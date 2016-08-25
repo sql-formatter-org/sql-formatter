@@ -60,39 +60,30 @@ export default class SqlFormatter {
 
             result = this.addNewlineOnNeed(result);
 
-            // Display comments directly where they appear in the source
             if (token.type === sqlTokenTypes.COMMENT || token.type === sqlTokenTypes.BLOCK_COMMENT) {
                 result = this.formatComment(token, result);
                 return;
             }
-            // TODO explain what does this do
             else if (this.inlineParentheses && token.value === ")") {
                 result = this.formatClosingInlineParentheses(token, result);
                 return;
             }
-            // Opening parentheses increase the block indent level and start a new line
             else if (token.value === "(") {
                 result = this.formatOpeningParentheses(token, key, tokens, tokensWithWhitespaces, result);
             }
-            // Closing parentheses decrease the block indent level
             else if (token.value === ")") {
                 result = this.formatClosingParentheses(result);
             }
-            // Top level reserved words start a new line and increase the special indent level
             else if (token.type === sqlTokenTypes.RESERVED_TOPLEVEL) {
                 result = this.formatToplevelReservedWord(token, result);
             }
-            // Newline reserved words start a new line
             else if (token.type === sqlTokenTypes.RESERVED_NEWLINE) {
                 result = this.formatNewlineReservedWord(token, result);
             }
-            // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
             else if (token.value === "," && !this.inlineParentheses) {
                 this.formatComma();
             }
-            // Checks if we are out of the limit clause
-            else if (this.limitClause && token.value !== "," && token.type !== sqlTokenTypes.NUMBER &&
-                token.type !== sqlTokenTypes.WHITESPACE) {
+            else if (this.hasLimitClauseEnded(token)) {
                 this.limitClause = false;
             }
             result = this.manageWhitespaces(token, key, tokens, result);
@@ -129,6 +120,7 @@ export default class SqlFormatter {
         return result;
     }
 
+    // Display comments directly where they appear in the source
     formatComment(token, result) {
         if (token.type === sqlTokenTypes.BLOCK_COMMENT) {
             const indent = this.indent.repeat(this.indentLevel);
@@ -158,6 +150,7 @@ export default class SqlFormatter {
         return result;
     }
 
+    // Opening parentheses increase the block indent level and start a new line
     formatOpeningParentheses(token, key, tokens, tokensWithWhitespaces, result) {
         // First check if this should be an inline parentheses block
         // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
@@ -209,6 +202,7 @@ export default class SqlFormatter {
         return result;
     }
 
+    // Closing parentheses decrease the block indent level
     formatClosingParentheses(result) {
         // Remove whitespace before the closing parentheses
         result = result.replace(/\s+$/, "");
@@ -235,6 +229,7 @@ export default class SqlFormatter {
         return result;
     }
 
+    // Top level reserved words start a new line and increase the special indent level
     formatToplevelReservedWord(token, result) {
         this.needToIncreaseSpecialIndent = true;
 
@@ -271,6 +266,7 @@ export default class SqlFormatter {
         return result;
     }
 
+    // Newline reserved words start a new line
     formatNewlineReservedWord(token, result) {
         // Add a newline before the reserved word (if not already added)
         if (!this.addedNewline) {
@@ -286,6 +282,7 @@ export default class SqlFormatter {
         return result;
     }
 
+    // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
     formatComma() {
         // If the previous TOKEN_VALUE is "LIMIT", resets new line
         if (this.limitClause === true) {
@@ -296,6 +293,10 @@ export default class SqlFormatter {
         else {
             this.needToAddNewline = true;
         }
+    }
+
+    hasLimitClauseEnded(token) {
+        return this.limitClause && token.value !== "," && token.type !== sqlTokenTypes.NUMBER && token.type !== sqlTokenTypes.WHITESPACE;
     }
 
     manageWhitespaces(token, key, tokens, result) {
