@@ -16,7 +16,7 @@ const TOKEN_TYPE_VARIABLE = "variable";
 
 export default class SqlFormatter {
     /**
-     * Builds regular expressions and sorts the reserved words.
+     * Builds regular expressions.
      *
      * @param {Object} cfg
      *  @param {Array} cfg.reservedWords Reserved words in SQL
@@ -27,10 +27,10 @@ export default class SqlFormatter {
     constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, functionWords}) {
         // Regular expressions for tokenizing
         this.regexBoundaries = "(,|;|\\:|\\)|\\(|\\.|\\=|\\<|\\>|\\+|\\-|\\*|\\/|\\!|\\^|%|\\||&|#)";
-        this.regexReserved = "(" + reservedWords.join("|") + ")";
-        this.regexReservedToplevel = "(" + reservedToplevelWords.join("|") + ")";
-        this.regexReservedNewline = "(" + reservedNewlineWords.join("|") + ")";
-        this.regexFunction = "(" + functionWords.join("|") + ")";
+        this.regexReserved = `(${reservedWords.join("|")})`;
+        this.regexReservedToplevel = `(${reservedToplevelWords.join("|")})`;
+        this.regexReservedNewline = `(${reservedNewlineWords.join("|")})`;
+        this.regexFunction = `(${functionWords.join("|")})`;
     }
 
     /**
@@ -335,158 +335,224 @@ export default class SqlFormatter {
     }
 
     /**
-     * Return the next token and token type in a SQL string.
-     * Quoted strings, comments, reserved words, whitespace, and punctuation are all their own tokens.
+     * Return the next token value and type in a SQL string.
      *
      * @param {String} input The SQL string
-     * @param {Array} previous The result of the previous getNextToken() call
+     * @param {Array} previousToken The result of the previous getNextToken() call
      * @return {Array} An associative array containing the type and value of the token.
      */
-    getNextToken(input, previous) {
-        // Whitespace
-        if (input.match(/^\s+/)) {
-            return {
-                type: TOKEN_TYPE_WHITESPACE,
-                value: input.match(/^\s+/)[0]
-            };
+    getNextToken(input, previousToken) {
+        const whitespaceToken = this.getWhitespaceToken(input);
+        if (whitespaceToken) {
+            return whitespaceToken;
         }
 
-        // Comment
-        if (input.charAt(0) === "#" || (input.charAt(0) === "-" && input.charAt(1) === "-") ||
-            (input.charAt(0) === "/" && input.charAt(1) === "*")) {
+        const commentToken = this.getCommentToken(input);
+        if (commentToken) {
+            return commentToken;
+        }
+
+        const quotedStringToken = this.getQuotedStringToken(input);
+        if (quotedStringToken) {
+            return quotedStringToken;
+        }
+
+        const variableToken = this.getVariableToken(input);
+        if (variableToken) {
+            return variableToken;
+        }
+
+        const numberToken = this.getNumberToken(input);
+        if (numberToken) {
+            return numberToken;
+        }
+
+        const boundaryCharacterToken = this.getBoundaryCharacterToken(input);
+        if (boundaryCharacterToken) {
+            return boundaryCharacterToken;
+        }
+
+        const reservedWordToken = this.getReservedWordToken(input.toUpperCase(), previousToken);
+        if (reservedWordToken) {
+            return reservedWordToken;
+        }
+
+        const functionWordToken = this.getFunctionWordToken(input.toUpperCase());
+        if (functionWordToken) {
+            return functionWordToken;
+        }
+
+        return this.getNonReservedWordToken(input);
+    }
+
+    getWhitespaceToken(input) {
+        const matches = input.match(/^\s+/);
+
+        if (matches) {
+            return {
+                type: TOKEN_TYPE_WHITESPACE,
+                value: matches[0]
+            };
+        }
+    }
+
+    getCommentToken(input) {
+        const firstChar = input.charAt(0);
+        const secondChar = input.charAt(1);
+
+        if (firstChar === "#" || (firstChar === "-" && secondChar === "-") || (firstChar === "/" && secondChar === "*")) {
             let type;
-            let last;
+            let commentEnd;
 
             // Comment until end of line
-            if (input.charAt(0) === "-" || input.charAt(0) === "#") {
-                last = input.indexOf("\n");
+            if (firstChar === "-" || firstChar === "#") {
                 type = TOKEN_TYPE_COMMENT;
+                commentEnd = input.indexOf("\n");
             }
             // Comment until closing comment tag
             else {
-                last = input.indexOf("*/") + 2;
                 type = TOKEN_TYPE_BLOCK_COMMENT;
+                commentEnd = input.indexOf("*/") !== -1 && input.indexOf("*/") + 2;
             }
-            if (last === -1) {
-                last = input.length;
+            // Query ends with unclosed comment
+            if (commentEnd === -1) {
+                commentEnd = input.length;
             }
 
             return {
                 type,
-                value: input.substring(0, last)
+                value: input.substring(0, commentEnd)
             };
         }
+    }
 
-        // Quoted String
-        if (input.charAt(0) === "\"" || input.charAt(0) === "'" || input.charAt(0) === "`" || input.charAt(0) === "[") {
+    getQuotedStringToken(input) {
+        const firstChar = input.charAt(0);
+
+        if (firstChar === "\"" || firstChar === "'" || firstChar === "`" || firstChar === "[") {
             return {
-                type: ((input.charAt(0) === "`" || input.charAt(0) === "[") ? TOKEN_TYPE_BACKTICK_QUOTE : TOKEN_TYPE_QUOTE),
+                type: (firstChar === "`" || firstChar === "[") ? TOKEN_TYPE_BACKTICK_QUOTE : TOKEN_TYPE_QUOTE,
                 value: this.getQuotedString(input)
             };
         }
+    }
 
-        // User-defined Variable
+    getVariableToken(input) {
         if ((input.charAt(0) === "@" || input.charAt(0) === ":") && input.charAt(1)) {
-            const output = {
-                type: TOKEN_TYPE_VARIABLE
-            };
-
-            // If the variable name is quoted
+            // Quoted variable name
             if (input.charAt(1) === "\"" || input.charAt(1) === "'" || input.charAt(1) === "`") {
-                output.value = input.charAt(0) + this.getQuotedString(input.substring(1));
+                return {
+                    type: TOKEN_TYPE_VARIABLE,
+                    value: input.charAt(0) + this.getQuotedString(input.substring(1))
+                };
             }
             // Non-quoted variable name
             else {
-                const matches = input.match(new RegExp("^(" + input.charAt(0) + "[a-zA-Z0-9\\._\\$]+)"));
+                const matches = input.match(new RegExp(`^(${input.charAt(0)}[a-zA-Z0-9\\._\\$]+)`));
 
                 if (matches) {
-                    output.value = matches[1];
+                    return {
+                        type: TOKEN_TYPE_VARIABLE,
+                        value: matches[1]
+                    };
                 }
             }
-            if (output.value) {
-                return output;
-            }
         }
+    }
 
-        // Number (decimal, binary, or hex)
-        const numberMatches = input.match(new RegExp(`^([0-9]+(\\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)($|\\s|"'\`|${this.regexBoundaries})`));
+    // Decimal, binary, or hex numbers
+    getNumberToken(input) {
+        const matches = input.match(new RegExp(`^([0-9]+(\\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)($|\\s|"'\`|${this.regexBoundaries})`));
 
-        if (numberMatches) {
+        if (matches) {
             return {
-                value: numberMatches[1],
-                type: TOKEN_TYPE_NUMBER
+                type: TOKEN_TYPE_NUMBER,
+                value: matches[1]
             };
         }
+    }
 
-        // Boundary Character (punctuation and symbols)
-        const boundaryMatches = input.match(new RegExp("^(" + this.regexBoundaries + ")"));
+    // Punctuation and symbols
+    getBoundaryCharacterToken(input) {
+        const matches = input.match(new RegExp(`^(${this.regexBoundaries})`));
 
-        if (boundaryMatches) {
+        if (matches) {
             return {
-                value: boundaryMatches[1],
-                type: TOKEN_TYPE_BOUNDARY
+                type: TOKEN_TYPE_BOUNDARY,
+                value: matches[1]
             };
         }
+    }
 
+    getReservedWordToken(input, previousToken) {
         // A reserved word cannot be preceded by a "."
         // this makes it so in "mytable.from", "from" is not considered a reserved word
-        if (!previous || !previous.value || previous.value !== ".") {
-            const upper = input.toUpperCase();
+        if (previousToken && previousToken.value && previousToken.value === ".") {
+            return;
+        }
+        const uppercasedInput = input.toUpperCase();
 
-            // Top Level Reserved Word
-            const topLevelReservedWordMatches = upper.match(
-                new RegExp("^(" + this.regexReservedToplevel + ")($|\\s|" + this.regexBoundaries + ")")
-            );
+        const toplevelReservedWordToken = this.getSpecificReservedWordToken({
+            input: uppercasedInput,
+            type: TOKEN_TYPE_RESERVED_TOPLEVEL,
+            regex: this.regexReservedToplevel
+        });
 
-            if (topLevelReservedWordMatches) {
-                return {
-                    type: TOKEN_TYPE_RESERVED_TOPLEVEL,
-                    value: upper.substring(0, topLevelReservedWordMatches[1].length)
-                };
-            }
-            // Newline Reserved Word
-            const newlineReservedWordMatches = upper.match(
-                new RegExp("^(" + this.regexReservedNewline + ")($|\\s|" + this.regexBoundaries + ")")
-            );
-
-            if (newlineReservedWordMatches) {
-                return {
-                    type: TOKEN_TYPE_RESERVED_NEWLINE,
-                    value: upper.substring(0, newlineReservedWordMatches[1].length)
-                };
-            }
-            // Other Reserved Word
-            const otherReservedWordMatches = upper.match(new RegExp("^(" + this.regexReserved + ")($|\\s|" + this.regexBoundaries + ")"));
-
-            if (otherReservedWordMatches) {
-                return {
-                    type: TOKEN_TYPE_RESERVED,
-                    value: upper.substring(0, otherReservedWordMatches[1].length)
-                };
-            }
+        if (toplevelReservedWordToken) {
+            return toplevelReservedWordToken;
         }
 
-        // A function must be suceeded by "("
-        // this makes it so "count(" is considered a function, but "count" alone is not
-        const upper = input.toUpperCase();
+        const newlineReservedWordToken = this.getSpecificReservedWordToken({
+            input: uppercasedInput,
+            type: TOKEN_TYPE_RESERVED_TOPLEVEL,
+            regex: this.regexReservedNewline
+        });
 
-        // function
-        const functionMatches = upper.match(new RegExp("^(" + this.regexFunction + "[(]|\\s|[)])"));
+        if (newlineReservedWordToken) {
+            return newlineReservedWordToken;
+        }
 
-        if (functionMatches && functionMatches[1]) {
+        return this.getSpecificReservedWordToken({
+            input: uppercasedInput,
+            type: TOKEN_TYPE_RESERVED,
+            regex: this.regexReserved
+        });
+    }
+
+    getSpecificReservedWordToken({input, type, regex}) {
+        const matches = input.match(new RegExp(`^(${regex})($|\\s|${this.regexBoundaries})`));
+
+        if (matches) {
             return {
-                type: TOKEN_TYPE_RESERVED,
-                value: upper.substring(0, functionMatches[1].length - 1)
+                type,
+                value: input.substring(0, matches[1].length)
             };
         }
+    }
 
-        // Non reserved word
-        const nonReservedWordMatches = input.match(new RegExp("^(.*?)($|\\s|[\"'`]|" + this.regexBoundaries + ")"));
+    getFunctionWordToken(input) {
+        // A function must be suceeded by "("
+        // this makes it so "count(" is considered a function, but "count" alone is not
+        const matches = input.match(new RegExp(`^(${this.regexFunction}[(]|\\s|[)])`));
 
-        return {
-            type: TOKEN_TYPE_WORD,
-            value: nonReservedWordMatches[1]
-        };
+        if (matches) {
+            return {
+                // TODO should be type_function?
+                type: TOKEN_TYPE_RESERVED,
+                value: input.substring(0, matches[1].length - 1)
+            };
+        }
+    }
+
+    getNonReservedWordToken(input) {
+        const matches = input.match(new RegExp(`^(.*?)($|\\s|["'\`]|${this.regexBoundaries})`));
+
+        if (matches) {
+            return {
+                type: TOKEN_TYPE_WORD,
+                value: matches[1]
+            };
+        }
     }
 
     getQuotedString(input) {
