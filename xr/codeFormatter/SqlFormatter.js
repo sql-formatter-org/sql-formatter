@@ -1,22 +1,18 @@
 import _ from "xr/_";
 
 // Constants for token types
-const TOKEN_TYPE_WHITESPACE = 0;
-const TOKEN_TYPE_WORD = 1;
-const TOKEN_TYPE_QUOTE = 2;
-const TOKEN_TYPE_BACKTICK_QUOTE = 3;
-const TOKEN_TYPE_RESERVED = 4;
-const TOKEN_TYPE_RESERVED_TOPLEVEL = 5;
-const TOKEN_TYPE_RESERVED_NEWLINE = 6;
-const TOKEN_TYPE_BOUNDARY = 7;
-const TOKEN_TYPE_COMMENT = 8;
-const TOKEN_TYPE_BLOCK_COMMENT = 9;
-const TOKEN_TYPE_NUMBER = 10;
-const TOKEN_TYPE_VARIABLE = 12;
-
-// Constants for different components of a token
-const TOKEN_TYPE = 0;
-const TOKEN_VALUE = 1;
+const TOKEN_TYPE_WHITESPACE = "whitespace";
+const TOKEN_TYPE_WORD = "word";
+const TOKEN_TYPE_QUOTE = "quote";
+const TOKEN_TYPE_BACKTICK_QUOTE = "backtick-quote";
+const TOKEN_TYPE_RESERVED = "reserved";
+const TOKEN_TYPE_RESERVED_TOPLEVEL = "reserved-toplevel";
+const TOKEN_TYPE_RESERVED_NEWLINE = "reserved-newline";
+const TOKEN_TYPE_BOUNDARY = "boundary";
+const TOKEN_TYPE_COMMENT = "comment";
+const TOKEN_TYPE_BLOCK_COMMENT = "block-comment";
+const TOKEN_TYPE_NUMBER = "number";
+const TOKEN_TYPE_VARIABLE = "variable";
 
 export default class SqlFormatter {
     /**
@@ -67,7 +63,7 @@ export default class SqlFormatter {
         const tokens = [];
 
         _(originalTokens).forEach((token, key) => {
-            if (token[TOKEN_TYPE] !== TOKEN_TYPE_WHITESPACE) {
+            if (token.type !== TOKEN_TYPE_WHITESPACE) {
                 token.key = key;
                 tokens.push(token);
             }
@@ -75,7 +71,7 @@ export default class SqlFormatter {
 
         // Format token by token
         _(tokens).forEach((token, key) => {
-            let tokenValue = token[TOKEN_VALUE];
+            let tokenValue = token.value;
 
             // If we are increasing the special indent level now
             if (increaseSpecialIndent) {
@@ -100,8 +96,8 @@ export default class SqlFormatter {
                 addedNewline = false;
             }
             // Display comments directly where they appear in the source
-            if (token[TOKEN_TYPE] === TOKEN_TYPE_COMMENT || token[TOKEN_TYPE] === TOKEN_TYPE_BLOCK_COMMENT) {
-                if (token[TOKEN_TYPE] === TOKEN_TYPE_BLOCK_COMMENT) {
+            if (token.type === TOKEN_TYPE_COMMENT || token.type === TOKEN_TYPE_BLOCK_COMMENT) {
+                if (token.type === TOKEN_TYPE_BLOCK_COMMENT) {
                     const indent = tab.repeat(indentLevel);
                     result = result.replace(/\s+$/, "");
                     result += "\n" + indent;
@@ -113,10 +109,9 @@ export default class SqlFormatter {
                 return result;
             }
 
-            // TODO add comment
             if (inlineParentheses) {
                 // End of inline parentheses
-                if (token[TOKEN_VALUE] === ")") {
+                if (token.value === ")") {
                     result = result.replace(/\s+$/, "");
 
                     if (inlineIndented) {
@@ -132,17 +127,17 @@ export default class SqlFormatter {
                     return result;
                 }
 
-                if (token[TOKEN_VALUE] === ",") {
+                if (token.value === ",") {
                     if (inlineCount >= 30) {
                         inlineCount = 0;
                         newline = true;
                     }
                 }
-                inlineCount += token[TOKEN_VALUE].length;
+                inlineCount += token.value.length;
             }
 
             // Opening parentheses increase the block indent level and start a new line
-            if (token[TOKEN_VALUE] === "(") {
+            if (token.value === "(") {
                 // First check if this should be an inline parentheses block
                 // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
                 // Allow up to 3 non-whitespace tokens inside inline parentheses
@@ -156,22 +151,22 @@ export default class SqlFormatter {
                     const next = tokens[key + i];
 
                     // Reached closing parentheses, able to inline it
-                    if (next[TOKEN_VALUE] === ")") {
+                    if (next.value === ")") {
                         inlineParentheses = true;
                         inlineCount = 0;
                         inlineIndented = false;
                         break;
                     }
                     // Reached an invalid token for inline parentheses
-                    if (next[TOKEN_VALUE] === ";" || next[TOKEN_VALUE] === "(") {
+                    if (next.value === ";" || next.value === "(") {
                         break;
                     }
                     // Reached an invalid token type for inline parentheses
-                    if (next[TOKEN_TYPE] === TOKEN_TYPE_RESERVED_TOPLEVEL || next[TOKEN_TYPE] === TOKEN_TYPE_RESERVED_NEWLINE ||
-                        next[TOKEN_TYPE] === TOKEN_TYPE_COMMENT || next[TOKEN_TYPE] === TOKEN_TYPE_BLOCK_COMMENT) {
+                    if (next.type === TOKEN_TYPE_RESERVED_TOPLEVEL || next.type === TOKEN_TYPE_RESERVED_NEWLINE ||
+                        next.type === TOKEN_TYPE_COMMENT || next.type === TOKEN_TYPE_BLOCK_COMMENT) {
                         break;
                     }
-                    length += next[TOKEN_VALUE].length;
+                    length += next.value.length;
                 }
 
                 if (inlineParentheses && length > 30) {
@@ -181,7 +176,7 @@ export default class SqlFormatter {
                 }
 
                 // Take out the preceding space unless there was whitespace there in the original query
-                if (originalTokens[token.key - 1] && originalTokens[token.key - 1][TOKEN_TYPE] !== TOKEN_TYPE_WHITESPACE) {
+                if (originalTokens[token.key - 1] && originalTokens[token.key - 1].type !== TOKEN_TYPE_WHITESPACE) {
                     result = result.replace(/\s+$/, "");
                 }
 
@@ -192,7 +187,7 @@ export default class SqlFormatter {
                 }
             }
             // Closing parentheses decrease the block indent level
-            else if (token[TOKEN_VALUE] === ")") {
+            else if (token.value === ")") {
                 // Remove whitespace before the closing parentheses
                 result = result.replace(/\s+$/, "");
 
@@ -217,7 +212,7 @@ export default class SqlFormatter {
                 }
             }
             // Top level reserved words start a new line and increase the special indent level
-            else if (token[TOKEN_TYPE] === TOKEN_TYPE_RESERVED_TOPLEVEL) {
+            else if (token.type === TOKEN_TYPE_RESERVED_TOPLEVEL) {
                 increaseSpecialIndent = true;
 
                 // If the last indent type was "special", decrease the special indent for this round
@@ -241,23 +236,23 @@ export default class SqlFormatter {
                 }
 
                 // If the token may have extra whitespace
-                if (token[TOKEN_VALUE].indexOf(" ") !== -1 || token[TOKEN_VALUE].indexOf("\n") !== -1 ||
-                    token[TOKEN_VALUE].indexOf("\t") !== -1) {
+                if (token.value.indexOf(" ") !== -1 || token.value.indexOf("\n") !== -1 ||
+                    token.value.indexOf("\t") !== -1) {
                     tokenValue = tokenValue.replace(/\s+/, " ", tokenValue);
                 }
 
                 // if SQL "LIMIT" clause, start variable to reset newline
-                if (token[TOKEN_VALUE] === "LIMIT" && !inlineParentheses) {
+                if (token.value === "LIMIT" && !inlineParentheses) {
                     clauseLimit = true;
                 }
             }
             // Checks if we are out of the limit clause
-            else if (clauseLimit && token[TOKEN_VALUE] !== "," && token[TOKEN_TYPE] !== TOKEN_TYPE_NUMBER &&
-                token[TOKEN_TYPE] !== TOKEN_TYPE_WHITESPACE) {
+            else if (clauseLimit && token.value !== "," && token.type !== TOKEN_TYPE_NUMBER &&
+                token.type !== TOKEN_TYPE_WHITESPACE) {
                 clauseLimit = false;
             }
             // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
-            else if (token[TOKEN_VALUE] === "," && !inlineParentheses) {
+            else if (token.value === "," && !inlineParentheses) {
                 // If the previous TOKEN_VALUE is "LIMIT", resets new line
                 if (clauseLimit === true) {
                     newline = false;
@@ -269,7 +264,7 @@ export default class SqlFormatter {
                 }
             }
             // Newline reserved words start a new line
-            else if (token[TOKEN_TYPE] === TOKEN_TYPE_RESERVED_NEWLINE) {
+            else if (token.type === TOKEN_TYPE_RESERVED_NEWLINE) {
                 // Add a newline before the reserved word (if not already added)
                 if (!addedNewline) {
                     result = result.replace(/\s+$/, "");
@@ -277,27 +272,27 @@ export default class SqlFormatter {
                 }
 
                 // If the token may have extra whitespace
-                if (token[TOKEN_VALUE].indexOf(" ") !== -1 || token[TOKEN_VALUE].indexOf("\n") !== -1 ||
-                    token[TOKEN_VALUE].indexOf("\t") !== -1) {
+                if (token.value.indexOf(" ") !== -1 || token.value.indexOf("\n") !== -1 ||
+                    token.value.indexOf("\t") !== -1) {
                     tokenValue = tokenValue.replace(/\s+/, " ");
                 }
             }
 
             // If the token shouldn"t have a space before it
-            if (token[TOKEN_VALUE] === "." || token[TOKEN_VALUE] === "," || token[TOKEN_VALUE] === ";") {
+            if (token.value === "." || token.value === "," || token.value === ";") {
                 result = result.replace(/\s+$/, "");
             }
 
             result += tokenValue + " ";
 
             // If the token shouldn"t have a space after it
-            if (token[TOKEN_VALUE] === "(" || token[TOKEN_VALUE] === ".") {
+            if (token.value === "(" || token.value === ".") {
                 result = result.replace(/\s+$/, "");
             }
 
             // If this is the "-" of a negative number, it shouldn"t have a space after it
-            if (token[TOKEN_VALUE] === "-" && tokens[key + 1] && tokens[key + 1][TOKEN_TYPE] === TOKEN_TYPE_NUMBER && tokens[key - 1]) {
-                const prev = tokens[key - 1][TOKEN_TYPE];
+            if (token.value === "-" && tokens[key + 1] && tokens[key + 1].type === TOKEN_TYPE_NUMBER && tokens[key - 1]) {
+                const prev = tokens[key - 1].type;
 
                 if (prev !== TOKEN_TYPE_QUOTE && prev !== TOKEN_TYPE_BACKTICK_QUOTE &&
                     prev !== TOKEN_TYPE_WORD && prev !== TOKEN_TYPE_NUMBER) {
@@ -327,7 +322,7 @@ export default class SqlFormatter {
         while (currentLength) {
             // Get the next token and the token type
             token = this.getNextToken(input, token);
-            tokenLength = token[TOKEN_VALUE].length;
+            tokenLength = token.value.length;
 
             tokens.push(token);
 
@@ -351,8 +346,8 @@ export default class SqlFormatter {
         // Whitespace
         if (input.match(/^\s+/)) {
             return {
-                [TOKEN_TYPE]: TOKEN_TYPE_WHITESPACE,
-                [TOKEN_VALUE]: input.match(/^\s+/)[0]
+                type: TOKEN_TYPE_WHITESPACE,
+                value: input.match(/^\s+/)[0]
             };
         }
 
@@ -377,38 +372,38 @@ export default class SqlFormatter {
             }
 
             return {
-                [TOKEN_TYPE]: type,
-                [TOKEN_VALUE]: input.substring(0, last)
+                type,
+                value: input.substring(0, last)
             };
         }
 
         // Quoted String
         if (input.charAt(0) === "\"" || input.charAt(0) === "'" || input.charAt(0) === "`" || input.charAt(0) === "[") {
             return {
-                [TOKEN_TYPE]: ((input.charAt(0) === "`" || input.charAt(0) === "[") ? TOKEN_TYPE_BACKTICK_QUOTE : TOKEN_TYPE_QUOTE),
-                [TOKEN_VALUE]: this.getQuotedString(input)
+                type: ((input.charAt(0) === "`" || input.charAt(0) === "[") ? TOKEN_TYPE_BACKTICK_QUOTE : TOKEN_TYPE_QUOTE),
+                value: this.getQuotedString(input)
             };
         }
 
         // User-defined Variable
         if ((input.charAt(0) === "@" || input.charAt(0) === ":") && input.charAt(1)) {
             const output = {
-                [TOKEN_TYPE]: TOKEN_TYPE_VARIABLE
+                type: TOKEN_TYPE_VARIABLE
             };
 
             // If the variable name is quoted
             if (input.charAt(1) === "\"" || input.charAt(1) === "'" || input.charAt(1) === "`") {
-                output[TOKEN_VALUE] = input.charAt(0) + this.getQuotedString(input.substring(1));
+                output.value = input.charAt(0) + this.getQuotedString(input.substring(1));
             }
             // Non-quoted variable name
             else {
                 const matches = input.match(new RegExp("^(" + input.charAt(0) + "[a-zA-Z0-9\\._\\$]+)"));
 
                 if (matches) {
-                    output[TOKEN_VALUE] = matches[1];
+                    output.value = matches[1];
                 }
             }
-            if (output[TOKEN_VALUE]) {
+            if (output.value) {
                 return output;
             }
         }
@@ -418,8 +413,8 @@ export default class SqlFormatter {
 
         if (numberMatches) {
             return {
-                [TOKEN_VALUE]: numberMatches[1],
-                [TOKEN_TYPE]: TOKEN_TYPE_NUMBER
+                value: numberMatches[1],
+                type: TOKEN_TYPE_NUMBER
             };
         }
 
@@ -428,14 +423,14 @@ export default class SqlFormatter {
 
         if (boundaryMatches) {
             return {
-                [TOKEN_VALUE]: boundaryMatches[1],
-                [TOKEN_TYPE]: TOKEN_TYPE_BOUNDARY
+                value: boundaryMatches[1],
+                type: TOKEN_TYPE_BOUNDARY
             };
         }
 
         // A reserved word cannot be preceded by a "."
         // this makes it so in "mytable.from", "from" is not considered a reserved word
-        if (!previous || !previous[TOKEN_VALUE] || previous[TOKEN_VALUE] !== ".") {
+        if (!previous || !previous.value || previous.value !== ".") {
             const upper = input.toUpperCase();
 
             // Top Level Reserved Word
@@ -445,8 +440,8 @@ export default class SqlFormatter {
 
             if (topLevelReservedWordMatches) {
                 return {
-                    [TOKEN_TYPE]: TOKEN_TYPE_RESERVED_TOPLEVEL,
-                    [TOKEN_VALUE]: upper.substring(0, topLevelReservedWordMatches[1].length)
+                    type: TOKEN_TYPE_RESERVED_TOPLEVEL,
+                    value: upper.substring(0, topLevelReservedWordMatches[1].length)
                 };
             }
             // Newline Reserved Word
@@ -456,8 +451,8 @@ export default class SqlFormatter {
 
             if (newlineReservedWordMatches) {
                 return {
-                    [TOKEN_TYPE]: TOKEN_TYPE_RESERVED_NEWLINE,
-                    [TOKEN_VALUE]: upper.substring(0, newlineReservedWordMatches[1].length)
+                    type: TOKEN_TYPE_RESERVED_NEWLINE,
+                    value: upper.substring(0, newlineReservedWordMatches[1].length)
                 };
             }
             // Other Reserved Word
@@ -465,8 +460,8 @@ export default class SqlFormatter {
 
             if (otherReservedWordMatches) {
                 return {
-                    [TOKEN_TYPE]: TOKEN_TYPE_RESERVED,
-                    [TOKEN_VALUE]: upper.substring(0, otherReservedWordMatches[1].length)
+                    type: TOKEN_TYPE_RESERVED,
+                    value: upper.substring(0, otherReservedWordMatches[1].length)
                 };
             }
         }
@@ -480,8 +475,8 @@ export default class SqlFormatter {
 
         if (functionMatches && functionMatches[1]) {
             return {
-                [TOKEN_TYPE]: TOKEN_TYPE_RESERVED,
-                [TOKEN_VALUE]: upper.substring(0, functionMatches[1].length - 1)
+                type: TOKEN_TYPE_RESERVED,
+                value: upper.substring(0, functionMatches[1].length - 1)
             };
         }
 
@@ -489,14 +484,11 @@ export default class SqlFormatter {
         const nonReservedWordMatches = input.match(new RegExp("^(.*?)($|\\s|[\"'`]|" + this.regexBoundaries + ")"));
 
         return {
-            [TOKEN_TYPE]: TOKEN_TYPE_WORD,
-            [TOKEN_VALUE]: nonReservedWordMatches[1]
+            type: TOKEN_TYPE_WORD,
+            value: nonReservedWordMatches[1]
         };
     }
 
-    /**
-     * TODO
-     */
     getQuotedString(input) {
         // This checks for the following patterns:
         // 1. backtick quoted string using `` to escape
