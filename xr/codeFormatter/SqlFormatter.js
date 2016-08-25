@@ -93,6 +93,7 @@ export default class SqlFormatter {
             }
             // If we need a new line before the token
             if (newline) {
+                result = result.replace(/\s+$/, "");
                 result += "\n" + tab.repeat(indentLevel);
                 addedNewline = true;
                 newline = false;
@@ -104,6 +105,7 @@ export default class SqlFormatter {
             if (token[TOKEN_TYPE] === TOKEN_TYPE_COMMENT || token[TOKEN_TYPE] === TOKEN_TYPE_BLOCK_COMMENT) {
                 if (token[TOKEN_TYPE] === TOKEN_TYPE_BLOCK_COMMENT) {
                     const indent = tab.repeat(indentLevel);
+                    result = result.replace(/\s+$/, "");
                     result += "\n" + indent;
                     tokenValue = tokenValue.replace("\n", "\n" + indent);
                 }
@@ -122,6 +124,7 @@ export default class SqlFormatter {
                     if (inlineIndented) {
                         indentTypes.shift();
                         indentLevel --;
+                        result = result.replace(/\s+$/, "");
                         result += "\n" + tab.repeat(indentLevel);
                     }
 
@@ -216,6 +219,7 @@ export default class SqlFormatter {
 
                 // Add a newline before the closing parentheses (if not already added)
                 if (!addedNewline) {
+                    result = result.replace(/\s+$/, "");
                     result += "\n" + tab.repeat(indentLevel);
                 }
             }
@@ -234,6 +238,7 @@ export default class SqlFormatter {
 
                 // Add a newline before the top level reserved word (if not already added)
                 if (!addedNewline) {
+                    result = result.replace(/\s+$/, "");
                     result += "\n" + tab.repeat(indentLevel);
                 }
 
@@ -274,6 +279,7 @@ export default class SqlFormatter {
             else if (token[TOKEN_TYPE] === TOKEN_TYPE_RESERVED_NEWLINE) {
                 // Add a newline before the reserved word (if not already added)
                 if (!addedNewline) {
+                    result = result.replace(/\s+$/, "");
                     result += "\n" + tab.repeat(indentLevel);
                 }
 
