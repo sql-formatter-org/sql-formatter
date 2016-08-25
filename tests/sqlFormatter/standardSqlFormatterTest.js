@@ -28,12 +28,10 @@ describe("sqlFormatter", function() {
                 "  `Table1`\n" +
                 "WHERE\n" +
                 "  Column1 = 'testing'\n" +
-                "AND\n" +
-                "  (\n" +
+                "  AND (\n" +
                 "    (\n" +
                 "      `Column2` = `Column3`\n" +
-                "      OR\n" +
-                "        Column4 > = NOW()\n" +
+                "      OR Column4 > = NOW()\n" +
                 "    )\n" +
                 "  )\n" +
                 "GROUP BY\n" +
@@ -56,8 +54,7 @@ describe("sqlFormatter", function() {
                 "  COUNT(order_id) AS total\n" +
                 "FROM\n" +
                 "  customers\n" +
-                "INNER JOIN\n" +
-                "  orders ON customers.customer_id = orders.customer_id;\n"
+                "  INNER JOIN orders ON customers.customer_id = orders.customer_id;\n"
             );
         });
 
@@ -139,8 +136,7 @@ describe("sqlFormatter", function() {
                 "  Customers\n" +
                 "WHERE\n" +
                 "  CustomerName = 'Alfred'\n" +
-                "AND\n" +
-                "  Phone = 5002132;\n"
+                "  AND Phone = 5002132;\n"
             );
         });
     });

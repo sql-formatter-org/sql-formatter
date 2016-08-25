@@ -190,7 +190,7 @@ export default class SqlTokenizer {
 
         const newlineReservedWordToken = this.getSpecificReservedWordToken({
             input,
-            type: sqlTokenTypes.RESERVED_TOPLEVEL,
+            type: sqlTokenTypes.RESERVED_NEWLINE,
             regex: this.regex.reservedNewline
         });
 
