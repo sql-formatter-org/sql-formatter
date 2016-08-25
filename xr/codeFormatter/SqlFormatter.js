@@ -12,7 +12,6 @@ const TOKEN_TYPE_BOUNDARY = 7;
 const TOKEN_TYPE_COMMENT = 8;
 const TOKEN_TYPE_BLOCK_COMMENT = 9;
 const TOKEN_TYPE_NUMBER = 10;
-const TOKEN_TYPE_ERROR = 11;
 const TOKEN_TYPE_VARIABLE = 12;
 
 // Constants for different components of a token
@@ -25,8 +24,8 @@ export default class SqlFormatter {
      *
      * @param {Object} cfg
      *  @param {Array} cfg.reservedWords Reserved words in SQL
-     *  @param {Array} cfg.reservedToplevelWords Words that are query starters
-     *  @param {Array} cfg.reservedNewlineWords Words that are set to newline
+     *  @param {Array} cfg.reservedToplevelWords Words that are set to new line and on first indent level
+     *  @param {Array} cfg.reservedNewlineWords Words that are set to newline and to new indent level
      *  @param {Array} cfg.functionWords Words that are treated as functions
      */
     constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, functionWords}) {
@@ -79,7 +78,6 @@ export default class SqlFormatter {
             let tokenValue = token[TOKEN_VALUE];
 
             // If we are increasing the special indent level now
-            // XXX WTF is a special indent
             if (increaseSpecialIndent) {
                 indentLevel ++;
                 indentTypes.unshift("special");
@@ -212,11 +210,6 @@ export default class SqlFormatter {
                     }
                 }
 
-                if (indentLevel < 0) {
-                    // This is an error
-                    indentLevel = 0;
-                }
-
                 // Add a newline before the closing parentheses (if not already added)
                 if (!addedNewline) {
                     result = result.replace(/\s+$/, "");
@@ -289,14 +282,6 @@ export default class SqlFormatter {
                     tokenValue = tokenValue.replace(/\s+/, " ");
                 }
             }
-            // Multiple boundary characters in a row should not have spaces between them (not including parentheses)
-            else if (token[TOKEN_TYPE] === TOKEN_TYPE_BOUNDARY) {
-                if (tokens[key - 1] && tokens[key - 1][TOKEN_TYPE] === TOKEN_TYPE_BOUNDARY) {
-                    if (originalTokens[token.key - 1] && originalTokens[token.key - 1][TOKEN_TYPE] !== TOKEN_TYPE_WHITESPACE) {
-                        result = result.replace(/\s+$/, "");
-                    }
-                }
-            }
 
             // If the token shouldn"t have a space before it
             if (token[TOKEN_VALUE] === "." || token[TOKEN_VALUE] === "," || token[TOKEN_VALUE] === ";") {
@@ -334,23 +319,12 @@ export default class SqlFormatter {
         const tokens = [];
 
         // Used to make sure the string keeps shrinking on each iteration
-        let oldStringLength = input.length + 1;
         let currentLength = input.length;
         let token;
         let tokenLength;
 
         // Keep processing the string until it is empty
         while (currentLength) {
-            // If the string stopped shrinking, there was a problem
-            if (oldStringLength <= currentLength) {
-                tokens.push({
-                    [TOKEN_VALUE]: input,
-                    [TOKEN_TYPE]: TOKEN_TYPE_ERROR
-                });
-                return tokens;
-            }
-            oldStringLength = currentLength;
-
             // Get the next token and the token type
             token = this.getNextToken(input, token);
             tokenLength = token[TOKEN_VALUE].length;
@@ -424,7 +398,7 @@ export default class SqlFormatter {
 
             // If the variable name is quoted
             if (input.charAt(1) === "\"" || input.charAt(1) === "'" || input.charAt(1) === "`") {
-                output[TOKEN_VALUE] = input.charAt(1) + this.getQuotedString(input.substring(1));
+                output[TOKEN_VALUE] = input.charAt(0) + this.getQuotedString(input.substring(1));
             }
             // Non-quoted variable name
             else {
@@ -440,7 +414,7 @@ export default class SqlFormatter {
         }
 
         // Number (decimal, binary, or hex)
-        const numberMatches = input.match(new RegExp(`^([0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)($|\\s|""\`|${this.regexBoundaries})`));
+        const numberMatches = input.match(new RegExp(`^([0-9]+(\\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)($|\\s|"'\`|${this.regexBoundaries})`));
 
         if (numberMatches) {
             return {
@@ -455,7 +429,7 @@ export default class SqlFormatter {
         if (boundaryMatches) {
             return {
                 [TOKEN_VALUE]: boundaryMatches[1],
-                [TOKEN_TYPE]: TOKEN_TYPE_NUMBER
+                [TOKEN_TYPE]: TOKEN_TYPE_BOUNDARY
             };
         }
 
@@ -492,7 +466,7 @@ export default class SqlFormatter {
             if (otherReservedWordMatches) {
                 return {
                     [TOKEN_TYPE]: TOKEN_TYPE_RESERVED,
-                    [TOKEN_VALUE]: input.substring(0, otherReservedWordMatches[1].length)
+                    [TOKEN_VALUE]: upper.substring(0, otherReservedWordMatches[1].length)
                 };
             }
         }

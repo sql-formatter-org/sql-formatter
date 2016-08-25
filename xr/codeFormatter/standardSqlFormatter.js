@@ -38,13 +38,13 @@ const reservedWords = [
     "VIEW", "WHEN", "WITH", "WORK", "WRITE", "YEAR_MONTH"
 ];
 
-// Words that are query starters
+// Words that are set to new line and on first indent level
 const reservedToplevelWords = [
     "SELECT", "FROM", "WHERE", "SET", "ORDER BY", "GROUP BY", "LIMIT", "DROP",
     "VALUES", "UPDATE", "HAVING", "ADD", "AFTER", "ALTER TABLE", "DELETE FROM", "UNION ALL", "UNION", "EXCEPT", "INTERSECT"
 ];
 
-// Words that are set to newline
+// Words that are set to newline and to new indent level
 const reservedNewlineWords = [
     "LEFT OUTER JOIN", "RIGHT OUTER JOIN", "LEFT JOIN", "RIGHT JOIN", "OUTER JOIN", "INNER JOIN", "JOIN", "XOR", "OR", "AND"
 ];
