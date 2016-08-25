@@ -15,42 +15,29 @@ export default class SqlTokenizer {
 
     /**
      * Takes a SQL string and breaks it into tokens.
-     * Each token is an associative array with type and value.
+     * Each token is an object with type and value.
      *
      * @param {String} input The SQL string
-     * @return {Array} An array of tokens.
+     * @return {Object[]} tokens An array of tokens.
+     *  @return {String} token.type
+     *  @return {String} token.value
      */
     tokenize(input) {
         const tokens = [];
-
-        // Used to make sure the string keeps shrinking on each iteration
-        let currentLength = input.length;
         let token;
-        let tokenLength;
 
         // Keep processing the string until it is empty
-        while (currentLength) {
+        while (input.length) {
             // Get the next token and the token type
             token = this.getNextToken(input, token);
-            tokenLength = token.value.length;
+            // Advance the string
+            input = input.substring(token.value.length);
 
             tokens.push(token);
-
-            // Advance the string
-            input = input.substring(tokenLength);
-
-            currentLength -= tokenLength;
         }
         return tokens;
     }
 
-    /**
-     * Return the next token value and type in a SQL string.
-     *
-     * @param {String} input The SQL string
-     * @param {Array} previousToken The result of the previous getNextToken() call
-     * @return {Array} An associative array containing the type and value of the token.
-     */
     getNextToken(input, previousToken) {
         const whitespaceToken = this.getWhitespaceToken(input);
         if (whitespaceToken) {
@@ -158,40 +145,31 @@ export default class SqlTokenizer {
             }
             // Non-quoted variable name
             else {
-                const matches = input.match(new RegExp(`^(${input.charAt(0)}[a-zA-Z0-9\\._\\$]+)`));
-
-                if (matches) {
-                    return {
-                        type: sqlTokenTypes.VARIABLE,
-                        value: matches[1]
-                    };
-                }
+                return this.getTokenOnFirstMatch({
+                    input,
+                    type: sqlTokenTypes.VARIABLE,
+                    regex: new RegExp(`^(${input.charAt(0)}[a-zA-Z0-9\\._\\$]+)`)
+                });
             }
         }
     }
 
     // Decimal, binary, or hex numbers
     getNumberToken(input) {
-        const matches = input.match(new RegExp(`^([0-9]+(\\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)($|\\s|"'\`|${this.regex.boundaries})`));
-
-        if (matches) {
-            return {
-                type: sqlTokenTypes.NUMBER,
-                value: matches[1]
-            };
-        }
+        return this.getTokenOnFirstMatch({
+            input,
+            type: sqlTokenTypes.NUMBER,
+            regex: new RegExp(`^([0-9]+(\\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)($|\\s|"'\`|${this.regex.boundaries})`)
+        });
     }
 
     // Punctuation and symbols
     getBoundaryCharacterToken(input) {
-        const matches = input.match(new RegExp(`^(${this.regex.boundaries})`));
-
-        if (matches) {
-            return {
-                type: sqlTokenTypes.BOUNDARY,
-                value: matches[1]
-            };
-        }
+        return this.getTokenOnFirstMatch({
+            input,
+            type: sqlTokenTypes.BOUNDARY,
+            regex: new RegExp(`^(${this.regex.boundaries})`)
+        });
     }
 
     getReservedWordToken(input, previousToken) {
@@ -200,10 +178,8 @@ export default class SqlTokenizer {
         if (previousToken && previousToken.value && previousToken.value === ".") {
             return;
         }
-        const uppercasedInput = input.toUpperCase();
-
         const toplevelReservedWordToken = this.getSpecificReservedWordToken({
-            input: uppercasedInput,
+            input,
             type: sqlTokenTypes.RESERVED_TOPLEVEL,
             regex: this.regex.reservedToplevel
         });
@@ -213,7 +189,7 @@ export default class SqlTokenizer {
         }
 
         const newlineReservedWordToken = this.getSpecificReservedWordToken({
-            input: uppercasedInput,
+            input,
             type: sqlTokenTypes.RESERVED_TOPLEVEL,
             regex: this.regex.reservedNewline
         });
@@ -223,7 +199,7 @@ export default class SqlTokenizer {
         }
 
         return this.getSpecificReservedWordToken({
-            input: uppercasedInput,
+            input,
             type: sqlTokenTypes.RESERVED,
             regex: this.regex.reserved
         });
@@ -255,13 +231,18 @@ export default class SqlTokenizer {
     }
 
     getNonReservedWordToken(input) {
-        const matches = input.match(new RegExp(`^(.*?)($|\\s|["'\`]|${this.regex.boundaries})`));
+        return this.getTokenOnFirstMatch({
+            input,
+            type: sqlTokenTypes.WORD,
+            regex: new RegExp(`^(.*?)($|\\s|["'\`]|${this.regex.boundaries})`)
+        });
+    }
+
+    getTokenOnFirstMatch({input, type, regex}) {
+        const matches = input.match(regex);
 
         if (matches) {
-            return {
-                type: sqlTokenTypes.WORD,
-                value: matches[1]
-            };
+            return {type, value: matches[1]};
         }
     }
 
