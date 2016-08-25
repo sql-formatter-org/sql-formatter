@@ -65,20 +65,18 @@ export default class SqlFormatter {
                 result = this.formatComment(token, result);
                 return;
             }
-
             // TODO explain what does this do
-            if (this.inlineParentheses && token.value === ")") {
-                result = this.formatEndingInlineParentheses(token, result);
+            else if (this.inlineParentheses && token.value === ")") {
+                result = this.formatClosingInlineParentheses(token, result);
                 return;
             }
-
             // Opening parentheses increase the block indent level and start a new line
-            if (token.value === "(") {
-                result = this.formatStartingParentheses(token, key, tokens, tokensWithWhitespaces, result);
+            else if (token.value === "(") {
+                result = this.formatOpeningParentheses(token, key, tokens, tokensWithWhitespaces, result);
             }
             // Closing parentheses decrease the block indent level
             else if (token.value === ")") {
-                result = this.formatEndingParentheses(result);
+                result = this.formatClosingParentheses(result);
             }
             // Top level reserved words start a new line and increase the special indent level
             else if (token.type === sqlTokenTypes.RESERVED_TOPLEVEL) {
@@ -88,14 +86,14 @@ export default class SqlFormatter {
             else if (token.type === sqlTokenTypes.RESERVED_NEWLINE) {
                 result = this.formatNewlineReservedWord(token, result);
             }
+            // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
+            else if (token.value === "," && !this.inlineParentheses) {
+                this.formatComma();
+            }
             // Checks if we are out of the limit clause
             else if (this.limitClause && token.value !== "," && token.type !== sqlTokenTypes.NUMBER &&
                 token.type !== sqlTokenTypes.WHITESPACE) {
                 this.limitClause = false;
-            }
-            // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
-            else if (token.value === "," && !this.inlineParentheses) {
-                this.formatComma();
             }
             result = this.manageWhitespaces(token, key, tokens, result);
         });
@@ -144,7 +142,7 @@ export default class SqlFormatter {
         return result;
     }
 
-    formatEndingInlineParentheses(token, result) {
+    formatClosingInlineParentheses(token, result) {
         result = result.replace(/\s+$/, "");
 
         if (this.inlineIndented) {
@@ -160,7 +158,7 @@ export default class SqlFormatter {
         return result;
     }
 
-    formatStartingParentheses(token, key, tokens, tokensWithWhitespaces, result) {
+    formatOpeningParentheses(token, key, tokens, tokensWithWhitespaces, result) {
         // First check if this should be an inline parentheses block
         // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
         // Allow up to 3 non-whitespace tokens inside inline parentheses
@@ -211,7 +209,7 @@ export default class SqlFormatter {
         return result;
     }
 
-    formatEndingParentheses(result) {
+    formatClosingParentheses(result) {
         // Remove whitespace before the closing parentheses
         result = result.replace(/\s+$/, "");
 
