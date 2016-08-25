@@ -1,4 +1,4 @@
-import standardSqlFormatter from "xr/codeFormatter/standardSqlFormatter";
+import standardSqlFormatter from "xr/sqlFormatter/standardSqlFormatter";
 
 describe("sqlFormatter", function() {
     describe("SELECT", function() {
@@ -28,10 +28,12 @@ describe("sqlFormatter", function() {
                 "  `Table1`\n" +
                 "WHERE\n" +
                 "  Column1 = 'testing'\n" +
-                "  AND (\n" +
+                "AND\n" +
+                "  (\n" +
                 "    (\n" +
                 "      `Column2` = `Column3`\n" +
-                "      OR Column4 > = NOW()\n" +
+                "      OR\n" +
+                "        Column4 > = NOW()\n" +
                 "    )\n" +
                 "  )\n" +
                 "GROUP BY\n" +
@@ -45,16 +47,17 @@ describe("sqlFormatter", function() {
 
         it("formats sentence with inner join part", function() {
             const result = standardSqlFormatter.format(
-                "SELECT customer_id, COUNT(order_id) as total FROM customers " +
+                "SELECT customer_id.from, COUNT(order_id) as total FROM customers " +
                 "INNER JOIN orders ON customers.customer_id = orders.customer_id;"
             );
             expect(result).toBe(
                 "SELECT\n" +
-                "  customer_id,\n" +
+                "  customer_id.from,\n" +
                 "  COUNT(order_id) AS total\n" +
                 "FROM\n" +
                 "  customers\n" +
-                "  INNER JOIN orders ON customers.customer_id = orders.customer_id;\n"
+                "INNER JOIN\n" +
+                "  orders ON customers.customer_id = orders.customer_id;\n"
             );
         });
 
@@ -136,7 +139,8 @@ describe("sqlFormatter", function() {
                 "  Customers\n" +
                 "WHERE\n" +
                 "  CustomerName = 'Alfred'\n" +
-                "  AND Phone = 5002132;\n"
+                "AND\n" +
+                "  Phone = 5002132;\n"
             );
         });
     });

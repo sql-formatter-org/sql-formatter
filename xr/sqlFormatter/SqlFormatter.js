@@ -21,7 +21,7 @@ export default class SqlFormatter {
      * @param {Object} cfg
      *  @param {Array} cfg.reservedWords Reserved words in SQL
      *  @param {Array} cfg.reservedToplevelWords Words that are set to new line and on first indent level
-     *  @param {Array} cfg.reservedNewlineWords Words that are set to newline and to new indent level
+     *  @param {Array} cfg.reservedNewlineWords Words that are set to newline
      *  @param {Array} cfg.functionWords Words that are treated as functions
      */
     constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, functionWords}) {

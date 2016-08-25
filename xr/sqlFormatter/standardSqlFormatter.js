@@ -1,4 +1,4 @@
-import SqlFormatter from "xr/codeFormatter/SqlFormatter";
+import SqlFormatter from "xr/sqlFormatter/SqlFormatter";
 
 // Reserved words
 const reservedWords = [
@@ -44,7 +44,7 @@ const reservedToplevelWords = [
     "VALUES", "UPDATE", "HAVING", "ADD", "AFTER", "ALTER TABLE", "DELETE FROM", "UNION ALL", "UNION", "EXCEPT", "INTERSECT"
 ];
 
-// Words that are set to newline and to new indent level
+// Words that are set to newline
 const reservedNewlineWords = [
     "LEFT OUTER JOIN", "RIGHT OUTER JOIN", "LEFT JOIN", "RIGHT JOIN", "OUTER JOIN", "INNER JOIN", "JOIN", "XOR", "OR", "AND"
 ];
