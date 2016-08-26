@@ -1,3 +1,4 @@
+import _ from "xr/_";
 import sqlTokenTypes from "xr/sqlFormatter/sqlTokenTypes";
 
 export default class SqlTokenizer {
@@ -104,15 +105,15 @@ export default class SqlTokenizer {
             // Comment until end of line
             if (firstChar === "-" || firstChar === "#") {
                 type = sqlTokenTypes.COMMENT;
-                commentEnd = input.indexOf("\n");
+                commentEnd = _.includes(input, "\n") && input.indexOf("\n");
             }
             // Comment until closing comment tag
             else {
                 type = sqlTokenTypes.BLOCK_COMMENT;
-                commentEnd = input.indexOf("*/") !== -1 && input.indexOf("*/") + 2;
+                commentEnd = _.includes(input, "*/") && input.indexOf("*/") + 2;
             }
             // Query ends with unclosed comment
-            if (commentEnd === -1) {
+            if (!commentEnd) {
                 commentEnd = input.length;
             }
 

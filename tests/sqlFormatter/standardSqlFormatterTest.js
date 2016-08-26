@@ -220,5 +220,13 @@ describe("sqlFormatter", function() {
                 "  TABLE IF EXISTS `admin_role`;\n"
             );
         });
+
+        it("formats uncomplete query", function() {
+            const result = standardSqlFormatter.format("SELECT count(");
+            expect(result).toBe(
+                "SELECT\n" +
+                "  COUNT(\n"
+            );
+        });
     });
 });

@@ -232,11 +232,7 @@ export default class SqlFormatter {
         // Remove whitespace before the closing parentheses
         query = this.trimFromRight(query);
 
-        // Add a newline before the closing parentheses (if not already added)
-        if (!this.addedNewline) {
-            return this.addNewline(query);
-        }
-        return query;
+        return this.addNewline(query);
     }
 
     // Top level reserved words start a new line and increase the toplevel indent level
