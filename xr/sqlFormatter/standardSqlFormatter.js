@@ -38,7 +38,7 @@ const reservedWords = [
     "VIEW", "WHEN", "WITH", "WORK", "WRITE", "YEAR_MONTH"
 ];
 
-// Words that are set to new line and on first indent level
+// Words that are set to separate new line
 const reservedToplevelWords = [
     "SELECT", "FROM", "WHERE", "SET", "ORDER BY", "GROUP BY", "LIMIT", "DROP",
     "VALUES", "UPDATE", "HAVING", "ADD", "AFTER", "ALTER TABLE", "DELETE FROM", "UNION ALL", "UNION", "EXCEPT", "INTERSECT"

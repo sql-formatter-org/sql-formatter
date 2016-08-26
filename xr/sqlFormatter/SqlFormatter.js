@@ -5,6 +5,9 @@ import SqlTokenizer from "xr/sqlFormatter/SqlTokenizer";
 const INDENT_TYPE_TOPLEVEL = "toplevel-indent";
 const INDENT_TYPE_BLOCK = "block-indent";
 
+const TOKENS_WITHOUT_PRECEDING_SPACE = [".", ",", ";"];
+const TOKENS_WITHOUT_FOLLOWING_SPACE = ["(", "."];
+
 export default class SqlFormatter {
     /**
      * @param {Object} cfg
@@ -294,26 +297,39 @@ export default class SqlFormatter {
     }
 
     addTokenValueToQuery(token, key, query) {
-        // If the token shouldn't have a space before it
-        if (token.value === "." || token.value === "," || token.value === ";") {
+        if (_.includes(TOKENS_WITHOUT_PRECEDING_SPACE, token.value)) {
             query = this.trimFromRight(query);
         }
 
         query += token.value + " ";
 
-        // If the token shouldn't have a space after it
-        if (token.value === "(" || token.value === ".") {
+        if (_.includes(TOKENS_WITHOUT_FOLLOWING_SPACE, token.value)) {
             query = this.trimFromRight(query);
         }
+        else {
+            query = this.formatNegativeNumber(token, key, query);
+            query = this.formatStringConcat(token, key, query);
+        }
+        return query;
+    }
 
-        // If this is the "-" of a negative number, it shouldn't have a space after it
+    // If this is the "-" of a negative number, it shouldn't have a space after it
+    formatNegativeNumber(token, key, query) {
         if (token.value === "-" && this.tokens[key + 1] && this.tokens[key + 1].type === sqlTokenTypes.NUMBER && this.tokens[key - 1]) {
             const previousTokenType = this.tokens[key - 1].type;
 
             if (previousTokenType !== sqlTokenTypes.QUOTE && previousTokenType !== sqlTokenTypes.BACKTICK_QUOTE &&
                 previousTokenType !== sqlTokenTypes.WORD && previousTokenType !== sqlTokenTypes.NUMBER) {
-                query = this.trimFromRight(query);
+                return this.trimFromRight(query);
             }
+        }
+        return query;
+    }
+
+    formatStringConcat(token, key, query) {
+        // N1QL String concat
+        if (token.value === "|" && this.tokens[key + 1] && this.tokens[key + 1].value === "|") {
+            return this.trimFromRight(query);
         }
         return query;
     }
