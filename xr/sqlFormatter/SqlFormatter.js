@@ -2,6 +2,9 @@ import _ from "xr/_";
 import sqlTokenTypes from "xr/sqlFormatter/sqlTokenTypes";
 import SqlTokenizer from "xr/sqlFormatter/SqlTokenizer";
 
+const INDENT_TYPE_TOPLEVEL = "toplevel-indent";
+const INDENT_TYPE_BLOCK = "block-indent";
+
 export default class SqlFormatter {
     /**
      * @param {Object} cfg
@@ -21,19 +24,20 @@ export default class SqlFormatter {
         this.indent = "\t";
         this.indentLevel = 0;
         this.indentTypes = [];
+        this.inlineLength = 0;
     }
 
     /**
      * Format the whitespace in a SQL string to make it easier to read.
      *
-     * @param {String} query The SQL input query
-     * @return {String} formatted string
+     * @param {String} query The SQL query string
+     * @return {String} formatted query
      */
     format(query) {
         this.tokensWithWhitespaces = this.tokenizer.tokenize(query);
         this.tokens = this.getTokensWithoutWhitespaces();
 
-        const formattedQuery = this.formatTokens();
+        const formattedQuery = this.formatQuery();
 
         return this.getRefinedResult(formattedQuery);
     }
@@ -50,22 +54,15 @@ export default class SqlFormatter {
         return tokensWithoutWhitespaces;
     }
 
-    formatTokens() {
+    formatQuery() {
         let formattedQuery = "";
 
         _(this.tokens).forEach((token, key) => {
-            this.increaseSpecialIndentOnNeed();
-            this.increaseBlockIndentOnNeed();
-
-            formattedQuery = this.addNewlineOnNeed(formattedQuery);
-
             if (token.type === sqlTokenTypes.COMMENT || token.type === sqlTokenTypes.BLOCK_COMMENT) {
                 formattedQuery = this.formatComment(token, formattedQuery);
-                return;
             }
-            else if (this.inlineParentheses && token.value === ")") {
-                formattedQuery = this.formatClosingInlineParentheses(token, formattedQuery);
-                return;
+            else if (this.inlineParentheses) {
+                formattedQuery = this.formatInlineParentheses(token, formattedQuery);
             }
             else if (token.value === "(") {
                 formattedQuery = this.formatOpeningParentheses(token, key, formattedQuery);
@@ -85,23 +82,28 @@ export default class SqlFormatter {
             else if (this.hasLimitClauseEnded(token)) {
                 this.limitClause = false;
             }
-            formattedQuery = this.addTokenValueToResult(token, key, formattedQuery);
+            formattedQuery = this.addTokenValueToQuery(token, key, formattedQuery);
+
+            this.increaseToplevelIndentOnNeed();
+            this.increaseBlockIndentOnNeed();
+
+            formattedQuery = this.addNewlineOnNeed(formattedQuery);
         });
         return formattedQuery;
     }
 
-    increaseSpecialIndentOnNeed() {
-        if (this.needToIncreaseSpecialIndent) {
+    increaseToplevelIndentOnNeed() {
+        if (this.needToIncreaseToplevelIndent) {
             this.indentLevel ++;
-            this.indentTypes.unshift("special");
-            this.needToIncreaseSpecialIndent = false;
+            this.indentTypes.unshift(INDENT_TYPE_TOPLEVEL);
+            this.needToIncreaseToplevelIndent = false;
         }
     }
 
     increaseBlockIndentOnNeed() {
         if (this.needToIncreaseBlockIndent) {
             this.indentLevel ++;
-            this.indentTypes.unshift("block");
+            this.indentTypes.unshift(INDENT_TYPE_BLOCK);
             this.needToIncreaseBlockIndent = false;
         }
     }
@@ -126,14 +128,27 @@ export default class SqlFormatter {
 
             token.value = token.value.replace("\n", "\n" + this.indent.repeat(this.indentLevel));
         }
-        query += token.value;
-
         this.needToAddNewline = true;
 
         return query;
     }
 
-    formatClosingInlineParentheses(token, query) {
+    formatInlineParentheses(token, query) {
+        if (token.value === ")") {
+            query = this.formatClosingInlineParentheses(query);
+        }
+        else if (token.value === ",") {
+            if (this.inlineLength >= 30) {
+                this.inlineLength = 0;
+                this.needToAddNewline = true;
+            }
+        }
+        this.inlineLength += token.value.length;
+
+        return query;
+    }
+
+    formatClosingInlineParentheses(query) {
         this.inlineParentheses = false;
 
         query = this.trimFromRight(query);
@@ -144,14 +159,14 @@ export default class SqlFormatter {
 
             query = this.addNewline(query);
         }
-        return query + token.value + " ";
+        return query;
     }
 
     // Opening parentheses increase the block indent level and start a new line
     formatOpeningParentheses(token, key, query) {
         // First check if this should be an inline parentheses block
         // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
-        // Allow up to 3 non-whitespace inside inline parentheses
+        // Allow up to 30 non-whitespace inside inline parentheses
         let length = 0;
 
         for (let i = 1; i <= 250; i ++) {
@@ -165,6 +180,7 @@ export default class SqlFormatter {
             if (next.value === ")") {
                 this.inlineParentheses = true;
                 this.inlineIndented = false;
+                this.inlineLength = 0;
                 break;
             }
             // Reached an invalid token value for inline parentheses
@@ -205,7 +221,7 @@ export default class SqlFormatter {
         while (this.indentTypes.length) {
             const type = this.indentTypes.shift();
 
-            if (type !== "special") {
+            if (type !== INDENT_TYPE_TOPLEVEL) {
                 break;
             }
             this.indentLevel --;
@@ -220,12 +236,12 @@ export default class SqlFormatter {
         return query;
     }
 
-    // Top level reserved words start a new line and increase the special indent level
+    // Top level reserved words start a new line and increase the toplevel indent level
     formatToplevelReservedWord(token, query) {
-        this.needToIncreaseSpecialIndent = true;
+        this.needToIncreaseToplevelIndent = true;
 
-        // If the last indent type was "special", decrease the special indent for this round
-        if (this.indentTypes[0] === "special") {
+        // If the last indent type was INDENT_TYPE_TOPLEVEL, decrease the toplevel indent for this round
+        if (this.indentTypes[0] === INDENT_TYPE_TOPLEVEL) {
             this.indentLevel --;
             this.indentTypes.shift();
         }
@@ -233,7 +249,7 @@ export default class SqlFormatter {
         // Add a newline after the top level reserved word
         this.needToAddNewline = true;
 
-        // Add a this.needToAddNewline before the top level reserved word (if not already added)
+        // Add a newline before the top level reserved word (if not already added)
         if (!this.addedNewline) {
             query = this.addNewline(query);
         }
@@ -243,7 +259,7 @@ export default class SqlFormatter {
         }
         this.removeExtraWhitespacesFromToken(token);
 
-        // if SQL "LIMIT" clause, start variable to reset this.needToAddNewline
+        // if SQL "LIMIT" clause, start variable to reset newline
         if (token.value === "LIMIT" && !this.inlineParentheses) {
             this.limitClause = true;
         }
@@ -268,7 +284,6 @@ export default class SqlFormatter {
             this.needToAddNewline = false;
             this.limitClause = false;
         }
-        // All other cases of commas
         else {
             this.needToAddNewline = true;
         }
@@ -278,7 +293,7 @@ export default class SqlFormatter {
         return this.limitClause && token.value !== "," && token.type !== sqlTokenTypes.NUMBER && token.type !== sqlTokenTypes.WHITESPACE;
     }
 
-    addTokenValueToResult(token, key, query) {
+    addTokenValueToQuery(token, key, query) {
         // If the token shouldn't have a space before it
         if (token.value === "." || token.value === "," || token.value === ";") {
             query = this.trimFromRight(query);

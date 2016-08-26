@@ -43,6 +43,42 @@ describe("sqlFormatter", function() {
             );
         });
 
+        it("formats sentence with limit and offset part", function() {
+            const result = standardSqlFormatter.format(
+                "SELECT avg(paycheck) FROM `Table1` LIMIT 5,10 OFFSET 20;"
+            );
+            expect(result).toBe(
+                "SELECT\n" +
+                "  AVG(paycheck)\n" +
+                "FROM\n" +
+                "  `Table1`\n" +
+                "LIMIT\n" +
+                "  5, 10 OFFSET 20;\n"
+            );
+        });
+
+        it("formats inside select sentence", function() {
+            const result = standardSqlFormatter.format(
+                "SELECT *, SUM(*) AS sum FROM (SELECT * FROM `Posts` LIMIT 30) GROUP By `Category`"
+            );
+            expect(result).toBe(
+                "SELECT\n" +
+                "  *,\n" +
+                "  SUM(*) AS sum\n" +
+                "FROM\n" +
+                "  (\n" +
+                "    SELECT\n" +
+                "      *\n" +
+                "    FROM\n" +
+                "      `Posts`\n" +
+                "    LIMIT\n" +
+                "      30\n" +
+                "  )\n" +
+                "GROUP BY\n" +
+                "  `Category`\n"
+            );
+        });
+
         it("formats sentence with inner join part", function() {
             const result = standardSqlFormatter.format(
                 "SELECT customer_id.from, COUNT(order_id) as total FROM customers " +
@@ -105,6 +141,47 @@ describe("sqlFormatter", function() {
                 "  (\n" +
                 "    12, -123.4, `Skagen 21`, 'Stavanger'\n" +
                 "  );\n"
+            );
+        });
+
+        it("formats long sentence that includes if, inner join and select sentences", function() {
+            const result = standardSqlFormatter.format(
+                "INSERT INTO `PREFIX_specific_price` (`id_product`, `id_shop`, `id_currency`, `id_country`, `id_group`, `priority`, " +
+                "`price`, `from_quantity`, `reduction`,   `reduction_type`, `from`, `to`) (" +
+                "SELECT dq.`id_product`, 1, 1,0,1, 0, 0.00, dq.`quantity`, IF(dq.`id_discount_type` = 2, dq.`value`, dq.`value` / 100)," +
+                "IF (dq.`id_discount_type` = 2, 'amount', 'percentage'), '0000-00-00 00:00:00', '0000-00-00 00:00:00' " +
+                "FROM `PREFIX_discount_quantity` dq INNER JOIN `PREFIX_product` p ON (p.`id_product` = dq.`id_product`));"
+            );
+            expect(result).toBe(
+                "INSERT INTO `PREFIX_specific_price` (\n" +
+                "  `id_product`, `id_shop`, `id_currency`,\n" +
+                "  `id_country`, `id_group`, `priority`,\n" +
+                "  `price`, `from_quantity`, `reduction`,\n" +
+                "  `reduction_type`, `from`, `to`\n" +
+                ") (\n" +
+                "  SELECT\n" +
+                "    dq.`id_product`,\n" +
+                "    1,\n" +
+                "    1,\n" +
+                "    0,\n" +
+                "    1,\n" +
+                "    0,\n" +
+                "    0.00,\n" +
+                "    dq.`quantity`,\n" +
+                "    IF(\n" +
+                "      dq.`id_discount_type` = 2, dq.`value`,\n" +
+                "      dq.`value` / 100\n" +
+                "    ),\n" +
+                "    IF (\n" +
+                "      dq.`id_discount_type` = 2, 'amount',\n" +
+                "      'percentage'\n" +
+                "    ),\n" +
+                "    '0000-00-00 00:00:00',\n" +
+                "    '0000-00-00 00:00:00'\n" +
+                "  FROM\n" +
+                "    `PREFIX_discount_quantity` dq\n" +
+                "    INNER JOIN `PREFIX_product` p ON (p.`id_product` = dq.`id_product`)\n" +
+                ");\n"
             );
         });
     });

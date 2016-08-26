@@ -223,7 +223,6 @@ export default class SqlTokenizer {
 
         if (matches) {
             return {
-                // TODO should be type_function?
                 type: sqlTokenTypes.RESERVED,
                 value: input.substring(0, matches[1].length - 1)
             };
