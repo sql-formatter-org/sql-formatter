@@ -1,19 +1,20 @@
 import n1qlFormatter from "xr/sqlFormatter/n1qlFormatter";
 
 describe("n1qlFormatter", function() {
-    describe("SELECT", function() {
-        it("formats simple sentence", function() {
-            const result = n1qlFormatter.format("SELECT count(*),'Column1' FROM `Table1`;");
+    describe("format()", function() {
+        it("formats SELECT query with CLOCK_STR function", function() {
+            const result = n1qlFormatter.format("SELECT clock_str(*),'Column1' FROM `Table1`;");
+
             expect(result).toBe(
                 "SELECT\n" +
-                "  COUNT(*),\n" +
+                "  CLOCK_STR(*),\n" +
                 "  'Column1'\n" +
                 "FROM\n" +
                 "  `Table1`;\n"
             );
         });
 
-        it("formats DISTINCT keyword", function() {
+        it("formats SELECT query with DISTINCT keyword", function() {
             const result = n1qlFormatter.format("SELECT distinct orderlines[0].productId FROM orders;");
             expect(result).toBe(
                 "SELECT\n" +
@@ -23,7 +24,7 @@ describe("n1qlFormatter", function() {
             );
         });
 
-        it("formats functions on the data", function() {
+        it("formats SELECT query with data as function arg", function() {
             const result = n1qlFormatter.format(
                 "SELECT fname, age, ROUND(age/7) as age_dog_years FROM tutorial WHERE fname='Dave';"
             );
@@ -39,7 +40,7 @@ describe("n1qlFormatter", function() {
             );
         });
 
-        it("formats string concat", function() {
+        it("formats SELECT query with string concat", function() {
             const result = n1qlFormatter.format(
                 "SELECT fname || \" \" || lname AS full_name FROM tutorial;"
             );
@@ -51,7 +52,7 @@ describe("n1qlFormatter", function() {
             );
         });
 
-        it("formats primary key quering", function() {
+        it("formats SELECT query with primary key quering", function() {
             const result = n1qlFormatter.format(
                 "SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];"
             );
@@ -66,7 +67,7 @@ describe("n1qlFormatter", function() {
             );
         });
 
-        it("formats unnest", function() {
+        it("formats SELECT query with UNNEST and other toplevel words", function() {
             const result = n1qlFormatter.format(
                 "SELECT t.relation, COUNT(*) AS count, AVG(c.age) AS avg_age FROM tutorial t " +
                 "UNNEST t.children c WHERE c.age > 10 GROUP BY t.relation HAVING COUNT(*) > 1 " +
@@ -94,7 +95,7 @@ describe("n1qlFormatter", function() {
             );
         });
 
-        it("formats nest and other same-line reserved words", function() {
+        it("formats SELECT query with NEST and other same-line reserved words", function() {
             const result = n1qlFormatter.format(
                 "SELECT usr.personal_details, orders FROM users_with_orders usr " +
                 "USE KEYS \"Elinor_33313792\" NEST orders_with_users orders " +
@@ -112,10 +113,8 @@ describe("n1qlFormatter", function() {
                 "  orders_with_users orders ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;\n"
             );
         });
-    });
 
-    describe("EXPLAIN", function() {
-        it("formats simple sentence", function() {
+        it("formats explained DELETE query", function() {
             const result = n1qlFormatter.format(
                 "EXPLAIN DELETE FROM tutorial t USE KEYS 'baldwin' RETURNING t"
             );
@@ -126,10 +125,8 @@ describe("n1qlFormatter", function() {
                 "  'baldwin' RETURNING t\n"
             );
         });
-    });
 
-    describe("UPDATE", function() {
-        it("formats simple sentence", function() {
+        it("formats UPDATE query", function() {
             const result = n1qlFormatter.format(
                 "UPDATE tutorial USE KEYS 'baldwin' SET type = 'actor' RETURNING tutorial.type"
             );

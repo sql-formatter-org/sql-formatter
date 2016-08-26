@@ -1,8 +1,8 @@
 import standardSqlFormatter from "xr/sqlFormatter/standardSqlFormatter";
 
 describe("sqlFormatter", function() {
-    describe("SELECT", function() {
-        it("formats simple sentence", function() {
+    describe("format()", function() {
+        it("formats simple SELECT query", function() {
             const result = standardSqlFormatter.format("SELECT count(*),'Column1' FROM `Table1`;");
             expect(result).toBe(
                 "SELECT\n" +
@@ -13,7 +13,7 @@ describe("sqlFormatter", function() {
             );
         });
 
-        it("formats sentence with where, group/order by and limit part", function() {
+        it("formats SELECT query with WHERE, GROUP/ORDER BY and LIMIT words", function() {
             const result = standardSqlFormatter.format(
                 "SELECT count(*),'Column1',`Testing`, `Testing Three` FROM `Table1` WHERE Column1 = 'testing' " +
                 "AND ( (`Column2` = `Column3` OR Column4 >= NOW()) ) GROUP BY Column1 ORDER BY Column3 DESC LIMIT 5,10;"
@@ -43,7 +43,7 @@ describe("sqlFormatter", function() {
             );
         });
 
-        it("formats sentence with limit and offset part", function() {
+        it("formats SELECT query with LIMIT and OFFSET", function() {
             const result = standardSqlFormatter.format(
                 "SELECT avg(paycheck) FROM `Table1` LIMIT 5,10 OFFSET 20;"
             );
@@ -57,7 +57,7 @@ describe("sqlFormatter", function() {
             );
         });
 
-        it("formats inside select sentence", function() {
+        it("formats SELECT query with SELECT query inside it", function() {
             const result = standardSqlFormatter.format(
                 "SELECT *, SUM(*) AS sum FROM (SELECT * FROM `Posts` LIMIT 30) GROUP By `Category`"
             );
@@ -79,7 +79,7 @@ describe("sqlFormatter", function() {
             );
         });
 
-        it("formats sentence with inner join part", function() {
+        it("formats SELECT query with INNER JOIN", function() {
             const result = standardSqlFormatter.format(
                 "SELECT customer_id.from, COUNT(order_id) as total FROM customers " +
                 "INNER JOIN orders ON customers.customer_id = orders.customer_id;"
@@ -94,7 +94,7 @@ describe("sqlFormatter", function() {
             );
         });
 
-        it("formats sentence with comments", function() {
+        it("formats SELECT query with different comments", function() {
             const result = standardSqlFormatter.format(
                 "SELECT\n" +
                 "/* This is a block comment\n" +
@@ -118,7 +118,7 @@ describe("sqlFormatter", function() {
             );
         });
 
-        it("formats sentence with variable", function() {
+        it("formats SELECT query with different variable types", function() {
             const result = standardSqlFormatter.format(
                 "SELECT @variable, @'variable name';"
             );
@@ -128,10 +128,8 @@ describe("sqlFormatter", function() {
                 "  @'variable name';\n"
             );
         });
-    });
 
-    describe("INSERT", function() {
-        it("formats simple sentence", function() {
+        it("formats simple INSERT query", function() {
             const result = standardSqlFormatter.format(
                 "INSERT iNtO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, `Skagen 21`,'Stavanger');"
             );
@@ -144,7 +142,7 @@ describe("sqlFormatter", function() {
             );
         });
 
-        it("formats long sentence that includes if, inner join and select sentences", function() {
+        it("formats long INSERT query including SELECT, IF and INNER JOIN parts", function() {
             const result = standardSqlFormatter.format(
                 "INSERT INTO `PREFIX_specific_price` (`id_product`, `id_shop`, `id_currency`, `id_country`, `id_group`, `priority`, " +
                 "`price`, `from_quantity`, `reduction`,   `reduction_type`, `from`, `to`) (" +
@@ -184,10 +182,8 @@ describe("sqlFormatter", function() {
                 ");\n"
             );
         });
-    });
 
-    describe("UPDATE", function() {
-        it("formats sentence with where part", function() {
+        it("formats simple UPDATE query", function() {
             const result = standardSqlFormatter.format(
                 "uPDATE Customers set ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';"
             );
@@ -201,10 +197,8 @@ describe("sqlFormatter", function() {
                 "  CustomerName = 'Alfreds Futterkiste';\n"
             );
         });
-    });
 
-    describe("DELETE", function() {
-        it("formats simple sentence", function() {
+        it("formats simple DELETE query", function() {
             const result = standardSqlFormatter.format(
                 "DELETE FROM Customers WHERE CustomerName='Alfred' AND Phone=5002132;"
             );
@@ -216,10 +210,8 @@ describe("sqlFormatter", function() {
                 "  AND Phone = 5002132;\n"
             );
         });
-    });
 
-    describe("DROP", function() {
-        it("formats simple sentence", function() {
+        it("formats simple DROP query", function() {
             const result = standardSqlFormatter.format(
                 "DROP TABLE IF EXISTS `admin_role`;"
             );
