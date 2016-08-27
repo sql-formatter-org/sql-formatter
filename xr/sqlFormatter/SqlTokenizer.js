@@ -160,7 +160,7 @@ export default class SqlTokenizer {
         return this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.NUMBER,
-            regex: new RegExp(`^([0-9]+(\\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)($|\\s|"'\`|${this.regex.boundaries})`)
+            regex: new RegExp(`^((-\s*)?[0-9]+(\\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)($|\\s|"'\`|${this.regex.boundaries})`)
         });
     }
 

@@ -131,13 +131,13 @@ describe("sqlFormatter", function() {
 
         it("formats simple INSERT query", function() {
             const result = standardSqlFormatter.format(
-                "INSERT iNtO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, `Skagen 21`,'Stavanger');"
+                "INSERT iNtO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, `Skagen 2111`,'Stavanger');"
             );
             expect(result).toBe(
                 "INSERT INTO Customers (ID, MoneyBalance, Address, City)\n" +
                 "VALUES\n" +
                 "  (\n" +
-                "    12, -123.4, `Skagen 21`, 'Stavanger'\n" +
+                "    12, -123.4, `Skagen 2111`, 'Stavanger'\n" +
                 "  );\n"
             );
         });
@@ -226,6 +226,15 @@ describe("sqlFormatter", function() {
             expect(result).toBe(
                 "SELECT\n" +
                 "  COUNT(\n"
+            );
+        });
+
+        it("formats query that ends with open comment", function() {
+            const result = standardSqlFormatter.format("SELECT count(*)\n/*Comment");
+            expect(result).toBe(
+                "SELECT\n" +
+                "  COUNT(*)\n" +
+                "  /*Comment\n"
             );
         });
     });
