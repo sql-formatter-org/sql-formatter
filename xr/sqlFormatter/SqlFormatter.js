@@ -216,7 +216,7 @@ export default class SqlFormatter {
         }
         query = this.addNewline(query);
 
-        return this.addValueToQuery(query, token.value);
+        return this.addValueToQuery(query, token.value + " ");
     }
 
     // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)

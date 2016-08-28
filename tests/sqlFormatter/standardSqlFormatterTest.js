@@ -237,5 +237,24 @@ describe("sqlFormatter", function() {
                 "  /*Comment\n"
             );
         });
+
+        it("formats UPDATE query with AS part", function() {
+            const result = standardSqlFormatter.format(
+                "UPDATE customers SET totalorders = ordersummary.total  FROM ( SELECT * FROM bank) As ordersummary"
+            );
+            expect(result).toBe(
+                "UPDATE\n" +
+                "  customers\n" +
+                "SET\n" +
+                "  totalorders = ordersummary.total\n" +
+                "FROM\n" +
+                "  (\n" +
+                "    SELECT\n" +
+                "      *\n" +
+                "    FROM\n" +
+                "      bank\n" +
+                "  ) AS ordersummary\n"
+            );
+        });
     });
 });
