@@ -36,31 +36,24 @@ describe("standardSqlFormatter", function() {
         );
     });
 
-    it("formats GROUP BY and ORDER BY", function() {
+    it("formats SELECT with toplevel reserved words", function() {
         const result = standardSqlFormatter.format(
-            "SELECT * FROM foo GROUP BY some_column ORDER BY other_column;"
+            "SELECT * FROM foo WHERE name = 'John' GROUP BY some_column " +
+            "HAVING column > 10 ORDER BY other_column LIMIT 5,10 OFFSET 20;"
         );
         expect(result).toBe(
             "SELECT\n" +
             "  *\n" +
             "FROM\n" +
             "  foo\n" +
+            "WHERE\n" +
+            "  name = 'John'\n" +
             "GROUP BY\n" +
             "  some_column\n" +
+            "HAVING\n" +
+            "  column > 10\n" +
             "ORDER BY\n" +
-            "  other_column;\n"
-        );
-    });
-
-    it("formats LIMIT and OFFSET", function() {
-        const result = standardSqlFormatter.format(
-            "SELECT * FROM Table1 LIMIT 5,10 OFFSET 20;"
-        );
-        expect(result).toBe(
-            "SELECT\n" +
-            "  *\n" +
-            "FROM\n" +
-            "  Table1\n" +
+            "  other_column\n" +
             "LIMIT\n" +
             "  5, 10 OFFSET 20;\n"
         );
