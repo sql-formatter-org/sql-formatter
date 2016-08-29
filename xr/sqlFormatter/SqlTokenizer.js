@@ -26,7 +26,7 @@ export default class SqlTokenizer {
         // 1. backtick quoted string using `` to escape
         // 2. square bracket quoted string (SQL Server) using ]] to escape
         // 3. double quoted string using "" or \" to escape
-        // 4. single quoted string using "" or \" to escape
+        // 4. single quoted string using '' or \' to escape
         this.STRING_REGEX = new RegExp(
             "^(((`[^`]*($|`))+)|" +
             "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)|" +
