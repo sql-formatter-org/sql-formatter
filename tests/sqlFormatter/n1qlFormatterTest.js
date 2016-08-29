@@ -2,14 +2,13 @@ import n1qlFormatter from "xr/sqlFormatter/n1qlFormatter";
 
 describe("n1qlFormatter", function() {
     it("formats SELECT query with CLOCK_STR function", function() {
-        const result = n1qlFormatter.format("SELECT CLOCK_STR(*),'Column1' FROM `Table1`;");
-
+        const result = n1qlFormatter.format("SELECT CLOCK_STR(*),'Column1' FROM Table1;");
         expect(result).toBe(
             "SELECT\n" +
             "  CLOCK_STR(*),\n" +
             "  'Column1'\n" +
             "FROM\n" +
-            "  `Table1`;\n"
+            "  Table1;\n"
         );
     });
 
@@ -85,7 +84,7 @@ describe("n1qlFormatter", function() {
     it("formats SELECT query with NEST and other same-line reserved words", function() {
         const result = n1qlFormatter.format(
             "SELECT usr.personal_details, orders FROM users_with_orders usr " +
-            "USE KEYS \"Elinor_33313792\" NEST orders_with_users orders " +
+            "USE KEYS 'Elinor_33313792' NEST orders_with_users orders " +
             "ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;"
         );
         expect(result).toBe(
@@ -95,7 +94,7 @@ describe("n1qlFormatter", function() {
             "FROM\n" +
             "  users_with_orders usr\n" +
             "USE KEYS\n" +
-            "  \"Elinor_33313792\"\n" +
+            "  'Elinor_33313792'\n" +
             "NEST\n" +
             "  orders_with_users orders ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;\n"
         );

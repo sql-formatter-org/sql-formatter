@@ -2,34 +2,34 @@ import standardSqlFormatter from "xr/sqlFormatter/standardSqlFormatter";
 
 describe("standardSqlFormatter", function() {
     it("formats simple SELECT query", function() {
-        const result = standardSqlFormatter.format("SELECT count(*),'Column1' FROM `Table1`;");
+        const result = standardSqlFormatter.format("SELECT count(*),Column1 FROM Table1;");
         expect(result).toBe(
             "SELECT\n" +
             "  count(*),\n" +
-            "  'Column1'\n" +
+            "  Column1\n" +
             "FROM\n" +
-            "  `Table1`;\n"
+            "  Table1;\n"
         );
     });
 
     it("formats SELECT query with WHERE, GROUP/ORDER BY and LIMIT words", function() {
         const result = standardSqlFormatter.format(
-            "SELECT count(*),'Column1',`Testing`, `Testing Three` FROM `Table1` WHERE Column1 = 'testing' " +
-            "AND ( (`Column2` = `Column3` OR Column4 >= NOW()) ) GROUP BY Column1 ORDER BY Column3 DESC LIMIT 5,10;"
+            "SELECT count(*),'Column1','Testing', 'Testing Three' FROM Table1 WHERE Column1 = 'testing' " +
+            "AND ( (Column2 = Column3 OR Column4 >= NOW()) ) GROUP BY Column1 ORDER BY Column3 DESC LIMIT 5,10;"
         );
         expect(result).toBe(
             "SELECT\n" +
             "  count(*),\n" +
             "  'Column1',\n" +
-            "  `Testing`,\n" +
-            "  `Testing Three`\n" +
+            "  'Testing',\n" +
+            "  'Testing Three'\n" +
             "FROM\n" +
-            "  `Table1`\n" +
+            "  Table1\n" +
             "WHERE\n" +
             "  Column1 = 'testing'\n" +
             "  AND (\n" +
             "    (\n" +
-            "      `Column2` = `Column3`\n" +
+            "      Column2 = Column3\n" +
             "      OR Column4 >= NOW()\n" +
             "    )\n" +
             "  )\n" +
@@ -44,13 +44,13 @@ describe("standardSqlFormatter", function() {
 
     it("formats SELECT query with LIMIT and OFFSET", function() {
         const result = standardSqlFormatter.format(
-            "SELECT avg(paycheck) FROM `Table1` LIMIT 5,10 OFFSET 20;"
+            "SELECT avg(paycheck) FROM Table1 LIMIT 5,10 OFFSET 20;"
         );
         expect(result).toBe(
             "SELECT\n" +
             "  avg(paycheck)\n" +
             "FROM\n" +
-            "  `Table1`\n" +
+            "  Table1\n" +
             "LIMIT\n" +
             "  5, 10 OFFSET 20;\n"
         );
@@ -58,7 +58,7 @@ describe("standardSqlFormatter", function() {
 
     it("formats SELECT query with SELECT query inside it", function() {
         const result = standardSqlFormatter.format(
-            "SELECT *, SUM(*) AS sum FROM (SELECT * FROM `Posts` LIMIT 30) GROUP BY `Category`"
+            "SELECT *, SUM(*) AS sum FROM (SELECT * FROM Posts LIMIT 30) GROUP BY Category"
         );
         expect(result).toBe(
             "SELECT\n" +
@@ -69,12 +69,12 @@ describe("standardSqlFormatter", function() {
             "    SELECT\n" +
             "      *\n" +
             "    FROM\n" +
-            "      `Posts`\n" +
+            "      Posts\n" +
             "    LIMIT\n" +
             "      30\n" +
             "  )\n" +
             "GROUP BY\n" +
-            "  `Category`\n"
+            "  Category\n"
         );
     });
 
@@ -101,7 +101,6 @@ describe("standardSqlFormatter", function() {
             "* FROM\n" +
             "-- This is another comment\n" +
             "MyTable # One final comment\n" +
-
             "WHERE 1 = 2;"
         );
         expect(result).toBe(
@@ -130,13 +129,13 @@ describe("standardSqlFormatter", function() {
 
     it("formats simple INSERT query", function() {
         const result = standardSqlFormatter.format(
-            "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, `Skagen 2111`,'Stavanger');"
+            "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stavanger');"
         );
         expect(result).toBe(
             "INSERT INTO Customers (ID, MoneyBalance, Address, City)\n" +
             "VALUES\n" +
             "  (\n" +
-            "    12, -123.4, `Skagen 2111`, 'Stavanger'\n" +
+            "    12, -123.4, 'Skagen 2111', 'Stavanger'\n" +
             "  );\n"
         );
     });
@@ -212,11 +211,11 @@ describe("standardSqlFormatter", function() {
 
     it("formats simple DROP query", function() {
         const result = standardSqlFormatter.format(
-            "DROP TABLE IF EXISTS `admin_role`;"
+            "DROP TABLE IF EXISTS admin_role;"
         );
         expect(result).toBe(
             "DROP\n" +
-            "  TABLE IF EXISTS `admin_role`;\n"
+            "  TABLE IF EXISTS admin_role;\n"
         );
     });
 
