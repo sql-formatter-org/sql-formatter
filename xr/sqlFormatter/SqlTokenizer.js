@@ -108,14 +108,11 @@ export default class SqlTokenizer {
     }
 
     getStringToken(input) {
-        const firstChar = input.charAt(0);
-
-        if (firstChar === "\"" || firstChar === "'" || firstChar === "`" || firstChar === "[") {
-            return {
-                type: sqlTokenTypes.STRING,
-                value: this.getQuotedString(input)
-            };
-        }
+        return this.getTokenOnFirstMatch({
+            input,
+            type: sqlTokenTypes.STRING,
+            regex: this.STRING_REGEX
+        });
     }
 
     getVariableToken(input) {
@@ -124,7 +121,7 @@ export default class SqlTokenizer {
             if (input.charAt(1) === "\"" || input.charAt(1) === "'" || input.charAt(1) === "`") {
                 return {
                     type: sqlTokenTypes.VARIABLE,
-                    value: input.charAt(0) + this.getQuotedString(input.substring(1))
+                    value: input.charAt(0) + input.substring(1).match(this.STRING_REGEX)[1]
                 };
             }
             // Non-quoted variable name
@@ -216,7 +213,7 @@ export default class SqlTokenizer {
     }
 
     getQuotedString(input) {
-        const matches = input.match(this.STRING_REGEX);
+        const matches = input;
 
         if (matches) {
             return matches[1];
