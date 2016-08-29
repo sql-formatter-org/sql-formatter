@@ -9,20 +9,20 @@ export default class SqlTokenizer {
      *  @param {Array} cfg.functionWords Words that are treated as functions
      */
     constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, functionWords}) {
-        const boundaries = "(!=|<>|==|<=|>=|!<|!>|\\|\\||,|;|\\:|\\)|\\(|\\.|\\=|\\<|\\>|\\+|\\-|\\*|\\/|\\!|\\^|%|\\||&|#)";
+        const operators = "(!=|<>|==|<=|>=|!<|!>|\\|\\||,|;|\\:|\\)|\\(|\\.|\\=|\\<|\\>|\\+|\\-|\\*|\\/|\\!|\\^|%|\\||&|#)";
 
         this.WHITESPACE_REGEX = /^(\s+)/;
         this.LINE_COMMENT_REGEX = /^((?:#|--).*?(?:\n|$))/;
         this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
-        this.NUMBER_REGEX = new RegExp(`^((-\s*)?[0-9]+(\\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)($|\\s|"'\`|${boundaries})`);
-        this.BOUNDARY_REGEX = new RegExp(`^(${boundaries})`);
+        this.NUMBER_REGEX = new RegExp(`^((-\s*)?[0-9]+(\\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)($|\\s|"'\`|${operators})`);
+        this.OPERATOR_REGEX = new RegExp(`^(${operators})`);
         this.FUNCTION_REGEX = new RegExp(`^(${functionWords.join("|")})\\(`, "i");
 
-        this.RESERVED_TOPLEVEL_REGEX = this.createReservedWordRegex(reservedToplevelWords, boundaries);
-        this.RESERVED_NEWLINE_REGEX = this.createReservedWordRegex(reservedNewlineWords, boundaries);
-        this.RESERVED_PLAIN_REGEX = this.createReservedWordRegex(reservedWords, boundaries);
+        this.RESERVED_TOPLEVEL_REGEX = this.createReservedWordRegex(reservedToplevelWords, operators);
+        this.RESERVED_NEWLINE_REGEX = this.createReservedWordRegex(reservedNewlineWords, operators);
+        this.RESERVED_PLAIN_REGEX = this.createReservedWordRegex(reservedWords, operators);
 
-        this.NON_RESERVED_WORD_REGEX = new RegExp(`^(.*?)($|\\s|["'\`]|${boundaries})`);
+        this.NON_RESERVED_WORD_REGEX = new RegExp(`^(.*?)($|\\s|["'\`]|${operators})`);
 
         // This checks for the following patterns:
         // 1. backtick quoted string using `` to escape
@@ -37,9 +37,9 @@ export default class SqlTokenizer {
         );
     }
 
-    createReservedWordRegex(reservedWords, boundaries) {
+    createReservedWordRegex(reservedWords, operators) {
         const reservedWordsPattern = reservedWords.join("|").replace(/ /g, "\\s+");
-        return new RegExp(`^(${reservedWordsPattern})($|\\s|${boundaries})`, "i");
+        return new RegExp(`^(${reservedWordsPattern})($|\\s|${operators})`, "i");
     }
 
     /**
@@ -151,8 +151,8 @@ export default class SqlTokenizer {
     getBoundaryCharacterToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.BOUNDARY,
-            regex: this.BOUNDARY_REGEX
+            type: sqlTokenTypes.OPERATOR,
+            regex: this.OPERATOR_REGEX
         });
     }
 

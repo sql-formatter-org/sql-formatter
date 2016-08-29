@@ -9,7 +9,7 @@ export default {
     RESERVED: "reserved",
     RESERVED_TOPLEVEL: "reserved-toplevel",
     RESERVED_NEWLINE: "reserved-newline",
-    BOUNDARY: "boundary",
+    OPERATOR: "operator",
     COMMENT: "comment",
     BLOCK_COMMENT: "block-comment",
     NUMBER: "number",
