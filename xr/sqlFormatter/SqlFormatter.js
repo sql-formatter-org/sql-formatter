@@ -13,7 +13,7 @@ export default class SqlFormatter {
      */
     constructor(tokenizer) {
         this.tokenizer = tokenizer;
-        this.indent = "\t";
+        this.indent = "  ";
         this.indentLevel = 0;
         this.indentTypes = [];
         this.inlineLength = 0;
@@ -117,7 +117,7 @@ export default class SqlFormatter {
     formatOpeningParentheses(tokens, index, query) {
         // Take out the preceding space unless there was whitespace there in the original query
         if (tokens[index - 1] && tokens[index - 1].type !== sqlTokenTypes.WHITESPACE) {
-            query = this.trimFromRight(query);
+            query = _.trimEnd(query);
         }
         query = this.addValueToQuery(query, tokens[index].value);
 
@@ -180,7 +180,7 @@ export default class SqlFormatter {
     formatClosingInlineParentheses(token, query) {
         this.inlineParentheses = false;
 
-        query = this.trimFromRight(query);
+        query = _.trimEnd(query);
 
         if (this.inlineIndented) {
             this.indentTypes.pop();
@@ -210,7 +210,7 @@ export default class SqlFormatter {
 
     // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
     formatComma(token, query) {
-        query = this.trimFromRight(query);
+        query = _.trimEnd(query);
         query = this.addValueToQuery(query, token.value + " ");
 
         if (this.inlineParentheses) {
@@ -239,7 +239,7 @@ export default class SqlFormatter {
     }
 
     formatDot(token, query) {
-        query = this.trimFromRight(query);
+        query = _.trimEnd(query);
         return this.addValueToQuery(query, token.value);
     }
 
@@ -270,12 +270,8 @@ export default class SqlFormatter {
     }
 
     addNewline(query) {
-        query = this.trimFromRight(query);
+        query = _.trimEnd(query);
         return query + "\n" + this.indent.repeat(this.indentLevel);
-    }
-
-    trimFromRight(query) {
-        return query.replace(/\s+$/, "");
     }
 
     addValueToQuery(query, value) {
@@ -283,6 +279,6 @@ export default class SqlFormatter {
     }
 
     getRefinedResult(formattedQuery) {
-        return formattedQuery.replace(new RegExp(this.indent, "g"), "  ").trim() + "\n";
+        return formattedQuery.trim() + "\n";
     }
 }
