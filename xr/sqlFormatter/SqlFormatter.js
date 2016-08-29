@@ -104,13 +104,18 @@ export default class SqlFormatter {
 
         this.increaseToplevelIndent();
 
-        query = this.addValueToQuery(query, token.value);
+        query = this.addValueToQuery(query, this.equalizeWhitespace(token.value));
         return this.addNewline(query);
     }
 
     formatNewlineReservedWord(token, query) {
         query = this.addNewline(query);
-        return this.addValueToQuery(query, token.value + " ");
+        return this.addValueToQuery(query, this.equalizeWhitespace(token.value) + " ");
+    }
+
+    // Replace any sequence of whitespace characters with single space
+    equalizeWhitespace(string) {
+        return string.replace(/\s+/g, " ");
     }
 
     // Opening parentheses increase the block indent level and start a new line

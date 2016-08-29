@@ -256,5 +256,18 @@ describe("standardSqlFormatter", function() {
                 "  ) As ordersummary\n"
             );
         });
+
+        it("formats top-level and newline multi-word reserved words with inconsistent spacing", function() {
+            const result = standardSqlFormatter.format("SELECT * FROM foo LEFT \t OUTER  \n JOIN bar ORDER \n BY blah");
+            expect(result).toBe(
+                "SELECT\n" +
+                "  *\n" +
+                "FROM\n" +
+                "  foo\n" +
+                "  LEFT OUTER JOIN bar\n" +
+                "ORDER BY\n" +
+                "  blah\n"
+            );
+        });
     });
 });
