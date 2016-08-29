@@ -68,31 +68,23 @@ export default class SqlTokenizer {
     }
 
     getCommentToken(input) {
-        const firstChar = input.charAt(0);
-        const secondChar = input.charAt(1);
+        return this.getLineCommentToken(input) || this.getBlockCommentToken(input);
+    }
 
-        if (firstChar === "#" || (firstChar === "-" && secondChar === "-") || (firstChar === "/" && secondChar === "*")) {
-            let type;
-            let commentEnd;
-
-            // Comment until end of line
-            if (firstChar === "-" || firstChar === "#") {
-                type = sqlTokenTypes.COMMENT;
-                commentEnd = _.includes(input, "\n") && input.indexOf("\n");
-            }
-            // Comment until closing comment tag
-            else {
-                type = sqlTokenTypes.BLOCK_COMMENT;
-                commentEnd = _.includes(input, "*/") && input.indexOf("*/") + 2;
-            }
-            // Query ends with unclosed comment
-            if (!commentEnd) {
-                commentEnd = input.length;
-            }
-
+    getLineCommentToken(input) {
+        if (/^(#|--)/.test(input)) {
             return {
-                type,
-                value: input.substring(0, commentEnd)
+                type: sqlTokenTypes.COMMENT,
+                value: input.match(/^.*?(\n|$)/)[0]
+            };
+        }
+    }
+
+    getBlockCommentToken(input) {
+        if (/^\/\*/.test(input)) {
+            return {
+                type: sqlTokenTypes.BLOCK_COMMENT,
+                value: input.match(/^[^]*?(\*\/|$)/)[0]
             };
         }
     }
