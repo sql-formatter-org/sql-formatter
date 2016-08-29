@@ -12,19 +12,31 @@ describe("standardSqlFormatter", function() {
         );
     });
 
-    it("formats SELECT query with complex WHERE", function() {
+    it("formats complex SELECT", function() {
         const result = standardSqlFormatter.format(
-            "SELECT count(*),'Column1','Testing', 'Testing Three' FROM Table1 WHERE Column1 = 'testing' " +
+            "SELECT DISTINCT name, ROUND(age/7) field1, 18 + 20 AS field2, 'some string' FROM foo;"
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  DISTINCT name,\n" +
+            "  ROUND(age / 7) field1,\n" +
+            "  18 + 20 AS field2,\n" +
+            "  'some string'\n" +
+            "FROM\n" +
+            "  foo;\n"
+        );
+    });
+
+    it("formats SELECT with complex WHERE", function() {
+        const result = standardSqlFormatter.format(
+            "SELECT * FROM foo WHERE Column1 = 'testing' " +
             "AND ( (Column2 = Column3 OR Column4 >= NOW()) );"
         );
         expect(result).toBe(
             "SELECT\n" +
-            "  count(*),\n" +
-            "  'Column1',\n" +
-            "  'Testing',\n" +
-            "  'Testing Three'\n" +
+            "  *\n" +
             "FROM\n" +
-            "  Table1\n" +
+            "  foo\n" +
             "WHERE\n" +
             "  Column1 = 'testing'\n" +
             "  AND (\n" +
