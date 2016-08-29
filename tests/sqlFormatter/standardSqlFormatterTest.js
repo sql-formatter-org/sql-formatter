@@ -6,7 +6,7 @@ describe("sqlFormatter", function() {
             const result = standardSqlFormatter.format("SELECT count(*),'Column1' FROM `Table1`;");
             expect(result).toBe(
                 "SELECT\n" +
-                "  COUNT(*),\n" +
+                "  count(*),\n" +
                 "  'Column1'\n" +
                 "FROM\n" +
                 "  `Table1`;\n"
@@ -20,7 +20,7 @@ describe("sqlFormatter", function() {
             );
             expect(result).toBe(
                 "SELECT\n" +
-                "  COUNT(*),\n" +
+                "  count(*),\n" +
                 "  'Column1',\n" +
                 "  `Testing`,\n" +
                 "  `Testing Three`\n" +
@@ -49,7 +49,7 @@ describe("sqlFormatter", function() {
             );
             expect(result).toBe(
                 "SELECT\n" +
-                "  AVG(paycheck)\n" +
+                "  avg(paycheck)\n" +
                 "FROM\n" +
                 "  `Table1`\n" +
                 "LIMIT\n" +
@@ -59,7 +59,7 @@ describe("sqlFormatter", function() {
 
         it("formats SELECT query with SELECT query inside it", function() {
             const result = standardSqlFormatter.format(
-                "SELECT *, SUM(*) AS sum FROM (SELECT * FROM `Posts` LIMIT 30) GROUP By `Category`"
+                "SELECT *, SUM(*) AS sum FROM (SELECT * FROM `Posts` LIMIT 30) GROUP BY `Category`"
             );
             expect(result).toBe(
                 "SELECT\n" +
@@ -81,7 +81,7 @@ describe("sqlFormatter", function() {
 
         it("formats SELECT query with INNER JOIN", function() {
             const result = standardSqlFormatter.format(
-                "SELECT customer_id.from, COUNT(order_id) as total FROM customers " +
+                "SELECT customer_id.from, COUNT(order_id) AS total FROM customers " +
                 "INNER JOIN orders ON customers.customer_id = orders.customer_id;"
             );
             expect(result).toBe(
@@ -131,7 +131,7 @@ describe("sqlFormatter", function() {
 
         it("formats simple INSERT query", function() {
             const result = standardSqlFormatter.format(
-                "INSERT iNtO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, `Skagen 2111`,'Stavanger');"
+                "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, `Skagen 2111`,'Stavanger');"
             );
             expect(result).toBe(
                 "INSERT INTO Customers (ID, MoneyBalance, Address, City)\n" +
@@ -188,9 +188,9 @@ describe("sqlFormatter", function() {
                 "uPDATE Customers set ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';"
             );
             expect(result).toBe(
-                "UPDATE\n" +
+                "uPDATE\n" +
                 "  Customers\n" +
-                "SET\n" +
+                "set\n" +
                 "  ContactName = 'Alfred Schmidt',\n" +
                 "  City = 'Hamburg'\n" +
                 "WHERE\n" +
@@ -225,7 +225,7 @@ describe("sqlFormatter", function() {
             const result = standardSqlFormatter.format("SELECT count(");
             expect(result).toBe(
                 "SELECT\n" +
-                "  COUNT(\n"
+                "  count(\n"
             );
         });
 
@@ -233,7 +233,7 @@ describe("sqlFormatter", function() {
             const result = standardSqlFormatter.format("SELECT count(*)\n/*Comment");
             expect(result).toBe(
                 "SELECT\n" +
-                "  COUNT(*)\n" +
+                "  count(*)\n" +
                 "  /*Comment\n"
             );
         });
@@ -253,7 +253,7 @@ describe("sqlFormatter", function() {
                 "      *\n" +
                 "    FROM\n" +
                 "      bank\n" +
-                "  ) AS ordersummary\n"
+                "  ) As ordersummary\n"
             );
         });
     });

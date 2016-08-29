@@ -70,12 +70,12 @@ export default class SqlTokenizer {
             return boundaryCharacterToken;
         }
 
-        const reservedWordToken = this.getReservedWordToken(input.toUpperCase(), previousToken);
+        const reservedWordToken = this.getReservedWordToken(input, previousToken);
         if (reservedWordToken) {
             return reservedWordToken;
         }
 
-        const functionWordToken = this.getFunctionWordToken(input.toUpperCase());
+        const functionWordToken = this.getFunctionWordToken(input);
         if (functionWordToken) {
             return functionWordToken;
         }
@@ -207,7 +207,7 @@ export default class SqlTokenizer {
     }
 
     getSpecificReservedWordToken({input, type, regex}) {
-        const matches = input.match(new RegExp(`^(${regex})($|\\s|${this.regex.boundaries})`));
+        const matches = input.match(new RegExp(`^(${regex})($|\\s|${this.regex.boundaries})`, "i"));
 
         if (matches) {
             return {
@@ -220,7 +220,7 @@ export default class SqlTokenizer {
     getFunctionWordToken(input) {
         // A function must be suceeded by "("
         // this makes it so "count(" is considered a function, but "count" alone is not
-        const matches = input.match(new RegExp(`^(${this.regex.function}[(]|\\s|[)])`));
+        const matches = input.match(new RegExp(`^(${this.regex.function}[(]|\\s|[)])`, "i"));
 
         if (matches) {
             return {

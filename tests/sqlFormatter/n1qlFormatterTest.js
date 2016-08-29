@@ -3,7 +3,7 @@ import n1qlFormatter from "xr/sqlFormatter/n1qlFormatter";
 describe("n1qlFormatter", function() {
     describe("format()", function() {
         it("formats SELECT query with CLOCK_STR function", function() {
-            const result = n1qlFormatter.format("SELECT clock_str(*),'Column1' FROM `Table1`;");
+            const result = n1qlFormatter.format("SELECT CLOCK_STR(*),'Column1' FROM `Table1`;");
 
             expect(result).toBe(
                 "SELECT\n" +
@@ -15,7 +15,7 @@ describe("n1qlFormatter", function() {
         });
 
         it("formats SELECT query with DISTINCT keyword", function() {
-            const result = n1qlFormatter.format("SELECT distinct orderlines[0].productId FROM orders;");
+            const result = n1qlFormatter.format("SELECT DISTINCT orderlines[0].productId FROM orders;");
             expect(result).toBe(
                 "SELECT\n" +
                 "  DISTINCT orderlines[0].productId\n" +
@@ -26,7 +26,7 @@ describe("n1qlFormatter", function() {
 
         it("formats SELECT query with data as function arg", function() {
             const result = n1qlFormatter.format(
-                "SELECT fname, age, ROUND(age/7) as age_dog_years FROM tutorial WHERE fname='Dave';"
+                "SELECT fname, age, ROUND(age/7) AS age_dog_years FROM tutorial WHERE fname='Dave';"
             );
             expect(result).toBe(
                 "SELECT\n" +
@@ -99,7 +99,7 @@ describe("n1qlFormatter", function() {
             const result = n1qlFormatter.format(
                 "SELECT usr.personal_details, orders FROM users_with_orders usr " +
                 "USE KEYS \"Elinor_33313792\" NEST orders_with_users orders " +
-                "ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history end;"
+                "ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;"
             );
             expect(result).toBe(
                 "SELECT\n" +
