@@ -123,7 +123,7 @@ export default class SqlFormatter {
 
         // Check if this should be an inline parentheses block
         // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
-        const parenthesesBlockLength = this.considerInlineParenthesesBlock(tokens, index);
+        const parenthesesBlockLength = this.measureInlineParenthesesBlock(tokens, index);
 
         if (this.inlineParentheses && parenthesesBlockLength > INLINE_MAX_LENGTH) {
             this.inlineIndented = true;
@@ -138,7 +138,7 @@ export default class SqlFormatter {
         return query;
     }
 
-    considerInlineParenthesesBlock(tokens, index) {
+    measureInlineParenthesesBlock(tokens, index) {
         let length = 0;
 
         for (let i = 1; i <= INLINE_PARENTHESES_SEARCH_RANGE; i ++) {
