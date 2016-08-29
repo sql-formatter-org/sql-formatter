@@ -6,9 +6,8 @@ export default class SqlTokenizer {
      *  @param {Array} cfg.reservedWords Reserved words in SQL
      *  @param {Array} cfg.reservedToplevelWords Words that are set to new line and on first indent level
      *  @param {Array} cfg.reservedNewlineWords Words that are set to newline
-     *  @param {Array} cfg.functionWords Words that are treated as functions
      */
-    constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, functionWords}) {
+    constructor({reservedWords, reservedToplevelWords, reservedNewlineWords}) {
         const operators = "(!=|<>|==|<=|>=|!<|!>|\\|\\||,|;|\\:|\\)|\\(|\\.|\\=|\\<|\\>|\\+|\\-|\\*|\\/|\\!|\\^|%|\\||&|#)";
 
         this.WHITESPACE_REGEX = /^(\s+)/;
@@ -16,7 +15,6 @@ export default class SqlTokenizer {
         this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
         this.NUMBER_REGEX = new RegExp(`^((-\s*)?[0-9]+(\\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)($|\\s|"'\`|${operators})`);
         this.OPERATOR_REGEX = new RegExp(`^(${operators})`);
-        this.FUNCTION_REGEX = new RegExp(`^(${functionWords.join("|")})\\(`, "i");
 
         this.RESERVED_TOPLEVEL_REGEX = this.createReservedWordRegex(reservedToplevelWords, operators);
         this.RESERVED_NEWLINE_REGEX = this.createReservedWordRegex(reservedNewlineWords, operators);
@@ -75,7 +73,6 @@ export default class SqlTokenizer {
             this.getNumberToken(input) ||
             this.getBoundaryCharacterToken(input) ||
             this.getReservedWordToken(input, previousToken) ||
-            this.getFunctionWordToken(input) ||
             this.getWordToken(input);
     }
 
@@ -183,16 +180,6 @@ export default class SqlTokenizer {
             input,
             type: sqlTokenTypes.RESERVED,
             regex: this.RESERVED_PLAIN_REGEX
-        });
-    }
-
-    getFunctionWordToken(input) {
-        // A function must be suceeded by "("
-        // this makes it so "count(" is considered a function, but "count" alone is not
-        return this.getTokenOnFirstMatch({
-            input,
-            type: sqlTokenTypes.RESERVED,
-            regex: this.FUNCTION_REGEX
         });
     }
 
