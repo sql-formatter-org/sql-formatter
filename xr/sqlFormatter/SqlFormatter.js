@@ -35,7 +35,7 @@ export default class SqlFormatter {
     getFormattedQueryFromTokens(tokens) {
         let formattedQuery = "";
 
-        _(tokens).forEach((token, key) => {
+        _(tokens).forEach((token, index) => {
             if (this.hasLimitClauseEnded(token)) {
                 this.limitClause = false;
             }
@@ -53,7 +53,7 @@ export default class SqlFormatter {
                 formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
             }
             else if (token.value === "(") {
-                formattedQuery = this.formatOpeningParentheses(tokens, key, formattedQuery);
+                formattedQuery = this.formatOpeningParentheses(tokens, index, formattedQuery);
             }
             else if (token.value === ")") {
                 formattedQuery = this.formatClosingParentheses(token, formattedQuery);
@@ -65,7 +65,7 @@ export default class SqlFormatter {
                 formattedQuery = this.formatDot(token, formattedQuery);
             }
             else if (token.value === "|") {
-                formattedQuery = this.formatStringConcat(tokens, key, formattedQuery);
+                formattedQuery = this.formatStringConcat(tokens, index, formattedQuery);
             }
             else {
                 formattedQuery = this.formatLeftOver(token, formattedQuery);
@@ -114,16 +114,16 @@ export default class SqlFormatter {
     }
 
     // Opening parentheses increase the block indent level and start a new line
-    formatOpeningParentheses(tokens, key, query) {
+    formatOpeningParentheses(tokens, index, query) {
         // Take out the preceding space unless there was whitespace there in the original query
-        if (tokens[key - 1] && tokens[key - 1].type !== sqlTokenTypes.WHITESPACE) {
+        if (tokens[index - 1] && tokens[index - 1].type !== sqlTokenTypes.WHITESPACE) {
             query = this.trimFromRight(query);
         }
-        query = this.addValueToQuery(query, tokens[key].value);
+        query = this.addValueToQuery(query, tokens[index].value);
 
         // Check if this should be an inline parentheses block
         // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
-        const parenthesesBlockLength = this.considerInlineParenthesesBlock(tokens, key);
+        const parenthesesBlockLength = this.considerInlineParenthesesBlock(tokens, index);
 
         if (this.inlineParentheses && parenthesesBlockLength > INLINE_MAX_LENGTH) {
             this.inlineIndented = true;
@@ -138,15 +138,15 @@ export default class SqlFormatter {
         return query;
     }
 
-    considerInlineParenthesesBlock(tokens, key) {
+    considerInlineParenthesesBlock(tokens, index) {
         let length = 0;
 
         for (let i = 1; i <= INLINE_PARENTHESES_SEARCH_RANGE; i ++) {
             // Reached end of string
-            if (!tokens[key + i]) {
+            if (!tokens[index + i]) {
                 break;
             }
-            const next = tokens[key + i];
+            const next = tokens[index + i];
 
             // Reached closing parentheses, able to inline it
             if (next.value === ")") {
@@ -243,10 +243,10 @@ export default class SqlFormatter {
         return this.addValueToQuery(query, token.value);
     }
 
-    formatStringConcat(tokens, key, query) {
-        const token = tokens[key];
+    formatStringConcat(tokens, index, query) {
+        const token = tokens[index];
 
-        if (token.value === "|" && tokens[key + 1] && tokens[key + 1].value === "|") {
+        if (token.value === "|" && tokens[index + 1] && tokens[index + 1].value === "|") {
             return this.addValueToQuery(query, token.value);
         }
         return this.addValueToQuery(query, token.value + " ");
