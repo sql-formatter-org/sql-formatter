@@ -59,6 +59,22 @@ describe("standardSqlFormatter", function() {
         );
     });
 
+    it("preserves case of keywords", function() {
+        const result = standardSqlFormatter.format(
+            "select distinct * frOM foo left join bar WHERe a > 1 and b = 3"
+        );
+        expect(result).toBe(
+            "select\n" +
+            "  distinct *\n" +
+            "frOM\n" +
+            "  foo\n" +
+            "  left join bar\n" +
+            "WHERe\n" +
+            "  a > 1\n" +
+            "  and b = 3\n"
+        );
+    });
+
     it("formats SELECT query with SELECT query inside it", function() {
         const result = standardSqlFormatter.format(
             "SELECT *, SUM(*) AS sum FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b"
@@ -186,12 +202,12 @@ describe("standardSqlFormatter", function() {
 
     it("formats simple UPDATE query", function() {
         const result = standardSqlFormatter.format(
-            "uPDATE Customers set ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';"
+            "UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';"
         );
         expect(result).toBe(
-            "uPDATE\n" +
+            "UPDATE\n" +
             "  Customers\n" +
-            "set\n" +
+            "SET\n" +
             "  ContactName = 'Alfred Schmidt',\n" +
             "  City = 'Hamburg'\n" +
             "WHERE\n" +
@@ -241,7 +257,7 @@ describe("standardSqlFormatter", function() {
 
     it("formats UPDATE query with AS part", function() {
         const result = standardSqlFormatter.format(
-            "UPDATE customers SET totalorders = ordersummary.total  FROM ( SELECT * FROM bank) As ordersummary"
+            "UPDATE customers SET totalorders = ordersummary.total  FROM ( SELECT * FROM bank) AS ordersummary"
         );
         expect(result).toBe(
             "UPDATE\n" +
@@ -254,7 +270,7 @@ describe("standardSqlFormatter", function() {
             "      *\n" +
             "    FROM\n" +
             "      bank\n" +
-            "  ) As ordersummary\n"
+            "  ) AS ordersummary\n"
         );
     });
 
