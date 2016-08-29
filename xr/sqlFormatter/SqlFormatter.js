@@ -1,3 +1,4 @@
+import _ from "xr/_";
 import sqlTokenTypes from "xr/sqlFormatter/sqlTokenTypes";
 
 const INDENT_TYPE_TOPLEVEL = "toplevel-indent";
@@ -91,9 +92,9 @@ export default class SqlFormatter {
 
     formatToplevelReservedWord(token, query) {
         // If the last indent type was INDENT_TYPE_TOPLEVEL, decrease the toplevel indent for this round
-        if (this.indentTypes[0] === INDENT_TYPE_TOPLEVEL) {
+        if (_.last(this.indentTypes) === INDENT_TYPE_TOPLEVEL) {
             this.indentLevel --;
-            this.indentTypes.shift();
+            this.indentTypes.pop();
         }
         // if SQL "LIMIT" clause, start variable to reset newline
         if (token.value === "LIMIT" && !this.inlineParentheses) {
@@ -182,7 +183,7 @@ export default class SqlFormatter {
         query = this.trimFromRight(query);
 
         if (this.inlineIndented) {
-            this.indentTypes.shift();
+            this.indentTypes.pop();
             this.indentLevel --;
 
             query = this.addNewline(query);
@@ -195,7 +196,7 @@ export default class SqlFormatter {
 
         // Reset indent level
         while (this.indentTypes.length) {
-            const type = this.indentTypes.shift();
+            const type = this.indentTypes.pop();
 
             if (type !== INDENT_TYPE_TOPLEVEL) {
                 break;
@@ -260,12 +261,12 @@ export default class SqlFormatter {
 
     increaseToplevelIndent() {
         this.indentLevel ++;
-        this.indentTypes.unshift(INDENT_TYPE_TOPLEVEL);
+        this.indentTypes.push(INDENT_TYPE_TOPLEVEL);
     }
 
     increaseBlockIndent() {
         this.indentLevel ++;
-        this.indentTypes.unshift(INDENT_TYPE_BLOCK);
+        this.indentTypes.push(INDENT_TYPE_BLOCK);
     }
 
     addNewline(query) {
