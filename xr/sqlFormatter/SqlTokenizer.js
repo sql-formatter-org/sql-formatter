@@ -198,12 +198,4 @@ export default class SqlTokenizer {
             return {type, value: matches[1]};
         }
     }
-
-    getQuotedString(input) {
-        const matches = input;
-
-        if (matches) {
-            return matches[1];
-        }
-    }
 }
