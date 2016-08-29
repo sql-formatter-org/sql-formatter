@@ -20,7 +20,7 @@ export default class SqlTokenizer {
 
         this.RESERVED_TOPLEVEL_REGEX = new RegExp(`^(${reservedToplevelWords.join("|")})($|\\s|${boundaries})`, "i");
         this.RESERVED_NEWLINE_REGEX = new RegExp(`^(${reservedNewlineWords.join("|")})($|\\s|${boundaries})`, "i");
-        this.RESERVED_REGEX = new RegExp(`^(${reservedWords.join("|")})($|\\s|${boundaries})`, "i");
+        this.RESERVED_PLAIN_REGEX = new RegExp(`^(${reservedWords.join("|")})($|\\s|${boundaries})`, "i");
 
         this.NON_RESERVED_WORD_REGEX = new RegExp(`^(.*?)($|\\s|["'\`]|${boundaries})`);
 
@@ -157,30 +157,30 @@ export default class SqlTokenizer {
         if (previousToken && previousToken.value && previousToken.value === ".") {
             return;
         }
-        const toplevelReservedWordToken = this.getTokenOnFirstMatch({
+        return this.getToplevelReservedToken(input) || this.getNewlineReservedToken(input) || this.getPlainReservedToken(input);
+    }
+
+    getToplevelReservedToken(input) {
+        return this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.RESERVED_TOPLEVEL,
             regex: this.RESERVED_TOPLEVEL_REGEX
         });
+    }
 
-        if (toplevelReservedWordToken) {
-            return toplevelReservedWordToken;
-        }
-
-        const newlineReservedWordToken = this.getTokenOnFirstMatch({
+    getNewlineReservedToken(input) {
+        return this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.RESERVED_NEWLINE,
             regex: this.RESERVED_NEWLINE_REGEX
         });
+    }
 
-        if (newlineReservedWordToken) {
-            return newlineReservedWordToken;
-        }
-
+    getPlainReservedToken(input) {
         return this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.RESERVED,
-            regex: this.RESERVED_REGEX
+            regex: this.RESERVED_PLAIN_REGEX
         });
     }
 
