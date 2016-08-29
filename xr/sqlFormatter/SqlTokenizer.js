@@ -45,47 +45,15 @@ export default class SqlTokenizer {
     }
 
     getNextToken(input, previousToken) {
-        const whitespaceToken = this.getWhitespaceToken(input);
-        if (whitespaceToken) {
-            return whitespaceToken;
-        }
-
-        const commentToken = this.getCommentToken(input);
-        if (commentToken) {
-            return commentToken;
-        }
-
-        const quotedStringToken = this.getQuotedStringToken(input);
-        if (quotedStringToken) {
-            return quotedStringToken;
-        }
-
-        const variableToken = this.getVariableToken(input);
-        if (variableToken) {
-            return variableToken;
-        }
-
-        const numberToken = this.getNumberToken(input);
-        if (numberToken) {
-            return numberToken;
-        }
-
-        const boundaryCharacterToken = this.getBoundaryCharacterToken(input);
-        if (boundaryCharacterToken) {
-            return boundaryCharacterToken;
-        }
-
-        const reservedWordToken = this.getReservedWordToken(input, previousToken);
-        if (reservedWordToken) {
-            return reservedWordToken;
-        }
-
-        const functionWordToken = this.getFunctionWordToken(input);
-        if (functionWordToken) {
-            return functionWordToken;
-        }
-
-        return this.getNonReservedWordToken(input);
+        return this.getWhitespaceToken(input) ||
+            this.getCommentToken(input) ||
+            this.getQuotedStringToken(input) ||
+            this.getVariableToken(input) ||
+            this.getNumberToken(input) ||
+            this.getBoundaryCharacterToken(input) ||
+            this.getReservedWordToken(input, previousToken) ||
+            this.getFunctionWordToken(input) ||
+            this.getNonReservedWordToken(input);
     }
 
     getWhitespaceToken(input) {
