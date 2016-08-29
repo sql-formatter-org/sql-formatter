@@ -64,9 +64,6 @@ export default class SqlFormatter {
             else if (token.value === "." || token.value === ";") {
                 formattedQuery = this.formatDot(token, formattedQuery);
             }
-            else if (token.value === "|") {
-                formattedQuery = this.formatStringConcat(tokens, index, formattedQuery);
-            }
             else {
                 formattedQuery = this.formatLeftOver(token, formattedQuery);
             }
@@ -246,15 +243,6 @@ export default class SqlFormatter {
     formatDot(token, query) {
         query = _.trimEnd(query);
         return this.addValueToQuery(query, token.value);
-    }
-
-    formatStringConcat(tokens, index, query) {
-        const token = tokens[index];
-
-        if (token.value === "|" && tokens[index + 1] && tokens[index + 1].value === "|") {
-            return this.addValueToQuery(query, token.value);
-        }
-        return this.addValueToQuery(query, token.value + " ");
     }
 
     formatLeftOver(token, query) {

@@ -40,18 +40,6 @@ describe("n1qlFormatter", function() {
             );
         });
 
-        it("formats SELECT query with string concat", function() {
-            const result = n1qlFormatter.format(
-                "SELECT fname || \" \" || lname AS full_name FROM tutorial;"
-            );
-            expect(result).toBe(
-                "SELECT\n" +
-                "  fname || \" \" || lname AS full_name\n" +
-                "FROM\n" +
-                "  tutorial;\n"
-            );
-        });
-
         it("formats SELECT query with primary key quering", function() {
             const result = n1qlFormatter.format(
                 "SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];"

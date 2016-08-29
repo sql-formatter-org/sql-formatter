@@ -285,6 +285,7 @@ describe("standardSqlFormatter", function() {
             expect(standardSqlFormatter.format("foo != bar")).toBe("foo != bar\n");
             expect(standardSqlFormatter.format("foo <> bar")).toBe("foo <> bar\n");
             expect(standardSqlFormatter.format("foo == bar")).toBe("foo == bar\n"); // N1QL
+            expect(standardSqlFormatter.format("foo || bar")).toBe("foo || bar\n"); // Oracle, Postgres, N1QL string concat
 
             expect(standardSqlFormatter.format("foo <= bar")).toBe("foo <= bar\n");
             expect(standardSqlFormatter.format("foo >= bar")).toBe("foo >= bar\n");

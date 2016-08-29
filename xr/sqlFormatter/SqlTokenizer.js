@@ -9,7 +9,7 @@ export default class SqlTokenizer {
      *  @param {Array} cfg.functionWords Words that are treated as functions
      */
     constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, functionWords}) {
-        const boundaries = "(!=|<>|==|<=|>=|!<|!>|,|;|\\:|\\)|\\(|\\.|\\=|\\<|\\>|\\+|\\-|\\*|\\/|\\!|\\^|%|\\||&|#)";
+        const boundaries = "(!=|<>|==|<=|>=|!<|!>|\\|\\||,|;|\\:|\\)|\\(|\\.|\\=|\\<|\\>|\\+|\\-|\\*|\\/|\\!|\\^|%|\\||&|#)";
 
         this.WHITESPACE_REGEX = /^(\s+)/;
         this.LINE_COMMENT_REGEX = /^((?:#|--).*?(?:\n|$))/;
