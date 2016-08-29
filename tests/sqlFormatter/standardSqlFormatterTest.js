@@ -31,7 +31,7 @@ describe("standardSqlFormatter", function() {
                 "  AND (\n" +
                 "    (\n" +
                 "      `Column2` = `Column3`\n" +
-                "      OR Column4 > = NOW()\n" +
+                "      OR Column4 >= NOW()\n" +
                 "    )\n" +
                 "  )\n" +
                 "GROUP BY\n" +
@@ -268,6 +268,45 @@ describe("standardSqlFormatter", function() {
                 "ORDER BY\n" +
                 "  blah\n"
             );
+        });
+
+        it("formats single-char operators", function() {
+            expect(standardSqlFormatter.format("foo = bar")).toBe("foo = bar\n");
+            expect(standardSqlFormatter.format("foo < bar")).toBe("foo < bar\n");
+            expect(standardSqlFormatter.format("foo > bar")).toBe("foo > bar\n");
+            expect(standardSqlFormatter.format("foo + bar")).toBe("foo + bar\n");
+            expect(standardSqlFormatter.format("foo - bar")).toBe("foo - bar\n");
+            expect(standardSqlFormatter.format("foo * bar")).toBe("foo * bar\n");
+            expect(standardSqlFormatter.format("foo / bar")).toBe("foo / bar\n");
+            expect(standardSqlFormatter.format("foo % bar")).toBe("foo % bar\n");
+        });
+
+        it("formats multi-char operators", function() {
+            expect(standardSqlFormatter.format("foo != bar")).toBe("foo != bar\n");
+            expect(standardSqlFormatter.format("foo <> bar")).toBe("foo <> bar\n");
+            expect(standardSqlFormatter.format("foo == bar")).toBe("foo == bar\n"); // N1QL
+
+            expect(standardSqlFormatter.format("foo <= bar")).toBe("foo <= bar\n");
+            expect(standardSqlFormatter.format("foo >= bar")).toBe("foo >= bar\n");
+
+            expect(standardSqlFormatter.format("foo !< bar")).toBe("foo !< bar\n");
+            expect(standardSqlFormatter.format("foo !> bar")).toBe("foo !> bar\n");
+        });
+
+        it("formats logical operators", function() {
+            expect(standardSqlFormatter.format("foo ALL bar")).toBe("foo ALL bar\n");
+            expect(standardSqlFormatter.format("foo = ANY (1, 2, 3)")).toBe("foo = ANY (1, 2, 3)\n");
+            expect(standardSqlFormatter.format("EXISTS bar")).toBe("EXISTS bar\n");
+            expect(standardSqlFormatter.format("foo IN (1, 2, 3)")).toBe("foo IN (1, 2, 3)\n");
+            expect(standardSqlFormatter.format("foo LIKE 'hello%'")).toBe("foo LIKE 'hello%'\n");
+            expect(standardSqlFormatter.format("foo IS NULL")).toBe("foo IS NULL\n");
+            expect(standardSqlFormatter.format("UNIQUE foo")).toBe("UNIQUE foo\n");
+        });
+
+        it("formats AND/OR operators", function() {
+            expect(standardSqlFormatter.format("foo BETWEEN bar AND baz")).toBe("foo BETWEEN bar\nAND baz\n");
+            expect(standardSqlFormatter.format("foo AND bar")).toBe("foo\nAND bar\n");
+            expect(standardSqlFormatter.format("foo OR bar")).toBe("foo\nOR bar\n");
         });
     });
 });
