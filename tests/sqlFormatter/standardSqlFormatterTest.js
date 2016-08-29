@@ -1,6 +1,6 @@
 import standardSqlFormatter from "xr/sqlFormatter/standardSqlFormatter";
 
-describe("sqlFormatter", function() {
+describe("standardSqlFormatter", function() {
     describe("format()", function() {
         it("formats simple SELECT query", function() {
             const result = standardSqlFormatter.format("SELECT count(*),'Column1' FROM `Table1`;");
