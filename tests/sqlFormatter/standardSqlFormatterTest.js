@@ -308,4 +308,18 @@ describe("standardSqlFormatter", function() {
         expect(standardSqlFormatter.format("foo AND bar")).toBe("foo\nAND bar\n");
         expect(standardSqlFormatter.format("foo OR bar")).toBe("foo\nOR bar\n");
     });
+
+    it("recognizes strings", function() {
+        expect(standardSqlFormatter.format("\"foo JOIN bar\"")).toBe("\"foo JOIN bar\"\n");
+        expect(standardSqlFormatter.format("'foo JOIN bar'")).toBe("'foo JOIN bar'\n");
+        expect(standardSqlFormatter.format("`foo JOIN bar`")).toBe("`foo JOIN bar`\n");
+        expect(standardSqlFormatter.format("[foo JOIN bar]")).toBe("[foo JOIN bar]\n");
+    });
+
+    it("recognizes escaped strings", function() {
+        expect(standardSqlFormatter.format("\"foo \\\" JOIN bar\"")).toBe("\"foo \\\" JOIN bar\"\n");
+        expect(standardSqlFormatter.format("'foo \\' JOIN bar'")).toBe("'foo \\' JOIN bar'\n");
+        expect(standardSqlFormatter.format("`foo `` JOIN bar`")).toBe("`foo `` JOIN bar`\n");
+        expect(standardSqlFormatter.format("[foo ]] JOIN bar]")).toBe("[foo ]] JOIN bar]\n");
+    });
 });
