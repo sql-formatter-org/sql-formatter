@@ -12,10 +12,10 @@ describe("standardSqlFormatter", function() {
         );
     });
 
-    it("formats SELECT query with WHERE, GROUP/ORDER BY and LIMIT words", function() {
+    it("formats SELECT query with WHERE, GROUP/ORDER BY", function() {
         const result = standardSqlFormatter.format(
             "SELECT count(*),'Column1','Testing', 'Testing Three' FROM Table1 WHERE Column1 = 'testing' " +
-            "AND ( (Column2 = Column3 OR Column4 >= NOW()) ) GROUP BY Column1 ORDER BY Column3 DESC LIMIT 5,10;"
+            "AND ( (Column2 = Column3 OR Column4 >= NOW()) ) GROUP BY Column1 ORDER BY Column3 DESC;"
         );
         expect(result).toBe(
             "SELECT\n" +
@@ -36,19 +36,17 @@ describe("standardSqlFormatter", function() {
             "GROUP BY\n" +
             "  Column1\n" +
             "ORDER BY\n" +
-            "  Column3 DESC\n" +
-            "LIMIT\n" +
-            "  5, 10;\n"
+            "  Column3 DESC;\n"
         );
     });
 
-    it("formats SELECT query with LIMIT and OFFSET", function() {
+    it("formats LIMIT and OFFSET", function() {
         const result = standardSqlFormatter.format(
-            "SELECT avg(paycheck) FROM Table1 LIMIT 5,10 OFFSET 20;"
+            "SELECT * FROM Table1 LIMIT 5,10 OFFSET 20;"
         );
         expect(result).toBe(
             "SELECT\n" +
-            "  avg(paycheck)\n" +
+            "  *\n" +
             "FROM\n" +
             "  Table1\n" +
             "LIMIT\n" +
