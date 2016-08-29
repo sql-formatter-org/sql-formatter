@@ -1,4 +1,3 @@
-import _ from "xr/_";
 import sqlTokenTypes from "xr/sqlFormatter/sqlTokenTypes";
 
 const INDENT_TYPE_TOPLEVEL = "toplevel-indent";
@@ -35,7 +34,7 @@ export default class SqlFormatter {
     getFormattedQueryFromTokens(tokens) {
         let formattedQuery = "";
 
-        _(tokens).forEach((token, index) => {
+        tokens.forEach((token, index) => {
             if (this.hasLimitClauseEnded(token)) {
                 this.limitClause = false;
             }
