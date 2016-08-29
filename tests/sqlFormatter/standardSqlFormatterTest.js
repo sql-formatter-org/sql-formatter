@@ -12,10 +12,10 @@ describe("standardSqlFormatter", function() {
         );
     });
 
-    it("formats SELECT query with WHERE, GROUP/ORDER BY", function() {
+    it("formats SELECT query with complex WHERE", function() {
         const result = standardSqlFormatter.format(
             "SELECT count(*),'Column1','Testing', 'Testing Three' FROM Table1 WHERE Column1 = 'testing' " +
-            "AND ( (Column2 = Column3 OR Column4 >= NOW()) ) GROUP BY Column1 ORDER BY Column3 DESC;"
+            "AND ( (Column2 = Column3 OR Column4 >= NOW()) );"
         );
         expect(result).toBe(
             "SELECT\n" +
@@ -32,11 +32,23 @@ describe("standardSqlFormatter", function() {
             "      Column2 = Column3\n" +
             "      OR Column4 >= NOW()\n" +
             "    )\n" +
-            "  )\n" +
+            "  );\n"
+        );
+    });
+
+    it("formats GROUP BY and ORDER BY", function() {
+        const result = standardSqlFormatter.format(
+            "SELECT * FROM foo GROUP BY some_column ORDER BY other_column;"
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  *\n" +
+            "FROM\n" +
+            "  foo\n" +
             "GROUP BY\n" +
-            "  Column1\n" +
+            "  some_column\n" +
             "ORDER BY\n" +
-            "  Column3 DESC;\n"
+            "  other_column;\n"
         );
     });
 
@@ -56,7 +68,7 @@ describe("standardSqlFormatter", function() {
 
     it("formats SELECT query with SELECT query inside it", function() {
         const result = standardSqlFormatter.format(
-            "SELECT *, SUM(*) AS sum FROM (SELECT * FROM Posts LIMIT 30) GROUP BY Category"
+            "SELECT *, SUM(*) AS sum FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b"
         );
         expect(result).toBe(
             "SELECT\n" +
@@ -71,8 +83,8 @@ describe("standardSqlFormatter", function() {
             "    LIMIT\n" +
             "      30\n" +
             "  )\n" +
-            "GROUP BY\n" +
-            "  Category\n"
+            "WHERE\n" +
+            "  a > b\n"
         );
     });
 
