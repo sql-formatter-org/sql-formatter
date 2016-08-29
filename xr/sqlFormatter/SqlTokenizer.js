@@ -9,13 +9,32 @@ export default class SqlTokenizer {
      *  @param {Array} cfg.functionWords Words that are treated as functions
      */
     constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, functionWords}) {
-        this.regex = {
-            boundaries: "(,|;|\\:|\\)|\\(|\\.|\\=|\\<|\\>|\\+|\\-|\\*|\\/|\\!|\\^|%|\\||&|#)",
-            reservedToplevel: `(${reservedToplevelWords.join("|")})`,
-            reservedNewline: `(${reservedNewlineWords.join("|")})`,
-            reserved: `(${reservedWords.join("|")})`,
-            function: `(${functionWords.join("|")})`
-        };
+        const boundaries = "(,|;|\\:|\\)|\\(|\\.|\\=|\\<|\\>|\\+|\\-|\\*|\\/|\\!|\\^|%|\\||&|#)";
+
+        this.WHITESPACE_REGEX = /^(\s+)/;
+        this.LINE_COMMENT_REGEX = /^((?:#|--).*?(?:\n|$))/;
+        this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
+        this.NUMBER_REGEX = new RegExp(`^((-\s*)?[0-9]+(\\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)($|\\s|"'\`|${boundaries})`);
+        this.BOUNDARY_REGEX = new RegExp(`^(${boundaries})`);
+        this.FUNCTION_REGEX = new RegExp(`^(${functionWords.join("|")})\\(`, "i");
+
+        this.RESERVED_TOPLEVEL_REGEX = new RegExp(`^(${reservedToplevelWords.join("|")})($|\\s|${boundaries})`, "i");
+        this.RESERVED_NEWLINE_REGEX = new RegExp(`^(${reservedNewlineWords.join("|")})($|\\s|${boundaries})`, "i");
+        this.RESERVED_REGEX = new RegExp(`^(${reservedWords.join("|")})($|\\s|${boundaries})`, "i");
+
+        this.NON_RESERVED_WORD_REGEX = new RegExp(`^(.*?)($|\\s|["'\`]|${boundaries})`);
+
+        // This checks for the following patterns:
+        // 1. backtick quoted string using `` to escape
+        // 2. square bracket quoted string (SQL Server) using ]] to escape
+        // 3. double quoted string using "" or \" to escape
+        // 4. single quoted string using "" or \" to escape
+        this.STRING_REGEX = new RegExp(
+            "^(((`[^`]*($|`))+)|" +
+            "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)|" +
+            "((\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)|" +
+            "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+))"
+        );
     }
 
     /**
@@ -59,7 +78,7 @@ export default class SqlTokenizer {
         return this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.WHITESPACE,
-            regex: /^(\s+)/
+            regex: this.WHITESPACE_REGEX
         });
     }
 
@@ -71,7 +90,7 @@ export default class SqlTokenizer {
         return this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.COMMENT,
-            regex: /^((?:#|--).*?(?:\n|$))/
+            regex: this.LINE_COMMENT_REGEX
         });
     }
 
@@ -79,7 +98,7 @@ export default class SqlTokenizer {
         return this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.BLOCK_COMMENT,
-            regex: /^(\/\*[^]*?(?:\*\/|$))/
+            regex: this.BLOCK_COMMENT_REGEX
         });
     }
 
@@ -119,7 +138,7 @@ export default class SqlTokenizer {
         return this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.NUMBER,
-            regex: new RegExp(`^((-\s*)?[0-9]+(\\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)($|\\s|"'\`|${this.regex.boundaries})`)
+            regex: this.NUMBER_REGEX
         });
     }
 
@@ -128,7 +147,7 @@ export default class SqlTokenizer {
         return this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.BOUNDARY,
-            regex: new RegExp(`^(${this.regex.boundaries})`)
+            regex: this.BOUNDARY_REGEX
         });
     }
 
@@ -138,38 +157,30 @@ export default class SqlTokenizer {
         if (previousToken && previousToken.value && previousToken.value === ".") {
             return;
         }
-        const toplevelReservedWordToken = this.getSpecificReservedWordToken({
+        const toplevelReservedWordToken = this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.RESERVED_TOPLEVEL,
-            regex: this.regex.reservedToplevel
+            regex: this.RESERVED_TOPLEVEL_REGEX
         });
 
         if (toplevelReservedWordToken) {
             return toplevelReservedWordToken;
         }
 
-        const newlineReservedWordToken = this.getSpecificReservedWordToken({
+        const newlineReservedWordToken = this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.RESERVED_NEWLINE,
-            regex: this.regex.reservedNewline
+            regex: this.RESERVED_NEWLINE_REGEX
         });
 
         if (newlineReservedWordToken) {
             return newlineReservedWordToken;
         }
 
-        return this.getSpecificReservedWordToken({
-            input,
-            type: sqlTokenTypes.RESERVED,
-            regex: this.regex.reserved
-        });
-    }
-
-    getSpecificReservedWordToken({input, type, regex}) {
         return this.getTokenOnFirstMatch({
             input,
-            type,
-            regex: new RegExp(`^(${regex})($|\\s|${this.regex.boundaries})`, "i")
+            type: sqlTokenTypes.RESERVED,
+            regex: this.RESERVED_REGEX
         });
     }
 
@@ -179,7 +190,7 @@ export default class SqlTokenizer {
         return this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.RESERVED,
-            regex: new RegExp(`^(${this.regex.function})\\(`, "i")
+            regex: this.FUNCTION_REGEX
         });
     }
 
@@ -187,7 +198,7 @@ export default class SqlTokenizer {
         return this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.WORD,
-            regex: new RegExp(`^(.*?)($|\\s|["'\`]|${this.regex.boundaries})`)
+            regex: this.NON_RESERVED_WORD_REGEX
         });
     }
 
@@ -200,17 +211,8 @@ export default class SqlTokenizer {
     }
 
     getQuotedString(input) {
-        // This checks for the following patterns:
-        // 1. backtick quoted string using `` to escape
-        // 2. square bracket quoted string (SQL Server) using ]] to escape
-        // 3. double quoted string using "" or \" to escape
-        // 4. single quoted string using "" or \" to escape
-        const matches = input.match(new RegExp(
-            "^(((`[^`]*($|`))+)|" +
-            "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)|" +
-            "((\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)|" +
-            "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+))"
-        ));
+        const matches = input.match(this.STRING_REGEX);
+
         if (matches) {
             return matches[1];
         }
