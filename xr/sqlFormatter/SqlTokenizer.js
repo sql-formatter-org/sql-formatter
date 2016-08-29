@@ -22,7 +22,7 @@ export default class SqlTokenizer {
         this.RESERVED_NEWLINE_REGEX = this.createReservedWordRegex(reservedNewlineWords, operators);
         this.RESERVED_PLAIN_REGEX = this.createReservedWordRegex(reservedWords, operators);
 
-        this.NON_RESERVED_WORD_REGEX = new RegExp(`^(.*?)($|\\s|["'\`]|${operators})`);
+        this.WORD_REGEX = new RegExp(`^(.*?)($|\\s|["'\`]|${operators})`);
 
         // This checks for the following patterns:
         // 1. backtick quoted string using `` to escape
@@ -76,7 +76,7 @@ export default class SqlTokenizer {
             this.getBoundaryCharacterToken(input) ||
             this.getReservedWordToken(input, previousToken) ||
             this.getFunctionWordToken(input) ||
-            this.getNonReservedWordToken(input);
+            this.getWordToken(input);
     }
 
     getWhitespaceToken(input) {
@@ -199,11 +199,11 @@ export default class SqlTokenizer {
         });
     }
 
-    getNonReservedWordToken(input) {
+    getWordToken(input) {
         return this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.WORD,
-            regex: this.NON_RESERVED_WORD_REGEX
+            regex: this.WORD_REGEX
         });
     }
 
