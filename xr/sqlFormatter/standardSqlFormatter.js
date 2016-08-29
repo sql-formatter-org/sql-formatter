@@ -1,4 +1,5 @@
 import SqlFormatter from "xr/sqlFormatter/SqlFormatter";
+import SqlTokenizer from "xr/sqlFormatter/SqlTokenizer";
 
 // Reserved words
 const reservedWords = [
@@ -92,11 +93,11 @@ export default {
      * @return {String} formatted string
      */
     format: (query) => {
-        return new SqlFormatter({
+        return new SqlFormatter(new SqlTokenizer({
             reservedWords,
             reservedToplevelWords,
             reservedNewlineWords,
             functionWords
-        }).format(query);
+        })).format(query);
     }
 };

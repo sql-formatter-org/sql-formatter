@@ -3,15 +3,20 @@ import sqlTokenTypes from "xr/sqlFormatter/sqlTokenTypes";
 
 export default class SqlTokenizer {
     /**
-     * @param {Object} regex
-     *  @param {String} regex.boundaries
-     *  @param {String} regex.reservedToplevel
-     *  @param {String} regex.reservedNewline
-     *  @param {String} regex.reserved
-     *  @param {String} regex.function
+     * @param {Object} cfg
+     *  @param {Array} cfg.reservedWords Reserved words in SQL
+     *  @param {Array} cfg.reservedToplevelWords Words that are set to new line and on first indent level
+     *  @param {Array} cfg.reservedNewlineWords Words that are set to newline
+     *  @param {Array} cfg.functionWords Words that are treated as functions
      */
-    constructor(regex) {
-        this.regex = regex;
+    constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, functionWords}) {
+        this.regex = {
+            boundaries: "(,|;|\\:|\\)|\\(|\\.|\\=|\\<|\\>|\\+|\\-|\\*|\\/|\\!|\\^|%|\\||&|#)",
+            reservedToplevel: `(${reservedToplevelWords.join("|")})`,
+            reservedNewline: `(${reservedNewlineWords.join("|")})`,
+            reserved: `(${reservedWords.join("|")})`,
+            function: `(${functionWords.join("|")})`
+        };
     }
 
     /**

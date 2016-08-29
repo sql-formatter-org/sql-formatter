@@ -1,6 +1,5 @@
 import _ from "xr/_";
 import sqlTokenTypes from "xr/sqlFormatter/sqlTokenTypes";
-import SqlTokenizer from "xr/sqlFormatter/SqlTokenizer";
 
 const INDENT_TYPE_TOPLEVEL = "toplevel-indent";
 const INDENT_TYPE_BLOCK = "block-indent";
@@ -10,20 +9,10 @@ const INLINE_MAX_LENGTH = 35;
 
 export default class SqlFormatter {
     /**
-     * @param {Object} cfg
-     *  @param {Array} cfg.reservedWords Reserved words in SQL
-     *  @param {Array} cfg.reservedToplevelWords Words that are set to new line and on first indent level
-     *  @param {Array} cfg.reservedNewlineWords Words that are set to newline
-     *  @param {Array} cfg.functionWords Words that are treated as functions
+     * @param {SqlTokenizer} tokenizer
      */
-    constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, functionWords}) {
-        this.tokenizer = new SqlTokenizer({
-            boundaries: "(,|;|\\:|\\)|\\(|\\.|\\=|\\<|\\>|\\+|\\-|\\*|\\/|\\!|\\^|%|\\||&|#)",
-            reservedToplevel: `(${reservedToplevelWords.join("|")})`,
-            reservedNewline: `(${reservedNewlineWords.join("|")})`,
-            reserved: `(${reservedWords.join("|")})`,
-            function: `(${functionWords.join("|")})`
-        });
+    constructor(tokenizer) {
+        this.tokenizer = tokenizer;
         this.indent = "\t";
         this.indentLevel = 0;
         this.indentTypes = [];
