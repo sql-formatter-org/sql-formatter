@@ -1,4 +1,3 @@
-import _ from "xr/_";
 import sqlTokenTypes from "xr/sqlFormatter/sqlTokenTypes";
 
 export default class SqlTokenizer {
@@ -57,14 +56,11 @@ export default class SqlTokenizer {
     }
 
     getWhitespaceToken(input) {
-        const matches = input.match(/^\s+/);
-
-        if (matches) {
-            return {
-                type: sqlTokenTypes.WHITESPACE,
-                value: matches[0]
-            };
-        }
+        return this.getTokenOnFirstMatch({
+            input,
+            type: sqlTokenTypes.WHITESPACE,
+            regex: /^(\s+)/
+        });
     }
 
     getCommentToken(input) {
@@ -72,21 +68,19 @@ export default class SqlTokenizer {
     }
 
     getLineCommentToken(input) {
-        if (/^(#|--)/.test(input)) {
-            return {
-                type: sqlTokenTypes.COMMENT,
-                value: input.match(/^.*?(\n|$)/)[0]
-            };
-        }
+        return this.getTokenOnFirstMatch({
+            input,
+            type: sqlTokenTypes.COMMENT,
+            regex: /^((?:#|--).*?(?:\n|$))/
+        });
     }
 
     getBlockCommentToken(input) {
-        if (/^\/\*/.test(input)) {
-            return {
-                type: sqlTokenTypes.BLOCK_COMMENT,
-                value: input.match(/^[^]*?(\*\/|$)/)[0]
-            };
-        }
+        return this.getTokenOnFirstMatch({
+            input,
+            type: sqlTokenTypes.BLOCK_COMMENT,
+            regex: /^(\/\*[^]*?(?:\*\/|$))/
+        });
     }
 
     getQuotedStringToken(input) {
@@ -172,27 +166,21 @@ export default class SqlTokenizer {
     }
 
     getSpecificReservedWordToken({input, type, regex}) {
-        const matches = input.match(new RegExp(`^(${regex})($|\\s|${this.regex.boundaries})`, "i"));
-
-        if (matches) {
-            return {
-                type,
-                value: input.substring(0, matches[1].length)
-            };
-        }
+        return this.getTokenOnFirstMatch({
+            input,
+            type,
+            regex: new RegExp(`^(${regex})($|\\s|${this.regex.boundaries})`, "i")
+        });
     }
 
     getFunctionWordToken(input) {
         // A function must be suceeded by "("
         // this makes it so "count(" is considered a function, but "count" alone is not
-        const matches = input.match(new RegExp(`^(${this.regex.function}[(]|\\s|[)])`, "i"));
-
-        if (matches) {
-            return {
-                type: sqlTokenTypes.RESERVED,
-                value: input.substring(0, matches[1].length - 1)
-            };
-        }
+        return this.getTokenOnFirstMatch({
+            input,
+            type: sqlTokenTypes.RESERVED,
+            regex: new RegExp(`^(${this.regex.function})\\(`, "i")
+        });
     }
 
     getNonReservedWordToken(input) {
