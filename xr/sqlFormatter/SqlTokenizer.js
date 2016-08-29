@@ -70,7 +70,7 @@ export default class SqlTokenizer {
     getNextToken(input, previousToken) {
         return this.getWhitespaceToken(input) ||
             this.getCommentToken(input) ||
-            this.getQuotedStringToken(input) ||
+            this.getStringToken(input) ||
             this.getVariableToken(input) ||
             this.getNumberToken(input) ||
             this.getBoundaryCharacterToken(input) ||
@@ -107,12 +107,12 @@ export default class SqlTokenizer {
         });
     }
 
-    getQuotedStringToken(input) {
+    getStringToken(input) {
         const firstChar = input.charAt(0);
 
         if (firstChar === "\"" || firstChar === "'" || firstChar === "`" || firstChar === "[") {
             return {
-                type: (firstChar === "`" || firstChar === "[") ? sqlTokenTypes.BACKTICK_QUOTE : sqlTokenTypes.QUOTE,
+                type: sqlTokenTypes.STRING,
                 value: this.getQuotedString(input)
             };
         }

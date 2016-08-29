@@ -4,8 +4,7 @@
 export default {
     WHITESPACE: "whitespace",
     WORD: "word",
-    QUOTE: "quote",
-    BACKTICK_QUOTE: "backtick-quote",
+    STRING: "string",
     RESERVED: "reserved",
     RESERVED_TOPLEVEL: "reserved-toplevel",
     RESERVED_NEWLINE: "reserved-newline",
