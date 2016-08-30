@@ -146,17 +146,17 @@ export default class SqlFormatter {
         let level = 0;
 
         for (let i = index; i < tokens.length; i++) {
-            const next = tokens[i];
+            const token = tokens[i];
 
             // Overran max length
             if (length > INLINE_MAX_LENGTH) {
                 return false;
             }
 
-            if (next.type === sqlTokenTypes.OPEN_PAREN) {
+            if (token.type === sqlTokenTypes.OPEN_PAREN) {
                 level++;
             }
-            else if (next.type === sqlTokenTypes.CLOSE_PAREN) {
+            else if (token.type === sqlTokenTypes.CLOSE_PAREN) {
                 level--;
                 if (level === 0) {
                     return true;
@@ -164,15 +164,15 @@ export default class SqlFormatter {
             }
 
             // Reached an invalid token value for inline parentheses
-            if (next.value === ";") {
+            if (token.value === ";") {
                 return false;
             }
             // Reached an invalid token type for inline parentheses
-            if (next.type === sqlTokenTypes.RESERVED_TOPLEVEL || next.type === sqlTokenTypes.RESERVED_NEWLINE ||
-                next.type === sqlTokenTypes.COMMENT || next.type === sqlTokenTypes.BLOCK_COMMENT) {
+            if (token.type === sqlTokenTypes.RESERVED_TOPLEVEL || token.type === sqlTokenTypes.RESERVED_NEWLINE ||
+                token.type === sqlTokenTypes.COMMENT || token.type === sqlTokenTypes.BLOCK_COMMENT) {
                 return false;
             }
-            length += next.value.length;
+            length += token.value.length;
         }
         return false;
     }
