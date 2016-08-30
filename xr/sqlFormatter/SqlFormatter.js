@@ -16,7 +16,7 @@ export default class SqlFormatter {
         this.indent = "  ";
         this.indentLevel = 0;
         this.indentTypes = [];
-        this.inlineLength = 0;
+        this.inlineParentheses = false;
     }
 
     /**
@@ -123,52 +123,49 @@ export default class SqlFormatter {
         }
         query = this.addValueToQuery(query, tokens[index].value);
 
-        // Check if this should be an inline parentheses block
-        // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
-        const parenthesesBlockLength = this.measureInlineParenthesesBlock(tokens, index);
-
-        if (this.inlineParentheses && parenthesesBlockLength > INLINE_MAX_LENGTH) {
-            this.inlineIndented = true;
-
-            this.increaseBlockIndent();
-            query = this.addNewline(query);
+        if (this.isInlineParenthesesBlock(tokens, index)) {
+            this.inlineParentheses = true;
         }
-        else if (!this.inlineParentheses) {
+        else {
+            this.inlineParentheses = false;
             this.increaseBlockIndent();
             query = this.addNewline(query);
         }
         return query;
     }
 
-    measureInlineParenthesesBlock(tokens, index) {
+    // Check if this should be an inline parentheses block
+    // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
+    isInlineParenthesesBlock(tokens, index) {
         let length = 0;
 
         for (let i = 1; i <= INLINE_PARENTHESES_SEARCH_RANGE; i ++) {
             // Reached end of string
             if (!tokens[index + i]) {
-                break;
+                return false;
+            }
+            // Overran max length
+            if (length > INLINE_MAX_LENGTH) {
+                return false;
             }
             const next = tokens[index + i];
 
             // Reached closing parentheses, able to inline it
             if (next.type === sqlTokenTypes.CLOSE_PAREN) {
-                this.inlineParentheses = true;
-                this.inlineIndented = false;
-                this.inlineLength = 0;
-                break;
+                return true;
             }
             // Reached an invalid token value for inline parentheses
             if (next.value === ";" || next.type === sqlTokenTypes.OPEN_PAREN) {
-                break;
+                return false;
             }
             // Reached an invalid token type for inline parentheses
             if (next.type === sqlTokenTypes.RESERVED_TOPLEVEL || next.type === sqlTokenTypes.RESERVED_NEWLINE ||
                 next.type === sqlTokenTypes.COMMENT || next.type === sqlTokenTypes.BLOCK_COMMENT) {
-                break;
+                return false;
             }
             length += next.value.length;
         }
-        return length;
+        return false;
     }
 
     // Closing parentheses decrease the block indent level
@@ -184,12 +181,6 @@ export default class SqlFormatter {
 
         query = _.trimEnd(query);
 
-        if (this.inlineIndented) {
-            this.indentTypes.pop();
-            this.indentLevel --;
-
-            query = this.addNewline(query);
-        }
         return this.addValueToQuery(query, token.value + " ");
     }
 
@@ -216,17 +207,9 @@ export default class SqlFormatter {
         query = this.addValueToQuery(query, token.value + " ");
 
         if (this.inlineParentheses) {
-            return this.formatInlineComma(token, query);
+            return query;
         }
         return this.formatNewlineComma(token, query);
-    }
-
-    formatInlineComma(token, query) {
-        if (this.inlineLength >= 30) {
-            this.inlineLength = 0;
-            return this.addNewline(query);
-        }
-        return query;
     }
 
     formatNewlineComma(token, query) {
@@ -246,9 +229,6 @@ export default class SqlFormatter {
     }
 
     formatLeftOver(token, query) {
-        if (this.inlineParentheses) {
-            this.inlineLength += token.value.length;
-        }
         return this.addValueToQuery(query, token.value + " ");
     }
 
