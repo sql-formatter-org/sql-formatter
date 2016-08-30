@@ -1,3 +1,4 @@
+import _ from "xr/_";
 import sqlTokenTypes from "xr/sqlFormatter/sqlTokenTypes";
 
 export default class SqlTokenizer {
@@ -8,7 +9,7 @@ export default class SqlTokenizer {
      *  @param {Array} cfg.reservedNewlineWords Words that are set to newline
      *  @param {Array} cfg.stringTypes String types to enable: "", '', ``, []
      */
-    constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, stringsTypes}) {
+    constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, stringsTypes, openParens, closeParens}) {
         const operators = "(!=|<>|==|<=|>=|!<|!>|\\|\\||,|;|\\:|\\)|\\(|\\.|\\=|\\<|\\>|\\+|\\-|\\*|\\/|\\!|\\^|%|\\||&|#)";
 
         this.WHITESPACE_REGEX = /^(\s+)/;
@@ -24,6 +25,9 @@ export default class SqlTokenizer {
         this.WORD_REGEX = new RegExp(`^(.*?)($|\\s|["'\`]|${operators})`);
 
         this.STRING_REGEX = this.createStringRegex(stringsTypes);
+
+        this.OPEN_PAREN_REGEX = this.createParenRegex(openParens);
+        this.CLOSE_PAREN_REGEX = this.createParenRegex(closeParens);
     }
 
     createReservedWordRegex(reservedWords, operators) {
@@ -46,6 +50,12 @@ export default class SqlTokenizer {
 
         return new RegExp(
             "^(" + stringsTypes.map(t => patterns[t]).join("|") + ")"
+        );
+    }
+
+    createParenRegex(parens) {
+        return new RegExp(
+            "^(" + parens.map(p => _.escapeRegExp(p)).join("|") + ")"
         );
     }
 
@@ -78,6 +88,8 @@ export default class SqlTokenizer {
         return this.getWhitespaceToken(input) ||
             this.getCommentToken(input) ||
             this.getStringToken(input) ||
+            this.getOpenParenToken(input) ||
+            this.getCloseParenToken(input) ||
             this.getVariableToken(input) ||
             this.getNumberToken(input) ||
             this.getBoundaryCharacterToken(input) ||
@@ -118,6 +130,22 @@ export default class SqlTokenizer {
             input,
             type: sqlTokenTypes.STRING,
             regex: this.STRING_REGEX
+        });
+    }
+
+    getOpenParenToken(input) {
+        return this.getTokenOnFirstMatch({
+            input,
+            type: sqlTokenTypes.OPEN_PAREN,
+            regex: this.OPEN_PAREN_REGEX
+        });
+    }
+
+    getCloseParenToken(input) {
+        return this.getTokenOnFirstMatch({
+            input,
+            type: sqlTokenTypes.CLOSE_PAREN,
+            regex: this.CLOSE_PAREN_REGEX
         });
     }
 

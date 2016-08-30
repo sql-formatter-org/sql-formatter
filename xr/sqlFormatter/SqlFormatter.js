@@ -52,10 +52,10 @@ export default class SqlFormatter {
             else if (token.type === sqlTokenTypes.RESERVED_NEWLINE) {
                 formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
             }
-            else if (token.value === "(") {
+            else if (token.type === sqlTokenTypes.OPEN_PAREN) {
                 formattedQuery = this.formatOpeningParentheses(tokens, index, formattedQuery);
             }
-            else if (token.value === ")") {
+            else if (token.type === sqlTokenTypes.CLOSE_PAREN) {
                 formattedQuery = this.formatClosingParentheses(token, formattedQuery);
             }
             else if (token.value === ",") {
@@ -151,14 +151,14 @@ export default class SqlFormatter {
             const next = tokens[index + i];
 
             // Reached closing parentheses, able to inline it
-            if (next.value === ")") {
+            if (next.type === sqlTokenTypes.CLOSE_PAREN) {
                 this.inlineParentheses = true;
                 this.inlineIndented = false;
                 this.inlineLength = 0;
                 break;
             }
             // Reached an invalid token value for inline parentheses
-            if (next.value === ";" || next.value === "(") {
+            if (next.value === ";" || next.type === sqlTokenTypes.OPEN_PAREN) {
                 break;
             }
             // Reached an invalid token type for inline parentheses

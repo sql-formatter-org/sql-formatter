@@ -9,6 +9,8 @@ export default {
     RESERVED_TOPLEVEL: "reserved-toplevel",
     RESERVED_NEWLINE: "reserved-newline",
     OPERATOR: "operator",
+    OPEN_PAREN: "open-paren",
+    CLOSE_PAREN: "close-paren",
     COMMENT: "comment",
     BLOCK_COMMENT: "block-comment",
     NUMBER: "number",

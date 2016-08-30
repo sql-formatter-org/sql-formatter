@@ -14,7 +14,7 @@ describe("n1qlFormatter", function() {
         );
     });
 
-    xit("formats SELECT query with primary key quering", function() {
+    it("formats SELECT query with primary key quering", function() {
         const result = n1qlFormatter.format(
             "SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];"
         );
@@ -26,6 +26,20 @@ describe("n1qlFormatter", function() {
             "  tutorial\n" +
             "USE KEYS\n" +
             "  ['dave', 'ian'];\n"
+        );
+    });
+
+    it("formats INSERT with {} object literal", function() {
+        const result = n1qlFormatter.format(
+            "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id': 1, 'type': 'Tarzan'});"
+        );
+        expect(result).toBe(
+            "INSERT INTO heroes (KEY, VALUE)\n" +
+            "VALUES\n" +
+            "  (\n" +
+            "    '123',\n" +
+            "    {'id' : 1, 'type' : 'Tarzan'}\n" +
+            "  );\n"
         );
     });
 
