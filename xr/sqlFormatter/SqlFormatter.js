@@ -60,6 +60,9 @@ export default class SqlFormatter {
             else if (token.value === ",") {
                 formattedQuery = this.formatComma(token, formattedQuery);
             }
+            else if (token.value === ":") {
+                formattedQuery = this.formatColon(token, formattedQuery);
+            }
             else if (token.value === "." || token.value === ";") {
                 formattedQuery = this.formatDot(token, formattedQuery);
             }
@@ -217,6 +220,11 @@ export default class SqlFormatter {
             return this.addNewline(query);
         }
         return query;
+    }
+
+    formatColon(token, query) {
+        query = _.trimEnd(query);
+        return this.addValueToQuery(query, token.value + " ");
     }
 
     formatDot(token, query) {

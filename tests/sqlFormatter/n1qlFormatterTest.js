@@ -38,7 +38,7 @@ describe("n1qlFormatter", function() {
             "VALUES\n" +
             "  (\n" +
             "    '123',\n" +
-            "    {'id' : 1, 'type' : 'Tarzan'}\n" +
+            "    {'id': 1, 'type': 'Tarzan'}\n" +
             "  );\n"
         );
     });
@@ -54,15 +54,15 @@ describe("n1qlFormatter", function() {
             "  (\n" +
             "    '123',\n" +
             "    {\n" +
-            "      'id' : 1,\n" +
-            "      'type' : 'Tarzan',\n" +
-            "      'array' : [\n" +
+            "      'id': 1,\n" +
+            "      'type': 'Tarzan',\n" +
+            "      'array': [\n" +
             "        123456789,\n" +
             "        123456789,\n" +
             "        123456789,\n" +
             "        123456789\n" +
             "      ],\n" +
-            "      'hello' : 'world'\n" +
+            "      'hello': 'world'\n" +
             "    }\n" +
             "  );\n"
         );
