@@ -81,12 +81,16 @@ export default class SqlFormatter {
         if (token.type === sqlTokenTypes.BLOCK_COMMENT) {
             query = this.addNewline(query);
 
-            token.value = token.value.replace("\n", "\n" + this.indent.repeat(this.indentLevel));
+            token.value = this.indentComment(token.value);
         }
         query += token.value;
         query = this.addNewline(query);
 
         return query;
+    }
+
+    indentComment(comment) {
+        return comment.replace("\n", "\n" + this.indent.repeat(this.indentLevel));
     }
 
     formatToplevelReservedWord(token, query) {
