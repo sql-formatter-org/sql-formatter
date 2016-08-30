@@ -28,7 +28,7 @@ export default class SqlFormatter {
         const tokens = this.tokenizer.tokenize(query);
         const formattedQuery = this.getFormattedQueryFromTokens(tokens);
 
-        return this.getRefinedResult(formattedQuery);
+        return formattedQuery.trim() + "\n";
     }
 
     getFormattedQueryFromTokens(tokens) {
@@ -251,9 +251,5 @@ export default class SqlFormatter {
 
     addNewline(query) {
         return _.trimEnd(query) + "\n" + this.indent.repeat(this.indentLevel);
-    }
-
-    getRefinedResult(formattedQuery) {
-        return formattedQuery.trim() + "\n";
     }
 }
