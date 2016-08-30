@@ -147,6 +147,7 @@ export default class SqlFormatter {
 
         for (let i = index; i < tokens.length; i++) {
             const token = tokens[i];
+            length += token.value.length;
 
             // Overran max length
             if (length > INLINE_MAX_LENGTH) {
@@ -172,7 +173,6 @@ export default class SqlFormatter {
                 token.type === sqlTokenTypes.COMMENT || token.type === sqlTokenTypes.BLOCK_COMMENT) {
                 return false;
             }
-            length += token.value.length;
         }
         return false;
     }
