@@ -15,7 +15,7 @@ export default class SqlFormatter {
         this.indent = "  ";
         this.indentLevel = 0;
         this.indentTypes = [];
-        this.inlineParentheses = false;
+        this.inlineParenthesesLevel = 0;
     }
 
     /**
@@ -96,7 +96,7 @@ export default class SqlFormatter {
             this.indentTypes.pop();
         }
         // if SQL "LIMIT" clause, start variable to reset newline
-        if (token.value === "LIMIT" && !this.inlineParentheses) {
+        if (token.value === "LIMIT" && this.inlineParenthesesLevel === 0) {
             this.limitClause = true;
         }
         query = this.addNewline(query);
@@ -125,11 +125,14 @@ export default class SqlFormatter {
         }
         query = this.addValueToQuery(query, tokens[index].value);
 
-        if (this.isInlineParenthesesBlock(tokens, index)) {
-            this.inlineParentheses = true;
+        if (this.inlineParenthesesLevel === 0 && this.isInlineParenthesesBlock(tokens, index)) {
+            this.inlineParenthesesLevel = 1;
+        }
+        else if (this.inlineParenthesesLevel > 0) {
+            this.inlineParenthesesLevel++;
         }
         else {
-            this.inlineParentheses = false;
+            this.inlineParenthesesLevel = 0;
             this.increaseBlockIndent();
             query = this.addNewline(query);
         }
@@ -140,8 +143,9 @@ export default class SqlFormatter {
     // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
     isInlineParenthesesBlock(tokens, index) {
         let length = 0;
+        let level = 0;
 
-        for (let i = index + 1; i < tokens.length; i++) {
+        for (let i = index; i < tokens.length; i++) {
             const next = tokens[i];
 
             // Overran max length
@@ -149,12 +153,18 @@ export default class SqlFormatter {
                 return false;
             }
 
-            // Reached closing parentheses, able to inline it
-            if (next.type === sqlTokenTypes.CLOSE_PAREN) {
-                return true;
+            if (next.type === sqlTokenTypes.OPEN_PAREN) {
+                level++;
             }
+            else if (next.type === sqlTokenTypes.CLOSE_PAREN) {
+                level--;
+                if (level === 0) {
+                    return true;
+                }
+            }
+
             // Reached an invalid token value for inline parentheses
-            if (next.value === ";" || next.type === sqlTokenTypes.OPEN_PAREN) {
+            if (next.value === ";") {
                 return false;
             }
             // Reached an invalid token type for inline parentheses
@@ -169,14 +179,14 @@ export default class SqlFormatter {
 
     // Closing parentheses decrease the block indent level
     formatClosingParentheses(token, query) {
-        if (this.inlineParentheses) {
+        if (this.inlineParenthesesLevel > 0) {
             return this.formatClosingInlineParentheses(token, query);
         }
         return this.formatClosingNewlineParentheses(token, query);
     }
 
     formatClosingInlineParentheses(token, query) {
-        this.inlineParentheses = false;
+        this.inlineParenthesesLevel--;
 
         query = _.trimEnd(query);
 
@@ -205,7 +215,7 @@ export default class SqlFormatter {
         query = _.trimEnd(query);
         query = this.addValueToQuery(query, token.value + " ");
 
-        if (this.inlineParentheses) {
+        if (this.inlineParenthesesLevel > 0) {
             return query;
         }
         return this.formatNewlineComma(token, query);

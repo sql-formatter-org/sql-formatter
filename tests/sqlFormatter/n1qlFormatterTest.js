@@ -36,10 +36,7 @@ describe("n1qlFormatter", function() {
         expect(result).toBe(
             "INSERT INTO heroes (KEY, VALUE)\n" +
             "VALUES\n" +
-            "  (\n" +
-            "    '123',\n" +
-            "    {'id': 1, 'type': 'Tarzan'}\n" +
-            "  );\n"
+            "  ('123', {'id': 1, 'type': 'Tarzan'});\n"
         );
     });
 

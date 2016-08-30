@@ -160,6 +160,16 @@ export default function behavesLikeSqlFormatter(formatter) {
         );
     });
 
+    it("keeps short parenthized list with nested parenthesis on single line", function() {
+        const result = formatter.format(
+            "SELECT (a + b * (c - NOW()));"
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  (a + b * (c - NOW()));\n"
+        );
+    });
+
     it("breaks long parenthized lists to multiple lines", function() {
         const result = formatter.format(
             "INSERT INTO some_table (id_product, id_shop, id_currency, id_country) (" +
