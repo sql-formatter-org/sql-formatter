@@ -12,7 +12,7 @@ export default class SqlTokenizer {
      *  @param {String[]} cfg.closeParens Closing parentheses to enable, like ), ]
      *  @param {String[]} cfg.variableTypes Prefixes for variables, like @ and :
      */
-    constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, stringTypes, openParens, closeParens, variableTypes}) {
+    constructor(cfg) {
         this.WORD_REGEX = /^(\w+)/;
         this.WHITESPACE_REGEX = /^(\s+)/;
         this.LINE_COMMENT_REGEX = /^((?:#|--).*?(?:\n|$))/;
@@ -20,16 +20,16 @@ export default class SqlTokenizer {
         this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
         this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||.)/;
 
-        this.RESERVED_TOPLEVEL_REGEX = this.createReservedWordRegex(reservedToplevelWords);
-        this.RESERVED_NEWLINE_REGEX = this.createReservedWordRegex(reservedNewlineWords);
-        this.RESERVED_PLAIN_REGEX = this.createReservedWordRegex(reservedWords);
+        this.RESERVED_TOPLEVEL_REGEX = this.createReservedWordRegex(cfg.reservedToplevelWords);
+        this.RESERVED_NEWLINE_REGEX = this.createReservedWordRegex(cfg.reservedNewlineWords);
+        this.RESERVED_PLAIN_REGEX = this.createReservedWordRegex(cfg.reservedWords);
 
-        this.STRING_REGEX = this.createStringRegex(stringTypes);
+        this.STRING_REGEX = this.createStringRegex(cfg.stringTypes);
 
-        this.OPEN_PAREN_REGEX = this.createParenRegex(openParens);
-        this.CLOSE_PAREN_REGEX = this.createParenRegex(closeParens);
+        this.OPEN_PAREN_REGEX = this.createParenRegex(cfg.openParens);
+        this.CLOSE_PAREN_REGEX = this.createParenRegex(cfg.closeParens);
 
-        this.VARIABLE_REGEX = this.createVariableRegex(variableTypes);
+        this.VARIABLE_REGEX = this.createVariableRegex(cfg.variableTypes);
     }
 
     createReservedWordRegex(reservedWords) {
