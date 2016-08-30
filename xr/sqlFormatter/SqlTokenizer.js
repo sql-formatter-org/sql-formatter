@@ -10,13 +10,11 @@ export default class SqlTokenizer {
      *  @param {Array} cfg.stringTypes String types to enable: "", '', ``, []
      */
     constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, stringTypes, openParens, closeParens}) {
-        const operators = "(!=|<>|==|<=|>=|!<|!>|\\|\\||,|;|\\:|\\)|\\(|\\.|\\=|\\<|\\>|\\+|\\-|\\*|\\/|\\!|\\^|%|\\||&|#)";
-
         this.WHITESPACE_REGEX = /^(\s+)/;
         this.LINE_COMMENT_REGEX = /^((?:#|--).*?(?:\n|$))/;
         this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
         this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
-        this.OPERATOR_REGEX = new RegExp(`^(${operators})`);
+        this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||.)/;
 
         this.RESERVED_TOPLEVEL_REGEX = this.createReservedWordRegex(reservedToplevelWords);
         this.RESERVED_NEWLINE_REGEX = this.createReservedWordRegex(reservedNewlineWords);
