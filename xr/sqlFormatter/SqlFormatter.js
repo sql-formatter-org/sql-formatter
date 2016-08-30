@@ -214,10 +214,10 @@ export default class SqlFormatter {
         if (this.inlineParenthesesLevel > 0) {
             return query;
         }
-        return this.formatNewlineComma(token, query);
+        return this.formatNewlineComma(query);
     }
 
-    formatNewlineComma(token, query) {
+    formatNewlineComma(query) {
         // If the previous TOKEN_VALUE is "LIMIT", resets new line
         if (this.limitClause === true) {
             this.limitClause = false;
