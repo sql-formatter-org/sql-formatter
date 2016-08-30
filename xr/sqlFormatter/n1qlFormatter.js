@@ -31,6 +31,8 @@ const reservedNewlineWords = [
     "LEFT OUTER JOIN", "RIGHT OUTER JOIN", "LEFT JOIN", "RIGHT JOIN", "OUTER JOIN", "INNER JOIN", "JOIN", "XOR", "OR", "AND"
 ];
 
+let tokenizer;
+
 export default {
     /**
      * Format the whitespace in a N1QL string to make it easier to read
@@ -39,14 +41,17 @@ export default {
      * @return {String} formatted string
      */
     format: (query) => {
-        return new SqlFormatter(new SqlTokenizer({
-            reservedWords,
-            reservedToplevelWords,
-            reservedNewlineWords,
-            stringTypes: [`""`, "''", "``"],
-            openParens: ["(", "[", "{"],
-            closeParens: [")", "]", "}"],
-            variableTypes: [],
-        })).format(query);
+        if (!tokenizer) {
+            tokenizer = new SqlTokenizer({
+                reservedWords,
+                reservedToplevelWords,
+                reservedNewlineWords,
+                stringTypes: [`""`, "''", "``"],
+                openParens: ["(", "[", "{"],
+                closeParens: [")", "]", "}"],
+                variableTypes: [],
+            });
+        }
+        return new SqlFormatter(tokenizer).format(query);
     }
 };
