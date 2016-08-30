@@ -62,6 +62,7 @@ export default {
             reservedWords,
             reservedToplevelWords,
             reservedNewlineWords,
+            stringsTypes: [`""`, "''", "``", "[]"]
         })).format(query);
     }
 };

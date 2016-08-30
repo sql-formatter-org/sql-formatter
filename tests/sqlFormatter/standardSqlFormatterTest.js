@@ -3,4 +3,9 @@ import behavesLikeSqlFormatter from "tests/specs/sqlFormatter/behavesLikeSqlForm
 
 describe("standardSqlFormatter", function() {
     behavesLikeSqlFormatter(standardSqlFormatter);
+
+    it("recognizes [] strings", function() {
+        expect(standardSqlFormatter.format("[foo JOIN bar]")).toBe("[foo JOIN bar]\n");
+        expect(standardSqlFormatter.format("[foo ]] JOIN bar]")).toBe("[foo ]] JOIN bar]\n");
+    });
 });

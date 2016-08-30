@@ -347,13 +347,11 @@ export default function behavesLikeSqlFormatter(formatter) {
         expect(formatter.format("\"foo JOIN bar\"")).toBe("\"foo JOIN bar\"\n");
         expect(formatter.format("'foo JOIN bar'")).toBe("'foo JOIN bar'\n");
         expect(formatter.format("`foo JOIN bar`")).toBe("`foo JOIN bar`\n");
-        expect(formatter.format("[foo JOIN bar]")).toBe("[foo JOIN bar]\n");
     });
 
     it("recognizes escaped strings", function() {
         expect(formatter.format("\"foo \\\" JOIN bar\"")).toBe("\"foo \\\" JOIN bar\"\n");
         expect(formatter.format("'foo \\' JOIN bar'")).toBe("'foo \\' JOIN bar'\n");
         expect(formatter.format("`foo `` JOIN bar`")).toBe("`foo `` JOIN bar`\n");
-        expect(formatter.format("[foo ]] JOIN bar]")).toBe("[foo ]] JOIN bar]\n");
     });
 }

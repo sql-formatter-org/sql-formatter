@@ -6,8 +6,9 @@ export default class SqlTokenizer {
      *  @param {Array} cfg.reservedWords Reserved words in SQL
      *  @param {Array} cfg.reservedToplevelWords Words that are set to new line and on first indent level
      *  @param {Array} cfg.reservedNewlineWords Words that are set to newline
+     *  @param {Array} cfg.stringTypes String types to enable: "", '', ``, []
      */
-    constructor({reservedWords, reservedToplevelWords, reservedNewlineWords}) {
+    constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, stringsTypes}) {
         const operators = "(!=|<>|==|<=|>=|!<|!>|\\|\\||,|;|\\:|\\)|\\(|\\.|\\=|\\<|\\>|\\+|\\-|\\*|\\/|\\!|\\^|%|\\||&|#)";
 
         this.WHITESPACE_REGEX = /^(\s+)/;
@@ -22,22 +23,30 @@ export default class SqlTokenizer {
 
         this.WORD_REGEX = new RegExp(`^(.*?)($|\\s|["'\`]|${operators})`);
 
-        // This checks for the following patterns:
-        // 1. backtick quoted string using `` to escape
-        // 2. square bracket quoted string (SQL Server) using ]] to escape
-        // 3. double quoted string using "" or \" to escape
-        // 4. single quoted string using '' or \' to escape
-        this.STRING_REGEX = new RegExp(
-            "^(((`[^`]*($|`))+)|" +
-            "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)|" +
-            "((\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)|" +
-            "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+))"
-        );
+        this.STRING_REGEX = this.createStringRegex(stringsTypes);
     }
 
     createReservedWordRegex(reservedWords, operators) {
         const reservedWordsPattern = reservedWords.join("|").replace(/ /g, "\\s+");
         return new RegExp(`^(${reservedWordsPattern})($|\\s|${operators})`, "i");
+    }
+
+    // This enables the following string patterns:
+    // 1. backtick quoted string using `` to escape
+    // 2. square bracket quoted string (SQL Server) using ]] to escape
+    // 3. double quoted string using "" or \" to escape
+    // 4. single quoted string using '' or \' to escape
+    createStringRegex(stringsTypes) {
+        const patterns = {
+            "\"\"": "((\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)",
+            "''": "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
+            "``": "((`[^`]*($|`))+)",
+            "[]": "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)",
+        };
+
+        return new RegExp(
+            "^(" + stringsTypes.map(t => patterns[t]).join("|") + ")"
+        );
     }
 
     /**
