@@ -43,6 +43,31 @@ describe("n1qlFormatter", function() {
         );
     });
 
+    it("formats INSERT with large object and array literals", function() {
+        const result = n1qlFormatter.format(
+            "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id': 1, 'type': 'Tarzan', " +
+            "'array': [123456789, 123456789, 123456789, 123456789], 'hello': 'world'});"
+        );
+        expect(result).toBe(
+            "INSERT INTO heroes (KEY, VALUE)\n" +
+            "VALUES\n" +
+            "  (\n" +
+            "    '123',\n" +
+            "    {\n" +
+            "      'id' : 1,\n" +
+            "      'type' : 'Tarzan',\n" +
+            "      'array' : [\n" +
+            "        123456789,\n" +
+            "        123456789,\n" +
+            "        123456789,\n" +
+            "        123456789\n" +
+            "      ],\n" +
+            "      'hello' : 'world'\n" +
+            "    }\n" +
+            "  );\n"
+        );
+    });
+
     it("formats SELECT query with UNNEST toplevel reserver word", function() {
         const result = n1qlFormatter.format(
             "SELECT * FROM tutorial UNNEST tutorial.children c;"
