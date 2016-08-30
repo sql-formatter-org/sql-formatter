@@ -65,6 +65,7 @@ export default {
             stringTypes: [`""`, "''", "``", "[]"],
             openParens: ["("],
             closeParens: [")"],
+            variableTypes: ["@", ":"],
         })).format(query);
     }
 };

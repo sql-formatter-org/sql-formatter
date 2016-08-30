@@ -9,7 +9,7 @@ export default class SqlTokenizer {
      *  @param {Array} cfg.reservedNewlineWords Words that are set to newline
      *  @param {Array} cfg.stringTypes String types to enable: "", '', ``, []
      */
-    constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, stringTypes, openParens, closeParens}) {
+    constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, stringTypes, openParens, closeParens, variableTypes}) {
         this.WORD_REGEX = /^(\w+)/;
         this.WHITESPACE_REGEX = /^(\s+)/;
         this.LINE_COMMENT_REGEX = /^((?:#|--).*?(?:\n|$))/;
@@ -25,6 +25,8 @@ export default class SqlTokenizer {
 
         this.OPEN_PAREN_REGEX = this.createParenRegex(openParens);
         this.CLOSE_PAREN_REGEX = this.createParenRegex(closeParens);
+
+        this.VARIABLE_REGEX = this.createVariableRegex(variableTypes);
     }
 
     createReservedWordRegex(reservedWords) {
@@ -53,6 +55,15 @@ export default class SqlTokenizer {
     createParenRegex(parens) {
         return new RegExp(
             "^(" + parens.map(p => _.escapeRegExp(p)).join("|") + ")"
+        );
+    }
+
+    createVariableRegex(variableTypes) {
+        if (variableTypes.length === 0) {
+            return false;
+        }
+        return new RegExp(
+            "^(" + variableTypes.map(_.escapeRegExp).join("|") + ")\\S"
         );
     }
 
@@ -147,7 +158,7 @@ export default class SqlTokenizer {
     }
 
     getVariableToken(input) {
-        if ((input.charAt(0) === "@" || input.charAt(0) === ":") && input.charAt(1)) {
+        if (this.VARIABLE_REGEX && this.VARIABLE_REGEX.test(input)) {
             // Quoted variable name
             if (input.charAt(1) === "\"" || input.charAt(1) === "'" || input.charAt(1) === "`") {
                 return {

@@ -31,7 +31,7 @@ describe("n1qlFormatter", function() {
 
     it("formats INSERT with {} object literal", function() {
         const result = n1qlFormatter.format(
-            "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id': 1, 'type': 'Tarzan'});"
+            "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id':1,'type':'Tarzan'});"
         );
         expect(result).toBe(
             "INSERT INTO heroes (KEY, VALUE)\n" +

@@ -149,32 +149,6 @@ export default function behavesLikeSqlFormatter(formatter) {
         );
     });
 
-    it("recognizes @variables", function() {
-        const result = formatter.format(
-            "SELECT @variable, @'var name', @\"var name\", @`var name`;"
-        );
-        expect(result).toBe(
-            "SELECT\n" +
-            "  @variable,\n" +
-            "  @'var name',\n" +
-            "  @\"var name\",\n" +
-            "  @`var name`;\n"
-        );
-    });
-
-    it("recognizes :variables", function() {
-        const result = formatter.format(
-            "SELECT :variable, :'var name', :\"var name\", :`var name`;"
-        );
-        expect(result).toBe(
-            "SELECT\n" +
-            "  :variable,\n" +
-            "  :'var name',\n" +
-            "  :\"var name\",\n" +
-            "  :`var name`;\n"
-        );
-    });
-
     it("formats simple INSERT query", function() {
         const result = formatter.format(
             "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"

@@ -8,4 +8,31 @@ describe("standardSqlFormatter", function() {
         expect(standardSqlFormatter.format("[foo JOIN bar]")).toBe("[foo JOIN bar]\n");
         expect(standardSqlFormatter.format("[foo ]] JOIN bar]")).toBe("[foo ]] JOIN bar]\n");
     });
+
+    it("recognizes @variables", function() {
+        const result = standardSqlFormatter.format(
+            "SELECT @variable, @'var name', @\"var name\", @`var name`;"
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  @variable,\n" +
+            "  @'var name',\n" +
+            "  @\"var name\",\n" +
+            "  @`var name`;\n"
+        );
+    });
+
+    it("recognizes :variables", function() {
+        const result = standardSqlFormatter.format(
+            "SELECT :variable, :'var name', :\"var name\", :`var name`;"
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  :variable,\n" +
+            "  :'var name',\n" +
+            "  :\"var name\",\n" +
+            "  :`var name`;\n"
+        );
+    });
+
 });
