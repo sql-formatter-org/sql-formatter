@@ -15,7 +15,7 @@ export default class SqlTokenizer {
         this.WHITESPACE_REGEX = /^(\s+)/;
         this.LINE_COMMENT_REGEX = /^((?:#|--).*?(?:\n|$))/;
         this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
-        this.NUMBER_REGEX = new RegExp(`^((-\s*)?[0-9]+(\\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)($|\\s|"'\`|${operators})`);
+        this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
         this.OPERATOR_REGEX = new RegExp(`^(${operators})`);
 
         this.RESERVED_TOPLEVEL_REGEX = this.createReservedWordRegex(reservedToplevelWords, operators);
