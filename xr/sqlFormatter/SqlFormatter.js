@@ -103,13 +103,12 @@ export default class SqlFormatter {
 
         this.increaseToplevelIndent();
 
-        query = this.addValueToQuery(query, this.equalizeWhitespace(token.value));
+        query += this.equalizeWhitespace(token.value);
         return this.addNewline(query);
     }
 
     formatNewlineReservedWord(token, query) {
-        query = this.addNewline(query);
-        return this.addValueToQuery(query, this.equalizeWhitespace(token.value) + " ");
+        return this.addNewline(query) + this.equalizeWhitespace(token.value) + " ";
     }
 
     // Replace any sequence of whitespace characters with single space
@@ -123,7 +122,7 @@ export default class SqlFormatter {
         if (tokens[index - 1] && tokens[index - 1].type !== sqlTokenTypes.WHITESPACE) {
             query = _.trimEnd(query);
         }
-        query = this.addValueToQuery(query, tokens[index].value);
+        query += tokens[index].value;
 
         if (this.inlineParenthesesLevel === 0 && this.isInlineParenthesesBlock(tokens, index)) {
             this.inlineParenthesesLevel = 1;
@@ -188,9 +187,7 @@ export default class SqlFormatter {
     formatClosingInlineParentheses(token, query) {
         this.inlineParenthesesLevel--;
 
-        query = _.trimEnd(query);
-
-        return this.addValueToQuery(query, token.value + " ");
+        return _.trimEnd(query) + token.value + " ";
     }
 
     formatClosingNewlineParentheses(token, query) {
@@ -205,15 +202,13 @@ export default class SqlFormatter {
             }
             this.indentLevel --;
         }
-        query = this.addNewline(query);
 
-        return this.addValueToQuery(query, token.value + " ");
+        return this.addNewline(query) + token.value + " ";
     }
 
     // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
     formatComma(token, query) {
-        query = _.trimEnd(query);
-        query = this.addValueToQuery(query, token.value + " ");
+        query = _.trimEnd(query) + token.value + " ";
 
         if (this.inlineParenthesesLevel > 0) {
             return query;
@@ -233,15 +228,15 @@ export default class SqlFormatter {
     }
 
     formatWithSpaceAfter(token, query) {
-        return this.addValueToQuery(_.trimEnd(query), token.value + " ");
+        return _.trimEnd(query) + token.value + " ";
     }
 
     formatWithoutSpaces(token, query) {
-        return this.addValueToQuery(_.trimEnd(query), token.value);
+        return _.trimEnd(query) + token.value;
     }
 
     formatWithSpaces(token, query) {
-        return this.addValueToQuery(query, token.value + " ");
+        return query + token.value + " ";
     }
 
     increaseToplevelIndent() {
@@ -257,10 +252,6 @@ export default class SqlFormatter {
     addNewline(query) {
         query = _.trimEnd(query);
         return query + "\n" + this.indent.repeat(this.indentLevel);
-    }
-
-    addValueToQuery(query, value) {
-        return query + value;
     }
 
     getRefinedResult(formattedQuery) {
