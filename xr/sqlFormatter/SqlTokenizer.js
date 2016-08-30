@@ -163,7 +163,7 @@ export default class SqlTokenizer {
     getVariableToken(input) {
         if (this.VARIABLE_REGEX && this.VARIABLE_REGEX.test(input)) {
             // Quoted variable name
-            if (input.charAt(1) === "\"" || input.charAt(1) === "'" || input.charAt(1) === "`") {
+            if (this.STRING_REGEX.test(input.substring(1))) {
                 return {
                     type: sqlTokenTypes.VARIABLE,
                     value: input.charAt(0) + input.substring(1).match(this.STRING_REGEX)[1]
