@@ -220,11 +220,11 @@ export default class SqlFormatter {
         // If the previous TOKEN_VALUE is "LIMIT", resets new line
         if (this.limitClause === true) {
             this.limitClause = false;
+            return query;
         }
         else {
             return this.addNewline(query);
         }
-        return query;
     }
 
     formatWithSpaceAfter(token, query) {
@@ -250,8 +250,7 @@ export default class SqlFormatter {
     }
 
     addNewline(query) {
-        query = _.trimEnd(query);
-        return query + "\n" + this.indent.repeat(this.indentLevel);
+        return _.trimEnd(query) + "\n" + this.indent.repeat(this.indentLevel);
     }
 
     getRefinedResult(formattedQuery) {
