@@ -79,14 +79,11 @@ export default class SqlFormatter {
 
     formatComment(token, query) {
         if (token.type === sqlTokenTypes.BLOCK_COMMENT) {
-            query = this.addNewline(query);
-
-            token.value = this.indentComment(token.value);
+            return this.addNewline(this.addNewline(query) + this.indentComment(token.value));
         }
-        query += token.value;
-        query = this.addNewline(query);
-
-        return query;
+        else {
+            return this.addNewline(query + token.value);
+        }
     }
 
     indentComment(comment) {
