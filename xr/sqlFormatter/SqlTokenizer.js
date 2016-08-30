@@ -18,9 +18,9 @@ export default class SqlTokenizer {
         this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
         this.OPERATOR_REGEX = new RegExp(`^(${operators})`);
 
-        this.RESERVED_TOPLEVEL_REGEX = this.createReservedWordRegex(reservedToplevelWords, operators);
-        this.RESERVED_NEWLINE_REGEX = this.createReservedWordRegex(reservedNewlineWords, operators);
-        this.RESERVED_PLAIN_REGEX = this.createReservedWordRegex(reservedWords, operators);
+        this.RESERVED_TOPLEVEL_REGEX = this.createReservedWordRegex(reservedToplevelWords);
+        this.RESERVED_NEWLINE_REGEX = this.createReservedWordRegex(reservedNewlineWords);
+        this.RESERVED_PLAIN_REGEX = this.createReservedWordRegex(reservedWords);
 
         this.WORD_REGEX = new RegExp(`^(.*?)($|\\s|["'\`]|${operators})`);
 
@@ -30,9 +30,9 @@ export default class SqlTokenizer {
         this.CLOSE_PAREN_REGEX = this.createParenRegex(closeParens);
     }
 
-    createReservedWordRegex(reservedWords, operators) {
+    createReservedWordRegex(reservedWords) {
         const reservedWordsPattern = reservedWords.join("|").replace(/ /g, "\\s+");
-        return new RegExp(`^(${reservedWordsPattern})($|\\s|${operators})`, "i");
+        return new RegExp(`^(${reservedWordsPattern})\\b`, "i");
     }
 
     // This enables the following string patterns:
