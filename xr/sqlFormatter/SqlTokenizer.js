@@ -29,7 +29,8 @@ export default class SqlTokenizer {
         this.OPEN_PAREN_REGEX = this.createParenRegex(cfg.openParens);
         this.CLOSE_PAREN_REGEX = this.createParenRegex(cfg.closeParens);
 
-        this.VARIABLE_REGEX = this.createVariableRegex(cfg.variableTypes);
+        this.PLAIN_VARIABLE_REGEX = this.createVariableRegex(cfg.variableTypes, "[a-zA-Z0-9._$]+");
+        this.QUOTED_VARIABLE_REGEX = this.createVariableRegex(cfg.variableTypes, this.createStringPattern(cfg.stringTypes));
     }
 
     createReservedWordRegex(reservedWords) {
@@ -37,12 +38,18 @@ export default class SqlTokenizer {
         return new RegExp(`^(${reservedWordsPattern})\\b`, "i");
     }
 
+    createStringRegex(stringTypes) {
+        return new RegExp(
+            "^(" + this.createStringPattern(stringTypes) + ")"
+        );
+    }
+
     // This enables the following string patterns:
     // 1. backtick quoted string using `` to escape
     // 2. square bracket quoted string (SQL Server) using ]] to escape
     // 3. double quoted string using "" or \" to escape
     // 4. single quoted string using '' or \' to escape
-    createStringRegex(stringTypes) {
+    createStringPattern(stringTypes) {
         const patterns = {
             "\"\"": "((\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)",
             "''": "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
@@ -50,9 +57,7 @@ export default class SqlTokenizer {
             "[]": "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)",
         };
 
-        return new RegExp(
-            "^(" + stringTypes.map(t => patterns[t]).join("|") + ")"
-        );
+        return stringTypes.map(t => patterns[t]).join("|");
     }
 
     createParenRegex(parens) {
@@ -61,12 +66,12 @@ export default class SqlTokenizer {
         );
     }
 
-    createVariableRegex(variableTypes) {
+    createVariableRegex(variableTypes, pattern) {
         if (variableTypes.length === 0) {
             return false;
         }
         return new RegExp(
-            "^(" + variableTypes.map(_.escapeRegExp).join("|") + ")\\S"
+            "^((?:" + variableTypes.map(_.escapeRegExp).join("|") + ")(?:" + pattern + "))\\S"
         );
     }
 
@@ -161,23 +166,23 @@ export default class SqlTokenizer {
     }
 
     getVariableToken(input) {
-        if (this.VARIABLE_REGEX && this.VARIABLE_REGEX.test(input)) {
-            // Quoted variable name
-            if (this.STRING_REGEX.test(input.substring(1))) {
-                return {
-                    type: sqlTokenTypes.VARIABLE,
-                    value: input.charAt(0) + input.substring(1).match(this.STRING_REGEX)[1]
-                };
-            }
-            // Non-quoted variable name
-            else {
-                return this.getTokenOnFirstMatch({
-                    input,
-                    type: sqlTokenTypes.VARIABLE,
-                    regex: new RegExp(`^(${input.charAt(0)}[a-zA-Z0-9\\._\\$]+)`)
-                });
-            }
-        }
+        return this.getPlainVariableToken(input) || this.getQuotedVariableToken(input);
+    }
+
+    getPlainVariableToken(input) {
+        return this.getTokenOnFirstMatch({
+            input,
+            type: sqlTokenTypes.VARIABLE,
+            regex: this.PLAIN_VARIABLE_REGEX
+        });
+    }
+
+    getQuotedVariableToken(input) {
+        return this.getTokenOnFirstMatch({
+            input,
+            type: sqlTokenTypes.VARIABLE,
+            regex: this.QUOTED_VARIABLE_REGEX
+        });
     }
 
     // Decimal, binary, or hex numbers
