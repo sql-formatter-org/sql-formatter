@@ -43,7 +43,7 @@ export default {
             reservedWords,
             reservedToplevelWords,
             reservedNewlineWords,
-            stringsTypes: [`""`, "''", "``"],
+            stringTypes: [`""`, "''", "``"],
             openParens: ["(", "[", "{"],
             closeParens: [")", "]", "}"],
         })).format(query);

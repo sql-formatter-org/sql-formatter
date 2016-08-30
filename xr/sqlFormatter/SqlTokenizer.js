@@ -9,7 +9,7 @@ export default class SqlTokenizer {
      *  @param {Array} cfg.reservedNewlineWords Words that are set to newline
      *  @param {Array} cfg.stringTypes String types to enable: "", '', ``, []
      */
-    constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, stringsTypes, openParens, closeParens}) {
+    constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, stringTypes, openParens, closeParens}) {
         const operators = "(!=|<>|==|<=|>=|!<|!>|\\|\\||,|;|\\:|\\)|\\(|\\.|\\=|\\<|\\>|\\+|\\-|\\*|\\/|\\!|\\^|%|\\||&|#)";
 
         this.WHITESPACE_REGEX = /^(\s+)/;
@@ -24,7 +24,7 @@ export default class SqlTokenizer {
 
         this.WORD_REGEX = new RegExp(`^(.*?)($|\\s|["'\`]|${operators})`);
 
-        this.STRING_REGEX = this.createStringRegex(stringsTypes);
+        this.STRING_REGEX = this.createStringRegex(stringTypes);
 
         this.OPEN_PAREN_REGEX = this.createParenRegex(openParens);
         this.CLOSE_PAREN_REGEX = this.createParenRegex(closeParens);
@@ -40,7 +40,7 @@ export default class SqlTokenizer {
     // 2. square bracket quoted string (SQL Server) using ]] to escape
     // 3. double quoted string using "" or \" to escape
     // 4. single quoted string using '' or \' to escape
-    createStringRegex(stringsTypes) {
+    createStringRegex(stringTypes) {
         const patterns = {
             "\"\"": "((\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)",
             "''": "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
@@ -49,7 +49,7 @@ export default class SqlTokenizer {
         };
 
         return new RegExp(
-            "^(" + stringsTypes.map(t => patterns[t]).join("|") + ")"
+            "^(" + stringTypes.map(t => patterns[t]).join("|") + ")"
         );
     }
 
