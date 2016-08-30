@@ -61,13 +61,13 @@ export default class SqlFormatter {
                 formattedQuery = this.formatComma(token, formattedQuery);
             }
             else if (token.value === ":") {
-                formattedQuery = this.formatColon(token, formattedQuery);
+                formattedQuery = this.formatWithSpaceAfter(token, formattedQuery);
             }
             else if (token.value === "." || token.value === ";") {
-                formattedQuery = this.formatDot(token, formattedQuery);
+                formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
             }
             else {
-                formattedQuery = this.formatLeftOver(token, formattedQuery);
+                formattedQuery = this.formatWithSpaces(token, formattedQuery);
             }
         });
         return formattedQuery;
@@ -232,17 +232,15 @@ export default class SqlFormatter {
         return query;
     }
 
-    formatColon(token, query) {
-        query = _.trimEnd(query);
-        return this.addValueToQuery(query, token.value + " ");
+    formatWithSpaceAfter(token, query) {
+        return this.addValueToQuery(_.trimEnd(query), token.value + " ");
     }
 
-    formatDot(token, query) {
-        query = _.trimEnd(query);
-        return this.addValueToQuery(query, token.value);
+    formatWithoutSpaces(token, query) {
+        return this.addValueToQuery(_.trimEnd(query), token.value);
     }
 
-    formatLeftOver(token, query) {
+    formatWithSpaces(token, query) {
         return this.addValueToQuery(query, token.value + " ");
     }
 
