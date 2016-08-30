@@ -4,10 +4,13 @@ import sqlTokenTypes from "xr/sqlFormatter/sqlTokenTypes";
 export default class SqlTokenizer {
     /**
      * @param {Object} cfg
-     *  @param {Array} cfg.reservedWords Reserved words in SQL
-     *  @param {Array} cfg.reservedToplevelWords Words that are set to new line and on first indent level
-     *  @param {Array} cfg.reservedNewlineWords Words that are set to newline
-     *  @param {Array} cfg.stringTypes String types to enable: "", '', ``, []
+     *  @param {String[]} cfg.reservedWords Reserved words in SQL
+     *  @param {String[]} cfg.reservedToplevelWords Words that are set to new line and on first indent level
+     *  @param {String[]} cfg.reservedNewlineWords Words that are set to newline
+     *  @param {String[]} cfg.stringTypes String types to enable: "", '', ``, []
+     *  @param {String[]} cfg.openParens Opening parentheses to enable, like (, [
+     *  @param {String[]} cfg.closeParens Closing parentheses to enable, like ), ]
+     *  @param {String[]} cfg.variableTypes Prefixes for variables, like @ and :
      */
     constructor({reservedWords, reservedToplevelWords, reservedNewlineWords, stringTypes, openParens, closeParens, variableTypes}) {
         this.WORD_REGEX = /^(\w+)/;
