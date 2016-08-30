@@ -4,7 +4,6 @@ import sqlTokenTypes from "xr/sqlFormatter/sqlTokenTypes";
 const INDENT_TYPE_TOPLEVEL = "toplevel-indent";
 const INDENT_TYPE_BLOCK = "block-indent";
 
-const INLINE_PARENTHESES_SEARCH_RANGE = 250;
 const INLINE_MAX_LENGTH = 35;
 
 export default class SqlFormatter {
@@ -139,16 +138,13 @@ export default class SqlFormatter {
     isInlineParenthesesBlock(tokens, index) {
         let length = 0;
 
-        for (let i = 1; i <= INLINE_PARENTHESES_SEARCH_RANGE; i ++) {
-            // Reached end of string
-            if (!tokens[index + i]) {
-                return false;
-            }
+        for (let i = index + 1; i < tokens.length; i++) {
+            const next = tokens[i];
+
             // Overran max length
             if (length > INLINE_MAX_LENGTH) {
                 return false;
             }
-            const next = tokens[index + i];
 
             // Reached closing parentheses, able to inline it
             if (next.type === sqlTokenTypes.CLOSE_PAREN) {
