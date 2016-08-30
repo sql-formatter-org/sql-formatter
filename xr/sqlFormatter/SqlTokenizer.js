@@ -22,7 +22,7 @@ export default class SqlTokenizer {
         this.RESERVED_NEWLINE_REGEX = this.createReservedWordRegex(reservedNewlineWords);
         this.RESERVED_PLAIN_REGEX = this.createReservedWordRegex(reservedWords);
 
-        this.WORD_REGEX = new RegExp(`^(.*?)($|\\s|["'\`]|${operators})`);
+        this.WORD_REGEX = /^(\w+)/;
 
         this.STRING_REGEX = this.createStringRegex(stringTypes);
 
@@ -92,9 +92,9 @@ export default class SqlTokenizer {
             this.getCloseParenToken(input) ||
             this.getVariableToken(input) ||
             this.getNumberToken(input) ||
-            this.getBoundaryCharacterToken(input) ||
             this.getReservedWordToken(input, previousToken) ||
-            this.getWordToken(input);
+            this.getWordToken(input) ||
+            this.getOperatorToken(input);
     }
 
     getWhitespaceToken(input) {
@@ -179,7 +179,7 @@ export default class SqlTokenizer {
     }
 
     // Punctuation and symbols
-    getBoundaryCharacterToken(input) {
+    getOperatorToken(input) {
         return this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.OPERATOR,
