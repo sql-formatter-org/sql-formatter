@@ -115,7 +115,8 @@ export default class SqlFormatter {
     // Opening parentheses increase the block indent level and start a new line
     formatOpeningParentheses(tokens, index, query) {
         // Take out the preceding space unless there was whitespace there in the original query
-        if (tokens[index - 1] && tokens[index - 1].type !== sqlTokenTypes.WHITESPACE) {
+        const previousToken = tokens[index - 1];
+        if (previousToken && previousToken.type !== sqlTokenTypes.WHITESPACE) {
             query = _.trimEnd(query);
         }
         query += tokens[index].value;
