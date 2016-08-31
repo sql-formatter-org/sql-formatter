@@ -16,6 +16,7 @@ export default class SqlFormatter {
         this.indentLevel = 0;
         this.indentTypes = [];
         this.inlineParenthesesLevel = 0;
+        this.previousReservedWord = {};
     }
 
     /**
@@ -35,10 +36,6 @@ export default class SqlFormatter {
         let formattedQuery = "";
 
         tokens.forEach((token, index) => {
-            if (this.hasLimitClauseEnded(token)) {
-                this.limitClause = false;
-            }
-
             if (token.type === sqlTokenTypes.WHITESPACE) {
                 return;
             }
@@ -47,9 +44,15 @@ export default class SqlFormatter {
             }
             else if (token.type === sqlTokenTypes.RESERVED_TOPLEVEL) {
                 formattedQuery = this.formatToplevelReservedWord(token, formattedQuery);
+                this.previousReservedWord = token;
             }
             else if (token.type === sqlTokenTypes.RESERVED_NEWLINE) {
                 formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
+                this.previousReservedWord = token;
+            }
+            else if (token.type === sqlTokenTypes.RESERVED) {
+                formattedQuery = this.formatWithSpaces(token, formattedQuery);
+                this.previousReservedWord = token;
             }
             else if (token.type === sqlTokenTypes.OPEN_PAREN) {
                 formattedQuery = this.formatOpeningParentheses(tokens, index, formattedQuery);
@@ -73,10 +76,6 @@ export default class SqlFormatter {
         return formattedQuery;
     }
 
-    hasLimitClauseEnded(token) {
-        return this.limitClause && token.value !== "," && token.type !== sqlTokenTypes.NUMBER && token.type !== sqlTokenTypes.WHITESPACE;
-    }
-
     formatComment(token, query) {
         if (token.type === sqlTokenTypes.BLOCK_COMMENT) {
             return this.addNewline(this.addNewline(query) + this.indentComment(token.value));
@@ -95,10 +94,6 @@ export default class SqlFormatter {
         if (_.last(this.indentTypes) === INDENT_TYPE_TOPLEVEL) {
             this.indentLevel --;
             this.indentTypes.pop();
-        }
-        // if SQL "LIMIT" clause, start variable to reset newline
-        if (token.value === "LIMIT" && this.inlineParenthesesLevel === 0) {
-            this.limitClause = true;
         }
         query = this.addNewline(query);
 
@@ -214,9 +209,7 @@ export default class SqlFormatter {
         if (this.inlineParenthesesLevel > 0) {
             return query;
         }
-        else if (this.limitClause === true) {
-            // If the previous TOKEN_VALUE is "LIMIT", resets new line
-            this.limitClause = false;
+        else if (this.previousReservedWord.value === "LIMIT") {
             return query;
         }
         else {
