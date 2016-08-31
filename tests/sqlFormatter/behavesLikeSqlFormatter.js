@@ -53,7 +53,7 @@ export default function behavesLikeSqlFormatter(formatter) {
     it("formats SELECT with toplevel reserved words", function() {
         const result = formatter.format(
             "SELECT * FROM foo WHERE name = 'John' GROUP BY some_column " +
-            "HAVING column > 10 ORDER BY other_column LIMIT 5,10 OFFSET 20;"
+            "HAVING column > 10 ORDER BY other_column LIMIT 5;"
         );
         expect(result).toBe(
             "SELECT\n" +
@@ -69,7 +69,40 @@ export default function behavesLikeSqlFormatter(formatter) {
             "ORDER BY\n" +
             "  other_column\n" +
             "LIMIT\n" +
-            "  5, 10 OFFSET 20;\n"
+            "  5;\n"
+        );
+    });
+
+    it("formats LIMIT with two comma-separated values on single line", function() {
+        const result = formatter.format(
+            "LIMIT 5, 10;"
+        );
+        expect(result).toBe(
+            "LIMIT\n" +
+            "  5, 10;\n"
+        );
+    });
+
+    it("formats LIMIT of single value followed by another SELECT using commas", function() {
+        const result = formatter.format(
+            "LIMIT 5; SELECT foo, bar;"
+        );
+        expect(result).toBe(
+            "LIMIT\n" +
+            "  5;\n" +
+            "SELECT\n" +
+            "  foo,\n" +
+            "  bar;\n"
+        );
+    });
+
+    it("formats LIMIT of single value and OFFSET", function() {
+        const result = formatter.format(
+            "LIMIT 5 OFFSET 8;"
+        );
+        expect(result).toBe(
+            "LIMIT\n" +
+            "  5 OFFSET 8;\n"
         );
     });
 
