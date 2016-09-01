@@ -14,7 +14,6 @@ const INDENT_TYPE_BLOCK_LEVEL = "block-level";
 export default class Indentation {
     constructor() {
         this.indent = "  ";
-        this.indentLevel = 0;
         this.indentTypes = [];
     }
 
@@ -23,14 +22,13 @@ export default class Indentation {
      * @return {String}
      */
     getIndent() {
-        return this.indent.repeat(this.indentLevel);
+        return this.indent.repeat(this.indentTypes.length);
     }
 
     /**
      * Increases indentation by one top-level indent.
      */
     increaseToplevel() {
-        this.indentLevel++;
         this.indentTypes.push(INDENT_TYPE_TOP_LEVEL);
     }
 
@@ -38,7 +36,6 @@ export default class Indentation {
      * Increases indentation by one block-level indent.
      */
     increaseBlockLevel() {
-        this.indentLevel++;
         this.indentTypes.push(INDENT_TYPE_BLOCK_LEVEL);
     }
 
@@ -48,7 +45,6 @@ export default class Indentation {
      */
     decreaseTopLevel() {
         if (_.last(this.indentTypes) === INDENT_TYPE_TOP_LEVEL) {
-            this.indentLevel--;
             this.indentTypes.pop();
         }
     }
@@ -59,14 +55,11 @@ export default class Indentation {
      * throws away these as well.
      */
     decreaseBlockLevel() {
-        this.indentLevel--;
-
         while (this.indentTypes.length > 0) {
             const type = this.indentTypes.pop();
             if (type !== INDENT_TYPE_TOP_LEVEL) {
                 break;
             }
-            this.indentLevel--;
         }
     }
 }
