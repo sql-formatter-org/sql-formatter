@@ -160,17 +160,21 @@ export default class SqlFormatter {
                 }
             }
 
-            // Reached an invalid token value for inline parentheses
-            if (token.value === ";") {
-                return false;
-            }
-            // Reached an invalid token type for inline parentheses
-            if (token.type === sqlTokenTypes.RESERVED_TOPLEVEL || token.type === sqlTokenTypes.RESERVED_NEWLINE ||
-                token.type === sqlTokenTypes.COMMENT || token.type === sqlTokenTypes.BLOCK_COMMENT) {
+            if (this.isForbiddenInlineParenthesesToken(token)) {
                 return false;
             }
         }
         return false;
+    }
+
+    // Reserved words that cause newlines, comments and semicolons
+    // are not allowed inside inline parentheses block
+    isForbiddenInlineParenthesesToken({type, value}) {
+        return type === sqlTokenTypes.RESERVED_TOPLEVEL ||
+            type === sqlTokenTypes.RESERVED_NEWLINE ||
+            type === sqlTokenTypes.COMMENT ||
+            type === sqlTokenTypes.BLOCK_COMMENT ||
+            value === ";";
     }
 
     // Closing parentheses decrease the block indent level
