@@ -106,6 +106,16 @@ export default function behavesLikeSqlFormatter(formatter) {
         );
     });
 
+    it("recognizes LIMIT in lowercase", function() {
+        const result = formatter.format(
+            "limit 5, 10;"
+        );
+        expect(result).toBe(
+            "limit\n" +
+            "  5, 10;\n"
+        );
+    });
+
     it("preserves case of keywords", function() {
         const result = formatter.format(
             "select distinct * frOM foo left join bar WHERe a > 1 and b = 3"

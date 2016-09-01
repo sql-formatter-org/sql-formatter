@@ -210,7 +210,7 @@ export default class SqlFormatter {
         if (this.inlineParenthesesLevel > 0) {
             return query;
         }
-        else if (this.previousReservedWord.value === "LIMIT") {
+        else if (/^LIMIT$/i.test(this.previousReservedWord.value)) {
             return query;
         }
         else {
