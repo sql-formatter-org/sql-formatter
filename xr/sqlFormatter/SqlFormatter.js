@@ -1,8 +1,6 @@
 import _ from "xr/_";
 import sqlTokenTypes from "xr/sqlFormatter/sqlTokenTypes";
-
-const INDENT_TYPE_TOPLEVEL = "toplevel-indent";
-const INDENT_TYPE_BLOCK = "block-indent";
+import Indentation from "xr/sqlFormatter/Indentation";
 
 const INLINE_MAX_LENGTH = 35;
 
@@ -12,9 +10,7 @@ export default class SqlFormatter {
      */
     constructor(tokenizer) {
         this.tokenizer = tokenizer;
-        this.indent = "  ";
-        this.indentLevel = 0;
-        this.indentTypes = [];
+        this.indentation = new Indentation();
         this.inlineParenthesesLevel = 0;
         this.previousReservedWord = {};
     }
@@ -86,18 +82,15 @@ export default class SqlFormatter {
     }
 
     indentComment(comment) {
-        return comment.replace("\n", "\n" + this.indent.repeat(this.indentLevel));
+        return comment.replace("\n", "\n" + this.indentation.getIndent());
     }
 
     formatToplevelReservedWord(token, query) {
-        // If the last indent type was INDENT_TYPE_TOPLEVEL, decrease the toplevel indent for this round
-        if (_.last(this.indentTypes) === INDENT_TYPE_TOPLEVEL) {
-            this.indentLevel --;
-            this.indentTypes.pop();
-        }
+        this.indentation.decreaseTopLevel();
+
         query = this.addNewline(query);
 
-        this.increaseToplevelIndent();
+        this.indentation.increaseToplevel();
 
         query += this.equalizeWhitespace(token.value);
         return this.addNewline(query);
@@ -129,7 +122,7 @@ export default class SqlFormatter {
         }
         else {
             this.inlineParenthesesLevel = 0;
-            this.increaseBlockIndent();
+            this.indentation.increaseBlockLevel();
             query = this.addNewline(query);
         }
         return query;
@@ -192,17 +185,7 @@ export default class SqlFormatter {
     }
 
     formatClosingNewlineParentheses(token, query) {
-        this.indentLevel --;
-
-        // Reset indent level
-        while (this.indentTypes.length) {
-            const type = this.indentTypes.pop();
-
-            if (type !== INDENT_TYPE_TOPLEVEL) {
-                break;
-            }
-            this.indentLevel --;
-        }
+        this.indentation.decreaseBlockLevel();
 
         return this.addNewline(query) + token.value + " ";
     }
@@ -234,17 +217,7 @@ export default class SqlFormatter {
         return query + token.value + " ";
     }
 
-    increaseToplevelIndent() {
-        this.indentLevel ++;
-        this.indentTypes.push(INDENT_TYPE_TOPLEVEL);
-    }
-
-    increaseBlockIndent() {
-        this.indentLevel ++;
-        this.indentTypes.push(INDENT_TYPE_BLOCK);
-    }
-
     addNewline(query) {
-        return _.trimEnd(query) + "\n" + this.indent.repeat(this.indentLevel);
+        return _.trimEnd(query) + "\n" + this.indentation.getIndent();
     }
 }
