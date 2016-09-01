@@ -1,8 +1,7 @@
 import _ from "xr/_";
 import sqlTokenTypes from "xr/sqlFormatter/sqlTokenTypes";
 import Indentation from "xr/sqlFormatter/Indentation";
-
-const INLINE_MAX_LENGTH = 35;
+import InlineBlock from "xr/sqlFormatter/InlineBlock";
 
 export default class SqlFormatter {
     /**
@@ -11,7 +10,7 @@ export default class SqlFormatter {
     constructor(tokenizer) {
         this.tokenizer = tokenizer;
         this.indentation = new Indentation();
-        this.inlineParenthesesLevel = 0;
+        this.inlineBlock = new InlineBlock();
         this.previousReservedWord = {};
     }
 
@@ -114,72 +113,25 @@ export default class SqlFormatter {
         }
         query += tokens[index].value;
 
-        if (this.inlineParenthesesLevel === 0 && this.isInlineParenthesesBlock(tokens, index)) {
-            this.inlineParenthesesLevel = 1;
-        }
-        else if (this.inlineParenthesesLevel > 0) {
-            this.inlineParenthesesLevel++;
-        }
-        else {
-            this.inlineParenthesesLevel = 0;
+        this.inlineBlock.beginIfPossible(tokens, index);
+
+        if (!this.inlineBlock.isActive()) {
             this.indentation.increaseBlockLevel();
             query = this.addNewline(query);
         }
         return query;
     }
 
-    // Check if this should be an inline parentheses block
-    // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
-    isInlineParenthesesBlock(tokens, index) {
-        let length = 0;
-        let level = 0;
-
-        for (let i = index; i < tokens.length; i++) {
-            const token = tokens[i];
-            length += token.value.length;
-
-            // Overran max length
-            if (length > INLINE_MAX_LENGTH) {
-                return false;
-            }
-
-            if (token.type === sqlTokenTypes.OPEN_PAREN) {
-                level++;
-            }
-            else if (token.type === sqlTokenTypes.CLOSE_PAREN) {
-                level--;
-                if (level === 0) {
-                    return true;
-                }
-            }
-
-            if (this.isForbiddenInlineParenthesesToken(token)) {
-                return false;
-            }
-        }
-        return false;
-    }
-
-    // Reserved words that cause newlines, comments and semicolons
-    // are not allowed inside inline parentheses block
-    isForbiddenInlineParenthesesToken({type, value}) {
-        return type === sqlTokenTypes.RESERVED_TOPLEVEL ||
-            type === sqlTokenTypes.RESERVED_NEWLINE ||
-            type === sqlTokenTypes.COMMENT ||
-            type === sqlTokenTypes.BLOCK_COMMENT ||
-            value === ";";
-    }
-
     // Closing parentheses decrease the block indent level
     formatClosingParentheses(token, query) {
-        if (this.inlineParenthesesLevel > 0) {
+        if (this.inlineBlock.isActive()) {
             return this.formatClosingInlineParentheses(token, query);
         }
         return this.formatClosingNewlineParentheses(token, query);
     }
 
     formatClosingInlineParentheses(token, query) {
-        this.inlineParenthesesLevel--;
+        this.inlineBlock.end();
 
         return _.trimEnd(query) + token.value + " ";
     }
@@ -194,7 +146,7 @@ export default class SqlFormatter {
     formatComma(token, query) {
         query = _.trimEnd(query) + token.value + " ";
 
-        if (this.inlineParenthesesLevel > 0) {
+        if (this.inlineBlock.isActive()) {
             return query;
         }
         else if (/^LIMIT$/i.test(this.previousReservedWord.value)) {
