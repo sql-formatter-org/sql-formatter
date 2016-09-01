@@ -17,7 +17,7 @@ export default {
             case "sql":
                 return standardSqlFormatter.format(query);
             default:
-                return query;
+                throw "Unsupported language";
         }
     }
 };

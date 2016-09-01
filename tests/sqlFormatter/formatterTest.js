@@ -27,9 +27,7 @@ describe("formatter", function() {
         expect(result).toBe("SELECT * (formatted as standard SQL)");
     });
 
-    it("does not format other language queries", function() {
-        const result = formatter.format("hql", "SELECT *");
-
-        expect(result).toBe("SELECT *");
+    it("throws error on other language queries", function() {
+        expect(() => formatter.format("hql", "SELECT *")).toThrow("Unsupported language");
     });
 });
