@@ -126,11 +126,11 @@ export default class SqlFormatter {
     formatClosingParentheses(token, query) {
         if (this.inlineBlock.isActive()) {
             this.inlineBlock.end();
-            return _.trimEnd(query) + token.value + " ";
+            return this.formatWithSpaceAfter(token, query);
         }
         else {
             this.indentation.decreaseBlockLevel();
-            return this.addNewline(query) + token.value + " ";
+            return this.formatWithSpaces(token, this.addNewline(query));
         }
     }
 
