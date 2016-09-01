@@ -125,21 +125,13 @@ export default class SqlFormatter {
     // Closing parentheses decrease the block indent level
     formatClosingParentheses(token, query) {
         if (this.inlineBlock.isActive()) {
-            return this.formatClosingInlineParentheses(token, query);
+            this.inlineBlock.end();
+            return _.trimEnd(query) + token.value + " ";
         }
-        return this.formatClosingNewlineParentheses(token, query);
-    }
-
-    formatClosingInlineParentheses(token, query) {
-        this.inlineBlock.end();
-
-        return _.trimEnd(query) + token.value + " ";
-    }
-
-    formatClosingNewlineParentheses(token, query) {
-        this.indentation.decreaseBlockLevel();
-
-        return this.addNewline(query) + token.value + " ";
+        else {
+            this.indentation.decreaseBlockLevel();
+            return this.addNewline(query) + token.value + " ";
+        }
     }
 
     // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
