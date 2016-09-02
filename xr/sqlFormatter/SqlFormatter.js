@@ -81,7 +81,7 @@ export default class SqlFormatter {
     }
 
     indentComment(comment) {
-        return comment.replace("\n", "\n" + this.indentation.getIndent());
+        return comment.replace(/\n/g, "\n" + this.indentation.getIndent());
     }
 
     formatToplevelReservedWord(token, query) {
