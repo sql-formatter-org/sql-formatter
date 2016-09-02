@@ -128,7 +128,7 @@ export default class SqlTokenizer {
     getLineCommentToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.COMMENT,
+            type: sqlTokenTypes.LINE_COMMENT,
             regex: this.LINE_COMMENT_REGEX
         });
     }

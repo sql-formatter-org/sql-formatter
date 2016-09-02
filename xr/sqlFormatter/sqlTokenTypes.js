@@ -11,7 +11,7 @@ export default {
     OPERATOR: "operator",
     OPEN_PAREN: "open-paren",
     CLOSE_PAREN: "close-paren",
-    COMMENT: "comment",
+    LINE_COMMENT: "line-comment",
     BLOCK_COMMENT: "block-comment",
     NUMBER: "number",
     VARIABLE: "variable"

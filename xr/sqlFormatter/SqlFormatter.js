@@ -34,7 +34,7 @@ export default class SqlFormatter {
             if (token.type === sqlTokenTypes.WHITESPACE) {
                 return;
             }
-            else if (token.type === sqlTokenTypes.COMMENT) {
+            else if (token.type === sqlTokenTypes.LINE_COMMENT) {
                 formattedQuery = this.formatLineComment(token, formattedQuery);
             }
             else if (token.type === sqlTokenTypes.BLOCK_COMMENT) {
