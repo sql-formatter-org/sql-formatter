@@ -34,8 +34,11 @@ export default class SqlFormatter {
             if (token.type === sqlTokenTypes.WHITESPACE) {
                 return;
             }
-            else if (token.type === sqlTokenTypes.COMMENT || token.type === sqlTokenTypes.BLOCK_COMMENT) {
-                formattedQuery = this.formatComment(token, formattedQuery);
+            else if (token.type === sqlTokenTypes.COMMENT) {
+                formattedQuery = this.formatLineComment(token, formattedQuery);
+            }
+            else if (token.type === sqlTokenTypes.BLOCK_COMMENT) {
+                formattedQuery = this.formatBlockComment(token, formattedQuery);
             }
             else if (token.type === sqlTokenTypes.RESERVED_TOPLEVEL) {
                 formattedQuery = this.formatToplevelReservedWord(token, formattedQuery);
@@ -71,13 +74,12 @@ export default class SqlFormatter {
         return formattedQuery;
     }
 
-    formatComment(token, query) {
-        if (token.type === sqlTokenTypes.BLOCK_COMMENT) {
-            return this.addNewline(this.addNewline(query) + this.indentComment(token.value));
-        }
-        else {
-            return this.addNewline(query + token.value);
-        }
+    formatLineComment(token, query) {
+        return this.addNewline(query + token.value);
+    }
+
+    formatBlockComment(token, query) {
+        return this.addNewline(this.addNewline(query) + this.indentComment(token.value));
     }
 
     indentComment(comment) {
