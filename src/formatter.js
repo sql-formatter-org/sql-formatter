@@ -4,7 +4,7 @@ import standardSqlFormatter from "./languages/standardSqlFormatter";
 export default {
     /**
      * Format whitespaces in a query to make it easier to read.
-     * Returns unformatted query when given language is not supported.
+     * Throws error when given language is not supported.
      *
      * @param {String} language Query language
      * @param {String} query
