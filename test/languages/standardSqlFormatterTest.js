@@ -1,5 +1,5 @@
-import standardSqlFormatter from "xr/sqlFormatter/standardSqlFormatter";
-import behavesLikeSqlFormatter from "tests/specs/sqlFormatter/behavesLikeSqlFormatter";
+import standardSqlFormatter from "../../src/languages/standardSqlFormatter";
+import behavesLikeSqlFormatter from "./behavesLikeSqlFormatter";
 
 describe("standardSqlFormatter", function() {
     behavesLikeSqlFormatter(standardSqlFormatter);

@@ -1,5 +1,5 @@
-import SqlFormatter from "xr/sqlFormatter/SqlFormatter";
-import SqlTokenizer from "xr/sqlFormatter/SqlTokenizer";
+import SqlFormatter from "../core/SqlFormatter";
+import SqlTokenizer from "../core/SqlTokenizer";
 
 // Reserved words
 const reservedWords = [

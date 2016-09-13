@@ -1,4 +1,4 @@
-import _ from "xr/_";
+import _ from "lodash";
 
 const INDENT_TYPE_TOP_LEVEL = "top-level";
 const INDENT_TYPE_BLOCK_LEVEL = "block-level";

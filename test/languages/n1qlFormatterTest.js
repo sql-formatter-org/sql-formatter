@@ -1,5 +1,5 @@
-import n1qlFormatter from "xr/sqlFormatter/n1qlFormatter";
-import behavesLikeSqlFormatter from "tests/specs/sqlFormatter/behavesLikeSqlFormatter";
+import n1qlFormatter from "../../src/languages/n1qlFormatter";
+import behavesLikeSqlFormatter from "./behavesLikeSqlFormatter";
 
 describe("n1qlFormatter", function() {
     behavesLikeSqlFormatter(n1qlFormatter);

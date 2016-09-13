@@ -1,4 +1,4 @@
-import sqlTokenTypes from "xr/sqlFormatter/sqlTokenTypes";
+import sqlTokenTypes from "./sqlTokenTypes";
 
 const INLINE_MAX_LENGTH = 35;
 

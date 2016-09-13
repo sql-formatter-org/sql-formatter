@@ -1,5 +1,5 @@
-import n1qlFormatter from "xr/sqlFormatter/n1qlFormatter";
-import standardSqlFormatter from "xr/sqlFormatter/standardSqlFormatter";
+import n1qlFormatter from "./languages/n1qlFormatter";
+import standardSqlFormatter from "./languages/standardSqlFormatter";
 
 export default {
     /**

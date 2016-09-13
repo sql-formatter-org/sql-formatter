@@ -1,4 +1,4 @@
-import formatter from "xr/sqlFormatter/formatter";
+import formatter from "../src/formatter";
 
 describe("formatter", function() {
     beforeEach(function() {

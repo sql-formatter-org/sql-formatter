@@ -1,5 +1,5 @@
-import _ from "xr/_";
-import sqlTokenTypes from "xr/sqlFormatter/sqlTokenTypes";
+import _ from "lodash";
+import sqlTokenTypes from "./sqlTokenTypes";
 
 export default class SqlTokenizer {
     /**

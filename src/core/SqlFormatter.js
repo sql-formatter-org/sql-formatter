@@ -1,7 +1,7 @@
-import _ from "xr/_";
-import sqlTokenTypes from "xr/sqlFormatter/sqlTokenTypes";
-import Indentation from "xr/sqlFormatter/Indentation";
-import InlineBlock from "xr/sqlFormatter/InlineBlock";
+import _ from "lodash";
+import sqlTokenTypes from "./sqlTokenTypes";
+import Indentation from "./Indentation";
+import InlineBlock from "./InlineBlock";
 
 export default class SqlFormatter {
     /**
