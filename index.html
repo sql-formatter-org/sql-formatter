@@ -1,0 +1,75 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>SQL formatter</title>
+
+    <link rel="shortcut icon" href="http://static.zeroturnaround.com/theme55/images/favicon.ico">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        main {
+            overflow: hidden;
+            display: flex;
+            flex-direction: row;
+        }
+        .input, .output {
+            width: 50%;
+            height: 100%;
+        }
+        .output {
+            border-left: 2px solid #8DC63F;
+        }
+        textarea {
+            width: 100%;
+            height: 100vh;
+            padding: 20px;
+            border: 0;
+            box-sizing: border-box;
+            font-size: 1.3em;
+            resize: none;
+            outline: none;
+            line-height: 1.3;
+            font-family: 'Roboto Mono', monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <section class="input">
+            <textarea id="input" autofocus="true" wrap="off"></textarea>
+        </section>
+        <section class="output">
+            <textarea id="output" readonly="true" wrap="off"></textarea>
+        </section>
+    </main>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.15.0/lodash.min.js"></script>
+    <script type="text/javascript" src="dist/sql-formatter.js"></script>
+    <script>
+        let input = document.getElementById('input');
+        let output = document.getElementById('output');
+
+        input.addEventListener('input', () => {
+            console.time('formatting');
+
+            if (location.hash === '#n1ql')
+                output.value = sqlFormatter.format('n1ql', input.value);
+            else
+                output.value = sqlFormatter.format('sql', input.value);
+
+            console.timeEnd('formatting');
+        });
+    </script>
+</body>
+</html>
