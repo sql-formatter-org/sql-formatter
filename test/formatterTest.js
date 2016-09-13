@@ -1,3 +1,4 @@
+import "babel-polyfill";
 import formatter from "../src/formatter";
 
 describe("formatter", function() {
