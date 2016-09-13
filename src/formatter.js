@@ -14,7 +14,6 @@ export default {
         switch (language) {
             case "n1ql":
                 return n1qlFormatter.format(query);
-            case "cassandra":
             case "sql":
                 return standardSqlFormatter.format(query);
             default:

@@ -22,12 +22,6 @@ describe("formatter", function() {
         expect(result).toBe("SELECT * (formatted as N1QL)");
     });
 
-    it("formats Cassandra as standard SQL query", function() {
-        const result = formatter.format("cassandra", "SELECT *");
-
-        expect(result).toBe("SELECT * (formatted as standard SQL)");
-    });
-
     it("formats standard SQL query", function() {
         const result = formatter.format("sql", "SELECT *");
 
