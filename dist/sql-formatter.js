@@ -77,9 +77,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {Object} cfg
 	     *  @param {String} cfg.indent Characters used for indentation, default is " " (2 spaces)
 	     */
-	    function SqlFormatter() {
-	        var cfg = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
+	    function SqlFormatter(cfg) {
 	        _classCallCheck(this, SqlFormatter);
 
 	        this.cfg = cfg;
@@ -19378,13 +19376,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *  @param {Object} cfg.indent
 	     * @param {Tokenizer} tokenizer
 	     */
-	    function Formatter() {
-	        var cfg = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	        var tokenizer = arguments[1];
-
+	    function Formatter(cfg, tokenizer) {
 	        _classCallCheck(this, Formatter);
 
-	        this.indentation = new _Indentation2["default"](cfg.indent);
+	        this.cfg = cfg || {};
+	        this.indentation = new _Indentation2["default"](this.cfg.indent);
 	        this.inlineBlock = new _InlineBlock2["default"]();
 	        this.tokenizer = tokenizer;
 	        this.previousReservedWord = {};
@@ -20590,12 +20586,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * @param {String} indent Indent value, default is "  " (2 spaces)
 	     */
-	    function Indentation() {
-	        var indent = arguments.length <= 0 || arguments[0] === undefined ? "  " : arguments[0];
-
+	    function Indentation(indent) {
 	        _classCallCheck(this, Indentation);
 
-	        this.indent = indent;
+	        this.indent = indent || "  ";
 	        this.indentTypes = [];
 	    }
 

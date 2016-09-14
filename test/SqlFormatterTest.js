@@ -20,21 +20,15 @@ describe("SqlFormatter", function() {
         });
     });
 
-    afterEach(function() {
-        delete this.cfg;
-    });
-
     it("formats N1QL query with custom config", function() {
         const result = new SqlFormatter().format("n1ql", "SELECT *");
 
-        expect(this.cfg).toEqual({});
         expect(result).toBe("SELECT * (formatted as N1QL)");
     });
 
     it("formats standard SQL query", function() {
         const result = new SqlFormatter().format("sql", "SELECT *");
 
-        expect(this.cfg).toEqual({});
         expect(result).toBe("SELECT * (formatted as standard SQL)");
     });
 
@@ -49,8 +43,8 @@ describe("SqlFormatter", function() {
         });
 
         it("passes it to standard SQL formatter", function() {
-            new SqlFormatter({indent: " "}).format("sql", "SELECT *");
-            expect(this.cfg).toEqual({indent: " "});
+            new SqlFormatter({indent: "   "}).format("sql", "SELECT *");
+            expect(this.cfg).toEqual({indent: "   "});
         });
     });
 });

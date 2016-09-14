@@ -15,8 +15,8 @@ export default class Indentation {
     /**
      * @param {String} indent Indent value, default is "  " (2 spaces)
      */
-    constructor(indent = "  ") {
-        this.indent = indent;
+    constructor(indent) {
+        this.indent = indent || "  ";
         this.indentTypes = [];
     }
 

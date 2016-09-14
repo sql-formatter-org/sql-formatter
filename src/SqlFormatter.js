@@ -7,7 +7,7 @@ export default class SqlFormatter {
      * @param {Object} cfg
      *  @param {String} cfg.indent Characters used for indentation, default is " " (2 spaces)
      */
-    constructor(cfg = {}) {
+    constructor(cfg) {
         this.cfg = cfg;
     }
 

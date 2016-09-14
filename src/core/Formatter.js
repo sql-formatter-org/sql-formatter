@@ -9,8 +9,9 @@ export default class Formatter {
      *  @param {Object} cfg.indent
      * @param {Tokenizer} tokenizer
      */
-    constructor(cfg = {}, tokenizer) {
-        this.indentation = new Indentation(cfg.indent);
+    constructor(cfg, tokenizer) {
+        this.cfg = cfg || {};
+        this.indentation = new Indentation(this.cfg.indent);
         this.inlineBlock = new InlineBlock();
         this.tokenizer = tokenizer;
         this.previousReservedWord = {};
