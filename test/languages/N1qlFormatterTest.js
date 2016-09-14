@@ -36,7 +36,8 @@ describe("N1qlFormatter", function() {
             "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id':1,'type':'Tarzan'});"
         );
         expect(result).toBe(
-            "INSERT INTO heroes (KEY, VALUE)\n" +
+            "INSERT INTO\n" +
+            "  heroes (KEY, VALUE)\n" +
             "VALUES\n" +
             "  ('123', {'id': 1, 'type': 'Tarzan'});\n"
         );
@@ -45,10 +46,11 @@ describe("N1qlFormatter", function() {
     it("formats INSERT with large object and array literals", function() {
         const result = new N1qlFormatter().format(
             "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id': 1, 'type': 'Tarzan', " +
-            "'array': [123456789, 123456789, 123456789, 123456789], 'hello': 'world'});"
+            "'array': [123456789, 123456789, 123456789, 123456789, 123456789], 'hello': 'world'});"
         );
         expect(result).toBe(
-            "INSERT INTO heroes (KEY, VALUE)\n" +
+            "INSERT INTO\n" +
+            "  heroes (KEY, VALUE)\n" +
             "VALUES\n" +
             "  (\n" +
             "    '123',\n" +
@@ -56,6 +58,7 @@ describe("N1qlFormatter", function() {
             "      'id': 1,\n" +
             "      'type': 'Tarzan',\n" +
             "      'array': [\n" +
+            "        123456789,\n" +
             "        123456789,\n" +
             "        123456789,\n" +
             "        123456789,\n" +

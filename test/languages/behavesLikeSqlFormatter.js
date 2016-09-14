@@ -199,7 +199,8 @@ export default function behavesLikeSqlFormatter(formatter) {
             "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
         );
         expect(result).toBe(
-            "INSERT INTO Customers (ID, MoneyBalance, Address, City)\n" +
+            "INSERT INTO\n" +
+            "  Customers (ID, MoneyBalance, Address, City)\n" +
             "VALUES\n" +
             "  (12, -123.4, 'Skagen 2111', 'Stv');\n"
         );
@@ -217,31 +218,33 @@ export default function behavesLikeSqlFormatter(formatter) {
 
     it("breaks long parenthized lists to multiple lines", function() {
         const result = formatter.format(
-            "INSERT INTO some_table (id_product, id_shop, id_currency, id_country) (" +
+            "INSERT INTO some_table (id_product, id_shop, id_currency, id_country, id_registration) (" +
             "SELECT IF(dq.id_discounter_shopping = 2, dq.value, dq.value / 100)," +
             "IF (dq.id_discounter_shopping = 2, 'amount', 'percentage') FROM foo);"
         );
         expect(result).toBe(
-            "INSERT INTO some_table (\n" +
-            "  id_product,\n" +
-            "  id_shop,\n" +
-            "  id_currency,\n" +
-            "  id_country\n" +
-            ") (\n" +
-            "  SELECT\n" +
-            "    IF(\n" +
-            "      dq.id_discounter_shopping = 2,\n" +
-            "      dq.value,\n" +
-            "      dq.value / 100\n" +
-            "    ),\n" +
-            "    IF (\n" +
-            "      dq.id_discounter_shopping = 2,\n" +
-            "      'amount',\n" +
-            "      'percentage'\n" +
-            "    )\n" +
-            "  FROM\n" +
-            "    foo\n" +
-            ");\n"
+            "INSERT INTO\n" +
+            "  some_table (\n" +
+            "    id_product,\n" +
+            "    id_shop,\n" +
+            "    id_currency,\n" +
+            "    id_country,\n" +
+            "    id_registration\n" +
+            "  ) (\n" +
+            "    SELECT\n" +
+            "      IF(\n" +
+            "        dq.id_discounter_shopping = 2,\n" +
+            "        dq.value,\n" +
+            "        dq.value / 100\n" +
+            "      ),\n" +
+            "      IF (\n" +
+            "        dq.id_discounter_shopping = 2,\n" +
+            "        'amount',\n" +
+            "        'percentage'\n" +
+            "      )\n" +
+            "    FROM\n" +
+            "      foo\n" +
+            "  );\n"
         );
     });
 
