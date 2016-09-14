@@ -53,7 +53,7 @@ new SqlFormatter().format("sql", "SELECT * FROM table1 WHERE foo = bar");
 new SqlFormatter().format("n1ql", "SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];");
 ```
 
-## Custom configuration
+## Optional configuration
 
 ```js
 new SqlFormatter({
