@@ -17,7 +17,7 @@ npm install --save sql-formatter
 
 The SQL Formatter source code is written in ES2015 but we precompile both CommonJS and UMD builds to ES5 so they work in any modern browser.
 
-If you don't use a module bundler then you can drop a file from `/dist` directory as a `<script>` tag on the page. The UMD builds make SQL Formatter available as a `window.sqlFormatter` global variable.
+If you don't use a module bundler then you can drop a file from `/dist` directory as a `<script>` tag on the page. This makes SQL Formatter available as a `window.SqlFormatter` global variable.
 
 ## Example usage
 
@@ -25,9 +25,9 @@ First we need to import our CommonJS module and then we can use it for formattin
 standard SQL query.
 
 ```js
-import sqlFormatter from "sql-formatter";
+import SqlFormatter from "sql-formatter";
 
-const formattedStandardSql = sqlFormatter.format("sql", "SELECT * FROM table1");
+const formattedStandardSql = new SqlFormatter().format("sql", "SELECT * FROM table1");
 ```
 
 The value of `formattedStandardSql` will look like this:
@@ -44,13 +44,21 @@ FROM
 ### [Standard SQL](https://en.wikipedia.org/wiki/SQL:2011)
 
 ```js
-sqlFormatter.format("sql", "SELECT * FROM table1 WHERE foo = bar");
+new SqlFormatter().format("sql", "SELECT * FROM table1 WHERE foo = bar");
 ```
 
 ### [N1QL](http://www.couchbase.com/n1ql)
 
 ```js
-sqlFormatter.format("n1ql", "SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];");
+new SqlFormatter().format("n1ql", "SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];");
+```
+
+## Custom configuration
+
+```js
+new SqlFormatter({
+    indent: "  " // Value that is used for creating indentation levels
+});
 ```
 
 ## Contribute
