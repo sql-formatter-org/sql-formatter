@@ -3,11 +3,13 @@
 [![Build Status](https://travis-ci.org/zeroturnaround/sql-formatter.svg?branch=master)](https://travis-ci.org/zeroturnaround/sql-formatter)
 [![Coverage Status](https://coveralls.io/repos/github/zeroturnaround/sql-formatter/badge.svg?branch=master)](https://coveralls.io/github/zeroturnaround/sql-formatter?branch=master)
 
-A whitespace formatter for different query languages.
+**SQL Formatter** is a whitespace formatter for different query languages.
+
+[See the demo](https://zeroturnaround.github.io/sql-formatter/).
 
 ## Installation
 
-To install the newest version:
+To install the newest version from NPM:
 
 ```
 npm install --save sql-formatter
@@ -50,6 +52,10 @@ sqlFormatter.format("sql", "SELECT * FROM table1 WHERE foo = bar");
 ```js
 sqlFormatter.format("n1ql", "SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];");
 ```
+
+## Contribute
+
+> TODO
 
 ## Influence
 
