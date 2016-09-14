@@ -17,7 +17,7 @@ npm install --save sql-formatter
 
 The SQL Formatter source code is written in ES2015 but we precompile both CommonJS and UMD builds to ES5 so they work in any modern browser.
 
-If you don't use a module bundler then you can drop a UMD build as a `<script>` tag on the page, or tell Bower to install it. The UMD builds make SQL Formatter available as a `window.sqlFormatter` global variable.
+If you don't use a module bundler then you can drop a file from `/dist` directory as a `<script>` tag on the page. The UMD builds make SQL Formatter available as a `window.sqlFormatter` global variable.
 
 ## Example usage
 
