@@ -1,16 +1,18 @@
-import standardSqlFormatter from "../../src/languages/standardSqlFormatter";
+import StandardSqlFormatter from "../../src/languages/standardSqlFormatter";
 import behavesLikeSqlFormatter from "./behavesLikeSqlFormatter";
+import respectsCustomCfg from "./respectsCustomCfg";
 
-describe("standardSqlFormatter", function() {
-    behavesLikeSqlFormatter(standardSqlFormatter);
+describe("StandardSqlFormatter", function() {
+    behavesLikeSqlFormatter(new StandardSqlFormatter());
+    respectsCustomCfg(StandardSqlFormatter);
 
     it("recognizes [] strings", function() {
-        expect(standardSqlFormatter.format("[foo JOIN bar]")).toBe("[foo JOIN bar]\n");
-        expect(standardSqlFormatter.format("[foo ]] JOIN bar]")).toBe("[foo ]] JOIN bar]\n");
+        expect(new StandardSqlFormatter().format("[foo JOIN bar]")).toBe("[foo JOIN bar]\n");
+        expect(new StandardSqlFormatter().format("[foo ]] JOIN bar]")).toBe("[foo ]] JOIN bar]\n");
     });
 
     it("recognizes @variables", function() {
-        const result = standardSqlFormatter.format(
+        const result = new StandardSqlFormatter().format(
             "SELECT @variable, @'var name', @\"var name\", @`var name`, @[var name];"
         );
         expect(result).toBe(
@@ -24,7 +26,7 @@ describe("standardSqlFormatter", function() {
     });
 
     it("recognizes :variables", function() {
-        const result = standardSqlFormatter.format(
+        const result = new StandardSqlFormatter().format(
             "SELECT :variable, :'var name', :\"var name\", :`var name`, :[var name];"
         );
         expect(result).toBe(

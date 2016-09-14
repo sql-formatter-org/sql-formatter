@@ -9,7 +9,7 @@ const config = {
         }]
     },
     output: {
-        library: "sqlFormatter",
+        library: "SqlFormatter",
         libraryTarget: "umd"
     },
     plugins: [

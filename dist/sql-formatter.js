@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["sqlFormatter"] = factory();
+		exports["SqlFormatter"] = factory();
 	else
-		root["sqlFormatter"] = factory();
+		root["SqlFormatter"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -70,7 +70,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	exports["default"] = {
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var SqlFormatter = function () {
+	    /**
+	     * @param {Object} cfg
+	     *  @param {String} cfg.indent Characters used for indentation, default is " " (2 spaces)
+	     */
+	    function SqlFormatter() {
+	        var cfg = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	        _classCallCheck(this, SqlFormatter);
+
+	        this.cfg = cfg;
+	    }
+
 	    /**
 	     * Format whitespaces in a query to make it easier to read.
 	     * Throws error when given language is not supported.
@@ -79,17 +93,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {String} query
 	     * @return {String}
 	     */
-	    format: function format(language, query) {
+
+
+	    SqlFormatter.prototype.format = function format(language, query) {
 	        switch (language) {
 	            case "n1ql":
-	                return _n1qlFormatter2["default"].format(query);
+	                return new _n1qlFormatter2["default"](this.cfg).format(query);
 	            case "sql":
-	                return _standardSqlFormatter2["default"].format(query);
+	                return new _standardSqlFormatter2["default"](this.cfg).format(query);
 	            default:
 	                throw "Unsupported language";
 	        }
-	    }
-	};
+	    };
+
+	    return SqlFormatter;
+	}();
+
+	exports["default"] = SqlFormatter;
 	module.exports = exports["default"];
 
 /***/ },
@@ -19354,14 +19374,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var SqlFormatter = function () {
 	    /**
+	     * @param {Object} cfg
+	     *  @param {Object} cfg.indent
 	     * @param {SqlTokenizer} tokenizer
 	     */
-	    function SqlFormatter(tokenizer) {
+	    function SqlFormatter() {
+	        var cfg = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	        var tokenizer = arguments[1];
+
 	        _classCallCheck(this, SqlFormatter);
 
-	        this.tokenizer = tokenizer;
-	        this.indentation = new _Indentation2["default"]();
+	        this.indentation = new _Indentation2["default"](cfg.indent);
 	        this.inlineBlock = new _InlineBlock2["default"]();
+	        this.tokenizer = tokenizer;
 	        this.previousReservedWord = {};
 	    }
 
@@ -20562,10 +20587,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var Indentation = function () {
+	    /**
+	     * @param {String} indent Indent value, default is "  " (2 spaces)
+	     */
 	    function Indentation() {
+	        var indent = arguments.length <= 0 || arguments[0] === undefined ? "  " : arguments[0];
+
 	        _classCallCheck(this, Indentation);
 
-	        this.indent = "  ";
+	        this.indent = indent;
 	        this.indentTypes = [];
 	    }
 
@@ -20770,6 +20800,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 	// Reserved words
 	var reservedWords = ["ALL", "ALTER", "ANALYZE", "AND", "ANY", "ARRAY", "AS", "ASC", "BEGIN", "BETWEEN", "BINARY", "BOOLEAN", "BREAK", "BUCKET", "BUILD", "BY", "CALL", "CASE", "CAST", "CLUSTER", "COLLATE", "COLLECTION", "COMMIT", "CONNECT", "CONTINUE", "CORRELATE", "COVER", "CREATE", "DATABASE", "DATASET", "DATASTORE", "DECLARE", "DECREMENT", "DELETE", "DERIVED", "DESC", "DESCRIBE", "DISTINCT", "DO", "DROP", "EACH", "ELEMENT", "ELSE", "END", "EVERY", "EXCEPT", "EXCLUDE", "EXECUTE", "EXISTS", "EXPLAIN", "FALSE", "FETCH", "FIRST", "FLATTEN", "FOR", "FORCE", "FROM", "FUNCTION", "GRANT", "GROUP", "GSI", "HAVING", "IF", "IGNORE", "ILIKE", "IN", "INCLUDE", "INCREMENT", "INDEX", "INFER", "INLINE", "INNER", "INSERT", "INTERSECT", "INTO", "IS", "JOIN", "KEY", "KEYS", "KEYSPACE", "KNOWN", "LAST", "LEFT", "LET", "LETTING", "LIKE", "LIMIT", "LSM", "MAP", "MAPPING", "MATCHED", "MATERIALIZED", "MERGE", "MINUS", "MISSING", "NAMESPACE", "NEST", "NOT", "NULL", "NUMBER", "OBJECT", "OFFSET", "ON", "OPTION", "OR", "ORDER", "OUTER", "OVER", "PARSE", "PARTITION", "PASSWORD", "PATH", "POOL", "PREPARE", "PRIMARY", "PRIVATE", "PRIVILEGE", "PROCEDURE", "PUBLIC", "RAW", "REALM", "REDUCE", "RENAME", "RETURN", "RETURNING", "REVOKE", "RIGHT", "ROLE", "ROLLBACK", "SATISFIES", "SCHEMA", "SELECT", "SELF", "SEMI", "SET", "SHOW", "SOME", "START", "STATISTICS", "STRING", "SYSTEM", "THEN", "TO", "TRANSACTION", "TRIGGER", "TRUE", "TRUNCATE", "UNDER", "UNION", "UNIQUE", "UNKNOWN", "UNNEST", "UNSET", "UPDATE", "UPSERT", "USE", "USER", "USING", "VALIDATE", "VALUE", "VALUED", "VALUES", "VIA", "VIEW", "WHEN", "WHERE", "WHILE", "WITH", "WITHIN", "WORK", "XOR"];
 
@@ -20781,14 +20813,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var tokenizer = void 0;
 
-	exports["default"] = {
+	var N1qlFormatter = function () {
+	    /**
+	     * @param {Object} cfg Different set of configurations
+	     */
+	    function N1qlFormatter(cfg) {
+	        _classCallCheck(this, N1qlFormatter);
+
+	        this.cfg = cfg;
+	    }
+
 	    /**
 	     * Format the whitespace in a N1QL string to make it easier to read
 	     *
 	     * @param {String} query The N1QL string
 	     * @return {String} formatted string
 	     */
-	    format: function format(query) {
+
+
+	    N1qlFormatter.prototype.format = function format(query) {
 	        if (!tokenizer) {
 	            tokenizer = new _SqlTokenizer2["default"]({
 	                reservedWords: reservedWords,
@@ -20800,9 +20843,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                variableTypes: []
 	            });
 	        }
-	        return new _SqlFormatter2["default"](tokenizer).format(query);
-	    }
-	};
+	        return new _SqlFormatter2["default"](this.cfg, tokenizer).format(query);
+	    };
+
+	    return N1qlFormatter;
+	}();
+
+	exports["default"] = N1qlFormatter;
 	module.exports = exports["default"];
 
 /***/ },
@@ -20823,6 +20870,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 	// Reserved words
 	var reservedWords = ["ACCESSIBLE", "ACTION", "AGAINST", "AGGREGATE", "ALGORITHM", "ALL", "ALTER", "ANALYSE", "ANALYZE", "AS", "ASC", "AUTOCOMMIT", "AUTO_INCREMENT", "BACKUP", "BEGIN", "BETWEEN", "BINLOG", "BOTH", "CASCADE", "CASE", "CHANGE", "CHANGED", "CHARACTER SET", "CHARSET", "CHECK", "CHECKSUM", "COLLATE", "COLLATION", "COLUMN", "COLUMNS", "COMMENT", "COMMIT", "COMMITTED", "COMPRESSED", "CONCURRENT", "CONSTRAINT", "CONTAINS", "CONVERT", "CREATE", "CROSS", "CURRENT_TIMESTAMP", "DATABASE", "DATABASES", "DAY", "DAY_HOUR", "DAY_MINUTE", "DAY_SECOND", "DEFAULT", "DEFINER", "DELAYED", "DELETE", "DESC", "DESCRIBE", "DETERMINISTIC", "DISTINCT", "DISTINCTROW", "DIV", "DO", "DUMPFILE", "DUPLICATE", "DYNAMIC", "ELSE", "ENCLOSED", "END", "ENGINE", "ENGINE_TYPE", "ENGINES", "ESCAPE", "ESCAPED", "EVENTS", "EXEC", "EXECUTE", "EXISTS", "EXPLAIN", "EXTENDED", "FAST", "FIELDS", "FILE", "FIRST", "FIXED", "FLUSH", "FOR", "FORCE", "FOREIGN", "FULL", "FULLTEXT", "FUNCTION", "GLOBAL", "GRANT", "GRANTS", "GROUP_CONCAT", "HEAP", "HIGH_PRIORITY", "HOSTS", "HOUR", "HOUR_MINUTE", "HOUR_SECOND", "IDENTIFIED", "IF", "IFNULL", "IGNORE", "IN", "INDEX", "INDEXES", "INFILE", "INSERT", "INSERT_ID", "INSERT_METHOD", "INTERVAL", "INTO", "INVOKER", "IS", "ISOLATION", "KEY", "KEYS", "KILL", "LAST_INSERT_ID", "LEADING", "LEVEL", "LIKE", "LINEAR", "LINES", "LOAD", "LOCAL", "LOCK", "LOCKS", "LOGS", "LOW_PRIORITY", "MARIA", "MASTER", "MASTER_CONNECT_RETRY", "MASTER_HOST", "MASTER_LOG_FILE", "MATCH", "MAX_CONNECTIONS_PER_HOUR", "MAX_QUERIES_PER_HOUR", "MAX_ROWS", "MAX_UPDATES_PER_HOUR", "MAX_USER_CONNECTIONS", "MEDIUM", "MERGE", "MINUTE", "MINUTE_SECOND", "MIN_ROWS", "MODE", "MODIFY", "MONTH", "MRG_MYISAM", "MYISAM", "NAMES", "NATURAL", "NOT", "NOW()", "NULL", "OFFSET", "ON", "OPEN", "OPTIMIZE", "OPTION", "OPTIONALLY", "ON UPDATE", "ON DELETE", "OUTFILE", "PACK_KEYS", "PAGE", "PARTIAL", "PARTITION", "PARTITIONS", "PASSWORD", "PRIMARY", "PRIVILEGES", "PROCEDURE", "PROCESS", "PROCESSLIST", "PURGE", "QUICK", "RANGE", "RAID0", "RAID_CHUNKS", "RAID_CHUNKSIZE", "RAID_TYPE", "READ", "READ_ONLY", "READ_WRITE", "REFERENCES", "REGEXP", "RELOAD", "RENAME", "REPAIR", "REPEATABLE", "REPLACE", "REPLICATION", "RESET", "RESTORE", "RESTRICT", "RETURN", "RETURNS", "REVOKE", "RLIKE", "ROLLBACK", "ROW", "ROWS", "ROW_FORMAT", "SECOND", "SECURITY", "SEPARATOR", "SERIALIZABLE", "SESSION", "SHARE", "SHOW", "SHUTDOWN", "SLAVE", "SONAME", "SOUNDS", "SQL", "SQL_AUTO_IS_NULL", "SQL_BIG_RESULT", "SQL_BIG_SELECTS", "SQL_BIG_TABLES", "SQL_BUFFER_RESULT", "SQL_CALC_FOUND_ROWS", "SQL_LOG_BIN", "SQL_LOG_OFF", "SQL_LOG_UPDATE", "SQL_LOW_PRIORITY_UPDATES", "SQL_MAX_JOIN_SIZE", "SQL_QUOTE_SHOW_CREATE", "SQL_SAFE_UPDATES", "SQL_SELECT_LIMIT", "SQL_SLAVE_SKIP_COUNTER", "SQL_SMALL_RESULT", "SQL_WARNINGS", "SQL_CACHE", "SQL_NO_CACHE", "START", "STARTING", "STATUS", "STOP", "STORAGE", "STRAIGHT_JOIN", "STRING", "STRIPED", "SUPER", "TABLE", "TABLES", "TEMPORARY", "TERMINATED", "THEN", "TO", "TRAILING", "TRANSACTIONAL", "TRUE", "TRUNCATE", "TYPE", "TYPES", "UNCOMMITTED", "UNIQUE", "UNLOCK", "UNSIGNED", "USAGE", "USE", "USING", "VARIABLES", "VIEW", "WHEN", "WITH", "WORK", "WRITE", "YEAR_MONTH"];
 
@@ -20834,14 +20883,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var tokenizer = void 0;
 
-	exports["default"] = {
+	var StandardSqlFormatter = function () {
+	    /**
+	     * @param {Object} cfg Different set of configurations
+	     */
+	    function StandardSqlFormatter(cfg) {
+	        _classCallCheck(this, StandardSqlFormatter);
+
+	        this.cfg = cfg;
+	    }
+
 	    /**
 	     * Format the whitespace in a Standard SQL string to make it easier to read
 	     *
 	     * @param {String} query The Standard SQL string
 	     * @return {String} formatted string
 	     */
-	    format: function format(query) {
+
+
+	    StandardSqlFormatter.prototype.format = function format(query) {
 	        if (!tokenizer) {
 	            tokenizer = new _SqlTokenizer2["default"]({
 	                reservedWords: reservedWords,
@@ -20853,9 +20913,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                variableTypes: ["@", ":"]
 	            });
 	        }
-	        return new _SqlFormatter2["default"](tokenizer).format(query);
-	    }
-	};
+	        return new _SqlFormatter2["default"](this.cfg, tokenizer).format(query);
+	    };
+
+	    return StandardSqlFormatter;
+	}();
+
+	exports["default"] = StandardSqlFormatter;
 	module.exports = exports["default"];
 
 /***/ },

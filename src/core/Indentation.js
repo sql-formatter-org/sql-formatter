@@ -12,8 +12,11 @@ const INDENT_TYPE_BLOCK_LEVEL = "block-level";
  * - TOP_LEVEL : increased by RESERVED_TOPLEVEL words
  */
 export default class Indentation {
-    constructor() {
-        this.indent = "  ";
+    /**
+     * @param {String} indent Indent value, default is "  " (2 spaces)
+     */
+    constructor(indent = "  ") {
+        this.indent = indent;
         this.indentTypes = [];
     }
 

@@ -1,33 +1,56 @@
-import formatter from "../src/formatter";
+import SqlFormatter from "../src/formatter";
 
 describe("formatter", function() {
     beforeEach(function() {
-        this.n1qlFormatter = {
-            format: (query) => query + " (formatted as N1QL)"
-        };
-        this.standardSqlFormatter = {
-            format: (query) => query + " (formatted as standard SQL)"
-        };
+        SqlFormatter.__set__({
+            N1qlFormatter: (cfg) => {
+                this.cfg = cfg;
 
-        formatter.__set__({
-            n1qlFormatter: this.n1qlFormatter,
-            standardSqlFormatter: this.standardSqlFormatter
+                return {
+                    format: query => query + " (formatted as N1QL)"
+                };
+            },
+            StandardSqlFormatter: (cfg) => {
+                this.cfg = cfg;
+
+                return {
+                    format: query => query + " (formatted as standard SQL)"
+                };
+            }
         });
     });
 
-    it("formats N1QL query", function() {
-        const result = formatter.format("n1ql", "SELECT *");
+    afterEach(function() {
+        delete this.cfg;
+    });
 
+    it("formats N1QL query with custom config", function() {
+        const result = new SqlFormatter().format("n1ql", "SELECT *");
+
+        expect(this.cfg).toEqual({});
         expect(result).toBe("SELECT * (formatted as N1QL)");
     });
 
     it("formats standard SQL query", function() {
-        const result = formatter.format("sql", "SELECT *");
+        const result = new SqlFormatter().format("sql", "SELECT *");
 
+        expect(this.cfg).toEqual({});
         expect(result).toBe("SELECT * (formatted as standard SQL)");
     });
 
     it("throws error on other language queries", function() {
-        expect(() => formatter.format("hql", "SELECT *")).toThrow("Unsupported language");
+        expect(() => new SqlFormatter().format("hql", "SELECT *")).toThrow("Unsupported language");
+    });
+
+    describe("when custom config is provided", function() {
+        it("passes it to N1QL formatter", function() {
+            new SqlFormatter({indent: " "}).format("n1ql", "SELECT *");
+            expect(this.cfg).toEqual({indent: " "});
+        });
+
+        it("passes it to standard SQL formatter", function() {
+            new SqlFormatter({indent: " "}).format("sql", "SELECT *");
+            expect(this.cfg).toEqual({indent: " "});
+        });
     });
 });

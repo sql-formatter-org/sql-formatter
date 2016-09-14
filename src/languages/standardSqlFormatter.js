@@ -52,14 +52,21 @@ const reservedNewlineWords = [
 
 let tokenizer;
 
-export default {
+export default class StandardSqlFormatter {
+    /**
+     * @param {Object} cfg Different set of configurations
+     */
+    constructor(cfg) {
+        this.cfg = cfg;
+    }
+
     /**
      * Format the whitespace in a Standard SQL string to make it easier to read
      *
      * @param {String} query The Standard SQL string
      * @return {String} formatted string
      */
-    format: (query) => {
+    format(query) {
         if (!tokenizer) {
             tokenizer = new SqlTokenizer({
                 reservedWords,
@@ -71,6 +78,6 @@ export default {
                 variableTypes: ["@", ":"],
             });
         }
-        return new SqlFormatter(tokenizer).format(query);
+        return new SqlFormatter(this.cfg, tokenizer).format(query);
     }
-};
+}

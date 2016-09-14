@@ -54,7 +54,7 @@
         </section>
     </main>
 
-    <script type="text/javascript" src="dist/sql-formatter.min.js"></script>
+    <script type="text/javascript" src="dist/sql-formatter.js"></script>
     <script>
         let input = document.getElementById('input');
         let output = document.getElementById('output');
@@ -63,9 +63,9 @@
             console.time('formatting');
 
             if (location.hash === '#n1ql')
-                output.value = sqlFormatter.format('n1ql', input.value);
+                output.value = new SqlFormatter().format('n1ql', input.value);
             else
-                output.value = sqlFormatter.format('sql', input.value);
+                output.value = new SqlFormatter().format('sql', input.value);
 
             console.timeEnd('formatting');
         });

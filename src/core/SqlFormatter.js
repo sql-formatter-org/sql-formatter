@@ -5,12 +5,14 @@ import InlineBlock from "./InlineBlock";
 
 export default class SqlFormatter {
     /**
+     * @param {Object} cfg
+     *  @param {Object} cfg.indent
      * @param {SqlTokenizer} tokenizer
      */
-    constructor(tokenizer) {
-        this.tokenizer = tokenizer;
-        this.indentation = new Indentation();
+    constructor(cfg = {}, tokenizer) {
+        this.indentation = new Indentation(cfg.indent);
         this.inlineBlock = new InlineBlock();
+        this.tokenizer = tokenizer;
         this.previousReservedWord = {};
     }
 

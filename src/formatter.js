@@ -1,8 +1,16 @@
 import "babel-polyfill";
-import n1qlFormatter from "./languages/n1qlFormatter";
-import standardSqlFormatter from "./languages/standardSqlFormatter";
+import N1qlFormatter from "./languages/n1qlFormatter";
+import StandardSqlFormatter from "./languages/standardSqlFormatter";
 
-export default {
+export default class SqlFormatter {
+    /**
+     * @param {Object} cfg
+     *  @param {String} cfg.indent Characters used for indentation, default is " " (2 spaces)
+     */
+    constructor(cfg = {}) {
+        this.cfg = cfg;
+    }
+
     /**
      * Format whitespaces in a query to make it easier to read.
      * Throws error when given language is not supported.
@@ -11,14 +19,14 @@ export default {
      * @param {String} query
      * @return {String}
      */
-    format: (language, query) => {
+    format(language, query) {
         switch (language) {
             case "n1ql":
-                return n1qlFormatter.format(query);
+                return new N1qlFormatter(this.cfg).format(query);
             case "sql":
-                return standardSqlFormatter.format(query);
+                return new StandardSqlFormatter(this.cfg).format(query);
             default:
                 throw "Unsupported language";
         }
     }
-};
+}

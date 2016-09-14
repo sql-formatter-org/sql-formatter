@@ -33,14 +33,21 @@ const reservedNewlineWords = [
 
 let tokenizer;
 
-export default {
+export default class N1qlFormatter {
+    /**
+     * @param {Object} cfg Different set of configurations
+     */
+    constructor(cfg) {
+        this.cfg = cfg;
+    }
+
     /**
      * Format the whitespace in a N1QL string to make it easier to read
      *
      * @param {String} query The N1QL string
      * @return {String} formatted string
      */
-    format: (query) => {
+    format(query) {
         if (!tokenizer) {
             tokenizer = new SqlTokenizer({
                 reservedWords,
@@ -52,6 +59,6 @@ export default {
                 variableTypes: [],
             });
         }
-        return new SqlFormatter(tokenizer).format(query);
+        return new SqlFormatter(this.cfg, tokenizer).format(query);
     }
-};
+}

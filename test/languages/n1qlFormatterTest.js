@@ -1,11 +1,13 @@
-import n1qlFormatter from "../../src/languages/n1qlFormatter";
+import N1qlFormatter from "../../src/languages/n1qlFormatter";
 import behavesLikeSqlFormatter from "./behavesLikeSqlFormatter";
+import respectsCustomCfg from "./respectsCustomCfg";
 
-describe("n1qlFormatter", function() {
-    behavesLikeSqlFormatter(n1qlFormatter);
+describe("N1qlFormatter", function() {
+    behavesLikeSqlFormatter(new N1qlFormatter());
+    respectsCustomCfg(N1qlFormatter);
 
     it("formats SELECT query with element selection expression", function() {
-        const result = n1qlFormatter.format("SELECT orderlines[0].productId FROM orders;");
+        const result = new N1qlFormatter().format("SELECT orderlines[0].productId FROM orders;");
         expect(result).toBe(
             "SELECT\n" +
             "  orderlines[0].productId\n" +
@@ -15,7 +17,7 @@ describe("n1qlFormatter", function() {
     });
 
     it("formats SELECT query with primary key quering", function() {
-        const result = n1qlFormatter.format(
+        const result = new N1qlFormatter().format(
             "SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];"
         );
         expect(result).toBe(
@@ -30,7 +32,7 @@ describe("n1qlFormatter", function() {
     });
 
     it("formats INSERT with {} object literal", function() {
-        const result = n1qlFormatter.format(
+        const result = new N1qlFormatter().format(
             "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id':1,'type':'Tarzan'});"
         );
         expect(result).toBe(
@@ -41,7 +43,7 @@ describe("n1qlFormatter", function() {
     });
 
     it("formats INSERT with large object and array literals", function() {
-        const result = n1qlFormatter.format(
+        const result = new N1qlFormatter().format(
             "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id': 1, 'type': 'Tarzan', " +
             "'array': [123456789, 123456789, 123456789, 123456789], 'hello': 'world'});"
         );
@@ -66,7 +68,7 @@ describe("n1qlFormatter", function() {
     });
 
     it("formats SELECT query with UNNEST toplevel reserver word", function() {
-        const result = n1qlFormatter.format(
+        const result = new N1qlFormatter().format(
             "SELECT * FROM tutorial UNNEST tutorial.children c;"
         );
         expect(result).toBe(
@@ -80,7 +82,7 @@ describe("n1qlFormatter", function() {
     });
 
     it("formats SELECT query with NEST and USE KEYS", function() {
-        const result = n1qlFormatter.format(
+        const result = new N1qlFormatter().format(
             "SELECT * FROM usr " +
             "USE KEYS 'Elinor_33313792' NEST orders_with_users orders " +
             "ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;"
@@ -98,7 +100,7 @@ describe("n1qlFormatter", function() {
     });
 
     it("formats explained DELETE query with USE KEYS and RETURNING", function() {
-        const result = n1qlFormatter.format(
+        const result = new N1qlFormatter().format(
             "EXPLAIN DELETE FROM tutorial t USE KEYS 'baldwin' RETURNING t"
         );
         expect(result).toBe(
@@ -110,7 +112,7 @@ describe("n1qlFormatter", function() {
     });
 
     it("formats UPDATE query with USE KEYS and RETURNING", function() {
-        const result = n1qlFormatter.format(
+        const result = new N1qlFormatter().format(
             "UPDATE tutorial USE KEYS 'baldwin' SET type = 'actor' RETURNING tutorial.type"
         );
         expect(result).toBe(
