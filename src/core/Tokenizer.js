@@ -1,7 +1,7 @@
 import _ from "lodash";
 import sqlTokenTypes from "./tokenTypes";
 
-export default class SqlTokenizer {
+export default class Tokenizer {
     /**
      * @param {Object} cfg
      *  @param {String[]} cfg.reservedWords Reserved words in SQL

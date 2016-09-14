@@ -1,6 +1,6 @@
 import SqlFormatter from "../src/SqlFormatter";
 
-describe("formatter", function() {
+describe("SqlFormatter", function() {
     beforeEach(function() {
         SqlFormatter.__set__({
             N1qlFormatter: (cfg) => {

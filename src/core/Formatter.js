@@ -3,11 +3,11 @@ import sqlTokenTypes from "./tokenTypes";
 import Indentation from "./Indentation";
 import InlineBlock from "./InlineBlock";
 
-export default class SqlFormatter {
+export default class Formatter {
     /**
      * @param {Object} cfg
      *  @param {Object} cfg.indent
-     * @param {SqlTokenizer} tokenizer
+     * @param {Tokenizer} tokenizer
      */
     constructor(cfg = {}, tokenizer) {
         this.indentation = new Indentation(cfg.indent);

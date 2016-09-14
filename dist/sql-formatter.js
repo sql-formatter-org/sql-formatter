@@ -60,13 +60,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	__webpack_require__(122);
 
-	var _n1qlFormatter = __webpack_require__(120);
+	var _N1qlFormatter = __webpack_require__(120);
 
-	var _n1qlFormatter2 = _interopRequireDefault(_n1qlFormatter);
+	var _N1qlFormatter2 = _interopRequireDefault(_N1qlFormatter);
 
-	var _standardSqlFormatter = __webpack_require__(121);
+	var _StandardSqlFormatter = __webpack_require__(121);
 
-	var _standardSqlFormatter2 = _interopRequireDefault(_standardSqlFormatter);
+	var _StandardSqlFormatter2 = _interopRequireDefault(_StandardSqlFormatter);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -98,9 +98,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    SqlFormatter.prototype.format = function format(language, query) {
 	        switch (language) {
 	            case "n1ql":
-	                return new _n1qlFormatter2["default"](this.cfg).format(query);
+	                return new _N1qlFormatter2["default"](this.cfg).format(query);
 	            case "sql":
-	                return new _standardSqlFormatter2["default"](this.cfg).format(query);
+	                return new _StandardSqlFormatter2["default"](this.cfg).format(query);
 	            default:
 	                throw "Unsupported language";
 	        }
@@ -19356,9 +19356,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _sqlTokenTypes = __webpack_require__(60);
+	var _tokenTypes = __webpack_require__(60);
 
-	var _sqlTokenTypes2 = _interopRequireDefault(_sqlTokenTypes);
+	var _tokenTypes2 = _interopRequireDefault(_tokenTypes);
 
 	var _Indentation = __webpack_require__(118);
 
@@ -19372,17 +19372,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var SqlFormatter = function () {
+	var Formatter = function () {
 	    /**
 	     * @param {Object} cfg
 	     *  @param {Object} cfg.indent
-	     * @param {SqlTokenizer} tokenizer
+	     * @param {Tokenizer} tokenizer
 	     */
-	    function SqlFormatter() {
+	    function Formatter() {
 	        var cfg = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	        var tokenizer = arguments[1];
 
-	        _classCallCheck(this, SqlFormatter);
+	        _classCallCheck(this, Formatter);
 
 	        this.indentation = new _Indentation2["default"](cfg.indent);
 	        this.inlineBlock = new _InlineBlock2["default"]();
@@ -19398,37 +19398,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 
-	    SqlFormatter.prototype.format = function format(query) {
+	    Formatter.prototype.format = function format(query) {
 	        var tokens = this.tokenizer.tokenize(query);
 	        var formattedQuery = this.getFormattedQueryFromTokens(tokens);
 
 	        return formattedQuery.trim() + "\n";
 	    };
 
-	    SqlFormatter.prototype.getFormattedQueryFromTokens = function getFormattedQueryFromTokens(tokens) {
+	    Formatter.prototype.getFormattedQueryFromTokens = function getFormattedQueryFromTokens(tokens) {
 	        var _this = this;
 
 	        var formattedQuery = "";
 
 	        tokens.forEach(function (token, index) {
-	            if (token.type === _sqlTokenTypes2["default"].WHITESPACE) {
+	            if (token.type === _tokenTypes2["default"].WHITESPACE) {
 	                return;
-	            } else if (token.type === _sqlTokenTypes2["default"].LINE_COMMENT) {
+	            } else if (token.type === _tokenTypes2["default"].LINE_COMMENT) {
 	                formattedQuery = _this.formatLineComment(token, formattedQuery);
-	            } else if (token.type === _sqlTokenTypes2["default"].BLOCK_COMMENT) {
+	            } else if (token.type === _tokenTypes2["default"].BLOCK_COMMENT) {
 	                formattedQuery = _this.formatBlockComment(token, formattedQuery);
-	            } else if (token.type === _sqlTokenTypes2["default"].RESERVED_TOPLEVEL) {
+	            } else if (token.type === _tokenTypes2["default"].RESERVED_TOPLEVEL) {
 	                formattedQuery = _this.formatToplevelReservedWord(token, formattedQuery);
 	                _this.previousReservedWord = token;
-	            } else if (token.type === _sqlTokenTypes2["default"].RESERVED_NEWLINE) {
+	            } else if (token.type === _tokenTypes2["default"].RESERVED_NEWLINE) {
 	                formattedQuery = _this.formatNewlineReservedWord(token, formattedQuery);
 	                _this.previousReservedWord = token;
-	            } else if (token.type === _sqlTokenTypes2["default"].RESERVED) {
+	            } else if (token.type === _tokenTypes2["default"].RESERVED) {
 	                formattedQuery = _this.formatWithSpaces(token, formattedQuery);
 	                _this.previousReservedWord = token;
-	            } else if (token.type === _sqlTokenTypes2["default"].OPEN_PAREN) {
+	            } else if (token.type === _tokenTypes2["default"].OPEN_PAREN) {
 	                formattedQuery = _this.formatOpeningParentheses(tokens, index, formattedQuery);
-	            } else if (token.type === _sqlTokenTypes2["default"].CLOSE_PAREN) {
+	            } else if (token.type === _tokenTypes2["default"].CLOSE_PAREN) {
 	                formattedQuery = _this.formatClosingParentheses(token, formattedQuery);
 	            } else if (token.value === ",") {
 	                formattedQuery = _this.formatComma(token, formattedQuery);
@@ -19443,19 +19443,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return formattedQuery;
 	    };
 
-	    SqlFormatter.prototype.formatLineComment = function formatLineComment(token, query) {
+	    Formatter.prototype.formatLineComment = function formatLineComment(token, query) {
 	        return this.addNewline(query + token.value);
 	    };
 
-	    SqlFormatter.prototype.formatBlockComment = function formatBlockComment(token, query) {
+	    Formatter.prototype.formatBlockComment = function formatBlockComment(token, query) {
 	        return this.addNewline(this.addNewline(query) + this.indentComment(token.value));
 	    };
 
-	    SqlFormatter.prototype.indentComment = function indentComment(comment) {
+	    Formatter.prototype.indentComment = function indentComment(comment) {
 	        return comment.replace(/\n/g, "\n" + this.indentation.getIndent());
 	    };
 
-	    SqlFormatter.prototype.formatToplevelReservedWord = function formatToplevelReservedWord(token, query) {
+	    Formatter.prototype.formatToplevelReservedWord = function formatToplevelReservedWord(token, query) {
 	        this.indentation.decreaseTopLevel();
 
 	        query = this.addNewline(query);
@@ -19466,24 +19466,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.addNewline(query);
 	    };
 
-	    SqlFormatter.prototype.formatNewlineReservedWord = function formatNewlineReservedWord(token, query) {
+	    Formatter.prototype.formatNewlineReservedWord = function formatNewlineReservedWord(token, query) {
 	        return this.addNewline(query) + this.equalizeWhitespace(token.value) + " ";
 	    };
 
 	    // Replace any sequence of whitespace characters with single space
 
 
-	    SqlFormatter.prototype.equalizeWhitespace = function equalizeWhitespace(string) {
+	    Formatter.prototype.equalizeWhitespace = function equalizeWhitespace(string) {
 	        return string.replace(/\s+/g, " ");
 	    };
 
 	    // Opening parentheses increase the block indent level and start a new line
 
 
-	    SqlFormatter.prototype.formatOpeningParentheses = function formatOpeningParentheses(tokens, index, query) {
+	    Formatter.prototype.formatOpeningParentheses = function formatOpeningParentheses(tokens, index, query) {
 	        // Take out the preceding space unless there was whitespace there in the original query
 	        var previousToken = tokens[index - 1];
-	        if (previousToken && previousToken.type !== _sqlTokenTypes2["default"].WHITESPACE) {
+	        if (previousToken && previousToken.type !== _tokenTypes2["default"].WHITESPACE) {
 	            query = _lodash2["default"].trimEnd(query);
 	        }
 	        query += tokens[index].value;
@@ -19500,7 +19500,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // Closing parentheses decrease the block indent level
 
 
-	    SqlFormatter.prototype.formatClosingParentheses = function formatClosingParentheses(token, query) {
+	    Formatter.prototype.formatClosingParentheses = function formatClosingParentheses(token, query) {
 	        if (this.inlineBlock.isActive()) {
 	            this.inlineBlock.end();
 	            return this.formatWithSpaceAfter(token, query);
@@ -19513,7 +19513,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
 
 
-	    SqlFormatter.prototype.formatComma = function formatComma(token, query) {
+	    Formatter.prototype.formatComma = function formatComma(token, query) {
 	        query = _lodash2["default"].trimEnd(query) + token.value + " ";
 
 	        if (this.inlineBlock.isActive()) {
@@ -19525,26 +19525,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    SqlFormatter.prototype.formatWithSpaceAfter = function formatWithSpaceAfter(token, query) {
+	    Formatter.prototype.formatWithSpaceAfter = function formatWithSpaceAfter(token, query) {
 	        return _lodash2["default"].trimEnd(query) + token.value + " ";
 	    };
 
-	    SqlFormatter.prototype.formatWithoutSpaces = function formatWithoutSpaces(token, query) {
+	    Formatter.prototype.formatWithoutSpaces = function formatWithoutSpaces(token, query) {
 	        return _lodash2["default"].trimEnd(query) + token.value;
 	    };
 
-	    SqlFormatter.prototype.formatWithSpaces = function formatWithSpaces(token, query) {
+	    Formatter.prototype.formatWithSpaces = function formatWithSpaces(token, query) {
 	        return query + token.value + " ";
 	    };
 
-	    SqlFormatter.prototype.addNewline = function addNewline(query) {
+	    Formatter.prototype.addNewline = function addNewline(query) {
 	        return _lodash2["default"].trimEnd(query) + "\n" + this.indentation.getIndent();
 	    };
 
-	    return SqlFormatter;
+	    return Formatter;
 	}();
 
-	exports["default"] = SqlFormatter;
+	exports["default"] = Formatter;
 	module.exports = exports["default"];
 
 /***/ },
@@ -19559,15 +19559,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _sqlTokenTypes = __webpack_require__(60);
+	var _tokenTypes = __webpack_require__(60);
 
-	var _sqlTokenTypes2 = _interopRequireDefault(_sqlTokenTypes);
+	var _tokenTypes2 = _interopRequireDefault(_tokenTypes);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var SqlTokenizer = function () {
+	var Tokenizer = function () {
 	    /**
 	     * @param {Object} cfg
 	     *  @param {String[]} cfg.reservedWords Reserved words in SQL
@@ -19578,8 +19578,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *  @param {String[]} cfg.closeParens Closing parentheses to enable, like ), ]
 	     *  @param {String[]} cfg.variableTypes Prefixes for variables, like @ and :
 	     */
-	    function SqlTokenizer(cfg) {
-	        _classCallCheck(this, SqlTokenizer);
+	    function Tokenizer(cfg) {
+	        _classCallCheck(this, Tokenizer);
 
 	        this.WORD_REGEX = /^(\w+)/;
 	        this.WHITESPACE_REGEX = /^(\s+)/;
@@ -19601,12 +19601,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.QUOTED_VARIABLE_REGEX = this.createVariableRegex(cfg.variableTypes, this.createStringPattern(cfg.stringTypes));
 	    }
 
-	    SqlTokenizer.prototype.createReservedWordRegex = function createReservedWordRegex(reservedWords) {
+	    Tokenizer.prototype.createReservedWordRegex = function createReservedWordRegex(reservedWords) {
 	        var reservedWordsPattern = reservedWords.join("|").replace(/ /g, "\\s+");
 	        return new RegExp("^(" + reservedWordsPattern + ")\\b", "i");
 	    };
 
-	    SqlTokenizer.prototype.createStringRegex = function createStringRegex(stringTypes) {
+	    Tokenizer.prototype.createStringRegex = function createStringRegex(stringTypes) {
 	        return new RegExp("^(" + this.createStringPattern(stringTypes) + ")");
 	    };
 
@@ -19617,7 +19617,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // 4. single quoted string using '' or \' to escape
 
 
-	    SqlTokenizer.prototype.createStringPattern = function createStringPattern(stringTypes) {
+	    Tokenizer.prototype.createStringPattern = function createStringPattern(stringTypes) {
 	        var patterns = {
 	            "\"\"": "((\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)",
 	            "''": "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
@@ -19630,13 +19630,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }).join("|");
 	    };
 
-	    SqlTokenizer.prototype.createParenRegex = function createParenRegex(parens) {
+	    Tokenizer.prototype.createParenRegex = function createParenRegex(parens) {
 	        return new RegExp("^(" + parens.map(function (p) {
 	            return _lodash2["default"].escapeRegExp(p);
 	        }).join("|") + ")");
 	    };
 
-	    SqlTokenizer.prototype.createVariableRegex = function createVariableRegex(variableTypes, pattern) {
+	    Tokenizer.prototype.createVariableRegex = function createVariableRegex(variableTypes, pattern) {
 	        if (variableTypes.length === 0) {
 	            return false;
 	        }
@@ -19654,7 +19654,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 
-	    SqlTokenizer.prototype.tokenize = function tokenize(input) {
+	    Tokenizer.prototype.tokenize = function tokenize(input) {
 	        var tokens = [];
 	        var token = void 0;
 
@@ -19670,78 +19670,78 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return tokens;
 	    };
 
-	    SqlTokenizer.prototype.getNextToken = function getNextToken(input, previousToken) {
+	    Tokenizer.prototype.getNextToken = function getNextToken(input, previousToken) {
 	        return this.getWhitespaceToken(input) || this.getCommentToken(input) || this.getStringToken(input) || this.getOpenParenToken(input) || this.getCloseParenToken(input) || this.getVariableToken(input) || this.getNumberToken(input) || this.getReservedWordToken(input, previousToken) || this.getWordToken(input) || this.getOperatorToken(input);
 	    };
 
-	    SqlTokenizer.prototype.getWhitespaceToken = function getWhitespaceToken(input) {
+	    Tokenizer.prototype.getWhitespaceToken = function getWhitespaceToken(input) {
 	        return this.getTokenOnFirstMatch({
 	            input: input,
-	            type: _sqlTokenTypes2["default"].WHITESPACE,
+	            type: _tokenTypes2["default"].WHITESPACE,
 	            regex: this.WHITESPACE_REGEX
 	        });
 	    };
 
-	    SqlTokenizer.prototype.getCommentToken = function getCommentToken(input) {
+	    Tokenizer.prototype.getCommentToken = function getCommentToken(input) {
 	        return this.getLineCommentToken(input) || this.getBlockCommentToken(input);
 	    };
 
-	    SqlTokenizer.prototype.getLineCommentToken = function getLineCommentToken(input) {
+	    Tokenizer.prototype.getLineCommentToken = function getLineCommentToken(input) {
 	        return this.getTokenOnFirstMatch({
 	            input: input,
-	            type: _sqlTokenTypes2["default"].LINE_COMMENT,
+	            type: _tokenTypes2["default"].LINE_COMMENT,
 	            regex: this.LINE_COMMENT_REGEX
 	        });
 	    };
 
-	    SqlTokenizer.prototype.getBlockCommentToken = function getBlockCommentToken(input) {
+	    Tokenizer.prototype.getBlockCommentToken = function getBlockCommentToken(input) {
 	        return this.getTokenOnFirstMatch({
 	            input: input,
-	            type: _sqlTokenTypes2["default"].BLOCK_COMMENT,
+	            type: _tokenTypes2["default"].BLOCK_COMMENT,
 	            regex: this.BLOCK_COMMENT_REGEX
 	        });
 	    };
 
-	    SqlTokenizer.prototype.getStringToken = function getStringToken(input) {
+	    Tokenizer.prototype.getStringToken = function getStringToken(input) {
 	        return this.getTokenOnFirstMatch({
 	            input: input,
-	            type: _sqlTokenTypes2["default"].STRING,
+	            type: _tokenTypes2["default"].STRING,
 	            regex: this.STRING_REGEX
 	        });
 	    };
 
-	    SqlTokenizer.prototype.getOpenParenToken = function getOpenParenToken(input) {
+	    Tokenizer.prototype.getOpenParenToken = function getOpenParenToken(input) {
 	        return this.getTokenOnFirstMatch({
 	            input: input,
-	            type: _sqlTokenTypes2["default"].OPEN_PAREN,
+	            type: _tokenTypes2["default"].OPEN_PAREN,
 	            regex: this.OPEN_PAREN_REGEX
 	        });
 	    };
 
-	    SqlTokenizer.prototype.getCloseParenToken = function getCloseParenToken(input) {
+	    Tokenizer.prototype.getCloseParenToken = function getCloseParenToken(input) {
 	        return this.getTokenOnFirstMatch({
 	            input: input,
-	            type: _sqlTokenTypes2["default"].CLOSE_PAREN,
+	            type: _tokenTypes2["default"].CLOSE_PAREN,
 	            regex: this.CLOSE_PAREN_REGEX
 	        });
 	    };
 
-	    SqlTokenizer.prototype.getVariableToken = function getVariableToken(input) {
+	    Tokenizer.prototype.getVariableToken = function getVariableToken(input) {
 	        return this.getPlainVariableToken(input) || this.getQuotedVariableToken(input);
 	    };
 
-	    SqlTokenizer.prototype.getPlainVariableToken = function getPlainVariableToken(input) {
+	    Tokenizer.prototype.getPlainVariableToken = function getPlainVariableToken(input) {
 	        return this.getTokenOnFirstMatch({
 	            input: input,
-	            type: _sqlTokenTypes2["default"].VARIABLE,
+	            type: _tokenTypes2["default"].VARIABLE,
 	            regex: this.PLAIN_VARIABLE_REGEX
 	        });
 	    };
 
-	    SqlTokenizer.prototype.getQuotedVariableToken = function getQuotedVariableToken(input) {
+	    Tokenizer.prototype.getQuotedVariableToken = function getQuotedVariableToken(input) {
 	        return this.getTokenOnFirstMatch({
 	            input: input,
-	            type: _sqlTokenTypes2["default"].VARIABLE,
+	            type: _tokenTypes2["default"].VARIABLE,
 	            regex: this.QUOTED_VARIABLE_REGEX
 	        });
 	    };
@@ -19749,10 +19749,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // Decimal, binary, or hex numbers
 
 
-	    SqlTokenizer.prototype.getNumberToken = function getNumberToken(input) {
+	    Tokenizer.prototype.getNumberToken = function getNumberToken(input) {
 	        return this.getTokenOnFirstMatch({
 	            input: input,
-	            type: _sqlTokenTypes2["default"].NUMBER,
+	            type: _tokenTypes2["default"].NUMBER,
 	            regex: this.NUMBER_REGEX
 	        });
 	    };
@@ -19760,15 +19760,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // Punctuation and symbols
 
 
-	    SqlTokenizer.prototype.getOperatorToken = function getOperatorToken(input) {
+	    Tokenizer.prototype.getOperatorToken = function getOperatorToken(input) {
 	        return this.getTokenOnFirstMatch({
 	            input: input,
-	            type: _sqlTokenTypes2["default"].OPERATOR,
+	            type: _tokenTypes2["default"].OPERATOR,
 	            regex: this.OPERATOR_REGEX
 	        });
 	    };
 
-	    SqlTokenizer.prototype.getReservedWordToken = function getReservedWordToken(input, previousToken) {
+	    Tokenizer.prototype.getReservedWordToken = function getReservedWordToken(input, previousToken) {
 	        // A reserved word cannot be preceded by a "."
 	        // this makes it so in "mytable.from", "from" is not considered a reserved word
 	        if (previousToken && previousToken.value && previousToken.value === ".") {
@@ -19777,39 +19777,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.getToplevelReservedToken(input) || this.getNewlineReservedToken(input) || this.getPlainReservedToken(input);
 	    };
 
-	    SqlTokenizer.prototype.getToplevelReservedToken = function getToplevelReservedToken(input) {
+	    Tokenizer.prototype.getToplevelReservedToken = function getToplevelReservedToken(input) {
 	        return this.getTokenOnFirstMatch({
 	            input: input,
-	            type: _sqlTokenTypes2["default"].RESERVED_TOPLEVEL,
+	            type: _tokenTypes2["default"].RESERVED_TOPLEVEL,
 	            regex: this.RESERVED_TOPLEVEL_REGEX
 	        });
 	    };
 
-	    SqlTokenizer.prototype.getNewlineReservedToken = function getNewlineReservedToken(input) {
+	    Tokenizer.prototype.getNewlineReservedToken = function getNewlineReservedToken(input) {
 	        return this.getTokenOnFirstMatch({
 	            input: input,
-	            type: _sqlTokenTypes2["default"].RESERVED_NEWLINE,
+	            type: _tokenTypes2["default"].RESERVED_NEWLINE,
 	            regex: this.RESERVED_NEWLINE_REGEX
 	        });
 	    };
 
-	    SqlTokenizer.prototype.getPlainReservedToken = function getPlainReservedToken(input) {
+	    Tokenizer.prototype.getPlainReservedToken = function getPlainReservedToken(input) {
 	        return this.getTokenOnFirstMatch({
 	            input: input,
-	            type: _sqlTokenTypes2["default"].RESERVED,
+	            type: _tokenTypes2["default"].RESERVED,
 	            regex: this.RESERVED_PLAIN_REGEX
 	        });
 	    };
 
-	    SqlTokenizer.prototype.getWordToken = function getWordToken(input) {
+	    Tokenizer.prototype.getWordToken = function getWordToken(input) {
 	        return this.getTokenOnFirstMatch({
 	            input: input,
-	            type: _sqlTokenTypes2["default"].WORD,
+	            type: _tokenTypes2["default"].WORD,
 	            regex: this.WORD_REGEX
 	        });
 	    };
 
-	    SqlTokenizer.prototype.getTokenOnFirstMatch = function getTokenOnFirstMatch(_ref) {
+	    Tokenizer.prototype.getTokenOnFirstMatch = function getTokenOnFirstMatch(_ref) {
 	        var input = _ref.input;
 	        var type = _ref.type;
 	        var regex = _ref.regex;
@@ -19821,10 +19821,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    return SqlTokenizer;
+	    return Tokenizer;
 	}();
 
-	exports["default"] = SqlTokenizer;
+	exports["default"] = Tokenizer;
 	module.exports = exports["default"];
 
 /***/ },
@@ -20669,9 +20669,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.__esModule = true;
 
-	var _sqlTokenTypes = __webpack_require__(60);
+	var _tokenTypes = __webpack_require__(60);
 
-	var _sqlTokenTypes2 = _interopRequireDefault(_sqlTokenTypes);
+	var _tokenTypes2 = _interopRequireDefault(_tokenTypes);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -20749,9 +20749,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return false;
 	            }
 
-	            if (token.type === _sqlTokenTypes2["default"].OPEN_PAREN) {
+	            if (token.type === _tokenTypes2["default"].OPEN_PAREN) {
 	                level++;
-	            } else if (token.type === _sqlTokenTypes2["default"].CLOSE_PAREN) {
+	            } else if (token.type === _tokenTypes2["default"].CLOSE_PAREN) {
 	                level--;
 	                if (level === 0) {
 	                    return true;
@@ -20773,7 +20773,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var type = _ref.type;
 	        var value = _ref.value;
 
-	        return type === _sqlTokenTypes2["default"].RESERVED_TOPLEVEL || type === _sqlTokenTypes2["default"].RESERVED_NEWLINE || type === _sqlTokenTypes2["default"].COMMENT || type === _sqlTokenTypes2["default"].BLOCK_COMMENT || value === ";";
+	        return type === _tokenTypes2["default"].RESERVED_TOPLEVEL || type === _tokenTypes2["default"].RESERVED_NEWLINE || type === _tokenTypes2["default"].COMMENT || type === _tokenTypes2["default"].BLOCK_COMMENT || value === ";";
 	    };
 
 	    return InlineBlock;
@@ -20790,13 +20790,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.__esModule = true;
 
-	var _SqlFormatter = __webpack_require__(88);
+	var _Formatter = __webpack_require__(88);
 
-	var _SqlFormatter2 = _interopRequireDefault(_SqlFormatter);
+	var _Formatter2 = _interopRequireDefault(_Formatter);
 
-	var _SqlTokenizer = __webpack_require__(89);
+	var _Tokenizer = __webpack_require__(89);
 
-	var _SqlTokenizer2 = _interopRequireDefault(_SqlTokenizer);
+	var _Tokenizer2 = _interopRequireDefault(_Tokenizer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -20833,7 +20833,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    N1qlFormatter.prototype.format = function format(query) {
 	        if (!tokenizer) {
-	            tokenizer = new _SqlTokenizer2["default"]({
+	            tokenizer = new _Tokenizer2["default"]({
 	                reservedWords: reservedWords,
 	                reservedToplevelWords: reservedToplevelWords,
 	                reservedNewlineWords: reservedNewlineWords,
@@ -20843,7 +20843,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                variableTypes: []
 	            });
 	        }
-	        return new _SqlFormatter2["default"](this.cfg, tokenizer).format(query);
+	        return new _Formatter2["default"](this.cfg, tokenizer).format(query);
 	    };
 
 	    return N1qlFormatter;
@@ -20860,13 +20860,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.__esModule = true;
 
-	var _SqlFormatter = __webpack_require__(88);
+	var _Formatter = __webpack_require__(88);
 
-	var _SqlFormatter2 = _interopRequireDefault(_SqlFormatter);
+	var _Formatter2 = _interopRequireDefault(_Formatter);
 
-	var _SqlTokenizer = __webpack_require__(89);
+	var _Tokenizer = __webpack_require__(89);
 
-	var _SqlTokenizer2 = _interopRequireDefault(_SqlTokenizer);
+	var _Tokenizer2 = _interopRequireDefault(_Tokenizer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -20903,7 +20903,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    StandardSqlFormatter.prototype.format = function format(query) {
 	        if (!tokenizer) {
-	            tokenizer = new _SqlTokenizer2["default"]({
+	            tokenizer = new _Tokenizer2["default"]({
 	                reservedWords: reservedWords,
 	                reservedToplevelWords: reservedToplevelWords,
 	                reservedNewlineWords: reservedNewlineWords,
@@ -20913,7 +20913,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                variableTypes: ["@", ":"]
 	            });
 	        }
-	        return new _SqlFormatter2["default"](this.cfg, tokenizer).format(query);
+	        return new _Formatter2["default"](this.cfg, tokenizer).format(query);
 	    };
 
 	    return StandardSqlFormatter;

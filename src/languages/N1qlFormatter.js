@@ -1,5 +1,5 @@
-import SqlFormatter from "../core/Formatter";
-import SqlTokenizer from "../core/Tokenizer";
+import Formatter from "../core/Formatter";
+import Tokenizer from "../core/Tokenizer";
 
 // Reserved words
 const reservedWords = [
@@ -49,7 +49,7 @@ export default class N1qlFormatter {
      */
     format(query) {
         if (!tokenizer) {
-            tokenizer = new SqlTokenizer({
+            tokenizer = new Tokenizer({
                 reservedWords,
                 reservedToplevelWords,
                 reservedNewlineWords,
@@ -59,6 +59,6 @@ export default class N1qlFormatter {
                 variableTypes: [],
             });
         }
-        return new SqlFormatter(this.cfg, tokenizer).format(query);
+        return new Formatter(this.cfg, tokenizer).format(query);
     }
 }
