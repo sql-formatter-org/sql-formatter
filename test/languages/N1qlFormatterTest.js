@@ -1,4 +1,4 @@
-import N1qlFormatter from "../../src/languages/n1qlFormatter";
+import N1qlFormatter from "../../src/languages/N1qlFormatter";
 import behavesLikeSqlFormatter from "./behavesLikeSqlFormatter";
 import respectsCustomCfg from "./respectsCustomCfg";
 

@@ -1,4 +1,4 @@
-import StandardSqlFormatter from "../../src/languages/standardSqlFormatter";
+import StandardSqlFormatter from "../../src/languages/StandardSqlFormatter";
 import behavesLikeSqlFormatter from "./behavesLikeSqlFormatter";
 import respectsCustomCfg from "./respectsCustomCfg";
 

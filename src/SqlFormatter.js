@@ -1,6 +1,6 @@
 import "babel-polyfill";
-import N1qlFormatter from "./languages/n1qlFormatter";
-import StandardSqlFormatter from "./languages/standardSqlFormatter";
+import N1qlFormatter from "./languages/N1qlFormatter";
+import StandardSqlFormatter from "./languages/StandardSqlFormatter";
 
 export default class SqlFormatter {
     /**

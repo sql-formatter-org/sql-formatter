@@ -1,5 +1,5 @@
 import _ from "lodash";
-import sqlTokenTypes from "./sqlTokenTypes";
+import sqlTokenTypes from "./tokenTypes";
 import Indentation from "./Indentation";
 import InlineBlock from "./InlineBlock";
 
