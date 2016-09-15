@@ -2,7 +2,7 @@
   "name": "sql-formatter",
   "version": "0.0.1",
   "description": "Formats whitespaces in a SQL query to make it more readable",
-  "main": "lib/SqlFormatter.js",
+  "main": "lib/sqlFormatter.js",
   "keywords": [
     "sql",
     "formatter",
@@ -27,8 +27,8 @@
     "check": "npm run lint && npm run test",
     "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
     "build:commonjs": "babel src --out-dir lib",
-    "build:umd": "cross-env NODE_ENV=development webpack src/SqlFormatter.js dist/sql-formatter.js",
-    "build:umd:min": "cross-env NODE_ENV=production webpack src/SqlFormatter.js dist/sql-formatter.min.js",
+    "build:umd": "cross-env NODE_ENV=development webpack src/sqlFormatter.js dist/sql-formatter.js",
+    "build:umd:min": "cross-env NODE_ENV=production webpack src/sqlFormatter.js dist/sql-formatter.min.js",
     "prepublish": "npm run clean && npm run check && npm run build && check-es3-syntax lib/ dist/ --kill --print"
   },
   "repository": {

@@ -1,4 +1,4 @@
-import sqlFormatter from "../src/SqlFormatter";
+import sqlFormatter from "../src/sqlFormatter";
 
 describe("sqlFormatter", function() {
     beforeEach(function() {
