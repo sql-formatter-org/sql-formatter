@@ -46,7 +46,6 @@
     "babel-loader": "^6.2.4",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-istanbul": "^2.0.2",
-    "babel-plugin-rewire": "^1.0.0-rc-4",
     "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-plugin-transform-es3-member-expression-literals": "^6.5.0",
     "babel-plugin-transform-es3-property-literals": "^6.5.0",
