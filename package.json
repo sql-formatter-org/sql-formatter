@@ -36,6 +36,7 @@
     "url": "https://github.com/zeroturnaround/sql-formatter.git"
   },
   "dependencies": {
+    "babel-polyfill": "^6.9.1",
     "lodash": "^4.14.0"
   },
   "devDependencies": {
@@ -51,7 +52,6 @@
     "babel-plugin-transform-es3-property-literals": "^6.5.0",
     "babel-plugin-transform-function-bind": "^6.8.0",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
-    "babel-polyfill": "^6.9.1",
     "babel-preset-es2015": "^6.14.0",
     "check-es3-syntax-cli": "^0.1.1",
     "cross-env": "^1.0.7",
