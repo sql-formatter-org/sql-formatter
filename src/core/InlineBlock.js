@@ -1,6 +1,6 @@
 import sqlTokenTypes from "./tokenTypes";
 
-const INLINE_MAX_LENGTH = 35;
+const INLINE_MAX_LENGTH = 50;
 
 /**
  * Bookkeeper for inline blocks.

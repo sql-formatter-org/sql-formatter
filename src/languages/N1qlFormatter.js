@@ -21,7 +21,7 @@ const reservedWords = [
 const reservedToplevelWords = [
     "SELECT", "FROM", "WHERE", "SET", "ORDER BY", "GROUP BY", "LIMIT", "VALUES", "EXPLAIN UPDATE", "UPDATE",
     "HAVING", "EXPLAIN DELETE FROM", "DELETE FROM", "UNION ALL", "UNION", "EXCEPT ALL", "EXCEPT", "INTERSECT ALL", "INTERSECT",
-    "INFER", "EXPLAIN UPSERT", "UPSERT", "MERGE", "PREPARE", "LET", "USE KEYS", "UNNEST", "NEST"
+    "INFER", "EXPLAIN UPSERT", "UPSERT", "MERGE", "PREPARE", "LET", "USE KEYS", "UNNEST", "NEST", "INSERT INTO"
 ];
 
 const reservedNewlineWords = [
