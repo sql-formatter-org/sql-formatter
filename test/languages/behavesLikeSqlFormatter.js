@@ -278,8 +278,7 @@ export default function behavesLikeSqlFormatter(formatter) {
             "DROP TABLE IF EXISTS admin_role;"
         );
         expect(result).toBe(
-            "DROP\n" +
-            "  TABLE IF EXISTS admin_role;\n"
+            "DROP TABLE IF EXISTS admin_role;\n"
         );
     });
 

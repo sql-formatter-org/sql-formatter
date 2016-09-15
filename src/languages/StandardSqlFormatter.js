@@ -39,7 +39,7 @@ const reservedWords = [
 ];
 
 const reservedToplevelWords = [
-    "SELECT", "FROM", "WHERE", "SET", "ORDER BY", "GROUP BY", "LIMIT", "DROP", "ALTER TABLE", "ALTER COLUMN",
+    "SELECT", "FROM", "WHERE", "SET", "ORDER BY", "GROUP BY", "LIMIT", "ALTER TABLE", "ALTER COLUMN",
     "VALUES", "UPDATE", "HAVING", "ADD", "AFTER", "DELETE FROM", "UNION ALL", "UNION", "EXCEPT", "INTERSECT", "MODIFY"
 ];
 
