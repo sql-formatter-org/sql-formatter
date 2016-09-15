@@ -12,7 +12,7 @@
     ],
     "env": {
         "test": {
-            "plugins": ["istanbul", "rewire"]
+            "plugins": ["istanbul"]
         }
     }
 }
