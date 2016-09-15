@@ -1,7 +1,6 @@
 import Formatter from "../core/Formatter";
 import Tokenizer from "../core/Tokenizer";
 
-// Reserved words
 const reservedWords = [
     "ALL", "ALTER", "ANALYZE", "AND", "ANY", "ARRAY", "AS", "ASC", "BEGIN", "BETWEEN", "BINARY", "BOOLEAN", "BREAK", "BUCKET",
     "BUILD", "BY", "CALL", "CASE", "CAST", "CLUSTER", "COLLATE", "COLLECTION", "COMMIT", "CONNECT", "CONTINUE", "CORRELATE",
@@ -19,14 +18,12 @@ const reservedWords = [
     "VALUE", "VALUED", "VALUES", "VIA", "VIEW", "WHEN", "WHERE", "WHILE", "WITH", "WITHIN", "WORK", "XOR"
 ];
 
-// Words that are set to separate new line
 const reservedToplevelWords = [
-    "SELECT", "FROM", "WHERE", "SET", "ORDER BY", "GROUP BY", "LIMIT", "DROP", "VALUES", "EXPLAIN UPDATE", "UPDATE",
+    "SELECT", "FROM", "WHERE", "SET", "ORDER BY", "GROUP BY", "LIMIT", "VALUES", "EXPLAIN UPDATE", "UPDATE",
     "HAVING", "EXPLAIN DELETE FROM", "DELETE FROM", "UNION ALL", "UNION", "EXCEPT ALL", "EXCEPT", "INTERSECT ALL", "INTERSECT",
     "INFER", "EXPLAIN UPSERT", "UPSERT", "MERGE", "PREPARE", "LET", "USE KEYS", "UNNEST", "NEST", "INSERT INTO"
 ];
 
-// Words that are set to newline
 const reservedNewlineWords = [
     "LEFT OUTER JOIN", "RIGHT OUTER JOIN", "LEFT JOIN", "RIGHT JOIN", "OUTER JOIN", "INNER JOIN", "JOIN", "XOR", "OR", "AND"
 ];

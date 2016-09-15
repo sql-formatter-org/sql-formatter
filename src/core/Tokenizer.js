@@ -5,7 +5,7 @@ export default class Tokenizer {
     /**
      * @param {Object} cfg
      *  @param {String[]} cfg.reservedWords Reserved words in SQL
-     *  @param {String[]} cfg.reservedToplevelWords Words that are set to new line and on first indent level
+     *  @param {String[]} cfg.reservedToplevelWords Words that are set to new line separately
      *  @param {String[]} cfg.reservedNewlineWords Words that are set to newline
      *  @param {String[]} cfg.stringTypes String types to enable: "", '', ``, []
      *  @param {String[]} cfg.openParens Opening parentheses to enable, like (, [
