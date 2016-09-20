@@ -25,7 +25,7 @@ export default class Indentation {
      * @return {String}
      */
     getIndent() {
-        return this.indent.repeat(this.indentTypes.length);
+        return _.repeat(this.indent, this.indentTypes.length);
     }
 
     /**

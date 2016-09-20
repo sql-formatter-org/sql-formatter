@@ -4,6 +4,7 @@
     ],
     "plugins": [
         "add-module-exports",
+        "transform-runtime",
         "transform-class-properties",
         "transform-function-bind",
         "transform-object-rest-spread",
