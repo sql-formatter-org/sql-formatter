@@ -1,4 +1,3 @@
-import "babel-polyfill";
 import N1qlFormatter from "./languages/N1qlFormatter";
 import StandardSqlFormatter from "./languages/StandardSqlFormatter";
 
