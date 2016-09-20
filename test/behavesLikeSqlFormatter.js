@@ -1,11 +1,12 @@
+import sqlFormatter from "./../src/sqlFormatter";
+
 /**
  * Core tests for all SQL formatters
- * @param {sqlFormatter} formatter
  * @param {String} language
  */
-export default function behavesLikeSqlFormatter(formatter, language) {
+export default function behavesLikeSqlFormatter(language) {
     it("uses given indent config for indention", function() {
-        const result = formatter.format(
+        const result = sqlFormatter.format(
             "SELECT count(*),Column1 FROM Table1;",
             {language, indent: "    "}
         );
@@ -20,7 +21,7 @@ export default function behavesLikeSqlFormatter(formatter, language) {
     });
 
     function format(query) {
-        return formatter.format(query, {language});
+        return sqlFormatter.format(query, {language});
     }
 
     it("formats simple SELECT query", function() {
