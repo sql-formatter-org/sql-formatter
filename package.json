@@ -1,6 +1,6 @@
 {
   "name": "sql-formatter",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Formats whitespaces in a SQL query to make it more readable",
   "main": "lib/sqlFormatter.js",
   "keywords": [
