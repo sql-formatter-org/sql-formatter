@@ -1,78 +1,68 @@
 # SQL Formatter [![NPM version](https://img.shields.io/npm/v/sql-formatter.svg)](https://npmjs.com/package/sql-formatter) [![Build Status](https://travis-ci.org/zeroturnaround/sql-formatter.svg?branch=master)](https://travis-ci.org/zeroturnaround/sql-formatter) [![Coverage Status](https://coveralls.io/repos/github/zeroturnaround/sql-formatter/badge.svg?branch=master)](https://coveralls.io/github/zeroturnaround/sql-formatter?branch=master)
 
-**SQL Formatter** is a whitespace formatter for different query languages.
+**SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
+It started as a port of a [PHP Library][], but has since considerably diverged.
+It supports [Standard SQL][] and [Couchbase N1QL][] dialects.
 
-[See the demo](https://zeroturnaround.github.io/sql-formatter/).
+&rarr; [Try the demo.](https://zeroturnaround.github.io/sql-formatter/)
 
-## Installation
+## Install
 
-To install the newest version from NPM:
+Get the latest version from NPM:
 
 ```
 npm install --save sql-formatter
 ```
 
-The SQL Formatter source code is written in ES2015 but we precompile both CommonJS and UMD builds to ES5 so they work in any modern browser.
-
-If you don't use a module bundler then you can drop a file from `/dist` directory as a `<script>` tag on the page. This makes SQL Formatter available as a `window.sqlFormatter` global variable.
-
-## Example usage
-
-First we need to import our CommonJS module and then we can use it for formatting
-standard SQL query.
+## Usage
 
 ```js
 import sqlFormatter from "sql-formatter";
 
-const formattedStandardSql = sqlFormatter.format("SELECT * FROM table1");
+console.log(sqlFormatter.format("SELECT * FROM table1"));
 ```
 
-The value of `formattedStandardSql` will look like this:
+This will output:
 
-```sql
+```
 SELECT
   *
 FROM
   table1
 ```
 
-## Supported languages
-
-### [Standard SQL](https://en.wikipedia.org/wiki/SQL:2011)
+You can also pass in configuration options:
 
 ```js
-sqlFormatter.format("SELECT * FROM table1 WHERE foo = bar");
+sqlFormatter.format("SELECT *", {
+    language: "n1ql" // Defaults to "sql"
+    indent: "    "   // Defaults to two spaces
+});
 ```
 
-### [N1QL](http://www.couchbase.com/n1ql)
+Currently just two SQL dialects are supported:
 
-```js
-sqlFormatter.format("SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];", {language: "n1ql"});
-```
+- **sql** - [Standard SQL][]
+- **n1ql** - [Couchbase N1QL][]
 
-## Optional configuration
+## Usage without NPM
 
-Example below has default values.
-
-```js
-const cfg = {
-    language: "sql" // Specific query language
-    indent: "  " // Value that is used for creating indentation levels
-};
-
-sqlFormatter.format("SELECT *", cfg);
-```
+If you don't use a module bundler, clone the repository, run `npm install` and grab a file from `/dist` directory to use inside a `<script>` tag.
+This makes SQL Formatter available as a global variable `window.sqlFormatter`.
 
 ## Contributing
 
-Simply `npm install` to install the dependencies, write your fix,
-ensure tests and linter are fine with `npm run check`,
-and you're ready to poke us with a pull request.
+```bash
+# run linter and tests
+$ npm run check
+```
 
-## Influence
-
-SQL Formatter core logic is influenced by a PHP version of [SQL Formatter by Jeremy Dorn](https://github.com/jdorn/sql-formatter).
+...and you're ready to poke us with a pull request.
 
 ## License
 
 [MIT](https://github.com/zeroturnaround/sql-formatter/blob/master/LICENSE)
+
+[PHP library]: https://github.com/jdorn/sql-formatter
+[Standard SQL]: https://en.wikipedia.org/wiki/SQL:2011
+[Couchbase N1QL]: http://www.couchbase.com/n1ql
