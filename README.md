@@ -67,9 +67,11 @@ const cfg = {
 sqlFormatter.format("SELECT *", cfg);
 ```
 
-## Contribute
+## Contributing
 
-> TODO
+Simply `npm install` to install the dependencies, write your fix,
+ensure tests and linter are fine with `npm run check`,
+and you're ready to poke us with a pull request.
 
 ## Influence
 
