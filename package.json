@@ -2,6 +2,7 @@
   "name": "sql-formatter",
   "version": "0.0.3",
   "description": "Formats whitespaces in a SQL query to make it more readable",
+  "license": "MIT",
   "main": "lib/sqlFormatter.js",
   "keywords": [
     "sql",
@@ -22,8 +23,8 @@
   "scripts": {
     "clean": "rimraf lib dist",
     "lint": "eslint .",
-    "test": "cross-env NODE_ENV=test karma start",
-    "test:watch": "npm run test -- --no-single-run",
+    "test": "jest",
+    "test:watch": "npm run test -- --watch",
     "check": "npm run lint && npm run test",
     "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
     "build:commonjs": "babel src --out-dir lib",
@@ -35,16 +36,19 @@
     "type": "git",
     "url": "https://github.com/zeroturnaround/sql-formatter.git"
   },
+  "bugs": {
+    "url": "https://github.com/zeroturnaround/sql-formatter/issues"
+  },
   "dependencies": {
-    "lodash": "^4.14.0"
+    "lodash": "^4.16.0"
   },
   "devDependencies": {
     "babel-cli": "^6.14.0",
     "babel-core": "^6.11.4",
     "babel-eslint": "^6.1.2",
+    "babel-jest": "^15.0.0",
     "babel-loader": "^6.2.4",
     "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-istanbul": "^2.0.2",
     "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-plugin-transform-es3-member-expression-literals": "^6.5.0",
     "babel-plugin-transform-es3-property-literals": "^6.5.0",
@@ -52,22 +56,15 @@
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "babel-plugin-transform-runtime": "^6.8.0",
     "babel-preset-es2015": "^6.14.0",
-    "cross-env": "^1.0.7",
+    "cross-env": "^2.0.1",
     "eslint": "^3.1.1",
-    "jasmine-core": "^2.4.1",
-    "karma": "^1.1.1",
-    "karma-coverage": "^1.1.1",
-    "karma-jasmine": "^1.0.2",
-    "karma-jasmine-diff-reporter": "^0.6.0",
-    "karma-phantomjs-launcher": "^1.0.1",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^1.7.0",
-    "phantomjs-prebuilt": "^2.1.7",
+    "jest": "^15.1.1",
     "rimraf": "^2.3.4",
     "webpack": "^1.13.1"
   },
-  "bugs": {
-    "url": "https://github.com/zeroturnaround/sql-formatter/issues"
-  },
-  "license": "MIT"
+  "jest": {
+    "testPathDirs": ["test"],
+    "testRegex": ".*Test",
+    "collectCoverage": true
+  }
 }
