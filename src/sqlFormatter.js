@@ -9,6 +9,7 @@ export default {
      * @param {Object} cfg
      *  @param {String} cfg.language Query language, default is Standard SQL
      *  @param {String} cfg.indent Characters used for indentation, default is "  " (2 spaces)
+     *  @param {Object} cfg.params Collection of params for placeholder replacement
      * @return {String}
      */
     format: (query, cfg) => {

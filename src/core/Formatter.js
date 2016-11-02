@@ -2,23 +2,26 @@ import _ from "lodash";
 import sqlTokenTypes from "./tokenTypes";
 import Indentation from "./Indentation";
 import InlineBlock from "./InlineBlock";
+import Params from "./Params";
 
 export default class Formatter {
     /**
      * @param {Object} cfg
-     *  @param {Object} cfg.indent
+     *   @param {Object} cfg.indent
+     *   @param {Object} cfg.params
      * @param {Tokenizer} tokenizer
      */
     constructor(cfg, tokenizer) {
         this.cfg = cfg || {};
         this.indentation = new Indentation(this.cfg.indent);
         this.inlineBlock = new InlineBlock();
+        this.params = new Params(this.cfg.params);
         this.tokenizer = tokenizer;
         this.previousReservedWord = {};
     }
 
     /**
-     * Format the whitespace in a SQL string to make it easier to read.
+     * Formats whitespaces in a SQL string to make it easier to read.
      *
      * @param {String} query The SQL query string
      * @return {String} formatted query
@@ -60,6 +63,9 @@ export default class Formatter {
             }
             else if (token.type === sqlTokenTypes.CLOSE_PAREN) {
                 formattedQuery = this.formatClosingParentheses(token, formattedQuery);
+            }
+            else if (token.type === sqlTokenTypes.PLACEHOLDER) {
+                formattedQuery = this.formatPlaceholder(token, formattedQuery);
             }
             else if (token.value === ",") {
                 formattedQuery = this.formatComma(token, formattedQuery);
@@ -137,6 +143,10 @@ export default class Formatter {
             this.indentation.decreaseBlockLevel();
             return this.formatWithSpaces(token, this.addNewline(query));
         }
+    }
+
+    formatPlaceholder(token, query) {
+        return query + this.params.get(token.value) + " ";
     }
 
     // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)

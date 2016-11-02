@@ -10,7 +10,8 @@ export default class Tokenizer {
      *  @param {String[]} cfg.stringTypes String types to enable: "", '', ``, []
      *  @param {String[]} cfg.openParens Opening parentheses to enable, like (, [
      *  @param {String[]} cfg.closeParens Closing parentheses to enable, like ), ]
-     *  @param {String[]} cfg.variableTypes Prefixes for variables, like @ and :
+     *  @param {String[]} cfg.indexedPlaceholderTypes Prefixes for indexed placeholders, like ?
+     *  @param {String[]} cfg.namedPlaceholderTypes Prefixes for named placeholders, like @ and :
      */
     constructor(cfg) {
         this.WORD_REGEX = /^(\w+)/;
@@ -29,8 +30,12 @@ export default class Tokenizer {
         this.OPEN_PAREN_REGEX = this.createParenRegex(cfg.openParens);
         this.CLOSE_PAREN_REGEX = this.createParenRegex(cfg.closeParens);
 
-        this.PLAIN_VARIABLE_REGEX = this.createVariableRegex(cfg.variableTypes, "[a-zA-Z0-9._$]+");
-        this.QUOTED_VARIABLE_REGEX = this.createVariableRegex(cfg.variableTypes, this.createStringPattern(cfg.stringTypes));
+        this.INDEXED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(cfg.indexedPlaceholderTypes);
+        this.PLAIN_NAMED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(cfg.namedPlaceholderTypes, "[a-zA-Z0-9._$]+");
+        this.STRING_NAMED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(
+            cfg.namedPlaceholderTypes,
+            this.createStringPattern(cfg.stringTypes)
+        );
     }
 
     createReservedWordRegex(reservedWords) {
@@ -66,13 +71,16 @@ export default class Tokenizer {
         );
     }
 
-    createVariableRegex(variableTypes, pattern) {
-        if (variableTypes.length === 0) {
+    createPlaceholderRegex(types, pattern) {
+        if (_.isEmpty(types)) {
             return false;
         }
-        return new RegExp(
-            "^((?:" + variableTypes.map(_.escapeRegExp).join("|") + ")(?:" + pattern + "))\\S"
-        );
+        const typesRegex = types.map(_.escapeRegExp).join("|");
+
+        if (pattern) {
+            return new RegExp(`^((?:${typesRegex})(?:${pattern}))\\S`);
+        }
+        return new RegExp(`^(${typesRegex})\\S`);
     }
 
     /**
@@ -106,7 +114,7 @@ export default class Tokenizer {
             this.getStringToken(input) ||
             this.getOpenParenToken(input) ||
             this.getCloseParenToken(input) ||
-            this.getVariableToken(input) ||
+            this.getPlaceholderToken(input) ||
             this.getNumberToken(input) ||
             this.getReservedWordToken(input, previousToken) ||
             this.getWordToken(input) ||
@@ -165,23 +173,33 @@ export default class Tokenizer {
         });
     }
 
-    getVariableToken(input) {
-        return this.getPlainVariableToken(input) || this.getQuotedVariableToken(input);
+    getPlaceholderToken(input) {
+        return this.getPlainNamedPlaceholderToken(input) ||
+            this.getStringNamedPlaceholderToken(input) ||
+            this.getIndexedPlaceholderToken(input);
     }
 
-    getPlainVariableToken(input) {
+    getPlainNamedPlaceholderToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.VARIABLE,
-            regex: this.PLAIN_VARIABLE_REGEX
+            type: sqlTokenTypes.PLACEHOLDER,
+            regex: this.PLAIN_NAMED_PLACEHOLDER_REGEX
         });
     }
 
-    getQuotedVariableToken(input) {
+    getStringNamedPlaceholderToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.VARIABLE,
-            regex: this.QUOTED_VARIABLE_REGEX
+            type: sqlTokenTypes.PLACEHOLDER,
+            regex: this.STRING_NAMED_PLACEHOLDER_REGEX
+        });
+    }
+
+    getIndexedPlaceholderToken(input) {
+        return this.getTokenOnFirstMatch({
+            input,
+            type: sqlTokenTypes.PLACEHOLDER,
+            regex: this.INDEXED_PLACEHOLDER_REGEX
         });
     }
 
