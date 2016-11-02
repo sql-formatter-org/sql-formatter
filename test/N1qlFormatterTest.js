@@ -132,4 +132,54 @@ describe("N1qlFormatter", function() {
             "  type = 'actor' RETURNING tutorial.type\n"
         );
     });
+
+    it("recognizes $variables", function() {
+        const result = sqlFormatter.format(
+            "SELECT $variable, $'var name', $\"var name\", $`var name`;",
+            {language: "n1ql"}
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  $variable,\n" +
+            "  $'var name',\n" +
+            "  $\"var name\",\n" +
+            "  $`var name`;\n"
+        );
+    });
+
+    it("replaces $variables with param values", function() {
+        const result = sqlFormatter.format(
+            "SELECT $variable, $'var name', $\"var name\", $`var name`;", {
+                language: "n1ql",
+                params: {
+                    "variable": "\"variable value\"",
+                    "var name": "'var value'"
+                }
+            }
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  \"variable value\",\n" +
+            "  'var value',\n" +
+            "  'var value',\n" +
+            "  'var value';\n"
+        );
+    });
+
+    it("replaces $ numbered placeholders with param values", function() {
+        const result = sqlFormatter.format("SELECT $1, $2, $0;", {
+            language: "n1ql",
+            params: {
+                0: "first",
+                1: "second",
+                2: "third"
+            }
+        });
+        expect(result).toBe(
+            "SELECT\n" +
+            "  second,\n" +
+            "  third,\n" +
+            "  first;\n"
+        );
+    });
 });
