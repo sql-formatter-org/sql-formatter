@@ -1,6 +1,6 @@
 {
   "name": "sql-formatter",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "Formats whitespaces in a SQL query to make it more readable",
   "license": "MIT",
   "main": "lib/sqlFormatter.js",
@@ -63,7 +63,9 @@
     "webpack": "^1.13.1"
   },
   "jest": {
-    "testPathDirs": ["test"],
+    "testPathDirs": [
+      "test"
+    ],
     "testRegex": ".*Test",
     "collectCoverage": true
   }
