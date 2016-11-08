@@ -144,11 +144,7 @@ describe("StandardSqlFormatter", function() {
     it("replaces ? indexed placeholders with param values", function() {
         const result = sqlFormatter.format("SELECT ?, ?, ?;", {
             language: "sql",
-            params: {
-                0: "first",
-                1: "second",
-                2: "third"
-            }
+            params: ["first", "second", "third"]
         });
         expect(result).toBe(
             "SELECT\n" +
