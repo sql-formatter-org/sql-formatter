@@ -31,7 +31,7 @@ export default class Tokenizer {
         this.CLOSE_PAREN_REGEX = this.createParenRegex(cfg.closeParens);
 
         this.INDEXED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(cfg.indexedPlaceholderTypes);
-        this.PLAIN_NAMED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(cfg.namedPlaceholderTypes, "[a-zA-Z0-9._$]+");
+        this.IDENT_NAMED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(cfg.namedPlaceholderTypes, "[a-zA-Z0-9._$]+");
         this.STRING_NAMED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(
             cfg.namedPlaceholderTypes,
             this.createStringPattern(cfg.stringTypes)
@@ -174,16 +174,16 @@ export default class Tokenizer {
     }
 
     getPlaceholderToken(input) {
-        return this.getPlainNamedPlaceholderToken(input) ||
+        return this.getIndentNamedPlaceholderToken(input) ||
             this.getStringNamedPlaceholderToken(input) ||
             this.getIndexedPlaceholderToken(input);
     }
 
-    getPlainNamedPlaceholderToken(input) {
+    getIndentNamedPlaceholderToken(input) {
         return this.getTokenOnFirstMatch({
             input,
             type: sqlTokenTypes.PLACEHOLDER,
-            regex: this.PLAIN_NAMED_PLACEHOLDER_REGEX
+            regex: this.IDENT_NAMED_PLACEHOLDER_REGEX
         });
     }
 
