@@ -1,5 +1,5 @@
 import _ from "lodash";
-import sqlTokenTypes from "./tokenTypes";
+import tokenTypes from "./tokenTypes";
 import Indentation from "./Indentation";
 import InlineBlock from "./InlineBlock";
 import Params from "./Params";
@@ -37,34 +37,34 @@ export default class Formatter {
         let formattedQuery = "";
 
         tokens.forEach((token, index) => {
-            if (token.type === sqlTokenTypes.WHITESPACE) {
+            if (token.type === tokenTypes.WHITESPACE) {
                 return;
             }
-            else if (token.type === sqlTokenTypes.LINE_COMMENT) {
+            else if (token.type === tokenTypes.LINE_COMMENT) {
                 formattedQuery = this.formatLineComment(token, formattedQuery);
             }
-            else if (token.type === sqlTokenTypes.BLOCK_COMMENT) {
+            else if (token.type === tokenTypes.BLOCK_COMMENT) {
                 formattedQuery = this.formatBlockComment(token, formattedQuery);
             }
-            else if (token.type === sqlTokenTypes.RESERVED_TOPLEVEL) {
+            else if (token.type === tokenTypes.RESERVED_TOPLEVEL) {
                 formattedQuery = this.formatToplevelReservedWord(token, formattedQuery);
                 this.previousReservedWord = token;
             }
-            else if (token.type === sqlTokenTypes.RESERVED_NEWLINE) {
+            else if (token.type === tokenTypes.RESERVED_NEWLINE) {
                 formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
                 this.previousReservedWord = token;
             }
-            else if (token.type === sqlTokenTypes.RESERVED) {
+            else if (token.type === tokenTypes.RESERVED) {
                 formattedQuery = this.formatWithSpaces(token, formattedQuery);
                 this.previousReservedWord = token;
             }
-            else if (token.type === sqlTokenTypes.OPEN_PAREN) {
+            else if (token.type === tokenTypes.OPEN_PAREN) {
                 formattedQuery = this.formatOpeningParentheses(tokens, index, formattedQuery);
             }
-            else if (token.type === sqlTokenTypes.CLOSE_PAREN) {
+            else if (token.type === tokenTypes.CLOSE_PAREN) {
                 formattedQuery = this.formatClosingParentheses(token, formattedQuery);
             }
-            else if (token.type === sqlTokenTypes.PLACEHOLDER || token.type === sqlTokenTypes.PLACEHOLDER_STRING) {
+            else if (token.type === tokenTypes.PLACEHOLDER || token.type === tokenTypes.PLACEHOLDER_STRING) {
                 formattedQuery = this.formatPlaceholder(token, formattedQuery);
             }
             else if (token.value === ",") {
@@ -119,7 +119,7 @@ export default class Formatter {
     formatOpeningParentheses(tokens, index, query) {
         // Take out the preceding space unless there was whitespace there in the original query
         const previousToken = tokens[index - 1];
-        if (previousToken && previousToken.type !== sqlTokenTypes.WHITESPACE) {
+        if (previousToken && previousToken.type !== tokenTypes.WHITESPACE) {
             query = _.trimEnd(query);
         }
         query += tokens[index].value;

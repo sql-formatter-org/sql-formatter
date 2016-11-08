@@ -1,5 +1,5 @@
 import _ from "lodash";
-import sqlTokenTypes from "./tokenTypes";
+import tokenTypes from "./tokenTypes";
 
 export default class Tokenizer {
     /**
@@ -124,7 +124,7 @@ export default class Tokenizer {
     getWhitespaceToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.WHITESPACE,
+            type: tokenTypes.WHITESPACE,
             regex: this.WHITESPACE_REGEX
         });
     }
@@ -136,7 +136,7 @@ export default class Tokenizer {
     getLineCommentToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.LINE_COMMENT,
+            type: tokenTypes.LINE_COMMENT,
             regex: this.LINE_COMMENT_REGEX
         });
     }
@@ -144,7 +144,7 @@ export default class Tokenizer {
     getBlockCommentToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.BLOCK_COMMENT,
+            type: tokenTypes.BLOCK_COMMENT,
             regex: this.BLOCK_COMMENT_REGEX
         });
     }
@@ -152,7 +152,7 @@ export default class Tokenizer {
     getStringToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.STRING,
+            type: tokenTypes.STRING,
             regex: this.STRING_REGEX
         });
     }
@@ -160,7 +160,7 @@ export default class Tokenizer {
     getOpenParenToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.OPEN_PAREN,
+            type: tokenTypes.OPEN_PAREN,
             regex: this.OPEN_PAREN_REGEX
         });
     }
@@ -168,7 +168,7 @@ export default class Tokenizer {
     getCloseParenToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.CLOSE_PAREN,
+            type: tokenTypes.CLOSE_PAREN,
             regex: this.CLOSE_PAREN_REGEX
         });
     }
@@ -182,7 +182,7 @@ export default class Tokenizer {
     getIndentNamedPlaceholderToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.PLACEHOLDER,
+            type: tokenTypes.PLACEHOLDER,
             regex: this.IDENT_NAMED_PLACEHOLDER_REGEX
         });
     }
@@ -190,7 +190,7 @@ export default class Tokenizer {
     getStringNamedPlaceholderToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.PLACEHOLDER_STRING,
+            type: tokenTypes.PLACEHOLDER_STRING,
             regex: this.STRING_NAMED_PLACEHOLDER_REGEX
         });
     }
@@ -198,7 +198,7 @@ export default class Tokenizer {
     getIndexedPlaceholderToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.PLACEHOLDER,
+            type: tokenTypes.PLACEHOLDER,
             regex: this.INDEXED_PLACEHOLDER_REGEX
         });
     }
@@ -207,7 +207,7 @@ export default class Tokenizer {
     getNumberToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.NUMBER,
+            type: tokenTypes.NUMBER,
             regex: this.NUMBER_REGEX
         });
     }
@@ -216,7 +216,7 @@ export default class Tokenizer {
     getOperatorToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.OPERATOR,
+            type: tokenTypes.OPERATOR,
             regex: this.OPERATOR_REGEX
         });
     }
@@ -233,7 +233,7 @@ export default class Tokenizer {
     getToplevelReservedToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.RESERVED_TOPLEVEL,
+            type: tokenTypes.RESERVED_TOPLEVEL,
             regex: this.RESERVED_TOPLEVEL_REGEX
         });
     }
@@ -241,7 +241,7 @@ export default class Tokenizer {
     getNewlineReservedToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.RESERVED_NEWLINE,
+            type: tokenTypes.RESERVED_NEWLINE,
             regex: this.RESERVED_NEWLINE_REGEX
         });
     }
@@ -249,7 +249,7 @@ export default class Tokenizer {
     getPlainReservedToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.RESERVED,
+            type: tokenTypes.RESERVED,
             regex: this.RESERVED_PLAIN_REGEX
         });
     }
@@ -257,7 +257,7 @@ export default class Tokenizer {
     getWordToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.WORD,
+            type: tokenTypes.WORD,
             regex: this.WORD_REGEX
         });
     }
