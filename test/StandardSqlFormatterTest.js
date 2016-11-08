@@ -48,36 +48,6 @@ describe("StandardSqlFormatter", function() {
         );
     });
 
-    it("recognizes :variables", function() {
-        const result = sqlFormatter.format(
-            "SELECT :variable, :a1_2.3$, :'var name', :\"var name\", :`var name`, :[var name];"
-        );
-        expect(result).toBe(
-            "SELECT\n" +
-            "  :variable,\n" +
-            "  :a1_2.3$,\n" +
-            "  :'var name',\n" +
-            "  :\"var name\",\n" +
-            "  :`var name`,\n" +
-            "  :[var name];\n"
-        );
-    });
-
-    it("recognizes ?variables", function() {
-        const result = sqlFormatter.format(
-            "SELECT ?variable, ?a1_2.3$, ?'var name', ?\"var name\", ?`var name`, ?[var name];"
-        );
-        expect(result).toBe(
-            "SELECT\n" +
-            "  ?variable,\n" +
-            "  ?a1_2.3$,\n" +
-            "  ?'var name',\n" +
-            "  ?\"var name\",\n" +
-            "  ?`var name`,\n" +
-            "  ?[var name];\n"
-        );
-    });
-
     it("replaces @variables with param values", function() {
         const result = sqlFormatter.format(
             "SELECT @variable, @a1_2.3$, @'var name', @\"var name\", @`var name`, @[var name];",
@@ -101,6 +71,21 @@ describe("StandardSqlFormatter", function() {
         );
     });
 
+    it("recognizes :variables", function() {
+        const result = sqlFormatter.format(
+            "SELECT :variable, :a1_2.3$, :'var name', :\"var name\", :`var name`, :[var name];"
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  :variable,\n" +
+            "  :a1_2.3$,\n" +
+            "  :'var name',\n" +
+            "  :\"var name\",\n" +
+            "  :`var name`,\n" +
+            "  :[var name];\n"
+        );
+    });
+
     it("replaces :variables with param values", function() {
         const result = sqlFormatter.format(
             "SELECT :variable, :a1_2.3$, :'var name', :\"var name\", :`var name`, :[var name];",
@@ -121,6 +106,21 @@ describe("StandardSqlFormatter", function() {
             "  'var value',\n" +
             "  'var value',\n" +
             "  'var value';\n"
+        );
+    });
+
+    it("recognizes ?variables", function() {
+        const result = sqlFormatter.format(
+            "SELECT ?variable, ?a1_2.3$, ?'var name', ?\"var name\", ?`var name`, ?[var name];"
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  ?variable,\n" +
+            "  ?a1_2.3$,\n" +
+            "  ?'var name',\n" +
+            "  ?\"var name\",\n" +
+            "  ?`var name`,\n" +
+            "  ?[var name];\n"
         );
     });
 
