@@ -117,9 +117,9 @@ export default class Formatter {
 
     // Opening parentheses increase the block indent level and start a new line
     formatOpeningParentheses(tokens, index, query) {
-        // Take out the preceding space unless there was whitespace there in the original query
+        // Take out the preceding space unless there was whitespace there in the original query or another opening parens
         const previousToken = tokens[index - 1];
-        if (previousToken && previousToken.type !== tokenTypes.WHITESPACE) {
+        if (previousToken && previousToken.type !== tokenTypes.WHITESPACE && previousToken.type !== tokenTypes.OPEN_PAREN) {
             query = _.trimEnd(query);
         }
         query += tokens[index].value;

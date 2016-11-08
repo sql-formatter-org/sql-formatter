@@ -355,6 +355,22 @@ export default function behavesLikeSqlFormatter(language) {
         );
     });
 
+    it("formats long double parenthized queries to multiple lines", function() {
+        const result = format("((foo = '0123456789-0123456789-0123456789-0123456789'))");
+        expect(result).toBe(
+            "(\n" +
+            "  (\n" +
+            "    foo = '0123456789-0123456789-0123456789-0123456789'\n" +
+            "  )\n" +
+            ")\n"
+        );
+    });
+
+    it("formats short double parenthized queries to one line", function() {
+        const result = format("((foo = 'bar'))");
+        expect(result).toBe("((foo = 'bar'))\n");
+    });
+
     it("formats single-char operators", function() {
         expect(format("foo = bar")).toBe("foo = bar\n");
         expect(format("foo < bar")).toBe("foo < bar\n");
