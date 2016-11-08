@@ -190,7 +190,7 @@ export default class Tokenizer {
     getStringNamedPlaceholderToken(input) {
         return this.getTokenOnFirstMatch({
             input,
-            type: sqlTokenTypes.PLACEHOLDER,
+            type: sqlTokenTypes.PLACEHOLDER_STRING,
             regex: this.STRING_NAMED_PLACEHOLDER_REGEX
         });
     }

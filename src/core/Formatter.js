@@ -64,7 +64,7 @@ export default class Formatter {
             else if (token.type === sqlTokenTypes.CLOSE_PAREN) {
                 formattedQuery = this.formatClosingParentheses(token, formattedQuery);
             }
-            else if (token.type === sqlTokenTypes.PLACEHOLDER) {
+            else if (token.type === sqlTokenTypes.PLACEHOLDER || token.type === sqlTokenTypes.PLACEHOLDER_STRING) {
                 formattedQuery = this.formatPlaceholder(token, formattedQuery);
             }
             else if (token.value === ",") {
@@ -146,7 +146,7 @@ export default class Formatter {
     }
 
     formatPlaceholder(token, query) {
-        return query + this.params.get(token.value) + " ";
+        return query + this.params.get(token) + " ";
     }
 
     // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)

@@ -1,3 +1,5 @@
+import tokenTypes from "./tokenTypes";
+
 /**
  * Handles placeholder replacement with given params.
  */
@@ -12,17 +14,21 @@ export default class Params {
 
     /**
      * Returns param value that matches given placeholder with param key.
-     * @param {String} placeholder
+     * @param {Object} token
+     *   @param {String} type Option from tokenTypes
+     *   @param {String} value Placeholder value
      * @return {String} param
      */
-    get(placeholder) {
+    get({type, value}) {
         if (!this.params) {
-            return placeholder;
+            return value;
         }
-        const matches = placeholder.match(/\w+(\s+\w+)*/);
+        const key = type === tokenTypes.PLACEHOLDER_STRING ?
+            value.substring(2).slice(0, -1) :
+            value.substring(1);
 
-        if (matches) {
-            return this.params[matches[0]];
+        if (key) {
+            return this.params[key];
         }
         return this.params[this.index ++];
     }
