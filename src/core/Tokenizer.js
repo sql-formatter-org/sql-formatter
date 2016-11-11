@@ -30,7 +30,7 @@ export default class Tokenizer {
         this.OPEN_PAREN_REGEX = this.createParenRegex(cfg.openParens);
         this.CLOSE_PAREN_REGEX = this.createParenRegex(cfg.closeParens);
 
-        this.INDEXED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(cfg.indexedPlaceholderTypes);
+        this.INDEXED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(cfg.indexedPlaceholderTypes, "[0-9]*");
         this.IDENT_NAMED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(cfg.namedPlaceholderTypes, "[a-zA-Z0-9._$]+");
         this.STRING_NAMED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(
             cfg.namedPlaceholderTypes,
@@ -77,10 +77,7 @@ export default class Tokenizer {
         }
         const typesRegex = types.map(_.escapeRegExp).join("|");
 
-        if (pattern) {
-            return new RegExp(`^((?:${typesRegex})(?:${pattern}))\\S`);
-        }
-        return new RegExp(`^(${typesRegex})\\S`);
+        return new RegExp(`^((?:${typesRegex})(?:${pattern}))`);
     }
 
     /**
@@ -174,33 +171,41 @@ export default class Tokenizer {
     }
 
     getPlaceholderToken(input) {
-        return this.getIndentNamedPlaceholderToken(input) ||
+        return this.getIdentNamedPlaceholderToken(input) ||
             this.getStringNamedPlaceholderToken(input) ||
             this.getIndexedPlaceholderToken(input);
     }
 
-    getIndentNamedPlaceholderToken(input) {
-        return this.getTokenOnFirstMatch({
+    getIdentNamedPlaceholderToken(input) {
+        return this.getPlaceholderTokenWithKey({
             input,
-            type: tokenTypes.PLACEHOLDER,
-            regex: this.IDENT_NAMED_PLACEHOLDER_REGEX
+            regex: this.IDENT_NAMED_PLACEHOLDER_REGEX,
+            parseKey: (v) => v.slice(1)
         });
     }
 
     getStringNamedPlaceholderToken(input) {
-        return this.getTokenOnFirstMatch({
+        return this.getPlaceholderTokenWithKey({
             input,
-            type: tokenTypes.PLACEHOLDER_STRING,
-            regex: this.STRING_NAMED_PLACEHOLDER_REGEX
+            regex: this.STRING_NAMED_PLACEHOLDER_REGEX,
+            parseKey: (v) => v.slice(2, -1).replace(/\\/g, "")
         });
     }
 
     getIndexedPlaceholderToken(input) {
-        return this.getTokenOnFirstMatch({
+        return this.getPlaceholderTokenWithKey({
             input,
-            type: tokenTypes.PLACEHOLDER,
-            regex: this.INDEXED_PLACEHOLDER_REGEX
+            regex: this.INDEXED_PLACEHOLDER_REGEX,
+            parseKey: (v) => v.slice(1)
         });
+    }
+
+    getPlaceholderTokenWithKey({input, regex, parseKey}) {
+        const token = this.getTokenOnFirstMatch({input, regex, type: tokenTypes.PLACEHOLDER});
+        if (token) {
+            token.key = parseKey(token.value);
+        }
+        return token;
     }
 
     // Decimal, binary, or hex numbers

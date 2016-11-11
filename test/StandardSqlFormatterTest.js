@@ -88,13 +88,14 @@ describe("StandardSqlFormatter", function() {
 
     it("replaces :variables with param values", function() {
         const result = sqlFormatter.format(
-            "SELECT :variable, :a1_2.3$, :'var name', :\"var name\", :`var name`, :[var name];",
+            "SELECT :variable, :a1_2.3$, :'var name', :\"var name\", :`var name`, :[var name], :'escaped\\-var';",
             {
                 language: "sql",
                 params: {
                     "variable": "\"variable value\"",
                     "a1_2.3$": "'weird value'",
-                    "var name": "'var value'"
+                    "var name": "'var value'",
+                    "escaped-var": "'weirder value'"
                 }
             }
         );
@@ -105,22 +106,20 @@ describe("StandardSqlFormatter", function() {
             "  'var value',\n" +
             "  'var value',\n" +
             "  'var value',\n" +
-            "  'var value';\n"
+            "  'var value',\n" +
+            "  'weirder value';\n"
         );
     });
 
-    it("recognizes ?variables", function() {
-        const result = sqlFormatter.format(
-            "SELECT ?variable, ?a1_2.3$, ?'var name', ?\"var name\", ?`var name`, ?[var name];"
-        );
+    it("recognizes ?[0-9]* placeholders", function() {
+        const result = sqlFormatter.format("SELECT ?1, ?25, ?;", {
+            language: "sql"
+        });
         expect(result).toBe(
             "SELECT\n" +
-            "  ?variable,\n" +
-            "  ?a1_2.3$,\n" +
-            "  ?'var name',\n" +
-            "  ?\"var name\",\n" +
-            "  ?`var name`,\n" +
-            "  ?[var name];\n"
+            "  ?1,\n" +
+            "  ?25,\n" +
+            "  ?;\n"
         );
     });
 

@@ -64,7 +64,7 @@ export default class Formatter {
             else if (token.type === tokenTypes.CLOSE_PAREN) {
                 formattedQuery = this.formatClosingParentheses(token, formattedQuery);
             }
-            else if (token.type === tokenTypes.PLACEHOLDER || token.type === tokenTypes.PLACEHOLDER_STRING) {
+            else if (token.type === tokenTypes.PLACEHOLDER) {
                 formattedQuery = this.formatPlaceholder(token, formattedQuery);
             }
             else if (token.value === ",") {
