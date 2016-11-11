@@ -50,13 +50,14 @@ describe("StandardSqlFormatter", function() {
 
     it("replaces @variables with param values", function() {
         const result = sqlFormatter.format(
-            "SELECT @variable, @a1_2.3$, @'var name', @\"var name\", @`var name`, @[var name];",
+            "SELECT @variable, @a1_2.3$, @'var name', @\"var name\", @`var name`, @[var name], @'var\\name';",
             {
                 language: "sql",
                 params: {
                     "variable": "\"variable value\"",
                     "a1_2.3$": "'weird value'",
-                    "var name": "'var value'"
+                    "var name": "'var value'",
+                    "var\\name": "'var\\ value'"
                 }
             }
         );
@@ -67,7 +68,8 @@ describe("StandardSqlFormatter", function() {
             "  'var value',\n" +
             "  'var value',\n" +
             "  'var value',\n" +
-            "  'var value';\n"
+            "  'var value',\n" +
+            "  'var\\ value';\n"
         );
     });
 
@@ -88,14 +90,14 @@ describe("StandardSqlFormatter", function() {
 
     it("replaces :variables with param values", function() {
         const result = sqlFormatter.format(
-            "SELECT :variable, :a1_2.3$, :'var name', :\"var name\", :`var name`, :[var name], :'escaped\\-var';",
+            "SELECT :variable, :a1_2.3$, :'var name', :\"var name\", :`var name`, :[var name], :'escaped \\'var\\'';",
             {
                 language: "sql",
                 params: {
                     "variable": "\"variable value\"",
                     "a1_2.3$": "'weird value'",
                     "var name": "'var value'",
-                    "escaped-var": "'weirder value'"
+                    "escaped 'var'": "'weirder value'"
                 }
             }
         );
