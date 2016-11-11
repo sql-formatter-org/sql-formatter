@@ -45,6 +45,29 @@ Currently just two SQL dialects are supported:
 - **sql** - [Standard SQL][]
 - **n1ql** - [Couchbase N1QL][]
 
+### Placeholders replacement
+
+```js
+// Named placeholders
+sqlFormatter.format("SELECT @foo FROM table1", {
+    params: {foo: "bar"}
+}));
+
+// Indexed placeholders
+sqlFormatter.format("SELECT ? FROM table1", {
+    params: ["bar"]
+}));
+```
+
+Both result in:
+
+```
+SELECT
+  bar
+FROM
+  table1
+```
+
 ## Usage without NPM
 
 If you don't use a module bundler, clone the repository, run `npm install` and grab a file from `/dist` directory to use inside a `<script>` tag.
