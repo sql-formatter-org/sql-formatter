@@ -188,7 +188,7 @@ export default class Tokenizer {
         return this.getPlaceholderTokenWithKey({
             input,
             regex: this.STRING_NAMED_PLACEHOLDER_REGEX,
-            parseKey: (v) => this.getEscapedPlaceholderKey({key: v.slice(2, -1), stringChar: v.slice(-1)})
+            parseKey: (v) => this.getEscapedPlaceholderKey({key: v.slice(2, -1), quoteChar: v.slice(-1)})
         });
     }
 
@@ -208,8 +208,8 @@ export default class Tokenizer {
         return token;
     }
 
-    getEscapedPlaceholderKey({key, stringChar}) {
-        return key.replace(new RegExp(_.escapeRegExp("\\") + stringChar, "g"), stringChar);
+    getEscapedPlaceholderKey({key, quoteChar}) {
+        return key.replace(new RegExp(_.escapeRegExp("\\") + quoteChar, "g"), quoteChar);
     }
 
     // Decimal, binary, or hex numbers
