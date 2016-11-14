@@ -90,14 +90,16 @@ describe("StandardSqlFormatter", function() {
 
     it("replaces :variables with param values", function() {
         const result = sqlFormatter.format(
-            "SELECT :variable, :a1_2.3$, :'var name', :\"var name\", :`var name`, :[var name], :'escaped \\'var\\'';",
+            "SELECT :variable, :a1_2.3$, :'var name', :\"var name\", :`var name`," +
+            " :[var name], :'escaped \\'var\\'', :\"^*& weird \\\" var   \";",
             {
                 language: "sql",
                 params: {
                     "variable": "\"variable value\"",
                     "a1_2.3$": "'weird value'",
                     "var name": "'var value'",
-                    "escaped 'var'": "'weirder value'"
+                    "escaped 'var'": "'weirder value'",
+                    "^*& weird \" var   ": "'super weird value'"
                 }
             }
         );
@@ -109,7 +111,8 @@ describe("StandardSqlFormatter", function() {
             "  'var value',\n" +
             "  'var value',\n" +
             "  'var value',\n" +
-            "  'weirder value';\n"
+            "  'weirder value',\n" +
+            "  'super weird value';\n"
         );
     });
 
