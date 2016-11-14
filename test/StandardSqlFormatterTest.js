@@ -35,11 +35,12 @@ describe("StandardSqlFormatter", function() {
 
     it("recognizes @variables", function() {
         const result = sqlFormatter.format(
-            "SELECT @variable, @'var name', @\"var name\", @`var name`, @[var name];"
+            "SELECT @variable, @a1_2.3$, @'var name', @\"var name\", @`var name`, @[var name];"
         );
         expect(result).toBe(
             "SELECT\n" +
             "  @variable,\n" +
+            "  @a1_2.3$,\n" +
             "  @'var name',\n" +
             "  @\"var name\",\n" +
             "  @`var name`,\n" +
@@ -47,17 +48,113 @@ describe("StandardSqlFormatter", function() {
         );
     });
 
+    it("replaces @variables with param values", function() {
+        const result = sqlFormatter.format(
+            "SELECT @variable, @a1_2.3$, @'var name', @\"var name\", @`var name`, @[var name], @'var\\name';",
+            {
+                language: "sql",
+                params: {
+                    "variable": "\"variable value\"",
+                    "a1_2.3$": "'weird value'",
+                    "var name": "'var value'",
+                    "var\\name": "'var\\ value'"
+                }
+            }
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  \"variable value\",\n" +
+            "  'weird value',\n" +
+            "  'var value',\n" +
+            "  'var value',\n" +
+            "  'var value',\n" +
+            "  'var value',\n" +
+            "  'var\\ value';\n"
+        );
+    });
+
     it("recognizes :variables", function() {
         const result = sqlFormatter.format(
-            "SELECT :variable, :'var name', :\"var name\", :`var name`, :[var name];"
+            "SELECT :variable, :a1_2.3$, :'var name', :\"var name\", :`var name`, :[var name];"
         );
         expect(result).toBe(
             "SELECT\n" +
             "  :variable,\n" +
+            "  :a1_2.3$,\n" +
             "  :'var name',\n" +
             "  :\"var name\",\n" +
             "  :`var name`,\n" +
             "  :[var name];\n"
+        );
+    });
+
+    it("replaces :variables with param values", function() {
+        const result = sqlFormatter.format(
+            "SELECT :variable, :a1_2.3$, :'var name', :\"var name\", :`var name`," +
+            " :[var name], :'escaped \\'var\\'', :\"^*& weird \\\" var   \";",
+            {
+                language: "sql",
+                params: {
+                    "variable": "\"variable value\"",
+                    "a1_2.3$": "'weird value'",
+                    "var name": "'var value'",
+                    "escaped 'var'": "'weirder value'",
+                    "^*& weird \" var   ": "'super weird value'"
+                }
+            }
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  \"variable value\",\n" +
+            "  'weird value',\n" +
+            "  'var value',\n" +
+            "  'var value',\n" +
+            "  'var value',\n" +
+            "  'var value',\n" +
+            "  'weirder value',\n" +
+            "  'super weird value';\n"
+        );
+    });
+
+    it("recognizes ?[0-9]* placeholders", function() {
+        const result = sqlFormatter.format("SELECT ?1, ?25, ?;", {
+            language: "sql"
+        });
+        expect(result).toBe(
+            "SELECT\n" +
+            "  ?1,\n" +
+            "  ?25,\n" +
+            "  ?;\n"
+        );
+    });
+
+    it("replaces ? numbered placeholders with param values", function() {
+        const result = sqlFormatter.format("SELECT ?1, ?2, ?0;", {
+            language: "sql",
+            params: {
+                0: "first",
+                1: "second",
+                2: "third"
+            }
+        });
+        expect(result).toBe(
+            "SELECT\n" +
+            "  second,\n" +
+            "  third,\n" +
+            "  first;\n"
+        );
+    });
+
+    it("replaces ? indexed placeholders with param values", function() {
+        const result = sqlFormatter.format("SELECT ?, ?, ?;", {
+            language: "sql",
+            params: ["first", "second", "third"]
+        });
+        expect(result).toBe(
+            "SELECT\n" +
+            "  first,\n" +
+            "  second,\n" +
+            "  third;\n"
         );
     });
 });

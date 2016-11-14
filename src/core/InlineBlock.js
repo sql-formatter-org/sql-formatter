@@ -1,4 +1,4 @@
-import sqlTokenTypes from "./tokenTypes";
+import tokenTypes from "./tokenTypes";
 
 const INLINE_MAX_LENGTH = 50;
 
@@ -63,10 +63,10 @@ export default class InlineBlock {
                 return false;
             }
 
-            if (token.type === sqlTokenTypes.OPEN_PAREN) {
+            if (token.type === tokenTypes.OPEN_PAREN) {
                 level++;
             }
-            else if (token.type === sqlTokenTypes.CLOSE_PAREN) {
+            else if (token.type === tokenTypes.CLOSE_PAREN) {
                 level--;
                 if (level === 0) {
                     return true;
@@ -83,10 +83,10 @@ export default class InlineBlock {
     // Reserved words that cause newlines, comments and semicolons
     // are not allowed inside inline parentheses block
     isForbiddenToken({type, value}) {
-        return type === sqlTokenTypes.RESERVED_TOPLEVEL ||
-            type === sqlTokenTypes.RESERVED_NEWLINE ||
-            type === sqlTokenTypes.COMMENT ||
-            type === sqlTokenTypes.BLOCK_COMMENT ||
+        return type === tokenTypes.RESERVED_TOPLEVEL ||
+            type === tokenTypes.RESERVED_NEWLINE ||
+            type === tokenTypes.COMMENT ||
+            type === tokenTypes.BLOCK_COMMENT ||
             value === ";";
     }
 }

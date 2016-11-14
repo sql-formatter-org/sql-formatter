@@ -53,7 +53,7 @@ export default class N1qlFormatter {
                 stringTypes: [`""`, "''", "``"],
                 openParens: ["(", "[", "{"],
                 closeParens: [")", "]", "}"],
-                variableTypes: [],
+                namedPlaceholderTypes: ["$"]
             });
         }
         return new Formatter(this.cfg, tokenizer).format(query);
