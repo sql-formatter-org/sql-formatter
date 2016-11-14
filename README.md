@@ -49,13 +49,13 @@ Currently just two SQL dialects are supported:
 
 ```js
 // Named placeholders
-sqlFormatter.format("SELECT @foo FROM table1", {
-    params: {foo: "bar"}
+sqlFormatter.format("SELECT * FROM tbl WHERE foo = @foo", {
+    params: {foo: "'bar'"}
 }));
 
 // Indexed placeholders
-sqlFormatter.format("SELECT ? FROM table1", {
-    params: ["bar"]
+sqlFormatter.format("SELECT * FROM tbl WHERE foo = ?", {
+    params: ["'bar'"]
 }));
 ```
 
@@ -63,9 +63,11 @@ Both result in:
 
 ```
 SELECT
-  bar
+  *
 FROM
-  table1
+  tbl
+WHERE
+  foo = 'bar'
 ```
 
 ## Usage without NPM
