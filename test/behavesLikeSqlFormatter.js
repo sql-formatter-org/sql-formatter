@@ -24,6 +24,16 @@ export default function behavesLikeSqlFormatter(language) {
         return sqlFormatter.format(query, {language});
     }
 
+    it("formats simple SET SCHEMA queries", function() {
+        const result = format("SET SCHEMA tetrisdb; SET CURRENT SCHEMA bingodb;");
+        expect(result).toBe(
+            "SET SCHEMA\n" +
+            "  tetrisdb;\n" +
+            "SET CURRENT SCHEMA\n" +
+            "  bingodb;\n"
+        );
+    });
+
     it("formats simple SELECT query", function() {
         const result = format("SELECT count(*),Column1 FROM Table1;");
         expect(result).toBe(

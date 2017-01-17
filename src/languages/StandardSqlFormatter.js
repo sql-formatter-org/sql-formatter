@@ -39,8 +39,9 @@ const reservedWords = [
 ];
 
 const reservedToplevelWords = [
-    "SELECT", "FROM", "WHERE", "SET", "ORDER BY", "GROUP BY", "LIMIT", "ALTER TABLE", "ALTER COLUMN", "INSERT INTO",
-    "VALUES", "UPDATE", "HAVING", "ADD", "AFTER", "DELETE FROM", "UNION ALL", "UNION", "EXCEPT", "INTERSECT", "MODIFY"
+    "SET SCHEMA", "SET CURRENT SCHEMA", "SELECT", "FROM", "WHERE", "SET", "ORDER BY", "GROUP BY", "LIMIT",
+    "ALTER TABLE", "ALTER COLUMN", "INSERT INTO", "VALUES", "UPDATE", "HAVING", "ADD", "AFTER", "DELETE FROM",
+    "UNION ALL", "UNION", "EXCEPT", "INTERSECT", "MODIFY"
 ];
 
 const reservedNewlineWords = [
