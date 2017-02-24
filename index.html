@@ -108,21 +108,23 @@
 
     <script type="text/javascript" src="https://unpkg.com/sql-formatter@1.1.2/dist/sql-formatter.min.js"></script>
     <script>
-        let language = document.getElementById('language');
-        let input = document.getElementById('input');
-        let output = document.getElementById('output');
+        (function() {
+            let language = document.getElementById('language');
+            let input = document.getElementById('input');
+            let output = document.getElementById('output');
 
-        input.addEventListener('input', format);
-        language.addEventListener('change', format);
+            input.addEventListener('input', format);
+            language.addEventListener('change', format);
 
-        function format() {
-            console.time('formatting');
+            function format() {
+                console.time('formatting');
 
-            output.value = sqlFormatter.format(input.value, {language: language.options[language.selectedIndex].value});
+                output.value = sqlFormatter.format(input.value, {language: language.options[language.selectedIndex].value});
 
-            console.timeEnd('formatting');
-        }
-        format();
+                console.timeEnd('formatting');
+            }
+            format();
+        })
     </script>
 </body>
 </html>
