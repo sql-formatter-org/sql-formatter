@@ -157,4 +157,63 @@ describe("StandardSqlFormatter", function() {
             "  third;\n"
         );
     });
+
+    it("formats query with GO batch separator", function() {
+        const result = sqlFormatter.format("SELECT 1 GO SELECT 2", {
+            language: "sql",
+            params: ["first", "second", "third"]
+        });
+        expect(result).toBe(
+            "SELECT\n" +
+            "  1\n" +
+            "GO\n" +
+            "SELECT\n" +
+            "  2\n"
+        );
+    });
+
+    it("formats SELECT query with CROSS JOIN", function() {
+        const result = sqlFormatter.format("SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t", {
+            language: "sql",
+            params: ["first", "second", "third"]
+        });
+        expect(result).toBe(
+            "SELECT\n" +
+            "  a,\n" +
+            "  b\n" +
+            "FROM\n" +
+            "  t\n" +
+            "  CROSS JOIN t2 on t.id = t2.id_t\n"
+        );
+    });
+
+    it("formats SELECT query with CROSS APPLY", function() {
+        const result = sqlFormatter.format("SELECT a, b FROM t CROSS APPLY fn(t.id)", {
+            language: "sql",
+            params: ["first", "second", "third"]
+        });
+        expect(result).toBe(
+            "SELECT\n" +
+            "  a,\n" +
+            "  b\n" +
+            "FROM\n" +
+            "  t\n" +
+            "  CROSS APPLY fn(t.id)\n"
+        );
+    });
+
+    it("formats SELECT query with OUTER APPLY", function() {
+        const result = sqlFormatter.format("SELECT a, b FROM t OUTER APPLY fn(t.id)", {
+            language: "sql",
+            params: ["first", "second", "third"]
+        });
+        expect(result).toBe(
+            "SELECT\n" +
+            "  a,\n" +
+            "  b\n" +
+            "FROM\n" +
+            "  t\n" +
+            "  OUTER APPLY fn(t.id)\n"
+        );
+    });
 });
