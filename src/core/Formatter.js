@@ -73,6 +73,9 @@ export default class Formatter {
             else if (token.value === ":") {
                 formattedQuery = this.formatWithSpaceAfter(token, formattedQuery);
             }
+            else if (token.value === "N") {
+                formattedQuery = this.formatWithSpaceBefore(token, formattedQuery);
+            }
             else if (token.value === "." || token.value === ";") {
                 formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
             }
@@ -164,8 +167,13 @@ export default class Formatter {
         }
     }
 
+    formatWithSpaceBefore(token, query) {
+        return _.trimEnd(query) + " " + token.value;
+
+    }
+
     formatWithSpaceAfter(token, query) {
-        return _.trimEnd(query) + token.value + " ";
+        return this.formatWithoutSpaces(token, _.trimEnd(query)) + " ";
     }
 
     formatWithoutSpaces(token, query) {
