@@ -5,10 +5,10 @@ import sqlFormatter from "./../src/sqlFormatter";
  * @param {String} language
  */
 export default function behavesLikeSqlFormatter(language) {
-    it("uses given indent config for indention", function() {
+    it("uses given indent config for indention", function () {
         const result = sqlFormatter.format(
             "SELECT count(*),Column1 FROM Table1;",
-            {language, indent: "    "}
+            { language, indent: "    " }
         );
 
         expect(result).toBe(
@@ -60,7 +60,7 @@ export default function behavesLikeSqlFormatter(language) {
         );
     });
 
-    it("formats SELECT with complex WHERE", function() {
+    it("formats SELECT with complex WHERE", function () {
         const result = format(
             "SELECT * FROM foo WHERE Column1 = 'testing' " +
             "AND ( (Column2 = Column3 OR Column4 >= NOW()) );"
@@ -72,6 +72,27 @@ export default function behavesLikeSqlFormatter(language) {
             "  foo\n" +
             "WHERE\n" +
             "  Column1 = 'testing'\n" +
+            "  AND (\n" +
+            "    (\n" +
+            "      Column2 = Column3\n" +
+            "      OR Column4 >= NOW()\n" +
+            "    )\n" +
+            "  );\n"
+        );
+    });
+
+    it("formats SELECT with complex WHERE with national characters (MSSQL)", function () {
+        const result = format(
+            "SELECT * FROM foo WHERE Column1 = N'testing' " +
+            "AND ( (Column2 = Column3 OR Column4 >= NOW()) );"
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  *\n" +
+            "FROM\n" +
+            "  foo\n" +
+            "WHERE\n" +
+            "  Column1 = N'testing'\n" +
             "  AND (\n" +
             "    (\n" +
             "      Column2 = Column3\n" +
