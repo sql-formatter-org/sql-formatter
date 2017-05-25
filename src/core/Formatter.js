@@ -102,12 +102,12 @@ export default class Formatter {
 
         this.indentation.increaseToplevel();
 
-        query += this.equalizeWhitespace(token.value);
+        query += this.equalizeWhitespace(this.formatReservedWords(token.value));
         return this.addNewline(query);
     }
 
     formatNewlineReservedWord(token, query) {
-        return this.addNewline(query) + this.equalizeWhitespace(token.value) + " ";
+        return this.addNewline(query) + this.equalizeWhitespace(this.formatReservedWords(token.value)) + " ";
     }
 
     // Replace any sequence of whitespace characters with single space
@@ -173,7 +173,18 @@ export default class Formatter {
     }
 
     formatWithSpaces(token, query) {
-        return query + token.value + " ";
+        let value = token.value;
+        if (token.type === 'reserved') {
+            value = this.formatReservedWords(value)
+        }
+        return query + value + " ";
+    }
+
+    formatReservedWords(value) {
+        if (this.cfg.uppercase) {
+            return value.toUpperCase();
+        }
+        return value;
     }
 
     addNewline(query) {

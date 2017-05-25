@@ -20,8 +20,8 @@ export default function behavesLikeSqlFormatter(language) {
         );
     });
 
-    function format(query) {
-        return sqlFormatter.format(query, {language});
+    function format(query, cfg = {}) {
+        return sqlFormatter.format(query, {...cfg, language});
     }
 
     it("formats simple SET SCHEMA queries", function() {
@@ -160,6 +160,23 @@ export default function behavesLikeSqlFormatter(language) {
             "WHERe\n" +
             "  a > 1\n" +
             "  and b = 3\n"
+        );
+    });
+
+    it("with options, allows setting of case of keywords", function() {
+        const result = format(
+            "select distinct * frOM foo left join bar WHERe a > 1 and b = 3",
+            { uppercase: true }
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  DISTINCT *\n" +
+            "FROM\n" +
+            "  foo\n" +
+            "  LEFT JOIN bar\n" +
+            "WHERE\n" +
+            "  a > 1\n" +
+            "  AND b = 3\n"
         );
     });
 

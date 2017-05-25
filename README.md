@@ -37,6 +37,7 @@ You can also pass in configuration options:
 sqlFormatter.format("SELECT *", {
     language: "n1ql" // Defaults to "sql"
     indent: "    "   // Defaults to two spaces
+    uppercase: true  // Defaultd to false
 });
 ```
 
