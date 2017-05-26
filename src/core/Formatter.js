@@ -164,11 +164,6 @@ export default class Formatter {
         }
     }
 
-    formatWithSpaceBefore(token, query) {
-        return _.trimEnd(query) + " " + token.value;
-
-    }
-
     formatWithSpaceAfter(token, query) {
         return this.formatWithoutSpaces(token, _.trimEnd(query)) + " ";
     }
