@@ -202,6 +202,67 @@ describe("StandardSqlFormatter", function() {
         );
     });
 
+    it("formats simple SELECT", function() {
+        const result = sqlFormatter.format("SELECT 'value'", );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  'value'\n"
+        );
+    });
+
+    it("formats simple SELECT", function() {
+        const result = sqlFormatter.format(
+            "SELECT N'value';"
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  N'value';\n"
+        );
+    });
+    
+    it("formats SELECT with complex WHERE", function() {
+        const result = sqlFormatter.format(
+            "SELECT * FROM foo WHERE Column1 = 'testing' " +
+            "AND ( (Column2 = Column3 OR Column4 >= NOW()) );"
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  *\n" +
+            "FROM\n" +
+            "  foo\n" +
+            "WHERE\n" +
+            "  Column1 = 'testing'\n" +
+            "  AND (\n" +
+            "    (\n" +
+            "      Column2 = Column3\n" +
+            "      OR Column4 >= NOW()\n" +
+            "    )\n" +
+            "  );\n"
+        );
+    });
+
+
+    it("formats SELECT with complex WHERE with national characters (MSSQL)", function() {
+        const result = sqlFormatter.format(
+            "SELECT * FROM foo WHERE Column1 = N'testing' " +
+            "AND ( (Column2 = Column3 OR Column4 >= NOW()) );"
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  *\n" +
+            "FROM\n" +
+            "  foo\n" +
+            "WHERE\n" +
+            "  Column1 = N'testing'\n" +
+            "  AND (\n" +
+            "    (\n" +
+            "      Column2 = Column3\n" +
+            "      OR Column4 >= NOW()\n" +
+            "    )\n" +
+            "  );\n"
+        );
+    });
+
     it("formats SELECT query with OUTER APPLY", function() {
         const result = sqlFormatter.format("SELECT a, b FROM t OUTER APPLY fn(t.id)", {
             language: "sql",
