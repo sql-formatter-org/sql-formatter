@@ -241,7 +241,6 @@ describe("StandardSqlFormatter", function() {
         );
     });
 
-
     it("formats SELECT with complex WHERE with national characters (MSSQL)", function() {
         const result = sqlFormatter.format(
             "SELECT * FROM foo WHERE Column1 = N'testing' " +
