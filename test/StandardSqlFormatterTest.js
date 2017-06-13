@@ -210,7 +210,7 @@ describe("StandardSqlFormatter", function() {
         );
     });
 
-    it("formats simple SELECT", function() {
+    it("formats simple SELECT with national character (MSSQL)", function() {
         const result = sqlFormatter.format(
             "SELECT N'value';"
         );
@@ -219,7 +219,7 @@ describe("StandardSqlFormatter", function() {
             "  N'value';\n"
         );
     });
-    
+
     it("formats SELECT with complex WHERE", function() {
         const result = sqlFormatter.format(
             "SELECT * FROM foo WHERE Column1 = 'testing' " +
