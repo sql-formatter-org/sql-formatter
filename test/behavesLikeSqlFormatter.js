@@ -432,4 +432,10 @@ export default function behavesLikeSqlFormatter(language) {
         expect(format("'foo \\' JOIN bar'")).toBe("'foo \\' JOIN bar'\n");
         expect(format("`foo `` JOIN bar`")).toBe("`foo `` JOIN bar`\n");
     });
+
+    it("formats postgres specific operators", function() {
+        expect(format("column::int")).toBe("column :: int\n");
+        expect(format("v->2")).toBe("v -> 2\n");
+        expect(format("v->>2")).toBe( "v ->> 2\n");
+    });
 }
