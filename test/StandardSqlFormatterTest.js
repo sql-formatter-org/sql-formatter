@@ -203,32 +203,21 @@ describe("StandardSqlFormatter", function() {
     });
 
     it("formats simple SELECT", function() {
-        const result = sqlFormatter.format("SELECT 'value'", );
+        const result = sqlFormatter.format("SELECT N, M FROM t");
         expect(result).toBe(
             "SELECT\n" +
-            "  'value'\n"
+            "  N,\n" +
+            "  M\n" +
+            "FROM\n" +
+            "  t\n"
         );
     });
 
-    it("formats SELECT with complex WHERE", function() {
-        const result = sqlFormatter.format(
-            "SELECT * FROM foo WHERE Column1 = N'testing' AND Column2 = 'testing'" +
-            "AND ( (Column3 = Column4 OR Column5 >= NOW()) );"
-        );
+    it("formats simple SELECT with national characters (MSSQL)", function() {
+        const result = sqlFormatter.format("SELECT N'value'");
         expect(result).toBe(
             "SELECT\n" +
-            "  *\n" +
-            "FROM\n" +
-            "  foo\n" +
-            "WHERE\n" +
-            "  Column1 = N'testing'\n" +
-            "  AND Column2 = 'testing'\n" +
-            "  AND (\n" +
-            "    (\n" +
-            "      Column3 = Column4\n" +
-            "      OR Column5 >= NOW()\n" +
-            "    )\n" +
-            "  );\n"
+            "  N'value'\n"
         );
     });
 

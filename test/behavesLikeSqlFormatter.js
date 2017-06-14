@@ -60,6 +60,27 @@ export default function behavesLikeSqlFormatter(language) {
         );
     });
 
+    it("formats SELECT with complex WHERE", function() {
+        const result = sqlFormatter.format(
+            "SELECT * FROM foo WHERE Column1 = 'testing'" +
+            "AND ( (Column2 = Column3 OR Column4 >= NOW()) );"
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  *\n" +
+            "FROM\n" +
+            "  foo\n" +
+            "WHERE\n" +
+            "  Column1 = 'testing'\n" +
+            "  AND (\n" +
+            "    (\n" +
+            "      Column2 = Column3\n" +
+            "      OR Column4 >= NOW()\n" +
+            "    )\n" +
+            "  );\n"
+        );
+    });
+
     it("formats SELECT with toplevel reserved words", function() {
         const result = format(
             "SELECT * FROM foo WHERE name = 'John' GROUP BY some_column " +
