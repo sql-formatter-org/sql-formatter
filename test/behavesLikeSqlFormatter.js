@@ -8,7 +8,7 @@ export default function behavesLikeSqlFormatter(language) {
     it("uses given indent config for indention", function() {
         const result = sqlFormatter.format(
             "SELECT count(*),Column1 FROM Table1;",
-            { language, indent: "    " }
+            {language, indent: "    "}
         );
 
         expect(result).toBe(
