@@ -1,3 +1,4 @@
+import Db2Formatter from "./languages/Db2Formatter";
 import N1qlFormatter from "./languages/N1qlFormatter";
 import StandardSqlFormatter from "./languages/StandardSqlFormatter";
 
@@ -16,6 +17,8 @@ export default {
         cfg = cfg || {};
 
         switch (cfg.language) {
+            case "db2":
+                return new Db2Formatter(cfg).format(query);
             case "n1ql":
                 return new N1qlFormatter(cfg).format(query);
             default:
