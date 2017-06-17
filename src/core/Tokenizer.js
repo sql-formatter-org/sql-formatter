@@ -15,7 +15,7 @@ export default class Tokenizer {
      *  @param {String[]} cfg.lineCommentTypes Line comments to enable, like # and --
      */
     constructor(cfg) {
-        this.WORD_REGEX = /^(\w+)/;
+        this.WORD_REGEX = /^([\w|#|@]+)/;
         this.WHITESPACE_REGEX = /^(\s+)/;
         this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
         this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|.)/;
@@ -41,7 +41,7 @@ export default class Tokenizer {
     }
 
     createLineCommentRegex(lineCommentTypes) {
-        return new RegExp(`^((?:${lineCommentTypes.map(c => _.escapeRegExp(c)).join("|")}).*?(?:\n|$))`);
+        return new RegExp(`^((?:${lineCommentTypes.map(c => _.escapeRegExp(c)).join("|")}).*?(?:\n|$))`)
     }
 
     createReservedWordRegex(reservedWords) {

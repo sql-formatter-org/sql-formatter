@@ -20,6 +20,22 @@ describe("Db2Formatter", function() {
         );
     });
 
+    it("formats only -- as a line comment", function() {
+        const result = sqlFormatter.format(
+            "SELECT col#1 FROM\n" +
+            "-- This is a comment\n" +
+            "MyTable;\n",
+            {language: "db2"}
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  col#1\n" +
+            "FROM\n" +
+            "  -- This is a comment\n" +
+            "  MyTable;\n"
+        );
+    });
+
     it("recognizes :variables", function() {
         expect(sqlFormatter.format("SELECT :variable;", {language: "db2"})).toBe(
             "SELECT\n" +
