@@ -41,7 +41,7 @@ export default class Tokenizer {
     }
 
     createLineCommentRegex(lineCommentTypes) {
-        return new RegExp(`^((?:${lineCommentTypes.map(c => _.escapeRegExp(c)).join("|")}).*?(?:\n|$))`)
+        return new RegExp(`^((?:${lineCommentTypes.map(c => _.escapeRegExp(c)).join("|")}).*?(?:\n|$))`);
     }
 
     createReservedWordRegex(reservedWords) {
