@@ -235,4 +235,13 @@ describe("StandardSqlFormatter", function() {
             "  OUTER APPLY fn(t.id)\n"
         );
     });
+
+    it("formats tricky line comments", function() {
+        expect(sqlFormatter.format("SELECT a#comment, here\nFROM b--comment")).toBe(
+            "SELECT\n" +
+            "  a #comment, here\n" +
+            "FROM\n" +
+            "  b --comment\n"
+        );
+    });
 });

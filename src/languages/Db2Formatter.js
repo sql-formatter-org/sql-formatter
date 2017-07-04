@@ -96,7 +96,8 @@ export default class Db2Formatter {
                 closeParens: [")"],
                 indexedPlaceholderTypes: ["?"],
                 namedPlaceholderTypes: [":"],
-                lineCommentTypes: ["--"]
+                lineCommentTypes: ["--"],
+                specialWordChars: ["#", "@"]
             });
         }
         return new Formatter(this.cfg, tokenizer).format(query);
