@@ -42,13 +42,31 @@ const reservedWords = [
 ];
 
 const reservedToplevelWords = [
-    "ADD", "AFTER", "ALTER COLUMN", "ALTER TABLE", "DELETE FROM", "EXCEPT", "FROM", "GROUP BY", "GO", "HAVING", "INSERT INTO", "INTERSECT",
-    "LIMIT", "MODIFY", "ORDER BY", "SELECT", "SET CURRENT SCHEMA", "SET SCHEMA", "SET", "UNION ALL", "UNION", "UPDATE", "VALUES", "WHERE"
+    "ADD", "AFTER", "ALTER COLUMN", "ALTER TABLE",
+    "DELETE FROM",
+    "EXCEPT",
+    "FROM",
+    "GROUP BY", "GO",
+    "HAVING",
+    "INSERT INTO", "INTERSECT",
+    "LIMIT",
+    "MODIFY",
+    "ORDER BY",
+    "SELECT", "SET CURRENT SCHEMA", "SET SCHEMA", "SET",
+    "UNION ALL", "UNION", "UPDATE",
+    "VALUES",
+    "WHERE"
 ];
 
 const reservedNewlineWords = [
-    "AND", "CROSS APPLY", "CROSS JOIN", "INNER JOIN", "JOIN", "LEFT JOIN", "LEFT OUTER JOIN", "OR", "OUTER APPLY", "OUTER JOIN",
-    "RIGHT JOIN", "RIGHT OUTER JOIN", "XOR"
+    "AND",
+    "CROSS APPLY", "CROSS JOIN",
+    "INNER JOIN",
+    "JOIN",
+    "LEFT JOIN", "LEFT OUTER JOIN",
+    "OR", "OUTER APPLY", "OUTER JOIN",
+    "RIGHT JOIN", "RIGHT OUTER JOIN",
+    "XOR"
 ];
 
 let tokenizer;

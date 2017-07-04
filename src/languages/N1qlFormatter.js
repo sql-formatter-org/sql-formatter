@@ -28,14 +28,32 @@ const reservedWords = [
 ];
 
 const reservedToplevelWords = [
-    "DELETE FROM", "EXCEPT ALL", "EXCEPT", "EXPLAIN DELETE FROM", "EXPLAIN UPDATE", "EXPLAIN UPSERT", "FROM",
-    "GROUP BY", "HAVING", "INFER", "INSERT INTO", "INTERSECT ALL", "INTERSECT", "LET", "LIMIT", "MERGE", "NEST",
-    "ORDER BY", "PREPARE", "SELECT", "SET CURRENT SCHEMA", "SET SCHEMA", "SET", "UNION ALL", "UNION", "UNNEST",
-    "UPDATE", "UPSERT", "USE KEYS", "VALUES", "WHERE"
+    "DELETE FROM",
+    "EXCEPT ALL", "EXCEPT", "EXPLAIN DELETE FROM", "EXPLAIN UPDATE", "EXPLAIN UPSERT",
+    "FROM",
+    "GROUP BY",
+    "HAVING",
+    "INFER", "INSERT INTO", "INTERSECT ALL", "INTERSECT",
+    "LET", "LIMIT",
+    "MERGE",
+    "NEST",
+    "ORDER BY",
+    "PREPARE",
+    "SELECT", "SET CURRENT SCHEMA", "SET SCHEMA", "SET",
+    "UNION ALL", "UNION", "UNNEST", "UPDATE", "UPSERT", "USE KEYS",
+    "VALUES",
+    "WHERE"
 ];
 
 const reservedNewlineWords = [
-    "AND", "INNER JOIN", "JOIN", "LEFT JOIN", "LEFT OUTER JOIN", "OR", "OUTER JOIN", "RIGHT JOIN", "RIGHT OUTER JOIN", "XOR"
+    "AND",
+    "INNER JOIN",
+    "JOIN",
+    "LEFT JOIN",
+    "LEFT OUTER JOIN",
+    "OR", "OUTER JOIN",
+    "RIGHT JOIN", "RIGHT OUTER JOIN",
+    "XOR"
 ];
 
 let tokenizer;
