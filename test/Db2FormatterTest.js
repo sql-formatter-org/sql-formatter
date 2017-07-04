@@ -22,17 +22,30 @@ describe("Db2Formatter", function() {
 
     it("formats only -- as a line comment", function() {
         const result = sqlFormatter.format(
-            "SELECT col#1 FROM\n" +
+            "SELECT col FROM\n" +
             "-- This is a comment\n" +
             "MyTable;\n",
             {language: "db2"}
         );
         expect(result).toBe(
             "SELECT\n" +
-            "  col#1\n" +
+            "  col\n" +
             "FROM\n" +
             "  -- This is a comment\n" +
             "  MyTable;\n"
+        );
+    });
+
+    it("recognizes @ and # as identifiers", function() {
+        const result = sqlFormatter.format(
+            "SELECT col#1, @col2 FROM tbl\n"
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  col#1,\n" +
+            "  @col2\n" +
+            "FROM\n" +
+            "  tbl\n"
         );
     });
 
