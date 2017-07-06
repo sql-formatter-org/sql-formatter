@@ -51,7 +51,7 @@ export default class Tokenizer {
     }
 
     createWordRegex(specialChars = []) {
-        return new RegExp(`^([\\w|${specialChars.join("|")}]+)`);
+        return new RegExp(`^([\\w${specialChars.join("")}]+)`);
     }
 
     createStringRegex(stringTypes) {
