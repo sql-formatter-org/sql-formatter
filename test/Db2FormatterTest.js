@@ -36,7 +36,7 @@ describe("Db2Formatter", function() {
         );
     });
 
-    it("recognizes @ and # as identifiers", function() {
+    it("recognizes @ and # as part of identifiers", function() {
         const result = sqlFormatter.format(
             "SELECT col#1, @col2 FROM tbl\n",
             {language: "db2"}
