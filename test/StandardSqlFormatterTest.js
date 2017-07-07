@@ -52,7 +52,6 @@ describe("StandardSqlFormatter", function() {
         const result = sqlFormatter.format(
             "SELECT @variable, @a1_2.3$, @'var name', @\"var name\", @`var name`, @[var name], @'var\\name';",
             {
-                language: "sql",
                 params: {
                     "variable": "\"variable value\"",
                     "a1_2.3$": "'weird value'",
@@ -93,7 +92,6 @@ describe("StandardSqlFormatter", function() {
             "SELECT :variable, :a1_2.3$, :'var name', :\"var name\", :`var name`," +
             " :[var name], :'escaped \\'var\\'', :\"^*& weird \\\" var   \";",
             {
-                language: "sql",
                 params: {
                     "variable": "\"variable value\"",
                     "a1_2.3$": "'weird value'",
@@ -117,9 +115,7 @@ describe("StandardSqlFormatter", function() {
     });
 
     it("recognizes ?[0-9]* placeholders", function() {
-        const result = sqlFormatter.format("SELECT ?1, ?25, ?;", {
-            language: "sql"
-        });
+        const result = sqlFormatter.format("SELECT ?1, ?25, ?;");
         expect(result).toBe(
             "SELECT\n" +
             "  ?1,\n" +
@@ -130,7 +126,6 @@ describe("StandardSqlFormatter", function() {
 
     it("replaces ? numbered placeholders with param values", function() {
         const result = sqlFormatter.format("SELECT ?1, ?2, ?0;", {
-            language: "sql",
             params: {
                 0: "first",
                 1: "second",
@@ -147,7 +142,6 @@ describe("StandardSqlFormatter", function() {
 
     it("replaces ? indexed placeholders with param values", function() {
         const result = sqlFormatter.format("SELECT ?, ?, ?;", {
-            language: "sql",
             params: ["first", "second", "third"]
         });
         expect(result).toBe(
@@ -160,7 +154,6 @@ describe("StandardSqlFormatter", function() {
 
     it("formats query with GO batch separator", function() {
         const result = sqlFormatter.format("SELECT 1 GO SELECT 2", {
-            language: "sql",
             params: ["first", "second", "third"]
         });
         expect(result).toBe(
@@ -174,7 +167,6 @@ describe("StandardSqlFormatter", function() {
 
     it("formats SELECT query with CROSS JOIN", function() {
         const result = sqlFormatter.format("SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t", {
-            language: "sql",
             params: ["first", "second", "third"]
         });
         expect(result).toBe(
@@ -189,7 +181,6 @@ describe("StandardSqlFormatter", function() {
 
     it("formats SELECT query with CROSS APPLY", function() {
         const result = sqlFormatter.format("SELECT a, b FROM t CROSS APPLY fn(t.id)", {
-            language: "sql",
             params: ["first", "second", "third"]
         });
         expect(result).toBe(
@@ -223,7 +214,6 @@ describe("StandardSqlFormatter", function() {
 
     it("formats SELECT query with OUTER APPLY", function() {
         const result = sqlFormatter.format("SELECT a, b FROM t OUTER APPLY fn(t.id)", {
-            language: "sql",
             params: ["first", "second", "third"]
         });
         expect(result).toBe(
@@ -233,6 +223,15 @@ describe("StandardSqlFormatter", function() {
             "FROM\n" +
             "  t\n" +
             "  OUTER APPLY fn(t.id)\n"
+        );
+    });
+
+    it("formats tricky line comments", function() {
+        expect(sqlFormatter.format("SELECT a#comment, here\nFROM b--comment")).toBe(
+            "SELECT\n" +
+            "  a #comment, here\n" +
+            "FROM\n" +
+            "  b --comment\n"
         );
     });
 });

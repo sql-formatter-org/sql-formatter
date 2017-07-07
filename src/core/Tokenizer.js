@@ -12,19 +12,22 @@ export default class Tokenizer {
      *  @param {String[]} cfg.closeParens Closing parentheses to enable, like ), ]
      *  @param {String[]} cfg.indexedPlaceholderTypes Prefixes for indexed placeholders, like ?
      *  @param {String[]} cfg.namedPlaceholderTypes Prefixes for named placeholders, like @ and :
+     *  @param {String[]} cfg.lineCommentTypes Line comments to enable, like # and --
+     *  @param {String[]} cfg.specialWordChars Special chars that can be found inside of words, like @ and #
      */
     constructor(cfg) {
-        this.WORD_REGEX = /^(\w+)/;
         this.WHITESPACE_REGEX = /^(\s+)/;
-        this.LINE_COMMENT_REGEX = /^((?:#|--).*?(?:\n|$))/;
-        this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
         this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
         this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|.)/;
+
+        this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
+        this.LINE_COMMENT_REGEX = this.createLineCommentRegex(cfg.lineCommentTypes);
 
         this.RESERVED_TOPLEVEL_REGEX = this.createReservedWordRegex(cfg.reservedToplevelWords);
         this.RESERVED_NEWLINE_REGEX = this.createReservedWordRegex(cfg.reservedNewlineWords);
         this.RESERVED_PLAIN_REGEX = this.createReservedWordRegex(cfg.reservedWords);
 
+        this.WORD_REGEX = this.createWordRegex(cfg.specialWordChars);
         this.STRING_REGEX = this.createStringRegex(cfg.stringTypes);
 
         this.OPEN_PAREN_REGEX = this.createParenRegex(cfg.openParens);
@@ -38,9 +41,17 @@ export default class Tokenizer {
         );
     }
 
+    createLineCommentRegex(lineCommentTypes) {
+        return new RegExp(`^((?:${lineCommentTypes.map(c => _.escapeRegExp(c)).join("|")}).*?(?:\n|$))`);
+    }
+
     createReservedWordRegex(reservedWords) {
         const reservedWordsPattern = reservedWords.join("|").replace(/ /g, "\\s+");
         return new RegExp(`^(${reservedWordsPattern})\\b`, "i");
+    }
+
+    createWordRegex(specialChars = []) {
+        return new RegExp(`^([\\w${specialChars.join("")}]+)`);
     }
 
     createStringRegex(stringTypes) {
@@ -57,11 +68,11 @@ export default class Tokenizer {
     // 5. national character quoted string using N'' or N\' to escape
     createStringPattern(stringTypes) {
         const patterns = {
+            "``": "((`[^`]*($|`))+)",
+            "[]": "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)",
             "\"\"": "((\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)",
             "''": "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
             "N''": "((N'[^N'\\\\]*(?:\\\\.[^N'\\\\]*)*('|$))+)",
-            "``": "((`[^`]*($|`))+)",
-            "[]": "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)",
         };
 
         return stringTypes.map(t => patterns[t]).join("|");

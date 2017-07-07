@@ -2,7 +2,7 @@
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 It started as a port of a [PHP Library][], but has since considerably diverged.
-It supports [Standard SQL][] and [Couchbase N1QL][] dialects.
+It supports [Standard SQL][], [Couchbase N1QL][] and [IBM DB2][] dialects.
 
 &rarr; [Try the demo.](https://zeroturnaround.github.io/sql-formatter/)
 
@@ -35,15 +35,16 @@ You can also pass in configuration options:
 
 ```js
 sqlFormatter.format("SELECT *", {
-    language: "n1ql" // Defaults to "sql"
+    language: "n1ql", // Defaults to "sql"
     indent: "    "   // Defaults to two spaces
 });
 ```
 
-Currently just two SQL dialects are supported:
+Currently just three SQL dialects are supported:
 
 - **sql** - [Standard SQL][]
 - **n1ql** - [Couchbase N1QL][]
+- **db2** - [IBM DB2][]
 
 ### Placeholders replacement
 
@@ -91,3 +92,4 @@ $ npm run check
 [PHP library]: https://github.com/jdorn/sql-formatter
 [Standard SQL]: https://en.wikipedia.org/wiki/SQL:2011
 [Couchbase N1QL]: http://www.couchbase.com/n1ql
+[IBM DB2]: https://www.ibm.com/analytics/us/en/technology/db2/
