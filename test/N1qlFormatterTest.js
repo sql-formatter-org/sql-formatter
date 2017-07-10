@@ -10,7 +10,7 @@ describe("N1qlFormatter", function() {
             "SELECT\n" +
             "  orderlines[0].productId\n" +
             "FROM\n" +
-            "  orders;\n"
+            "  orders;"
         );
     });
 
@@ -26,7 +26,7 @@ describe("N1qlFormatter", function() {
             "FROM\n" +
             "  tutorial\n" +
             "USE KEYS\n" +
-            "  ['dave', 'ian'];\n"
+            "  ['dave', 'ian'];"
         );
     });
 
@@ -39,7 +39,7 @@ describe("N1qlFormatter", function() {
             "INSERT INTO\n" +
             "  heroes (KEY, VALUE)\n" +
             "VALUES\n" +
-            "  ('123', {'id': 1, 'type': 'Tarzan'});\n"
+            "  ('123', {'id': 1, 'type': 'Tarzan'});"
         );
     });
 
@@ -67,7 +67,7 @@ describe("N1qlFormatter", function() {
             "      ],\n" +
             "      'hello': 'world'\n" +
             "    }\n" +
-            "  );\n"
+            "  );"
         );
     });
 
@@ -82,7 +82,7 @@ describe("N1qlFormatter", function() {
             "FROM\n" +
             "  tutorial\n" +
             "UNNEST\n" +
-            "  tutorial.children c;\n"
+            "  tutorial.children c;"
         );
     });
 
@@ -101,7 +101,7 @@ describe("N1qlFormatter", function() {
             "USE KEYS\n" +
             "  'Elinor_33313792'\n" +
             "NEST\n" +
-            "  orders_with_users orders ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;\n"
+            "  orders_with_users orders ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;"
         );
     });
 
@@ -114,7 +114,7 @@ describe("N1qlFormatter", function() {
             "EXPLAIN DELETE FROM\n" +
             "  tutorial t\n" +
             "USE KEYS\n" +
-            "  'baldwin' RETURNING t\n"
+            "  'baldwin' RETURNING t"
         );
     });
 
@@ -129,7 +129,7 @@ describe("N1qlFormatter", function() {
             "USE KEYS\n" +
             "  'baldwin'\n" +
             "SET\n" +
-            "  type = 'actor' RETURNING tutorial.type\n"
+            "  type = 'actor' RETURNING tutorial.type"
         );
     });
 
@@ -143,7 +143,7 @@ describe("N1qlFormatter", function() {
             "  $variable,\n" +
             "  $'var name',\n" +
             "  $\"var name\",\n" +
-            "  $`var name`;\n"
+            "  $`var name`;"
         );
     });
 
@@ -162,7 +162,7 @@ describe("N1qlFormatter", function() {
             "  \"variable value\",\n" +
             "  'var value',\n" +
             "  'var value',\n" +
-            "  'var value';\n"
+            "  'var value';"
         );
     });
 
@@ -179,7 +179,7 @@ describe("N1qlFormatter", function() {
             "SELECT\n" +
             "  second,\n" +
             "  third,\n" +
-            "  first;\n"
+            "  first;"
         );
     });
 });

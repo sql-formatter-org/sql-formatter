@@ -16,7 +16,7 @@ describe("Db2Formatter", function() {
             "ORDER BY\n" +
             "  col2 DESC\n" +
             "FETCH FIRST\n" +
-            "  20 ROWS ONLY;\n"
+            "  20 ROWS ONLY;"
         );
     });
 
@@ -32,7 +32,7 @@ describe("Db2Formatter", function() {
             "  col\n" +
             "FROM\n" +
             "  -- This is a comment\n" +
-            "  MyTable;\n"
+            "  MyTable;"
         );
     });
 
@@ -46,14 +46,14 @@ describe("Db2Formatter", function() {
             "  col#1,\n" +
             "  @col2\n" +
             "FROM\n" +
-            "  tbl\n"
+            "  tbl"
         );
     });
 
     it("recognizes :variables", function() {
         expect(sqlFormatter.format("SELECT :variable;", {language: "db2"})).toBe(
             "SELECT\n" +
-            "  :variable;\n"
+            "  :variable;"
         );
     });
 
@@ -64,7 +64,7 @@ describe("Db2Formatter", function() {
         );
         expect(result).toBe(
             "SELECT\n" +
-            "  \"variable value\"\n"
+            "  \"variable value\""
         );
     });
 });
