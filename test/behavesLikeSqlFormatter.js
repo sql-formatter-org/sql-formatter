@@ -16,7 +16,7 @@ export default function behavesLikeSqlFormatter(language) {
             "    count(*),\n" +
             "    Column1\n" +
             "FROM\n" +
-            "    Table1;\n"
+            "    Table1;"
         );
     });
 
@@ -30,7 +30,7 @@ export default function behavesLikeSqlFormatter(language) {
             "SET SCHEMA\n" +
             "  tetrisdb;\n" +
             "SET CURRENT SCHEMA\n" +
-            "  bingodb;\n"
+            "  bingodb;"
         );
     });
 
@@ -41,7 +41,7 @@ export default function behavesLikeSqlFormatter(language) {
             "  count(*),\n" +
             "  Column1\n" +
             "FROM\n" +
-            "  Table1;\n"
+            "  Table1;"
         );
     });
 
@@ -56,7 +56,7 @@ export default function behavesLikeSqlFormatter(language) {
             "  18 + 20 AS field2,\n" +
             "  'some string'\n" +
             "FROM\n" +
-            "  foo;\n"
+            "  foo;"
         );
     });
 
@@ -77,7 +77,7 @@ export default function behavesLikeSqlFormatter(language) {
             "      Column2 = Column3\n" +
             "      OR Column4 >= NOW()\n" +
             "    )\n" +
-            "  );\n"
+            "  );"
         );
     });
 
@@ -100,7 +100,7 @@ export default function behavesLikeSqlFormatter(language) {
             "ORDER BY\n" +
             "  other_column\n" +
             "LIMIT\n" +
-            "  5;\n"
+            "  5;"
         );
     });
 
@@ -110,7 +110,7 @@ export default function behavesLikeSqlFormatter(language) {
         );
         expect(result).toBe(
             "LIMIT\n" +
-            "  5, 10;\n"
+            "  5, 10;"
         );
     });
 
@@ -123,7 +123,7 @@ export default function behavesLikeSqlFormatter(language) {
             "  5;\n" +
             "SELECT\n" +
             "  foo,\n" +
-            "  bar;\n"
+            "  bar;"
         );
     });
 
@@ -133,7 +133,7 @@ export default function behavesLikeSqlFormatter(language) {
         );
         expect(result).toBe(
             "LIMIT\n" +
-            "  5 OFFSET 8;\n"
+            "  5 OFFSET 8;"
         );
     });
 
@@ -143,7 +143,7 @@ export default function behavesLikeSqlFormatter(language) {
         );
         expect(result).toBe(
             "limit\n" +
-            "  5, 10;\n"
+            "  5, 10;"
         );
     });
 
@@ -159,7 +159,7 @@ export default function behavesLikeSqlFormatter(language) {
             "  left join bar\n" +
             "WHERe\n" +
             "  a > 1\n" +
-            "  and b = 3\n"
+            "  and b = 3"
         );
     });
 
@@ -181,7 +181,7 @@ export default function behavesLikeSqlFormatter(language) {
             "      30\n" +
             "  )\n" +
             "WHERE\n" +
-            "  a > b\n"
+            "  a > b"
         );
     });
 
@@ -196,7 +196,7 @@ export default function behavesLikeSqlFormatter(language) {
             "  COUNT(order_id) AS total\n" +
             "FROM\n" +
             "  customers\n" +
-            "  INNER JOIN orders ON customers.customer_id = orders.customer_id;\n"
+            "  INNER JOIN orders ON customers.customer_id = orders.customer_id;"
         );
     });
 
@@ -221,7 +221,7 @@ export default function behavesLikeSqlFormatter(language) {
             "  -- This is another comment\n" +
             "  MyTable # One final comment\n" +
             "WHERE\n" +
-            "  1 = 2;\n"
+            "  1 = 2;"
         );
     });
 
@@ -233,7 +233,7 @@ export default function behavesLikeSqlFormatter(language) {
             "INSERT INTO\n" +
             "  Customers (ID, MoneyBalance, Address, City)\n" +
             "VALUES\n" +
-            "  (12, -123.4, 'Skagen 2111', 'Stv');\n"
+            "  (12, -123.4, 'Skagen 2111', 'Stv');"
         );
     });
 
@@ -243,7 +243,7 @@ export default function behavesLikeSqlFormatter(language) {
         );
         expect(result).toBe(
             "SELECT\n" +
-            "  (a + b * (c - NOW()));\n"
+            "  (a + b * (c - NOW()));"
         );
     });
 
@@ -275,7 +275,7 @@ export default function behavesLikeSqlFormatter(language) {
             "      )\n" +
             "    FROM\n" +
             "      foo\n" +
-            "  );\n"
+            "  );"
         );
     });
 
@@ -290,7 +290,7 @@ export default function behavesLikeSqlFormatter(language) {
             "  ContactName = 'Alfred Schmidt',\n" +
             "  City = 'Hamburg'\n" +
             "WHERE\n" +
-            "  CustomerName = 'Alfreds Futterkiste';\n"
+            "  CustomerName = 'Alfreds Futterkiste';"
         );
     });
 
@@ -303,7 +303,7 @@ export default function behavesLikeSqlFormatter(language) {
             "  Customers\n" +
             "WHERE\n" +
             "  CustomerName = 'Alfred'\n" +
-            "  AND Phone = 5002132;\n"
+            "  AND Phone = 5002132;"
         );
     });
 
@@ -312,7 +312,7 @@ export default function behavesLikeSqlFormatter(language) {
             "DROP TABLE IF EXISTS admin_role;"
         );
         expect(result).toBe(
-            "DROP TABLE IF EXISTS admin_role;\n"
+            "DROP TABLE IF EXISTS admin_role;"
         );
     });
 
@@ -320,7 +320,7 @@ export default function behavesLikeSqlFormatter(language) {
         const result = format("SELECT count(");
         expect(result).toBe(
             "SELECT\n" +
-            "  count(\n"
+            "  count("
         );
     });
 
@@ -329,7 +329,7 @@ export default function behavesLikeSqlFormatter(language) {
         expect(result).toBe(
             "SELECT\n" +
             "  count(*)\n" +
-            "  /*Comment\n"
+            "  /*Comment"
         );
     });
 
@@ -348,7 +348,7 @@ export default function behavesLikeSqlFormatter(language) {
             "      *\n" +
             "    FROM\n" +
             "      bank\n" +
-            "  ) AS ordersummary\n"
+            "  ) AS ordersummary"
         );
     });
 
@@ -361,7 +361,7 @@ export default function behavesLikeSqlFormatter(language) {
             "  foo\n" +
             "  LEFT OUTER JOIN bar\n" +
             "ORDER BY\n" +
-            "  blah\n"
+            "  blah"
         );
     });
 
@@ -372,70 +372,70 @@ export default function behavesLikeSqlFormatter(language) {
             "  (\n" +
             "    foo = '0123456789-0123456789-0123456789-0123456789'\n" +
             "  )\n" +
-            ")\n"
+            ")"
         );
     });
 
     it("formats short double parenthized queries to one line", function() {
         const result = format("((foo = 'bar'))");
-        expect(result).toBe("((foo = 'bar'))\n");
+        expect(result).toBe("((foo = 'bar'))");
     });
 
     it("formats single-char operators", function() {
-        expect(format("foo = bar")).toBe("foo = bar\n");
-        expect(format("foo < bar")).toBe("foo < bar\n");
-        expect(format("foo > bar")).toBe("foo > bar\n");
-        expect(format("foo + bar")).toBe("foo + bar\n");
-        expect(format("foo - bar")).toBe("foo - bar\n");
-        expect(format("foo * bar")).toBe("foo * bar\n");
-        expect(format("foo / bar")).toBe("foo / bar\n");
-        expect(format("foo % bar")).toBe("foo % bar\n");
+        expect(format("foo = bar")).toBe("foo = bar");
+        expect(format("foo < bar")).toBe("foo < bar");
+        expect(format("foo > bar")).toBe("foo > bar");
+        expect(format("foo + bar")).toBe("foo + bar");
+        expect(format("foo - bar")).toBe("foo - bar");
+        expect(format("foo * bar")).toBe("foo * bar");
+        expect(format("foo / bar")).toBe("foo / bar");
+        expect(format("foo % bar")).toBe("foo % bar");
     });
 
     it("formats multi-char operators", function() {
-        expect(format("foo != bar")).toBe("foo != bar\n");
-        expect(format("foo <> bar")).toBe("foo <> bar\n");
-        expect(format("foo == bar")).toBe("foo == bar\n"); // N1QL
-        expect(format("foo || bar")).toBe("foo || bar\n"); // Oracle, Postgres, N1QL string concat
+        expect(format("foo != bar")).toBe("foo != bar");
+        expect(format("foo <> bar")).toBe("foo <> bar");
+        expect(format("foo == bar")).toBe("foo == bar"); // N1QL
+        expect(format("foo || bar")).toBe("foo || bar"); // Oracle, Postgres, N1QL string concat
 
-        expect(format("foo <= bar")).toBe("foo <= bar\n");
-        expect(format("foo >= bar")).toBe("foo >= bar\n");
+        expect(format("foo <= bar")).toBe("foo <= bar");
+        expect(format("foo >= bar")).toBe("foo >= bar");
 
-        expect(format("foo !< bar")).toBe("foo !< bar\n");
-        expect(format("foo !> bar")).toBe("foo !> bar\n");
+        expect(format("foo !< bar")).toBe("foo !< bar");
+        expect(format("foo !> bar")).toBe("foo !> bar");
     });
 
     it("formats logical operators", function() {
-        expect(format("foo ALL bar")).toBe("foo ALL bar\n");
-        expect(format("foo = ANY (1, 2, 3)")).toBe("foo = ANY (1, 2, 3)\n");
-        expect(format("EXISTS bar")).toBe("EXISTS bar\n");
-        expect(format("foo IN (1, 2, 3)")).toBe("foo IN (1, 2, 3)\n");
-        expect(format("foo LIKE 'hello%'")).toBe("foo LIKE 'hello%'\n");
-        expect(format("foo IS NULL")).toBe("foo IS NULL\n");
-        expect(format("UNIQUE foo")).toBe("UNIQUE foo\n");
+        expect(format("foo ALL bar")).toBe("foo ALL bar");
+        expect(format("foo = ANY (1, 2, 3)")).toBe("foo = ANY (1, 2, 3)");
+        expect(format("EXISTS bar")).toBe("EXISTS bar");
+        expect(format("foo IN (1, 2, 3)")).toBe("foo IN (1, 2, 3)");
+        expect(format("foo LIKE 'hello%'")).toBe("foo LIKE 'hello%'");
+        expect(format("foo IS NULL")).toBe("foo IS NULL");
+        expect(format("UNIQUE foo")).toBe("UNIQUE foo");
     });
 
     it("formats AND/OR operators", function() {
-        expect(format("foo BETWEEN bar AND baz")).toBe("foo BETWEEN bar\nAND baz\n");
-        expect(format("foo AND bar")).toBe("foo\nAND bar\n");
-        expect(format("foo OR bar")).toBe("foo\nOR bar\n");
+        expect(format("foo BETWEEN bar AND baz")).toBe("foo BETWEEN bar\nAND baz");
+        expect(format("foo AND bar")).toBe("foo\nAND bar");
+        expect(format("foo OR bar")).toBe("foo\nOR bar");
     });
 
     it("recognizes strings", function() {
-        expect(format("\"foo JOIN bar\"")).toBe("\"foo JOIN bar\"\n");
-        expect(format("'foo JOIN bar'")).toBe("'foo JOIN bar'\n");
-        expect(format("`foo JOIN bar`")).toBe("`foo JOIN bar`\n");
+        expect(format("\"foo JOIN bar\"")).toBe("\"foo JOIN bar\"");
+        expect(format("'foo JOIN bar'")).toBe("'foo JOIN bar'");
+        expect(format("`foo JOIN bar`")).toBe("`foo JOIN bar`");
     });
 
     it("recognizes escaped strings", function() {
-        expect(format("\"foo \\\" JOIN bar\"")).toBe("\"foo \\\" JOIN bar\"\n");
-        expect(format("'foo \\' JOIN bar'")).toBe("'foo \\' JOIN bar'\n");
-        expect(format("`foo `` JOIN bar`")).toBe("`foo `` JOIN bar`\n");
+        expect(format("\"foo \\\" JOIN bar\"")).toBe("\"foo \\\" JOIN bar\"");
+        expect(format("'foo \\' JOIN bar'")).toBe("'foo \\' JOIN bar'");
+        expect(format("`foo `` JOIN bar`")).toBe("`foo `` JOIN bar`");
     });
 
     it("formats postgres specific operators", function() {
-        expect(format("column::int")).toBe("column :: int\n");
-        expect(format("v->2")).toBe("v -> 2\n");
-        expect(format("v->>2")).toBe( "v ->> 2\n");
+        expect(format("column::int")).toBe("column :: int");
+        expect(format("v->2")).toBe("v -> 2");
+        expect(format("v->>2")).toBe( "v ->> 2");
     });
 }

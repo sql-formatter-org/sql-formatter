@@ -12,7 +12,7 @@ describe("StandardSqlFormatter", function() {
             "ALTER TABLE\n" +
             "  supplier\n" +
             "MODIFY\n" +
-            "  supplier_name char(100) NOT NULL;\n"
+            "  supplier_name char(100) NOT NULL;"
         );
     });
 
@@ -24,13 +24,13 @@ describe("StandardSqlFormatter", function() {
             "ALTER TABLE\n" +
             "  supplier\n" +
             "ALTER COLUMN\n" +
-            "  supplier_name VARCHAR(100) NOT NULL;\n"
+            "  supplier_name VARCHAR(100) NOT NULL;"
         );
     });
 
     it("recognizes [] strings", function() {
-        expect(sqlFormatter.format("[foo JOIN bar]")).toBe("[foo JOIN bar]\n");
-        expect(sqlFormatter.format("[foo ]] JOIN bar]")).toBe("[foo ]] JOIN bar]\n");
+        expect(sqlFormatter.format("[foo JOIN bar]")).toBe("[foo JOIN bar]");
+        expect(sqlFormatter.format("[foo ]] JOIN bar]")).toBe("[foo ]] JOIN bar]");
     });
 
     it("recognizes @variables", function() {
@@ -44,7 +44,7 @@ describe("StandardSqlFormatter", function() {
             "  @'var name',\n" +
             "  @\"var name\",\n" +
             "  @`var name`,\n" +
-            "  @[var name];\n"
+            "  @[var name];"
         );
     });
 
@@ -68,7 +68,7 @@ describe("StandardSqlFormatter", function() {
             "  'var value',\n" +
             "  'var value',\n" +
             "  'var value',\n" +
-            "  'var\\ value';\n"
+            "  'var\\ value';"
         );
     });
 
@@ -83,7 +83,7 @@ describe("StandardSqlFormatter", function() {
             "  :'var name',\n" +
             "  :\"var name\",\n" +
             "  :`var name`,\n" +
-            "  :[var name];\n"
+            "  :[var name];"
         );
     });
 
@@ -110,7 +110,7 @@ describe("StandardSqlFormatter", function() {
             "  'var value',\n" +
             "  'var value',\n" +
             "  'weirder value',\n" +
-            "  'super weird value';\n"
+            "  'super weird value';"
         );
     });
 
@@ -120,7 +120,7 @@ describe("StandardSqlFormatter", function() {
             "SELECT\n" +
             "  ?1,\n" +
             "  ?25,\n" +
-            "  ?;\n"
+            "  ?;"
         );
     });
 
@@ -136,7 +136,7 @@ describe("StandardSqlFormatter", function() {
             "SELECT\n" +
             "  second,\n" +
             "  third,\n" +
-            "  first;\n"
+            "  first;"
         );
     });
 
@@ -148,7 +148,7 @@ describe("StandardSqlFormatter", function() {
             "SELECT\n" +
             "  first,\n" +
             "  second,\n" +
-            "  third;\n"
+            "  third;"
         );
     });
 
@@ -161,7 +161,7 @@ describe("StandardSqlFormatter", function() {
             "  1\n" +
             "GO\n" +
             "SELECT\n" +
-            "  2\n"
+            "  2"
         );
     });
 
@@ -175,7 +175,7 @@ describe("StandardSqlFormatter", function() {
             "  b\n" +
             "FROM\n" +
             "  t\n" +
-            "  CROSS JOIN t2 on t.id = t2.id_t\n"
+            "  CROSS JOIN t2 on t.id = t2.id_t"
         );
     });
 
@@ -189,7 +189,7 @@ describe("StandardSqlFormatter", function() {
             "  b\n" +
             "FROM\n" +
             "  t\n" +
-            "  CROSS APPLY fn(t.id)\n"
+            "  CROSS APPLY fn(t.id)"
         );
     });
 
@@ -200,7 +200,7 @@ describe("StandardSqlFormatter", function() {
             "  N,\n" +
             "  M\n" +
             "FROM\n" +
-            "  t\n"
+            "  t"
         );
     });
 
@@ -208,7 +208,7 @@ describe("StandardSqlFormatter", function() {
         const result = sqlFormatter.format("SELECT N'value'");
         expect(result).toBe(
             "SELECT\n" +
-            "  N'value'\n"
+            "  N'value'"
         );
     });
 
@@ -222,7 +222,7 @@ describe("StandardSqlFormatter", function() {
             "  b\n" +
             "FROM\n" +
             "  t\n" +
-            "  OUTER APPLY fn(t.id)\n"
+            "  OUTER APPLY fn(t.id)"
         );
     });
 
@@ -231,7 +231,7 @@ describe("StandardSqlFormatter", function() {
             "SELECT\n" +
             "  a #comment, here\n" +
             "FROM\n" +
-            "  b --comment\n"
+            "  b --comment"
         );
     });
 });

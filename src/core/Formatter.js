@@ -30,7 +30,7 @@ export default class Formatter {
         const tokens = this.tokenizer.tokenize(query);
         const formattedQuery = this.getFormattedQueryFromTokens(tokens);
 
-        return formattedQuery.trim() + "\n";
+        return formattedQuery.trim();
     }
 
     getFormattedQueryFromTokens(tokens) {
