@@ -1,4 +1,5 @@
-import _ from "lodash";
+import isEmpty from "lodash/isEmpty";
+import escapeRegExp from "lodash/escapeRegExp";
 import tokenTypes from "./tokenTypes";
 
 export default class Tokenizer {
@@ -42,7 +43,7 @@ export default class Tokenizer {
     }
 
     createLineCommentRegex(lineCommentTypes) {
-        return new RegExp(`^((?:${lineCommentTypes.map(c => _.escapeRegExp(c)).join("|")}).*?(?:\n|$))`);
+        return new RegExp(`^((?:${lineCommentTypes.map(c => escapeRegExp(c)).join("|")}).*?(?:\n|$))`);
     }
 
     createReservedWordRegex(reservedWords) {
@@ -80,15 +81,15 @@ export default class Tokenizer {
 
     createParenRegex(parens) {
         return new RegExp(
-            "^(" + parens.map(p => _.escapeRegExp(p)).join("|") + ")"
+            "^(" + parens.map(p => escapeRegExp(p)).join("|") + ")"
         );
     }
 
     createPlaceholderRegex(types, pattern) {
-        if (_.isEmpty(types)) {
+        if (isEmpty(types)) {
             return false;
         }
-        const typesRegex = types.map(_.escapeRegExp).join("|");
+        const typesRegex = types.map(escapeRegExp).join("|");
 
         return new RegExp(`^((?:${typesRegex})(?:${pattern}))`);
     }
@@ -222,7 +223,7 @@ export default class Tokenizer {
     }
 
     getEscapedPlaceholderKey({key, quoteChar}) {
-        return key.replace(new RegExp(_.escapeRegExp("\\") + quoteChar, "g"), quoteChar);
+        return key.replace(new RegExp(escapeRegExp("\\") + quoteChar, "g"), quoteChar);
     }
 
     // Decimal, binary, or hex numbers
