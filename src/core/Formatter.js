@@ -1,4 +1,4 @@
-import _ from "lodash";
+import trimEnd from "lodash/trimEnd";
 import tokenTypes from "./tokenTypes";
 import Indentation from "./Indentation";
 import InlineBlock from "./InlineBlock";
@@ -120,7 +120,7 @@ export default class Formatter {
         // Take out the preceding space unless there was whitespace there in the original query or another opening parens
         const previousToken = tokens[index - 1];
         if (previousToken && previousToken.type !== tokenTypes.WHITESPACE && previousToken.type !== tokenTypes.OPEN_PAREN) {
-            query = _.trimEnd(query);
+            query = trimEnd(query);
         }
         query += tokens[index].value;
 
@@ -151,7 +151,7 @@ export default class Formatter {
 
     // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
     formatComma(token, query) {
-        query = _.trimEnd(query) + token.value + " ";
+        query = trimEnd(query) + token.value + " ";
 
         if (this.inlineBlock.isActive()) {
             return query;
@@ -165,11 +165,11 @@ export default class Formatter {
     }
 
     formatWithSpaceAfter(token, query) {
-        return _.trimEnd(query) + token.value + " ";
+        return trimEnd(query) + token.value + " ";
     }
 
     formatWithoutSpaces(token, query) {
-        return _.trimEnd(query) + token.value;
+        return trimEnd(query) + token.value;
     }
 
     formatWithSpaces(token, query) {
@@ -177,6 +177,6 @@ export default class Formatter {
     }
 
     addNewline(query) {
-        return _.trimEnd(query) + "\n" + this.indentation.getIndent();
+        return trimEnd(query) + "\n" + this.indentation.getIndent();
     }
 }
