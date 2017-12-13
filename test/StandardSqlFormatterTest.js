@@ -234,4 +234,31 @@ describe("StandardSqlFormatter", function() {
             "  b --comment"
         );
     });
+
+    it("formats double curly brackets", function() {
+        expect(sqlFormatter.format("SELECT * FROM {{b}}")).toBe(
+          "SELECT\n" +
+          "  *\n" +
+          "FROM\n" +
+          "  {{ b }}"
+        );
+    });
+
+    it("formats triple curly brackets", function() {
+        expect(sqlFormatter.format("SELECT * FROM {{{b}}}")).toBe(
+          "SELECT\n" +
+          "  *\n" +
+          "FROM\n" +
+          "  {{{ b }}}"
+        );
+    });
+
+    it("formats query template correctly", function() {
+        expect(sqlFormatter.format("SELECT * FROM {{@b}}")).toBe(
+          "SELECT\n" +
+          "  *\n" +
+          "FROM\n" +
+          "  {{ @b }}"
+        );
+    });
 });
