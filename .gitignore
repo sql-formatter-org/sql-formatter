@@ -1,5 +1,5 @@
-dist
-lib
+#dist
+#lib
 node_modules
 .DS_Store
 coverage
