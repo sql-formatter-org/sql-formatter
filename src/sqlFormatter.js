@@ -21,8 +21,11 @@ export default {
                 return new Db2Formatter(cfg).format(query);
             case "n1ql":
                 return new N1qlFormatter(cfg).format(query);
-            default:
+            case "sql":
+            case undefined:
                 return new StandardSqlFormatter(cfg).format(query);
+            default:
+                throw Error(`Unsupported SQL dialect: ${cfg.language}`);
         }
     }
 };
