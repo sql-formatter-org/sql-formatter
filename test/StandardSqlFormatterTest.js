@@ -238,6 +238,18 @@ describe("StandardSqlFormatter", function() {
         );
     });
 
+    it("formats FETCH FIRST like LIMIT", function() {
+        const result = sqlFormatter.format(
+            "SELECT * FETCH FIRST 2 ROWS ONLY;"
+        );
+        expect(result).toBe(
+            "SELECT\n" +
+            "  *\n" +
+            "FETCH FIRST\n" +
+            "  2 ROWS ONLY;"
+        );
+    });
+
     it("formats tricky line comments", function() {
         expect(sqlFormatter.format("SELECT a#comment, here\nFROM b--comment")).toBe(
             "SELECT\n" +
