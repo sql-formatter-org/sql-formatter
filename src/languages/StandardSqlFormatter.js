@@ -48,7 +48,7 @@ const reservedToplevelWords = [
     "FROM",
     "GROUP BY", "GO",
     "HAVING",
-    "INSERT INTO", "INTERSECT",
+    "INSERT INTO", "INSERT", "INTERSECT",
     "LIMIT",
     "MODIFY",
     "ORDER BY",

@@ -4,6 +4,18 @@ import behavesLikeSqlFormatter from "./behavesLikeSqlFormatter";
 describe("StandardSqlFormatter", function() {
     behavesLikeSqlFormatter();
 
+    it("formats INSERT without INTO", function() {
+        const result = sqlFormatter.format(
+            "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
+        );
+        expect(result).toBe(
+            "INSERT\n" +
+            "  Customers (ID, MoneyBalance, Address, City)\n" +
+            "VALUES\n" +
+            "  (12, -123.4, 'Skagen 2111', 'Stv');"
+        );
+    });
+
     it("formats ALTER TABLE ... MODIFY query", function() {
         const result = sqlFormatter.format(
             "ALTER TABLE supplier MODIFY supplier_name char(100) NOT NULL;"
