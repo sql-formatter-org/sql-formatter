@@ -440,6 +440,7 @@ export default function behavesLikeSqlFormatter(language) {
         expect(format("foo ~~ 'hello'")).toBe("foo ~~ 'hello'");
         expect(format("foo !~ 'hello'")).toBe("foo !~ 'hello'");
         expect(format("foo ~* 'hello'")).toBe("foo ~* 'hello'");
+        expect(format("foo ~~* 'hello'")).toBe("foo ~~* 'hello'");
         expect(format("foo !~~ 'hello'")).toBe("foo !~~ 'hello'");
         expect(format("foo !~* 'hello'")).toBe("foo !~* 'hello'");
         expect(format("foo !~~* 'hello'")).toBe("foo !~~* 'hello'");
