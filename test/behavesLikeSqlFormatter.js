@@ -437,5 +437,11 @@ export default function behavesLikeSqlFormatter(language) {
         expect(format("column::int")).toBe("column :: int");
         expect(format("v->2")).toBe("v -> 2");
         expect(format("v->>2")).toBe( "v ->> 2");
+        expect(format("foo ~~ 'hello'")).toBe("foo ~~ 'hello'");
+        expect(format("foo !~ 'hello'")).toBe("foo !~ 'hello'");
+        expect(format("foo ~* 'hello'")).toBe("foo ~* 'hello'");
+        expect(format("foo !~~ 'hello'")).toBe("foo !~~ 'hello'");
+        expect(format("foo !~* 'hello'")).toBe("foo !~* 'hello'");
+        expect(format("foo !~~* 'hello'")).toBe("foo !~~* 'hello'");
     });
 }
