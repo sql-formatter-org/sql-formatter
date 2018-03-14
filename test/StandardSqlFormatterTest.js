@@ -4,6 +4,27 @@ import behavesLikeSqlFormatter from "./behavesLikeSqlFormatter";
 describe("StandardSqlFormatter", function() {
     behavesLikeSqlFormatter();
 
+    it("formats short CREATE TABLE", function() {
+        expect(sqlFormatter.format(
+            "CREATE TABLE items (a INT PRIMARY KEY, b TEXT);"
+        )).toBe(
+            "CREATE TABLE items (a INT PRIMARY KEY, b TEXT);"
+        );
+    });
+
+    it("formats long CREATE TABLE", function() {
+        expect(sqlFormatter.format(
+            "CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL);"
+        )).toBe(
+            "CREATE TABLE items (\n" +
+            "  a INT PRIMARY KEY,\n" +
+            "  b TEXT,\n" +
+            "  c INT NOT NULL,\n" +
+            "  d INT NOT NULL\n" +
+            ");"
+        );
+    });
+
     it("formats INSERT without INTO", function() {
         const result = sqlFormatter.format(
             "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
