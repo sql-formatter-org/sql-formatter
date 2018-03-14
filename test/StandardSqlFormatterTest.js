@@ -271,6 +271,57 @@ describe("StandardSqlFormatter", function() {
         );
     });
 
+    it("formats CASE ... WHEN with a blank expression", function() {
+        const result = sqlFormatter.format(
+            "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
+        );
+
+        expect(result).toBe(
+            "CASE\n" +
+            "  WHEN option = 'foo' THEN 1\n" +
+            "  WHEN option = 'bar' THEN 2\n" +
+            "  WHEN option = 'baz' THEN 3\n" +
+            "  ELSE 4\n" +
+            "END;"
+        );
+    });
+
+    it("formats CASE ... WHEN inside SELECT", function() {
+        const result = sqlFormatter.format(
+            "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table"
+        );
+
+        expect(result).toBe(
+            "SELECT\n" +
+            "  foo,\n" +
+            "  bar,\n" +
+            "  CASE\n" +
+            "    baz\n" +
+            "    WHEN 'one' THEN 1\n" +
+            "    WHEN 'two' THEN 2\n" +
+            "    ELSE 3\n" +
+            "  END\n" +
+            "FROM\n" +
+            "  table"
+        );
+    });
+
+    it("formats CASE ... WHEN with an expression", function() {
+        const result = sqlFormatter.format(
+            "CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;"
+        );
+
+        expect(result).toBe(
+            "CASE\n" +
+            "  toString(getNumber())\n" +
+            "  WHEN 'one' THEN 1\n" +
+            "  WHEN 'two' THEN 2\n" +
+            "  WHEN 'three' THEN 3\n" +
+            "  ELSE 4\n" +
+            "END;"
+        );
+    });
+
     it("formats tricky line comments", function() {
         expect(sqlFormatter.format("SELECT a#comment, here\nFROM b--comment")).toBe(
             "SELECT\n" +

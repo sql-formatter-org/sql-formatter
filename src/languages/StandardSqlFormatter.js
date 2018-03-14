@@ -61,11 +61,13 @@ const reservedToplevelWords = [
 const reservedNewlineWords = [
     "AND",
     "CROSS APPLY", "CROSS JOIN",
+    "ELSE",
     "INNER JOIN",
     "JOIN",
     "LEFT JOIN", "LEFT OUTER JOIN",
     "OR", "OUTER APPLY", "OUTER JOIN",
     "RIGHT JOIN", "RIGHT OUTER JOIN",
+    "WHEN",
     "XOR"
 ];
 
@@ -92,8 +94,8 @@ export default class StandardSqlFormatter {
                 reservedToplevelWords,
                 reservedNewlineWords,
                 stringTypes: [`""`, "N''", "''", "``", "[]"],
-                openParens: ["("],
-                closeParens: [")"],
+                openParens: ["(", "CASE"],
+                closeParens: [")", "END"],
                 indexedPlaceholderTypes: ["?"],
                 namedPlaceholderTypes: ["@", ":"],
                 lineCommentTypes: ["#", "--"]
