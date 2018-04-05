@@ -193,9 +193,7 @@ describe("PlSqlFormatter", function() {
     });
 
     it("formats SELECT query with CROSS JOIN", function() {
-        const result = sqlFormatter.format("SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t", {
-            params: ["first", "second", "third"]
-        });
+        const result = sqlFormatter.format("SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t");
         expect(result).toBe(
             "SELECT\n" +
             "  a,\n" +
@@ -207,9 +205,7 @@ describe("PlSqlFormatter", function() {
     });
 
     it("formats SELECT query with CROSS APPLY", function() {
-        const result = sqlFormatter.format("SELECT a, b FROM t CROSS APPLY fn(t.id)", {
-            params: ["first", "second", "third"]
-        });
+        const result = sqlFormatter.format("SELECT a, b FROM t CROSS APPLY fn(t.id)", );
         expect(result).toBe(
             "SELECT\n" +
             "  a,\n" +
@@ -240,9 +236,7 @@ describe("PlSqlFormatter", function() {
     });
 
     it("formats SELECT query with OUTER APPLY", function() {
-        const result = sqlFormatter.format("SELECT a, b FROM t OUTER APPLY fn(t.id)", {
-            params: ["first", "second", "third"]
-        });
+        const result = sqlFormatter.format("SELECT a, b FROM t OUTER APPLY fn(t.id)");
         expect(result).toBe(
             "SELECT\n" +
             "  a,\n" +
