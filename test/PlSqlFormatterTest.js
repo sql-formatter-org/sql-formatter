@@ -2,12 +2,12 @@ import sqlFormatter from "./../src/sqlFormatter";
 import behavesLikeSqlFormatter from "./behavesLikeSqlFormatter";
 
 describe("PlSqlFormatter", function() {
-    behavesLikeSqlFormatter("PL/SQL");
+    behavesLikeSqlFormatter("pl/sql");
 
     it("formats FETCH FIRST like LIMIT", function() {
         expect(sqlFormatter.format(
             "SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;",
-            {language: "PL/SQL"}
+            {language: "pl/sql"}
         )).toBe(
             "SELECT\n" +
             "  col1\n" +
@@ -25,7 +25,7 @@ describe("PlSqlFormatter", function() {
             "SELECT col FROM\n" +
             "-- This is a comment\n" +
             "MyTable;\n",
-            {language: "PL/SQL"}
+            {language: "pl/sql"}
         );
         expect(result).toBe(
             "SELECT\n" +
@@ -39,7 +39,7 @@ describe("PlSqlFormatter", function() {
     it("recognizes _, $, #, . and @ as part of identifiers", function() {
         const result = sqlFormatter.format(
             "SELECT my_col$1#, col.2@ FROM tbl\n",
-            {language: "PL/SQL"}
+            {language: "pl/sql"}
         );
         expect(result).toBe(
             "SELECT\n" +
