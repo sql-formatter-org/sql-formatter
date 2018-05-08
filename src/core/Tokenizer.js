@@ -81,7 +81,8 @@ export default class Tokenizer {
 
     createParenRegex(parens) {
         return new RegExp(
-            "^(" + parens.map(p => escapeRegExp(p)).join("|") + ")"
+            "^(" + parens.map(p => escapeRegExp(p)).join("|") + ")",
+            "i"
         );
     }
 

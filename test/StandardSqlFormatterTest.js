@@ -316,6 +316,19 @@ describe("StandardSqlFormatter", function() {
         );
     });
 
+    it("recognizes lowercase CASE ... END", function() {
+        const result = sqlFormatter.format(
+            "case when option = 'foo' then 1 else 2 end;"
+        );
+
+        expect(result).toBe(
+            "case\n" +
+            "  when option = 'foo' then 1\n" +
+            "  else 2\n" +
+            "end;"
+        );
+    });
+
     it("formats tricky line comments", function() {
         expect(sqlFormatter.format("SELECT a#comment, here\nFROM b--comment")).toBe(
             "SELECT\n" +
