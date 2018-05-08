@@ -81,9 +81,20 @@ export default class Tokenizer {
 
     createParenRegex(parens) {
         return new RegExp(
-            "^(" + parens.map(p => escapeRegExp(p)).join("|") + ")",
+            "^(" + parens.map(p => this.escapeParen(p)).join("|") + ")",
             "i"
         );
+    }
+
+    escapeParen(paren) {
+        if (paren.length === 1) {
+            // A single punctuation character
+            return escapeRegExp(paren);
+        }
+        else {
+            // longer word
+            return "\\b" + paren + "\\b";
+        }
     }
 
     createPlaceholderRegex(types, pattern) {

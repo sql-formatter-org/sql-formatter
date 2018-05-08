@@ -329,6 +329,21 @@ describe("StandardSqlFormatter", function() {
         );
     });
 
+    // Regression test for issue #43
+    it("ignores words CASE and END inside other strings", function() {
+        const result = sqlFormatter.format(
+            "SELECT CASEDATE, ENDDATE FROM table1;"
+        );
+
+        expect(result).toBe(
+            "SELECT\n" +
+            "  CASEDATE,\n" +
+            "  ENDDATE\n" +
+            "FROM\n" +
+            "  table1;"
+        );
+    });
+
     it("formats tricky line comments", function() {
         expect(sqlFormatter.format("SELECT a#comment, here\nFROM b--comment")).toBe(
             "SELECT\n" +
