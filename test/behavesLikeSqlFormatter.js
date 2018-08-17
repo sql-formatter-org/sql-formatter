@@ -1,5 +1,7 @@
 import sqlFormatter from "./../src/sqlFormatter";
 
+import assert from 'assert';
+
 /**
  * Core tests for all SQL formatters
  * @param {String} language
@@ -11,7 +13,7 @@ export default function behavesLikeSqlFormatter(language) {
             {language, indent: "    "}
         );
 
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "    count(*),\n" +
             "    Column1\n" +
@@ -26,7 +28,7 @@ export default function behavesLikeSqlFormatter(language) {
 
     it("formats simple SET SCHEMA queries", function() {
         const result = format("SET SCHEMA tetrisdb; SET CURRENT SCHEMA bingodb;");
-        expect(result).toBe(
+        assert.equal(result, 
             "SET SCHEMA\n" +
             "  tetrisdb;\n" +
             "SET CURRENT SCHEMA\n" +
@@ -36,7 +38,7 @@ export default function behavesLikeSqlFormatter(language) {
 
     it("formats simple SELECT query", function() {
         const result = format("SELECT count(*),Column1 FROM Table1;");
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  count(*),\n" +
             "  Column1\n" +
@@ -49,7 +51,7 @@ export default function behavesLikeSqlFormatter(language) {
         const result = format(
             "SELECT DISTINCT name, ROUND(age/7) field1, 18 + 20 AS field2, 'some string' FROM foo;"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  DISTINCT name,\n" +
             "  ROUND(age / 7) field1,\n" +
@@ -65,7 +67,7 @@ export default function behavesLikeSqlFormatter(language) {
             "SELECT * FROM foo WHERE Column1 = 'testing'" +
             "AND ( (Column2 = Column3 OR Column4 >= NOW()) );"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  *\n" +
             "FROM\n" +
@@ -86,7 +88,7 @@ export default function behavesLikeSqlFormatter(language) {
             "SELECT * FROM foo WHERE name = 'John' GROUP BY some_column " +
             "HAVING column > 10 ORDER BY other_column LIMIT 5;"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  *\n" +
             "FROM\n" +
@@ -108,7 +110,7 @@ export default function behavesLikeSqlFormatter(language) {
         const result = format(
             "LIMIT 5, 10;"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "LIMIT\n" +
             "  5, 10;"
         );
@@ -118,7 +120,7 @@ export default function behavesLikeSqlFormatter(language) {
         const result = format(
             "LIMIT 5; SELECT foo, bar;"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "LIMIT\n" +
             "  5;\n" +
             "SELECT\n" +
@@ -131,7 +133,7 @@ export default function behavesLikeSqlFormatter(language) {
         const result = format(
             "LIMIT 5 OFFSET 8;"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "LIMIT\n" +
             "  5 OFFSET 8;"
         );
@@ -141,7 +143,7 @@ export default function behavesLikeSqlFormatter(language) {
         const result = format(
             "limit 5, 10;"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "limit\n" +
             "  5, 10;"
         );
@@ -151,7 +153,7 @@ export default function behavesLikeSqlFormatter(language) {
         const result = format(
             "select distinct * frOM foo left join bar WHERe a > 1 and b = 3"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "select\n" +
             "  distinct *\n" +
             "frOM\n" +
@@ -167,7 +169,7 @@ export default function behavesLikeSqlFormatter(language) {
         const result = format(
             "SELECT *, SUM(*) AS sum FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  *,\n" +
             "  SUM(*) AS sum\n" +
@@ -190,7 +192,7 @@ export default function behavesLikeSqlFormatter(language) {
             "SELECT customer_id.from, COUNT(order_id) AS total FROM customers " +
             "INNER JOIN orders ON customers.customer_id = orders.customer_id;"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  customer_id.from,\n" +
             "  COUNT(order_id) AS total\n" +
@@ -211,7 +213,7 @@ export default function behavesLikeSqlFormatter(language) {
             "MyTable # One final comment\n" +
             "WHERE 1 = 2;"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  /*\n" +
             "   * This is a block comment\n" +
@@ -229,7 +231,7 @@ export default function behavesLikeSqlFormatter(language) {
         const result = format(
             "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "INSERT INTO\n" +
             "  Customers (ID, MoneyBalance, Address, City)\n" +
             "VALUES\n" +
@@ -241,7 +243,7 @@ export default function behavesLikeSqlFormatter(language) {
         const result = format(
             "SELECT (a + b * (c - NOW()));"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  (a + b * (c - NOW()));"
         );
@@ -253,7 +255,7 @@ export default function behavesLikeSqlFormatter(language) {
             "SELECT IF(dq.id_discounter_shopping = 2, dq.value, dq.value / 100)," +
             "IF (dq.id_discounter_shopping = 2, 'amount', 'percentage') FROM foo);"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "INSERT INTO\n" +
             "  some_table (\n" +
             "    id_product,\n" +
@@ -283,7 +285,7 @@ export default function behavesLikeSqlFormatter(language) {
         const result = format(
             "UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "UPDATE\n" +
             "  Customers\n" +
             "SET\n" +
@@ -298,7 +300,7 @@ export default function behavesLikeSqlFormatter(language) {
         const result = format(
             "DELETE FROM Customers WHERE CustomerName='Alfred' AND Phone=5002132;"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "DELETE FROM\n" +
             "  Customers\n" +
             "WHERE\n" +
@@ -311,14 +313,14 @@ export default function behavesLikeSqlFormatter(language) {
         const result = format(
             "DROP TABLE IF EXISTS admin_role;"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "DROP TABLE IF EXISTS admin_role;"
         );
     });
 
     it("formats uncomplete query", function() {
         const result = format("SELECT count(");
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  count("
         );
@@ -326,7 +328,7 @@ export default function behavesLikeSqlFormatter(language) {
 
     it("formats query that ends with open comment", function() {
         const result = format("SELECT count(*)\n/*Comment");
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  count(*)\n" +
             "  /*Comment"
@@ -337,7 +339,7 @@ export default function behavesLikeSqlFormatter(language) {
         const result = format(
             "UPDATE customers SET totalorders = ordersummary.total  FROM ( SELECT * FROM bank) AS ordersummary"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "UPDATE\n" +
             "  customers\n" +
             "SET\n" +
@@ -354,7 +356,7 @@ export default function behavesLikeSqlFormatter(language) {
 
     it("formats top-level and newline multi-word reserved words with inconsistent spacing", function() {
         const result = format("SELECT * FROM foo LEFT \t OUTER  \n JOIN bar ORDER \n BY blah");
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  *\n" +
             "FROM\n" +
@@ -367,7 +369,7 @@ export default function behavesLikeSqlFormatter(language) {
 
     it("formats long double parenthized queries to multiple lines", function() {
         const result = format("((foo = '0123456789-0123456789-0123456789-0123456789'))");
-        expect(result).toBe(
+        assert.equal(result, 
             "(\n" +
             "  (\n" +
             "    foo = '0123456789-0123456789-0123456789-0123456789'\n" +
@@ -378,71 +380,71 @@ export default function behavesLikeSqlFormatter(language) {
 
     it("formats short double parenthized queries to one line", function() {
         const result = format("((foo = 'bar'))");
-        expect(result).toBe("((foo = 'bar'))");
+        assert.equal(result, "((foo = 'bar'))");
     });
 
     it("formats single-char operators", function() {
-        expect(format("foo = bar")).toBe("foo = bar");
-        expect(format("foo < bar")).toBe("foo < bar");
-        expect(format("foo > bar")).toBe("foo > bar");
-        expect(format("foo + bar")).toBe("foo + bar");
-        expect(format("foo - bar")).toBe("foo - bar");
-        expect(format("foo * bar")).toBe("foo * bar");
-        expect(format("foo / bar")).toBe("foo / bar");
-        expect(format("foo % bar")).toBe("foo % bar");
+        assert.equal(format("foo = bar"), "foo = bar");
+        assert.equal(format("foo < bar"), "foo < bar");
+        assert.equal(format("foo > bar"), "foo > bar");
+        assert.equal(format("foo + bar"), "foo + bar");
+        assert.equal(format("foo - bar"), "foo - bar");
+        assert.equal(format("foo * bar"), "foo * bar");
+        assert.equal(format("foo / bar"), "foo / bar");
+        assert.equal(format("foo % bar"), "foo % bar");
     });
 
     it("formats multi-char operators", function() {
-        expect(format("foo != bar")).toBe("foo != bar");
-        expect(format("foo <> bar")).toBe("foo <> bar");
-        expect(format("foo == bar")).toBe("foo == bar"); // N1QL
-        expect(format("foo || bar")).toBe("foo || bar"); // Oracle, Postgres, N1QL string concat
+        assert.equal(format("foo != bar"), "foo != bar");
+        assert.equal(format("foo <> bar"), "foo <> bar");
+        assert.equal(format("foo == bar"), "foo == bar"); // N1QL
+        assert.equal(format("foo || bar"), "foo || bar"); // Oracle, Postgres, N1QL string concat
 
-        expect(format("foo <= bar")).toBe("foo <= bar");
-        expect(format("foo >= bar")).toBe("foo >= bar");
+        assert.equal(format("foo <= bar"), "foo <= bar");
+        assert.equal(format("foo >= bar"), "foo >= bar");
 
-        expect(format("foo !< bar")).toBe("foo !< bar");
-        expect(format("foo !> bar")).toBe("foo !> bar");
+        assert.equal(format("foo !< bar"), "foo !< bar");
+        assert.equal(format("foo !> bar"), "foo !> bar");
     });
 
     it("formats logical operators", function() {
-        expect(format("foo ALL bar")).toBe("foo ALL bar");
-        expect(format("foo = ANY (1, 2, 3)")).toBe("foo = ANY (1, 2, 3)");
-        expect(format("EXISTS bar")).toBe("EXISTS bar");
-        expect(format("foo IN (1, 2, 3)")).toBe("foo IN (1, 2, 3)");
-        expect(format("foo LIKE 'hello%'")).toBe("foo LIKE 'hello%'");
-        expect(format("foo IS NULL")).toBe("foo IS NULL");
-        expect(format("UNIQUE foo")).toBe("UNIQUE foo");
+        assert.equal(format("foo ALL bar"), "foo ALL bar");
+        assert.equal(format("foo = ANY (1, 2, 3)"), "foo = ANY (1, 2, 3)");
+        assert.equal(format("EXISTS bar"), "EXISTS bar");
+        assert.equal(format("foo IN (1, 2, 3)"), "foo IN (1, 2, 3)");
+        assert.equal(format("foo LIKE 'hello%'"), "foo LIKE 'hello%'");
+        assert.equal(format("foo IS NULL"), "foo IS NULL");
+        assert.equal(format("UNIQUE foo"), "UNIQUE foo");
     });
 
     it("formats AND/OR operators", function() {
-        expect(format("foo BETWEEN bar AND baz")).toBe("foo BETWEEN bar\nAND baz");
-        expect(format("foo AND bar")).toBe("foo\nAND bar");
-        expect(format("foo OR bar")).toBe("foo\nOR bar");
+        assert.equal(format("foo BETWEEN bar AND baz"), "foo BETWEEN bar\nAND baz");
+        assert.equal(format("foo AND bar"), "foo\nAND bar");
+        assert.equal(format("foo OR bar"), "foo\nOR bar");
     });
 
     it("recognizes strings", function() {
-        expect(format("\"foo JOIN bar\"")).toBe("\"foo JOIN bar\"");
-        expect(format("'foo JOIN bar'")).toBe("'foo JOIN bar'");
-        expect(format("`foo JOIN bar`")).toBe("`foo JOIN bar`");
+        assert.equal(format("\"foo JOIN bar\""), "\"foo JOIN bar\"");
+        assert.equal(format("'foo JOIN bar'"), "'foo JOIN bar'");
+        assert.equal(format("`foo JOIN bar`"), "`foo JOIN bar`");
     });
 
     it("recognizes escaped strings", function() {
-        expect(format("\"foo \\\" JOIN bar\"")).toBe("\"foo \\\" JOIN bar\"");
-        expect(format("'foo \\' JOIN bar'")).toBe("'foo \\' JOIN bar'");
-        expect(format("`foo `` JOIN bar`")).toBe("`foo `` JOIN bar`");
+        assert.equal(format("\"foo \\\" JOIN bar\""), "\"foo \\\" JOIN bar\"");
+        assert.equal(format("'foo \\' JOIN bar'"), "'foo \\' JOIN bar'");
+        assert.equal(format("`foo `` JOIN bar`"), "`foo `` JOIN bar`");
     });
 
     it("formats postgres specific operators", function() {
-        expect(format("column::int")).toBe("column :: int");
-        expect(format("v->2")).toBe("v -> 2");
-        expect(format("v->>2")).toBe( "v ->> 2");
-        expect(format("foo ~~ 'hello'")).toBe("foo ~~ 'hello'");
-        expect(format("foo !~ 'hello'")).toBe("foo !~ 'hello'");
-        expect(format("foo ~* 'hello'")).toBe("foo ~* 'hello'");
-        expect(format("foo ~~* 'hello'")).toBe("foo ~~* 'hello'");
-        expect(format("foo !~~ 'hello'")).toBe("foo !~~ 'hello'");
-        expect(format("foo !~* 'hello'")).toBe("foo !~* 'hello'");
-        expect(format("foo !~~* 'hello'")).toBe("foo !~~* 'hello'");
+        assert.equal(format("column::int"), "column :: int");
+        assert.equal(format("v->2"), "v -> 2");
+        assert.equal(format("v->>2"),  "v ->> 2");
+        assert.equal(format("foo ~~ 'hello'"), "foo ~~ 'hello'");
+        assert.equal(format("foo !~ 'hello'"), "foo !~ 'hello'");
+        assert.equal(format("foo ~* 'hello'"), "foo ~* 'hello'");
+        assert.equal(format("foo ~~* 'hello'"), "foo ~~* 'hello'");
+        assert.equal(format("foo !~~ 'hello'"), "foo !~~ 'hello'");
+        assert.equal(format("foo !~* 'hello'"), "foo !~* 'hello'");
+        assert.equal(format("foo !~~* 'hello'"), "foo !~~* 'hello'");
     });
 }

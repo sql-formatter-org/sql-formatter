@@ -24,7 +24,7 @@
   "scripts": {
     "clean": "rimraf lib dist",
     "lint": "eslint .",
-    "test": "jest",
+    "test": "mocha -r esm",
     "test:watch": "npm run test -- --watch",
     "check": "npm run lint && npm run test",
     "build:webpack": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
@@ -32,7 +32,7 @@
     "build:umd": "cross-env NODE_ENV=development webpack src/sqlFormatter.js dist/sql-formatter.js",
     "build:umd:min": "cross-env NODE_ENV=production webpack src/sqlFormatter.js dist/sql-formatter.min.js",
     "build": "rollup -c rollup.js",
-    "prepublish": "npm run clean && npm run check && npm run build"
+    "prepublishOnly": "npm run clean && npm run check && npm run build"
   },
   "repository": {
     "type": "git",
@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "eslint": "^3.7.1",
-    "jest": "^17.0.2",
+    "mocha": "^3.5.3",
     "rimraf": "^2.3.4",
     "rollup-plugin-buble": "^0.19.2",
     "rollup-plugin-node-resolve": "^3.3.0",

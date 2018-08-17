@@ -1,21 +1,23 @@
 import sqlFormatter from "./../src/sqlFormatter";
 import behavesLikeSqlFormatter from "./behavesLikeSqlFormatter";
 
+import assert from 'assert';
+
 describe("StandardSqlFormatter", function() {
     behavesLikeSqlFormatter();
 
     it("formats short CREATE TABLE", function() {
-        expect(sqlFormatter.format(
+        assert.equal(sqlFormatter.format(
             "CREATE TABLE items (a INT PRIMARY KEY, b TEXT);"
-        )).toBe(
+        ),
             "CREATE TABLE items (a INT PRIMARY KEY, b TEXT);"
         );
     });
 
     it("formats long CREATE TABLE", function() {
-        expect(sqlFormatter.format(
+        assert.equal(sqlFormatter.format(
             "CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL);"
-        )).toBe(
+        ),
             "CREATE TABLE items (\n" +
             "  a INT PRIMARY KEY,\n" +
             "  b TEXT,\n" +
@@ -29,7 +31,7 @@ describe("StandardSqlFormatter", function() {
         const result = sqlFormatter.format(
             "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "INSERT\n" +
             "  Customers (ID, MoneyBalance, Address, City)\n" +
             "VALUES\n" +
@@ -41,7 +43,7 @@ describe("StandardSqlFormatter", function() {
         const result = sqlFormatter.format(
             "ALTER TABLE supplier MODIFY supplier_name char(100) NOT NULL;"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "ALTER TABLE\n" +
             "  supplier\n" +
             "MODIFY\n" +
@@ -53,7 +55,7 @@ describe("StandardSqlFormatter", function() {
         const result = sqlFormatter.format(
             "ALTER TABLE supplier ALTER COLUMN supplier_name VARCHAR(100) NOT NULL;"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "ALTER TABLE\n" +
             "  supplier\n" +
             "ALTER COLUMN\n" +
@@ -62,15 +64,15 @@ describe("StandardSqlFormatter", function() {
     });
 
     it("recognizes [] strings", function() {
-        expect(sqlFormatter.format("[foo JOIN bar]")).toBe("[foo JOIN bar]");
-        expect(sqlFormatter.format("[foo ]] JOIN bar]")).toBe("[foo ]] JOIN bar]");
+        assert.equal(sqlFormatter.format("[foo JOIN bar]"), "[foo JOIN bar]");
+        assert.equal(sqlFormatter.format("[foo ]] JOIN bar]"), "[foo ]] JOIN bar]");
     });
 
     it("recognizes @variables", function() {
         const result = sqlFormatter.format(
             "SELECT @variable, @a1_2.3$, @'var name', @\"var name\", @`var name`, @[var name];"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  @variable,\n" +
             "  @a1_2.3$,\n" +
@@ -93,7 +95,7 @@ describe("StandardSqlFormatter", function() {
                 }
             }
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  \"variable value\",\n" +
             "  'weird value',\n" +
@@ -109,7 +111,7 @@ describe("StandardSqlFormatter", function() {
         const result = sqlFormatter.format(
             "SELECT :variable, :a1_2.3$, :'var name', :\"var name\", :`var name`, :[var name];"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  :variable,\n" +
             "  :a1_2.3$,\n" +
@@ -134,7 +136,7 @@ describe("StandardSqlFormatter", function() {
                 }
             }
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  \"variable value\",\n" +
             "  'weird value',\n" +
@@ -149,7 +151,7 @@ describe("StandardSqlFormatter", function() {
 
     it("recognizes ?[0-9]* placeholders", function() {
         const result = sqlFormatter.format("SELECT ?1, ?25, ?;");
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  ?1,\n" +
             "  ?25,\n" +
@@ -165,7 +167,7 @@ describe("StandardSqlFormatter", function() {
                 2: "third"
             }
         });
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  second,\n" +
             "  third,\n" +
@@ -177,7 +179,7 @@ describe("StandardSqlFormatter", function() {
         const result = sqlFormatter.format("SELECT ?, ?, ?;", {
             params: ["first", "second", "third"]
         });
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  first,\n" +
             "  second,\n" +
@@ -189,7 +191,7 @@ describe("StandardSqlFormatter", function() {
         const result = sqlFormatter.format("SELECT 1 GO SELECT 2", {
             params: ["first", "second", "third"]
         });
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  1\n" +
             "GO\n" +
@@ -200,7 +202,7 @@ describe("StandardSqlFormatter", function() {
 
     it("formats SELECT query with CROSS JOIN", function() {
         const result = sqlFormatter.format("SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t");
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  a,\n" +
             "  b\n" +
@@ -212,7 +214,7 @@ describe("StandardSqlFormatter", function() {
 
     it("formats SELECT query with CROSS APPLY", function() {
         const result = sqlFormatter.format("SELECT a, b FROM t CROSS APPLY fn(t.id)");
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  a,\n" +
             "  b\n" +
@@ -224,7 +226,7 @@ describe("StandardSqlFormatter", function() {
 
     it("formats simple SELECT", function() {
         const result = sqlFormatter.format("SELECT N, M FROM t");
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  N,\n" +
             "  M\n" +
@@ -235,7 +237,7 @@ describe("StandardSqlFormatter", function() {
 
     it("formats simple SELECT with national characters (MSSQL)", function() {
         const result = sqlFormatter.format("SELECT N'value'");
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  N'value'"
         );
@@ -243,7 +245,7 @@ describe("StandardSqlFormatter", function() {
 
     it("formats SELECT query with OUTER APPLY", function() {
         const result = sqlFormatter.format("SELECT a, b FROM t OUTER APPLY fn(t.id)");
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  a,\n" +
             "  b\n" +
@@ -257,7 +259,7 @@ describe("StandardSqlFormatter", function() {
         const result = sqlFormatter.format(
             "SELECT * FETCH FIRST 2 ROWS ONLY;"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  *\n" +
             "FETCH FIRST\n" +
@@ -270,7 +272,7 @@ describe("StandardSqlFormatter", function() {
             "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
         );
 
-        expect(result).toBe(
+        assert.equal(result, 
             "CASE\n" +
             "  WHEN option = 'foo' THEN 1\n" +
             "  WHEN option = 'bar' THEN 2\n" +
@@ -285,7 +287,7 @@ describe("StandardSqlFormatter", function() {
             "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table"
         );
 
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  foo,\n" +
             "  bar,\n" +
@@ -305,7 +307,7 @@ describe("StandardSqlFormatter", function() {
             "CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;"
         );
 
-        expect(result).toBe(
+        assert.equal(result, 
             "CASE\n" +
             "  toString(getNumber())\n" +
             "  WHEN 'one' THEN 1\n" +
@@ -321,7 +323,7 @@ describe("StandardSqlFormatter", function() {
             "case when option = 'foo' then 1 else 2 end;"
         );
 
-        expect(result).toBe(
+        assert.equal(result, 
             "case\n" +
             "  when option = 'foo' then 1\n" +
             "  else 2\n" +
@@ -335,7 +337,7 @@ describe("StandardSqlFormatter", function() {
             "SELECT CASEDATE, ENDDATE FROM table1;"
         );
 
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  CASEDATE,\n" +
             "  ENDDATE\n" +
@@ -345,7 +347,7 @@ describe("StandardSqlFormatter", function() {
     });
 
     it("formats tricky line comments", function() {
-        expect(sqlFormatter.format("SELECT a#comment, here\nFROM b--comment")).toBe(
+        assert.equal(sqlFormatter.format("SELECT a#comment, here\nFROM b--comment"),
             "SELECT\n" +
             "  a #comment, here\n" +
             "FROM\n" +

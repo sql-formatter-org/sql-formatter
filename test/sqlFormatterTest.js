@@ -1,9 +1,11 @@
 import sqlFormatter from "./../src/sqlFormatter";
 
+import assert from 'assert';
+
 describe("sqlFormatter", function() {
     it("throws error when unsupported language parameter specified", function() {
-        expect(() => {
+        assert.throws(() => {
             sqlFormatter.format("SELECT *", {language: "blah"});
-        }).toThrow("Unsupported SQL dialect: blah");
+        }, "Unsupported SQL dialect: blah");
     });
 });
