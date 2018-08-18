@@ -1,4 +1,4 @@
-import trimEnd from "lodash/trimEnd";
+import trimEnd from "lodash-es/trimEnd";
 import tokenTypes from "./tokenTypes";
 import Indentation from "./Indentation";
 import InlineBlock from "./InlineBlock";

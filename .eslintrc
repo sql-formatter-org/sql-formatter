@@ -1,5 +1,11 @@
 {
-    "extends": "zt/base",
+    "parserOptions": {
+        "ecmaVersion": 7,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "modules": true
+        }
+    },
     "env": {
         "jest": true
     }

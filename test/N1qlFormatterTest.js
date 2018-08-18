@@ -1,12 +1,14 @@
 import sqlFormatter from "./../src/sqlFormatter";
 import behavesLikeSqlFormatter from "./behavesLikeSqlFormatter";
 
+import assert from 'assert';
+
 describe("N1qlFormatter", function() {
     behavesLikeSqlFormatter("n1ql");
 
     it("formats SELECT query with element selection expression", function() {
         const result = sqlFormatter.format("SELECT orderlines[0].productId FROM orders;", {language: "n1ql"});
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  orderlines[0].productId\n" +
             "FROM\n" +
@@ -19,7 +21,7 @@ describe("N1qlFormatter", function() {
             "SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];",
             {language: "n1ql"}
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  fname,\n" +
             "  email\n" +
@@ -35,7 +37,7 @@ describe("N1qlFormatter", function() {
             "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id':1,'type':'Tarzan'});",
             {language: "n1ql"}
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "INSERT INTO\n" +
             "  heroes (KEY, VALUE)\n" +
             "VALUES\n" +
@@ -49,7 +51,7 @@ describe("N1qlFormatter", function() {
             "'array': [123456789, 123456789, 123456789, 123456789, 123456789], 'hello': 'world'});",
             {language: "n1ql"}
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "INSERT INTO\n" +
             "  heroes (KEY, VALUE)\n" +
             "VALUES\n" +
@@ -76,7 +78,7 @@ describe("N1qlFormatter", function() {
             "SELECT * FROM tutorial UNNEST tutorial.children c;",
             {language: "n1ql"}
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  *\n" +
             "FROM\n" +
@@ -93,7 +95,7 @@ describe("N1qlFormatter", function() {
             "ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;",
             {language: "n1ql"}
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  *\n" +
             "FROM\n" +
@@ -110,7 +112,7 @@ describe("N1qlFormatter", function() {
             "EXPLAIN DELETE FROM tutorial t USE KEYS 'baldwin' RETURNING t",
             {language: "n1ql"}
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "EXPLAIN DELETE FROM\n" +
             "  tutorial t\n" +
             "USE KEYS\n" +
@@ -123,7 +125,7 @@ describe("N1qlFormatter", function() {
             "UPDATE tutorial USE KEYS 'baldwin' SET type = 'actor' RETURNING tutorial.type",
             {language: "n1ql"}
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "UPDATE\n" +
             "  tutorial\n" +
             "USE KEYS\n" +
@@ -138,7 +140,7 @@ describe("N1qlFormatter", function() {
             "SELECT $variable, $'var name', $\"var name\", $`var name`;",
             {language: "n1ql"}
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  $variable,\n" +
             "  $'var name',\n" +
@@ -157,7 +159,7 @@ describe("N1qlFormatter", function() {
                 }
             }
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  \"variable value\",\n" +
             "  'var value',\n" +
@@ -175,7 +177,7 @@ describe("N1qlFormatter", function() {
                 2: "third"
             }
         });
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  second,\n" +
             "  third,\n" +

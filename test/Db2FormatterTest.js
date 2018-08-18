@@ -1,14 +1,16 @@
 import sqlFormatter from "./../src/sqlFormatter";
 import behavesLikeSqlFormatter from "./behavesLikeSqlFormatter";
 
+import assert from 'assert';
+
 describe("Db2Formatter", function() {
     behavesLikeSqlFormatter("db2");
 
     it("formats FETCH FIRST like LIMIT", function() {
-        expect(sqlFormatter.format(
+        assert.equal(sqlFormatter.format(
             "SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;",
             {language: "db2"}
-        )).toBe(
+        ),
             "SELECT\n" +
             "  col1\n" +
             "FROM\n" +
@@ -27,7 +29,7 @@ describe("Db2Formatter", function() {
             "MyTable;\n",
             {language: "db2"}
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  col\n" +
             "FROM\n" +
@@ -41,7 +43,7 @@ describe("Db2Formatter", function() {
             "SELECT col#1, @col2 FROM tbl\n",
             {language: "db2"}
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  col#1,\n" +
             "  @col2\n" +
@@ -51,7 +53,7 @@ describe("Db2Formatter", function() {
     });
 
     it("recognizes :variables", function() {
-        expect(sqlFormatter.format("SELECT :variable;", {language: "db2"})).toBe(
+        assert.equal(sqlFormatter.format("SELECT :variable;", {language: "db2"}),
             "SELECT\n" +
             "  :variable;"
         );
@@ -62,7 +64,7 @@ describe("Db2Formatter", function() {
             "SELECT :variable",
             {language: "db2", params: {"variable": "\"variable value\""}}
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  \"variable value\""
         );

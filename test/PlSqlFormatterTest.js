@@ -1,14 +1,16 @@
 import sqlFormatter from "./../src/sqlFormatter";
 import behavesLikeSqlFormatter from "./behavesLikeSqlFormatter";
 
+import assert from 'assert';
+
 describe("PlSqlFormatter", function() {
     behavesLikeSqlFormatter("pl/sql");
 
     it("formats FETCH FIRST like LIMIT", function() {
-        expect(sqlFormatter.format(
+        assert.equal(sqlFormatter.format(
             "SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;",
             {language: "pl/sql"}
-        )).toBe(
+        ),
             "SELECT\n" +
             "  col1\n" +
             "FROM\n" +
@@ -27,7 +29,7 @@ describe("PlSqlFormatter", function() {
             "MyTable;\n",
             {language: "pl/sql"}
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  col\n" +
             "FROM\n" +
@@ -41,7 +43,7 @@ describe("PlSqlFormatter", function() {
             "SELECT my_col$1#, col.2@ FROM tbl\n",
             {language: "pl/sql"}
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  my_col$1#,\n" +
             "  col.2@\n" +
@@ -51,17 +53,17 @@ describe("PlSqlFormatter", function() {
     });
 
     it("formats short CREATE TABLE", function() {
-        expect(sqlFormatter.format(
+        assert.equal(sqlFormatter.format(
             "CREATE TABLE items (a INT PRIMARY KEY, b TEXT);"
-        )).toBe(
+        ),
             "CREATE TABLE items (a INT PRIMARY KEY, b TEXT);"
         );
     });
 
     it("formats long CREATE TABLE", function() {
-        expect(sqlFormatter.format(
+        assert.equal(sqlFormatter.format(
             "CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL);"
-        )).toBe(
+        ),
             "CREATE TABLE items (\n" +
             "  a INT PRIMARY KEY,\n" +
             "  b TEXT,\n" +
@@ -75,7 +77,7 @@ describe("PlSqlFormatter", function() {
         const result = sqlFormatter.format(
             "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "INSERT\n" +
             "  Customers (ID, MoneyBalance, Address, City)\n" +
             "VALUES\n" +
@@ -87,7 +89,7 @@ describe("PlSqlFormatter", function() {
         const result = sqlFormatter.format(
             "ALTER TABLE supplier MODIFY supplier_name char(100) NOT NULL;"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "ALTER TABLE\n" +
             "  supplier\n" +
             "MODIFY\n" +
@@ -99,7 +101,7 @@ describe("PlSqlFormatter", function() {
         const result = sqlFormatter.format(
             "ALTER TABLE supplier ALTER COLUMN supplier_name VARCHAR(100) NOT NULL;"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "ALTER TABLE\n" +
             "  supplier\n" +
             "ALTER COLUMN\n" +
@@ -108,15 +110,15 @@ describe("PlSqlFormatter", function() {
     });
 
     it("recognizes [] strings", function() {
-        expect(sqlFormatter.format("[foo JOIN bar]")).toBe("[foo JOIN bar]");
-        expect(sqlFormatter.format("[foo ]] JOIN bar]")).toBe("[foo ]] JOIN bar]");
+        assert.equal(sqlFormatter.format("[foo JOIN bar]"),"[foo JOIN bar]");
+        assert.equal(sqlFormatter.format("[foo ]] JOIN bar]"),"[foo ]] JOIN bar]");
     });
 
     it("recognizes :variables", function() {
         const result = sqlFormatter.format(
             "SELECT :variable, :a1_2.3$, :'var name', :\"var name\", :`var name`, :[var name];"
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  :variable,\n" +
             "  :a1_2.3$,\n" +
@@ -141,7 +143,7 @@ describe("PlSqlFormatter", function() {
                 }
             }
         );
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  \"variable value\",\n" +
             "  'weird value',\n" +
@@ -156,7 +158,7 @@ describe("PlSqlFormatter", function() {
 
     it("recognizes ?[0-9]* placeholders", function() {
         const result = sqlFormatter.format("SELECT ?1, ?25, ?;");
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  ?1,\n" +
             "  ?25,\n" +
@@ -172,7 +174,7 @@ describe("PlSqlFormatter", function() {
                 2: "third"
             }
         });
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  second,\n" +
             "  third,\n" +
@@ -184,7 +186,7 @@ describe("PlSqlFormatter", function() {
         const result = sqlFormatter.format("SELECT ?, ?, ?;", {
             params: ["first", "second", "third"]
         });
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  first,\n" +
             "  second,\n" +
@@ -194,7 +196,7 @@ describe("PlSqlFormatter", function() {
 
     it("formats SELECT query with CROSS JOIN", function() {
         const result = sqlFormatter.format("SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t");
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  a,\n" +
             "  b\n" +
@@ -205,8 +207,8 @@ describe("PlSqlFormatter", function() {
     });
 
     it("formats SELECT query with CROSS APPLY", function() {
-        const result = sqlFormatter.format("SELECT a, b FROM t CROSS APPLY fn(t.id)", );
-        expect(result).toBe(
+        const result = sqlFormatter.format("SELECT a, b FROM t CROSS APPLY fn(t.id)");
+        assert.equal(result, 
             "SELECT\n" +
             "  a,\n" +
             "  b\n" +
@@ -218,7 +220,7 @@ describe("PlSqlFormatter", function() {
 
     it("formats simple SELECT", function() {
         const result = sqlFormatter.format("SELECT N, M FROM t");
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  N,\n" +
             "  M\n" +
@@ -229,7 +231,7 @@ describe("PlSqlFormatter", function() {
 
     it("formats simple SELECT with national characters", function() {
         const result = sqlFormatter.format("SELECT N'value'");
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  N'value'"
         );
@@ -237,7 +239,7 @@ describe("PlSqlFormatter", function() {
 
     it("formats SELECT query with OUTER APPLY", function() {
         const result = sqlFormatter.format("SELECT a, b FROM t OUTER APPLY fn(t.id)");
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  a,\n" +
             "  b\n" +
@@ -252,7 +254,7 @@ describe("PlSqlFormatter", function() {
             "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
         );
 
-        expect(result).toBe(
+        assert.equal(result, 
             "CASE\n" +
             "  WHEN option = 'foo' THEN 1\n" +
             "  WHEN option = 'bar' THEN 2\n" +
@@ -267,7 +269,7 @@ describe("PlSqlFormatter", function() {
             "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table"
         );
 
-        expect(result).toBe(
+        assert.equal(result, 
             "SELECT\n" +
             "  foo,\n" +
             "  bar,\n" +
@@ -287,7 +289,7 @@ describe("PlSqlFormatter", function() {
             "CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;"
         );
 
-        expect(result).toBe(
+        assert.equal(result, 
             "CASE\n" +
             "  toString(getNumber())\n" +
             "  WHEN 'one' THEN 1\n" +
