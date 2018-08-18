@@ -3,7 +3,7 @@ node_js: node
 
 install:
   - npm install
-  - npm install coveralls
+  - npm install coveralls rollup
 script:
   - npm run check
   - npm run build

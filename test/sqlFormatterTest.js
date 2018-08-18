@@ -6,6 +6,6 @@ describe("sqlFormatter", function() {
     it("throws error when unsupported language parameter specified", function() {
         assert.throws(() => {
             sqlFormatter.format("SELECT *", {language: "blah"});
-        }, "Unsupported SQL dialect: blah");
+        }, new Error ("Unsupported SQL dialect: blah"));
     });
 });
