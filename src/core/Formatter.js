@@ -74,7 +74,13 @@ export default class Formatter {
                 formattedQuery = this.formatWithSpaceAfter(token, formattedQuery);
             }
             else if (token.value === "." || token.value === ";") {
-                formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
+                // if the previous token was a line comment, do not allow the newline to be trimmed
+                if (tokens[index - 1].type === tokenTypes.LINE_COMMENT) {
+                    formattedQuery = this.formatWithNewlines(token, formattedQuery);
+                } 
+                else {
+                    formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
+                }
             }
             else {
                 formattedQuery = this.formatWithSpaces(token, formattedQuery);
@@ -174,6 +180,10 @@ export default class Formatter {
 
     formatWithSpaces(token, query) {
         return query + token.value + " ";
+    }
+
+    formatWithNewlines(token, query) {
+        return trimEnd(query, " ") + token.value;
     }
 
     addNewline(query) {

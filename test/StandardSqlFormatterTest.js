@@ -352,4 +352,14 @@ describe("StandardSqlFormatter", function() {
             "  b --comment"
         );
     });
+
+    it("formats line comments without adding semicolon to same line", function() {
+        expect(sqlFormatter.format("SELECT a FROM b\n--comment\n;")).toBe(
+            "SELECT\n" +
+            "  a\n" +
+            "FROM\n" +
+            "  b --comment\n" +
+            ";"
+        );
+    });
 });
