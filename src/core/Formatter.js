@@ -18,7 +18,8 @@ export default class Formatter {
         this.params = new Params(this.cfg.params);
         this.tokenizer = tokenizer;
         this.previousReservedWord = {};
-        this.previousToken = {};
+        this.tokens = [];
+        this.index = 0;
     }
 
     /**
@@ -28,19 +29,20 @@ export default class Formatter {
      * @return {String} formatted query
      */
     format(query) {
-        const tokens = this.tokenizer.tokenize(query);
-        const formattedQuery = this.getFormattedQueryFromTokens(tokens);
+        this.tokens = this.tokenizer.tokenize(query);
+        const formattedQuery = this.getFormattedQueryFromTokens();
 
         return formattedQuery.trim();
     }
 
-    getFormattedQueryFromTokens(tokens) {
+    getFormattedQueryFromTokens() {
         let formattedQuery = "";
 
-        tokens.forEach((token, index) => {
+        this.tokens.forEach((token, index) => {
+            this.index = index;
+
             if (token.type === tokenTypes.WHITESPACE) {
-                // ignore as if this token never existed
-                return;
+                // ignore (we do our own whitespace formatting)
             }
             else if (token.type === tokenTypes.LINE_COMMENT) {
                 formattedQuery = this.formatLineComment(token, formattedQuery);
@@ -61,7 +63,7 @@ export default class Formatter {
                 this.previousReservedWord = token;
             }
             else if (token.type === tokenTypes.OPEN_PAREN) {
-                formattedQuery = this.formatOpeningParentheses(tokens, index, formattedQuery);
+                formattedQuery = this.formatOpeningParentheses(token, formattedQuery);
             }
             else if (token.type === tokenTypes.CLOSE_PAREN) {
                 formattedQuery = this.formatClosingParentheses(token, formattedQuery);
@@ -81,8 +83,6 @@ export default class Formatter {
             else {
                 formattedQuery = this.formatWithSpaces(token, formattedQuery);
             }
-
-            this.previousToken = token;
         });
         return formattedQuery;
     }
@@ -120,15 +120,14 @@ export default class Formatter {
     }
 
     // Opening parentheses increase the block indent level and start a new line
-    formatOpeningParentheses(tokens, index, query) {
+    formatOpeningParentheses(token, query) {
         // Take out the preceding space unless there was whitespace there in the original query or another opening parens
-        const previousToken = tokens[index - 1];
-        if (previousToken && previousToken.type !== tokenTypes.WHITESPACE && previousToken.type !== tokenTypes.OPEN_PAREN && previousToken.type !== tokenTypes.LINE_COMMENT) {
+        if (this.previousToken().type !== tokenTypes.WHITESPACE && this.previousToken().type !== tokenTypes.OPEN_PAREN && this.previousToken().type !== tokenTypes.LINE_COMMENT) {
             query = trimEnd(query);
         }
-        query += tokens[index].value;
+        query += token.value;
 
-        this.inlineBlock.beginIfPossible(tokens, index);
+        this.inlineBlock.beginIfPossible(this.tokens, this.index);
 
         if (!this.inlineBlock.isActive()) {
             this.indentation.increaseBlockLevel();
@@ -185,11 +184,23 @@ export default class Formatter {
     }
 
     trimTrailingWhitespace(query) {
-        if (this.previousToken.type === tokenTypes.LINE_COMMENT) {
+        if (this.previousNonWhitespaceToken().type === tokenTypes.LINE_COMMENT) {
             return trimEnd(query) + "\n";
         }
         else {
             return trimEnd(query);
         }
+    }
+
+    previousNonWhitespaceToken() {
+        let n = 1;
+        while (this.previousToken(n).type === tokenTypes.WHITESPACE) {
+            n++;
+        }
+        return this.previousToken(n);
+    }
+
+    previousToken(offset = 1) {
+        return this.tokens[this.index - offset] || {};
     }
 }
