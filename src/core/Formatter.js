@@ -18,6 +18,7 @@ export default class Formatter {
         this.params = new Params(this.cfg.params);
         this.tokenizer = tokenizer;
         this.previousReservedWord = {};
+        this.previousToken = {};
     }
 
     /**
@@ -38,6 +39,7 @@ export default class Formatter {
 
         tokens.forEach((token, index) => {
             if (token.type === tokenTypes.WHITESPACE) {
+                // ignore as if this token never existed
                 return;
             }
             else if (token.type === tokenTypes.LINE_COMMENT) {
@@ -74,17 +76,13 @@ export default class Formatter {
                 formattedQuery = this.formatWithSpaceAfter(token, formattedQuery);
             }
             else if (token.value === "." || token.value === ";") {
-                // if the previous token was a line comment, do not allow the newline to be trimmed
-                if (tokens[index - 1].type === tokenTypes.LINE_COMMENT) {
-                    formattedQuery = this.formatWithNewlines(token, formattedQuery);
-                } 
-                else {
-                    formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
-                }
+                formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
             }
             else {
                 formattedQuery = this.formatWithSpaces(token, formattedQuery);
             }
+
+            this.previousToken = token;
         });
         return formattedQuery;
     }
@@ -125,7 +123,7 @@ export default class Formatter {
     formatOpeningParentheses(tokens, index, query) {
         // Take out the preceding space unless there was whitespace there in the original query or another opening parens
         const previousToken = tokens[index - 1];
-        if (previousToken && previousToken.type !== tokenTypes.WHITESPACE && previousToken.type !== tokenTypes.OPEN_PAREN) {
+        if (previousToken && previousToken.type !== tokenTypes.WHITESPACE && previousToken.type !== tokenTypes.OPEN_PAREN && previousToken.type !== tokenTypes.LINE_COMMENT) {
             query = trimEnd(query);
         }
         query += tokens[index].value;
@@ -157,7 +155,7 @@ export default class Formatter {
 
     // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
     formatComma(token, query) {
-        query = trimEnd(query) + token.value + " ";
+        query = this.trimTrailingWhitespace(query) + token.value + " ";
 
         if (this.inlineBlock.isActive()) {
             return query;
@@ -171,22 +169,27 @@ export default class Formatter {
     }
 
     formatWithSpaceAfter(token, query) {
-        return trimEnd(query) + token.value + " ";
+        return this.trimTrailingWhitespace(query) + token.value + " ";
     }
 
     formatWithoutSpaces(token, query) {
-        return trimEnd(query) + token.value;
+        return this.trimTrailingWhitespace(query) + token.value;
     }
 
     formatWithSpaces(token, query) {
         return query + token.value + " ";
     }
 
-    formatWithNewlines(token, query) {
-        return trimEnd(query, " ") + token.value;
-    }
-
     addNewline(query) {
         return trimEnd(query) + "\n" + this.indentation.getIndent();
+    }
+
+    trimTrailingWhitespace(query) {
+        if (this.previousToken.type === tokenTypes.LINE_COMMENT) {
+            return trimEnd(query) + "\n";
+        }
+        else {
+            return trimEnd(query);
+        }
     }
 }

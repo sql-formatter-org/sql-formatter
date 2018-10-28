@@ -353,7 +353,7 @@ describe("StandardSqlFormatter", function() {
         );
     });
 
-    it("formats line comments without adding semicolon to same line", function() {
+    it("formats line comments followed by semicolon", function() {
         expect(sqlFormatter.format("SELECT a FROM b\n--comment\n;")).toBe(
             "SELECT\n" +
             "  a\n" +
@@ -361,5 +361,34 @@ describe("StandardSqlFormatter", function() {
             "  b --comment\n" +
             ";"
         );
+    });
+
+    it("formats line comments followed by comma", function() {
+        expect(sqlFormatter.format("SELECT a --comment\n, b")).toBe(
+            "SELECT\n" +
+            "  a --comment\n" +
+            ",\n" +
+            "  b"
+        );
+    });
+
+    it("formats line comments followed by close-paren", function() {
+        expect(sqlFormatter.format("SELECT ( a --comment\n )")).toBe(
+            "SELECT\n" +
+            "  (a --comment\n" +
+            ")"
+        );
+    });
+
+    it("formats line comments followed by open-paren", function() {
+        expect(sqlFormatter.format("SELECT a --comment\n()")).toBe(
+            "SELECT\n" +
+            "  a --comment\n" +
+            "  ()"
+        );
+    });
+
+    it("formats lonely semicolon", function() {
+        expect(sqlFormatter.format(";")).toBe(";");
     });
 });
