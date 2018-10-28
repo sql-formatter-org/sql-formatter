@@ -18,6 +18,8 @@ export default class Formatter {
         this.params = new Params(this.cfg.params);
         this.tokenizer = tokenizer;
         this.previousReservedWord = {};
+        this.tokens = [];
+        this.index = 0;
     }
 
     /**
@@ -27,18 +29,20 @@ export default class Formatter {
      * @return {String} formatted query
      */
     format(query) {
-        const tokens = this.tokenizer.tokenize(query);
-        const formattedQuery = this.getFormattedQueryFromTokens(tokens);
+        this.tokens = this.tokenizer.tokenize(query);
+        const formattedQuery = this.getFormattedQueryFromTokens();
 
         return formattedQuery.trim();
     }
 
-    getFormattedQueryFromTokens(tokens) {
+    getFormattedQueryFromTokens() {
         let formattedQuery = "";
 
-        tokens.forEach((token, index) => {
+        this.tokens.forEach((token, index) => {
+            this.index = index;
+
             if (token.type === tokenTypes.WHITESPACE) {
-                return;
+                // ignore (we do our own whitespace formatting)
             }
             else if (token.type === tokenTypes.LINE_COMMENT) {
                 formattedQuery = this.formatLineComment(token, formattedQuery);
@@ -59,7 +63,7 @@ export default class Formatter {
                 this.previousReservedWord = token;
             }
             else if (token.type === tokenTypes.OPEN_PAREN) {
-                formattedQuery = this.formatOpeningParentheses(tokens, index, formattedQuery);
+                formattedQuery = this.formatOpeningParentheses(token, formattedQuery);
             }
             else if (token.type === tokenTypes.CLOSE_PAREN) {
                 formattedQuery = this.formatClosingParentheses(token, formattedQuery);
@@ -116,15 +120,20 @@ export default class Formatter {
     }
 
     // Opening parentheses increase the block indent level and start a new line
-    formatOpeningParentheses(tokens, index, query) {
-        // Take out the preceding space unless there was whitespace there in the original query or another opening parens
-        const previousToken = tokens[index - 1];
-        if (previousToken && previousToken.type !== tokenTypes.WHITESPACE && previousToken.type !== tokenTypes.OPEN_PAREN) {
+    formatOpeningParentheses(token, query) {
+        // Take out the preceding space unless there was whitespace there in the original query
+        // or another opening parens or line comment
+        const preserveWhitespaceFor = [
+            tokenTypes.WHITESPACE,
+            tokenTypes.OPEN_PAREN,
+            tokenTypes.LINE_COMMENT,
+        ];
+        if (!preserveWhitespaceFor.includes(this.previousToken().type)) {
             query = trimEnd(query);
         }
-        query += tokens[index].value;
+        query += token.value;
 
-        this.inlineBlock.beginIfPossible(tokens, index);
+        this.inlineBlock.beginIfPossible(this.tokens, this.index);
 
         if (!this.inlineBlock.isActive()) {
             this.indentation.increaseBlockLevel();
@@ -151,7 +160,7 @@ export default class Formatter {
 
     // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
     formatComma(token, query) {
-        query = trimEnd(query) + token.value + " ";
+        query = this.trimTrailingWhitespace(query) + token.value + " ";
 
         if (this.inlineBlock.isActive()) {
             return query;
@@ -165,11 +174,11 @@ export default class Formatter {
     }
 
     formatWithSpaceAfter(token, query) {
-        return trimEnd(query) + token.value + " ";
+        return this.trimTrailingWhitespace(query) + token.value + " ";
     }
 
     formatWithoutSpaces(token, query) {
-        return trimEnd(query) + token.value;
+        return this.trimTrailingWhitespace(query) + token.value;
     }
 
     formatWithSpaces(token, query) {
@@ -178,5 +187,26 @@ export default class Formatter {
 
     addNewline(query) {
         return trimEnd(query) + "\n" + this.indentation.getIndent();
+    }
+
+    trimTrailingWhitespace(query) {
+        if (this.previousNonWhitespaceToken().type === tokenTypes.LINE_COMMENT) {
+            return trimEnd(query) + "\n";
+        }
+        else {
+            return trimEnd(query);
+        }
+    }
+
+    previousNonWhitespaceToken() {
+        let n = 1;
+        while (this.previousToken(n).type === tokenTypes.WHITESPACE) {
+            n++;
+        }
+        return this.previousToken(n);
+    }
+
+    previousToken(offset = 1) {
+        return this.tokens[this.index - offset] || {};
     }
 }
