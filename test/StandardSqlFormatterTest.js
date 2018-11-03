@@ -393,7 +393,8 @@ describe("StandardSqlFormatter", function() {
     });
 
     it("format reserved word to upper case", function() {
-        expect(sqlFormatter.format("select col1, case when col2 is null then 1 else 2 end as col2 from users order by col3 asc, col4 desc", {
+        expect(sqlFormatter.format(`select col1, case when col2 is null then 1 else 2 end
+        as col2 from users order by col3 asc, col4 desc`, {
             reservedWordConverter: 'toUpperCase'
         })).toBe("SELECT\n" +
             "  col1,\n" +
@@ -409,7 +410,8 @@ describe("StandardSqlFormatter", function() {
     });
 
     it("format reserved word to lower case", function() {
-        expect(sqlFormatter.format("SELECT col1, CASE WHEN col2 IS NULL THEN 1 ELSE 2 END AS col2 FROM users ORDER BY col3 ASC, col4 DESC", {
+        expect(sqlFormatter.format(`SELECT col1, CASE WHEN col2 IS NULL THEN 1 ELSE 2 END
+        AS col2 FROM users ORDER BY col3 ASC, col4 DESC`, {
             reservedWordConverter: 'toLowerCase'
         })).toBe("select\n" +
             "  col1,\n" +
@@ -425,7 +427,8 @@ describe("StandardSqlFormatter", function() {
     });
 
     it("format reserved word to custom value", function() {
-        expect(sqlFormatter.format("select col1, CASE WHEN col2 IS NULL THEN 1 ELSE 2 END AS col2 FROM users ORDER BY col3 ASC, col4 DESC", {
+        expect(sqlFormatter.format(`select col1, CASE WHEN col2 IS NULL THEN 1 ELSE 2 END
+        AS col2 FROM users ORDER BY col3 ASC, col4 DESC`, {
             reservedWordConverter(value) {
                 return value.toLowerCase() === 'select' ? 'SELECT' : value.toLowerCase();
             }
