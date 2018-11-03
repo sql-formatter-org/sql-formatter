@@ -391,4 +391,54 @@ describe("StandardSqlFormatter", function() {
     it("formats lonely semicolon", function() {
         expect(sqlFormatter.format(";")).toBe(";");
     });
+
+    it("format reserved word to upper case", function() {
+        expect(sqlFormatter.format("select col1, case when col2 is null then 1 else 2 end as col2 from users order by col3 asc, col4 desc", {
+            reservedWordConverter: 'toUpperCase'
+        })).toBe("SELECT\n" +
+            "  col1,\n" +
+            "  CASE\n" +
+            "    WHEN col2 IS NULL THEN 1\n" +
+            "    ELSE 2\n" +
+            "  END AS col2\n" +
+            "FROM\n" +
+            "  users\n" +
+            "ORDER BY\n" +
+            "  col3 ASC,\n" +
+            "  col4 DESC");
+    });
+
+    it("format reserved word to lower case", function() {
+        expect(sqlFormatter.format("SELECT col1, CASE WHEN col2 IS NULL THEN 1 ELSE 2 END AS col2 FROM users ORDER BY col3 ASC, col4 DESC", {
+            reservedWordConverter: 'toLowerCase'
+        })).toBe("select\n" +
+            "  col1,\n" +
+            "  case\n" +
+            "    when col2 is null then 1\n" +
+            "    else 2\n" +
+            "  end as col2\n" +
+            "from\n" +
+            "  users\n" +
+            "order by\n" +
+            "  col3 asc,\n" +
+            "  col4 desc");
+    });
+
+    it("format reserved word to custom value", function() {
+        expect(sqlFormatter.format("select col1, CASE WHEN col2 IS NULL THEN 1 ELSE 2 END AS col2 FROM users ORDER BY col3 ASC, col4 DESC", {
+            reservedWordConverter(value) {
+                return value.toLowerCase() === 'select' ? 'SELECT' : value.toLowerCase();
+            }
+        })).toBe("SELECT\n" +
+            "  col1,\n" +
+            "  case\n" +
+            "    when col2 is null then 1\n" +
+            "    else 2\n" +
+            "  end as col2\n" +
+            "from\n" +
+            "  users\n" +
+            "order by\n" +
+            "  col3 asc,\n" +
+            "  col4 desc");
+    });
 });

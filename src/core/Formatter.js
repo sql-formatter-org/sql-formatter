@@ -35,6 +35,18 @@ export default class Formatter {
         return formattedQuery.trim();
     }
 
+    convertReservedWord(token) {
+        if (this.cfg.reservedWordConverter === 'toUpperCase') {
+            token.value = token.value.toUpperCase();
+        }
+        else if (this.cfg.reservedWordConverter === 'toLowerCase') {
+            token.value = token.value.toLowerCase();
+        }
+        else if (typeof this.cfg.reservedWordConverter === 'function') {
+            token.value = this.cfg.reservedWordConverter(token.value);
+        }
+    }
+
     getFormattedQueryFromTokens() {
         let formattedQuery = "";
 
@@ -51,21 +63,26 @@ export default class Formatter {
                 formattedQuery = this.formatBlockComment(token, formattedQuery);
             }
             else if (token.type === tokenTypes.RESERVED_TOPLEVEL) {
+                this.convertReservedWord(token);
                 formattedQuery = this.formatToplevelReservedWord(token, formattedQuery);
                 this.previousReservedWord = token;
             }
             else if (token.type === tokenTypes.RESERVED_NEWLINE) {
+                this.convertReservedWord(token);
                 formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
                 this.previousReservedWord = token;
             }
             else if (token.type === tokenTypes.RESERVED) {
+                this.convertReservedWord(token);
                 formattedQuery = this.formatWithSpaces(token, formattedQuery);
                 this.previousReservedWord = token;
             }
             else if (token.type === tokenTypes.OPEN_PAREN) {
+                this.convertReservedWord(token);
                 formattedQuery = this.formatOpeningParentheses(token, formattedQuery);
             }
             else if (token.type === tokenTypes.CLOSE_PAREN) {
+                this.convertReservedWord(token);
                 formattedQuery = this.formatClosingParentheses(token, formattedQuery);
             }
             else if (token.type === tokenTypes.PLACEHOLDER) {
