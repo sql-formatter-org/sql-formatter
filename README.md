@@ -11,13 +11,13 @@ It supports [Standard SQL][], [Couchbase N1QL][], [IBM DB2][] and [Oracle PL/SQL
 Get the latest version from NPM:
 
 ```
-npm install --save sql-formatter
+npm install --save-dev sql-formatter
 ```
 
 ## Usage
 
 ```js
-import sqlFormatter from "sql-formatter";
+const sqlFormatter = require("sql-formatter");
 
 console.log(sqlFormatter.format("SELECT * FROM table1"));
 ```
