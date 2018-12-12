@@ -11,7 +11,7 @@ It supports [Standard SQL][], [Couchbase N1QL][], [IBM DB2][] and [Oracle PL/SQL
 Get the latest version from NPM:
 
 ```
-npm install --save sql-formatter
+npm install sql-formatter
 ```
 
 ## Usage
