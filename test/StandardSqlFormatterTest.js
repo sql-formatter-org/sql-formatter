@@ -261,4 +261,13 @@ describe("StandardSqlFormatter", function() {
           "  {{ @b }}"
         );
     });
+
+    it("formats if syntax correctly", function() {
+        expect(sqlFormatter.format("SELECT * FROM {{#if}}")).toBe(
+          "SELECT\n" +
+          "  *\n" +
+          "FROM\n" +
+          "  {{#if}}"
+        );
+    });
 });
