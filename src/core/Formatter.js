@@ -71,6 +71,9 @@ export default class Formatter {
             else if (token.type === tokenTypes.PLACEHOLDER) {
                 formattedQuery = this.formatPlaceholder(token, formattedQuery);
             }
+            else if (token.type === tokenTypes.END_STATEMENT) {
+                formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
+            }
             else if (token.value === ",") {
                 formattedQuery = this.formatComma(token, formattedQuery);
             }
