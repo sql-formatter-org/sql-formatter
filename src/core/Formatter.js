@@ -71,17 +71,17 @@ export default class Formatter {
             else if (token.type === tokenTypes.PLACEHOLDER) {
                 formattedQuery = this.formatPlaceholder(token, formattedQuery);
             }
-            else if (token.type === tokenTypes.END_STATEMENT) {
-                formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
-            }
             else if (token.value === ",") {
                 formattedQuery = this.formatComma(token, formattedQuery);
             }
             else if (token.value === ":") {
                 formattedQuery = this.formatWithSpaceAfter(token, formattedQuery);
             }
-            else if (token.value === "." || token.value === ";") {
+            else if (token.value === ".") {
                 formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
+            }
+            else if (token.value === ";") {
+                formattedQuery = this.formatQuerySeparator(token, formattedQuery);
             }
             else {
                 formattedQuery = this.formatWithSpaces(token, formattedQuery);
@@ -186,6 +186,10 @@ export default class Formatter {
 
     formatWithSpaces(token, query) {
         return query + token.value + " ";
+    }
+
+    formatQuerySeparator(token, query) {
+        return trimEnd(query) + token.value + "\n";
     }
 
     addNewline(query) {

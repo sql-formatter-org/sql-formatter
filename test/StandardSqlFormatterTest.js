@@ -358,8 +358,7 @@ describe("StandardSqlFormatter", function() {
             "SELECT\n" +
             "  a\n" +
             "FROM\n" +
-            "  b --comment\n" +
-            ";"
+            "  b --comment;"
         );
     });
 

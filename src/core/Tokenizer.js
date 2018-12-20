@@ -18,7 +18,6 @@ export default class Tokenizer {
      */
     constructor(cfg) {
         this.WHITESPACE_REGEX = /^(\s+)/;
-        this.END_STATEMENT_REGEX = /^(;\n)/;
         this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
         this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|~~\*|~~|!~~\*|!~~|~\*|!~\*|!~|.)/;
 
@@ -134,7 +133,6 @@ export default class Tokenizer {
 
     getNextToken(input, previousToken) {
         return this.getWhitespaceToken(input) ||
-            this.getEndStatementToken(input) ||
             this.getCommentToken(input) ||
             this.getStringToken(input) ||
             this.getOpenParenToken(input) ||
@@ -151,14 +149,6 @@ export default class Tokenizer {
             input,
             type: tokenTypes.WHITESPACE,
             regex: this.WHITESPACE_REGEX
-        });
-    }
-
-    getEndStatementToken(input) {
-        return this.getTokenOnFirstMatch({
-            input,
-            type: tokenTypes.END_STATEMENT,
-            regex: this.END_STATEMENT_REGEX
         });
     }
 
