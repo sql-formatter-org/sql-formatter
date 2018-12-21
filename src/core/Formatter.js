@@ -189,7 +189,7 @@ export default class Formatter {
     }
 
     formatQuerySeparator(token, query) {
-        return trimEnd(query) + token.value + "\n";
+        return this.trimTrailingWhitespace(query) + token.value + "\n";
     }
 
     addNewline(query) {
