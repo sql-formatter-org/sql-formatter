@@ -445,4 +445,24 @@ export default function behavesLikeSqlFormatter(language) {
         expect(format("foo !~* 'hello'")).toBe("foo !~* 'hello'");
         expect(format("foo !~~* 'hello'")).toBe("foo !~~* 'hello'");
     });
+
+    it("keeps separation between multiple statements", function() {
+        expect(format("foo;bar;")).toBe("foo;\nbar;");
+        expect(format("foo\n;bar;")).toBe("foo;\nbar;");
+        expect(format("foo\n\n\n;bar;\n\n")).toBe("foo;\nbar;");
+
+        const result = format("SELECT count(*),Column1 FROM Table1;\nSELECT count(*),Column1 FROM Table2;");
+        expect(result).toBe(
+            "SELECT\n" +
+            "  count(*),\n" +
+            "  Column1\n" +
+            "FROM\n" +
+            "  Table1;\n" + 
+            "SELECT\n" +
+            "  count(*),\n" +
+            "  Column1\n" +
+            "FROM\n" +
+            "  Table2;"
+        );
+    });
 }
