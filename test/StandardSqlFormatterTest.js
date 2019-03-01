@@ -270,4 +270,13 @@ describe("StandardSqlFormatter", function() {
           "  {{#if}}"
         );
     });
+
+    it("formats data model syntax correctly", function() {
+        expect(sqlFormatter.format("SELECT * FROM {{ $products }}")).toBe(
+          "SELECT\n" +
+          "  *\n" +
+          "FROM\n" +
+          "  {{ $products }}"
+        );
+    });
 });

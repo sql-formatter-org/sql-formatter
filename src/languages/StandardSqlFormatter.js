@@ -95,7 +95,7 @@ export default class StandardSqlFormatter {
                 openParens: ["("],
                 closeParens: [")"],
                 indexedPlaceholderTypes: ["?"],
-                namedPlaceholderTypes: ["@", ":"],
+                namedPlaceholderTypes: ["@", ":", "$"],
                 lineCommentTypes: ["#", "--"]
             });
         }
