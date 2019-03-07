@@ -53,12 +53,12 @@ Currently just four SQL dialects are supported:
 // Named placeholders
 sqlFormatter.format("SELECT * FROM tbl WHERE foo = @foo", {
     params: {foo: "'bar'"}
-}));
+});
 
 // Indexed placeholders
 sqlFormatter.format("SELECT * FROM tbl WHERE foo = ?", {
     params: ["'bar'"]
-}));
+});
 ```
 
 Both result in:
@@ -76,6 +76,14 @@ WHERE
 
 If you don't use a module bundler, clone the repository, run `npm install` and grab a file from `/dist` directory to use inside a `<script>` tag.
 This makes SQL Formatter available as a global variable `window.sqlFormatter`.
+
+To use native imports, clone and then import files directly within ES6 modules:
+
+```js
+import sqlFormatter from '<PATH-TO-CLONED-REPO>/src/sqlFormatter.js';
+
+sqlFormatter.format("SELECT * FROM table1");
+```
 
 ## Contributing
 
