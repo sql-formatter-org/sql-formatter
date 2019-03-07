@@ -1,4 +1,4 @@
-import tokenTypes from "./tokenTypes";
+import tokenTypes from "./tokenTypes.js";
 
 const INLINE_MAX_LENGTH = 50;
 

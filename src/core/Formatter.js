@@ -1,7 +1,7 @@
-import tokenTypes from "./tokenTypes";
-import Indentation from "./Indentation";
-import InlineBlock from "./InlineBlock";
-import Params from "./Params";
+import tokenTypes from "./tokenTypes.js";
+import Indentation from "./Indentation.js";
+import InlineBlock from "./InlineBlock.js";
+import Params from "./Params.js";
 
 const trimEnd = string => string.replace(/\s+$/, '');
 

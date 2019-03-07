@@ -1,7 +1,7 @@
-import Db2Formatter from "./languages/Db2Formatter";
-import N1qlFormatter from "./languages/N1qlFormatter";
-import PlSqlFormatter from "./languages/PlSqlFormatter";
-import StandardSqlFormatter from "./languages/StandardSqlFormatter";
+import Db2Formatter from "./languages/Db2Formatter.js";
+import N1qlFormatter from "./languages/N1qlFormatter.js";
+import PlSqlFormatter from "./languages/PlSqlFormatter.js";
+import StandardSqlFormatter from "./languages/StandardSqlFormatter.js";
 
 export default {
     /**

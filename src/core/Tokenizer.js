@@ -1,4 +1,4 @@
-import tokenTypes from "./tokenTypes";
+import tokenTypes from "./tokenTypes.js";
 
 // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
 function escapeRegExp(string) {

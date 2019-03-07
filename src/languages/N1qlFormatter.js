@@ -1,5 +1,5 @@
-import Formatter from "../core/Formatter";
-import Tokenizer from "../core/Tokenizer";
+import Formatter from "../core/Formatter.js";
+import Tokenizer from "../core/Tokenizer.js";
 
 const reservedWords = [
     "ALL", "ALTER", "ANALYZE", "AND", "ANY", "ARRAY", "AS", "ASC",
