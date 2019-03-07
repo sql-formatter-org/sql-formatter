@@ -1,8 +1,9 @@
-import trimEnd from "lodash/trimEnd";
 import tokenTypes from "./tokenTypes";
 import Indentation from "./Indentation";
 import InlineBlock from "./InlineBlock";
 import Params from "./Params";
+
+const trimEnd = string => string.replace(/\s+$/, '');
 
 export default class Formatter {
     /**

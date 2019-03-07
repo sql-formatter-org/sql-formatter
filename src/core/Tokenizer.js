@@ -1,6 +1,9 @@
-import isEmpty from "lodash/isEmpty";
-import escapeRegExp from "lodash/escapeRegExp";
 import tokenTypes from "./tokenTypes";
+
+// See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
 
 export default class Tokenizer {
     /**
@@ -98,7 +101,7 @@ export default class Tokenizer {
     }
 
     createPlaceholderRegex(types, pattern) {
-        if (isEmpty(types)) {
+        if (Array.isArray(types) === false || types.length === 0) {
             return false;
         }
         const typesRegex = types.map(escapeRegExp).join("|");
