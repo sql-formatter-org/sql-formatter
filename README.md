@@ -1,4 +1,4 @@
-# SQL Formatter [![NPM version](https://img.shields.io/npm/v/sql-formatter.svg)](https://npmjs.com/package/sql-formatter) [![Build Status](https://travis-ci.org/zeroturnaround/sql-formatter.svg?branch=master)](https://travis-ci.org/zeroturnaround/sql-formatter) [![Coverage Status](https://coveralls.io/repos/github/zeroturnaround/sql-formatter/badge.svg?branch=master)](https://coveralls.io/github/zeroturnaround/sql-formatter?branch=master)
+# SQL Formatter [![NPM version](https://img.shields.io/npm/v/@teamsqlio/sql-formatter.svg)](https://npmjs.com/package/@teamsqlio/sql-formatter) [![Build Status](https://travis-ci.org/zeroturnaround/sql-formatter.svg?branch=master)](https://travis-ci.org/zeroturnaround/sql-formatter) [![Coverage Status](https://coveralls.io/repos/github/zeroturnaround/sql-formatter/badge.svg?branch=master)](https://coveralls.io/github/zeroturnaround/sql-formatter?branch=master)
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 It started as a port of a [PHP Library][], but has since considerably diverged.
@@ -11,13 +11,13 @@ It supports [Standard SQL][], [Couchbase N1QL][], [IBM DB2][] and [Oracle PL/SQL
 Get the latest version from NPM:
 
 ```
-npm install sql-formatter
+npm install @teamsqlio/sql-formatter
 ```
 
 ## Usage
 
 ```js
-import sqlFormatter from "sql-formatter";
+import sqlFormatter from "@teamsqlio/sql-formatter";
 
 console.log(sqlFormatter.format("SELECT * FROM table1"));
 ```
