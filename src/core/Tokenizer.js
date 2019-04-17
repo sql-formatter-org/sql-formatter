@@ -120,13 +120,15 @@ export default class Tokenizer {
         let token;
 
         // Keep processing the string until it is empty
-        while (input.length) {
-            // Get the next token and the token type
-            token = this.getNextToken(input, token);
-            // Advance the string
-            input = input.substring(token.value.length);
+        if (input) {
+            while (input.length) {
+                // Get the next token and the token type
+                token = this.getNextToken(input, token);
+                // Advance the string
+                input = input.substring(token.value.length);
 
-            tokens.push(token);
+                tokens.push(token);
+            }
         }
         return tokens;
     }
