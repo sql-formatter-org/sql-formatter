@@ -1,3 +1,4 @@
+import includes from "lodash/includes";
 import trimEnd from "lodash/trimEnd";
 import tokenTypes from "./tokenTypes";
 import Indentation from "./Indentation";
@@ -131,7 +132,7 @@ export default class Formatter {
             tokenTypes.OPEN_PAREN,
             tokenTypes.LINE_COMMENT,
         ];
-        if (!preserveWhitespaceFor.includes(this.previousToken().type)) {
+        if (!includes(preserveWhitespaceFor, this.previousToken().type)) {
             query = trimEnd(query);
         }
         query += token.value;
