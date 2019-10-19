@@ -1,9 +1,9 @@
-import includes from "lodash/includes";
-import trimEnd from "lodash/trimEnd";
-import tokenTypes from "./tokenTypes";
-import Indentation from "./Indentation";
-import InlineBlock from "./InlineBlock";
-import Params from "./Params";
+import includes from 'lodash/includes';
+import trimEnd from 'lodash/trimEnd';
+import tokenTypes from './tokenTypes';
+import Indentation from './Indentation';
+import InlineBlock from './InlineBlock';
+import Params from './Params';
 
 export default class Formatter {
     /**
@@ -37,54 +37,41 @@ export default class Formatter {
     }
 
     getFormattedQueryFromTokens() {
-        let formattedQuery = "";
+        let formattedQuery = '';
 
         this.tokens.forEach((token, index) => {
             this.index = index;
 
             if (token.type === tokenTypes.WHITESPACE) {
                 // ignore (we do our own whitespace formatting)
-            }
-            else if (token.type === tokenTypes.LINE_COMMENT) {
+            } else if (token.type === tokenTypes.LINE_COMMENT) {
                 formattedQuery = this.formatLineComment(token, formattedQuery);
-            }
-            else if (token.type === tokenTypes.BLOCK_COMMENT) {
+            } else if (token.type === tokenTypes.BLOCK_COMMENT) {
                 formattedQuery = this.formatBlockComment(token, formattedQuery);
-            }
-            else if (token.type === tokenTypes.RESERVED_TOPLEVEL) {
+            } else if (token.type === tokenTypes.RESERVED_TOPLEVEL) {
                 formattedQuery = this.formatToplevelReservedWord(token, formattedQuery);
                 this.previousReservedWord = token;
-            }
-            else if (token.type === tokenTypes.RESERVED_NEWLINE) {
+            } else if (token.type === tokenTypes.RESERVED_NEWLINE) {
                 formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
                 this.previousReservedWord = token;
-            }
-            else if (token.type === tokenTypes.RESERVED) {
+            } else if (token.type === tokenTypes.RESERVED) {
                 formattedQuery = this.formatWithSpaces(token, formattedQuery);
                 this.previousReservedWord = token;
-            }
-            else if (token.type === tokenTypes.OPEN_PAREN) {
+            } else if (token.type === tokenTypes.OPEN_PAREN) {
                 formattedQuery = this.formatOpeningParentheses(token, formattedQuery);
-            }
-            else if (token.type === tokenTypes.CLOSE_PAREN) {
+            } else if (token.type === tokenTypes.CLOSE_PAREN) {
                 formattedQuery = this.formatClosingParentheses(token, formattedQuery);
-            }
-            else if (token.type === tokenTypes.PLACEHOLDER) {
+            } else if (token.type === tokenTypes.PLACEHOLDER) {
                 formattedQuery = this.formatPlaceholder(token, formattedQuery);
-            }
-            else if (token.value === ",") {
+            } else if (token.value === ',') {
                 formattedQuery = this.formatComma(token, formattedQuery);
-            }
-            else if (token.value === ":") {
+            } else if (token.value === ':') {
                 formattedQuery = this.formatWithSpaceAfter(token, formattedQuery);
-            }
-            else if (token.value === ".") {
+            } else if (token.value === '.') {
                 formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
-            }
-            else if (token.value === ";") {
+            } else if (token.value === ';') {
                 formattedQuery = this.formatQuerySeparator(token, formattedQuery);
-            }
-            else {
+            } else {
                 formattedQuery = this.formatWithSpaces(token, formattedQuery);
             }
         });
@@ -100,7 +87,7 @@ export default class Formatter {
     }
 
     indentComment(comment) {
-        return comment.replace(/\n/g, "\n" + this.indentation.getIndent());
+        return comment.replace(/\n/g, '\n' + this.indentation.getIndent());
     }
 
     formatToplevelReservedWord(token, query) {
@@ -115,12 +102,12 @@ export default class Formatter {
     }
 
     formatNewlineReservedWord(token, query) {
-        return this.addNewline(query) + this.equalizeWhitespace(token.value) + " ";
+        return this.addNewline(query) + this.equalizeWhitespace(token.value) + ' ';
     }
 
     // Replace any sequence of whitespace characters with single space
     equalizeWhitespace(string) {
-        return string.replace(/\s+/g, " ");
+        return string.replace(/\s+/g, ' ');
     }
 
     // Opening parentheses increase the block indent level and start a new line
@@ -130,7 +117,7 @@ export default class Formatter {
         const preserveWhitespaceFor = [
             tokenTypes.WHITESPACE,
             tokenTypes.OPEN_PAREN,
-            tokenTypes.LINE_COMMENT,
+            tokenTypes.LINE_COMMENT
         ];
         if (!includes(preserveWhitespaceFor, this.previousToken().type)) {
             query = trimEnd(query);
@@ -151,34 +138,31 @@ export default class Formatter {
         if (this.inlineBlock.isActive()) {
             this.inlineBlock.end();
             return this.formatWithSpaceAfter(token, query);
-        }
-        else {
+        } else {
             this.indentation.decreaseBlockLevel();
             return this.formatWithSpaces(token, this.addNewline(query));
         }
     }
 
     formatPlaceholder(token, query) {
-        return query + this.params.get(token) + " ";
+        return query + this.params.get(token) + ' ';
     }
 
     // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
     formatComma(token, query) {
-        query = this.trimTrailingWhitespace(query) + token.value + " ";
+        query = this.trimTrailingWhitespace(query) + token.value + ' ';
 
         if (this.inlineBlock.isActive()) {
             return query;
-        }
-        else if (/^LIMIT$/i.test(this.previousReservedWord.value)) {
+        } else if (/^LIMIT$/i.test(this.previousReservedWord.value)) {
             return query;
-        }
-        else {
+        } else {
             return this.addNewline(query);
         }
     }
 
     formatWithSpaceAfter(token, query) {
-        return this.trimTrailingWhitespace(query) + token.value + " ";
+        return this.trimTrailingWhitespace(query) + token.value + ' ';
     }
 
     formatWithoutSpaces(token, query) {
@@ -186,22 +170,21 @@ export default class Formatter {
     }
 
     formatWithSpaces(token, query) {
-        return query + token.value + " ";
+        return query + token.value + ' ';
     }
 
     formatQuerySeparator(token, query) {
-        return this.trimTrailingWhitespace(query) + token.value + "\n";
+        return this.trimTrailingWhitespace(query) + token.value + '\n';
     }
 
     addNewline(query) {
-        return trimEnd(query) + "\n" + this.indentation.getIndent();
+        return trimEnd(query) + '\n' + this.indentation.getIndent();
     }
 
     trimTrailingWhitespace(query) {
         if (this.previousNonWhitespaceToken().type === tokenTypes.LINE_COMMENT) {
-            return trimEnd(query) + "\n";
-        }
-        else {
+            return trimEnd(query) + '\n';
+        } else {
             return trimEnd(query);
         }
     }

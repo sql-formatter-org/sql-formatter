@@ -1,4 +1,4 @@
-import tokenTypes from "./tokenTypes";
+import tokenTypes from './tokenTypes';
 
 const INLINE_MAX_LENGTH = 50;
 
@@ -23,11 +23,9 @@ export default class InlineBlock {
     beginIfPossible(tokens, index) {
         if (this.level === 0 && this.isInlineBlock(tokens, index)) {
             this.level = 1;
-        }
-        else if (this.level > 0) {
+        } else if (this.level > 0) {
             this.level++;
-        }
-        else {
+        } else {
             this.level = 0;
         }
     }
@@ -65,8 +63,7 @@ export default class InlineBlock {
 
             if (token.type === tokenTypes.OPEN_PAREN) {
                 level++;
-            }
-            else if (token.type === tokenTypes.CLOSE_PAREN) {
+            } else if (token.type === tokenTypes.CLOSE_PAREN) {
                 level--;
                 if (level === 0) {
                     return true;
@@ -82,11 +79,13 @@ export default class InlineBlock {
 
     // Reserved words that cause newlines, comments and semicolons
     // are not allowed inside inline parentheses block
-    isForbiddenToken({type, value}) {
-        return type === tokenTypes.RESERVED_TOPLEVEL ||
+    isForbiddenToken({ type, value }) {
+        return (
+            type === tokenTypes.RESERVED_TOPLEVEL ||
             type === tokenTypes.RESERVED_NEWLINE ||
             type === tokenTypes.COMMENT ||
             type === tokenTypes.BLOCK_COMMENT ||
-            value === ";";
+            value === ';'
+        );
     }
 }

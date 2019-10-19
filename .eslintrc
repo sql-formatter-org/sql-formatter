@@ -1,5 +1,5 @@
 {
-    "extends": "zt/base",
+    "extends": ["zt/base", "prettier"],
     "env": {
         "jest": true
     }

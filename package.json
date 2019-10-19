@@ -1,73 +1,75 @@
 {
-  "name": "sql-formatter",
-  "version": "2.3.3",
-  "description": "Formats whitespaces in a SQL query to make it more readable",
-  "license": "MIT",
-  "main": "lib/sqlFormatter.js",
-  "keywords": [
-    "sql",
-    "formatter",
-    "format",
-    "n1ql",
-    "whitespaces"
-  ],
-  "authors": [
-    "Rene Saarsoo",
-    "Uku Pattak"
-  ],
-  "files": [
-    "dist",
-    "lib",
-    "src"
-  ],
-  "scripts": {
-    "clean": "rimraf lib dist",
-    "lint": "eslint .",
-    "test": "jest",
-    "test:watch": "npm run test -- --watch",
-    "check": "npm run lint && npm run test",
-    "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
-    "build:commonjs": "babel src --out-dir lib",
-    "build:umd": "cross-env NODE_ENV=development webpack src/sqlFormatter.js dist/sql-formatter.js",
-    "build:umd:min": "cross-env NODE_ENV=production webpack src/sqlFormatter.js dist/sql-formatter.min.js",
-    "prepublish": "npm run clean && npm run check && npm run build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zeroturnaround/sql-formatter.git"
-  },
-  "bugs": {
-    "url": "https://github.com/zeroturnaround/sql-formatter/issues"
-  },
-  "dependencies": {
-    "lodash": "^4.16.0"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.14.0",
-    "babel-core": "^6.11.4",
-    "babel-eslint": "^7.1.0",
-    "babel-jest": "^17.0.2",
-    "babel-loader": "^6.2.4",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-transform-class-properties": "^6.11.5",
-    "babel-plugin-transform-es3-member-expression-literals": "^6.5.0",
-    "babel-plugin-transform-es3-property-literals": "^6.5.0",
-    "babel-plugin-transform-function-bind": "^6.8.0",
-    "babel-plugin-transform-object-rest-spread": "^6.8.0",
-    "babel-preset-es2015": "^6.14.0",
-    "cross-env": "^3.1.3",
-    "eslint": "^3.7.1",
-    "eslint-config-zt": "^1.3.0",
-    "eslint-plugin-react": "^7.6.1",
-    "jest": "^17.0.2",
-    "rimraf": "^2.3.4",
-    "webpack": "^1.13.1"
-  },
-  "jest": {
-    "testPathDirs": [
-      "test"
+    "name": "sql-formatter-plus",
+    "version": "2.3.3",
+    "description": "Formats whitespaces in a SQL query to make it more readable",
+    "license": "MIT",
+    "main": "lib/sqlFormatter.js",
+    "keywords": [
+        "sql",
+        "formatter",
+        "format",
+        "n1ql",
+        "whitespaces"
     ],
-    "testRegex": ".*Test",
-    "collectCoverage": true
-  }
+    "authors": [
+        "Rene Saarsoo",
+        "Uku Pattak"
+    ],
+    "files": [
+        "dist",
+        "lib",
+        "src"
+    ],
+    "scripts": {
+        "clean": "rimraf lib dist",
+        "lint": "eslint .",
+        "test": "jest",
+        "test:watch": "npm run test -- --watch",
+        "check": "npm run lint && npm run test",
+        "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
+        "build:commonjs": "babel src --out-dir lib",
+        "build:umd": "cross-env NODE_ENV=development webpack src/sqlFormatter.js dist/sql-formatter.js",
+        "build:umd:min": "cross-env NODE_ENV=production webpack src/sqlFormatter.js dist/sql-formatter.min.js",
+        "prepublish": "npm run clean && npm run check && npm run build",
+        "format": "prettier --write \"**/*.{js,jsx,md,json,css,prettierrc,eslintrc}\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/kufii/sql-formatter-plus.git"
+    },
+    "bugs": {
+        "url": "https://github.com/kufii/sql-formatter-plus/issues"
+    },
+    "dependencies": {
+        "lodash": "^4.17.15"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.14.0",
+        "babel-core": "^6.11.4",
+        "babel-eslint": "^7.1.0",
+        "babel-jest": "^17.0.2",
+        "babel-loader": "^6.2.4",
+        "babel-plugin-add-module-exports": "^0.2.1",
+        "babel-plugin-transform-class-properties": "^6.11.5",
+        "babel-plugin-transform-es3-member-expression-literals": "^6.5.0",
+        "babel-plugin-transform-es3-property-literals": "^6.5.0",
+        "babel-plugin-transform-function-bind": "^6.8.0",
+        "babel-plugin-transform-object-rest-spread": "^6.8.0",
+        "babel-preset-es2015": "^6.14.0",
+        "cross-env": "^3.1.3",
+        "eslint": "^6.5.1",
+        "eslint-config-prettier": "^6.4.0",
+        "eslint-config-zt": "^2.0.0",
+        "jest": "^17.0.2",
+        "prettier": "^1.18.2",
+        "rimraf": "^3.0.0",
+        "webpack": "^1.13.1"
+    },
+    "jest": {
+        "testPathDirs": [
+            "test"
+        ],
+        "testRegex": ".*Test",
+        "collectCoverage": true
+    }
 }

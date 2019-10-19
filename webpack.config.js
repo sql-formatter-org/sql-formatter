@@ -1,23 +1,23 @@
-const webpack = require("webpack");
+const webpack = require('webpack');
 
 const config = {
     module: {
-        loaders: [{
-            test: /\.js$/,
-            loader: "babel-loader",
-            exclude: /node_modules/
-        }]
+        loaders: [
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/
+            }
+        ]
     },
     output: {
-        library: "sqlFormatter",
-        libraryTarget: "umd"
+        library: 'sqlFormatter',
+        libraryTarget: 'umd'
     },
-    plugins: [
-        new webpack.optimize.OccurrenceOrderPlugin(),
-    ]
+    plugins: [new webpack.optimize.OccurrenceOrderPlugin()]
 };
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
     config.plugins.push(
         new webpack.optimize.UglifyJsPlugin({
             compressor: {

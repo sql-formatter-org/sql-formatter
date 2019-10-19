@@ -17,13 +17,13 @@ export default class Params {
      *   @param {String} token.value Placeholder value
      * @return {String} param or token.value when params are missing
      */
-    get({key, value}) {
+    get({ key, value }) {
         if (!this.params) {
             return value;
         }
         if (key) {
             return this.params[key];
         }
-        return this.params[this.index ++];
+        return this.params[this.index++];
     }
 }
