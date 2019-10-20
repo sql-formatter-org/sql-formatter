@@ -57,12 +57,12 @@ Currently just four SQL dialects are supported:
 ```javascript
 // Named placeholders
 sqlFormatter.format("SELECT * FROM tbl WHERE foo = @foo", {
-    params: {foo: "'bar'"}
+  params: {foo: "'bar'"}
 }));
 
 // Indexed placeholders
 sqlFormatter.format("SELECT * FROM tbl WHERE foo = ?", {
-    params: ["'bar'"]
+  params: ["'bar'"]
 }));
 ```
 
