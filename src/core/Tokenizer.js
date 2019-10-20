@@ -50,7 +50,7 @@ export default class Tokenizer {
 
   createLineCommentRegex(lineCommentTypes) {
     return new RegExp(
-      `^((?:${lineCommentTypes.map((c) => escapeRegExp(c)).join('|')}).*?(?:\n|$))`
+      `^((?:${lineCommentTypes.map(c => escapeRegExp(c)).join('|')}).*?(?:\r\n|\r|\n|$))`
     );
   }
 
