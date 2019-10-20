@@ -1,7 +1,7 @@
 import sqlFormatter from './../src/sqlFormatter';
 
-describe('sqlFormatter', function() {
-  it('throws error when unsupported language parameter specified', function() {
+describe('sqlFormatter', () => {
+  it('throws error when unsupported language parameter specified', () => {
     expect(() => {
       sqlFormatter.format('SELECT *', { language: 'blah' });
     }).toThrow('Unsupported SQL dialect: blah');

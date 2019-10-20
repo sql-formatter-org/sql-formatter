@@ -1,10 +1,16 @@
 # SQL Formatter Plus
 
-A fork of [SQL Formatter](https://github.com/zeroturnaround/sql-formatter) with some extra bug fixes.
+A fork of [SQL Formatter](https://github.com/zeroturnaround/sql-formatter) with some extra bug fixes and features.
+
+Fixes:
 
 - Fixed formatting issue with unicode characters
 - Fixed comment formatting for non-unix line endings
 - Fixed null reference on input tokenization
+
+New Features:
+
+- Convert keywords to uppercase with the `uppercase` config option
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 It started as a port of a [PHP Library][], but has since considerably diverged.
@@ -42,7 +48,8 @@ You can also pass in configuration options:
 ```javascript
 sqlFormatter.format('SELECT *', {
   language: 'n1ql', // Defaults to "sql"
-  indent: '    ' // Defaults to two spaces
+  indent: '    ', // Defaults to two spaces,
+  uppercase: true // Defaults to false
 });
 ```
 

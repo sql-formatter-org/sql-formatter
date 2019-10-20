@@ -1,16 +1,16 @@
 import sqlFormatter from './../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
-describe('StandardSqlFormatter', function() {
+describe('StandardSqlFormatter', () => {
   behavesLikeSqlFormatter();
 
-  it('formats short CREATE TABLE', function() {
+  it('formats short CREATE TABLE', () => {
     expect(sqlFormatter.format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT);')).toBe(
       'CREATE TABLE items (a INT PRIMARY KEY, b TEXT);'
     );
   });
 
-  it('formats long CREATE TABLE', function() {
+  it('formats long CREATE TABLE', () => {
     expect(
       sqlFormatter.format(
         'CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL);'
@@ -25,7 +25,7 @@ describe('StandardSqlFormatter', function() {
     );
   });
 
-  it('formats INSERT without INTO', function() {
+  it('formats INSERT without INTO', () => {
     const result = sqlFormatter.format(
       "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
     );
@@ -37,14 +37,14 @@ describe('StandardSqlFormatter', function() {
     );
   });
 
-  it('formats ALTER TABLE ... MODIFY query', function() {
+  it('formats ALTER TABLE ... MODIFY query', () => {
     const result = sqlFormatter.format(
       'ALTER TABLE supplier MODIFY supplier_name char(100) NOT NULL;'
     );
     expect(result).toBe('ALTER TABLE\n  supplier\nMODIFY\n  supplier_name char(100) NOT NULL;');
   });
 
-  it('formats ALTER TABLE ... ALTER COLUMN query', function() {
+  it('formats ALTER TABLE ... ALTER COLUMN query', () => {
     const result = sqlFormatter.format(
       'ALTER TABLE supplier ALTER COLUMN supplier_name VARCHAR(100) NOT NULL;'
     );
@@ -56,12 +56,12 @@ describe('StandardSqlFormatter', function() {
     `);
   });
 
-  it('recognizes [] strings', function() {
+  it('recognizes [] strings', () => {
     expect(sqlFormatter.format('[foo JOIN bar]')).toBe('[foo JOIN bar]');
     expect(sqlFormatter.format('[foo ]] JOIN bar]')).toBe('[foo ]] JOIN bar]');
   });
 
-  it('recognizes @variables', function() {
+  it('recognizes @variables', () => {
     const result = sqlFormatter.format(
       'SELECT @variable, @a1_2.3$, @\'var name\', @"var name", @`var name`, @[var name];'
     );
@@ -76,7 +76,7 @@ describe('StandardSqlFormatter', function() {
     );
   });
 
-  it('replaces @variables with param values', function() {
+  it('replaces @variables with param values', () => {
     const result = sqlFormatter.format(
       "SELECT @variable, @a1_2.3$, @'var name', @\"var name\", @`var name`, @[var name], @'var\\name';",
       {
@@ -100,7 +100,7 @@ describe('StandardSqlFormatter', function() {
     );
   });
 
-  it('recognizes :variables', function() {
+  it('recognizes :variables', () => {
     const result = sqlFormatter.format(
       'SELECT :variable, :a1_2.3$, :\'var name\', :"var name", :`var name`, :[var name];'
     );
@@ -115,7 +115,7 @@ describe('StandardSqlFormatter', function() {
     );
   });
 
-  it('replaces :variables with param values', function() {
+  it('replaces :variables with param values', () => {
     const result = sqlFormatter.format(
       'SELECT :variable, :a1_2.3$, :\'var name\', :"var name", :`var name`,' +
         " :[var name], :'escaped \\'var\\'', :\"^*& weird \\\" var   \";",
@@ -142,12 +142,12 @@ describe('StandardSqlFormatter', function() {
     );
   });
 
-  it('recognizes ?[0-9]* placeholders', function() {
+  it('recognizes ?[0-9]* placeholders', () => {
     const result = sqlFormatter.format('SELECT ?1, ?25, ?;');
     expect(result).toBe('SELECT\n  ?1,\n  ?25,\n  ?;');
   });
 
-  it('replaces ? numbered placeholders with param values', function() {
+  it('replaces ? numbered placeholders with param values', () => {
     const result = sqlFormatter.format('SELECT ?1, ?2, ?0;', {
       params: {
         0: 'first',
@@ -158,21 +158,21 @@ describe('StandardSqlFormatter', function() {
     expect(result).toBe('SELECT\n  second,\n  third,\n  first;');
   });
 
-  it('replaces ? indexed placeholders with param values', function() {
+  it('replaces ? indexed placeholders with param values', () => {
     const result = sqlFormatter.format('SELECT ?, ?, ?;', {
       params: ['first', 'second', 'third']
     });
     expect(result).toBe('SELECT\n  first,\n  second,\n  third;');
   });
 
-  it('formats query with GO batch separator', function() {
+  it('formats query with GO batch separator', () => {
     const result = sqlFormatter.format('SELECT 1 GO SELECT 2', {
       params: ['first', 'second', 'third']
     });
     expect(result).toBe('SELECT\n  1\nGO\nSELECT\n  2');
   });
 
-  it('formats SELECT query with CROSS JOIN', function() {
+  it('formats SELECT query with CROSS JOIN', () => {
     const result = sqlFormatter.format('SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t');
     expect(result).toEqualMultiline(`
       SELECT
@@ -184,32 +184,32 @@ describe('StandardSqlFormatter', function() {
     `);
   });
 
-  it('formats SELECT query with CROSS APPLY', function() {
+  it('formats SELECT query with CROSS APPLY', () => {
     const result = sqlFormatter.format('SELECT a, b FROM t CROSS APPLY fn(t.id)');
     expect(result).toBe('SELECT\n  a,\n  b\nFROM\n  t\n  CROSS APPLY fn(t.id)');
   });
 
-  it('formats simple SELECT', function() {
+  it('formats simple SELECT', () => {
     const result = sqlFormatter.format('SELECT N, M FROM t');
     expect(result).toBe('SELECT\n  N,\n  M\nFROM\n  t');
   });
 
-  it('formats simple SELECT with national characters (MSSQL)', function() {
+  it('formats simple SELECT with national characters (MSSQL)', () => {
     const result = sqlFormatter.format("SELECT N'value'");
     expect(result).toBe("SELECT\n  N'value'");
   });
 
-  it('formats SELECT query with OUTER APPLY', function() {
+  it('formats SELECT query with OUTER APPLY', () => {
     const result = sqlFormatter.format('SELECT a, b FROM t OUTER APPLY fn(t.id)');
     expect(result).toBe('SELECT\n  a,\n  b\nFROM\n  t\n  OUTER APPLY fn(t.id)');
   });
 
-  it('formats FETCH FIRST like LIMIT', function() {
+  it('formats FETCH FIRST like LIMIT', () => {
     const result = sqlFormatter.format('SELECT * FETCH FIRST 2 ROWS ONLY;');
     expect(result).toBe('SELECT\n  *\nFETCH FIRST\n  2 ROWS ONLY;');
   });
 
-  it('formats CASE ... WHEN with a blank expression', function() {
+  it('formats CASE ... WHEN with a blank expression', () => {
     const result = sqlFormatter.format(
       "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
     );
@@ -224,7 +224,7 @@ describe('StandardSqlFormatter', function() {
     );
   });
 
-  it('formats CASE ... WHEN inside SELECT', function() {
+  it('formats CASE ... WHEN inside SELECT', () => {
     const result = sqlFormatter.format(
       "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table"
     );
@@ -244,7 +244,7 @@ describe('StandardSqlFormatter', function() {
     );
   });
 
-  it('formats CASE ... WHEN with an expression', function() {
+  it('formats CASE ... WHEN with an expression', () => {
     const result = sqlFormatter.format(
       "CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;"
     );
@@ -260,44 +260,44 @@ describe('StandardSqlFormatter', function() {
     );
   });
 
-  it('recognizes lowercase CASE ... END', function() {
+  it('recognizes lowercase CASE ... END', () => {
     const result = sqlFormatter.format("case when option = 'foo' then 1 else 2 end;");
 
     expect(result).toBe("case\n  when option = 'foo' then 1\n  else 2\nend;");
   });
 
   // Regression test for issue #43
-  it('ignores words CASE and END inside other strings', function() {
+  it('ignores words CASE and END inside other strings', () => {
     const result = sqlFormatter.format('SELECT CASEDATE, ENDDATE FROM table1;');
 
     expect(result).toBe('SELECT\n  CASEDATE,\n  ENDDATE\nFROM\n  table1;');
   });
 
-  it('formats tricky line comments', function() {
+  it('formats tricky line comments', () => {
     expect(sqlFormatter.format('SELECT a#comment, here\nFROM b--comment')).toBe(
       'SELECT\n  a #comment, here\nFROM\n  b --comment'
     );
   });
 
-  it('formats line comments followed by semicolon', function() {
+  it('formats line comments followed by semicolon', () => {
     expect(sqlFormatter.format('SELECT a FROM b\n--comment\n;')).toBe(
       'SELECT\n  a\nFROM\n  b --comment\n;'
     );
   });
 
-  it('formats line comments followed by comma', function() {
+  it('formats line comments followed by comma', () => {
     expect(sqlFormatter.format('SELECT a --comment\n, b')).toBe('SELECT\n  a --comment\n,\n  b');
   });
 
-  it('formats line comments followed by close-paren', function() {
+  it('formats line comments followed by close-paren', () => {
     expect(sqlFormatter.format('SELECT ( a --comment\n )')).toBe('SELECT\n  (a --comment\n)');
   });
 
-  it('formats line comments followed by open-paren', function() {
+  it('formats line comments followed by open-paren', () => {
     expect(sqlFormatter.format('SELECT a --comment\n()')).toBe('SELECT\n  a --comment\n  ()');
   });
 
-  it('formats lonely semicolon', function() {
+  it('formats lonely semicolon', () => {
     expect(sqlFormatter.format(';')).toBe(';');
   });
 });
