@@ -412,6 +412,12 @@ export default function behavesLikeSqlFormatter(language) {
 
     it('formats unicode correctly', function() {
         const result = format('SELECT test, тест FROM table;');
-        expect(result).toBe('SELECT\n  test,\n  тест\nFROM\n  table;');
+        expect(result).toEqualMultiline(`
+            SELECT
+              test,
+              тест
+            FROM
+              table;
+        `);
     });
 }
