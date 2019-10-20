@@ -2,30 +2,26 @@
 
 A fork of [SQL Formatter](https://github.com/zeroturnaround/sql-formatter) with some extra bug fixes.
 
-## Extra fixes
-
 - Fixed formatting issue with unicode characters
 - Fixed comment formatting for non-unix line endings
-
-# SQL Formatter
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 It started as a port of a [PHP Library][], but has since considerably diverged.
 It supports [Standard SQL][], [Couchbase N1QL][], [IBM DB2][] and [Oracle PL/SQL][] dialects.
 
-&rarr; [Try the demo.](https://zeroturnaround.github.io/sql-formatter/)
+[Try the demo.](https://zeroturnaround.github.io/sql-formatter/)
 
 ## Install
 
 Get the latest version from NPM:
 
-```
+```shell
 npm install sql-formatter
 ```
 
 ## Usage
 
-```js
+```javascript
 import sqlFormatter from 'sql-formatter';
 
 console.log(sqlFormatter.format('SELECT * FROM table1'));
@@ -33,7 +29,7 @@ console.log(sqlFormatter.format('SELECT * FROM table1'));
 
 This will output:
 
-```
+```sql
 SELECT
   *
 FROM
@@ -42,7 +38,7 @@ FROM
 
 You can also pass in configuration options:
 
-```js
+```javascript
 sqlFormatter.format('SELECT *', {
   language: 'n1ql', // Defaults to "sql"
   indent: '    ' // Defaults to two spaces
@@ -58,7 +54,7 @@ Currently just four SQL dialects are supported:
 
 ### Placeholders replacement
 
-```js
+```javascript
 // Named placeholders
 sqlFormatter.format("SELECT * FROM tbl WHERE foo = @foo", {
     params: {foo: "'bar'"}
@@ -72,7 +68,7 @@ sqlFormatter.format("SELECT * FROM tbl WHERE foo = ?", {
 
 Both result in:
 
-```
+```sql
 SELECT
   *
 FROM
@@ -88,9 +84,9 @@ This makes SQL Formatter available as a global variable `window.sqlFormatter`.
 
 ## Contributing
 
-```bash
+```shell
 # run linter and tests
-$ npm run check
+npm run check
 ```
 
 ...and you're ready to poke us with a pull request.
