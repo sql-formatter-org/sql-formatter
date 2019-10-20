@@ -17,11 +17,11 @@ export default class Tokenizer {
    *  @param {String[]} cfg.specialWordChars Special chars that can be found inside of words, like @ and #
    */
   constructor(cfg) {
-    this.WHITESPACE_REGEX = /^(\s+)/;
-    this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
-    this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|~~\*|~~|!~~\*|!~~|~\*|!~\*|!~|.)/;
+    this.WHITESPACE_REGEX = /^(\s+)/u;
+    this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/u;
+    this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|~~\*|~~|!~~\*|!~~|~\*|!~\*|!~|.)/u;
 
-    this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
+    this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/u;
     this.LINE_COMMENT_REGEX = this.createLineCommentRegex(cfg.lineCommentTypes);
 
     this.RESERVED_TOPLEVEL_REGEX = this.createReservedWordRegex(cfg.reservedToplevelWords);
@@ -50,13 +50,14 @@ export default class Tokenizer {
 
   createLineCommentRegex(lineCommentTypes) {
     return new RegExp(
-      `^((?:${lineCommentTypes.map(c => escapeRegExp(c)).join('|')}).*?(?:\r\n|\r|\n|$))`
+      `^((?:${lineCommentTypes.map(c => escapeRegExp(c)).join('|')}).*?(?:\r\n|\r|\n|$))`,
+      'u'
     );
   }
 
   createReservedWordRegex(reservedWords) {
-    const reservedWordsPattern = reservedWords.join('|').replace(/ /g, '\\s+');
-    return new RegExp(`^(${reservedWordsPattern})\\b`, 'i');
+    const reservedWordsPattern = reservedWords.join('|').replace(/ /gu, '\\s+');
+    return new RegExp(`^(${reservedWordsPattern})\\b`, 'iu');
   }
 
   createWordRegex(specialChars = []) {
@@ -69,7 +70,7 @@ export default class Tokenizer {
   }
 
   createStringRegex(stringTypes) {
-    return new RegExp('^(' + this.createStringPattern(stringTypes) + ')');
+    return new RegExp('^(' + this.createStringPattern(stringTypes) + ')', 'u');
   }
 
   // This enables the following string patterns:
@@ -91,7 +92,7 @@ export default class Tokenizer {
   }
 
   createParenRegex(parens) {
-    return new RegExp('^(' + parens.map(p => this.escapeParen(p)).join('|') + ')', 'i');
+    return new RegExp('^(' + parens.map(p => this.escapeParen(p)).join('|') + ')', 'iu');
   }
 
   escapeParen(paren) {
@@ -110,7 +111,7 @@ export default class Tokenizer {
     }
     const typesRegex = types.map(escapeRegExp).join('|');
 
-    return new RegExp(`^((?:${typesRegex})(?:${pattern}))`);
+    return new RegExp(`^((?:${typesRegex})(?:${pattern}))`, 'u');
   }
 
   /**
@@ -248,7 +249,7 @@ export default class Tokenizer {
   }
 
   getEscapedPlaceholderKey({ key, quoteChar }) {
-    return key.replace(new RegExp(escapeRegExp('\\') + quoteChar, 'g'), quoteChar);
+    return key.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar);
   }
 
   // Decimal, binary, or hex numbers

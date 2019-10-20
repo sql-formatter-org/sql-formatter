@@ -87,7 +87,7 @@ export default class Formatter {
   }
 
   indentComment(comment) {
-    return comment.replace(/\n/g, '\n' + this.indentation.getIndent());
+    return comment.replace(/\n/gu, '\n' + this.indentation.getIndent());
   }
 
   formatToplevelReservedWord(token, query) {
@@ -109,7 +109,7 @@ export default class Formatter {
 
   // Replace any sequence of whitespace characters with single space
   equalizeWhitespace(string) {
-    return string.replace(/\s+/g, ' ');
+    return string.replace(/\s+/gu, ' ');
   }
 
   // Opening parentheses increase the block indent level and start a new line
@@ -156,7 +156,7 @@ export default class Formatter {
 
     if (this.inlineBlock.isActive()) {
       return query;
-    } else if (/^LIMIT$/i.test(this.previousReservedWord.value)) {
+    } else if (/^LIMIT$/iu.test(this.previousReservedWord.value)) {
       return query;
     } else {
       return this.addNewline(query);
