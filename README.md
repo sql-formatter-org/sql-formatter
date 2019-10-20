@@ -4,6 +4,7 @@ A fork of [SQL Formatter](https://github.com/zeroturnaround/sql-formatter) with 
 
 - Fixed formatting issue with unicode characters
 - Fixed comment formatting for non-unix line endings
+- Fixed null reference on input tokenization
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 It started as a port of a [PHP Library][], but has since considerably diverged.
@@ -22,7 +23,7 @@ npm install sql-formatter
 ## Usage
 
 ```javascript
-import sqlFormatter from 'sql-formatter';
+import sqlFormatter from 'sql-formatter-plus';
 
 console.log(sqlFormatter.format('SELECT * FROM table1'));
 ```
