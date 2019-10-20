@@ -4,8 +4,8 @@ A fork of [SQL Formatter](https://github.com/zeroturnaround/sql-formatter) with 
 
 ## Extra fixes
 
--   Fixed formatting issue with unicode characters
--   Fixed comment formatting for non-unix line endings
+- Fixed formatting issue with unicode characters
+- Fixed comment formatting for non-unix line endings
 
 # SQL Formatter
 
@@ -44,17 +44,17 @@ You can also pass in configuration options:
 
 ```js
 sqlFormatter.format('SELECT *', {
-    language: 'n1ql', // Defaults to "sql"
-    indent: '    ' // Defaults to two spaces
+  language: 'n1ql', // Defaults to "sql"
+  indent: '    ' // Defaults to two spaces
 });
 ```
 
 Currently just four SQL dialects are supported:
 
--   **sql** - [Standard SQL][]
--   **n1ql** - [Couchbase N1QL][]
--   **db2** - [IBM DB2][]
--   **pl/sql** - [Oracle PL/SQL][]
+- **sql** - [Standard SQL][]
+- **n1ql** - [Couchbase N1QL][]
+- **db2** - [IBM DB2][]
+- **pl/sql** - [Oracle PL/SQL][]
 
 ### Placeholders replacement
 

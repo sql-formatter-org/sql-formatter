@@ -1,6 +1,11 @@
 {
-    "extends": ["zt/base", "prettier"],
-    "env": {
-        "jest": true
-    }
+  "extends": ["adpyke-es6", "prettier"],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "env": {
+    "jest": true,
+    "browser": false,
+    "node": true
+  }
 }

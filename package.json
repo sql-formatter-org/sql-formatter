@@ -1,73 +1,74 @@
 {
-    "name": "sql-formatter-plus",
-    "version": "1.0.0",
-    "description": "Formats whitespaces in a SQL query to make it more readable",
-    "license": "MIT",
-    "main": "lib/sqlFormatter.js",
-    "keywords": [
-        "sql",
-        "formatter",
-        "format",
-        "n1ql",
-        "whitespaces"
+  "name": "sql-formatter-plus",
+  "version": "1.0.0",
+  "description": "Formats whitespaces in a SQL query to make it more readable",
+  "license": "MIT",
+  "main": "lib/sqlFormatter.js",
+  "keywords": [
+    "sql",
+    "formatter",
+    "format",
+    "n1ql",
+    "whitespaces"
+  ],
+  "authors": [
+    "Rene Saarsoo",
+    "Uku Pattak"
+  ],
+  "files": [
+    "dist",
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "clean": "rimraf lib dist",
+    "lint": "eslint .",
+    "test": "jest",
+    "test:watch": "npm run test -- --watch",
+    "check": "npm run lint && npm run test",
+    "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
+    "build:commonjs": "babel src --out-dir lib",
+    "build:umd": "cross-env NODE_ENV=development webpack --mode development src/sqlFormatter.js --output dist/sql-formatter.js",
+    "build:umd:min": "cross-env NODE_ENV=production webpack --mode production src/sqlFormatter.js --output dist/sql-formatter.min.js",
+    "prepublish": "npm run clean && npm run check && npm run build",
+    "format": "prettier --write \"**/*.{js,jsx,md,json,css,prettierrc,eslintrc}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kufii/sql-formatter-plus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kufii/sql-formatter-plus/issues"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.6.0",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "babel-eslint": "^10.0.3",
+    "babel-loader": "^8.0.6",
+    "cross-env": "^6.0.3",
+    "eslint": "^6.5.1",
+    "eslint-config-adpyke-es6": "^1.4.12",
+    "eslint-config-prettier": "^6.4.0",
+    "jest": "^24.9.0",
+    "jest-multiline-matchers": "^0.2.1",
+    "prettier": "^1.18.2",
+    "rimraf": "^3.0.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9"
+  },
+  "jest": {
+    "roots": [
+      "test"
     ],
-    "authors": [
-        "Rene Saarsoo",
-        "Uku Pattak"
-    ],
-    "files": [
-        "dist",
-        "lib",
-        "src"
-    ],
-    "scripts": {
-        "clean": "rimraf lib dist",
-        "lint": "eslint .",
-        "test": "jest",
-        "test:watch": "npm run test -- --watch",
-        "check": "npm run lint && npm run test",
-        "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
-        "build:commonjs": "babel src --out-dir lib",
-        "build:umd": "cross-env NODE_ENV=development webpack src/sqlFormatter.js dist/sql-formatter.js",
-        "build:umd:min": "cross-env NODE_ENV=production webpack src/sqlFormatter.js dist/sql-formatter.min.js",
-        "prepublish": "npm run clean && npm run check && npm run build",
-        "format": "prettier --write \"**/*.{js,jsx,md,json,css,prettierrc,eslintrc}\""
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/kufii/sql-formatter-plus.git"
-    },
-    "bugs": {
-        "url": "https://github.com/kufii/sql-formatter-plus/issues"
-    },
-    "dependencies": {
-        "@babel/polyfill": "^7.6.0",
-        "lodash": "^4.17.15"
-    },
-    "devDependencies": {
-        "@babel/cli": "^7.6.4",
-        "@babel/core": "^7.6.4",
-        "@babel/preset-env": "^7.6.3",
-        "babel-eslint": "^10.0.3",
-        "babel-loader": "^8.0.6",
-        "cross-env": "^3.1.3",
-        "eslint": "^6.5.1",
-        "eslint-config-prettier": "^6.4.0",
-        "eslint-config-zt": "^2.0.0",
-        "jest": "^24.9.0",
-        "jest-multiline-matchers": "^0.2.1",
-        "prettier": "^1.18.2",
-        "rimraf": "^3.0.0",
-        "webpack": "^1.13.1"
-    },
-    "jest": {
-        "roots": [
-            "test"
-        ],
-        "testRegex": ".*Test",
-        "collectCoverage": true,
-        "setupFilesAfterEnv": [
-            "<rootDir>/test/helpers/customMatchers.js"
-        ]
-    }
+    "testRegex": ".*Test",
+    "collectCoverage": true,
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/helpers/customMatchers.js"
+    ]
+  }
 }
