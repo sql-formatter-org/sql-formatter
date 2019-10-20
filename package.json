@@ -42,7 +42,6 @@
     },
     "dependencies": {
         "@babel/polyfill": "^7.6.0",
-        "jest-multiline-matchers": "^0.2.1",
         "lodash": "^4.17.15"
     },
     "devDependencies": {
@@ -56,6 +55,7 @@
         "eslint-config-prettier": "^6.4.0",
         "eslint-config-zt": "^2.0.0",
         "jest": "^24.9.0",
+        "jest-multiline-matchers": "^0.2.1",
         "prettier": "^1.18.2",
         "rimraf": "^3.0.0",
         "webpack": "^1.13.1"
