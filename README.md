@@ -5,6 +5,7 @@ A fork of [SQL Formatter](https://github.com/zeroturnaround/sql-formatter) with 
 ## Extra fixes
 
 -   Fixed formatting issue with unicode characters
+-   Fixed comment formatting for non-unix line endings
 
 # SQL Formatter
 
