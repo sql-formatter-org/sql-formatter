@@ -16,9 +16,7 @@ export default function behavesLikeSqlFormatter(language) {
     );
   });
 
-  function format(query) {
-    return sqlFormatter.format(query, { language });
-  }
+  const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
   it('formats simple SET SCHEMA queries', function () {
     const result = format('SET SCHEMA tetrisdb; SET CURRENT SCHEMA bingodb;');
@@ -404,5 +402,32 @@ export default function behavesLikeSqlFormatter(language) {
         'FROM\n' +
         '  Table2;'
     );
+  });
+
+  it('formats unicode correctly', () => {
+    const result = format('SELECT test, тест FROM table;');
+    expect(result).toEqualMultiline(`
+      SELECT
+        test,
+        тест
+      FROM
+        table;
+    `);
+  });
+
+  it('`converts keywords to uppercase when option passed in', () => {
+    const result = format('select distinct * frOM foo left join bar WHERe cola > 1 and colb = 3', {
+      uppercase: true
+    });
+    expect(result).toEqualMultiline(`
+      SELECT
+        DISTINCT *
+      FROM
+        foo
+        LEFT JOIN bar
+      WHERE
+        cola > 1
+        AND colb = 3
+    `);
   });
 }
