@@ -15,9 +15,7 @@ export default {
    *  @param {Object} cfg.params Collection of params for placeholder replacement
    * @return {String}
    */
-  format: (query, cfg) => {
-    cfg = cfg || {};
-
+  format: (query, cfg = {}) => {
     switch (cfg.language) {
       case 'db2':
         return new Db2Formatter(cfg).format(query);
