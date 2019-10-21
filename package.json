@@ -31,7 +31,7 @@
     "build:umd": "cross-env NODE_ENV=development webpack --mode development src/sqlFormatter.js --output dist/sql-formatter.js",
     "build:umd:min": "cross-env NODE_ENV=production webpack --mode production src/sqlFormatter.js --output dist/sql-formatter.min.js",
     "prepublish": "npm run clean && npm run check && npm run build",
-    "format": "prettier --write \"**/*.{js,jsx,md,json,css,prettierrc,eslintrc,babelrc}\""
+    "format": "prettier --write \"**/*.{js,jsx,md,json,css,html,prettierrc,eslintrc,babelrc}\""
   },
   "repository": {
     "type": "git",
