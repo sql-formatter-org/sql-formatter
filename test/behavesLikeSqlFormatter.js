@@ -457,7 +457,7 @@ export default function behavesLikeSqlFormatter(language) {
             "  count(*),\n" +
             "  Column1\n" +
             "FROM\n" +
-            "  Table1;\n" + 
+            "  Table1;\n" +
             "SELECT\n" +
             "  count(*),\n" +
             "  Column1\n" +
@@ -465,17 +465,17 @@ export default function behavesLikeSqlFormatter(language) {
             "  Table2;"
         );
     });
-    
+
     it('formats unicode correctly', function() {
         const result = format(
             'SELECT test, тест FROM table;'
-        )
+        );
         expect(result).toBe(
             'SELECT\n' +
             '  test,\n' +
             '  тест\n' +
             'FROM\n' +
             '  table;'
-        )
-    })
+        );
+    });
 }
