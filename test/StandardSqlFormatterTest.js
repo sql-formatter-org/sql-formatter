@@ -300,4 +300,22 @@ describe('StandardSqlFormatter', () => {
   it('formats lonely semicolon', () => {
     expect(sqlFormatter.format(';')).toBe(';');
   });
+
+  it('correctly indents create statement after select', () => {
+    const result = sqlFormatter.format(`
+      SELECT * FROM test;
+      CREATE TABLE TEST(id NUMBER NOT NULL, col1 VARCHAR2(20), col2 VARCHAR2(20));
+    `);
+    expect(result).toEqualMultiline(`
+      SELECT
+        *
+      FROM
+        test;
+      CREATE TABLE TEST(
+        id NUMBER NOT NULL,
+        col1 VARCHAR2(20),
+        col2 VARCHAR2(20)
+      );
+    `);
+  });
 });
