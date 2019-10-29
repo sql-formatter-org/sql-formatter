@@ -391,4 +391,22 @@ describe("StandardSqlFormatter", function() {
     it("formats lonely semicolon", function() {
         expect(sqlFormatter.format(";")).toBe(";");
     });
+    
+    it('correctly indents create statement after select', () => {
+        const result = sqlFormatter.format(`
+            SELECT * FROM test;
+            CREATE TABLE TEST(id NUMBER NOT NULL, col1 VARCHAR2(20), col2 VARCHAR2(20));
+        `);
+        expect(result).toBe(
+            "SELECT\n" +
+            "  *\n" +
+            "FROM\n" +
+            "  test;\n" +
+            "CREATE TABLE TEST(\n" +
+            "  id NUMBER NOT NULL,\n" +
+            "  col1 VARCHAR2(20),\n" +
+            "  col2 VARCHAR2(20)\n" +
+            ");"
+        );
+    });
 });
