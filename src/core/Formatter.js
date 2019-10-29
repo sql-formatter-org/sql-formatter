@@ -190,6 +190,7 @@ export default class Formatter {
     }
 
     formatQuerySeparator(token, query) {
+        this.indentation.decreaseTopLevel();
         return this.trimTrailingWhitespace(query) + token.value + "\n";
     }
 
