@@ -7,6 +7,7 @@ Fixes:
 - Fixed formatting issue with unicode characters
 - Fixed comment formatting for non-unix line endings
 - Fixed null reference on input tokenization
+- Fixed indentation of multiple statements
 
 New Features:
 
