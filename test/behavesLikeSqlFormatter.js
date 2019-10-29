@@ -308,7 +308,7 @@ export default function behavesLikeSqlFormatter(language) {
     expect(result).toEqualMultiline(`
       (
         (
-            foo = '0123456789-0123456789-0123456789-0123456789'
+          foo = '0123456789-0123456789-0123456789-0123456789'
         )
       )
     `);
@@ -417,7 +417,7 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('`converts keywords to uppercase when option passed in', () => {
+  it('converts keywords to uppercase when option passed in', () => {
     const result = format('select distinct * frOM foo left join bar WHERe cola > 1 and colb = 3', {
       uppercase: true
     });

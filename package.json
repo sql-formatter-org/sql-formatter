@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.6.0",
+    "dedent": "^0.7.0",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
@@ -50,11 +51,12 @@
     "@babel/preset-env": "^7.6.3",
     "babel-eslint": "^10.0.3",
     "babel-plugin-add-module-exports": "^1.0.2",
-    "eslint": "^6.5.1",
+    "eslint": "^6.6.0",
     "eslint-config-adpyke-es6": "^1.4.13",
-    "eslint-config-prettier": "^6.4.0",
+    "eslint-config-prettier": "^6.5.0",
     "jest": "^24.9.0",
-    "jest-multiline-matchers": "^0.2.1",
+    "jest-diff": "^24.9.0",
+    "jest-matcher-utils": "^24.9.0",
     "prettier": "^1.18.2",
     "rimraf": "^3.0.0",
     "webpack": "^4.41.2",
