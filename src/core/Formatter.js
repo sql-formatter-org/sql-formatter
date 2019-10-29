@@ -174,6 +174,7 @@ export default class Formatter {
   }
 
   formatQuerySeparator(token, query) {
+    this.indentation.resetIndentation();
     return this.trimTrailingWhitespace(query) + token.value + '\n';
   }
 
