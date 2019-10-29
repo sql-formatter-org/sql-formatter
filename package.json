@@ -67,9 +67,6 @@
       "test"
     ],
     "testRegex": ".*Test",
-    "collectCoverage": true,
-    "setupFilesAfterEnv": [
-      "<rootDir>/test/helpers/customMatchers.js"
-    ]
+    "collectCoverage": true
   }
 }

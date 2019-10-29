@@ -195,14 +195,6 @@ export default class Formatter {
     return query + this.indentation.getIndent();
   }
 
-  previousNonWhitespaceToken() {
-    let n = 1;
-    while (this.previousToken(n).type === tokenTypes.WHITESPACE) {
-      n++;
-    }
-    return this.previousToken(n);
-  }
-
   previousToken(offset = 1) {
     return this.tokens[this.index - offset] || {};
   }
