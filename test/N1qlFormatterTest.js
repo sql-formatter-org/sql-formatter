@@ -1,165 +1,168 @@
 import sqlFormatter from './../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import dedent from 'dedent';
 
 describe('N1qlFormatter', function () {
   behavesLikeSqlFormatter('n1ql');
 
-  it('formats SELECT query with element selection expression', function () {
-    const result = sqlFormatter.format('SELECT orderlines[0].productId FROM orders;', {
-      language: 'n1ql',
-    });
-    expect(result).toBe('SELECT\n' + '  orderlines[0].productId\n' + 'FROM\n' + '  orders;');
+  const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'n1ql' });
+
+  it('formats SELECT query with element selection expression', () => {
+    const result = format('SELECT orderlines[0].productId FROM orders;');
+    expect(result).toBe(dedent`
+      SELECT
+        orderlines[0].productId
+      FROM
+        orders;
+    `);
   });
 
-  it('formats SELECT query with primary key quering', function () {
-    const result = sqlFormatter.format(
-      "SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];",
-      { language: 'n1ql' }
-    );
-    expect(result).toBe(
-      'SELECT\n' +
-        '  fname,\n' +
-        '  email\n' +
-        'FROM\n' +
-        '  tutorial\n' +
-        'USE KEYS\n' +
-        "  ['dave', 'ian'];"
-    );
+  it('formats SELECT query with primary key querying', () => {
+    const result = format("SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];");
+    expect(result).toBe(dedent`
+      SELECT
+        fname,
+        email
+      FROM
+        tutorial
+      USE KEYS
+        ['dave', 'ian'];
+    `);
   });
 
-  it('formats INSERT with {} object literal', function () {
-    const result = sqlFormatter.format(
-      "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id':1,'type':'Tarzan'});",
-      { language: 'n1ql' }
+  it('formats INSERT with {} object literal', () => {
+    const result = format(
+      "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id':1,'type':'Tarzan'});"
     );
-    expect(result).toBe(
-      'INSERT INTO\n' +
-        '  heroes (KEY, VALUE)\n' +
-        'VALUES\n' +
-        "  ('123', {'id': 1, 'type': 'Tarzan'});"
-    );
+    expect(result).toBe(dedent`
+      INSERT INTO
+        heroes (KEY, VALUE)
+      VALUES
+        ('123', {'id': 1, 'type': 'Tarzan'});
+    `);
   });
 
-  it('formats INSERT with large object and array literals', function () {
-    const result = sqlFormatter.format(
-      "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id': 1, 'type': 'Tarzan', " +
-        "'array': [123456789, 123456789, 123456789, 123456789, 123456789], 'hello': 'world'});",
-      { language: 'n1ql' }
-    );
-    expect(result).toBe(
-      'INSERT INTO\n' +
-        '  heroes (KEY, VALUE)\n' +
-        'VALUES\n' +
-        '  (\n' +
-        "    '123',\n" +
-        '    {\n' +
-        "      'id': 1,\n" +
-        "      'type': 'Tarzan',\n" +
-        "      'array': [\n" +
-        '        123456789,\n' +
-        '        123456789,\n' +
-        '        123456789,\n' +
-        '        123456789,\n' +
-        '        123456789\n' +
-        '      ],\n' +
-        "      'hello': 'world'\n" +
-        '    }\n' +
-        '  );'
-    );
+  it('formats INSERT with large object and array literals', () => {
+    const result = format(`
+      INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id': 1, 'type': 'Tarzan',
+      'array': [123456789, 123456789, 123456789, 123456789, 123456789], 'hello': 'world'});
+    `);
+    expect(result).toBe(dedent`
+      INSERT INTO
+        heroes (KEY, VALUE)
+      VALUES
+        (
+          '123',
+          {
+            'id': 1,
+            'type': 'Tarzan',
+            'array': [
+              123456789,
+              123456789,
+              123456789,
+              123456789,
+              123456789
+            ],
+            'hello': 'world'
+          }
+        );
+    `);
   });
 
-  it('formats SELECT query with UNNEST toplevel reserver word', function () {
-    const result = sqlFormatter.format('SELECT * FROM tutorial UNNEST tutorial.children c;', {
-      language: 'n1ql',
-    });
-    expect(result).toBe(
-      'SELECT\n' + '  *\n' + 'FROM\n' + '  tutorial\n' + 'UNNEST\n' + '  tutorial.children c;'
-    );
+  it('formats SELECT query with UNNEST top level reserver word', () => {
+    const result = format('SELECT * FROM tutorial UNNEST tutorial.children c;');
+    expect(result).toBe(dedent`
+      SELECT
+        *
+      FROM
+        tutorial
+      UNNEST
+        tutorial.children c;
+    `);
   });
 
-  it('formats SELECT query with NEST and USE KEYS', function () {
-    const result = sqlFormatter.format(
-      'SELECT * FROM usr ' +
-        "USE KEYS 'Elinor_33313792' NEST orders_with_users orders " +
-        'ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;',
-      { language: 'n1ql' }
-    );
-    expect(result).toBe(
-      'SELECT\n' +
-        '  *\n' +
-        'FROM\n' +
-        '  usr\n' +
-        'USE KEYS\n' +
-        "  'Elinor_33313792'\n" +
-        'NEST\n' +
-        '  orders_with_users orders ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;'
-    );
+  it('formats SELECT query with NEST and USE KEYS', () => {
+    const result = format(`
+      SELECT * FROM usr
+      USE KEYS 'Elinor_33313792' NEST orders_with_users orders
+      ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        *
+      FROM
+        usr
+      USE KEYS
+        'Elinor_33313792'
+      NEST
+        orders_with_users orders ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;
+    `);
   });
 
-  it('formats explained DELETE query with USE KEYS and RETURNING', function () {
-    const result = sqlFormatter.format(
-      "EXPLAIN DELETE FROM tutorial t USE KEYS 'baldwin' RETURNING t",
-      { language: 'n1ql' }
-    );
-    expect(result).toBe(
-      'EXPLAIN DELETE FROM\n' + '  tutorial t\n' + 'USE KEYS\n' + "  'baldwin' RETURNING t"
-    );
+  it('formats explained DELETE query with USE KEYS and RETURNING', () => {
+    const result = format("EXPLAIN DELETE FROM tutorial t USE KEYS 'baldwin' RETURNING t");
+    expect(result).toBe(dedent`
+      EXPLAIN DELETE FROM
+        tutorial t
+      USE KEYS
+        'baldwin' RETURNING t
+    `);
   });
 
-  it('formats UPDATE query with USE KEYS and RETURNING', function () {
-    const result = sqlFormatter.format(
-      "UPDATE tutorial USE KEYS 'baldwin' SET type = 'actor' RETURNING tutorial.type",
-      { language: 'n1ql' }
+  it('formats UPDATE query with USE KEYS and RETURNING', () => {
+    const result = format(
+      "UPDATE tutorial USE KEYS 'baldwin' SET type = 'actor' RETURNING tutorial.type"
     );
-    expect(result).toBe(
-      'UPDATE\n' +
-        '  tutorial\n' +
-        'USE KEYS\n' +
-        "  'baldwin'\n" +
-        'SET\n' +
-        "  type = 'actor' RETURNING tutorial.type"
-    );
+    expect(result).toBe(dedent`
+      UPDATE
+        tutorial
+      USE KEYS
+        'baldwin'
+      SET
+        type = 'actor' RETURNING tutorial.type
+    `);
   });
 
-  it('recognizes $variables', function () {
-    const result = sqlFormatter.format(
-      'SELECT $variable, $\'var name\', $"var name", $`var name`;',
-      { language: 'n1ql' }
-    );
-    expect(result).toBe(
-      'SELECT\n' + '  $variable,\n' + "  $'var name',\n" + '  $"var name",\n' + '  $`var name`;'
-    );
+  it('recognizes $variables', () => {
+    const result = format('SELECT $variable, $\'var name\', $"var name", $`var name`;');
+    expect(result).toBe(dedent`
+      SELECT
+        $variable,
+        $'var name',
+        $"var name",
+        $\`var name\`;
+    `);
   });
 
-  it('replaces $variables with param values', function () {
-    const result = sqlFormatter.format(
-      'SELECT $variable, $\'var name\', $"var name", $`var name`;',
-      {
-        language: 'n1ql',
-        params: {
-          variable: '"variable value"',
-          'var name': "'var value'",
-        },
+  it('replaces $variables with param values', () => {
+    const result = format('SELECT $variable, $\'var name\', $"var name", $`var name`;', {
+      params: {
+        variable: '"variable value"',
+        'var name': "'var value'"
       }
-    );
-    expect(result).toBe(
-      'SELECT\n' +
-        '  "variable value",\n' +
-        "  'var value',\n" +
-        "  'var value',\n" +
-        "  'var value';"
-    );
+    });
+    expect(result).toBe(dedent`
+      SELECT
+        "variable value",
+        'var value',
+        'var value',
+        'var value';
+    `);
   });
 
-  it('replaces $ numbered placeholders with param values', function () {
-    const result = sqlFormatter.format('SELECT $1, $2, $0;', {
-      language: 'n1ql',
+  it('replaces $ numbered placeholders with param values', () => {
+    const result = format('SELECT $1, $2, $0;', {
       params: {
         0: 'first',
         1: 'second',
         2: 'third',
       },
     });
-    expect(result).toBe('SELECT\n' + '  second,\n' + '  third,\n' + '  first;');
+    expect(result).toBe(dedent`
+      SELECT
+        second,
+        third,
+        first;
+    `);
   });
 });
