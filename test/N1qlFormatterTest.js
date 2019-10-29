@@ -1,6 +1,6 @@
 import sqlFormatter from './../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
-import dedent from 'dedent';
+import dedent from 'dedent-js';
 
 describe('N1qlFormatter', function () {
   behavesLikeSqlFormatter('n1ql');
@@ -8,10 +8,10 @@ describe('N1qlFormatter', function () {
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'n1ql' });
 
   it('formats SELECT query with element selection expression', () => {
-    const result = format('SELECT orderlines[0].productId FROM orders;');
+    const result = format('SELECT order_lines[0].productId FROM orders;');
     expect(result).toBe(dedent`
       SELECT
-        orderlines[0].productId
+        order_lines[0].productId
       FROM
         orders;
     `);
