@@ -432,4 +432,19 @@ export default function behavesLikeSqlFormatter(language) {
         AND colb = 3
     `);
   });
+
+  it('line breaks between queries change with config', () => {
+    const result = format('SELECT * FROM foo; SELECT * FROM bar;', { linesBetweenQueries: 2 });
+    expect(result).toEqualMultiline(`
+      SELECT
+        *
+      FROM
+        foo;
+
+      SELECT
+        *
+      FROM
+        bar;
+    `);
+  });
 }

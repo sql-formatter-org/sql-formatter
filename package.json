@@ -42,7 +42,6 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.6.0",
-    "dedent": "^0.7.0",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
@@ -51,6 +50,7 @@
     "@babel/preset-env": "^7.6.3",
     "babel-eslint": "^10.0.3",
     "babel-plugin-add-module-exports": "^1.0.2",
+    "dedent": "^0.7.0",
     "eslint": "^6.6.0",
     "eslint-config-adpyke-es6": "^1.4.13",
     "eslint-config-prettier": "^6.5.0",

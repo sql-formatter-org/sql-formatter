@@ -1,15 +1,19 @@
 import includes from 'lodash/includes';
-import trimEnd from 'lodash/trimEnd';
 import tokenTypes from './tokenTypes';
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 
+const trimSpacesEnd = str => str.replace(/[ \t]+$/u, '');
+
 export default class Formatter {
   /**
    * @param {Object} cfg
-   *   @param {Object} cfg.indent
-   *   @param {Object} cfg.params
+   *  @param {String} cfg.language
+   *  @param {String} cfg.indent
+   *  @param {Bool} cfg.uppercase
+   *  @param {Integer} cfg.linesBetweenQueries
+   *  @param {Object} cfg.params
    * @param {Tokenizer} tokenizer
    */
   constructor(cfg, tokenizer) {
@@ -122,7 +126,7 @@ export default class Formatter {
       tokenTypes.LINE_COMMENT
     ];
     if (!includes(preserveWhitespaceFor, this.previousToken().type)) {
-      query = trimEnd(query);
+      query = trimSpacesEnd(query);
     }
     query += token.value;
 
@@ -152,7 +156,7 @@ export default class Formatter {
 
   // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
   formatComma(token, query) {
-    query = this.trimTrailingWhitespace(query) + token.value + ' ';
+    query = trimSpacesEnd(query) + token.value + ' ';
 
     if (this.inlineBlock.isActive()) {
       return query;
@@ -164,11 +168,11 @@ export default class Formatter {
   }
 
   formatWithSpaceAfter(token, query) {
-    return this.trimTrailingWhitespace(query) + token.value + ' ';
+    return trimSpacesEnd(query) + token.value + ' ';
   }
 
   formatWithoutSpaces(token, query) {
-    return this.trimTrailingWhitespace(query) + token.value;
+    return trimSpacesEnd(query) + token.value;
   }
 
   formatWithSpaces(token, query) {
@@ -182,19 +186,13 @@ export default class Formatter {
 
   formatQuerySeparator(token, query) {
     this.indentation.decreaseTopLevel();
-    return this.trimTrailingWhitespace(query) + token.value + '\n';
+    return trimSpacesEnd(query) + token.value + '\n'.repeat(this.cfg.linesBetweenQueries || 1);
   }
 
   addNewline(query) {
-    return trimEnd(query) + '\n' + this.indentation.getIndent();
-  }
-
-  trimTrailingWhitespace(query) {
-    if (this.previousNonWhitespaceToken().type === tokenTypes.LINE_COMMENT) {
-      return trimEnd(query) + '\n';
-    } else {
-      return trimEnd(query);
-    }
+    query = trimSpacesEnd(query);
+    if (!query.endsWith('\n')) query += '\n';
+    return query + this.indentation.getIndent();
   }
 
   previousNonWhitespaceToken() {

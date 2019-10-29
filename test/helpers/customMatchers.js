@@ -5,27 +5,33 @@ const diff = require('jest-diff');
 const multilineMessage = (pass, received, expected, name, field) =>
   pass
     ? () =>
-        `${matcherHint(`.not.${name}`)}\n\n` +
-        `Expected ${field} to not equal:\n` +
-        `  ${printExpected(expected)}\n` +
-        `Received:\n` +
-        `  ${printReceived(received)}`
+        dedent(`
+          ${matcherHint(`.not.${name}`)}
+
+          Expected ${field} to not equal:
+            ${printExpected(expected)}\n
+          Received:
+            ${printReceived(received)}
+        `)
     : () => {
         const diffString = diff(expected, received);
-        return (
-          `${matcherHint(`.${name}`)}\n\n` +
-          `Expected ${field} to equal:\n` +
-          `  ${printExpected(expected)}\n` +
-          `Received:\n` +
-          `  ${printReceived(received)}${diffString ? `\n\nDifference:\n\n${diffString}` : ``}`
-        );
+        return dedent(`
+          ${matcherHint(`.not.${name}`)}
+
+          Expected ${field} to not equal:
+            ${printExpected(expected)}\n
+          Received:
+            ${printReceived(received)}${diffString ? `\n\nDifference:\n\n${diffString}` : ''}
+        `);
       };
+
 const toEqualMultiline = (received, expected) => {
   expected = dedent(expected);
   const pass = received === expected;
   const message = multilineMessage(pass, received, expected, 'toEqualMultiline', 'value');
   return { actual: received, expected, message, name: 'toEqualMultiline', pass };
 };
+
 expect.extend({
   toEqualMultiline
 });

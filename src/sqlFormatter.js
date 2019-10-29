@@ -11,6 +11,7 @@ import StandardSqlFormatter from './languages/StandardSqlFormatter';
  *  @param {String} cfg.language Query language, default is Standard SQL
  *  @param {String} cfg.indent Characters used for indentation, default is "  " (2 spaces)
  *  @param {Bool} cfg.uppercase Converts keywords to uppercase
+ *  @param {Integer} cfg.linesBetweenQueries How many line breaks between queries
  *  @param {Object} cfg.params Collection of params for placeholder replacement
  * @return {String}
  */

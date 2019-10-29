@@ -12,6 +12,7 @@ Fixes:
 New Features:
 
 - Convert keywords to uppercase with the `uppercase` config option
+- Configurable number of line breaks between queries with the `linesBetweenQueries` config option
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 It started as a port of a [PHP Library][], but has since considerably diverged.
@@ -50,7 +51,8 @@ You can also pass in configuration options:
 sqlFormatter.format('SELECT *', {
   language: 'n1ql', // Defaults to "sql"
   indent: '    ', // Defaults to two spaces,
-  uppercase: true // Defaults to false
+  uppercase: true, // Defaults to false
+  linesBetweenQueries: 2 // Defaults to 1
 });
 ```
 
