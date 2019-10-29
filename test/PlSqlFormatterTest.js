@@ -1,6 +1,6 @@
 import sqlFormatter from './../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
-import dedent from 'dedent';
+import dedent from 'dedent-js';
 
 describe('PlSqlFormatter', () => {
   behavesLikeSqlFormatter('pl/sql');
@@ -51,31 +51,36 @@ describe('PlSqlFormatter', () => {
   it('formats long CREATE TABLE', () => {
     expect(
       format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL);')
-    ).toBe(
-      'CREATE TABLE items (\n' +
-        '  a INT PRIMARY KEY,\n' +
-        '  b TEXT,\n' +
-        '  c INT NOT NULL,\n' +
-        '  d INT NOT NULL\n' +
-        ');'
-    );
+    ).toBe(dedent`
+      CREATE TABLE items (
+        a INT PRIMARY KEY,
+        b TEXT,
+        c INT NOT NULL,
+        d INT NOT NULL
+      );
+    `);
   });
 
   it('formats INSERT without INTO', () => {
     const result = format(
       "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
     );
-    expect(result).toBe(
-      'INSERT\n' +
-        '  Customers (ID, MoneyBalance, Address, City)\n' +
-        'VALUES\n' +
-        "  (12, -123.4, 'Skagen 2111', 'Stv');"
-    );
+    expect(result).toBe(dedent`
+      INSERT
+        Customers (ID, MoneyBalance, Address, City)
+      VALUES
+        (12, -123.4, 'Skagen 2111', 'Stv');
+    `);
   });
 
   it('formats ALTER TABLE ... MODIFY query', () => {
     const result = format('ALTER TABLE supplier MODIFY supplier_name char(100) NOT NULL;');
-    expect(result).toBe('ALTER TABLE\n  supplier\nMODIFY\n  supplier_name char(100) NOT NULL;');
+    expect(result).toBe(dedent`
+      ALTER TABLE
+        supplier
+      MODIFY
+        supplier_name char(100) NOT NULL;
+    `);
   });
 
   it('formats ALTER TABLE ... ALTER COLUMN query', () => {
@@ -90,7 +95,12 @@ describe('PlSqlFormatter', () => {
 
   it('recognizes ?[0-9]* placeholders', () => {
     const result = format('SELECT ?1, ?25, ?;');
-    expect(result).toBe('SELECT\n  ?1,\n  ?25,\n  ?;');
+    expect(result).toBe(dedent`
+      SELECT
+        ?1,
+        ?25,
+        ?;
+    `);
   });
 
   it('replaces ? numbered placeholders with param values', () => {
@@ -125,22 +135,45 @@ describe('PlSqlFormatter', () => {
 
   it('formats SELECT query with CROSS APPLY', () => {
     const result = format('SELECT a, b FROM t CROSS APPLY fn(t.id)');
-    expect(result).toBe('SELECT\n  a,\n  b\nFROM\n  t\n  CROSS APPLY fn(t.id)');
+    expect(result).toBe(dedent`
+      SELECT
+        a,
+        b
+      FROM
+        t
+        CROSS APPLY fn(t.id)
+    `);
   });
 
   it('formats simple SELECT', () => {
     const result = format('SELECT N, M FROM t');
-    expect(result).toBe('SELECT\n  N,\n  M\nFROM\n  t');
+    expect(result).toBe(dedent`
+      SELECT
+        N,
+        M
+      FROM
+        t
+    `);
   });
 
   it('formats simple SELECT with national characters', () => {
     const result = format("SELECT N'value'");
-    expect(result).toBe("SELECT\n  N'value'");
+    expect(result).toBe(dedent`
+      SELECT
+        N'value'
+    `);
   });
 
   it('formats SELECT query with OUTER APPLY', () => {
     const result = format('SELECT a, b FROM t OUTER APPLY fn(t.id)');
-    expect(result).toBe('SELECT\n  a,\n  b\nFROM\n  t\n  OUTER APPLY fn(t.id)');
+    expect(result).toBe(dedent`
+      SELECT
+        a,
+        b
+      FROM
+        t
+        OUTER APPLY fn(t.id)
+    `);
   });
 
   it('formats CASE ... WHEN with a blank expression', () => {
@@ -148,14 +181,14 @@ describe('PlSqlFormatter', () => {
       "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
     );
 
-    expect(result).toBe(
-      'CASE\n' +
-        "  WHEN option = 'foo' THEN 1\n" +
-        "  WHEN option = 'bar' THEN 2\n" +
-        "  WHEN option = 'baz' THEN 3\n" +
-        '  ELSE 4\n' +
-        'END;'
-    );
+    expect(result).toBe(dedent`
+      CASE
+        WHEN option = 'foo' THEN 1
+        WHEN option = 'bar' THEN 2
+        WHEN option = 'baz' THEN 3
+        ELSE 4
+      END;
+    `);
   });
 
   it('formats CASE ... WHEN inside SELECT', () => {
@@ -163,19 +196,19 @@ describe('PlSqlFormatter', () => {
       "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table"
     );
 
-    expect(result).toBe(
-      'SELECT\n' +
-        '  foo,\n' +
-        '  bar,\n' +
-        '  CASE\n' +
-        '    baz\n' +
-        "    WHEN 'one' THEN 1\n" +
-        "    WHEN 'two' THEN 2\n" +
-        '    ELSE 3\n' +
-        '  END\n' +
-        'FROM\n' +
-        '  table'
-    );
+    expect(result).toBe(dedent`
+      SELECT
+        foo,
+        bar,
+        CASE
+          baz
+          WHEN 'one' THEN 1
+          WHEN 'two' THEN 2
+          ELSE 3
+        END
+      FROM
+        table
+    `);
   });
 
   it('formats CASE ... WHEN with an expression', () => {
@@ -183,14 +216,14 @@ describe('PlSqlFormatter', () => {
       "CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;"
     );
 
-    expect(result).toBe(
-      'CASE\n' +
-        '  toString(getNumber())\n' +
-        "  WHEN 'one' THEN 1\n" +
-        "  WHEN 'two' THEN 2\n" +
-        "  WHEN 'three' THEN 3\n" +
-        '  ELSE 4\n' +
-        'END;'
-    );
+    expect(result).toBe(dedent`
+      CASE
+        toString(getNumber())
+        WHEN 'one' THEN 1
+        WHEN 'two' THEN 2
+        WHEN 'three' THEN 3
+        ELSE 4
+      END;
+    `);
   });
 });

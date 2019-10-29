@@ -50,7 +50,7 @@
     "@babel/preset-env": "^7.6.3",
     "babel-eslint": "^10.0.3",
     "babel-plugin-add-module-exports": "^1.0.2",
-    "dedent": "^0.7.0",
+    "dedent-js": "^1.0.1",
     "eslint": "^6.6.0",
     "eslint-config-adpyke-es6": "^1.4.13",
     "eslint-config-prettier": "^6.5.0",

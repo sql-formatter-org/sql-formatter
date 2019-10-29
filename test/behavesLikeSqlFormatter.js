@@ -1,5 +1,5 @@
 import sqlFormatter from './../src/sqlFormatter';
-import dedent from 'dedent';
+import dedent from 'dedent-js';
 
 /**
  * Core tests for all SQL formatters
@@ -23,12 +23,12 @@ export default function behavesLikeSqlFormatter(language) {
   });
 
   it('formats simple SET SCHEMA queries', () => {
-    const result = format('SET SCHEMA tetrisdb; SET CURRENT SCHEMA bingodb;');
+    const result = format('SET SCHEMA schema1; SET CURRENT SCHEMA schema2;');
     expect(result).toBe(dedent`
       SET SCHEMA
-        tetrisdb;
+        schema1;
       SET CURRENT SCHEMA
-        bingodb;
+        schema2;
     `);
   });
 
@@ -318,20 +318,20 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('formats UPDATE query with AS part', () => {
     const result = format(
-      'UPDATE customers SET totalorders = ordersummary.total  FROM ( SELECT * FROM bank) AS ordersummary'
+      'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary'
     );
     expect(result).toBe(dedent`
       UPDATE
         customers
       SET
-        totalorders = ordersummary.total
+        total_orders = order_summary.total
       FROM
         (
           SELECT
             *
           FROM
             bank
-        ) AS ordersummary
+        ) AS order_summary
     `);
   });
 
