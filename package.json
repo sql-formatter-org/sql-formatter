@@ -55,8 +55,6 @@
     "eslint-config-adpyke-es6": "^1.4.13",
     "eslint-config-prettier": "^6.5.0",
     "jest": "^24.9.0",
-    "jest-diff": "^24.9.0",
-    "jest-matcher-utils": "^24.9.0",
     "prettier": "^1.18.2",
     "rimraf": "^3.0.0",
     "webpack": "^4.41.2",
