@@ -185,7 +185,7 @@ export default class Formatter {
   }
 
   formatQuerySeparator(token, query) {
-    this.indentation.decreaseTopLevel();
+    this.indentation.resetIndentation();
     return trimSpacesEnd(query) + token.value + '\n'.repeat(this.cfg.linesBetweenQueries || 1);
   }
 
