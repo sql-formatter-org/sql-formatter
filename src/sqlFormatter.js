@@ -4,7 +4,7 @@ import PlSqlFormatter from './languages/PlSqlFormatter';
 import StandardSqlFormatter from './languages/StandardSqlFormatter';
 
 /**
- * Format whitespaces in a query to make it easier to read.
+ * Format whitespace in a query to make it easier to read.
  *
  * @param {String} query
  * @param {Object} cfg

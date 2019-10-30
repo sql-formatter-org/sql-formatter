@@ -28,7 +28,7 @@ export default class Formatter {
   }
 
   /**
-   * Formats whitespaces in a SQL string to make it easier to read.
+   * Formats whitespace in a SQL string to make it easier to read.
    *
    * @param {String} query The SQL query string
    * @return {String} formatted query
@@ -52,8 +52,8 @@ export default class Formatter {
         formattedQuery = this.formatLineComment(token, formattedQuery);
       } else if (token.type === tokenTypes.BLOCK_COMMENT) {
         formattedQuery = this.formatBlockComment(token, formattedQuery);
-      } else if (token.type === tokenTypes.RESERVED_TOPLEVEL) {
-        formattedQuery = this.formatToplevelReservedWord(token, formattedQuery);
+      } else if (token.type === tokenTypes.RESERVED_TOP_LEVEL) {
+        formattedQuery = this.formatTopLevelReservedWord(token, formattedQuery);
         this.previousReservedWord = token;
       } else if (token.type === tokenTypes.RESERVED_NEWLINE) {
         formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
@@ -94,12 +94,12 @@ export default class Formatter {
     return comment.replace(/\n/gu, '\n' + this.indentation.getIndent());
   }
 
-  formatToplevelReservedWord(token, query) {
+  formatTopLevelReservedWord(token, query) {
     this.indentation.decreaseTopLevel();
 
     query = this.addNewline(query);
 
-    this.indentation.increaseToplevel();
+    this.indentation.increaseTopLevel();
 
     query += this.equalizeWhitespace(this.formatReservedWord(token.value));
     return this.addNewline(query);

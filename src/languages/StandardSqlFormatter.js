@@ -276,7 +276,7 @@ const reservedWords = [
   'YEAR_MONTH'
 ];
 
-const reservedToplevelWords = [
+const reservedTopLevelWords = [
   'ADD',
   'AFTER',
   'ALTER COLUMN',
@@ -343,7 +343,7 @@ export default class StandardSqlFormatter {
     if (!tokenizer) {
       tokenizer = new Tokenizer({
         reservedWords,
-        reservedToplevelWords,
+        reservedTopLevelWords,
         reservedNewlineWords,
         stringTypes: [`""`, "N''", "''", '``', '[]'],
         openParens: ['(', 'CASE'],

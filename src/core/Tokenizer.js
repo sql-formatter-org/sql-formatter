@@ -6,7 +6,7 @@ export default class Tokenizer {
   /**
    * @param {Object} cfg
    *  @param {String[]} cfg.reservedWords Reserved words in SQL
-   *  @param {String[]} cfg.reservedToplevelWords Words that are set to new line separately
+   *  @param {String[]} cfg.reservedTopLevelWords Words that are set to new line separately
    *  @param {String[]} cfg.reservedNewlineWords Words that are set to newline
    *  @param {String[]} cfg.stringTypes String types to enable: "", '', ``, [], N''
    *  @param {String[]} cfg.openParens Opening parentheses to enable, like (, [
@@ -24,7 +24,7 @@ export default class Tokenizer {
     this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/u;
     this.LINE_COMMENT_REGEX = this.createLineCommentRegex(cfg.lineCommentTypes);
 
-    this.RESERVED_TOPLEVEL_REGEX = this.createReservedWordRegex(cfg.reservedToplevelWords);
+    this.RESERVED_TOP_LEVEL_REGEX = this.createReservedWordRegex(cfg.reservedTopLevelWords);
     this.RESERVED_NEWLINE_REGEX = this.createReservedWordRegex(cfg.reservedNewlineWords);
     this.RESERVED_PLAIN_REGEX = this.createReservedWordRegex(cfg.reservedWords);
 
@@ -272,22 +272,22 @@ export default class Tokenizer {
 
   getReservedWordToken(input, previousToken) {
     // A reserved word cannot be preceded by a "."
-    // this makes it so in "mytable.from", "from" is not considered a reserved word
+    // this makes it so in "my_table.from", "from" is not considered a reserved word
     if (previousToken && previousToken.value && previousToken.value === '.') {
       return;
     }
     return (
-      this.getToplevelReservedToken(input) ||
+      this.getTopLevelReservedToken(input) ||
       this.getNewlineReservedToken(input) ||
       this.getPlainReservedToken(input)
     );
   }
 
-  getToplevelReservedToken(input) {
+  getTopLevelReservedToken(input) {
     return this.getTokenOnFirstMatch({
       input,
-      type: tokenTypes.RESERVED_TOPLEVEL,
-      regex: this.RESERVED_TOPLEVEL_REGEX
+      type: tokenTypes.RESERVED_TOP_LEVEL,
+      regex: this.RESERVED_TOP_LEVEL_REGEX
     });
   }
 

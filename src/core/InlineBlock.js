@@ -5,8 +5,8 @@ const INLINE_MAX_LENGTH = 50;
 /**
  * Bookkeeper for inline blocks.
  *
- * Inline blocks are parenthized expressions that are shorter than INLINE_MAX_LENGTH.
- * These blocks are formatted on a single line, unlike longer parenthized
+ * Inline blocks are parenthesized expressions that are shorter than INLINE_MAX_LENGTH.
+ * These blocks are formatted on a single line, unlike longer parenthesized
  * expressions where open-parenthesis causes newline and increase of indentation.
  */
 export default class InlineBlock {
@@ -47,7 +47,7 @@ export default class InlineBlock {
   }
 
   // Check if this should be an inline parentheses block
-  // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
+  // Examples are "NOW()", "COUNT(*)", "int(10)", key(`some_column`), DECIMAL(7,2)
   isInlineBlock(tokens, index) {
     let length = 0;
     let level = 0;
@@ -81,7 +81,7 @@ export default class InlineBlock {
   // are not allowed inside inline parentheses block
   isForbiddenToken({ type, value }) {
     return (
-      type === tokenTypes.RESERVED_TOPLEVEL ||
+      type === tokenTypes.RESERVED_TOP_LEVEL ||
       type === tokenTypes.RESERVED_NEWLINE ||
       type === tokenTypes.COMMENT ||
       type === tokenTypes.BLOCK_COMMENT ||
