@@ -91,7 +91,7 @@ export default class Formatter {
   }
 
   indentComment(comment) {
-    return comment.replace(/\n/gu, '\n' + this.indentation.getIndent());
+    return comment.replace(/\n[ \t]*/gu, '\n' + this.indentation.getIndent() + ' ');
   }
 
   formatTopLevelReservedWord(token, query) {
