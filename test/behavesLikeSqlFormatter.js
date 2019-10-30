@@ -213,7 +213,22 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('formats simple INSERT query', function () {
+  it('maintains block comment indentation', () => {
+    const sql = dedent`
+      SELECT
+        /*
+         * This is a block comment
+         */
+        *
+      FROM
+        MyTable
+      WHERE
+        1 = 2;
+    `;
+    expect(format(sql)).toBe(sql);
+  });
+
+  it('formats simple INSERT query', () => {
     const result = format(
       "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
     );
