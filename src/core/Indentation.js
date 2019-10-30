@@ -52,10 +52,6 @@ export default class Indentation {
             this.indentTypes.pop();
         }
     }
-    
-    resetIndentation() {
-        this.indentTypes = [];
-    }
 
     /**
      * Decreases indentation by one block-level indent.
@@ -69,5 +65,9 @@ export default class Indentation {
                 break;
             }
         }
+    }
+    
+    resetIndentation() {
+        this.indentTypes = [];
     }
 }
