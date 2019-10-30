@@ -18,7 +18,7 @@ New Features:
 It started as a port of a [PHP Library][], but has since considerably diverged.
 It supports [Standard SQL][], [Couchbase N1QL][], [IBM DB2][] and [Oracle PL/SQL][] dialects.
 
-[Try the demo.](https://zeroturnaround.github.io/sql-formatter/)
+[Try the demo.](https://kufii.github.io/sql-formatter-plus//)
 
 ## Install
 
