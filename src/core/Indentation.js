@@ -52,6 +52,10 @@ export default class Indentation {
             this.indentTypes.pop();
         }
     }
+    
+    resetIndentation() {
+        this.indentTypes = [];
+    }
 
     /**
      * Decreases indentation by one block-level indent.
