@@ -12,12 +12,13 @@ export default class Formatter {
    *   @param {Object} cfg.params
    * @param {Tokenizer} tokenizer
    */
-  constructor(cfg, tokenizer) {
+  constructor(cfg, tokenizer, tokenOverride) {
     this.cfg = cfg || {};
     this.indentation = new Indentation(this.cfg.indent);
     this.inlineBlock = new InlineBlock();
     this.params = new Params(this.cfg.params);
     this.tokenizer = tokenizer;
+    this.tokenOverride = tokenOverride;
     this.previousReservedWord = {};
     this.tokens = [];
     this.index = 0;
@@ -42,6 +43,8 @@ export default class Formatter {
     this.tokens.forEach((token, index) => {
       this.index = index;
 
+      if (this.tokenOverride) token = this.tokenOverride(token, this.previousReservedWord) || token;
+
       if (token.type === tokenTypes.WHITESPACE) {
         // ignore (we do our own whitespace formatting)
       } else if (token.type === tokenTypes.LINE_COMMENT) {
@@ -50,6 +53,9 @@ export default class Formatter {
         formattedQuery = this.formatBlockComment(token, formattedQuery);
       } else if (token.type === tokenTypes.RESERVED_TOPLEVEL) {
         formattedQuery = this.formatToplevelReservedWord(token, formattedQuery);
+        this.previousReservedWord = token;
+      } else if (token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT) {
+        formattedQuery = this.formatTopLevelReservedWordNoIndent(token, formattedQuery);
         this.previousReservedWord = token;
       } else if (token.type === tokenTypes.RESERVED_NEWLINE) {
         formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
@@ -90,7 +96,13 @@ export default class Formatter {
     return comment.replace(/\n[ \t]*/gu, '\n' + this.indentation.getIndent() + ' ');
   }
 
-  formatToplevelReservedWord(token, query) {
+  formatTopLevelReservedWordNoIndent(token, query) {
+    this.indentation.decreaseTopLevel();
+    query = this.addNewline(query) + this.equalizeWhitespace(this.formatReservedWord(token.value));
+    return this.addNewline(query);
+  }
+
+  formatTopLevelReservedWord(token, query) {
     this.indentation.decreaseTopLevel();
 
     query = this.addNewline(query);

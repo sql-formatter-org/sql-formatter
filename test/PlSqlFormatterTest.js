@@ -226,4 +226,82 @@ describe('PlSqlFormatter', function () {
       END;
     `);
   });
+
+  it('properly converts to uppercase in case statements', () => {
+    const result = format(
+      "case toString(getNumber()) when 'one' then 1 when 'two' then 2 when 'three' then 3 else 4 end;",
+      { uppercase: true }
+    );
+    expect(result).toBe(dedent`
+      CASE
+        toString(getNumber())
+        WHEN 'one' THEN 1
+        WHEN 'two' THEN 2
+        WHEN 'three' THEN 3
+        ELSE 4
+      END;
+    `);
+  });
+
+  it('formats Oracle recursive sub queries', () => {
+    const result = format(`
+      WITH t1(id, parent_id) AS (
+        -- Anchor member.
+        SELECT
+          id,
+          parent_id
+        FROM
+          tab1
+        WHERE
+          parent_id IS NULL
+        MINUS
+          -- Recursive member.
+        SELECT
+          t2.id,
+          t2.parent_id
+        FROM
+          tab1 t2,
+          t1
+        WHERE
+          t2.parent_id = t1.id
+      ) SEARCH BREADTH FIRST BY id SET order1,
+      another AS (SELECT * FROM dual)
+      SELECT id, parent_id FROM t1 ORDER BY order1;
+    `);
+    expect(result).toBe(dedent`
+      WITH t1(id, parent_id) AS (
+        -- Anchor member.
+        SELECT
+          id,
+          parent_id
+        FROM
+          tab1
+        WHERE
+          parent_id IS NULL
+        MINUS
+        -- Recursive member.
+        SELECT
+          t2.id,
+          t2.parent_id
+        FROM
+          tab1 t2,
+          t1
+        WHERE
+          t2.parent_id = t1.id
+      ) SEARCH BREADTH FIRST BY id SET order1,
+      another AS (
+        SELECT
+          *
+        FROM
+          dual
+      )
+      SELECT
+        id,
+        parent_id
+      FROM
+        t1
+      ORDER BY
+        order1;
+    `);
+  });
 });

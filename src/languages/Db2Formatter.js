@@ -526,11 +526,12 @@ const reservedToplevelWords = [
   'SET CURRENT SCHEMA',
   'SET SCHEMA',
   'SET',
-  'UNION ALL',
   'UPDATE',
   'VALUES',
   'WHERE',
 ];
+
+const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'UNION', 'UNION ALL'];
 
 const reservedNewlineWords = [
   'AND',
@@ -567,6 +568,7 @@ export default class Db2Formatter {
         reservedWords,
         reservedToplevelWords,
         reservedNewlineWords,
+        reservedTopLevelWordsNoIndent,
         stringTypes: [`""`, "''", '``', '[]'],
         openParens: ['('],
         closeParens: [')'],
