@@ -89,6 +89,7 @@ const reservedWords = [
   'ELEMENT',
   'ELSIF',
   'EMPTY',
+  'END',
   'ESCAPE',
   'EXCEPTIONS',
   'EXCLUSIVE',

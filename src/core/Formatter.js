@@ -128,7 +128,7 @@ export default class Formatter {
     if (!includes(preserveWhitespaceFor, this.previousToken().type)) {
       query = trimSpacesEnd(query);
     }
-    query += token.value;
+    query += this.cfg.uppercase ? token.value.toUpperCase() : token.value;
 
     this.inlineBlock.beginIfPossible(this.tokens, this.index);
 
@@ -141,6 +141,7 @@ export default class Formatter {
 
   // Closing parentheses decrease the block indent level
   formatClosingParentheses(token, query) {
+    token.value = this.cfg.uppercase ? token.value.toUpperCase() : token.value;
     if (this.inlineBlock.isActive()) {
       this.inlineBlock.end();
       return this.formatWithSpaceAfter(token, query);
