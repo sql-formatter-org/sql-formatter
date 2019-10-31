@@ -7,6 +7,7 @@ export default {
   STRING: 'string',
   RESERVED: 'reserved',
   RESERVED_TOP_LEVEL: 'reserved-top-level',
+  RESERVED_TOP_LEVEL_NO_INDENT: 'reserved-top-level-no-indent',
   RESERVED_NEWLINE: 'reserved-newline',
   OPERATOR: 'operator',
   OPEN_PAREN: 'open-paren',

@@ -95,7 +95,6 @@ const reservedWords = [
   'MATCHED',
   'MATERIALIZED',
   'MERGE',
-  'MINUS',
   'MISSING',
   'NAMESPACE',
   'NEST',
@@ -187,8 +186,6 @@ const reservedTopLevelWords = [
   'HAVING',
   'INFER',
   'INSERT INTO',
-  'INTERSECT ALL',
-  'INTERSECT',
   'LET',
   'LIMIT',
   'MERGE',
@@ -199,8 +196,6 @@ const reservedTopLevelWords = [
   'SET CURRENT SCHEMA',
   'SET SCHEMA',
   'SET',
-  'UNION ALL',
-  'UNION',
   'UNNEST',
   'UPDATE',
   'UPSERT',
@@ -208,6 +203,8 @@ const reservedTopLevelWords = [
   'VALUES',
   'WHERE'
 ];
+
+const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'UNION', 'UNION ALL'];
 
 const reservedNewlineWords = [
   'AND',
@@ -244,6 +241,7 @@ export default class N1qlFormatter {
         reservedWords,
         reservedTopLevelWords,
         reservedNewlineWords,
+        reservedTopLevelWordsNoIndent,
         stringTypes: [`""`, "''", '``'],
         openParens: ['(', '[', '{'],
         closeParens: [')', ']', '}'],

@@ -1,5 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import tokenTypes from '../core/tokenTypes';
 
 const reservedWords = [
   'A',
@@ -26,6 +27,7 @@ const reservedWords = [
   'BOOLEAN',
   'BOTH',
   'BOUND',
+  'BREADTH',
   'BULK',
   'BY',
   'BYTE',
@@ -78,6 +80,7 @@ const reservedWords = [
   'DEFAULT',
   'DEFINE',
   'DELETE',
+  'DEPTH',
   'DESC',
   'DETERMINISTIC',
   'DIRECTORY',
@@ -158,7 +161,6 @@ const reservedWords = [
   'MEMBER',
   'MERGE',
   'MIN',
-  'MINUS',
   'MINUTE',
   'MLSLABEL',
   'MOD',
@@ -265,6 +267,7 @@ const reservedWords = [
   'SB1',
   'SB2',
   'SB4',
+  'SEARCH',
   'SECOND',
   'SEGMENT',
   'SELF',
@@ -372,7 +375,6 @@ const reservedTopLevelWords = [
   'HAVING',
   'INSERT INTO',
   'INSERT',
-  'INTERSECT',
   'LIMIT',
   'LOOP',
   'MODIFY',
@@ -382,12 +384,12 @@ const reservedTopLevelWords = [
   'SET SCHEMA',
   'SET',
   'START WITH',
-  'UNION ALL',
-  'UNION',
   'UPDATE',
   'VALUES',
   'WHERE'
 ];
+
+const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'UNION', 'UNION ALL'];
 
 const reservedNewlineWords = [
   'AND',
@@ -407,6 +409,17 @@ const reservedNewlineWords = [
   'WHEN',
   'XOR'
 ];
+
+const tokenOverride = (token, previousReservedToken) => {
+  if (
+    token.type === tokenTypes.RESERVED_TOP_LEVEL &&
+    token.value === 'SET' &&
+    previousReservedToken.value === 'BY'
+  ) {
+    token.type = tokenTypes.RESERVED;
+    return token;
+  }
+};
 
 let tokenizer;
 
@@ -430,6 +443,7 @@ export default class PlSqlFormatter {
         reservedWords,
         reservedTopLevelWords,
         reservedNewlineWords,
+        reservedTopLevelWordsNoIndent,
         stringTypes: [`""`, "N''", "''", '``'],
         openParens: ['(', 'CASE'],
         closeParens: [')', 'END'],
@@ -439,6 +453,6 @@ export default class PlSqlFormatter {
         specialWordChars: ['_', '$', '#', '.', '@']
       });
     }
-    return new Formatter(this.cfg, tokenizer).format(query);
+    return new Formatter(this.cfg, tokenizer, tokenOverride).format(query);
   }
 }

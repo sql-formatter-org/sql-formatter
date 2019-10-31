@@ -290,7 +290,6 @@ const reservedTopLevelWords = [
   'HAVING',
   'INSERT INTO',
   'INSERT',
-  'INTERSECT',
   'LIMIT',
   'MODIFY',
   'ORDER BY',
@@ -298,12 +297,12 @@ const reservedTopLevelWords = [
   'SET CURRENT SCHEMA',
   'SET SCHEMA',
   'SET',
-  'UNION ALL',
-  'UNION',
   'UPDATE',
   'VALUES',
   'WHERE'
 ];
+
+const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'UNION', 'UNION ALL'];
 
 const reservedNewlineWords = [
   'AND',
@@ -345,6 +344,7 @@ export default class StandardSqlFormatter {
         reservedWords,
         reservedTopLevelWords,
         reservedNewlineWords,
+        reservedTopLevelWordsNoIndent,
         stringTypes: [`""`, "N''", "''", '``', '[]'],
         openParens: ['(', 'CASE'],
         closeParens: [')', 'END'],
