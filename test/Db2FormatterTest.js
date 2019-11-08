@@ -8,7 +8,8 @@ describe('Db2Formatter', () => {
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'db2' });
 
   it('formats FETCH FIRST like LIMIT', () => {
-    expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
+    expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;'))
+      .toBe(dedent/* sql */ `
         SELECT
           col1
         FROM
@@ -26,7 +27,7 @@ describe('Db2Formatter', () => {
       -- This is a comment
       MyTable;
     `);
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         col
       FROM
@@ -37,7 +38,7 @@ describe('Db2Formatter', () => {
 
   it('recognizes @ and # as part of identifiers', () => {
     const result = format('SELECT col#1, @col2 FROM tbl');
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         col#1,
         @col2
@@ -47,7 +48,7 @@ describe('Db2Formatter', () => {
   });
 
   it('recognizes :variables', () => {
-    expect(format('SELECT :variable;')).toBe(dedent`
+    expect(format('SELECT :variable;')).toBe(dedent/* sql */ `
       SELECT
         :variable;
     `);
@@ -57,7 +58,7 @@ describe('Db2Formatter', () => {
     const result = format('SELECT :variable', {
       params: { variable: '"variable value"' }
     });
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         "variable value"
     `);

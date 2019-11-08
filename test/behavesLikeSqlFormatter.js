@@ -13,7 +13,7 @@ export default function behavesLikeSqlFormatter(language) {
       indent: '    '
     });
 
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
           count(*),
           Column1
@@ -24,7 +24,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('formats simple SET SCHEMA queries', () => {
     const result = format('SET SCHEMA schema1; SET CURRENT SCHEMA schema2;');
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SET SCHEMA
         schema1;
       SET CURRENT SCHEMA
@@ -34,7 +34,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('formats simple SELECT query', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;');
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         count(*),
         Column1
@@ -47,7 +47,7 @@ export default function behavesLikeSqlFormatter(language) {
     const result = format(
       "SELECT DISTINCT name, ROUND(age/7) field1, 18 + 20 AS field2, 'some string' FROM foo;"
     );
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         DISTINCT name,
         ROUND(age / 7) field1,
@@ -63,7 +63,7 @@ export default function behavesLikeSqlFormatter(language) {
       SELECT * FROM foo WHERE Column1 = 'testing'
       AND ( (Column2 = Column3 OR Column4 >= NOW()) );
     `);
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         *
       FROM
@@ -84,7 +84,7 @@ export default function behavesLikeSqlFormatter(language) {
       SELECT * FROM foo WHERE name = 'John' GROUP BY some_column
       HAVING column > 10 ORDER BY other_column LIMIT 5;
     `);
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         *
       FROM
@@ -104,7 +104,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('formats LIMIT with two comma-separated values on single line', () => {
     const result = format('LIMIT 5, 10;');
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       LIMIT
         5, 10;
     `);
@@ -112,7 +112,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('formats LIMIT of single value followed by another SELECT using commas', () => {
     const result = format('LIMIT 5; SELECT foo, bar;');
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       LIMIT
         5;
       SELECT
@@ -123,7 +123,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('formats LIMIT of single value and OFFSET', () => {
     const result = format('LIMIT 5 OFFSET 8;');
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       LIMIT
         5 OFFSET 8;
     `);
@@ -131,7 +131,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('recognizes LIMIT in lowercase', () => {
     const result = format('limit 5, 10;');
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       limit
         5, 10;
     `);
@@ -139,7 +139,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('preserves case of keywords', () => {
     const result = format('select distinct * frOM foo left join bar WHERe a > 1 and b = 3');
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       select
         distinct *
       frOM
@@ -155,7 +155,7 @@ export default function behavesLikeSqlFormatter(language) {
     const result = format(
       'SELECT *, SUM(*) AS sum FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b'
     );
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         *,
         SUM(*) AS sum
@@ -178,7 +178,7 @@ export default function behavesLikeSqlFormatter(language) {
       SELECT customer_id.from, COUNT(order_id) AS total FROM customers
       INNER JOIN orders ON customers.customer_id = orders.customer_id;
     `);
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         customer_id.from,
         COUNT(order_id) AS total
@@ -189,7 +189,7 @@ export default function behavesLikeSqlFormatter(language) {
   });
 
   it('formats SELECT query with different comments', () => {
-    const result = format(dedent`
+    const result = format(dedent/* sql */ `
       SELECT
       /*
        * This is a block comment
@@ -199,7 +199,7 @@ export default function behavesLikeSqlFormatter(language) {
       MyTable # One final comment
       WHERE 1 = 2;
     `);
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         /*
          * This is a block comment
@@ -214,7 +214,7 @@ export default function behavesLikeSqlFormatter(language) {
   });
 
   it('maintains block comment indentation', () => {
-    const sql = dedent`
+    const sql = dedent/* sql */ `
       SELECT
         /*
          * This is a block comment
@@ -232,7 +232,7 @@ export default function behavesLikeSqlFormatter(language) {
     const result = format(
       "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
     );
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       INSERT INTO
         Customers (ID, MoneyBalance, Address, City)
       VALUES
@@ -242,7 +242,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('keeps short parenthesized list with nested parenthesis on single line', () => {
     const result = format('SELECT (a + b * (c - NOW()));');
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         (a + b * (c - NOW()));
     `);
@@ -254,7 +254,7 @@ export default function behavesLikeSqlFormatter(language) {
       SELECT IF(dq.id_discounter_shopping = 2, dq.value, dq.value / 100),
       IF (dq.id_discounter_shopping = 2, 'amount', 'percentage') FROM foo);
     `);
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       INSERT INTO
         some_table (
           id_product,
@@ -284,7 +284,7 @@ export default function behavesLikeSqlFormatter(language) {
     const result = format(
       "UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';"
     );
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       UPDATE
         Customers
       SET
@@ -297,7 +297,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('formats simple DELETE query', () => {
     const result = format("DELETE FROM Customers WHERE CustomerName='Alfred' AND Phone=5002132;");
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       DELETE FROM
         Customers
       WHERE
@@ -313,7 +313,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('formats incomplete query', () => {
     const result = format('SELECT count(');
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         count(
     `);
@@ -335,7 +335,7 @@ export default function behavesLikeSqlFormatter(language) {
     const result = format(
       'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary'
     );
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       UPDATE
         customers
       SET
@@ -352,7 +352,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('formats top-level and newline multi-word reserved words with inconsistent spacing', () => {
     const result = format('SELECT * FROM foo LEFT \t OUTER  \n JOIN bar ORDER \n BY blah');
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         *
       FROM
@@ -365,7 +365,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('formats long double parenthesized queries to multiple lines', () => {
     const result = format("((foo = '0123456789-0123456789-0123456789-0123456789'))");
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       (
         (
           foo = '0123456789-0123456789-0123456789-0123456789'
@@ -453,7 +453,7 @@ export default function behavesLikeSqlFormatter(language) {
       SELECT count(*),Column1 FROM Table1;
       SELECT count(*),Column1 FROM Table2;
     `);
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         count(*),
         Column1
@@ -469,7 +469,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('formats unicode correctly', () => {
     const result = format('SELECT test, тест FROM table;');
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         test,
         тест
@@ -482,7 +482,7 @@ export default function behavesLikeSqlFormatter(language) {
     const result = format('select distinct * frOM foo left join bar WHERe cola > 1 and colb = 3', {
       uppercase: true
     });
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         DISTINCT *
       FROM
@@ -496,7 +496,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('line breaks between queries change with config', () => {
     const result = format('SELECT * FROM foo; SELECT * FROM bar;', { linesBetweenQueries: 2 });
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         *
       FROM
@@ -514,7 +514,7 @@ export default function behavesLikeSqlFormatter(language) {
       SELECT * FROM test;
       CREATE TABLE TEST(id NUMBER NOT NULL, col1 VARCHAR2(20), col2 VARCHAR2(20));
     `);
-    expect(result).toBe(dedent`
+    expect(result).toBe(dedent/* sql */ `
       SELECT
         *
       FROM
