@@ -23,15 +23,16 @@
   "scripts": {
     "clean": "rimraf lib dist",
     "lint": "eslint .",
+    "format": "prettier --write \"**/*.{js,jsx,md,json,css,html,prettierrc,eslintrc,babelrc}\"",
+    "check:format": "prettier --check \"**/*.{js,jsx,md,json,css,html,prettierrc,eslintrc,babelrc}\"",
     "test": "jest",
     "test:watch": "npm run test -- --watch",
-    "check": "npm run lint && npm run test",
+    "check": "npm run lint && npm run check:format && npm run test",
     "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
     "build:commonjs": "babel src --out-dir lib",
     "build:umd": "webpack --mode development src/sqlFormatter.js --output dist/sql-formatter.js",
     "build:umd:min": "webpack --mode production src/sqlFormatter.js --output dist/sql-formatter.min.js",
-    "prepublish": "npm run clean && npm run check && npm run build",
-    "format": "prettier --write \"**/*.{js,jsx,md,json,css,html,prettierrc,eslintrc,babelrc}\""
+    "prepublish": "npm run clean && npm run check && npm run build"
   },
   "repository": {
     "type": "git",
