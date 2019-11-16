@@ -42,7 +42,7 @@
     "url": "https://github.com/kufii/sql-formatter-plus/issues"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.6.0",
+    "@babel/polyfill": "^7.7.0",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
