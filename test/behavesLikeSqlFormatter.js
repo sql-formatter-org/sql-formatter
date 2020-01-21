@@ -382,6 +382,11 @@ export default function behavesLikeSqlFormatter(language) {
     expect(format("foo !~~ 'hello'")).toBe("foo !~~ 'hello'");
     expect(format("foo !~* 'hello'")).toBe("foo !~* 'hello'");
     expect(format("foo !~~* 'hello'")).toBe("foo !~~* 'hello'");
+        expect(format("@ foo")).toBe("@ foo");
+        expect(format("foo << 2")).toBe("foo << 2");
+        expect(format("foo >> 2")).toBe("foo >> 2");
+        expect(format("|/ foo")).toBe("|/ foo");
+        expect(format("||/ foo")).toBe("||/ foo");
   });
 
   it('keeps separation between multiple statements', function () {
