@@ -241,7 +241,7 @@ describe("StandardSqlFormatter", function() {
           "SELECT\n" +
           "  *\n" +
           "FROM\n" +
-          "  {{b}}"
+          "  {{ b }}"
         );
     });
 
@@ -259,7 +259,7 @@ describe("StandardSqlFormatter", function() {
           "SELECT\n" +
           "  *\n" +
           "FROM\n" +
-          "  {{@b}}"
+          "  {{ @b }}"
         );
     });
 
@@ -268,7 +268,7 @@ describe("StandardSqlFormatter", function() {
           "SELECT\n" +
           "  *\n" +
           "FROM\n" +
-          "  {{#if}}"
+          "  {{ #if }}"
         );
     });
 
@@ -297,8 +297,8 @@ describe("StandardSqlFormatter", function() {
     it("format hash for datamodel correctly", function() {
         expect(sqlFormatter.format("SELECT {{ #o.order_id}} as order_id, {{ #o.product_id}} as product_id\nFROM")).toBe(
             "SELECT\n" +
-            "  {{ #o.order_id}} as order_id,\n" +
-            "  {{ #o.product_id}} as product_id\n" +
+            "  {{ #o.order_id }} as order_id,\n" +
+            "  {{ #o.product_id }} as product_id\n" +
             "FROM"
         );
     });
