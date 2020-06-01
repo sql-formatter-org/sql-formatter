@@ -619,7 +619,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        while (input.length) {
 	            // Get the next token and the token type
 	            token = this.getNextToken(input, token);
-	            // console.log(token);
 	            // Advance the string
 	            input = input.substring(token.value.length);
 
