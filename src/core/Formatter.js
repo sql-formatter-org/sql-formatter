@@ -18,6 +18,7 @@ export default class Formatter {
         this.params = new Params(this.cfg.params);
         this.tokenizer = tokenizer;
         this.previousReservedWord = {};
+        this.previousToken = null;
     }
 
     /**
@@ -79,6 +80,7 @@ export default class Formatter {
             else {
                 formattedQuery = this.formatWithSpaces(token, formattedQuery);
             }
+            this.previousToken = token;
         });
         return formattedQuery;
     }
@@ -151,16 +153,20 @@ export default class Formatter {
 
     // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
     formatComma(token, query) {
-        query = trimEnd(query) + token.value + " ";
+        const newQuery = trimEnd(query) + token.value + " ";
 
         if (this.inlineBlock.isActive()) {
-            return query;
+            return newQuery;
         }
         else if (/^LIMIT$/i.test(this.previousReservedWord.value)) {
-            return query;
+            return newQuery;
+        }
+        // if the last token is line comment, do not allow the comma on the same line
+        else if (this.previousToken.type === tokenTypes.LINE_COMMENT) {
+            return trimEnd(query) + "\n" + this.indentation.getIndent() + token.value;
         }
         else {
-            return this.addNewline(query);
+            return this.addNewline(newQuery);
         }
     }
 

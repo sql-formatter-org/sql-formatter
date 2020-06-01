@@ -226,7 +226,8 @@ describe("StandardSqlFormatter", function() {
         );
     });
 
-    it("formats tricky line comments", function() {
+    // disable # as line comment token for StandardSql because we use # for our DataModel
+    xit("formats tricky line comments", function() {
         expect(sqlFormatter.format("SELECT a#comment, here\nFROM b--comment")).toBe(
             "SELECT\n" +
             "  a #comment, here\n" +
@@ -240,7 +241,7 @@ describe("StandardSqlFormatter", function() {
           "SELECT\n" +
           "  *\n" +
           "FROM\n" +
-          "  {{ b }}"
+          "  {{b}}"
         );
     });
 
@@ -258,7 +259,7 @@ describe("StandardSqlFormatter", function() {
           "SELECT\n" +
           "  *\n" +
           "FROM\n" +
-          "  {{ @b }}"
+          "  {{@b}}"
         );
     });
 
@@ -279,4 +280,27 @@ describe("StandardSqlFormatter", function() {
           "  {{ $products }}"
         );
     });
+
+    it("format line comment correctly", function() {
+        expect(sqlFormatter.format("SELECT\n 1--line comment\n  ,2")).toBe(
+          "SELECT\n" +
+          "  1 --line comment\n" +
+          "  ,2"
+        );
+
+        expect(sqlFormatter.format("SELECT\n 1--line comment,abc\n")).toBe(
+          "SELECT\n" +
+          "  1 --line comment,abc"
+        );
+    });
+
+    it("format hash for datamodel correctly", function() {
+        expect(sqlFormatter.format("SELECT {{ #o.order_id}} as order_id, {{ #o.product_id}} as product_id\nFROM")).toBe(
+            "SELECT\n" +
+            "  {{ #o.order_id}} as order_id,\n" +
+            "  {{ #o.product_id}} as product_id\n" +
+            "FROM"
+        );
+    });
+
 });
