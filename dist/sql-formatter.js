@@ -306,6 +306,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.params = new _Params2["default"](this.cfg.params);
 	        this.tokenizer = tokenizer;
 	        this.previousReservedWord = {};
+	        this.previousToken = null;
 	    }
 
 	    /**
@@ -359,6 +360,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else {
 	                formattedQuery = _this.formatWithSpaces(token, formattedQuery);
 	            }
+	            _this.previousToken = token;
 	        });
 	        return formattedQuery;
 	    };
@@ -438,15 +440,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    Formatter.prototype.formatComma = function formatComma(token, query) {
-	        query = (0, _trimEnd2["default"])(query) + token.value + " ";
+	        var newQuery = (0, _trimEnd2["default"])(query) + token.value + " ";
 
 	        if (this.inlineBlock.isActive()) {
-	            return query;
+	            return newQuery;
 	        } else if (/^LIMIT$/i.test(this.previousReservedWord.value)) {
-	            return query;
-	        } else {
-	            return this.addNewline(query);
+	            return newQuery;
 	        }
+	        // if the last token is line comment, do not allow the comma on the same line
+	        else if (this.previousToken.type === _tokenTypes2["default"].LINE_COMMENT) {
+	                return (0, _trimEnd2["default"])(query) + "\n" + this.indentation.getIndent() + token.value;
+	            } else {
+	                return this.addNewline(newQuery);
+	            }
 	    };
 
 	    Formatter.prototype.formatWithSpaceAfter = function formatWithSpaceAfter(token, query) {
@@ -516,7 +522,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.WHITESPACE_REGEX = /^(\s+)/;
 	        this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
-	        this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|\{\{\{|\}\}\}|\{\{#\w+\s*\}\}|\{\{|\}\}|.)/;
+	        this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|\{\{\{|\}\}\}|\{\{[^}}]*\}\}|\{\{|\}\}|.)/;
 
 	        this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
 	        this.LINE_COMMENT_REGEX = this.createLineCommentRegex(cfg.lineCommentTypes);
@@ -1689,7 +1695,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                closeParens: [")"],
 	                indexedPlaceholderTypes: ["?"],
 	                namedPlaceholderTypes: ["@", ":", "$"],
-	                lineCommentTypes: ["#", "--"]
+	                lineCommentTypes: ["--"]
 	            });
 	        }
 	        return new _Formatter2["default"](this.cfg, tokenizer).format(query);
@@ -2409,13 +2415,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
 	 */
 	function isIndex(value, length) {
-	  var type = typeof value;
 	  length = length == null ? MAX_SAFE_INTEGER : length;
-
 	  return !!length &&
-	    (type == 'number' ||
-	      (type != 'symbol' && reIsUint.test(value))) &&
-	        (value > -1 && value % 1 == 0 && value < length);
+	    (typeof value == 'number' || reIsUint.test(value)) &&
+	    (value > -1 && value % 1 == 0 && value < length);
 	}
 
 	module.exports = isIndex;
@@ -2516,14 +2519,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** Used to access faster Node.js helpers. */
 	var nodeUtil = (function() {
 	  try {
-	    // Use `util.types` for Node.js 10+.
-	    var types = freeModule && freeModule.require && freeModule.require('util').types;
-
-	    if (types) {
-	      return types;
-	    }
-
-	    // Legacy `process.binding('util')` for Node.js < 10.
 	    return freeProcess && freeProcess.binding && freeProcess.binding('util');
 	  } catch (e) {}
 	}());
