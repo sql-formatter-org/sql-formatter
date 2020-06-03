@@ -226,8 +226,7 @@ describe("StandardSqlFormatter", function() {
         );
     });
 
-    // disable # as line comment token for StandardSql because we use # for our DataModel
-    xit("formats tricky line comments", function() {
+    it("formats tricky line comments", function() {
         expect(sqlFormatter.format("SELECT a#comment, here\nFROM b--comment")).toBe(
             "SELECT\n" +
             "  a #comment, here\n" +
@@ -299,6 +298,23 @@ describe("StandardSqlFormatter", function() {
             "SELECT\n" +
             "  {{ #o.order_id }} as order_id,\n" +
             "  {{ #o.product_id }} as product_id\n" +
+            "FROM"
+        );
+
+        // multiple hashes
+        expect(sqlFormatter.format("SELECT {{ #o.order_id, #p.product_id}}\nFROM")).toBe(
+            "SELECT\n" +
+            "  {{ #o.order_id, #p.product_id }}\n" +
+            "FROM"
+        );
+    });
+
+    it("format both datamodel hash and comment hash correctly", function() {
+        expect(sqlFormatter.format(
+            "SELECT {{#o.order_id}} #this is a comment\nFROM")
+        ).toBe(
+            "SELECT\n" +
+            "  {{ #o.order_id }} #this is a comment\n" +
             "FROM"
         );
     });

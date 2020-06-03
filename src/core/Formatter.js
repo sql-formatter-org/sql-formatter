@@ -68,6 +68,9 @@ export default class Formatter {
             else if (token.type === tokenTypes.PLACEHOLDER) {
                 formattedQuery = this.formatPlaceholder(token, formattedQuery);
             }
+            else if (token.type === tokenTypes.HOLISTICS_HASH) {
+                formattedQuery = this.formatWithSpaceBefore(token, formattedQuery);
+            }
             else if (token.value === ",") {
                 formattedQuery = this.formatComma(token, formattedQuery);
             }
@@ -172,6 +175,10 @@ export default class Formatter {
 
     formatWithSpaceAfter(token, query) {
         return trimEnd(query) + token.value + " ";
+    }
+
+    formatWithSpaceBefore(token, query) {
+        return trimEnd(query) + " " + token.value;
     }
 
     formatWithoutSpaces(token, query) {
