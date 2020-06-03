@@ -19,7 +19,7 @@ export default class Tokenizer {
     constructor(cfg) {
         this.WHITESPACE_REGEX = /^(\s+)/;
         this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
-        this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|\{\{\{|\}\}\}|\{\{|\}\}|.)/;
+        this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|\{\{\{|\}\}\}|\{\{#\w+\s*\}\}|\{\{|\}\}|.)/;
 
         this.HOLISTICS_OPENING_OPERATORS = ['{{', '{{{'];
         this.HOLISTICS_CLOSING_OPERATORS = ['}}', '}}}'];
@@ -312,7 +312,7 @@ export default class Tokenizer {
         }
     }
 
-    // Use stack to keep the opening/closing ({{, }}) state to see if we're in a Holistics block
+    // Use a stack to store the opening/closing brackets ({{, }}) which allow us to know if we're in a Holistics block
     processHolisticsBlock(token) {
         if (!token) {return;}
 

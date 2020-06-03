@@ -267,7 +267,7 @@ describe("StandardSqlFormatter", function() {
           "SELECT\n" +
           "  *\n" +
           "FROM\n" +
-          "  {{ #if }}"
+          "  {{#if}}"
         );
     });
 
