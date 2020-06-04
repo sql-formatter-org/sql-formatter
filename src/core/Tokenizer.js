@@ -21,6 +21,11 @@ export default class Tokenizer {
         this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
         this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|\{\{\{|\}\}\}|\{\{#\w+\s*\}\}|\{\{|\}\}|.)/;
 
+        this.HOLISTICS_OPENING_OPERATORS = ['{{', '{{{'];
+        this.HOLISTICS_CLOSING_OPERATORS = ['}}', '}}}'];
+        this.HOLISTICS_HASH_REGEX = /^(#)/; // for parsing syntax like: {{ #table1 }}, {{ #if }}
+        this.holisticsStack = []; // to check whether we're in a Holistics block or not
+
         this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
         this.LINE_COMMENT_REGEX = this.createLineCommentRegex(cfg.lineCommentTypes);
 
@@ -121,6 +126,7 @@ export default class Tokenizer {
 
     getNextToken(input, previousToken) {
         return this.getWhitespaceToken(input) ||
+            this.getHolisticsHashToken(input) ||
             this.getCommentToken(input) ||
             this.getStringToken(input) ||
             this.getOpenParenToken(input) ||
@@ -137,6 +143,16 @@ export default class Tokenizer {
             input,
             type: tokenTypes.WHITESPACE,
             regex: this.WHITESPACE_REGEX
+        });
+    }
+
+    getHolisticsHashToken(input) {
+        if (!this.isInHolisticsBlock) {return null;}
+
+        return this.getTokenOnFirstMatch({
+            input,
+            type: tokenTypes.HOLISTICS_HASH,
+            regex: this.HOLISTICS_HASH_REGEX
         });
     }
 
@@ -237,11 +253,14 @@ export default class Tokenizer {
 
     // Punctuation and symbols
     getOperatorToken(input) {
-        return this.getTokenOnFirstMatch({
+        const token = this.getTokenOnFirstMatch({
             input,
             type: tokenTypes.OPERATOR,
             regex: this.OPERATOR_REGEX
         });
+
+        this.processHolisticsBlock(token);
+        return token;
     }
 
     getReservedWordToken(input, previousToken) {
@@ -291,5 +310,33 @@ export default class Tokenizer {
         if (matches) {
             return {type, value: matches[1]};
         }
+    }
+
+    // Use a stack to store the opening/closing brackets ({{, }}) which allow us to know if we're in a Holistics block
+    processHolisticsBlock(token) {
+        if (!token) {return;}
+
+        if (this.HOLISTICS_OPENING_OPERATORS.includes(token.value)) {
+            this.holisticsStack.push(token.value);
+        }
+        else if (this.HOLISTICS_CLOSING_OPERATORS.includes(token.value) && this.holisticsStack.length > 0) {
+            let reverseBracket = null;
+            switch (token.value) {
+                case "}}":
+                    reverseBracket = "{{";
+                    break;
+                case "}}}":
+                    reverseBracket = "{{{";
+                    break;
+            }
+
+            if (reverseBracket === this.holisticsStack[this.holisticsStack.length - 1]) {
+                this.holisticsStack.pop();
+            }
+        }
+    }
+
+    get isInHolisticsBlock() {
+        return this.holisticsStack.length > 0;
     }
 }

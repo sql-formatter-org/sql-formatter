@@ -279,4 +279,44 @@ describe("StandardSqlFormatter", function() {
           "  {{ $products }}"
         );
     });
+
+    it("format line comment correctly", function() {
+        expect(sqlFormatter.format("SELECT\n 1--line comment\n  ,2")).toBe(
+          "SELECT\n" +
+          "  1 --line comment\n" +
+          "  ,2"
+        );
+
+        expect(sqlFormatter.format("SELECT\n 1--line comment,abc\n")).toBe(
+          "SELECT\n" +
+          "  1 --line comment,abc"
+        );
+    });
+
+    it("format hash for datamodel correctly", function() {
+        expect(sqlFormatter.format("SELECT {{ #o.order_id}} as order_id, {{ #o.product_id}} as product_id\nFROM")).toBe(
+            "SELECT\n" +
+            "  {{ #o.order_id }} as order_id,\n" +
+            "  {{ #o.product_id }} as product_id\n" +
+            "FROM"
+        );
+
+        // multiple hashes
+        expect(sqlFormatter.format("SELECT {{ #o.order_id, #p.product_id}}\nFROM")).toBe(
+            "SELECT\n" +
+            "  {{ #o.order_id, #p.product_id }}\n" +
+            "FROM"
+        );
+    });
+
+    it("format both datamodel hash and comment hash correctly", function() {
+        expect(sqlFormatter.format(
+            "SELECT {{#o.order_id}} #this is a comment\nFROM")
+        ).toBe(
+            "SELECT\n" +
+            "  {{ #o.order_id }} #this is a comment\n" +
+            "FROM"
+        );
+    });
+
 });
