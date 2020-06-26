@@ -1,8 +1,9 @@
 import Db2Formatter from './languages/Db2Formatter';
 import N1qlFormatter from './languages/N1qlFormatter';
 import PlSqlFormatter from './languages/PlSqlFormatter';
-import StandardSqlFormatter from './languages/StandardSqlFormatter';
 import RedshiftFormatter from './languages/RedshiftFormatter';
+import SparkSqlFormatter from './languages/SparkSqlFormatter';
+import StandardSqlFormatter from './languages/StandardSqlFormatter';
 
 /**
  * Format whitespace in a query to make it easier to read.
@@ -26,6 +27,8 @@ export const format = (query, cfg = {}) => {
       return new PlSqlFormatter(cfg).format(query);
     case 'redshift':
       return new RedshiftFormatter(cfg).format(query);
+    case 'spark':
+      return new SparkSqlFormatter(cfg).format(query);
     case 'sql':
     case undefined:
       return new StandardSqlFormatter(cfg).format(query);
