@@ -3,6 +3,7 @@ import tokenTypes from './tokenTypes';
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
+import Tokenizer from './Tokenizer';
 
 const trimSpacesEnd = (str) => str.replace(/[ \t]+$/u, '');
 
@@ -14,18 +15,47 @@ export default class Formatter {
    *  @param {Bool} cfg.uppercase
    *  @param {Integer} cfg.linesBetweenQueries
    *  @param {Object} cfg.params
-   * @param {Tokenizer} tokenizer
    */
-  constructor(cfg, tokenizer, tokenOverride) {
+  constructor(cfg) {
     this.cfg = cfg || {};
     this.indentation = new Indentation(this.cfg.indent);
     this.inlineBlock = new InlineBlock();
     this.params = new Params(this.cfg.params);
-    this.tokenizer = tokenizer;
-    this.tokenOverride = tokenOverride;
-    this.previousReservedWord = {};
+    this.previousReservedToken = {};
     this.tokens = [];
     this.index = 0;
+  }
+
+  /**
+   * SQL Tokenizer for this formatter, typically overriden by subclasses.
+   */
+  static tokenizer = new Tokenizer({
+    reservedWords: [],
+    reservedTopLevelWords: [],
+    reservedNewlineWords: [],
+    reservedTopLevelWordsNoIndent: [],
+    stringTypes: [],
+    openParens: [],
+    closeParens: [],
+    indexedPlaceholderTypes: [],
+    namedPlaceholderTypes: [],
+    lineCommentTypes: [],
+    specialWordChars: [],
+  });
+
+  /**
+   * Reprocess and modify a token based on parsed context.
+   *
+   * @param {Object} token The token to modify
+   *  @param {String} token.type
+   *  @param {String} token.value
+   * @return {?Object} modified token
+   *  @return {String} token.type
+   *  @return {String} token.value
+   */
+  tokenOverride() {
+    // do nothing
+    // subclasses can override this to modify tokens during formatting
   }
 
   /**
@@ -35,7 +65,7 @@ export default class Formatter {
    * @return {String} formatted query
    */
   format(query) {
-    this.tokens = this.tokenizer.tokenize(query);
+    this.tokens = this.constructor.tokenizer.tokenize(query);
     const formattedQuery = this.getFormattedQueryFromTokens();
 
     return formattedQuery.trim();
@@ -47,7 +77,7 @@ export default class Formatter {
     this.tokens.forEach((token, index) => {
       this.index = index;
 
-      if (this.tokenOverride) token = this.tokenOverride(token, this.previousReservedWord) || token;
+      token = this.tokenOverride(token) || token;
 
       if (token.type === tokenTypes.WHITESPACE) {
         // ignore (we do our own whitespace formatting)
@@ -57,16 +87,16 @@ export default class Formatter {
         formattedQuery = this.formatBlockComment(token, formattedQuery);
       } else if (token.type === tokenTypes.RESERVED_TOP_LEVEL) {
         formattedQuery = this.formatTopLevelReservedWord(token, formattedQuery);
-        this.previousReservedWord = token;
+        this.previousReservedToken = token;
       } else if (token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT) {
         formattedQuery = this.formatTopLevelReservedWordNoIndent(token, formattedQuery);
-        this.previousReservedWord = token;
+        this.previousReservedToken = token;
       } else if (token.type === tokenTypes.RESERVED_NEWLINE) {
         formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
-        this.previousReservedWord = token;
+        this.previousReservedToken = token;
       } else if (token.type === tokenTypes.RESERVED) {
         formattedQuery = this.formatWithSpaces(token, formattedQuery);
-        this.previousReservedWord = token;
+        this.previousReservedToken = token;
       } else if (token.type === tokenTypes.OPEN_PAREN) {
         formattedQuery = this.formatOpeningParentheses(token, formattedQuery);
       } else if (token.type === tokenTypes.CLOSE_PAREN) {
@@ -174,7 +204,7 @@ export default class Formatter {
 
     if (this.inlineBlock.isActive()) {
       return query;
-    } else if (/^LIMIT$/i.test(this.previousReservedWord.value)) {
+    } else if (/^LIMIT$/i.test(this.previousReservedToken.value)) {
       return query;
     } else {
       return this.addNewline(query);

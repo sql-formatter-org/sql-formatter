@@ -410,49 +410,29 @@ const reservedNewlineWords = [
   'XOR',
 ];
 
-const tokenOverride = (token, previousReservedToken) => {
-  if (
-    token.type === tokenTypes.RESERVED_TOP_LEVEL &&
-    token.value.toUpperCase() === 'SET' &&
-    previousReservedToken.value.toUpperCase() === 'BY'
-  ) {
-    token.type = tokenTypes.RESERVED;
-    return token;
-  }
-};
+export default class PlSqlFormatter extends Formatter {
+  static tokenizer = new Tokenizer({
+    reservedWords,
+    reservedTopLevelWords,
+    reservedNewlineWords,
+    reservedTopLevelWordsNoIndent,
+    stringTypes: [`""`, "N''", "''", '``'],
+    openParens: ['(', 'CASE'],
+    closeParens: [')', 'END'],
+    indexedPlaceholderTypes: ['?'],
+    namedPlaceholderTypes: [':'],
+    lineCommentTypes: ['--'],
+    specialWordChars: ['_', '$', '#', '.', '@'],
+  });
 
-let tokenizer;
-
-export default class PlSqlFormatter {
-  /**
-   * @param {Object} cfg Different set of configurations
-   */
-  constructor(cfg) {
-    this.cfg = cfg;
-  }
-
-  /**
-   * Format the whitespace in a PL/SQL string to make it easier to read
-   *
-   * @param {String} query The PL/SQL string
-   * @return {String} formatted string
-   */
-  format(query) {
-    if (!tokenizer) {
-      tokenizer = new Tokenizer({
-        reservedWords,
-        reservedTopLevelWords,
-        reservedNewlineWords,
-        reservedTopLevelWordsNoIndent,
-        stringTypes: [`""`, "N''", "''", '``'],
-        openParens: ['(', 'CASE'],
-        closeParens: [')', 'END'],
-        indexedPlaceholderTypes: ['?'],
-        namedPlaceholderTypes: [':'],
-        lineCommentTypes: ['--'],
-        specialWordChars: ['_', '$', '#', '.', '@'],
-      });
+  tokenOverride(token) {
+    if (
+      token.type === tokenTypes.RESERVED_TOP_LEVEL &&
+      token.value.toUpperCase() === 'SET' &&
+      this.previousReservedToken.value.toUpperCase() === 'BY'
+    ) {
+      token.type = tokenTypes.RESERVED;
+      return token;
     }
-    return new Formatter(this.cfg, tokenizer, tokenOverride).format(query);
   }
 }

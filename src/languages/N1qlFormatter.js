@@ -219,36 +219,16 @@ const reservedNewlineWords = [
   'XOR',
 ];
 
-let tokenizer;
-
-export default class N1qlFormatter {
-  /**
-   * @param {Object} cfg Different set of configurations
-   */
-  constructor(cfg) {
-    this.cfg = cfg;
-  }
-
-  /**
-   * Format the whitespace in a N1QL string to make it easier to read
-   *
-   * @param {String} query The N1QL string
-   * @return {String} formatted string
-   */
-  format(query) {
-    if (!tokenizer) {
-      tokenizer = new Tokenizer({
-        reservedWords,
-        reservedTopLevelWords,
-        reservedNewlineWords,
-        reservedTopLevelWordsNoIndent,
-        stringTypes: [`""`, "''", '``'],
-        openParens: ['(', '[', '{'],
-        closeParens: [')', ']', '}'],
-        namedPlaceholderTypes: ['$'],
-        lineCommentTypes: ['#', '--'],
-      });
-    }
-    return new Formatter(this.cfg, tokenizer).format(query);
-  }
+export default class N1qlFormatter extends Formatter {
+  static tokenizer = new Tokenizer({
+    reservedWords,
+    reservedTopLevelWords,
+    reservedNewlineWords,
+    reservedTopLevelWordsNoIndent,
+    stringTypes: [`""`, "''", '``'],
+    openParens: ['(', '[', '{'],
+    closeParens: [')', ']', '}'],
+    namedPlaceholderTypes: ['$'],
+    lineCommentTypes: ['#', '--'],
+  });
 }

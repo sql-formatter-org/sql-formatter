@@ -546,38 +546,18 @@ const reservedNewlineWords = [
   'RIGHT OUTER JOIN',
 ];
 
-let tokenizer;
-
-export default class Db2Formatter {
-  /**
-   * @param {Object} cfg Different set of configurations
-   */
-  constructor(cfg) {
-    this.cfg = cfg;
-  }
-
-  /**
-   * Formats DB2 query to make it easier to read
-   *
-   * @param {String} query The DB2 query string
-   * @return {String} formatted string
-   */
-  format(query) {
-    if (!tokenizer) {
-      tokenizer = new Tokenizer({
-        reservedWords,
-        reservedTopLevelWords,
-        reservedNewlineWords,
-        reservedTopLevelWordsNoIndent,
-        stringTypes: [`""`, "''", '``', '[]'],
-        openParens: ['('],
-        closeParens: [')'],
-        indexedPlaceholderTypes: ['?'],
-        namedPlaceholderTypes: [':'],
-        lineCommentTypes: ['--'],
-        specialWordChars: ['#', '@'],
-      });
-    }
-    return new Formatter(this.cfg, tokenizer).format(query);
-  }
+export default class Db2Formatter extends Formatter {
+  static tokenizer = new Tokenizer({
+    reservedWords,
+    reservedTopLevelWords,
+    reservedNewlineWords,
+    reservedTopLevelWordsNoIndent,
+    stringTypes: [`""`, "''", '``', '[]'],
+    openParens: ['('],
+    closeParens: [')'],
+    indexedPlaceholderTypes: ['?'],
+    namedPlaceholderTypes: [':'],
+    lineCommentTypes: ['--'],
+    specialWordChars: ['#', '@'],
+  });
 }

@@ -362,37 +362,17 @@ const reservedNewlineWords = [
   'INTERLEAVED',
 ];
 
-let tokenizer;
-
-export default class StandardSqlFormatter {
-  /**
-   * @param {Object} cfg Different set of configurations
-   */
-  constructor(cfg) {
-    this.cfg = cfg;
-  }
-
-  /**
-   * Format the whitespace in a Standard SQL string to make it easier to read
-   *
-   * @param {String} query The Standard SQL string
-   * @return {String} formatted string
-   */
-  format(query) {
-    if (!tokenizer) {
-      tokenizer = new Tokenizer({
-        reservedWords,
-        reservedTopLevelWords,
-        reservedNewlineWords,
-        reservedTopLevelWordsNoIndent,
-        stringTypes: [`""`, "''", '``'],
-        openParens: ['('],
-        closeParens: [')'],
-        indexedPlaceholderTypes: ['?'],
-        namedPlaceholderTypes: ['@', '#', '$'],
-        lineCommentTypes: ['--'],
-      });
-    }
-    return new Formatter(this.cfg, tokenizer).format(query);
-  }
+export default class StandardSqlFormatter extends Formatter {
+  static tokenizer = new Tokenizer({
+    reservedWords,
+    reservedTopLevelWords,
+    reservedNewlineWords,
+    reservedTopLevelWordsNoIndent,
+    stringTypes: [`""`, "''", '``'],
+    openParens: ['('],
+    closeParens: [')'],
+    indexedPlaceholderTypes: ['?'],
+    namedPlaceholderTypes: ['@', '#', '$'],
+    lineCommentTypes: ['--'],
+  });
 }
