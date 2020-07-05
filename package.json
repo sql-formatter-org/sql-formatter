@@ -1,6 +1,6 @@
 {
-  "name": "sql-formatter",
-  "version": "2.3.3",
+  "name": "@gwax/sql-formatter",
+  "version": "3.0.0-alpha.0",
   "description": "Formats whitespaces in a SQL query to make it more readable",
   "license": "MIT",
   "main": "lib/sqlFormatter.js",
@@ -9,11 +9,12 @@
     "formatter",
     "format",
     "n1ql",
-    "whitespaces"
+    "whitespace"
   ],
   "authors": [
     "Rene Saarsoo",
-    "Uku Pattak"
+    "Uku Pattak",
+    "George Leslie-Waksman"
   ],
   "files": [
     "dist",
@@ -34,10 +35,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zeroturnaround/sql-formatter.git"
+    "url": "https://github.com/gwax/sql-formatter.git"
   },
   "bugs": {
-    "url": "https://github.com/zeroturnaround/sql-formatter/issues"
+    "url": "https://github.com/gwax/sql-formatter/issues"
   },
   "dependencies": {
     "lodash": "^4.16.0"
