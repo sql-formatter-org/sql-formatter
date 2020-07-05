@@ -1,6 +1,19 @@
 {
-    "extends": "zt/base",
-    "env": {
-        "jest": true
-    }
+  "extends": ["airbnb-base", "prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": ["error"],
+    "import/no-useless-path-segments": "warn",
+    "func-names": "warn",
+    "no-useless-concat": "warn",
+    "class-methods-use-this": "warn",
+    "no-param-reassign": "warn",
+    "prefer-template": "warn",
+    "no-plusplus": "warn",
+    "no-else-return": "warn",
+    "consistent-return": "warn"
+  },
+  "env": {
+    "jest": true
+  }
 }

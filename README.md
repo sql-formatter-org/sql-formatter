@@ -2,7 +2,7 @@
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 It started as a port of a [PHP Library][], but has since considerably diverged.
-It supports [Standard SQL][], [Couchbase N1QL][], [IBM DB2][] and [Oracle PL/SQL][]  dialects.
+It supports [Standard SQL][], [Couchbase N1QL][], [IBM DB2][] and [Oracle PL/SQL][] dialects.
 
 &rarr; [Try the demo.](https://zeroturnaround.github.io/sql-formatter/)
 
@@ -17,9 +17,9 @@ npm install sql-formatter
 ## Usage
 
 ```js
-import sqlFormatter from "sql-formatter";
+import sqlFormatter from 'sql-formatter';
 
-console.log(sqlFormatter.format("SELECT * FROM table1"));
+console.log(sqlFormatter.format('SELECT * FROM table1'));
 ```
 
 This will output:
@@ -34,9 +34,9 @@ FROM
 You can also pass in configuration options:
 
 ```js
-sqlFormatter.format("SELECT *", {
-    language: "n1ql", // Defaults to "sql"
-    indent: "    "   // Defaults to two spaces
+sqlFormatter.format('SELECT *', {
+  language: 'n1ql', // Defaults to "sql"
+  indent: '    ', // Defaults to two spaces
 });
 ```
 
@@ -90,8 +90,8 @@ $ npm run check
 
 [MIT](https://github.com/zeroturnaround/sql-formatter/blob/master/LICENSE)
 
-[PHP library]: https://github.com/jdorn/sql-formatter
-[Standard SQL]: https://en.wikipedia.org/wiki/SQL:2011
-[Couchbase N1QL]: http://www.couchbase.com/n1ql
-[IBM DB2]: https://www.ibm.com/analytics/us/en/technology/db2/
-[Oracle PL/SQL]: http://www.oracle.com/technetwork/database/features/plsql/index.html
+[php library]: https://github.com/jdorn/sql-formatter
+[standard sql]: https://en.wikipedia.org/wiki/SQL:2011
+[couchbase n1ql]: http://www.couchbase.com/n1ql
+[ibm db2]: https://www.ibm.com/analytics/us/en/technology/db2/
+[oracle pl/sql]: http://www.oracle.com/technetwork/database/features/plsql/index.html
