@@ -25,36 +25,36 @@ describe('StandardSqlFormatter', function () {
     );
   });
 
-    it("formats CASE ... WHEN with a blank expression", function() {
-        const result = sqlFormatter.format(
-            "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
-        );
+  it('formats CASE ... WHEN with a blank expression', function () {
+    const result = sqlFormatter.format(
+      "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
+    );
 
-        expect(result).toBe(
-            "CASE\n" +
-            "  WHEN option = 'foo' THEN 1\n" +
-            "  WHEN option = 'bar' THEN 2\n" +
-            "  WHEN option = 'baz' THEN 3\n" +
-            "  ELSE 4\n" +
-            "END;"
-        );
-    });
+    expect(result).toBe(
+      'CASE\n' +
+        "  WHEN option = 'foo' THEN 1\n" +
+        "  WHEN option = 'bar' THEN 2\n" +
+        "  WHEN option = 'baz' THEN 3\n" +
+        '  ELSE 4\n' +
+        'END;'
+    );
+  });
 
-    it("formats CASE ... WHEN with an expression", function() {
-        const result = sqlFormatter.format(
-            "CASE option WHEN 'foo' THEN 1 WHEN 'bar' THEN 2 WHEN 'baz' THEN 3 ELSE 4 END;"
-        );
+  it('formats CASE ... WHEN with an expression', function () {
+    const result = sqlFormatter.format(
+      "CASE option WHEN 'foo' THEN 1 WHEN 'bar' THEN 2 WHEN 'baz' THEN 3 ELSE 4 END;"
+    );
 
-        expect(result).toBe(
-            "CASE\n" +
-            "  option\n" +
-            "  WHEN 'foo' THEN 1\n" +
-            "  WHEN 'bar' THEN 2\n" +
-            "  WHEN 'baz' THEN 3\n" +
-            "  ELSE 4\n" +
-            "END;"
-        );
-    });
+    expect(result).toBe(
+      'CASE\n' +
+        '  option\n' +
+        "  WHEN 'foo' THEN 1\n" +
+        "  WHEN 'bar' THEN 2\n" +
+        "  WHEN 'baz' THEN 3\n" +
+        '  ELSE 4\n' +
+        'END;'
+    );
+  });
 
   it('formats INSERT without INTO', function () {
     const result = sqlFormatter.format(
