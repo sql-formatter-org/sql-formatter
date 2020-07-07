@@ -95,7 +95,6 @@ const reservedWords = [
   'MATCHED',
   'MATERIALIZED',
   'MERGE',
-  'MINUS',
   'MISSING',
   'NAMESPACE',
   'NEST',
@@ -175,7 +174,7 @@ const reservedWords = [
   'XOR',
 ];
 
-const reservedToplevelWords = [
+const reservedTopLevelWords = [
   'DELETE FROM',
   'EXCEPT ALL',
   'EXCEPT',
@@ -187,8 +186,6 @@ const reservedToplevelWords = [
   'HAVING',
   'INFER',
   'INSERT INTO',
-  'INTERSECT ALL',
-  'INTERSECT',
   'LET',
   'LIMIT',
   'MERGE',
@@ -199,8 +196,6 @@ const reservedToplevelWords = [
   'SET CURRENT SCHEMA',
   'SET SCHEMA',
   'SET',
-  'UNION ALL',
-  'UNION',
   'UNNEST',
   'UPDATE',
   'UPSERT',
@@ -208,6 +203,8 @@ const reservedToplevelWords = [
   'VALUES',
   'WHERE',
 ];
+
+const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'UNION', 'UNION ALL'];
 
 const reservedNewlineWords = [
   'AND',
@@ -242,8 +239,9 @@ export default class N1qlFormatter {
     if (!tokenizer) {
       tokenizer = new Tokenizer({
         reservedWords,
-        reservedToplevelWords,
+        reservedTopLevelWords,
         reservedNewlineWords,
+        reservedTopLevelWordsNoIndent,
         stringTypes: [`""`, "''", '``'],
         openParens: ['(', '[', '{'],
         closeParens: [')', ']', '}'],

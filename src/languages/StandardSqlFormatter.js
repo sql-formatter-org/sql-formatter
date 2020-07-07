@@ -276,7 +276,7 @@ const reservedWords = [
   'YEAR_MONTH',
 ];
 
-const reservedToplevelWords = [
+const reservedTopLevelWords = [
   'ADD',
   'AFTER',
   'ALTER COLUMN',
@@ -290,7 +290,6 @@ const reservedToplevelWords = [
   'HAVING',
   'INSERT INTO',
   'INSERT',
-  'INTERSECT',
   'LIMIT',
   'MODIFY',
   'ORDER BY',
@@ -298,12 +297,12 @@ const reservedToplevelWords = [
   'SET CURRENT SCHEMA',
   'SET SCHEMA',
   'SET',
-  'UNION ALL',
-  'UNION',
   'UPDATE',
   'VALUES',
   'WHERE',
 ];
+
+const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'UNION', 'UNION ALL'];
 
 const reservedNewlineWords = [
   'AND',
@@ -343,8 +342,9 @@ export default class StandardSqlFormatter {
     if (!tokenizer) {
       tokenizer = new Tokenizer({
         reservedWords,
-        reservedToplevelWords,
+        reservedTopLevelWords,
         reservedNewlineWords,
+        reservedTopLevelWordsNoIndent,
         stringTypes: [`""`, "N''", "''", '``', '[]'],
         openParens: ['(', 'CASE'],
         closeParens: [')', 'END'],

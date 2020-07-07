@@ -6,8 +6,9 @@ export default class Tokenizer {
   /**
    * @param {Object} cfg
    *  @param {String[]} cfg.reservedWords Reserved words in SQL
-   *  @param {String[]} cfg.reservedToplevelWords Words that are set to new line separately
+   *  @param {String[]} cfg.reservedTopLevelWords Words that are set to new line separately
    *  @param {String[]} cfg.reservedNewlineWords Words that are set to newline
+   *  @param {String[]} cfg.reservedTopLevelWordsNoIndent Words that are top level but have no indentation
    *  @param {String[]} cfg.stringTypes String types to enable: "", '', ``, [], N''
    *  @param {String[]} cfg.openParens Opening parentheses to enable, like (, [
    *  @param {String[]} cfg.closeParens Closing parentheses to enable, like ), ]
@@ -19,12 +20,15 @@ export default class Tokenizer {
   constructor(cfg) {
     this.WHITESPACE_REGEX = /^(\s+)/;
     this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
-    this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|~~\*|~~|!~~\*|!~~|~\*|!~\*|!~|.)/;
+    this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|~~\*|~~|!~~\*|!~~|~\*|!~\*|!~|:=|.)/;
 
     this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
     this.LINE_COMMENT_REGEX = this.createLineCommentRegex(cfg.lineCommentTypes);
 
-    this.RESERVED_TOPLEVEL_REGEX = this.createReservedWordRegex(cfg.reservedToplevelWords);
+    this.RESERVED_TOP_LEVEL_REGEX = this.createReservedWordRegex(cfg.reservedTopLevelWords);
+    this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX = this.createReservedWordRegex(
+      cfg.reservedTopLevelWordsNoIndent
+    );
     this.RESERVED_NEWLINE_REGEX = this.createReservedWordRegex(cfg.reservedNewlineWords);
     this.RESERVED_PLAIN_REGEX = this.createReservedWordRegex(cfg.reservedWords);
 
@@ -50,7 +54,7 @@ export default class Tokenizer {
 
   createLineCommentRegex(lineCommentTypes) {
     return new RegExp(
-      `^((?:${lineCommentTypes.map((c) => escapeRegExp(c)).join('|')}).*?(?:\n|$))`
+      `^((?:${lineCommentTypes.map((c) => escapeRegExp(c)).join('|')}).*?(?:\r\n|\r|\n|$))`
     );
   }
 
@@ -60,7 +64,12 @@ export default class Tokenizer {
   }
 
   createWordRegex(specialChars = []) {
-    return new RegExp(`^([\\w${specialChars.join('')}]+)`);
+    return new RegExp(
+      `^([\\p{Alphabetic}\\p{Mark}\\p{Decimal_Number}\\p{Connector_Punctuation}\\p{Join_Control}${specialChars.join(
+        ''
+      )}]+)`,
+      'u'
+    );
   }
 
   createStringRegex(stringTypes) {
@@ -118,6 +127,8 @@ export default class Tokenizer {
    *  @return {String} token.value
    */
   tokenize(input) {
+    if (!input) return [];
+
     const tokens = [];
     let token;
 
@@ -270,17 +281,18 @@ export default class Tokenizer {
       return;
     }
     return (
-      this.getToplevelReservedToken(input) ||
+      this.getTopLevelReservedToken(input) ||
       this.getNewlineReservedToken(input) ||
+      this.getTopLevelReservedTokenNoIndent(input) ||
       this.getPlainReservedToken(input)
     );
   }
 
-  getToplevelReservedToken(input) {
+  getTopLevelReservedToken(input) {
     return this.getTokenOnFirstMatch({
       input,
-      type: tokenTypes.RESERVED_TOPLEVEL,
-      regex: this.RESERVED_TOPLEVEL_REGEX,
+      type: tokenTypes.RESERVED_TOP_LEVEL,
+      regex: this.RESERVED_TOP_LEVEL_REGEX,
     });
   }
 
@@ -289,6 +301,14 @@ export default class Tokenizer {
       input,
       type: tokenTypes.RESERVED_NEWLINE,
       regex: this.RESERVED_NEWLINE_REGEX,
+    });
+  }
+
+  getTopLevelReservedTokenNoIndent(input) {
+    return this.getTokenOnFirstMatch({
+      input,
+      type: tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT,
+      regex: this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX,
     });
   }
 

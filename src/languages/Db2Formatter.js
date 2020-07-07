@@ -506,7 +506,7 @@ const reservedWords = [
   'YEARS',
 ];
 
-const reservedToplevelWords = [
+const reservedTopLevelWords = [
   'ADD',
   'AFTER',
   'ALTER COLUMN',
@@ -526,11 +526,12 @@ const reservedToplevelWords = [
   'SET CURRENT SCHEMA',
   'SET SCHEMA',
   'SET',
-  'UNION ALL',
   'UPDATE',
   'VALUES',
   'WHERE',
 ];
+
+const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'UNION', 'UNION ALL'];
 
 const reservedNewlineWords = [
   'AND',
@@ -565,8 +566,9 @@ export default class Db2Formatter {
     if (!tokenizer) {
       tokenizer = new Tokenizer({
         reservedWords,
-        reservedToplevelWords,
+        reservedTopLevelWords,
         reservedNewlineWords,
+        reservedTopLevelWordsNoIndent,
         stringTypes: [`""`, "''", '``', '[]'],
         openParens: ['('],
         closeParens: [')'],
