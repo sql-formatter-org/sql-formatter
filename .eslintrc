@@ -4,6 +4,7 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": ["error"],
+    "require-unicode-regexp": ["error"],
     "import/no-useless-path-segments": "warn",
     "func-names": "warn",
     "no-useless-concat": "warn",
