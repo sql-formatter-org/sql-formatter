@@ -86,8 +86,8 @@ describe('StandardSqlFormatter', function () {
           variable: '"variable value"',
           'a1_2.3$': "'weird value'",
           'var name': "'var value'",
-          'var\\name': `'var\\ value'`
-        }
+          'var\\name': `'var\\ value'`,
+        },
       }
     );
     expect(result).toBe(dedent`
@@ -172,7 +172,7 @@ describe('StandardSqlFormatter', function () {
 
   it('replaces ? indexed placeholders with param values', () => {
     const result = format('SELECT ?, ?, ?;', {
-      params: ['first', 'second', 'third']
+      params: ['first', 'second', 'third'],
     });
     expect(result).toBe(dedent`
       SELECT
@@ -184,7 +184,7 @@ describe('StandardSqlFormatter', function () {
 
   it('formats query with GO batch separator', () => {
     const result = format('SELECT 1 GO SELECT 2', {
-      params: ['first', 'second', 'third']
+      params: ['first', 'second', 'third'],
     });
     expect(result).toBe(dedent`
       SELECT

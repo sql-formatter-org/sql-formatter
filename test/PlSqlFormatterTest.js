@@ -116,7 +116,7 @@ describe('PlSqlFormatter', function () {
 
   it('replaces ? indexed placeholders with param values', () => {
     const result = format('SELECT ?, ?, ?;', {
-      params: ['first', 'second', 'third']
+      params: ['first', 'second', 'third'],
     });
     expect(result).toBe('SELECT\n' + '  first,\n' + '  second,\n' + '  third;');
   });

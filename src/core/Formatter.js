@@ -8,7 +8,9 @@ import Params from './Params';
 export default class Formatter {
   /**
    * @param {Object} cfg
-   *   @param {Object} cfg.indent
+   *  @param {String} cfg.language
+   *  @param {String} cfg.indent
+   *  @param {Bool} cfg.uppercase
    *   @param {Object} cfg.params
    * @param {Tokenizer} tokenizer
    */

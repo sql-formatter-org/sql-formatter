@@ -54,7 +54,7 @@ export default class Tokenizer {
 
   createLineCommentRegex(lineCommentTypes) {
     return new RegExp(
-      `^((?:${lineCommentTypes.map(c => escapeRegExp(c)).join('|')}).*?(?:\r\n|\r|\n|$))`
+      `^((?:${lineCommentTypes.map((c) => escapeRegExp(c)).join('|')}).*?(?:\r\n|\r|\n|$))`
     );
   }
 
@@ -64,7 +64,12 @@ export default class Tokenizer {
   }
 
   createWordRegex(specialChars = []) {
-    return new RegExp(`^([\\w${specialChars.join('')}]+)`);
+    return new RegExp(
+      `^([\\p{Alphabetic}\\p{Mark}\\p{Decimal_Number}\\p{Connector_Punctuation}\\p{Join_Control}${specialChars.join(
+        ''
+      )}]+)`,
+      'u'
+    );
   }
 
   createStringRegex(stringTypes) {
@@ -303,7 +308,7 @@ export default class Tokenizer {
     return this.getTokenOnFirstMatch({
       input,
       type: tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT,
-      regex: this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX
+      regex: this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX,
     });
   }
 
