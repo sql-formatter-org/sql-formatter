@@ -542,4 +542,23 @@ export default function behavesLikeSqlFormatter(language) {
         3.5e12 AS d;
     `);
   });
+
+  it('does not split UNION ALL in half', () => {
+    const result = sqlFormatter.format(`
+      SELECT * FROM tbl1
+      UNION ALL
+      SELECT * FROM tbl2;
+    `);
+    expect(result).toBe(dedent/* sql */ `
+      SELECT
+        *
+      FROM
+        tbl1
+      UNION ALL
+      SELECT
+        *
+      FROM
+        tbl2;
+    `);
+  });
 }

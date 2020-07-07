@@ -60,6 +60,9 @@ export default class Tokenizer {
 
   createReservedWordRegex(reservedWords) {
     if (reservedWords.length === 0) return new RegExp(`^\b$`);
+    reservedWords = reservedWords.sort((a, b) => {
+      return b.length - a.length || a.localeCompare(b);
+    });
     const reservedWordsPattern = reservedWords.join('|').replace(/ /g, '\\s+');
     return new RegExp(`^(${reservedWordsPattern})\\b`, 'i');
   }
