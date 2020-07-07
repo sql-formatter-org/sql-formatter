@@ -59,6 +59,7 @@ export default class Tokenizer {
   }
 
   createReservedWordRegex(reservedWords) {
+    if (reservedWords.length === 0) return new RegExp(`^\b$`);
     const reservedWordsPattern = reservedWords.join('|').replace(/ /g, '\\s+');
     return new RegExp(`^(${reservedWordsPattern})\\b`, 'i');
   }
