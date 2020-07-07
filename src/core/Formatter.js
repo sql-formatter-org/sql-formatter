@@ -136,6 +136,7 @@ export default class Formatter {
       tokenTypes.WHITESPACE,
       tokenTypes.OPEN_PAREN,
       tokenTypes.LINE_COMMENT,
+      tokenTypes.OPERATOR,
     ];
     if (!includes(preserveWhitespaceFor, this.previousToken().type)) {
       query = trimSpacesEnd(query);

@@ -240,6 +240,28 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
+  it('formats open paren after comma', () => {
+    const result = format(
+      'WITH TestIds AS (VALUES (4),(5), (6),(7),(9),(10),(11)) SELECT * FROM TestIds;'
+    );
+    expect(result).toBe(dedent/* sql */ `
+      WITH TestIds AS (
+        VALUES
+          (4),
+          (5),
+          (6),
+          (7),
+          (9),
+          (10),
+          (11)
+      )
+      SELECT
+        *
+      FROM
+        TestIds;
+    `);
+  });
+
   it('keeps short parenthesized list with nested parenthesis on single line', () => {
     const result = format('SELECT (a + b * (c - NOW()));');
     expect(result).toBe(dedent`
