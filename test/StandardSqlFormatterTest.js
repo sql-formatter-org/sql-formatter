@@ -26,8 +26,39 @@ describe('StandardSqlFormatter', function () {
     `);
   });
 
-  it('formats INSERT without INTO', () => {
-    const result = format(
+  it('formats CASE ... WHEN with a blank expression', function () {
+    const result = sqlFormatter.format(
+      "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
+    );
+
+    expect(result).toBe(dedent`
+      CASE
+        WHEN option = 'foo' THEN 1
+        WHEN option = 'bar' THEN 2
+        WHEN option = 'baz' THEN 3
+        ELSE 4
+      END;
+    `);
+  });
+
+  it('formats CASE ... WHEN with an expression', function () {
+    const result = sqlFormatter.format(
+      "CASE option WHEN 'foo' THEN 1 WHEN 'bar' THEN 2 WHEN 'baz' THEN 3 ELSE 4 END;"
+    );
+
+    expect(result).toBe(dedent`
+      CASE
+        option
+        WHEN 'foo' THEN 1
+        WHEN 'bar' THEN 2
+        WHEN 'baz' THEN 3
+        ELSE 4
+      END;
+    `);
+  });
+
+  it('formats INSERT without INTO', function () {
+    const result = sqlFormatter.format(
       "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
     );
     expect(result).toBe(dedent`
