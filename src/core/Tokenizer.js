@@ -6,7 +6,7 @@ export default class Tokenizer {
   /**
    * @param {Object} cfg
    *  @param {String[]} cfg.reservedWords Reserved words in SQL
-   *  @param {String[]} cfg.reservedToplevelWords Words that are set to new line separately
+   *  @param {String[]} cfg.reservedTopLevelWords Words that are set to new line separately
    *  @param {String[]} cfg.reservedNewlineWords Words that are set to newline
    *  @param {String[]} cfg.reservedTopLevelWordsNoIndent Words that are top level but have no indentation
    *  @param {String[]} cfg.stringTypes String types to enable: "", '', ``, [], N''
@@ -281,18 +281,18 @@ export default class Tokenizer {
       return;
     }
     return (
-      this.getToplevelReservedToken(input) ||
+      this.getTopLevelReservedToken(input) ||
       this.getNewlineReservedToken(input) ||
       this.getTopLevelReservedTokenNoIndent(input) ||
       this.getPlainReservedToken(input)
     );
   }
 
-  getToplevelReservedToken(input) {
+  getTopLevelReservedToken(input) {
     return this.getTokenOnFirstMatch({
       input,
-      type: tokenTypes.RESERVED_TOPLEVEL,
-      regex: this.RESERVED_TOPLEVEL_REGEX,
+      type: tokenTypes.RESERVED_TOP_LEVEL,
+      regex: this.RESERVED_TOP_LEVEL_REGEX,
     });
   }
 

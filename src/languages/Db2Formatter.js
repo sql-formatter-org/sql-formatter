@@ -506,7 +506,7 @@ const reservedWords = [
   'YEARS',
 ];
 
-const reservedToplevelWords = [
+const reservedTopLevelWords = [
   'ADD',
   'AFTER',
   'ALTER COLUMN',
@@ -566,7 +566,7 @@ export default class Db2Formatter {
     if (!tokenizer) {
       tokenizer = new Tokenizer({
         reservedWords,
-        reservedToplevelWords,
+        reservedTopLevelWords,
         reservedNewlineWords,
         reservedTopLevelWordsNoIndent,
         stringTypes: [`""`, "''", '``', '[]'],

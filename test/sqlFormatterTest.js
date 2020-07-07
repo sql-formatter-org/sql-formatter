@@ -1,4 +1,4 @@
-import sqlFormatter from './../src/sqlFormatter';
+import * as sqlFormatter from './../src/sqlFormatter';
 
 describe('sqlFormatter', function () {
   it('throws error when unsupported language parameter specified', function () {

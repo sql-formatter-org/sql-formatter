@@ -1,6 +1,6 @@
-import sqlFormatter from './../src/sqlFormatter';
-import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import dedent from 'dedent-js';
+import * as sqlFormatter from './../src/sqlFormatter';
+import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 describe('PlSqlFormatter', function () {
   behavesLikeSqlFormatter('pl/sql');

@@ -174,7 +174,7 @@ const reservedWords = [
   'XOR',
 ];
 
-const reservedToplevelWords = [
+const reservedTopLevelWords = [
   'DELETE FROM',
   'EXCEPT ALL',
   'EXCEPT',
@@ -239,7 +239,7 @@ export default class N1qlFormatter {
     if (!tokenizer) {
       tokenizer = new Tokenizer({
         reservedWords,
-        reservedToplevelWords,
+        reservedTopLevelWords,
         reservedNewlineWords,
         reservedTopLevelWordsNoIndent,
         stringTypes: [`""`, "''", '``'],
