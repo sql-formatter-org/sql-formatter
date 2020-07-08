@@ -1,10 +1,16 @@
-# SQL Formatter [![NPM version](https://img.shields.io/npm/v/sql-formatter.svg)](https://npmjs.com/package/sql-formatter) [![Build Status](https://travis-ci.org/zeroturnaround/sql-formatter.svg?branch=master)](https://travis-ci.org/zeroturnaround/sql-formatter) [![Coverage Status](https://coveralls.io/repos/github/zeroturnaround/sql-formatter/badge.svg?branch=master)](https://coveralls.io/github/zeroturnaround/sql-formatter?branch=master)
+# SQL Formatter [![NPM version](https://img.shields.io/npm/v/@gwax/sql-formatter.svg)](https://npmjs.com/package/@gwax/sql-formatter) [![Build Status](https://travis-ci.com/gwax/sql-formatter.svg?branch=master)](https://travis-ci.com/gwax/sql-formatter) [![Coverage Status](https://coveralls.io/repos/github/gwax/sql-formatter/badge.svg?branch=master)](https://coveralls.io/github/gwax/sql-formatter?branch=master)
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
-It started as a port of a [PHP Library][], but has since considerably diverged.
-It supports [Standard SQL][], [Couchbase N1QL][], [IBM DB2][] and [Oracle PL/SQL][] dialects.
+It started as a Javascript port of a [PHP Library][], but has diverged
+considerably, and been forked/joined multiple times in the past. The current
+formatter (@gwax/sql-formatter) forked from [zeroturnaround/sql-formatter](https://github.com/zeroturnaround/sql-formatter)
+with code consolidated from [kufii/sql-formatter-plus](https://github.com/kufii/sql-formatter-plus)
+and a number of other forks scattered around GitHub.
 
-&rarr; [Try the demo.](https://zeroturnaround.github.io/sql-formatter/)
+SQL Formatter supports [Standard SQL][], [Couchbase N1QL][], [IBM DB2][],
+[Oracle PL/SQL][], [Amazon Redshift][], and [Spark][] dialects.
+
+&rarr; [Try the demo.](https://gwax.github.io/sql-formatter/)
 
 ## Install
 
@@ -17,14 +23,14 @@ npm install sql-formatter
 ## Usage
 
 ```js
-import sqlFormatter from 'sql-formatter';
+import sqlFormatter from '@gwax/sql-formatter';
 
 console.log(sqlFormatter.format('SELECT * FROM table1'));
 ```
 
 This will output:
 
-```
+```sql
 SELECT
   *
 FROM
@@ -40,30 +46,32 @@ sqlFormatter.format('SELECT *', {
 });
 ```
 
-Currently just four SQL dialects are supported:
+Currently just six SQL dialects are supported:
 
 - **sql** - [Standard SQL][]
 - **n1ql** - [Couchbase N1QL][]
 - **db2** - [IBM DB2][]
 - **pl/sql** - [Oracle PL/SQL][]
+- **redshift** - [Amazon Redshift][]
+- **spark** - [Spark][]
 
 ### Placeholders replacement
 
 ```js
 // Named placeholders
-sqlFormatter.format("SELECT * FROM tbl WHERE foo = @foo", {
-    params: {foo: "'bar'"}
-}));
+sqlFormatter.format('SELECT * FROM tbl WHERE foo = @foo', {
+  params: { foo: "'bar'" },
+});
 
 // Indexed placeholders
-sqlFormatter.format("SELECT * FROM tbl WHERE foo = ?", {
-    params: ["'bar'"]
-}));
+sqlFormatter.format('SELECT * FROM tbl WHERE foo = ?', {
+  params: ["'bar'"],
+});
 ```
 
 Both result in:
 
-```
+```sql
 SELECT
   *
 FROM
@@ -88,10 +96,12 @@ $ npm run check
 
 ## License
 
-[MIT](https://github.com/zeroturnaround/sql-formatter/blob/master/LICENSE)
+[MIT](https://github.com/gwax/sql-formatter/blob/master/LICENSE)
 
 [php library]: https://github.com/jdorn/sql-formatter
 [standard sql]: https://en.wikipedia.org/wiki/SQL:2011
 [couchbase n1ql]: http://www.couchbase.com/n1ql
 [ibm db2]: https://www.ibm.com/analytics/us/en/technology/db2/
 [oracle pl/sql]: http://www.oracle.com/technetwork/database/features/plsql/index.html
+[amazon redshift]: https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
+[spark]: https://spark.apache.org/docs/latest/api/sql/index.html

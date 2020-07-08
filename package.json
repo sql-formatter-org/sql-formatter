@@ -1,7 +1,7 @@
 {
   "name": "@gwax/sql-formatter",
   "version": "3.0.0-alpha.0",
-  "description": "Formats whitespaces in a SQL query to make it more readable",
+  "description": "Format whitespace in a SQL query to make it more readable",
   "license": "MIT",
   "main": "lib/sqlFormatter.js",
   "keywords": [
@@ -9,6 +9,8 @@
     "formatter",
     "format",
     "n1ql",
+    "redshift",
+    "spark",
     "whitespace"
   ],
   "authors": [
@@ -33,7 +35,7 @@
     "build:commonjs": "babel src --out-dir lib",
     "build:umd": "webpack --mode=\"development\"  --output=\"dist/sql-formatter.js\" src/sqlFormatter.js",
     "build:umd:min": "webpack --mode=\"production\"  --output=\"dist/sql-formatter.min.js\" src/sqlFormatter.js",
-    "prepublish": "npm run clean && npm run check && npm run build"
+    "prepare": "npm run clean && npm run check && npm run build"
   },
   "repository": {
     "type": "git",
