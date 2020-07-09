@@ -1,6 +1,6 @@
 const path = require('path');
 
-const config = {
+module.exports = {
   entry: './src/sqlFormatter.js',
   output: {
     path: path.join(__dirname, 'dist'),
@@ -17,11 +17,4 @@ const config = {
       },
     ],
   },
-};
-
-module.exports = (env, argv) => {
-  if (argv.mode === 'production') {
-    config.output.filename = 'sql-formatter.min.js';
-  }
-  return config;
 };
