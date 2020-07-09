@@ -1,6 +1,3 @@
-import repeat from 'lodash/repeat';
-import last from 'lodash/last';
-
 const INDENT_TYPE_TOP_LEVEL = 'top-level';
 const INDENT_TYPE_BLOCK_LEVEL = 'block-level';
 
@@ -26,7 +23,7 @@ export default class Indentation {
    * @return {String}
    */
   getIndent() {
-    return repeat(this.indent, this.indentTypes.length);
+    return this.indent.repeat(this.indentTypes.length);
   }
 
   /**
@@ -48,7 +45,10 @@ export default class Indentation {
    * Does nothing when the previous indent is not top-level.
    */
   decreaseTopLevel() {
-    if (last(this.indentTypes) === INDENT_TYPE_TOP_LEVEL) {
+    if (
+      this.indentTypes.length > 0 &&
+      this.indentTypes[this.indentTypes.length - 1] === INDENT_TYPE_TOP_LEVEL
+    ) {
       this.indentTypes.pop();
     }
   }

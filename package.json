@@ -33,8 +33,8 @@
     "check": "npm run pretty:check && npm run lint && npm run test",
     "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
     "build:commonjs": "babel src --out-dir lib",
-    "build:umd": "webpack --mode=\"development\"  --output=\"dist/sql-formatter.js\" src/sqlFormatter.js",
-    "build:umd:min": "webpack --mode=\"production\"  --output=\"dist/sql-formatter.min.js\" src/sqlFormatter.js",
+    "build:umd": "webpack --mode=\"development\"",
+    "build:umd:min": "webpack --mode=\"production\"",
     "prepare": "npm run clean && npm run check && npm run build"
   },
   "repository": {
@@ -43,9 +43,6 @@
   },
   "bugs": {
     "url": "https://github.com/gwax/sql-formatter/issues"
-  },
-  "dependencies": {
-    "lodash": "^4.17.15"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.4",

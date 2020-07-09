@@ -1,4 +1,3 @@
-import includes from 'lodash/includes';
 import tokenTypes from './tokenTypes';
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
@@ -162,13 +161,13 @@ export default class Formatter {
   formatOpeningParentheses(token, query) {
     // Take out the preceding space unless there was whitespace there in the original query
     // or another opening parens or line comment
-    const preserveWhitespaceFor = [
-      tokenTypes.WHITESPACE,
-      tokenTypes.OPEN_PAREN,
-      tokenTypes.LINE_COMMENT,
-      tokenTypes.OPERATOR,
-    ];
-    if (!includes(preserveWhitespaceFor, this.previousToken().type)) {
+    const preserveWhitespaceFor = {
+      [tokenTypes.WHITESPACE]: true,
+      [tokenTypes.OPEN_PAREN]: true,
+      [tokenTypes.LINE_COMMENT]: true,
+      [tokenTypes.OPERATOR]: true,
+    };
+    if (!preserveWhitespaceFor[this.previousToken().type]) {
       query = trimSpacesEnd(query);
     }
     query += this.cfg.uppercase ? token.value.toUpperCase() : token.value;
