@@ -4,6 +4,9 @@
   "description": "Format whitespace in a SQL query to make it more readable",
   "license": "MIT",
   "main": "lib/sqlFormatter.js",
+  "bin": {
+    "sqlfmt": "./bin/sqlfmt.js"
+  },
   "keywords": [
     "sql",
     "formatter",
@@ -19,6 +22,7 @@
     "George Leslie-Waksman"
   ],
   "files": [
+    "bin",
     "dist",
     "lib",
     "src"
@@ -72,5 +76,8 @@
     ],
     "testRegex": ".*Test",
     "collectCoverage": true
+  },
+  "dependencies": {
+    "argparse": "^1.0.10"
   }
 }

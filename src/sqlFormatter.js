@@ -5,6 +5,16 @@ import RedshiftFormatter from './languages/RedshiftFormatter';
 import SparkSqlFormatter from './languages/SparkSqlFormatter';
 import StandardSqlFormatter from './languages/StandardSqlFormatter';
 
+export const FORMATTERS = {
+  db2: Db2Formatter,
+  n1ql: N1qlFormatter,
+  'pl/sql': PlSqlFormatter,
+  plsql: PlSqlFormatter,
+  redshift: RedshiftFormatter,
+  spark: SparkSqlFormatter,
+  sql: StandardSqlFormatter,
+};
+
 /**
  * Format whitespace in a query to make it easier to read.
  *
@@ -18,23 +28,14 @@ import StandardSqlFormatter from './languages/StandardSqlFormatter';
  * @return {String}
  */
 export const format = (query, cfg = {}) => {
-  switch (cfg.language) {
-    case 'db2':
-      return new Db2Formatter(cfg).format(query);
-    case 'n1ql':
-      return new N1qlFormatter(cfg).format(query);
-    case 'pl/sql':
-      return new PlSqlFormatter(cfg).format(query);
-    case 'redshift':
-      return new RedshiftFormatter(cfg).format(query);
-    case 'spark':
-      return new SparkSqlFormatter(cfg).format(query);
-    case 'sql':
-    case undefined:
-      return new StandardSqlFormatter(cfg).format(query);
-    default:
-      throw Error(`Unsupported SQL dialect: ${cfg.language}`);
+  let Formatter = StandardSqlFormatter;
+  if (cfg.language !== undefined) {
+    Formatter = FORMATTERS[cfg.language];
   }
+  if (Formatter === undefined) {
+    throw Error(`Unsupported SQL dialect: ${cfg.language}`);
+  }
+  return new Formatter(cfg).format(query);
 };
 
-export default { format };
+export default { format, FORMATTERS };
