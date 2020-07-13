@@ -94,5 +94,5 @@ function writeOutput(file, query) {
 const args = getArgs();
 const cfg = configFromArgs(args);
 const query = getInput(args.file);
-const formattedQuery = format(query, cfg);
+const formattedQuery = format(query, cfg).trim() + '\n';
 writeOutput(args.output, formattedQuery);
