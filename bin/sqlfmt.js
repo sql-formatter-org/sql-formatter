@@ -58,7 +58,7 @@ function getArgs() {
 
 function configFromArgs(args) {
   return {
-    langauge: args.langauge,
+    language: args.language,
     indent: args.tab_indent ? '\t' : ' '.repeat(args.indent),
     uppercase: args.uppercase,
     linesBetweenQueries: args.lines_between_queries,
