@@ -23,7 +23,7 @@ function getArgs() {
     help: 'File to write SQL output (defaults to stdout)',
   });
 
-  parser.addArgument(['-l', '--langauge'], {
+  parser.addArgument(['-l', '--language'], {
     help: 'SQL Formatter dialect (defaults to basic sql)',
     choices: formatterKeys,
     defaultValue: 'sql',
