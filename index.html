@@ -104,7 +104,7 @@
       </div>
 
       <div class="select-wrapper">
-        Format
+        <label for="lanugage">Format</label>
         <select id="language">
           <option value="sql">
             SQL
@@ -122,12 +122,20 @@
             Spark
           </option>
         </select>
+        |
+        <label for="uppercae">Uppercase</label>
+        <input type="checkbox" id="uppercase" name="uppercase" checked />
       </div>
     </header>
     <main>
       <section class="input">
         <textarea id="input" autofocus="true" wrap="off">
-SELECT supplier_name, city FROM suppliers&#10;WHERE supplier_id > 500&#10;ORDER BY supplier_name ASC, city DESC;</textarea
+select supplier_name,city from
+(select * from suppliers join addresses on suppliers.address_id=addresses.id)
+as suppliers
+where supplier_id>500
+order by supplier_name asc,city desc;
+      </textarea
         >
       </section>
       <section class="output">
@@ -135,30 +143,39 @@ SELECT supplier_name, city FROM suppliers&#10;WHERE supplier_id > 500&#10;ORDER 
       </section>
     </main>
 
-    <script
-      type="text/javascript"
-      src="https://unpkg.com/@gwax/sql-formatter@latest/dist/sql-formatter.min.js"
-    ></script>
+    <!-- Load from local (for development) -->
+    <script type="text/javascript" src="dist/sql-formatter.js"></script>
+    <!-- Fallback to reading from npm -->
     <script>
-      (function () {
+      window.sqlFormatter ||
+        document.write(
+          unescape(
+            '%3Cscript type="text/javascript" src="https://unpkg.com/@gwax/sql-formatter@latest/dist/sql-formatter.min.js"%3E%3C/script%3E'
+          )
+        );
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
         let language = document.getElementById('language');
+        let uppercase = document.getElementById('uppercase');
         let input = document.getElementById('input');
         let output = document.getElementById('output');
 
-        input.addEventListener('input', format);
-        language.addEventListener('change', format);
-
         function format() {
           console.time('formatting');
-
           output.value = sqlFormatter.format(input.value, {
             language: language.options[language.selectedIndex].value,
+            uppercase: uppercase.checked,
           });
-
           console.timeEnd('formatting');
         }
+
+        input.addEventListener('input', format);
+        language.addEventListener('change', format);
+        uppercase.addEventListener('change', format);
+
         format();
-      })();
+      });
     </script>
   </body>
 </html>

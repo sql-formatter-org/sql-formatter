@@ -1,9 +1,10 @@
 # SQL Formatter [![NPM version](https://img.shields.io/npm/v/@gwax/sql-formatter.svg)](https://npmjs.com/package/@gwax/sql-formatter) [![Build Status](https://travis-ci.com/gwax/sql-formatter.svg?branch=master)](https://travis-ci.com/gwax/sql-formatter) [![Coverage Status](https://coveralls.io/repos/github/gwax/sql-formatter/badge.svg?branch=master)](https://coveralls.io/github/gwax/sql-formatter?branch=master)
 
-**SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
-It started as a Javascript port of a [PHP Library][], but has diverged
-considerably, and been forked/joined multiple times in the past. The current
-formatter (@gwax/sql-formatter) forked from [zeroturnaround/sql-formatter](https://github.com/zeroturnaround/sql-formatter)
+**SQL Formatter** is a JavaScript library and command line tool for
+pretty-printing SQL queries. It started as a Javascript port of a
+[PHP Library][], but has diverged considerably, and been forked/joined multiple
+times in the past. The current formatter (@gwax/sql-formatter) forked from
+[zeroturnaround/sql-formatter](https://github.com/zeroturnaround/sql-formatter)
 with code consolidated from [kufii/sql-formatter-plus](https://github.com/kufii/sql-formatter-plus)
 and a number of other forks scattered around GitHub.
 
@@ -16,8 +17,58 @@ SQL Formatter supports [Standard SQL][], [Couchbase N1QL][], [IBM DB2][],
 
 Get the latest version from NPM:
 
+```sh
+npm install @gwax/sql-formatter
 ```
-npm install sql-formatter
+
+## Command Line Interface
+
+The CLI tool will be installed under `@gwax/sql-formatter` and under
+`sql-formatter` and may be invoked via `npx @gwax/sql-formatter`:
+
+```sh
+npx @gwax/sql-formatter -h
+```
+
+```
+usage: sql-formatter [-h] [-v] [-f FILE] [-o OUTPUT]
+                     [-l {db2,n1ql,pl/sql,plsql,redshift,spark,sql}]
+                     [-i N | -t] [-u] [--lines-between-queries N]
+
+
+SQL Formatter
+
+Optional arguments:
+  -h, --help            Show this help message and exit.
+  -v, --version         Show program's version number and exit.
+  -f FILE, --file FILE  Input SQL file (defaults to stdin)
+  -o OUTPUT, --output OUTPUT
+                        File to write SQL output (defaults to stdout)
+  -l {db2,n1ql,pl/sql,plsql,redshift,spark,sql}, --langauge {db2,n1ql,pl/sql,plsql,redshift,spark,sql}
+                        SQL Formatter dialect (defaults to basic sql)
+  -i N, --indent N      Number of spaces to indent query blocks (defaults to
+                        2)
+  -t, --tab-indent      Indent query blocks with tabs instead of spaces
+  -u, --uppercase       Capitalize language keywords
+  --lines-between-queries N
+                        How many newlines to insert between queries
+                        (separated by ";")
+```
+
+By default, the tool takes queries from stdin and processes them to stdout but
+the `-f`/`--file` and `-o`/`--output` flags can be used to alter this behavior.
+
+```sh
+echo 'select * from tbl where id = 3' | npx @gwax/sql-formatter -u
+```
+
+```sql
+SELECT
+  *
+FROM
+  tbl
+WHERE
+  id = 3
 ```
 
 ## Usage
@@ -25,7 +76,7 @@ npm install sql-formatter
 ```js
 import sqlFormatter from '@gwax/sql-formatter';
 
-console.log(sqlFormatter.format('SELECT * FROM table1'));
+console.log(sqlFormatter.format('SELECT * FROM tbl'));
 ```
 
 This will output:
@@ -34,15 +85,17 @@ This will output:
 SELECT
   *
 FROM
-  table1
+  tbl
 ```
 
 You can also pass in configuration options:
 
 ```js
-sqlFormatter.format('SELECT *', {
-  language: 'n1ql', // Defaults to "sql"
+sqlFormatter.format('SELECT * FROM tbl', {
+  language: 'spark', // Defaults to "sql"
   indent: '    ', // Defaults to two spaces
+  uppercase: bool, // Defaults to false
+  linesBetweenQueries: 2, // Defaults to 1
 });
 ```
 
@@ -87,9 +140,10 @@ This makes SQL Formatter available as a global variable `window.sqlFormatter`.
 
 ## Contributing
 
-```bash
-# run linter and tests
-$ npm run check
+Make sure to run all checks:
+
+```sh
+npm run check
 ```
 
 ...and you're ready to poke us with a pull request.
