@@ -1,5 +1,5 @@
+import Formatter from "../core/Formatter";
 import Tokenizer from "../core/Tokenizer";
-import NewFormatter from "../core/NewFormatter";
 
 const reservedWords = [
     "A", "ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG",
@@ -41,38 +41,53 @@ const reservedWords = [
     "UB1", "UB2", "UB4", "UID", "UNDER", "UNIQUE", "UNPLUG", "UNSIGNED", "UNTRUSTED", "USE", "USER", "USING",
     "VALIDATE", "VALIST", "VALUE", "VARCHAR", "VARCHAR2", "VARIABLE", "VARIANCE", "VARRAY", "VARYING", "VIEW", "VIEWS", "VOID",
     "WHENEVER", "WHILE", "WITH", "WORK", "WRAPPED", "WRITE",
-    "YEAR", "SELECT", "UNION", "INSERT", "EXCEPTION", "END IF",
+    "YEAR", "SELECT",
     "ZONE", 
     "AND", 
-    "OR", 
+    "OR",
 ];
 
 const reservedToplevelWords = [
-    // "CREATE", "PROCEDURE", "FUNCTION", "CURSOR", 
-    "AS", 
-    // "BEGIN", 
-    "TYPE", "WITH", "UNION", 
-    // "RETURN", 
-    // "PROCEDURE" ,
-    // "END", 
-    "EXCEPTION", "ELSE", 
+    "ADD", "ALTER COLUMN", "ALTER TABLE",
+    // "BEGIN",
+    "CONNECT BY",
+    "DECLARE", "DELETE FROM", "DELETE",
+    // "END",
+    "EXCEPT", "EXCEPTION",
+    "FETCH FIRST", 
+    "FROM",
+    "GROUP BY",
+    "HAVING",
+    "INSERT INTO", "INSERT", "INTERSECT",
+    "LIMIT", "LOOP",
+    "MODIFY",
+    "ORDER BY",
+    "SELECT", "SET CURRENT SCHEMA", "SET SCHEMA", "SET", "START WITH",
+    "UNION ALL", "UNION", "UPDATE",
+    "VALUES",
+    "WHERE", 
     // "WHEN",
-     "THEN", "ELSIF", //"END IF"
+    // "AND"
 ];
 
 const reservedNewlineWords = [
-    "ALTER", "SELECT", "INSERT", "UPDATE", "DROP"
+    // "AND",
+    "CROSS APPLY", "CROSS JOIN",
+    "ELSE", "END",
+    "INNER JOIN",
+    "JOIN",
+    "LEFT JOIN", "LEFT OUTER JOIN",
+    "OR", "OUTER APPLY", "OUTER JOIN",
+    "RIGHT JOIN", "RIGHT OUTER JOIN",
+    "WHEN",
+    "UNION",
+    "XOR",
+    "AND"
 ];
-
-const openParens = [
-    // "(", 
-    "CREATE", "BEGIN","FUNCTION", "CURSOR", "IF", "ELSIF", "FOR" , "LOOP", "WHEN",
-    "PROCEDURE" ,
-]
 
 let tokenizer;
 
-export default class SqlFormatter {
+export default class PlSqlFormatter {
     /**
      * @param {Object} cfg Different set of configurations
      */
@@ -93,17 +108,32 @@ export default class SqlFormatter {
                 reservedToplevelWords,
                 reservedNewlineWords,
                 stringTypes: [`""`, "N''", "''", "``"],
-                openParens,
-                closeParens: [//")", 
-                "END", "RETURN", ],
+                openParens: ["(", "CASE", "BEGIN"],
+                closeParens: [")", "END"],
                 indexedPlaceholderTypes: ["?"],
                 namedPlaceholderTypes: [":"],
                 lineCommentTypes: ["--"],
-                specialWordChars: ["_", "$", "#",  ".", "@", "%"]
+                specialWordChars: ["_", "$", "#",  ".", "@"]
             });
         }
-        return new NewFormatter(this.cfg, tokenizer, reservedWords, openParens).format(query);
+        return new Formatter(this.cfg, tokenizer, reservedWords).format(query);
     }
 
-    
+    getFormatArray(query){
+        if (!tokenizer) {
+            tokenizer = new Tokenizer({
+                reservedWords,
+                reservedToplevelWords,
+                reservedNewlineWords,
+                stringTypes: [`""`, "N''", "''", "``"],
+                openParens: ["(", "CASE", "BEGIN"],
+                closeParens: [")", "END"],
+                indexedPlaceholderTypes: ["?"],
+                namedPlaceholderTypes: [":"],
+                lineCommentTypes: ["--"],
+                specialWordChars: ["_", "$", "#",  ".", "@"]
+            });
+        }
+        return new Formatter(this.cfg, tokenizer, reservedWords).getFormatArray(query);   
+    }
 }

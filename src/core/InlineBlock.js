@@ -1,6 +1,6 @@
 import tokenTypes from "./tokenTypes";
 
-const INLINE_MAX_LENGTH = 50;
+const INLINE_MAX_LENGTH = 150;
 
 /**
  * Bookkeeper for inline blocks.
@@ -87,6 +87,6 @@ export default class InlineBlock {
             type === tokenTypes.RESERVED_NEWLINE ||
             type === tokenTypes.COMMENT ||
             type === tokenTypes.BLOCK_COMMENT ||
-            value === ";";
+            value === ";" || value === "(";
     }
 }
