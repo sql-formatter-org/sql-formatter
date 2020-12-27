@@ -22,8 +22,10 @@ export default class Formatter {
         this.index = 0;
         this.reservedWords = reservedWords;
         this.inlineReservedWord = ["order", "group", "values"];
-        this.alignList = [];
+        this.indents = [];
         this.lines = [""];
+        this.startBlock = ["select", "begin", "create", "alter", "insert", "update", "drop"];
+        this.rightAlignWords = ["or", "and"];
     }
 
     /**
@@ -48,108 +50,63 @@ export default class Formatter {
     formatQuery(){
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
-
-            // console.log(token.value);
-
             token.value = this.formatTextCase(token);
             if (token.type === tokenTypes.WHITESPACE) {
                 if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")){
                     this.lines[this.lastIndex()] += " ";
                 }
             } else if (token.type === tokenTypes.LINE_COMMENT) {
-                this.formatLineCommentArray(token);
+                this.formatLineComment(token);
             } else if (token.type === tokenTypes.BLOCK_COMMENT) {
-                this.formatBlockCommentArray(token);
+                this.formatBlockComment(token);
             } else if (token.type === tokenTypes.RESERVED_TOPLEVEL) {
-                this.formatTopLeveleReservedWordArray(token);
+                this.formatTopLeveleReservedWord(token);
                 this.previousReservedWord = token;
             } else if (token.type === tokenTypes.RESERVED_NEWLINE) {
-                this.formatNewlineReservedWordArray(token);
+                this.formatNewlineReservedWord(token);
                 this.previousReservedWord = token;
             } else if (token.type === tokenTypes.RESERVED) {
-                this.formatWithSpacesArray(token);
+                this.formatWithSpaces(token);
                 this.previousReservedWord = token;
             } else if (token.type === tokenTypes.OPEN_PAREN) {
-                this.formatOpeningParenthesesArray(token);
+                this.formatOpeningParentheses(token);
             } else if (token.type === tokenTypes.CLOSE_PAREN) {
-                this.formatClosingParenthesesArray(token);
+                this.formatClosingParentheses(token);
             } else if (token.type === tokenTypes.PLACEHOLDER) {
-                this.formatPlaceholderArray(token);
+                this.formatPlaceholder(token);
             } else if (token.value === ",") {
-                this.fromatCommaArray(token, i);
+                this.fromatComma(token, i);
             } else if (token.value === ":") {
-                this.formatWithSpaceAfterArray(token);
+                this.formatWithSpaceAfter(token);
             } else if (token.value === "." || token.value === "%") {
-                this.formatWithoutSpacesArray(token);
+                this.formatWithoutSpaces(token);
             } else if (token.value === ";") {
-                this.formatQuerySeparatorArray(token);
+                this.formatQuerySeparator(token);
             } else {
-                this.formatWithSpacesArray(token);
+                this.formatWithSpaces(token);
             };
         }
-        // return this.lines.join("\n").trim();
     }
 
-    fromatCommaArray(token, index){
-        this.lines[this.lastIndex()] = trimEnd(this.getLastString()) + token.value;
-        var re = / |\(/;
-        let first = this.getLastString().trim().split(re)[0];
-        if (!this.inlineReservedWord.includes(first)){
-            let block = this.getFirstWordInBlock();
-            if (block == "select"){
-                this.addNewLineArray("left", token.value);
-            } else {
-                let lastString = this.getLastString().trim();
-                let count = lastString.split(",")[0].split(re).length;
-                //check previous value
-                if (count < 3){
-                    this.addNewLineArray("left", token.value);
-                }
-                //check next value
-                for (let i = index + 1; i < index + 5; i++){
-                    if (i > this.tokens.length){
-                        break;
-                    }
-                    let tok = this.tokens[i];
-                    if (tok != undefined && tok.type === tokenTypes.RESERVED_TOPLEVEL){
-                        this.addNewLineArray("left", token.value);
-                        break;
-                    }
-                }
+    fromatComma(token, index){
+        this.trimEndLastString();
+        this.lines[this.lastIndex()] += token.value;
+        this.addNewLine("left", token.value);
+    }
+
+    formatTopLeveleReservedWord(token){
+        if (this.startBlock.includes(token.value.split(" ")[0])){
+            if (this.getLastString().includes("union")){
+                this.indents.pop;
+                this.addNewLine("right", token.value);
+            }else if (this.getLastString().trim() != "" && this.getLastString().trim().endsWith(")")){
+                this.addNewLine("right", token.value);
             }
-        }
-    }
-
-    getFirstWordInBlock(){
-        let line = this.getLastString();
-        let open = line.lastIndexOf("(");
-        if (open < 0){
-            return line.trim().split(" ")[0];
-        } else{
-            if (line.lastIndexOf(")") > open){
-                return line.trim().split(" ")[0];
-            }
-            let substring = line.substring(open + 1);
-            return substring.split(" ")[0];
-        }
-    }
-
-    formatTopLeveleReservedWordArray(token){
-        let word = token.value;
-        let startBlock = ["select", "begin", "create", "alter", "insert", "update"];
-        if (startBlock.includes(word.split(" ")[0])){
-            let lineIndex = this.lastIndex();
-            // if (this.getLastString().endsWith("(")){
-                this.alignList.pop()
-            // };
-            this.alignList.push({word: word.split(" ")[0], 
-                                 count: this.getLastString().length,
-                                 token: word});
-            this.lines[lineIndex] += word;
+            this.indents.push({token: token, indent: this.getLastString().length});
         } else {
-            this.addNewLineArray("right", token.value);
-            this.lines[this.lastIndex()] += token.value;
+            this.addNewLine("right", token.value);
         }
+        this.lines[this.lastIndex()] += token.value;
     }
 
     formatTextCase(token){
@@ -158,152 +115,143 @@ export default class Formatter {
         } else {
             return token.value.toLowerCase();
         }
-
     }
 
-    formatLineCommentArray(token){
-        this.lines[this.lastIndex()] += token.value;
-        this.addNewLineArray("right", "");
-    }   
-
-    addNewLineArray(align, word){
-        if (this.getLastString().trim() != ""){
-            this.lines[this.lastIndex()] = trimEnd(this.getLastString());
-            let last = this.alignList[this.alignList.length  - 1];
-            let shift = 0;
-            if (last != undefined){
-                shift = last.count;
-                if (align == "left"){
-                    shift += last.token.length + 1;
-                } else {
-                    let dif = last.word.length - word.split(" ")[0].length;
-                    if (dif > 0) {
-                        shift += dif;
-                    }
-                }
+    addNewLine(align, word){
+        this.trimEndLastString();
+        let last = this.indents[this.indents.length - 1];
+        if (last == undefined){
+            this.lines.push("");
+            return;
+        }
+        let indent = last.indent;
+        if (align == "right"){
+            let dif = last.token.value.split(" ")[0].trim().length 
+                            - word.split(" ")[0].trim().length;
+            if (dif < 0){
+                dif = 0;
             }
-            this.lines.push(repeat(" ", shift));
-        } 
+            indent += dif;
+        }else {
+            indent += last.token.value.length + 1;
+        }
+        if (this.getLastString().trim() == ""){
+            this.lines[this.lastIndex()] = repeat(" ", indent);
+        }else {
+            this.lines.push(repeat(" ", indent));
+        }
     } 
 
-    formatBlockCommentArray(token){
-        this.addNewLineArray("right", token.value);
+    formatBlockComment(token){
+        this.addNewLine("right", token.value);
         this.lines[this.lastIndex()] = this.indentComment(token.value);
+        this.addNewLine("right", token.value);
     }
 
-
-    indentComment(comment) {
-        return comment.replace(/\n/g, "\n" + this.indentation.getIndent());
+    formatLineComment(token){
+        this.lines[this.lastIndex()] += token.value;
+        this.addNewLine("right", "");
     }
 
-    formatNewlineReservedWordArray(token){
-        let index = this.lastIndex();
-        let words = this.getLastString().trim().split(" ");
-        if (words[0] == "case" && words.length == 1){
-            this.lines[index] += token.value;
-        } else {
-            this.addNewLineArray("left", token.value);
-            this.lines[index + 1] += token.value;
+    formatNewlineReservedWord(token){
+        if (this.getLastString().trim().split(" ").length > 1){
+            if (this.rightAlignWords.includes(token.value)){
+                this.addNewLine("right", token.value);
+            }else{
+                this.addNewLine("left", token.value);
+            }
         }
-    }
-
-    formatOpeningParenthesesArray(token){
-        if (token.value != "("){
-            this.addNewLineArray("left", token.value);
-        }else if (this.getLastString().trim() != ""){
-            this.lines[this.lastIndex()] = trimEnd(this.getLastString());
-        }
-        this.alignList.push({word: token.value.split(" ")[0], count: this.getLastString().length, token: token.value});
         this.lines[this.lastIndex()] += token.value;
     }
 
-    formatClosingParenthesesArray(token){
-        let word = token.value;
-        if (word != ")"){
-            this.addNewLineArray("right", token.value);
-            this.lines[this.lastIndex()] += word;
-            this.alignList.pop();
+    formatOpeningParentheses(token){
+        if (token.value == "("){
+            if (this.getLastString().trim() != ""){
+                this.trimEndLastString();  
+            }
         } else {
-            this.alignList.pop();
-            let openIdx = -2;
-            let closeIdx = -2;
-            for (let i = this.lastIndex(); i >= 0; i--){
-                let line = this.lines[i];
-                if (openIdx < 0){
-                    openIdx = line.lastIndexOf("(");
-                    if (closeIdx < 0){
-                        closeIdx = line.lastIndexOf(")");
-                    } else {
-                        this.addNewLineArray("left", token.value);
-                        this.lines[this.lastIndex()] += word;
-                        break;
+            this.addNewLine("left", token.value);
+        }
+        this.indents.push({token: token, indent: this.getLastString().length})
+        this.lines[this.lastIndex()] += token.value;
+    }
+
+    formatClosingParentheses(token){
+        if (token.value == ")"){
+            this.trimEndLastString();
+            if (this.getLastString().match(/\)/) != null){
+                this.addNewLine("right", token.value);    
+            }
+            this.checkCloseBkt();
+        } else {
+            this.addNewLine("right", token.value);
+        }
+        this.indents.pop();
+        this.lines[this.lastIndex()] += token.value;
+    }
+
+    checkCloseBkt(){
+        let bktCount = 1;
+        let substring = "";
+        let startIndex = 0;
+        let start = 0;
+        for (let i = this.lastIndex(); i >= 0; i--){
+            let line = this.lines[i];
+            for (let j = line.length - 1; j >= 0; j--){
+                if (line[j] == ")"){
+                    bktCount++;
+                } else if (line[j] == "("){
+                    bktCount--;
+                }
+                if (bktCount == 0){
+                    start = j;
+                    substring = line.substring(start);
+                    for (let k = i + 1; k < this.lines.length; k++){
+                        substring += " " + this.lines[k].trim();
                     }
-                    if (openIdx > closeIdx){
-                        let substring = trimEnd(line) + " ";
-                        for (let j = i + 1; j < this.lines.length; j++){
-                            substring += this.lines[j].trim() + " ";
-                        }
-                        let first = substring.replace(/\(|\)|,/i, " ").trim().split(" ")[0].toUpperCase();
-                        if (this.reservedWords.includes(first)){
-                            this.lines[this.lastIndex()] = trimEnd(this.getLastString()) + word;
-                        } else {
-                            let count = substring.split(",").length;
-                            if (count > 4){
-                                this.addNewLineArray("left", token.value);
-                                this.lines[this.lastIndex()] += word;
-                            } else  if (count > 1) {
-                                this.lines[i] = trimEnd(substring) + word;
-                                for (let j = i; j < this.lastIndex(); j++){
-                                    this.lines.pop();
-                                }
-                            } else {
-                                this.lines[this.lastIndex()] += word;
-                                // this.addNewLineArray("left", token.value);
-                            }
-                        }
-                        break;
-                    }
-                } else {
-                    this.addNewLineArray("left", token.value);
-                    this.lines[this.lastIndex()] += word;
+                    startIndex = i;
                     break;
                 }
             }
+            if (bktCount == 0){
+                break;
+            }
+        }
+        let first = substring.trim().split(" ")[0].replace(/\(/, "").trim();
+        if (this.startBlock.includes(first)){
+            this.indents.pop();
+        } else {
+            if (!this.reservedWords.includes(first) && substring.match(/.* (and|or|xor|not) .*/) == null){
+                let subLines = substring.split("\n");
+                substring = "";
+                for (let i = 0; i< subLines.length; i++){
+                    substring += subLines[i].trim() + " ";
+                }
+                this.lines[startIndex] = trimEnd(this.lines[startIndex].substring(0, start) + substring);
+                let length = this.lines.length;
+                for (let i = startIndex + 1; i < length; i++){
+                    this.lines.pop();
+                }
+            }
         }
     }
 
 
-    formatPlaceholderArray(token){
+    formatPlaceholder(token){
         this.lines[this.lastIndex()] += this.params.get(token) + " ";
     }
 
-    formatPlaceholder(token, query) {
-        return query + this.params.get(token) + " ";
-    }
-
-    formatWithSpaceAfter(token, query) {
-        return this.trimTrailingWhitespace(query) + token.value + " ";
-    }
-
-    formatWithSpaceAfterArray(token){
-        this.trimTrailingWhitespaceArray();
+    formatWithSpaceAfter(token){
+        this.trimTrailingWhitespace();
         this.lines[this.lastIndex()] += token.value + " ";
     }
 
-    formatWithoutSpaces(token, query) {
-        return this.trimTrailingWhitespace(query) + token.value;
-    }
-
-    formatWithoutSpacesArray(token){
-        this.trimTrailingWhitespaceArray();
+    formatWithoutSpaces(token){
+        this.trimTrailingWhitespace();
         this.lines[this.lastIndex()] += token.value;
     }
 
-    formatWithSpaces(token, query) {
-        return query + token.value + " ";
-    }
-
-    formatWithSpacesArray(token){
+    formatWithSpaces(token){
         if (!token.value.endsWith(".")){
             this.lines[this.lastIndex()] += token.value + " ";
         } else {
@@ -311,31 +259,22 @@ export default class Formatter {
         }
     }
 
-    formatQuerySeparator(token, query) {
-        return this.trimTrailingWhitespace(query) + token.value + "\n";
-    }
-
-    formatQuerySeparatorArray(token){
-        this.trimTrailingWhitespaceArray();
+    formatQuerySeparator(token){
+        this.indents.pop();
+        this.trimTrailingWhitespace();
         this.lines[this.lastIndex()] += token.value;
-        this.addNewLineArray("left", token.value);
+        this.addNewLine("left", token.value);
     }
 
-
-    trimTrailingWhitespace(query) {
-        if (this.previousNonWhitespaceToken().type === tokenTypes.LINE_COMMENT) {
-            return trimEnd(query) + "\n";
-        }
-        else {
-            return trimEnd(query);
-        }
-    }
-
-    trimTrailingWhitespaceArray(){
-        this.lines[this.lastIndex()] = trimEnd(this.getLastString());
+    trimTrailingWhitespace(){
+        this.trimEndLastString();
         if (this.previousNonWhitespaceToken.type === tokenTypes.LINE_COMMENT){
-            this.addNewLineArray("left", "");
+            this.addNewLine("left", "");
         } 
+    }
+
+    trimEndLastString(){
+        this.lines[this.lastIndex()] = trimEnd(this.getLastString());
     }
 
     previousNonWhitespaceToken() {

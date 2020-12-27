@@ -62,6 +62,7 @@ const reservedToplevelWords = [
     "LIMIT", "LOOP",
     "MODIFY",
     "ORDER BY",
+    "ORDER",
     "SELECT", "SET CURRENT SCHEMA", "SET SCHEMA", "SET", "START WITH",
     "UNION ALL", "UNION", "UPDATE",
     "VALUES",

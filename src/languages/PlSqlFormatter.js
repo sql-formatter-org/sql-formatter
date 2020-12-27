@@ -41,7 +41,7 @@ const reservedWords = [
     "UB1", "UB2", "UB4", "UID", "UNDER", "UNIQUE", "UNPLUG", "UNSIGNED", "UNTRUSTED", "USE", "USER", "USING",
     "VALIDATE", "VALIST", "VALUE", "VARCHAR", "VARCHAR2", "VARIABLE", "VARIANCE", "VARRAY", "VARYING", "VIEW", "VIEWS", "VOID",
     "WHENEVER", "WHILE", "WITH", "WORK", "WRAPPED", "WRITE",
-    "YEAR", "SELECT", "UNION", "INSERT", "EXCEPTION", "END IF",
+    "YEAR", "SELECT", "UNION", "INSERT", "EXCEPTION", //"END IF",
     "ZONE", 
     "AND", 
     "OR", 
@@ -49,15 +49,17 @@ const reservedWords = [
 
 const reservedToplevelWords = [
     // "CREATE", "PROCEDURE", "FUNCTION", "CURSOR", 
-    "AS", 
+    "AS", "LOOP",
+    "IS",
     // "BEGIN", 
     "TYPE", "WITH", "UNION", 
     // "RETURN", 
     // "PROCEDURE" ,
     // "END", 
     "EXCEPTION", "ELSE", 
-    // "WHEN",
-     "THEN", "ELSIF", //"END IF"
+    "WHEN",
+     "THEN",
+      "ELSIF", //"END IF"
 ];
 
 const reservedNewlineWords = [
@@ -66,7 +68,9 @@ const reservedNewlineWords = [
 
 const openParens = [
     // "(", 
-    "CREATE", "BEGIN","FUNCTION", "CURSOR", "IF", "ELSIF", "FOR" , "LOOP", "WHEN",
+    "CREATE", "BEGIN","FUNCTION", "CURSOR", "IF", 
+    // "ELSIF", 
+    "FOR" , //"LOOP", //"WHEN",
     "PROCEDURE" ,
 ]
 
