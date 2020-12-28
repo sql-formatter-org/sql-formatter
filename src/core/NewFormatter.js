@@ -45,7 +45,6 @@ export default class NewFormatter {
     formatQuery(){
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
-            console.log(token.value + " : " + this.indentCount);
             token.value = this.formatTextCase(token);
             if (token.type === tokenTypes.WHITESPACE) {
                 if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")){
@@ -74,11 +73,28 @@ export default class NewFormatter {
                 this.formatWithoutSpaces(token);
             } else if (token.value === ";") {
                 this.formatQuerySeparator(token);
-            } else {
+            } else if (token.value == "exception"){
+                this.formatException(token);
+            }else{
                 this.formatWithSpaces(token);
             };
         }
         return this.lines.join("\n").trim();
+    }
+
+    formatException(token){
+        let idx = this.lastIndex() - 1;
+        if (this.lines[idx].trim().endsWith(";")){
+            if (this.getLastString().trim() != ""){
+                this.lines[this.lastIndex()] += token.value;
+            } else {
+                this.lines.pop();
+                this.addNewLine(this.indentCount - 1);
+                this.lines[this.lastIndex()] += token.value;
+            }
+        } else {
+            this.lines[this.lastIndex()] += token.value;
+        }
     }
 
     formatTextCase(token){
@@ -102,6 +118,17 @@ export default class NewFormatter {
             this.addNewLine(this.indentCount);
             for (let i = 0; i < subLines.length; i++){
                 let subLine = subLines[i].trim();
+                if (subLines[i].includes("'")){
+                    let match = subLines[i].match(/\'/)
+                    subLine = "";
+                    while(match.length % 2 != 0 && i < subLines.length){
+                        subLine += subLines[i] + ",";
+                        i++;
+                    }
+                    if (subLine == ""){
+                        subLine = subLines[i];
+                    }
+                }
                 if (subLine.includes("(") && !subLine.includes(")")){
                     while(i < subLines.length - 1 && !subLines.includes(")")){
                         i++;
@@ -135,7 +162,7 @@ export default class NewFormatter {
         procedure name(val);
         */
         let first = this.getFirstWord(this.getLastString());
-        if (this.openParens.includes(first.toUpperCase() && first != "if")){
+        if (this.openParens.includes(first.toUpperCase()) && first != "if"){
             this.decrementIndent();
         } else if (this.getLastString().endsWith(")")){
             let ssInfo = this.getBktSubstring();
@@ -144,8 +171,21 @@ export default class NewFormatter {
             if (this.openParens.includes(first.toUpperCase() && first != "if")){
                 this.decrementIndent();
             }
-        }
-
+        } 
+        // else {
+        //     if (first == "end"){
+        //         let second = this.getLastString().trim().replace("end ", "").toUpperCase();
+        //         if (this.reservedWords.includes(second)){
+        //             let prev = this.lines[this.lastIndex() - 1];
+        //             if (prev != undefined && prev.includes("return")){
+        //                 this.indentCount++;
+        //                 this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount) + this.getLastString().trim();
+        //             }else if (prev != undefined) {
+        //                 this.lines[this.lastIndex()] = repeat(this.indent, this.indentStartBlock) + this.getLastString().trim();
+        //             }
+        //         }
+        //     }
+        // }
         this.lines[this.lastIndex()] += token.value;
         this.addNewLine(this.indentCount);
     }
@@ -181,7 +221,7 @@ export default class NewFormatter {
 
     getFirstWord(string){
         var wordSeparator = / |\(|\)/;
-        return string.trim().split(wordSeparator)[0];
+        return string.trim().split(wordSeparator)[0].trim();
     }
 
     formatWithSpaces(token){
@@ -201,7 +241,6 @@ export default class NewFormatter {
             return;
         }
         if (startBlock.includes(token.value)){
-            console.log(this.indentStartBlock);
             if (this.indentStartBlock < 0){
                 this.indentStartBlock = this.indentCount;
             } else {
@@ -209,7 +248,12 @@ export default class NewFormatter {
             }
         }
 
-        this.addNewLine(this.indentCount);
+        if (token.value == "begin" && this.getLastString().trim() == ""){
+
+        }else{
+            this.addNewLine(this.indentCount);
+        }
+
         this.indentCount++;
         this.lines[this.lastIndex()] += token.value;
         if (token.value == "begin"){
@@ -243,7 +287,9 @@ export default class NewFormatter {
             this.addNewLine(this.indentCount);
             this.lines[this.lastIndex()] += token.value;
         }else {
-            this.addNewLine(this.indentCount);
+            if (this.getLastString().trim() != ""){
+                this.addNewLine(this.indentCount);
+            }
             this.lines[this.lastIndex()] += token.value;
             this.decrementIndent();
         }
@@ -302,6 +348,9 @@ export default class NewFormatter {
 
     insertSqlInNewLine(sqlArray){
         for (let i = 0; i < sqlArray.length; i++){
+            if (this.getLastString().trim() == ""){
+                this.lines.pop();
+            }
             this.addNewLine(this.indentCount);
             this.lines[this.lastIndex()] += sqlArray[i];
         }
@@ -331,15 +380,11 @@ export default class NewFormatter {
     }
 
     formatTopLeveleReservedWord(token){
-        if (this.getLastString().trim() != "end" 
-            && this.getLastString().trim() != "is" && token.value != "then"){
+        if (this.addNewLinePreviewReservedWord(token)){
             this.addNewLine(this.indentCount);
         }
         this.lines[this.lastIndex()] += token.value;
-        if (token.value == "as"){
-            // this.addNewLine(this.indentCount);
-        }
-        if (token.value == "is"){
+        if (token.value == "is" || token.value == "as"){
             let idx = this.lastIndex() - 1;
             let first = this.getFirstWord(this.lines[idx]);
             if (first == "return"){
@@ -350,9 +395,19 @@ export default class NewFormatter {
         }
     }
 
+    addNewLinePreviewReservedWord(token){
+        return this.getLastString().trim() != "end" && this.getLastString().trim() != "is" 
+                            && token.value != "then" && this.getLastString().trim() != "" 
+                            && !(token.value == "as" && this.getLastString().includes(" with "))
+    }
+
     formatLineComment(token){
+        if (!this.getLastString().endsWith(" ")){
+            this.lines[this.lastIndex()] += " ";
+        }
         this.lines[this.lastIndex()] += token.value;
         this.addNewLine(this.indentCount);
+        
     }   
 
     formatBlockComment(token){

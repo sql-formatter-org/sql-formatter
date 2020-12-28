@@ -41,25 +41,18 @@ const reservedWords = [
     "UB1", "UB2", "UB4", "UID", "UNDER", "UNIQUE", "UNPLUG", "UNSIGNED", "UNTRUSTED", "USE", "USER", "USING",
     "VALIDATE", "VALIST", "VALUE", "VARCHAR", "VARCHAR2", "VARIABLE", "VARIANCE", "VARRAY", "VARYING", "VIEW", "VIEWS", "VOID",
     "WHENEVER", "WHILE", "WITH", "WORK", "WRAPPED", "WRITE",
-    "YEAR", "SELECT", "UNION", "INSERT", "EXCEPTION", //"END IF",
+    "YEAR", "SELECT", "UNION", "INSERT", "EXCEPTION",
     "ZONE", 
     "AND", 
     "OR", 
 ];
 
 const reservedToplevelWords = [
-    // "CREATE", "PROCEDURE", "FUNCTION", "CURSOR", 
-    "AS", "LOOP",
-    "IS",
-    // "BEGIN", 
+    "AS", "LOOP", "IS",
     "TYPE", "WITH", "UNION", 
-    // "RETURN", 
-    // "PROCEDURE" ,
-    // "END", 
-    "EXCEPTION", "ELSE", 
-    "WHEN",
-     "THEN",
-      "ELSIF", //"END IF"
+    // "EXCEPTION", 
+    "ELSE", 
+    "WHEN", "THEN", "ELSIF",
 ];
 
 const reservedNewlineWords = [
@@ -67,11 +60,8 @@ const reservedNewlineWords = [
 ];
 
 const openParens = [
-    // "(", 
     "CREATE", "BEGIN","FUNCTION", "CURSOR", "IF", 
-    // "ELSIF", 
-    "FOR" , //"LOOP", //"WHEN",
-    "PROCEDURE" ,
+    "FOR", "PROCEDURE", "WHILE",
 ]
 
 let tokenizer;
@@ -98,8 +88,7 @@ export default class SqlFormatter {
                 reservedNewlineWords,
                 stringTypes: [`""`, "N''", "''", "``"],
                 openParens,
-                closeParens: [//")", 
-                "END", "RETURN", ],
+                closeParens: ["END", "RETURN", ],
                 indexedPlaceholderTypes: ["?"],
                 namedPlaceholderTypes: [":"],
                 lineCommentTypes: ["--"],
