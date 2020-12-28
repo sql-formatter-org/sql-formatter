@@ -248,13 +248,16 @@ export default class NewFormatter {
             if (this.indentStartBlock < 0){
                 this.indentStartBlock = this.indentCount;
             } else {
+                if (this.lines[this.lastIndex() - 1].trim() == ""){
+                    this.lines.pop();
+                }
                 this.indentCount = this.indentStartBlock;
             }
         }
 
         if (token.value == "begin" && this.getLastString().trim() == ""){
 
-        }else{
+        }else if (this.getLastString().trim() != "") {
             this.addNewLine(this.indentCount);
         }
 
@@ -351,6 +354,9 @@ export default class NewFormatter {
     }
 
     insertSqlInNewLine(sqlArray){
+        while (this.getLastString().trim() == ""){
+            this.lines.pop();
+        }
         for (let i = 0; i < sqlArray.length; i++){
             if (this.getLastString().trim() == ""){
                 this.lines.pop();
@@ -358,14 +364,6 @@ export default class NewFormatter {
             this.addNewLine(this.indentCount);
             this.lines[this.lastIndex()] += sqlArray[i];
         }
-    }
-
-    insertFormatSql(indent, sqlArray){
-        for (let i = 0; i < sqlArray.length; i++){
-            this.addNewLine(this.indentCount);
-            this.lines[this.lastIndex()] += sqlArray[i];
-        }
-        return true;
     }
 
     getPrevValidTokenValue(index){

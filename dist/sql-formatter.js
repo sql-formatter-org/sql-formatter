@@ -2287,11 +2287,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (this.indentStartBlock < 0) {
 	                this.indentStartBlock = this.indentCount;
 	            } else {
+	                if (this.lines[this.lastIndex() - 1].trim() == "") {
+	                    this.lines.pop();
+	                }
 	                this.indentCount = this.indentStartBlock;
 	            }
 	        }
 
-	        if (token.value == "begin" && this.getLastString().trim() == "") {} else {
+	        if (token.value == "begin" && this.getLastString().trim() == "") {} else if (this.getLastString().trim() != "") {
 	            this.addNewLine(this.indentCount);
 	        }
 
@@ -2387,6 +2390,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    NewFormatter.prototype.insertSqlInNewLine = function insertSqlInNewLine(sqlArray) {
+	        while (this.getLastString().trim() == "") {
+	            this.lines.pop();
+	        }
 	        for (var i = 0; i < sqlArray.length; i++) {
 	            if (this.getLastString().trim() == "") {
 	                this.lines.pop();
@@ -2394,14 +2400,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.addNewLine(this.indentCount);
 	            this.lines[this.lastIndex()] += sqlArray[i];
 	        }
-	    };
-
-	    NewFormatter.prototype.insertFormatSql = function insertFormatSql(indent, sqlArray) {
-	        for (var i = 0; i < sqlArray.length; i++) {
-	            this.addNewLine(this.indentCount);
-	            this.lines[this.lastIndex()] += sqlArray[i];
-	        }
-	        return true;
 	    };
 
 	    NewFormatter.prototype.getPrevValidTokenValue = function getPrevValidTokenValue(index) {
