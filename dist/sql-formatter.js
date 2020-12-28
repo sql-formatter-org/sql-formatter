@@ -2418,6 +2418,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.addNewLinePreviewReservedWord(token)) {
 	            this.addNewLine(this.indentCount);
 	        }
+	        if (token.value == "elsif" && this.lines[this.lastIndex() - 1].includes("return")) {
+	            this.indentCount++;
+	        }
 	        this.lines[this.lastIndex()] += token.value;
 	        if (token.value == "is" || token.value == "as") {
 	            var idx = this.lastIndex() - 1;
