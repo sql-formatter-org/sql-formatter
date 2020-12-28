@@ -111,11 +111,15 @@ export default class NewFormatter {
     formatComma(token){
         let line = this.getLastString();
         let startBkt = line.indexOf("(");
+        let indent = this.indentCount + 1;
+        // if (this.openParens.includes(this.getFirstWord(line).toUpperCase())){
+        //     indent--;
+        // }
         if (line.length > 100){
             this.lines[this.lastIndex()] = line.substring(0, startBkt + 1);
             line = line.substring(startBkt + 1);
             let subLines = line.split(",");
-            this.addNewLine(this.indentCount);
+            this.addNewLine(indent);
             for (let i = 0; i < subLines.length; i++){
                 let subLine = subLines[i].trim();
                 if (subLines[i].includes("'")){
@@ -136,11 +140,11 @@ export default class NewFormatter {
                     }
                 }
                 this.lines[this.lastIndex()] += trimEnd(subLine) + ",";
-                this.addNewLine(this.indentCount);
+                this.addNewLine(indent);
             }
         } else if (startBkt < 0){
             this.lines[this.lastIndex()] = trimEnd(this.getLastString()) + token.value;
-            this.addNewLine(this.indentCount);
+            this.addNewLine(indent);
         } else {
             this.lines[this.lastIndex()] = trimEnd(this.getLastString()) + token.value;
         }
@@ -405,6 +409,9 @@ export default class NewFormatter {
     }
 
     formatLineComment(token){
+        if (this.getLastString().trim() == ""){
+            this.lines.pop();
+        }
         if (!this.getLastString().endsWith(" ")){
             this.lines[this.lastIndex()] += " ";
         }
@@ -421,6 +428,7 @@ export default class NewFormatter {
             this.lines[this.lastIndex()] += comLines[i].trim();
             this.addNewLine(this.indentCount);
         }
+        this.lines.pop();
     }
 
     addNewLine(count){

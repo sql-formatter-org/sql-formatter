@@ -1741,8 +1741,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatBlockComment = function formatBlockComment(token) {
-	        this.addNewLine("right", token.value);
-	        this.lines[this.lastIndex()] = this.indentComment(token.value);
+	        this.addNewLine("left", token.value);
+	        // let last = this.indents[this.indents.length -1];
+	        this.lines[this.lastIndex()] += token.value;
 	        this.addNewLine("right", token.value);
 	    };
 
@@ -2149,11 +2150,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    NewFormatter.prototype.formatComma = function formatComma(token) {
 	        var line = this.getLastString();
 	        var startBkt = line.indexOf("(");
+	        var indent = this.indentCount + 1;
+	        // if (this.openParens.includes(this.getFirstWord(line).toUpperCase())){
+	        //     indent--;
+	        // }
 	        if (line.length > 100) {
 	            this.lines[this.lastIndex()] = line.substring(0, startBkt + 1);
 	            line = line.substring(startBkt + 1);
 	            var subLines = line.split(",");
-	            this.addNewLine(this.indentCount);
+	            this.addNewLine(indent);
 	            for (var i = 0; i < subLines.length; i++) {
 	                var subLine = subLines[i].trim();
 	                if (subLines[i].includes("'")) {
@@ -2174,11 +2179,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 	                this.lines[this.lastIndex()] += (0, _trimEnd2["default"])(subLine) + ",";
-	                this.addNewLine(this.indentCount);
+	                this.addNewLine(indent);
 	            }
 	        } else if (startBkt < 0) {
 	            this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString()) + token.value;
-	            this.addNewLine(this.indentCount);
+	            this.addNewLine(indent);
 	        } else {
 	            this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString()) + token.value;
 	        }
@@ -2438,6 +2443,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    NewFormatter.prototype.formatLineComment = function formatLineComment(token) {
+	        if (this.getLastString().trim() == "") {
+	            this.lines.pop();
+	        }
 	        if (!this.getLastString().endsWith(" ")) {
 	            this.lines[this.lastIndex()] += " ";
 	        }
@@ -2453,6 +2461,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.lines[this.lastIndex()] += comLines[i].trim();
 	            this.addNewLine(this.indentCount);
 	        }
+	        this.lines.pop();
 	    };
 
 	    NewFormatter.prototype.addNewLine = function addNewLine(count) {

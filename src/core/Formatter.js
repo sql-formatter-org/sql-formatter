@@ -143,8 +143,9 @@ export default class Formatter {
     } 
 
     formatBlockComment(token){
-        this.addNewLine("right", token.value);
-        this.lines[this.lastIndex()] = this.indentComment(token.value);
+        this.addNewLine("left", token.value);
+        // let last = this.indents[this.indents.length -1];
+        this.lines[this.lastIndex()] +=  token.value;
         this.addNewLine("right", token.value);
     }
 
