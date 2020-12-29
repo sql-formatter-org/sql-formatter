@@ -51,7 +51,7 @@ export default class Formatter {
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
             token.value = this.formatTextCase(token);
-            console.log(token.value);
+            // console.log(token.value);
             if (token.type === tokenTypes.WHITESPACE) {
                 if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")){
                     this.lines[this.lastIndex()] += " ";
@@ -147,7 +147,7 @@ export default class Formatter {
 
     formatBlockComment(token){
         this.addNewLine("left", token.value);
-        let indent = this.getLastString().length;
+        let indent = this.getLastString().length + 2;
         let comment = token.value;
         let commentsLine = comment.split("\n");
         comment = commentsLine[0];

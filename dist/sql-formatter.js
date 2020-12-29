@@ -1650,7 +1650,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
 	            token.value = this.formatTextCase(token);
-	            console.log(token.value);
+	            // console.log(token.value);
 	            if (token.type === _tokenTypes2["default"].WHITESPACE) {
 	                if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")) {
 	                    this.lines[this.lastIndex()] += " ";
@@ -1743,7 +1743,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Formatter.prototype.formatBlockComment = function formatBlockComment(token) {
 	        this.addNewLine("left", token.value);
-	        var indent = this.getLastString().length;
+	        var indent = this.getLastString().length + 2;
 	        var comment = token.value;
 	        var commentsLine = comment.split("\n");
 	        comment = commentsLine[0];
@@ -2124,6 +2124,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.formatQuerySeparator(token);
 	            } else if (token.value == "exception") {
 	                this.formatException(token);
+	            } else if (token.value == "as" || token.value == "is") {
+	                this.formatAsIs(token);
 	            } else {
 	                this.formatWithSpaces(token);
 	            };
@@ -2201,6 +2203,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString()) + token.value + " ";
 	    };
 
+	    NewFormatter.prototype.formatAsIs = function formatAsIs(token) {
+	        var startComment = false;
+	        var bktCount = 0;
+	        var substring = "";
+	        for (var i = this.lastIndex(); i >= 0; i--) {
+	            var line = this.lines[i];
+	            if (startComment) {
+	                if (line.includes("/*")) {
+	                    startComment = false;
+	                } else {
+	                    continue;
+	                }
+	            } else {
+	                if (line.includes("*/")) {
+	                    startComment = true;
+	                    continue;
+	                }
+	                if (line.trim() == "") {
+	                    continue;
+	                }
+	                if (line.includes(")")) {
+	                    substring = this.getBktSubstring(i) + substring;
+	                    break;
+	                } else {
+	                    substring = line + substring;
+	                    break;
+	                }
+	            }
+	        }
+	        var first = this.getFirstWord(substring);
+	        if (first == "create") {
+	            console.log(this.getLastString());
+	            this.addNewLine(this.indentCount - 1);
+	            console.log(this.getLastString());
+	            this.lines[this.lastIndex()] += token.value;
+	            console.log(this.getLastString());
+	            this.addNewLine(this.indentCount);
+	        } else if (first == "cursor") {
+	            this.lines[this.lastIndex] += token.value;
+	            this.addNewLine(this.indentCount);
+	        } else if (this.openParens.includes(first.toUpperCase()) || this.getLastString().includes("return") && !this.getLastString().endsWith(";")) {
+	            if (this.getLastString().includes("return") && !this.getLastString().endsWith(";")) {
+	                this.indentCount++;
+	            }
+	            this.addNewLine(this.indentCount - 1);
+	            this.lines[this.lastIndex()] += token.value;
+	            this.addNewLine(this.indentCount);
+	        } else {
+	            this.lines[this.lastIndex()] += token.value;
+	        }
+	    };
+
 	    NewFormatter.prototype.formatQuerySeparator = function formatQuerySeparator(token) {
 
 	        this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString());
@@ -2212,38 +2266,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.openParens.includes(first.toUpperCase()) && first != "if") {
 	            this.decrementIndent();
 	        } else if (this.getLastString().endsWith(")")) {
-	            var ssInfo = this.getBktSubstring();
+	            var ssInfo = this.getBktSubstring(this.lastIndex());
 	            var substring = ssInfo.substring;
 	            first = this.getFirstWord(substring);
 	            if (this.openParens.includes(first.toUpperCase() && first != "if")) {
 	                this.decrementIndent();
 	            }
 	        }
-	        // else {
-	        //     if (first == "end"){
-	        //         let second = this.getLastString().trim().replace("end ", "").toUpperCase();
-	        //         if (this.reservedWords.includes(second)){
-	        //             let prev = this.lines[this.lastIndex() - 1];
-	        //             if (prev != undefined && prev.includes("return")){
-	        //                 this.indentCount++;
-	        //                 this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount) + this.getLastString().trim();
-	        //             }else if (prev != undefined) {
-	        //                 this.lines[this.lastIndex()] = repeat(this.indent, this.indentStartBlock) + this.getLastString().trim();
-	        //             }
-	        //         }
-	        //     }
-	        // }
 	        this.lines[this.lastIndex()] += token.value;
 	        this.addNewLine(this.indentCount);
 	    };
 
-	    NewFormatter.prototype.getBktSubstring = function getBktSubstring() {
+	    NewFormatter.prototype.getBktSubstring = function getBktSubstring(from) {
 	        var countOpenBkt = 0;
 	        var countCloseBkt = 0;
 	        var substring = "";
 	        var index = 0;
 	        var subLines = [];
-	        for (var i = this.lastIndex(); i >= 0; i--) {
+	        for (var i = from; i >= 0; i--) {
 	            subLines.unshift(this.lines[i]);
 	            var line = this.lines[i].replace(/--.*/, "");
 	            if (line.startsWith("*") || line.startsWith("/*")) {
@@ -2298,10 +2338,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 
-	        if (token.value == "begin" && this.getLastString().trim() == "") {} else if (this.getLastString().trim() != "") {
-	            this.addNewLine(this.indentCount);
+	        this.addNewLine(this.indentCount);
+	        if (token.value == "begin" && this.lines[this.lastIndex() - 1].trim() == "") {
+	            this.lines.pop();
+	            this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount);
 	        }
-
 	        this.indentCount++;
 	        this.lines[this.lastIndex()] += token.value;
 	        if (token.value == "begin") {
@@ -2507,7 +2548,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var reservedWords = ["A", "ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG", "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE", "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND", "BULK", "BY", "BYTE", "C", "CALL", "CALLING", "CASCADE", "CASE", "CHAR_BASE", "CHAR", "CHARACTER", "CHARSET", "CHARSETFORM", "CHARSETID", "CHECK", "CLOB_BASE", "CLONE", "CLOSE", "CLUSTER", "CLUSTERS", "COALESCE", "COLAUTH", "COLLECT", "COLUMNS", "COMMENT", "COMMIT", "COMMITTED", "COMPILED", "COMPRESS", "CONNECT", "CONSTANT", "CONSTRUCTOR", "CONTEXT", "CONTINUE", "CONVERT", "COUNT", "CRASH", "CREATE", "CREDENTIAL", "CURRENT", "CURRVAL", "CURSOR", "CUSTOMDATUM", "DANGLING", "DATA", "DATE_BASE", "DATE", "DAY", "DECIMAL", "DEFAULT", "DEFINE", "DELETE", "DESC", "DETERMINISTIC", "DIRECTORY", "DISTINCT", "DO", "DOUBLE", "DROP", "DURATION", "ELEMENT", "ELSIF", "EMPTY", "ESCAPE", "EXCEPTIONS", "EXCLUSIVE", "EXECUTE", "EXISTS", "EXIT", "EXTENDS", "EXTERNAL", "EXTRACT", "FALSE", "FETCH", "FINAL", "FIRST", "FIXED", "FLOAT", "FOR", "FORALL", "FORCE", "FROM", "FUNCTION", "GENERAL", "GOTO", "GRANT", "GROUP", "HASH", "HEAP", "HIDDEN", "HOUR", "IDENTIFIED", "IF", "IMMEDIATE", "IN", "INCLUDING", "INDEX", "INDEXES", "INDICATOR", "INDICES", "INFINITE", "INSTANTIABLE", "INT", "INTEGER", "INTERFACE", "INTERVAL", "INTO", "INVALIDATE", "IS", "ISOLATION", "JAVA", "LANGUAGE", "LARGE", "LEADING", "LENGTH", "LEVEL", "LIBRARY", "LIKE", "LIKE2", "LIKE4", "LIKEC", "LIMITED", "LOCAL", "LOCK", "LONG", "MAP", "MAX", "MAXLEN", "MEMBER", "MERGE", "MIN", "MINUS", "MINUTE", "MLSLABEL", "MOD", "MODE", "MONTH", "MULTISET", "NAME", "NAN", "NATIONAL", "NATIVE", "NATURAL", "NATURALN", "NCHAR", "NEW", "NEXTVAL", "NOCOMPRESS", "NOCOPY", "NOT", "NOWAIT", "NULL", "NULLIF", "NUMBER_BASE", "NUMBER", "OBJECT", "OCICOLL", "OCIDATE", "OCIDATETIME", "OCIDURATION", "OCIINTERVAL", "OCILOBLOCATOR", "OCINUMBER", "OCIRAW", "OCIREF", "OCIREFCURSOR", "OCIROWID", "OCISTRING", "OCITYPE", "OF", "OLD", "ON", "ONLY", "OPAQUE", "OPEN", "OPERATOR", "OPTION", "ORACLE", "ORADATA", "ORDER", "ORGANIZATION", "ORLANY", "ORLVARY", "OTHERS", "OUT", "OVERLAPS", "OVERRIDING", "PACKAGE", "PARALLEL_ENABLE", "PARAMETER", "PARAMETERS", "PARENT", "PARTITION", "PASCAL", "PCTFREE", "PIPE", "PIPELINED", "PLS_INTEGER", "PLUGGABLE", "POSITIVE", "POSITIVEN", "PRAGMA", "PRECISION", "PRIOR", "PRIVATE", "PROCEDURE", "PUBLIC", "RAISE", "RANGE", "RAW", "READ", "REAL", "RECORD", "REF", "REFERENCE", "RELEASE", "RELIES_ON", "REM", "REMAINDER", "RENAME", "RESOURCE", "RESULT_CACHE", "RESULT", "RETURN", "RETURNING", "REVERSE", "REVOKE", "ROLLBACK", "ROW", "ROWID", "ROWNUM", "ROWTYPE", "SAMPLE", "SAVE", "SAVEPOINT", "SB1", "SB2", "SB4", "SECOND", "SEGMENT", "SELF", "SEPARATE", "SEQUENCE", "SERIALIZABLE", "SHARE", "SHORT", "SIZE_T", "SIZE", "SMALLINT", "SOME", "SPACE", "SPARSE", "SQL", "SQLCODE", "SQLDATA", "SQLERRM", "SQLNAME", "SQLSTATE", "STANDARD", "START", "STATIC", "STDDEV", "STORED", "STRING", "STRUCT", "STYLE", "SUBMULTISET", "SUBPARTITION", "SUBSTITUTABLE", "SUBTYPE", "SUCCESSFUL", "SUM", "SYNONYM", "SYSDATE", "TABAUTH", "TABLE", "TDO", "THE", "THEN", "TIME", "TIMESTAMP", "TIMEZONE_ABBR", "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TIMEZONE_REGION", "TO", "TRAILING", "TRANSACTION", "TRANSACTIONAL", "TRIGGER", "TRUE", "TRUSTED", "TYPE", "UB1", "UB2", "UB4", "UID", "UNDER", "UNIQUE", "UNPLUG", "UNSIGNED", "UNTRUSTED", "USE", "USER", "USING", "VALIDATE", "VALIST", "VALUE", "VARCHAR", "VARCHAR2", "VARIABLE", "VARIANCE", "VARRAY", "VARYING", "VIEW", "VIEWS", "VOID", "WHENEVER", "WHILE", "WITH", "WORK", "WRAPPED", "WRITE", "YEAR", "SELECT", "UNION", "INSERT", "EXCEPTION", "ZONE", "AND", "OR"];
 
-	var reservedToplevelWords = ["AS", "LOOP", "IS", "TYPE", "WITH", "UNION",
+	var reservedToplevelWords = [
+	// "AS", 
+	"LOOP",
+	// "IS",
+	"TYPE", "WITH", "UNION",
 	// "EXCEPTION", 
 	"ELSE", "WHEN", "THEN", "ELSIF"];
 

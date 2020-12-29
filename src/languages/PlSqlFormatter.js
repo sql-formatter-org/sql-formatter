@@ -48,7 +48,9 @@ const reservedWords = [
 ];
 
 const reservedToplevelWords = [
-    "AS", "LOOP", "IS",
+    // "AS", 
+    "LOOP", 
+    // "IS",
     "TYPE", "WITH", "UNION", 
     // "EXCEPTION", 
     "ELSE", 
