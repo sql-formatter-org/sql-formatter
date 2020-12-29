@@ -2390,7 +2390,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    NewFormatter.prototype.insertSqlInNewLine = function insertSqlInNewLine(sqlArray) {
-	        while (this.getLastString().trim() == "") {
+	        while (this.getLastString().trim() == "" && this.lines.length != 1) {
 	            this.lines.pop();
 	        }
 	        for (var i = 0; i < sqlArray.length; i++) {

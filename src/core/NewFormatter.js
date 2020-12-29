@@ -354,7 +354,7 @@ export default class NewFormatter {
     }
 
     insertSqlInNewLine(sqlArray){
-        while (this.getLastString().trim() == ""){
+        while (this.getLastString().trim() == "" && this.lines.length != 1){
             this.lines.pop();
         }
         for (let i = 0; i < sqlArray.length; i++){
