@@ -1,7 +1,6 @@
 import includes from "lodash/includes";
 import trimEnd from "lodash/trimEnd";
 import tokenTypes from "./tokenTypes";
-import Indentation from "./Indentation";
 import Params from "./Params";
 import repeat from "lodash/repeat";
 
@@ -14,14 +13,13 @@ export default class Formatter {
      */
     constructor(cfg, tokenizer, reservedWords) {
         this.cfg = cfg || {};
-        this.indentation = new Indentation(this.cfg.indent);
         this.params = new Params(this.cfg.params);
         this.tokenizer = tokenizer;
         this.previousReservedWord = {};
         this.tokens = [];
         this.index = 0;
         this.reservedWords = reservedWords;
-        this.inlineReservedWord = ["order", "group", "values"];
+        this.inlineReservedWord = ["order", "group"];
         this.indents = [];
         this.lines = [""];
         this.startBlock = ["select", "begin", "create", "alter", "insert", "update", "drop"];
@@ -76,7 +74,7 @@ export default class Formatter {
             } else if (token.type === tokenTypes.PLACEHOLDER) {
                 this.formatPlaceholder(token);
             } else if (token.value === ",") {
-                this.fromatComma(token, i);
+                this.formatComma(token, i);
             } else if (token.value === ":") {
                 this.formatWithSpaceAfter(token);
             } else if (token.value === "." || token.value === "%") {
@@ -89,10 +87,28 @@ export default class Formatter {
         }
     }
 
-    fromatComma(token, index){
-        this.trimEndLastString();
-        this.lines[this.lastIndex()] += token.value;
-        this.addNewLine("left", token.value);
+    formatComma(token, index){
+        let last = this.getLastString();
+        if (this.inlineReservedWord.includes(last.trim().split(" ")[0])){
+            if (last.length > 100){
+                let subLines = last.split(",");
+                this.lines[this.lastIndex()] = subLines[0].trim() + ",";
+                this.indents[this.indents.length - 1].indent += 1;
+                this.indents[this.indents.length - 1].token.value = "order by";
+                this.addNewLine("left", ",");
+                for (let i = 1; i < subLines.length; i++){
+                    this.lines[this.lastIndex()] += subLines[i].trim() + ",";
+                    this.addNewLine("left", ",");
+                }
+            } else {
+                this.trimEndLastString();
+                this.lines[this.lastIndex()] += token.value;
+            }
+        }else{
+            this.trimEndLastString();
+            this.lines[this.lastIndex()] += token.value;
+            this.addNewLine("left", token.value);
+        }
     }
 
     formatTopLeveleReservedWord(token){
