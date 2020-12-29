@@ -112,9 +112,6 @@ export default class NewFormatter {
         let line = this.getLastString();
         let startBkt = line.indexOf("(");
         let indent = this.indentCount + 1;
-        // if (this.openParens.includes(this.getFirstWord(line).toUpperCase())){
-        //     indent--;
-        // }
         if (line.length > 100){
             this.lines[this.lastIndex()] = line.substring(0, startBkt + 1);
             line = line.substring(startBkt + 1);

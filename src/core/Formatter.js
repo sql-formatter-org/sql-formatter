@@ -51,6 +51,7 @@ export default class Formatter {
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
             token.value = this.formatTextCase(token);
+            console.log(token.value);
             if (token.type === tokenTypes.WHITESPACE) {
                 if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")){
                     this.lines[this.lastIndex()] += " ";
@@ -110,7 +111,9 @@ export default class Formatter {
     }
 
     formatTextCase(token){
-        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null){
+        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || 
+            token.type === tokenTypes.BLOCK_COMMENT ||
+            token.type === tokenTypes.LINE_COMMENT){
             return token.value;
         } else {
             return token.value.toLowerCase();
@@ -144,9 +147,15 @@ export default class Formatter {
 
     formatBlockComment(token){
         this.addNewLine("left", token.value);
-        // let last = this.indents[this.indents.length -1];
-        this.lines[this.lastIndex()] +=  token.value;
-        this.addNewLine("right", token.value);
+        let indent = this.getLastString().length;
+        let comment = token.value;
+        let commentsLine = comment.split("\n");
+        comment = commentsLine[0];
+        for (let i = 1; i < commentsLine.length; i++){
+            comment += "\n" + repeat(" ", indent) + commentsLine[i];
+        }
+        this.lines[this.lastIndex()] +=  comment;
+        this.addNewLine("left", token.value);
     }
 
     formatLineComment(token){

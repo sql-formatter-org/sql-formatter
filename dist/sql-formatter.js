@@ -1650,6 +1650,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
 	            token.value = this.formatTextCase(token);
+	            console.log(token.value);
 	            if (token.type === _tokenTypes2["default"].WHITESPACE) {
 	                if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")) {
 	                    this.lines[this.lastIndex()] += " ";
@@ -1709,7 +1710,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatTextCase = function formatTextCase(token) {
-	        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null) {
+	        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || token.type === _tokenTypes2["default"].BLOCK_COMMENT || token.type === _tokenTypes2["default"].LINE_COMMENT) {
 	            return token.value;
 	        } else {
 	            return token.value.toLowerCase();
@@ -1742,9 +1743,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Formatter.prototype.formatBlockComment = function formatBlockComment(token) {
 	        this.addNewLine("left", token.value);
-	        // let last = this.indents[this.indents.length -1];
-	        this.lines[this.lastIndex()] += token.value;
-	        this.addNewLine("right", token.value);
+	        var indent = this.getLastString().length;
+	        var comment = token.value;
+	        var commentsLine = comment.split("\n");
+	        comment = commentsLine[0];
+	        for (var i = 1; i < commentsLine.length; i++) {
+	            comment += "\n" + (0, _repeat2["default"])(" ", indent) + commentsLine[i];
+	        }
+	        this.lines[this.lastIndex()] += comment;
+	        this.addNewLine("left", token.value);
 	    };
 
 	    Formatter.prototype.formatLineComment = function formatLineComment(token) {
@@ -2151,9 +2158,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var line = this.getLastString();
 	        var startBkt = line.indexOf("(");
 	        var indent = this.indentCount + 1;
-	        // if (this.openParens.includes(this.getFirstWord(line).toUpperCase())){
-	        //     indent--;
-	        // }
 	        if (line.length > 100) {
 	            this.lines[this.lastIndex()] = line.substring(0, startBkt + 1);
 	            line = line.substring(startBkt + 1);
