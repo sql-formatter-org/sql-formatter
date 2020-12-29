@@ -1686,9 +1686,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Formatter.prototype.formatComma = function formatComma(token, index) {
 	        var last = this.getLastString();
 	        if (this.inlineReservedWord.includes(last.trim().split(" ")[0])) {
-	            if (last.length > 100) {
-	                var subLines = last.split(",");
-	                this.lines[this.lastIndex()] = subLines[0].trim() + ",";
+	            var subLines = last.split(",");
+	            if (last.split(",").length > 2) {
+	                this.lines[this.lastIndex()] = " " + subLines[0].trim() + ",";
 	                this.indents[this.indents.length - 1].indent += 1;
 	                this.indents[this.indents.length - 1].token.value = "order by";
 	                this.addNewLine("left", ",");
