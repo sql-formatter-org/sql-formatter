@@ -1755,7 +1755,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatBlockComment = function formatBlockComment(token) {
-	        this.addNewLine("left", token.value);
+	        this.resolveAddLineInCommentsBlock(token);
 	        var indent = this.getLastString().length + 2;
 	        var comment = token.value;
 	        var commentsLine = comment.split("\n");
@@ -1765,6 +1765,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.lines[this.lastIndex()] += comment;
 	        this.addNewLine("left", token.value);
+	    };
+
+	    Formatter.prototype.resolveAddLineInCommentsBlock = function resolveAddLineInCommentsBlock(token) {
+	        var substing = this.getLastString().trim();
+	        var words = substing.split(/\(|\)| /);
+	        var last = words[words.length - 1];
+	        if (!this.reservedWords.includes(last.toUpperCase()) || last.endsWith(";")) {
+	            this.addNewLine("left", token.value);
+	        }
 	    };
 
 	    Formatter.prototype.formatLineComment = function formatLineComment(token) {

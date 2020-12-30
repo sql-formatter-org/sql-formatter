@@ -162,7 +162,7 @@ export default class Formatter {
     } 
 
     formatBlockComment(token){
-        this.addNewLine("left", token.value);
+        this.resolveAddLineInCommentsBlock(token);
         let indent = this.getLastString().length + 2;
         let comment = token.value;
         let commentsLine = comment.split("\n");
@@ -172,6 +172,15 @@ export default class Formatter {
         }
         this.lines[this.lastIndex()] +=  comment;
         this.addNewLine("left", token.value);
+    }
+
+    resolveAddLineInCommentsBlock(token){
+        let substing = this.getLastString().trim();
+        let words = substing.split(/\(|\)| /);
+        let last = words[words.length - 1];
+        if (!this.reservedWords.includes(last.toUpperCase()) || last.endsWith(";")){
+            this.addNewLine("left", token.value);
+        }
     }
 
     formatLineComment(token){
