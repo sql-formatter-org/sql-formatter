@@ -1739,7 +1739,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.inlineReservedWord.includes(last.trim().split(" ")[0])) {
 	            var subLines = last.split(",");
 	            if (last.split(",").length > 2) {
-	                this.lines[this.lastIndex()] = " " + (0, _trimEnd2["default"])(subLines[0]) + ",";
+	                this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(subLines[0]) + ",";
 	                // console.log(this.indents)
 	                this.indents[this.indents.length - 1].indent += 1;
 	                this.indents[this.indents.length - 1].token.value = "order by";

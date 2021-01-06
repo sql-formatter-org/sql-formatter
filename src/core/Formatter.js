@@ -139,7 +139,7 @@ export default class Formatter {
         if (this.inlineReservedWord.includes(last.trim().split(" ")[0])){
             let subLines = last.split(",");
             if (last.split(",").length > 2){
-                this.lines[this.lastIndex()] = " " + trimEnd(subLines[0]) + ",";
+                this.lines[this.lastIndex()] = trimEnd(subLines[0]) + ",";
                 // console.log(this.indents)
                 this.indents[this.indents.length - 1].indent += 1;
                 this.indents[this.indents.length - 1].token.value = "order by";
