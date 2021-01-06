@@ -1625,14 +1625,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.rightAlignWords = ["or", "and"];
 	    }
 
-	    /**
-	     * Formats whitespaces in a SQL string to make it easier to read.
-	     *
-	     * @param {String} query The SQL query string
-	     * @return {String} formatted query
-	     */
-
-
 	    Formatter.prototype.format = function format(query) {
 	        this.tokens = this.tokenizer.tokenize(query);
 	        var formattedQuery = this.formatQuery();
@@ -1650,7 +1642,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
 	            token.value = this.formatTextCase(token);
-	            // console.log(token.value);
 	            if (token.type === _tokenTypes2["default"].WHITESPACE) {
 	                if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")) {
 	                    this.lines[this.lastIndex()] += " ";
@@ -1692,22 +1683,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Formatter.prototype.formatLogicalOperators = function formatLogicalOperators(token) {
 	        this.trimEndLastString();
-	        // let first = this.getLastString().trim().split(" ")[0];
 	        var indent = this.getLogicalIndent(token.value);
-	        // if (this.logicalOperators.includes(first)){
-	        //     indent = this.getLastString().length - this.getLastString().trim().length;
-	        //     indent += first.length - token.value.length;
-	        // } else if (this.getLastString().includes(" when ")){
-	        //     indent = this.getLastString().indexOf("when") + 4 - token.value.length;
-	        // } else if (this.getLastString().includes(" on(") || this.getLastString().includes(" on ")){
-	        //     indent = this.getLastString().indexOf("on(");
-	        //     if (indent == -1){
-	        //         indent = this.getLastString().indexOf("on ");
-	        //     }
-	        //     indent += 2 - token.value.length;
-	        // } else {
-	        //     this.addNewLine("right", token.value);
-	        // }
 	        if (this.getLastString().trim() != "") {
 	            this.lines.push((0, _repeat2["default"])(" ", indent));
 	        }
@@ -1737,25 +1713,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Formatter.prototype.formatComma = function formatComma(token, index) {
 	        var last = this.getLastString();
 	        if (this.inlineReservedWord.includes(last.trim().split(" ")[0])) {
-	            var subLines = last.split(",");
-	            if (last.split(",").length > 2) {
-	                this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(subLines[0]) + ",";
-	                // console.log(this.indents)
-	                this.indents[this.indents.length - 1].indent += 1;
-	                this.indents[this.indents.length - 1].token.value = "order by";
-	                this.addNewLine("left", ",");
-	                for (var i = 1; i < subLines.length; i++) {
-	                    this.lines[this.lastIndex()] += subLines[i].trim() + ",";
-	                    this.addNewLine("left", ",");
-	                }
-	            } else {
-	                this.trimEndLastString();
-	                this.lines[this.lastIndex()] += token.value;
-	            }
+	            this.formatCommaInlineReservedWord(last, token);
 	        } else {
 	            this.trimEndLastString();
 	            this.lines[this.lastIndex()] += token.value;
 	            this.addNewLine("left", token.value);
+	        }
+	    };
+
+	    Formatter.prototype.formatCommaInlineReservedWord = function formatCommaInlineReservedWord(last, token) {
+	        var subLines = last.split(",");
+	        if (last.split(",").length > 2) {
+	            this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(subLines[0]) + ",";
+	            this.indents[this.indents.length - 1].indent += 1;
+	            this.indents[this.indents.length - 1].token.value = "order by";
+	            this.addNewLine("left", ",");
+	            for (var i = 1; i < subLines.length; i++) {
+	                this.lines[this.lastIndex()] += subLines[i].trim() + ",";
+	                this.addNewLine("left", ",");
+	            }
+	        } else {
+	            this.trimEndLastString();
+	            this.lines[this.lastIndex()] += token.value;
 	        }
 	    };
 
@@ -1794,6 +1773,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var dif = last.token.value.split(" ")[0].trim().length - word.split(" ")[0].trim().length;
 	            if (dif < 0) {
 	                dif = 0;
+	            }
+	            if (word == ")") {
+	                dif = -1;
 	            }
 	            indent += dif;
 	        } else {

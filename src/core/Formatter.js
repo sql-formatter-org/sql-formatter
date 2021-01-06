@@ -27,12 +27,6 @@ export default class Formatter {
         this.rightAlignWords = ["or", "and"];
     }
 
-    /**
-     * Formats whitespaces in a SQL string to make it easier to read.
-     *
-     * @param {String} query The SQL query string
-     * @return {String} formatted query
-     */
     format(query) {
         this.tokens = this.tokenizer.tokenize(query);
         const formattedQuery = this.formatQuery();
@@ -50,7 +44,6 @@ export default class Formatter {
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
             token.value = this.formatTextCase(token);
-            // console.log(token.value);
             if (token.type === tokenTypes.WHITESPACE) {
                 if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")){
                     this.lines[this.lastIndex()] += " ";
@@ -77,7 +70,7 @@ export default class Formatter {
             } else if (token.type === tokenTypes.PLACEHOLDER) {
                 this.formatPlaceholder(token);
             } else if (token.value === ",") {
-                this.formatComma(token, i);
+                this.formatComma(token);
             } else if (token.value === ":") {
                 this.formatWithSpaceAfter(token);
             } else if (token.value === "." || token.value === "%") {
@@ -92,22 +85,7 @@ export default class Formatter {
 
     formatLogicalOperators(token){
         this.trimEndLastString();
-        // let first = this.getLastString().trim().split(" ")[0];
         let indent = this.getLogicalIndent(token.value);
-        // if (this.logicalOperators.includes(first)){
-        //     indent = this.getLastString().length - this.getLastString().trim().length;
-        //     indent += first.length - token.value.length;
-        // } else if (this.getLastString().includes(" when ")){
-        //     indent = this.getLastString().indexOf("when") + 4 - token.value.length;
-        // } else if (this.getLastString().includes(" on(") || this.getLastString().includes(" on ")){
-        //     indent = this.getLastString().indexOf("on(");
-        //     if (indent == -1){
-        //         indent = this.getLastString().indexOf("on ");
-        //     }
-        //     indent += 2 - token.value.length;
-        // } else {
-        //     this.addNewLine("right", token.value);
-        // }
         if (this.getLastString().trim() != ""){
             this.lines.push(repeat(" ", indent));
         }
@@ -134,28 +112,31 @@ export default class Formatter {
         }
     }
 
-    formatComma(token, index){
+    formatComma(token){
         let last = this.getLastString();
         if (this.inlineReservedWord.includes(last.trim().split(" ")[0])){
-            let subLines = last.split(",");
-            if (last.split(",").length > 2){
-                this.lines[this.lastIndex()] = trimEnd(subLines[0]) + ",";
-                // console.log(this.indents)
-                this.indents[this.indents.length - 1].indent += 1;
-                this.indents[this.indents.length - 1].token.value = "order by";
-                this.addNewLine("left", ",");
-                for (let i = 1; i < subLines.length; i++){
-                    this.lines[this.lastIndex()] += subLines[i].trim() + ",";
-                    this.addNewLine("left", ",");
-                }
-            } else {
-                this.trimEndLastString();
-                this.lines[this.lastIndex()] += token.value;
-            }
+            this.formatCommaInlineReservedWord(last, token);
         }else{
             this.trimEndLastString();
             this.lines[this.lastIndex()] += token.value;
             this.addNewLine("left", token.value);
+        }
+    }
+
+    formatCommaInlineReservedWord(last, token){
+        let subLines = last.split(",");
+        if (last.split(",").length > 2){
+            this.lines[this.lastIndex()] = trimEnd(subLines[0]) + ",";
+            this.indents[this.indents.length - 1].indent += 1;
+            this.indents[this.indents.length - 1].token.value = "order by";
+            this.addNewLine("left", ",");
+            for (let i = 1; i < subLines.length; i++){
+                this.lines[this.lastIndex()] += subLines[i].trim() + ",";
+                this.addNewLine("left", ",");
+            }
+        } else {
+            this.trimEndLastString();
+            this.lines[this.lastIndex()] += token.value;
         }
     }
 
@@ -197,6 +178,9 @@ export default class Formatter {
                             - word.split(" ")[0].trim().length;
             if (dif < 0){
                 dif = 0;
+            }
+            if (word == ")"){
+                dif = -1;
             }
             indent += dif;
         }else {
