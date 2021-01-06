@@ -62,7 +62,7 @@ const reservedToplevelWords = [
     "LIMIT", "LOOP",
     "MODIFY",
     "ORDER BY",
-    "ORDER",
+    // "ORDER",
     "SELECT", "SET CURRENT SCHEMA", "SET SCHEMA", "SET", "START WITH",
     "UNION ALL", "UNION", "UPDATE",
     "VALUES",
@@ -78,12 +78,13 @@ const reservedNewlineWords = [
     "INNER JOIN",
     "JOIN",
     "LEFT JOIN", "LEFT OUTER JOIN",
-    "OR", "OUTER APPLY", "OUTER JOIN",
+    // "OR", 
+    "OUTER APPLY", "OUTER JOIN",
     "RIGHT JOIN", "RIGHT OUTER JOIN",
     "WHEN",
     "UNION",
-    "XOR",
-    "AND"
+    // "XOR",
+    // "AND"
 ];
 
 let tokenizer;
