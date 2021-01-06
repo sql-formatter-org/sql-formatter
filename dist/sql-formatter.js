@@ -1642,6 +1642,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
 	            token.value = this.formatTextCase(token);
+	            // if (i < 20){
+	            //     console.log(token.value);
+	            // }
 	            if (token.type === _tokenTypes2["default"].WHITESPACE) {
 	                if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")) {
 	                    this.lines[this.lastIndex()] += " ";
@@ -1668,7 +1671,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else if (token.type === _tokenTypes2["default"].PLACEHOLDER) {
 	                this.formatPlaceholder(token);
 	            } else if (token.value === ",") {
-	                this.formatComma(token, i);
+	                this.formatComma(token);
 	            } else if (token.value === ":") {
 	                this.formatWithSpaceAfter(token);
 	            } else if (token.value === "." || token.value === "%") {
@@ -1710,7 +1713,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    Formatter.prototype.formatComma = function formatComma(token, index) {
+	    Formatter.prototype.formatComma = function formatComma(token) {
 	        var last = this.getLastString();
 	        if (this.inlineReservedWord.includes(last.trim().split(" ")[0])) {
 	            this.formatCommaInlineReservedWord(last, token);
@@ -1827,12 +1830,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatOpeningParentheses = function formatOpeningParentheses(token) {
-	        if (token.value == "(") {
-	            if (this.getLastString().trim() != "") {
-	                this.trimEndLastString();
-	            }
-	        } else {
+	        if (token.value != "(") {
 	            this.addNewLine("left", token.value);
+	        } else if (!this.getLastString().endsWith(" ")) {
+	            this.lines[this.lastIndex()] += " ";
 	        }
 	        this.indents.push({ token: token, indent: this.getLastString().length });
 	        this.lines[this.lastIndex()] += token.value;

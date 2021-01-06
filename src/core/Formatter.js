@@ -44,6 +44,9 @@ export default class Formatter {
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
             token.value = this.formatTextCase(token);
+            // if (i < 20){
+            //     console.log(token.value);
+            // }
             if (token.type === tokenTypes.WHITESPACE) {
                 if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")){
                     this.lines[this.lastIndex()] += " ";
@@ -232,12 +235,10 @@ export default class Formatter {
     }
 
     formatOpeningParentheses(token){
-        if (token.value == "("){
-            if (this.getLastString().trim() != ""){
-                this.trimEndLastString();  
-            }
-        } else {
+        if (token.value != "("){
             this.addNewLine("left", token.value);
+        }else if (!this.getLastString().endsWith(" ")){
+            this.lines[this.lastIndex()] += " ";
         }
         this.indents.push({token: token, indent: this.getLastString().length})
         this.lines[this.lastIndex()] += token.value;
