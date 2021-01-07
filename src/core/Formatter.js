@@ -169,7 +169,12 @@ export default class Formatter {
     }
 
     addNewLine(align, word){
-        this.trimEndLastString();
+        if (this.getLastString().trim() == ")"){
+            this.lines.pop();
+            this.lines[this.lastIndex()] += ")";
+        } else {
+            this.trimEndLastString();
+        }
         let last = this.indents[this.indents.length - 1];
         if (last == undefined){
             this.lines.push("");
@@ -224,7 +229,7 @@ export default class Formatter {
     }
 
     formatNewlineReservedWord(token){
-        if (this.getLastString().trim().split(" ").length > 1){
+        if (this.getLastString().trim().split(" ").length > 1 || this.getLastString().trim() == ")"){
             // if (this.rightAlignWords.includes(token.value)){
             //     this.addNewLine("right", token.value);
             // }else{

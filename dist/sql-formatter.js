@@ -1765,7 +1765,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.addNewLine = function addNewLine(align, word) {
-	        this.trimEndLastString();
+	        if (this.getLastString().trim() == ")") {
+	            this.lines.pop();
+	            this.lines[this.lastIndex()] += ")";
+	        } else {
+	            this.trimEndLastString();
+	        }
 	        var last = this.indents[this.indents.length - 1];
 	        if (last == undefined) {
 	            this.lines.push("");
@@ -1819,7 +1824,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatNewlineReservedWord = function formatNewlineReservedWord(token) {
-	        if (this.getLastString().trim().split(" ").length > 1) {
+	        if (this.getLastString().trim().split(" ").length > 1 || this.getLastString().trim() == ")") {
 	            // if (this.rightAlignWords.includes(token.value)){
 	            //     this.addNewLine("right", token.value);
 	            // }else{
