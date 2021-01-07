@@ -5,12 +5,6 @@ import Params from "./Params";
 import repeat from "lodash/repeat";
 
 export default class Formatter {
-    /**
-     * @param {Object} cfg
-     *   @param {Object} cfg.indent
-     *   @param {Object} cfg.params
-     * @param {Tokenizer} tokenizer
-     */
     constructor(cfg, tokenizer, reservedWords) {
         this.cfg = cfg || {};
         this.params = new Params(this.cfg.params);
@@ -22,9 +16,9 @@ export default class Formatter {
         this.inlineReservedWord = ["order", "group"];
         this.indents = [];
         this.lines = [""];
-        this.startBlock = ["select", "begin", "create", "alter", "insert", "update", "drop"];
+        this.startBlock = ["select", "begin", "create", "alter", "insert", //"update", 
+                                    "drop", "merge"];
         this.logicalOperators = ["or", "xor", "and"];
-        this.rightAlignWords = ["or", "and"];
     }
 
     format(query) {
@@ -44,9 +38,6 @@ export default class Formatter {
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
             token.value = this.formatTextCase(token);
-            // if (i < 20){
-            //     console.log(token.value);
-            // }
             if (token.type === tokenTypes.WHITESPACE) {
                 if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")){
                     this.lines[this.lastIndex()] += " ";
@@ -88,14 +79,31 @@ export default class Formatter {
 
     formatLogicalOperators(token){
         this.trimEndLastString();
-        let words = this.getLastString().trim().split(" ");
-        // let first = words[0];
+        var last = this.getLastString();
+        let words = last.trim().split(" ");
         let indent = this.getLogicalIndent(token.value, words[0]);
-        // console.log("first: " + words[0] + " second: " + words[1] + " last: " + words[words.length - 1] + " count: " + words.length);
-        // console.log(this.logicalOperators.includes(words[0]) + " : " + )
         if (this.logicalOperators.includes(words[0]) && words[1].startsWith("(") && !words[words.length - 1].endsWith(")")){
             this.lines[this.lastIndex()] += " ";
-        } else if (this.getLastString().trim() != ""){
+        } else if(last.includes(" on ") && !last.includes(" join ")){
+            let boolExps = last.split(/ and | or | xor /);
+            if (boolExps.length > 3){
+                let indent = last.indexOf("on ") + 4;
+                this.lines[this.lastIndex()] = boolExps[0];
+                last = last.substring(last.indexOf(boolExps[0]) + boolExps[0].length);
+                for (let i = 1; i < boolExps.length; i++){
+                    this.lines.push(repeat(" ", indent));
+                    let bool = last.trim().split(" ")[0];
+                    if (bool.length < 3){
+                        this.lines[this.lastIndex()] += repeat(" ", 3 - bool.length);
+                    }
+                    this.lines[this.lastIndex()] += bool + " " + boolExps[i];
+                    last = last.substring(last.indexOf(boolExps[i]) + boolExps[i].length);
+                }
+                this.lines.push(repeat(" ", indent));
+            } else {
+                this.lines[this.lastIndex()] += " ";
+            }
+        } else if (last.trim() != ""){
             this.lines.push(repeat(" ", indent));
         }
         this.lines[this.lastIndex()] += token.value;
@@ -229,17 +237,17 @@ export default class Formatter {
     }
 
     formatLineComment(token){
+        let before = this.getLastString();
         this.lines[this.lastIndex()] += token.value;
         this.addNewLine("right", "");
+        if (before.trim().endsWith("then")){
+            this.lines[this.lastIndex()] += repeat(" ", 6);
+        }
     }
 
     formatNewlineReservedWord(token){
         if (this.getLastString().trim().split(" ").length > 1 || this.getLastString().trim() == ")"){
-            // if (this.rightAlignWords.includes(token.value)){
-            //     this.addNewLine("right", token.value);
-            // }else{
-                this.addNewLine("left", token.value);
-            // }
+            this.addNewLine("left", token.value);
         }
         this.lines[this.lastIndex()] += token.value;
     }
@@ -330,6 +338,9 @@ export default class Formatter {
     }
 
     formatWithSpaces(token){
+        if (token.value == "on" && !this.getLastString().includes(" join ")){
+            this.addNewLine("right", token.value);
+        }
         if (!token.value.endsWith(".")){
             this.lines[this.lastIndex()] += token.value + " ";
         } else {

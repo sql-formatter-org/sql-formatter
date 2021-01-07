@@ -5,15 +5,7 @@ import Params from "./Params";
 import repeat from "lodash/repeat";
 import SqlFormatter from "../languages/SqlFormatter";
 
-// const indent = "    ";
-
 export default class NewFormatter {
-    /**
-     * @param {Object} cfg
-     *   @param {Object} cfg.indent
-     *   @param {Object} cfg.params
-     * @param {Tokenizer} tokenizer
-     */
     constructor(cfg, tokenizer, reservedWords, openParens) {
         this.indentCount = 0;
         this.cfg = cfg || {};
@@ -21,20 +13,14 @@ export default class NewFormatter {
         this.tokenizer = tokenizer;
         this.tokens = [];
         this.reservedWords = reservedWords;
-        this.withoutSpaces = [".", "%", "(", ")"];
+        this.withoutSpaces = [".", "%", "(",
+         ")"];
         this.lines = [""];
         this.indent = "    ";
         this.openParens = openParens;
         this.indentStartBlock = -1;
     }
 
-
-    /**
-     * Formats whitespaces in a SQL string to make it easier to read.
-     *
-     * @param {String} query The SQL query string
-     * @return {String} formatted query
-     */
     format(query) {
         this.tokens = this.tokenizer.tokenize(query);
         const formattedQuery = this.formatQuery();
@@ -46,6 +32,7 @@ export default class NewFormatter {
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
             token.value = this.formatTextCase(token);
+            console.log(token.value);
             if (token.type === tokenTypes.WHITESPACE) {
                 if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")){
                     this.lines[this.lastIndex()] += " ";
@@ -271,8 +258,11 @@ export default class NewFormatter {
     }  
 
     formatWithoutSpaces(token){
-        // if (this.getLastString().trim() != )
-        this.lines[this.lastIndex()] = trimEnd(this.getLastString()) + token.value;
+        if (token.value != "("){
+            this.lines[this.lastIndex()] = trimEnd(this.getLastString()) + token.value;
+        } else {
+            this.lines[this.lastIndex()] = this.getLastString() + token.value;
+        }
     }
 
     formatOpeningParentheses(token, index){

@@ -20,7 +20,7 @@ const reservedWords = [
     "JAVA",
     "LANGUAGE", "LARGE", "LEADING", "LENGTH", "LEVEL", "LIBRARY", "LIKE", "LIKE2", "LIKE4", "LIKEC", "LIMITED", "LOCAL",
     "LOCK", "LONG",
-    "MAP", "MAX", "MAXLEN", "MEMBER", "MERGE", "MIN", "MINUS", "MINUTE", "MLSLABEL", "MOD", "MODE", "MONTH", "MULTISET",
+    "MAP", "MAX", "MAXLEN", "MEMBER", "MERGE INTO", "MIN", "MINUS", "MINUTE", "MLSLABEL", "MOD", "MODE", "MONTH", "MULTISET",
     "NAME", "NAN", "NATIONAL", "NATIVE", "NATURAL", "NATURALN", "NCHAR", "NEW", "NEXTVAL", "NOCOMPRESS", "NOCOPY", "NOT",
     "NOWAIT", "NULL", "NULLIF", "NUMBER_BASE", "NUMBER",
     "OBJECT", "OCICOLL", "OCIDATE", "OCIDATETIME", "OCIDURATION", "OCIINTERVAL", "OCILOBLOCATOR", "OCINUMBER", "OCIRAW",
@@ -48,17 +48,15 @@ const reservedWords = [
 ];
 
 const reservedToplevelWords = [
-    // "AS", 
     "LOOP", 
-    // "IS",
     "TYPE", "WITH", "UNION", 
-    // "EXCEPTION", 
+    "USING",
     "ELSE", 
     "WHEN", "THEN", "ELSIF",
 ];
 
 const reservedNewlineWords = [
-    "ALTER", "SELECT", "INSERT", "UPDATE", "DROP"
+    "ALTER", "SELECT", "INSERT", "UPDATE", "DROP", "MERGE INTO",
 ];
 
 const openParens = [
@@ -69,19 +67,10 @@ const openParens = [
 let tokenizer;
 
 export default class SqlFormatter {
-    /**
-     * @param {Object} cfg Different set of configurations
-     */
     constructor(cfg) {
         this.cfg = cfg;
     }
 
-    /**
-     * Format the whitespace in a PL/SQL string to make it easier to read
-     *
-     * @param {String} query The PL/SQL string
-     * @return {String} formatted string
-     */
     format(query) {
         if (!tokenizer) {
             tokenizer = new Tokenizer({

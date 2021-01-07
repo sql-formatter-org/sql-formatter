@@ -816,17 +816,28 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var reservedToplevelWords = ["ADD", "ALTER COLUMN", "ALTER TABLE",
 	// "BEGIN",
-	"CONNECT BY", "DECLARE", "DELETE FROM", "DELETE",
+	"CONNECT BY", "USING", "DECLARE", "DELETE FROM", "DELETE",
 	// "END",
-	"EXCEPT", "EXCEPTION", "FETCH FIRST", "FROM", "GROUP BY", "HAVING", "INSERT INTO", "INSERT", "INTERSECT", "LIMIT", "LOOP", "MODIFY", "ORDER BY",
+	"MERGE", "EXCEPT", "EXCEPTION", "FETCH FIRST", "FROM", "GROUP BY", "HAVING", "INSERT INTO", "INSERT", "INTERSECT", "LIMIT", "LOOP", "MODIFY", "CROSS JOIN", "OUTER JOIN", "RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN", "ORDER BY",
 	// "ORDER",
-	"SELECT", "SET CURRENT SCHEMA", "SET SCHEMA", "SET", "START WITH", "UNION ALL", "UNION", "UPDATE", "VALUES", "WHERE"];
+	"SELECT", "SET CURRENT SCHEMA", "SET SCHEMA",
+	// "SET", 
+	"START WITH", "UNION ALL", "UNION",
+	// "UPDATE",
+	"VALUES", "WHERE"];
 
 	var reservedNewlineWords = [
 	// "AND",
-	"CROSS APPLY", "CROSS JOIN", "ELSE", "END", "INNER JOIN", "JOIN", "LEFT JOIN", "LEFT OUTER JOIN",
+	"CROSS APPLY",
+	// "CROSS JOIN", "OUTER JOIN","RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN",
+	"ELSE", "END",
+	// "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN",
+	"JOIN",
+	// "LEFT JOIN", "LEFT OUTER JOIN",
 	// "OR", 
-	"OUTER APPLY", "OUTER JOIN", "RIGHT JOIN", "RIGHT OUTER JOIN", "WHEN", "UNION"];
+	"OUTER APPLY",
+	// "OUTER JOIN","RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN",
+	"WHEN", "UNION"];
 
 	var tokenizer = void 0;
 
@@ -1601,12 +1612,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Formatter = function () {
-	    /**
-	     * @param {Object} cfg
-	     *   @param {Object} cfg.indent
-	     *   @param {Object} cfg.params
-	     * @param {Tokenizer} tokenizer
-	     */
 	    function Formatter(cfg, tokenizer, reservedWords) {
 	        _classCallCheck(this, Formatter);
 
@@ -1620,9 +1625,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.inlineReservedWord = ["order", "group"];
 	        this.indents = [];
 	        this.lines = [""];
-	        this.startBlock = ["select", "begin", "create", "alter", "insert", "update", "drop"];
+	        this.startBlock = ["select", "begin", "create", "alter", "insert", //"update", 
+	        "drop", "merge"];
 	        this.logicalOperators = ["or", "xor", "and"];
-	        this.rightAlignWords = ["or", "and"];
 	    }
 
 	    Formatter.prototype.format = function format(query) {
@@ -1642,9 +1647,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
 	            token.value = this.formatTextCase(token);
-	            // if (i < 20){
-	            //     console.log(token.value);
-	            // }
 	            if (token.type === _tokenTypes2["default"].WHITESPACE) {
 	                if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")) {
 	                    this.lines[this.lastIndex()] += " ";
@@ -1686,14 +1688,31 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Formatter.prototype.formatLogicalOperators = function formatLogicalOperators(token) {
 	        this.trimEndLastString();
-	        var words = this.getLastString().trim().split(" ");
-	        // let first = words[0];
+	        var last = this.getLastString();
+	        var words = last.trim().split(" ");
 	        var indent = this.getLogicalIndent(token.value, words[0]);
-	        // console.log("first: " + words[0] + " second: " + words[1] + " last: " + words[words.length - 1] + " count: " + words.length);
-	        // console.log(this.logicalOperators.includes(words[0]) + " : " + )
 	        if (this.logicalOperators.includes(words[0]) && words[1].startsWith("(") && !words[words.length - 1].endsWith(")")) {
 	            this.lines[this.lastIndex()] += " ";
-	        } else if (this.getLastString().trim() != "") {
+	        } else if (last.includes(" on ") && !last.includes(" join ")) {
+	            var boolExps = last.split(/ and | or | xor /);
+	            if (boolExps.length > 3) {
+	                var _indent = last.indexOf("on ") + 4;
+	                this.lines[this.lastIndex()] = boolExps[0];
+	                last = last.substring(last.indexOf(boolExps[0]) + boolExps[0].length);
+	                for (var i = 1; i < boolExps.length; i++) {
+	                    this.lines.push((0, _repeat2["default"])(" ", _indent));
+	                    var bool = last.trim().split(" ")[0];
+	                    if (bool.length < 3) {
+	                        this.lines[this.lastIndex()] += (0, _repeat2["default"])(" ", 3 - bool.length);
+	                    }
+	                    this.lines[this.lastIndex()] += bool + " " + boolExps[i];
+	                    last = last.substring(last.indexOf(boolExps[i]) + boolExps[i].length);
+	                }
+	                this.lines.push((0, _repeat2["default"])(" ", _indent));
+	            } else {
+	                this.lines[this.lastIndex()] += " ";
+	            }
+	        } else if (last.trim() != "") {
 	            this.lines.push((0, _repeat2["default"])(" ", indent));
 	        }
 	        this.lines[this.lastIndex()] += token.value;
@@ -1824,17 +1843,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatLineComment = function formatLineComment(token) {
+	        var before = this.getLastString();
 	        this.lines[this.lastIndex()] += token.value;
 	        this.addNewLine("right", "");
+	        if (before.trim().endsWith("then")) {
+	            this.lines[this.lastIndex()] += (0, _repeat2["default"])(" ", 6);
+	        }
 	    };
 
 	    Formatter.prototype.formatNewlineReservedWord = function formatNewlineReservedWord(token) {
 	        if (this.getLastString().trim().split(" ").length > 1 || this.getLastString().trim() == ")") {
-	            // if (this.rightAlignWords.includes(token.value)){
-	            //     this.addNewLine("right", token.value);
-	            // }else{
 	            this.addNewLine("left", token.value);
-	            // }
 	        }
 	        this.lines[this.lastIndex()] += token.value;
 	    };
@@ -1924,6 +1943,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatWithSpaces = function formatWithSpaces(token) {
+	        if (token.value == "on" && !this.getLastString().includes(" join ")) {
+	            this.addNewLine("right", token.value);
+	        }
 	        if (!token.value.endsWith(".")) {
 	            this.lines[this.lastIndex()] += token.value + " ";
 	        } else {
@@ -2013,15 +2035,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	// const indent = "    ";
-
 	var NewFormatter = function () {
-	    /**
-	     * @param {Object} cfg
-	     *   @param {Object} cfg.indent
-	     *   @param {Object} cfg.params
-	     * @param {Tokenizer} tokenizer
-	     */
 	    function NewFormatter(cfg, tokenizer, reservedWords, openParens) {
 	        _classCallCheck(this, NewFormatter);
 
@@ -2038,14 +2052,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.indentStartBlock = -1;
 	    }
 
-	    /**
-	     * Formats whitespaces in a SQL string to make it easier to read.
-	     *
-	     * @param {String} query The SQL query string
-	     * @return {String} formatted query
-	     */
-
-
 	    NewFormatter.prototype.format = function format(query) {
 	        this.tokens = this.tokenizer.tokenize(query);
 	        var formattedQuery = this.formatQuery();
@@ -2057,6 +2063,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
 	            token.value = this.formatTextCase(token);
+	            console.log(token.value);
 	            if (token.type === _tokenTypes2["default"].WHITESPACE) {
 	                if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")) {
 	                    this.lines[this.lastIndex()] += " ";
@@ -2278,8 +2285,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    NewFormatter.prototype.formatWithoutSpaces = function formatWithoutSpaces(token) {
-	        // if (this.getLastString().trim() != )
-	        this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString()) + token.value;
+	        if (token.value != "(") {
+	            this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString()) + token.value;
+	        } else {
+	            this.lines[this.lastIndex()] = this.getLastString() + token.value;
+	        }
 	    };
 
 	    NewFormatter.prototype.formatOpeningParentheses = function formatOpeningParentheses(token, index) {
@@ -2508,39 +2518,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var reservedWords = ["A", "ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG", "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE", "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND", "BULK", "BY", "BYTE", "C", "CALL", "CALLING", "CASCADE", "CASE", "CHAR_BASE", "CHAR", "CHARACTER", "CHARSET", "CHARSETFORM", "CHARSETID", "CHECK", "CLOB_BASE", "CLONE", "CLOSE", "CLUSTER", "CLUSTERS", "COALESCE", "COLAUTH", "COLLECT", "COLUMNS", "COMMENT", "COMMIT", "COMMITTED", "COMPILED", "COMPRESS", "CONNECT", "CONSTANT", "CONSTRUCTOR", "CONTEXT", "CONTINUE", "CONVERT", "COUNT", "CRASH", "CREATE", "CREDENTIAL", "CURRENT", "CURRVAL", "CURSOR", "CUSTOMDATUM", "DANGLING", "DATA", "DATE_BASE", "DATE", "DAY", "DECIMAL", "DEFAULT", "DEFINE", "DELETE", "DESC", "DETERMINISTIC", "DIRECTORY", "DISTINCT", "DO", "DOUBLE", "DROP", "DURATION", "ELEMENT", "ELSIF", "EMPTY", "ESCAPE", "EXCEPTIONS", "EXCLUSIVE", "EXECUTE", "EXISTS", "EXIT", "EXTENDS", "EXTERNAL", "EXTRACT", "FALSE", "FETCH", "FINAL", "FIRST", "FIXED", "FLOAT", "FOR", "FORALL", "FORCE", "FROM", "FUNCTION", "GENERAL", "GOTO", "GRANT", "GROUP", "HASH", "HEAP", "HIDDEN", "HOUR", "IDENTIFIED", "IF", "IMMEDIATE", "IN", "INCLUDING", "INDEX", "INDEXES", "INDICATOR", "INDICES", "INFINITE", "INSTANTIABLE", "INT", "INTEGER", "INTERFACE", "INTERVAL", "INTO", "INVALIDATE", "IS", "ISOLATION", "JAVA", "LANGUAGE", "LARGE", "LEADING", "LENGTH", "LEVEL", "LIBRARY", "LIKE", "LIKE2", "LIKE4", "LIKEC", "LIMITED", "LOCAL", "LOCK", "LONG", "MAP", "MAX", "MAXLEN", "MEMBER", "MERGE", "MIN", "MINUS", "MINUTE", "MLSLABEL", "MOD", "MODE", "MONTH", "MULTISET", "NAME", "NAN", "NATIONAL", "NATIVE", "NATURAL", "NATURALN", "NCHAR", "NEW", "NEXTVAL", "NOCOMPRESS", "NOCOPY", "NOT", "NOWAIT", "NULL", "NULLIF", "NUMBER_BASE", "NUMBER", "OBJECT", "OCICOLL", "OCIDATE", "OCIDATETIME", "OCIDURATION", "OCIINTERVAL", "OCILOBLOCATOR", "OCINUMBER", "OCIRAW", "OCIREF", "OCIREFCURSOR", "OCIROWID", "OCISTRING", "OCITYPE", "OF", "OLD", "ON", "ONLY", "OPAQUE", "OPEN", "OPERATOR", "OPTION", "ORACLE", "ORADATA", "ORDER", "ORGANIZATION", "ORLANY", "ORLVARY", "OTHERS", "OUT", "OVERLAPS", "OVERRIDING", "PACKAGE", "PARALLEL_ENABLE", "PARAMETER", "PARAMETERS", "PARENT", "PARTITION", "PASCAL", "PCTFREE", "PIPE", "PIPELINED", "PLS_INTEGER", "PLUGGABLE", "POSITIVE", "POSITIVEN", "PRAGMA", "PRECISION", "PRIOR", "PRIVATE", "PROCEDURE", "PUBLIC", "RAISE", "RANGE", "RAW", "READ", "REAL", "RECORD", "REF", "REFERENCE", "RELEASE", "RELIES_ON", "REM", "REMAINDER", "RENAME", "RESOURCE", "RESULT_CACHE", "RESULT", "RETURN", "RETURNING", "REVERSE", "REVOKE", "ROLLBACK", "ROW", "ROWID", "ROWNUM", "ROWTYPE", "SAMPLE", "SAVE", "SAVEPOINT", "SB1", "SB2", "SB4", "SECOND", "SEGMENT", "SELF", "SEPARATE", "SEQUENCE", "SERIALIZABLE", "SHARE", "SHORT", "SIZE_T", "SIZE", "SMALLINT", "SOME", "SPACE", "SPARSE", "SQL", "SQLCODE", "SQLDATA", "SQLERRM", "SQLNAME", "SQLSTATE", "STANDARD", "START", "STATIC", "STDDEV", "STORED", "STRING", "STRUCT", "STYLE", "SUBMULTISET", "SUBPARTITION", "SUBSTITUTABLE", "SUBTYPE", "SUCCESSFUL", "SUM", "SYNONYM", "SYSDATE", "TABAUTH", "TABLE", "TDO", "THE", "THEN", "TIME", "TIMESTAMP", "TIMEZONE_ABBR", "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TIMEZONE_REGION", "TO", "TRAILING", "TRANSACTION", "TRANSACTIONAL", "TRIGGER", "TRUE", "TRUSTED", "TYPE", "UB1", "UB2", "UB4", "UID", "UNDER", "UNIQUE", "UNPLUG", "UNSIGNED", "UNTRUSTED", "USE", "USER", "USING", "VALIDATE", "VALIST", "VALUE", "VARCHAR", "VARCHAR2", "VARIABLE", "VARIANCE", "VARRAY", "VARYING", "VIEW", "VIEWS", "VOID", "WHENEVER", "WHILE", "WITH", "WORK", "WRAPPED", "WRITE", "YEAR", "SELECT", "UNION", "INSERT", "EXCEPTION", "ZONE", "AND", "OR"];
+	var reservedWords = ["A", "ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG", "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE", "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND", "BULK", "BY", "BYTE", "C", "CALL", "CALLING", "CASCADE", "CASE", "CHAR_BASE", "CHAR", "CHARACTER", "CHARSET", "CHARSETFORM", "CHARSETID", "CHECK", "CLOB_BASE", "CLONE", "CLOSE", "CLUSTER", "CLUSTERS", "COALESCE", "COLAUTH", "COLLECT", "COLUMNS", "COMMENT", "COMMIT", "COMMITTED", "COMPILED", "COMPRESS", "CONNECT", "CONSTANT", "CONSTRUCTOR", "CONTEXT", "CONTINUE", "CONVERT", "COUNT", "CRASH", "CREATE", "CREDENTIAL", "CURRENT", "CURRVAL", "CURSOR", "CUSTOMDATUM", "DANGLING", "DATA", "DATE_BASE", "DATE", "DAY", "DECIMAL", "DEFAULT", "DEFINE", "DELETE", "DESC", "DETERMINISTIC", "DIRECTORY", "DISTINCT", "DO", "DOUBLE", "DROP", "DURATION", "ELEMENT", "ELSIF", "EMPTY", "ESCAPE", "EXCEPTIONS", "EXCLUSIVE", "EXECUTE", "EXISTS", "EXIT", "EXTENDS", "EXTERNAL", "EXTRACT", "FALSE", "FETCH", "FINAL", "FIRST", "FIXED", "FLOAT", "FOR", "FORALL", "FORCE", "FROM", "FUNCTION", "GENERAL", "GOTO", "GRANT", "GROUP", "HASH", "HEAP", "HIDDEN", "HOUR", "IDENTIFIED", "IF", "IMMEDIATE", "IN", "INCLUDING", "INDEX", "INDEXES", "INDICATOR", "INDICES", "INFINITE", "INSTANTIABLE", "INT", "INTEGER", "INTERFACE", "INTERVAL", "INTO", "INVALIDATE", "IS", "ISOLATION", "JAVA", "LANGUAGE", "LARGE", "LEADING", "LENGTH", "LEVEL", "LIBRARY", "LIKE", "LIKE2", "LIKE4", "LIKEC", "LIMITED", "LOCAL", "LOCK", "LONG", "MAP", "MAX", "MAXLEN", "MEMBER", "MERGE INTO", "MIN", "MINUS", "MINUTE", "MLSLABEL", "MOD", "MODE", "MONTH", "MULTISET", "NAME", "NAN", "NATIONAL", "NATIVE", "NATURAL", "NATURALN", "NCHAR", "NEW", "NEXTVAL", "NOCOMPRESS", "NOCOPY", "NOT", "NOWAIT", "NULL", "NULLIF", "NUMBER_BASE", "NUMBER", "OBJECT", "OCICOLL", "OCIDATE", "OCIDATETIME", "OCIDURATION", "OCIINTERVAL", "OCILOBLOCATOR", "OCINUMBER", "OCIRAW", "OCIREF", "OCIREFCURSOR", "OCIROWID", "OCISTRING", "OCITYPE", "OF", "OLD", "ON", "ONLY", "OPAQUE", "OPEN", "OPERATOR", "OPTION", "ORACLE", "ORADATA", "ORDER", "ORGANIZATION", "ORLANY", "ORLVARY", "OTHERS", "OUT", "OVERLAPS", "OVERRIDING", "PACKAGE", "PARALLEL_ENABLE", "PARAMETER", "PARAMETERS", "PARENT", "PARTITION", "PASCAL", "PCTFREE", "PIPE", "PIPELINED", "PLS_INTEGER", "PLUGGABLE", "POSITIVE", "POSITIVEN", "PRAGMA", "PRECISION", "PRIOR", "PRIVATE", "PROCEDURE", "PUBLIC", "RAISE", "RANGE", "RAW", "READ", "REAL", "RECORD", "REF", "REFERENCE", "RELEASE", "RELIES_ON", "REM", "REMAINDER", "RENAME", "RESOURCE", "RESULT_CACHE", "RESULT", "RETURN", "RETURNING", "REVERSE", "REVOKE", "ROLLBACK", "ROW", "ROWID", "ROWNUM", "ROWTYPE", "SAMPLE", "SAVE", "SAVEPOINT", "SB1", "SB2", "SB4", "SECOND", "SEGMENT", "SELF", "SEPARATE", "SEQUENCE", "SERIALIZABLE", "SHARE", "SHORT", "SIZE_T", "SIZE", "SMALLINT", "SOME", "SPACE", "SPARSE", "SQL", "SQLCODE", "SQLDATA", "SQLERRM", "SQLNAME", "SQLSTATE", "STANDARD", "START", "STATIC", "STDDEV", "STORED", "STRING", "STRUCT", "STYLE", "SUBMULTISET", "SUBPARTITION", "SUBSTITUTABLE", "SUBTYPE", "SUCCESSFUL", "SUM", "SYNONYM", "SYSDATE", "TABAUTH", "TABLE", "TDO", "THE", "THEN", "TIME", "TIMESTAMP", "TIMEZONE_ABBR", "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TIMEZONE_REGION", "TO", "TRAILING", "TRANSACTION", "TRANSACTIONAL", "TRIGGER", "TRUE", "TRUSTED", "TYPE", "UB1", "UB2", "UB4", "UID", "UNDER", "UNIQUE", "UNPLUG", "UNSIGNED", "UNTRUSTED", "USE", "USER", "USING", "VALIDATE", "VALIST", "VALUE", "VARCHAR", "VARCHAR2", "VARIABLE", "VARIANCE", "VARRAY", "VARYING", "VIEW", "VIEWS", "VOID", "WHENEVER", "WHILE", "WITH", "WORK", "WRAPPED", "WRITE", "YEAR", "SELECT", "UNION", "INSERT", "EXCEPTION", "ZONE", "AND", "OR"];
 
-	var reservedToplevelWords = [
-	// "AS", 
-	"LOOP",
-	// "IS",
-	"TYPE", "WITH", "UNION",
-	// "EXCEPTION", 
-	"ELSE", "WHEN", "THEN", "ELSIF"];
+	var reservedToplevelWords = ["LOOP", "TYPE", "WITH", "UNION", "USING", "ELSE", "WHEN", "THEN", "ELSIF"];
 
-	var reservedNewlineWords = ["ALTER", "SELECT", "INSERT", "UPDATE", "DROP"];
+	var reservedNewlineWords = ["ALTER", "SELECT", "INSERT", "UPDATE", "DROP", "MERGE INTO"];
 
 	var openParens = ["CREATE", "BEGIN", "FUNCTION", "CURSOR", "IF", "FOR", "PROCEDURE", "WHILE"];
 
 	var tokenizer = void 0;
 
 	var SqlFormatter = function () {
-	    /**
-	     * @param {Object} cfg Different set of configurations
-	     */
 	    function SqlFormatter(cfg) {
 	        _classCallCheck(this, SqlFormatter);
 
 	        this.cfg = cfg;
 	    }
-
-	    /**
-	     * Format the whitespace in a PL/SQL string to make it easier to read
-	     *
-	     * @param {String} query The PL/SQL string
-	     * @return {String} formatted string
-	     */
-
 
 	    SqlFormatter.prototype.format = function format(query) {
 	        if (!tokenizer) {
