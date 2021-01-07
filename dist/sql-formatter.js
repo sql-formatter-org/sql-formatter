@@ -2063,7 +2063,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
 	            token.value = this.formatTextCase(token);
-	            console.log(token.value);
 	            if (token.type === _tokenTypes2["default"].WHITESPACE) {
 	                if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")) {
 	                    this.lines[this.lastIndex()] += " ";

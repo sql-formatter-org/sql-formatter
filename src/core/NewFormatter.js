@@ -32,7 +32,6 @@ export default class NewFormatter {
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
             token.value = this.formatTextCase(token);
-            console.log(token.value);
             if (token.type === tokenTypes.WHITESPACE) {
                 if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")){
                     this.lines[this.lastIndex()] += " ";
