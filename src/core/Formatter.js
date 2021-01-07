@@ -88,15 +88,20 @@ export default class Formatter {
 
     formatLogicalOperators(token){
         this.trimEndLastString();
-        let indent = this.getLogicalIndent(token.value);
-        if (this.getLastString().trim() != ""){
+        let words = this.getLastString().trim().split(" ");
+        // let first = words[0];
+        let indent = this.getLogicalIndent(token.value, words[0]);
+        // console.log("first: " + words[0] + " second: " + words[1] + " last: " + words[words.length - 1] + " count: " + words.length);
+        // console.log(this.logicalOperators.includes(words[0]) + " : " + )
+        if (this.logicalOperators.includes(words[0]) && words[1].startsWith("(") && !words[words.length - 1].endsWith(")")){
+            this.lines[this.lastIndex()] += " ";
+        } else if (this.getLastString().trim() != ""){
             this.lines.push(repeat(" ", indent));
         }
         this.lines[this.lastIndex()] += token.value;
     }
 
-    getLogicalIndent(operator){
-        let first = this.getLastString().trim().split(" ")[0];
+    getLogicalIndent(operator, first){
         let indent = 0;
         if (this.logicalOperators.includes(first)){
             indent = this.getLastString().length - this.getLastString().trim().length;

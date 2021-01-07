@@ -1686,15 +1686,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Formatter.prototype.formatLogicalOperators = function formatLogicalOperators(token) {
 	        this.trimEndLastString();
-	        var indent = this.getLogicalIndent(token.value);
-	        if (this.getLastString().trim() != "") {
+	        var words = this.getLastString().trim().split(" ");
+	        // let first = words[0];
+	        var indent = this.getLogicalIndent(token.value, words[0]);
+	        // console.log("first: " + words[0] + " second: " + words[1] + " last: " + words[words.length - 1] + " count: " + words.length);
+	        // console.log(this.logicalOperators.includes(words[0]) + " : " + )
+	        if (this.logicalOperators.includes(words[0]) && words[1].startsWith("(") && !words[words.length - 1].endsWith(")")) {
+	            this.lines[this.lastIndex()] += " ";
+	        } else if (this.getLastString().trim() != "") {
 	            this.lines.push((0, _repeat2["default"])(" ", indent));
 	        }
 	        this.lines[this.lastIndex()] += token.value;
 	    };
 
-	    Formatter.prototype.getLogicalIndent = function getLogicalIndent(operator) {
-	        var first = this.getLastString().trim().split(" ")[0];
+	    Formatter.prototype.getLogicalIndent = function getLogicalIndent(operator, first) {
 	        var indent = 0;
 	        if (this.logicalOperators.includes(first)) {
 	            indent = this.getLastString().length - this.getLastString().trim().length;
