@@ -1712,7 +1712,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else {
 	                this.lines[this.lastIndex()] += " ";
 	            }
-	        } else if (last.trim() != "") {
+	        } else if (last.trim() != "" && indent > 0) {
 	            this.lines.push((0, _repeat2["default"])(" ", indent));
 	        }
 	        this.lines[this.lastIndex()] += token.value;

@@ -103,7 +103,7 @@ export default class Formatter {
             } else {
                 this.lines[this.lastIndex()] += " ";
             }
-        } else if (last.trim() != ""){
+        } else if (last.trim() != "" && indent > 0){
             this.lines.push(repeat(" ", indent));
         }
         this.lines[this.lastIndex()] += token.value;
