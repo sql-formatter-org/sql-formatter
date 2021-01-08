@@ -257,10 +257,11 @@ export default class NewFormatter {
     }  
 
     formatWithoutSpaces(token){
-        if (token.value != "("){
-            this.lines[this.lastIndex()] = trimEnd(this.getLastString()) + token.value;
-        } else {
+        let words = this.getLastString().trim().split(" ");
+        if (token.value == "(" && this.reservedWords.includes(words[words.length - 1].trim().toUpperCase())){
             this.lines[this.lastIndex()] = this.getLastString() + token.value;
+        } else {
+            this.lines[this.lastIndex()] = trimEnd(this.getLastString()) + token.value;
         }
     }
 

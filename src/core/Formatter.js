@@ -253,10 +253,15 @@ export default class Formatter {
     }
 
     formatOpeningParentheses(token){
+        let words = this.getLastString().trim().split(" ");
         if (token.value != "("){
             this.addNewLine("left", token.value);
-        }else if (!this.getLastString().endsWith(" ")){
-            this.lines[this.lastIndex()] += " ";
+        }else if (this.reservedWords.includes(words[words.length - 1].trim().toUpperCase())){
+            if (!this.getLastString().endsWith(" ")){
+                this.lines[this.lastIndex()] += " ";
+            }
+        }else {
+            this.trimEndLastString();
         }
         this.indents.push({token: token, indent: this.getLastString().length})
         this.lines[this.lastIndex()] += token.value;
