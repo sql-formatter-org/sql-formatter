@@ -2134,7 +2134,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    NewFormatter.prototype.formatComma = function formatComma(token) {
 	        var line = this.getLastString();
 	        var startBkt = line.indexOf("(");
-	        var indent = this.indentCount + 1;
+	        var indent = this.indentCount;
 	        if (line.length > 100) {
 	            this.lines[this.lastIndex()] = line.substring(0, startBkt + 1);
 	            line = line.substring(startBkt + 1);

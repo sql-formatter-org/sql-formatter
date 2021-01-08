@@ -99,7 +99,7 @@ export default class NewFormatter {
     formatComma(token){
         let line = this.getLastString();
         let startBkt = line.indexOf("(");
-        let indent = this.indentCount + 1;
+        let indent = this.indentCount;
         if (line.length > 100){
             this.lines[this.lastIndex()] = line.substring(0, startBkt + 1);
             line = line.substring(startBkt + 1);
