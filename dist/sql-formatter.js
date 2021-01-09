@@ -1633,6 +1633,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    Formatter.prototype.format = function format(query) {
+	        this.query = query;
 	        this.tokens = this.tokenizer.tokenize(query);
 	        var formattedQuery = this.formatQuery();
 
@@ -1640,6 +1641,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.getFormatArray = function getFormatArray(query) {
+	        this.query = query;
 	        this.tokens = this.tokenizer.tokenize(query);
 	        this.formatQuery();
 	        return this.lines;
@@ -1797,6 +1799,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	            this.trimEndLastString();
 	        }
+	        var indent = this.getCurrentIndent(align, word);
+	        if (this.getLastString().trim() == "") {
+	            this.lines[this.lastIndex()] = (0, _repeat2["default"])(" ", indent);
+	        } else {
+	            this.lines.push((0, _repeat2["default"])(" ", indent));
+	        }
+	    };
+
+	    Formatter.prototype.getCurrentIndent = function getCurrentIndent(align, word) {
 	        var last = this.indents[this.indents.length - 1];
 	        if (last == undefined) {
 	            this.lines.push("");
@@ -1815,11 +1826,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	            indent += last.token.value.length + 1;
 	        }
-	        if (this.getLastString().trim() == "") {
-	            this.lines[this.lastIndex()] = (0, _repeat2["default"])(" ", indent);
-	        } else {
-	            this.lines.push((0, _repeat2["default"])(" ", indent));
-	        }
+	        return indent;
 	    };
 
 	    Formatter.prototype.formatBlockComment = function formatBlockComment(token) {
@@ -1829,7 +1836,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var commentsLine = comment.split("\n");
 	        comment = commentsLine[0];
 	        for (var i = 1; i < commentsLine.length; i++) {
-	            comment += "\n" + (0, _repeat2["default"])(" ", indent) + commentsLine[i];
+	            if (commentsLine[i].trim().startsWith("*")) {
+	                comment += "\n" + (0, _repeat2["default"])(" ", indent + 1);
+	            } else {
+	                comment += "\n" + (0, _repeat2["default"])(" ", indent);
+	            }
+	            comment += commentsLine[i];
 	        }
 	        this.lines[this.lastIndex()] += comment;
 	        this.addNewLine("left", token.value);
@@ -1845,11 +1857,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatLineComment = function formatLineComment(token) {
-	        var before = this.getLastString();
-	        this.lines[this.lastIndex()] += token.value;
-	        this.addNewLine("right", "");
-	        if (before.trim().endsWith("then")) {
-	            this.lines[this.lastIndex()] += (0, _repeat2["default"])(" ", 6);
+	        var qLines = this.query.split("\n");
+	        var isNewLine = false;
+	        for (var i = 0; i < qLines.length; i++) {
+	            if (qLines[i].includes(token.value.trim()) && qLines[i].trim() == token.value.trim()) {
+	                isNewLine = true;
+	                break;
+	            }
+	        }
+	        this.query = this.query.substring(this.query.indexOf(token.value) + token.value.length);
+	        if (isNewLine) {
+	            var indent = this.getCurrentIndent("right", "");
+	            this.lines.push((0, _repeat2["default"])(" ", indent + 1) + token.value);
+	            this.addNewLine("right", "");
+	        } else {
+	            var before = this.getLastString();
+	            this.lines[this.lastIndex()] += token.value;
+	            this.addNewLine("right", "");
+	            if (before.trim().endsWith("then")) {
+	                this.lines[this.lastIndex()] += (0, _repeat2["default"])(" ", 6);
+	            }
 	        }
 	    };
 
@@ -2060,6 +2087,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    NewFormatter.prototype.format = function format(query) {
+	        this.query = query;
 	        this.tokens = this.tokenizer.tokenize(query);
 	        var formattedQuery = this.formatQuery();
 
@@ -2465,8 +2493,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    NewFormatter.prototype.formatLineComment = function formatLineComment(token) {
-	        if (this.getLastString().trim() == "") {
-	            this.lines.pop();
+	        var qLines = this.query.split("\n");
+	        var isNewLine = false;
+	        for (var i = 0; i < qLines.length; i++) {
+	            if (qLines[i].includes(token.value.trim()) && qLines[i].trim() == token.value.trim()) {
+	                isNewLine = true;
+	                break;
+	            }
+	        }
+	        this.query = this.query.substring(this.query.indexOf(token.value) + token.value.length);
+	        if (isNewLine) {
+	            if (!this.getLastString().trim() == "") {
+	                this.addNewLine(this.indentCount);
+	            }
+	        } else {
+	            if (this.getLastString().trim() == "") {
+	                this.lines.pop();
+	            }
 	        }
 	        if (!this.getLastString().endsWith(" ")) {
 	            this.lines[this.lastIndex()] += " ";
@@ -2480,6 +2523,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var comment = "";
 	        var comLines = token.value.split("\n");
 	        for (var i = 0; i < comLines.length; i++) {
+	            if (comLines[i].trim().startsWith("*")) {
+	                this.lines[this.lastIndex()] += " ";
+	            }
 	            this.lines[this.lastIndex()] += comLines[i].trim();
 	            this.addNewLine(this.indentCount);
 	        }

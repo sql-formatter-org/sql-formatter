@@ -22,6 +22,7 @@ export default class NewFormatter {
     }
 
     format(query) {
+        this.query = query;
         this.tokens = this.tokenizer.tokenize(query);
         const formattedQuery = this.formatQuery();
 
@@ -434,8 +435,23 @@ export default class NewFormatter {
     }
 
     formatLineComment(token){
-        if (this.getLastString().trim() == ""){
-            this.lines.pop();
+        let qLines = this.query.split("\n");
+        let isNewLine = false;
+        for (let i = 0; i < qLines.length; i++){
+            if (qLines[i].includes(token.value.trim()) && qLines[i].trim() == token.value.trim()){
+                isNewLine = true;
+                break;
+            }
+        }
+        this.query = this.query.substring(this.query.indexOf(token.value) + token.value.length);
+        if (isNewLine){
+            if (!this.getLastString().trim() == ""){
+                this.addNewLine(this.indentCount);
+            }
+        } else {
+            if (this.getLastString().trim() == ""){
+                this.lines.pop();
+            }
         }
         if (!this.getLastString().endsWith(" ")){
             this.lines[this.lastIndex()] += " ";
@@ -450,6 +466,9 @@ export default class NewFormatter {
         let comment = "";
         let comLines = token.value.split("\n")
         for (let i = 0; i < comLines.length; i++){
+            if (comLines[i].trim().startsWith("*")){
+                this.lines[this.lastIndex()] +=" ";
+            }
             this.lines[this.lastIndex()] += comLines[i].trim();
             this.addNewLine(this.indentCount);
         }

@@ -22,6 +22,7 @@ export default class Formatter {
     }
 
     format(query) {
+        this.query = query;
         this.tokens = this.tokenizer.tokenize(query);
         const formattedQuery = this.formatQuery();
 
@@ -29,6 +30,7 @@ export default class Formatter {
     }
 
     getFormatArray(query){
+        this.query = query;
         this.tokens = this.tokenizer.tokenize(query);
         this.formatQuery();
         return this.lines;
@@ -188,6 +190,15 @@ export default class Formatter {
         } else {
             this.trimEndLastString();
         }
+        let indent = this.getCurrentIndent(align, word);
+        if (this.getLastString().trim() == ""){
+            this.lines[this.lastIndex()] = repeat(" ", indent);
+        }else {
+            this.lines.push(repeat(" ", indent));
+        }
+    }
+
+    getCurrentIndent(align, word){
         let last = this.indents[this.indents.length - 1];
         if (last == undefined){
             this.lines.push("");
@@ -207,12 +218,8 @@ export default class Formatter {
         }else {
             indent += last.token.value.length + 1;
         }
-        if (this.getLastString().trim() == ""){
-            this.lines[this.lastIndex()] = repeat(" ", indent);
-        }else {
-            this.lines.push(repeat(" ", indent));
-        }
-    } 
+        return indent;
+    }
 
     formatBlockComment(token){
         this.resolveAddLineInCommentsBlock(token);
@@ -221,7 +228,12 @@ export default class Formatter {
         let commentsLine = comment.split("\n");
         comment = commentsLine[0];
         for (let i = 1; i < commentsLine.length; i++){
-            comment += "\n" + repeat(" ", indent) + commentsLine[i];
+            if (commentsLine[i].trim().startsWith("*")){
+                comment += "\n" + repeat(" ", indent + 1);    
+            } else {
+                comment += "\n" + repeat(" ", indent);
+            }
+            comment += commentsLine[i];
         }
         this.lines[this.lastIndex()] +=  comment;
         this.addNewLine("left", token.value);
@@ -237,11 +249,26 @@ export default class Formatter {
     }
 
     formatLineComment(token){
-        let before = this.getLastString();
-        this.lines[this.lastIndex()] += token.value;
-        this.addNewLine("right", "");
-        if (before.trim().endsWith("then")){
-            this.lines[this.lastIndex()] += repeat(" ", 6);
+        let qLines = this.query.split("\n");
+        let isNewLine = false;
+        for (let i = 0; i < qLines.length; i++){
+            if (qLines[i].includes(token.value.trim()) && qLines[i].trim() == token.value.trim()){
+                isNewLine = true;
+                break;
+            }
+        }
+        this.query = this.query.substring(this.query.indexOf(token.value) + token.value.length);
+        if (isNewLine){
+            let indent = this.getCurrentIndent("right", "");
+            this.lines.push(repeat(" ", indent + 1) + token.value);
+            this.addNewLine("right", "");
+        } else {
+            let before = this.getLastString();
+            this.lines[this.lastIndex()] += token.value;
+            this.addNewLine("right", "");
+            if (before.trim().endsWith("then")){
+                this.lines[this.lastIndex()] += repeat(" ", 6);
+            }
         }
     }
 
