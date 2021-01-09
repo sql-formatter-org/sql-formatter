@@ -45,6 +45,7 @@ const reservedWords = [
     "YEAR", "SELECT",
     "ZONE", 
     "AND", 
+    "WHERE", 
     "OR",
 ];
 

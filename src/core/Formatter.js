@@ -260,7 +260,7 @@ export default class Formatter {
             if (!this.getLastString().endsWith(" ")){
                 this.lines[this.lastIndex()] += " ";
             }
-        }else {
+        }else if (this.getLastString().trim() != ""){
             this.trimEndLastString();
         }
         this.indents.push({token: token, indent: this.getLastString().length})
