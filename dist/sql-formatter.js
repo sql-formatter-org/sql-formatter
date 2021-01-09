@@ -1869,7 +1869,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (isNewLine) {
 	            var indent = this.getCurrentIndent("right", "");
 	            this.lines.push((0, _repeat2["default"])(" ", indent + 1) + token.value);
-	            this.addNewLine("right", "");
+	            this.addNewLine("left", "");
 	        } else {
 	            var before = this.getLastString();
 	            this.lines[this.lastIndex()] += token.value;

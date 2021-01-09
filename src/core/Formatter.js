@@ -261,7 +261,7 @@ export default class Formatter {
         if (isNewLine){
             let indent = this.getCurrentIndent("right", "");
             this.lines.push(repeat(" ", indent + 1) + token.value);
-            this.addNewLine("right", "");
+            this.addNewLine("left", "");
         } else {
             let before = this.getLastString();
             this.lines[this.lastIndex()] += token.value;
