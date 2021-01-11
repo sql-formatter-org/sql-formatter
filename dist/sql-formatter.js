@@ -820,7 +820,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// "BEGIN",
 	"CONNECT BY", "USING", "DECLARE", "DELETE FROM", "DELETE",
 	// "END",
-	"MERGE", "EXCEPT", "EXCEPTION", "FETCH FIRST", "FROM", "GROUP BY", "HAVING", "INSERT INTO", "INSERT", "INTERSECT", "LIMIT", "LOOP", "MODIFY", "CROSS JOIN", "OUTER JOIN", "RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN", "ORDER BY",
+	"MERGE", "EXCEPT", "EXCEPTION", "FETCH FIRST", "FROM", "GROUP BY", "HAVING", "INSERT INTO", "INTO", "INSERT", "INTERSECT", "LIMIT", "LOOP", "MODIFY", "CROSS JOIN", "OUTER JOIN", "RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN", "ORDER BY",
 	// "ORDER",
 	"SELECT", "SET CURRENT SCHEMA", "SET SCHEMA",
 	// "SET", 
@@ -1881,7 +1881,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatNewlineReservedWord = function formatNewlineReservedWord(token) {
-	        if (this.getLastString().trim().split(" ").length > 1 || this.getLastString().trim() == ")") {
+	        var last = this.getLastString();
+	        if (last.trim().split(" ").length > 1 || last.trim() == ")" && !(last.includes("case") && !last.includes("when"))) {
 	            this.addNewLine("left", token.value);
 	        }
 	        this.lines[this.lastIndex()] += token.value;
@@ -1889,7 +1890,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Formatter.prototype.formatOpeningParentheses = function formatOpeningParentheses(token) {
 	        var words = this.getLastString().trim().split(" ");
-	        if (token.value != "(") {
+	        var last = this.getLastString().trim().toUpperCase();
+	        if (token.value != "(" && token.value != "case" && !this.reservedWords.includes(last)) {
 	            this.addNewLine("left", token.value);
 	        } else if (this.reservedWords.includes(words[words.length - 1].trim().toUpperCase())) {
 	            if (!this.getLastString().endsWith(" ")) {

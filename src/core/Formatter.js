@@ -273,7 +273,8 @@ export default class Formatter {
     }
 
     formatNewlineReservedWord(token){
-        if (this.getLastString().trim().split(" ").length > 1 || this.getLastString().trim() == ")"){
+        let last = this.getLastString();
+        if (last.trim().split(" ").length > 1 || last.trim() == ")" && !(last.includes("case") && !last.includes("when"))) {
             this.addNewLine("left", token.value);
         }
         this.lines[this.lastIndex()] += token.value;
@@ -281,7 +282,8 @@ export default class Formatter {
 
     formatOpeningParentheses(token){
         let words = this.getLastString().trim().split(" ");
-        if (token.value != "("){
+        let last = this.getLastString().trim().toUpperCase();
+        if (token.value != "(" && (token.value != "case" && !this.reservedWords.includes(last))){
             this.addNewLine("left", token.value);
         }else if (this.reservedWords.includes(words[words.length - 1].trim().toUpperCase())){
             if (!this.getLastString().endsWith(" ")){
