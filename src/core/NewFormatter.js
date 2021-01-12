@@ -283,8 +283,9 @@ export default class NewFormatter {
                 this.indentCount = this.indentStartBlock;
             }
         }
-        
-        this.addNewLine(this.indentCount);
+        if (!this.lines[this.lastIndex() - 1].trim().endsWith("*/")){
+           this.addNewLine(this.indentCount);
+        }
         if (token.value == "begin" && this.lines[this.lastIndex() - 1].trim() == ""){
             this.lines.pop();
             this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount);
@@ -472,7 +473,7 @@ export default class NewFormatter {
             this.lines[this.lastIndex()] += comLines[i].trim();
             this.addNewLine(this.indentCount);
         }
-        this.lines.pop();
+        // this.lines.pop();
     }
 
     addNewLine(count){
