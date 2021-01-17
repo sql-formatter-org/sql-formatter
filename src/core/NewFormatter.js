@@ -8,24 +8,24 @@ import SqlFormatter from "../languages/SqlFormatter";
 export default class NewFormatter {
     constructor(cfg, tokenizer, reservedWords, openParens) {
         this.indentCount = 0;
-        this.cfg = cfg || {};
-        this.params = new Params(this.cfg.params);
         this.tokenizer = tokenizer;
         this.tokens = [];
         this.reservedWords = reservedWords;
-        this.withoutSpaces = [".", "%", "(",
-         ")"];
+        this.withoutSpaces = [".", "%", 
+        "(", //")"
+        ];
         this.lines = [""];
         this.indent = "    ";
         this.openParens = openParens;
-        this.indentStartBlock = -1;
+        this.indentsKeyWords = [];
+        this.lastIndentKey = {key: "", name: "", indent: 0};
+        this.lineSize = 80;
     }
 
     format(query) {
         this.query = query;
         this.tokens = this.tokenizer.tokenize(query);
         const formattedQuery = this.formatQuery();
-
         return formattedQuery.trim();
     }
 
@@ -37,103 +37,234 @@ export default class NewFormatter {
                 if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")){
                     this.lines[this.lastIndex()] += " ";
                 }
-            } else if (token.type === tokenTypes.LINE_COMMENT) {
+            } 
+            else if (token.type === tokenTypes.LINE_COMMENT) {
                 this.formatLineComment(token);
-            } else if (token.type === tokenTypes.BLOCK_COMMENT) {
+            } 
+            else if (token.type === tokenTypes.BLOCK_COMMENT) {
                 this.formatBlockComment(token);
-            } else if (token.type === tokenTypes.RESERVED_TOPLEVEL) {
-                this.formatTopLeveleReservedWord(token);
-            } else if (token.type === tokenTypes.RESERVED_NEWLINE) {
+            }
+            // else if (token.type === tokenTypes.RESERVED_TOPLEVEL) {
+            //     this.formatTopLeveleReservedWord(token);
+            // } 
+            else if (token.type === tokenTypes.RESERVED_NEWLINE) {
                 //new line token = start sql query
                 i = this.formatSqlQuery(i);
-            } else if (token.type === tokenTypes.OPEN_PAREN) {
+            } 
+            else if (token.type === tokenTypes.OPEN_PAREN) {
                 this.formatOpeningParentheses(token, i);
-            } else if (token.type === tokenTypes.CLOSE_PAREN) {
+            } 
+            else if (token.type === tokenTypes.CLOSE_PAREN) {
                 this.formatClosingParentheses(token, i);
-            } else if (token.type === tokenTypes.PLACEHOLDER) {
+            } 
+            else if (token.type === tokenTypes.PLACEHOLDER) {
                 this.formatPlaceholder(token);
-            } else if (token.value === ",") {
+            } 
+            else if (token.value === ")"){
+                this.formatCloseBkt(token);
+            }
+            else if (token.value === "begin"){
+                this.formatBegin(token);
+            }
+            else if (token.value == "then") {
+                this.formatThen(token);
+            }
+            else if (token.value === "loop"){
+                this.formatLoop(token, i);
+            }
+            else if (token.value === ",") {
                 this.formatComma(token);
-            } else if (token.value === ":") {
+            } 
+            else if (token.value === ":") {
                 this.formatWithSpaceAfter(token);
-            } else if (this.withoutSpaces.includes(token.value)) {
+            } 
+            else if (this.withoutSpaces.includes(token.value)) {
                 this.formatWithoutSpaces(token);
-            } else if (token.value === ";") {
+            } 
+            else if (token.value === ";") {
                 this.formatQuerySeparator(token);
-            } else if (token.value == "exception"){
-                this.formatException(token);
-            } else if (token.value =="as" || token.value == "is"){
+            } 
+            else if (token.value == "exception"){
+                this.formatException(token, i);
+            } 
+            else if (token.value == "else"){
+                this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1) + token.value;
+                this.addNewLine(this.indentCount);
+            }
+            else if (token.value == "elsif"){
+                this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1) + token.value;
+            }
+            else if (token.value == "when"){
+                this.formatWhen(token);
+            }
+            else if (token.value =="as" || token.value == "is"){
                 this.formatAsIs(token);
-            }else{
+            } 
+            else{
                 this.formatWithSpaces(token);
             };
         }
         return this.lines.join("\n").trim();
     }
 
-    formatException(token){
-        let idx = this.lastIndex() - 1;
-        if (this.lines[idx].trim().endsWith(";")){
-            if (this.getLastString().trim() != ""){
-                this.lines[this.lastIndex()] += token.value;
-            } else {
-                this.lines.pop();
-                this.addNewLine(this.indentCount - 1);
-                this.lines[this.lastIndex()] += token.value;
-            }
+    formatWhen(token){
+        let lastKey = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+        if (lastKey != undefined && lastKey.key == "case" && !this.getLastString().trim().startsWith("case")){
+            this.indentCount--;
+            this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount) + " ";
+        }
+        this.lines[this.lastIndex()] += token.value;
+    }
+
+    formatThen(token){
+        this.lines[this.lastIndex()] += token.value;
+        if (this.getLastString().includes(" when ")){
+            this.indentCount++;
+        }
+        this.addNewLine(this.indentCount);
+    }
+
+    formatLoop(token, index){
+        let next = this.getNextValidWord(index);
+        if (next != ";"){
+            this.addNewLine(this.indentCount);
+            this.lines[this.lastIndex()] += token.value;
+            this.incrementIndent(token.value, "");
+            this.addNewLine(this.indentCount);
         } else {
             this.lines[this.lastIndex()] += token.value;
         }
     }
 
-    formatTextCase(token){
-        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || 
-            token.type === tokenTypes.BLOCK_COMMENT ||
-            token.type === tokenTypes.LINE_COMMENT){
-            return token.value;
+    formatBegin(token){
+        let lastIndent = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+        let startBlock = ["cursor", "procedure", "function", "pragma"];
+        if (lastIndent != undefined){
+            if (startBlock.includes(lastIndent.key)){
+                if (this.getLastString().trim() != ""){
+                    this.addNewLine(this.indentCount - 1);
+                } else {
+                    this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1);
+                }
+                this.indentsKeyWords.push({key: token.value, name: "", indent: this.indentCount});  
+            } else {
+                this.incrementIndent(token.value, "");
+            }
         } else {
-            return token.value.toLowerCase();
+            if (this.getLastString().trim() != "" && !this.prevLineIsComment()){
+                this.addNewLine(this.indentCount);
+            }
+            this.incrementIndent(token.value, "");
         }
+        this.lines[this.lastIndex()] += token.value;
+        this.addNewLine(this.indentCount);
+    }
 
+    formatCloseBkt(token){
+        this.lines[this.lastIndex()] = trimEnd(this.getLastString()) + token.value + " ";    
+        let lastString =  this.getLastString();
+        let openMatch = lastString.match(/\(/);
+        let closeMatch = lastString.match(/\)/);
+        if (openMatch != undefined && closeMatch != undefined){
+            let first = this.getFirstWord(lastString);
+            if (lastString.length > this.lineSize && openMatch.length == closeMatch.length){
+                if (this.openParens.includes(first.toUpperCase())){
+                    this.lines[this.lastIndex()] = lastString.substring(0, lastString.indexOf("(") + 1);
+                    let subLines = lastString.substring(lastString.indexOf("(") + 1).split(", ");
+                    this.lines.push(repeat(this.indent, this.indentCount) + subLines[0]);
+                    for (let i = 1; i < subLines.length; i++){
+                        this.lines[this.lastIndex()] += ",";
+                        this.lines.push(repeat(this.indent, this.indentCount) + subLines[i]);
+                    }
+                } else {
+                    let idx = this.getStartBktIndex();
+                    this.lines[this.lastIndex()] = lastString.substring(0, idx + 1);
+                    let subLines = lastString.substring(idx + 1).split(", ");
+                    let bktIndent = this.lines[this.lastIndex()].length;
+                    let sbstr = subLines[0];
+                    let start = 0;
+                    while (bktIndent + sbstr.length < this.lineSize){
+                        start++;
+                        sbstr += ", " + subLines[start];
+                    }
+                    this.lines[this.lastIndex()] += sbstr;
+                    sbstr = subLines[start + 1];
+                    if (start + 1 == subLines.length - 1){
+                        this.lines[this.lastIndex()] = lastString.substring(0, idx + 1);
+                        let center = (subLines.length - (subLines.length % 2) ) / 2;
+                        for (let i = 0; i < subLines.length; i++){
+                            if (i == center){
+                                this.lines.push(repeat(" ", bktIndent));
+                            }
+                            this.lines[this.lastIndex()] += subLines[i];
+                            if (i != subLines.length - 1){
+                                this.lines[this.lastIndex()] += ", ";
+                            }
+                        }
+                    } else {
+                        for (let i = start + 2; i < subLines.length; i++){
+                            sbstr +=  ", ";
+                            if (sbstr.length + bktIndent > this.lineSize){
+                                this.lines.push(repeat(" ", bktIndent) + sbstr);
+                                sbstr = subLines[i];
+                                if (i == subLines.length - 1){
+                                    this.lines.push(repeat(" ", bktIndent) + sbstr);
+                               }
+                            } else {
+                                sbstr += subLines[i];
+                                if (i == subLines.length - 1){
+                                    this.lines.push(repeat(" ", bktIndent) + sbstr);
+                               }
+                            }
+                        }
+                    }
+                    
+                }
+            } 
+        }
+    }
+
+    getStartBktIndex(){
+        let lastStr = trimEnd(this.getLastString());
+        let openBkt = 0;
+        let closeBkt = 0;
+        for (let i = lastStr.length - 1; i >= 0; i--){
+            if (lastStr[i] == "("){
+                openBkt++;
+            } else if (lastStr[i] == ")"){
+                closeBkt++;
+            }
+            if (closeBkt == openBkt){
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    formatException(token, index){
+        let next = this.getNextValidWord(index);
+        if (next == ";"){
+            this.lines[this.lastIndex()] += token.value;
+            return;
+        }
+        if (this.getLastString().trim().match(/^return.*;$/) != null){
+            this.indentsKeyWords.push(this.lastIndentKey);
+        }
+        let last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+        let lastIndent = last.indent;
+        this.indentCount = last.indent + 1;
+        if (this.getLastString().trim() == ""){
+            this.lines[this.lastIndex()] = repeat(this.indent, lastIndent);
+        } else {
+            this.addNewLine(lastIndent);
+        }
+        this.lines[this.lastIndex()] += token.value;
+        this.indentCount = last.indent + 1;
+        this.addNewLine(this.indentCount);
     }
 
     formatComma(token){
-        let line = this.getLastString();
-        let startBkt = line.indexOf("(");
-        let indent = this.indentCount;
-        if (line.length > 100){
-            this.lines[this.lastIndex()] = line.substring(0, startBkt + 1);
-            line = line.substring(startBkt + 1);
-            let subLines = line.split(",");
-            this.addNewLine(indent);
-            for (let i = 0; i < subLines.length; i++){
-                let subLine = subLines[i].trim();
-                if (subLines[i].includes("'")){
-                    let match = subLines[i].match(/\'/)
-                    subLine = "";
-                    while(match.length % 2 != 0 && i < subLines.length){
-                        subLine += subLines[i] + ",";
-                        i++;
-                    }
-                    if (subLine == ""){
-                        subLine = subLines[i];
-                    }
-                }
-                if (subLine.includes("(") && !subLine.includes(")")){
-                    while(i < subLines.length - 1 && !subLines.includes(")")){
-                        i++;
-                        subLine += ", " + subLines[i];
-                    }
-                }
-                this.lines[this.lastIndex()] += trimEnd(subLine) + ",";
-                this.addNewLine(indent);
-            }
-        } else if (startBkt < 0){
-            this.lines[this.lastIndex()] = trimEnd(this.getLastString()) + token.value;
-            this.addNewLine(indent);
-        } else {
-            this.lines[this.lastIndex()] = trimEnd(this.getLastString()) + token.value;
-        }
+        this.lines[this.lastIndex()] = trimEnd(this.getLastString()) + token.value + " ";
     }
 
     formatPlaceholder(token){
@@ -166,7 +297,7 @@ export default class NewFormatter {
                     continue;
                 }
                 if (line.includes(")")){
-                    substring = this.getBktSubstring(i) + substring;
+                    substring = this.getBktSubstring(i).substring + substring;
                     break;
                 }else {
                     substring = line + substring;
@@ -176,23 +307,27 @@ export default class NewFormatter {
         }
         let first = this.getFirstWord(substring);
         if (first == "create"){
-            console.log(this.getLastString());
-            this.addNewLine(this.indentCount - 1);
-            console.log(this.getLastString());
+            if (!this.prevLineIsComment() && this.getLastString().trim() != ""){
+                this.addNewLine(this.indentCount - 1);
+            } else {
+                this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1);
+            }
             this.lines[this.lastIndex()] += token.value;
-            console.log(this.getLastString());
             this.addNewLine(this.indentCount);
-        }else if (first == "cursor"){
+        } else if (first == "cursor"){
             this.lines[this.lastIndex] += token.value;
             this.addNewLine(this.indentCount);
-        } else if (this.openParens.includes(first.toUpperCase()) || (this.getLastString().includes("return") && !this.getLastString().endsWith(";"))){
-            if (this.getLastString().includes("return") && !this.getLastString().endsWith(";")){
-                this.indentCount++;
+        } else if ((this.openParens.includes(first.toUpperCase()) && first != "if" && first != "elsif" ) || 
+            (this.getLastString().includes("return") && !this.getLastString().endsWith(";"))){
+            if (!this.prevLineIsComment() && this.getLastString().trim() != ""){
+                this.addNewLine(this.indentCount - 1);
+            } else {
+                this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1);
             }
-            this.addNewLine(this.indentCount - 1);
+            // this.addNewLine(this.indentCount - 1);
             this.lines[this.lastIndex()] += token.value;
             this.addNewLine(this.indentCount);
-        }else {
+        } else {
             this.lines[this.lastIndex()] += token.value;
         }
     }
@@ -204,14 +339,21 @@ export default class NewFormatter {
         example:
         procedure name(val);
         */
+        let startBlock = ["cursor", "procedure", "function", "pragma"];
         let first = this.getFirstWord(this.getLastString());
-        if (this.openParens.includes(first.toUpperCase()) && first != "if"){
-            this.decrementIndent();
+        if ((this.openParens.includes(first.toUpperCase()) 
+            && first != "if") || 
+            this.getLastString().includes("return")){
+            if (this.indentsKeyWords[this.indentsKeyWords.length - 1] != undefined && 
+                startBlock.includes(this.indentsKeyWords[this.indentsKeyWords.length - 1].key)
+                ){
+                this.decrementIndent(); 
+            }
         } else if (this.getLastString().endsWith(")")){
             let ssInfo = this.getBktSubstring(this.lastIndex());
             let substring = ssInfo.substring;
             first = this.getFirstWord(substring);
-            if (this.openParens.includes(first.toUpperCase() && first != "if")){
+            if (this.openParens.includes(first.toUpperCase()) && first != "if"){
                 this.decrementIndent();
             }
         } 
@@ -269,31 +411,25 @@ export default class NewFormatter {
     formatOpeningParentheses(token, index){
         let next = this.getNextValidWord(index);
         let startBlock = ["cursor", "procedure", "function"];
-        if (next == ";"){
-            this.lines[this.lastIndex()] += token.value;
-            return;
-        }
-        if (startBlock.includes(token.value)){
-            if (this.indentStartBlock < 0){
-                this.indentStartBlock = this.indentCount;
-            } else {
-                if (this.lines[this.lastIndex() - 1].trim() == ""){
+        if (next != ";"){
+            let lastIndent = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+            if (!this.prevLineIsComment()){
+                if (this.getLastString().trim() != ""){
+                    this.addNewLine(this.indentCount);    
+                }
+                this.addNewLine(this.indentCount);
+            }
+            if (token.value == "if"){
+                while(this.getLastString().trim() == ""){
                     this.lines.pop();
                 }
-                this.indentCount = this.indentStartBlock;
+                this.addNewLine(this.indentCount);
+                // this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount);
             }
-        }
-        if (!this.lines[this.lastIndex() - 1].trim().endsWith("*/")){
-           this.addNewLine(this.indentCount);
-        }
-        if (token.value == "begin" && this.lines[this.lastIndex() - 1].trim() == ""){
-            this.lines.pop();
-            this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount);
-        }
-        this.indentCount++;
-        this.lines[this.lastIndex()] += token.value;
-        if (token.value == "begin"){
-            this.addNewLine(this.indentCount);
+            this.incrementIndent(token.value, next);
+            this.lines[this.lastIndex()] += token.value;
+        } else {
+            this.lines[this.lastIndex()] += token.value;
         }
     }
 
@@ -312,23 +448,35 @@ export default class NewFormatter {
     }
 
     decrementIndent(){
-        if (this.indentCount != 0)
-            this.indentCount--;
+        this.lastIndentKey = this.indentsKeyWords.pop();
+        this.indentCount = this.lastIndentKey.indent
+    }
+
+    incrementIndent(key, name){
+        this.indentsKeyWords.push({key: key, name: name, indent: this.indentCount});  
+        this.indentCount++;
     }
 
     formatClosingParentheses(token, index){
-        if (token.value == "end"){
+        let next = this.getNextValidWord(index);
+        if (next == ";" || this.reservedWords.includes(next.toUpperCase())){
             this.decrementIndent();
-            this.lines.pop();
-            this.addNewLine(this.indentCount);
-            this.lines[this.lastIndex()] += token.value;
-        }else {
-            if (this.getLastString().trim() != ""){
-                this.addNewLine(this.indentCount);
+        } else {
+            for (let i = this.indentsKeyWords.length - 1; i >= 0; i--){
+                let current = this.indentsKeyWords[i];
+                if (current.name == next){
+                    this.indentCount = current.indent;
+                    break;
+                } else {
+                    this.decrementIndent();
+                }
             }
-            this.lines[this.lastIndex()] += token.value;
-            this.decrementIndent();
         }
+        if (this.getLastString().trim() != ""){
+            this.addNewLine(this.indentCount);
+        }
+        this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount) + token.value;
+        
     }
 
     formatSqlQuery(startIndex){
@@ -371,6 +519,11 @@ export default class NewFormatter {
             this.insertSqlInNewLine(sqlArray);
         }
         this.indentCount = startIndent;
+        let next = this.getNextValidWord(index);
+        if (next == ";" && this.indentsKeyWords.length !=0 &&
+                 this.indentsKeyWords[this.indentsKeyWords.length - 1].key == "cursor"){
+            this.decrementIndent();
+        }
         return index;
     }
 
@@ -463,6 +616,9 @@ export default class NewFormatter {
     }   
 
     formatBlockComment(token){
+        if (this.prevLineIsComment()){
+            this.lines.push("");
+        }
         this.addNewLine(this.indentCount);
         let comment = "";
         let comLines = token.value.split("\n")
@@ -473,7 +629,11 @@ export default class NewFormatter {
             this.lines[this.lastIndex()] += comLines[i].trim();
             this.addNewLine(this.indentCount);
         }
-        // this.lines.pop();
+    }
+
+    prevLineIsComment(){
+        return this.lastIndex() != 0 && 
+                this.lines[this.lastIndex() - 1].endsWith("*/");
     }
 
     addNewLine(count){
@@ -487,5 +647,16 @@ export default class NewFormatter {
 
     getLastString(){
         return this.lines[this.lastIndex()];
+    }
+
+    formatTextCase(token){
+        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || 
+            token.type === tokenTypes.BLOCK_COMMENT ||
+            token.type === tokenTypes.LINE_COMMENT){
+            return token.value;
+        } else {
+            return token.value.toLowerCase();
+        }
+
     }
 }

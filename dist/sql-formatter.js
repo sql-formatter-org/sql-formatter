@@ -2076,23 +2076,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, NewFormatter);
 
 	        this.indentCount = 0;
-	        this.cfg = cfg || {};
-	        this.params = new _Params2["default"](this.cfg.params);
 	        this.tokenizer = tokenizer;
 	        this.tokens = [];
 	        this.reservedWords = reservedWords;
-	        this.withoutSpaces = [".", "%", "(", ")"];
+	        this.withoutSpaces = [".", "%", "("];
 	        this.lines = [""];
 	        this.indent = "    ";
 	        this.openParens = openParens;
-	        this.indentStartBlock = -1;
+	        this.indentsKeyWords = [];
+	        this.lastIndentKey = { key: "", name: "", indent: 0 };
+	        this.lineSize = 80;
 	    }
 
 	    NewFormatter.prototype.format = function format(query) {
 	        this.query = query;
 	        this.tokens = this.tokenizer.tokenize(query);
 	        var formattedQuery = this.formatQuery();
-
 	        return formattedQuery.trim();
 	    };
 
@@ -2108,96 +2107,210 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.formatLineComment(token);
 	            } else if (token.type === _tokenTypes2["default"].BLOCK_COMMENT) {
 	                this.formatBlockComment(token);
-	            } else if (token.type === _tokenTypes2["default"].RESERVED_TOPLEVEL) {
-	                this.formatTopLeveleReservedWord(token);
-	            } else if (token.type === _tokenTypes2["default"].RESERVED_NEWLINE) {
-	                //new line token = start sql query
-	                i = this.formatSqlQuery(i);
-	            } else if (token.type === _tokenTypes2["default"].OPEN_PAREN) {
-	                this.formatOpeningParentheses(token, i);
-	            } else if (token.type === _tokenTypes2["default"].CLOSE_PAREN) {
-	                this.formatClosingParentheses(token, i);
-	            } else if (token.type === _tokenTypes2["default"].PLACEHOLDER) {
-	                this.formatPlaceholder(token);
-	            } else if (token.value === ",") {
-	                this.formatComma(token);
-	            } else if (token.value === ":") {
-	                this.formatWithSpaceAfter(token);
-	            } else if (this.withoutSpaces.includes(token.value)) {
-	                this.formatWithoutSpaces(token);
-	            } else if (token.value === ";") {
-	                this.formatQuerySeparator(token);
-	            } else if (token.value == "exception") {
-	                this.formatException(token);
-	            } else if (token.value == "as" || token.value == "is") {
-	                this.formatAsIs(token);
-	            } else {
-	                this.formatWithSpaces(token);
-	            };
+	            }
+	            // else if (token.type === tokenTypes.RESERVED_TOPLEVEL) {
+	            //     this.formatTopLeveleReservedWord(token);
+	            // } 
+	            else if (token.type === _tokenTypes2["default"].RESERVED_NEWLINE) {
+	                    //new line token = start sql query
+	                    i = this.formatSqlQuery(i);
+	                } else if (token.type === _tokenTypes2["default"].OPEN_PAREN) {
+	                    this.formatOpeningParentheses(token, i);
+	                } else if (token.type === _tokenTypes2["default"].CLOSE_PAREN) {
+	                    this.formatClosingParentheses(token, i);
+	                } else if (token.type === _tokenTypes2["default"].PLACEHOLDER) {
+	                    this.formatPlaceholder(token);
+	                } else if (token.value === ")") {
+	                    this.formatCloseBkt(token);
+	                } else if (token.value === "begin") {
+	                    this.formatBegin(token);
+	                } else if (token.value == "then") {
+	                    this.formatThen(token);
+	                } else if (token.value === "loop") {
+	                    this.formatLoop(token, i);
+	                } else if (token.value === ",") {
+	                    this.formatComma(token);
+	                } else if (token.value === ":") {
+	                    this.formatWithSpaceAfter(token);
+	                } else if (this.withoutSpaces.includes(token.value)) {
+	                    this.formatWithoutSpaces(token);
+	                } else if (token.value === ";") {
+	                    this.formatQuerySeparator(token);
+	                } else if (token.value == "exception") {
+	                    this.formatException(token, i);
+	                } else if (token.value == "else") {
+	                    this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;
+	                    this.addNewLine(this.indentCount);
+	                } else if (token.value == "elsif") {
+	                    this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;
+	                } else if (token.value == "when") {
+	                    this.formatWhen(token);
+	                } else if (token.value == "as" || token.value == "is") {
+	                    this.formatAsIs(token);
+	                } else {
+	                    this.formatWithSpaces(token);
+	                };
 	        }
 	        return this.lines.join("\n").trim();
 	    };
 
-	    NewFormatter.prototype.formatException = function formatException(token) {
-	        var idx = this.lastIndex() - 1;
-	        if (this.lines[idx].trim().endsWith(";")) {
-	            if (this.getLastString().trim() != "") {
-	                this.lines[this.lastIndex()] += token.value;
-	            } else {
-	                this.lines.pop();
-	                this.addNewLine(this.indentCount - 1);
-	                this.lines[this.lastIndex()] += token.value;
-	            }
+	    NewFormatter.prototype.formatWhen = function formatWhen(token) {
+	        var lastKey = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+	        if (lastKey != undefined && lastKey.key == "case" && !this.getLastString().trim().startsWith("case")) {
+	            this.indentCount--;
+	            this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount) + " ";
+	        }
+	        this.lines[this.lastIndex()] += token.value;
+	    };
+
+	    NewFormatter.prototype.formatThen = function formatThen(token) {
+	        this.lines[this.lastIndex()] += token.value;
+	        if (this.getLastString().includes(" when ")) {
+	            this.indentCount++;
+	        }
+	        this.addNewLine(this.indentCount);
+	    };
+
+	    NewFormatter.prototype.formatLoop = function formatLoop(token, index) {
+	        var next = this.getNextValidWord(index);
+	        if (next != ";") {
+	            this.addNewLine(this.indentCount);
+	            this.lines[this.lastIndex()] += token.value;
+	            this.incrementIndent(token.value, "");
+	            this.addNewLine(this.indentCount);
 	        } else {
 	            this.lines[this.lastIndex()] += token.value;
 	        }
 	    };
 
-	    NewFormatter.prototype.formatTextCase = function formatTextCase(token) {
-	        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || token.type === _tokenTypes2["default"].BLOCK_COMMENT || token.type === _tokenTypes2["default"].LINE_COMMENT) {
-	            return token.value;
+	    NewFormatter.prototype.formatBegin = function formatBegin(token) {
+	        var lastIndent = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+	        var startBlock = ["cursor", "procedure", "function", "pragma"];
+	        if (lastIndent != undefined) {
+	            if (startBlock.includes(lastIndent.key)) {
+	                if (this.getLastString().trim() != "") {
+	                    this.addNewLine(this.indentCount - 1);
+	                } else {
+	                    this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1);
+	                }
+	                this.indentsKeyWords.push({ key: token.value, name: "", indent: this.indentCount });
+	            } else {
+	                this.incrementIndent(token.value, "");
+	            }
 	        } else {
-	            return token.value.toLowerCase();
+	            if (this.getLastString().trim() != "" && !this.prevLineIsComment()) {
+	                this.addNewLine(this.indentCount);
+	            }
+	            this.incrementIndent(token.value, "");
+	        }
+	        this.lines[this.lastIndex()] += token.value;
+	        this.addNewLine(this.indentCount);
+	    };
+
+	    NewFormatter.prototype.formatCloseBkt = function formatCloseBkt(token) {
+	        this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString()) + token.value + " ";
+	        var lastString = this.getLastString();
+	        var openMatch = lastString.match(/\(/);
+	        var closeMatch = lastString.match(/\)/);
+	        if (openMatch != undefined && closeMatch != undefined) {
+	            var first = this.getFirstWord(lastString);
+	            if (lastString.length > this.lineSize && openMatch.length == closeMatch.length) {
+	                if (this.openParens.includes(first.toUpperCase())) {
+	                    this.lines[this.lastIndex()] = lastString.substring(0, lastString.indexOf("(") + 1);
+	                    var subLines = lastString.substring(lastString.indexOf("(") + 1).split(", ");
+	                    this.lines.push((0, _repeat2["default"])(this.indent, this.indentCount) + subLines[0]);
+	                    for (var i = 1; i < subLines.length; i++) {
+	                        this.lines[this.lastIndex()] += ",";
+	                        this.lines.push((0, _repeat2["default"])(this.indent, this.indentCount) + subLines[i]);
+	                    }
+	                } else {
+	                    var idx = this.getStartBktIndex();
+	                    this.lines[this.lastIndex()] = lastString.substring(0, idx + 1);
+	                    var _subLines = lastString.substring(idx + 1).split(", ");
+	                    var bktIndent = this.lines[this.lastIndex()].length;
+	                    var sbstr = _subLines[0];
+	                    var start = 0;
+	                    while (bktIndent + sbstr.length < this.lineSize) {
+	                        start++;
+	                        sbstr += ", " + _subLines[start];
+	                    }
+	                    this.lines[this.lastIndex()] += sbstr;
+	                    sbstr = _subLines[start + 1];
+	                    if (start + 1 == _subLines.length - 1) {
+	                        this.lines[this.lastIndex()] = lastString.substring(0, idx + 1);
+	                        var center = (_subLines.length - _subLines.length % 2) / 2;
+	                        for (var _i = 0; _i < _subLines.length; _i++) {
+	                            if (_i == center) {
+	                                this.lines.push((0, _repeat2["default"])(" ", bktIndent));
+	                            }
+	                            this.lines[this.lastIndex()] += _subLines[_i];
+	                            if (_i != _subLines.length - 1) {
+	                                this.lines[this.lastIndex()] += ", ";
+	                            }
+	                        }
+	                    } else {
+	                        for (var _i2 = start + 2; _i2 < _subLines.length; _i2++) {
+	                            sbstr += ", ";
+	                            if (sbstr.length + bktIndent > this.lineSize) {
+	                                this.lines.push((0, _repeat2["default"])(" ", bktIndent) + sbstr);
+	                                sbstr = _subLines[_i2];
+	                                if (_i2 == _subLines.length - 1) {
+	                                    this.lines.push((0, _repeat2["default"])(" ", bktIndent) + sbstr);
+	                                }
+	                            } else {
+	                                sbstr += _subLines[_i2];
+	                                if (_i2 == _subLines.length - 1) {
+	                                    this.lines.push((0, _repeat2["default"])(" ", bktIndent) + sbstr);
+	                                }
+	                            }
+	                        }
+	                    }
+	                }
+	            }
 	        }
 	    };
 
-	    NewFormatter.prototype.formatComma = function formatComma(token) {
-	        var line = this.getLastString();
-	        var startBkt = line.indexOf("(");
-	        var indent = this.indentCount;
-	        if (line.length > 100) {
-	            this.lines[this.lastIndex()] = line.substring(0, startBkt + 1);
-	            line = line.substring(startBkt + 1);
-	            var subLines = line.split(",");
-	            this.addNewLine(indent);
-	            for (var i = 0; i < subLines.length; i++) {
-	                var subLine = subLines[i].trim();
-	                if (subLines[i].includes("'")) {
-	                    var match = subLines[i].match(/\'/);
-	                    subLine = "";
-	                    while (match.length % 2 != 0 && i < subLines.length) {
-	                        subLine += subLines[i] + ",";
-	                        i++;
-	                    }
-	                    if (subLine == "") {
-	                        subLine = subLines[i];
-	                    }
-	                }
-	                if (subLine.includes("(") && !subLine.includes(")")) {
-	                    while (i < subLines.length - 1 && !subLines.includes(")")) {
-	                        i++;
-	                        subLine += ", " + subLines[i];
-	                    }
-	                }
-	                this.lines[this.lastIndex()] += (0, _trimEnd2["default"])(subLine) + ",";
-	                this.addNewLine(indent);
+	    NewFormatter.prototype.getStartBktIndex = function getStartBktIndex() {
+	        var lastStr = (0, _trimEnd2["default"])(this.getLastString());
+	        var openBkt = 0;
+	        var closeBkt = 0;
+	        for (var i = lastStr.length - 1; i >= 0; i--) {
+	            if (lastStr[i] == "(") {
+	                openBkt++;
+	            } else if (lastStr[i] == ")") {
+	                closeBkt++;
 	            }
-	        } else if (startBkt < 0) {
-	            this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString()) + token.value;
-	            this.addNewLine(indent);
-	        } else {
-	            this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString()) + token.value;
+	            if (closeBkt == openBkt) {
+	                return i;
+	            }
 	        }
+	        return 0;
+	    };
+
+	    NewFormatter.prototype.formatException = function formatException(token, index) {
+	        var next = this.getNextValidWord(index);
+	        if (next == ";") {
+	            this.lines[this.lastIndex()] += token.value;
+	            return;
+	        }
+	        if (this.getLastString().trim().match(/^return.*;$/) != null) {
+	            this.indentsKeyWords.push(this.lastIndentKey);
+	        }
+	        var last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+	        var lastIndent = last.indent;
+	        this.indentCount = last.indent + 1;
+	        if (this.getLastString().trim() == "") {
+	            this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, lastIndent);
+	        } else {
+	            this.addNewLine(lastIndent);
+	        }
+	        this.lines[this.lastIndex()] += token.value;
+	        this.indentCount = last.indent + 1;
+	        this.addNewLine(this.indentCount);
+	    };
+
+	    NewFormatter.prototype.formatComma = function formatComma(token) {
+	        this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString()) + token.value + " ";
 	    };
 
 	    NewFormatter.prototype.formatPlaceholder = function formatPlaceholder(token) {
@@ -2229,7 +2342,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    continue;
 	                }
 	                if (line.includes(")")) {
-	                    substring = this.getBktSubstring(i) + substring;
+	                    substring = this.getBktSubstring(i).substring + substring;
 	                    break;
 	                } else {
 	                    substring = line + substring;
@@ -2239,20 +2352,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        var first = this.getFirstWord(substring);
 	        if (first == "create") {
-	            console.log(this.getLastString());
-	            this.addNewLine(this.indentCount - 1);
-	            console.log(this.getLastString());
+	            if (!this.prevLineIsComment() && this.getLastString().trim() != "") {
+	                this.addNewLine(this.indentCount - 1);
+	            } else {
+	                this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1);
+	            }
 	            this.lines[this.lastIndex()] += token.value;
-	            console.log(this.getLastString());
 	            this.addNewLine(this.indentCount);
 	        } else if (first == "cursor") {
 	            this.lines[this.lastIndex] += token.value;
 	            this.addNewLine(this.indentCount);
-	        } else if (this.openParens.includes(first.toUpperCase()) || this.getLastString().includes("return") && !this.getLastString().endsWith(";")) {
-	            if (this.getLastString().includes("return") && !this.getLastString().endsWith(";")) {
-	                this.indentCount++;
+	        } else if (this.openParens.includes(first.toUpperCase()) && first != "if" && first != "elsif" || this.getLastString().includes("return") && !this.getLastString().endsWith(";")) {
+	            if (!this.prevLineIsComment() && this.getLastString().trim() != "") {
+	                this.addNewLine(this.indentCount - 1);
+	            } else {
+	                this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1);
 	            }
-	            this.addNewLine(this.indentCount - 1);
+	            // this.addNewLine(this.indentCount - 1);
 	            this.lines[this.lastIndex()] += token.value;
 	            this.addNewLine(this.indentCount);
 	        } else {
@@ -2267,14 +2383,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        example:
 	        procedure name(val);
 	        */
+	        var startBlock = ["cursor", "procedure", "function", "pragma"];
 	        var first = this.getFirstWord(this.getLastString());
-	        if (this.openParens.includes(first.toUpperCase()) && first != "if") {
-	            this.decrementIndent();
+	        if (this.openParens.includes(first.toUpperCase()) && first != "if" || this.getLastString().includes("return")) {
+	            if (this.indentsKeyWords[this.indentsKeyWords.length - 1] != undefined && startBlock.includes(this.indentsKeyWords[this.indentsKeyWords.length - 1].key)) {
+	                this.decrementIndent();
+	            }
 	        } else if (this.getLastString().endsWith(")")) {
 	            var ssInfo = this.getBktSubstring(this.lastIndex());
 	            var substring = ssInfo.substring;
 	            first = this.getFirstWord(substring);
-	            if (this.openParens.includes(first.toUpperCase() && first != "if")) {
+	            if (this.openParens.includes(first.toUpperCase()) && first != "if") {
 	                this.decrementIndent();
 	            }
 	        }
@@ -2332,31 +2451,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	    NewFormatter.prototype.formatOpeningParentheses = function formatOpeningParentheses(token, index) {
 	        var next = this.getNextValidWord(index);
 	        var startBlock = ["cursor", "procedure", "function"];
-	        if (next == ";") {
-	            this.lines[this.lastIndex()] += token.value;
-	            return;
-	        }
-	        if (startBlock.includes(token.value)) {
-	            if (this.indentStartBlock < 0) {
-	                this.indentStartBlock = this.indentCount;
-	            } else {
-	                if (this.lines[this.lastIndex() - 1].trim() == "") {
+	        if (next != ";") {
+	            var lastIndent = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+	            if (!this.prevLineIsComment()) {
+	                if (this.getLastString().trim() != "") {
+	                    this.addNewLine(this.indentCount);
+	                }
+	                this.addNewLine(this.indentCount);
+	            }
+	            if (token.value == "if") {
+	                while (this.getLastString().trim() == "") {
 	                    this.lines.pop();
 	                }
-	                this.indentCount = this.indentStartBlock;
+	                this.addNewLine(this.indentCount);
+	                // this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount);
 	            }
-	        }
-	        if (!this.lines[this.lastIndex() - 1].trim().endsWith("*/")) {
-	            this.addNewLine(this.indentCount);
-	        }
-	        if (token.value == "begin" && this.lines[this.lastIndex() - 1].trim() == "") {
-	            this.lines.pop();
-	            this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount);
-	        }
-	        this.indentCount++;
-	        this.lines[this.lastIndex()] += token.value;
-	        if (token.value == "begin") {
-	            this.addNewLine(this.indentCount);
+	            this.incrementIndent(token.value, next);
+	            this.lines[this.lastIndex()] += token.value;
+	        } else {
+	            this.lines[this.lastIndex()] += token.value;
 	        }
 	    };
 
@@ -2375,22 +2488,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    NewFormatter.prototype.decrementIndent = function decrementIndent() {
-	        if (this.indentCount != 0) this.indentCount--;
+	        this.lastIndentKey = this.indentsKeyWords.pop();
+	        this.indentCount = this.lastIndentKey.indent;
+	    };
+
+	    NewFormatter.prototype.incrementIndent = function incrementIndent(key, name) {
+	        this.indentsKeyWords.push({ key: key, name: name, indent: this.indentCount });
+	        this.indentCount++;
 	    };
 
 	    NewFormatter.prototype.formatClosingParentheses = function formatClosingParentheses(token, index) {
-	        if (token.value == "end") {
+	        var next = this.getNextValidWord(index);
+	        if (next == ";" || this.reservedWords.includes(next.toUpperCase())) {
 	            this.decrementIndent();
-	            this.lines.pop();
-	            this.addNewLine(this.indentCount);
-	            this.lines[this.lastIndex()] += token.value;
 	        } else {
-	            if (this.getLastString().trim() != "") {
-	                this.addNewLine(this.indentCount);
+	            for (var i = this.indentsKeyWords.length - 1; i >= 0; i--) {
+	                var current = this.indentsKeyWords[i];
+	                if (current.name == next) {
+	                    this.indentCount = current.indent;
+	                    break;
+	                } else {
+	                    this.decrementIndent();
+	                }
 	            }
-	            this.lines[this.lastIndex()] += token.value;
-	            this.decrementIndent();
 	        }
+	        if (this.getLastString().trim() != "") {
+	            this.addNewLine(this.indentCount);
+	        }
+	        this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount) + token.value;
 	    };
 
 	    NewFormatter.prototype.formatSqlQuery = function formatSqlQuery(startIndex) {
@@ -2433,6 +2558,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.insertSqlInNewLine(sqlArray);
 	        }
 	        this.indentCount = startIndent;
+	        var next = this.getNextValidWord(index);
+	        if (next == ";" && this.indentsKeyWords.length != 0 && this.indentsKeyWords[this.indentsKeyWords.length - 1].key == "cursor") {
+	            this.decrementIndent();
+	        }
 	        return index;
 	    };
 
@@ -2522,6 +2651,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    NewFormatter.prototype.formatBlockComment = function formatBlockComment(token) {
+	        if (this.prevLineIsComment()) {
+	            this.lines.push("");
+	        }
 	        this.addNewLine(this.indentCount);
 	        var comment = "";
 	        var comLines = token.value.split("\n");
@@ -2532,7 +2664,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.lines[this.lastIndex()] += comLines[i].trim();
 	            this.addNewLine(this.indentCount);
 	        }
-	        // this.lines.pop();
+	    };
+
+	    NewFormatter.prototype.prevLineIsComment = function prevLineIsComment() {
+	        return this.lastIndex() != 0 && this.lines[this.lastIndex() - 1].endsWith("*/");
 	    };
 
 	    NewFormatter.prototype.addNewLine = function addNewLine(count) {
@@ -2546,6 +2681,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    NewFormatter.prototype.getLastString = function getLastString() {
 	        return this.lines[this.lastIndex()];
+	    };
+
+	    NewFormatter.prototype.formatTextCase = function formatTextCase(token) {
+	        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || token.type === _tokenTypes2["default"].BLOCK_COMMENT || token.type === _tokenTypes2["default"].LINE_COMMENT) {
+	            return token.value;
+	        } else {
+	            return token.value.toLowerCase();
+	        }
 	    };
 
 	    return NewFormatter;
@@ -2574,13 +2717,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var reservedWords = ["A", "ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG", "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE", "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND", "BULK", "BY", "BYTE", "C", "CALL", "CALLING", "CASCADE", "CASE", "CHAR_BASE", "CHAR", "CHARACTER", "CHARSET", "CHARSETFORM", "CHARSETID", "CHECK", "CLOB_BASE", "CLONE", "CLOSE", "CLUSTER", "CLUSTERS", "COALESCE", "COLAUTH", "COLLECT", "COLUMNS", "COMMENT", "COMMIT", "COMMITTED", "COMPILED", "COMPRESS", "CONNECT", "CONSTANT", "CONSTRUCTOR", "CONTEXT", "CONTINUE", "CONVERT", "COUNT", "CRASH", "CREATE", "CREDENTIAL", "CURRENT", "CURRVAL", "CURSOR", "CUSTOMDATUM", "DANGLING", "DATA", "DATE_BASE", "DATE", "DAY", "DECIMAL", "DEFAULT", "DEFINE", "DELETE", "DESC", "DETERMINISTIC", "DIRECTORY", "DISTINCT", "DO", "DOUBLE", "DROP", "DURATION", "ELEMENT", "ELSIF", "EMPTY", "ESCAPE", "EXCEPTIONS", "EXCLUSIVE", "EXECUTE", "EXISTS", "EXIT", "EXTENDS", "EXTERNAL", "EXTRACT", "FALSE", "FETCH", "FINAL", "FIRST", "FIXED", "FLOAT", "FOR", "FORALL", "FORCE", "FROM", "FUNCTION", "GENERAL", "GOTO", "GRANT", "GROUP", "HASH", "HEAP", "HIDDEN", "HOUR", "IDENTIFIED", "IF", "IMMEDIATE", "IN", "INCLUDING", "INDEX", "INDEXES", "INDICATOR", "INDICES", "INFINITE", "INSTANTIABLE", "INT", "INTEGER", "INTERFACE", "INTERVAL", "INTO", "INVALIDATE", "IS", "ISOLATION", "JAVA", "LANGUAGE", "LARGE", "LEADING", "LENGTH", "LEVEL", "LIBRARY", "LIKE", "LIKE2", "LIKE4", "LIKEC", "LIMITED", "LOCAL", "LOCK", "LONG", "MAP", "MAX", "MAXLEN", "MEMBER", "MERGE INTO", "MIN", "MINUS", "MINUTE", "MLSLABEL", "MOD", "MODE", "MONTH", "MULTISET", "NAME", "NAN", "NATIONAL", "NATIVE", "NATURAL", "NATURALN", "NCHAR", "NEW", "NEXTVAL", "NOCOMPRESS", "NOCOPY", "NOT", "NOWAIT", "NULL", "NULLIF", "NUMBER_BASE", "NUMBER", "OBJECT", "OCICOLL", "OCIDATE", "OCIDATETIME", "OCIDURATION", "OCIINTERVAL", "OCILOBLOCATOR", "OCINUMBER", "OCIRAW", "OCIREF", "OCIREFCURSOR", "OCIROWID", "OCISTRING", "OCITYPE", "OF", "OLD", "ON", "ONLY", "OPAQUE", "OPEN", "OPERATOR", "OPTION", "ORACLE", "ORADATA", "ORDER", "ORGANIZATION", "ORLANY", "ORLVARY", "OTHERS", "OUT", "OVERLAPS", "OVERRIDING", "PACKAGE", "PARALLEL_ENABLE", "PARAMETER", "PARAMETERS", "PARENT", "PARTITION", "PASCAL", "PCTFREE", "PIPE", "PIPELINED", "PLS_INTEGER", "PLUGGABLE", "POSITIVE", "POSITIVEN", "PRAGMA", "PRECISION", "PRIOR", "PRIVATE", "PROCEDURE", "PUBLIC", "RAISE", "RANGE", "RAW", "READ", "REAL", "RECORD", "REF", "REFERENCE", "RELEASE", "RELIES_ON", "REM", "REMAINDER", "RENAME", "RESOURCE", "RESULT_CACHE", "RESULT", "RETURN", "RETURNING", "REVERSE", "REVOKE", "ROLLBACK", "ROW", "ROWID", "ROWNUM", "ROWTYPE", "SAMPLE", "SAVE", "SAVEPOINT", "SB1", "SB2", "SB4", "SECOND", "SEGMENT", "SELF", "SEPARATE", "SEQUENCE", "SERIALIZABLE", "SHARE", "SHORT", "SIZE_T", "SIZE", "SMALLINT", "SOME", "SPACE", "SPARSE", "SQL", "SQLCODE", "SQLDATA", "SQLERRM", "SQLNAME", "SQLSTATE", "STANDARD", "START", "STATIC", "STDDEV", "STORED", "STRING", "STRUCT", "STYLE", "SUBMULTISET", "SUBPARTITION", "SUBSTITUTABLE", "SUBTYPE", "SUCCESSFUL", "SUM", "SYNONYM", "SYSDATE", "TABAUTH", "TABLE", "TDO", "THE", "THEN", "TIME", "TIMESTAMP", "TIMEZONE_ABBR", "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TIMEZONE_REGION", "TO", "TRAILING", "TRANSACTION", "TRANSACTIONAL", "TRIGGER", "TRUE", "TRUSTED", "TYPE", "UB1", "UB2", "UB4", "UID", "UNDER", "UNIQUE", "UNPLUG", "UNSIGNED", "UNTRUSTED", "USE", "USER", "USING", "VALIDATE", "VALIST", "VALUE", "VARCHAR", "VARCHAR2", "VARIABLE", "VARIANCE", "VARRAY", "VARYING", "VIEW", "VIEWS", "VOID", "WHENEVER", "WHILE", "WITH", "WORK", "WRAPPED", "WRITE", "YEAR", "SELECT", "UNION", "INSERT", "EXCEPTION", "ZONE", "AND", "OR"];
+	var reservedWords = ["A", "ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG", "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE", "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND", "BULK", "BY", "BYTE", "C", "CALL", "CALLING", "CASCADE", "CASE", "CHAR_BASE", "CHAR", "CHARACTER", "CHARSET", "CHARSETFORM", "CHARSETID", "CHECK", "CLOB_BASE", "CLONE", "CLOSE", "CLUSTER", "CLUSTERS", "COALESCE", "COLAUTH", "COLLECT", "COLUMNS", "COMMENT", "COMMIT", "COMMITTED", "COMPILED", "COMPRESS", "CONNECT", "CONSTANT", "CONSTRUCTOR", "CONTEXT", "CONTINUE", "CONVERT", "COUNT", "CRASH", "CREATE", "CREDENTIAL", "CURRENT", "CURRVAL", "CURSOR", "CUSTOMDATUM", "DANGLING", "DATA", "DATE_BASE", "DATE", "DAY", "DECIMAL", "DEFAULT", "DEFINE", "DELETE", "DESC", "DETERMINISTIC", "DIRECTORY", "DISTINCT", "DO", "DOUBLE", "DROP", "DURATION", "ELEMENT", "ELSIF", "EMPTY", "ESCAPE", "EXCEPTIONS", "EXCLUSIVE", "EXECUTE", "EXISTS", "EXIT", "EXTENDS", "EXTERNAL", "EXTRACT", "FALSE", "FETCH", "FINAL", "FIRST", "FIXED", "FLOAT", "FOR", "FORALL", "FORCE", "FROM", "FUNCTION", "GENERAL", "GOTO", "GRANT", "GROUP", "HASH", "HEAP", "HIDDEN", "HOUR", "IDENTIFIED", "IF", "IMMEDIATE", "IN", "INCLUDING", "INDEX", "INDEXES", "INDICATOR", "INDICES", "INFINITE", "INSTANTIABLE", "INT", "INTEGER", "INTERFACE", "INTERVAL", "INTO", "INVALIDATE", "IS", "ISOLATION", "JAVA", "LANGUAGE", "LARGE", "LEADING", "LENGTH", "LEVEL", "LIBRARY", "LIKE", "LIKE2", "LIKE4", "LIKEC", "LIMITED", "LOCAL", "LOCK", "LONG", "MAP", "MAX", "MAXLEN", "MEMBER", "MERGE INTO", "MIN", "MINUS", "MINUTE", "MLSLABEL", "MOD", "MODE", "MONTH", "MULTISET", "NAME", "NAN", "NATIONAL", "NATIVE", "NATURAL", "NATURALN", "NCHAR", "NEW", "NEXTVAL", "NOCOMPRESS", "NOCOPY", "NOT", "NOWAIT", "NULL", "NULLIF", "NUMBER_BASE", "NUMBER", "OBJECT", "OCICOLL", "OCIDATE", "OCIDATETIME", "OCIDURATION", "OCIINTERVAL", "OCILOBLOCATOR", "OCINUMBER", "OCIRAW", "OCIREF", "OCIREFCURSOR", "OCIROWID", "OCISTRING", "OCITYPE", "OF", "OLD", "ON", "ONLY", "OPAQUE", "OPEN", "OPERATOR", "OPTION", "ORACLE", "ORADATA", "ORDER", "ORGANIZATION", "ORLANY", "ORLVARY", "OTHERS", "OUT", "OVERLAPS", "OVERRIDING", "PACKAGE", "PARALLEL_ENABLE", "PARAMETER", "PARAMETERS", "PARENT", "PARTITION", "PASCAL", "PCTFREE", "PIPE", "PIPELINED", "PLS_INTEGER", "PLUGGABLE", "POSITIVE", "POSITIVEN", "PRAGMA", "PRECISION", "PRIOR", "PRIVATE", "PROCEDURE", "PUBLIC", "RAISE", "RANGE", "RAW", "READ", "REAL", "RECORD", "REF", "REFERENCE", "RELEASE", "RELIES_ON", "REM", "REMAINDER", "RENAME", "RESOURCE", "RESULT_CACHE", "RESULT", "RETURN", "RETURNING", "REVERSE", "REVOKE", "ROLLBACK", "ROW", "ROWID", "ROWNUM", "ROWTYPE", "SAMPLE", "SAVE", "SAVEPOINT", "SB1", "SB2", "SB4", "SECOND", "SEGMENT", "SELF", "SEPARATE", "SEQUENCE", "SERIALIZABLE", "SHARE", "SHORT", "SIZE_T", "SIZE", "SMALLINT", "SOME", "SPACE", "SPARSE", "SQL", "SQLCODE", "SQLDATA", "SQLERRM", "SQLNAME", "SQLSTATE", "STANDARD", "START", "STATIC", "STDDEV", "STORED", "STRING", "STRUCT", "STYLE", "SUBMULTISET", "SUBPARTITION", "SUBSTITUTABLE", "SUBTYPE", "SUCCESSFUL", "SUM", "SYNONYM", "SYSDATE", "TABAUTH", "TABLE", "TDO", "THE", "THEN", "TIME", "TIMESTAMP", "TIMEZONE_ABBR", "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TIMEZONE_REGION", "TO", "TRAILING", "TRANSACTION", "TRANSACTIONAL", "TRIGGER", "TRUE", "TRUSTED", "TYPE", "UB1", "UB2", "UB4", "UID", "UNDER", "UNIQUE", "UNPLUG", "UNSIGNED", "UNTRUSTED", "USE", "USER", "USING", "VALIDATE", "VALIST", "VALUE", "VARCHAR", "VARCHAR2", "VARIABLE", "VARIANCE", "VARRAY", "VARYING", "VIEW", "VIEWS", "VOID", "WHENEVER", "WHILE", "WITH", "WORK", "WRAPPED", "WRITE", "YEAR", "SELECT", "UNION", "INSERT", "EXCEPTION", "ZONE", "AND", "OR", "LOOP", "TYPE", "WITH", "UNION", "USING", "ELSE", "WHEN", "THEN", "ELSIF", "ALTER", "SELECT", "INSERT", "UPDATE", "DROP", "MERGE INTO", "CREATE", "BEGIN", "FUNCTION", "CURSOR", "IF", "FOR", "PROCEDURE", "WHILE", "PRAGMA", "CASE"];
 
-	var reservedToplevelWords = ["LOOP", "TYPE", "WITH", "UNION", "USING", "ELSE", "WHEN", "THEN", "ELSIF"];
+	var reservedToplevelWords = [
+	// "LOOP", 
+	"TYPE", "WITH", "UNION", "USING", "ELSE", "WHEN", "THEN", "ELSIF"];
 
 	var reservedNewlineWords = ["ALTER", "SELECT", "INSERT", "UPDATE", "DROP", "MERGE INTO"];
 
-	var openParens = ["CREATE", "BEGIN", "FUNCTION", "CURSOR", "IF", "FOR", "PROCEDURE", "WHILE"];
+	var openParens = ["CREATE", //"BEGIN",
+	"FUNCTION", "CURSOR", "IF",
+	//"FOR",
+	"PROCEDURE",
+	// "LOOP",
+	// "WHILE", 
+	// "PRAGMA", 
+	"CASE"];
 
 	var tokenizer = void 0;
 
@@ -2599,7 +2751,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                reservedNewlineWords: reservedNewlineWords,
 	                stringTypes: ["\"\"", "N''", "''", "``"],
 	                openParens: openParens,
-	                closeParens: ["END", "RETURN"],
+	                closeParens: ["END"], //"RETURN", ],
 	                indexedPlaceholderTypes: ["?"],
 	                namedPlaceholderTypes: [":"],
 	                lineCommentTypes: ["--"],
