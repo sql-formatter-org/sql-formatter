@@ -2136,7 +2136,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.formatWithoutSpaces(token);
 	                } else if (token.value === ";") {
 	                    this.formatQuerySeparator(token);
-	                } else if (token.value == "exception") {
+	                } else if (token.value.startsWith("exception")) {
 	                    this.formatException(token, i);
 	                } else if (token.value == "else") {
 	                    this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;

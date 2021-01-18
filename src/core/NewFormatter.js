@@ -84,7 +84,7 @@ export default class NewFormatter {
             else if (token.value === ";") {
                 this.formatQuerySeparator(token);
             } 
-            else if (token.value == "exception"){
+            else if (token.value.startsWith("exception")){
                 this.formatException(token, i);
             } 
             else if (token.value == "else"){
