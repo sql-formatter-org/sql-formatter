@@ -2193,7 +2193,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                } else {
 	                    this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1);
 	                }
-	                this.indentsKeyWords.push({ key: token.value, name: "", indent: this.indentCount });
+	                if (lastIndent.key != "procedure") {
+	                    this.indentsKeyWords.push({ key: token.value, name: "", indent: this.indentCount });
+	                } else {
+	                    this.indentsKeyWords[this.indentsKeyWords.length - 1].key = token.value;
+	                }
 	            } else {
 	                this.incrementIndent(token.value, "");
 	            }
