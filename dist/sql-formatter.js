@@ -1980,9 +1980,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatWithSpaces = function formatWithSpaces(token) {
-	        if (token.value == "on" && !this.getLastString().includes(" join ")) {
-	            this.addNewLine("right", token.value);
-	        }
+	        // if (token.value == "on" && !this.getLastString().includes(" join ")){
+	        //     this.addNewLine("right", token.value);
+	        // }
 	        if (!token.value.endsWith(".")) {
 	            this.lines[this.lastIndex()] += token.value + " ";
 	        } else {
