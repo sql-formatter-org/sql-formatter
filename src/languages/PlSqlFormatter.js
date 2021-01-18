@@ -124,7 +124,7 @@ export default class SqlFormatter {
                 reservedWords,
                 reservedToplevelWords,
                 reservedNewlineWords,
-                stringTypes: [`""`, "N''", "''", "``"],
+                stringTypes: [`""`, "N''", "''", "``",],
                 openParens,
                 closeParens: ["END", ],//"RETURN", ],
                 indexedPlaceholderTypes: ["?"],

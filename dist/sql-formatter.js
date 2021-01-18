@@ -537,6 +537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "``": "((`[^`]*($|`))+)",
 	            "[]": "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)",
 	            "\"\"": "((\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)",
+	            // "''''": "((''[^''\\\\]*(?:\\\\.[^''\\\\]*)*('|$))+)",
 	            "''": "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
 	            "N''": "((N'[^N'\\\\]*(?:\\\\.[^N'\\\\]*)*('|$))+)"
 	        };
@@ -2359,7 +2360,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	        var first = this.getFirstWord(substring);
-	        console.log("first : " + first);
 	        if (first == "create") {
 	            if (!this.prevLineIsComment() && this.getLastString().trim() != "") {
 	                this.addNewLine(this.indentCount - 1);
@@ -2370,7 +2370,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.addNewLine(this.indentCount);
 	        } else if (first == "cursor") {
 	            this.lines[this.lastIndex()] += token.value;
-	            console.log(this.getLastString());
 	            this.addNewLine(this.indentCount);
 	        } else if (this.openParens.includes(first.toUpperCase()) && first != "if" && first != "elsif" || this.getLastString().includes("return") && !this.getLastString().endsWith(";")) {
 	            if (!this.prevLineIsComment() && this.getLastString().trim() != "") {
@@ -2706,7 +2705,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    NewFormatter.prototype.formatTextCase = function formatTextCase(token) {
-	        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || token.type === _tokenTypes2["default"].BLOCK_COMMENT || token.type === _tokenTypes2["default"].LINE_COMMENT) {
+	        // console.log(token.value);
+	        // console.log(token.value);
+	        // console.log(this.getLastString());
+	        // console.log(token.value);
+	        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || token.type === _tokenTypes2["default"].BLOCK_COMMENT || token.type === _tokenTypes2["default"].LINE_COMMENT || token.value.startsWith("'")) {
 	            return token.value;
 	        } else {
 	            return token.value.toLowerCase();

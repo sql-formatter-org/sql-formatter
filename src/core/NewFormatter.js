@@ -314,7 +314,6 @@ export default class NewFormatter {
             }
         }
         let first = this.getFirstWord(substring);
-        console.log("first : " + first);
         if (first == "create"){
             if (!this.prevLineIsComment() && this.getLastString().trim() != ""){
                 this.addNewLine(this.indentCount - 1);
@@ -325,7 +324,6 @@ export default class NewFormatter {
             this.addNewLine(this.indentCount);
         } else if (first == "cursor"){
             this.lines[this.lastIndex()] += token.value;
-            console.log(this.getLastString());
             this.addNewLine(this.indentCount);
         } else if (
             (this.openParens.includes(first.toUpperCase()) && first != "if" && first != "elsif") || 
@@ -676,9 +674,14 @@ export default class NewFormatter {
     }
 
     formatTextCase(token){
+        // console.log(token.value);
+        // console.log(token.value);
+        // console.log(this.getLastString());
+        // console.log(token.value);
         if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || 
             token.type === tokenTypes.BLOCK_COMMENT ||
-            token.type === tokenTypes.LINE_COMMENT){
+            token.type === tokenTypes.LINE_COMMENT ||
+            token.value.startsWith("'")){
             return token.value;
         } else {
             return token.value.toLowerCase();
