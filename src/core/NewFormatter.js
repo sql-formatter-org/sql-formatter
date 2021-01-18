@@ -168,7 +168,7 @@ export default class NewFormatter {
         if (openMatch != undefined && closeMatch != undefined){
             let first = this.getFirstWord(lastString);
             if (lastString.length > this.lineSize && openMatch.length == closeMatch.length){
-                if (this.openParens.includes(first.toUpperCase())){
+                if (this.openParens.includes(first.toUpperCase()) && first != "if"){
                     this.lines[this.lastIndex()] = lastString.substring(0, lastString.indexOf("(") + 1);
                     let subLines = lastString.substring(lastString.indexOf("(") + 1).split(", ");
                     this.lines.push(repeat(this.indent, this.indentCount) + subLines[0]);
@@ -177,47 +177,47 @@ export default class NewFormatter {
                         this.lines.push(repeat(this.indent, this.indentCount) + subLines[i]);
                     }
                 } else {
-                    let idx = this.getStartBktIndex();
-                    this.lines[this.lastIndex()] = lastString.substring(0, idx + 1);
-                    let subLines = lastString.substring(idx + 1).split(", ");
-                    let bktIndent = this.lines[this.lastIndex()].length;
-                    let sbstr = subLines[0];
-                    let start = 0;
-                    while (bktIndent + sbstr.length < this.lineSize){
-                        start++;
-                        sbstr += ", " + subLines[start];
-                    }
-                    this.lines[this.lastIndex()] += sbstr;
-                    sbstr = subLines[start + 1];
-                    if (start + 1 == subLines.length - 1){
-                        this.lines[this.lastIndex()] = lastString.substring(0, idx + 1);
-                        let center = (subLines.length - (subLines.length % 2) ) / 2;
-                        for (let i = 0; i < subLines.length; i++){
-                            if (i == center){
-                                this.lines.push(repeat(" ", bktIndent));
-                            }
-                            this.lines[this.lastIndex()] += subLines[i];
-                            if (i != subLines.length - 1){
-                                this.lines[this.lastIndex()] += ", ";
-                            }
-                        }
-                    } else {
-                        for (let i = start + 2; i < subLines.length; i++){
-                            sbstr +=  ", ";
-                            if (sbstr.length + bktIndent > this.lineSize){
-                                this.lines.push(repeat(" ", bktIndent) + sbstr);
-                                sbstr = subLines[i];
-                                if (i == subLines.length - 1){
-                                    this.lines.push(repeat(" ", bktIndent) + sbstr);
-                               }
-                            } else {
-                                sbstr += subLines[i];
-                                if (i == subLines.length - 1){
-                                    this.lines.push(repeat(" ", bktIndent) + sbstr);
-                               }
-                            }
-                        }
-                    }
+                    // let idx = this.getStartBktIndex();
+                    // this.lines[this.lastIndex()] = lastString.substring(0, idx + 1);
+                    // let subLines = lastString.substring(idx + 1).split(", ");
+                    // let bktIndent = this.lines[this.lastIndex()].length;
+                    // let sbstr = subLines[0];
+                    // let start = 0;
+                    // while (bktIndent + sbstr.length < this.lineSize){
+                    //     start++;
+                    //     sbstr += ", " + subLines[start];
+                    // }
+                    // this.lines[this.lastIndex()] += sbstr;
+                    // sbstr = subLines[start + 1];
+                    // if (start + 1 == subLines.length - 1){
+                    //     this.lines[this.lastIndex()] = lastString.substring(0, idx + 1);
+                    //     let center = (subLines.length - (subLines.length % 2) ) / 2;
+                    //     for (let i = 0; i < subLines.length; i++){
+                    //         if (i == center){
+                    //             this.lines.push(repeat(" ", bktIndent));
+                    //         }
+                    //         this.lines[this.lastIndex()] += subLines[i];
+                    //         if (i != subLines.length - 1){
+                    //             this.lines[this.lastIndex()] += ", ";
+                    //         }
+                    //     }
+                    // } else {
+                    //     for (let i = start + 2; i < subLines.length; i++){
+                    //         sbstr +=  ", ";
+                    //         if (sbstr.length + bktIndent > this.lineSize){
+                    //             this.lines.push(repeat(" ", bktIndent) + sbstr);
+                    //             sbstr = subLines[i];
+                    //             if (i == subLines.length - 1){
+                    //                 this.lines.push(repeat(" ", bktIndent) + sbstr);
+                    //            }
+                    //         } else {
+                    //             sbstr += subLines[i];
+                    //             if (i == subLines.length - 1){
+                    //                 this.lines.push(repeat(" ", bktIndent) + sbstr);
+                    //            }
+                    //         }
+                    //     }
+                    // }
                     
                 }
             } 
@@ -459,6 +459,7 @@ export default class NewFormatter {
 
     formatClosingParentheses(token, index){
         let next = this.getNextValidWord(index);
+        let prevIndent = this.indentCount;
         if (next == ";" || this.reservedWords.includes(next.toUpperCase())){
             this.decrementIndent();
         } else {
@@ -475,7 +476,12 @@ export default class NewFormatter {
         if (this.getLastString().trim() != ""){
             this.addNewLine(this.indentCount);
         }
-        this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount) + token.value;
+        if (prevIndent == this.indentCount){
+            this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1) + token.value;    
+        } else {
+            this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount) + token.value;
+        }
+        
         
     }
 

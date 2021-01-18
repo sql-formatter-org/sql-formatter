@@ -2215,7 +2215,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (openMatch != undefined && closeMatch != undefined) {
 	            var first = this.getFirstWord(lastString);
 	            if (lastString.length > this.lineSize && openMatch.length == closeMatch.length) {
-	                if (this.openParens.includes(first.toUpperCase())) {
+	                if (this.openParens.includes(first.toUpperCase()) && first != "if") {
 	                    this.lines[this.lastIndex()] = lastString.substring(0, lastString.indexOf("(") + 1);
 	                    var subLines = lastString.substring(lastString.indexOf("(") + 1).split(", ");
 	                    this.lines.push((0, _repeat2["default"])(this.indent, this.indentCount) + subLines[0]);
@@ -2224,47 +2224,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        this.lines.push((0, _repeat2["default"])(this.indent, this.indentCount) + subLines[i]);
 	                    }
 	                } else {
-	                    var idx = this.getStartBktIndex();
-	                    this.lines[this.lastIndex()] = lastString.substring(0, idx + 1);
-	                    var _subLines = lastString.substring(idx + 1).split(", ");
-	                    var bktIndent = this.lines[this.lastIndex()].length;
-	                    var sbstr = _subLines[0];
-	                    var start = 0;
-	                    while (bktIndent + sbstr.length < this.lineSize) {
-	                        start++;
-	                        sbstr += ", " + _subLines[start];
-	                    }
-	                    this.lines[this.lastIndex()] += sbstr;
-	                    sbstr = _subLines[start + 1];
-	                    if (start + 1 == _subLines.length - 1) {
-	                        this.lines[this.lastIndex()] = lastString.substring(0, idx + 1);
-	                        var center = (_subLines.length - _subLines.length % 2) / 2;
-	                        for (var _i = 0; _i < _subLines.length; _i++) {
-	                            if (_i == center) {
-	                                this.lines.push((0, _repeat2["default"])(" ", bktIndent));
-	                            }
-	                            this.lines[this.lastIndex()] += _subLines[_i];
-	                            if (_i != _subLines.length - 1) {
-	                                this.lines[this.lastIndex()] += ", ";
-	                            }
-	                        }
-	                    } else {
-	                        for (var _i2 = start + 2; _i2 < _subLines.length; _i2++) {
-	                            sbstr += ", ";
-	                            if (sbstr.length + bktIndent > this.lineSize) {
-	                                this.lines.push((0, _repeat2["default"])(" ", bktIndent) + sbstr);
-	                                sbstr = _subLines[_i2];
-	                                if (_i2 == _subLines.length - 1) {
-	                                    this.lines.push((0, _repeat2["default"])(" ", bktIndent) + sbstr);
-	                                }
-	                            } else {
-	                                sbstr += _subLines[_i2];
-	                                if (_i2 == _subLines.length - 1) {
-	                                    this.lines.push((0, _repeat2["default"])(" ", bktIndent) + sbstr);
-	                                }
-	                            }
-	                        }
-	                    }
+	                    // let idx = this.getStartBktIndex();
+	                    // this.lines[this.lastIndex()] = lastString.substring(0, idx + 1);
+	                    // let subLines = lastString.substring(idx + 1).split(", ");
+	                    // let bktIndent = this.lines[this.lastIndex()].length;
+	                    // let sbstr = subLines[0];
+	                    // let start = 0;
+	                    // while (bktIndent + sbstr.length < this.lineSize){
+	                    //     start++;
+	                    //     sbstr += ", " + subLines[start];
+	                    // }
+	                    // this.lines[this.lastIndex()] += sbstr;
+	                    // sbstr = subLines[start + 1];
+	                    // if (start + 1 == subLines.length - 1){
+	                    //     this.lines[this.lastIndex()] = lastString.substring(0, idx + 1);
+	                    //     let center = (subLines.length - (subLines.length % 2) ) / 2;
+	                    //     for (let i = 0; i < subLines.length; i++){
+	                    //         if (i == center){
+	                    //             this.lines.push(repeat(" ", bktIndent));
+	                    //         }
+	                    //         this.lines[this.lastIndex()] += subLines[i];
+	                    //         if (i != subLines.length - 1){
+	                    //             this.lines[this.lastIndex()] += ", ";
+	                    //         }
+	                    //     }
+	                    // } else {
+	                    //     for (let i = start + 2; i < subLines.length; i++){
+	                    //         sbstr +=  ", ";
+	                    //         if (sbstr.length + bktIndent > this.lineSize){
+	                    //             this.lines.push(repeat(" ", bktIndent) + sbstr);
+	                    //             sbstr = subLines[i];
+	                    //             if (i == subLines.length - 1){
+	                    //                 this.lines.push(repeat(" ", bktIndent) + sbstr);
+	                    //            }
+	                    //         } else {
+	                    //             sbstr += subLines[i];
+	                    //             if (i == subLines.length - 1){
+	                    //                 this.lines.push(repeat(" ", bktIndent) + sbstr);
+	                    //            }
+	                    //         }
+	                    //     }
+	                    // }
+
 	                }
 	            }
 	        }
@@ -2499,6 +2500,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    NewFormatter.prototype.formatClosingParentheses = function formatClosingParentheses(token, index) {
 	        var next = this.getNextValidWord(index);
+	        var prevIndent = this.indentCount;
 	        if (next == ";" || this.reservedWords.includes(next.toUpperCase())) {
 	            this.decrementIndent();
 	        } else {
@@ -2515,7 +2517,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.getLastString().trim() != "") {
 	            this.addNewLine(this.indentCount);
 	        }
-	        this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount) + token.value;
+	        if (prevIndent == this.indentCount) {
+	            this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;
+	        } else {
+	            this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount) + token.value;
+	        }
 	    };
 
 	    NewFormatter.prototype.formatSqlQuery = function formatSqlQuery(startIndex) {
