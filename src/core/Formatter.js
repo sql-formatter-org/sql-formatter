@@ -366,9 +366,17 @@ export default class Formatter {
             }
         }
         let first = substring.trim().split(" ")[0].replace(/\(/, "").trim();
-        if (this.startBlock.includes(first) || first == "with"){
-            console.log(first);
+        if (this.startBlock.includes(first)){
             this.indents.pop();
+        } else if (first == "with") {
+            let match = substring.match(/(\s|\n)union(\s|\n)/);
+            let popCount = 1;
+            if (match != undefined){
+                popCount += match.length
+            }
+            for (let i = 0; i < popCount; i++){
+                this.indents.pop();
+            }
         } else {
             if (!this.reservedWords.includes(first) && substring.match(/.* (and|or|xor|not) .*/) == null){
                 let subLines = substring.split("\n");

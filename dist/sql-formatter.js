@@ -1973,19 +1973,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	        var first = substring.trim().split(" ")[0].replace(/\(/, "").trim();
-	        if (this.startBlock.includes(first) || first == "with") {
-	            console.log(first);
+	        if (this.startBlock.includes(first)) {
 	            this.indents.pop();
+	        } else if (first == "with") {
+	            var match = substring.match(/(\s|\n)union(\s|\n)/);
+	            var popCount = 1;
+	            if (match != undefined) {
+	                popCount += match.length;
+	            }
+	            for (var _i = 0; _i < popCount; _i++) {
+	                this.indents.pop();
+	            }
 	        } else {
 	            if (!this.reservedWords.includes(first) && substring.match(/.* (and|or|xor|not) .*/) == null) {
 	                var subLines = substring.split("\n");
 	                substring = "";
-	                for (var _i = 0; _i < subLines.length; _i++) {
-	                    substring += subLines[_i].trim() + " ";
+	                for (var _i2 = 0; _i2 < subLines.length; _i2++) {
+	                    substring += subLines[_i2].trim() + " ";
 	                }
 	                this.lines[startIndex] = (0, _trimEnd2["default"])(this.lines[startIndex].substring(0, start) + substring);
 	                var length = this.lines.length;
-	                for (var _i2 = startIndex + 1; _i2 < length; _i2++) {
+	                for (var _i3 = startIndex + 1; _i3 < length; _i3++) {
 	                    this.lines.pop();
 	                }
 	            }
