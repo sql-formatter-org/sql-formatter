@@ -1649,6 +1649,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatQuery = function formatQuery() {
+
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
 	            token.value = this.formatTextCase(token);
@@ -1806,6 +1807,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	            this.lines.push((0, _repeat2["default"])(" ", indent));
 	        }
+	        // this.checkLineLength();
+	    };
+
+	    Formatter.prototype.checkLineLength = function checkLineLength() {
+	        var maxCleanLineLength = 60;
+	        var last = this.lines[this.lastIndex() - 1].trim();
+	        if (last.trim().length < maxCleanLineLength) {
+	            return;
+	        }
+	        var firstChar = this.getLastString().trim()[0];
+	        if (firstChar == "(") {
+	            last = last.substring(1).trim();
+	        }
+	        var first = last.split(/\(\) ,/)[0];
+	        var index = this.query.indexOf(first);
+	        this.query = this.query.substring(index);
+	        var lastWithoutSpace = last.replace(/\s*\n*/, " ");
+	        while (index != this.query.replace(/\s*\n*/, " ").indexOf(lastWithoutSpace)) {
+	            var _index = this.query.indexOf(first);
+	            this.query = this.query.substring(_index);
+	        }
+	        var substring = "";
+	        if (firstChar == "(") {
+	            substring += firstChar;
+	        }
 	    };
 
 	    Formatter.prototype.getCurrentIndent = function getCurrentIndent(align, word) {
@@ -1947,7 +1973,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	        var first = substring.trim().split(" ")[0].replace(/\(/, "").trim();
-	        if (this.startBlock.includes(first)) {
+	        if (this.startBlock.includes(first) || first == "with") {
+	            console.log(first);
 	            this.indents.pop();
 	        } else {
 	            if (!this.reservedWords.includes(first) && substring.match(/.* (and|or|xor|not) .*/) == null) {

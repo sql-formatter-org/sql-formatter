@@ -19,7 +19,7 @@ export default class Formatter {
         this.startBlock = ["select", "begin", "create", "alter", "insert", //"update", 
                                     "drop", "merge"];
         this.logicalOperators = ["or", "xor", "and"];
-    }
+            }
 
     format(query) {
         this.query = query;
@@ -37,6 +37,7 @@ export default class Formatter {
     }
 
     formatQuery(){
+
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
             token.value = this.formatTextCase(token);
@@ -196,6 +197,33 @@ export default class Formatter {
         }else {
             this.lines.push(repeat(" ", indent));
         }
+        // this.checkLineLength();
+    }
+
+    checkLineLength(){
+        let maxCleanLineLength = 60;
+        let last = this.lines[this.lastIndex() - 1].trim();
+        if (last.trim().length < maxCleanLineLength){
+            return;
+        }
+        let firstChar = this.getLastString().trim()[0];
+        if (firstChar == "("){
+            last = last.substring(1).trim();
+        }
+        let first = last.split(/\(\) ,/)[0];
+        let index = this.query.indexOf(first);
+        this.query = this.query.substring(index);
+        let lastWithoutSpace = last.replace(/\s*\n*/, " ");
+        while(index != this.query.replace(/\s*\n*/, " ").indexOf(lastWithoutSpace)){
+            let index = this.query.indexOf(first);
+            this.query = this.query.substring(index);
+        }
+        let substring = "";
+        if (firstChar == "("){
+            substring += firstChar;
+        }
+
+
     }
 
     getCurrentIndent(align, word){
@@ -338,7 +366,8 @@ export default class Formatter {
             }
         }
         let first = substring.trim().split(" ")[0].replace(/\(/, "").trim();
-        if (this.startBlock.includes(first)){
+        if (this.startBlock.includes(first) || first == "with"){
+            console.log(first);
             this.indents.pop();
         } else {
             if (!this.reservedWords.includes(first) && substring.match(/.* (and|or|xor|not) .*/) == null){
