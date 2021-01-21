@@ -1,9 +1,9 @@
-import sqlFormatter from './../src/sqlFormatter';
+import sqlFormatter from "./../src/sqlFormatter";
 
-describe('sqlFormatter', () => {
-    it('throws error when unsupported language parameter specified', () => {
+describe("sqlFormatter", () => {
+    it("throws error when unsupported language parameter specified", () => {
         expect(() => {
-            sqlFormatter.format('SELECT *', { language: 'blah' });
-        }).toThrow('Unsupported SQL dialect: blah');
+            sqlFormatter.format("SELECT *", { language: "blah" });
+        }).toThrow("Unsupported SQL dialect: blah");
     });
 });

@@ -1,10 +1,10 @@
-import includes from 'lodash/includes';
-import tokenTypes from './tokenTypes';
-import Indentation from './Indentation';
-import InlineBlock from './InlineBlock';
-import Params from './Params';
+import includes from "lodash/includes";
+import tokenTypes from "./tokenTypes";
+import Indentation from "./Indentation";
+import InlineBlock from "./InlineBlock";
+import Params from "./Params";
 
-const trimSpacesEnd = str => str.replace(/[ \t]+$/u, '');
+const trimSpacesEnd = str => str.replace(/[ \t]+$/u, "");
 
 export default class Formatter {
     /**
@@ -42,7 +42,7 @@ export default class Formatter {
     }
 
     getFormattedQueryFromTokens() {
-        let formattedQuery = '';
+        let formattedQuery = "";
 
         this.tokens.forEach((token, index) => {
             this.index = index;
@@ -74,13 +74,13 @@ export default class Formatter {
                 formattedQuery = this.formatClosingParentheses(token, formattedQuery);
             } else if (token.type === tokenTypes.PLACEHOLDER) {
                 formattedQuery = this.formatPlaceholder(token, formattedQuery);
-            } else if (token.value === ',') {
+            } else if (token.value === ",") {
                 formattedQuery = this.formatComma(token, formattedQuery);
-            } else if (token.value === ':') {
+            } else if (token.value === ":") {
                 formattedQuery = this.formatWithSpaceAfter(token, formattedQuery);
-            } else if (token.value === '.') {
+            } else if (token.value === ".") {
                 formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
-            } else if (token.value === ';') {
+            } else if (token.value === ";") {
                 formattedQuery = this.formatQuerySeparator(token, formattedQuery);
             } else {
                 formattedQuery = this.formatWithSpaces(token, formattedQuery);
@@ -98,7 +98,7 @@ export default class Formatter {
     }
 
     indentComment(comment) {
-        return comment.replace(/\n[ \t]*/gu, '\n' + this.indentation.getIndent() + ' ');
+        return comment.replace(/\n[ \t]*/gu, "\n" + this.indentation.getIndent() + " ");
     }
 
     formatTopLevelReservedWordNoIndent(token, query) {
@@ -123,13 +123,13 @@ export default class Formatter {
         return (
             this.addNewline(query) +
             this.equalizeWhitespace(this.formatReservedWord(token.value)) +
-            ' '
+            " "
         );
     }
 
     // Replace any sequence of whitespace characters with single space
     equalizeWhitespace(string) {
-        return string.replace(/\s+/gu, ' ');
+        return string.replace(/\s+/gu, " ");
     }
 
     // Opening parentheses increase the block indent level and start a new line
@@ -168,12 +168,12 @@ export default class Formatter {
     }
 
     formatPlaceholder(token, query) {
-        return query + this.params.get(token) + ' ';
+        return query + this.params.get(token) + " ";
     }
 
     // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
     formatComma(token, query) {
-        query = trimSpacesEnd(query) + token.value + ' ';
+        query = trimSpacesEnd(query) + token.value + " ";
 
         if (this.inlineBlock.isActive()) {
             return query;
@@ -185,7 +185,7 @@ export default class Formatter {
     }
 
     formatWithSpaceAfter(token, query) {
-        return trimSpacesEnd(query) + token.value + ' ';
+        return trimSpacesEnd(query) + token.value + " ";
     }
 
     formatWithoutSpaces(token, query) {
@@ -194,8 +194,8 @@ export default class Formatter {
 
     formatWithSpaces(token, query) {
         const value =
-            token.type === 'reserved' ? this.formatReservedWord(token.value) : token.value;
-        return query + value + ' ';
+            token.type === "reserved" ? this.formatReservedWord(token.value) : token.value;
+        return query + value + " ";
     }
 
     formatReservedWord(value) {
@@ -204,12 +204,12 @@ export default class Formatter {
 
     formatQuerySeparator(token, query) {
         this.indentation.resetIndentation();
-        return trimSpacesEnd(query) + token.value + '\n'.repeat(this.cfg.linesBetweenQueries || 1);
+        return trimSpacesEnd(query) + token.value + "\n".repeat(this.cfg.linesBetweenQueries || 1);
     }
 
     addNewline(query) {
         query = trimSpacesEnd(query);
-        if (!query.endsWith('\n')) query += '\n';
+        if (!query.endsWith("\n")) query += "\n";
         return query + this.indentation.getIndent();
     }
 

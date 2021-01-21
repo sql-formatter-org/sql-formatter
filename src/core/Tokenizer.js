@@ -1,6 +1,6 @@
-import isEmpty from 'lodash/isEmpty';
-import escapeRegExp from 'lodash/escapeRegExp';
-import tokenTypes from './tokenTypes';
+import isEmpty from "lodash/isEmpty";
+import escapeRegExp from "lodash/escapeRegExp";
+import tokenTypes from "./tokenTypes";
 
 export default class Tokenizer {
     /**
@@ -40,11 +40,11 @@ export default class Tokenizer {
 
         this.INDEXED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(
             cfg.indexedPlaceholderTypes,
-            '[0-9]*'
+            "[0-9]*"
         );
         this.IDENT_NAMED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(
             cfg.namedPlaceholderTypes,
-            '[a-zA-Z0-9._$]+'
+            "[a-zA-Z0-9._$]+"
         );
         this.STRING_NAMED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(
             cfg.namedPlaceholderTypes,
@@ -54,27 +54,27 @@ export default class Tokenizer {
 
     createLineCommentRegex(lineCommentTypes) {
         return new RegExp(
-            `^((?:${lineCommentTypes.map(c => escapeRegExp(c)).join('|')}).*?(?:\r\n|\r|\n|$))`,
-            'u'
+            `^((?:${lineCommentTypes.map(c => escapeRegExp(c)).join("|")}).*?(?:\r\n|\r|\n|$))`,
+            "u"
         );
     }
 
     createReservedWordRegex(reservedWords) {
-        const reservedWordsPattern = reservedWords.join('|').replace(/ /gu, '\\s+');
-        return new RegExp(`^(${reservedWordsPattern})\\b`, 'iu');
+        const reservedWordsPattern = reservedWords.join("|").replace(/ /gu, "\\s+");
+        return new RegExp(`^(${reservedWordsPattern})\\b`, "iu");
     }
 
     createWordRegex(specialChars = []) {
         return new RegExp(
             `^([\\p{Alphabetic}\\p{Mark}\\p{Decimal_Number}\\p{Connector_Punctuation}\\p{Join_Control}${specialChars.join(
-                ''
+                ""
             )}]+)`,
-            'u'
+            "u"
         );
     }
 
     createStringRegex(stringTypes) {
-        return new RegExp('^(' + this.createStringPattern(stringTypes) + ')', 'u');
+        return new RegExp("^(" + this.createStringPattern(stringTypes) + ")", "u");
     }
 
     // This enables the following string patterns:
@@ -85,18 +85,18 @@ export default class Tokenizer {
     // 5. national character quoted string using N'' or N\' to escape
     createStringPattern(stringTypes) {
         const patterns = {
-            '``': '((`[^`]*($|`))+)',
-            '[]': '((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)',
+            "``": "((`[^`]*($|`))+)",
+            "[]": "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)",
             '""': '(("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+)',
             "''": "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
             "N''": "((N'[^N'\\\\]*(?:\\\\.[^N'\\\\]*)*('|$))+)"
         };
 
-        return stringTypes.map(t => patterns[t]).join('|');
+        return stringTypes.map(t => patterns[t]).join("|");
     }
 
     createParenRegex(parens) {
-        return new RegExp('^(' + parens.map(p => this.escapeParen(p)).join('|') + ')', 'iu');
+        return new RegExp("^(" + parens.map(p => this.escapeParen(p)).join("|") + ")", "iu");
     }
 
     escapeParen(paren) {
@@ -105,7 +105,7 @@ export default class Tokenizer {
             return escapeRegExp(paren);
         } else {
             // longer word
-            return '\\b' + paren + '\\b';
+            return "\\b" + paren + "\\b";
         }
     }
 
@@ -113,9 +113,9 @@ export default class Tokenizer {
         if (isEmpty(types)) {
             return false;
         }
-        const typesRegex = types.map(escapeRegExp).join('|');
+        const typesRegex = types.map(escapeRegExp).join("|");
 
-        return new RegExp(`^((?:${typesRegex})(?:${pattern}))`, 'u');
+        return new RegExp(`^((?:${typesRegex})(?:${pattern}))`, "u");
     }
 
     /**
@@ -254,7 +254,7 @@ export default class Tokenizer {
     }
 
     getEscapedPlaceholderKey({ key, quoteChar }) {
-        return key.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar);
+        return key.replace(new RegExp(escapeRegExp("\\" + quoteChar), "gu"), quoteChar);
     }
 
     // Decimal, binary, or hex numbers
@@ -278,7 +278,7 @@ export default class Tokenizer {
     getReservedWordToken(input, previousToken) {
         // A reserved word cannot be preceded by a "."
         // this makes it so in "my_table.from", "from" is not considered a reserved word
-        if (previousToken && previousToken.value && previousToken.value === '.') {
+        if (previousToken && previousToken.value && previousToken.value === ".") {
             return;
         }
         return (

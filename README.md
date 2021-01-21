@@ -17,9 +17,9 @@ npm install sql-formatter
 ## Usage
 
 ```javascript
-import sqlFormatter from 'sql-formatter';
+import sqlFormatter from "sql-formatter";
 
-console.log(sqlFormatter.format('SELECT * FROM table1'));
+console.log(sqlFormatter.format("SELECT * FROM table1"));
 ```
 
 This will output:
@@ -34,9 +34,9 @@ FROM
 You can also pass in configuration options:
 
 ```javascript
-sqlFormatter.format('SELECT *', {
-    language: 'n1ql', // Defaults to "sql"
-    indent: '    ', // Defaults to two spaces,
+sqlFormatter.format("SELECT *", {
+    language: "n1ql", // Defaults to "sql"
+    indent: "    ", // Defaults to two spaces,
     uppercase: true, // Defaults to false
     linesBetweenQueries: 2 // Defaults to 1
 });

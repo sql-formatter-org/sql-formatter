@@ -1,14 +1,14 @@
-import sqlFormatter from './../src/sqlFormatter';
-import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
-import dedent from 'dedent-js';
+import sqlFormatter from "./../src/sqlFormatter";
+import behavesLikeSqlFormatter from "./behavesLikeSqlFormatter";
+import dedent from "dedent-js";
 
-describe('N1qlFormatter', () => {
-    behavesLikeSqlFormatter('n1ql');
+describe("N1qlFormatter", () => {
+    behavesLikeSqlFormatter("n1ql");
 
-    const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'n1ql' });
+    const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: "n1ql" });
 
-    it('formats SELECT query with element selection expression', () => {
-        const result = format('SELECT order_lines[0].productId FROM orders;');
+    it("formats SELECT query with element selection expression", () => {
+        const result = format("SELECT order_lines[0].productId FROM orders;");
         expect(result).toBe(dedent/* sql */ `
       SELECT
         order_lines[0].productId
@@ -17,7 +17,7 @@ describe('N1qlFormatter', () => {
     `);
     });
 
-    it('formats SELECT query with primary key querying', () => {
+    it("formats SELECT query with primary key querying", () => {
         const result = format("SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];");
         expect(result).toBe(dedent/* sql */ `
       SELECT
@@ -30,7 +30,7 @@ describe('N1qlFormatter', () => {
     `);
     });
 
-    it('formats INSERT with {} object literal', () => {
+    it("formats INSERT with {} object literal", () => {
         const result = format(
             "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id':1,'type':'Tarzan'});"
         );
@@ -42,7 +42,7 @@ describe('N1qlFormatter', () => {
     `);
     });
 
-    it('formats INSERT with large object and array literals', () => {
+    it("formats INSERT with large object and array literals", () => {
         const result = format(`
       INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id': 1, 'type': 'Tarzan',
       'array': [123456789, 123456789, 123456789, 123456789, 123456789], 'hello': 'world'});
@@ -69,8 +69,8 @@ describe('N1qlFormatter', () => {
     `);
     });
 
-    it('formats SELECT query with UNNEST top level reserver word', () => {
-        const result = format('SELECT * FROM tutorial UNNEST tutorial.children c;');
+    it("formats SELECT query with UNNEST top level reserver word", () => {
+        const result = format("SELECT * FROM tutorial UNNEST tutorial.children c;");
         expect(result).toBe(dedent/* sql */ `
       SELECT
         *
@@ -81,7 +81,7 @@ describe('N1qlFormatter', () => {
     `);
     });
 
-    it('formats SELECT query with NEST and USE KEYS', () => {
+    it("formats SELECT query with NEST and USE KEYS", () => {
         const result = format(`
       SELECT * FROM usr
       USE KEYS 'Elinor_33313792' NEST orders_with_users orders
@@ -99,7 +99,7 @@ describe('N1qlFormatter', () => {
     `);
     });
 
-    it('formats explained DELETE query with USE KEYS and RETURNING', () => {
+    it("formats explained DELETE query with USE KEYS and RETURNING", () => {
         const result = format("EXPLAIN DELETE FROM tutorial t USE KEYS 'baldwin' RETURNING t");
         expect(result).toBe(dedent/* sql */ `
       EXPLAIN DELETE FROM
@@ -109,7 +109,7 @@ describe('N1qlFormatter', () => {
     `);
     });
 
-    it('formats UPDATE query with USE KEYS and RETURNING', () => {
+    it("formats UPDATE query with USE KEYS and RETURNING", () => {
         const result = format(
             "UPDATE tutorial USE KEYS 'baldwin' SET type = 'actor' RETURNING tutorial.type"
         );
@@ -123,8 +123,8 @@ describe('N1qlFormatter', () => {
     `);
     });
 
-    it('recognizes $variables', () => {
-        const result = format('SELECT $variable, $\'var name\', $"var name", $`var name`;');
+    it("recognizes $variables", () => {
+        const result = format("SELECT $variable, $'var name', $\"var name\", $`var name`;");
         expect(result).toBe(dedent/* sql */ `
       SELECT
         $variable,
@@ -134,11 +134,11 @@ describe('N1qlFormatter', () => {
     `);
     });
 
-    it('replaces $variables with param values', () => {
-        const result = format('SELECT $variable, $\'var name\', $"var name", $`var name`;', {
+    it("replaces $variables with param values", () => {
+        const result = format("SELECT $variable, $'var name', $\"var name\", $`var name`;", {
             params: {
                 variable: '"variable value"',
-                'var name': "'var value'"
+                "var name": "'var value'"
             }
         });
         expect(result).toBe(dedent/* sql */ `
@@ -150,12 +150,12 @@ describe('N1qlFormatter', () => {
     `);
     });
 
-    it('replaces $ numbered placeholders with param values', () => {
-        const result = format('SELECT $1, $2, $0;', {
+    it("replaces $ numbered placeholders with param values", () => {
+        const result = format("SELECT $1, $2, $0;", {
             params: {
-                0: 'first',
-                1: 'second',
-                2: 'third'
+                0: "first",
+                1: "second",
+                2: "third"
             }
         });
         expect(result).toBe(dedent/* sql */ `

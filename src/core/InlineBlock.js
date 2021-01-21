@@ -1,4 +1,4 @@
-import tokenTypes from './tokenTypes';
+import tokenTypes from "./tokenTypes";
 
 const INLINE_MAX_LENGTH = 50;
 
@@ -85,7 +85,7 @@ export default class InlineBlock {
             type === tokenTypes.RESERVED_NEWLINE ||
             type === tokenTypes.COMMENT ||
             type === tokenTypes.BLOCK_COMMENT ||
-            value === ';'
+            value === ";"
         );
     }
 }
