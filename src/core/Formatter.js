@@ -4,7 +4,7 @@ import Indentation from "./Indentation";
 import InlineBlock from "./InlineBlock";
 import Params from "./Params";
 
-const trimSpacesEnd = str => str.replace(/[ \t]+$/u, "");
+const trimSpacesEnd = (str) => str.replace(/[ \t]+$/u, "");
 
 export default class Formatter {
     /**

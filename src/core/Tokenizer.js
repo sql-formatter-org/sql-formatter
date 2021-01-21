@@ -54,7 +54,7 @@ export default class Tokenizer {
 
     createLineCommentRegex(lineCommentTypes) {
         return new RegExp(
-            `^((?:${lineCommentTypes.map(c => escapeRegExp(c)).join("|")}).*?(?:\r\n|\r|\n|$))`,
+            `^((?:${lineCommentTypes.map((c) => escapeRegExp(c)).join("|")}).*?(?:\r\n|\r|\n|$))`,
             "u"
         );
     }
@@ -92,11 +92,11 @@ export default class Tokenizer {
             "N''": "((N'[^N'\\\\]*(?:\\\\.[^N'\\\\]*)*('|$))+)"
         };
 
-        return stringTypes.map(t => patterns[t]).join("|");
+        return stringTypes.map((t) => patterns[t]).join("|");
     }
 
     createParenRegex(parens) {
-        return new RegExp("^(" + parens.map(p => this.escapeParen(p)).join("|") + ")", "iu");
+        return new RegExp("^(" + parens.map((p) => this.escapeParen(p)).join("|") + ")", "iu");
     }
 
     escapeParen(paren) {
@@ -224,7 +224,7 @@ export default class Tokenizer {
         return this.getPlaceholderTokenWithKey({
             input,
             regex: this.IDENT_NAMED_PLACEHOLDER_REGEX,
-            parseKey: v => v.slice(1)
+            parseKey: (v) => v.slice(1)
         });
     }
 
@@ -232,7 +232,7 @@ export default class Tokenizer {
         return this.getPlaceholderTokenWithKey({
             input,
             regex: this.STRING_NAMED_PLACEHOLDER_REGEX,
-            parseKey: v =>
+            parseKey: (v) =>
                 this.getEscapedPlaceholderKey({ key: v.slice(2, -1), quoteChar: v.slice(-1) })
         });
     }
@@ -241,7 +241,7 @@ export default class Tokenizer {
         return this.getPlaceholderTokenWithKey({
             input,
             regex: this.INDEXED_PLACEHOLDER_REGEX,
-            parseKey: v => v.slice(1)
+            parseKey: (v) => v.slice(1)
         });
     }
 
