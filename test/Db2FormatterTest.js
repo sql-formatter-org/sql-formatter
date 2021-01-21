@@ -5,7 +5,7 @@ import dedent from "dedent-js";
 describe("Db2Formatter", () => {
     behavesLikeSqlFormatter("db2");
 
-    const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: "db2" });
+    const format = (query, cfg = {}) => sqlFormatter.format(query, {...cfg, language: "db2"});
 
     it("formats FETCH FIRST like LIMIT", () => {
         expect(format("SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;"))
@@ -56,7 +56,7 @@ describe("Db2Formatter", () => {
 
     it("replaces :variables with param values", () => {
         const result = format("SELECT :variable", {
-            params: { variable: '"variable value"' }
+            params: {variable: '"variable value"'}
         });
         expect(result).toBe(dedent/* sql */ `
       SELECT

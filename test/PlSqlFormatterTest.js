@@ -5,7 +5,7 @@ import dedent from "dedent-js";
 describe("PlSqlFormatter", () => {
     behavesLikeSqlFormatter("pl/sql");
 
-    const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: "pl/sql" });
+    const format = (query, cfg = {}) => sqlFormatter.format(query, {...cfg, language: "pl/sql"});
 
     it("formats FETCH FIRST like LIMIT", () => {
         expect(format("SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;"))
@@ -235,7 +235,7 @@ describe("PlSqlFormatter", () => {
     it("properly converts to uppercase in case statements", () => {
         const result = format(
             "case toString(getNumber()) when 'one' then 1 when 'two' then 2 when 'three' then 3 else 4 end;",
-            { uppercase: true }
+            {uppercase: true}
         );
         expect(result).toBe(dedent/* sql */ `
       CASE

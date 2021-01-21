@@ -6,7 +6,7 @@ import dedent from "dedent-js";
  * @param {String} language
  */
 export default function behavesLikeSqlFormatter(language) {
-    const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
+    const format = (query, cfg = {}) => sqlFormatter.format(query, {...cfg, language});
 
     it("uses given indent config for indention", () => {
         const result = format("SELECT count(*),Column1 FROM Table1;", {
@@ -500,7 +500,7 @@ export default function behavesLikeSqlFormatter(language) {
     });
 
     it("line breaks between queries change with config", () => {
-        const result = format("SELECT * FROM foo; SELECT * FROM bar;", { linesBetweenQueries: 2 });
+        const result = format("SELECT * FROM foo; SELECT * FROM bar;", {linesBetweenQueries: 2});
         expect(result).toBe(dedent/* sql */ `
       SELECT
         *

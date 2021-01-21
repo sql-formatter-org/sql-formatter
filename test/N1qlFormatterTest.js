@@ -5,7 +5,7 @@ import dedent from "dedent-js";
 describe("N1qlFormatter", () => {
     behavesLikeSqlFormatter("n1ql");
 
-    const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: "n1ql" });
+    const format = (query, cfg = {}) => sqlFormatter.format(query, {...cfg, language: "n1ql"});
 
     it("formats SELECT query with element selection expression", () => {
         const result = format("SELECT order_lines[0].productId FROM orders;");

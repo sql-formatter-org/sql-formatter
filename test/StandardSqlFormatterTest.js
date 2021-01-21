@@ -5,7 +5,7 @@ import dedent from "dedent-js";
 describe("StandardSqlFormatter", () => {
     behavesLikeSqlFormatter();
 
-    const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: "sql" });
+    const format = (query, cfg = {}) => sqlFormatter.format(query, {...cfg, language: "sql"});
 
     it("formats short CREATE TABLE", () => {
         expect(format("CREATE TABLE items (a INT PRIMARY KEY, b TEXT);")).toBe(

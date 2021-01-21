@@ -31,4 +31,4 @@ export const format = (query, cfg = {}) => {
     }
 };
 
-export default { format };
+export default {format};

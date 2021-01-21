@@ -79,7 +79,7 @@ export default class InlineBlock {
 
     // Reserved words that cause newlines, comments and semicolons
     // are not allowed inside inline parentheses block
-    isForbiddenToken({ type, value }) {
+    isForbiddenToken({type, value}) {
         return (
             type === tokenTypes.RESERVED_TOP_LEVEL ||
             type === tokenTypes.RESERVED_NEWLINE ||

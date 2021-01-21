@@ -233,7 +233,7 @@ export default class Tokenizer {
             input,
             regex: this.STRING_NAMED_PLACEHOLDER_REGEX,
             parseKey: (v) =>
-                this.getEscapedPlaceholderKey({ key: v.slice(2, -1), quoteChar: v.slice(-1) })
+                this.getEscapedPlaceholderKey({key: v.slice(2, -1), quoteChar: v.slice(-1)})
         });
     }
 
@@ -245,15 +245,15 @@ export default class Tokenizer {
         });
     }
 
-    getPlaceholderTokenWithKey({ input, regex, parseKey }) {
-        const token = this.getTokenOnFirstMatch({ input, regex, type: tokenTypes.PLACEHOLDER });
+    getPlaceholderTokenWithKey({input, regex, parseKey}) {
+        const token = this.getTokenOnFirstMatch({input, regex, type: tokenTypes.PLACEHOLDER});
         if (token) {
             token.key = parseKey(token.value);
         }
         return token;
     }
 
-    getEscapedPlaceholderKey({ key, quoteChar }) {
+    getEscapedPlaceholderKey({key, quoteChar}) {
         return key.replace(new RegExp(escapeRegExp("\\" + quoteChar), "gu"), quoteChar);
     }
 
@@ -329,11 +329,11 @@ export default class Tokenizer {
         });
     }
 
-    getTokenOnFirstMatch({ input, type, regex }) {
+    getTokenOnFirstMatch({input, type, regex}) {
         const matches = input.match(regex);
 
         if (matches) {
-            return { type, value: matches[1] };
+            return {type, value: matches[1]};
         }
     }
 }
