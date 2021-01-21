@@ -1,24 +1,10 @@
-# SQL Formatter Plus
-
-A fork of [SQL Formatter](https://github.com/zeroturnaround/sql-formatter) with some extra bug fixes and features.
-
-Fixes:
-
-- Fixed formatting issue with unicode characters
-- Fixed comment formatting for non-unix line endings
-- Fixed null reference on input tokenization
-- Fixed indentation of multiple statements
-
-New Features:
-
-- Convert keywords to uppercase with the `uppercase` config option
-- Configurable number of line breaks between queries with the `linesBetweenQueries` config option
+# SQL Formatter [![NPM version](https://img.shields.io/npm/v/sql-formatter.svg)](https://npmjs.com/package/sql-formatter) [![Build Status](https://travis-ci.org/zeroturnaround/sql-formatter.svg?branch=master)](https://travis-ci.org/zeroturnaround/sql-formatter) [![Coverage Status](https://coveralls.io/repos/github/zeroturnaround/sql-formatter/badge.svg?branch=master)](https://coveralls.io/github/zeroturnaround/sql-formatter?branch=master)
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 It started as a port of a [PHP Library][], but has since considerably diverged.
 It supports [Standard SQL][], [Couchbase N1QL][], [IBM DB2][] and [Oracle PL/SQL][] dialects.
 
-[Try the demo.](https://kufii.github.io/sql-formatter-plus//)
+[Try the demo.](https://zeroturnaround.github.io/sql-formatter/)
 
 ## Install
 
@@ -31,7 +17,7 @@ npm install sql-formatter
 ## Usage
 
 ```javascript
-import sqlFormatter from 'sql-formatter-plus';
+import sqlFormatter from 'sql-formatter';
 
 console.log(sqlFormatter.format('SELECT * FROM table1'));
 ```
