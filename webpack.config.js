@@ -1,6 +1,6 @@
 module.exports = {
-  output: {
-    library: 'sqlFormatter',
-    libraryTarget: 'umd'
-  }
+    output: {
+        library: 'sqlFormatter',
+        libraryTarget: 'umd'
+    }
 };

@@ -1,155 +1,158 @@
 <!DOCTYPE html>
 
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
+    <head>
+        <meta charset="utf-8" />
 
-    <title>SQL formatter</title>
-    <meta name="description" content="A whitespace formatter for different query languages" />
+        <title>SQL formatter</title>
+        <meta name="description" content="A whitespace formatter for different query languages" />
 
-    <meta property="og:title" content="SQL Formatter" />
-    <meta
-      property="og:description"
-      content="A whitespace formatter for different query languages"
-    />
-    <meta property="og:url" content="https://zeroturnaround.github.io/sql-formatter" />
+        <meta property="og:title" content="SQL Formatter" />
+        <meta
+            property="og:description"
+            content="A whitespace formatter for different query languages"
+        />
+        <meta property="og:url" content="https://zeroturnaround.github.io/sql-formatter" />
 
-    <link rel="shortcut icon" href="http://static.zeroturnaround.com/theme55/images/favicon.ico" />
+        <link
+            rel="shortcut icon"
+            href="http://static.zeroturnaround.com/theme55/images/favicon.ico"
+        />
 
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet" />
 
-    <style>
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        font-family: 'Roboto Mono', monospace;
-      }
-      header {
-        position: relative;
-        height: 120px;
-        padding: 10px 20px;
-        border-bottom: 2px solid #8dc63f;
-        box-sizing: border-box;
-      }
-      .select-wrapper {
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
-      h1 {
-        margin: 0 0 8px 0;
-      }
-      a {
-        text-decoration: none;
-      }
-      main {
-        overflow: hidden;
-        display: flex;
-        flex-direction: row;
-        -webkit-align-items: stretch;
-        align-items: stretch;
-        height: calc(100% - 120px);
-      }
-      .input,
-      .output {
-        display: flex;
-        -webkit-align-items: stretch;
-        align-items: stretch;
-        width: 50%;
-        height: 100%;
-      }
-      .output {
-        border-left: 2px solid #8dc63f;
-      }
-      textarea {
-        width: 100%;
-        padding: 20px;
-        border: 0;
-        box-sizing: border-box;
-        font-size: 1.3em;
-        resize: none;
-        outline: none;
-        line-height: 1.3;
-        font-family: 'Roboto Mono', monospace;
-      }
-    </style>
-  </head>
+        <style>
+            html,
+            body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                font-family: 'Roboto Mono', monospace;
+            }
+            header {
+                position: relative;
+                height: 120px;
+                padding: 10px 20px;
+                border-bottom: 2px solid #8dc63f;
+                box-sizing: border-box;
+            }
+            .select-wrapper {
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+            h1 {
+                margin: 0 0 8px 0;
+            }
+            a {
+                text-decoration: none;
+            }
+            main {
+                overflow: hidden;
+                display: flex;
+                flex-direction: row;
+                -webkit-align-items: stretch;
+                align-items: stretch;
+                height: calc(100% - 120px);
+            }
+            .input,
+            .output {
+                display: flex;
+                -webkit-align-items: stretch;
+                align-items: stretch;
+                width: 50%;
+                height: 100%;
+            }
+            .output {
+                border-left: 2px solid #8dc63f;
+            }
+            textarea {
+                width: 100%;
+                padding: 20px;
+                border: 0;
+                box-sizing: border-box;
+                font-size: 1.3em;
+                resize: none;
+                outline: none;
+                line-height: 1.3;
+                font-family: 'Roboto Mono', monospace;
+            }
+        </style>
+    </head>
 
-  <body>
-    <header>
-      <h1>SQL Formatter Plus</h1>
+    <body>
+        <header>
+            <h1>SQL Formatter Plus</h1>
 
-      <div class="buttons">
-        <a href="https://www.npmjs.com/package/sql-formatter">
-          <img src="https://img.shields.io/npm/v/sql-formatter.svg" height="18" />
-        </a>
-        <iframe
-          src="https://ghbtns.com/github-btn.html?user=zeroturnaround&repo=sql-formatter&type=star&count=true"
-          frameborder="0"
-          scrolling="0"
-          width="120px"
-          height="20px"
-          style="position: relative;top: 1px;"
-        ></iframe>
-      </div>
+            <div class="buttons">
+                <a href="https://www.npmjs.com/package/sql-formatter">
+                    <img src="https://img.shields.io/npm/v/sql-formatter.svg" height="18" />
+                </a>
+                <iframe
+                    src="https://ghbtns.com/github-btn.html?user=zeroturnaround&repo=sql-formatter&type=star&count=true"
+                    frameborder="0"
+                    scrolling="0"
+                    width="120px"
+                    height="20px"
+                    style="position: relative;top: 1px;"
+                ></iframe>
+            </div>
 
-      <div class="select-wrapper">
-        Format
-        <select id="language">
-          <option value="sql">
-            SQL
-          </option>
-          <option value="n1ql">
-            N1QL
-          </option>
-          <option value="db2">
-            DB2
-          </option>
-          <option value="pl/sql">
-            PL/SQL
-          </option>
-        </select>
-      </div>
-    </header>
-    <main>
-      <section class="input">
-        <textarea id="input" autofocus="true" wrap="off">
+            <div class="select-wrapper">
+                Format
+                <select id="language">
+                    <option value="sql">
+                        SQL
+                    </option>
+                    <option value="n1ql">
+                        N1QL
+                    </option>
+                    <option value="db2">
+                        DB2
+                    </option>
+                    <option value="pl/sql">
+                        PL/SQL
+                    </option>
+                </select>
+            </div>
+        </header>
+        <main>
+            <section class="input">
+                <textarea id="input" autofocus="true" wrap="off">
 SELECT supplier_name, city FROM suppliers&#10;WHERE supplier_id > 500&#10;ORDER BY supplier_name ASC, city DESC;</textarea
-        >
-      </section>
-      <section class="output">
-        <textarea id="output" readonly="true" wrap="off"></textarea>
-      </section>
-    </main>
+                >
+            </section>
+            <section class="output">
+                <textarea id="output" readonly="true" wrap="off"></textarea>
+            </section>
+        </main>
 
-    <script
-      type="text/javascript"
-      src="https://unpkg.com/sql-formatter-plus@latest/dist/sql-formatter.min.js"
-    ></script>
-    <script>
-      (() => {
-        let language = document.getElementById('language');
-        let input = document.getElementById('input');
-        let output = document.getElementById('output');
+        <script
+            type="text/javascript"
+            src="https://unpkg.com/sql-formatter-plus@latest/dist/sql-formatter.min.js"
+        ></script>
+        <script>
+            (() => {
+                let language = document.getElementById('language');
+                let input = document.getElementById('input');
+                let output = document.getElementById('output');
 
-        input.addEventListener('input', format);
-        language.addEventListener('change', format);
+                input.addEventListener('input', format);
+                language.addEventListener('change', format);
 
-        function format() {
-          console.time('formatting');
+                function format() {
+                    console.time('formatting');
 
-          output.value = sqlFormatter.format(input.value, {
-            language: language.options[language.selectedIndex].value
-          });
+                    output.value = sqlFormatter.format(input.value, {
+                        language: language.options[language.selectedIndex].value
+                    });
 
-          console.timeEnd('formatting');
-        }
-        format();
-      })();
-    </script>
-  </body>
+                    console.timeEnd('formatting');
+                }
+                format();
+            })();
+        </script>
+    </body>
 </html>
