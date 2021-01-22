@@ -98,7 +98,8 @@ export default class StandardSqlFormatter {
                 closeParens: [")", "END"],
                 indexedPlaceholderTypes: ["?"],
                 namedPlaceholderTypes: ["@", ":"],
-                lineCommentTypes: ["#", "--"]
+                lineCommentTypes: ["#", "--"],
+                specialWordChars: this.cfg.specialWordChars
             });
         }
         return new Formatter(this.cfg, tokenizer).format(query);
