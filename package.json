@@ -43,7 +43,7 @@
     "url": "https://github.com/zeroturnaround/sql-formatter/issues"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.7.0",
+    "@babel/polyfill": "^7.12.1",
     "lodash": "^4.17.20"
   },
   "devDependencies": {
