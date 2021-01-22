@@ -228,6 +228,12 @@ export default function behavesLikeSqlFormatter(language) {
         expect(format(sql)).toBe(sql);
     });
 
+    // FIXME: should not mix windows and unix line-endings
+    it("recognizes line-comments with Windows line-endings", () => {
+        const result = format("SELECT * FROM\r\n-- line comment 1\r\nMyTable -- line comment 2\r\n");
+        expect(result).toBe("SELECT\n  *\nFROM\n  -- line comment 1\r\n  MyTable -- line comment 2");
+    });
+
     it("formats simple INSERT query", () => {
         const result = format(
             "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
