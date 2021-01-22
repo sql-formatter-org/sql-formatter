@@ -547,4 +547,25 @@ export default function behavesLikeSqlFormatter(language) {
       );
     `);
     });
+
+    ["INTERSECT ALL", "INTERSECT", "MINUS", "UNION ALL", "UNION"].forEach((setOpWord) => {
+        it(`${setOpWord} is indented to top-level`, () => {
+            const result = sqlFormatter.format(/* sql */ `
+            SELECT * FROM tab1
+            ${setOpWord}
+            SELECT * FROM tab2
+        `);
+            expect(result).toBe(dedent/* sql */ `
+            SELECT
+              *
+            FROM
+              tab1
+            ${setOpWord}
+            SELECT
+              *
+            FROM
+              tab2
+        `);
+        });
+    });
 }
