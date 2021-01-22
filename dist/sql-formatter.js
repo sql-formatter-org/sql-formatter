@@ -1649,7 +1649,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatQuery = function formatQuery() {
-
+	        var originalQuery = this.query;
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
 	            token.value = this.formatTextCase(token);
@@ -1689,6 +1689,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else {
 	                this.formatWithSpaces(token);
 	            };
+	        }
+
+	        this.query = originalQuery;
+
+	        for (var _i = 0; _i < this.lines.length; _i++) {
+	            this.lines[_i] = this.formatLineByLength(this.lines[_i]);
 	        }
 	    };
 
@@ -1787,7 +1793,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatTextCase = function formatTextCase(token) {
-	        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || token.type === _tokenTypes2["default"].BLOCK_COMMENT || token.type === _tokenTypes2["default"].LINE_COMMENT) {
+	        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || token.type === _tokenTypes2["default"].BLOCK_COMMENT || token.type === _tokenTypes2["default"].LINE_COMMENT || token.value.includes("'")) {
 	            return token.value;
 	        } else {
 	            return token.value.toLowerCase();
@@ -1807,31 +1813,130 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	            this.lines.push((0, _repeat2["default"])(" ", indent));
 	        }
-	        // this.checkLineLength();
 	    };
 
-	    Formatter.prototype.checkLineLength = function checkLineLength() {
+	    Formatter.prototype.formatLineByLength = function formatLineByLength(line) {
+
+	        var originQuery = this.query;
 	        var maxCleanLineLength = 60;
-	        var last = this.lines[this.lastIndex() - 1].trim();
+	        var last = line.trim();
 	        if (last.trim().length < maxCleanLineLength) {
-	            return;
+	            return line;
 	        }
-	        var firstChar = this.getLastString().trim()[0];
+	        var firstChar = last[0];
 	        if (firstChar == "(") {
 	            last = last.substring(1).trim();
 	        }
-	        var first = last.split(/\(\) ,/)[0];
+	        var i = 0;
+	        var split = last.split(/\(|\)| |,/);
+	        var first = split[i];
+	        while (this.reservedWords.includes(first)) {
+	            i++;
+	            if (i == split.length) {
+	                return line;
+	            }
+	            first = split[i];
+	        }
+
+	        var lastWithoutSpace = this.getWordInOneStyle(last);
+	        var index = this.getOriginStringStartIndex(first, lastWithoutSpace);
+	        if (index == -1) {
+	            return line;
+	        }
+	        var substring = this.getOriginSubstring(lastWithoutSpace);
+	        if (firstChar == "(") {
+	            substring = firstChar + substring;
+	        }
+	        var originIndent = this.getOriginSubstringIndent(originQuery, substring);
+	        var indent = this.getLineIndent(line);
+	        this.query = this.query.substring(substring.length);
+	        return this.formatOriginSubstringWithIndent(indent, originIndent, substring);
+	    };
+
+	    Formatter.prototype.getLineIndent = function getLineIndent(line) {
+	        var indent = 0;
+	        for (indent; indent < line.length; indent++) {
+	            if (line[indent] != " ") {
+	                return indent;
+	            }
+	        }
+	        return indent;
+	    };
+
+	    Formatter.prototype.formatOriginSubstringWithIndent = function formatOriginSubstringWithIndent(indent, originIndent, substring) {
+	        var split = substring.split("\n");
+	        if (split[0].match(/'/g) == undefined || split[0].match(/'/g).length % 2 == 0) {
+	            split[0] = (0, _repeat2["default"])(" ", indent) + split[0].trim();
+	        } else {
+	            split[0] = (0, _repeat2["default"])(" ", indent) + this.trimStart(split[0]);
+	        }
+	        var inQuotes = split[0].match(/'/g) != undefined && split[0].match(/'/g) % 2 == 1;
+	        for (var i = 1; i < split.length; i++) {
+	            var match = split[i].match(/'/g);
+	            if (inQuotes) {
+	                split[i] = split[i];
+	                if (match != undefined && match.length % 2 == 1) {
+	                    inQuotes = false;
+	                }
+	            } else {
+	                if (match == undefined) {
+	                    split[i] = (0, _repeat2["default"])(" ", indent) + split[i].trim();
+	                } else {
+	                    if (match.length % 2 == 1) {
+	                        inQuotes = true;
+	                    }
+	                    var cIndent = this.getLineIndent(split[i]);
+	                    split[i] = (0, _repeat2["default"])(" ", indent - originIndent + cIndent) + this.trimStart(split[i]);
+	                }
+	            }
+	        }
+	        return split.join("\n");
+	    };
+
+	    Formatter.prototype.trimStart = function trimStart(line) {
+	        while (line[0] == " ") {
+	            line = line.substring(1);
+	        }
+	        return line;
+	    };
+
+	    Formatter.prototype.getOriginSubstringIndent = function getOriginSubstringIndent(origin, substring) {
+	        var idx = origin.indexOf(substring);
+	        var beforeSubstring = origin.substring(0, idx);
+	        var indent = 0;
+	        for (var i = beforeSubstring.length - 1; i >= 0; i--) {
+	            if (beforeSubstring[i] != " ") {
+	                return indent;
+	            }
+	            indent++;
+	        }
+	        return indent;
+	    };
+
+	    Formatter.prototype.getOriginSubstring = function getOriginSubstring(lastWithoutSpace) {
+	        var substring = "";
+	        var targetLength = lastWithoutSpace.split(" ").length;
+	        var i = 0;
+	        while (this.getWordInOneStyle(substring).split(" ").length != targetLength && i < this.query.length) {
+	            substring += this.query[i];
+	            i++;
+	        }
+	        return substring;
+	    };
+
+	    Formatter.prototype.getOriginStringStartIndex = function getOriginStringStartIndex(first, lastWithoutSpace) {
 	        var index = this.query.indexOf(first);
 	        this.query = this.query.substring(index);
-	        var lastWithoutSpace = last.replace(/\s*\n*/, " ");
-	        while (index != this.query.replace(/\s*\n*/, " ").indexOf(lastWithoutSpace)) {
-	            var _index = this.query.indexOf(first);
-	            this.query = this.query.substring(_index);
+	        while (index != this.getWordInOneStyle(this.query).indexOf(lastWithoutSpace) && index != -1) {
+	            index = this.query.indexOf(first);
+	            this.query = this.query.substring(index);
+	            index = this.query.indexOf(first);
 	        }
-	        var substring = "";
-	        if (firstChar == "(") {
-	            substring += firstChar;
-	        }
+	        return index;
+	    };
+
+	    Formatter.prototype.getWordInOneStyle = function getWordInOneStyle(word) {
+	        return word.replaceAll("(", " ( ").replaceAll(")", " ) ").replaceAll(",", " , ").replaceAll("=", " = ").replaceAll("--", " -- ").replaceAll(/(\s|\n)+/g, " ");
 	    };
 
 	    Formatter.prototype.getCurrentIndent = function getCurrentIndent(align, word) {
@@ -1981,19 +2086,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (match != undefined) {
 	                popCount += match.length;
 	            }
-	            for (var _i = 0; _i < popCount; _i++) {
+	            for (var _i2 = 0; _i2 < popCount; _i2++) {
 	                this.indents.pop();
 	            }
 	        } else {
 	            if (!this.reservedWords.includes(first) && substring.match(/.* (and|or|xor|not) .*/) == null) {
 	                var subLines = substring.split("\n");
 	                substring = "";
-	                for (var _i2 = 0; _i2 < subLines.length; _i2++) {
-	                    substring += subLines[_i2].trim() + " ";
+	                for (var _i3 = 0; _i3 < subLines.length; _i3++) {
+	                    substring += subLines[_i3].trim() + " ";
 	                }
 	                this.lines[startIndex] = (0, _trimEnd2["default"])(this.lines[startIndex].substring(0, start) + substring);
 	                var length = this.lines.length;
-	                for (var _i3 = startIndex + 1; _i3 < length; _i3++) {
+	                for (var _i4 = startIndex + 1; _i4 < length; _i4++) {
 	                    this.lines.pop();
 	                }
 	            }

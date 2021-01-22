@@ -37,7 +37,7 @@ export default class Formatter {
     }
 
     formatQuery(){
-
+        let originalQuery = this.query;
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
             token.value = this.formatTextCase(token);
@@ -77,6 +77,12 @@ export default class Formatter {
             } else {
                 this.formatWithSpaces(token);
             };
+        }
+
+        this.query = originalQuery;
+
+        for (let i = 0; i < this.lines.length; i++){
+            this.lines[i] = this.formatLineByLength(this.lines[i]);
         }
     }
 
@@ -177,7 +183,7 @@ export default class Formatter {
     formatTextCase(token){
         if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || 
             token.type === tokenTypes.BLOCK_COMMENT ||
-            token.type === tokenTypes.LINE_COMMENT){
+            token.type === tokenTypes.LINE_COMMENT || token.value.includes("'")){
             return token.value;
         } else {
             return token.value.toLowerCase();
@@ -197,33 +203,133 @@ export default class Formatter {
         }else {
             this.lines.push(repeat(" ", indent));
         }
-        // this.checkLineLength();
     }
 
-    checkLineLength(){
+    formatLineByLength(line){
+
+        let originQuery = this.query;
         let maxCleanLineLength = 60;
-        let last = this.lines[this.lastIndex() - 1].trim();
+        let last = line.trim();
         if (last.trim().length < maxCleanLineLength){
-            return;
+            return line;
         }
-        let firstChar = this.getLastString().trim()[0];
+        let firstChar = last[0];
         if (firstChar == "("){
             last = last.substring(1).trim();
         }
-        let first = last.split(/\(\) ,/)[0];
+        let i = 0;
+        let split = last.split(/\(|\)| |,/);
+        let first = split[i];
+        while (this.reservedWords.includes(first)){
+            i++;
+            if (i == split.length){
+                return line;
+            }
+            first = split[i];
+        }
+        
+        let lastWithoutSpace = this.getWordInOneStyle(last);
+        let index = this.getOriginStringStartIndex(first, lastWithoutSpace);
+        if (index == -1){
+            return line;
+        }
+        let substring = this.getOriginSubstring(lastWithoutSpace);
+        if (firstChar == "("){
+            substring = firstChar + substring;
+        }
+        let originIndent = this.getOriginSubstringIndent(originQuery, substring);
+        let indent = this.getLineIndent(line);
+        this.query = this.query.substring(substring.length);
+        return this.formatOriginSubstringWithIndent(indent, originIndent, substring);
+    }
+
+    getLineIndent(line){
+        let indent = 0;
+        for (indent; indent < line.length; indent++){
+            if (line[indent] != " "){
+                return indent;
+            }
+        }
+        return indent;
+    }
+
+    formatOriginSubstringWithIndent(indent, originIndent, substring){
+        let split = substring.split("\n");
+        if (split[0].match(/'/g) == undefined || split[0].match(/'/g).length % 2 == 0){
+            split[0] = repeat(" ", indent) + split[0].trim();
+        } else {
+            split[0] = repeat(" ", indent) + this.trimStart(split[0]);
+        }
+        let inQuotes = (split[0].match(/'/g) != undefined && split[0].match(/'/g) % 2 == 1);
+        for (let i = 1; i < split.length; i++){
+            let match = split[i].match(/'/g);
+            if (inQuotes){
+                split[i] = split[i];
+                if (match != undefined && match.length % 2 == 1){
+                    inQuotes = false;
+                }
+            }else {
+                if (match == undefined){
+                    split[i] = repeat(" ", indent) + split[i].trim();
+                } else {
+                    if (match.length % 2 == 1){
+                        inQuotes = true;
+                    }
+                    let cIndent = this.getLineIndent(split[i]);
+                    split[i] = repeat(" ", indent - originIndent + cIndent) + this.trimStart(split[i]);
+                }
+            }
+        }
+        return split.join("\n");
+    }
+
+    trimStart(line){
+        while (line[0] == " "){
+            line = line.substring(1);
+        }
+        return line;
+    }
+
+    getOriginSubstringIndent(origin, substring){
+        let idx = origin.indexOf(substring);
+        let beforeSubstring = origin.substring(0, idx);
+        let indent = 0;
+        for (let i = beforeSubstring.length - 1; i >= 0; i--){
+            if (beforeSubstring[i] != " "){
+                return indent;
+            }
+            indent++;
+        }
+        return indent;
+    }
+
+    getOriginSubstring(lastWithoutSpace){
+        let substring = "";
+        let targetLength = lastWithoutSpace.split(" ").length;
+        let i = 0;
+        while(this.getWordInOneStyle(substring).split(" ").length != targetLength && 
+              i < this.query.length){
+            substring += this.query[i];
+            i++;
+        }
+        return substring;
+    }
+
+    getOriginStringStartIndex(first, lastWithoutSpace){
         let index = this.query.indexOf(first);
         this.query = this.query.substring(index);
-        let lastWithoutSpace = last.replace(/\s*\n*/, " ");
-        while(index != this.query.replace(/\s*\n*/, " ").indexOf(lastWithoutSpace)){
-            let index = this.query.indexOf(first);
+        while(index != this.getWordInOneStyle(this.query).indexOf(lastWithoutSpace) && index != -1){
+            index = this.query.indexOf(first);
             this.query = this.query.substring(index);
+            index = this.query.indexOf(first);
         }
-        let substring = "";
-        if (firstChar == "("){
-            substring += firstChar;
-        }
+        return index;
+    }
 
-
+    getWordInOneStyle(word){
+        return word.replaceAll("(", " ( ").replaceAll(")", " ) ")
+                   .replaceAll(",", " , ").replaceAll("=", " = ")
+                   .replaceAll("--", " -- ").replaceAll(/(\s|\n)+/g, " ");
     }
 
     getCurrentIndent(align, word){
