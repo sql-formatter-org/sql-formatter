@@ -47,8 +47,9 @@ export default class Formatter {
         this.tokens.forEach((token, index) => {
             this.index = index;
 
-            if (this.tokenOverride)
+            if (this.tokenOverride) {
                 token = this.tokenOverride(token, this.previousReservedWord) || token;
+            }
 
             if (token.type === tokenTypes.WHITESPACE) {
                 // ignore (we do our own whitespace formatting)
@@ -209,7 +210,9 @@ export default class Formatter {
 
     addNewline(query) {
         query = trimSpacesEnd(query);
-        if (!query.endsWith("\n")) query += "\n";
+        if (!query.endsWith("\n")) {
+            query += "\n";
+        }
         return query + this.indentation.getIndent();
     }
 
