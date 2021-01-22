@@ -16,6 +16,9 @@ import StandardSqlFormatter from "./languages/StandardSqlFormatter";
  * @return {String}
  */
 export const format = (query, cfg = {}) => {
+    if (typeof query !== "string") {
+        throw new Error("Invalid query parameter. Extected string, instead got " + typeof query)
+    }
     switch (cfg.language) {
         case "db2":
             return new Db2Formatter(cfg).format(query);

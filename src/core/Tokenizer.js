@@ -128,8 +128,6 @@ export default class Tokenizer {
      *  @return {String} token.value
      */
     tokenize(input) {
-        if (!input) return [];
-
         const tokens = [];
         let token;
 
