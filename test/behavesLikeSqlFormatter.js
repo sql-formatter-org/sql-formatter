@@ -15,7 +15,9 @@ export default function behavesLikeSqlFormatter(language) {
     });
 
     it("throws error when query argument is not string", () => {
-        expect(() => format(undefined)).toThrow("Invalid query argument. Extected string, instead got undefined")
+        expect(() => format(undefined)).toThrow(
+            "Invalid query argument. Extected string, instead got undefined"
+        );
     });
 
     it("uses given indent config for indention", () => {
@@ -240,8 +242,12 @@ export default function behavesLikeSqlFormatter(language) {
 
     // FIXME: should not mix windows and unix line-endings
     it("recognizes line-comments with Windows line-endings", () => {
-        const result = format("SELECT * FROM\r\n-- line comment 1\r\nMyTable -- line comment 2\r\n");
-        expect(result).toBe("SELECT\n  *\nFROM\n  -- line comment 1\r\n  MyTable -- line comment 2");
+        const result = format(
+            "SELECT * FROM\r\n-- line comment 1\r\nMyTable -- line comment 2\r\n"
+        );
+        expect(result).toBe(
+            "SELECT\n  *\nFROM\n  -- line comment 1\r\n  MyTable -- line comment 2"
+        );
     });
 
     it("formats simple INSERT query", () => {
