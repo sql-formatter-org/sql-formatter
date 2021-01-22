@@ -7,12 +7,12 @@
     "require-unicode-regexp": ["error"],
     "import/no-useless-path-segments": "warn",
     "func-names": "warn",
-    "no-useless-concat": "warn",
-    "class-methods-use-this": "warn",
-    "no-param-reassign": "warn",
-    "prefer-template": "warn",
-    "no-plusplus": "warn",
-    "no-else-return": "warn",
+    "no-useless-concat": "off",
+    "class-methods-use-this": "off",
+    "no-param-reassign": "off",
+    "prefer-template": "off",
+    "no-plusplus": "off",
+    "no-else-return": "off",
     "consistent-return": "warn"
   },
   "env": {
