@@ -11,7 +11,7 @@ export default class Formatter {
      * @param {Object} cfg
      *  @param {String} cfg.language
      *  @param {String} cfg.indent
-     *  @param {Bool} cfg.uppercase
+     *  @param {Boolean} cfg.uppercase
      *  @param {Integer} cfg.linesBetweenQueries
      *  @param {Object} cfg.params
      * @param {Tokenizer} tokenizer
