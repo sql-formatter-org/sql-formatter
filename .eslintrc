@@ -1,6 +1,19 @@
 {
-    "extends": "zt/base",
-    "env": {
-        "jest": true
-    }
+  "parser": "babel-eslint",
+  "extends": ["airbnb-base", "prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": ["error"],
+    "require-unicode-regexp": ["error"],
+    "func-names": "error",
+    "no-useless-concat": "off",
+    "class-methods-use-this": "off",
+    "no-param-reassign": "off",
+    "prefer-template": "off",
+    "no-plusplus": "off",
+    "no-else-return": "off"
+  },
+  "env": {
+    "jest": true
+  }
 }
