@@ -271,6 +271,6 @@ export default class SparkSqlFormatter extends Formatter {
       }
     }
 
-    return undefined;
+    return token;
   }
 }

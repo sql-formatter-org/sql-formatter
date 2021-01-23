@@ -49,13 +49,13 @@ export default class Formatter {
    * @param {Object} token The token to modify
    *  @param {String} token.type
    *  @param {String} token.value
-   * @return {?Object} modified token
+   * @return {Object} new token or the original
    *  @return {String} token.type
    *  @return {String} token.value
    */
-  tokenOverride() {
-    // do nothing
+  tokenOverride(token) {
     // subclasses can override this to modify tokens during formatting
+    return token;
   }
 
   /**
@@ -77,7 +77,7 @@ export default class Formatter {
     this.tokens.forEach((token, index) => {
       this.index = index;
 
-      token = this.tokenOverride(token) || token;
+      token = this.tokenOverride(token);
 
       if (token.type === tokenTypes.WHITESPACE) {
         // ignore (we do our own whitespace formatting)
