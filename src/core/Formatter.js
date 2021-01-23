@@ -220,7 +220,8 @@ export default class Formatter {
   }
 
   formatWithSpaces(token, query) {
-    const value = token.type === 'reserved' ? this.formatReservedWord(token.value) : token.value;
+    const value =
+      token.type === tokenTypes.RESERVED ? this.formatReservedWord(token.value) : token.value;
     return query + value + ' ';
   }
 
