@@ -66,7 +66,9 @@ export default class Tokenizer {
   }
 
   createReservedWordRegex(reservedWords) {
-    if (reservedWords.length === 0) return new RegExp(`^\b$`, 'u');
+    if (reservedWords.length === 0) {
+      return new RegExp(`^\b$`, 'u');
+    }
     reservedWords = reservedWords.sort((a, b) => {
       return b.length - a.length || a.localeCompare(b);
     });

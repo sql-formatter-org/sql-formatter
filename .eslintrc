@@ -4,6 +4,7 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": ["error"],
+    "curly": ["error", "all"],
     "require-unicode-regexp": ["error"],
     "func-names": "error",
     "no-useless-concat": "off",
