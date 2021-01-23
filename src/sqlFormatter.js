@@ -28,6 +28,10 @@ export const FORMATTERS = {
  * @return {String}
  */
 export const format = (query, cfg = {}) => {
+  if (typeof query !== 'string') {
+    throw new Error('Invalid query argument. Extected string, instead got ' + typeof query);
+  }
+
   let Formatter = StandardSqlFormatter;
   if (cfg.language !== undefined) {
     Formatter = FORMATTERS[cfg.language];

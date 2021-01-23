@@ -8,6 +8,18 @@ import * as sqlFormatter from '../src/sqlFormatter';
 export default function behavesLikeSqlFormatter(language) {
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
+  it('does nothing with empty input', () => {
+    const result = format('');
+
+    expect(result).toBe('');
+  });
+
+  it('throws error when query argument is not string', () => {
+    expect(() => format(undefined)).toThrow(
+      'Invalid query argument. Extected string, instead got undefined'
+    );
+  });
+
   it('uses given indent config for indention', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;', {
       indent: '    ',
