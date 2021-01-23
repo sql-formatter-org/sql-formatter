@@ -5,7 +5,7 @@ import RedshiftFormatter from './languages/RedshiftFormatter';
 import SparkSqlFormatter from './languages/SparkSqlFormatter';
 import StandardSqlFormatter from './languages/StandardSqlFormatter';
 
-export const FORMATTERS = {
+const FORMATTERS = {
   db2: Db2Formatter,
   n1ql: N1qlFormatter,
   'pl/sql': PlSqlFormatter,
@@ -42,4 +42,7 @@ export const format = (query, cfg = {}) => {
   return new Formatter(cfg).format(query);
 };
 
-export default { format, FORMATTERS };
+export default {
+  format,
+  supportedDialects: Object.keys(FORMATTERS),
+};

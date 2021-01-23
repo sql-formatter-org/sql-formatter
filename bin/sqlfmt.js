@@ -2,12 +2,10 @@
 
 'use strict';
 
-const { format, FORMATTERS } = require('../lib/sqlFormatter');
+const { format, supportedDialects } = require('../lib/sqlFormatter');
 const fs = require('fs');
 const { version } = require('../package.json');
 const { ArgumentParser } = require('argparse');
-
-const formatterKeys = Object.keys(FORMATTERS);
 
 function getArgs() {
   const parser = new ArgumentParser({
@@ -25,7 +23,7 @@ function getArgs() {
 
   parser.addArgument(['-l', '--language'], {
     help: 'SQL Formatter dialect (defaults to basic sql)',
-    choices: formatterKeys,
+    choices: supportedDialects,
     defaultValue: 'sql',
   });
 
