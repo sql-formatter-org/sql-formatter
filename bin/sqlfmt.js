@@ -9,49 +9,53 @@ const { ArgumentParser } = require('argparse');
 
 function getArgs() {
   const parser = new ArgumentParser({
-    version,
-    addHelp: true,
+    add_help: true,
     description: 'SQL Formatter',
   });
 
-  parser.addArgument(['-f', '--file'], {
+  parser.add_argument('-f', '--file', {
     help: 'Input SQL file (defaults to stdin)',
   });
-  parser.addArgument(['-o', '--output'], {
+  parser.add_argument('-o', '--output', {
     help: 'File to write SQL output (defaults to stdout)',
   });
 
-  parser.addArgument(['-l', '--language'], {
+  parser.add_argument('-l', '--language', {
     help: 'SQL Formatter dialect (defaults to basic sql)',
     choices: supportedDialects,
-    defaultValue: 'sql',
+    default: 'sql',
   });
 
-  const indentationGroup = parser.addMutuallyExclusiveGroup();
-  indentationGroup.addArgument(['-i', '--indent'], {
+  const indentationGroup = parser.add_mutually_exclusive_group();
+  indentationGroup.add_argument('-i', '--indent', {
     help: 'Number of spaces to indent query blocks (defaults to 2)',
     metavar: 'N',
     type: 'int',
-    defaultValue: 2,
+    default: 2,
   });
-  indentationGroup.addArgument(['-t', '--tab-indent'], {
+  indentationGroup.add_argument('-t', '--tab-indent', {
     help: 'Indent query blocks with tabs instead of spaces',
-    action: 'storeTrue',
+    action: 'store_true',
   });
 
-  parser.addArgument(['-u', '--uppercase'], {
+  parser.add_argument('-u', '--uppercase', {
     help: 'Capitalize language keywords',
-    action: 'storeTrue',
+    action: 'store_true',
   });
 
-  parser.addArgument(['--lines-between-queries'], {
+  parser.add_argument('--lines-between-queries', {
     help: 'How many newlines to insert between queries (separated by ";")',
     metavar: 'N',
     type: 'int',
     default: 1,
   });
 
-  return parser.parseArgs();
+  parser.add_argument('--version', {
+    action: 'version',
+    version,
+  });
+
+  return parser.parse_args();
 }
 
 function configFromArgs(args) {
@@ -81,7 +85,7 @@ function getInput(file) {
 }
 
 function writeOutput(file, query) {
-  if (file === null) {
+  if (!file) {
     // No output file, write to console
     console.log(query);
   } else {
