@@ -16,55 +16,7 @@ Get the latest version from NPM:
 npm install sql-formatter
 ```
 
-## Command Line Interface
-
-The CLI tool will be installed under `sql-formatter`
-and may be invoked via `npx sql-formatter`:
-
-```sh
-sql-formatter -h
-```
-
-```
-usage: sql-formatter [-h] [-o OUTPUT] [-l {db2,n1ql,pl/sql,plsql,redshift,spark,sql}]
-                     [-i N | -t] [-u] [--lines-between-queries N] [--version] [FILE]
-
-SQL Formatter
-
-positional arguments:
-  FILE                  Input SQL file (defaults to stdin)
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -o OUTPUT, --output OUTPUT
-                        File to write SQL output (defaults to stdout)
-  -l {db2,n1ql,pl/sql,plsql,redshift,spark,sql}, --language {db2,n1ql,pl/sql,plsql,redshift,spark,sql}
-                        SQL Formatter dialect (defaults to basic sql)
-  -i N, --indent N      Number of spaces to indent query blocks (defaults to 2)
-  -t, --tab-indent      Indent query blocks with tabs instead of spaces
-  -u, --uppercase       Capitalize language keywords
-  --lines-between-queries N
-                        How many newlines to insert between queries (separated by ";")
-  --version             show program's version number and exit
-```
-
-By default, the tool takes queries from stdin and processes them to stdout but
-one can also name an input file name or use the `--output` option.
-
-```sh
-echo 'select * from tbl where id = 3' | sql-formatter -u
-```
-
-```sql
-SELECT
-  *
-FROM
-  tbl
-WHERE
-  id = 3
-```
-
-## Usage
+## Usage as library
 
 ```js
 import sqlFormatter from 'sql-formatter';
@@ -124,6 +76,54 @@ FROM
   tbl
 WHERE
   foo = 'bar'
+```
+
+## Usage from command line
+
+The CLI tool will be installed under `sql-formatter`
+and may be invoked via `npx sql-formatter`:
+
+```sh
+sql-formatter -h
+```
+
+```
+usage: sql-formatter [-h] [-o OUTPUT] [-l {db2,n1ql,pl/sql,plsql,redshift,spark,sql}]
+                     [-i N | -t] [-u] [--lines-between-queries N] [--version] [FILE]
+
+SQL Formatter
+
+positional arguments:
+  FILE                  Input SQL file (defaults to stdin)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -o OUTPUT, --output OUTPUT
+                        File to write SQL output (defaults to stdout)
+  -l {db2,n1ql,pl/sql,plsql,redshift,spark,sql}, --language {db2,n1ql,pl/sql,plsql,redshift,spark,sql}
+                        SQL Formatter dialect (defaults to basic sql)
+  -i N, --indent N      Number of spaces to indent query blocks (defaults to 2)
+  -t, --tab-indent      Indent query blocks with tabs instead of spaces
+  -u, --uppercase       Capitalize language keywords
+  --lines-between-queries N
+                        How many newlines to insert between queries (separated by ";")
+  --version             show program's version number and exit
+```
+
+By default, the tool takes queries from stdin and processes them to stdout but
+one can also name an input file name or use the `--output` option.
+
+```sh
+echo 'select * from tbl where id = 3' | sql-formatter -u
+```
+
+```sql
+SELECT
+  *
+FROM
+  tbl
+WHERE
+  id = 3
 ```
 
 ## Usage without NPM
