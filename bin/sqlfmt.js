@@ -13,9 +13,12 @@ function getArgs() {
     description: 'SQL Formatter',
   });
 
-  parser.add_argument('-f', '--file', {
+  parser.add_argument('file', {
+    metavar: 'FILE',
+    nargs: '?',
     help: 'Input SQL file (defaults to stdin)',
   });
+
   parser.add_argument('-o', '--output', {
     help: 'File to write SQL output (defaults to stdout)',
   });
