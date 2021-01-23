@@ -229,18 +229,20 @@ const reservedNewlineWords = [
 ];
 
 export default class SparkSqlFormatter extends Formatter {
-  static tokenizer = new Tokenizer({
-    reservedWords,
-    reservedTopLevelWords,
-    reservedNewlineWords,
-    reservedTopLevelWordsNoIndent,
-    stringTypes: [`""`, "''", '``', '{}'],
-    openParens: ['(', 'CASE'],
-    closeParens: [')', 'END'],
-    indexedPlaceholderTypes: ['?'],
-    namedPlaceholderTypes: ['$'],
-    lineCommentTypes: ['--'],
-  });
+  tokenizer() {
+    return new Tokenizer({
+      reservedWords,
+      reservedTopLevelWords,
+      reservedNewlineWords,
+      reservedTopLevelWordsNoIndent,
+      stringTypes: [`""`, "''", '``', '{}'],
+      openParens: ['(', 'CASE'],
+      closeParens: [')', 'END'],
+      indexedPlaceholderTypes: ['?'],
+      namedPlaceholderTypes: ['$'],
+      lineCommentTypes: ['--'],
+    });
+  }
 
   tokenOverride(token) {
     // Fix cases where names are ambiguously keywords or functions

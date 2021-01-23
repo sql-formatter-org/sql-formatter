@@ -411,19 +411,21 @@ const reservedNewlineWords = [
 ];
 
 export default class PlSqlFormatter extends Formatter {
-  static tokenizer = new Tokenizer({
-    reservedWords,
-    reservedTopLevelWords,
-    reservedNewlineWords,
-    reservedTopLevelWordsNoIndent,
-    stringTypes: [`""`, "N''", "''", '``'],
-    openParens: ['(', 'CASE'],
-    closeParens: [')', 'END'],
-    indexedPlaceholderTypes: ['?'],
-    namedPlaceholderTypes: [':'],
-    lineCommentTypes: ['--'],
-    specialWordChars: ['_', '$', '#', '.', '@'],
-  });
+  tokenizer() {
+    return new Tokenizer({
+      reservedWords,
+      reservedTopLevelWords,
+      reservedNewlineWords,
+      reservedTopLevelWordsNoIndent,
+      stringTypes: [`""`, "N''", "''", '``'],
+      openParens: ['(', 'CASE'],
+      closeParens: [')', 'END'],
+      indexedPlaceholderTypes: ['?'],
+      namedPlaceholderTypes: [':'],
+      lineCommentTypes: ['--'],
+      specialWordChars: ['_', '$', '#', '.', '@'],
+    });
+  }
 
   tokenOverride(token) {
     if (

@@ -547,17 +547,19 @@ const reservedNewlineWords = [
 ];
 
 export default class Db2Formatter extends Formatter {
-  static tokenizer = new Tokenizer({
-    reservedWords,
-    reservedTopLevelWords,
-    reservedNewlineWords,
-    reservedTopLevelWordsNoIndent,
-    stringTypes: [`""`, "''", '``', '[]'],
-    openParens: ['('],
-    closeParens: [')'],
-    indexedPlaceholderTypes: ['?'],
-    namedPlaceholderTypes: [':'],
-    lineCommentTypes: ['--'],
-    specialWordChars: ['#', '@'],
-  });
+  tokenizer() {
+    return new Tokenizer({
+      reservedWords,
+      reservedTopLevelWords,
+      reservedNewlineWords,
+      reservedTopLevelWordsNoIndent,
+      stringTypes: [`""`, "''", '``', '[]'],
+      openParens: ['('],
+      closeParens: [')'],
+      indexedPlaceholderTypes: ['?'],
+      namedPlaceholderTypes: [':'],
+      lineCommentTypes: ['--'],
+      specialWordChars: ['#', '@'],
+    });
+  }
 }

@@ -220,15 +220,17 @@ const reservedNewlineWords = [
 ];
 
 export default class N1qlFormatter extends Formatter {
-  static tokenizer = new Tokenizer({
-    reservedWords,
-    reservedTopLevelWords,
-    reservedNewlineWords,
-    reservedTopLevelWordsNoIndent,
-    stringTypes: [`""`, "''", '``'],
-    openParens: ['(', '[', '{'],
-    closeParens: [')', ']', '}'],
-    namedPlaceholderTypes: ['$'],
-    lineCommentTypes: ['#', '--'],
-  });
+  tokenizer() {
+    return new Tokenizer({
+      reservedWords,
+      reservedTopLevelWords,
+      reservedNewlineWords,
+      reservedTopLevelWordsNoIndent,
+      stringTypes: [`""`, "''", '``'],
+      openParens: ['(', '[', '{'],
+      closeParens: [')', ']', '}'],
+      namedPlaceholderTypes: ['$'],
+      lineCommentTypes: ['#', '--'],
+    });
+  }
 }

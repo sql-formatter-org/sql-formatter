@@ -322,16 +322,18 @@ const reservedNewlineWords = [
 ];
 
 export default class StandardSqlFormatter extends Formatter {
-  static tokenizer = new Tokenizer({
-    reservedWords,
-    reservedTopLevelWords,
-    reservedNewlineWords,
-    reservedTopLevelWordsNoIndent,
-    stringTypes: [`""`, "N''", "''", '``', '[]'],
-    openParens: ['(', 'CASE'],
-    closeParens: [')', 'END'],
-    indexedPlaceholderTypes: ['?'],
-    namedPlaceholderTypes: ['@', ':'],
-    lineCommentTypes: ['#', '--'],
-  });
+  tokenizer() {
+    return new Tokenizer({
+      reservedWords,
+      reservedTopLevelWords,
+      reservedNewlineWords,
+      reservedTopLevelWordsNoIndent,
+      stringTypes: [`""`, "N''", "''", '``', '[]'],
+      openParens: ['(', 'CASE'],
+      closeParens: [')', 'END'],
+      indexedPlaceholderTypes: ['?'],
+      namedPlaceholderTypes: ['@', ':'],
+      lineCommentTypes: ['#', '--'],
+    });
+  }
 }

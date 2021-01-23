@@ -28,19 +28,21 @@ export default class Formatter {
   /**
    * SQL Tokenizer for this formatter, typically overriden by subclasses.
    */
-  static tokenizer = new Tokenizer({
-    reservedWords: [],
-    reservedTopLevelWords: [],
-    reservedNewlineWords: [],
-    reservedTopLevelWordsNoIndent: [],
-    stringTypes: [],
-    openParens: [],
-    closeParens: [],
-    indexedPlaceholderTypes: [],
-    namedPlaceholderTypes: [],
-    lineCommentTypes: [],
-    specialWordChars: [],
-  });
+  tokenizer() {
+    return new Tokenizer({
+      reservedWords: [],
+      reservedTopLevelWords: [],
+      reservedNewlineWords: [],
+      reservedTopLevelWordsNoIndent: [],
+      stringTypes: [],
+      openParens: [],
+      closeParens: [],
+      indexedPlaceholderTypes: [],
+      namedPlaceholderTypes: [],
+      lineCommentTypes: [],
+      specialWordChars: [],
+    });
+  }
 
   /**
    * Reprocess and modify a token based on parsed context.
@@ -64,7 +66,7 @@ export default class Formatter {
    * @return {String} formatted query
    */
   format(query) {
-    this.tokens = this.constructor.tokenizer.tokenize(query);
+    this.tokens = this.tokenizer().tokenize(query);
     const formattedQuery = this.getFormattedQueryFromTokens();
 
     return formattedQuery.trim();
