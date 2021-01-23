@@ -290,7 +290,7 @@ export default class Tokenizer {
     // A reserved word cannot be preceded by a "."
     // this makes it so in "mytable.from", "from" is not considered a reserved word
     if (previousToken && previousToken.value && previousToken.value === '.') {
-      return;
+      return undefined;
     }
     return (
       this.getTopLevelReservedToken(input) ||
@@ -343,8 +343,6 @@ export default class Tokenizer {
   getTokenOnFirstMatch({ input, type, regex }) {
     const matches = input.match(regex);
 
-    if (matches) {
-      return { type, value: matches[1] };
-    }
+    return matches ? { type, value: matches[1] } : undefined;
   }
 }

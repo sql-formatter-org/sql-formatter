@@ -434,5 +434,6 @@ export default class PlSqlFormatter extends Formatter {
       token.type = tokenTypes.RESERVED;
       return token;
     }
+    return undefined;
   }
 }
