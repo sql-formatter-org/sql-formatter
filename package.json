@@ -1,11 +1,10 @@
 {
-  "name": "@gwax/sql-formatter",
+  "name": "sql-formatter",
   "version": "3.0.3",
   "description": "Format whitespace in a SQL query to make it more readable",
   "license": "MIT",
   "main": "lib/sqlFormatter.js",
   "bin": {
-    "@gwax/sql-formatter": "./bin/sqlfmt.js",
     "sql-formatter": "./bin/sqlfmt.js"
   },
   "keywords": [

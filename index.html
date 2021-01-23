@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
 
-    <title>@gwax/sql-formatter</title>
+    <title>SQL formatter</title>
     <meta name="description" content="A whitespace formatter for different query languages" />
 
     <meta property="og:title" content="SQL Formatter" />
@@ -12,7 +12,9 @@
       property="og:description"
       content="A whitespace formatter for different query languages"
     />
-    <meta property="og:url" content="https://gwax.github.io/sql-formatter/" />
+    <meta property="og:url" content="https://zeroturnaround.github.io/sql-formatter" />
+
+    <link rel="shortcut icon" href="http://static.zeroturnaround.com/theme55/images/favicon.ico" />
 
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet" />
 
@@ -25,7 +27,6 @@
         overflow: hidden;
         font-family: 'Roboto Mono', monospace;
       }
-
       header {
         position: relative;
         height: 120px;
@@ -33,22 +34,18 @@
         border-bottom: 2px solid #8dc63f;
         box-sizing: border-box;
       }
-
       .select-wrapper {
         position: absolute;
         bottom: 0;
         left: 50%;
         transform: translate(-50%, -50%);
       }
-
       h1 {
         margin: 0 0 8px 0;
       }
-
       a {
         text-decoration: none;
       }
-
       main {
         overflow: hidden;
         display: flex;
@@ -57,7 +54,6 @@
         align-items: stretch;
         height: calc(100% - 120px);
       }
-
       .input,
       .output {
         display: flex;
@@ -66,11 +62,9 @@
         width: 50%;
         height: 100%;
       }
-
       .output {
         border-left: 2px solid #8dc63f;
       }
-
       textarea {
         width: 100%;
         padding: 20px;
@@ -90,11 +84,11 @@
       <h1>SQL Formatter</h1>
 
       <div class="buttons">
-        <a href="https://www.npmjs.com/package/@gwax/sql-formatter">
-          <img src="https://img.shields.io/npm/v/@gwax/sql-formatter.svg" height="18" />
+        <a href="https://www.npmjs.com/package/sql-formatter">
+          <img src="https://img.shields.io/npm/v/sql-formatter.svg" height="18" />
         </a>
         <iframe
-          src="https://ghbtns.com/github-btn.html?user=gwax&repo=sql-formatter&type=star&count=true"
+          src="https://ghbtns.com/github-btn.html?user=zeroturnaround&repo=sql-formatter&type=star&count=true"
           frameborder="0"
           scrolling="0"
           width="120px"
@@ -123,7 +117,7 @@
           </option>
         </select>
         |
-        <label for="uppercae">Uppercase</label>
+        <label for="uppercase">Uppercase</label>
         <input type="checkbox" id="uppercase" name="uppercase" checked />
       </div>
     </header>
@@ -150,7 +144,7 @@ order by supplier_name asc,city desc;
       window.sqlFormatter ||
         document.write(
           unescape(
-            '%3Cscript type="text/javascript" src="https://unpkg.com/@gwax/sql-formatter@latest/dist/sql-formatter.min.js"%3E%3C/script%3E'
+            '%3Cscript type="text/javascript" src="https://unpkg.com/sql-formatter@latest/dist/sql-formatter.min.js"%3E%3C/script%3E'
           )
         );
     </script>

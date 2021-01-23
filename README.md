@@ -1,33 +1,28 @@
-# SQL Formatter [![NPM version](https://img.shields.io/npm/v/@gwax/sql-formatter.svg)](https://npmjs.com/package/@gwax/sql-formatter) [![Build Status](https://travis-ci.com/gwax/sql-formatter.svg?branch=master)](https://travis-ci.com/gwax/sql-formatter) [![Coverage Status](https://coveralls.io/repos/github/gwax/sql-formatter/badge.svg?branch=master)](https://coveralls.io/github/gwax/sql-formatter?branch=master)
+# SQL Formatter [![NPM version](https://img.shields.io/npm/v/sql-formatter.svg)](https://npmjs.com/package/sql-formatter) [![Build Status](https://travis-ci.org/zeroturnaround/sql-formatter.svg?branch=master)](https://travis-ci.org/zeroturnaround/sql-formatter) [![Coverage Status](https://coveralls.io/repos/github/zeroturnaround/sql-formatter/badge.svg?branch=master)](https://coveralls.io/github/zeroturnaround/sql-formatter?branch=master)
 
-**SQL Formatter** is a JavaScript library and command line tool for
-pretty-printing SQL queries. It started as a Javascript port of a
-[PHP Library][], but has diverged considerably, and been forked/joined multiple
-times in the past. The current formatter (@gwax/sql-formatter) forked from
-[zeroturnaround/sql-formatter](https://github.com/zeroturnaround/sql-formatter)
-with code consolidated from [kufii/sql-formatter-plus](https://github.com/kufii/sql-formatter-plus)
-and a number of other forks scattered around GitHub.
+**SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
+It started as a port of a [PHP Library][], but has since considerably diverged.
 
 SQL Formatter supports [Standard SQL][], [Couchbase N1QL][], [IBM DB2][],
 [Oracle PL/SQL][], [Amazon Redshift][], and [Spark][] dialects.
 
-&rarr; [Try the demo.](https://gwax.github.io/sql-formatter/)
+&rarr; [Try the demo.](https://zeroturnaround.github.io/sql-formatter/)
 
 ## Install
 
 Get the latest version from NPM:
 
 ```sh
-npm install @gwax/sql-formatter
+npm install sql-formatter
 ```
 
 ## Command Line Interface
 
-The CLI tool will be installed under `@gwax/sql-formatter` and under
-`sql-formatter` and may be invoked via `npx @gwax/sql-formatter`:
+The CLI tool will be installed under `sql-formatter`
+and may be invoked via `npx sql-formatter`:
 
 ```sh
-npx @gwax/sql-formatter -h
+sql-formatter -h
 ```
 
 ```
@@ -59,7 +54,7 @@ By default, the tool takes queries from stdin and processes them to stdout but
 the `-f`/`--file` and `-o`/`--output` flags can be used to alter this behavior.
 
 ```sh
-echo 'select * from tbl where id = 3' | npx @gwax/sql-formatter -u
+echo 'select * from tbl where id = 3' | sql-formatter -u
 ```
 
 ```sql
@@ -74,7 +69,7 @@ WHERE
 ## Usage
 
 ```js
-import sqlFormatter from '@gwax/sql-formatter';
+import sqlFormatter from 'sql-formatter';
 
 console.log(sqlFormatter.format('SELECT * FROM tbl'));
 ```
@@ -99,7 +94,7 @@ sqlFormatter.format('SELECT * FROM tbl', {
 });
 ```
 
-Currently just six SQL dialects are supported:
+Currently six SQL dialects are supported:
 
 - **sql** - [Standard SQL][]
 - **n1ql** - [Couchbase N1QL][]
@@ -112,19 +107,19 @@ Currently just six SQL dialects are supported:
 
 ```js
 // Named placeholders
-sqlFormatter.format('SELECT * FROM tbl WHERE foo = @foo', {
-  params: { foo: "'bar'" },
-});
+sqlFormatter.format("SELECT * FROM tbl WHERE foo = @foo", {
+  params: {foo: "'bar'"}
+}));
 
 // Indexed placeholders
-sqlFormatter.format('SELECT * FROM tbl WHERE foo = ?', {
-  params: ["'bar'"],
-});
+sqlFormatter.format("SELECT * FROM tbl WHERE foo = ?", {
+  params: ["'bar'"]
+}));
 ```
 
 Both result in:
 
-```sql
+```
 SELECT
   *
 FROM
@@ -150,7 +145,7 @@ npm run check
 
 ## License
 
-[MIT](https://github.com/gwax/sql-formatter/blob/master/LICENSE)
+[MIT](https://github.com/zeroturnaround/sql-formatter/blob/master/LICENSE)
 
 [php library]: https://github.com/jdorn/sql-formatter
 [standard sql]: https://en.wikipedia.org/wiki/SQL:2011
