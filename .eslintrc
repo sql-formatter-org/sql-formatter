@@ -12,7 +12,8 @@
     "no-param-reassign": "off",
     "prefer-template": "off",
     "no-plusplus": "off",
-    "no-else-return": "off"
+    "no-else-return": "off",
+    "no-use-before-define": "off"
   },
   "env": {
     "jest": true

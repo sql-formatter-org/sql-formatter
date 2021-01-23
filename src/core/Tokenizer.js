@@ -1,5 +1,6 @@
-import { escapeRegExp, isEmpty } from '../utils';
 import tokenTypes from './tokenTypes';
+import * as regexFactory from './regexFactory';
+import { escapeRegExp } from '../utils';
 
 export default class Tokenizer {
   /**
@@ -20,7 +21,7 @@ export default class Tokenizer {
     this.WHITESPACE_REGEX = /^(\s+)/u;
     this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?([eE]-?[0-9]+(\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u;
 
-    this.OPERATOR_REGEX = this.createOperatorRegex([
+    this.OPERATOR_REGEX = regexFactory.createOperatorRegex([
       '!=',
       '<<',
       '>>',
@@ -48,110 +49,33 @@ export default class Tokenizer {
     ]);
 
     this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/u;
-    this.LINE_COMMENT_REGEX = this.createLineCommentRegex(cfg.lineCommentTypes);
+    this.LINE_COMMENT_REGEX = regexFactory.createLineCommentRegex(cfg.lineCommentTypes);
 
-    this.RESERVED_TOP_LEVEL_REGEX = this.createReservedWordRegex(cfg.reservedTopLevelWords);
-    this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX = this.createReservedWordRegex(
+    this.RESERVED_TOP_LEVEL_REGEX = regexFactory.createReservedWordRegex(cfg.reservedTopLevelWords);
+    this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX = regexFactory.createReservedWordRegex(
       cfg.reservedTopLevelWordsNoIndent
     );
-    this.RESERVED_NEWLINE_REGEX = this.createReservedWordRegex(cfg.reservedNewlineWords);
-    this.RESERVED_PLAIN_REGEX = this.createReservedWordRegex(cfg.reservedWords);
+    this.RESERVED_NEWLINE_REGEX = regexFactory.createReservedWordRegex(cfg.reservedNewlineWords);
+    this.RESERVED_PLAIN_REGEX = regexFactory.createReservedWordRegex(cfg.reservedWords);
 
-    this.WORD_REGEX = this.createWordRegex(cfg.specialWordChars);
-    this.STRING_REGEX = this.createStringRegex(cfg.stringTypes);
+    this.WORD_REGEX = regexFactory.createWordRegex(cfg.specialWordChars);
+    this.STRING_REGEX = regexFactory.createStringRegex(cfg.stringTypes);
 
-    this.OPEN_PAREN_REGEX = this.createParenRegex(cfg.openParens);
-    this.CLOSE_PAREN_REGEX = this.createParenRegex(cfg.closeParens);
+    this.OPEN_PAREN_REGEX = regexFactory.createParenRegex(cfg.openParens);
+    this.CLOSE_PAREN_REGEX = regexFactory.createParenRegex(cfg.closeParens);
 
-    this.INDEXED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(
+    this.INDEXED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
       cfg.indexedPlaceholderTypes,
       '[0-9]*'
     );
-    this.IDENT_NAMED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(
+    this.IDENT_NAMED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
       cfg.namedPlaceholderTypes,
       '[a-zA-Z0-9._$]+'
     );
-    this.STRING_NAMED_PLACEHOLDER_REGEX = this.createPlaceholderRegex(
+    this.STRING_NAMED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
       cfg.namedPlaceholderTypes,
-      this.createStringPattern(cfg.stringTypes)
+      regexFactory.createStringPattern(cfg.stringTypes)
     );
-  }
-
-  createOperatorRegex(multiLetterOperators) {
-    return new RegExp(`^(${multiLetterOperators.map(escapeRegExp).join('|')}|.)`, 'u');
-  }
-
-  createLineCommentRegex(lineCommentTypes) {
-    return new RegExp(
-      `^((?:${lineCommentTypes.map((c) => escapeRegExp(c)).join('|')}).*?(?:\r\n|\r|\n|$))`,
-      'u'
-    );
-  }
-
-  createReservedWordRegex(reservedWords) {
-    if (reservedWords.length === 0) {
-      return new RegExp(`^\b$`, 'u');
-    }
-    reservedWords = reservedWords.sort((a, b) => {
-      return b.length - a.length || a.localeCompare(b);
-    });
-    const reservedWordsPattern = reservedWords.join('|').replace(/ /gu, '\\s+');
-    return new RegExp(`^(${reservedWordsPattern})\\b`, 'iu');
-  }
-
-  createWordRegex(specialChars = []) {
-    return new RegExp(
-      `^([\\p{Alphabetic}\\p{Mark}\\p{Decimal_Number}\\p{Connector_Punctuation}\\p{Join_Control}${specialChars.join(
-        ''
-      )}]+)`,
-      'u'
-    );
-  }
-
-  createStringRegex(stringTypes) {
-    return new RegExp('^(' + this.createStringPattern(stringTypes) + ')', 'u');
-  }
-
-  // This enables the following string patterns:
-  // 1. backtick quoted string using `` to escape
-  // 2. square bracket quoted string (SQL Server) using ]] to escape
-  // 3. double quoted string using "" or \" to escape
-  // 4. single quoted string using '' or \' to escape
-  // 5. national character quoted string using N'' or N\' to escape
-  createStringPattern(stringTypes) {
-    const patterns = {
-      '``': '((`[^`]*($|`))+)',
-      '{}': '((\\{[^\\}]*($|\\}))+)',
-      '[]': '((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)',
-      '""': '(("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+)',
-      "''": "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
-      "N''": "((N'[^N'\\\\]*(?:\\\\.[^N'\\\\]*)*('|$))+)",
-    };
-
-    return stringTypes.map((t) => patterns[t]).join('|');
-  }
-
-  createParenRegex(parens) {
-    return new RegExp('^(' + parens.map((p) => this.escapeParen(p)).join('|') + ')', 'iu');
-  }
-
-  escapeParen(paren) {
-    if (paren.length === 1) {
-      // A single punctuation character
-      return escapeRegExp(paren);
-    } else {
-      // longer word
-      return '\\b' + paren + '\\b';
-    }
-  }
-
-  createPlaceholderRegex(types, pattern) {
-    if (isEmpty(types)) {
-      return false;
-    }
-    const typesRegex = types.map(escapeRegExp).join('|');
-
-    return new RegExp(`^((?:${typesRegex})(?:${pattern}))`, 'u');
   }
 
   /**
