@@ -26,32 +26,30 @@ sql-formatter -h
 ```
 
 ```
-usage: sql-formatter [-h] [-v] [-f FILE] [-o OUTPUT]
-                     [-l {db2,n1ql,pl/sql,plsql,redshift,spark,sql}]
-                     [-i N | -t] [-u] [--lines-between-queries N]
-
+usage: sql-formatter [-h] [-o OUTPUT] [-l {db2,n1ql,pl/sql,plsql,redshift,spark,sql}]
+                     [-i N | -t] [-u] [--lines-between-queries N] [--version] [FILE]
 
 SQL Formatter
 
-Optional arguments:
-  -h, --help            Show this help message and exit.
-  -v, --version         Show program's version number and exit.
-  -f FILE, --file FILE  Input SQL file (defaults to stdin)
+positional arguments:
+  FILE                  Input SQL file (defaults to stdin)
+
+optional arguments:
+  -h, --help            show this help message and exit
   -o OUTPUT, --output OUTPUT
                         File to write SQL output (defaults to stdout)
-  -l {db2,n1ql,pl/sql,plsql,redshift,spark,sql}, --langauge {db2,n1ql,pl/sql,plsql,redshift,spark,sql}
+  -l {db2,n1ql,pl/sql,plsql,redshift,spark,sql}, --language {db2,n1ql,pl/sql,plsql,redshift,spark,sql}
                         SQL Formatter dialect (defaults to basic sql)
-  -i N, --indent N      Number of spaces to indent query blocks (defaults to
-                        2)
+  -i N, --indent N      Number of spaces to indent query blocks (defaults to 2)
   -t, --tab-indent      Indent query blocks with tabs instead of spaces
   -u, --uppercase       Capitalize language keywords
   --lines-between-queries N
-                        How many newlines to insert between queries
-                        (separated by ";")
+                        How many newlines to insert between queries (separated by ";")
+  --version             show program's version number and exit
 ```
 
 By default, the tool takes queries from stdin and processes them to stdout but
-the `-f`/`--file` and `-o`/`--output` flags can be used to alter this behavior.
+one can also name an input file name or use the `--output` option.
 
 ```sh
 echo 'select * from tbl where id = 3' | sql-formatter -u
