@@ -5,7 +5,7 @@ import RedshiftFormatter from './languages/RedshiftFormatter';
 import SparkSqlFormatter from './languages/SparkSqlFormatter';
 import StandardSqlFormatter from './languages/StandardSqlFormatter';
 
-const FORMATTERS = {
+const formatters = {
   db2: Db2Formatter,
   n1ql: N1qlFormatter,
   'pl/sql': PlSqlFormatter,
@@ -34,7 +34,7 @@ export const format = (query, cfg = {}) => {
 
   let Formatter = StandardSqlFormatter;
   if (cfg.language !== undefined) {
-    Formatter = FORMATTERS[cfg.language];
+    Formatter = formatters[cfg.language];
   }
   if (Formatter === undefined) {
     throw Error(`Unsupported SQL dialect: ${cfg.language}`);
@@ -44,5 +44,5 @@ export const format = (query, cfg = {}) => {
 
 export default {
   format,
-  supportedDialects: Object.keys(FORMATTERS),
+  supportedDialects: Object.keys(formatters),
 };
