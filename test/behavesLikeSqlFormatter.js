@@ -507,10 +507,10 @@ export default function behavesLikeSqlFormatter(language) {
   });
 
   it('formats unicode correctly', () => {
-    const result = format('SELECT test, тест FROM table;');
+    const result = format('SELECT 结合使用, тест FROM table;');
     expect(result).toBe(dedent`
       SELECT
-        test,
+        结合使用,
         тест
       FROM
         table;
