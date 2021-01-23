@@ -6,7 +6,7 @@ export function createOperatorRegex(multiLetterOperators) {
 
 export function createLineCommentRegex(lineCommentTypes) {
   return new RegExp(
-    `^((?:${lineCommentTypes.map((c) => escapeRegExp(c)).join('|')}).*?(?:\r\n|\r|\n|$))`,
+    `^((?:${lineCommentTypes.map((c) => escapeRegExp(c)).join('|')}).*?)(?:\r\n|\r|\n|$)`,
     'u'
   );
 }
