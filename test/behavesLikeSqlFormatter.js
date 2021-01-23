@@ -32,7 +32,7 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('formats simple SELECT query', function () {
+  it('formats simple SELECT query', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;');
     expect(result).toBe(dedent`
       SELECT
@@ -43,7 +43,7 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('formats complex SELECT', function () {
+  it('formats complex SELECT', () => {
     const result = format(
       "SELECT DISTINCT name, ROUND(age/7) field1, 18 + 20 AS field2, 'some string' FROM foo;"
     );
@@ -102,7 +102,7 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('formats LIMIT with two comma-separated values on single line', function () {
+  it('formats LIMIT with two comma-separated values on single line', () => {
     const result = format('LIMIT 5, 10;');
     expect(result).toBe(dedent`
       LIMIT
@@ -110,7 +110,7 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('formats LIMIT of single value followed by another SELECT using commas', function () {
+  it('formats LIMIT of single value followed by another SELECT using commas', () => {
     const result = format('LIMIT 5; SELECT foo, bar;');
     expect(result).toBe(dedent`
       LIMIT
@@ -121,7 +121,7 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('formats LIMIT of single value and OFFSET', function () {
+  it('formats LIMIT of single value and OFFSET', () => {
     const result = format('LIMIT 5 OFFSET 8;');
     expect(result).toBe(dedent`
       LIMIT
@@ -129,7 +129,7 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('recognizes LIMIT in lowercase', function () {
+  it('recognizes LIMIT in lowercase', () => {
     const result = format('limit 5, 10;');
     expect(result).toBe(dedent`
       limit
@@ -137,7 +137,7 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('preserves case of keywords', function () {
+  it('preserves case of keywords', () => {
     const result = format('select distinct * frOM foo left join bar WHERe a > 1 and b = 3');
     expect(result).toBe(dedent`
       select
@@ -151,7 +151,7 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('formats SELECT query with SELECT query inside it', function () {
+  it('formats SELECT query with SELECT query inside it', () => {
     const result = format(
       'SELECT *, SUM(*) AS sum FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b'
     );
@@ -302,7 +302,7 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('formats simple UPDATE query', function () {
+  it('formats simple UPDATE query', () => {
     const result = format(
       "UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';"
     );
@@ -317,7 +317,7 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('formats simple DELETE query', function () {
+  it('formats simple DELETE query', () => {
     const result = format("DELETE FROM Customers WHERE CustomerName='Alfred' AND Phone=5002132;");
     expect(result).toBe(dedent`
       DELETE FROM
@@ -328,7 +328,7 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('formats simple DROP query', function () {
+  it('formats simple DROP query', () => {
     const result = format('DROP TABLE IF EXISTS admin_role;');
     expect(result).toBe('DROP TABLE IF EXISTS admin_role;');
   });
@@ -353,7 +353,7 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('formats UPDATE query with AS part', function () {
+  it('formats UPDATE query with AS part', () => {
     const result = format(
       'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary'
     );
@@ -372,7 +372,7 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('formats top-level and newline multi-word reserved words with inconsistent spacing', function () {
+  it('formats top-level and newline multi-word reserved words with inconsistent spacing', () => {
     const result = format('SELECT * FROM foo LEFT \t OUTER  \n JOIN bar ORDER \n BY blah');
     expect(result).toBe(dedent`
       SELECT
@@ -385,7 +385,7 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('formats long double parenthized queries to multiple lines', function () {
+  it('formats long double parenthized queries to multiple lines', () => {
     const result = format("((foo = '0123456789-0123456789-0123456789-0123456789'))");
     expect(result).toBe(dedent`
       (
@@ -396,12 +396,12 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('formats short double parenthized queries to one line', function () {
+  it('formats short double parenthized queries to one line', () => {
     const result = format("((foo = 'bar'))");
     expect(result).toBe("((foo = 'bar'))");
   });
 
-  it('formats single-char operators', function () {
+  it('formats single-char operators', () => {
     expect(format('foo = bar')).toBe('foo = bar');
     expect(format('foo < bar')).toBe('foo < bar');
     expect(format('foo > bar')).toBe('foo > bar');
@@ -412,7 +412,7 @@ export default function behavesLikeSqlFormatter(language) {
     expect(format('foo % bar')).toBe('foo % bar');
   });
 
-  it('formats multi-char operators', function () {
+  it('formats multi-char operators', () => {
     expect(format('foo != bar')).toBe('foo != bar');
     expect(format('foo <> bar')).toBe('foo <> bar');
     expect(format('foo == bar')).toBe('foo == bar'); // N1QL
@@ -425,7 +425,7 @@ export default function behavesLikeSqlFormatter(language) {
     expect(format('foo !> bar')).toBe('foo !> bar');
   });
 
-  it('formats logical operators', function () {
+  it('formats logical operators', () => {
     expect(format('foo ALL bar')).toBe('foo ALL bar');
     expect(format('foo = ANY (1, 2, 3)')).toBe('foo = ANY (1, 2, 3)');
     expect(format('EXISTS bar')).toBe('EXISTS bar');
@@ -435,19 +435,19 @@ export default function behavesLikeSqlFormatter(language) {
     expect(format('UNIQUE foo')).toBe('UNIQUE foo');
   });
 
-  it('formats AND/OR operators', function () {
+  it('formats AND/OR operators', () => {
     expect(format('foo BETWEEN bar AND baz')).toBe('foo BETWEEN bar\nAND baz');
     expect(format('foo AND bar')).toBe('foo\nAND bar');
     expect(format('foo OR bar')).toBe('foo\nOR bar');
   });
 
-  it('recognizes strings', function () {
+  it('recognizes strings', () => {
     expect(format('"foo JOIN bar"')).toBe('"foo JOIN bar"');
     expect(format("'foo JOIN bar'")).toBe("'foo JOIN bar'");
     expect(format('`foo JOIN bar`')).toBe('`foo JOIN bar`');
   });
 
-  it('recognizes escaped strings', function () {
+  it('recognizes escaped strings', () => {
     expect(format('"foo \\" JOIN bar"')).toBe('"foo \\" JOIN bar"');
     expect(format("'foo \\' JOIN bar'")).toBe("'foo \\' JOIN bar'");
     expect(format('`foo `` JOIN bar`')).toBe('`foo `` JOIN bar`');
@@ -471,7 +471,7 @@ export default function behavesLikeSqlFormatter(language) {
     expect(format('||/ foo')).toBe('||/ foo');
   });
 
-  it('keeps separation between multiple statements', function () {
+  it('keeps separation between multiple statements', () => {
     expect(format('foo;bar;')).toBe('foo;\nbar;');
     expect(format('foo\n;bar;')).toBe('foo;\nbar;');
     expect(format('foo\n\n\n;bar;\n\n')).toBe('foo;\nbar;');

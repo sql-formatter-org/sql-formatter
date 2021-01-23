@@ -2,7 +2,7 @@ import dedent from 'dedent-js';
 import * as sqlFormatter from './../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
-describe('StandardSqlFormatter', function () {
+describe('StandardSqlFormatter', () => {
   behavesLikeSqlFormatter();
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'sql' });
@@ -13,7 +13,7 @@ describe('StandardSqlFormatter', function () {
     );
   });
 
-  it('formats long CREATE TABLE', function () {
+  it('formats long CREATE TABLE', () => {
     expect(
       format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL);')
     ).toBe(dedent`
@@ -26,7 +26,7 @@ describe('StandardSqlFormatter', function () {
     `);
   });
 
-  it('formats CASE ... WHEN with a blank expression', function () {
+  it('formats CASE ... WHEN with a blank expression', () => {
     const result = sqlFormatter.format(
       "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
     );
@@ -41,7 +41,7 @@ describe('StandardSqlFormatter', function () {
     `);
   });
 
-  it('formats CASE ... WHEN with an expression', function () {
+  it('formats CASE ... WHEN with an expression', () => {
     const result = sqlFormatter.format(
       "CASE option WHEN 'foo' THEN 1 WHEN 'bar' THEN 2 WHEN 'baz' THEN 3 ELSE 4 END;"
     );
@@ -57,7 +57,7 @@ describe('StandardSqlFormatter', function () {
     `);
   });
 
-  it('formats INSERT without INTO', function () {
+  it('formats INSERT without INTO', () => {
     const result = sqlFormatter.format(
       "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
     );

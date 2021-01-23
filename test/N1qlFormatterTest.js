@@ -2,7 +2,7 @@ import dedent from 'dedent-js';
 import * as sqlFormatter from './../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
-describe('N1qlFormatter', function () {
+describe('N1qlFormatter', () => {
   behavesLikeSqlFormatter('n1ql');
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'n1ql' });

@@ -2,7 +2,7 @@ import dedent from 'dedent-js';
 import * as sqlFormatter from './../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
-describe('PlSqlFormatter', function () {
+describe('PlSqlFormatter', () => {
   behavesLikeSqlFormatter('pl/sql');
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'pl/sql' });
@@ -48,7 +48,7 @@ describe('PlSqlFormatter', function () {
     );
   });
 
-  it('formats long CREATE TABLE', function () {
+  it('formats long CREATE TABLE', () => {
     expect(
       format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL);')
     ).toBe(dedent`
