@@ -42,7 +42,4 @@ export const format = (query, cfg = {}) => {
   return new Formatter(cfg).format(query);
 };
 
-export default {
-  format,
-  supportedDialects: Object.keys(formatters),
-};
+export const supportedDialects = Object.keys(formatters);
