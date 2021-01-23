@@ -433,8 +433,7 @@ export default class PlSqlFormatter extends Formatter {
       token.value.toUpperCase() === 'SET' &&
       this.previousReservedToken.value.toUpperCase() === 'BY'
     ) {
-      token.type = tokenTypes.RESERVED;
-      return token;
+      return { type: tokenTypes.RESERVED, value: token.value };
     }
     return undefined;
   }

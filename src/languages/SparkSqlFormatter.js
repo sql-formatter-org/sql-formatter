@@ -252,7 +252,7 @@ export default class SparkSqlFormatter extends Formatter {
         const aheadToken = lookAhead[i];
         if (aheadToken.type === tokenTypes.OPEN_PAREN) {
           // This is a function call, treat it as a reserved word
-          token.type = tokenTypes.RESERVED;
+          token = { type: tokenTypes.RESERVED, value: token.value };
         }
         return token;
       }
@@ -265,7 +265,7 @@ export default class SparkSqlFormatter extends Formatter {
         const backToken = lookBack[i];
         if (backToken.type === tokenTypes.OPERATOR && backToken.value === '.') {
           // This is window().end (or similar) not CASE ... END
-          token.type = tokenTypes.WORD;
+          token = { type: tokenTypes.WORD, value: token.value };
         }
         return token;
       }
