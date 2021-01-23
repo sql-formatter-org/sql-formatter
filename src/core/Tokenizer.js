@@ -1,12 +1,5 @@
+import { escapeRegExp, isEmpty } from '../utils';
 import tokenTypes from './tokenTypes';
-
-function isEmpty(arr) {
-  return !Array.isArray(arr) || arr.length === 0;
-}
-
-function escapeRegExp(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
-}
 
 export default class Tokenizer {
   /**

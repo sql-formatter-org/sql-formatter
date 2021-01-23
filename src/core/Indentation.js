@@ -1,3 +1,5 @@
+import { last } from '../utils';
+
 const INDENT_TYPE_TOP_LEVEL = 'top-level';
 const INDENT_TYPE_BLOCK_LEVEL = 'block-level';
 
@@ -45,10 +47,7 @@ export default class Indentation {
    * Does nothing when the previous indent is not top-level.
    */
   decreaseTopLevel() {
-    if (
-      this.indentTypes.length > 0 &&
-      this.indentTypes[this.indentTypes.length - 1] === INDENT_TYPE_TOP_LEVEL
-    ) {
+    if (this.indentTypes.length > 0 && last(this.indentTypes) === INDENT_TYPE_TOP_LEVEL) {
       this.indentTypes.pop();
     }
   }

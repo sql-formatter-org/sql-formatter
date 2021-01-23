@@ -3,8 +3,7 @@ import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import Tokenizer from './Tokenizer';
-
-const trimSpacesEnd = (str) => str.replace(/[ \t]+$/u, '');
+import { trimSpacesEnd } from '../utils';
 
 export default class Formatter {
   /**
