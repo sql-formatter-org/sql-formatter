@@ -247,27 +247,19 @@ export default class SparkSqlFormatter extends Formatter {
   tokenOverride(token) {
     // Fix cases where names are ambiguously keywords or functions
     if (token.type === tokenTypes.RESERVED_TOP_LEVEL && token.value.toUpperCase() === 'WINDOW') {
-      const lookAhead = this.tokenLookAhead();
-      for (let i = 0; i < lookAhead.length; i++) {
-        const aheadToken = lookAhead[i];
-        if (aheadToken.type === tokenTypes.OPEN_PAREN) {
-          // This is a function call, treat it as a reserved word
-          token = { type: tokenTypes.RESERVED, value: token.value };
-        }
-        return token;
+      const [aheadToken] = this.tokenLookAhead();
+      if (aheadToken && aheadToken.type === tokenTypes.OPEN_PAREN) {
+        // This is a function call, treat it as a reserved word
+        return { type: tokenTypes.RESERVED, value: token.value };
       }
     }
 
     // Fix cases where names are ambiguously keywords or properties
     if (token.type === tokenTypes.CLOSE_PAREN && token.value.toUpperCase() === 'END') {
-      const lookBack = this.tokenLookBack();
-      for (let i = 0; i < lookBack.length; i++) {
-        const backToken = lookBack[i];
-        if (backToken.type === tokenTypes.OPERATOR && backToken.value === '.') {
-          // This is window().end (or similar) not CASE ... END
-          token = { type: tokenTypes.WORD, value: token.value };
-        }
-        return token;
+      const [backToken] = this.tokenLookBack();
+      if (backToken && backToken.type === tokenTypes.OPERATOR && backToken.value === '.') {
+        // This is window().end (or similar) not CASE ... END
+        return { type: tokenTypes.WORD, value: token.value };
       }
     }
 
