@@ -1,9 +1,11 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import supportsCreateTable from './features/createTable';
 
 describe('RedshiftFormatter', () => {
   behavesLikeSqlFormatter('redshift');
+  supportsCreateTable('redshift');
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'redshift' });
 
@@ -49,13 +51,7 @@ describe('RedshiftFormatter', () => {
     `);
   });
 
-  it('formats short CREATE TABLE', () => {
-    expect(format('CREATE TABLE items (a INT, b TEXT);')).toBe(
-      'CREATE TABLE items (a INT, b TEXT);'
-    );
-  });
-
-  it.skip('formats long CREATE TABLE', () => {
+  it.skip('formats DISTKEY and SORTKEY after CREATE TABLE', () => {
     expect(
       format(
         'CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL) DISTKEY(created_at) SORTKEY(created_at);'

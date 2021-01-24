@@ -2,10 +2,12 @@ import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsCase from './features/case';
+import supportsCreateTable from './features/createTable';
 
 describe('PlSqlFormatter', () => {
   behavesLikeSqlFormatter('pl/sql');
   supportsCase('pl/sql');
+  supportsCreateTable('pl/sql');
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'pl/sql' });
 
@@ -41,25 +43,6 @@ describe('PlSqlFormatter', () => {
         col.2@
       FROM
         tbl
-    `);
-  });
-
-  it('formats short CREATE TABLE', () => {
-    expect(format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT);')).toBe(
-      'CREATE TABLE items (a INT PRIMARY KEY, b TEXT);'
-    );
-  });
-
-  it('formats long CREATE TABLE', () => {
-    expect(
-      format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL);')
-    ).toBe(dedent`
-      CREATE TABLE items (
-        a INT PRIMARY KEY,
-        b TEXT,
-        c INT NOT NULL,
-        d INT NOT NULL
-      );
     `);
   });
 

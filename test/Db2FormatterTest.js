@@ -1,9 +1,11 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import supportsCreateTable from './features/createTable';
 
 describe('Db2Formatter', () => {
   behavesLikeSqlFormatter('db2');
+  supportsCreateTable('db2');
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'db2' });
 
