@@ -2,7 +2,6 @@ import tokenTypes from './tokenTypes';
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
-import Tokenizer from './Tokenizer';
 import { trimSpacesEnd } from '../utils';
 
 export default class Formatter {
@@ -25,22 +24,10 @@ export default class Formatter {
   }
 
   /**
-   * SQL Tokenizer for this formatter, typically overriden by subclasses.
+   * SQL Tokenizer for this formatter, provided by subclasses.
    */
   tokenizer() {
-    return new Tokenizer({
-      reservedWords: [],
-      reservedTopLevelWords: [],
-      reservedNewlineWords: [],
-      reservedTopLevelWordsNoIndent: [],
-      stringTypes: [],
-      openParens: [],
-      closeParens: [],
-      indexedPlaceholderTypes: [],
-      namedPlaceholderTypes: [],
-      lineCommentTypes: [],
-      specialWordChars: [],
-    });
+    throw new Error('tokenizer() not implemented by subclass');
   }
 
   /**
