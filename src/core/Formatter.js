@@ -106,7 +106,7 @@ export default class Formatter {
   }
 
   formatLineComment(token, query) {
-    return this.addNewline(query + token.value);
+    return this.addNewline(query + this.show(token));
   }
 
   formatBlockComment(token, query) {
@@ -119,7 +119,7 @@ export default class Formatter {
 
   formatTopLevelReservedWordNoIndent(token, query) {
     this.indentation.decreaseTopLevel();
-    query = this.addNewline(query) + this.equalizeWhitespace(this.formatReservedWord(token.value));
+    query = this.addNewline(query) + this.equalizeWhitespace(this.show(token));
     return this.addNewline(query);
   }
 
@@ -130,14 +130,12 @@ export default class Formatter {
 
     this.indentation.increaseTopLevel();
 
-    query += this.equalizeWhitespace(this.formatReservedWord(token.value));
+    query += this.equalizeWhitespace(this.show(token));
     return this.addNewline(query);
   }
 
   formatNewlineReservedWord(token, query) {
-    return (
-      this.addNewline(query) + this.equalizeWhitespace(this.formatReservedWord(token.value)) + ' '
-    );
+    return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
   }
 
   // Replace any sequence of whitespace characters with single space
@@ -158,7 +156,7 @@ export default class Formatter {
     if (!preserveWhitespaceFor[this.previousToken().type]) {
       query = trimSpacesEnd(query);
     }
-    query += this.cfg.uppercase ? token.value.toUpperCase() : token.value;
+    query += this.show(token);
 
     this.inlineBlock.beginIfPossible(this.tokens, this.index);
 
@@ -171,7 +169,6 @@ export default class Formatter {
 
   // Closing parentheses decrease the block indent level
   formatClosingParentheses(token, query) {
-    token.value = this.cfg.uppercase ? token.value.toUpperCase() : token.value;
     if (this.inlineBlock.isActive()) {
       this.inlineBlock.end();
       return this.formatWithSpaceAfter(token, query);
@@ -187,7 +184,7 @@ export default class Formatter {
 
   // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
   formatComma(token, query) {
-    query = trimSpacesEnd(query) + token.value + ' ';
+    query = trimSpacesEnd(query) + this.show(token) + ' ';
 
     if (this.inlineBlock.isActive()) {
       return query;
@@ -199,26 +196,37 @@ export default class Formatter {
   }
 
   formatWithSpaceAfter(token, query) {
-    return trimSpacesEnd(query) + token.value + ' ';
+    return trimSpacesEnd(query) + this.show(token) + ' ';
   }
 
   formatWithoutSpaces(token, query) {
-    return trimSpacesEnd(query) + token.value;
+    return trimSpacesEnd(query) + this.show(token);
   }
 
   formatWithSpaces(token, query) {
-    const value =
-      token.type === tokenTypes.RESERVED ? this.formatReservedWord(token.value) : token.value;
-    return query + value + ' ';
-  }
-
-  formatReservedWord(value) {
-    return this.cfg.uppercase ? value.toUpperCase() : value;
+    return query + this.show(token) + ' ';
   }
 
   formatQuerySeparator(token, query) {
     this.indentation.resetIndentation();
-    return trimSpacesEnd(query) + token.value + '\n'.repeat(this.cfg.linesBetweenQueries || 1);
+    return trimSpacesEnd(query) + this.show(token) + '\n'.repeat(this.cfg.linesBetweenQueries || 1);
+  }
+
+  // Converts token to string (uppercasing it if needed)
+  show({ type, value }) {
+    if (
+      this.cfg.uppercase &&
+      (type === tokenTypes.RESERVED ||
+        type === tokenTypes.RESERVED_TOP_LEVEL ||
+        type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT ||
+        type === tokenTypes.RESERVED_NEWLINE ||
+        type === tokenTypes.OPEN_PAREN ||
+        type === tokenTypes.CLOSE_PAREN)
+    ) {
+      return value.toUpperCase();
+    } else {
+      return value;
+    }
   }
 
   addNewline(query) {
