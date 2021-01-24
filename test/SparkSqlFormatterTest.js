@@ -1,6 +1,7 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import supportsAlterTable from './features/alterTable';
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
 
@@ -8,6 +9,7 @@ describe('SparkSqlFormatter', () => {
   behavesLikeSqlFormatter('spark');
   supportsCase('spark');
   supportsCreateTable('spark');
+  supportsAlterTable('spark');
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'spark' });
 

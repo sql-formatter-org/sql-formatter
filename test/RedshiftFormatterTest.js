@@ -1,11 +1,15 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import supportsAlterTable from './features/alterTable';
+import supportsAlterTableModify from './features/alterTableModify';
 import supportsCreateTable from './features/createTable';
 
 describe('RedshiftFormatter', () => {
   behavesLikeSqlFormatter('redshift');
   supportsCreateTable('redshift');
+  supportsAlterTable('redshift');
+  supportsAlterTableModify('redshift');
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'redshift' });
 

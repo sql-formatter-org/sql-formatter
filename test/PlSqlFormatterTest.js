@@ -1,6 +1,8 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import supportsAlterTable from './features/alterTable';
+import supportsAlterTableModify from './features/alterTableModify';
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
 
@@ -8,6 +10,8 @@ describe('PlSqlFormatter', () => {
   behavesLikeSqlFormatter('pl/sql');
   supportsCase('pl/sql');
   supportsCreateTable('pl/sql');
+  supportsAlterTable('pl/sql');
+  supportsAlterTableModify('pl/sql');
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'pl/sql' });
 
@@ -55,26 +59,6 @@ describe('PlSqlFormatter', () => {
         Customers (ID, MoneyBalance, Address, City)
       VALUES
         (12, -123.4, 'Skagen 2111', 'Stv');
-    `);
-  });
-
-  it('formats ALTER TABLE ... MODIFY query', () => {
-    const result = format('ALTER TABLE supplier MODIFY supplier_name char(100) NOT NULL;');
-    expect(result).toBe(dedent`
-      ALTER TABLE
-        supplier
-      MODIFY
-        supplier_name char(100) NOT NULL;
-    `);
-  });
-
-  it('formats ALTER TABLE ... ALTER COLUMN query', () => {
-    const result = format('ALTER TABLE supplier ALTER COLUMN supplier_name VARCHAR(100) NOT NULL;');
-    expect(result).toBe(dedent`
-      ALTER TABLE
-        supplier
-      ALTER COLUMN
-        supplier_name VARCHAR(100) NOT NULL;
     `);
   });
 
