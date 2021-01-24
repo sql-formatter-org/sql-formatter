@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
-import supportsCase from './supportsCase';
+import supportsCase from './features/case';
 
 describe('SparkSqlFormatter', () => {
   behavesLikeSqlFormatter('spark');

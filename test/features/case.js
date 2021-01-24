@@ -1,5 +1,5 @@
 import dedent from 'dedent-js';
-import * as sqlFormatter from '../src/sqlFormatter';
+import * as sqlFormatter from '../../src/sqlFormatter';
 
 /**
  * Tests support for CASE [WHEN...] END syntax
