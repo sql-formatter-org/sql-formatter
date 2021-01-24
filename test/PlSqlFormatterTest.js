@@ -1,9 +1,11 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import supportsCase from './supportsCase';
 
 describe('PlSqlFormatter', () => {
   behavesLikeSqlFormatter('pl/sql');
+  supportsCase('pl/sql');
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'pl/sql' });
 
@@ -173,73 +175,6 @@ describe('PlSqlFormatter', () => {
       FROM
         t
         OUTER APPLY fn(t.id)
-    `);
-  });
-
-  it('formats CASE ... WHEN with a blank expression', () => {
-    const result = format(
-      "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
-    );
-
-    expect(result).toBe(dedent`
-      CASE
-        WHEN option = 'foo' THEN 1
-        WHEN option = 'bar' THEN 2
-        WHEN option = 'baz' THEN 3
-        ELSE 4
-      END;
-    `);
-  });
-
-  it('formats CASE ... WHEN inside SELECT', () => {
-    const result = format(
-      "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table"
-    );
-
-    expect(result).toBe(dedent`
-      SELECT
-        foo,
-        bar,
-        CASE
-          baz
-          WHEN 'one' THEN 1
-          WHEN 'two' THEN 2
-          ELSE 3
-        END
-      FROM
-        table
-    `);
-  });
-
-  it('formats CASE ... WHEN with an expression', () => {
-    const result = format(
-      "CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;"
-    );
-
-    expect(result).toBe(dedent`
-      CASE
-        toString(getNumber())
-        WHEN 'one' THEN 1
-        WHEN 'two' THEN 2
-        WHEN 'three' THEN 3
-        ELSE 4
-      END;
-    `);
-  });
-
-  it('properly converts to uppercase in case statements', () => {
-    const result = format(
-      "case toString(getNumber()) when 'one' then 1 when 'two' then 2 when 'three' then 3 else 4 end;",
-      { uppercase: true }
-    );
-    expect(result).toBe(dedent`
-      CASE
-        toString(getNumber())
-        WHEN 'one' THEN 1
-        WHEN 'two' THEN 2
-        WHEN 'three' THEN 3
-        ELSE 4
-      END;
     `);
   });
 

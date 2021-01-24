@@ -1,9 +1,11 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import supportsCase from './supportsCase';
 
 describe('StandardSqlFormatter', () => {
-  behavesLikeSqlFormatter();
+  behavesLikeSqlFormatter('sql');
+  supportsCase('sql');
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'sql' });
 
@@ -23,37 +25,6 @@ describe('StandardSqlFormatter', () => {
         c INT NOT NULL,
         d INT NOT NULL
       );
-    `);
-  });
-
-  it('formats CASE ... WHEN with a blank expression', () => {
-    const result = sqlFormatter.format(
-      "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
-    );
-
-    expect(result).toBe(dedent`
-      CASE
-        WHEN option = 'foo' THEN 1
-        WHEN option = 'bar' THEN 2
-        WHEN option = 'baz' THEN 3
-        ELSE 4
-      END;
-    `);
-  });
-
-  it('formats CASE ... WHEN with an expression', () => {
-    const result = sqlFormatter.format(
-      "CASE option WHEN 'foo' THEN 1 WHEN 'bar' THEN 2 WHEN 'baz' THEN 3 ELSE 4 END;"
-    );
-
-    expect(result).toBe(dedent`
-      CASE
-        option
-        WHEN 'foo' THEN 1
-        WHEN 'bar' THEN 2
-        WHEN 'baz' THEN 3
-        ELSE 4
-      END;
     `);
   });
 
@@ -288,81 +259,6 @@ describe('StandardSqlFormatter', () => {
         *
       FETCH FIRST
         2 ROWS ONLY;
-    `);
-  });
-
-  it('formats CASE ... WHEN with a blank expression', () => {
-    const result = format(
-      "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
-    );
-
-    expect(result).toBe(dedent`
-      CASE
-        WHEN option = 'foo' THEN 1
-        WHEN option = 'bar' THEN 2
-        WHEN option = 'baz' THEN 3
-        ELSE 4
-      END;
-    `);
-  });
-
-  it('formats CASE ... WHEN inside SELECT', () => {
-    const result = format(
-      "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table"
-    );
-
-    expect(result).toBe(dedent`
-      SELECT
-        foo,
-        bar,
-        CASE
-          baz
-          WHEN 'one' THEN 1
-          WHEN 'two' THEN 2
-          ELSE 3
-        END
-      FROM
-        table
-    `);
-  });
-
-  it('formats CASE ... WHEN with an expression', () => {
-    const result = format(
-      "CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;"
-    );
-
-    expect(result).toBe(dedent`
-      CASE
-        toString(getNumber())
-        WHEN 'one' THEN 1
-        WHEN 'two' THEN 2
-        WHEN 'three' THEN 3
-        ELSE 4
-      END;
-    `);
-  });
-
-  it('recognizes lowercase CASE ... END', () => {
-    const result = format("case when option = 'foo' then 1 else 2 end;");
-
-    expect(result).toBe(dedent`
-      case
-        when option = 'foo' then 1
-        else 2
-      end;
-    `);
-  });
-
-  // Regression test for issue #43
-  it('ignores words CASE and END inside other strings', () => {
-    const result = format('SELECT CASEDATE, ENDDATE FROM table1;');
-
-    expect(result).toBe(dedent`
-      SELECT
-        CASEDATE,
-        ENDDATE
-      FROM
-        table1;
     `);
   });
 

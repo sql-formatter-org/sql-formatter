@@ -1,9 +1,11 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import supportsCase from './supportsCase';
 
 describe('SparkSqlFormatter', () => {
   behavesLikeSqlFormatter('spark');
+  supportsCase('spark');
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'spark' });
 
@@ -37,20 +39,6 @@ describe('SparkSqlFormatter', () => {
         window(time, "1 hour").end AS window_end
       FROM
         tbl;
-    `);
-  });
-
-  it('treats END as usual in CASE expression', () => {
-    const result = format(
-      "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
-    );
-    expect(result).toBe(dedent`
-      CASE
-        WHEN option = 'foo' THEN 1
-        WHEN option = 'bar' THEN 2
-        WHEN option = 'baz' THEN 3
-        ELSE 4
-      END;
     `);
   });
 
