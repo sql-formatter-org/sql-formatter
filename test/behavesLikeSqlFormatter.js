@@ -1,11 +1,14 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
+import supportsComments from './features/comments';
 
 /**
  * Core tests for all SQL formatters
  * @param {String} language
  */
 export default function behavesLikeSqlFormatter(language) {
+  supportsComments(language);
+
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
   it('does nothing with empty input', () => {
@@ -202,46 +205,6 @@ export default function behavesLikeSqlFormatter(language) {
         customers
         INNER JOIN orders ON customers.customer_id = orders.customer_id;
     `);
-  });
-
-  it('formats SELECT query with different comments', () => {
-    const result = format(dedent`
-      SELECT
-      /*
-       * This is a block comment
-       */
-      * FROM
-      -- This is another comment
-      MyTable # One final comment
-      WHERE 1 = 2;
-    `);
-    expect(result).toBe(dedent`
-      SELECT
-        /*
-         * This is a block comment
-         */
-        *
-      FROM
-        -- This is another comment
-        MyTable # One final comment
-      WHERE
-        1 = 2;
-    `);
-  });
-
-  it('maintains block comment indentation', () => {
-    const sql = dedent`
-      SELECT
-        /*
-         * This is a block comment
-         */
-        *
-      FROM
-        MyTable
-      WHERE
-        1 = 2;
-    `;
-    expect(format(sql)).toBe(sql);
   });
 
   it('formats simple INSERT query', () => {
@@ -598,10 +561,5 @@ export default function behavesLikeSqlFormatter(language) {
       FROM
         tbl2;
     `);
-  });
-
-  it('recognizes line-comments with Windows line-endings (converts them to UNIX)', () => {
-    const result = format('SELECT * FROM\r\n-- line comment 1\r\nMyTable -- line comment 2\r\n');
-    expect(result).toBe('SELECT\n  *\nFROM\n  -- line comment 1\n  MyTable -- line comment 2');
   });
 }

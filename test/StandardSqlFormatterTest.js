@@ -229,58 +229,12 @@ describe('StandardSqlFormatter', () => {
     `);
   });
 
-  it('formats tricky line comments', () => {
-    expect(format('SELECT a#comment, here\nFROM b--comment')).toBe(dedent`
+  it('supports # comments', () => {
+    expect(format('SELECT a # comment\nFROM b # comment')).toBe(dedent`
       SELECT
-        a #comment, here
+        a # comment
       FROM
-        b --comment
-    `);
-  });
-
-  it('formats line comments followed by semicolon', () => {
-    expect(
-      format(`
-      SELECT a FROM b
-      --comment
-      ;
-    `)
-    ).toBe(dedent`
-      SELECT
-        a
-      FROM
-        b --comment
-      ;
-    `);
-  });
-
-  it('formats line comments followed by comma', () => {
-    expect(
-      format(dedent`
-      SELECT a --comment
-      , b
-    `)
-    ).toBe(dedent`
-      SELECT
-        a --comment
-      ,
-        b
-    `);
-  });
-
-  it('formats line comments followed by close-paren', () => {
-    expect(format('SELECT ( a --comment\n )')).toBe(dedent`
-      SELECT
-        (a --comment
-      )
-    `);
-  });
-
-  it('formats line comments followed by open-paren', () => {
-    expect(format('SELECT a --comment\n()')).toBe(dedent`
-      SELECT
-        a --comment
-        ()
+        b # comment
     `);
   });
 });
