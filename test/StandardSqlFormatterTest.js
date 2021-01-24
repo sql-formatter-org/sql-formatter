@@ -188,17 +188,6 @@ describe('StandardSqlFormatter', () => {
     `);
   });
 
-  it('formats simple SELECT', () => {
-    const result = format('SELECT N, M FROM t');
-    expect(result).toBe(dedent`
-      SELECT
-        N,
-        M
-      FROM
-        t
-    `);
-  });
-
   it('formats simple SELECT with national characters (MSSQL)', () => {
     const result = format("SELECT N'value'");
     expect(result).toBe(dedent`
