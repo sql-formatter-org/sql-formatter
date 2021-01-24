@@ -40,6 +40,20 @@ describe('SparkSqlFormatter', () => {
     `);
   });
 
+  it('treats END as usual in CASE expression', () => {
+    const result = format(
+      "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
+    );
+    expect(result).toBe(dedent`
+      CASE
+        WHEN option = 'foo' THEN 1
+        WHEN option = 'bar' THEN 2
+        WHEN option = 'baz' THEN 3
+        ELSE 4
+      END;
+    `);
+  });
+
   // eslint-disable-next-line no-template-curly-in-string
   it('does not add spaces around ${value} params', () => {
     // eslint-disable-next-line no-template-curly-in-string
