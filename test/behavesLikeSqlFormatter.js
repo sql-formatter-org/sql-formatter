@@ -1,6 +1,7 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import supportsComments from './features/comments';
+import supportsConfigOptions from './features/configOptions';
 
 /**
  * Core tests for all SQL formatters
@@ -8,6 +9,7 @@ import supportsComments from './features/comments';
  */
 export default function behavesLikeSqlFormatter(language) {
   supportsComments(language);
+  supportsConfigOptions(language);
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
@@ -25,20 +27,6 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('formats lonely semicolon', () => {
     expect(format(';')).toBe(';');
-  });
-
-  it('uses given indent config for indention', () => {
-    const result = format('SELECT count(*),Column1 FROM Table1;', {
-      indent: '    ',
-    });
-
-    expect(result).toBe(dedent`
-      SELECT
-          count(*),
-          Column1
-      FROM
-          Table1;
-    `);
   });
 
   it('formats simple SET SCHEMA queries', () => {
@@ -481,37 +469,6 @@ export default function behavesLikeSqlFormatter(language) {
         тест
       FROM
         table;
-    `);
-  });
-
-  it('converts keywords to uppercase when option passed in', () => {
-    const result = format('select distinct * frOM foo left join bar WHERe cola > 1 and colb = 3', {
-      uppercase: true,
-    });
-    expect(result).toBe(dedent`
-      SELECT
-        DISTINCT *
-      FROM
-        foo
-        LEFT JOIN bar
-      WHERE
-        cola > 1
-        AND colb = 3
-    `);
-  });
-
-  it('line breaks between queries change with config', () => {
-    const result = format('SELECT * FROM foo; SELECT * FROM bar;', { linesBetweenQueries: 2 });
-    expect(result).toBe(dedent`
-      SELECT
-        *
-      FROM
-        foo;
-
-      SELECT
-        *
-      FROM
-        bar;
     `);
   });
 
