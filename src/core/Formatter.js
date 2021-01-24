@@ -246,15 +246,11 @@ export default class Formatter {
     return this.tokens[this.index - offset] || {};
   }
 
-  tokenLookBack(maxBack = 5) {
-    const start = Math.max(0, this.index - maxBack);
-    const end = this.index;
-    return this.tokens.slice(start, end).reverse();
+  tokenLookBehind() {
+    return this.tokens[this.index - 1];
   }
 
-  tokenLookAhead(maxAhead = 5) {
-    const start = this.index + 1;
-    const end = this.index + maxAhead + 1;
-    return this.tokens.slice(start, end);
+  tokenLookAhead() {
+    return this.tokens[this.index + 1];
   }
 }
