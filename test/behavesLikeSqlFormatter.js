@@ -308,18 +308,6 @@ export default function behavesLikeSqlFormatter(language) {
     `);
   });
 
-  it('formats query that ends with open comment', () => {
-    const result = format(`
-      SELECT count(*)
-      /*Comment
-    `);
-    expect(result).toBe(dedent`
-      SELECT
-        count(*)
-        /*Comment
-    `);
-  });
-
   it('formats UPDATE query with AS part', () => {
     const result = format(
       'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary'

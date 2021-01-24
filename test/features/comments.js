@@ -107,4 +107,16 @@ export default function supportsComments(language) {
     const result = format('SELECT * FROM\r\n-- line comment 1\r\nMyTable -- line comment 2\r\n');
     expect(result).toBe('SELECT\n  *\nFROM\n  -- line comment 1\n  MyTable -- line comment 2');
   });
+
+  it('formats query that ends with open comment', () => {
+    const result = format(`
+      SELECT count(*)
+      /*Comment
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        count(*)
+        /*Comment
+    `);
+  });
 }
