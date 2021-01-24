@@ -283,8 +283,4 @@ describe('StandardSqlFormatter', () => {
         ()
     `);
   });
-
-  it('formats lonely semicolon', () => {
-    expect(format(';')).toBe(';');
-  });
 });

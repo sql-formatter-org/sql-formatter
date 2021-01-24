@@ -20,6 +20,10 @@ export default function behavesLikeSqlFormatter(language) {
     );
   });
 
+  it('formats lonely semicolon', () => {
+    expect(format(';')).toBe(';');
+  });
+
   it('uses given indent config for indention', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;', {
       indent: '    ',
