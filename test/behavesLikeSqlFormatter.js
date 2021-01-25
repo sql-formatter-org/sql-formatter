@@ -396,24 +396,6 @@ export default function behavesLikeSqlFormatter(language) {
     expect(format('foo OR bar')).toBe('foo\nOR bar');
   });
 
-  it('formats postgre specific operators', () => {
-    expect(format('column::int')).toBe('column :: int');
-    expect(format('v->2')).toBe('v -> 2');
-    expect(format('v->>2')).toBe('v ->> 2');
-    expect(format("foo ~~ 'hello'")).toBe("foo ~~ 'hello'");
-    expect(format("foo !~ 'hello'")).toBe("foo !~ 'hello'");
-    expect(format("foo ~* 'hello'")).toBe("foo ~* 'hello'");
-    expect(format("foo ~~* 'hello'")).toBe("foo ~~* 'hello'");
-    expect(format("foo !~~ 'hello'")).toBe("foo !~~ 'hello'");
-    expect(format("foo !~* 'hello'")).toBe("foo !~* 'hello'");
-    expect(format("foo !~~* 'hello'")).toBe("foo !~~* 'hello'");
-    expect(format('@ foo')).toBe('@ foo');
-    expect(format('foo << 2')).toBe('foo << 2');
-    expect(format('foo >> 2')).toBe('foo >> 2');
-    expect(format('|/ foo')).toBe('|/ foo');
-    expect(format('||/ foo')).toBe('||/ foo');
-  });
-
   it('keeps separation between multiple statements', () => {
     expect(format('foo;bar;')).toBe('foo;\nbar;');
     expect(format('foo\n;bar;')).toBe('foo;\nbar;');

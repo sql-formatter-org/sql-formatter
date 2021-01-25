@@ -511,6 +511,22 @@ export default class PostgreSqlFormatter extends Formatter {
       indexedPlaceholderTypes: ['$'],
       namedPlaceholderTypes: [],
       lineCommentTypes: ['--'],
+      operators: [
+        '<<',
+        '>>',
+        '||/',
+        '|/',
+        '::',
+        '->>',
+        '->',
+        '~~*',
+        '~~',
+        '!~~*',
+        '!~~',
+        '~*',
+        '!~*',
+        '!~',
+      ],
     });
   }
 }

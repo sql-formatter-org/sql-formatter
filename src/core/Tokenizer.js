@@ -16,36 +16,23 @@ export default class Tokenizer {
    *  @param {String[]} cfg.namedPlaceholderTypes Prefixes for named placeholders, like @ and :
    *  @param {String[]} cfg.lineCommentTypes Line comments to enable, like # and --
    *  @param {String[]} cfg.specialWordChars Special chars that can be found inside of words, like @ and #
+   *  @param {String[]} [cfg.operator] Additional operators to recognize
    */
   constructor(cfg) {
     this.WHITESPACE_REGEX = /^(\s+)/u;
     this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?([eE]-?[0-9]+(\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u;
 
     this.OPERATOR_REGEX = regexFactory.createOperatorRegex([
+      ...(cfg.operators || []),
       '!=',
-      '<<',
-      '>>',
       '<>',
       '==',
       '<=',
       '>=',
       '!<',
       '!>',
-      '||/',
-      '|/',
       '||',
-      '::',
-      '->>',
-      '->',
-      '~~*',
-      '~~',
-      '!~~*',
-      '!~~',
-      '~*',
-      '!~*',
-      '!~',
       ':=',
-      '@',
     ]);
 
     this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/u;
