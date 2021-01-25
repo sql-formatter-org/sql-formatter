@@ -150,7 +150,10 @@ export default class Formatter {
       [tokenTypes.LINE_COMMENT]: true,
       [tokenTypes.OPERATOR]: true,
     };
-    if (token.whitespaceBefore.length === 0 && !preserveWhitespaceFor[this.previousToken().type]) {
+    if (
+      token.whitespaceBefore.length === 0 &&
+      !preserveWhitespaceFor[this.tokenLookBehind().type]
+    ) {
       query = trimSpacesEnd(query);
     }
     query += this.show(token);
@@ -232,10 +235,6 @@ export default class Formatter {
       query += '\n';
     }
     return query + this.indentation.getIndent();
-  }
-
-  previousToken(offset = 1) {
-    return this.tokens[this.index - offset] || {};
   }
 
   tokenLookBehind() {
