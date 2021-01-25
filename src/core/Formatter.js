@@ -152,7 +152,7 @@ export default class Formatter {
     };
     if (
       token.whitespaceBefore.length === 0 &&
-      !preserveWhitespaceFor[this.tokenLookBehind().type]
+      !preserveWhitespaceFor[this.tokenLookBehind()?.type]
     ) {
       query = trimSpacesEnd(query);
     }
