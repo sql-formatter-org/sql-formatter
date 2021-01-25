@@ -1,13 +1,10 @@
 import dedent from 'dedent-js';
-import * as sqlFormatter from '../../src/sqlFormatter';
 
 /**
  * Tests for standard -- and /* *\/ comments
- * @param {String} language
+ * @param {Function} format
  */
-export default function supportsComments(language) {
-  const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
-
+export default function supportsComments(format) {
   it('formats SELECT query with different comments', () => {
     const result = format(dedent`
       SELECT

@@ -1,13 +1,10 @@
 import dedent from 'dedent-js';
-import * as sqlFormatter from '../../src/sqlFormatter';
 
 /**
  * Tests for all the config options
- * @param {String} language
+ * @param {Function} format
  */
-export default function supportsConfigOptions(language) {
-  const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
-
+export default function supportsConfigOptions(format) {
   it('supports indent option', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;', {
       indent: '    ',

@@ -4,10 +4,10 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsStrings from './features/strings';
 
 describe('N1qlFormatter', () => {
-  behavesLikeSqlFormatter('n1ql');
-  supportsStrings('n1ql', ['""', "''", '``']);
-
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'n1ql' });
+
+  behavesLikeSqlFormatter(format);
+  supportsStrings(format, ['""', "''", '``']);
 
   it('formats SELECT query with element selection expression', () => {
     const result = format('SELECT order_lines[0].productId FROM orders;');

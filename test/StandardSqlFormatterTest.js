@@ -8,14 +8,14 @@ import supportsAlterTableModify from './features/alterTableModify';
 import supportsStrings from './features/strings';
 
 describe('StandardSqlFormatter', () => {
-  behavesLikeSqlFormatter('sql');
-  supportsCase('sql');
-  supportsCreateTable('sql');
-  supportsAlterTable('sql');
-  supportsAlterTableModify('sql');
-  supportsStrings('sql', ['""', "''", '``']);
-
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'sql' });
+
+  behavesLikeSqlFormatter(format);
+  supportsCase(format);
+  supportsCreateTable(format);
+  supportsAlterTable(format);
+  supportsAlterTableModify(format);
+  supportsStrings(format, ['""', "''", '``']);
 
   it('formats INSERT without INTO', () => {
     const result = sqlFormatter.format(

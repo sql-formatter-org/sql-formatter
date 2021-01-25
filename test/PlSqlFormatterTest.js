@@ -8,14 +8,14 @@ import supportsCreateTable from './features/createTable';
 import supportsStrings from './features/strings';
 
 describe('PlSqlFormatter', () => {
-  behavesLikeSqlFormatter('pl/sql');
-  supportsCase('pl/sql');
-  supportsCreateTable('pl/sql');
-  supportsAlterTable('pl/sql');
-  supportsAlterTableModify('pl/sql');
-  supportsStrings('pl/sql', ['""', "''", '``']);
-
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'pl/sql' });
+
+  behavesLikeSqlFormatter(format);
+  supportsCase(format);
+  supportsCreateTable(format);
+  supportsAlterTable(format);
+  supportsAlterTableModify(format);
+  supportsStrings(format, ['""', "''", '``']);
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`

@@ -7,14 +7,14 @@ import supportsCreateTable from './features/createTable';
 import supportsStrings from './features/strings';
 
 describe('PostgreSqlFormatter', () => {
-  behavesLikeSqlFormatter('postgresql');
-  supportsCase('postgresql');
-  supportsCreateTable('postgresql');
-  supportsAlterTable('postgresql');
-  supportsStrings('postgresql', ['""', "''", 'U&""', "U&''"]);
-
   const format = (query, cfg = {}) =>
     sqlFormatter.format(query, { ...cfg, language: 'postgresql' });
+
+  behavesLikeSqlFormatter(format);
+  supportsCase(format);
+  supportsCreateTable(format);
+  supportsAlterTable(format);
+  supportsStrings(format, ['""', "''", 'U&""', "U&''"]);
 
   it('replaces $placeholders with param values', () => {
     const result = format('SELECT $1, $2 FROM tbl', {

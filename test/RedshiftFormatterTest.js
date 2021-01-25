@@ -7,13 +7,13 @@ import supportsCreateTable from './features/createTable';
 import supportsStrings from './features/strings';
 
 describe('RedshiftFormatter', () => {
-  behavesLikeSqlFormatter('redshift');
-  supportsCreateTable('redshift');
-  supportsAlterTable('redshift');
-  supportsAlterTableModify('redshift');
-  supportsStrings('redshift', ['""', "''", '``']);
-
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'redshift' });
+
+  behavesLikeSqlFormatter(format);
+  supportsCreateTable(format);
+  supportsAlterTable(format);
+  supportsAlterTableModify(format);
+  supportsStrings(format, ['""', "''", '``']);
 
   it('formats LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC LIMIT 10;')).toBe(dedent`

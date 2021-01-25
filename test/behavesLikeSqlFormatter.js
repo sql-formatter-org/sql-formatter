@@ -1,17 +1,14 @@
 import dedent from 'dedent-js';
-import * as sqlFormatter from '../src/sqlFormatter';
 import supportsComments from './features/comments';
 import supportsConfigOptions from './features/configOptions';
 
 /**
  * Core tests for all SQL formatters
- * @param {String} language
+ * @param {Function} format
  */
-export default function behavesLikeSqlFormatter(language) {
-  supportsComments(language);
-  supportsConfigOptions(language);
-
-  const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
+export default function behavesLikeSqlFormatter(format) {
+  supportsComments(format);
+  supportsConfigOptions(format);
 
   it('does nothing with empty input', () => {
     const result = format('');
@@ -66,7 +63,7 @@ export default function behavesLikeSqlFormatter(language) {
   });
 
   it('formats SELECT with complex WHERE', () => {
-    const result = sqlFormatter.format(`
+    const result = format(`
       SELECT * FROM foo WHERE Column1 = 'testing'
       AND ( (Column2 = Column3 OR Column4 >= NOW()) );
     `);
@@ -431,7 +428,7 @@ export default function behavesLikeSqlFormatter(language) {
   });
 
   it('correctly indents create statement after select', () => {
-    const result = sqlFormatter.format(`
+    const result = format(`
       SELECT * FROM test;
       CREATE TABLE TEST(id NUMBER NOT NULL, col1 VARCHAR2(20), col2 VARCHAR2(20));
     `);
@@ -449,7 +446,7 @@ export default function behavesLikeSqlFormatter(language) {
   });
 
   it('correctly handles floats as single tokens', () => {
-    const result = sqlFormatter.format('SELECT 1e-9 AS a, 1.5e-10 AS b, 3.5E12 AS c, 3.5e12 AS d;');
+    const result = format('SELECT 1e-9 AS a, 1.5e-10 AS b, 3.5E12 AS c, 3.5e12 AS d;');
     expect(result).toBe(dedent`
       SELECT
         1e-9 AS a,
@@ -460,7 +457,7 @@ export default function behavesLikeSqlFormatter(language) {
   });
 
   it('does not split UNION ALL in half', () => {
-    const result = sqlFormatter.format(`
+    const result = format(`
       SELECT * FROM tbl1
       UNION ALL
       SELECT * FROM tbl2;

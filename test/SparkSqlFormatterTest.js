@@ -7,13 +7,13 @@ import supportsCreateTable from './features/createTable';
 import supportsStrings from './features/strings';
 
 describe('SparkSqlFormatter', () => {
-  behavesLikeSqlFormatter('spark');
-  supportsCase('spark');
-  supportsCreateTable('spark');
-  supportsAlterTable('spark');
-  supportsStrings('spark', ['""', "''", '``']);
-
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'spark' });
+
+  behavesLikeSqlFormatter(format);
+  supportsCase(format);
+  supportsCreateTable(format);
+  supportsAlterTable(format);
+  supportsStrings(format, ['""', "''", '``']);
 
   it('formats WINDOW specification as top level', () => {
     const result = format(

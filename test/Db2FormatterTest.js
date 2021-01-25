@@ -6,12 +6,12 @@ import supportsCreateTable from './features/createTable';
 import supportsStrings from './features/strings';
 
 describe('Db2Formatter', () => {
-  behavesLikeSqlFormatter('db2');
-  supportsCreateTable('db2');
-  supportsAlterTable('db2');
-  supportsStrings('db2', ['""', "''", '``']);
-
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'db2' });
+
+  behavesLikeSqlFormatter(format);
+  supportsCreateTable(format);
+  supportsAlterTable(format);
+  supportsStrings(format, ['""', "''", '``']);
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
