@@ -1,4 +1,4 @@
-import { escapeRegExp, isEmpty } from '../utils';
+import { escapeRegExp, isEmpty, sortByLengthDesc } from '../utils';
 
 export function createOperatorRegex(multiLetterOperators) {
   return new RegExp(`^(${multiLetterOperators.map(escapeRegExp).join('|')}|.)`, 'u');
@@ -15,10 +15,7 @@ export function createReservedWordRegex(reservedWords) {
   if (reservedWords.length === 0) {
     return new RegExp(`^\b$`, 'u');
   }
-  reservedWords = reservedWords.sort((a, b) => {
-    return b.length - a.length || a.localeCompare(b);
-  });
-  const reservedWordsPattern = reservedWords.join('|').replace(/ /gu, '\\s+');
+  const reservedWordsPattern = sortByLengthDesc(reservedWords).join('|').replace(/ /gu, '\\s+');
   return new RegExp(`^(${reservedWordsPattern})\\b`, 'iu');
 }
 
