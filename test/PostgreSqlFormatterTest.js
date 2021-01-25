@@ -16,6 +16,17 @@ describe('PostgreSqlFormatter', () => {
   supportsAlterTable(format);
   supportsStrings(format, ['""', "''", 'U&""', "U&''", '$$']);
 
+  it('supports $placeholders', () => {
+    const result = format('SELECT $1, $2 FROM tbl');
+    expect(result).toBe(dedent`
+      SELECT
+        $1,
+        $2
+      FROM
+        tbl
+    `);
+  });
+
   it('replaces $placeholders with param values', () => {
     const result = format('SELECT $1, $2 FROM tbl', {
       params: { 1: '"variable value"', 2: '"blah"' },
