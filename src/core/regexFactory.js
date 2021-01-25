@@ -1,7 +1,10 @@
 import { escapeRegExp, isEmpty, sortByLengthDesc } from '../utils';
 
 export function createOperatorRegex(multiLetterOperators) {
-  return new RegExp(`^(${multiLetterOperators.map(escapeRegExp).join('|')}|.)`, 'u');
+  return new RegExp(
+    `^(${sortByLengthDesc(multiLetterOperators).map(escapeRegExp).join('|')}|.)`,
+    'u'
+  );
 }
 
 export function createLineCommentRegex(lineCommentTypes) {
