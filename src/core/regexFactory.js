@@ -43,6 +43,7 @@ export function createStringRegex(stringTypes) {
 // 5. national character quoted string using N'' or N\' to escape
 // 6. Unicode single-quoted string using \' to escape
 // 7. Unicode double-quoted string using \" to escape
+// 8. PostgreSQL dollar-quoted strings
 export function createStringPattern(stringTypes) {
   const patterns = {
     '``': '((`[^`]*($|`))+)',
@@ -53,6 +54,7 @@ export function createStringPattern(stringTypes) {
     "N''": "((N'[^N'\\\\]*(?:\\\\.[^N'\\\\]*)*('|$))+)",
     "U&''": "((U&'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
     'U&""': '((U&"[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+)',
+    $$: '((?<tag>\\$\\w*\\$).*?(?:\\k<tag>|$))',
   };
 
   return stringTypes.map((t) => patterns[t]).join('|');

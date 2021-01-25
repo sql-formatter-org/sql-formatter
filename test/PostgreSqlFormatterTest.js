@@ -14,7 +14,7 @@ describe('PostgreSqlFormatter', () => {
   supportsCase(format);
   supportsCreateTable(format);
   supportsAlterTable(format);
-  supportsStrings(format, ['""', "''", 'U&""', "U&''"]);
+  supportsStrings(format, ['""', "''", 'U&""', "U&''", '$$']);
 
   it('replaces $placeholders with param values', () => {
     const result = format('SELECT $1, $2 FROM tbl', {

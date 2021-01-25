@@ -38,4 +38,14 @@ export default function supportsStrings(format, stringTypes = []) {
       expect(format("U&'foo \\' JOIN bar'")).toBe("U&'foo \\' JOIN bar'");
     });
   }
+
+  if (stringTypes.includes('$$')) {
+    it('supports dollar-quoted strings', () => {
+      expect(format('$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$')).toBe(
+        '$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$'
+      );
+      expect(format('$$foo JOIN bar$$')).toBe('$$foo JOIN bar$$');
+      expect(format('$$foo $ JOIN bar$$')).toBe('$$foo $ JOIN bar$$');
+    });
+  }
 }

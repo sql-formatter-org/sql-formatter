@@ -505,7 +505,7 @@ export default class PostgreSqlFormatter extends Formatter {
       reservedNewlineWords,
       reservedTopLevelWordsNoIndent,
       // TODO: support $$ dollar-quoted strings $$
-      stringTypes: [`""`, "''", "U&''", 'U&""'],
+      stringTypes: [`""`, "''", "U&''", 'U&""', '$$'],
       openParens: ['(', 'CASE'],
       closeParens: [')', 'END'],
       indexedPlaceholderTypes: ['$'],
