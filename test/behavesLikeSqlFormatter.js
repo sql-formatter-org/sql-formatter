@@ -396,18 +396,6 @@ export default function behavesLikeSqlFormatter(language) {
     expect(format('foo OR bar')).toBe('foo\nOR bar');
   });
 
-  it('recognizes strings', () => {
-    expect(format('"foo JOIN bar"')).toBe('"foo JOIN bar"');
-    expect(format("'foo JOIN bar'")).toBe("'foo JOIN bar'");
-    expect(format('`foo JOIN bar`')).toBe('`foo JOIN bar`');
-  });
-
-  it('recognizes escaped strings', () => {
-    expect(format('"foo \\" JOIN bar"')).toBe('"foo \\" JOIN bar"');
-    expect(format("'foo \\' JOIN bar'")).toBe("'foo \\' JOIN bar'");
-    expect(format('`foo `` JOIN bar`')).toBe('`foo `` JOIN bar`');
-  });
-
   it('formats postgre specific operators', () => {
     expect(format('column::int')).toBe('column :: int');
     expect(format('v->2')).toBe('v -> 2');

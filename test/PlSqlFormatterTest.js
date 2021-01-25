@@ -5,6 +5,7 @@ import supportsAlterTable from './features/alterTable';
 import supportsAlterTableModify from './features/alterTableModify';
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
+import supportsStrings from './features/strings';
 
 describe('PlSqlFormatter', () => {
   behavesLikeSqlFormatter('pl/sql');
@@ -12,6 +13,7 @@ describe('PlSqlFormatter', () => {
   supportsCreateTable('pl/sql');
   supportsAlterTable('pl/sql');
   supportsAlterTableModify('pl/sql');
+  supportsStrings('pl/sql', ['""', "''", '``']);
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'pl/sql' });
 

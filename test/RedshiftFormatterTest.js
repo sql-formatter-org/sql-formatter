@@ -4,12 +4,14 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
 import supportsAlterTableModify from './features/alterTableModify';
 import supportsCreateTable from './features/createTable';
+import supportsStrings from './features/strings';
 
 describe('RedshiftFormatter', () => {
   behavesLikeSqlFormatter('redshift');
   supportsCreateTable('redshift');
   supportsAlterTable('redshift');
   supportsAlterTableModify('redshift');
+  supportsStrings('redshift', ['""', "''", '``']);
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'redshift' });
 

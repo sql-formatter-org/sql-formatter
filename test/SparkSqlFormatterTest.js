@@ -4,12 +4,14 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
+import supportsStrings from './features/strings';
 
 describe('SparkSqlFormatter', () => {
   behavesLikeSqlFormatter('spark');
   supportsCase('spark');
   supportsCreateTable('spark');
   supportsAlterTable('spark');
+  supportsStrings('spark', ['""', "''", '``']);
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'spark' });
 

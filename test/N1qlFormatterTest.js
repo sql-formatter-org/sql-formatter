@@ -1,9 +1,11 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import supportsStrings from './features/strings';
 
 describe('N1qlFormatter', () => {
   behavesLikeSqlFormatter('n1ql');
+  supportsStrings('n1ql', ['""', "''", '``']);
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'n1ql' });
 

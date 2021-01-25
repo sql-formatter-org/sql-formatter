@@ -5,6 +5,7 @@ import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
 import supportsAlterTable from './features/alterTable';
 import supportsAlterTableModify from './features/alterTableModify';
+import supportsStrings from './features/strings';
 
 describe('StandardSqlFormatter', () => {
   behavesLikeSqlFormatter('sql');
@@ -12,6 +13,7 @@ describe('StandardSqlFormatter', () => {
   supportsCreateTable('sql');
   supportsAlterTable('sql');
   supportsAlterTableModify('sql');
+  supportsStrings('sql', ['""', "''", '``']);
 
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'sql' });
 
