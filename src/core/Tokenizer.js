@@ -86,6 +86,7 @@ export default class Tokenizer {
    * @return {Object[]} tokens An array of tokens.
    *  @return {String} token.type
    *  @return {String} token.value
+   *  @return {String} token.whitespaceBefore Preceding whitespace
    */
   tokenize(input) {
     const tokens = [];
@@ -93,19 +94,29 @@ export default class Tokenizer {
 
     // Keep processing the string until it is empty
     while (input.length) {
-      // Get the next token and the token type
-      token = this.getNextToken(input, token);
-      // Advance the string
-      input = input.substring(token.value.length);
+      // grab any preceding whitespace
+      const whitespaceBefore = this.getWhitespace(input);
+      input = input.substring(whitespaceBefore.length);
 
-      tokens.push(token);
+      if (input.length) {
+        // Get the next token and the token type
+        token = this.getNextToken(input, token);
+        // Advance the string
+        input = input.substring(token.value.length);
+
+        tokens.push({ ...token, whitespaceBefore });
+      }
     }
     return tokens;
   }
 
+  getWhitespace(input) {
+    const matches = input.match(this.WHITESPACE_REGEX);
+    return matches ? matches[1] : '';
+  }
+
   getNextToken(input, previousToken) {
     return (
-      this.getWhitespaceToken(input) ||
       this.getCommentToken(input) ||
       this.getStringToken(input) ||
       this.getOpenParenToken(input) ||
@@ -116,14 +127,6 @@ export default class Tokenizer {
       this.getWordToken(input) ||
       this.getOperatorToken(input)
     );
-  }
-
-  getWhitespaceToken(input) {
-    return this.getTokenOnFirstMatch({
-      input,
-      type: tokenTypes.WHITESPACE,
-      regex: this.WHITESPACE_REGEX,
-    });
   }
 
   getCommentToken(input) {

@@ -66,9 +66,7 @@ export default class Formatter {
 
       token = this.tokenOverride(token);
 
-      if (token.type === tokenTypes.WHITESPACE) {
-        // ignore (we do our own whitespace formatting)
-      } else if (token.type === tokenTypes.LINE_COMMENT) {
+      if (token.type === tokenTypes.LINE_COMMENT) {
         formattedQuery = this.formatLineComment(token, formattedQuery);
       } else if (token.type === tokenTypes.BLOCK_COMMENT) {
         formattedQuery = this.formatBlockComment(token, formattedQuery);
@@ -148,12 +146,11 @@ export default class Formatter {
     // Take out the preceding space unless there was whitespace there in the original query
     // or another opening parens or line comment
     const preserveWhitespaceFor = {
-      [tokenTypes.WHITESPACE]: true,
       [tokenTypes.OPEN_PAREN]: true,
       [tokenTypes.LINE_COMMENT]: true,
       [tokenTypes.OPERATOR]: true,
     };
-    if (!preserveWhitespaceFor[this.previousToken().type]) {
+    if (token.whitespaceBefore.length === 0 && !preserveWhitespaceFor[this.previousToken().type]) {
       query = trimSpacesEnd(query);
     }
     query += this.show(token);

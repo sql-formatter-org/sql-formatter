@@ -2,7 +2,6 @@
  * Constants for token types
  */
 export default {
-  WHITESPACE: 'whitespace',
   WORD: 'word',
   STRING: 'string',
   RESERVED: 'reserved',
