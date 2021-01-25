@@ -41,6 +41,8 @@ export function createStringRegex(stringTypes) {
 // 3. double quoted string using "" or \" to escape
 // 4. single quoted string using '' or \' to escape
 // 5. national character quoted string using N'' or N\' to escape
+// 6. Unicode single-quoted string using \' to escape
+// 7. Unicode double-quoted string using \" to escape
 export function createStringPattern(stringTypes) {
   const patterns = {
     '``': '((`[^`]*($|`))+)',
@@ -49,6 +51,8 @@ export function createStringPattern(stringTypes) {
     '""': '(("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+)',
     "''": "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
     "N''": "((N'[^N'\\\\]*(?:\\\\.[^N'\\\\]*)*('|$))+)",
+    "U&''": "((U&'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
+    'U&""': '((U&"[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+)',
   };
 
   return stringTypes.map((t) => patterns[t]).join('|');

@@ -28,4 +28,18 @@ export default function supportsStrings(language, stringTypes = []) {
       expect(format('`foo `` JOIN bar`')).toBe('`foo `` JOIN bar`');
     });
   }
+
+  if (stringTypes.includes('U&""')) {
+    it('supports unicode double-quoted strings', () => {
+      expect(format('U&"foo JOIN bar"')).toBe('U&"foo JOIN bar"');
+      expect(format('U&"foo \\" JOIN bar"')).toBe('U&"foo \\" JOIN bar"');
+    });
+  }
+
+  if (stringTypes.includes("U&''")) {
+    it('supports single-quoted strings', () => {
+      expect(format("U&'foo JOIN bar'")).toBe("U&'foo JOIN bar'");
+      expect(format("U&'foo \\' JOIN bar'")).toBe("U&'foo \\' JOIN bar'");
+    });
+  }
 }
