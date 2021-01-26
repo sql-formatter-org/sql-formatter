@@ -3,8 +3,15 @@
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 It started as a port of a [PHP Library][], but has since considerably diverged.
 
-SQL Formatter supports [Standard SQL][], [Couchbase N1QL][], [IBM DB2][],
-[Oracle PL/SQL][], [Amazon Redshift][], and [Spark][] dialects.
+SQL formatter supports the following dialects:
+
+- **sql** - [Standard SQL][]
+- **postgresql** - [PostgreSQL][]
+- **db2** - [IBM DB2][]
+- **pl/sql** - [Oracle PL/SQL][]
+- **n1ql** - [Couchbase N1QL][]
+- **redshift** - [Amazon Redshift][]
+- **spark** - [Spark][]
 
 &rarr; [Try the demo.](https://zeroturnaround.github.io/sql-formatter/)
 
@@ -37,21 +44,12 @@ You can also pass in configuration options:
 
 ```js
 sqlFormatter.format('SELECT * FROM tbl', {
-  language: 'spark', // Defaults to "sql"
+  language: 'spark', // Defaults to "sql" (see the above list of supported dialects)
   indent: '    ', // Defaults to two spaces
   uppercase: bool, // Defaults to false
   linesBetweenQueries: 2, // Defaults to 1
 });
 ```
-
-Currently six SQL dialects are supported:
-
-- **sql** - [Standard SQL][]
-- **n1ql** - [Couchbase N1QL][]
-- **db2** - [IBM DB2][]
-- **pl/sql** - [Oracle PL/SQL][]
-- **redshift** - [Amazon Redshift][]
-- **spark** - [Spark][]
 
 ### Placeholders replacement
 
@@ -152,3 +150,4 @@ npm run check
 [oracle pl/sql]: http://www.oracle.com/technetwork/database/features/plsql/index.html
 [amazon redshift]: https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 [spark]: https://spark.apache.org/docs/latest/api/sql/index.html
+[postgresql]: https://www.postgresql.org/
