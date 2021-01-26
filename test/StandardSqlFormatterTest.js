@@ -6,6 +6,7 @@ import supportsCreateTable from './features/createTable';
 import supportsAlterTable from './features/alterTable';
 import supportsAlterTableModify from './features/alterTableModify';
 import supportsStrings from './features/strings';
+import supportsBetween from './features/between';
 
 describe('StandardSqlFormatter', () => {
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'sql' });
@@ -16,6 +17,7 @@ describe('StandardSqlFormatter', () => {
   supportsAlterTable(format);
   supportsAlterTableModify(format);
   supportsStrings(format, ['""', "''", '``']);
+  supportsBetween(format);
 
   it('formats INSERT without INTO', () => {
     const result = sqlFormatter.format(

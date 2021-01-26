@@ -392,10 +392,6 @@ export default function behavesLikeSqlFormatter(format) {
     expect(format('foo OR bar')).toBe('foo\nOR bar');
   });
 
-  it('formats BETWEEN _ AND _ on single line', () => {
-    expect(format('foo BETWEEN bar AND baz')).toBe('foo BETWEEN bar AND baz');
-  });
-
   it('keeps separation between multiple statements', () => {
     expect(format('foo;bar;')).toBe('foo;\nbar;');
     expect(format('foo\n;bar;')).toBe('foo;\nbar;');

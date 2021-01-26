@@ -247,7 +247,7 @@ export default class SparkSqlFormatter extends Formatter {
 
   tokenOverride(token) {
     // Fix cases where names are ambiguously keywords or functions
-    if (token.type === tokenTypes.RESERVED_TOP_LEVEL && isWindow(token)) {
+    if (isWindow(token)) {
       const aheadToken = this.tokenLookAhead();
       if (aheadToken && aheadToken.type === tokenTypes.OPEN_PAREN) {
         // This is a function call, treat it as a reserved word
@@ -256,7 +256,7 @@ export default class SparkSqlFormatter extends Formatter {
     }
 
     // Fix cases where names are ambiguously keywords or properties
-    if (token.type === tokenTypes.CLOSE_PAREN && isEnd(token)) {
+    if (isEnd(token)) {
       const backToken = this.tokenLookBehind();
       if (backToken && backToken.type === tokenTypes.OPERATOR && backToken.value === '.') {
         // This is window().end (or similar) not CASE ... END

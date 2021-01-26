@@ -429,11 +429,7 @@ export default class PlSqlFormatter extends Formatter {
   }
 
   tokenOverride(token) {
-    if (
-      token.type === tokenTypes.RESERVED_TOP_LEVEL &&
-      isSet(token) &&
-      isBy(this.previousReservedToken)
-    ) {
+    if (isSet(token) && isBy(this.previousReservedToken)) {
       return { type: tokenTypes.RESERVED, value: token.value };
     }
     return token;

@@ -2,6 +2,7 @@ import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
+import supportsBetween from './features/between';
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
 import supportsStrings from './features/strings';
@@ -14,6 +15,7 @@ describe('SparkSqlFormatter', () => {
   supportsCreateTable(format);
   supportsAlterTable(format);
   supportsStrings(format, ['""', "''", '``']);
+  supportsBetween(format);
 
   it('formats WINDOW specification as top level', () => {
     const result = format(

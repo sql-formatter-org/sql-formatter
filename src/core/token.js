@@ -1,15 +1,17 @@
-const isTokenValue = (regex) => (token) => regex.test(token?.value);
+import tokenTypes from './tokenTypes';
 
-export const isAnd = isTokenValue(/^AND$/iu);
+const isToken = (type, regex) => (token) => token?.type === type && regex.test(token?.value);
 
-export const isBetween = isTokenValue(/^BETWEEN$/iu);
+export const isAnd = isToken(tokenTypes.RESERVED_NEWLINE, /^AND$/iu);
 
-export const isLimit = isTokenValue(/^LIMIT$/iu);
+export const isBetween = isToken(tokenTypes.RESERVED, /^BETWEEN$/iu);
 
-export const isSet = isTokenValue(/^SET$/iu);
+export const isLimit = isToken(tokenTypes.RESERVED_TOP_LEVEL, /^LIMIT$/iu);
 
-export const isBy = isTokenValue(/^BY$/iu);
+export const isSet = isToken(tokenTypes.RESERVED_TOP_LEVEL, /^SET$/iu);
 
-export const isWindow = isTokenValue(/^WINDOW$/iu);
+export const isBy = isToken(tokenTypes.RESERVED, /^BY$/iu);
 
-export const isEnd = isTokenValue(/^END$/iu);
+export const isWindow = isToken(tokenTypes.RESERVED_TOP_LEVEL, /^WINDOW$/iu);
+
+export const isEnd = isToken(tokenTypes.CLOSE_PAREN, /^END$/iu);

@@ -2,6 +2,7 @@ import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
+import supportsBetween from './features/between';
 import supportsCreateTable from './features/createTable';
 import supportsStrings from './features/strings';
 
@@ -12,6 +13,7 @@ describe('Db2Formatter', () => {
   supportsCreateTable(format);
   supportsAlterTable(format);
   supportsStrings(format, ['""', "''", '``']);
+  supportsBetween(format);
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
