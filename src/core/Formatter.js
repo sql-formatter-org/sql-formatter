@@ -207,7 +207,6 @@ export default class Formatter {
 
     formatLineByLength(line){
 
-        console.log(line);
         let originQuery = this.query;
         let maxCleanLineLength = 60;
         let last = line.trim();
@@ -408,7 +407,9 @@ export default class Formatter {
 
     formatNewlineReservedWord(token){
         let last = this.getLastString();
-        if (last.trim().split(" ").length > 1 || last.trim() == ")" && !(last.includes("case") && !last.includes("when"))) {
+        if (last.includes("case") && !last.includes("when")){
+        } else if (last.trim().split(" ").length > 1 || last.trim() == ")" &&
+         !(last.includes("case") && !last.includes("when"))) {
             this.addNewLine("left", token.value);
         }
         this.lines[this.lastIndex()] += token.value;
@@ -417,14 +418,15 @@ export default class Formatter {
     formatOpeningParentheses(token){
         let words = this.getLastString().trim().split(" ");
         let last = this.getLastString().trim().toUpperCase();
-        if (token.value != "(" && (token.value != "case" && !this.reservedWords.includes(last))){
+        if (token.value == "case" && this.getLastString().trim().endsWith("select")){
+        } else if (token.value != "(" && (token.value != "case" && !this.reservedWords.includes(last))){
             this.addNewLine("left", token.value);
         }else if (this.reservedWords.includes(words[words.length - 1].trim().toUpperCase())){
             if (!this.getLastString().endsWith(" ")){
                 this.lines[this.lastIndex()] += " ";
             }
         }else if (this.getLastString().trim() != ""){
-            this.trimEndLastString();
+            // this.trimEndLastString();
         }
         this.indents.push({token: token, indent: this.getLastString().length})
         this.lines[this.lastIndex()] += token.value;
@@ -505,7 +507,6 @@ export default class Formatter {
                     for (let  i = 0; i < split.length; i++){
                         this.lines.push(repeat(" ", indent + 4) + split[i].trim() + ",");
                     }
-                    // this.lines[this.lastIndex()] = this.getLastString().substring(0, this.getLastString().length - 2);
                 } else {
                     this.addSubstringInLine(start, startIndex, substring);
                 }
@@ -514,10 +515,6 @@ export default class Formatter {
                 this.addSubstringInLine(start, startIndex, substring);
             }
         }
-    }
-
-    formatValuesLongString(){
-        this.lines[this.lastIndex() - 1]
     }
 
     addSubstringInLine(start, startIndex, substring){
