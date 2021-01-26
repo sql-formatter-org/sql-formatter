@@ -13,6 +13,11 @@ SQL formatter supports the following dialects:
 - **redshift** - [Amazon Redshift][]
 - **spark** - [Spark][]
 
+It does not support:
+
+- Stored procedures.
+- Changing of the delimiter type to something else than `;`.
+
 &rarr; [Try the demo.](https://zeroturnaround.github.io/sql-formatter/)
 
 ## Install
