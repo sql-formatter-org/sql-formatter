@@ -1,4 +1,5 @@
 import Formatter from '../core/Formatter';
+import { isBy, isSet } from '../core/token';
 import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
 
@@ -430,8 +431,8 @@ export default class PlSqlFormatter extends Formatter {
   tokenOverride(token) {
     if (
       token.type === tokenTypes.RESERVED_TOP_LEVEL &&
-      token.value.toUpperCase() === 'SET' &&
-      this.previousReservedToken.value.toUpperCase() === 'BY'
+      isSet(token) &&
+      isBy(this.previousReservedToken)
     ) {
       return { type: tokenTypes.RESERVED, value: token.value };
     }

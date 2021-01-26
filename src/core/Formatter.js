@@ -3,6 +3,7 @@ import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { trimSpacesEnd } from '../utils';
+import { isAnd, isBetween, isLimit } from './token';
 
 export default class Formatter {
   /**
@@ -133,10 +134,7 @@ export default class Formatter {
   }
 
   formatNewlineReservedWord(token, query) {
-    if (
-      token.value.toUpperCase() === 'AND' &&
-      this.tokenLookBehind(2)?.value.toUpperCase() === 'BETWEEN'
-    ) {
+    if (isAnd(token) && isBetween(this.tokenLookBehind(2))) {
       return this.formatWithSpaces(token, query);
     }
     return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
@@ -194,7 +192,7 @@ export default class Formatter {
 
     if (this.inlineBlock.isActive()) {
       return query;
-    } else if (/^LIMIT$/iu.test(this.previousReservedToken.value)) {
+    } else if (isLimit(this.previousReservedToken)) {
       return query;
     } else {
       return this.addNewline(query);
