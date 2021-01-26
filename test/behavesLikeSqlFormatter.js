@@ -388,9 +388,12 @@ export default function behavesLikeSqlFormatter(format) {
   });
 
   it('formats AND/OR operators', () => {
-    expect(format('foo BETWEEN bar AND baz')).toBe('foo BETWEEN bar\nAND baz');
     expect(format('foo AND bar')).toBe('foo\nAND bar');
     expect(format('foo OR bar')).toBe('foo\nOR bar');
+  });
+
+  it('formats BETWEEN _ AND _ on single line', () => {
+    expect(format('foo BETWEEN bar AND baz')).toBe('foo BETWEEN bar AND baz');
   });
 
   it('keeps separation between multiple statements', () => {

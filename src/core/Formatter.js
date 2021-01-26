@@ -133,6 +133,12 @@ export default class Formatter {
   }
 
   formatNewlineReservedWord(token, query) {
+    if (
+      token.value.toUpperCase() === 'AND' &&
+      this.tokenLookBehind(2)?.value.toUpperCase() === 'BETWEEN'
+    ) {
+      return this.formatWithSpaces(token, query);
+    }
     return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
   }
 
@@ -237,11 +243,11 @@ export default class Formatter {
     return query + this.indentation.getIndent();
   }
 
-  tokenLookBehind() {
-    return this.tokens[this.index - 1];
+  tokenLookBehind(n = 1) {
+    return this.tokens[this.index - n];
   }
 
-  tokenLookAhead() {
-    return this.tokens[this.index + 1];
+  tokenLookAhead(n = 1) {
+    return this.tokens[this.index + n];
   }
 }
