@@ -16,7 +16,7 @@ export default class Formatter {
         this.inlineReservedWord = ["order", "group"];
         this.indents = [];
         this.lines = [""];
-        this.startBlock = ["select", "begin", "create", "alter", "insert", //"update", 
+        this.startBlock = ["select", "begin", "create", "alter", "insert", "update", 
                                     "drop", "merge"];
         this.logicalOperators = ["or", "xor", "and"];
             }
@@ -207,6 +207,7 @@ export default class Formatter {
 
     formatLineByLength(line){
 
+        console.log(line);
         let originQuery = this.query;
         let maxCleanLineLength = 60;
         let last = line.trim();
@@ -227,7 +228,6 @@ export default class Formatter {
             }
             first = split[i];
         }
-        
         let lastWithoutSpace = this.getWordInOneStyle(last);
         let index = this.getOriginStringStartIndex(first, lastWithoutSpace);
         if (index == -1){
@@ -320,7 +320,7 @@ export default class Formatter {
         this.query = this.query.substring(index);
         while(index != this.getWordInOneStyle(this.query).indexOf(lastWithoutSpace) && index != -1){
             index = this.query.indexOf(first);
-            this.query = this.query.substring(index);
+            this.query = this.query.substring(index + 1);
             index = this.query.indexOf(first);
         }
         return index;
@@ -471,6 +471,7 @@ export default class Formatter {
                 break;
             }
         }
+        let firstInStartLine = this.lines[startIndex].replaceAll(/\(|\)/g, " ").trim().split(" ")[0].trim();
         let first = substring.trim().split(" ")[0].replace(/\(/, "").trim();
         if (this.startBlock.includes(first)){
             this.indents.pop();
@@ -484,18 +485,55 @@ export default class Formatter {
                 this.indents.pop();
             }
         } else {
-            if (!this.reservedWords.includes(first) && substring.match(/.* (and|or|xor|not) .*/) == null){
-                let subLines = substring.split("\n");
-                substring = "";
-                for (let i = 0; i< subLines.length; i++){
-                    substring += subLines[i].trim() + " ";
+            if (firstInStartLine == "insert" || firstInStartLine == "values"){
+                if (firstInStartLine == "values"){
+                    this.lines[startIndex] = this.lines[startIndex].replace("values(", "values (");
                 }
-                this.lines[startIndex] = trimEnd(this.lines[startIndex].substring(0, start) + substring);
-                let length = this.lines.length;
-                for (let i = startIndex + 1; i < length; i++){
-                    this.lines.pop();
+                if (substring.split(",").length > 3 || substring.length > 30){
+                    this.removeLines(startIndex);
+                    if (firstInStartLine == "values"){
+                        let ll = this.lines[this.lastIndex() - 1];
+                        this.lines[this.lastIndex() - 1] = ll.substring(0, ll.length - 2);
+                        this.lines[startIndex] = this.lines[startIndex].replace("values", ") values");
+                    }
+                    let fromIdx = this.lines[this.lastIndex()].indexOf(firstInStartLine);
+                    this.lines[startIndex] = this.lines[startIndex].substring(0, 
+                       this.lines[startIndex].indexOf("(", fromIdx + 1) + 1);
+                    let split = substring.split(", ");
+                    split[0] = split[0].substring(1);
+                    let indent = this.indents[this.indents.length - 2].indent;
+                    for (let  i = 0; i < split.length; i++){
+                        this.lines.push(repeat(" ", indent + 4) + split[i].trim() + ",");
+                    }
+                    // this.lines[this.lastIndex()] = this.getLastString().substring(0, this.getLastString().length - 2);
+                } else {
+                    this.addSubstringInLine(start, startIndex, substring);
                 }
+            } else if (!this.reservedWords.includes(first) 
+                && substring.match(/.* (and|or|xor|not) .*/) == null){
+                this.addSubstringInLine(start, startIndex, substring);
             }
+        }
+    }
+
+    formatValuesLongString(){
+        this.lines[this.lastIndex() - 1]
+    }
+
+    addSubstringInLine(start, startIndex, substring){
+        let subLines = substring.split("\n");
+        substring = "";
+        for (let i = 0; i< subLines.length; i++){
+            substring += subLines[i].trim() + " ";
+        }
+        this.lines[startIndex] = trimEnd(this.lines[startIndex].substring(0, start) + substring);
+        this.removeLines(startIndex);
+    }
+
+    removeLines(startIndex){
+        let length = this.lines.length;
+        for (let i = startIndex + 1; i < length; i++){
+            this.lines.pop();
         }
     }
 

@@ -821,13 +821,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	// "BEGIN",
 	"CONNECT BY", "USING", "DECLARE", "DELETE FROM", "DELETE",
 	// "END",
-	"MERGE", "EXCEPT", "EXCEPTION", "FETCH FIRST", "FROM", "GROUP BY", "HAVING", "INSERT INTO", "INTO", "INSERT", "INTERSECT", "LIMIT", "LOOP", "MODIFY", "CROSS JOIN", "OUTER JOIN", "RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN", "ORDER BY",
+	"MERGE", "EXCEPT", "EXCEPTION", "FETCH FIRST", "FROM", "GROUP BY", "SET", "HAVING", "INSERT INTO", "INTO", "INSERT", "INTERSECT", "LIMIT", "LOOP", "MODIFY", "CROSS JOIN", "OUTER JOIN", "RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN", "ORDER BY",
 	// "ORDER",
-	"SELECT", "SET CURRENT SCHEMA", "SET SCHEMA",
+	"SELECT", //"SET CURRENT SCHEMA", "SET SCHEMA", 
 	// "SET", 
 	"START WITH", "UNION ALL", "UNION",
 	// "UPDATE",
-	"VALUES", "WHERE"];
+	"VALUES", "WHERE", "UPDATE"
+	// "WHEN",
+	// "AND"
+	];
 
 	var reservedNewlineWords = [
 	// "AND",
@@ -1628,8 +1631,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.inlineReservedWord = ["order", "group"];
 	        this.indents = [];
 	        this.lines = [""];
-	        this.startBlock = ["select", "begin", "create", "alter", "insert", //"update", 
-	        "drop", "merge"];
+	        this.startBlock = ["select", "begin", "create", "alter", "insert", "update", "drop", "merge"];
 	        this.logicalOperators = ["or", "xor", "and"];
 	    }
 
@@ -1817,6 +1819,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Formatter.prototype.formatLineByLength = function formatLineByLength(line) {
 
+	        console.log(line);
 	        var originQuery = this.query;
 	        var maxCleanLineLength = 60;
 	        var last = line.trim();
@@ -1837,7 +1840,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            first = split[i];
 	        }
-
 	        var lastWithoutSpace = this.getWordInOneStyle(last);
 	        var index = this.getOriginStringStartIndex(first, lastWithoutSpace);
 	        if (index == -1) {
@@ -1929,7 +1931,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.query = this.query.substring(index);
 	        while (index != this.getWordInOneStyle(this.query).indexOf(lastWithoutSpace) && index != -1) {
 	            index = this.query.indexOf(first);
-	            this.query = this.query.substring(index);
+	            this.query = this.query.substring(index + 1);
 	            index = this.query.indexOf(first);
 	        }
 	        return index;
@@ -2077,6 +2079,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                break;
 	            }
 	        }
+	        var firstInStartLine = this.lines[startIndex].replaceAll(/\(|\)/g, " ").trim().split(" ")[0].trim();
 	        var first = substring.trim().split(" ")[0].replace(/\(/, "").trim();
 	        if (this.startBlock.includes(first)) {
 	            this.indents.pop();
@@ -2090,18 +2093,53 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.indents.pop();
 	            }
 	        } else {
-	            if (!this.reservedWords.includes(first) && substring.match(/.* (and|or|xor|not) .*/) == null) {
-	                var subLines = substring.split("\n");
-	                substring = "";
-	                for (var _i3 = 0; _i3 < subLines.length; _i3++) {
-	                    substring += subLines[_i3].trim() + " ";
+	            if (firstInStartLine == "insert" || firstInStartLine == "values") {
+	                if (firstInStartLine == "values") {
+	                    this.lines[startIndex] = this.lines[startIndex].replace("values(", "values (");
 	                }
-	                this.lines[startIndex] = (0, _trimEnd2["default"])(this.lines[startIndex].substring(0, start) + substring);
-	                var length = this.lines.length;
-	                for (var _i4 = startIndex + 1; _i4 < length; _i4++) {
-	                    this.lines.pop();
+	                if (substring.split(",").length > 3 || substring.length > 30) {
+	                    this.removeLines(startIndex);
+	                    if (firstInStartLine == "values") {
+	                        var ll = this.lines[this.lastIndex() - 1];
+	                        this.lines[this.lastIndex() - 1] = ll.substring(0, ll.length - 2);
+	                        this.lines[startIndex] = this.lines[startIndex].replace("values", ") values");
+	                    }
+	                    var fromIdx = this.lines[this.lastIndex()].indexOf(firstInStartLine);
+	                    this.lines[startIndex] = this.lines[startIndex].substring(0, this.lines[startIndex].indexOf("(", fromIdx + 1) + 1);
+	                    var split = substring.split(", ");
+	                    split[0] = split[0].substring(1);
+	                    var indent = this.indents[this.indents.length - 2].indent;
+	                    for (var _i3 = 0; _i3 < split.length; _i3++) {
+	                        this.lines.push((0, _repeat2["default"])(" ", indent + 4) + split[_i3].trim() + ",");
+	                    }
+	                    // this.lines[this.lastIndex()] = this.getLastString().substring(0, this.getLastString().length - 2);
+	                } else {
+	                    this.addSubstringInLine(start, startIndex, substring);
 	                }
+	            } else if (!this.reservedWords.includes(first) && substring.match(/.* (and|or|xor|not) .*/) == null) {
+	                this.addSubstringInLine(start, startIndex, substring);
 	            }
+	        }
+	    };
+
+	    Formatter.prototype.formatValuesLongString = function formatValuesLongString() {
+	        this.lines[this.lastIndex() - 1];
+	    };
+
+	    Formatter.prototype.addSubstringInLine = function addSubstringInLine(start, startIndex, substring) {
+	        var subLines = substring.split("\n");
+	        substring = "";
+	        for (var i = 0; i < subLines.length; i++) {
+	            substring += subLines[i].trim() + " ";
+	        }
+	        this.lines[startIndex] = (0, _trimEnd2["default"])(this.lines[startIndex].substring(0, start) + substring);
+	        this.removeLines(startIndex);
+	    };
+
+	    Formatter.prototype.removeLines = function removeLines(startIndex) {
+	        var length = this.lines.length;
+	        for (var i = startIndex + 1; i < length; i++) {
+	            this.lines.pop();
 	        }
 	    };
 
@@ -2237,6 +2275,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    NewFormatter.prototype.formatQuery = function formatQuery() {
+	        var originQuery = this.query;
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
 	            token.value = this.formatTextCase(token);
@@ -2295,7 +2334,56 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.formatWithSpaces(token);
 	                };
 	        }
-	        return this.lines.join("\n").trim();
+	        return this.addDevelopEmptyLines(originQuery, this.lines.join("\n").trim());
+	        // return this.lines.join("\n").trim();
+	    };
+
+	    NewFormatter.prototype.addDevelopEmptyLines = function addDevelopEmptyLines(origin, query) {
+	        var format = "";
+	        var split = origin.split("\n");
+	        for (var i = 0; i < split.length; i++) {
+	            if (split[i].trim() == "") {
+	                var spaceCount = 1;
+	                while (i < split.length && split[i].trim() == "") {
+	                    spaceCount++;
+	                    i++;
+	                }
+	                if (spaceCount > 1) {
+	                    format += "\n";
+	                }
+	                i--;
+	            } else {
+	                for (var j = 0; j < split[i].length; j++) {
+	                    var char = split[i][j];
+	                    if (char != " ") {
+	                        var index = query.indexOf(char);
+	                        var idx1 = query.indexOf(char.toLowerCase());
+	                        if (index < 0) {
+	                            index = idx1;
+	                        } else if (index > idx1 && idx1 != -1) {
+	                            index = idx1;
+	                        }
+	                        var ss = query.substring(0, index + 1);
+	                        format += ss;
+	                        query = query.substring(index + 1);
+	                    }
+	                }
+	            }
+	        }
+	        return this.removeDupticateEmptyLine(format);
+	    };
+
+	    NewFormatter.prototype.removeDupticateEmptyLine = function removeDupticateEmptyLine(query) {
+	        var split = query.split("\n");
+	        for (var i = split.length - 1; i >= 1; i--) {
+	            if (split[i].trim() == "" && split[i - 1].trim() == "") {
+	                for (var j = i; j < split.length - 1; j++) {
+	                    split[j] = split[j + 1];
+	                }
+	                split.pop();
+	            }
+	        }
+	        return split.join("\n");
 	    };
 
 	    NewFormatter.prototype.formatWhen = function formatWhen(token) {
@@ -2845,10 +2933,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    NewFormatter.prototype.formatTextCase = function formatTextCase(token) {
-	        // console.log(token.value);
-	        // console.log(token.value);
-	        // console.log(this.getLastString());
-	        // console.log(token.value);
 	        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || token.type === _tokenTypes2["default"].BLOCK_COMMENT || token.type === _tokenTypes2["default"].LINE_COMMENT || token.value.startsWith("'")) {
 	            return token.value;
 	        } else {

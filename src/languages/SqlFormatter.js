@@ -61,6 +61,7 @@ const reservedToplevelWords = [
     "FETCH FIRST", 
     "FROM",
     "GROUP BY",
+    "SET",
     "HAVING",
     "INSERT INTO",
     "INTO", 
@@ -70,13 +71,14 @@ const reservedToplevelWords = [
     "CROSS JOIN", "OUTER JOIN","RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN",
     "ORDER BY",
     // "ORDER",
-    "SELECT", "SET CURRENT SCHEMA", "SET SCHEMA", 
+    "SELECT", //"SET CURRENT SCHEMA", "SET SCHEMA", 
     // "SET", 
     "START WITH",
     "UNION ALL", "UNION", 
     // "UPDATE",
     "VALUES",
     "WHERE", 
+    "UPDATE"
     // "WHEN",
     // "AND"
 ];

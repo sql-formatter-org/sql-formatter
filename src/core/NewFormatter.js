@@ -30,6 +30,7 @@ export default class NewFormatter {
     }
 
     formatQuery(){
+        let originQuery = this.query;
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
             token.value = this.formatTextCase(token);
@@ -108,7 +109,56 @@ export default class NewFormatter {
                 this.formatWithSpaces(token);
             };
         }
-        return this.lines.join("\n").trim();
+        return this.addDevelopEmptyLines(originQuery, this.lines.join("\n").trim());
+        // return this.lines.join("\n").trim();
+    }
+
+    addDevelopEmptyLines(origin, query){
+        let format = "";
+        let split = origin.split("\n");
+        for (let i = 0; i < split.length; i++){
+            if (split[i].trim() == ""){
+                let spaceCount = 1;
+                while(i < split.length && split[i].trim() == ""){
+                    spaceCount++;
+                    i++;
+                }
+                if (spaceCount > 1){
+                    format += "\n";
+                }
+                i--;
+            } else {
+                 for (let j = 0; j < split[i].length; j++){
+                    let char = split[i][j];
+                    if (char != " "){
+                        let index = query.indexOf(char);
+                        let idx1 = query.indexOf(char.toLowerCase());
+                        if (index < 0) {
+                            index = idx1;
+                        } else if (index > idx1 && idx1 != -1){
+                            index = idx1;
+                        }
+                        let ss = query.substring(0, index + 1);
+                        format += ss;
+                        query = query.substring(index + 1);
+                    }
+                 }
+            }
+        }
+        return this.removeDupticateEmptyLine(format);
+    }
+
+    removeDupticateEmptyLine(query){
+        let split = query.split("\n");
+        for (let i = split.length - 1; i >= 1; i--){
+            if (split[i].trim() == "" && split[i - 1].trim() == ""){
+                for (let j = i; j < split.length - 1; j++){
+                    split[j] = split[j + 1];
+                }
+                split.pop();
+            }
+        }
+        return split.join("\n");
     }
 
     formatWhen(token){
@@ -674,10 +724,6 @@ export default class NewFormatter {
     }
 
     formatTextCase(token){
-        // console.log(token.value);
-        // console.log(token.value);
-        // console.log(this.getLastString());
-        // console.log(token.value);
         if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || 
             token.type === tokenTypes.BLOCK_COMMENT ||
             token.type === tokenTypes.LINE_COMMENT ||
