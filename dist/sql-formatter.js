@@ -841,7 +841,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"JOIN",
 	// "LEFT JOIN", "LEFT OUTER JOIN",
 	// "OR", 
-	"OUTER APPLY",
+	"OUTER APPLY", "THEN",
 	// "OUTER JOIN","RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN",
 	"WHEN", "UNION"];
 

@@ -93,6 +93,7 @@ const reservedNewlineWords = [
     // "LEFT JOIN", "LEFT OUTER JOIN",
     // "OR", 
     "OUTER APPLY", 
+    "THEN",
     // "OUTER JOIN","RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN",
     "WHEN",
     "UNION",
