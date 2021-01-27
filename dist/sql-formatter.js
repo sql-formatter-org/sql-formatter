@@ -1703,6 +1703,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Formatter.prototype.formatLogicalOperators = function formatLogicalOperators(token) {
 	        this.trimEndLastString();
 	        var last = this.getLastString();
+	        if (last.trim() == ")") {
+	            this.lines[this.lastIndex() - 1] += ")";
+	            this.lines.pop();
+	            last = this.getLastString();
+	        }
 	        var words = last.trim().split(" ");
 	        var indent = this.getLogicalIndent(token.value, words[0]);
 	        if (this.logicalOperators.includes(words[0]) && words[1].startsWith("(") && !words[words.length - 1].endsWith(")")) {
@@ -2030,9 +2035,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!this.getLastString().endsWith(" ")) {
 	                this.lines[this.lastIndex()] += " ";
 	            }
-	        } else if (this.getLastString().trim() != "") {
-	            // this.trimEndLastString();
 	        }
+	        // else if (this.getLastString().trim() != ""){
+	        //     // this.trimEndLastString();
+	        // }
 	        this.indents.push({ token: token, indent: this.getLastString().length });
 	        this.lines[this.lastIndex()] += token.value;
 	    };
