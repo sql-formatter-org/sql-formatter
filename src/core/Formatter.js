@@ -79,7 +79,7 @@ export default class Formatter {
             };
         }
 
-        this.query = originalQuery;
+        // this.query = originalQuery;
 
         for (let i = 0; i < this.lines.length; i++){
             this.lines[i] = this.formatLineByLength(this.lines[i]);
@@ -234,6 +234,7 @@ export default class Formatter {
         }
         let lastWithoutSpace = this.getWordInOneStyle(last);
         let index = this.getOriginStringStartIndex(first, lastWithoutSpace);
+
         if (index == -1){
             return line;
         }
@@ -325,7 +326,7 @@ export default class Formatter {
         while(index != this.getWordInOneStyle(this.query).indexOf(lastWithoutSpace) && index != -1){
             index = this.query.indexOf(first);
             this.query = this.query.substring(index + 1);
-            index = this.query.indexOf(first);
+            // index = this.query.indexOf(first);
         }
         return index;
     }

@@ -20,6 +20,7 @@ export default class NewFormatter {
         this.indentsKeyWords = [];
         this.lastIndentKey = {key: "", name: "", indent: 0};
         this.lineSize = 80;
+        this.booleanOperators = ["and", "or", "xor"];
     }
 
     format(query) {
@@ -65,6 +66,9 @@ export default class NewFormatter {
             else if (token.type === tokenTypes.PLACEHOLDER) {
                 this.formatPlaceholder(token);
             } 
+            else if (this.booleanOperators.includes(token.value)){
+                this.formatBooleanExpressions(token);
+            }
             else if (token.value === ")"){
                 this.formatCloseBkt(token);
             }
@@ -111,6 +115,14 @@ export default class NewFormatter {
         }
         return this.addDevelopEmptyLines(originQuery, this.lines.join("\n").trim());
         // return this.lines.join("\n").trim();
+    }
+
+    formatBooleanExpressions(token){
+        let last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+        if (last.key == "case" || last.key == "if"){
+            this.addNewLine(this.indentCount);
+        }
+        this.lines[this.lastIndex()] += token.value;
     }
 
     addDevelopEmptyLines(origin, query){

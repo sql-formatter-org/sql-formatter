@@ -1693,7 +1693,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            };
 	        }
 
-	        this.query = originalQuery;
+	        // this.query = originalQuery;
 
 	        for (var _i = 0; _i < this.lines.length; _i++) {
 	            this.lines[_i] = this.formatLineByLength(this.lines[_i]);
@@ -1846,6 +1846,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        var lastWithoutSpace = this.getWordInOneStyle(last);
 	        var index = this.getOriginStringStartIndex(first, lastWithoutSpace);
+
 	        if (index == -1) {
 	            return line;
 	        }
@@ -1936,7 +1937,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        while (index != this.getWordInOneStyle(this.query).indexOf(lastWithoutSpace) && index != -1) {
 	            index = this.query.indexOf(first);
 	            this.query = this.query.substring(index + 1);
-	            index = this.query.indexOf(first);
+	            // index = this.query.indexOf(first);
 	        }
 	        return index;
 	    };
@@ -2265,6 +2266,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.indentsKeyWords = [];
 	        this.lastIndentKey = { key: "", name: "", indent: 0 };
 	        this.lineSize = 80;
+	        this.booleanOperators = ["and", "or", "xor"];
 	    }
 
 	    NewFormatter.prototype.format = function format(query) {
@@ -2303,6 +2305,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.formatClosingParentheses(token, i);
 	                } else if (token.type === _tokenTypes2["default"].PLACEHOLDER) {
 	                    this.formatPlaceholder(token);
+	                } else if (this.booleanOperators.includes(token.value)) {
+	                    this.formatBooleanExpressions(token);
 	                } else if (token.value === ")") {
 	                    this.formatCloseBkt(token);
 	                } else if (token.value === "begin") {
@@ -2336,6 +2340,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return this.addDevelopEmptyLines(originQuery, this.lines.join("\n").trim());
 	        // return this.lines.join("\n").trim();
+	    };
+
+	    NewFormatter.prototype.formatBooleanExpressions = function formatBooleanExpressions(token) {
+	        var last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+	        if (last.key == "case" || last.key == "if") {
+	            this.addNewLine(this.indentCount);
+	        }
+	        this.lines[this.lastIndex()] += token.value;
 	    };
 
 	    NewFormatter.prototype.addDevelopEmptyLines = function addDevelopEmptyLines(origin, query) {
