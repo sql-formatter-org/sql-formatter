@@ -825,7 +825,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// "ORDER",
 	"SELECT", //"SET CURRENT SCHEMA", "SET SCHEMA", 
 	// "SET", 
-	"START WITH", "UNION ALL", "UNION",
+	"START WITH", "JOIN", "UNION ALL", "UNION",
 	// "UPDATE",
 	"VALUES", "WHERE", "UPDATE"
 	// "WHEN",
@@ -838,7 +838,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// "CROSS JOIN", "OUTER JOIN","RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN",
 	"ELSE", "END",
 	// "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN",
-	"JOIN",
+	// "JOIN",
 	// "LEFT JOIN", "LEFT OUTER JOIN",
 	// "OR", 
 	"OUTER APPLY", "THEN",
