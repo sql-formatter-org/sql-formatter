@@ -35,9 +35,9 @@ export default class NewFormatter {
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
             token.value = this.formatTextCase(token);
-            if (token.value.startsWith(".")){
-                this.lines[this.lastIndex()] = trimEnd(this.getLastString());
-            }
+            // if (token.value.startsWith(".")){
+            //     this.lines[this.lastIndex()] = trimEnd(this.getLastString());
+            // }
             if (token.type === tokenTypes.WHITESPACE) {
                 if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")
                  && this.getLastString().trim() != ""){
@@ -93,7 +93,7 @@ export default class NewFormatter {
             else if (token.value === ";") {
                 this.formatQuerySeparator(token);
             } 
-            else if (token.value.startsWith("exception")){
+            else if (token.value == "exception" || token.value == "exceptions"){
                 this.formatException(token, i);
             } 
             else if (token.value == "else"){
@@ -193,9 +193,10 @@ export default class NewFormatter {
     formatLoop(token, index){
         let next = this.getNextValidWord(index);
         if (next != ";"){
-            this.addNewLine(this.indentCount);
+            // this.addNewLine(this.indentCount);
             this.lines[this.lastIndex()] += token.value;
-            this.incrementIndent(token.value, "");
+            this.indentsKeyWords[this.indentsKeyWords.length - 1].key = "loop";
+            // this.incrementIndent(token.value, "");
             this.addNewLine(this.indentCount);
         } else {
             this.lines[this.lastIndex()] += token.value;
@@ -375,6 +376,7 @@ export default class NewFormatter {
                 }
             }
         }
+        let ignore = ["if", "elsif", "while", "for"];
         let first = this.getFirstWord(substring);
         if (first == "create"){
             if (!this.prevLineIsComment() && this.getLastString().trim() != ""){
@@ -388,7 +390,7 @@ export default class NewFormatter {
             this.lines[this.lastIndex()] += token.value;
             this.addNewLine(this.indentCount);
         } else if (
-            (this.openParens.includes(first.toUpperCase()) && first != "if" && first != "elsif") || 
+            (this.openParens.includes(first.toUpperCase()) && !ignore.includes(first)) || 
             (this.getLastString().includes("return") && !this.getLastString().endsWith(";"))
             ){
             if (!this.prevLineIsComment() && this.getLastString().trim() != ""){
@@ -416,14 +418,14 @@ export default class NewFormatter {
         example:
         procedure name(val);
         */
-        let startBlock = ["cursor", "procedure", "function", "pragma"];
+        let startBlock = ["cursor", "procedure", "function", "forall", "for", "while"];
         let first = this.getFirstWord(this.getLastString());
-        if ((this.openParens.includes(first.toUpperCase()) 
-            && first != "if") || 
-            this.getLastString().includes("return")){
-            if (this.indentsKeyWords[this.indentsKeyWords.length - 1] != undefined && 
-                startBlock.includes(this.indentsKeyWords[this.indentsKeyWords.length - 1].key)
-                ){
+        let lIndent = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+        if (lIndent != undefined && lIndent.key == "forall"){
+            this.decrementIndent(); 
+        } else if ((this.openParens.includes(first.toUpperCase()) 
+            && first != "if") || this.getLastString().includes("return")){
+            if (lIndent != undefined && startBlock.includes(lIndent.key)){
                 this.decrementIndent(); 
             }
         } else if (this.getLastString().endsWith(")")){
@@ -487,7 +489,7 @@ export default class NewFormatter {
 
     formatOpeningParentheses(token, index){
         let next = this.getNextValidWord(index);
-        let startBlock = ["cursor", "procedure", "function"];
+        let startBlock = ["cursor", "procedure", "function", "forall", "for", "while"];
         if (next != ";"){
             let lastIndent = this.indentsKeyWords[this.indentsKeyWords.length - 1];
             if (!this.prevLineIsComment()){
@@ -496,7 +498,7 @@ export default class NewFormatter {
                 }
                 this.addNewLine(this.indentCount);
             }
-            if (token.value == "if"){
+            if (token.value == "if" || token.value.startsWith("for") || token.value == "while"){
                 while(this.getLastString().trim() == ""){
                     this.lines.pop();
                 }

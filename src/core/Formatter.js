@@ -57,6 +57,8 @@ export default class Formatter {
                 this.previousReservedWord = token;
             } else if (this.logicalOperators.includes(token.value)){
                 this.formatLogicalOperators(token);
+            } else if (token.value == "into"){
+                this.formatInto(token);
             } else if (token.type === tokenTypes.RESERVED) {
                 this.formatWithSpaces(token);
                 this.previousReservedWord = token;
@@ -83,6 +85,14 @@ export default class Formatter {
 
         for (let i = 0; i < this.lines.length; i++){
             this.lines[i] = this.formatLineByLength(this.lines[i]);
+        }
+    }
+
+    formatInto(token){
+        if (this.getLastString().includes("insert") || this.getLastString().includes("returning")){
+            this.lines[this.lastIndex()] += token.value;
+        } else {
+            this.formatTopLeveleReservedWord(token);
         }
     }
 
@@ -502,7 +512,7 @@ export default class Formatter {
                     this.removeLines(startIndex);
                     if (firstInStartLine == "values"){
                         let ll = this.lines[this.lastIndex() - 1];
-                        this.lines[this.lastIndex() - 1] = ll.substring(0, ll.length - 2);
+                        this.lines[this.lastIndex() - 1] = ll.substring(0, ll.length - 1);
                         this.lines[startIndex] = this.lines[startIndex].replace("values", ") values");
                     }
                     let fromIdx = this.lines[this.lastIndex()].indexOf(firstInStartLine);
@@ -511,8 +521,10 @@ export default class Formatter {
                     let split = substring.split(", ");
                     split[0] = split[0].substring(1);
                     let indent = this.indents[this.indents.length - 2].indent;
-                    for (let  i = 0; i < split.length; i++){
-                        this.lines.push(repeat(" ", indent + 4) + split[i].trim() + ",");
+                    this.lines.push(repeat(" ", indent + 4) + split[0].trim());
+                    for (let  i = 1; i < split.length; i++){
+                        this.lines[this.lastIndex()] += ",";
+                        this.lines.push(repeat(" ", indent + 4) + split[i].trim());
                     }
                 } else {
                     this.addSubstringInLine(start, startIndex, substring);

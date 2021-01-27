@@ -5,7 +5,8 @@ const reservedWords = [
     "A", "ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG",
     "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE", "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND",
     "BULK", "BY", "BYTE",
-    "C", "CALL", "CALLING", "CASCADE", "CASE", "CHAR_BASE", "CHAR", "CHARACTER", "CHARSET", "CHARSETFORM", "CHARSETID",
+    // "C", 
+    "CALL", "CALLING", "CASCADE", "CASE", "CHAR_BASE", "CHAR", "CHARACTER", "CHARSET", "CHARSETFORM", "CHARSETID",
     "CHECK", "CLOB_BASE", "CLONE", "CLOSE", "CLUSTER", "CLUSTERS", "COALESCE", "COLAUTH", "COLLECT", "COLUMNS", "COMMENT",
     "COMMIT", "COMMITTED", "COMPILED", "COMPRESS", "CONNECT", "CONSTANT", "CONSTRUCTOR", "CONTEXT", "CONTINUE", "CONVERT",
     // "COUNT", 
@@ -63,13 +64,14 @@ const reservedToplevelWords = [
     "GROUP BY",
     "SET",
     "HAVING",
-    "INSERT INTO",
-    "INTO", 
+    // "INSERT INTO",
+    // "INTO", 
     "INSERT", "INTERSECT",
     "LIMIT", "LOOP",
     "MODIFY",
     "CROSS JOIN", "OUTER JOIN","RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN",
     "ORDER BY",
+     "RETURNING",
     // "ORDER",
     "SELECT", //"SET CURRENT SCHEMA", "SET SCHEMA", 
     // "SET", 
@@ -130,7 +132,7 @@ export default class PlSqlFormatter {
                 indexedPlaceholderTypes: ["?"],
                 namedPlaceholderTypes: [":"],
                 lineCommentTypes: ["--"],
-                specialWordChars: ["_", "$", "#",  ".", "@"]
+                specialWordChars: ["_", "$", "#",  ".", "@", "%"]
             });
         }
         return new Formatter(this.cfg, tokenizer, reservedWords).format(query);

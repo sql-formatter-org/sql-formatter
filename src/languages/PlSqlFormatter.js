@@ -7,7 +7,8 @@ const reservedWords = [
     "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE", 
     "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND",
     "BULK", "BY", "BYTE",
-    "C", "CALL", "CALLING", "CASCADE", "CASE", "CHAR_BASE", "CHAR",
+    // "C", 
+    "CALL", "CALLING", "CASCADE", "CASE", "CHAR_BASE", "CHAR",
     "CHARACTER", "CHARSET", "CHARSETFORM", "CHARSETID",
     "CHECK", "CLOB_BASE", "CLONE", "CLOSE", "CLUSTER", "CLUSTERS", 
     "COALESCE", "COLAUTH", "COLLECT", "COLUMNS", "COMMENT",
@@ -103,10 +104,11 @@ const reservedNewlineWords = [
 const openParens = [
     "CREATE", //"BEGIN",
     "FUNCTION", "CURSOR", "IF", 
-    //"FOR",
+    "FORALL",
+    "FOR",
      "PROCEDURE", 
      // "LOOP",
-    // "WHILE", 
+    "WHILE", 
     // "PRAGMA", 
     "CASE",
 ]
