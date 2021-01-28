@@ -303,7 +303,7 @@ export default class MariaDbFormatter extends Formatter {
       namedPlaceholderTypes: [],
       lineCommentTypes: ['--', '#'],
       specialWordChars: ['@'],
-      operators: [':=', '<<', '>>', '!=', '<=>', '&&', '||'],
+      operators: [':=', '<<', '>>', '!=', '<>', '<=>', '&&', '||'],
     });
   }
 }

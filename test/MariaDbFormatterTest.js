@@ -19,6 +19,7 @@ describe('MariaDbFormatter', () => {
 
   it('formats MariaDb operators', () => {
     expect(format('foo != bar')).toBe('foo != bar');
+    expect(format('foo <> bar')).toBe('foo <> bar');
     expect(format('foo <= bar')).toBe('foo <= bar');
     expect(format('foo >= bar')).toBe('foo >= bar');
     expect(format('foo <=> bar')).toBe('foo <=> bar');
