@@ -1660,6 +1660,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
 	            token.value = this.formatTextCase(token);
+	            if (token.value.startsWith(".") && token.value != ".." && this.getLastString().endsWith(") ")) {
+	                this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString());
+	            }
 	            if (token.type === _tokenTypes2["default"].WHITESPACE) {
 	                if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")) {
 	                    this.lines[this.lastIndex()] += " ";
@@ -1708,7 +1711,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatInto = function formatInto(token) {
-	        if (this.getLastString().includes("insert") || this.getLastString().includes("returning")) {
+	        if (this.getLastString().includes("insert") || this.getLastString().includes("returning") || this.getLastString().includes("merge")) {
 	            this.lines[this.lastIndex()] += token.value;
 	        } else {
 	            this.formatTopLeveleReservedWord(token);
@@ -2298,9 +2301,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
 	            token.value = this.formatTextCase(token);
-	            // if (token.value.startsWith(".")){
-	            //     this.lines[this.lastIndex()] = trimEnd(this.getLastString());
-	            // }
+	            if (token.value.startsWith(".") && token.value != ".." && this.getLastString().endsWith(") ")) {
+	                this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString());
+	            }
 	            if (token.type === _tokenTypes2["default"].WHITESPACE) {
 	                if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(") && this.getLastString().trim() != "") {
 	                    this.lines[this.lastIndex()] += " ";
@@ -2351,12 +2354,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.formatWhen(token);
 	                } else if (token.value == "as" || token.value == "is") {
 	                    this.formatAsIs(token);
+	                } else if (token.value == "return") {
+	                    this.formatReturn(token);
 	                } else {
 	                    this.formatWithSpaces(token);
 	                };
 	        }
 	        return this.addDevelopEmptyLines(originQuery, this.lines.join("\n").trim());
 	        // return this.lines.join("\n").trim();
+	    };
+
+	    NewFormatter.prototype.formatReturn = function formatReturn(token) {
+	        var first = this.getFirstWord(this.getLastString());
+	        var last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+	        if (this.openParens.includes(first) && this.getLastString().split(",").length > 1 || last != undefined) {
+	            this.addNewLine(this.indentCount);
+	        }
+	        this.lines[this.lastIndex()] += token.value;
 	    };
 
 	    NewFormatter.prototype.formatBooleanExpressions = function formatBooleanExpressions(token) {

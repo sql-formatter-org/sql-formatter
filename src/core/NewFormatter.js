@@ -35,9 +35,9 @@ export default class NewFormatter {
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
             token.value = this.formatTextCase(token);
-            // if (token.value.startsWith(".")){
-            //     this.lines[this.lastIndex()] = trimEnd(this.getLastString());
-            // }
+            if (token.value.startsWith(".") && token.value != ".." && this.getLastString().endsWith(") ")){
+                this.lines[this.lastIndex()] = trimEnd(this.getLastString());
+            }
             if (token.type === tokenTypes.WHITESPACE) {
                 if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")
                  && this.getLastString().trim() != ""){
@@ -109,12 +109,25 @@ export default class NewFormatter {
             else if (token.value =="as" || token.value == "is"){
                 this.formatAsIs(token);
             } 
-            else{
+            else if (token.value == "return"){
+                this.formatReturn(token);
+            }
+            else {
                 this.formatWithSpaces(token);
             };
         }
         return this.addDevelopEmptyLines(originQuery, this.lines.join("\n").trim());
         // return this.lines.join("\n").trim();
+    }
+
+    formatReturn(token){
+        let first = this.getFirstWord(this.getLastString());
+        let last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+        if ((this.openParens.includes(first) && this.getLastString().split(",").length > 1) ||
+            (last != undefined)){
+            this.addNewLine(this.indentCount);
+        }
+        this.lines[this.lastIndex()] += token.value;
     }
 
     formatBooleanExpressions(token){

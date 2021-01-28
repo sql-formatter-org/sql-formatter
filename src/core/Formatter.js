@@ -41,6 +41,9 @@ export default class Formatter {
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
             token.value = this.formatTextCase(token);
+            if (token.value.startsWith(".") && token.value != ".." && this.getLastString().endsWith(") ")){
+                this.lines[this.lastIndex()] = trimEnd(this.getLastString());
+            }
             if (token.type === tokenTypes.WHITESPACE) {
                 if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")){
                     this.lines[this.lastIndex()] += " ";
@@ -89,7 +92,8 @@ export default class Formatter {
     }
 
     formatInto(token){
-        if (this.getLastString().includes("insert") || this.getLastString().includes("returning")){
+        if (this.getLastString().includes("insert") || this.getLastString().includes("returning") ||
+            this.getLastString().includes("merge")){
             this.lines[this.lastIndex()] += token.value;
         } else {
             this.formatTopLeveleReservedWord(token);
