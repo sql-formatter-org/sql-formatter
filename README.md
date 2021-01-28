@@ -6,6 +6,7 @@ It started as a port of a [PHP Library][], but has since considerably diverged.
 SQL formatter supports the following dialects:
 
 - **sql** - [Standard SQL][]
+- **mariadb** - [MariaDB][]
 - **postgresql** - [PostgreSQL][]
 - **db2** - [IBM DB2][]
 - **pl/sql** - [Oracle PL/SQL][]
@@ -156,3 +157,4 @@ npm run check
 [amazon redshift]: https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 [spark]: https://spark.apache.org/docs/latest/api/sql/index.html
 [postgresql]: https://www.postgresql.org/
+[mariadb]: https://mariadb.com/
