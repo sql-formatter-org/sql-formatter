@@ -5,6 +5,7 @@ import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
+import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 
 describe('PostgreSqlFormatter', () => {
@@ -17,6 +18,7 @@ describe('PostgreSqlFormatter', () => {
   supportsAlterTable(format);
   supportsStrings(format, ['""', "''", 'U&""', "U&''", '$$']);
   supportsBetween(format);
+  supportsSchema(format);
 
   it('supports $placeholders', () => {
     const result = format('SELECT $1, $2 FROM tbl');

@@ -6,6 +6,7 @@ import supportsAlterTableModify from './features/alterTableModify';
 import supportsBetween from './features/between';
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
+import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 
 describe('PlSqlFormatter', () => {
@@ -18,6 +19,7 @@ describe('PlSqlFormatter', () => {
   supportsAlterTableModify(format);
   supportsStrings(format, ['""', "''", '``']);
   supportsBetween(format);
+  supportsSchema(format);
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`

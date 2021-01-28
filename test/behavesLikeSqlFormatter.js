@@ -26,16 +26,6 @@ export default function behavesLikeSqlFormatter(format) {
     expect(format(';')).toBe(';');
   });
 
-  it('formats simple SET SCHEMA queries', () => {
-    const result = format('SET SCHEMA schema1; SET CURRENT SCHEMA schema2;');
-    expect(result).toBe(dedent`
-      SET SCHEMA
-        schema1;
-      SET CURRENT SCHEMA
-        schema2;
-    `);
-  });
-
   it('formats simple SELECT query', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;');
     expect(result).toBe(dedent`

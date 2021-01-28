@@ -5,6 +5,7 @@ import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
+import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 
 describe('SparkSqlFormatter', () => {
@@ -16,6 +17,7 @@ describe('SparkSqlFormatter', () => {
   supportsAlterTable(format);
   supportsStrings(format, ['""', "''", '``']);
   supportsBetween(format);
+  supportsSchema(format);
 
   it('formats WINDOW specification as top level', () => {
     const result = format(
