@@ -1,5 +1,6 @@
 import Db2Formatter from './languages/Db2Formatter';
 import MariaDbFormatter from './languages/MariaDbFormatter';
+import MySqlFormatter from './languages/MySqlFormatter';
 import N1qlFormatter from './languages/N1qlFormatter';
 import PlSqlFormatter from './languages/PlSqlFormatter';
 import PostgreSqlFormatter from './languages/PostgreSqlFormatter';
@@ -10,6 +11,7 @@ import StandardSqlFormatter from './languages/StandardSqlFormatter';
 const formatters = {
   db2: Db2Formatter,
   mariadb: MariaDbFormatter,
+  mysql: MySqlFormatter,
   n1ql: N1qlFormatter,
   'pl/sql': PlSqlFormatter,
   plsql: PlSqlFormatter,

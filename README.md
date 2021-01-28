@@ -7,6 +7,7 @@ SQL formatter supports the following dialects:
 
 - **sql** - [Standard SQL][]
 - **mariadb** - [MariaDB][]
+- **mysql** - [MySQL][]
 - **postgresql** - [PostgreSQL][]
 - **db2** - [IBM DB2][]
 - **pl/sql** - [Oracle PL/SQL][]
@@ -158,3 +159,4 @@ npm run check
 [spark]: https://spark.apache.org/docs/latest/api/sql/index.html
 [postgresql]: https://www.postgresql.org/
 [mariadb]: https://mariadb.com/
+[mysql]: https://www.mysql.com/
