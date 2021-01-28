@@ -37,4 +37,24 @@ describe('MariaDbFormatter', () => {
         b # comment
     `);
   });
+
+  it('supports @variables', () => {
+    expect(format('SELECT @foo, @bar')).toBe(dedent`
+      SELECT
+        @foo,
+        @bar
+    `);
+  });
+
+  it('supports setting variables: @var :=', () => {
+    expect(format('SET @foo := (SELECT * FROM tbl);')).toBe(dedent`
+      SET
+        @foo := (
+          SELECT
+            *
+          FROM
+            tbl
+        );
+    `);
+  });
 });
