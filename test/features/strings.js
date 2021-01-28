@@ -49,4 +49,18 @@ export default function supportsStrings(format, stringTypes = []) {
       expect(format('$$foo \n bar$$')).toBe('$$foo \n bar$$');
     });
   }
+
+  if (stringTypes.includes('[]')) {
+    it('supports [bracket-quoted identifiers]', () => {
+      expect(format('[foo JOIN bar]')).toBe('[foo JOIN bar]');
+      expect(format('[foo ]] JOIN bar]')).toBe('[foo ]] JOIN bar]');
+    });
+  }
+
+  if (stringTypes.includes("N''")) {
+    it('supports T-SQL unicode strings', () => {
+      expect(format("N'foo JOIN bar'")).toBe("N'foo JOIN bar'");
+      expect(format("N'foo \\' JOIN bar'")).toBe("N'foo \\' JOIN bar'");
+    });
+  }
 }
