@@ -10,7 +10,7 @@ import supportsBetween from './features/between';
 import supportsOperators from './features/operators';
 import supportsJoin from './features/join';
 
-describe('StandardSqlFormatter', () => {
+describe('TSqlFormatter', () => {
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'tsql' });
 
   behavesLikeSqlFormatter(format);
@@ -44,7 +44,7 @@ describe('StandardSqlFormatter', () => {
   // TODO: The following are duplicated from StandardSQLFormatter test
 
   it('formats INSERT without INTO', () => {
-    const result = sqlFormatter.format(
+    const result = format(
       "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
     );
     expect(result).toBe(dedent`
