@@ -362,7 +362,7 @@ const reservedNewlineWords = [
   'INTERLEAVED',
 ];
 
-export default class StandardSqlFormatter extends Formatter {
+export default class RedshiftFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedWords,
