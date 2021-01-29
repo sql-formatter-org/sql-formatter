@@ -134,13 +134,12 @@ export default function behavesLikeSqlFormatter(format) {
   });
 
   it('preserves case of keywords', () => {
-    const result = format('select distinct * frOM foo left join bar WHERe a > 1 and b = 3');
+    const result = format('select distinct * frOM foo WHERe a > 1 and b = 3');
     expect(result).toBe(dedent`
       select
         distinct *
       frOM
         foo
-        left join bar
       WHERe
         a > 1
         and b = 3
@@ -317,13 +316,13 @@ export default function behavesLikeSqlFormatter(format) {
   });
 
   it('formats top-level and newline multi-word reserved words with inconsistent spacing', () => {
-    const result = format('SELECT * FROM foo LEFT \t OUTER  \n JOIN bar ORDER \n BY blah');
+    const result = format('SELECT * FROM foo LEFT \t   \n JOIN bar ORDER \n BY blah');
     expect(result).toBe(dedent`
       SELECT
         *
       FROM
         foo
-        LEFT OUTER JOIN bar
+        LEFT JOIN bar
       ORDER BY
         blah
     `);
