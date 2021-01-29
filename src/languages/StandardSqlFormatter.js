@@ -328,11 +328,11 @@ export default class StandardSqlFormatter extends Formatter {
       reservedTopLevelWords,
       reservedNewlineWords,
       reservedTopLevelWordsNoIndent,
-      stringTypes: [`""`, "''", '``', '[]'],
+      stringTypes: [`""`, "''"],
       openParens: ['(', 'CASE'],
       closeParens: [')', 'END'],
       indexedPlaceholderTypes: ['?'],
-      namedPlaceholderTypes: ['@', ':'],
+      namedPlaceholderTypes: [],
       lineCommentTypes: ['#', '--'],
     });
   }

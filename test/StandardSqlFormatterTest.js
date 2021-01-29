@@ -17,7 +17,7 @@ describe('StandardSqlFormatter', () => {
   supportsCreateTable(format);
   supportsAlterTable(format);
   supportsAlterTableModify(format);
-  supportsStrings(format, ['""', "''", '``']);
+  supportsStrings(format, ['""', "''"]);
   supportsBetween(format);
   supportsSchema(format);
 
@@ -30,118 +30,6 @@ describe('StandardSqlFormatter', () => {
         Customers (ID, MoneyBalance, Address, City)
       VALUES
         (12, -123.4, 'Skagen 2111', 'Stv');
-    `);
-  });
-
-  it('recognizes [] strings', () => {
-    expect(format('[foo JOIN bar]')).toBe('[foo JOIN bar]');
-    expect(format('[foo ]] JOIN bar]')).toBe('[foo ]] JOIN bar]');
-  });
-
-  it('recognizes @variables', () => {
-    const result = format(
-      'SELECT @variable, @a1_2.3$, @\'var name\', @"var name", @`var name`, @[var name];'
-    );
-    expect(result).toBe(dedent`
-      SELECT
-        @variable,
-        @a1_2.3$,
-        @'var name',
-        @"var name",
-        @\`var name\`,
-        @[var name];
-    `);
-  });
-
-  it('replaces @variables with param values', () => {
-    const result = format(
-      "SELECT @variable, @a1_2.3$, @'var name', @\"var name\", @`var name`, @[var name], @'var\\name';",
-      {
-        params: {
-          variable: '"variable value"',
-          'a1_2.3$': "'weird value'",
-          'var name': "'var value'",
-          'var\\name': `'var\\ value'`,
-        },
-      }
-    );
-    expect(result).toBe(dedent`
-      SELECT
-        "variable value",
-        'weird value',
-        'var value',
-        'var value',
-        'var value',
-        'var value',
-        'var\\ value';
-    `);
-  });
-
-  it('recognizes :variables', () => {
-    const result = format(
-      'SELECT :variable, :a1_2.3$, :\'var name\', :"var name", :`var name`, :[var name];'
-    );
-    expect(result).toBe(dedent`
-      SELECT
-        :variable,
-        :a1_2.3$,
-        :'var name',
-        :"var name",
-        :\`var name\`,
-        :[var name];
-    `);
-  });
-
-  it('replaces :variables with param values', () => {
-    const result = format(
-      'SELECT :variable, :a1_2.3$, :\'var name\', :"var name", :`var name`,' +
-        " :[var name], :'escaped \\'var\\'', :\"^*& weird \\\" var   \";",
-      {
-        params: {
-          variable: '"variable value"',
-          'a1_2.3$': "'weird value'",
-          'var name': "'var value'",
-          "escaped 'var'": "'weirder value'",
-          '^*& weird " var   ': "'super weird value'",
-        },
-      }
-    );
-    expect(result).toBe(dedent`
-      SELECT
-        "variable value",
-        'weird value',
-        'var value',
-        'var value',
-        'var value',
-        'var value',
-        'weirder value',
-        'super weird value';
-    `);
-  });
-
-  it('recognizes ?[0-9]* placeholders', () => {
-    const result = format('SELECT ?1, ?25, ?;');
-    expect(result).toBe(dedent`
-      SELECT
-        ?1,
-        ?25,
-        ?;
-    `);
-  });
-
-  it('replaces ? numbered placeholders with param values', () => {
-    const result = format('SELECT ?1, ?2, ?0;', {
-      params: {
-        0: 'first',
-        1: 'second',
-        2: 'third',
-      },
-    });
-    expect(result).toBe(dedent`
-      SELECT
-        second,
-        third,
-        first;
     `);
   });
 
