@@ -305,10 +305,8 @@ const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'U
 
 const reservedNewlineWords = [
   'AND',
-  'CROSS APPLY',
   'ELSE',
   'OR',
-  'OUTER APPLY',
   'WHEN',
   'XOR',
   // joins
