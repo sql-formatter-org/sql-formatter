@@ -14,7 +14,13 @@
     "n1ql",
     "redshift",
     "spark",
-    "whitespace"
+    "whitespace",
+    "mysql",
+    "mariadb",
+    "postgresql",
+    "pl/sql",
+    "transact-sql",
+    "db2"
   ],
   "contributors": [
     "Adrien Pyke <adpyke@gmail.com>",
