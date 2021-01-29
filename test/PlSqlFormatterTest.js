@@ -12,7 +12,7 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 
 describe('PlSqlFormatter', () => {
-  const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'pl/sql' });
+  const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'plsql' });
 
   behavesLikeSqlFormatter(format);
   supportsCase(format);

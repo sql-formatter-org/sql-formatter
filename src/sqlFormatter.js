@@ -14,7 +14,6 @@ const formatters = {
   mariadb: MariaDbFormatter,
   mysql: MySqlFormatter,
   n1ql: N1qlFormatter,
-  'pl/sql': PlSqlFormatter,
   plsql: PlSqlFormatter,
   postgresql: PostgreSqlFormatter,
   redshift: RedshiftFormatter,

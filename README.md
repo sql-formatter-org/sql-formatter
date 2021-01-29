@@ -10,7 +10,7 @@ SQL formatter supports the following dialects:
 - **mysql** - [MySQL][]
 - **postgresql** - [PostgreSQL][]
 - **db2** - [IBM DB2][]
-- **pl/sql** - [Oracle PL/SQL][]
+- **plsql** - [Oracle PL/SQL][]
 - **n1ql** - [Couchbase N1QL][]
 - **redshift** - [Amazon Redshift][]
 - **spark** - [Spark][]
@@ -94,7 +94,7 @@ sql-formatter -h
 ```
 
 ```
-usage: sql-formatter [-h] [-o OUTPUT] [-l {db2,mariadb,mysql,n1ql,pl/sql,plsql,postgresql,redshift,spark,sql,tsql}]
+usage: sql-formatter [-h] [-o OUTPUT] [-l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}]
                      [-i N | -t] [-u] [--lines-between-queries N] [--version] [FILE]
 
 SQL Formatter
@@ -106,8 +106,8 @@ optional arguments:
   -h, --help            show this help message and exit
   -o OUTPUT, --output OUTPUT
                         File to write SQL output (defaults to stdout)
-  -l {db2,mariadb,mysql,n1ql,pl/sql,plsql,postgresql,redshift,spark,sql,tsql},
-  --language {db2,mariadb,mysql,n1ql,pl/sql,plsql,postgresql,redshift,spark,sql,tsql}
+  -l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql},
+  --language {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}
                         SQL Formatter dialect (defaults to basic sql)
   -i N, --indent N      Number of spaces to indent query blocks (defaults to 2)
   -t, --tab-indent      Indent query blocks with tabs instead of spaces
