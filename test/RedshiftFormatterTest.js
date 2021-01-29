@@ -4,6 +4,7 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
 import supportsAlterTableModify from './features/alterTableModify';
 import supportsCreateTable from './features/createTable';
+import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
@@ -18,6 +19,7 @@ describe('RedshiftFormatter', () => {
   supportsStrings(format, ['""', "''", '``']);
   supportsSchema(format);
   supportsOperators(format, ['%', '^', '|/', '||/', '<<', '>>', '&', '|', '~', '!', '!=', '||']);
+  supportsJoin(format);
 
   it('formats LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC LIMIT 10;')).toBe(dedent`

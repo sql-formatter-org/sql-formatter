@@ -395,20 +395,23 @@ const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'U
 const reservedNewlineWords = [
   'AND',
   'CROSS APPLY',
-  'CROSS JOIN',
   'ELSE',
   'END',
-  'INNER JOIN',
-  'JOIN',
-  'LEFT JOIN',
-  'LEFT OUTER JOIN',
   'OR',
   'OUTER APPLY',
-  'OUTER JOIN',
-  'RIGHT JOIN',
-  'RIGHT OUTER JOIN',
   'WHEN',
   'XOR',
+  // joins
+  'JOIN',
+  'INNER JOIN',
+  'LEFT JOIN',
+  'LEFT OUTER JOIN',
+  'RIGHT JOIN',
+  'RIGHT OUTER JOIN',
+  'FULL JOIN',
+  'FULL OUTER JOIN',
+  'CROSS JOIN',
+  'NATURAL JOIN',
 ];
 
 export default class PlSqlFormatter extends Formatter {

@@ -8,6 +8,7 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
 import supportsOperators from './features/operators';
+import supportsJoin from './features/join';
 
 describe('StandardSqlFormatter', () => {
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'tsql' });
@@ -38,6 +39,7 @@ describe('StandardSqlFormatter', () => {
     '^=',
     '::',
   ]);
+  supportsJoin(format, { without: ['NATURAL'] });
 
   // TODO: The following are duplicated from StandardSQLFormatter test
 

@@ -276,17 +276,18 @@ const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'UNION', 'U
 
 const reservedNewlineWords = [
   'AND',
-  'CROSS JOIN',
   'ELSE',
-  'INNER JOIN',
+  'OR',
+  'WHEN',
+  // joins
   'JOIN',
+  'INNER JOIN',
   'LEFT JOIN',
   'LEFT OUTER JOIN',
-  'OR',
-  'OUTER JOIN',
   'RIGHT JOIN',
   'RIGHT OUTER JOIN',
-  'WHEN',
+  'CROSS JOIN',
+  'NATURAL JOIN',
 ];
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/

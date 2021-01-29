@@ -535,15 +535,18 @@ const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'U
 
 const reservedNewlineWords = [
   'AND',
-  'CROSS JOIN',
-  'INNER JOIN',
+  'OR',
+  // joins
   'JOIN',
+  'INNER JOIN',
   'LEFT JOIN',
   'LEFT OUTER JOIN',
-  'OR',
-  'OUTER JOIN',
   'RIGHT JOIN',
   'RIGHT OUTER JOIN',
+  'FULL JOIN',
+  'FULL OUTER JOIN',
+  'CROSS JOIN',
+  'NATURAL JOIN',
 ];
 
 // For reference: https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm

@@ -168,21 +168,6 @@ export default function behavesLikeSqlFormatter(format) {
     `);
   });
 
-  it('formats SELECT query with INNER JOIN', () => {
-    const result = format(`
-      SELECT customer_id.from, COUNT(order_id) AS total FROM customers
-      INNER JOIN orders ON customers.customer_id = orders.customer_id;
-    `);
-    expect(result).toBe(dedent`
-      SELECT
-        customer_id.from,
-        COUNT(order_id) AS total
-      FROM
-        customers
-        INNER JOIN orders ON customers.customer_id = orders.customer_id;
-    `);
-  });
-
   it('formats simple INSERT query', () => {
     const result = format(
       "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"

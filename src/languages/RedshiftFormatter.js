@@ -339,17 +339,9 @@ const reservedTopLevelWordsNoIndent = [];
 
 const reservedNewlineWords = [
   'AND',
-  'CROSS JOIN',
   'ELSE',
-  'INNER JOIN',
-  'JOIN',
-  'LEFT JOIN',
-  'LEFT OUTER JOIN',
   'OR',
   'OUTER APPLY',
-  'OUTER JOIN',
-  'RIGHT JOIN',
-  'RIGHT OUTER JOIN',
   'WHEN',
   'VACUUM',
   'COPY',
@@ -360,6 +352,17 @@ const reservedNewlineWords = [
   'SORTKEY',
   'COMPOUND',
   'INTERLEAVED',
+  // joins
+  'JOIN',
+  'INNER JOIN',
+  'LEFT JOIN',
+  'LEFT OUTER JOIN',
+  'RIGHT JOIN',
+  'RIGHT OUTER JOIN',
+  'FULL JOIN',
+  'FULL OUTER JOIN',
+  'CROSS JOIN',
+  'NATURAL JOIN',
 ];
 
 export default class RedshiftFormatter extends Formatter {

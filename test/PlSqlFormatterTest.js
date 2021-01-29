@@ -6,6 +6,7 @@ import supportsAlterTableModify from './features/alterTableModify';
 import supportsBetween from './features/between';
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
+import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
@@ -22,6 +23,7 @@ describe('PlSqlFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, ['||', '**', '!=', ':=']);
+  supportsJoin(format);
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
@@ -96,18 +98,6 @@ describe('PlSqlFormatter', () => {
       params: ['first', 'second', 'third'],
     });
     expect(result).toBe('SELECT\n' + '  first,\n' + '  second,\n' + '  third;');
-  });
-
-  it('formats SELECT query with CROSS JOIN', () => {
-    const result = format('SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t');
-    expect(result).toBe(dedent`
-      SELECT
-        a,
-        b
-      FROM
-        t
-        CROSS JOIN t2 on t.id = t2.id_t
-    `);
   });
 
   it('formats SELECT query with CROSS APPLY', () => {

@@ -5,6 +5,7 @@ import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
+import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
@@ -46,6 +47,7 @@ describe('PostgreSqlFormatter', () => {
     '!~*',
     '!~',
   ]);
+  supportsJoin(format);
 
   it('supports $placeholders', () => {
     const result = format('SELECT $1, $2 FROM tbl');

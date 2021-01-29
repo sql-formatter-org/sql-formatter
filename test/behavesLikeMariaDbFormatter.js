@@ -6,6 +6,7 @@ import supportsAlterTable from './features/alterTable';
 import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
 import supportsOperators from './features/operators';
+import supportsJoin from './features/join';
 
 /**
  * Shared tests for MySQL and MariaDB
@@ -33,6 +34,7 @@ export default function behavesLikeMariaDbFormatter(format) {
     '||',
     ':=',
   ]);
+  supportsJoin(format, { without: ['FULL'] });
 
   it('supports # comments', () => {
     expect(format('SELECT a # comment\nFROM b # comment')).toBe(dedent`

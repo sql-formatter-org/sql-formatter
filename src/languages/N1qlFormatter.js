@@ -208,15 +208,15 @@ const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'U
 
 const reservedNewlineWords = [
   'AND',
-  'INNER JOIN',
+  'OR',
+  'XOR',
+  // joins
   'JOIN',
+  'INNER JOIN',
   'LEFT JOIN',
   'LEFT OUTER JOIN',
-  'OR',
-  'OUTER JOIN',
   'RIGHT JOIN',
   'RIGHT OUTER JOIN',
-  'XOR',
 ];
 
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html

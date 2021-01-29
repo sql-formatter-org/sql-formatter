@@ -5,6 +5,7 @@ import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
+import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
@@ -20,6 +21,7 @@ describe('SparkSqlFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, ['!=', '%', '|', '&', '^', '~', '!', '<=>', '%', '&&', '||', '==']);
+  supportsJoin(format);
 
   it('formats WINDOW specification as top level', () => {
     const result = format(

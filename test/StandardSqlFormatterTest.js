@@ -8,6 +8,7 @@ import supportsAlterTableModify from './features/alterTableModify';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
+import supportsJoin from './features/join';
 
 describe('StandardSqlFormatter', () => {
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'sql' });
@@ -20,6 +21,7 @@ describe('StandardSqlFormatter', () => {
   supportsStrings(format, ['""', "''"]);
   supportsBetween(format);
   supportsSchema(format);
+  supportsJoin(format);
 
   it('formats INSERT without INTO', () => {
     const result = sqlFormatter.format(
@@ -55,18 +57,6 @@ describe('StandardSqlFormatter', () => {
       GO
       SELECT
         2
-    `);
-  });
-
-  it('formats SELECT query with CROSS JOIN', () => {
-    const result = format('SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t');
-    expect(result).toBe(dedent`
-      SELECT
-        a,
-        b
-      FROM
-        t
-        CROSS JOIN t2 on t.id = t2.id_t
     `);
   });
 

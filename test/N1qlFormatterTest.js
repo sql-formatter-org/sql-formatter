@@ -2,6 +2,7 @@ import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsBetween from './features/between';
+import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
@@ -14,6 +15,7 @@ describe('N1qlFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, ['%', '==', '!=']);
+  supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'] });
 
   it('formats SELECT query with element selection expression', () => {
     const result = format('SELECT order_lines[0].productId FROM orders;');

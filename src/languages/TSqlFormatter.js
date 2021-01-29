@@ -217,17 +217,19 @@ const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'U
 
 const reservedNewlineWords = [
   'AND',
-  'CROSS JOIN',
   'ELSE',
-  'INNER JOIN',
+  'OR',
+  'WHEN',
+  // joins
   'JOIN',
+  'INNER JOIN',
   'LEFT JOIN',
   'LEFT OUTER JOIN',
-  'OR',
-  'OUTER JOIN',
   'RIGHT JOIN',
   'RIGHT OUTER JOIN',
-  'WHEN',
+  'FULL JOIN',
+  'FULL OUTER JOIN',
+  'CROSS JOIN',
 ];
 
 export default class TSqlFormatter extends Formatter {
