@@ -23,16 +23,10 @@ export default class Tokenizer {
     this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?([eE]-?[0-9]+(\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u;
 
     this.OPERATOR_REGEX = regexFactory.createOperatorRegex([
-      ...(cfg.operators || []),
-      '!=',
       '<>',
-      '==',
       '<=',
       '>=',
-      '!<',
-      '!>',
-      '||',
-      ':=',
+      ...(cfg.operators || []),
     ]);
 
     this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/u;

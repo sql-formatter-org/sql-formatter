@@ -232,6 +232,7 @@ export default class N1qlFormatter extends Formatter {
       closeParens: [')', ']', '}'],
       namedPlaceholderTypes: ['$'],
       lineCommentTypes: ['#', '--'],
+      operators: ['==', '!='],
     });
   }
 }

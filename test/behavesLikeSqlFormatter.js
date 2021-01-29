@@ -345,30 +345,6 @@ export default function behavesLikeSqlFormatter(format) {
     expect(result).toBe("((foo = 'bar'))");
   });
 
-  it('formats single-char operators', () => {
-    expect(format('foo = bar')).toBe('foo = bar');
-    expect(format('foo < bar')).toBe('foo < bar');
-    expect(format('foo > bar')).toBe('foo > bar');
-    expect(format('foo + bar')).toBe('foo + bar');
-    expect(format('foo - bar')).toBe('foo - bar');
-    expect(format('foo * bar')).toBe('foo * bar');
-    expect(format('foo / bar')).toBe('foo / bar');
-    expect(format('foo % bar')).toBe('foo % bar');
-  });
-
-  it('formats multi-char operators', () => {
-    expect(format('foo != bar')).toBe('foo != bar');
-    expect(format('foo <> bar')).toBe('foo <> bar');
-    expect(format('foo == bar')).toBe('foo == bar'); // N1QL
-    expect(format('foo || bar')).toBe('foo || bar'); // Oracle, Postgre, N1QL string concat
-
-    expect(format('foo <= bar')).toBe('foo <= bar');
-    expect(format('foo >= bar')).toBe('foo >= bar');
-
-    expect(format('foo !< bar')).toBe('foo !< bar');
-    expect(format('foo !> bar')).toBe('foo !> bar');
-  });
-
   it('formats logical operators', () => {
     expect(format('foo ALL bar')).toBe('foo ALL bar');
     expect(format('foo = ANY (1, 2, 3)')).toBe('foo = ANY (1, 2, 3)');
