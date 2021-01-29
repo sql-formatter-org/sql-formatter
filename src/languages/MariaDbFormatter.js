@@ -288,6 +288,12 @@ const reservedNewlineWords = [
   'RIGHT OUTER JOIN',
   'CROSS JOIN',
   'NATURAL JOIN',
+  // non-standard joins
+  'STRAIGHT_JOIN',
+  'NATURAL LEFT JOIN',
+  'NATURAL LEFT OUTER JOIN',
+  'NATURAL RIGHT JOIN',
+  'NATURAL RIGHT OUTER JOIN',
 ];
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
