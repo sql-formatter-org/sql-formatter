@@ -5,8 +5,9 @@ import dedent from 'dedent-js';
  * @param {Function} format
  * @param {Object} opts
  * @param {String[]} opts.without
+ * @param {String[]} opts.additionally
  */
-export default function supportsJoin(format, { without } = {}) {
+export default function supportsJoin(format, { without, additionally } = {}) {
   const unsupportedJoinRegex = without ? new RegExp(without.join('|'), 'u') : /^whateve_!%&$/u;
   const isSupportedJoin = (join) => !unsupportedJoinRegex.test(join);
 
@@ -38,6 +39,7 @@ export default function supportsJoin(format, { without } = {}) {
     'RIGHT OUTER JOIN',
     'FULL JOIN',
     'FULL OUTER JOIN',
+    ...(additionally || []),
   ]
     .filter(isSupportedJoin)
     .forEach((join) => {

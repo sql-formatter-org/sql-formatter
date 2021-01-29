@@ -34,7 +34,16 @@ export default function behavesLikeMariaDbFormatter(format) {
     '||',
     ':=',
   ]);
-  supportsJoin(format, { without: ['FULL'] });
+  supportsJoin(format, {
+    without: ['FULL'],
+    additionally: [
+      'STRAIGHT_JOIN',
+      'NATURAL LEFT JOIN',
+      'NATURAL LEFT OUTER JOIN',
+      'NATURAL RIGHT JOIN',
+      'NATURAL RIGHT OUTER JOIN',
+    ],
+  });
 
   it('supports # comments', () => {
     expect(format('SELECT a # comment\nFROM b # comment')).toBe(dedent`

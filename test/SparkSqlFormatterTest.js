@@ -21,7 +21,26 @@ describe('SparkSqlFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, ['!=', '%', '|', '&', '^', '~', '!', '<=>', '%', '&&', '||', '==']);
-  supportsJoin(format);
+  supportsJoin(format, {
+    additionally: [
+      'ANTI JOIN',
+      'SEMI JOIN',
+      'LEFT ANTI JOIN',
+      'LEFT SEMI JOIN',
+      'RIGHT OUTER JOIN',
+      'RIGHT SEMI JOIN',
+      'NATURAL ANTI JOIN',
+      'NATURAL FULL OUTER JOIN',
+      'NATURAL INNER JOIN',
+      'NATURAL LEFT ANTI JOIN',
+      'NATURAL LEFT OUTER JOIN',
+      'NATURAL LEFT SEMI JOIN',
+      'NATURAL OUTER JOIN',
+      'NATURAL RIGHT OUTER JOIN',
+      'NATURAL RIGHT SEMI JOIN',
+      'NATURAL SEMI JOIN',
+    ],
+  });
 
   it('formats WINDOW specification as top level', () => {
     const result = format(
