@@ -103,13 +103,4 @@ describe('StandardSqlFormatter', () => {
         2 ROWS ONLY;
     `);
   });
-
-  it('supports # comments', () => {
-    expect(format('SELECT a # comment\nFROM b # comment')).toBe(dedent`
-      SELECT
-        a # comment
-      FROM
-        b # comment
-    `);
-  });
 });
