@@ -242,6 +242,7 @@ export default class SparkSqlFormatter extends Formatter {
       indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: ['$'],
       lineCommentTypes: ['--'],
+      operators: ['!=', '<=>', '&&', '||', '=='],
     });
   }
 

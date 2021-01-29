@@ -7,6 +7,7 @@ import supportsAlterTable from './features/alterTable';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
+import supportsOperators from './features/operators';
 
 describe('StandardSqlFormatter', () => {
   const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'tsql' });
@@ -18,24 +19,25 @@ describe('StandardSqlFormatter', () => {
   supportsStrings(format, ['""', "''", "N''", '[]']);
   supportsBetween(format);
   supportsSchema(format);
-
-  it('formats operators', () => {
-    expect(format('foo >= bar')).toBe('foo >= bar');
-    expect(format('foo <= bar')).toBe('foo <= bar');
-    expect(format('foo <> bar')).toBe('foo <> bar');
-    expect(format('foo != bar')).toBe('foo != bar');
-    expect(format('foo !< bar')).toBe('foo !< bar');
-    expect(format('foo !> bar')).toBe('foo !> bar');
-    expect(format('foo += bar')).toBe('foo += bar');
-    expect(format('foo -= bar')).toBe('foo -= bar');
-    expect(format('foo *= bar')).toBe('foo *= bar');
-    expect(format('foo /= bar')).toBe('foo /= bar');
-    expect(format('foo %= bar')).toBe('foo %= bar');
-    expect(format('foo |= bar')).toBe('foo |= bar');
-    expect(format('foo &= bar')).toBe('foo &= bar');
-    expect(format('foo ^= bar')).toBe('foo ^= bar');
-    expect(format('foo :: bar')).toBe('foo :: bar');
-  });
+  supportsOperators(format, [
+    '%',
+    '&',
+    '|',
+    '^',
+    '~',
+    '!=',
+    '!<',
+    '!>',
+    '+=',
+    '-=',
+    '*=',
+    '/=',
+    '%=',
+    '|=',
+    '&=',
+    '^=',
+    '::',
+  ]);
 
   // TODO: The following are duplicated from StandardSQLFormatter test
 

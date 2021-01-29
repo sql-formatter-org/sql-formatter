@@ -5,6 +5,7 @@ import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
+import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 
@@ -19,6 +20,32 @@ describe('PostgreSqlFormatter', () => {
   supportsStrings(format, ['""', "''", 'U&""', "U&''", '$$']);
   supportsBetween(format);
   supportsSchema(format);
+  supportsOperators(format, [
+    '%',
+    '^',
+    '!',
+    '!!',
+    '@',
+    '!=',
+    '&',
+    '|',
+    '~',
+    '#',
+    '<<',
+    '>>',
+    '||/',
+    '|/',
+    '::',
+    '->>',
+    '->',
+    '~~*',
+    '~~',
+    '!~~*',
+    '!~~',
+    '~*',
+    '!~*',
+    '!~',
+  ]);
 
   it('supports $placeholders', () => {
     const result = format('SELECT $1, $2 FROM tbl');
@@ -42,23 +69,5 @@ describe('PostgreSqlFormatter', () => {
       FROM
         tbl
     `);
-  });
-
-  it('formats PostgreSQL specific operators', () => {
-    expect(format('column::int')).toBe('column :: int');
-    expect(format('v->2')).toBe('v -> 2');
-    expect(format('v->>2')).toBe('v ->> 2');
-    expect(format("foo ~~ 'hello'")).toBe("foo ~~ 'hello'");
-    expect(format("foo !~ 'hello'")).toBe("foo !~ 'hello'");
-    expect(format("foo ~* 'hello'")).toBe("foo ~* 'hello'");
-    expect(format("foo ~~* 'hello'")).toBe("foo ~~* 'hello'");
-    expect(format("foo !~~ 'hello'")).toBe("foo !~~ 'hello'");
-    expect(format("foo !~* 'hello'")).toBe("foo !~* 'hello'");
-    expect(format("foo !~~* 'hello'")).toBe("foo !~~* 'hello'");
-    expect(format('@ foo')).toBe('@ foo');
-    expect(format('foo << 2')).toBe('foo << 2');
-    expect(format('foo >> 2')).toBe('foo >> 2');
-    expect(format('|/ foo')).toBe('|/ foo');
-    expect(format('||/ foo')).toBe('||/ foo');
   });
 });

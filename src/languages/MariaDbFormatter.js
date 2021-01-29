@@ -289,6 +289,7 @@ const reservedNewlineWords = [
   'WHEN',
 ];
 
+// For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({

@@ -546,6 +546,7 @@ const reservedNewlineWords = [
   'RIGHT OUTER JOIN',
 ];
 
+// For reference: https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
@@ -560,6 +561,7 @@ export default class Db2Formatter extends Formatter {
       namedPlaceholderTypes: [':'],
       lineCommentTypes: ['--'],
       specialWordChars: ['#', '@'],
+      operators: ['**', '!=', '!>', '!>', '||'],
     });
   }
 }

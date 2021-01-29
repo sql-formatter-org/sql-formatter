@@ -219,6 +219,7 @@ const reservedNewlineWords = [
   'XOR',
 ];
 
+// For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html
 export default class N1qlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({

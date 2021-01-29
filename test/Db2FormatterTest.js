@@ -4,6 +4,7 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsCreateTable from './features/createTable';
+import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 
@@ -16,6 +17,7 @@ describe('Db2Formatter', () => {
   supportsStrings(format, ['""', "''", '``']);
   supportsBetween(format);
   supportsSchema(format);
+  supportsOperators(format, ['%', '**', '!=', '!>', '!>', '||']);
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`

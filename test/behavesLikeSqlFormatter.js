@@ -1,6 +1,7 @@
 import dedent from 'dedent-js';
 import supportsComments from './features/comments';
 import supportsConfigOptions from './features/configOptions';
+import supportsOperators from './features/operators';
 
 /**
  * Core tests for all SQL formatters
@@ -9,6 +10,7 @@ import supportsConfigOptions from './features/configOptions';
 export default function behavesLikeSqlFormatter(format) {
   supportsComments(format);
   supportsConfigOptions(format);
+  supportsOperators(['=', '+', '-', '*', '/', '<>', '>', '<', '>=', '<=']);
 
   it('does nothing with empty input', () => {
     const result = format('');

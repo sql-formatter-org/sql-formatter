@@ -425,6 +425,7 @@ export default class PlSqlFormatter extends Formatter {
       namedPlaceholderTypes: [':'],
       lineCommentTypes: ['--'],
       specialWordChars: ['_', '$', '#', '.', '@'],
+      operators: ['||', '**', '!=', ':='],
     });
   }
 

@@ -5,6 +5,7 @@ import supportsCreateTable from './features/createTable';
 import supportsAlterTable from './features/alterTable';
 import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
+import supportsOperators from './features/operators';
 
 /**
  * Shared tests for MySQL and MariaDB
@@ -17,19 +18,21 @@ export default function behavesLikeMariaDbFormatter(format) {
   supportsAlterTable(format);
   supportsStrings(format, ['""', "''", '``']);
   supportsBetween(format);
-
-  it('formats operators', () => {
-    expect(format('foo != bar')).toBe('foo != bar');
-    expect(format('foo <> bar')).toBe('foo <> bar');
-    expect(format('foo <= bar')).toBe('foo <= bar');
-    expect(format('foo >= bar')).toBe('foo >= bar');
-    expect(format('foo <=> bar')).toBe('foo <=> bar');
-    expect(format('foo << bar')).toBe('foo << bar');
-    expect(format('foo >> bar')).toBe('foo >> bar');
-    expect(format('foo && bar')).toBe('foo && bar');
-    expect(format('foo || bar')).toBe('foo || bar');
-    expect(format('foo := bar')).toBe('foo := bar');
-  });
+  supportsOperators(format, [
+    '%',
+    '&',
+    '|',
+    '^',
+    '~',
+    '!=',
+    '!',
+    '<=>',
+    '<<',
+    '>>',
+    '&&',
+    '||',
+    ':=',
+  ]);
 
   it('supports # comments', () => {
     expect(format('SELECT a # comment\nFROM b # comment')).toBe(dedent`
