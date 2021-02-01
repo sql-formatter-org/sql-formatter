@@ -34,9 +34,9 @@ npm install sql-formatter
 ## Usage as library
 
 ```js
-import sqlFormatter from 'sql-formatter';
+import { format } from 'sql-formatter';
 
-console.log(sqlFormatter.format('SELECT * FROM tbl'));
+console.log(format('SELECT * FROM tbl'));
 ```
 
 This will output:
@@ -51,7 +51,7 @@ FROM
 You can also pass in configuration options:
 
 ```js
-sqlFormatter.format('SELECT * FROM tbl', {
+format('SELECT * FROM tbl', {
   language: 'spark', // Defaults to "sql" (see the above list of supported dialects)
   indent: '    ', // Defaults to two spaces
   uppercase: bool, // Defaults to false
@@ -63,12 +63,12 @@ sqlFormatter.format('SELECT * FROM tbl', {
 
 ```js
 // Named placeholders
-sqlFormatter.format("SELECT * FROM tbl WHERE foo = @foo", {
+format("SELECT * FROM tbl WHERE foo = @foo", {
   params: {foo: "'bar'"}
 }));
 
 // Indexed placeholders
-sqlFormatter.format("SELECT * FROM tbl WHERE foo = ?", {
+format("SELECT * FROM tbl WHERE foo = ?", {
   params: ["'bar'"]
 }));
 ```
