@@ -194,6 +194,7 @@ export default class NewFormatter {
         let substring = "";
         let indent = 0;
         let startIdx = 0;
+        // console.log("1")
         while (this.getStringInOneStyle(substring).trim().toLowerCase() != searchString.trim().toLowerCase()){
             substring = "";
             startIdx = this.query.toLowerCase().indexOf(first);
@@ -205,6 +206,7 @@ export default class NewFormatter {
                 this.query = this.query.substring(this.query.toLowerCase().indexOf(first) + first.length);
             }
         }
+        // console.log("2")
         let from = this.query.indexOf(substring);
         for (let i = from; i >=0; i--){
             if (this.query[i] == "\n"){
@@ -229,15 +231,15 @@ export default class NewFormatter {
             let token = toks[i];
             token.value = this.formatTextCase(token);
             if (token.type != tokenTypes.WHITESPACE){
-                console.log("token : " + token.value);
-                console.log("prev : " + prev.value);
+                // console.log("token : " + token.value);
+                // console.log("prev : " + prev.value);
                 let start = lowCase.indexOf(prev.value.toLowerCase()) + prev.value.length;
                 let end = lowCase.indexOf(token.value.toLowerCase());
                 let current = lowCase.substring(0, end)+ token.value; 
                 substring += current;
-                console.log("current : " + current);
+                // console.log("current : " + current);
                 lowCase = lowCase.substring(lowCase.indexOf(current.toLowerCase()) + current.length);
-                console.log("lowCase : " + lowCase);
+                // console.log("lowCase : " + lowCase);
                 // lowCase = lowCase.indexOf(current.toLowerCase() + current.length);
                 prev = token;
             }
@@ -364,7 +366,9 @@ export default class NewFormatter {
     formatLoop(token, index){
         let next = this.getNextValidWord(index);
         if (next != ";"){
-            this.formatLikeDevelopWrite(token);
+            if (this.indentsKeyWords[this.indentsKeyWords.length - 1].key == "while"){
+                this.formatLikeDevelopWrite(token);
+            }
             this.lines[this.lastIndex()] += token.value;
             this.indentsKeyWords[this.indentsKeyWords.length - 1].key = "loop";
             this.addNewLine(this.indentCount);
