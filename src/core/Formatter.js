@@ -462,7 +462,15 @@ export default class Formatter {
 
     formatClosingParentheses(token){
         if (token.value == ")"){
-            this.trimEndLastString();
+            if (this.getLastString().trim() != ""){
+                this.trimEndLastString();
+            } else {
+                // this.lines.pop();
+                let indent = this.indents[this.indents.length - 1];
+                this.lines[this.lastIndex()] = repeat(" ", indent.indent);
+
+                // this.addNewLine("right", );
+            }
             if (this.getLastString().match(/\)/) != null){
                 this.addNewLine("right", token.value);    
             }
@@ -605,7 +613,9 @@ export default class Formatter {
     }
 
     trimEndLastString(){
-        this.lines[this.lastIndex()] = trimEnd(this.getLastString());
+        if (this.getLastString().trim() != ""){
+            this.lines[this.lastIndex()] = trimEnd(this.getLastString());
+        }
     }
 
     previousNonWhitespaceToken() {

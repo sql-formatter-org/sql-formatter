@@ -2073,7 +2073,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Formatter.prototype.formatClosingParentheses = function formatClosingParentheses(token) {
 	        if (token.value == ")") {
-	            this.trimEndLastString();
+	            if (this.getLastString().trim() != "") {
+	                this.trimEndLastString();
+	            } else {
+	                // this.lines.pop();
+	                var indent = this.indents[this.indents.length - 1];
+	                this.lines[this.lastIndex()] = (0, _repeat2["default"])(" ", indent.indent);
+
+	                // this.addNewLine("right", );
+	            }
 	            if (this.getLastString().match(/\)/) != null) {
 	                this.addNewLine("right", token.value);
 	            }
@@ -2213,7 +2221,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.trimEndLastString = function trimEndLastString() {
-	        this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString());
+	        if (this.getLastString().trim() != "") {
+	            this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString());
+	        }
 	    };
 
 	    Formatter.prototype.previousNonWhitespaceToken = function previousNonWhitespaceToken() {
@@ -2457,7 +2467,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            substring = "";
 	            startIdx = this.query.toLowerCase().indexOf(first);
 	            while (searchString.trim().toLowerCase().startsWith(this.getStringInOneStyle(substring).trim().toLowerCase()) && this.getStringInOneStyle(substring.trim()).trim().length != searchString.trim().length) {
-	                console.log("substring : " + substring);
+	                // console.log("substring : " + substring);
 	                substring += this.query[startIdx];
 	                startIdx++;
 	            }
@@ -2465,7 +2475,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.query = this.query.substring(this.query.toLowerCase().indexOf(first) + first.length);
 	            }
 	        }
-	        // console.log("2")
+	        console.log("end subs");
 	        var from = this.query.indexOf(substring);
 	        for (var i = from; i >= 0; i--) {
 	            if (this.query[i] == "\n") {

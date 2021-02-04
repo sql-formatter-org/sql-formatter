@@ -201,7 +201,7 @@ export default class NewFormatter {
             startIdx = this.query.toLowerCase().indexOf(first);
             while(searchString.trim().toLowerCase().startsWith(this.getStringInOneStyle(substring).trim().toLowerCase()) && 
                    this.getStringInOneStyle(substring.trim()).trim().length != searchString.trim().length){
-                console.log("substring : " + substring);
+                // console.log("substring : " + substring);
                 substring += this.query[startIdx];
                 startIdx++;
             }
@@ -209,7 +209,7 @@ export default class NewFormatter {
                 this.query = this.query.substring(this.query.toLowerCase().indexOf(first) + first.length);
             }
         }
-        // console.log("2")
+        console.log("end subs");
         let from = this.query.indexOf(substring);
         for (let i = from; i >=0; i--){
             if (this.query[i] == "\n"){
