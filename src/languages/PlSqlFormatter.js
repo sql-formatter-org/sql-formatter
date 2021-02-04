@@ -2,7 +2,8 @@ import Tokenizer from "../core/Tokenizer";
 import NewFormatter from "../core/NewFormatter";
 
 const reservedWords = [
-    "A", "ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", 
+    // "A",
+     "ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", 
     "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG",
     "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE", 
     "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND",

@@ -134,7 +134,7 @@ export default class NewFormatter {
         let cInfo = this.getFormattingString(token);
         let searchString = cInfo.substring;
         let first = searchString.trim().split(" ")[0].trim().replace("(", "");
-        let info = this.findSubstring(first, token.value, this.getStringInOneStyle(searchString).trim());
+        let info = this.findSubstring(first, token.value, this.getStringInOneStyle(searchString + " " + token.value).trim());
         if (searchString.trim().length < 65){
             return;
         }
@@ -194,11 +194,14 @@ export default class NewFormatter {
         let substring = "";
         let indent = 0;
         let startIdx = 0;
-        // console.log("1")
+        console.log("first : " + first);
+        console.log("searchString : " + searchString);
         while (this.getStringInOneStyle(substring).trim().toLowerCase() != searchString.trim().toLowerCase()){
             substring = "";
             startIdx = this.query.toLowerCase().indexOf(first);
-            while(searchString.trim().toLowerCase().startsWith(this.getStringInOneStyle(substring).trim().toLowerCase()) && this.getStringInOneStyle(substring.trim()).trim().length != searchString.trim().length){
+            while(searchString.trim().toLowerCase().startsWith(this.getStringInOneStyle(substring).trim().toLowerCase()) && 
+                   this.getStringInOneStyle(substring.trim()).trim().length != searchString.trim().length){
+                console.log("substring : " + substring);
                 substring += this.query[startIdx];
                 startIdx++;
             }
@@ -275,6 +278,7 @@ export default class NewFormatter {
         }
         let indent = this.getLineIndent(this.lines[lastIdx])
         let popCount = this.lines.length - lastIdx - 1;
+        // substring += token.value;
         return {indent: indent, substring: substring, popCount: popCount};
 
     }
@@ -282,9 +286,10 @@ export default class NewFormatter {
     formatReturn(token){
         let first = this.getFirstWord(this.getLastString());
         let last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
-        if ((this.openParens.includes(first) && this.getLastString().split(",").length > 1) ||
-            (last != undefined)){
-            this.addNewLine(this.indentCount);
+        if ((this.openParens.includes(first) && this.getLastString().split(",").length > 1) || (last != undefined)){
+            if (this.getLastString().trim() != ""){
+                this.addNewLine(this.indentCount);
+            }
         }
         this.lines[this.lastIndex()] += token.value;
     }
@@ -356,7 +361,9 @@ export default class NewFormatter {
 
     formatThen(token){
         this.formatLikeDevelopWrite(token);
-        this.lines[this.lastIndex()] += token.value;
+        if (!this.getLastString().includes(token.value)){
+            this.lines[this.lastIndex()] += token.value;
+        }
         if (this.getLastString().includes(" when ")){
             this.indentCount++;
         }
@@ -369,8 +376,10 @@ export default class NewFormatter {
             if (this.indentsKeyWords[this.indentsKeyWords.length - 1].key == "while"){
                 this.formatLikeDevelopWrite(token);
             }
-            this.lines[this.lastIndex()] += token.value;
-            this.indentsKeyWords[this.indentsKeyWords.length - 1].key = "loop";
+            if (!this.getLastString().includes(token.value)){
+                this.lines[this.lastIndex()] += token.value;
+                this.indentsKeyWords[this.indentsKeyWords.length - 1].key = "loop";
+            }
             this.addNewLine(this.indentCount);
         } else {
             this.lines[this.lastIndex()] += token.value;
@@ -609,7 +618,22 @@ export default class NewFormatter {
             if (this.openParens.includes(first.toUpperCase()) && first != "if"){
                 this.decrementIndent();
             }
-        } 
+        }
+        let last = this.getLastString();
+        if ((last.includes(" or ") || last.includes(" and ") || last.includes(" xor ")) && last.trim().length > 60){
+            console.log("1")
+            let searchString = last;
+            let firstWord = searchString.trim().split(" ")[0].trim().replace("(", "");
+            console.log("2");
+            let info = this.findSubstring(firstWord, token.value, this.getStringInOneStyle(searchString).trim());
+            console.log("3")
+            // this.popLine(cInfo.popCount);
+            console.log("4")
+            let newLine = this.formatOriginSubstringWithIndent(this.getLineIndent(this.getLastString()), info.indent, info.substring);
+            console.log("5")
+            this.lines[this.lastIndex()] = newLine;
+        }
+        // if (this.getLastString().includes(token.value))
         this.lines[this.lastIndex()] += token.value;
         this.addNewLine(this.indentCount);
     }
@@ -672,7 +696,7 @@ export default class NewFormatter {
                 }
                 this.addNewLine(this.indentCount);
             }
-            if (token.value == "if" || token.value.startsWith("for") || token.value == "while"){
+            if (token.value == "if" || token.value.startsWith("for") || token.value == "while" || token.value == "case"){
                 while(this.getLastString().trim() == ""){
                     this.lines.pop();
                 }

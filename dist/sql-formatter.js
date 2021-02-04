@@ -813,7 +813,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var reservedWords = ["A", "ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG", "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE", "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND", "BULK", "BY", "BYTE",
+	var reservedWords = [
+	// "A", 
+	"ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG", "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE", "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND", "BULK", "BY", "BYTE",
 	// "C", 
 	"CALL", "CALLING", "CASCADE", "CASE", "CHAR_BASE", "CHAR", "CHARACTER", "CHARSET", "CHARSETFORM", "CHARSETID", "CHECK", "CLOB_BASE", "CLONE", "CLOSE", "CLUSTER", "CLUSTERS", "COALESCE", "COLAUTH", "COLLECT", "COLUMNS", "COMMENT", "COMMIT", "COMMITTED", "COMPILED", "COMPRESS", "CONNECT", "CONSTANT", "CONSTRUCTOR", "CONTEXT", "CONTINUE", "CONVERT",
 	// "COUNT", 
@@ -2390,7 +2392,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var cInfo = this.getFormattingString(token);
 	        var searchString = cInfo.substring;
 	        var first = searchString.trim().split(" ")[0].trim().replace("(", "");
-	        var info = this.findSubstring(first, token.value, this.getStringInOneStyle(searchString).trim());
+	        var info = this.findSubstring(first, token.value, this.getStringInOneStyle(searchString + " " + token.value).trim());
 	        if (searchString.trim().length < 65) {
 	            return;
 	        }
@@ -2449,11 +2451,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var substring = "";
 	        var indent = 0;
 	        var startIdx = 0;
-	        // console.log("1")
+	        console.log("first : " + first);
+	        console.log("searchString : " + searchString);
 	        while (this.getStringInOneStyle(substring).trim().toLowerCase() != searchString.trim().toLowerCase()) {
 	            substring = "";
 	            startIdx = this.query.toLowerCase().indexOf(first);
 	            while (searchString.trim().toLowerCase().startsWith(this.getStringInOneStyle(substring).trim().toLowerCase()) && this.getStringInOneStyle(substring.trim()).trim().length != searchString.trim().length) {
+	                console.log("substring : " + substring);
 	                substring += this.query[startIdx];
 	                startIdx++;
 	            }
@@ -2527,6 +2531,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        var indent = this.getLineIndent(this.lines[lastIdx]);
 	        var popCount = this.lines.length - lastIdx - 1;
+	        // substring += token.value;
 	        return { indent: indent, substring: substring, popCount: popCount };
 	    };
 
@@ -2534,7 +2539,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var first = this.getFirstWord(this.getLastString());
 	        var last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
 	        if (this.openParens.includes(first) && this.getLastString().split(",").length > 1 || last != undefined) {
-	            this.addNewLine(this.indentCount);
+	            if (this.getLastString().trim() != "") {
+	                this.addNewLine(this.indentCount);
+	            }
 	        }
 	        this.lines[this.lastIndex()] += token.value;
 	    };
@@ -2606,7 +2613,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    NewFormatter.prototype.formatThen = function formatThen(token) {
 	        this.formatLikeDevelopWrite(token);
-	        this.lines[this.lastIndex()] += token.value;
+	        if (!this.getLastString().includes(token.value)) {
+	            this.lines[this.lastIndex()] += token.value;
+	        }
 	        if (this.getLastString().includes(" when ")) {
 	            this.indentCount++;
 	        }
@@ -2619,8 +2628,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (this.indentsKeyWords[this.indentsKeyWords.length - 1].key == "while") {
 	                this.formatLikeDevelopWrite(token);
 	            }
-	            this.lines[this.lastIndex()] += token.value;
-	            this.indentsKeyWords[this.indentsKeyWords.length - 1].key = "loop";
+	            if (!this.getLastString().includes(token.value)) {
+	                this.lines[this.lastIndex()] += token.value;
+	                this.indentsKeyWords[this.indentsKeyWords.length - 1].key = "loop";
+	            }
 	            this.addNewLine(this.indentCount);
 	        } else {
 	            this.lines[this.lastIndex()] += token.value;
@@ -2854,6 +2865,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.decrementIndent();
 	            }
 	        }
+	        var last = this.getLastString();
+	        if ((last.includes(" or ") || last.includes(" and ") || last.includes(" xor ")) && last.trim().length > 60) {
+	            console.log("1");
+	            var searchString = last;
+	            var firstWord = searchString.trim().split(" ")[0].trim().replace("(", "");
+	            console.log("2");
+	            var info = this.findSubstring(firstWord, token.value, this.getStringInOneStyle(searchString).trim());
+	            console.log("3");
+	            // this.popLine(cInfo.popCount);
+	            console.log("4");
+	            var newLine = this.formatOriginSubstringWithIndent(this.getLineIndent(this.getLastString()), info.indent, info.substring);
+	            console.log("5");
+	            this.lines[this.lastIndex()] = newLine;
+	        }
+	        // if (this.getLastString().includes(token.value))
 	        this.lines[this.lastIndex()] += token.value;
 	        this.addNewLine(this.indentCount);
 	    };
@@ -2916,7 +2942,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	                this.addNewLine(this.indentCount);
 	            }
-	            if (token.value == "if" || token.value.startsWith("for") || token.value == "while") {
+	            if (token.value == "if" || token.value.startsWith("for") || token.value == "while" || token.value == "case") {
 	                while (this.getLastString().trim() == "") {
 	                    this.lines.pop();
 	                }
@@ -3182,7 +3208,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var reservedWords = ["A", "ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG", "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE", "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND", "BULK", "BY", "BYTE",
+	var reservedWords = [
+	// "A",
+	"ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG", "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE", "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND", "BULK", "BY", "BYTE",
 	// "C", 
 	"CALL", "CALLING", "CASCADE", "CASE", "CHAR_BASE", "CHAR", "CHARACTER", "CHARSET", "CHARSETFORM", "CHARSETID", "CHECK", "CLOB_BASE", "CLONE", "CLOSE", "CLUSTER", "CLUSTERS", "COALESCE", "COLAUTH", "COLLECT", "COLUMNS", "COMMENT", "COMMIT", "COMMITTED", "COMPILED", "COMPRESS", "CONNECT", "CONSTANT", "CONSTRUCTOR", "CONTEXT", "CONTINUE", "CONVERT", "COUNT", "CRASH", "CREATE", "CREDENTIAL", "CURRENT", "CURRVAL", "CURSOR", "CUSTOMDATUM", "DANGLING", "DATA", "DATE_BASE", "DATE", "DAY", "DECIMAL", "DEFAULT", "DEFINE", "DELETE", "DESC", "DETERMINISTIC", "DIRECTORY", "DISTINCT", "DO", "DOUBLE", "DROP", "DURATION", "ELEMENT", "ELSIF", "EMPTY", "ESCAPE", "EXCEPTIONS", "EXCLUSIVE", "EXECUTE", "EXISTS", "EXIT", "EXTENDS", "EXTERNAL", "EXTRACT", "FALSE", "FETCH", "FINAL", "FIRST", "FIXED", "FLOAT", "FOR", "FORALL", "FORCE", "FROM", "FUNCTION", "GENERAL", "GOTO", "GRANT", "GROUP", "HASH", "HEAP", "HIDDEN", "HOUR", "IDENTIFIED", "IF", "IMMEDIATE", "IN", "INCLUDING", "INDEX", "INDEXES", "INDICATOR", "INDICES", "INFINITE", "INSTANTIABLE", "INT", "INTEGER", "INTERFACE", "INTERVAL", "INTO", "INVALIDATE", "IS", "ISOLATION", "JAVA", "LANGUAGE", "LARGE", "LEADING", "LENGTH", "LEVEL", "LIBRARY", "LIKE", "LIKE2", "LIKE4", "LIKEC", "LIMITED", "LOCAL", "LOCK", "LONG", "MAP", "MAX", "MAXLEN", "MEMBER", "MERGE INTO", "MIN", "MINUS", "MINUTE", "MLSLABEL", "MOD", "MODE", "MONTH", "MULTISET", "NAME", "NAN", "NATIONAL", "NATIVE", "NATURAL", "NATURALN", "NCHAR", "NEW", "NEXTVAL", "NOCOMPRESS", "NOCOPY", "NOT", "NOWAIT", "NULL", "NULLIF", "NUMBER_BASE", "NUMBER", "OBJECT", "OCICOLL", "OCIDATE", "OCIDATETIME", "OCIDURATION", "OCIINTERVAL", "OCILOBLOCATOR", "OCINUMBER", "OCIRAW", "OCIREF", "OCIREFCURSOR", "OCIROWID", "OCISTRING", "OCITYPE", "OF", "OLD", "ON", "ONLY", "OPAQUE", "OPEN", "OPERATOR", "OPTION", "ORACLE", "ORADATA", "ORDER", "ORGANIZATION", "ORLANY", "ORLVARY", "OTHERS", "OUT", "OVERLAPS", "OVERRIDING", "PACKAGE", "PARALLEL_ENABLE", "PARAMETER", "PARAMETERS", "PARENT", "PARTITION", "PASCAL", "PCTFREE", "PIPE", "PIPELINED", "PLS_INTEGER", "PLUGGABLE", "POSITIVE", "POSITIVEN", "PRAGMA", "PRECISION", "PRIOR", "PRIVATE", "PROCEDURE", "PUBLIC", "RAISE", "RANGE", "RAW", "READ", "REAL", "RECORD", "REF", "REFERENCE", "RELEASE", "RELIES_ON", "REM", "REMAINDER", "RENAME", "RESOURCE", "RESULT_CACHE", "RESULT", "RETURN", "RETURNING", "REVERSE", "REVOKE", "ROLLBACK", "ROW", "ROWID", "ROWNUM", "ROWTYPE", "SAMPLE", "SAVE", "SAVEPOINT", "SB1", "SB2", "SB4", "SECOND", "SEGMENT", "SELF", "SEPARATE", "SEQUENCE", "SERIALIZABLE", "SHARE", "SHORT", "SIZE_T", "SIZE", "SMALLINT", "SOME", "SPACE", "SPARSE", "SQL", "SQLCODE", "SQLDATA", "SQLERRM", "SQLNAME", "SQLSTATE", "STANDARD", "START", "STATIC", "STDDEV", "STORED", "STRING", "STRUCT", "STYLE", "SUBMULTISET", "SUBPARTITION", "SUBSTITUTABLE", "SUBTYPE", "SUCCESSFUL", "SUM", "SYNONYM", "SYSDATE", "TABAUTH", "TABLE", "TDO", "THE", "THEN", "TIME", "TIMESTAMP", "TIMEZONE_ABBR", "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TIMEZONE_REGION", "TO", "TRAILING", "TRANSACTION", "TRANSACTIONAL", "TRIGGER", "TRUE", "TRUSTED", "TYPE", "UB1", "UB2", "UB4", "UID", "UNDER", "UNIQUE", "UNPLUG", "UNSIGNED", "UNTRUSTED", "USE", "USER", "USING", "VALIDATE", "VALIST", "VALUE", "VARCHAR", "VARCHAR2", "VARIABLE", "VARIANCE", "VARRAY", "VARYING", "VIEW", "VIEWS", "VOID", "WHENEVER", "WHILE", "WITH", "WORK", "WRAPPED", "WRITE", "YEAR", "SELECT", "UNION", "INSERT", "EXCEPTION", "ZONE", "AND", "OR", "LOOP", "TYPE", "WITH", "UNION", "USING", "ELSE", "WHEN", "THEN", "ELSIF", "ALTER", "SELECT", "INSERT", "UPDATE", "DROP", "MERGE INTO", "CREATE", "BEGIN", "FUNCTION", "CURSOR", "IF", "FOR", "PROCEDURE", "WHILE", "PRAGMA", "CASE"];
 
