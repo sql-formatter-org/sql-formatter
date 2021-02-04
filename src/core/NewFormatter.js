@@ -4,6 +4,7 @@ import tokenTypes from "./tokenTypes";
 import Params from "./Params";
 import repeat from "lodash/repeat";
 import SqlFormatter from "../languages/SqlFormatter";
+import Tokenizer from "./Tokenizer";
 
 export default class NewFormatter {
     constructor(cfg, tokenizer, reservedWords, openParens) {
@@ -21,6 +22,7 @@ export default class NewFormatter {
         this.lastIndentKey = {key: "", name: "", indent: 0};
         this.lineSize = 80;
         this.booleanOperators = ["and", "or", "xor"];
+        this.cQuery = "";
     }
 
     format(query) {
@@ -31,6 +33,7 @@ export default class NewFormatter {
     }
 
     formatQuery(){
+        this.cQuery = this.query;
         let originQuery = this.query;
         for (let i = 0; i < this.tokens.length; i++){
             var token = this.tokens[i];
@@ -66,9 +69,9 @@ export default class NewFormatter {
             else if (token.type === tokenTypes.PLACEHOLDER) {
                 this.formatPlaceholder(token);
             } 
-            else if (this.booleanOperators.includes(token.value)){
-                this.formatBooleanExpressions(token);
-            }
+            // else if (this.booleanOperators.includes(token.value)){
+            //     this.formatBooleanExpressions(token);
+            // }
             else if (token.value === ")"){
                 this.formatCloseBkt(token);
             }
@@ -118,6 +121,160 @@ export default class NewFormatter {
         }
         return this.addDevelopEmptyLines(originQuery, this.lines.join("\n").trim());
         // return this.lines.join("\n").trim();
+    }
+
+    trimStart(line){
+        while (line[0] == " "){
+            line = line.substring(1);
+        }
+        return line;
+    }
+
+    formatLikeDevelopWrite(token){
+        let cInfo = this.getFormattingString(token);
+        let searchString = cInfo.substring;
+        let first = searchString.trim().split(" ")[0].trim().replace("(", "");
+        let info = this.findSubstring(first, token.value, this.getStringInOneStyle(searchString).trim());
+        if (searchString.trim().length < 65){
+            return;
+        }
+        this.popLine(cInfo.popCount);
+        let newLine = this.formatOriginSubstringWithIndent(cInfo.indent, info.indent, info.substring) + " ";
+        this.lines[this.lastIndex()] = newLine;
+
+    }
+
+    formatOriginSubstringWithIndent(indent, originIndent, substring){
+        let split = substring.split("\n");
+        if (split[0].match(/'/g) == undefined || split[0].match(/'/g).length % 2 == 0){
+            split[0] = repeat(" ", indent) + split[0].trim();
+        } else {
+            split[0] = repeat(" ", indent) + this.trimStart(split[0]);
+        }
+        let inQuotes = (split[0].match(/'/g) != undefined && split[0].match(/'/g) % 2 == 1);
+        for (let i = 1; i < split.length; i++){
+            let match = split[i].match(/'/g);
+            let cIndent = this.getLineIndent(split[i]) + 1;
+            if (inQuotes){
+                split[i] = split[i];
+                if (match != undefined && match.length % 2 == 1){
+                    inQuotes = false;
+                }
+            }else {
+                if (match == undefined){
+                    split[i] = repeat(" ", indent - originIndent + cIndent) + split[i].trim();
+                } else {
+                    if (match.length % 2 == 1){
+                        inQuotes = true;
+                    }
+                    split[i] = repeat(" ", indent - originIndent + cIndent) + this.trimStart(split[i]);
+                }
+            }
+        }
+        return split.join("\n");
+    }
+
+    getLineIndent(line){
+        let indent = 0;
+        for (indent; indent < line.length; indent++){
+            if (line[indent] != " "){
+                return indent;
+            }
+        }
+        return indent;
+    }
+
+    popLine(popCount){
+        for (let i = 0; i < popCount; i++){
+            let line = this.lines.pop();
+        }
+    }
+
+    findSubstring(first, last, searchString){
+        let substring = "";
+        let indent = 0;
+        let startIdx = 0;
+        while (this.getStringInOneStyle(substring).trim().toLowerCase() != searchString.trim().toLowerCase()){
+            substring = "";
+            startIdx = this.query.toLowerCase().indexOf(first);
+            while(searchString.trim().toLowerCase().startsWith(this.getStringInOneStyle(substring).trim().toLowerCase()) && this.getStringInOneStyle(substring.trim()).trim().length != searchString.trim().length){
+                substring += this.query[startIdx];
+                startIdx++;
+            }
+            if (searchString.trim().toLowerCase() != this.getStringInOneStyle(substring).trim().toLowerCase()){
+                this.query = this.query.substring(this.query.toLowerCase().indexOf(first) + first.length);
+            }
+        }
+        let from = this.query.indexOf(substring);
+        for (let i = from; i >=0; i--){
+            if (this.query[i] == "\n"){
+                break;
+            } else {
+                indent++;
+            }
+        }
+        this.query = this.query.substring(this.query.indexOf(substring) + substring.length - 1);
+        substring = this.formatSubstringCase(substring);
+        return {substring: substring, indent: indent};
+    }
+
+    formatSubstringCase(string){
+        let cfg = this.openParens;
+        let toks = this.tokenizer.tokenize(string);
+        let prev = toks[0];
+        prev.value = this.formatTextCase(prev);
+        let substring = "";
+        let lowCase = string.toLowerCase();
+        for (let i = 1; i < toks.length; i++){
+            let token = toks[i];
+            token.value = this.formatTextCase(token);
+            if (token.type != tokenTypes.WHITESPACE){
+                console.log("token : " + token.value);
+                console.log("prev : " + prev.value);
+                let start = lowCase.indexOf(prev.value.toLowerCase()) + prev.value.length;
+                let end = lowCase.indexOf(token.value.toLowerCase());
+                let current = lowCase.substring(0, end)+ token.value; 
+                substring += current;
+                console.log("current : " + current);
+                lowCase = lowCase.substring(lowCase.indexOf(current.toLowerCase()) + current.length);
+                console.log("lowCase : " + lowCase);
+                // lowCase = lowCase.indexOf(current.toLowerCase() + current.length);
+                prev = token;
+            }
+        }
+        return substring;
+    }
+
+    getStringInOneStyle(word){
+        return word.replaceAll("(", " ( ").replaceAll(")", " ) ")
+                   .replaceAll(",", " , ").replaceAll("=", " = ")
+                   .replaceAll("--", " -- ")
+                   .replaceAll("-", " - ").replaceAll(/(\s|\n)+/g, " ");
+    }
+
+    getFormattingString(token){
+        let lastIdx = this.lastIndex();
+        let startBlocks = ["if", "elsif", "while", "case", "when"];
+        if (lastIdx == 0){
+            return this.getLastString();
+        }
+        let first = this.getLastString().trim().replaceAll(/\(|\(/g, "").split(" ")[0];
+        let substring = this.getLastString();
+        while (!startBlocks.includes(first)){
+            lastIdx--;
+            if (lastIdx < 0){
+                break;
+            }
+            substring = this.lines[lastIdx] + " " + substring.trim();
+            first = substring.trim().replaceAll(/\(|\(/g, "").split(" ")[0];
+        }
+        if (lastIdx < 0){
+            lastIdx = 0;
+        }
+        let indent = this.getLineIndent(this.lines[lastIdx])
+        let popCount = this.lines.length - lastIdx - 1;
+        return {indent: indent, substring: substring, popCount: popCount};
+
     }
 
     formatReturn(token){
@@ -196,6 +353,7 @@ export default class NewFormatter {
     }
 
     formatThen(token){
+        this.formatLikeDevelopWrite(token);
         this.lines[this.lastIndex()] += token.value;
         if (this.getLastString().includes(" when ")){
             this.indentCount++;
@@ -206,10 +364,9 @@ export default class NewFormatter {
     formatLoop(token, index){
         let next = this.getNextValidWord(index);
         if (next != ";"){
-            // this.addNewLine(this.indentCount);
+            this.formatLikeDevelopWrite(token);
             this.lines[this.lastIndex()] += token.value;
             this.indentsKeyWords[this.indentsKeyWords.length - 1].key = "loop";
-            // this.incrementIndent(token.value, "");
             this.addNewLine(this.indentCount);
         } else {
             this.lines[this.lastIndex()] += token.value;
@@ -686,7 +843,7 @@ export default class NewFormatter {
     }
 
     formatLineComment(token){
-        let qLines = this.query.split("\n");
+        let qLines = this.cQuery.split("\n");
         let isNewLine = false;
         for (let i = 0; i < qLines.length; i++){
             if (qLines[i].includes(token.value.trim()) && qLines[i].trim() == token.value.trim()){
@@ -694,7 +851,7 @@ export default class NewFormatter {
                 break;
             }
         }
-        this.query = this.query.substring(this.query.indexOf(token.value) + token.value.length);
+        this.cQuery = this.cQuery.substring(this.cQuery.indexOf(token.value) + token.value.length);
         if (isNewLine){
             if (!this.getLastString().trim() == ""){
                 this.addNewLine(this.indentCount);

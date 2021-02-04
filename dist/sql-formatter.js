@@ -119,7 +119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var Symbol = __webpack_require__(9),
+	var Symbol = __webpack_require__(10),
 	    getRawTag = __webpack_require__(56),
 	    objectToString = __webpack_require__(64);
 
@@ -317,131 +317,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports) {
-
-	"use strict";
-
-	exports.__esModule = true;
-	/**
-	 * Constants for token types
-	 */
-	exports["default"] = {
-	    WHITESPACE: "whitespace", //1
-	    WORD: "word", //
-	    STRING: "string", //
-	    RESERVED: "reserved", //6
-	    RESERVED_TOPLEVEL: "reserved-toplevel", //4
-	    RESERVED_NEWLINE: "reserved-newline", //5
-	    OPERATOR: "operator",
-	    OPEN_PAREN: "open-paren", //7
-	    CLOSE_PAREN: "close-paren", //8
-	    LINE_COMMENT: "line-comment", //2
-	    BLOCK_COMMENT: "block-comment", //3
-	    NUMBER: "number", //
-	    PLACEHOLDER: "placeholder" //9
-	};
-	module.exports = exports["default"];
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var root = __webpack_require__(1);
-
-	/** Built-in value references. */
-	var Symbol = root.Symbol;
-
-	module.exports = Symbol;
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseToString = __webpack_require__(17);
-
-	/**
-	 * Converts `value` to a string. An empty string is returned for `null`
-	 * and `undefined` values. The sign of `-0` is preserved.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to convert.
-	 * @returns {string} Returns the converted string.
-	 * @example
-	 *
-	 * _.toString(null);
-	 * // => ''
-	 *
-	 * _.toString(-0);
-	 * // => '-0'
-	 *
-	 * _.toString([1, 2, 3]);
-	 * // => '1,2,3'
-	 */
-	function toString(value) {
-	  return value == null ? '' : baseToString(value);
-	}
-
-	module.exports = toString;
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-	"use strict";
-
-	exports.__esModule = true;
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	 * Handles placeholder replacement with given params.
-	 */
-	var Params = function () {
-	    /**
-	     * @param {Object} params
-	     */
-	    function Params(params) {
-	        _classCallCheck(this, Params);
-
-	        this.params = params;
-	        this.index = 0;
-	    }
-
-	    /**
-	     * Returns param value that matches given placeholder with param key.
-	     * @param {Object} token
-	     *   @param {String} token.key Placeholder key
-	     *   @param {String} token.value Placeholder value
-	     * @return {String} param or token.value when params are missing
-	     */
-
-
-	    Params.prototype.get = function get(_ref) {
-	        var key = _ref.key,
-	            value = _ref.value;
-
-	        if (!this.params) {
-	            return value;
-	        }
-	        if (key) {
-	            return this.params[key];
-	        }
-	        return this.params[this.index++];
-	    };
-
-	    return Params;
-	}();
-
-	exports["default"] = Params;
-	module.exports = exports["default"];
-
-/***/ }),
-/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -456,7 +331,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _escapeRegExp2 = _interopRequireDefault(_escapeRegExp);
 
-	var _tokenTypes = __webpack_require__(8);
+	var _tokenTypes = __webpack_require__(9);
 
 	var _tokenTypes2 = _interopRequireDefault(_tokenTypes);
 
@@ -794,6 +669,131 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	exports.__esModule = true;
+	/**
+	 * Constants for token types
+	 */
+	exports["default"] = {
+	    WHITESPACE: "whitespace", //1
+	    WORD: "word", //
+	    STRING: "string", //
+	    RESERVED: "reserved", //6
+	    RESERVED_TOPLEVEL: "reserved-toplevel", //4
+	    RESERVED_NEWLINE: "reserved-newline", //5
+	    OPERATOR: "operator",
+	    OPEN_PAREN: "open-paren", //7
+	    CLOSE_PAREN: "close-paren", //8
+	    LINE_COMMENT: "line-comment", //2
+	    BLOCK_COMMENT: "block-comment", //3
+	    NUMBER: "number", //
+	    PLACEHOLDER: "placeholder" //9
+	};
+	module.exports = exports["default"];
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var root = __webpack_require__(1);
+
+	/** Built-in value references. */
+	var Symbol = root.Symbol;
+
+	module.exports = Symbol;
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var baseToString = __webpack_require__(17);
+
+	/**
+	 * Converts `value` to a string. An empty string is returned for `null`
+	 * and `undefined` values. The sign of `-0` is preserved.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to convert.
+	 * @returns {string} Returns the converted string.
+	 * @example
+	 *
+	 * _.toString(null);
+	 * // => ''
+	 *
+	 * _.toString(-0);
+	 * // => '-0'
+	 *
+	 * _.toString([1, 2, 3]);
+	 * // => '1,2,3'
+	 */
+	function toString(value) {
+	  return value == null ? '' : baseToString(value);
+	}
+
+	module.exports = toString;
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	exports.__esModule = true;
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * Handles placeholder replacement with given params.
+	 */
+	var Params = function () {
+	    /**
+	     * @param {Object} params
+	     */
+	    function Params(params) {
+	        _classCallCheck(this, Params);
+
+	        this.params = params;
+	        this.index = 0;
+	    }
+
+	    /**
+	     * Returns param value that matches given placeholder with param key.
+	     * @param {Object} token
+	     *   @param {String} token.key Placeholder key
+	     *   @param {String} token.value Placeholder value
+	     * @return {String} param or token.value when params are missing
+	     */
+
+
+	    Params.prototype.get = function get(_ref) {
+	        var key = _ref.key,
+	            value = _ref.value;
+
+	        if (!this.params) {
+	            return value;
+	        }
+	        if (key) {
+	            return this.params[key];
+	        }
+	        return this.params[this.index++];
+	    };
+
+	    return Params;
+	}();
+
+	exports["default"] = Params;
+	module.exports = exports["default"];
+
+/***/ }),
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -805,7 +805,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Formatter2 = _interopRequireDefault(_Formatter);
 
-	var _Tokenizer = __webpack_require__(12);
+	var _Tokenizer = __webpack_require__(8);
 
 	var _Tokenizer2 = _interopRequireDefault(_Tokenizer);
 
@@ -1005,7 +1005,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var Symbol = __webpack_require__(9),
+	var Symbol = __webpack_require__(10),
 	    arrayMap = __webpack_require__(14),
 	    isArray = __webpack_require__(5),
 	    isSymbol = __webpack_require__(27);
@@ -1447,7 +1447,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var baseRepeat = __webpack_require__(48),
 	    isIterateeCall = __webpack_require__(60),
 	    toInteger = __webpack_require__(30),
-	    toString = __webpack_require__(10);
+	    toString = __webpack_require__(11);
 
 	/**
 	 * Repeats the given string `n` times.
@@ -1533,7 +1533,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    castSlice = __webpack_require__(53),
 	    charsEndIndex = __webpack_require__(54),
 	    stringToArray = __webpack_require__(67),
-	    toString = __webpack_require__(10);
+	    toString = __webpack_require__(11);
 
 	/** Used to match leading and trailing whitespace. */
 	var reTrimEnd = /\s+$/;
@@ -1606,11 +1606,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _trimEnd2 = _interopRequireDefault(_trimEnd);
 
-	var _tokenTypes = __webpack_require__(8);
+	var _tokenTypes = __webpack_require__(9);
 
 	var _tokenTypes2 = _interopRequireDefault(_tokenTypes);
 
-	var _Params = __webpack_require__(11);
+	var _Params = __webpack_require__(12);
 
 	var _Params2 = _interopRequireDefault(_Params);
 
@@ -1707,6 +1707,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        for (var _i = 0; _i < this.lines.length; _i++) {
 	            this.lines[_i] = this.formatLineByLength(this.lines[_i]);
+	        }
+	        var length = this.lines.length - 1;
+	        if (this.lines[length].trim() == ")" || this.lines[length].trim() == ");" || this.lines[length].trim() == ";") {
+	            if (length != 0) {
+	                this.lines[length - 1] += this.lines[length].trim();
+	                this.lines.pop();
+	            }
 	        }
 	    };
 
@@ -2251,11 +2258,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _trimEnd2 = _interopRequireDefault(_trimEnd);
 
-	var _tokenTypes = __webpack_require__(8);
+	var _tokenTypes = __webpack_require__(9);
 
 	var _tokenTypes2 = _interopRequireDefault(_tokenTypes);
 
-	var _Params = __webpack_require__(11);
+	var _Params = __webpack_require__(12);
 
 	var _Params2 = _interopRequireDefault(_Params);
 
@@ -2266,6 +2273,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _SqlFormatter = __webpack_require__(13);
 
 	var _SqlFormatter2 = _interopRequireDefault(_SqlFormatter);
+
+	var _Tokenizer = __webpack_require__(8);
+
+	var _Tokenizer2 = _interopRequireDefault(_Tokenizer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -2287,6 +2298,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.lastIndentKey = { key: "", name: "", indent: 0 };
 	        this.lineSize = 80;
 	        this.booleanOperators = ["and", "or", "xor"];
+	        this.cQuery = "";
 	    }
 
 	    NewFormatter.prototype.format = function format(query) {
@@ -2297,6 +2309,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    NewFormatter.prototype.formatQuery = function formatQuery() {
+	        this.cQuery = this.query;
 	        var originQuery = this.query;
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
@@ -2325,43 +2338,194 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.formatClosingParentheses(token, i);
 	                } else if (token.type === _tokenTypes2["default"].PLACEHOLDER) {
 	                    this.formatPlaceholder(token);
-	                } else if (this.booleanOperators.includes(token.value)) {
-	                    this.formatBooleanExpressions(token);
-	                } else if (token.value === ")") {
-	                    this.formatCloseBkt(token);
-	                } else if (token.value === "begin") {
-	                    this.formatBegin(token);
-	                } else if (token.value == "then") {
-	                    this.formatThen(token);
-	                } else if (token.value === "loop") {
-	                    this.formatLoop(token, i);
-	                } else if (token.value === ",") {
-	                    this.formatComma(token);
-	                } else if (token.value === ":") {
-	                    this.formatWithSpaceAfter(token);
-	                } else if (this.withoutSpaces.includes(token.value)) {
-	                    this.formatWithoutSpaces(token);
-	                } else if (token.value === ";") {
-	                    this.formatQuerySeparator(token);
-	                } else if (token.value == "exception" || token.value == "exceptions") {
-	                    this.formatException(token, i);
-	                } else if (token.value == "else") {
-	                    this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;
-	                    this.addNewLine(this.indentCount);
-	                } else if (token.value == "elsif") {
-	                    this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;
-	                } else if (token.value == "when") {
-	                    this.formatWhen(token);
-	                } else if (token.value == "as" || token.value == "is") {
-	                    this.formatAsIs(token);
-	                } else if (token.value == "return") {
-	                    this.formatReturn(token);
-	                } else {
-	                    this.formatWithSpaces(token);
-	                };
+	                }
+	                // else if (this.booleanOperators.includes(token.value)){
+	                //     this.formatBooleanExpressions(token);
+	                // }
+	                else if (token.value === ")") {
+	                        this.formatCloseBkt(token);
+	                    } else if (token.value === "begin") {
+	                        this.formatBegin(token);
+	                    } else if (token.value == "then") {
+	                        this.formatThen(token);
+	                    } else if (token.value === "loop") {
+	                        this.formatLoop(token, i);
+	                    } else if (token.value === ",") {
+	                        this.formatComma(token);
+	                    } else if (token.value === ":") {
+	                        this.formatWithSpaceAfter(token);
+	                    } else if (this.withoutSpaces.includes(token.value)) {
+	                        this.formatWithoutSpaces(token);
+	                    } else if (token.value === ";") {
+	                        this.formatQuerySeparator(token);
+	                    } else if (token.value == "exception" || token.value == "exceptions") {
+	                        this.formatException(token, i);
+	                    } else if (token.value == "else") {
+	                        this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;
+	                        this.addNewLine(this.indentCount);
+	                    } else if (token.value == "elsif") {
+	                        this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;
+	                    } else if (token.value == "when") {
+	                        this.formatWhen(token);
+	                    } else if (token.value == "as" || token.value == "is") {
+	                        this.formatAsIs(token);
+	                    } else if (token.value == "return") {
+	                        this.formatReturn(token);
+	                    } else {
+	                        this.formatWithSpaces(token);
+	                    };
 	        }
 	        return this.addDevelopEmptyLines(originQuery, this.lines.join("\n").trim());
 	        // return this.lines.join("\n").trim();
+	    };
+
+	    NewFormatter.prototype.trimStart = function trimStart(line) {
+	        while (line[0] == " ") {
+	            line = line.substring(1);
+	        }
+	        return line;
+	    };
+
+	    NewFormatter.prototype.formatLikeDevelopWrite = function formatLikeDevelopWrite(token) {
+	        var cInfo = this.getFormattingString(token);
+	        var searchString = cInfo.substring;
+	        var first = searchString.trim().split(" ")[0].trim().replace("(", "");
+	        var info = this.findSubstring(first, token.value, this.getStringInOneStyle(searchString).trim());
+	        if (searchString.trim().length < 65) {
+	            return;
+	        }
+	        this.popLine(cInfo.popCount);
+	        var newLine = this.formatOriginSubstringWithIndent(cInfo.indent, info.indent, info.substring) + " ";
+	        this.lines[this.lastIndex()] = newLine;
+	    };
+
+	    NewFormatter.prototype.formatOriginSubstringWithIndent = function formatOriginSubstringWithIndent(indent, originIndent, substring) {
+	        var split = substring.split("\n");
+	        if (split[0].match(/'/g) == undefined || split[0].match(/'/g).length % 2 == 0) {
+	            split[0] = (0, _repeat2["default"])(" ", indent) + split[0].trim();
+	        } else {
+	            split[0] = (0, _repeat2["default"])(" ", indent) + this.trimStart(split[0]);
+	        }
+	        var inQuotes = split[0].match(/'/g) != undefined && split[0].match(/'/g) % 2 == 1;
+	        for (var i = 1; i < split.length; i++) {
+	            var match = split[i].match(/'/g);
+	            var cIndent = this.getLineIndent(split[i]) + 1;
+	            if (inQuotes) {
+	                split[i] = split[i];
+	                if (match != undefined && match.length % 2 == 1) {
+	                    inQuotes = false;
+	                }
+	            } else {
+	                if (match == undefined) {
+	                    split[i] = (0, _repeat2["default"])(" ", indent - originIndent + cIndent) + split[i].trim();
+	                } else {
+	                    if (match.length % 2 == 1) {
+	                        inQuotes = true;
+	                    }
+	                    split[i] = (0, _repeat2["default"])(" ", indent - originIndent + cIndent) + this.trimStart(split[i]);
+	                }
+	            }
+	        }
+	        return split.join("\n");
+	    };
+
+	    NewFormatter.prototype.getLineIndent = function getLineIndent(line) {
+	        var indent = 0;
+	        for (indent; indent < line.length; indent++) {
+	            if (line[indent] != " ") {
+	                return indent;
+	            }
+	        }
+	        return indent;
+	    };
+
+	    NewFormatter.prototype.popLine = function popLine(popCount) {
+	        for (var i = 0; i < popCount; i++) {
+	            var line = this.lines.pop();
+	        }
+	    };
+
+	    NewFormatter.prototype.findSubstring = function findSubstring(first, last, searchString) {
+	        var substring = "";
+	        var indent = 0;
+	        var startIdx = 0;
+	        while (this.getStringInOneStyle(substring).trim().toLowerCase() != searchString.trim().toLowerCase()) {
+	            substring = "";
+	            startIdx = this.query.toLowerCase().indexOf(first);
+	            while (searchString.trim().toLowerCase().startsWith(this.getStringInOneStyle(substring).trim().toLowerCase()) && this.getStringInOneStyle(substring.trim()).trim().length != searchString.trim().length) {
+	                substring += this.query[startIdx];
+	                startIdx++;
+	            }
+	            if (searchString.trim().toLowerCase() != this.getStringInOneStyle(substring).trim().toLowerCase()) {
+	                this.query = this.query.substring(this.query.toLowerCase().indexOf(first) + first.length);
+	            }
+	        }
+	        var from = this.query.indexOf(substring);
+	        for (var i = from; i >= 0; i--) {
+	            if (this.query[i] == "\n") {
+	                break;
+	            } else {
+	                indent++;
+	            }
+	        }
+	        this.query = this.query.substring(this.query.indexOf(substring) + substring.length - 1);
+	        substring = this.formatSubstringCase(substring);
+	        return { substring: substring, indent: indent };
+	    };
+
+	    NewFormatter.prototype.formatSubstringCase = function formatSubstringCase(string) {
+	        var cfg = this.openParens;
+	        var toks = this.tokenizer.tokenize(string);
+	        var prev = toks[0];
+	        prev.value = this.formatTextCase(prev);
+	        var substring = "";
+	        var lowCase = string.toLowerCase();
+	        for (var i = 1; i < toks.length; i++) {
+	            var token = toks[i];
+	            token.value = this.formatTextCase(token);
+	            if (token.type != _tokenTypes2["default"].WHITESPACE) {
+	                console.log("token : " + token.value);
+	                console.log("prev : " + prev.value);
+	                var start = lowCase.indexOf(prev.value.toLowerCase()) + prev.value.length;
+	                var end = lowCase.indexOf(token.value.toLowerCase());
+	                var current = lowCase.substring(0, end) + token.value;
+	                substring += current;
+	                console.log("current : " + current);
+	                lowCase = lowCase.substring(lowCase.indexOf(current.toLowerCase()) + current.length);
+	                console.log("lowCase : " + lowCase);
+	                // lowCase = lowCase.indexOf(current.toLowerCase() + current.length);
+	                prev = token;
+	            }
+	        }
+	        return substring;
+	    };
+
+	    NewFormatter.prototype.getStringInOneStyle = function getStringInOneStyle(word) {
+	        return word.replaceAll("(", " ( ").replaceAll(")", " ) ").replaceAll(",", " , ").replaceAll("=", " = ").replaceAll("--", " -- ").replaceAll("-", " - ").replaceAll(/(\s|\n)+/g, " ");
+	    };
+
+	    NewFormatter.prototype.getFormattingString = function getFormattingString(token) {
+	        var lastIdx = this.lastIndex();
+	        var startBlocks = ["if", "elsif", "while", "case", "when"];
+	        if (lastIdx == 0) {
+	            return this.getLastString();
+	        }
+	        var first = this.getLastString().trim().replaceAll(/\(|\(/g, "").split(" ")[0];
+	        var substring = this.getLastString();
+	        while (!startBlocks.includes(first)) {
+	            lastIdx--;
+	            if (lastIdx < 0) {
+	                break;
+	            }
+	            substring = this.lines[lastIdx] + " " + substring.trim();
+	            first = substring.trim().replaceAll(/\(|\(/g, "").split(" ")[0];
+	        }
+	        if (lastIdx < 0) {
+	            lastIdx = 0;
+	        }
+	        var indent = this.getLineIndent(this.lines[lastIdx]);
+	        var popCount = this.lines.length - lastIdx - 1;
+	        return { indent: indent, substring: substring, popCount: popCount };
 	    };
 
 	    NewFormatter.prototype.formatReturn = function formatReturn(token) {
@@ -2439,6 +2603,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    NewFormatter.prototype.formatThen = function formatThen(token) {
+	        this.formatLikeDevelopWrite(token);
 	        this.lines[this.lastIndex()] += token.value;
 	        if (this.getLastString().includes(" when ")) {
 	            this.indentCount++;
@@ -2449,10 +2614,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    NewFormatter.prototype.formatLoop = function formatLoop(token, index) {
 	        var next = this.getNextValidWord(index);
 	        if (next != ";") {
-	            // this.addNewLine(this.indentCount);
+	            this.formatLikeDevelopWrite(token);
 	            this.lines[this.lastIndex()] += token.value;
 	            this.indentsKeyWords[this.indentsKeyWords.length - 1].key = "loop";
-	            // this.incrementIndent(token.value, "");
 	            this.addNewLine(this.indentCount);
 	        } else {
 	            this.lines[this.lastIndex()] += token.value;
@@ -2918,7 +3082,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    NewFormatter.prototype.formatLineComment = function formatLineComment(token) {
-	        var qLines = this.query.split("\n");
+	        var qLines = this.cQuery.split("\n");
 	        var isNewLine = false;
 	        for (var i = 0; i < qLines.length; i++) {
 	            if (qLines[i].includes(token.value.trim()) && qLines[i].trim() == token.value.trim()) {
@@ -2926,7 +3090,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                break;
 	            }
 	        }
-	        this.query = this.query.substring(this.query.indexOf(token.value) + token.value.length);
+	        this.cQuery = this.cQuery.substring(this.cQuery.indexOf(token.value) + token.value.length);
 	        if (isNewLine) {
 	            if (!this.getLastString().trim() == "") {
 	                this.addNewLine(this.indentCount);
@@ -3002,7 +3166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.__esModule = true;
 
-	var _Tokenizer = __webpack_require__(12);
+	var _Tokenizer = __webpack_require__(8);
 
 	var _Tokenizer2 = _interopRequireDefault(_Tokenizer);
 
@@ -3607,7 +3771,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var Symbol = __webpack_require__(9);
+	var Symbol = __webpack_require__(10);
 
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -4076,7 +4240,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var toString = __webpack_require__(10);
+	var toString = __webpack_require__(11);
 
 	/**
 	 * Used to match `RegExp`

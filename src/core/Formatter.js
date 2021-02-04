@@ -89,6 +89,13 @@ export default class Formatter {
         for (let i = 0; i < this.lines.length; i++){
             this.lines[i] = this.formatLineByLength(this.lines[i]);
         }
+        let length = this.lines.length - 1;
+        if (this.lines[length].trim() == ")" || this.lines[length].trim() == ");" || this.lines[length].trim() == ";"){
+            if (length != 0){
+                this.lines[length - 1] += this.lines[length].trim();
+                this.lines.pop();
+            }
+        }
     }
 
     formatInto(token){
