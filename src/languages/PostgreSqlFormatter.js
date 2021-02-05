@@ -511,7 +511,7 @@ export default class PostgreSqlFormatter extends Formatter {
       openParens: ['(', 'CASE'],
       closeParens: [')', 'END'],
       indexedPlaceholderTypes: ['$'],
-      namedPlaceholderTypes: [],
+      namedPlaceholderTypes: [':'],
       lineCommentTypes: ['--'],
       operators: [
         '!=',
