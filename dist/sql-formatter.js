@@ -58,11 +58,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.__esModule = true;
 
-	var _SqlFormatter = __webpack_require__(13);
-
-	var _SqlFormatter2 = _interopRequireDefault(_SqlFormatter);
-
-	var _PlSqlFormatter = __webpack_require__(35);
+	var _PlSqlFormatter = __webpack_require__(25);
 
 	var _PlSqlFormatter2 = _interopRequireDefault(_PlSqlFormatter);
 
@@ -81,21 +77,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    format: function format(query, cfg) {
 	        return new _PlSqlFormatter2["default"](cfg).format(query);
-	        // cfg = cfg || {};
-
-	        // switch (cfg.language) {
-	        //     case "db2":
-	        //         return new Db2Formatter(cfg).format(query);
-	        //     case "n1ql":
-	        //         return new N1qlFormatter(cfg).format(query);
-	        //     case "pl/sql":
-	        //         return 
-	        //     case "sql":
-	        //     case undefined:
-	        //         return new StandardSqlFormatter(cfg).format(query);
-	        //     default:
-	        //         throw Error(`Unsupported SQL dialect: ${cfg.language}`);
-	        // }
 	    }
 	};
 	module.exports = exports["default"];
@@ -104,7 +85,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var freeGlobal = __webpack_require__(18);
+	var freeGlobal = __webpack_require__(11);
 
 	/** Detect free variable `self`. */
 	var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -119,9 +100,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var Symbol = __webpack_require__(10),
-	    getRawTag = __webpack_require__(56),
-	    objectToString = __webpack_require__(64);
+	var Symbol = __webpack_require__(7),
+	    getRawTag = __webpack_require__(47),
+	    objectToString = __webpack_require__(56);
 
 	/** `Object#toString` result references. */
 	var nullTag = '[object Null]',
@@ -153,8 +134,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseIsNative = __webpack_require__(46),
-	    getValue = __webpack_require__(58);
+	var baseIsNative = __webpack_require__(38),
+	    getValue = __webpack_require__(49);
 
 	/**
 	 * Gets the native function at `key` of `object`.
@@ -174,112 +155,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Checks if `value` is object-like. A value is object-like if it's not `null`
-	 * and has a `typeof` result of "object".
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-	 * @example
-	 *
-	 * _.isObjectLike({});
-	 * // => true
-	 *
-	 * _.isObjectLike([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObjectLike(_.noop);
-	 * // => false
-	 *
-	 * _.isObjectLike(null);
-	 * // => false
-	 */
-	function isObjectLike(value) {
-	  return value != null && typeof value == 'object';
-	}
-
-	module.exports = isObjectLike;
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Checks if `value` is classified as an `Array` object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an array, else `false`.
-	 * @example
-	 *
-	 * _.isArray([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isArray(document.body.children);
-	 * // => false
-	 *
-	 * _.isArray('abc');
-	 * // => false
-	 *
-	 * _.isArray(_.noop);
-	 * // => false
-	 */
-	var isArray = Array.isArray;
-
-	module.exports = isArray;
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var isFunction = __webpack_require__(25),
-	    isLength = __webpack_require__(26);
-
-	/**
-	 * Checks if `value` is array-like. A value is considered array-like if it's
-	 * not a function and has a `value.length` that's an integer greater than or
-	 * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
-	 * @example
-	 *
-	 * _.isArrayLike([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isArrayLike(document.body.children);
-	 * // => true
-	 *
-	 * _.isArrayLike('abc');
-	 * // => true
-	 *
-	 * _.isArrayLike(_.noop);
-	 * // => false
-	 */
-	function isArrayLike(value) {
-	  return value != null && isLength(value.length) && !isFunction(value);
-	}
-
-	module.exports = isArrayLike;
-
-
-/***/ }),
-/* 7 */
 /***/ (function(module, exports) {
 
 	/**
@@ -316,22 +191,130 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+	/**
+	 * Checks if `value` is object-like. A value is object-like if it's not `null`
+	 * and has a `typeof` result of "object".
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 * @example
+	 *
+	 * _.isObjectLike({});
+	 * // => true
+	 *
+	 * _.isObjectLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObjectLike(_.noop);
+	 * // => false
+	 *
+	 * _.isObjectLike(null);
+	 * // => false
+	 */
+	function isObjectLike(value) {
+	  return value != null && typeof value == 'object';
+	}
+
+	module.exports = isObjectLike;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	exports.__esModule = true;
+	/**
+	 * Constants for token types
+	 */
+	exports["default"] = {
+	    WHITESPACE: "whitespace", //1
+	    WORD: "word", //
+	    STRING: "string", //
+	    RESERVED: "reserved", //6
+	    RESERVED_TOPLEVEL: "reserved-toplevel", //4
+	    RESERVED_NEWLINE: "reserved-newline", //5
+	    OPERATOR: "operator",
+	    OPEN_PAREN: "open-paren", //7
+	    CLOSE_PAREN: "close-paren", //8
+	    LINE_COMMENT: "line-comment", //2
+	    BLOCK_COMMENT: "block-comment", //3
+	    NUMBER: "number", //
+	    PLACEHOLDER: "placeholder" //9
+	};
+	module.exports = exports["default"];
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var root = __webpack_require__(1);
+
+	/** Built-in value references. */
+	var Symbol = root.Symbol;
+
+	module.exports = Symbol;
+
+
+/***/ }),
 /* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var baseToString = __webpack_require__(10);
+
+	/**
+	 * Converts `value` to a string. An empty string is returned for `null`
+	 * and `undefined` values. The sign of `-0` is preserved.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to convert.
+	 * @returns {string} Returns the converted string.
+	 * @example
+	 *
+	 * _.toString(null);
+	 * // => ''
+	 *
+	 * _.toString(-0);
+	 * // => '-0'
+	 *
+	 * _.toString([1, 2, 3]);
+	 * // => '1,2,3'
+	 */
+	function toString(value) {
+	  return value == null ? '' : baseToString(value);
+	}
+
+	module.exports = toString;
+
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _isEmpty = __webpack_require__(71);
+	var _isEmpty = __webpack_require__(65);
 
 	var _isEmpty2 = _interopRequireDefault(_isEmpty);
 
-	var _escapeRegExp = __webpack_require__(70);
+	var _escapeRegExp = __webpack_require__(62);
 
 	var _escapeRegExp2 = _interopRequireDefault(_escapeRegExp);
 
-	var _tokenTypes = __webpack_require__(9);
+	var _tokenTypes = __webpack_require__(6);
 
 	var _tokenTypes2 = _interopRequireDefault(_tokenTypes);
 
@@ -669,348 +652,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports) {
-
-	"use strict";
-
-	exports.__esModule = true;
-	/**
-	 * Constants for token types
-	 */
-	exports["default"] = {
-	    WHITESPACE: "whitespace", //1
-	    WORD: "word", //
-	    STRING: "string", //
-	    RESERVED: "reserved", //6
-	    RESERVED_TOPLEVEL: "reserved-toplevel", //4
-	    RESERVED_NEWLINE: "reserved-newline", //5
-	    OPERATOR: "operator",
-	    OPEN_PAREN: "open-paren", //7
-	    CLOSE_PAREN: "close-paren", //8
-	    LINE_COMMENT: "line-comment", //2
-	    BLOCK_COMMENT: "block-comment", //3
-	    NUMBER: "number", //
-	    PLACEHOLDER: "placeholder" //9
-	};
-	module.exports = exports["default"];
-
-/***/ }),
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var root = __webpack_require__(1);
-
-	/** Built-in value references. */
-	var Symbol = root.Symbol;
-
-	module.exports = Symbol;
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseToString = __webpack_require__(17);
-
-	/**
-	 * Converts `value` to a string. An empty string is returned for `null`
-	 * and `undefined` values. The sign of `-0` is preserved.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to convert.
-	 * @returns {string} Returns the converted string.
-	 * @example
-	 *
-	 * _.toString(null);
-	 * // => ''
-	 *
-	 * _.toString(-0);
-	 * // => '-0'
-	 *
-	 * _.toString([1, 2, 3]);
-	 * // => '1,2,3'
-	 */
-	function toString(value) {
-	  return value == null ? '' : baseToString(value);
-	}
-
-	module.exports = toString;
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-	"use strict";
-
-	exports.__esModule = true;
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	 * Handles placeholder replacement with given params.
-	 */
-	var Params = function () {
-	    /**
-	     * @param {Object} params
-	     */
-	    function Params(params) {
-	        _classCallCheck(this, Params);
-
-	        this.params = params;
-	        this.index = 0;
-	    }
-
-	    /**
-	     * Returns param value that matches given placeholder with param key.
-	     * @param {Object} token
-	     *   @param {String} token.key Placeholder key
-	     *   @param {String} token.value Placeholder value
-	     * @return {String} param or token.value when params are missing
-	     */
-
-
-	    Params.prototype.get = function get(_ref) {
-	        var key = _ref.key,
-	            value = _ref.value;
-
-	        if (!this.params) {
-	            return value;
-	        }
-	        if (key) {
-	            return this.params[key];
-	        }
-	        return this.params[this.index++];
-	    };
-
-	    return Params;
-	}();
-
-	exports["default"] = Params;
-	module.exports = exports["default"];
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	exports.__esModule = true;
-
-	var _Formatter = __webpack_require__(33);
-
-	var _Formatter2 = _interopRequireDefault(_Formatter);
-
-	var _Tokenizer = __webpack_require__(8);
-
-	var _Tokenizer2 = _interopRequireDefault(_Tokenizer);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var reservedWords = [
-	// "A", 
-	"ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG", "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE", "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND", "BULK", "BY", "BYTE",
-	// "C", 
-	"CALL", "CALLING", "CASCADE", "CASE", "CHAR_BASE", "CHAR", "CHARACTER", "CHARSET", "CHARSETFORM", "CHARSETID", "CHECK", "CLOB_BASE", "CLONE", "CLOSE", "CLUSTER", "CLUSTERS", "COALESCE", "COLAUTH", "COLLECT", "COLUMNS", "COMMENT", "COMMIT", "COMMITTED", "COMPILED", "COMPRESS", "CONNECT", "CONSTANT", "CONSTRUCTOR", "CONTEXT", "CONTINUE", "CONVERT",
-	// "COUNT", 
-	"CRASH", "CREATE", "CREDENTIAL", "CURRENT", "CURRVAL", "CURSOR", "CUSTOMDATUM", "DANGLING", "DATA", "DATE_BASE", "DATE", "DAY", "DECIMAL", "DEFAULT", "DEFINE", "DELETE", "DESC", "DETERMINISTIC", "DIRECTORY", "DISTINCT", "DO", "DOUBLE", "DROP", "DURATION", "ELEMENT", "ELSIF", "EMPTY", "ESCAPE", "EXCEPTIONS", "EXCLUSIVE", "EXECUTE", "EXISTS", "EXIT", "EXTENDS", "EXTERNAL", "EXTRACT", "FALSE", "FETCH", "FINAL", "FIRST", "FIXED", "FLOAT", "FOR", "FORALL", "FORCE", "FROM", "FUNCTION", "GENERAL", "GOTO", "GRANT", "GROUP", "HASH", "HEAP", "HIDDEN", "HOUR", "IDENTIFIED", "IF", "IMMEDIATE", "IN", "INCLUDING", "INDEX", "INDEXES", "INDICATOR", "INDICES", "INFINITE", "INSTANTIABLE", "INT", "INTEGER", "INTERFACE", "INTERVAL", "INTO", "INVALIDATE", "IS", "ISOLATION", "JAVA", "LANGUAGE", "LARGE", "LEADING", "LENGTH", "LEVEL", "LIBRARY", "LIKE", "LIKE2", "LIKE4", "LIKEC", "LIMITED", "LOCAL", "LOCK", "LONG", "MAP", "MAX", "MAXLEN", "MEMBER", "MERGE", "MIN", "MINUS", "MINUTE", "MLSLABEL", "MOD", "MODE", "MONTH", "MULTISET", "NAME", "NAN", "NATIONAL", "NATIVE", "NATURAL", "NATURALN", "NCHAR", "NEW", "NEXTVAL", "NOCOMPRESS", "NOCOPY", "NOT", "NOWAIT", "NULL", "NULLIF", "NUMBER_BASE", "NUMBER", "OBJECT", "OCICOLL", "OCIDATE", "OCIDATETIME", "OCIDURATION", "OCIINTERVAL", "OCILOBLOCATOR", "OCINUMBER", "OCIRAW", "OCIREF", "OCIREFCURSOR", "OCIROWID", "OCISTRING", "OCITYPE", "OF", "OLD", "ON", "ONLY", "OPAQUE", "OPEN", "OPERATOR", "OPTION", "ORACLE", "ORADATA", "ORDER", "ORGANIZATION", "ORLANY", "ORLVARY", "OTHERS", "OUT", "OVERLAPS", "OVERRIDING", "PACKAGE", "PARALLEL_ENABLE", "PARAMETER", "PARAMETERS", "PARENT", "PARTITION", "PASCAL", "PCTFREE", "PIPE", "PIPELINED", "PLS_INTEGER", "PLUGGABLE", "POSITIVE", "POSITIVEN", "PRAGMA", "PRECISION", "PRIOR", "PRIVATE", "PROCEDURE", "PUBLIC", "RAISE", "RANGE", "RAW", "READ", "REAL", "RECORD", "REF", "REFERENCE", "RELEASE", "RELIES_ON", "REM", "REMAINDER", "RENAME", "RESOURCE", "RESULT_CACHE", "RESULT", "RETURN", "RETURNING", "REVERSE", "REVOKE", "ROLLBACK", "ROW", "ROWID", "ROWNUM", "ROWTYPE", "SAMPLE", "SAVE", "SAVEPOINT", "SB1", "SB2", "SB4", "SECOND", "SEGMENT", "SELF", "SEPARATE", "SEQUENCE", "SERIALIZABLE", "SHARE", "SHORT", "SIZE_T", "SIZE", "SMALLINT", "SOME", "SPACE", "SPARSE", "SQL", "SQLCODE", "SQLDATA", "SQLERRM", "SQLNAME", "SQLSTATE", "STANDARD", "START", "STATIC", "STDDEV", "STORED", "STRING", "STRUCT", "STYLE", "SUBMULTISET", "SUBPARTITION", "SUBSTITUTABLE", "SUBTYPE", "SUCCESSFUL", "SUM", "SYNONYM", "SYSDATE", "TABAUTH", "TABLE", "TDO", "THE", "THEN", "TIME", "TIMESTAMP", "TIMEZONE_ABBR", "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TIMEZONE_REGION", "TO", "TRAILING", "TRANSACTION", "TRANSACTIONAL", "TRIGGER", "TRUE", "TRUSTED", "TYPE", "UB1", "UB2", "UB4", "UID", "UNDER", "UNIQUE", "UNPLUG", "UNSIGNED", "UNTRUSTED", "USE", "USER", "USING", "VALIDATE", "VALIST", "VALUE", "VARCHAR", "VARCHAR2", "VARIABLE", "VARIANCE", "VARRAY", "VARYING", "VIEW", "VIEWS", "VOID", "WHENEVER", "WHILE", "WITH", "WORK", "WRAPPED", "WRITE", "YEAR", "SELECT", "ZONE", "AND", "WHERE", "OR"];
-
-	var reservedToplevelWords = ["ADD", "ALTER COLUMN", "ALTER TABLE",
-	// "BEGIN",
-	"CONNECT BY", "USING", "DECLARE", "DELETE FROM", "DELETE",
-	// "END",
-	"MERGE", "EXCEPT", "EXCEPTION", "FETCH FIRST", "FROM", "GROUP BY", "SET", "HAVING",
-	// "INSERT INTO",
-	// "INTO", 
-	"INSERT", "INTERSECT", "LIMIT", "LOOP", "MODIFY", "CROSS JOIN", "OUTER JOIN", "RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN", "ORDER BY", "RETURNING",
-	// "ORDER",
-	"SELECT", //"SET CURRENT SCHEMA", "SET SCHEMA", 
-	// "SET", 
-	"START WITH", "JOIN", "UNION ALL", "UNION",
-	// "UPDATE",
-	"VALUES", "WHERE", "UPDATE"
-	// "WHEN",
-	// "AND"
-	];
-
-	var reservedNewlineWords = [
-	// "AND",
-	"CROSS APPLY",
-	// "CROSS JOIN", "OUTER JOIN","RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN",
-	"ELSE", "END",
-	// "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN",
-	// "JOIN",
-	// "LEFT JOIN", "LEFT OUTER JOIN",
-	// "OR", 
-	"OUTER APPLY", "THEN",
-	// "OUTER JOIN","RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN",
-	"WHEN", "UNION"];
-
-	var tokenizer = void 0;
-
-	var PlSqlFormatter = function () {
-	    /**
-	     * @param {Object} cfg Different set of configurations
-	     */
-	    function PlSqlFormatter(cfg) {
-	        _classCallCheck(this, PlSqlFormatter);
-
-	        this.cfg = cfg;
-	    }
-
-	    /**
-	     * Format the whitespace in a PL/SQL string to make it easier to read
-	     *
-	     * @param {String} query The PL/SQL string
-	     * @return {String} formatted string
-	     */
-
-
-	    PlSqlFormatter.prototype.format = function format(query) {
-	        if (!tokenizer) {
-	            tokenizer = new _Tokenizer2["default"]({
-	                reservedWords: reservedWords,
-	                reservedToplevelWords: reservedToplevelWords,
-	                reservedNewlineWords: reservedNewlineWords,
-	                stringTypes: ["\"\"", "N''", "''", "``"],
-	                openParens: ["(", "CASE", "BEGIN"],
-	                closeParens: [")", "END"],
-	                indexedPlaceholderTypes: ["?"],
-	                namedPlaceholderTypes: [":"],
-	                lineCommentTypes: ["--"],
-	                specialWordChars: ["_", "$", "#", ".", "@", "%"]
-	            });
-	        }
-	        return new _Formatter2["default"](this.cfg, tokenizer, reservedWords).format(query);
-	    };
-
-	    PlSqlFormatter.prototype.getFormatArray = function getFormatArray(query) {
-	        if (!tokenizer) {
-	            tokenizer = new _Tokenizer2["default"]({
-	                reservedWords: reservedWords,
-	                reservedToplevelWords: reservedToplevelWords,
-	                reservedNewlineWords: reservedNewlineWords,
-	                stringTypes: ["\"\"", "N''", "''", "``"],
-	                openParens: ["(", "CASE", "BEGIN"],
-	                closeParens: [")", "END"],
-	                indexedPlaceholderTypes: ["?"],
-	                namedPlaceholderTypes: [":"],
-	                lineCommentTypes: ["--"],
-	                specialWordChars: ["_", "$", "#", ".", "@"]
-	            });
-	        }
-	        return new _Formatter2["default"](this.cfg, tokenizer, reservedWords).getFormatArray(query);
-	    };
-
-	    return PlSqlFormatter;
-	}();
-
-	exports["default"] = PlSqlFormatter;
-	module.exports = exports["default"];
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports) {
-
-	/**
-	 * A specialized version of `_.map` for arrays without support for iteratee
-	 * shorthands.
-	 *
-	 * @private
-	 * @param {Array} [array] The array to iterate over.
-	 * @param {Function} iteratee The function invoked per iteration.
-	 * @returns {Array} Returns the new mapped array.
-	 */
-	function arrayMap(array, iteratee) {
-	  var index = -1,
-	      length = array == null ? 0 : array.length,
-	      result = Array(length);
-
-	  while (++index < length) {
-	    result[index] = iteratee(array[index], index, array);
-	  }
-	  return result;
-	}
-
-	module.exports = arrayMap;
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseFindIndex = __webpack_require__(43),
-	    baseIsNaN = __webpack_require__(45),
-	    strictIndexOf = __webpack_require__(66);
-
-	/**
-	 * The base implementation of `_.indexOf` without `fromIndex` bounds checks.
-	 *
-	 * @private
-	 * @param {Array} array The array to inspect.
-	 * @param {*} value The value to search for.
-	 * @param {number} fromIndex The index to search from.
-	 * @returns {number} Returns the index of the matched value, else `-1`.
-	 */
-	function baseIndexOf(array, value, fromIndex) {
-	  return value === value
-	    ? strictIndexOf(array, value, fromIndex)
-	    : baseFindIndex(array, baseIsNaN, fromIndex);
-	}
-
-	module.exports = baseIndexOf;
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var isPrototype = __webpack_require__(20),
-	    nativeKeys = __webpack_require__(62);
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/**
-	 * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 */
-	function baseKeys(object) {
-	  if (!isPrototype(object)) {
-	    return nativeKeys(object);
-	  }
-	  var result = [];
-	  for (var key in Object(object)) {
-	    if (hasOwnProperty.call(object, key) && key != 'constructor') {
-	      result.push(key);
-	    }
-	  }
-	  return result;
-	}
-
-	module.exports = baseKeys;
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var Symbol = __webpack_require__(10),
-	    arrayMap = __webpack_require__(14),
-	    isArray = __webpack_require__(5),
-	    isSymbol = __webpack_require__(27);
+	var Symbol = __webpack_require__(7),
+	    arrayMap = __webpack_require__(32),
+	    isArray = __webpack_require__(14),
+	    isSymbol = __webpack_require__(18);
 
 	/** Used as references for various `Number` constants. */
 	var INFINITY = 1 / 0;
@@ -1047,7 +695,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 18 */
+/* 11 */
 /***/ (function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
@@ -1058,38 +706,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ }),
-/* 19 */
-/***/ (function(module, exports) {
-
-	/** Used as references for various `Number` constants. */
-	var MAX_SAFE_INTEGER = 9007199254740991;
-
-	/** Used to detect unsigned integer values. */
-	var reIsUint = /^(?:0|[1-9]\d*)$/;
-
-	/**
-	 * Checks if `value` is a valid array-like index.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
-	 * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
-	 */
-	function isIndex(value, length) {
-	  var type = typeof value;
-	  length = length == null ? MAX_SAFE_INTEGER : length;
-
-	  return !!length &&
-	    (type == 'number' ||
-	      (type != 'symbol' && reIsUint.test(value))) &&
-	        (value > -1 && value % 1 == 0 && value < length);
-	}
-
-	module.exports = isIndex;
-
-
-/***/ }),
-/* 20 */
+/* 12 */
 /***/ (function(module, exports) {
 
 	/** Used for built-in method references. */
@@ -1113,7 +730,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 21 */
+/* 13 */
 /***/ (function(module, exports) {
 
 	/** Used for built-in method references. */
@@ -1145,157 +762,82 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseIndexOf = __webpack_require__(15),
-	    isArrayLike = __webpack_require__(6),
-	    isString = __webpack_require__(72),
-	    toInteger = __webpack_require__(30),
-	    values = __webpack_require__(77);
-
-	/* Built-in method references for those with the same name as other `lodash` methods. */
-	var nativeMax = Math.max;
+/* 14 */
+/***/ (function(module, exports) {
 
 	/**
-	 * Checks if `value` is in `collection`. If `collection` is a string, it's
-	 * checked for a substring of `value`, otherwise
-	 * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
-	 * is used for equality comparisons. If `fromIndex` is negative, it's used as
-	 * the offset from the end of `collection`.
+	 * Checks if `value` is classified as an `Array` object.
 	 *
 	 * @static
 	 * @memberOf _
 	 * @since 0.1.0
-	 * @category Collection
-	 * @param {Array|Object|string} collection The collection to inspect.
-	 * @param {*} value The value to search for.
-	 * @param {number} [fromIndex=0] The index to search from.
-	 * @param- {Object} [guard] Enables use as an iteratee for methods like `_.reduce`.
-	 * @returns {boolean} Returns `true` if `value` is found, else `false`.
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an array, else `false`.
 	 * @example
 	 *
-	 * _.includes([1, 2, 3], 1);
+	 * _.isArray([1, 2, 3]);
 	 * // => true
 	 *
-	 * _.includes([1, 2, 3], 1, 2);
+	 * _.isArray(document.body.children);
 	 * // => false
 	 *
-	 * _.includes({ 'a': 1, 'b': 2 }, 1);
+	 * _.isArray('abc');
+	 * // => false
+	 *
+	 * _.isArray(_.noop);
+	 * // => false
+	 */
+	var isArray = Array.isArray;
+
+	module.exports = isArray;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var isFunction = __webpack_require__(16),
+	    isLength = __webpack_require__(17);
+
+	/**
+	 * Checks if `value` is array-like. A value is considered array-like if it's
+	 * not a function and has a `value.length` that's an integer greater than or
+	 * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+	 * @example
+	 *
+	 * _.isArrayLike([1, 2, 3]);
 	 * // => true
 	 *
-	 * _.includes('abcd', 'bc');
+	 * _.isArrayLike(document.body.children);
 	 * // => true
+	 *
+	 * _.isArrayLike('abc');
+	 * // => true
+	 *
+	 * _.isArrayLike(_.noop);
+	 * // => false
 	 */
-	function includes(collection, value, fromIndex, guard) {
-	  collection = isArrayLike(collection) ? collection : values(collection);
-	  fromIndex = (fromIndex && !guard) ? toInteger(fromIndex) : 0;
-
-	  var length = collection.length;
-	  if (fromIndex < 0) {
-	    fromIndex = nativeMax(length + fromIndex, 0);
-	  }
-	  return isString(collection)
-	    ? (fromIndex <= length && collection.indexOf(value, fromIndex) > -1)
-	    : (!!length && baseIndexOf(collection, value, fromIndex) > -1);
+	function isArrayLike(value) {
+	  return value != null && isLength(value.length) && !isFunction(value);
 	}
 
-	module.exports = includes;
+	module.exports = isArrayLike;
 
 
 /***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseIsArguments = __webpack_require__(44),
-	    isObjectLike = __webpack_require__(4);
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/** Built-in value references. */
-	var propertyIsEnumerable = objectProto.propertyIsEnumerable;
-
-	/**
-	 * Checks if `value` is likely an `arguments` object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an `arguments` object,
-	 *  else `false`.
-	 * @example
-	 *
-	 * _.isArguments(function() { return arguments; }());
-	 * // => true
-	 *
-	 * _.isArguments([1, 2, 3]);
-	 * // => false
-	 */
-	var isArguments = baseIsArguments(function() { return arguments; }()) ? baseIsArguments : function(value) {
-	  return isObjectLike(value) && hasOwnProperty.call(value, 'callee') &&
-	    !propertyIsEnumerable.call(value, 'callee');
-	};
-
-	module.exports = isArguments;
-
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(1),
-	    stubFalse = __webpack_require__(74);
-
-	/** Detect free variable `exports`. */
-	var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
-
-	/** Detect free variable `module`. */
-	var freeModule = freeExports && typeof module == 'object' && module && !module.nodeType && module;
-
-	/** Detect the popular CommonJS extension `module.exports`. */
-	var moduleExports = freeModule && freeModule.exports === freeExports;
-
-	/** Built-in value references. */
-	var Buffer = moduleExports ? root.Buffer : undefined;
-
-	/* Built-in method references for those with the same name as other `lodash` methods. */
-	var nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined;
-
-	/**
-	 * Checks if `value` is a buffer.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.3.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a buffer, else `false`.
-	 * @example
-	 *
-	 * _.isBuffer(new Buffer(2));
-	 * // => true
-	 *
-	 * _.isBuffer(new Uint8Array(2));
-	 * // => false
-	 */
-	var isBuffer = nativeIsBuffer || stubFalse;
-
-	module.exports = isBuffer;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)(module)))
-
-/***/ }),
-/* 25 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var baseGetTag = __webpack_require__(2),
-	    isObject = __webpack_require__(7);
+	    isObject = __webpack_require__(4);
 
 	/** `Object#toString` result references. */
 	var asyncTag = '[object AsyncFunction]',
@@ -1334,7 +876,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 26 */
+/* 17 */
 /***/ (function(module, exports) {
 
 	/** Used as references for various `Number` constants. */
@@ -1375,11 +917,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 27 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var baseGetTag = __webpack_require__(2),
-	    isObjectLike = __webpack_require__(4);
+	    isObjectLike = __webpack_require__(5);
 
 	/** `Object#toString` result references. */
 	var symbolTag = '[object Symbol]';
@@ -1410,46 +952,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 28 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseIsTypedArray = __webpack_require__(47),
-	    baseUnary = __webpack_require__(51),
-	    nodeUtil = __webpack_require__(63);
-
-	/* Node.js helper references. */
-	var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
-
-	/**
-	 * Checks if `value` is classified as a typed array.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 3.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.
-	 * @example
-	 *
-	 * _.isTypedArray(new Uint8Array);
-	 * // => true
-	 *
-	 * _.isTypedArray([]);
-	 * // => false
-	 */
-	var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
-
-	module.exports = isTypedArray;
-
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseRepeat = __webpack_require__(48),
-	    isIterateeCall = __webpack_require__(60),
-	    toInteger = __webpack_require__(30),
-	    toString = __webpack_require__(11);
+	var baseRepeat = __webpack_require__(41),
+	    isIterateeCall = __webpack_require__(52),
+	    toInteger = __webpack_require__(69),
+	    toString = __webpack_require__(8);
 
 	/**
 	 * Repeats the given string `n` times.
@@ -1486,56 +995,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 30 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var toFinite = __webpack_require__(75);
-
-	/**
-	 * Converts `value` to an integer.
-	 *
-	 * **Note:** This method is loosely based on
-	 * [`ToInteger`](http://www.ecma-international.org/ecma-262/7.0/#sec-tointeger).
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to convert.
-	 * @returns {number} Returns the converted integer.
-	 * @example
-	 *
-	 * _.toInteger(3.2);
-	 * // => 3
-	 *
-	 * _.toInteger(Number.MIN_VALUE);
-	 * // => 0
-	 *
-	 * _.toInteger(Infinity);
-	 * // => 1.7976931348623157e+308
-	 *
-	 * _.toInteger('3.2');
-	 * // => 3
-	 */
-	function toInteger(value) {
-	  var result = toFinite(value),
-	      remainder = result % 1;
-
-	  return result === result ? (remainder ? result - remainder : result) : 0;
-	}
-
-	module.exports = toInteger;
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseToString = __webpack_require__(17),
-	    castSlice = __webpack_require__(53),
-	    charsEndIndex = __webpack_require__(54),
-	    stringToArray = __webpack_require__(67),
-	    toString = __webpack_require__(11);
+	var baseToString = __webpack_require__(10),
+	    castSlice = __webpack_require__(44),
+	    charsEndIndex = __webpack_require__(45),
+	    stringToArray = __webpack_require__(59),
+	    toString = __webpack_require__(8);
 
 	/** Used to match leading and trailing whitespace. */
 	var reTrimEnd = /\s+$/;
@@ -1577,7 +1044,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 32 */
+/* 21 */
 /***/ (function(module, exports) {
 
 	module.exports = function(module) {
@@ -1593,36 +1060,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 33 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _includes = __webpack_require__(22);
-
-	var _includes2 = _interopRequireDefault(_includes);
-
-	var _trimEnd = __webpack_require__(31);
+	var _trimEnd = __webpack_require__(20);
 
 	var _trimEnd2 = _interopRequireDefault(_trimEnd);
 
-	var _tokenTypes = __webpack_require__(9);
+	var _tokenTypes = __webpack_require__(6);
 
 	var _tokenTypes2 = _interopRequireDefault(_tokenTypes);
 
-	var _Params = __webpack_require__(12);
+	var _Params = __webpack_require__(23);
 
 	var _Params2 = _interopRequireDefault(_Params);
 
-	var _repeat = __webpack_require__(29);
+	var _repeat = __webpack_require__(19);
 
 	var _repeat2 = _interopRequireDefault(_repeat);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } // import includes from "lodash/includes";
+
 
 	var Formatter = function () {
 	    function Formatter(cfg, tokenizer, reservedWords) {
@@ -1645,8 +1109,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Formatter.prototype.format = function format(query) {
 	        this.query = query;
 	        this.tokens = this.tokenizer.tokenize(query);
-	        var formattedQuery = this.formatQuery();
-
+	        this.formatQuery();
 	        return this.lines.join("\n").trim();
 	    };
 
@@ -1654,7 +1117,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.query = query;
 	        this.tokens = this.tokenizer.tokenize(query);
 	        this.formatQuery();
-	        return this.lines;
+	        return this.lines.join("\n").split("\n");
 	    };
 
 	    Formatter.prototype.formatQuery = function formatQuery() {
@@ -1662,51 +1125,50 @@ return /******/ (function(modules) { // webpackBootstrap
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
 	            token.value = this.formatTextCase(token);
-	            if (token.value.startsWith(".") && token.value != ".." && this.getLastString().endsWith(") ")) {
+	            if (token.value.startsWith(".") && token.value != "..") {
 	                this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString());
 	            }
-	            if (token.type === _tokenTypes2["default"].WHITESPACE) {
+	            if (token.type == _tokenTypes2["default"].WHITESPACE) {
 	                if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")) {
 	                    this.lines[this.lastIndex()] += " ";
 	                }
-	            } else if (token.type === _tokenTypes2["default"].LINE_COMMENT) {
+	            } else if (token.type == _tokenTypes2["default"].LINE_COMMENT) {
 	                this.formatLineComment(token);
-	            } else if (token.type === _tokenTypes2["default"].BLOCK_COMMENT) {
+	            } else if (token.type == _tokenTypes2["default"].BLOCK_COMMENT) {
 	                this.formatBlockComment(token);
-	            } else if (token.type === _tokenTypes2["default"].RESERVED_TOPLEVEL) {
+	            } else if (token.type == _tokenTypes2["default"].RESERVED_TOPLEVEL) {
 	                this.formatTopLeveleReservedWord(token);
 	                this.previousReservedWord = token;
-	            } else if (token.type === _tokenTypes2["default"].RESERVED_NEWLINE) {
+	            } else if (token.type == _tokenTypes2["default"].RESERVED_NEWLINE) {
 	                this.formatNewlineReservedWord(token);
 	                this.previousReservedWord = token;
 	            } else if (this.logicalOperators.includes(token.value)) {
 	                this.formatLogicalOperators(token);
 	            } else if (token.value == "into") {
 	                this.formatInto(token);
-	            } else if (token.type === _tokenTypes2["default"].RESERVED) {
+	            } else if (token.type == _tokenTypes2["default"].RESERVED) {
 	                this.formatWithSpaces(token);
 	                this.previousReservedWord = token;
-	            } else if (token.type === _tokenTypes2["default"].OPEN_PAREN) {
+	            } else if (token.type == _tokenTypes2["default"].OPEN_PAREN) {
 	                this.formatOpeningParentheses(token);
-	            } else if (token.type === _tokenTypes2["default"].CLOSE_PAREN) {
+	            } else if (token.type == _tokenTypes2["default"].CLOSE_PAREN) {
 	                this.formatClosingParentheses(token);
-	            } else if (token.type === _tokenTypes2["default"].PLACEHOLDER) {
+	            } else if (token.type == _tokenTypes2["default"].PLACEHOLDER) {
 	                this.formatPlaceholder(token);
-	            } else if (token.value === ",") {
+	            } else if (token.value == ",") {
 	                this.formatComma(token);
-	            } else if (token.value === ":") {
+	            } else if (token.value == ":") {
 	                this.formatWithSpaceAfter(token);
-	            } else if (token.value === "." || token.value === "%") {
+	            } else if (token.value == "." || token.value == "%") {
 	                this.formatWithoutSpaces(token);
-	            } else if (token.value === ";") {
+	            } else if (token.value == ";") {
 	                this.formatQuerySeparator(token);
 	            } else {
 	                this.formatWithSpaces(token);
-	            };
+	            }
 	        }
 
-	        // this.query = originalQuery;
-
+	        this.query = originalQuery;
 	        for (var _i = 0; _i < this.lines.length; _i++) {
 	            this.lines[_i] = this.formatLineByLength(this.lines[_i]);
 	        }
@@ -1827,7 +1289,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatTextCase = function formatTextCase(token) {
-	        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || token.type === _tokenTypes2["default"].BLOCK_COMMENT || token.type === _tokenTypes2["default"].LINE_COMMENT || token.value.includes("'")) {
+	        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || token.type == _tokenTypes2["default"].BLOCK_COMMENT || token.type == _tokenTypes2["default"].LINE_COMMENT || token.value.includes("'")) {
 	            return token.value;
 	        } else {
 	            return token.value.toLowerCase();
@@ -1850,41 +1312,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatLineByLength = function formatLineByLength(line) {
-
-	        var originQuery = this.query;
 	        var maxCleanLineLength = 60;
 	        var last = line.trim();
 	        if (last.trim().length < maxCleanLineLength) {
 	            return line;
 	        }
 	        var firstChar = last[0];
-	        if (firstChar == "(") {
+	        if (firstChar == "(" || firstChar == ")") {
 	            last = last.substring(1).trim();
 	        }
-	        var i = 0;
 	        var split = last.split(/\(|\)| |,/);
-	        var first = split[i];
-	        while (this.reservedWords.includes(first)) {
-	            i++;
-	            if (i == split.length) {
-	                return line;
-	            }
-	            first = split[i];
-	        }
-	        var lastWithoutSpace = this.getWordInOneStyle(last);
-	        var index = this.getOriginStringStartIndex(first, lastWithoutSpace);
-
-	        if (index == -1) {
-	            return line;
-	        }
-	        var substring = this.getOriginSubstring(lastWithoutSpace);
-	        if (firstChar == "(") {
+	        var first = split[0];
+	        var lastWithoutSpace = this.getStringInOneStyle(last);
+	        var info = this.findSubstring(first.toLowerCase(), lastWithoutSpace.toLowerCase());
+	        var substring = info.substring;
+	        if (firstChar == "(" || firstChar == ")") {
 	            substring = firstChar + substring;
 	        }
-	        var originIndent = this.getOriginSubstringIndent(originQuery, substring);
 	        var indent = this.getLineIndent(line);
-	        this.query = this.query.substring(substring.length);
-	        return this.formatOriginSubstringWithIndent(indent, originIndent, substring);
+	        if (this.reservedWords.includes(first)) {
+	            return this.formatOriginSubstringWithIndent(indent + first.length + 1, info.indent, substring);
+	        }
+	        return this.formatOriginSubstringWithIndent(indent, info.indent, substring);
 	    };
 
 	    Formatter.prototype.getLineIndent = function getLineIndent(line) {
@@ -1900,27 +1349,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Formatter.prototype.formatOriginSubstringWithIndent = function formatOriginSubstringWithIndent(indent, originIndent, substring) {
 	        var split = substring.split("\n");
 	        if (split[0].match(/'/g) == undefined || split[0].match(/'/g).length % 2 == 0) {
-	            split[0] = (0, _repeat2["default"])(" ", indent) + split[0].trim();
-	        } else {
 	            split[0] = (0, _repeat2["default"])(" ", indent) + this.trimStart(split[0]);
+	        } else {
+	            split[0] = (0, _repeat2["default"])(" ", indent) + split[0].trim();
 	        }
 	        var inQuotes = split[0].match(/'/g) != undefined && split[0].match(/'/g) % 2 == 1;
 	        for (var i = 1; i < split.length; i++) {
 	            var match = split[i].match(/'/g);
+	            var cIndent = this.getLineIndent(split[i]);
 	            if (inQuotes) {
 	                split[i] = split[i];
 	                if (match != undefined && match.length % 2 == 1) {
 	                    inQuotes = false;
 	                }
 	            } else {
-	                if (match == undefined) {
-	                    split[i] = (0, _repeat2["default"])(" ", indent) + split[i].trim();
-	                } else {
+	                if (match != undefined) {
 	                    if (match.length % 2 == 1) {
 	                        inQuotes = true;
 	                    }
-	                    var cIndent = this.getLineIndent(split[i]);
-	                    split[i] = (0, _repeat2["default"])(" ", indent - originIndent + cIndent) + this.trimStart(split[i]);
+	                    split[i] = (0, _repeat2["default"])(" ", cIndent - originIndent + indent) + this.trimStart(split[i]);
+	                } else {
+	                    split[i] = (0, _repeat2["default"])(" ", cIndent - originIndent + indent) + split[i].trim();
 	                }
 	            }
 	        }
@@ -1934,43 +1383,59 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return line;
 	    };
 
-	    Formatter.prototype.getOriginSubstringIndent = function getOriginSubstringIndent(origin, substring) {
-	        var idx = origin.indexOf(substring);
-	        var beforeSubstring = origin.substring(0, idx);
+	    Formatter.prototype.findSubstring = function findSubstring(first, searchString) {
+	        var substring = "";
 	        var indent = 0;
-	        for (var i = beforeSubstring.length - 1; i >= 0; i--) {
-	            if (beforeSubstring[i] != " ") {
-	                return indent;
+	        var startIdx = 0;
+	        while (this.getStringInOneStyle(substring).trim().toLowerCase() != searchString.trim().toLowerCase()) {
+	            substring = "";
+	            startIdx = this.query.toLowerCase().indexOf(first);
+	            while (searchString.trim().toLowerCase().startsWith(this.getStringInOneStyle(substring).trim().toLowerCase()) && this.getStringInOneStyle(substring.trim()).trim().length != searchString.trim().length && startIdx != this.query.length) {
+	                substring += this.query[startIdx];
+	                startIdx++;
 	            }
-	            indent++;
+	            if (searchString.trim().toLowerCase() != this.getStringInOneStyle(substring).trim().toLowerCase()) {
+	                this.query = this.query.substring(this.query.toLowerCase().indexOf(first) + first.length);
+	            }
 	        }
-	        return indent;
+	        var from = this.query.indexOf(substring);
+	        for (var i = from; i >= 0; i--) {
+	            if (this.query[i] == "\n") {
+	                break;
+	            } else {
+	                indent++;
+	            }
+	        }
+	        this.query = this.query.substring(this.query.indexOf(substring) + substring.length - 1);
+	        substring = this.formatSubstringCase(substring);
+	        return {
+	            substring: substring,
+	            indent: indent
+	        };
 	    };
 
-	    Formatter.prototype.getOriginSubstring = function getOriginSubstring(lastWithoutSpace) {
+	    Formatter.prototype.getStringInOneStyle = function getStringInOneStyle(word) {
+	        return word.replaceAll("(", " ( ").replaceAll(")", " ) ").replaceAll(",", " , ").replaceAll("=", " = ").replaceAll("--", " -- ").replaceAll("||", " || ").replaceAll("'", " ' ").replaceAll("+", " + ").replaceAll("-", " - ").replaceAll(/(\s|\n)+/g, " ");
+	    };
+
+	    Formatter.prototype.formatSubstringCase = function formatSubstringCase(string) {
+	        var toks = this.tokenizer.tokenize(string);
+	        var prev = toks[0];
+	        prev.value = this.formatTextCase(prev);
 	        var substring = "";
-	        var targetLength = lastWithoutSpace.split(" ").length;
-	        var i = 0;
-	        while (this.getWordInOneStyle(substring).split(" ").length != targetLength && i < this.query.length) {
-	            substring += this.query[i];
-	            i++;
+	        var lowCase = string.toLowerCase();
+	        for (var i = 1; i < toks.length; i++) {
+	            var token = toks[i];
+	            token.value = this.formatTextCase(token);
+	            if (token.type != _tokenTypes2["default"].WHITESPACE) {
+	                var end = lowCase.indexOf(token.value.toLowerCase());
+	                var current = lowCase.substring(0, end) + token.value;
+	                substring += current;
+	                lowCase = lowCase.substring(lowCase.indexOf(current.toLowerCase()) + current.length);
+	                prev = token;
+	            }
 	        }
 	        return substring;
-	    };
-
-	    Formatter.prototype.getOriginStringStartIndex = function getOriginStringStartIndex(first, lastWithoutSpace) {
-	        var index = this.query.indexOf(first);
-	        this.query = this.query.substring(index);
-	        while (index != this.getWordInOneStyle(this.query).indexOf(lastWithoutSpace) && index != -1) {
-	            index = this.query.indexOf(first);
-	            this.query = this.query.substring(index + 1);
-	            // index = this.query.indexOf(first);
-	        }
-	        return index;
-	    };
-
-	    Formatter.prototype.getWordInOneStyle = function getWordInOneStyle(word) {
-	        return word.replaceAll("(", " ( ").replaceAll(")", " ) ").replaceAll(",", " , ").replaceAll("=", " = ").replaceAll("--", " -- ").replaceAll(/(\s|\n)+/g, " ");
 	    };
 
 	    Formatter.prototype.getCurrentIndent = function getCurrentIndent(align, word) {
@@ -2064,9 +1529,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.lines[this.lastIndex()] += " ";
 	            }
 	        }
-	        // else if (this.getLastString().trim() != ""){
-	        //     // this.trimEndLastString();
-	        // }
 	        this.indents.push({ token: token, indent: this.getLastString().length });
 	        this.lines[this.lastIndex()] += token.value;
 	    };
@@ -2076,11 +1538,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (this.getLastString().trim() != "") {
 	                this.trimEndLastString();
 	            } else {
-	                // this.lines.pop();
 	                var indent = this.indents[this.indents.length - 1];
 	                this.lines[this.lastIndex()] = (0, _repeat2["default"])(" ", indent.indent);
-
-	                // this.addNewLine("right", );
 	            }
 	            if (this.getLastString().match(/\)/) != null) {
 	                this.addNewLine("right", token.value);
@@ -2196,9 +1655,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatWithSpaces = function formatWithSpaces(token) {
-	        // if (token.value == "on" && !this.getLastString().includes(" join ")){
-	        //     this.addNewLine("right", token.value);
-	        // }
 	        if (!token.value.endsWith(".")) {
 	            this.lines[this.lastIndex()] += token.value + " ";
 	        } else {
@@ -2215,7 +1671,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Formatter.prototype.trimTrailingWhitespace = function trimTrailingWhitespace() {
 	        this.trimEndLastString();
-	        if (this.previousNonWhitespaceToken.type === _tokenTypes2["default"].LINE_COMMENT) {
+	        if (this.previousNonWhitespaceToken.type == _tokenTypes2["default"].LINE_COMMENT) {
 	            this.addNewLine("left", "");
 	        }
 	    };
@@ -2228,7 +1684,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Formatter.prototype.previousNonWhitespaceToken = function previousNonWhitespaceToken() {
 	        var n = 1;
-	        while (this.previousToken(n).type === _tokenTypes2["default"].WHITESPACE) {
+	        while (this.previousToken(n).type == _tokenTypes2["default"].WHITESPACE) {
 	            n++;
 	        }
 	        return this.previousToken(n);
@@ -2255,48 +1711,88 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ }),
-/* 34 */
+/* 23 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	exports.__esModule = true;
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * Handles placeholder replacement with given params.
+	 */
+	var Params = function () {
+	    /**
+	     * @param {Object} params
+	     */
+	    function Params(params) {
+	        _classCallCheck(this, Params);
+
+	        this.params = params;
+	        this.index = 0;
+	    }
+
+	    /**
+	     * Returns param value that matches given placeholder with param key.
+	     * @param {Object} token
+	     *   @param {String} token.key Placeholder key
+	     *   @param {String} token.value Placeholder value
+	     * @return {String} param or token.value when params are missing
+	     */
+
+
+	    Params.prototype.get = function get(_ref) {
+	        var key = _ref.key,
+	            value = _ref.value;
+
+	        if (!this.params) {
+	            return value;
+	        }
+	        if (key) {
+	            return this.params[key];
+	        }
+	        return this.params[this.index++];
+	    };
+
+	    return Params;
+	}();
+
+	exports["default"] = Params;
+	module.exports = exports["default"];
+
+/***/ }),
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _includes = __webpack_require__(22);
-
-	var _includes2 = _interopRequireDefault(_includes);
-
-	var _trimEnd = __webpack_require__(31);
+	var _trimEnd = __webpack_require__(20);
 
 	var _trimEnd2 = _interopRequireDefault(_trimEnd);
 
-	var _tokenTypes = __webpack_require__(9);
+	var _tokenTypes = __webpack_require__(6);
 
 	var _tokenTypes2 = _interopRequireDefault(_tokenTypes);
 
-	var _Params = __webpack_require__(12);
-
-	var _Params2 = _interopRequireDefault(_Params);
-
-	var _repeat = __webpack_require__(29);
+	var _repeat = __webpack_require__(19);
 
 	var _repeat2 = _interopRequireDefault(_repeat);
 
-	var _SqlFormatter = __webpack_require__(13);
+	var _SqlFormatter = __webpack_require__(26);
 
 	var _SqlFormatter2 = _interopRequireDefault(_SqlFormatter);
-
-	var _Tokenizer = __webpack_require__(8);
-
-	var _Tokenizer2 = _interopRequireDefault(_Tokenizer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var NewFormatter = function () {
-	    function NewFormatter(cfg, tokenizer, reservedWords, openParens) {
-	        _classCallCheck(this, NewFormatter);
+	var PlSqlFormatter = function () {
+	    function PlSqlFormatter(cfg, tokenizer, reservedWords, openParens) {
+	        _classCallCheck(this, PlSqlFormatter);
 
 	        this.indentCount = 0;
 	        this.tokenizer = tokenizer;
@@ -2307,98 +1803,93 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.indent = "    ";
 	        this.openParens = openParens;
 	        this.indentsKeyWords = [];
-	        this.lastIndentKey = { key: "", name: "", indent: 0 };
+	        this.lastIndentKey = {
+	            key: "",
+	            name: "",
+	            indent: 0
+	        };
 	        this.lineSize = 80;
 	        this.booleanOperators = ["and", "or", "xor"];
 	        this.cQuery = "";
 	    }
 
-	    NewFormatter.prototype.format = function format(query) {
+	    PlSqlFormatter.prototype.format = function format(query) {
 	        this.query = query;
 	        this.tokens = this.tokenizer.tokenize(query);
 	        var formattedQuery = this.formatQuery();
 	        return formattedQuery.trim();
 	    };
 
-	    NewFormatter.prototype.formatQuery = function formatQuery() {
+	    PlSqlFormatter.prototype.formatQuery = function formatQuery() {
 	        this.cQuery = this.query;
 	        var originQuery = this.query;
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
 	            token.value = this.formatTextCase(token);
-	            if (token.value.startsWith(".") && token.value != ".." && this.getLastString().endsWith(") ")) {
+	            if (token.value.startsWith(".") && token.value != "..") {
 	                this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString());
 	            }
-	            if (token.type === _tokenTypes2["default"].WHITESPACE) {
+	            if (token.type == _tokenTypes2["default"].WHITESPACE) {
 	                if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(") && this.getLastString().trim() != "") {
 	                    this.lines[this.lastIndex()] += " ";
 	                }
-	            } else if (token.type === _tokenTypes2["default"].LINE_COMMENT) {
+	            } else if (token.type == _tokenTypes2["default"].LINE_COMMENT) {
 	                this.formatLineComment(token);
-	            } else if (token.type === _tokenTypes2["default"].BLOCK_COMMENT) {
+	            } else if (token.type == _tokenTypes2["default"].BLOCK_COMMENT) {
 	                this.formatBlockComment(token);
-	            }
-	            // else if (token.type === tokenTypes.RESERVED_TOPLEVEL) {
-	            //     this.formatTopLeveleReservedWord(token);
-	            // } 
-	            else if (token.type === _tokenTypes2["default"].RESERVED_NEWLINE) {
-	                    //new line token = start sql query
-	                    i = this.formatSqlQuery(i);
-	                } else if (token.type === _tokenTypes2["default"].OPEN_PAREN) {
-	                    this.formatOpeningParentheses(token, i);
-	                } else if (token.type === _tokenTypes2["default"].CLOSE_PAREN) {
-	                    this.formatClosingParentheses(token, i);
-	                } else if (token.type === _tokenTypes2["default"].PLACEHOLDER) {
-	                    this.formatPlaceholder(token);
-	                }
-	                // else if (this.booleanOperators.includes(token.value)){
-	                //     this.formatBooleanExpressions(token);
-	                // }
-	                else if (token.value === ")") {
-	                        this.formatCloseBkt(token);
-	                    } else if (token.value === "begin") {
-	                        this.formatBegin(token);
-	                    } else if (token.value == "then") {
-	                        this.formatThen(token);
-	                    } else if (token.value === "loop") {
-	                        this.formatLoop(token, i);
-	                    } else if (token.value === ",") {
-	                        this.formatComma(token);
-	                    } else if (token.value === ":") {
-	                        this.formatWithSpaceAfter(token);
-	                    } else if (this.withoutSpaces.includes(token.value)) {
-	                        this.formatWithoutSpaces(token);
-	                    } else if (token.value === ";") {
-	                        this.formatQuerySeparator(token);
-	                    } else if (token.value == "exception" || token.value == "exceptions") {
-	                        this.formatException(token, i);
-	                    } else if (token.value == "else") {
-	                        this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;
-	                        this.addNewLine(this.indentCount);
-	                    } else if (token.value == "elsif") {
-	                        this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;
-	                    } else if (token.value == "when") {
-	                        this.formatWhen(token);
-	                    } else if (token.value == "as" || token.value == "is") {
-	                        this.formatAsIs(token);
-	                    } else if (token.value == "return") {
-	                        this.formatReturn(token);
-	                    } else {
-	                        this.formatWithSpaces(token);
-	                    };
+	            } else if (token.type == _tokenTypes2["default"].RESERVED_NEWLINE) {
+	                //new line token = start sql query
+	                i = this.formatSqlQuery(i);
+	            } else if (token.type == _tokenTypes2["default"].OPEN_PAREN) {
+	                this.formatOpeningParentheses(token, i);
+	            } else if (token.type == _tokenTypes2["default"].CLOSE_PAREN) {
+	                this.formatClosingParentheses(token, i);
+	            } else if (token.type == _tokenTypes2["default"].PLACEHOLDER) {
+	                this.formatPlaceholder();
+	            } else if (token.value == ")") {
+	                this.formatCloseBkt(token);
+	            } else if (token.value == "begin") {
+	                this.formatBegin(token);
+	            } else if (token.value == "then") {
+	                this.formatThen(token);
+	            } else if (token.value == "loop") {
+	                this.formatLoop(token, i);
+	            } else if (token.value == ",") {
+	                this.formatComma(token);
+	            } else if (token.value == ":") {
+	                this.formatWithSpaceAfter(token);
+	            } else if (this.withoutSpaces.includes(token.value)) {
+	                this.formatWithoutSpaces(token);
+	            } else if (token.value == ";") {
+	                this.formatQuerySeparator(token);
+	            } else if (token.value == "exception" || token.value == "exceptions") {
+	                this.formatException(token, i);
+	            } else if (token.value == "else") {
+	                this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;
+	                this.addNewLine(this.indentCount);
+	            } else if (token.value == "elsif") {
+	                this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;
+	            } else if (token.value == "when") {
+	                this.formatWhen(token);
+	            } else if (token.value == "as" || token.value == "is") {
+	                this.formatAsIs(token);
+	            } else if (token.value == "return") {
+	                this.formatReturn(token);
+	            } else {
+	                this.formatWithSpaces(token);
+	            };
 	        }
 	        return this.addDevelopEmptyLines(originQuery, this.lines.join("\n").trim());
-	        // return this.lines.join("\n").trim();
 	    };
 
-	    NewFormatter.prototype.trimStart = function trimStart(line) {
+	    PlSqlFormatter.prototype.trimStart = function trimStart(line) {
 	        while (line[0] == " ") {
 	            line = line.substring(1);
 	        }
 	        return line;
 	    };
 
-	    NewFormatter.prototype.formatLikeDevelopWrite = function formatLikeDevelopWrite(token) {
+	    PlSqlFormatter.prototype.formatLikeDevelopWrite = function formatLikeDevelopWrite(token) {
 	        var cInfo = this.getFormattingString(token);
 	        var searchString = cInfo.substring;
 	        var first = searchString.trim().split(" ")[0].trim().replace("(", "");
@@ -2407,17 +1898,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 	        this.popLine(cInfo.popCount);
-	        var newLine = this.formatOriginSubstringWithIndent(cInfo.indent, info.indent, info.substring) + " ";
-	        this.lines[this.lastIndex()] = newLine;
+	        this.lines[this.lastIndex()] = this.formatOriginSubstringWithIndent(cInfo.indent, info.indent, info.substring) + " ";
 	    };
 
-	    NewFormatter.prototype.formatOriginSubstringWithIndent = function formatOriginSubstringWithIndent(indent, originIndent, substring) {
+	    PlSqlFormatter.prototype.splitByNewLineAndFormatFirst = function splitByNewLineAndFormatFirst(substring, indent) {
 	        var split = substring.split("\n");
 	        if (split[0].match(/'/g) == undefined || split[0].match(/'/g).length % 2 == 0) {
 	            split[0] = (0, _repeat2["default"])(" ", indent) + split[0].trim();
 	        } else {
 	            split[0] = (0, _repeat2["default"])(" ", indent) + this.trimStart(split[0]);
 	        }
+	        return split;
+	    };
+
+	    PlSqlFormatter.prototype.formatOriginSubstringWithIndent = function formatOriginSubstringWithIndent(indent, originIndent, substring) {
+	        var split = this.splitByNewLineAndFormatFirst(substring, indent);
 	        var inQuotes = split[0].match(/'/g) != undefined && split[0].match(/'/g) % 2 == 1;
 	        for (var i = 1; i < split.length; i++) {
 	            var match = split[i].match(/'/g);
@@ -2441,7 +1936,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return split.join("\n");
 	    };
 
-	    NewFormatter.prototype.getLineIndent = function getLineIndent(line) {
+	    PlSqlFormatter.prototype.getLineIndent = function getLineIndent(line) {
 	        var indent = 0;
 	        for (indent; indent < line.length; indent++) {
 	            if (line[indent] != " ") {
@@ -2451,23 +1946,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return indent;
 	    };
 
-	    NewFormatter.prototype.popLine = function popLine(popCount) {
+	    PlSqlFormatter.prototype.popLine = function popLine(popCount) {
 	        for (var i = 0; i < popCount; i++) {
-	            var line = this.lines.pop();
+	            this.lines.pop();
 	        }
 	    };
 
-	    NewFormatter.prototype.findSubstring = function findSubstring(first, last, searchString) {
+	    PlSqlFormatter.prototype.findSubstring = function findSubstring(first, last, searchString) {
 	        var substring = "";
 	        var indent = 0;
 	        var startIdx = 0;
-	        console.log("first : " + first);
-	        console.log("searchString : " + searchString);
 	        while (this.getStringInOneStyle(substring).trim().toLowerCase() != searchString.trim().toLowerCase()) {
 	            substring = "";
 	            startIdx = this.query.toLowerCase().indexOf(first);
-	            while (searchString.trim().toLowerCase().startsWith(this.getStringInOneStyle(substring).trim().toLowerCase()) && this.getStringInOneStyle(substring.trim()).trim().length != searchString.trim().length) {
-	                // console.log("substring : " + substring);
+	            while (searchString.trim().toLowerCase().startsWith(this.getStringInOneStyle(substring).trim().toLowerCase()) && this.getStringInOneStyle(substring.trim()).trim().length != searchString.trim().length && startIdx != this.query.length) {
 	                substring += this.query[startIdx];
 	                startIdx++;
 	            }
@@ -2475,7 +1967,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.query = this.query.substring(this.query.toLowerCase().indexOf(first) + first.length);
 	            }
 	        }
-	        console.log("end subs");
 	        var from = this.query.indexOf(substring);
 	        for (var i = from; i >= 0; i--) {
 	            if (this.query[i] == "\n") {
@@ -2486,11 +1977,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.query = this.query.substring(this.query.indexOf(substring) + substring.length - 1);
 	        substring = this.formatSubstringCase(substring);
-	        return { substring: substring, indent: indent };
+	        return {
+	            substring: substring,
+	            indent: indent
+	        };
 	    };
 
-	    NewFormatter.prototype.formatSubstringCase = function formatSubstringCase(string) {
-	        var cfg = this.openParens;
+	    PlSqlFormatter.prototype.formatSubstringCase = function formatSubstringCase(string) {
 	        var toks = this.tokenizer.tokenize(string);
 	        var prev = toks[0];
 	        prev.value = this.formatTextCase(prev);
@@ -2500,27 +1993,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var token = toks[i];
 	            token.value = this.formatTextCase(token);
 	            if (token.type != _tokenTypes2["default"].WHITESPACE) {
-	                // console.log("token : " + token.value);
-	                // console.log("prev : " + prev.value);
-	                var start = lowCase.indexOf(prev.value.toLowerCase()) + prev.value.length;
 	                var end = lowCase.indexOf(token.value.toLowerCase());
 	                var current = lowCase.substring(0, end) + token.value;
 	                substring += current;
-	                // console.log("current : " + current);
 	                lowCase = lowCase.substring(lowCase.indexOf(current.toLowerCase()) + current.length);
-	                // console.log("lowCase : " + lowCase);
-	                // lowCase = lowCase.indexOf(current.toLowerCase() + current.length);
 	                prev = token;
 	            }
 	        }
 	        return substring;
 	    };
 
-	    NewFormatter.prototype.getStringInOneStyle = function getStringInOneStyle(word) {
-	        return word.replaceAll("(", " ( ").replaceAll(")", " ) ").replaceAll(",", " , ").replaceAll("=", " = ").replaceAll("--", " -- ").replaceAll("-", " - ").replaceAll(/(\s|\n)+/g, " ");
+	    PlSqlFormatter.prototype.getStringInOneStyle = function getStringInOneStyle(word) {
+	        return word.replaceAll("(", " ( ").replaceAll(")", " ) ").replaceAll(",", " , ").replaceAll("=", " = ").replaceAll("--", " -- ").replaceAll("||", " || ").replaceAll("-", " - ").replaceAll(/(\s|\n)+/g, " ");
 	    };
 
-	    NewFormatter.prototype.getFormattingString = function getFormattingString(token) {
+	    PlSqlFormatter.prototype.getFormattingString = function getFormattingString() {
 	        var lastIdx = this.lastIndex();
 	        var startBlocks = ["if", "elsif", "while", "case", "when"];
 	        if (lastIdx == 0) {
@@ -2541,11 +2028,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        var indent = this.getLineIndent(this.lines[lastIdx]);
 	        var popCount = this.lines.length - lastIdx - 1;
-	        // substring += token.value;
-	        return { indent: indent, substring: substring, popCount: popCount };
+	        return {
+	            indent: indent,
+	            substring: substring,
+	            popCount: popCount
+	        };
 	    };
 
-	    NewFormatter.prototype.formatReturn = function formatReturn(token) {
+	    PlSqlFormatter.prototype.formatReturn = function formatReturn(token) {
 	        var first = this.getFirstWord(this.getLastString());
 	        var last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
 	        if (this.openParens.includes(first) && this.getLastString().split(",").length > 1 || last != undefined) {
@@ -2556,7 +2046,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.lines[this.lastIndex()] += token.value;
 	    };
 
-	    NewFormatter.prototype.formatBooleanExpressions = function formatBooleanExpressions(token) {
+	    PlSqlFormatter.prototype.formatBooleanExpressions = function formatBooleanExpressions(token) {
 	        var last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
 	        if (last.key == "case" || last.key == "if") {
 	            this.addNewLine(this.indentCount);
@@ -2564,7 +2054,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.lines[this.lastIndex()] += token.value;
 	    };
 
-	    NewFormatter.prototype.addDevelopEmptyLines = function addDevelopEmptyLines(origin, query) {
+	    PlSqlFormatter.prototype.addDevelopEmptyLines = function addDevelopEmptyLines(origin, query) {
 	        var format = "";
 	        var split = origin.split("\n");
 	        for (var i = 0; i < split.length; i++) {
@@ -2589,8 +2079,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        } else if (index > idx1 && idx1 != -1) {
 	                            index = idx1;
 	                        }
-	                        var ss = query.substring(0, index + 1);
-	                        format += ss;
+	                        format += query.substring(0, index + 1);
 	                        query = query.substring(index + 1);
 	                    }
 	                }
@@ -2599,7 +2088,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.removeDupticateEmptyLine(format);
 	    };
 
-	    NewFormatter.prototype.removeDupticateEmptyLine = function removeDupticateEmptyLine(query) {
+	    PlSqlFormatter.prototype.removeDupticateEmptyLine = function removeDupticateEmptyLine(query) {
 	        var split = query.split("\n");
 	        for (var i = split.length - 1; i >= 1; i--) {
 	            if (split[i].trim() == "" && split[i - 1].trim() == "") {
@@ -2612,7 +2101,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return split.join("\n");
 	    };
 
-	    NewFormatter.prototype.formatWhen = function formatWhen(token) {
+	    PlSqlFormatter.prototype.formatWhen = function formatWhen(token) {
 	        var lastKey = this.indentsKeyWords[this.indentsKeyWords.length - 1];
 	        if (lastKey != undefined && lastKey.key == "case" && !this.getLastString().trim().startsWith("case")) {
 	            this.indentCount--;
@@ -2621,7 +2110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.lines[this.lastIndex()] += token.value;
 	    };
 
-	    NewFormatter.prototype.formatThen = function formatThen(token) {
+	    PlSqlFormatter.prototype.formatThen = function formatThen(token) {
 	        this.formatLikeDevelopWrite(token);
 	        if (!this.getLastString().includes(token.value)) {
 	            this.lines[this.lastIndex()] += token.value;
@@ -2632,15 +2121,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.addNewLine(this.indentCount);
 	    };
 
-	    NewFormatter.prototype.formatLoop = function formatLoop(token, index) {
+	    PlSqlFormatter.prototype.formatLoop = function formatLoop(token, index) {
 	        var next = this.getNextValidWord(index);
-	        if (next != ";") {
-	            if (this.indentsKeyWords[this.indentsKeyWords.length - 1].key == "while") {
+	        if (next !== ";") {
+	            var lastKW = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+	            if (lastKW.key == "while") {
 	                this.formatLikeDevelopWrite(token);
+	            }
+	            if (lastKW.key == "while" || lastKW.key == "for") {
+	                this.indentsKeyWords[this.indentsKeyWords.length - 1].key = "loop";
+	            } else {
+	                this.incrementIndent(token.value, "");
 	            }
 	            if (!this.getLastString().includes(token.value)) {
 	                this.lines[this.lastIndex()] += token.value;
-	                this.indentsKeyWords[this.indentsKeyWords.length - 1].key = "loop";
 	            }
 	            this.addNewLine(this.indentCount);
 	        } else {
@@ -2648,7 +2142,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    NewFormatter.prototype.formatBegin = function formatBegin(token) {
+	    PlSqlFormatter.prototype.formatBegin = function formatBegin(token) {
 	        var lastIndent = this.indentsKeyWords[this.indentsKeyWords.length - 1];
 	        var startBlock = ["cursor", "procedure", "function", "pragma"];
 	        if (lastIndent != undefined) {
@@ -2676,7 +2170,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.addNewLine(this.indentCount);
 	    };
 
-	    NewFormatter.prototype.formatCloseBkt = function formatCloseBkt(token) {
+	    PlSqlFormatter.prototype.formatCloseBkt = function formatCloseBkt(token) {
 	        this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString()) + token.value + " ";
 	        var lastString = this.getLastString();
 	        var openMatch = lastString.match(/\(/);
@@ -2692,55 +2186,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        this.lines[this.lastIndex()] += ",";
 	                        this.lines.push((0, _repeat2["default"])(this.indent, this.indentCount) + subLines[i]);
 	                    }
-	                } else {
-	                    // let idx = this.getStartBktIndex();
-	                    // this.lines[this.lastIndex()] = lastString.substring(0, idx + 1);
-	                    // let subLines = lastString.substring(idx + 1).split(", ");
-	                    // let bktIndent = this.lines[this.lastIndex()].length;
-	                    // let sbstr = subLines[0];
-	                    // let start = 0;
-	                    // while (bktIndent + sbstr.length < this.lineSize){
-	                    //     start++;
-	                    //     sbstr += ", " + subLines[start];
-	                    // }
-	                    // this.lines[this.lastIndex()] += sbstr;
-	                    // sbstr = subLines[start + 1];
-	                    // if (start + 1 == subLines.length - 1){
-	                    //     this.lines[this.lastIndex()] = lastString.substring(0, idx + 1);
-	                    //     let center = (subLines.length - (subLines.length % 2) ) / 2;
-	                    //     for (let i = 0; i < subLines.length; i++){
-	                    //         if (i == center){
-	                    //             this.lines.push(repeat(" ", bktIndent));
-	                    //         }
-	                    //         this.lines[this.lastIndex()] += subLines[i];
-	                    //         if (i != subLines.length - 1){
-	                    //             this.lines[this.lastIndex()] += ", ";
-	                    //         }
-	                    //     }
-	                    // } else {
-	                    //     for (let i = start + 2; i < subLines.length; i++){
-	                    //         sbstr +=  ", ";
-	                    //         if (sbstr.length + bktIndent > this.lineSize){
-	                    //             this.lines.push(repeat(" ", bktIndent) + sbstr);
-	                    //             sbstr = subLines[i];
-	                    //             if (i == subLines.length - 1){
-	                    //                 this.lines.push(repeat(" ", bktIndent) + sbstr);
-	                    //            }
-	                    //         } else {
-	                    //             sbstr += subLines[i];
-	                    //             if (i == subLines.length - 1){
-	                    //                 this.lines.push(repeat(" ", bktIndent) + sbstr);
-	                    //            }
-	                    //         }
-	                    //     }
-	                    // }
-
 	                }
 	            }
 	        }
 	    };
 
-	    NewFormatter.prototype.getStartBktIndex = function getStartBktIndex() {
+	    PlSqlFormatter.prototype.getStartBktIndex = function getStartBktIndex() {
 	        var lastStr = (0, _trimEnd2["default"])(this.getLastString());
 	        var openBkt = 0;
 	        var closeBkt = 0;
@@ -2757,7 +2208,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return 0;
 	    };
 
-	    NewFormatter.prototype.formatException = function formatException(token, index) {
+	    PlSqlFormatter.prototype.formatException = function formatException(token, index) {
 	        var next = this.getNextValidWord(index);
 	        if (next == ";") {
 	            this.lines[this.lastIndex()] += token.value;
@@ -2779,29 +2230,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.addNewLine(this.indentCount);
 	    };
 
-	    NewFormatter.prototype.formatComma = function formatComma(token) {
-	        this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString()) + token.value + " ";
+	    PlSqlFormatter.prototype.formatComma = function formatComma(token) {
+	        if (this.getLastString().trim() == "") {
+	            var indent = this.getLastString().length;
+	            this.lines.pop();
+	            this.lines[this.lastIndex()] += token.value;
+	            this.lines.push((0, _repeat2["default"])(" ", indent));
+	        } else {
+	            this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString()) + token.value + " ";
+	        }
 	    };
 
-	    NewFormatter.prototype.formatPlaceholder = function formatPlaceholder(token) {
+	    PlSqlFormatter.prototype.formatPlaceholder = function formatPlaceholder() {
 	        this.lines[this.lastIndex()] += " ";
 	    };
 
-	    NewFormatter.prototype.formatWithSpaceAfter = function formatWithSpaceAfter(token) {
+	    PlSqlFormatter.prototype.formatWithSpaceAfter = function formatWithSpaceAfter(token) {
 	        this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString()) + token.value + " ";
 	    };
 
-	    NewFormatter.prototype.formatAsIs = function formatAsIs(token) {
+	    PlSqlFormatter.prototype.formatAsIs = function formatAsIs(token) {
 	        var startComment = false;
-	        var bktCount = 0;
 	        var substring = "";
 	        for (var i = this.lastIndex(); i >= 0; i--) {
 	            var line = this.lines[i];
 	            if (startComment) {
 	                if (line.includes("/*")) {
 	                    startComment = false;
-	                } else {
-	                    continue;
 	                }
 	            } else {
 	                if (line.includes("*/")) {
@@ -2843,7 +2298,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.addNewLine(this.indentCount - 1);
 	                }
 	            }
-	            // this.addNewLine(this.indentCount - 1);
 	            this.lines[this.lastIndex()] += token.value;
 	            this.addNewLine(this.indentCount);
 	        } else {
@@ -2851,12 +2305,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    NewFormatter.prototype.formatQuerySeparator = function formatQuerySeparator(token) {
+	    PlSqlFormatter.prototype.formatQuerySeparator = function formatQuerySeparator(token) {
 
 	        this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString());
-	        /**if first word is start block, and line end for ; then decrement indent
-	        example:
-	        procedure name(val);
+	        /**
+	         * if first word is start block, and line end for ; then decrement indent
+	         * example:
+	         * procedure name(val);
 	        */
 	        var startBlock = ["cursor", "procedure", "function", "forall", "for", "while"];
 	        var first = this.getFirstWord(this.getLastString());
@@ -2877,24 +2332,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        var last = this.getLastString();
 	        if ((last.includes(" or ") || last.includes(" and ") || last.includes(" xor ")) && last.trim().length > 60) {
-	            console.log("1");
 	            var searchString = last;
 	            var firstWord = searchString.trim().split(" ")[0].trim().replace("(", "");
-	            console.log("2");
 	            var info = this.findSubstring(firstWord, token.value, this.getStringInOneStyle(searchString).trim());
-	            console.log("3");
-	            // this.popLine(cInfo.popCount);
-	            console.log("4");
-	            var newLine = this.formatOriginSubstringWithIndent(this.getLineIndent(this.getLastString()), info.indent, info.substring);
-	            console.log("5");
-	            this.lines[this.lastIndex()] = newLine;
+	            this.lines[this.lastIndex()] = this.formatOriginSubstringWithIndent(this.getLineIndent(this.getLastString()), info.indent, info.substring);
 	        }
-	        // if (this.getLastString().includes(token.value))
+
 	        this.lines[this.lastIndex()] += token.value;
 	        this.addNewLine(this.indentCount);
 	    };
 
-	    NewFormatter.prototype.getBktSubstring = function getBktSubstring(from) {
+	    PlSqlFormatter.prototype.getBktSubstring = function getBktSubstring(from) {
 	        var countOpenBkt = 0;
 	        var countCloseBkt = 0;
 	        var substring = "";
@@ -2923,16 +2371,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return { substring: substring, startIndex: index, subLines: subLines };
 	    };
 
-	    NewFormatter.prototype.getFirstWord = function getFirstWord(string) {
+	    PlSqlFormatter.prototype.getFirstWord = function getFirstWord(string) {
 	        var wordSeparator = / |\(|\)/;
 	        return string.trim().split(wordSeparator)[0].trim();
 	    };
 
-	    NewFormatter.prototype.formatWithSpaces = function formatWithSpaces(token) {
+	    PlSqlFormatter.prototype.formatWithSpaces = function formatWithSpaces(token) {
 	        this.lines[this.lastIndex()] += token.value + " ";
 	    };
 
-	    NewFormatter.prototype.formatWithoutSpaces = function formatWithoutSpaces(token) {
+	    PlSqlFormatter.prototype.formatWithoutSpaces = function formatWithoutSpaces(token) {
 	        var words = this.getLastString().trim().split(" ");
 	        if (token.value == "(" && this.reservedWords.includes(words[words.length - 1].trim().toUpperCase())) {
 	            this.lines[this.lastIndex()] = this.getLastString() + token.value;
@@ -2941,11 +2389,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    NewFormatter.prototype.formatOpeningParentheses = function formatOpeningParentheses(token, index) {
+	    PlSqlFormatter.prototype.formatOpeningParentheses = function formatOpeningParentheses(token, index) {
 	        var next = this.getNextValidWord(index);
-	        var startBlock = ["cursor", "procedure", "function", "forall", "for", "while"];
 	        if (next != ";") {
-	            var lastIndent = this.indentsKeyWords[this.indentsKeyWords.length - 1];
 	            if (!this.prevLineIsComment()) {
 	                if (this.getLastString().trim() != "") {
 	                    this.addNewLine(this.indentCount);
@@ -2965,7 +2411,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    NewFormatter.prototype.getNextValidWord = function getNextValidWord(index) {
+	    PlSqlFormatter.prototype.getNextValidWord = function getNextValidWord(index) {
 	        var token = this.tokens[index + 1];
 	        if (token != undefined) {
 	            if (token.value.trim() != "") {
@@ -2979,17 +2425,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return "";
 	    };
 
-	    NewFormatter.prototype.decrementIndent = function decrementIndent() {
+	    PlSqlFormatter.prototype.decrementIndent = function decrementIndent() {
 	        this.lastIndentKey = this.indentsKeyWords.pop();
 	        this.indentCount = this.lastIndentKey.indent;
 	    };
 
-	    NewFormatter.prototype.incrementIndent = function incrementIndent(key, name) {
+	    PlSqlFormatter.prototype.incrementIndent = function incrementIndent(key, name) {
 	        this.indentsKeyWords.push({ key: key, name: name, indent: this.indentCount });
 	        this.indentCount++;
 	    };
 
-	    NewFormatter.prototype.formatClosingParentheses = function formatClosingParentheses(token, index) {
+	    PlSqlFormatter.prototype.formatClosingParentheses = function formatClosingParentheses(token, index) {
 	        var next = this.getNextValidWord(index);
 	        var prevIndent = this.indentCount;
 	        if (next == ";" || this.reservedWords.includes(next.toUpperCase())) {
@@ -3015,7 +2461,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    NewFormatter.prototype.formatSqlQuery = function formatSqlQuery(startIndex) {
+	    PlSqlFormatter.prototype.formatSqlQuery = function formatSqlQuery(startIndex) {
 	        var startIndent = this.indentCount;
 	        var sql = "";
 	        var index = startIndex;
@@ -3051,6 +2497,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var sqlArray = new _SqlFormatter2["default"](this.cfg).getFormatArray(sql);
 	        if (this.getLastString().trim().endsWith("(")) {
 	            this.insertSqlInThisLine(sqlArray);
+	            this.lines[this.lastIndex()] += ")";
+	            this.addNewLine(this.indentCount);
+	            index++;
 	        } else {
 	            this.insertSqlInNewLine(sqlArray);
 	        }
@@ -3062,7 +2511,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return index;
 	    };
 
-	    NewFormatter.prototype.insertSqlInThisLine = function insertSqlInThisLine(sqlArray) {
+	    PlSqlFormatter.prototype.insertSqlInThisLine = function insertSqlInThisLine(sqlArray) {
 	        var indent = this.getLastString().length;
 	        this.lines[this.lastIndex()] += sqlArray[0];
 	        for (var i = 1; i < sqlArray.length; i++) {
@@ -3070,7 +2519,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    NewFormatter.prototype.insertSqlInNewLine = function insertSqlInNewLine(sqlArray) {
+	    PlSqlFormatter.prototype.insertSqlInNewLine = function insertSqlInNewLine(sqlArray) {
 	        while (this.getLastString().trim() == "" && this.lines.length != 1) {
 	            this.lines.pop();
 	        }
@@ -3078,12 +2527,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (this.getLastString().trim() == "") {
 	                this.lines.pop();
 	            }
-	            this.addNewLine(this.indentCount);
-	            this.lines[this.lastIndex()] += sqlArray[i];
+	            this.lines.push((0, _repeat2["default"])(this.indent, this.indentCount) + sqlArray[i]);
 	        }
 	    };
 
-	    NewFormatter.prototype.getPrevValidTokenValue = function getPrevValidTokenValue(index) {
+	    PlSqlFormatter.prototype.getPrevValidTokenValue = function getPrevValidTokenValue(index) {
 	        var token = this.tokens[index - 1];
 	        if (token != undefined) {
 	            if (token.value.trim() == "") {
@@ -3098,30 +2546,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return "";
 	    };
 
-	    NewFormatter.prototype.formatTopLeveleReservedWord = function formatTopLeveleReservedWord(token) {
-	        if (this.addNewLinePreviewReservedWord(token)) {
-	            this.addNewLine(this.indentCount);
-	        }
-	        if (token.value == "elsif" && this.lines[this.lastIndex() - 1].includes("return")) {
-	            this.indentCount++;
-	        }
-	        this.lines[this.lastIndex()] += token.value;
-	        if (token.value == "is" || token.value == "as") {
-	            var idx = this.lastIndex() - 1;
-	            var first = this.getFirstWord(this.lines[idx]);
-	            if (first == "return") {
-	                this.indentCount++;
-	                this.lines[idx] = this.indent + this.lines[idx];
-	                this.addNewLine(this.indentCount);
-	            }
-	        }
-	    };
-
-	    NewFormatter.prototype.addNewLinePreviewReservedWord = function addNewLinePreviewReservedWord(token) {
+	    PlSqlFormatter.prototype.addNewLinePreviewReservedWord = function addNewLinePreviewReservedWord(token) {
 	        return this.getLastString().trim() != "end" && this.getLastString().trim() != "is" && token.value != "then" && this.getLastString().trim() != "" && !(token.value == "as" && this.getLastString().includes(" with "));
 	    };
 
-	    NewFormatter.prototype.formatLineComment = function formatLineComment(token) {
+	    PlSqlFormatter.prototype.formatLineComment = function formatLineComment(token) {
 	        var qLines = this.cQuery.split("\n");
 	        var isNewLine = false;
 	        for (var i = 0; i < qLines.length; i++) {
@@ -3132,7 +2561,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.cQuery = this.cQuery.substring(this.cQuery.indexOf(token.value) + token.value.length);
 	        if (isNewLine) {
-	            if (!this.getLastString().trim() == "") {
+	            if (this.getLastString().trim() != "") {
 	                this.addNewLine(this.indentCount);
 	            }
 	        } else {
@@ -3147,12 +2576,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.addNewLine(this.indentCount);
 	    };
 
-	    NewFormatter.prototype.formatBlockComment = function formatBlockComment(token) {
+	    PlSqlFormatter.prototype.formatBlockComment = function formatBlockComment(token) {
 	        if (this.prevLineIsComment()) {
 	            this.lines.push("");
 	        }
 	        this.addNewLine(this.indentCount);
-	        var comment = "";
 	        var comLines = token.value.split("\n");
 	        for (var i = 0; i < comLines.length; i++) {
 	            if (comLines[i].trim().startsWith("*")) {
@@ -3163,11 +2591,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    NewFormatter.prototype.prevLineIsComment = function prevLineIsComment() {
+	    PlSqlFormatter.prototype.prevLineIsComment = function prevLineIsComment() {
 	        return this.lastIndex() != 0 && this.lines[this.lastIndex() - 1].endsWith("*/");
 	    };
 
-	    NewFormatter.prototype.addNewLine = function addNewLine(count) {
+	    PlSqlFormatter.prototype.addNewLine = function addNewLine(count) {
 	        this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString());
 	        if (count > 0) {
 	            this.lines.push((0, _repeat2["default"])(this.indent, count));
@@ -3176,43 +2604,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    NewFormatter.prototype.lastIndex = function lastIndex() {
+	    PlSqlFormatter.prototype.lastIndex = function lastIndex() {
 	        return this.lines.length - 1;
 	    };
 
-	    NewFormatter.prototype.getLastString = function getLastString() {
+	    PlSqlFormatter.prototype.getLastString = function getLastString() {
 	        return this.lines[this.lastIndex()];
 	    };
 
-	    NewFormatter.prototype.formatTextCase = function formatTextCase(token) {
-	        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || token.type === _tokenTypes2["default"].BLOCK_COMMENT || token.type === _tokenTypes2["default"].LINE_COMMENT || token.value.startsWith("'")) {
+	    PlSqlFormatter.prototype.formatTextCase = function formatTextCase(token) {
+	        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || token.type == _tokenTypes2["default"].BLOCK_COMMENT || token.type == _tokenTypes2["default"].LINE_COMMENT || token.value.startsWith("'")) {
 	            return token.value;
 	        } else {
 	            return token.value.toLowerCase();
 	        }
 	    };
 
-	    return NewFormatter;
+	    return PlSqlFormatter;
 	}();
 
-	exports["default"] = NewFormatter;
+	exports["default"] = PlSqlFormatter;
 	module.exports = exports["default"];
 
 /***/ }),
-/* 35 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _Tokenizer = __webpack_require__(8);
+	var _Tokenizer = __webpack_require__(9);
 
 	var _Tokenizer2 = _interopRequireDefault(_Tokenizer);
 
-	var _NewFormatter = __webpack_require__(34);
+	var _PlSqlFormatter = __webpack_require__(24);
 
-	var _NewFormatter2 = _interopRequireDefault(_NewFormatter);
+	var _PlSqlFormatter2 = _interopRequireDefault(_PlSqlFormatter);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -3221,20 +2649,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	var reservedWords = [
 	// "A",
 	"ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG", "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE", "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND", "BULK", "BY", "BYTE",
-	// "C", 
+	// "C",
 	"CALL", "CALLING", "CASCADE", "CASE", "CHAR_BASE", "CHAR", "CHARACTER", "CHARSET", "CHARSETFORM", "CHARSETID", "CHECK", "CLOB_BASE", "CLONE", "CLOSE", "CLUSTER", "CLUSTERS", "COALESCE", "COLAUTH", "COLLECT", "COLUMNS", "COMMENT", "COMMIT", "COMMITTED", "COMPILED", "COMPRESS", "CONNECT", "CONSTANT", "CONSTRUCTOR", "CONTEXT", "CONTINUE", "CONVERT", "COUNT", "CRASH", "CREATE", "CREDENTIAL", "CURRENT", "CURRVAL", "CURSOR", "CUSTOMDATUM", "DANGLING", "DATA", "DATE_BASE", "DATE", "DAY", "DECIMAL", "DEFAULT", "DEFINE", "DELETE", "DESC", "DETERMINISTIC", "DIRECTORY", "DISTINCT", "DO", "DOUBLE", "DROP", "DURATION", "ELEMENT", "ELSIF", "EMPTY", "ESCAPE", "EXCEPTIONS", "EXCLUSIVE", "EXECUTE", "EXISTS", "EXIT", "EXTENDS", "EXTERNAL", "EXTRACT", "FALSE", "FETCH", "FINAL", "FIRST", "FIXED", "FLOAT", "FOR", "FORALL", "FORCE", "FROM", "FUNCTION", "GENERAL", "GOTO", "GRANT", "GROUP", "HASH", "HEAP", "HIDDEN", "HOUR", "IDENTIFIED", "IF", "IMMEDIATE", "IN", "INCLUDING", "INDEX", "INDEXES", "INDICATOR", "INDICES", "INFINITE", "INSTANTIABLE", "INT", "INTEGER", "INTERFACE", "INTERVAL", "INTO", "INVALIDATE", "IS", "ISOLATION", "JAVA", "LANGUAGE", "LARGE", "LEADING", "LENGTH", "LEVEL", "LIBRARY", "LIKE", "LIKE2", "LIKE4", "LIKEC", "LIMITED", "LOCAL", "LOCK", "LONG", "MAP", "MAX", "MAXLEN", "MEMBER", "MERGE INTO", "MIN", "MINUS", "MINUTE", "MLSLABEL", "MOD", "MODE", "MONTH", "MULTISET", "NAME", "NAN", "NATIONAL", "NATIVE", "NATURAL", "NATURALN", "NCHAR", "NEW", "NEXTVAL", "NOCOMPRESS", "NOCOPY", "NOT", "NOWAIT", "NULL", "NULLIF", "NUMBER_BASE", "NUMBER", "OBJECT", "OCICOLL", "OCIDATE", "OCIDATETIME", "OCIDURATION", "OCIINTERVAL", "OCILOBLOCATOR", "OCINUMBER", "OCIRAW", "OCIREF", "OCIREFCURSOR", "OCIROWID", "OCISTRING", "OCITYPE", "OF", "OLD", "ON", "ONLY", "OPAQUE", "OPEN", "OPERATOR", "OPTION", "ORACLE", "ORADATA", "ORDER", "ORGANIZATION", "ORLANY", "ORLVARY", "OTHERS", "OUT", "OVERLAPS", "OVERRIDING", "PACKAGE", "PARALLEL_ENABLE", "PARAMETER", "PARAMETERS", "PARENT", "PARTITION", "PASCAL", "PCTFREE", "PIPE", "PIPELINED", "PLS_INTEGER", "PLUGGABLE", "POSITIVE", "POSITIVEN", "PRAGMA", "PRECISION", "PRIOR", "PRIVATE", "PROCEDURE", "PUBLIC", "RAISE", "RANGE", "RAW", "READ", "REAL", "RECORD", "REF", "REFERENCE", "RELEASE", "RELIES_ON", "REM", "REMAINDER", "RENAME", "RESOURCE", "RESULT_CACHE", "RESULT", "RETURN", "RETURNING", "REVERSE", "REVOKE", "ROLLBACK", "ROW", "ROWID", "ROWNUM", "ROWTYPE", "SAMPLE", "SAVE", "SAVEPOINT", "SB1", "SB2", "SB4", "SECOND", "SEGMENT", "SELF", "SEPARATE", "SEQUENCE", "SERIALIZABLE", "SHARE", "SHORT", "SIZE_T", "SIZE", "SMALLINT", "SOME", "SPACE", "SPARSE", "SQL", "SQLCODE", "SQLDATA", "SQLERRM", "SQLNAME", "SQLSTATE", "STANDARD", "START", "STATIC", "STDDEV", "STORED", "STRING", "STRUCT", "STYLE", "SUBMULTISET", "SUBPARTITION", "SUBSTITUTABLE", "SUBTYPE", "SUCCESSFUL", "SUM", "SYNONYM", "SYSDATE", "TABAUTH", "TABLE", "TDO", "THE", "THEN", "TIME", "TIMESTAMP", "TIMEZONE_ABBR", "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TIMEZONE_REGION", "TO", "TRAILING", "TRANSACTION", "TRANSACTIONAL", "TRIGGER", "TRUE", "TRUSTED", "TYPE", "UB1", "UB2", "UB4", "UID", "UNDER", "UNIQUE", "UNPLUG", "UNSIGNED", "UNTRUSTED", "USE", "USER", "USING", "VALIDATE", "VALIST", "VALUE", "VARCHAR", "VARCHAR2", "VARIABLE", "VARIANCE", "VARRAY", "VARYING", "VIEW", "VIEWS", "VOID", "WHENEVER", "WHILE", "WITH", "WORK", "WRAPPED", "WRITE", "YEAR", "SELECT", "UNION", "INSERT", "EXCEPTION", "ZONE", "AND", "OR", "LOOP", "TYPE", "WITH", "UNION", "USING", "ELSE", "WHEN", "THEN", "ELSIF", "ALTER", "SELECT", "INSERT", "UPDATE", "DROP", "MERGE INTO", "CREATE", "BEGIN", "FUNCTION", "CURSOR", "IF", "FOR", "PROCEDURE", "WHILE", "PRAGMA", "CASE"];
 
 	var reservedToplevelWords = [
-	// "LOOP", 
+	// "LOOP",
 	"TYPE", "WITH", "UNION", "USING", "ELSE", "WHEN", "THEN", "ELSIF"];
 
-	var reservedNewlineWords = ["ALTER", "SELECT", "INSERT", "UPDATE", "DROP", "MERGE INTO"];
+	var reservedNewlineWords = ["ALTER", "SELECT", "INSERT", "UPDATE", "DROP", "MERGE"];
 
 	var openParens = ["CREATE", //"BEGIN",
 	"FUNCTION", "CURSOR", "IF", "FORALL", "FOR", "PROCEDURE",
 	// "LOOP",
 	"WHILE",
-	// "PRAGMA", 
+	// "PRAGMA",
 	"CASE"];
 
 	var tokenizer = void 0;
@@ -3261,7 +2689,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                specialWordChars: ["_", "$", "#", ".", "@", "%"]
 	            });
 	        }
-	        return new _NewFormatter2["default"](this.cfg, tokenizer, reservedWords, openParens).format(query);
+	        return new _PlSqlFormatter2["default"](this.cfg, tokenizer, reservedWords, openParens).format(query);
 	    };
 
 	    return SqlFormatter;
@@ -3271,7 +2699,95 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ }),
-/* 36 */
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	exports.__esModule = true;
+
+	var _Formatter = __webpack_require__(22);
+
+	var _Formatter2 = _interopRequireDefault(_Formatter);
+
+	var _Tokenizer = __webpack_require__(9);
+
+	var _Tokenizer2 = _interopRequireDefault(_Tokenizer);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var reservedWords = ["ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER", "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG", "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE", "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND", "BULK", "BY", "BYTE", "CALL", "CALLING", "CASCADE", "CASE", "CHAR_BASE", "CHAR", "CHARACTER", "CHARSET", "CHARSETFORM", "CHARSETID", "CHECK", "CLOB_BASE", "CLONE", "CLOSE", "CLUSTER", "CLUSTERS", "COALESCE", "COLAUTH", "COLLECT", "COLUMNS", "COMMENT", "COMMIT", "COMMITTED", "COMPILED", "COMPRESS", "CONNECT", "CONSTANT", "CONSTRUCTOR", "CONTEXT", "CONTINUE", "CONVERT", "CRASH", "CREATE", "CREDENTIAL", "CURRENT", "CURRVAL", "CURSOR", "CUSTOMDATUM", "DANGLING", "DATA", "DATE_BASE", "DATE", "DAY", "DECIMAL", "DEFAULT", "DEFINE", "DELETE", "DESC", "DETERMINISTIC", "DIRECTORY", "DISTINCT", "DO", "DOUBLE", "DROP", "DURATION", "ELEMENT", "ELSIF", "EMPTY", "ESCAPE", "EXCEPTIONS", "EXCLUSIVE", "EXECUTE", "EXISTS", "EXIT", "EXTENDS", "EXTERNAL", "EXTRACT", "FALSE", "FETCH", "FINAL", "FIRST", "FIXED", "FLOAT", "FOR", "FORALL", "FORCE", "FROM", "FUNCTION", "GENERAL", "GOTO", "GRANT", "GROUP", "HASH", "HEAP", "HIDDEN", "HOUR", "IDENTIFIED", "IF", "IMMEDIATE", "IN", "INCLUDING", "INDEX", "INDEXES", "INDICATOR", "INDICES", "INFINITE", "INSTANTIABLE", "INT", "INTEGER", "INTERFACE", "INTERVAL", "INTO", "INVALIDATE", "IS", "ISOLATION", "JAVA", "LANGUAGE", "LARGE", "LEADING", "LENGTH", "LEVEL", "LIBRARY", "LIKE", "LIKE2", "LIKE4", "LIKEC", "LIMITED", "LOCAL", "LOCK", "LONG", "MAP", "MAX", "MAXLEN", "MEMBER", "MERGE", "MIN", "MINUS", "MINUTE", "MLSLABEL", "MOD", "MODE", "MONTH", "MULTISET", "NAME", "NAN", "NATIONAL", "NATIVE", "NATURAL", "NATURALN", "NCHAR", "NEW", "NEXTVAL", "NOCOMPRESS", "NOCOPY", "NOT", "NOWAIT", "NULL", "NULLIF", "NUMBER_BASE", "NUMBER", "OBJECT", "OCICOLL", "OCIDATE", "OCIDATETIME", "OCIDURATION", "OCIINTERVAL", "OCILOBLOCATOR", "OCINUMBER", "OCIRAW", "OCIREF", "OCIREFCURSOR", "OCIROWID", "OCISTRING", "OCITYPE", "OF", "OLD", "ON", "ONLY", "OPAQUE", "OPEN", "OPERATOR", "OPTION", "ORACLE", "ORADATA", "ORDER", "ORGANIZATION", "ORLANY", "ORLVARY", "OTHERS", "OUT", "OVERLAPS", "OVERRIDING", "PACKAGE", "PARALLEL_ENABLE", "PARAMETER", "PARAMETERS", "PARENT", "PARTITION", "PASCAL", "PCTFREE", "PIPE", "PIPELINED", "PLS_INTEGER", "PLUGGABLE", "POSITIVE", "POSITIVEN", "PRAGMA", "PRECISION", "PRIOR", "PRIVATE", "PROCEDURE", "PUBLIC", "RAISE", "RANGE", "RAW", "READ", "REAL", "RECORD", "REF", "REFERENCE", "RELEASE", "RELIES_ON", "REM", "REMAINDER", "RENAME", "RESOURCE", "RESULT_CACHE", "RESULT", "RETURN", "RETURNING", "REVERSE", "REVOKE", "ROLLBACK", "ROW", "ROWID", "ROWNUM", "ROWTYPE", "SAMPLE", "SAVE", "SAVEPOINT", "SB1", "SB2", "SB4", "SECOND", "SEGMENT", "SELF", "SEPARATE", "SEQUENCE", "SERIALIZABLE", "SHARE", "SHORT", "SIZE_T", "SIZE", "SMALLINT", "SOME", "SPACE", "SPARSE", "SQL", "SQLCODE", "SQLDATA", "SQLERRM", "SQLNAME", "SQLSTATE", "STANDARD", "START", "STATIC", "STDDEV", "STORED", "STRING", "STRUCT", "STYLE", "SUBMULTISET", "SUBPARTITION", "SUBSTITUTABLE", "SUBTYPE", "SUCCESSFUL", "SUM", "SYNONYM", "SYSDATE", "TABAUTH", "TABLE", "TDO", "THE", "THEN", "TIME", "TIMESTAMP", "TIMEZONE_ABBR", "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TIMEZONE_REGION", "TO", "TRAILING", "TRANSACTION", "TRANSACTIONAL", "TRIGGER", "TRUE", "TRUSTED", "TYPE", "UB1", "UB2", "UB4", "UID", "UNDER", "UNIQUE", "UNPLUG", "UNSIGNED", "UNTRUSTED", "USE", "USER", "USING", "VALIDATE", "VALIST", "VALUE", "VARCHAR", "VARCHAR2", "VARIABLE", "VARIANCE", "VARRAY", "VARYING", "VIEW", "VIEWS", "VOID", "WHENEVER", "WHILE", "WITH", "WORK", "WRAPPED", "WRITE", "YEAR", "SELECT", "ZONE", "AND", "WHERE", "OR"];
+
+	var reservedToplevelWords = ["ADD", "ALTER COLUMN", "ALTER TABLE", "BULK", "CONNECT BY", "USING", "DECLARE", "DELETE FROM", "DELETE", "MERGE", "EXCEPT", "EXCEPTION", "FETCH FIRST", "FROM", "GROUP BY", "SET", "HAVING", "INSERT", "INTERSECT", "LIMIT", "LOOP", "MODIFY", "CROSS JOIN", "OUTER JOIN", "RIGHT JOIN", "RIGHT OUTER JOIN", "INNER JOIN", "LEFT JOIN", "LEFT OUTER JOIN", "ORDER BY", "RETURNING", "SELECT", "START WITH", "JOIN", "UNION ALL", "UNION", "VALUES", "WHERE", "UPDATE"];
+
+	var reservedNewlineWords = ["CROSS APPLY", "ELSE", "END", "OUTER APPLY", "THEN", "WHEN", "UNION"];
+
+	var tokenizer = void 0;
+
+	var PlSqlFormatter = function () {
+	    /**
+	     * @param {Object} cfg Different set of configurations
+	     */
+	    function PlSqlFormatter(cfg) {
+	        _classCallCheck(this, PlSqlFormatter);
+
+	        this.cfg = cfg;
+	    }
+
+	    /**
+	     * Format the whitespace in a PL/SQL string to make it easier to read
+	     *
+	     * @param {String} query The PL/SQL string
+	     * @return {String} formatted string
+	     */
+
+
+	    PlSqlFormatter.prototype.format = function format(query) {
+	        if (!tokenizer) {
+	            tokenizer = new _Tokenizer2["default"]({
+	                reservedWords: reservedWords,
+	                reservedToplevelWords: reservedToplevelWords,
+	                reservedNewlineWords: reservedNewlineWords,
+	                stringTypes: ["\"\"", "N''", "''", "``"],
+	                openParens: ["(", "CASE", "BEGIN"],
+	                closeParens: [")", "END"],
+	                indexedPlaceholderTypes: ["?"],
+	                namedPlaceholderTypes: [":"],
+	                lineCommentTypes: ["--"],
+	                specialWordChars: ["_", "$", "#", ".", "@", "%"]
+	            });
+	        }
+	        return new _Formatter2["default"](this.cfg, tokenizer, reservedWords).format(query);
+	    };
+
+	    PlSqlFormatter.prototype.getFormatArray = function getFormatArray(query) {
+	        if (!tokenizer) {
+	            tokenizer = new _Tokenizer2["default"]({
+	                reservedWords: reservedWords,
+	                reservedToplevelWords: reservedToplevelWords,
+	                reservedNewlineWords: reservedNewlineWords,
+	                stringTypes: ["\"\"", "N''", "''", "``"],
+	                openParens: ["(", "CASE", "BEGIN"],
+	                closeParens: [")", "END"],
+	                indexedPlaceholderTypes: ["?"],
+	                namedPlaceholderTypes: [":"],
+	                lineCommentTypes: ["--"],
+	                specialWordChars: ["_", "$", "#", ".", "@"]
+	            });
+	        }
+	        return new _Formatter2["default"](this.cfg, tokenizer, reservedWords).getFormatArray(query);
+	    };
+
+	    return PlSqlFormatter;
+	}();
+
+	exports["default"] = PlSqlFormatter;
+	module.exports = exports["default"];
+
+/***/ }),
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var getNative = __webpack_require__(3),
@@ -3284,7 +2800,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 37 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var getNative = __webpack_require__(3),
@@ -3297,7 +2813,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 38 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var getNative = __webpack_require__(3),
@@ -3310,7 +2826,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 39 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var getNative = __webpack_require__(3),
@@ -3323,7 +2839,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 40 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var getNative = __webpack_require__(3),
@@ -3336,62 +2852,34 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseTimes = __webpack_require__(50),
-	    isArguments = __webpack_require__(23),
-	    isArray = __webpack_require__(5),
-	    isBuffer = __webpack_require__(24),
-	    isIndex = __webpack_require__(19),
-	    isTypedArray = __webpack_require__(28);
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
+/* 32 */
+/***/ (function(module, exports) {
 
 	/**
-	 * Creates an array of the enumerable property names of the array-like `value`.
+	 * A specialized version of `_.map` for arrays without support for iteratee
+	 * shorthands.
 	 *
 	 * @private
-	 * @param {*} value The value to query.
-	 * @param {boolean} inherited Specify returning inherited property names.
-	 * @returns {Array} Returns the array of property names.
+	 * @param {Array} [array] The array to iterate over.
+	 * @param {Function} iteratee The function invoked per iteration.
+	 * @returns {Array} Returns the new mapped array.
 	 */
-	function arrayLikeKeys(value, inherited) {
-	  var isArr = isArray(value),
-	      isArg = !isArr && isArguments(value),
-	      isBuff = !isArr && !isArg && isBuffer(value),
-	      isType = !isArr && !isArg && !isBuff && isTypedArray(value),
-	      skipIndexes = isArr || isArg || isBuff || isType,
-	      result = skipIndexes ? baseTimes(value.length, String) : [],
-	      length = result.length;
+	function arrayMap(array, iteratee) {
+	  var index = -1,
+	      length = array == null ? 0 : array.length,
+	      result = Array(length);
 
-	  for (var key in value) {
-	    if ((inherited || hasOwnProperty.call(value, key)) &&
-	        !(skipIndexes && (
-	           // Safari 9 has enumerable `arguments.length` in strict mode.
-	           key == 'length' ||
-	           // Node.js 0.10 has enumerable non-index properties on buffers.
-	           (isBuff && (key == 'offset' || key == 'parent')) ||
-	           // PhantomJS 2 has enumerable non-index properties on typed arrays.
-	           (isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset')) ||
-	           // Skip index properties.
-	           isIndex(key, length)
-	        ))) {
-	      result.push(key);
-	    }
+	  while (++index < length) {
+	    result[index] = iteratee(array[index], index, array);
 	  }
 	  return result;
 	}
 
-	module.exports = arrayLikeKeys;
+	module.exports = arrayMap;
 
 
 /***/ }),
-/* 42 */
+/* 33 */
 /***/ (function(module, exports) {
 
 	/**
@@ -3409,7 +2897,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 43 */
+/* 34 */
 /***/ (function(module, exports) {
 
 	/**
@@ -3439,11 +2927,37 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 44 */
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var baseFindIndex = __webpack_require__(34),
+	    baseIsNaN = __webpack_require__(37),
+	    strictIndexOf = __webpack_require__(58);
+
+	/**
+	 * The base implementation of `_.indexOf` without `fromIndex` bounds checks.
+	 *
+	 * @private
+	 * @param {Array} array The array to inspect.
+	 * @param {*} value The value to search for.
+	 * @param {number} fromIndex The index to search from.
+	 * @returns {number} Returns the index of the matched value, else `-1`.
+	 */
+	function baseIndexOf(array, value, fromIndex) {
+	  return value === value
+	    ? strictIndexOf(array, value, fromIndex)
+	    : baseFindIndex(array, baseIsNaN, fromIndex);
+	}
+
+	module.exports = baseIndexOf;
+
+
+/***/ }),
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var baseGetTag = __webpack_require__(2),
-	    isObjectLike = __webpack_require__(4);
+	    isObjectLike = __webpack_require__(5);
 
 	/** `Object#toString` result references. */
 	var argsTag = '[object Arguments]';
@@ -3463,7 +2977,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 45 */
+/* 37 */
 /***/ (function(module, exports) {
 
 	/**
@@ -3481,13 +2995,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 46 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isFunction = __webpack_require__(25),
-	    isMasked = __webpack_require__(61),
-	    isObject = __webpack_require__(7),
-	    toSource = __webpack_require__(21);
+	var isFunction = __webpack_require__(16),
+	    isMasked = __webpack_require__(53),
+	    isObject = __webpack_require__(4),
+	    toSource = __webpack_require__(13);
 
 	/**
 	 * Used to match `RegExp`
@@ -3534,12 +3048,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 47 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var baseGetTag = __webpack_require__(2),
-	    isLength = __webpack_require__(26),
-	    isObjectLike = __webpack_require__(4);
+	    isLength = __webpack_require__(17),
+	    isObjectLike = __webpack_require__(5);
 
 	/** `Object#toString` result references. */
 	var argsTag = '[object Arguments]',
@@ -3600,7 +3114,43 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 48 */
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var isPrototype = __webpack_require__(12),
+	    nativeKeys = __webpack_require__(54);
+
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/**
+	 * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @returns {Array} Returns the array of property names.
+	 */
+	function baseKeys(object) {
+	  if (!isPrototype(object)) {
+	    return nativeKeys(object);
+	  }
+	  var result = [];
+	  for (var key in Object(object)) {
+	    if (hasOwnProperty.call(object, key) && key != 'constructor') {
+	      result.push(key);
+	    }
+	  }
+	  return result;
+	}
+
+	module.exports = baseKeys;
+
+
+/***/ }),
+/* 41 */
 /***/ (function(module, exports) {
 
 	/** Used as references for various `Number` constants. */
@@ -3641,7 +3191,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 49 */
+/* 42 */
 /***/ (function(module, exports) {
 
 	/**
@@ -3678,33 +3228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 50 */
-/***/ (function(module, exports) {
-
-	/**
-	 * The base implementation of `_.times` without support for iteratee shorthands
-	 * or max array length checks.
-	 *
-	 * @private
-	 * @param {number} n The number of times to invoke `iteratee`.
-	 * @param {Function} iteratee The function invoked per iteration.
-	 * @returns {Array} Returns the array of results.
-	 */
-	function baseTimes(n, iteratee) {
-	  var index = -1,
-	      result = Array(n);
-
-	  while (++index < n) {
-	    result[index] = iteratee(index);
-	  }
-	  return result;
-	}
-
-	module.exports = baseTimes;
-
-
-/***/ }),
-/* 51 */
+/* 43 */
 /***/ (function(module, exports) {
 
 	/**
@@ -3724,35 +3248,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 52 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var arrayMap = __webpack_require__(14);
-
-	/**
-	 * The base implementation of `_.values` and `_.valuesIn` which creates an
-	 * array of `object` property values corresponding to the property names
-	 * of `props`.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @param {Array} props The property names to get values for.
-	 * @returns {Object} Returns the array of property values.
-	 */
-	function baseValues(object, props) {
-	  return arrayMap(props, function(key) {
-	    return object[key];
-	  });
-	}
-
-	module.exports = baseValues;
-
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseSlice = __webpack_require__(49);
+	var baseSlice = __webpack_require__(42);
 
 	/**
 	 * Casts `array` to a slice if it's needed.
@@ -3773,10 +3272,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 54 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseIndexOf = __webpack_require__(15);
+	var baseIndexOf = __webpack_require__(35);
 
 	/**
 	 * Used by `_.trim` and `_.trimEnd` to get the index of the last string symbol
@@ -3798,7 +3297,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 55 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var root = __webpack_require__(1);
@@ -3810,10 +3309,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 56 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var Symbol = __webpack_require__(10);
+	var Symbol = __webpack_require__(7);
 
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -3862,16 +3361,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 57 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var DataView = __webpack_require__(36),
-	    Map = __webpack_require__(37),
-	    Promise = __webpack_require__(38),
-	    Set = __webpack_require__(39),
-	    WeakMap = __webpack_require__(40),
+	var DataView = __webpack_require__(27),
+	    Map = __webpack_require__(28),
+	    Promise = __webpack_require__(29),
+	    Set = __webpack_require__(30),
+	    WeakMap = __webpack_require__(31),
 	    baseGetTag = __webpack_require__(2),
-	    toSource = __webpack_require__(21);
+	    toSource = __webpack_require__(13);
 
 	/** `Object#toString` result references. */
 	var mapTag = '[object Map]',
@@ -3926,7 +3425,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 58 */
+/* 49 */
 /***/ (function(module, exports) {
 
 	/**
@@ -3945,7 +3444,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 59 */
+/* 50 */
 /***/ (function(module, exports) {
 
 	/** Used to compose unicode character classes. */
@@ -3977,13 +3476,44 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 60 */
+/* 51 */
+/***/ (function(module, exports) {
+
+	/** Used as references for various `Number` constants. */
+	var MAX_SAFE_INTEGER = 9007199254740991;
+
+	/** Used to detect unsigned integer values. */
+	var reIsUint = /^(?:0|[1-9]\d*)$/;
+
+	/**
+	 * Checks if `value` is a valid array-like index.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+	 * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+	 */
+	function isIndex(value, length) {
+	  var type = typeof value;
+	  length = length == null ? MAX_SAFE_INTEGER : length;
+
+	  return !!length &&
+	    (type == 'number' ||
+	      (type != 'symbol' && reIsUint.test(value))) &&
+	        (value > -1 && value % 1 == 0 && value < length);
+	}
+
+	module.exports = isIndex;
+
+
+/***/ }),
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var eq = __webpack_require__(69),
-	    isArrayLike = __webpack_require__(6),
-	    isIndex = __webpack_require__(19),
-	    isObject = __webpack_require__(7);
+	var eq = __webpack_require__(61),
+	    isArrayLike = __webpack_require__(15),
+	    isIndex = __webpack_require__(51),
+	    isObject = __webpack_require__(4);
 
 	/**
 	 * Checks if the given arguments are from an iteratee call.
@@ -4013,10 +3543,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 61 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var coreJsData = __webpack_require__(55);
+	var coreJsData = __webpack_require__(46);
 
 	/** Used to detect methods masquerading as native. */
 	var maskSrcKey = (function() {
@@ -4039,10 +3569,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 62 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var overArg = __webpack_require__(65);
+	var overArg = __webpack_require__(57);
 
 	/* Built-in method references for those with the same name as other `lodash` methods. */
 	var nativeKeys = overArg(Object.keys, Object);
@@ -4051,10 +3581,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 63 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(18);
+	/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(11);
 
 	/** Detect free variable `exports`. */
 	var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -4085,10 +3615,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = nodeUtil;
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)(module)))
 
 /***/ }),
-/* 64 */
+/* 56 */
 /***/ (function(module, exports) {
 
 	/** Used for built-in method references. */
@@ -4116,7 +3646,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 65 */
+/* 57 */
 /***/ (function(module, exports) {
 
 	/**
@@ -4137,7 +3667,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 66 */
+/* 58 */
 /***/ (function(module, exports) {
 
 	/**
@@ -4166,12 +3696,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 67 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var asciiToArray = __webpack_require__(42),
-	    hasUnicode = __webpack_require__(59),
-	    unicodeToArray = __webpack_require__(68);
+	var asciiToArray = __webpack_require__(33),
+	    hasUnicode = __webpack_require__(50),
+	    unicodeToArray = __webpack_require__(60);
 
 	/**
 	 * Converts `string` to an array.
@@ -4190,7 +3720,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 68 */
+/* 60 */
 /***/ (function(module, exports) {
 
 	/** Used to compose unicode character classes. */
@@ -4236,7 +3766,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 69 */
+/* 61 */
 /***/ (function(module, exports) {
 
 	/**
@@ -4279,10 +3809,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 70 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var toString = __webpack_require__(11);
+	var toString = __webpack_require__(8);
 
 	/**
 	 * Used to match `RegExp`
@@ -4317,17 +3847,104 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 71 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseKeys = __webpack_require__(16),
-	    getTag = __webpack_require__(57),
-	    isArguments = __webpack_require__(23),
-	    isArray = __webpack_require__(5),
-	    isArrayLike = __webpack_require__(6),
-	    isBuffer = __webpack_require__(24),
-	    isPrototype = __webpack_require__(20),
-	    isTypedArray = __webpack_require__(28);
+	var baseIsArguments = __webpack_require__(36),
+	    isObjectLike = __webpack_require__(5);
+
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/** Built-in value references. */
+	var propertyIsEnumerable = objectProto.propertyIsEnumerable;
+
+	/**
+	 * Checks if `value` is likely an `arguments` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an `arguments` object,
+	 *  else `false`.
+	 * @example
+	 *
+	 * _.isArguments(function() { return arguments; }());
+	 * // => true
+	 *
+	 * _.isArguments([1, 2, 3]);
+	 * // => false
+	 */
+	var isArguments = baseIsArguments(function() { return arguments; }()) ? baseIsArguments : function(value) {
+	  return isObjectLike(value) && hasOwnProperty.call(value, 'callee') &&
+	    !propertyIsEnumerable.call(value, 'callee');
+	};
+
+	module.exports = isArguments;
+
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(1),
+	    stubFalse = __webpack_require__(67);
+
+	/** Detect free variable `exports`. */
+	var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
+
+	/** Detect free variable `module`. */
+	var freeModule = freeExports && typeof module == 'object' && module && !module.nodeType && module;
+
+	/** Detect the popular CommonJS extension `module.exports`. */
+	var moduleExports = freeModule && freeModule.exports === freeExports;
+
+	/** Built-in value references. */
+	var Buffer = moduleExports ? root.Buffer : undefined;
+
+	/* Built-in method references for those with the same name as other `lodash` methods. */
+	var nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined;
+
+	/**
+	 * Checks if `value` is a buffer.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.3.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a buffer, else `false`.
+	 * @example
+	 *
+	 * _.isBuffer(new Buffer(2));
+	 * // => true
+	 *
+	 * _.isBuffer(new Uint8Array(2));
+	 * // => false
+	 */
+	var isBuffer = nativeIsBuffer || stubFalse;
+
+	module.exports = isBuffer;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)(module)))
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var baseKeys = __webpack_require__(40),
+	    getTag = __webpack_require__(48),
+	    isArguments = __webpack_require__(63),
+	    isArray = __webpack_require__(14),
+	    isArrayLike = __webpack_require__(15),
+	    isBuffer = __webpack_require__(64),
+	    isPrototype = __webpack_require__(12),
+	    isTypedArray = __webpack_require__(66);
 
 	/** `Object#toString` result references. */
 	var mapTag = '[object Map]',
@@ -4400,86 +4017,40 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 72 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseGetTag = __webpack_require__(2),
-	    isArray = __webpack_require__(5),
-	    isObjectLike = __webpack_require__(4);
+	var baseIsTypedArray = __webpack_require__(39),
+	    baseUnary = __webpack_require__(43),
+	    nodeUtil = __webpack_require__(55);
 
-	/** `Object#toString` result references. */
-	var stringTag = '[object String]';
+	/* Node.js helper references. */
+	var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
 
 	/**
-	 * Checks if `value` is classified as a `String` primitive or object.
+	 * Checks if `value` is classified as a typed array.
 	 *
 	 * @static
-	 * @since 0.1.0
 	 * @memberOf _
+	 * @since 3.0.0
 	 * @category Lang
 	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a string, else `false`.
+	 * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.
 	 * @example
 	 *
-	 * _.isString('abc');
+	 * _.isTypedArray(new Uint8Array);
 	 * // => true
 	 *
-	 * _.isString(1);
+	 * _.isTypedArray([]);
 	 * // => false
 	 */
-	function isString(value) {
-	  return typeof value == 'string' ||
-	    (!isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag);
-	}
+	var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
 
-	module.exports = isString;
+	module.exports = isTypedArray;
 
 
 /***/ }),
-/* 73 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var arrayLikeKeys = __webpack_require__(41),
-	    baseKeys = __webpack_require__(16),
-	    isArrayLike = __webpack_require__(6);
-
-	/**
-	 * Creates an array of the own enumerable property names of `object`.
-	 *
-	 * **Note:** Non-object values are coerced to objects. See the
-	 * [ES spec](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)
-	 * for more details.
-	 *
-	 * @static
-	 * @since 0.1.0
-	 * @memberOf _
-	 * @category Object
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 * @example
-	 *
-	 * function Foo() {
-	 *   this.a = 1;
-	 *   this.b = 2;
-	 * }
-	 *
-	 * Foo.prototype.c = 3;
-	 *
-	 * _.keys(new Foo);
-	 * // => ['a', 'b'] (iteration order is not guaranteed)
-	 *
-	 * _.keys('hi');
-	 * // => ['0', '1']
-	 */
-	function keys(object) {
-	  return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
-	}
-
-	module.exports = keys;
-
-
-/***/ }),
-/* 74 */
+/* 67 */
 /***/ (function(module, exports) {
 
 	/**
@@ -4503,10 +4074,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 75 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var toNumber = __webpack_require__(76);
+	var toNumber = __webpack_require__(70);
 
 	/** Used as references for various `Number` constants. */
 	var INFINITY = 1 / 0,
@@ -4551,11 +4122,53 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 76 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(7),
-	    isSymbol = __webpack_require__(27);
+	var toFinite = __webpack_require__(68);
+
+	/**
+	 * Converts `value` to an integer.
+	 *
+	 * **Note:** This method is loosely based on
+	 * [`ToInteger`](http://www.ecma-international.org/ecma-262/7.0/#sec-tointeger).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to convert.
+	 * @returns {number} Returns the converted integer.
+	 * @example
+	 *
+	 * _.toInteger(3.2);
+	 * // => 3
+	 *
+	 * _.toInteger(Number.MIN_VALUE);
+	 * // => 0
+	 *
+	 * _.toInteger(Infinity);
+	 * // => 1.7976931348623157e+308
+	 *
+	 * _.toInteger('3.2');
+	 * // => 3
+	 */
+	function toInteger(value) {
+	  var result = toFinite(value),
+	      remainder = result % 1;
+
+	  return result === result ? (remainder ? result - remainder : result) : 0;
+	}
+
+	module.exports = toInteger;
+
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var isObject = __webpack_require__(4),
+	    isSymbol = __webpack_require__(18);
 
 	/** Used as references for various `Number` constants. */
 	var NAN = 0 / 0;
@@ -4620,46 +4233,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	module.exports = toNumber;
-
-
-/***/ }),
-/* 77 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseValues = __webpack_require__(52),
-	    keys = __webpack_require__(73);
-
-	/**
-	 * Creates an array of the own enumerable string keyed property values of `object`.
-	 *
-	 * **Note:** Non-object values are coerced to objects.
-	 *
-	 * @static
-	 * @since 0.1.0
-	 * @memberOf _
-	 * @category Object
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property values.
-	 * @example
-	 *
-	 * function Foo() {
-	 *   this.a = 1;
-	 *   this.b = 2;
-	 * }
-	 *
-	 * Foo.prototype.c = 3;
-	 *
-	 * _.values(new Foo);
-	 * // => [1, 2] (iteration order is not guaranteed)
-	 *
-	 * _.values('hi');
-	 * // => ['h', 'i']
-	 */
-	function values(object) {
-	  return object == null ? [] : baseValues(object, keys(object));
-	}
-
-	module.exports = values;
 
 
 /***/ })
