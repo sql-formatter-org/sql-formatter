@@ -245,9 +245,15 @@ export default class PlSqlFormatter {
 
     getStringInOneStyle(word) {
         return word.replaceAll("(", " ( ").replaceAll(")", " ) ")
-                   .replaceAll(",", " , ").replaceAll("=", " = ")
-                   .replaceAll("--", " -- ").replaceAll("||", " || ")
-                   .replaceAll("-", " - ").replaceAll(/(\s|\n)+/g, " ");
+            .replaceAll(".", " . ").replaceAll("\"", " \" ")
+            .replaceAll("*", " * ").replaceAll("/", " / ")
+            .replaceAll("%", " % ").replaceAll(":", " : ")
+            .replaceAll(",", " , ").replaceAll("=", " = ")
+            .replaceAll("-", " - ").replaceAll("|", " | ")
+            .replaceAll("'", " ' ").replaceAll("+", " + ")
+            .replaceAll("\\", " \\ ").replaceAll(";", " ; ")
+            .replaceAll("?", " ? ").replaceAll("@", " @ ")
+            .replaceAll("#", " # ").replaceAll(/(\s|\n)+/g, " ");
     }
 
     getFormattingString() {

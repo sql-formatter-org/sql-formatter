@@ -368,10 +368,15 @@ export default class Formatter {
 
     getStringInOneStyle(word) {
         return word.replaceAll("(", " ( ").replaceAll(")", " ) ")
+            .replaceAll(".", " . ").replaceAll("\"", " \" ")
+            .replaceAll("*", " * ").replaceAll("/", " / ")
+            .replaceAll("%", " % ").replaceAll(":", " : ")
             .replaceAll(",", " , ").replaceAll("=", " = ")
-            .replaceAll("--", " -- ").replaceAll("||", " || ")
+            .replaceAll("-", " - ").replaceAll("|", " | ")
             .replaceAll("'", " ' ").replaceAll("+", " + ")
-            .replaceAll("-", " - ").replaceAll(/(\s|\n)+/g, " ");
+            .replaceAll("\\", " \\ ").replaceAll(";", " ; ")
+            .replaceAll("?", " ? ").replaceAll("@", " @ ")
+            .replaceAll("#", " # ").replaceAll(/(\s|\n)+/g, " ");
     }
 
     formatSubstringCase(string) {
