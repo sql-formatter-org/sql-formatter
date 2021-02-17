@@ -1236,7 +1236,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.lines[this.lastIndex()] += " ";
 	            }
 	        } else if (last.trim() != "" && indent > 0) {
-	            this.lines.push((0, _repeat2["default"])(" ", indent));
+	            if (last.includes(" between ")) {
+	                var sLast = last.substring(last.indexOf(" between"));
+	                if (sLast.split(/ and | or | xor /).length > 1) {
+	                    this.lines.push((0, _repeat2["default"])(" ", indent));
+	                } else {
+	                    this.lines[this.lastIndex()] += " ";
+	                }
+	            } else {
+	                this.lines.push((0, _repeat2["default"])(" ", indent));
+	            }
 	        }
 	        this.lines[this.lastIndex()] += token.value;
 	    };

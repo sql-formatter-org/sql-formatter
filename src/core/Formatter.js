@@ -170,7 +170,18 @@ export default class Formatter {
             }
         }
         else if (last.trim() != "" && indent > 0) {
-            this.lines.push(repeat(" ", indent));
+            if (last.includes(" between ")) {
+                const sLast = last.substring(last.indexOf(" between"));
+                if (sLast.split(/ and | or | xor /).length > 1) {
+                    this.lines.push(repeat(" ", indent));
+                }
+                else {
+                    this.lines[this.lastIndex()] += " ";
+                }
+            }
+            else {
+                this.lines.push(repeat(" ", indent));
+            }
         }
         this.lines[this.lastIndex()] += token.value;
     }
