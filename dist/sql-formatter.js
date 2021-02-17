@@ -1415,7 +1415,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.getStringInOneStyle = function getStringInOneStyle(word) {
-	        return word.replaceAll("(", " ( ").replaceAll(")", " ) ").replaceAll(".", " . ").replaceAll("\"", " \" ").replaceAll("*", " * ").replaceAll("/", " / ").replaceAll("%", " % ").replaceAll(":", " : ").replaceAll(",", " , ").replaceAll("=", " = ").replaceAll("-", " - ").replaceAll("|", " | ").replaceAll("'", " ' ").replaceAll("+", " + ").replaceAll("\\", " \\ ").replaceAll(";", " ; ").replaceAll("?", " ? ").replaceAll("@", " @ ").replaceAll("#", " # ").replaceAll(/(\s|\n)+/g, " ");
+	        return word.replaceAll("(", " ( ").replaceAll(")", " ) ").replaceAll(".", " . ").replaceAll("\"", " \" ").replaceAll("*", " * ").replaceAll("/", " / ").replaceAll("%", " % ").replaceAll(":", " : ").replaceAll(",", " , ").replaceAll("=", " = ").replaceAll("-", " - ").replaceAll("|", " | ").replaceAll("'", " ' ").replaceAll("+", " + ").replaceAll("<", " < ").replaceAll(">", " > ").replaceAll("\\", " \\ ").replaceAll(";", " ; ").replaceAll("?", " ? ").replaceAll("@", " @ ").replaceAll("#", " # ").replaceAll(/(\s|\n)+/g, " ");
 	    };
 
 	    Formatter.prototype.formatSubstringCase = function formatSubstringCase(string) {
@@ -2004,7 +2004,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    PlSqlFormatter.prototype.getStringInOneStyle = function getStringInOneStyle(word) {
-	        return word.replaceAll("(", " ( ").replaceAll(")", " ) ").replaceAll(".", " . ").replaceAll("\"", " \" ").replaceAll("*", " * ").replaceAll("/", " / ").replaceAll("%", " % ").replaceAll(":", " : ").replaceAll(",", " , ").replaceAll("=", " = ").replaceAll("-", " - ").replaceAll("|", " | ").replaceAll("'", " ' ").replaceAll("+", " + ").replaceAll("\\", " \\ ").replaceAll(";", " ; ").replaceAll("?", " ? ").replaceAll("@", " @ ").replaceAll("#", " # ").replaceAll(/(\s|\n)+/g, " ");
+	        return word.replaceAll("(", " ( ").replaceAll(")", " ) ").replaceAll(".", " . ").replaceAll("\"", " \" ").replaceAll("*", " * ").replaceAll("/", " / ").replaceAll("%", " % ").replaceAll(":", " : ").replaceAll(",", " , ").replaceAll("=", " = ").replaceAll("-", " - ").replaceAll("|", " | ").replaceAll("'", " ' ").replaceAll("+", " + ").replaceAll("<", " < ").replaceAll(">", " > ").replaceAll("\\", " \\ ").replaceAll(";", " ; ").replaceAll("?", " ? ").replaceAll("@", " @ ").replaceAll("#", " # ").replaceAll(/(\s|\n)+/g, " ");
 	    };
 
 	    PlSqlFormatter.prototype.getFormattingString = function getFormattingString() {

@@ -374,6 +374,7 @@ export default class Formatter {
             .replaceAll(",", " , ").replaceAll("=", " = ")
             .replaceAll("-", " - ").replaceAll("|", " | ")
             .replaceAll("'", " ' ").replaceAll("+", " + ")
+            .replaceAll("<", " < ").replaceAll(">", " > ")
             .replaceAll("\\", " \\ ").replaceAll(";", " ; ")
             .replaceAll("?", " ? ").replaceAll("@", " @ ")
             .replaceAll("#", " # ").replaceAll(/(\s|\n)+/g, " ");

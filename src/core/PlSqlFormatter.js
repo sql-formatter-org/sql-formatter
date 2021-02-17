@@ -251,6 +251,7 @@ export default class PlSqlFormatter {
             .replaceAll(",", " , ").replaceAll("=", " = ")
             .replaceAll("-", " - ").replaceAll("|", " | ")
             .replaceAll("'", " ' ").replaceAll("+", " + ")
+            .replaceAll("<", " < ").replaceAll(">", " > ")
             .replaceAll("\\", " \\ ").replaceAll(";", " ; ")
             .replaceAll("?", " ? ").replaceAll("@", " @ ")
             .replaceAll("#", " # ").replaceAll(/(\s|\n)+/g, " ");
