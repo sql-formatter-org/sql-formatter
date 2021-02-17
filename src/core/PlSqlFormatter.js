@@ -94,8 +94,9 @@ export default class PlSqlFormatter {
                 this.formatException(token, i);
             }
             else if (token.value == "else") {
-                this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1) + token.value;
-                this.addNewLine(this.indentCount);
+                this.formatElse(token);
+                // this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1) + token.value;
+                // this.addNewLine(this.indentCount);
             }
             else if (token.value == "elsif") {
                 this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1) + token.value;
@@ -116,6 +117,17 @@ export default class PlSqlFormatter {
         return this.addDevelopEmptyLines(originQuery, this.lines.join("\n").trim());
     }
 
+    formatElse(token) {
+        const last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+        if (last != undefined && last.key == "case") {
+            this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1) + " " + token.value;
+        }
+        else {
+            this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1) + token.value;
+        }
+        this.addNewLine(this.indentCount);
+    }
+
     trimStart(line) {
         while (line[0] == " ") {
             line = line.substring(1);
@@ -126,7 +138,7 @@ export default class PlSqlFormatter {
     formatLikeDevelopWrite(token) {
         const cInfo = this.getFormattingString(token);
         const searchString = cInfo.substring;
-        const first = searchString.trim().split(" ")[0].trim().replace("(", "");
+        const first = this.getFirstWord(searchString);
         const info = this.findSubstring(first, token.value, this.getStringInOneStyle(searchString + " " + token.value).trim());
         if (searchString.trim().length < 65) {
             return;
@@ -263,7 +275,7 @@ export default class PlSqlFormatter {
         if (lastIdx == 0) {
             return this.getLastString();
         }
-        let first = this.getLastString().trim().replaceAll(/\(|\(/g, "").split(" ")[0];
+        let first = this.getFirstWord(this.getLastString().trim());
         let substring = this.getLastString();
         while (!startBlocks.includes(first)) {
             lastIdx--;
@@ -271,7 +283,7 @@ export default class PlSqlFormatter {
                 break;
             }
             substring = this.lines[lastIdx] + " " + substring.trim();
-            first = substring.trim().replaceAll(/\(|\(/g, "").split(" ")[0];
+            first = this.getFirstWord(substring);
         }
         if (lastIdx < 0) {
             lastIdx = 0;
@@ -372,6 +384,10 @@ export default class PlSqlFormatter {
             this.indentCount++;
         }
         this.addNewLine(this.indentCount);
+        const last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+        if (last != undefined && last.key == "case") {
+            this.lines[this.lastIndex()] += " ";
+        }
     }
 
     formatLoop(token, index) {
@@ -608,14 +624,31 @@ export default class PlSqlFormatter {
         const last = this.getLastString();
         if ((last.includes(" or ") || last.includes(" and ") || last.includes(" xor ")) && last.trim().length > 60) {
             const searchString = last;
-            const firstWord = searchString.trim().split(" ")[0].trim().replace("(", "");
+            const firstWord = this.getFirstWord(searchString);
             const info = this.findSubstring(firstWord, token.value, this.getStringInOneStyle(searchString).trim());
             this.lines[this.lastIndex()] = this.formatOriginSubstringWithIndent(
                                                     this.getLineIndent(this.getLastString()), info.indent, info.substring);
         }
-
+        if (this.getLastString().trim() == "") {
+            this.lines.pop();
+        }
         this.lines[this.lastIndex()] += token.value;
         this.addNewLine(this.indentCount);
+    }
+
+    getFirstWord(string) {
+        if (string.trim() == "") {
+            return "";
+        }
+        const split = string.trim().split(/,|\.|\(|\)| |%/);
+        let idx = 0;
+        while (idx < split.length && split[idx].trim() == "") {
+            idx++;
+        }
+        if (idx == split.length) {
+            return split[idx - 1].trim();
+        }
+        return split[idx].trim();
     }
 
     getBktSubstring(from) {
@@ -630,11 +663,11 @@ export default class PlSqlFormatter {
             if (line.startsWith("*") || line.startsWith("/*")) {
                 line = "";
             }
-            let match = line.match(/\(/);
+            let match = line.match(/\(/g);
             if (match != null) {
                 countOpenBkt += match.length;
             }
-            match = line.match(/\)/);
+            match = line.match(/\)/g);
             if (match != null) {
                 countCloseBkt += match.length;
             }
@@ -645,11 +678,6 @@ export default class PlSqlFormatter {
             }
         }
         return {substring:substring, startIndex: index, subLines: subLines};
-    }
-
-    getFirstWord(string) {
-        const wordSeparator = / |\(|\)/;
-        return string.trim().split(wordSeparator)[0].trim();
     }
 
     formatWithSpaces(token) {
@@ -869,10 +897,19 @@ export default class PlSqlFormatter {
     }
 
     formatBlockComment(token) {
+        let removeLastLine = false;
         if (this.prevLineIsComment()) {
             this.lines.push("");
         }
-        this.addNewLine(this.indentCount);
+        if (!this.originalBlockCommentInNewLine(token)) {
+            while (this.getLastString().trim() == "") {
+                this.lines.pop();
+            }
+            removeLastLine = !this.getLastString().endsWith(";");
+        }
+        else {
+            this.addNewLine(this.indentCount);
+        }
         const comLines = token.value.split("\n");
         for (let i = 0; i < comLines.length; i++) {
             if (comLines[i].trim().startsWith("*")) {
@@ -881,6 +918,17 @@ export default class PlSqlFormatter {
             this.lines[this.lastIndex()] += comLines[i].trim();
             this.addNewLine(this.indentCount);
         }
+        if (removeLastLine) {
+            this.lines.pop();
+        }
+    }
+
+    originalBlockCommentInNewLine(token) {
+        let idx = this.query.indexOf(token.value) - 1;
+        while (idx >= 0 && this.query[idx] == " ") {
+            idx--;
+        }
+        return this.query[idx] == "\n";
     }
 
     prevLineIsComment() {

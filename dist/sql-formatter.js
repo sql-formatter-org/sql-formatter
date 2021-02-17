@@ -1120,6 +1120,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.lines.join("\n").split("\n");
 	    };
 
+	    Formatter.prototype.getFirstWord = function getFirstWord(string) {
+	        if (string.trim() == "") {
+	            return "";
+	        }
+	        var split = string.trim().split(/,|\.|\(|\)| |%/);
+	        var idx = 0;
+	        while (idx < split.length && split[idx].trim() == "") {
+	            idx++;
+	        }
+	        if (idx == split.length) {
+	            return split[idx - 1].trim();
+	        }
+	        return split[idx].trim();
+	    };
+
 	    Formatter.prototype.formatQuery = function formatQuery() {
 	        var originalQuery = this.query;
 	        for (var i = 0; i < this.tokens.length; i++) {
@@ -1321,8 +1336,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (firstChar == "(" || firstChar == ")") {
 	            last = last.substring(1).trim();
 	        }
-	        var split = last.split(/\(|\)| |,/);
-	        var first = split[0];
+	        var first = this.getFirstWord(last.trim());
 	        var lastWithoutSpace = this.getStringInOneStyle(last);
 	        var info = this.findSubstring(first.toLowerCase(), lastWithoutSpace.toLowerCase());
 	        var substring = info.substring;
@@ -1478,11 +1492,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.addNewLine("left", token.value);
 	    };
 
+	    Formatter.prototype.originalBlockCommentInNewLine = function originalBlockCommentInNewLine(token) {
+	        var idx = this.query.indexOf(token.value) - 1;
+	        while (idx >= 0 && this.query[idx] == " ") {
+	            idx--;
+	        }
+	        return this.query[idx] == "\n";
+	    };
+
 	    Formatter.prototype.resolveAddLineInCommentsBlock = function resolveAddLineInCommentsBlock(token) {
 	        var substing = this.getLastString().trim();
 	        var words = substing.split(/\(|\)| /);
 	        var last = words[words.length - 1];
-	        if (!this.reservedWords.includes(last.toUpperCase()) || last.endsWith(";")) {
+	        if (!this.originalBlockCommentInNewLine(token)) {
+	            while (this.getLastString().trim() == "") {
+	                this.lines.pop();
+	            }
+	        } else if (!this.reservedWords.includes(last.toUpperCase()) || last.endsWith(";")) {
 	            this.addNewLine("left", token.value);
 	        }
 	    };
@@ -1579,8 +1605,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                break;
 	            }
 	        }
-	        var firstInStartLine = this.lines[startIndex].replaceAll(/\(|\)/g, " ").trim().split(" ")[0].trim();
-	        var first = substring.trim().split(" ")[0].replace(/\(/, "").trim();
+	        var firstInStartLine = this.getFirstWord(this.lines[startIndex]);
+	        var first = this.getFirstWord(substring);
 	        if (this.startBlock.includes(first)) {
 	            this.indents.pop();
 	        } else if (first == "with") {
@@ -1670,7 +1696,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.trimTrailingWhitespace = function trimTrailingWhitespace() {
-	        this.trimEndLastString();
+	        if (this.getLastString().trim() != "") {
+	            this.trimEndLastString();
+	        }
 	        if (this.previousNonWhitespaceToken.type == _tokenTypes2["default"].LINE_COMMENT) {
 	            this.addNewLine("left", "");
 	        }
@@ -1865,8 +1893,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else if (token.value == "exception" || token.value == "exceptions") {
 	                this.formatException(token, i);
 	            } else if (token.value == "else") {
-	                this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;
-	                this.addNewLine(this.indentCount);
+	                this.formatElse(token);
+	                // this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1) + token.value;
+	                // this.addNewLine(this.indentCount);
 	            } else if (token.value == "elsif") {
 	                this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;
 	            } else if (token.value == "when") {
@@ -1882,6 +1911,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.addDevelopEmptyLines(originQuery, this.lines.join("\n").trim());
 	    };
 
+	    PlSqlFormatter.prototype.formatElse = function formatElse(token) {
+	        var last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+	        if (last != undefined && last.key == "case") {
+	            this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + " " + token.value;
+	        } else {
+	            this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;
+	        }
+	        this.addNewLine(this.indentCount);
+	    };
+
 	    PlSqlFormatter.prototype.trimStart = function trimStart(line) {
 	        while (line[0] == " ") {
 	            line = line.substring(1);
@@ -1892,7 +1931,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    PlSqlFormatter.prototype.formatLikeDevelopWrite = function formatLikeDevelopWrite(token) {
 	        var cInfo = this.getFormattingString(token);
 	        var searchString = cInfo.substring;
-	        var first = searchString.trim().split(" ")[0].trim().replace("(", "");
+	        var first = this.getFirstWord(searchString);
 	        var info = this.findSubstring(first, token.value, this.getStringInOneStyle(searchString + " " + token.value).trim());
 	        if (searchString.trim().length < 65) {
 	            return;
@@ -2013,7 +2052,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (lastIdx == 0) {
 	            return this.getLastString();
 	        }
-	        var first = this.getLastString().trim().replaceAll(/\(|\(/g, "").split(" ")[0];
+	        var first = this.getFirstWord(this.getLastString().trim());
 	        var substring = this.getLastString();
 	        while (!startBlocks.includes(first)) {
 	            lastIdx--;
@@ -2021,7 +2060,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                break;
 	            }
 	            substring = this.lines[lastIdx] + " " + substring.trim();
-	            first = substring.trim().replaceAll(/\(|\(/g, "").split(" ")[0];
+	            first = this.getFirstWord(substring);
 	        }
 	        if (lastIdx < 0) {
 	            lastIdx = 0;
@@ -2119,6 +2158,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.indentCount++;
 	        }
 	        this.addNewLine(this.indentCount);
+	        var last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
+	        if (last != undefined && last.key == "case") {
+	            this.lines[this.lastIndex()] += " ";
+	        }
 	    };
 
 	    PlSqlFormatter.prototype.formatLoop = function formatLoop(token, index) {
@@ -2333,13 +2376,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var last = this.getLastString();
 	        if ((last.includes(" or ") || last.includes(" and ") || last.includes(" xor ")) && last.trim().length > 60) {
 	            var searchString = last;
-	            var firstWord = searchString.trim().split(" ")[0].trim().replace("(", "");
+	            var firstWord = this.getFirstWord(searchString);
 	            var info = this.findSubstring(firstWord, token.value, this.getStringInOneStyle(searchString).trim());
 	            this.lines[this.lastIndex()] = this.formatOriginSubstringWithIndent(this.getLineIndent(this.getLastString()), info.indent, info.substring);
 	        }
-
+	        if (this.getLastString().trim() == "") {
+	            this.lines.pop();
+	        }
 	        this.lines[this.lastIndex()] += token.value;
 	        this.addNewLine(this.indentCount);
+	    };
+
+	    PlSqlFormatter.prototype.getFirstWord = function getFirstWord(string) {
+	        if (string.trim() == "") {
+	            return "";
+	        }
+	        var split = string.trim().split(/,|\.|\(|\)| |%/);
+	        var idx = 0;
+	        while (idx < split.length && split[idx].trim() == "") {
+	            idx++;
+	        }
+	        if (idx == split.length) {
+	            return split[idx - 1].trim();
+	        }
+	        return split[idx].trim();
 	    };
 
 	    PlSqlFormatter.prototype.getBktSubstring = function getBktSubstring(from) {
@@ -2354,11 +2414,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (line.startsWith("*") || line.startsWith("/*")) {
 	                line = "";
 	            }
-	            var match = line.match(/\(/);
+	            var match = line.match(/\(/g);
 	            if (match != null) {
 	                countOpenBkt += match.length;
 	            }
-	            match = line.match(/\)/);
+	            match = line.match(/\)/g);
 	            if (match != null) {
 	                countCloseBkt += match.length;
 	            }
@@ -2369,11 +2429,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	        return { substring: substring, startIndex: index, subLines: subLines };
-	    };
-
-	    PlSqlFormatter.prototype.getFirstWord = function getFirstWord(string) {
-	        var wordSeparator = / |\(|\)/;
-	        return string.trim().split(wordSeparator)[0].trim();
 	    };
 
 	    PlSqlFormatter.prototype.formatWithSpaces = function formatWithSpaces(token) {
@@ -2577,10 +2632,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    PlSqlFormatter.prototype.formatBlockComment = function formatBlockComment(token) {
+	        var removeLastLine = false;
 	        if (this.prevLineIsComment()) {
 	            this.lines.push("");
 	        }
-	        this.addNewLine(this.indentCount);
+	        if (!this.originalBlockCommentInNewLine(token)) {
+	            while (this.getLastString().trim() == "") {
+	                this.lines.pop();
+	            }
+	            removeLastLine = !this.getLastString().endsWith(";");
+	        } else {
+	            this.addNewLine(this.indentCount);
+	        }
 	        var comLines = token.value.split("\n");
 	        for (var i = 0; i < comLines.length; i++) {
 	            if (comLines[i].trim().startsWith("*")) {
@@ -2589,6 +2652,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.lines[this.lastIndex()] += comLines[i].trim();
 	            this.addNewLine(this.indentCount);
 	        }
+	        if (removeLastLine) {
+	            this.lines.pop();
+	        }
+	    };
+
+	    PlSqlFormatter.prototype.originalBlockCommentInNewLine = function originalBlockCommentInNewLine(token) {
+	        var idx = this.query.indexOf(token.value) - 1;
+	        while (idx >= 0 && this.query[idx] == " ") {
+	            idx--;
+	        }
+	        return this.query[idx] == "\n";
 	    };
 
 	    PlSqlFormatter.prototype.prevLineIsComment = function prevLineIsComment() {
