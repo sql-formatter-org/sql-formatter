@@ -95,8 +95,6 @@ export default class PlSqlFormatter {
             }
             else if (token.value == "else") {
                 this.formatElse(token);
-                // this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1) + token.value;
-                // this.addNewLine(this.indentCount);
             }
             else if (token.value == "elsif") {
                 this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1) + token.value;
@@ -121,11 +119,13 @@ export default class PlSqlFormatter {
         const last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
         if (last != undefined && last.key == "case") {
             this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1) + " " + token.value;
+            this.addNewLine(this.indentCount);
+            this.lines[this.lastIndex()] += " ";
         }
         else {
             this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1) + token.value;
+            this.addNewLine(this.indentCount);
         }
-        this.addNewLine(this.indentCount);
     }
 
     trimStart(line) {
@@ -932,8 +932,9 @@ export default class PlSqlFormatter {
     }
 
     prevLineIsComment() {
+
         return this.lastIndex() != 0 &&
-                this.lines[this.lastIndex() - 1].endsWith("*/");
+            (this.lines[this.lastIndex() - 1].endsWith("*/") || this.lines[this.lastIndex() - 1].trim().startsWith("--"));
     }
 
     addNewLine(count) {

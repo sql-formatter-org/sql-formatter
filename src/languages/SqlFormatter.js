@@ -102,7 +102,7 @@ export default class PlSqlFormatter {
                 specialWordChars: ["_", "$", "#", ".", "@", "%"]
             });
         }
-        return new Formatter(this.cfg, tokenizer, reservedWords).format(query);
+        return new Formatter(this.cfg, tokenizer, reservedWords, reservedToplevelWords, reservedNewlineWords).format(query);
     }
 
     getFormatArray(query) {
@@ -120,6 +120,6 @@ export default class PlSqlFormatter {
                 specialWordChars: ["_", "$", "#", ".", "@"]
             });
         }
-        return new Formatter(this.cfg, tokenizer, reservedWords).getFormatArray(query);
+        return new Formatter(this.cfg, tokenizer, reservedWords, reservedToplevelWords.concat(reservedNewlineWords)).getFormatArray(query);
     }
 }

@@ -5,15 +5,15 @@ import Params from "./Params";
 import repeat from "lodash/repeat";
 
 export default class Formatter {
-    constructor(cfg, tokenizer, reservedWords) {
+    constructor(cfg, tokenizer, reservedWords, reservedForBkt) {
         this.cfg = cfg || {};
         this.params = new Params(this.cfg.params);
         this.tokenizer = tokenizer;
-        this.previousReservedWord = {};
         this.tokens = [];
         this.index = 0;
         this.reservedWords = reservedWords;
         this.inlineReservedWord = ["order", "group"];
+        this.reservedForBkt = reservedForBkt;
         this.indents = [];
         this.lines = [""];
         this.startBlock = ["select", "begin", "create", "alter", "insert", "update", "drop", "merge"];
@@ -70,11 +70,9 @@ export default class Formatter {
             }
             else if (token.type == tokenTypes.RESERVED_TOPLEVEL) {
                 this.formatTopLeveleReservedWord(token);
-                this.previousReservedWord = token;
             }
             else if (token.type == tokenTypes.RESERVED_NEWLINE) {
                 this.formatNewlineReservedWord(token);
-                this.previousReservedWord = token;
             }
             else if (this.logicalOperators.includes(token.value)) {
                 this.formatLogicalOperators(token);
@@ -84,7 +82,6 @@ export default class Formatter {
             }
             else if (token.type == tokenTypes.RESERVED) {
                 this.formatWithSpaces(token);
-                this.previousReservedWord = token;
             }
             else if (token.type == tokenTypes.OPEN_PAREN) {
                 this.formatOpeningParentheses(token);
@@ -539,7 +536,11 @@ export default class Formatter {
                 this.lines[this.lastIndex()] += " ";
             }
         }
-        this.indents.push({token: token, indent: this.getLastString().length})
+        if (token.value == "(" && !this.reservedForBkt.includes(words[words.length - 1].trim().toUpperCase())) {
+            this.trimEndLastString();
+            this.lines[this.getLastString()] += token.value;
+        }
+        this.indents.push({token: token, indent: this.getLastString().length});
         this.lines[this.lastIndex()] += token.value;
     }
 
