@@ -1,4 +1,5 @@
 import tokenTypes from "./tokenTypes";
+import repeat from "lodash/repeat";
 
 export default class SqlUtils {
 
@@ -79,6 +80,33 @@ export default class SqlUtils {
         return substring;
     }
 
+    static formatOriginSubstringWithIndent(indent, originIndent, substring) {
+        const split = substring.split("\n");
+        split[0] = repeat(" ", indent) + this.trimStart(split[0]);
+        let inQuotes = this.inQuotes(split[0]);
+        for (let i = 1; i < split.length; i++) {
+            const cIndent = this.getLineIndent(split[i]);
+            if (inQuotes) {
+                if (this.inQuotes(split[i])) {
+                    inQuotes = false;
+                }
+            }
+            else {
+                const lineIndent = cIndent > originIndent ? cIndent - originIndent + indent + 1 : indent;
+                split[i] = repeat(" ", lineIndent ) + this.trimStart(split[i]);
+                if (this.inQuotes(split[i])) {
+                    inQuotes = true;
+                }
+            }
+        }
+        return split.join("\n");
+    }
+
+    static inQuotes(string) {
+        const match = string.match(/'/g);
+        return match != undefined && match.length % 2 == 1;
+    }
+
     static findSubstring(first, searchString, query, tokenizer) {
         let substring = "";
         let indent = 0;
@@ -112,5 +140,13 @@ export default class SqlUtils {
             indent: indent,
             query: query
         };
+    }
+
+    static originalBlockCommentInNewLine(token, query) {
+        let idx = query.indexOf(token.value) - 1;
+        while (idx >= 0 && query[idx] == " ") {
+            idx--;
+        }
+        return query[idx] == "\n";
     }
 }

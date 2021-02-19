@@ -5,6 +5,7 @@ import SqlFormatter from "../languages/SqlFormatter";
 import SqlUtils from "./SqlUtils";
 
 export default class PlSqlFormatter {
+
     constructor(cfg, tokenizer, reservedWords, openParens) {
         this.indentCount = 0;
         this.tokenizer = tokenizer;
@@ -26,6 +27,9 @@ export default class PlSqlFormatter {
     }
 
     format(query) {
+        if (query.trim() == "") {
+            return query;
+        }
         this.query = query;
         this.tokens = this.tokenizer.tokenize(query);
         const formattedQuery = this.formatQuery();
@@ -111,7 +115,7 @@ export default class PlSqlFormatter {
             }
             else {
                 this.formatWithSpaces(token);
-            };
+            }
         }
         return this.addDevelopEmptyLines(originQuery, this.lines.join("\n").trim());
     }
@@ -140,45 +144,7 @@ export default class PlSqlFormatter {
             return;
         }
         this.popLine(cInfo.popCount);
-        this.lines[this.lastIndex()] = this.formatOriginSubstringWithIndent(cInfo.indent, info.indent, info.substring) + " ";
-    }
-
-    splitByNewLineAndFormatFirst(substring, indent) {
-        const split = substring.split("\n");
-        if (split[0].match(/'/g) == undefined || split[0].match(/'/g).length % 2 == 0) {
-            split[0] = repeat(" ", indent) + split[0].trim();
-        }
-        else {
-            split[0] = repeat(" ", indent) + SqlUtils.trimStart(split[0]);
-        }
-        return split;
-    }
-
-    formatOriginSubstringWithIndent(indent, originIndent, substring) {
-        const split = this.splitByNewLineAndFormatFirst(substring, indent);
-        let inQuotes = (split[0].match(/'/g) != undefined && split[0].match(/'/g) % 2 == 1);
-        for (let i = 1; i < split.length; i++) {
-            const match = split[i].match(/'/g);
-            const cIndent = SqlUtils.getLineIndent(split[i]) + 1;
-            if (inQuotes) {
-                split[i] = split[i];
-                if (match != undefined && match.length % 2 == 1) {
-                    inQuotes = false;
-                }
-            }
-            else {
-                if (match == undefined) {
-                    split[i] = repeat(" ", indent - originIndent + cIndent) + split[i].trim();
-                }
-                else {
-                    if (match.length % 2 == 1) {
-                        inQuotes = true;
-                    }
-                    split[i] = repeat(" ", indent - originIndent + cIndent) + SqlUtils.trimStart(split[i]);
-                }
-            }
-        }
-        return split.join("\n");
+        this.lines[this.lastIndex()] = SqlUtils.formatOriginSubstringWithIndent(cInfo.indent, info.indent, info.substring) + " ";
     }
 
     popLine(popCount) {
@@ -213,7 +179,6 @@ export default class PlSqlFormatter {
             substring: substring,
             popCount: popCount
         };
-
     }
 
     formatReturn(token) {
@@ -223,14 +188,6 @@ export default class PlSqlFormatter {
             if (this.getLastString().trim() != "") {
                 this.addNewLine(this.indentCount);
             }
-        }
-        this.lines[this.lastIndex()] += token.value;
-    }
-
-    formatBooleanExpressions(token) {
-        const last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
-        if (last.key == "case" || last.key == "if") {
-            this.addNewLine(this.indentCount);
         }
         this.lines[this.lastIndex()] += token.value;
     }
@@ -246,12 +203,17 @@ export default class PlSqlFormatter {
                     i++;
                 }
                 if (spaceCount > 1) {
-                    format += "\n";
+                    if (format.endsWith("\n")) {
+                        format += "\n";
+                    }
+                    else {
+                        format += "\n" + repeat(" ", SqlUtils.getLineIndent(split[i]));
+                    }
                 }
                 i--;
             }
             else {
-                 for (let j = 0; j < split[i].length; j++) {
+                for (let j = 0; j < split[i].length; j++) {
                     let char = split[i][j];
                     if (char != " ") {
                         let index = query.indexOf(char);
@@ -384,24 +346,6 @@ export default class PlSqlFormatter {
         }
     }
 
-    getStartBktIndex() {
-        const lastStr = trimEnd(this.getLastString());
-        let openBkt = 0;
-        let closeBkt = 0;
-        for (let i = lastStr.length - 1; i >= 0; i--) {
-            if (lastStr[i] == "(") {
-                openBkt++;
-            }
-            else if (lastStr[i] == ")") {
-                closeBkt++;
-            }
-            if (closeBkt == openBkt) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
     formatException(token, index) {
         const next = this.getNextValidWord(index);
         if (next == ";") {
@@ -512,7 +456,6 @@ export default class PlSqlFormatter {
     }
 
     formatQuerySeparator(token) {
-
         this.lines[this.lastIndex()] = trimEnd(this.getLastString());
         /**
          * if first word is start block, and line end for ; then decrement indent
@@ -545,7 +488,7 @@ export default class PlSqlFormatter {
             const firstWord = SqlUtils.getFirstWord(searchString);
             const info = SqlUtils.findSubstring(firstWord, SqlUtils.getStringInOneStyle(searchString).trim(), this.query, this.tokenizer);
             this.query = info.query;
-            this.lines[this.lastIndex()] = this.formatOriginSubstringWithIndent(
+            this.lines[this.lastIndex()] = SqlUtils.formatOriginSubstringWithIndent(
                                                     SqlUtils.getLineIndent(this.getLastString()), info.indent, info.substring);
         }
         if (this.getLastString().trim() == "") {
@@ -766,12 +709,6 @@ export default class PlSqlFormatter {
         return "";
     }
 
-    addNewLinePreviewReservedWord(token) {
-        return this.getLastString().trim() != "end" && this.getLastString().trim() != "is" &&
-            token.value != "then" && this.getLastString().trim() != "" &&
-            !(token.value == "as" && this.getLastString().includes(" with "));
-    }
-
     formatLineComment(token) {
         const qLines = this.cQuery.split("\n");
         let isNewLine = false;
@@ -805,7 +742,7 @@ export default class PlSqlFormatter {
         if (this.prevLineIsComment()) {
             this.lines.push("");
         }
-        if (!this.originalBlockCommentInNewLine(token)) {
+        if (!SqlUtils.originalBlockCommentInNewLine(token, this.query)) {
             while (this.getLastString().trim() == "") {
                 this.lines.pop();
             }
@@ -825,14 +762,6 @@ export default class PlSqlFormatter {
         if (removeLastLine) {
             this.lines.pop();
         }
-    }
-
-    originalBlockCommentInNewLine(token) {
-        let idx = this.query.indexOf(token.value) - 1;
-        while (idx >= 0 && this.query[idx] == " ") {
-            idx--;
-        }
-        return this.query[idx] == "\n";
     }
 
     prevLineIsComment() {

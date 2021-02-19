@@ -85,7 +85,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var freeGlobal = __webpack_require__(12);
+	var freeGlobal = __webpack_require__(13);
 
 	/** Detect free variable `self`. */
 	var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -268,7 +268,50 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseToString = __webpack_require__(11);
+	var baseRepeat = __webpack_require__(41),
+	    isIterateeCall = __webpack_require__(52),
+	    toInteger = __webpack_require__(69),
+	    toString = __webpack_require__(9);
+
+	/**
+	 * Repeats the given string `n` times.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 3.0.0
+	 * @category String
+	 * @param {string} [string=''] The string to repeat.
+	 * @param {number} [n=1] The number of times to repeat the string.
+	 * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+	 * @returns {string} Returns the repeated string.
+	 * @example
+	 *
+	 * _.repeat('*', 3);
+	 * // => '***'
+	 *
+	 * _.repeat('abc', 2);
+	 * // => 'abcabc'
+	 *
+	 * _.repeat('abc', 0);
+	 * // => ''
+	 */
+	function repeat(string, n, guard) {
+	  if ((guard ? isIterateeCall(string, n, guard) : n === undefined)) {
+	    n = 1;
+	  } else {
+	    n = toInteger(n);
+	  }
+	  return baseRepeat(toString(string), n);
+	}
+
+	module.exports = repeat;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var baseToString = __webpack_require__(12);
 
 	/**
 	 * Converts `value` to a string. An empty string is returned for `null`
@@ -299,7 +342,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -309,6 +352,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _tokenTypes = __webpack_require__(4);
 
 	var _tokenTypes2 = _interopRequireDefault(_tokenTypes);
+
+	var _repeat = __webpack_require__(8);
+
+	var _repeat2 = _interopRequireDefault(_repeat);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -383,6 +430,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return substring;
 	    };
 
+	    SqlUtils.formatOriginSubstringWithIndent = function formatOriginSubstringWithIndent(indent, originIndent, substring) {
+	        var split = substring.split("\n");
+	        split[0] = (0, _repeat2["default"])(" ", indent) + this.trimStart(split[0]);
+	        var inQuotes = this.inQuotes(split[0]);
+	        for (var i = 1; i < split.length; i++) {
+	            var cIndent = this.getLineIndent(split[i]);
+	            if (inQuotes) {
+	                if (this.inQuotes(split[i])) {
+	                    inQuotes = false;
+	                }
+	            } else {
+	                var lineIndent = cIndent > originIndent ? cIndent - originIndent + indent + 1 : indent;
+	                split[i] = (0, _repeat2["default"])(" ", lineIndent) + this.trimStart(split[i]);
+	                if (this.inQuotes(split[i])) {
+	                    inQuotes = true;
+	                }
+	            }
+	        }
+	        return split.join("\n");
+	    };
+
+	    SqlUtils.inQuotes = function inQuotes(string) {
+	        var match = string.match(/'/g);
+	        return match != undefined && match.length % 2 == 1;
+	    };
+
 	    SqlUtils.findSubstring = function findSubstring(first, searchString, query, tokenizer) {
 	        var substring = "";
 	        var indent = 0;
@@ -415,6 +488,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    };
 
+	    SqlUtils.originalBlockCommentInNewLine = function originalBlockCommentInNewLine(token, query) {
+	        var idx = query.indexOf(token.value) - 1;
+	        while (idx >= 0 && query[idx] == " ") {
+	            idx--;
+	        }
+	        return query[idx] == "\n";
+	    };
+
 	    return SqlUtils;
 	}();
 
@@ -422,7 +503,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -775,13 +856,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var Symbol = __webpack_require__(7),
 	    arrayMap = __webpack_require__(32),
-	    isArray = __webpack_require__(15),
-	    isSymbol = __webpack_require__(19);
+	    isArray = __webpack_require__(16),
+	    isSymbol = __webpack_require__(20);
 
 	/** Used as references for various `Number` constants. */
 	var INFINITY = 1 / 0;
@@ -818,7 +899,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
@@ -829,7 +910,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 	/** Used for built-in method references. */
@@ -853,7 +934,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 	/** Used for built-in method references. */
@@ -885,7 +966,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 	/**
@@ -917,11 +998,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isFunction = __webpack_require__(17),
-	    isLength = __webpack_require__(18);
+	var isFunction = __webpack_require__(18),
+	    isLength = __webpack_require__(19);
 
 	/**
 	 * Checks if `value` is array-like. A value is considered array-like if it's
@@ -956,7 +1037,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var baseGetTag = __webpack_require__(2),
@@ -999,7 +1080,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 	/** Used as references for various `Number` constants. */
@@ -1040,7 +1121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var baseGetTag = __webpack_require__(2),
@@ -1075,57 +1156,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseRepeat = __webpack_require__(41),
-	    isIterateeCall = __webpack_require__(52),
-	    toInteger = __webpack_require__(69),
-	    toString = __webpack_require__(8);
-
-	/**
-	 * Repeats the given string `n` times.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 3.0.0
-	 * @category String
-	 * @param {string} [string=''] The string to repeat.
-	 * @param {number} [n=1] The number of times to repeat the string.
-	 * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
-	 * @returns {string} Returns the repeated string.
-	 * @example
-	 *
-	 * _.repeat('*', 3);
-	 * // => '***'
-	 *
-	 * _.repeat('abc', 2);
-	 * // => 'abcabc'
-	 *
-	 * _.repeat('abc', 0);
-	 * // => ''
-	 */
-	function repeat(string, n, guard) {
-	  if ((guard ? isIterateeCall(string, n, guard) : n === undefined)) {
-	    n = 1;
-	  } else {
-	    n = toInteger(n);
-	  }
-	  return baseRepeat(toString(string), n);
-	}
-
-	module.exports = repeat;
-
-
-/***/ }),
 /* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseToString = __webpack_require__(11),
+	var baseToString = __webpack_require__(12),
 	    castSlice = __webpack_require__(44),
 	    charsEndIndex = __webpack_require__(45),
 	    stringToArray = __webpack_require__(59),
-	    toString = __webpack_require__(8);
+	    toString = __webpack_require__(9);
 
 	/** Used to match leading and trailing whitespace. */
 	var reTrimEnd = /\s+$/;
@@ -1198,11 +1236,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _tokenTypes2 = _interopRequireDefault(_tokenTypes);
 
-	var _repeat = __webpack_require__(20);
+	var _repeat = __webpack_require__(8);
 
 	var _repeat2 = _interopRequireDefault(_repeat);
 
-	var _SqlUtils = __webpack_require__(9);
+	var _SqlUtils = __webpack_require__(10);
 
 	var _SqlUtils2 = _interopRequireDefault(_SqlUtils);
 
@@ -1450,94 +1488,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        var indent = _SqlUtils2["default"].getLineIndent(line);
 	        if (this.reservedWords.includes(first)) {
-	            return this.formatOriginSubstringWithIndent(indent + first.length + 1, info.indent, substring);
+	            return _SqlUtils2["default"].formatOriginSubstringWithIndent(indent + first.length + 1, info.indent, substring);
 	        }
-	        return this.formatOriginSubstringWithIndent(indent, info.indent, substring);
+	        return _SqlUtils2["default"].formatOriginSubstringWithIndent(indent, info.indent, substring);
 	    };
-
-	    Formatter.prototype.formatOriginSubstringWithIndent = function formatOriginSubstringWithIndent(indent, originIndent, substring) {
-	        var split = substring.split("\n");
-	        if (split[0].match(/'/g) == undefined || split[0].match(/'/g).length % 2 == 0) {
-	            split[0] = (0, _repeat2["default"])(" ", indent) + _SqlUtils2["default"].trimStart(split[0]);
-	        } else {
-	            split[0] = (0, _repeat2["default"])(" ", indent) + split[0].trim();
-	        }
-	        var inQuotes = split[0].match(/'/g) != undefined && split[0].match(/'/g) % 2 == 1;
-	        for (var i = 1; i < split.length; i++) {
-	            var match = split[i].match(/'/g);
-	            var cIndent = _SqlUtils2["default"].getLineIndent(split[i]);
-	            if (inQuotes) {
-	                split[i] = split[i];
-	                if (match != undefined && match.length % 2 == 1) {
-	                    inQuotes = false;
-	                }
-	            } else {
-	                if (match != undefined) {
-	                    if (match.length % 2 == 1) {
-	                        inQuotes = true;
-	                    }
-	                    split[i] = (0, _repeat2["default"])(" ", cIndent - originIndent + indent) + _SqlUtils2["default"].trimStart(split[i]);
-	                } else {
-	                    split[i] = (0, _repeat2["default"])(" ", cIndent - originIndent + indent) + split[i].trim();
-	                }
-	            }
-	        }
-	        return split.join("\n");
-	    };
-
-	    // findSubstring(first, searchString) {
-	    //     let substring = "";
-	    //     let indent = 0;
-	    //     let startIdx = 0;
-	    //     while (SqlUtils.getStringInOneStyle(substring).trim().toLowerCase() != searchString.trim().toLowerCase()) {
-	    //         substring = "";
-	    //         startIdx = this.query.toLowerCase().indexOf(first);
-	    //         while (searchString.trim().toLowerCase().startsWith(SqlUtils.getStringInOneStyle(substring).trim().toLowerCase()) &&
-	    //         SqlUtils.getStringInOneStyle(substring.trim()).trim().length != searchString.trim().length &&
-	    //                 startIdx != this.query.length) {
-	    //             substring += this.query[startIdx];
-	    //             startIdx++;
-	    //         }
-	    //         if (searchString.trim().toLowerCase() != SqlUtils.getStringInOneStyle(substring).trim().toLowerCase()) {
-	    //             this.query = this.query.substring(this.query.toLowerCase().indexOf(first) + first.length);
-	    //         }
-	    //     }
-	    //     const from = this.query.indexOf(substring);
-	    //     for (let i = from; i >= 0; i--) {
-	    //         if (this.query[i] == "\n") {
-	    //             break;
-	    //         }
-	    //         else {
-	    //             indent++;
-	    //         }
-	    //     }
-	    //     this.query = this.query.substring(this.query.indexOf(substring) + substring.length - 1);
-	    //     substring = this.formatSubstringCase(substring);
-	    //     return {
-	    //         substring: substring,
-	    //         indent: indent
-	    //     };
-	    // }
-
-	    // formatSubstringCase(string) {
-	    //     const toks = this.tokenizer.tokenize(string);
-	    //     let prev = toks[0];
-	    //     prev.value = SqlUtils.formatTextCase(prev);
-	    //     let substring = "";
-	    //     let lowCase = string.toLowerCase();
-	    //     for (let i = 1; i < toks.length; i++) {
-	    //         const token = toks[i];
-	    //         token.value = SqlUtils.formatTextCase(token);
-	    //         if (token.type != tokenTypes.WHITESPACE) {
-	    //             const end = lowCase.indexOf(token.value.toLowerCase());
-	    //             const current = lowCase.substring(0, end) + token.value;
-	    //             substring += current;
-	    //             lowCase = lowCase.substring(lowCase.indexOf(current.toLowerCase()) + current.length);
-	    //             prev = token;
-	    //         }
-	    //     }
-	    //     return substring;
-	    // }
 
 	    Formatter.prototype.getCurrentIndent = function getCurrentIndent(align, word) {
 	        var last = this.indents[this.indents.length - 1];
@@ -1579,23 +1533,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.addNewLine("left", token.value);
 	    };
 
-	    Formatter.prototype.originalBlockCommentInNewLine = function originalBlockCommentInNewLine(token) {
-	        var idx = this.query.indexOf(token.value) - 1;
-	        while (idx >= 0 && this.query[idx] == " ") {
-	            idx--;
-	        }
-	        return this.query[idx] == "\n";
-	    };
-
 	    Formatter.prototype.resolveAddLineInCommentsBlock = function resolveAddLineInCommentsBlock(token) {
 	        var substing = this.getLastString().trim();
 	        var words = substing.split(/\(|\)| /);
 	        var last = words[words.length - 1];
-	        if (!this.originalBlockCommentInNewLine(token)) {
+	        if (!_SqlUtils2["default"].originalBlockCommentInNewLine(token, this.query)) {
 	            while (this.getLastString().trim() == "") {
 	                this.lines.pop();
 	            }
 	        } else if (!this.reservedWords.includes(last.toUpperCase()) || last.endsWith(";")) {
+	            this.addNewLine("left", token.value);
+	        } else if (this.getLastString().trim() != "") {
 	            this.addNewLine("left", token.value);
 	        }
 	    };
@@ -1615,12 +1563,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.lines.push((0, _repeat2["default"])(" ", indent + 1) + token.value);
 	            this.addNewLine("left", "");
 	        } else {
-	            var before = this.getLastString();
 	            this.lines[this.lastIndex()] += token.value;
 	            this.addNewLine("right", "");
-	            if (before.trim().endsWith("then")) {
-	                this.lines[this.lastIndex()] += (0, _repeat2["default"])(" ", 6);
-	            }
 	        }
 	    };
 
@@ -1757,8 +1701,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    Formatter.prototype.formatPlaceholder = function formatPlaceholder() {
-	        this.lines[this.lastIndex()] += " ";
+	    Formatter.prototype.formatPlaceholder = function formatPlaceholder(token) {
+	        this.lines[this.lastIndex()] += token.value;
 	    };
 
 	    Formatter.prototype.formatWithSpaceAfter = function formatWithSpaceAfter(token) {
@@ -1845,7 +1789,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _tokenTypes2 = _interopRequireDefault(_tokenTypes);
 
-	var _repeat = __webpack_require__(20);
+	var _repeat = __webpack_require__(8);
 
 	var _repeat2 = _interopRequireDefault(_repeat);
 
@@ -1853,7 +1797,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _SqlFormatter2 = _interopRequireDefault(_SqlFormatter);
 
-	var _SqlUtils = __webpack_require__(9);
+	var _SqlUtils = __webpack_require__(10);
 
 	var _SqlUtils2 = _interopRequireDefault(_SqlUtils);
 
@@ -1885,6 +1829,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    PlSqlFormatter.prototype.format = function format(query) {
+	        if (query.trim() == "") {
+	            return query;
+	        }
 	        this.query = query;
 	        this.tokens = this.tokenizer.tokenize(query);
 	        var formattedQuery = this.formatQuery();
@@ -1947,7 +1894,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.formatReturn(token);
 	            } else {
 	                this.formatWithSpaces(token);
-	            };
+	            }
 	        }
 	        return this.addDevelopEmptyLines(originQuery, this.lines.join("\n").trim());
 	    };
@@ -1974,42 +1921,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 	        this.popLine(cInfo.popCount);
-	        this.lines[this.lastIndex()] = this.formatOriginSubstringWithIndent(cInfo.indent, info.indent, info.substring) + " ";
-	    };
-
-	    PlSqlFormatter.prototype.splitByNewLineAndFormatFirst = function splitByNewLineAndFormatFirst(substring, indent) {
-	        var split = substring.split("\n");
-	        if (split[0].match(/'/g) == undefined || split[0].match(/'/g).length % 2 == 0) {
-	            split[0] = (0, _repeat2["default"])(" ", indent) + split[0].trim();
-	        } else {
-	            split[0] = (0, _repeat2["default"])(" ", indent) + _SqlUtils2["default"].trimStart(split[0]);
-	        }
-	        return split;
-	    };
-
-	    PlSqlFormatter.prototype.formatOriginSubstringWithIndent = function formatOriginSubstringWithIndent(indent, originIndent, substring) {
-	        var split = this.splitByNewLineAndFormatFirst(substring, indent);
-	        var inQuotes = split[0].match(/'/g) != undefined && split[0].match(/'/g) % 2 == 1;
-	        for (var i = 1; i < split.length; i++) {
-	            var match = split[i].match(/'/g);
-	            var cIndent = _SqlUtils2["default"].getLineIndent(split[i]) + 1;
-	            if (inQuotes) {
-	                split[i] = split[i];
-	                if (match != undefined && match.length % 2 == 1) {
-	                    inQuotes = false;
-	                }
-	            } else {
-	                if (match == undefined) {
-	                    split[i] = (0, _repeat2["default"])(" ", indent - originIndent + cIndent) + split[i].trim();
-	                } else {
-	                    if (match.length % 2 == 1) {
-	                        inQuotes = true;
-	                    }
-	                    split[i] = (0, _repeat2["default"])(" ", indent - originIndent + cIndent) + _SqlUtils2["default"].trimStart(split[i]);
-	                }
-	            }
-	        }
-	        return split.join("\n");
+	        this.lines[this.lastIndex()] = _SqlUtils2["default"].formatOriginSubstringWithIndent(cInfo.indent, info.indent, info.substring) + " ";
 	    };
 
 	    PlSqlFormatter.prototype.popLine = function popLine(popCount) {
@@ -2017,74 +1929,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.lines.pop();
 	        }
 	    };
-
-	    // findSubstring(first, searchString) {
-	    //     let substring = "";
-	    //     let indent = 0;
-	    //     let startIdx = 0;
-	    //     while (SqlUtils.getStringInOneStyle(substring).trim().toLowerCase() != searchString.trim().toLowerCase()) {
-	    //         substring = "";
-	    //         startIdx = this.query.toLowerCase().indexOf(first);
-	    //         while (searchString.trim().toLowerCase().startsWith(SqlUtils.getStringInOneStyle(substring).trim().toLowerCase()) &&
-	    //                SqlUtils.getStringInOneStyle(substring.trim()).trim().length != searchString.trim().length &&
-	    //                 startIdx != this.query.length) {
-	    //             substring += this.query[startIdx];
-	    //             startIdx++;
-	    //         }
-	    //         if (searchString.trim().toLowerCase() != SqlUtils.getStringInOneStyle(substring).trim().toLowerCase()) {
-	    //             this.query = this.query.substring(this.query.toLowerCase().indexOf(first) + first.length);
-	    //         }
-	    //     }
-	    //     const from = this.query.indexOf(substring);
-	    //     for (let i = from; i >= 0; i--) {
-	    //         if (this.query[i] == "\n") {
-	    //             break;
-	    //         }
-	    //         else {
-	    //             indent++;
-	    //         }
-	    //     }
-	    //     this.query = this.query.substring(this.query.indexOf(substring) + substring.length - 1);
-	    //     substring = this.formatSubstringCase(substring);
-	    //     return {
-	    //         substring: substring,
-	    //         indent: indent
-	    //     };
-	    // }
-
-	    // formatSubstringCase(string) {
-	    //     const toks = this.tokenizer.tokenize(string);
-	    //     let prev = toks[0];
-	    //     prev.value = SqlUtils.formatTextCase(prev);
-	    //     let substring = "";
-	    //     let lowCase = string.toLowerCase();
-	    //     for (let i = 1; i < toks.length; i++) {
-	    //         const token = toks[i];
-	    //         token.value = SqlUtils.formatTextCase(token);
-	    //         if (token.type != tokenTypes.WHITESPACE) {
-	    //             const end = lowCase.indexOf(token.value.toLowerCase());
-	    //             const current = lowCase.substring(0, end) + token.value;
-	    //             substring += current;
-	    //             lowCase = lowCase.substring(lowCase.indexOf(current.toLowerCase()) + current.length);
-	    //             prev = token;
-	    //         }
-	    //     }
-	    //     return substring;
-	    // }
-
-	    // getStringInOneStyle(word) {
-	    //     return word.replaceAll("(", " ( ").replaceAll(")", " ) ")
-	    //         .replaceAll(".", " . ").replaceAll("\"", " \" ")
-	    //         .replaceAll("*", " * ").replaceAll("/", " / ")
-	    //         .replaceAll("%", " % ").replaceAll(":", " : ")
-	    //         .replaceAll(",", " , ").replaceAll("=", " = ")
-	    //         .replaceAll("-", " - ").replaceAll("|", " | ")
-	    //         .replaceAll("'", " ' ").replaceAll("+", " + ")
-	    //         .replaceAll("<", " < ").replaceAll(">", " > ")
-	    //         .replaceAll("\\", " \\ ").replaceAll(";", " ; ")
-	    //         .replaceAll("?", " ? ").replaceAll("@", " @ ")
-	    //         .replaceAll("#", " # ").replaceAll(/(\s|\n)+/g, " ");
-	    // }
 
 	    PlSqlFormatter.prototype.getFormattingString = function getFormattingString() {
 	        var lastIdx = this.lastIndex();
@@ -2125,14 +1969,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.lines[this.lastIndex()] += token.value;
 	    };
 
-	    PlSqlFormatter.prototype.formatBooleanExpressions = function formatBooleanExpressions(token) {
-	        var last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
-	        if (last.key == "case" || last.key == "if") {
-	            this.addNewLine(this.indentCount);
-	        }
-	        this.lines[this.lastIndex()] += token.value;
-	    };
-
 	    PlSqlFormatter.prototype.addDevelopEmptyLines = function addDevelopEmptyLines(origin, query) {
 	        var format = "";
 	        var split = origin.split("\n");
@@ -2144,7 +1980,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    i++;
 	                }
 	                if (spaceCount > 1) {
-	                    format += "\n";
+	                    if (format.endsWith("\n")) {
+	                        format += "\n";
+	                    } else {
+	                        format += "\n" + (0, _repeat2["default"])(" ", _SqlUtils2["default"].getLineIndent(split[i]));
+	                    }
 	                }
 	                i--;
 	            } else {
@@ -2274,23 +2114,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    PlSqlFormatter.prototype.getStartBktIndex = function getStartBktIndex() {
-	        var lastStr = (0, _trimEnd2["default"])(this.getLastString());
-	        var openBkt = 0;
-	        var closeBkt = 0;
-	        for (var i = lastStr.length - 1; i >= 0; i--) {
-	            if (lastStr[i] == "(") {
-	                openBkt++;
-	            } else if (lastStr[i] == ")") {
-	                closeBkt++;
-	            }
-	            if (closeBkt == openBkt) {
-	                return i;
-	            }
-	        }
-	        return 0;
-	    };
-
 	    PlSqlFormatter.prototype.formatException = function formatException(token, index) {
 	        var next = this.getNextValidWord(index);
 	        if (next == ";") {
@@ -2389,7 +2212,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    PlSqlFormatter.prototype.formatQuerySeparator = function formatQuerySeparator(token) {
-
 	        this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString());
 	        /**
 	         * if first word is start block, and line end for ; then decrement indent
@@ -2419,7 +2241,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var firstWord = _SqlUtils2["default"].getFirstWord(searchString);
 	            var info = _SqlUtils2["default"].findSubstring(firstWord, _SqlUtils2["default"].getStringInOneStyle(searchString).trim(), this.query, this.tokenizer);
 	            this.query = info.query;
-	            this.lines[this.lastIndex()] = this.formatOriginSubstringWithIndent(_SqlUtils2["default"].getLineIndent(this.getLastString()), info.indent, info.substring);
+	            this.lines[this.lastIndex()] = _SqlUtils2["default"].formatOriginSubstringWithIndent(_SqlUtils2["default"].getLineIndent(this.getLastString()), info.indent, info.substring);
 	        }
 	        if (this.getLastString().trim() == "") {
 	            this.lines.pop();
@@ -2627,10 +2449,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return "";
 	    };
 
-	    PlSqlFormatter.prototype.addNewLinePreviewReservedWord = function addNewLinePreviewReservedWord(token) {
-	        return this.getLastString().trim() != "end" && this.getLastString().trim() != "is" && token.value != "then" && this.getLastString().trim() != "" && !(token.value == "as" && this.getLastString().includes(" with "));
-	    };
-
 	    PlSqlFormatter.prototype.formatLineComment = function formatLineComment(token) {
 	        var qLines = this.cQuery.split("\n");
 	        var isNewLine = false;
@@ -2662,7 +2480,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.prevLineIsComment()) {
 	            this.lines.push("");
 	        }
-	        if (!this.originalBlockCommentInNewLine(token)) {
+	        if (!_SqlUtils2["default"].originalBlockCommentInNewLine(token, this.query)) {
 	            while (this.getLastString().trim() == "") {
 	                this.lines.pop();
 	            }
@@ -2683,16 +2501,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    PlSqlFormatter.prototype.originalBlockCommentInNewLine = function originalBlockCommentInNewLine(token) {
-	        var idx = this.query.indexOf(token.value) - 1;
-	        while (idx >= 0 && this.query[idx] == " ") {
-	            idx--;
-	        }
-	        return this.query[idx] == "\n";
-	    };
-
 	    PlSqlFormatter.prototype.prevLineIsComment = function prevLineIsComment() {
-
 	        return this.lastIndex() != 0 && (this.lines[this.lastIndex() - 1].endsWith("*/") || this.lines[this.lastIndex() - 1].trim().startsWith("--"));
 	    };
 
@@ -2727,7 +2536,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.__esModule = true;
 
-	var _Tokenizer = __webpack_require__(10);
+	var _Tokenizer = __webpack_require__(11);
 
 	var _Tokenizer2 = _interopRequireDefault(_Tokenizer);
 
@@ -2803,7 +2612,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Formatter2 = _interopRequireDefault(_Formatter);
 
-	var _Tokenizer = __webpack_require__(10);
+	var _Tokenizer = __webpack_require__(11);
 
 	var _Tokenizer2 = _interopRequireDefault(_Tokenizer);
 
@@ -3091,10 +2900,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isFunction = __webpack_require__(17),
+	var isFunction = __webpack_require__(18),
 	    isMasked = __webpack_require__(53),
 	    isObject = __webpack_require__(5),
-	    toSource = __webpack_require__(14);
+	    toSource = __webpack_require__(15);
 
 	/**
 	 * Used to match `RegExp`
@@ -3145,7 +2954,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 	var baseGetTag = __webpack_require__(2),
-	    isLength = __webpack_require__(18),
+	    isLength = __webpack_require__(19),
 	    isObjectLike = __webpack_require__(6);
 
 	/** `Object#toString` result references. */
@@ -3210,7 +3019,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isPrototype = __webpack_require__(13),
+	var isPrototype = __webpack_require__(14),
 	    nativeKeys = __webpack_require__(54);
 
 	/** Used for built-in method references. */
@@ -3463,7 +3272,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Set = __webpack_require__(30),
 	    WeakMap = __webpack_require__(31),
 	    baseGetTag = __webpack_require__(2),
-	    toSource = __webpack_require__(14);
+	    toSource = __webpack_require__(15);
 
 	/** `Object#toString` result references. */
 	var mapTag = '[object Map]',
@@ -3604,7 +3413,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 	var eq = __webpack_require__(61),
-	    isArrayLike = __webpack_require__(16),
+	    isArrayLike = __webpack_require__(17),
 	    isIndex = __webpack_require__(51),
 	    isObject = __webpack_require__(5);
 
@@ -3677,7 +3486,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(12);
+	/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(13);
 
 	/** Detect free variable `exports`. */
 	var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -3905,7 +3714,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var toString = __webpack_require__(8);
+	var toString = __webpack_require__(9);
 
 	/**
 	 * Used to match `RegExp`
@@ -4033,10 +3842,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var baseKeys = __webpack_require__(40),
 	    getTag = __webpack_require__(48),
 	    isArguments = __webpack_require__(63),
-	    isArray = __webpack_require__(15),
-	    isArrayLike = __webpack_require__(16),
+	    isArray = __webpack_require__(16),
+	    isArrayLike = __webpack_require__(17),
 	    isBuffer = __webpack_require__(64),
-	    isPrototype = __webpack_require__(13),
+	    isPrototype = __webpack_require__(14),
 	    isTypedArray = __webpack_require__(66);
 
 	/** `Object#toString` result references. */
@@ -4261,7 +4070,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 	var isObject = __webpack_require__(5),
-	    isSymbol = __webpack_require__(19);
+	    isSymbol = __webpack_require__(20);
 
 	/** Used as references for various `Number` constants. */
 	var NAN = 0 / 0;

@@ -272,42 +272,9 @@ export default class Formatter {
         }
         const indent = SqlUtils.getLineIndent(line);
         if (this.reservedWords.includes(first)) {
-            return this.formatOriginSubstringWithIndent(indent + first.length + 1, info.indent, substring);
+            return SqlUtils.formatOriginSubstringWithIndent(indent + first.length + 1, info.indent, substring);
         }
-        return this.formatOriginSubstringWithIndent(indent, info.indent, substring);
-    }
-
-    formatOriginSubstringWithIndent(indent, originIndent, substring) {
-        const split = substring.split("\n");
-        if (split[0].match(/'/g) == undefined || split[0].match(/'/g).length % 2 == 0) {
-            split[0] = repeat(" ", indent) + SqlUtils.trimStart(split[0]);
-        }
-        else {
-            split[0] = repeat(" ", indent) + split[0].trim();
-        }
-        let inQuotes = (split[0].match(/'/g) != undefined && split[0].match(/'/g) % 2 == 1);
-        for (let i = 1; i < split.length; i++) {
-            const match = split[i].match(/'/g);
-            const cIndent = SqlUtils.getLineIndent(split[i]);
-            if (inQuotes) {
-                split[i] = split[i];
-                if (match != undefined && match.length % 2 == 1) {
-                    inQuotes = false;
-                }
-            }
-            else {
-                if (match != undefined) {
-                    if (match.length % 2 == 1) {
-                        inQuotes = true;
-                    }
-                    split[i] = repeat(" ", cIndent - originIndent + indent ) + SqlUtils.trimStart(split[i]);
-                }
-                else {
-                    split[i] = repeat(" ", cIndent - originIndent + indent) + split[i].trim();
-                }
-            }
-        }
-        return split.join("\n");
+        return SqlUtils.formatOriginSubstringWithIndent(indent, info.indent, substring);
     }
 
     getCurrentIndent(align, word) {
@@ -353,24 +320,19 @@ export default class Formatter {
         this.addNewLine("left", token.value);
     }
 
-    originalBlockCommentInNewLine(token) {
-        let idx = this.query.indexOf(token.value) - 1;
-        while (idx >= 0 && this.query[idx] == " ") {
-            idx--;
-        }
-        return this.query[idx] == "\n";
-    }
-
     resolveAddLineInCommentsBlock(token) {
         const substing = this.getLastString().trim();
         const words = substing.split(/\(|\)| /);
         const last = words[words.length - 1];
-        if (!this.originalBlockCommentInNewLine(token)) {
+        if (!SqlUtils.originalBlockCommentInNewLine(token, this.query)) {
             while (this.getLastString().trim() == "") {
                 this.lines.pop();
             }
         }
         else if (!this.reservedWords.includes(last.toUpperCase()) || last.endsWith(";")) {
+            this.addNewLine("left", token.value);
+        }
+        else if (this.getLastString().trim() != "") {
             this.addNewLine("left", token.value);
         }
     }
@@ -391,12 +353,8 @@ export default class Formatter {
             this.addNewLine("left", "");
         }
         else {
-            const before = this.getLastString();
             this.lines[this.lastIndex()] += token.value;
             this.addNewLine("right", "");
-            if (before.trim().endsWith("then")) {
-                this.lines[this.lastIndex()] += repeat(" ", 6);
-            }
         }
     }
 
@@ -548,8 +506,8 @@ export default class Formatter {
         }
     }
 
-    formatPlaceholder() {
-        this.lines[this.lastIndex()] += " ";
+    formatPlaceholder(token) {
+        this.lines[this.lastIndex()] += token.value;
     }
 
     formatWithSpaceAfter(token) {
