@@ -2,6 +2,7 @@ import trimEnd from "lodash/trimEnd";
 import tokenTypes from "./tokenTypes";
 import repeat from "lodash/repeat";
 import SqlFormatter from "../languages/SqlFormatter";
+import SqlUtils from "./SqlUtils";
 
 export default class PlSqlFormatter {
     constructor(cfg, tokenizer, reservedWords, openParens) {
@@ -36,7 +37,7 @@ export default class PlSqlFormatter {
         const originQuery = this.query;
         for (let i = 0; i < this.tokens.length; i++) {
             const token = this.tokens[i];
-            token.value = this.formatTextCase(token);
+            token.value = SqlUtils.formatTextCase(token);
             if (token.value.startsWith(".") && token.value != ".." ) {
                 this.lines[this.lastIndex()] = trimEnd(this.getLastString());
             }
@@ -128,18 +129,13 @@ export default class PlSqlFormatter {
         }
     }
 
-    trimStart(line) {
-        while (line[0] == " ") {
-            line = line.substring(1);
-        }
-        return line;
-    }
-
     formatLikeDevelopWrite(token) {
         const cInfo = this.getFormattingString(token);
         const searchString = cInfo.substring;
-        const first = this.getFirstWord(searchString);
-        const info = this.findSubstring(first, token.value, this.getStringInOneStyle(searchString + " " + token.value).trim());
+        const first = SqlUtils.getFirstWord(searchString);
+        const info = SqlUtils.findSubstring(first, SqlUtils.getStringInOneStyle(searchString + " " + token.value).trim(),
+                                                this.query, this.tokenizer);
+        this.query = info.query;
         if (searchString.trim().length < 65) {
             return;
         }
@@ -153,7 +149,7 @@ export default class PlSqlFormatter {
             split[0] = repeat(" ", indent) + split[0].trim();
         }
         else {
-            split[0] = repeat(" ", indent) + this.trimStart(split[0]);
+            split[0] = repeat(" ", indent) + SqlUtils.trimStart(split[0]);
         }
         return split;
     }
@@ -163,7 +159,7 @@ export default class PlSqlFormatter {
         let inQuotes = (split[0].match(/'/g) != undefined && split[0].match(/'/g) % 2 == 1);
         for (let i = 1; i < split.length; i++) {
             const match = split[i].match(/'/g);
-            const cIndent = this.getLineIndent(split[i]) + 1;
+            const cIndent = SqlUtils.getLineIndent(split[i]) + 1;
             if (inQuotes) {
                 split[i] = split[i];
                 if (match != undefined && match.length % 2 == 1) {
@@ -178,21 +174,11 @@ export default class PlSqlFormatter {
                     if (match.length % 2 == 1) {
                         inQuotes = true;
                     }
-                    split[i] = repeat(" ", indent - originIndent + cIndent) + this.trimStart(split[i]);
+                    split[i] = repeat(" ", indent - originIndent + cIndent) + SqlUtils.trimStart(split[i]);
                 }
             }
         }
         return split.join("\n");
-    }
-
-    getLineIndent(line) {
-        let indent = 0;
-        for (indent; indent < line.length; indent++) {
-            if (line[indent] != " ") {
-                return indent;
-            }
-        }
-        return indent;
     }
 
     popLine(popCount) {
@@ -201,81 +187,13 @@ export default class PlSqlFormatter {
         }
     }
 
-    findSubstring(first, last, searchString) {
-        let substring = "";
-        let indent = 0;
-        let startIdx = 0;
-        while (this.getStringInOneStyle(substring).trim().toLowerCase() != searchString.trim().toLowerCase()) {
-            substring = "";
-            startIdx = this.query.toLowerCase().indexOf(first);
-            while (searchString.trim().toLowerCase().startsWith(this.getStringInOneStyle(substring).trim().toLowerCase()) &&
-                   this.getStringInOneStyle(substring.trim()).trim().length != searchString.trim().length &&
-                    startIdx != this.query.length) {
-                substring += this.query[startIdx];
-                startIdx++;
-            }
-            if (searchString.trim().toLowerCase() != this.getStringInOneStyle(substring).trim().toLowerCase()) {
-                this.query = this.query.substring(this.query.toLowerCase().indexOf(first) + first.length);
-            }
-        }
-        const from = this.query.indexOf(substring);
-        for (let i = from; i >= 0; i--) {
-            if (this.query[i] == "\n") {
-                break;
-            }
-            else {
-                indent++;
-            }
-        }
-        this.query = this.query.substring(this.query.indexOf(substring) + substring.length - 1);
-        substring = this.formatSubstringCase(substring);
-        return {
-            substring: substring,
-            indent: indent
-        };
-    }
-
-    formatSubstringCase(string) {
-        const toks = this.tokenizer.tokenize(string);
-        let prev = toks[0];
-        prev.value = this.formatTextCase(prev);
-        let substring = "";
-        let lowCase = string.toLowerCase();
-        for (let i = 1; i < toks.length; i++) {
-            const token = toks[i];
-            token.value = this.formatTextCase(token);
-            if (token.type != tokenTypes.WHITESPACE) {
-                const end = lowCase.indexOf(token.value.toLowerCase());
-                const current = lowCase.substring(0, end) + token.value;
-                substring += current;
-                lowCase = lowCase.substring(lowCase.indexOf(current.toLowerCase()) + current.length);
-                prev = token;
-            }
-        }
-        return substring;
-    }
-
-    getStringInOneStyle(word) {
-        return word.replaceAll("(", " ( ").replaceAll(")", " ) ")
-            .replaceAll(".", " . ").replaceAll("\"", " \" ")
-            .replaceAll("*", " * ").replaceAll("/", " / ")
-            .replaceAll("%", " % ").replaceAll(":", " : ")
-            .replaceAll(",", " , ").replaceAll("=", " = ")
-            .replaceAll("-", " - ").replaceAll("|", " | ")
-            .replaceAll("'", " ' ").replaceAll("+", " + ")
-            .replaceAll("<", " < ").replaceAll(">", " > ")
-            .replaceAll("\\", " \\ ").replaceAll(";", " ; ")
-            .replaceAll("?", " ? ").replaceAll("@", " @ ")
-            .replaceAll("#", " # ").replaceAll(/(\s|\n)+/g, " ");
-    }
-
     getFormattingString() {
         let lastIdx = this.lastIndex();
         const startBlocks = ["if", "elsif", "while", "case", "when"];
         if (lastIdx == 0) {
             return this.getLastString();
         }
-        let first = this.getFirstWord(this.getLastString().trim());
+        let first = SqlUtils.getFirstWord(this.getLastString().trim());
         let substring = this.getLastString();
         while (!startBlocks.includes(first)) {
             lastIdx--;
@@ -283,12 +201,12 @@ export default class PlSqlFormatter {
                 break;
             }
             substring = this.lines[lastIdx] + " " + substring.trim();
-            first = this.getFirstWord(substring);
+            first = SqlUtils.getFirstWord(substring);
         }
         if (lastIdx < 0) {
             lastIdx = 0;
         }
-        const indent = this.getLineIndent(this.lines[lastIdx]);
+        const indent = SqlUtils.getLineIndent(this.lines[lastIdx]);
         const popCount = this.lines.length - lastIdx - 1;
         return {
             indent: indent,
@@ -299,7 +217,7 @@ export default class PlSqlFormatter {
     }
 
     formatReturn(token) {
-        const first = this.getFirstWord(this.getLastString());
+        const first = SqlUtils.getFirstWord(this.getLastString());
         const last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
         if ((this.openParens.includes(first) && this.getLastString().split(",").length > 1) || (last != undefined)) {
             if (this.getLastString().trim() != "") {
@@ -451,7 +369,7 @@ export default class PlSqlFormatter {
         const openMatch = lastString.match(/\(/);
         const closeMatch = lastString.match(/\)/);
         if (openMatch != undefined && closeMatch != undefined) {
-            const first = this.getFirstWord(lastString);
+            const first = SqlUtils.getFirstWord(lastString);
             if (lastString.length > this.lineSize && openMatch.length == closeMatch.length) {
                 if (this.openParens.includes(first.toUpperCase()) && first != "if") {
                     this.lines[this.lastIndex()] = lastString.substring(0, lastString.indexOf("(") + 1);
@@ -556,7 +474,7 @@ export default class PlSqlFormatter {
             }
         }
         const ignore = ["if", "elsif", "while", "for"];
-        const first = this.getFirstWord(substring);
+        const first = SqlUtils.getFirstWord(substring);
         if (first == "create") {
             if (!this.prevLineIsComment() && this.getLastString().trim() != "") {
                 this.addNewLine(this.indentCount - 1);
@@ -602,7 +520,7 @@ export default class PlSqlFormatter {
          * procedure name(val);
         */
         const startBlock = ["cursor", "procedure", "function", "forall", "for", "while"];
-        let first = this.getFirstWord(this.getLastString());
+        let first = SqlUtils.getFirstWord(this.getLastString());
         const lIndent = this.indentsKeyWords[this.indentsKeyWords.length - 1];
         if (lIndent != undefined && lIndent.key == "forall") {
             this.decrementIndent();
@@ -616,7 +534,7 @@ export default class PlSqlFormatter {
         else if (this.getLastString().endsWith(")")) {
             const ssInfo = this.getBktSubstring(this.lastIndex());
             const substring = ssInfo.substring;
-            first = this.getFirstWord(substring);
+            first = SqlUtils.getFirstWord(substring);
             if (this.openParens.includes(first.toUpperCase()) && first != "if") {
                 this.decrementIndent();
             }
@@ -624,31 +542,17 @@ export default class PlSqlFormatter {
         const last = this.getLastString();
         if ((last.includes(" or ") || last.includes(" and ") || last.includes(" xor ")) && last.trim().length > 60) {
             const searchString = last;
-            const firstWord = this.getFirstWord(searchString);
-            const info = this.findSubstring(firstWord, token.value, this.getStringInOneStyle(searchString).trim());
+            const firstWord = SqlUtils.getFirstWord(searchString);
+            const info = SqlUtils.findSubstring(firstWord, SqlUtils.getStringInOneStyle(searchString).trim(), this.query, this.tokenizer);
+            this.query = info.query;
             this.lines[this.lastIndex()] = this.formatOriginSubstringWithIndent(
-                                                    this.getLineIndent(this.getLastString()), info.indent, info.substring);
+                                                    SqlUtils.getLineIndent(this.getLastString()), info.indent, info.substring);
         }
         if (this.getLastString().trim() == "") {
             this.lines.pop();
         }
         this.lines[this.lastIndex()] += token.value;
         this.addNewLine(this.indentCount);
-    }
-
-    getFirstWord(string) {
-        if (string.trim() == "") {
-            return "";
-        }
-        const split = string.trim().split(/,|\.|\(|\)| |%/);
-        let idx = 0;
-        while (idx < split.length && split[idx].trim() == "") {
-            idx++;
-        }
-        if (idx == split.length) {
-            return split[idx - 1].trim();
-        }
-        return split[idx].trim();
     }
 
     getBktSubstring(from) {
@@ -932,7 +836,6 @@ export default class PlSqlFormatter {
     }
 
     prevLineIsComment() {
-
         return this.lastIndex() != 0 &&
             (this.lines[this.lastIndex() - 1].endsWith("*/") || this.lines[this.lastIndex() - 1].trim().startsWith("--"));
     }
@@ -953,18 +856,5 @@ export default class PlSqlFormatter {
 
     getLastString() {
         return this.lines[this.lastIndex()];
-    }
-
-    formatTextCase(token) {
-        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null ||
-            token.type == tokenTypes.BLOCK_COMMENT ||
-            token.type == tokenTypes.LINE_COMMENT ||
-            token.value.startsWith("'")) {
-            return token.value;
-        }
-        else {
-            return token.value.toLowerCase();
-        }
-
     }
 }

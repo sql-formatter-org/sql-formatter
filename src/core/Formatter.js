@@ -1,13 +1,11 @@
-// import includes from "lodash/includes";
 import trimEnd from "lodash/trimEnd";
 import tokenTypes from "./tokenTypes";
-import Params from "./Params";
 import repeat from "lodash/repeat";
+import SqlUtils from "./SqlUtils";
 
 export default class Formatter {
     constructor(cfg, tokenizer, reservedWords, reservedForBkt) {
         this.cfg = cfg || {};
-        this.params = new Params(this.cfg.params);
         this.tokenizer = tokenizer;
         this.tokens = [];
         this.index = 0;
@@ -34,26 +32,11 @@ export default class Formatter {
         return this.lines.join("\n").split("\n");
     }
 
-    getFirstWord(string) {
-        if (string.trim() == "") {
-            return "";
-        }
-        const split = string.trim().split(/,|\.|\(|\)| |%/);
-        let idx = 0;
-        while (idx < split.length && split[idx].trim() == "") {
-            idx++;
-        }
-        if (idx == split.length) {
-            return split[idx - 1].trim();
-        }
-        return split[idx].trim();
-    }
-
     formatQuery() {
         const originalQuery = this.query;
         for (let i = 0; i < this.tokens.length; i++) {
             const token = this.tokens[i];
-            token.value = this.formatTextCase(token);
+            token.value = SqlUtils.formatTextCase(token);
             if (token.value.startsWith(".") && token.value != ".." ) {
                 this.lines[this.lastIndex()] = trimEnd(this.getLastString());
             }
@@ -252,17 +235,6 @@ export default class Formatter {
         this.lines[this.lastIndex()] += token.value;
     }
 
-    formatTextCase(token) {
-        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null ||
-            token.type == tokenTypes.BLOCK_COMMENT ||
-            token.type == tokenTypes.LINE_COMMENT || token.value.includes("'")) {
-            return token.value;
-        }
-        else {
-            return token.value.toLowerCase();
-        }
-    }
-
     addNewLine(align, word) {
         if (this.getLastString().trim() == ")") {
             this.lines.pop();
@@ -290,34 +262,25 @@ export default class Formatter {
         if (firstChar == "(" || firstChar == ")") {
             last = last.substring(1).trim();
         }
-        const first = this.getFirstWord(last.trim());
-        const lastWithoutSpace = this.getStringInOneStyle(last);
-        const info = this.findSubstring(first.toLowerCase(), lastWithoutSpace.toLowerCase());
+        const first = SqlUtils.getFirstWord(last.trim());
+        const lastWithoutSpace = SqlUtils.getStringInOneStyle(last);
+        const info = SqlUtils.findSubstring(first.toLowerCase(), lastWithoutSpace.toLowerCase(), this.query, this.tokenizer);
+        this.query = info.query;
         let substring = info.substring;
         if (firstChar == "(" || firstChar == ")") {
             substring = firstChar + substring;
         }
-        const indent = this.getLineIndent(line);
+        const indent = SqlUtils.getLineIndent(line);
         if (this.reservedWords.includes(first)) {
             return this.formatOriginSubstringWithIndent(indent + first.length + 1, info.indent, substring);
         }
         return this.formatOriginSubstringWithIndent(indent, info.indent, substring);
     }
 
-    getLineIndent(line) {
-        let indent = 0;
-        for (indent; indent < line.length; indent++) {
-            if (line[indent] != " ") {
-                return indent;
-            }
-        }
-        return indent;
-    }
-
     formatOriginSubstringWithIndent(indent, originIndent, substring) {
         const split = substring.split("\n");
         if (split[0].match(/'/g) == undefined || split[0].match(/'/g).length % 2 == 0) {
-            split[0] = repeat(" ", indent) + this.trimStart(split[0]);
+            split[0] = repeat(" ", indent) + SqlUtils.trimStart(split[0]);
         }
         else {
             split[0] = repeat(" ", indent) + split[0].trim();
@@ -325,7 +288,7 @@ export default class Formatter {
         let inQuotes = (split[0].match(/'/g) != undefined && split[0].match(/'/g) % 2 == 1);
         for (let i = 1; i < split.length; i++) {
             const match = split[i].match(/'/g);
-            const cIndent = this.getLineIndent(split[i]);
+            const cIndent = SqlUtils.getLineIndent(split[i]);
             if (inQuotes) {
                 split[i] = split[i];
                 if (match != undefined && match.length % 2 == 1) {
@@ -337,7 +300,7 @@ export default class Formatter {
                     if (match.length % 2 == 1) {
                         inQuotes = true;
                     }
-                    split[i] = repeat(" ", cIndent - originIndent + indent ) + this.trimStart(split[i]);
+                    split[i] = repeat(" ", cIndent - originIndent + indent ) + SqlUtils.trimStart(split[i]);
                 }
                 else {
                     split[i] = repeat(" ", cIndent - originIndent + indent) + split[i].trim();
@@ -345,81 +308,6 @@ export default class Formatter {
             }
         }
         return split.join("\n");
-    }
-
-    trimStart(line) {
-        while (line[0] == " ") {
-            line = line.substring(1);
-        }
-        return line;
-    }
-
-    findSubstring(first, searchString) {
-        let substring = "";
-        let indent = 0;
-        let startIdx = 0;
-        while (this.getStringInOneStyle(substring).trim().toLowerCase() != searchString.trim().toLowerCase()) {
-            substring = "";
-            startIdx = this.query.toLowerCase().indexOf(first);
-            while (searchString.trim().toLowerCase().startsWith(this.getStringInOneStyle(substring).trim().toLowerCase()) &&
-            this.getStringInOneStyle(substring.trim()).trim().length != searchString.trim().length &&
-                    startIdx != this.query.length) {
-                substring += this.query[startIdx];
-                startIdx++;
-            }
-            if (searchString.trim().toLowerCase() != this.getStringInOneStyle(substring).trim().toLowerCase()) {
-                this.query = this.query.substring(this.query.toLowerCase().indexOf(first) + first.length);
-            }
-        }
-        const from = this.query.indexOf(substring);
-        for (let i = from; i >= 0; i--) {
-            if (this.query[i] == "\n") {
-                break;
-            }
-            else {
-                indent++;
-            }
-        }
-        this.query = this.query.substring(this.query.indexOf(substring) + substring.length - 1);
-        substring = this.formatSubstringCase(substring);
-        return {
-            substring: substring,
-            indent: indent
-        };
-    }
-
-    getStringInOneStyle(word) {
-        return word.replaceAll("(", " ( ").replaceAll(")", " ) ")
-            .replaceAll(".", " . ").replaceAll("\"", " \" ")
-            .replaceAll("*", " * ").replaceAll("/", " / ")
-            .replaceAll("%", " % ").replaceAll(":", " : ")
-            .replaceAll(",", " , ").replaceAll("=", " = ")
-            .replaceAll("-", " - ").replaceAll("|", " | ")
-            .replaceAll("'", " ' ").replaceAll("+", " + ")
-            .replaceAll("<", " < ").replaceAll(">", " > ")
-            .replaceAll("\\", " \\ ").replaceAll(";", " ; ")
-            .replaceAll("?", " ? ").replaceAll("@", " @ ")
-            .replaceAll("#", " # ").replaceAll(/(\s|\n)+/g, " ");
-    }
-
-    formatSubstringCase(string) {
-        const toks = this.tokenizer.tokenize(string);
-        let prev = toks[0];
-        prev.value = this.formatTextCase(prev);
-        let substring = "";
-        let lowCase = string.toLowerCase();
-        for (let i = 1; i < toks.length; i++) {
-            const token = toks[i];
-            token.value = this.formatTextCase(token);
-            if (token.type != tokenTypes.WHITESPACE) {
-                const end = lowCase.indexOf(token.value.toLowerCase());
-                const current = lowCase.substring(0, end) + token.value;
-                substring += current;
-                lowCase = lowCase.substring(lowCase.indexOf(current.toLowerCase()) + current.length);
-                prev = token;
-            }
-        }
-        return substring;
     }
 
     getCurrentIndent(align, word) {
@@ -593,8 +481,8 @@ export default class Formatter {
                 break;
             }
         }
-        const firstInStartLine = this.getFirstWord(this.lines[startIndex]);
-        const first = this.getFirstWord(substring);
+        const firstInStartLine = SqlUtils.getFirstWord(this.lines[startIndex]);
+        const first = SqlUtils.getFirstWord(substring);
         if (this.startBlock.includes(first)) {
             this.indents.pop();
         }
@@ -660,8 +548,8 @@ export default class Formatter {
         }
     }
 
-    formatPlaceholder(token) {
-        this.lines[this.lastIndex()] += this.params.get(token) + " ";
+    formatPlaceholder() {
+        this.lines[this.lastIndex()] += " ";
     }
 
     formatWithSpaceAfter(token) {
