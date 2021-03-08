@@ -67,8 +67,7 @@
     "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
     "build:commonjs": "babel src --out-dir lib",
     "build:umd": "webpack --config webpack.dev.js",
-    "build:umd:min": "webpack --config webpack.prod.js",
-    "prepare": "npm run clean && npm run check && npm run build"
+    "build:umd:min": "webpack --config webpack.prod.js"
   },
   "repository": {
     "type": "git",
