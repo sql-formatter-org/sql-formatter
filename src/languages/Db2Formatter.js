@@ -563,7 +563,7 @@ export default class Db2Formatter extends Formatter {
       indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: [':'],
       lineCommentTypes: ['--'],
-      specialWordChars: ['#', '@'],
+      specialWordChars: ['#', '@', "x'"],
       operators: ['**', '!=', '!>', '!>', '||'],
     });
   }
