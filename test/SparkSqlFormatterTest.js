@@ -42,6 +42,16 @@ describe('SparkSqlFormatter', () => {
     ],
   });
 
+  it('formats SELECT query with element selection expression', () => {
+    const result = format('SELECT order_lines[0].productId FROM orders;');
+    expect(result).toBe(dedent`
+      SELECT
+        order_lines[0].productId
+      FROM
+        orders;
+    `);
+  });
+
   it('formats WINDOW specification as top level', () => {
     const result = format(
       'SELECT *, LAG(value) OVER wnd AS next_value FROM tbl WINDOW wnd as (PARTITION BY id ORDER BY time);'
