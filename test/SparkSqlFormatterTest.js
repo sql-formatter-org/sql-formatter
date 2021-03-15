@@ -20,7 +20,21 @@ describe('SparkSqlFormatter', () => {
   supportsStrings(format, ['""', "''", '``']);
   supportsBetween(format);
   supportsSchema(format);
-  supportsOperators(format, ['!=', '%', '|', '&', '^', '~', '!', '<=>', '%', '&&', '||', '==']);
+  supportsOperators(format, [
+    '!=',
+    '%',
+    '|',
+    '&',
+    '^',
+    '~',
+    '!',
+    '<=>',
+    '%',
+    '&&',
+    '||',
+    '==',
+    '->',
+  ]);
   supportsJoin(format, {
     additionally: [
       'ANTI JOIN',
