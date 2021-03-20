@@ -14,6 +14,7 @@ export interface FormatOptions {
   indent?: string;
   uppercase?: boolean;
   linesBetweenQueries?: number;
+  indentQuerySeparator: boolean;
 }
 
 export function format(sql: string, options?: FormatOptions): string;

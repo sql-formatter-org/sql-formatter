@@ -31,6 +31,7 @@ const formatters = {
  *  @param {String} cfg.indent Characters used for indentation, default is "  " (2 spaces)
  *  @param {Boolean} cfg.uppercase Converts keywords to uppercase
  *  @param {Integer} cfg.linesBetweenQueries How many line breaks between queries
+ *  @param {Boolean} cfg.indentQuerySeparator Indent query separator ";" on a final new line
  *  @param {Object} cfg.params Collection of params for placeholder replacement
  * @return {String}
  */

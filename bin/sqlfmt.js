@@ -53,6 +53,12 @@ function getArgs() {
     default: 1,
   });
 
+  parser.add_argument('--indent-query-separator', {
+    help: 'Indent query separator ";" on a final new line',
+    action: 'store_true',
+    default: false,
+  });
+
   parser.add_argument('--version', {
     action: 'version',
     version,
@@ -67,6 +73,7 @@ function configFromArgs(args) {
     indent: args.tab_indent ? '\t' : ' '.repeat(args.indent),
     uppercase: args.uppercase,
     linesBetweenQueries: args.lines_between_queries,
+    indentQuerySeparator: args.indent_query_separator,
   };
 }
 

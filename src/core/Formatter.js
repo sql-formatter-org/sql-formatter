@@ -12,6 +12,7 @@ export default class Formatter {
    *  @param {String} cfg.indent
    *  @param {Boolean} cfg.uppercase
    *  @param {Integer} cfg.linesBetweenQueries
+   *  @param {Boolean} cfg.indentQuerySeparator
    *  @param {Object} cfg.params
    */
   constructor(cfg) {
@@ -213,7 +214,12 @@ export default class Formatter {
 
   formatQuerySeparator(token, query) {
     this.indentation.resetIndentation();
-    return trimSpacesEnd(query) + this.show(token) + '\n'.repeat(this.cfg.linesBetweenQueries || 1);
+    return (
+      trimSpacesEnd(query) +
+      (this.cfg.indentQuerySeparator ? '\n' : '') +
+      this.show(token) +
+      '\n'.repeat(this.cfg.linesBetweenQueries || 1)
+    );
   }
 
   // Converts token to string (uppercasing it if needed)

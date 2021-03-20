@@ -34,6 +34,29 @@ export default function supportsConfigOptions(format) {
     `);
   });
 
+  it('supports indentQuerySeparator option', () => {
+    const result = format('SELECT * FROM foo; SELECT * FROM bar\n; SELECT * FROM baz\n\n;', {
+      indentQuerySeparator: true,
+    });
+    expect(result).toBe(dedent`
+      SELECT
+        *
+      FROM
+        foo
+      ;
+      SELECT
+        *
+      FROM
+        bar
+      ;
+      SELECT
+        *
+      FROM
+        baz
+      ;
+    `);
+  });
+
   it('supports uppercase option', () => {
     const result = format('select distinct * frOM foo left join bar WHERe cola > 1 and colb = 3', {
       uppercase: true,
