@@ -15,6 +15,7 @@ SQL formatter supports the following dialects:
 - **redshift** - [Amazon Redshift][]
 - **spark** - [Spark][]
 - **tsql** - [SQL Server Transact-SQL][tsql]
+- **soql** - [Salesforce SOQL][]
 
 It does not support:
 
@@ -106,8 +107,8 @@ optional arguments:
   -h, --help            show this help message and exit
   -o OUTPUT, --output OUTPUT
                         File to write SQL output (defaults to stdout)
-  -l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql},
-  --language {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}
+  -l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,soql,sql,tsql},
+  --language {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,soql,sql,tsql}
                         SQL Formatter dialect (defaults to basic sql)
   -i N, --indent N      Number of spaces to indent query blocks (defaults to 2)
   -t, --tab-indent      Indent query blocks with tabs instead of spaces
@@ -163,3 +164,4 @@ npm run check
 [mariadb]: https://mariadb.com/
 [mysql]: https://www.mysql.com/
 [tsql]: https://docs.microsoft.com/en-us/sql/sql-server/
+[salesforce soql]: https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_select.htm

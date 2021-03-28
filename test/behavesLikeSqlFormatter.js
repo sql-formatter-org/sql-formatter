@@ -20,7 +20,7 @@ export default function behavesLikeSqlFormatter(format) {
 
   it('throws error when query argument is not string', () => {
     expect(() => format(undefined)).toThrow(
-      'Invalid query argument. Extected string, instead got undefined'
+      'Invalid query argument. Expected string, instead got undefined'
     );
   });
 

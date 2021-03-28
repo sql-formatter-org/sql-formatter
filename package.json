@@ -21,11 +21,13 @@
     "postgresql",
     "pl/sql",
     "transact-sql",
-    "db2"
+    "db2",
+    "soql"
   ],
   "contributors": [
     "Adrien Pyke <adpyke@gmail.com>",
     "Andrew",
+    "Austin Turner <paustint@gmail.com>",
     "Benjamin Bellamy",
     "bingou",
     "Damon Davison <ddavison@avalere.com>",

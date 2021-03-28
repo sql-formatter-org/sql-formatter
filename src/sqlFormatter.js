@@ -5,6 +5,7 @@ import N1qlFormatter from './languages/N1qlFormatter';
 import PlSqlFormatter from './languages/PlSqlFormatter';
 import PostgreSqlFormatter from './languages/PostgreSqlFormatter';
 import RedshiftFormatter from './languages/RedshiftFormatter';
+import SoqlFormatter from './languages/SoqlFormatter';
 import SparkSqlFormatter from './languages/SparkSqlFormatter';
 import StandardSqlFormatter from './languages/StandardSqlFormatter';
 import TSqlFormatter from './languages/TSqlFormatter';
@@ -19,6 +20,7 @@ const formatters = {
   redshift: RedshiftFormatter,
   spark: SparkSqlFormatter,
   sql: StandardSqlFormatter,
+  soql: SoqlFormatter,
   tsql: TSqlFormatter,
 };
 
@@ -36,7 +38,7 @@ const formatters = {
  */
 export const format = (query, cfg = {}) => {
   if (typeof query !== 'string') {
-    throw new Error('Invalid query argument. Extected string, instead got ' + typeof query);
+    throw new Error(`Invalid query argument. Expected string, instead got ${typeof query}`);
   }
 
   let Formatter = StandardSqlFormatter;
