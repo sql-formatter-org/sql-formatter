@@ -1,5 +1,5 @@
 {
-  "name": "@romainr/sql-formatter",
+  "name": "@gethue/sql-formatter",
   "version": "4.0.2",
   "description": "Format whitespace in a SQL query to make it more readable",
   "license": "MIT",
@@ -72,11 +72,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/romainr/sql-formatter.git"
+    "url": "https://github.com/gethue/sql-formatter.git"
   },
   "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "bugs": {
-    "url": "https://github.com/romainr/sql-formatter/issues"
+    "url": "https://github.com/gethue/sql-formatter/issues"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.4",
