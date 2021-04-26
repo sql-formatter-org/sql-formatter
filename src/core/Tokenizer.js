@@ -272,6 +272,9 @@ export default class Tokenizer {
   }
 
   getTokenOnFirstMatch({ input, type, regex }) {
+    if (!regex) {
+      return undefined;
+    }
     const matches = input.match(regex);
 
     return matches ? { type, value: matches[1] } : undefined;
