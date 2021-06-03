@@ -107,7 +107,7 @@ const openParens = [
     "FUNCTION", "CURSOR", "IF",
     "FORALL",
     "FOR",
-     "PROCEDURE",
+     "PROCEDURE", "DECLARE",
      // "LOOP",
     "WHILE",
     // "PRAGMA",

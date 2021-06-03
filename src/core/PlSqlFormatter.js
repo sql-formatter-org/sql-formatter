@@ -68,6 +68,9 @@ export default class PlSqlFormatter {
             else if (token.type == tokenTypes.CLOSE_PAREN) {
                 this.formatClosingParentheses(token, i);
             }
+            else if (token.value.startsWith(":") && token.value != ":="){
+                this.formatWithSpaces(token);
+            }
             else if (token.type == tokenTypes.PLACEHOLDER) {
                 this.formatPlaceholder();
             }
@@ -295,7 +298,7 @@ export default class PlSqlFormatter {
 
     formatBegin(token) {
         const lastIndent = this.indentsKeyWords[this.indentsKeyWords.length - 1];
-        const startBlock = ["cursor", "procedure", "function", "pragma"];
+        const startBlock = ["cursor", "procedure", "function", "pragma", "declare"];
         if (lastIndent != undefined) {
             if (startBlock.includes(lastIndent.key)) {
                 if (this.getLastString().trim() != "") {
@@ -558,6 +561,9 @@ export default class PlSqlFormatter {
             }
             this.incrementIndent(token.value, next);
             this.lines[this.lastIndex()] += token.value;
+            if (token.value == "declare"){
+                this.addNewLine(this.indentCount);
+            }
         }
         else {
             this.lines[this.lastIndex()] += token.value;
@@ -660,8 +666,7 @@ export default class PlSqlFormatter {
             this.lines[this.lastIndex()] += ")";
             this.addNewLine(this.indentCount);
             index++;
-        }
-        else {
+        } else {
             this.insertSqlInNewLine(sqlArray);
         }
         this.indentCount = startIndent;

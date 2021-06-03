@@ -1862,6 +1862,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.formatOpeningParentheses(token, i);
 	            } else if (token.type == _tokenTypes2["default"].CLOSE_PAREN) {
 	                this.formatClosingParentheses(token, i);
+	            } else if (token.value.startsWith(":") && token.value != ":=") {
+	                this.formatWithSpaces(token);
 	            } else if (token.type == _tokenTypes2["default"].PLACEHOLDER) {
 	                this.formatPlaceholder();
 	            } else if (token.value == ")") {
@@ -2067,7 +2069,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    PlSqlFormatter.prototype.formatBegin = function formatBegin(token) {
 	        var lastIndent = this.indentsKeyWords[this.indentsKeyWords.length - 1];
-	        var startBlock = ["cursor", "procedure", "function", "pragma"];
+	        var startBlock = ["cursor", "procedure", "function", "pragma", "declare"];
 	        if (lastIndent != undefined) {
 	            if (startBlock.includes(lastIndent.key)) {
 	                if (this.getLastString().trim() != "") {
@@ -2309,6 +2311,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            this.incrementIndent(token.value, next);
 	            this.lines[this.lastIndex()] += token.value;
+	            if (token.value == "declare") {
+	                this.addNewLine(this.indentCount);
+	            }
 	        } else {
 	            this.lines[this.lastIndex()] += token.value;
 	        }
@@ -2561,7 +2566,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var reservedNewlineWords = ["ALTER", "SELECT", "INSERT", "UPDATE", "DROP", "MERGE"];
 
 	var openParens = ["CREATE", //"BEGIN",
-	"FUNCTION", "CURSOR", "IF", "FORALL", "FOR", "PROCEDURE",
+	"FUNCTION", "CURSOR", "IF", "FORALL", "FOR", "PROCEDURE", "DECLARE",
 	// "LOOP",
 	"WHILE",
 	// "PRAGMA",
