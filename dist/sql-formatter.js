@@ -76,7 +76,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {String}
 	     */
 	    format: function format(query, cfg) {
-	        return new _PlSqlFormatter2["default"](cfg).format(query);
+	        return new _PlSqlFormatter2["default"](cfg).format(query.trim());
 	    }
 	};
 	module.exports = exports["default"];

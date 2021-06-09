@@ -12,6 +12,6 @@ export default {
      * @return {String}
      */
     format: (query, cfg) => {
-        return new PlSqlFormatter(cfg).format(query);
+        return new PlSqlFormatter(cfg).format(query.trim());
     }
 };
