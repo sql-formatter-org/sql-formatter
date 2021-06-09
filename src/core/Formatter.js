@@ -16,20 +16,21 @@ export default class Formatter {
         this.lines = [""];
         this.startBlock = ["select", "begin", "create", "alter", "insert", "update", "drop", "merge"];
         this.logicalOperators = ["or", "xor", "and"];
+        this.hasError = false;
     }
 
     format(query) {
         this.query = query;
         this.tokens = this.tokenizer.tokenize(query);
         this.formatQuery();
-        return this.lines.join("\n").trim();
+        return this.hasError ? query : this.lines.join("\n").trim();
     }
 
     getFormatArray(query) {
         this.query = query;
         this.tokens = this.tokenizer.tokenize(query);
         this.formatQuery();
-        return this.lines.join("\n").split("\n");
+        return this.hasError ? query.split("\n") : this.lines.join("\n").split("\n");
     }
 
     formatQuery() {
@@ -89,6 +90,9 @@ export default class Formatter {
             }
             else {
                 this.formatWithSpaces(token);
+            }
+            if (this.hasError) {
+                return;
             }
         }
 
@@ -265,6 +269,10 @@ export default class Formatter {
         const first = SqlUtils.getFirstWord(last.trim());
         const lastWithoutSpace = SqlUtils.getStringInOneStyle(last);
         const info = SqlUtils.findSubstring(first.toLowerCase(), lastWithoutSpace.toLowerCase(), this.query, this.tokenizer);
+        if (info.hasError) {
+            this.hasError = true;
+            return "";
+        }
         this.query = info.query;
         let substring = info.substring;
         if (firstChar == "(" || firstChar == ")") {

@@ -24,6 +24,7 @@ export default class PlSqlFormatter {
         this.lineSize = 80;
         this.booleanOperators = ["and", "or", "xor"];
         this.cQuery = "";
+        this.hasError = false;
     }
 
     format(query) {
@@ -33,7 +34,7 @@ export default class PlSqlFormatter {
         this.query = query;
         this.tokens = this.tokenizer.tokenize(query);
         const formattedQuery = this.formatQuery();
-        return formattedQuery.trim();
+        return this.hasError ? query : formattedQuery.trim();
     }
 
     formatQuery() {
@@ -119,6 +120,9 @@ export default class PlSqlFormatter {
             else {
                 this.formatWithSpaces(token);
             }
+            if (this.hasError) {
+                return originQuery;
+            }
         }
         return this.addDevelopEmptyLines(originQuery, this.lines.join("\n").trim());
     }
@@ -142,6 +146,10 @@ export default class PlSqlFormatter {
         const first = SqlUtils.getFirstWord(searchString);
         const info = SqlUtils.findSubstring(first, SqlUtils.getStringInOneStyle(searchString + " " + token.value).trim(),
                                                 this.query, this.tokenizer);
+        if (info.hasError) {
+            this.hasError = true;
+            return;
+        }
         this.query = info.query;
         if (searchString.trim().length < 65) {
             return;
@@ -490,6 +498,10 @@ export default class PlSqlFormatter {
             const searchString = last;
             const firstWord = SqlUtils.getFirstWord(searchString);
             const info = SqlUtils.findSubstring(firstWord, SqlUtils.getStringInOneStyle(searchString).trim(), this.query, this.tokenizer);
+            if (info.hasError) {
+                this.hasError = true;
+                return;
+            }
             this.query = info.query;
             this.lines[this.lastIndex()] = SqlUtils.formatOriginSubstringWithIndent(
                                                     SqlUtils.getLineIndent(this.getLastString()), info.indent, info.substring);

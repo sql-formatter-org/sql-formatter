@@ -2,13 +2,11 @@ import Tokenizer from "../core/Tokenizer";
 import PlSqlFormatter from "../core/PlSqlFormatter";
 
 const reservedWords = [
-    // "A",
-     "ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER",
+    "ACCESSIBLE", "AGENT", "AGGREGATE", "ALL", "ALTER",
     "ANY", "ARRAY", "AS", "ASC", "AT", "ATTRIBUTE", "AUTHID", "AVG",
     "BETWEEN", "BFILE_BASE", "BINARY_INTEGER", "BINARY", "BLOB_BASE",
     "BLOCK", "BODY", "BOOLEAN", "BOTH", "BOUND",
     "BULK", "BY", "BYTE",
-    // "C",
     "CALL", "CALLING", "CASCADE", "CASE", "CHAR_BASE", "CHAR",
     "CHARACTER", "CHARSET", "CHARSETFORM", "CHARSETID",
     "CHECK", "CLOB_BASE", "CLONE", "CLOSE", "CLUSTER", "CLUSTERS",
@@ -31,7 +29,7 @@ const reservedWords = [
     "IDENTIFIED", "IF", "IMMEDIATE", "IN", "INCLUDING",
     "INDEX", "INDEXES", "INDICATOR", "INDICES", "INFINITE",
     "INSTANTIABLE", "INT", "INTEGER", "INTERFACE", "INTERVAL",
-     "INTO", "INVALIDATE", "IS", "ISOLATION",
+    "INTO", "INVALIDATE", "IS", "ISOLATION",
     "JAVA",
     "LANGUAGE", "LARGE", "LEADING", "LENGTH", "LEVEL",
     "LIBRARY", "LIKE", "LIKE2", "LIKE4", "LIKEC", "LIMITED",
@@ -45,12 +43,12 @@ const reservedWords = [
     "OBJECT", "OCICOLL", "OCIDATE", "OCIDATETIME", "OCIDURATION",
     "OCIINTERVAL", "OCILOBLOCATOR", "OCINUMBER", "OCIRAW",
     "OCIREF", "OCIREFCURSOR", "OCIROWID", "OCISTRING", "OCITYPE",
-     "OF", "OLD", "ON", "ONLY", "OPAQUE", "OPEN", "OPERATOR",
+    "OF", "OLD", "ON", "ONLY", "OPAQUE", "OPEN", "OPERATOR",
     "OPTION", "ORACLE", "ORADATA", "ORDER", "ORGANIZATION",
     "ORLANY", "ORLVARY", "OTHERS", "OUT", "OVERLAPS",
     "OVERRIDING",
     "PACKAGE", "PARALLEL_ENABLE", "PARAMETER", "PARAMETERS", "PARENT",
-     "PARTITION", "PASCAL", "PCTFREE", "PIPE", "PIPELINED",
+    "PARTITION", "PASCAL", "PCTFREE", "PIPE", "PIPELINED",
     "PLS_INTEGER", "PLUGGABLE", "POSITIVE", "POSITIVEN", "PRAGMA",
     "PRECISION", "PRIOR", "PRIVATE", "PROCEDURE", "PUBLIC",
     "RAISE", "RANGE", "RAW", "READ", "REAL", "RECORD", "REF",
@@ -61,9 +59,9 @@ const reservedWords = [
     "SAMPLE", "SAVE", "SAVEPOINT", "SB1", "SB2", "SB4", "SECOND",
     "SEGMENT", "SELF", "SEPARATE", "SEQUENCE",
     "SERIALIZABLE", "SHARE", "SHORT", "SIZE_T", "SIZE", "SMALLINT",
-     "SOME", "SPACE", "SPARSE", "SQL", "SQLCODE",
+    "SOME", "SPACE", "SPARSE", "SQL", "SQLCODE",
     "SQLDATA", "SQLERRM", "SQLNAME", "SQLSTATE", "STANDARD", "START",
-     "STATIC", "STDDEV", "STORED", "STRING", "STRUCT",
+    "STATIC", "STDDEV", "STORED", "STRING", "STRUCT",
     "STYLE", "SUBMULTISET", "SUBPARTITION", "SUBSTITUTABLE", "SUBTYPE",
     "SUCCESSFUL", "SUM", "SYNONYM", "SYSDATE",
     "TABAUTH", "TABLE", "TDO", "THE", "THEN", "TIME", "TIMESTAMP",
@@ -91,7 +89,6 @@ const reservedWords = [
 ];
 
 const reservedToplevelWords = [
-    // "LOOP",
     "TYPE", "WITH", "UNION",
     "USING",
     "ELSE",
@@ -103,16 +100,14 @@ const reservedNewlineWords = [
 ];
 
 const openParens = [
-    "CREATE", //"BEGIN",
+    "CREATE",
     "FUNCTION", "CURSOR", "IF",
     "FORALL",
     "FOR",
-     "PROCEDURE", "DECLARE",
-     // "LOOP",
+    "PROCEDURE", "DECLARE",
     "WHILE",
-    // "PRAGMA",
-    "CASE",
-]
+    "CASE"
+];
 
 let tokenizer;
 
@@ -129,15 +124,14 @@ export default class SqlFormatter {
                 reservedNewlineWords,
                 stringTypes: [`""`, "N''", "''", "``",],
                 openParens,
-                closeParens: ["END", ],//"RETURN", ],
+                closeParens: ["END", ],
                 indexedPlaceholderTypes: ["?"],
                 namedPlaceholderTypes: [":"],
                 lineCommentTypes: ["--"],
-                specialWordChars: ["_", "$", "#",  ".", "@", "%"]
+                specialWordChars: ["_", "$", "#", ".", "@", "%"]
             });
         }
         return new PlSqlFormatter(this.cfg, tokenizer, reservedWords, openParens).format(query);
     }
-
 
 }
