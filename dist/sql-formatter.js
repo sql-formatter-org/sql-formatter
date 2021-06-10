@@ -460,7 +460,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var substring = "";
 	        var indent = 0;
 	        var startIdx = 0;
-	        var startTime = Date.now();
 	        var hasError = false;
 	        while (this.getStringInOneStyle(substring).trim().toLowerCase() != searchString.trim().toLowerCase()) {
 	            substring = "";
@@ -468,16 +467,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            while (searchString.trim().toLowerCase().startsWith(SqlUtils.getStringInOneStyle(substring).trim().toLowerCase()) && this.getStringInOneStyle(substring.trim()).trim().length != searchString.trim().length && startIdx != query.length) {
 	                substring += query[startIdx];
 	                startIdx++;
-	                if (Date.now() - startTime > 120 * 1000) {
-	                    hasError = true;
-	                    break;
-	                }
-	            }
-	            if (hasError || Date.now() - startTime > 120 * 1000) {
-	                break;
 	            }
 	            if (searchString.trim().toLowerCase() != this.getStringInOneStyle(substring).trim().toLowerCase()) {
 	                query = query.substring(query.toLowerCase().indexOf(first) + first.length);
+	            }
+	            if (query == "" && substring == "undefined") {
+	                hasError = true;
+	                break;
 	            }
 	        }
 	        var from = query.indexOf(substring);
@@ -555,7 +551,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.WHITESPACE_REGEX = /^(\s+)/;
 	        this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
-	        this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|~~\*|~~|!~~\*|!~~|~\*|!~\*|!~|:=|.)/;
+	        this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|=>|!<|!>|\|\||::|->>|->|~~\*|~~|!~~\*|!~~|~\*|!~\*|!~|:=|.)/;
 
 	        this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
 	        this.LINE_COMMENT_REGEX = this.createLineCommentRegex(cfg.lineCommentTypes);

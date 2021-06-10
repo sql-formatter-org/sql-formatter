@@ -111,7 +111,6 @@ export default class SqlUtils {
         let substring = "";
         let indent = 0;
         let startIdx = 0;
-        const startTime = Date.now();
         let hasError = false;
         while (this.getStringInOneStyle(substring).trim().toLowerCase() != searchString.trim().toLowerCase()) {
             substring = "";
@@ -121,16 +120,13 @@ export default class SqlUtils {
                     startIdx != query.length) {
                 substring += query[startIdx];
                 startIdx++;
-                if (Date.now() - startTime > 120 * 1000) {
-                    hasError = true;
-                    break;
-                }
-            }
-            if (hasError || Date.now() - startTime > 120 * 1000) {
-                break;
             }
             if (searchString.trim().toLowerCase() != this.getStringInOneStyle(substring).trim().toLowerCase()) {
                 query = query.substring(query.toLowerCase().indexOf(first) + first.length);
+            }
+            if (query == "" && substring == "undefined"){
+                hasError = true;
+                break;
             }
         }
         const from = query.indexOf(substring);
