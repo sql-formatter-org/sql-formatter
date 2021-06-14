@@ -267,11 +267,14 @@ export default class Formatter {
             last = last.substring(1).trim();
         }
         const first = SqlUtils.getFirstWord(last.trim());
+        if (first.startsWith("/*")) {
+            return line;
+        }
         const lastWithoutSpace = SqlUtils.getStringInOneStyle(last);
         const info = SqlUtils.findSubstring(first.toLowerCase(), lastWithoutSpace.toLowerCase(), this.query, this.tokenizer);
         if (info.hasError) {
             this.hasError = true;
-            return "";
+            return line;
         }
         this.query = info.query;
         let substring = info.substring;

@@ -1489,11 +1489,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            last = last.substring(1).trim();
 	        }
 	        var first = _SqlUtils2["default"].getFirstWord(last.trim());
+	        if (first.startsWith("/*")) {
+	            return line;
+	        }
 	        var lastWithoutSpace = _SqlUtils2["default"].getStringInOneStyle(last);
 	        var info = _SqlUtils2["default"].findSubstring(first.toLowerCase(), lastWithoutSpace.toLowerCase(), this.query, this.tokenizer);
 	        if (info.hasError) {
 	            this.hasError = true;
-	            return "";
+	            return line;
 	        }
 	        this.query = info.query;
 	        var substring = info.substring;
