@@ -320,12 +320,12 @@ export default class Formatter {
         comment = commentsLine[0];
         for (let i = 1; i < commentsLine.length; i++) {
             if (commentsLine[i].trim().startsWith("*")) {
-                comment += "\n" + repeat(" ", indent + 1);
+                comment += "\n" + repeat(" ", indent - 1);
             }
             else {
-                comment += "\n" + repeat(" ", indent);
+                comment += "\n" + repeat(" ", indent + 1);
             }
-            comment += commentsLine[i];
+            comment += commentsLine[i].trim();
         }
         this.lines[this.lastIndex()] += comment;
         this.addNewLine("left", token.value);
