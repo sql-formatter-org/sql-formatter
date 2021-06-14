@@ -267,7 +267,7 @@ export default class Formatter {
             last = last.substring(1).trim();
         }
         const first = SqlUtils.getFirstWord(last.trim());
-        if (first.startsWith("/*")) {
+        if (first.startsWith("/*") || first.startsWith("--")) {
             return line;
         }
         const lastWithoutSpace = SqlUtils.getStringInOneStyle(last);

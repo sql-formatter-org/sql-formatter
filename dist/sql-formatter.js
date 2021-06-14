@@ -1489,7 +1489,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            last = last.substring(1).trim();
 	        }
 	        var first = _SqlUtils2["default"].getFirstWord(last.trim());
-	        if (first.startsWith("/*")) {
+	        if (first.startsWith("/*") || first.startsWith("--")) {
 	            return line;
 	        }
 	        var lastWithoutSpace = _SqlUtils2["default"].getStringInOneStyle(last);
