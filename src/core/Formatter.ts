@@ -151,27 +151,26 @@ export default class Formatter {
 			)
 		);
 
-		if (this.newline.mode === 'itemCount' || this.newline.mode === 'hybrid') {
-			const numItems = nextTokens.reduce(
-				(acc, { type, value }) => {
-					if (value == ',' && !acc.inParen) return { ...acc, count: acc.count + 1 }; // count commas between items in clause
-					if (type === tokenTypes.OPEN_PAREN) return { ...acc, inParen: true }; // don't count commas in functions
-					if (type === tokenTypes.CLOSE_PAREN) return { ...acc, inParen: false };
-					return acc;
-				},
-				{ count: 1, inParen: false } // start with 1 for first word
-			).count;
+		const numItems = nextTokens.reduce(
+			(acc, { type, value }) => {
+				if (value == ',' && !acc.inParen) return { ...acc, count: acc.count + 1 }; // count commas between items in clause
+				if (type === tokenTypes.OPEN_PAREN) return { ...acc, inParen: true }; // don't count commas in functions
+				if (type === tokenTypes.CLOSE_PAREN) return { ...acc, inParen: false };
+				return acc;
+			},
+			{ count: 1, inParen: false } // start with 1 for first word
+		).count;
 
-			return numItems > this.newline.itemCount!;
-		}
+		if (this.newline.mode === 'itemCount') return numItems > this.newline.itemCount!;
 
-		if (this.newline.mode === 'lineWidth' || this.newline.mode === 'hybrid')
-			return (
-				// calculate length if it were all inline
-				`${this.tokens[index].whitespaceBefore}${this.tokens[index].value} ${nextTokens
-					.map(({ value }) => (value === ',' ? value + ' ' : value))
-					.join('')}`.length > this.lineWidth
-			);
+		// calculate length if it were all inline
+		const inlineWidth = `${this.tokens[index].whitespaceBefore}${
+			this.tokens[index].value
+		} ${nextTokens.map(({ value }) => (value === ',' ? value + ' ' : value)).join('')}`.length;
+
+		if (this.newline.mode === 'lineWidth') return inlineWidth > this.lineWidth;
+		else if (this.newline.mode == 'hybrid')
+			return numItems > this.newline.itemCount! || inlineWidth > this.lineWidth;
 
 		return true;
 	};
