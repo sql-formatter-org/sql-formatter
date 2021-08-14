@@ -2,12 +2,14 @@ import dedent from 'dedent-js';
 import supportsComments from './features/comments';
 import supportsConfigOptions from './features/configOptions';
 import supportsOperators from './features/operators';
+import supportsNewlineOptions from './features/newline';
 
 /**
  * Core tests for all SQL formatters
  * @param {Function} format
  */
 export default function behavesLikeSqlFormatter(format) {
+	supportsNewlineOptions(format);
 	supportsComments(format);
 	supportsConfigOptions(format);
 	supportsOperators(['=', '+', '-', '*', '/', '<>', '>', '<', '>=', '<=']);
