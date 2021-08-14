@@ -134,7 +134,11 @@ export default class Formatter {
 	}
 
 	checkNewline = (index: number) => {
-		if (this.newline.mode === 'always') return true;
+		if (
+			this.newline.mode === 'always' ||
+			this.tokens.some(({ type, value }) => type === tokenTypes.OPEN_PAREN && value.length > 1) // auto break on CASE statements
+		)
+			return true;
 		if (this.newline.mode === 'never') return false;
 		const tail = this.tokens.slice(index + 1);
 		const nextTokens = tail.slice(
@@ -147,21 +151,28 @@ export default class Formatter {
 			)
 		);
 
-		const numItems = nextTokens.reduce(
-			(acc, { type, value }) => {
-				if (value == ',' && !acc.inParen) return { ...acc, count: acc.count + 1 }; // count commas between items in clause
-				if (type === tokenTypes.OPEN_PAREN) return { ...acc, inParen: true }; // don't count commas in functions
-				if (type === tokenTypes.CLOSE_PAREN) return { ...acc, inParen: false };
-				return acc;
-			},
-			{ count: 1, inParen: false } // start with 1 for first word
-		).count;
+		if (this.newline.mode === 'itemCount' || this.newline.mode === 'hybrid') {
+			const numItems = nextTokens.reduce(
+				(acc, { type, value }) => {
+					if (value == ',' && !acc.inParen) return { ...acc, count: acc.count + 1 }; // count commas between items in clause
+					if (type === tokenTypes.OPEN_PAREN) return { ...acc, inParen: true }; // don't count commas in functions
+					if (type === tokenTypes.CLOSE_PAREN) return { ...acc, inParen: false };
+					return acc;
+				},
+				{ count: 1, inParen: false } // start with 1 for first word
+			).count;
 
-		if (this.newline.mode === 'itemCount' || this.newline.mode === 'hybrid')
 			return numItems > this.newline.itemCount!;
+		}
 
 		if (this.newline.mode === 'lineWidth' || this.newline.mode === 'hybrid')
-			return 0 > this.lineWidth;
+			return (
+				// calculate length if it were all inline
+				`${this.tokens[index].whitespaceBefore}${this.tokens[index].value} ${nextTokens
+					.map(({ value }) => (value === ',' ? value + ' ' : value))
+					.join('')}`.length > this.lineWidth
+			);
+
 		return true;
 	};
 
