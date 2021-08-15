@@ -52,10 +52,10 @@ You can also pass in configuration options:
 
 ```js
 format('SELECT * FROM tbl', {
-  language: 'spark', // Defaults to "sql" (see the above list of supported dialects)
-  indent: '    ', // Defaults to two spaces
-  uppercase: bool, // Defaults to false (not safe to use when SQL dialect has case-sensitive identifiers)
-  linesBetweenQueries: 2, // Defaults to 1
+	language: 'spark', // Defaults to "sql" (see the above list of supported dialects)
+	indent: '    ', // Defaults to two spaces
+	uppercase: bool, // Defaults to false (not safe to use when SQL dialect has case-sensitive identifiers)
+	linesBetweenQueries: 2, // Defaults to 1
 });
 ```
 

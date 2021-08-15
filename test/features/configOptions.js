@@ -5,23 +5,23 @@ import dedent from 'dedent-js';
  * @param {Function} format
  */
 export default function supportsConfigOptions(format) {
-  it('supports indent option', () => {
-    const result = format('SELECT count(*),Column1 FROM Table1;', {
-      indent: '    ',
-    });
+	it('supports indent option', () => {
+		const result = format('SELECT count(*),Column1 FROM Table1;', {
+			indent: '    ',
+		});
 
-    expect(result).toBe(dedent`
+		expect(result).toBe(dedent`
       SELECT
           count(*),
           Column1
       FROM
           Table1;
     `);
-  });
+	});
 
-  it('supports linesBetweenQueries option', () => {
-    const result = format('SELECT * FROM foo; SELECT * FROM bar;', { linesBetweenQueries: 2 });
-    expect(result).toBe(dedent`
+	it('supports linesBetweenQueries option', () => {
+		const result = format('SELECT * FROM foo; SELECT * FROM bar;', { linesBetweenQueries: 2 });
+		expect(result).toBe(dedent`
       SELECT
         *
       FROM
@@ -32,13 +32,13 @@ export default function supportsConfigOptions(format) {
       FROM
         bar;
     `);
-  });
+	});
 
-  it('supports uppercase option', () => {
-    const result = format('select distinct * frOM foo left join bar WHERe cola > 1 and colb = 3', {
-      uppercase: true,
-    });
-    expect(result).toBe(dedent`
+	it('supports uppercase option', () => {
+		const result = format('select distinct * frOM foo left join bar WHERe cola > 1 and colb = 3', {
+			uppercase: true,
+		});
+		expect(result).toBe(dedent`
       SELECT
         DISTINCT *
       FROM
@@ -48,5 +48,5 @@ export default function supportsConfigOptions(format) {
         cola > 1
         AND colb = 3
     `);
-  });
+	});
 }
