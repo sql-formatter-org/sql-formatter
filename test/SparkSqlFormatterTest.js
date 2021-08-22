@@ -53,7 +53,7 @@ describe('SparkSqlFormatter', () => {
       FROM
         tbl
       WINDOW
-        wnd as (
+        wnd AS (
           PARTITION BY
             id
           ORDER BY
@@ -68,8 +68,8 @@ describe('SparkSqlFormatter', () => {
 		);
 		expect(result).toBe(dedent`
       SELECT
-        window(time, "1 hour").start AS window_start,
-        window(time, "1 hour").end AS window_end
+        WINDOW(time, "1 hour").start AS window_start,
+        WINDOW(time, "1 hour").end AS window_end
       FROM
         tbl;
     `);

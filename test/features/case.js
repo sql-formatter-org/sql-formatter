@@ -57,7 +57,7 @@ export default function supportsCase(format) {
 	});
 
 	it('recognizes lowercase CASE ... END', () => {
-		const result = format("case when option = 'foo' then 1 else 2 end;");
+		const result = format("case when option = 'foo' then 1 else 2 end;", { uppercase: false });
 
 		expect(result).toBe(dedent`
       case

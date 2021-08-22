@@ -32,7 +32,7 @@ export default function behavesLikeSqlFormatter(format) {
 		const result = format('SELECT count(*),Column1 FROM Table1;');
 		expect(result).toBe(dedent`
       SELECT
-        count(*),
+        COUNT(*),
         Column1
       FROM
         Table1;
@@ -277,7 +277,7 @@ export default function behavesLikeSqlFormatter(format) {
 		const result = format('SELECT count(');
 		expect(result).toBe(dedent`
       SELECT
-        count(
+        COUNT(
     `);
 	});
 
@@ -355,12 +355,12 @@ export default function behavesLikeSqlFormatter(format) {
     `);
 		expect(result).toBe(dedent`
       SELECT
-        count(*),
+        COUNT(*),
         Column1
       FROM
         Table1;
       SELECT
-        count(*),
+        COUNT(*),
         Column1
       FROM
         Table2;

@@ -187,6 +187,7 @@ const reservedWords = [
 	'WRITETEXT',
 	'EXIT',
 	'PROC',
+	'COUNT',
 ];
 
 const reservedTopLevelWords = [
