@@ -1,8 +1,6 @@
 import { Token } from './token';
 import tokenTypes from './tokenTypes';
 
-const INLINE_MAX_LENGTH = 50;
-
 /**
  * Bookkeeper for inline blocks.
  *
@@ -12,9 +10,11 @@ const INLINE_MAX_LENGTH = 50;
  */
 export default class InlineBlock {
 	level: number;
+	lineWidth: number;
 
-	constructor() {
+	constructor(lineWidth: number) {
 		this.level = 0;
+		this.lineWidth = lineWidth;
 	}
 
 	/**
@@ -60,7 +60,7 @@ export default class InlineBlock {
 			length += token.value.length;
 
 			// Overran max length
-			if (length > INLINE_MAX_LENGTH) {
+			if (length > this.lineWidth) {
 				return false;
 			}
 

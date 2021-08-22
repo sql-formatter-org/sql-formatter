@@ -9,18 +9,38 @@ import { FormatOptions } from '../sqlFormatter';
 
 export default class Formatter {
 	cfg: FormatOptions;
+	newline: FormatOptions['newline'];
+	currentNewline: boolean;
+	lineWidth: number;
 	indentation: Indentation;
 	inlineBlock: InlineBlock;
 	params: Params;
+
 	previousReservedToken: Token;
 	tokens: Token[];
 	index: number;
 
+	/**
+	 * @param {FormatOptions} cfg
+	 *  @param {String} cfg.language
+	 *  @param {String} cfg.indent
+	 *  @param {Boolean} cfg.uppercase
+	 *  @param {NewlineOptions} cfg.newline
+	 * 		@param {String} cfg.newline.mode
+	 * 		@param {Integer} cfg.newline.itemCount
+	 *  @param {Integer} cfg.lineWidth
+	 *  @param {Integer} cfg.linesBetweenQueries
+	 *  @param {ParamItems | string[]} cfg.params
+	 */
 	constructor(cfg: FormatOptions) {
 		this.cfg = cfg;
+		this.newline = cfg.newline;
+		this.currentNewline = true;
+		this.lineWidth = cfg.lineWidth;
 		this.indentation = new Indentation(this.cfg.indent);
-		this.inlineBlock = new InlineBlock();
+		this.inlineBlock = new InlineBlock(this.lineWidth);
 		this.params = new Params(this.cfg.params);
+
 		this.previousReservedToken = {} as Token;
 		this.tokens = [];
 		this.index = 0;
