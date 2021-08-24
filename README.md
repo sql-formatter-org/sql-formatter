@@ -95,7 +95,7 @@ sql-formatter -h
 
 ```
 usage: sql-formatter [-h] [-o OUTPUT] [-l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}]
-                     [-i N | -t] [-u] [--lines-between-queries N] [--version] [FILE]
+                     [-i N | -t] [-u] [--lines-between-queries N] [--lines-after-output N] [--version] [FILE]
 
 SQL Formatter
 
@@ -114,6 +114,8 @@ optional arguments:
   -u, --uppercase       Capitalize language keywords
   --lines-between-queries N
                         How many newlines to insert between queries (separated by ";")
+  --lines-after-output N
+                        How many newlines to append after output (defaults to 1)
   --version             show program's version number and exit
 ```
 

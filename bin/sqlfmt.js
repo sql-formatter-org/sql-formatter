@@ -53,6 +53,13 @@ function getArgs() {
     default: 1,
   });
 
+  parser.add_argument('--lines-after-output', {
+    help: 'How many newlines to append after output (defaults to 1)',
+    metavar: 'N',
+    type: 'int',
+    default: 1,
+  });
+
   parser.add_argument('--version', {
     action: 'version',
     version,
@@ -99,5 +106,5 @@ function writeOutput(file, query) {
 const args = getArgs();
 const cfg = configFromArgs(args);
 const query = getInput(args.file);
-const formattedQuery = format(query, cfg).trim() + '\n';
-writeOutput(args.output, formattedQuery);
+const formattedQuery = format(query, cfg).trim();
+writeOutput(args.output, formattedQuery + '\n'.repeat(args.lines_after_output));
