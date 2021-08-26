@@ -41,11 +41,11 @@ export default function behavesLikeSqlFormatter(format) {
 
 	it('formats complex SELECT', () => {
 		const result = format(
-			"SELECT DISTINCT name, ROUND(age/7) field1, 18 + 20 AS field2, 'some string' FROM foo;"
+			"SELECT DISTINCT [name], ROUND(age/7) field1, 18 + 20 AS field2, 'some string' FROM foo;"
 		);
 		expect(result).toBe(dedent`
       SELECT
-        DISTINCT name,
+        DISTINCT [name],
         ROUND(age / 7) field1,
         18 + 20 AS field2,
         'some string'
@@ -77,7 +77,7 @@ export default function behavesLikeSqlFormatter(format) {
 
 	it('formats SELECT with top level reserved words', () => {
 		const result = format(`
-      SELECT "select", \`from\`, [Where], foo.else FROM foo WHERE name = 'John' GROUP BY some_column
+      SELECT "select", \`from\`, [Where], foo.else FROM foo WHERE "name" = 'John' GROUP BY some_column
       HAVING [column] > 10 ORDER BY other_column LIMIT 5;
     `);
 		expect(result).toBe(dedent`
@@ -89,7 +89,7 @@ export default function behavesLikeSqlFormatter(format) {
       FROM
         foo
       WHERE
-        name = 'John'
+        "name" = 'John'
       GROUP BY
         some_column
       HAVING
@@ -151,12 +151,12 @@ export default function behavesLikeSqlFormatter(format) {
 
 	it('formats SELECT query with SELECT query inside it', () => {
 		const result = format(
-			'SELECT *, SUM(*) AS sum FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b'
+			'SELECT *, SUM(*) AS total FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b'
 		);
 		expect(result).toBe(dedent`
       SELECT
         *,
-        SUM(*) AS sum
+        SUM(*) AS total
       FROM
         (
           SELECT

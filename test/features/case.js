@@ -7,14 +7,14 @@ import dedent from 'dedent-js';
 export default function supportsCase(format) {
 	it('formats CASE ... WHEN with a blank expression', () => {
 		const result = format(
-			"CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
+			"CASE WHEN [option] = 'foo' THEN 1 WHEN [option] = 'bar' THEN 2 WHEN [option] = 'baz' THEN 3 ELSE 4 END;"
 		);
 
 		expect(result).toBe(dedent`
       CASE
-        WHEN option = 'foo' THEN 1
-        WHEN option = 'bar' THEN 2
-        WHEN option = 'baz' THEN 3
+        WHEN [option] = 'foo' THEN 1
+        WHEN [option] = 'bar' THEN 2
+        WHEN [option] = 'baz' THEN 3
         ELSE 4
       END;
     `);

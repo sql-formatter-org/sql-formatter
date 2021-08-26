@@ -115,9 +115,15 @@ export default class Formatter {
 				formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
 			} else if (token.value === ';') {
 				formattedQuery = this.formatQuerySeparator(token, formattedQuery);
-			} else if (token.value === '[') {
+			} else if (
+				token.value === '[' ||
+				(token.value === '`' && this.tokenLookAhead(2)?.value === '`')
+			) {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'before');
-			} else if (token.value === ']') {
+			} else if (
+				token.value === ']' ||
+				(token.value === '`' && this.tokenLookBehind(2)?.value === '`')
+			) {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
 			} else {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery);
@@ -246,11 +252,6 @@ export default class Formatter {
 			type === tokenTypes.OPEN_PAREN ||
 			type === tokenTypes.CLOSE_PAREN
 		) {
-			// const adjacentTokens: string = this.tokenLookBehind()?.value + this.tokenLookAhead()?.value;
-			// if (['""', '[]', '``'].includes(adjacentTokens)) {
-			// 	this.tokenLookAhead().whitespaceBefore = '';
-			// 	return value;
-			// } else
 			return this.cfg.uppercase ? value.toUpperCase() : value.toLowerCase();
 		} else return value;
 	}

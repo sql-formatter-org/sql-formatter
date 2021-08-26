@@ -4,7 +4,7 @@ import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
 
 const reservedWords = [
-	'A',
+	// 'A',
 	'ACCESSIBLE',
 	'AGENT',
 	'AGGREGATE',
@@ -32,7 +32,7 @@ const reservedWords = [
 	'BULK',
 	'BY',
 	'BYTE',
-	'C',
+	// 'C',
 	'CALL',
 	'CALLING',
 	'CASCADE',
