@@ -259,9 +259,9 @@ export default class Tokenizer {
 	}
 
 	getReservedWordToken(input: string, previousToken?: Token) {
-		// A reserved word cannot be preceded by a "."
-		// this makes it so in "mytable.from", "from" is not considered a reserved word
-		if (previousToken?.value === '.') {
+		// A reserved word cannot be preceded by a '.', '[', '`', or '"'
+		// this makes it so for "mytable.from", [from], `from`, "from" - from is not considered a reserved word
+		if (previousToken && ['.', '[', '`', '"'].includes(previousToken.value)) {
 			return undefined;
 		}
 		return (

@@ -110,11 +110,15 @@ export default class Formatter {
 			} else if (token.value === ',') {
 				formattedQuery = this.formatComma(token, formattedQuery);
 			} else if (token.value === ':') {
-				formattedQuery = this.formatWithSpaceAfter(token, formattedQuery);
+				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
 			} else if (token.value === '.') {
 				formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
 			} else if (token.value === ';') {
 				formattedQuery = this.formatQuerySeparator(token, formattedQuery);
+			} else if (token.value === '[') {
+				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'before');
+			} else if (token.value === ']') {
+				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
 			} else {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery);
 			}
@@ -193,7 +197,7 @@ export default class Formatter {
 	formatClosingParentheses(token: Token, query: string) {
 		if (this.inlineBlock.isActive()) {
 			this.inlineBlock.end();
-			return this.formatWithSpaceAfter(token, query);
+			return this.formatWithSpaces(token, query, 'after');
 		} else {
 			this.indentation.decreaseBlockLevel();
 			return this.formatWithSpaces(token, this.addNewline(query));
@@ -217,16 +221,14 @@ export default class Formatter {
 		}
 	}
 
-	formatWithSpaceAfter(token: Token, query: string) {
-		return trimSpacesEnd(query) + this.show(token) + ' ';
-	}
-
 	formatWithoutSpaces(token: Token, query: string) {
 		return trimSpacesEnd(query) + this.show(token);
 	}
 
-	formatWithSpaces(token: Token, query: string) {
-		return query + this.show(token) + ' ';
+	formatWithSpaces(token: Token, query: string, preserve: 'before' | 'after' | 'both' = 'both') {
+		const before = preserve === 'after' ? trimSpacesEnd(query) : query;
+		const after = preserve === 'before' ? '' : ' ';
+		return before + this.show(token) + after;
 	}
 
 	formatQuerySeparator(token: Token, query: string) {
@@ -237,18 +239,20 @@ export default class Formatter {
 	// Converts token to string (uppercasing it if needed)
 	show({ type, value }: Token) {
 		if (
-			this.cfg.uppercase &&
-			(type === tokenTypes.RESERVED ||
-				type === tokenTypes.RESERVED_TOP_LEVEL ||
-				type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT ||
-				type === tokenTypes.RESERVED_NEWLINE ||
-				type === tokenTypes.OPEN_PAREN ||
-				type === tokenTypes.CLOSE_PAREN)
+			type === tokenTypes.RESERVED ||
+			type === tokenTypes.RESERVED_TOP_LEVEL ||
+			type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT ||
+			type === tokenTypes.RESERVED_NEWLINE ||
+			type === tokenTypes.OPEN_PAREN ||
+			type === tokenTypes.CLOSE_PAREN
 		) {
-			return value.toUpperCase();
-		} else {
-			return value;
-		}
+			// const adjacentTokens: string = this.tokenLookBehind()?.value + this.tokenLookAhead()?.value;
+			// if (['""', '[]', '``'].includes(adjacentTokens)) {
+			// 	this.tokenLookAhead().whitespaceBefore = '';
+			// 	return value;
+			// } else
+			return this.cfg.uppercase ? value.toUpperCase() : value.toLowerCase();
+		} else return value;
 	}
 
 	addNewline(query: string) {

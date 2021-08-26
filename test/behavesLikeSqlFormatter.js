@@ -77,12 +77,15 @@ export default function behavesLikeSqlFormatter(format) {
 
 	it('formats SELECT with top level reserved words', () => {
 		const result = format(`
-      SELECT * FROM foo WHERE name = 'John' GROUP BY some_column
-      HAVING column > 10 ORDER BY other_column LIMIT 5;
+      SELECT "select", \`from\`, [Where], foo.else FROM foo WHERE name = 'John' GROUP BY some_column
+      HAVING [column] > 10 ORDER BY other_column LIMIT 5;
     `);
 		expect(result).toBe(dedent`
       SELECT
-        *
+        "select",
+        \`from\`,
+        [Where],
+        foo.else
       FROM
         foo
       WHERE
@@ -90,7 +93,7 @@ export default function behavesLikeSqlFormatter(format) {
       GROUP BY
         some_column
       HAVING
-        column > 10
+        [column] > 10
       ORDER BY
         other_column
       LIMIT
@@ -368,13 +371,13 @@ export default function behavesLikeSqlFormatter(format) {
 	});
 
 	it('formats unicode correctly', () => {
-		const result = format('SELECT 结合使用, тест FROM table;');
+		const result = format('SELECT 结合使用, тест FROM [table];');
 		expect(result).toBe(dedent`
       SELECT
         结合使用,
         тест
       FROM
-        table;
+        [table];
     `);
 	});
 
