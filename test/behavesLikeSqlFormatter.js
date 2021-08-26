@@ -20,7 +20,7 @@ export default function behavesLikeSqlFormatter(format) {
 
 	it('throws error when query argument is not string', () => {
 		expect(() => format(undefined)).toThrow(
-			'Invalid query argument. Extected string, instead got undefined'
+			'Invalid query argument. Expected string, instead got undefined'
 		);
 	});
 
@@ -32,7 +32,7 @@ export default function behavesLikeSqlFormatter(format) {
 		const result = format('SELECT count(*),Column1 FROM Table1;');
 		expect(result).toBe(dedent`
       SELECT
-        count(*),
+        COUNT(*),
         Column1
       FROM
         Table1;
@@ -41,11 +41,11 @@ export default function behavesLikeSqlFormatter(format) {
 
 	it('formats complex SELECT', () => {
 		const result = format(
-			"SELECT DISTINCT name, ROUND(age/7) field1, 18 + 20 AS field2, 'some string' FROM foo;"
+			"SELECT DISTINCT [name], ROUND(age/7) field1, 18 + 20 AS field2, 'some string' FROM foo;"
 		);
 		expect(result).toBe(dedent`
       SELECT
-        DISTINCT name,
+        DISTINCT [name],
         ROUND(age / 7) field1,
         18 + 20 AS field2,
         'some string'
@@ -77,20 +77,23 @@ export default function behavesLikeSqlFormatter(format) {
 
 	it('formats SELECT with top level reserved words', () => {
 		const result = format(`
-      SELECT * FROM foo WHERE name = 'John' GROUP BY some_column
-      HAVING column > 10 ORDER BY other_column LIMIT 5;
+      SELECT "select", \`from\`, [Where], foo.else FROM foo WHERE "name" = 'John' GROUP BY some_column
+      HAVING [column] > 10 ORDER BY other_column LIMIT 5;
     `);
 		expect(result).toBe(dedent`
       SELECT
-        *
+        "select",
+        \`from\`,
+        [Where],
+        foo.else
       FROM
         foo
       WHERE
-        name = 'John'
+        "name" = 'John'
       GROUP BY
         some_column
       HAVING
-        column > 10
+        [column] > 10
       ORDER BY
         other_column
       LIMIT
@@ -126,34 +129,34 @@ export default function behavesLikeSqlFormatter(format) {
 	});
 
 	it('recognizes LIMIT in lowercase', () => {
-		const result = format('limit 5, 10;');
+		const result = format('limit 5, 10;', { uppercase: false });
 		expect(result).toBe(dedent`
       limit
         5, 10;
     `);
 	});
 
-	it('preserves case of keywords', () => {
-		const result = format('select distinct * frOM foo WHERe a > 1 and b = 3');
-		expect(result).toBe(dedent`
-      select
-        distinct *
-      frOM
-        foo
-      WHERe
-        a > 1
-        and b = 3
-    `);
-	});
+	// it('preserves case of keywords', () => {
+	// 	const result = format('select distinct * frOM foo WHERe a > 1 and b = 3');
+	// 	expect(result).toBe(dedent`
+	//     select
+	//       distinct *
+	//     frOM
+	//       foo
+	//     WHERe
+	//       a > 1
+	//       and b = 3
+	//   `);
+	// });
 
 	it('formats SELECT query with SELECT query inside it', () => {
 		const result = format(
-			'SELECT *, SUM(*) AS sum FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b'
+			'SELECT *, SUM(*) AS total FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b'
 		);
 		expect(result).toBe(dedent`
       SELECT
         *,
-        SUM(*) AS sum
+        SUM(*) AS total
       FROM
         (
           SELECT
@@ -277,7 +280,7 @@ export default function behavesLikeSqlFormatter(format) {
 		const result = format('SELECT count(');
 		expect(result).toBe(dedent`
       SELECT
-        count(
+        COUNT(
     `);
 	});
 
@@ -355,12 +358,12 @@ export default function behavesLikeSqlFormatter(format) {
     `);
 		expect(result).toBe(dedent`
       SELECT
-        count(*),
+        COUNT(*),
         Column1
       FROM
         Table1;
       SELECT
-        count(*),
+        COUNT(*),
         Column1
       FROM
         Table2;
@@ -368,13 +371,13 @@ export default function behavesLikeSqlFormatter(format) {
 	});
 
 	it('formats unicode correctly', () => {
-		const result = format('SELECT 结合使用, тест FROM table;');
+		const result = format('SELECT 结合使用, тест FROM [table];');
 		expect(result).toBe(dedent`
       SELECT
         结合使用,
         тест
       FROM
-        table;
+        [table];
     `);
 	});
 

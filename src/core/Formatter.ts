@@ -9,18 +9,38 @@ import { FormatOptions } from '../sqlFormatter';
 
 export default class Formatter {
 	cfg: FormatOptions;
+	newline: FormatOptions['newline'];
+	currentNewline: boolean;
+	lineWidth: number;
 	indentation: Indentation;
 	inlineBlock: InlineBlock;
 	params: Params;
+
 	previousReservedToken: Token;
 	tokens: Token[];
 	index: number;
 
+	/**
+	 * @param {FormatOptions} cfg
+	 *  @param {String} cfg.language
+	 *  @param {String} cfg.indent
+	 *  @param {Boolean} cfg.uppercase
+	 *  @param {NewlineOptions} cfg.newline
+	 * 		@param {String} cfg.newline.mode
+	 * 		@param {Integer} cfg.newline.itemCount
+	 *  @param {Integer} cfg.lineWidth
+	 *  @param {Integer} cfg.linesBetweenQueries
+	 *  @param {ParamItems | string[]} cfg.params
+	 */
 	constructor(cfg: FormatOptions) {
 		this.cfg = cfg;
+		this.newline = cfg.newline;
+		this.currentNewline = true;
+		this.lineWidth = cfg.lineWidth;
 		this.indentation = new Indentation(this.cfg.indent);
-		this.inlineBlock = new InlineBlock();
+		this.inlineBlock = new InlineBlock(this.lineWidth);
 		this.params = new Params(this.cfg.params);
+
 		this.previousReservedToken = {} as Token;
 		this.tokens = [];
 		this.index = 0;
@@ -90,11 +110,21 @@ export default class Formatter {
 			} else if (token.value === ',') {
 				formattedQuery = this.formatComma(token, formattedQuery);
 			} else if (token.value === ':') {
-				formattedQuery = this.formatWithSpaceAfter(token, formattedQuery);
+				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
 			} else if (token.value === '.') {
 				formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
 			} else if (token.value === ';') {
 				formattedQuery = this.formatQuerySeparator(token, formattedQuery);
+			} else if (
+				token.value === '[' ||
+				(token.value === '`' && this.tokenLookAhead(2)?.value === '`')
+			) {
+				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'before');
+			} else if (
+				token.value === ']' ||
+				(token.value === '`' && this.tokenLookBehind(2)?.value === '`')
+			) {
+				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
 			} else {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery);
 			}
@@ -173,7 +203,7 @@ export default class Formatter {
 	formatClosingParentheses(token: Token, query: string) {
 		if (this.inlineBlock.isActive()) {
 			this.inlineBlock.end();
-			return this.formatWithSpaceAfter(token, query);
+			return this.formatWithSpaces(token, query, 'after');
 		} else {
 			this.indentation.decreaseBlockLevel();
 			return this.formatWithSpaces(token, this.addNewline(query));
@@ -197,16 +227,14 @@ export default class Formatter {
 		}
 	}
 
-	formatWithSpaceAfter(token: Token, query: string) {
-		return trimSpacesEnd(query) + this.show(token) + ' ';
-	}
-
 	formatWithoutSpaces(token: Token, query: string) {
 		return trimSpacesEnd(query) + this.show(token);
 	}
 
-	formatWithSpaces(token: Token, query: string) {
-		return query + this.show(token) + ' ';
+	formatWithSpaces(token: Token, query: string, preserve: 'before' | 'after' | 'both' = 'both') {
+		const before = preserve === 'after' ? trimSpacesEnd(query) : query;
+		const after = preserve === 'before' ? '' : ' ';
+		return before + this.show(token) + after;
 	}
 
 	formatQuerySeparator(token: Token, query: string) {
@@ -217,18 +245,15 @@ export default class Formatter {
 	// Converts token to string (uppercasing it if needed)
 	show({ type, value }: Token) {
 		if (
-			this.cfg.uppercase &&
-			(type === tokenTypes.RESERVED ||
-				type === tokenTypes.RESERVED_TOP_LEVEL ||
-				type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT ||
-				type === tokenTypes.RESERVED_NEWLINE ||
-				type === tokenTypes.OPEN_PAREN ||
-				type === tokenTypes.CLOSE_PAREN)
+			type === tokenTypes.RESERVED ||
+			type === tokenTypes.RESERVED_TOP_LEVEL ||
+			type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT ||
+			type === tokenTypes.RESERVED_NEWLINE ||
+			type === tokenTypes.OPEN_PAREN ||
+			type === tokenTypes.CLOSE_PAREN
 		) {
-			return value.toUpperCase();
-		} else {
-			return value;
-		}
+			return this.cfg.uppercase ? value.toUpperCase() : value.toLowerCase();
+		} else return value;
 	}
 
 	addNewline(query: string) {

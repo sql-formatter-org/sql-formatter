@@ -75,6 +75,7 @@ const reservedWords = [
 	'CONVERSION',
 	'COPY',
 	'COST',
+	'COUNT',
 	'CREATE',
 	'CROSS',
 	'CSV',
