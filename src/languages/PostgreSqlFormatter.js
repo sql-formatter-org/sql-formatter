@@ -1,8 +1,12 @@
 import Formatter from '../core/Formatter';
+import { isBy, isSet } from '../core/token';
 import Tokenizer from '../core/Tokenizer';
+import tokenTypes from '../core/tokenTypes';
 
 const reservedWords = [
+  'A',
   'ABORT',
+  'ABS',
   'ABSOLUTE',
   'ACCESS',
   'ACTION',
@@ -75,6 +79,7 @@ const reservedWords = [
   'CONVERSION',
   'COPY',
   'COST',
+  'COUNT',
   'CREATE',
   'CROSS',
   'CSV',
@@ -321,6 +326,8 @@ const reservedWords = [
   'RESET',
   'RESTART',
   'RESTRICT',
+  'RESULT',
+  'RETURN',
   'RETURNING',
   'RETURNS',
   'REVOKE',
@@ -459,6 +466,7 @@ const reservedTopLevelWords = [
   'AFTER',
   'ALTER COLUMN',
   'ALTER TABLE',
+  'BEGIN',
   'CASE',
   'DELETE FROM',
   'END',
@@ -471,13 +479,16 @@ const reservedTopLevelWords = [
   'INSERT',
   'LIMIT',
   'ORDER BY',
+  'RESULT',
   'SELECT',
   'SET CURRENT SCHEMA',
   'SET SCHEMA',
   'SET',
   'UPDATE',
   'VALUES',
+  'WITH',
   'WHERE',
+  'WHEN'
 ];
 
 const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'UNION', 'UNION ALL'];
@@ -485,6 +496,7 @@ const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'UNION', 'U
 const reservedNewlineWords = [
   'AND',
   'ELSE',
+  'END',
   'OR',
   'WHEN',
   // joins
@@ -507,16 +519,24 @@ export default class PostgreSqlFormatter extends Formatter {
       reservedTopLevelWords,
       reservedNewlineWords,
       reservedTopLevelWordsNoIndent,
-      stringTypes: [`""`, "''", "U&''", 'U&""', '$$'],
+      stringTypes: [`""`, "''", "U&''", 'U&""'],
       openParens: ['(', 'CASE'],
       closeParens: [')', 'END'],
-      indexedPlaceholderTypes: ['$'],
+      indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: [':'],
       lineCommentTypes: ['--'],
+      specialWordChars: ['_', '$', '.', '@'],
       operators: [
+        '||',
+        '**',
+        ':=',
         '!=',
+        '<>',
         '<<',
+        '>=',
+        '<=',
         '>>',
+        '#',
         '||/',
         '|/',
         '::',
@@ -532,5 +552,11 @@ export default class PostgreSqlFormatter extends Formatter {
         '!!',
       ],
     });
+  }
+  tokenOverride(token) {
+    if (isSet(token) && isBy(this.previousReservedToken)) {
+      return { type: tokenTypes.RESERVED, value: token.value };
+    }
+    return token;
   }
 }
