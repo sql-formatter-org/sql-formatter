@@ -3,7 +3,7 @@ import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { trimSpacesEnd } from '../utils';
-import { isAnd, isBetween, isLimit, Token } from './token';
+import { isAnd, isAs, isBetween, isLimit, isReserved, Token } from './token';
 import Tokenizer from './Tokenizer';
 import { FormatOptions } from '../sqlFormatter';
 
@@ -126,10 +126,41 @@ export default class Formatter {
 			) {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
 			} else {
-				formattedQuery = this.formatWithSpaces(token, formattedQuery);
+				const formattedQueryOrSkipAs = this.formatAliases(token, formattedQuery);
+				if (formattedQueryOrSkipAs === undefined) return; // if skipping AS token
+
+				formattedQuery = this.formatWithSpaces(token, formattedQueryOrSkipAs);
 			}
 		});
 		return formattedQuery;
+	}
+
+	formatAliases(token: Token, query: string) {
+		const prevToken = this.tokenLookBehind();
+		const nextToken = this.tokenLookAhead();
+		const asToken = { type: tokenTypes.RESERVED, value: this.cfg.uppercase ? 'AS' : 'as' };
+
+		const missingTableAlias = // if table alias is missing and alias is always
+			this.cfg.aliasAs === 'always' && token.type === tokenTypes.WORD && prevToken?.value === ')';
+
+		const missingSelectColumnAlias = // if select column alias is missing and alias is not never
+			this.cfg.aliasAs !== 'never' &&
+			token.type === tokenTypes.WORD &&
+			// isAs(prevToken) ||
+			prevToken?.type === tokenTypes.WORD &&
+			(nextToken?.value === ',' || isReserved(nextToken));
+
+		const removeAs = this.cfg.aliasAs === 'never' && isAs(token); // if no alias
+
+		if (missingTableAlias) {
+			return this.formatWithSpaces(asToken, query);
+		} else if (missingSelectColumnAlias) {
+			console.log(this.previousReservedToken, prevToken, token, nextToken);
+			// return this.formatWithSpaces(asToken, query);
+		} else if (removeAs) {
+			return undefined; // do not format normally, skip this token
+		}
+		return query;
 	}
 
 	formatLineComment(token: Token, query: string) {
@@ -243,17 +274,14 @@ export default class Formatter {
 	}
 
 	// Converts token to string (uppercasing it if needed)
-	show({ type, value }: Token) {
+	show(token: Token) {
 		if (
-			type === tokenTypes.RESERVED ||
-			type === tokenTypes.RESERVED_TOP_LEVEL ||
-			type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT ||
-			type === tokenTypes.RESERVED_NEWLINE ||
-			type === tokenTypes.OPEN_PAREN ||
-			type === tokenTypes.CLOSE_PAREN
+			isReserved(token) ||
+			token.type === tokenTypes.OPEN_PAREN ||
+			token.type === tokenTypes.CLOSE_PAREN
 		) {
-			return this.cfg.uppercase ? value.toUpperCase() : value.toLowerCase();
-		} else return value;
+			return this.cfg.uppercase ? token.value.toUpperCase() : token.value.toLowerCase();
+		} else return token.value;
 	}
 
 	addNewline(query: string) {

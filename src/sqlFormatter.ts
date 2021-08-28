@@ -36,6 +36,7 @@ export interface FormatOptions {
 	indent: string;
 	uppercase: boolean;
 	newline: NewlineOptions;
+	aliasAs: 'always' | 'never' | 'select';
 	lineWidth: number;
 	linesBetweenQueries: number;
 }
@@ -81,6 +82,7 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 		uppercase: true,
 		linesBetweenQueries: 1,
 		newline: { mode: 'always' },
+		aliasAs: 'select',
 		lineWidth: 50,
 	};
 	cfg = { ...defaultOptions, ...cfg };
