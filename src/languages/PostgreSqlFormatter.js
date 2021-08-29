@@ -1,7 +1,5 @@
 import Formatter from '../core/Formatter';
-import { isBy, isSet } from '../core/token';
 import Tokenizer from '../core/Tokenizer';
-import tokenTypes from '../core/tokenTypes';
 
 const reservedWords = [
   'A',
@@ -486,9 +484,7 @@ const reservedTopLevelWords = [
   'SET',
   'UPDATE',
   'VALUES',
-  'WITH',
   'WHERE',
-  'WHEN'
 ];
 
 const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'UNION', 'UNION ALL'];
@@ -522,10 +518,10 @@ export default class PostgreSqlFormatter extends Formatter {
       stringTypes: [`""`, "''", "U&''", 'U&""'],
       openParens: ['(', 'CASE'],
       closeParens: [')', 'END'],
-      indexedPlaceholderTypes: ['?'],
+      indexedPlaceholderTypes: ['$'],
       namedPlaceholderTypes: [':'],
       lineCommentTypes: ['--'],
-      specialWordChars: ['_', '$', '.', '@'],
+      specialWordChars: ['*', '$', '.'],
       operators: [
         '||',
         '**',
@@ -554,10 +550,11 @@ export default class PostgreSqlFormatter extends Formatter {
       ],
     });
   }
-  tokenOverride(token) {
-    if (isSet(token) && isBy(this.previousReservedToken)) {
-      return { type: tokenTypes.RESERVED, value: token.value };
-    }
-    return token;
-  }
+
+  // tokenOverride(token) {
+  //   if (isSet(token) && isBy(this.previousReservedToken)) {
+  //     return { type: tokenTypes.RESERVED, value: token.value };
+  //   }
+  //   return token;
+  // }
 }

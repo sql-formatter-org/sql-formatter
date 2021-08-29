@@ -20,7 +20,8 @@ export default class Tokenizer {
    */
   constructor(cfg) {
     this.WHITESPACE_REGEX = /^(\s+)/u;
-    this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?([eE]-?[0-9]+(\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u;
+    this.NUMBER_REGEX =
+      /^((-\s*)?[0-9]+(\.[0-9]+)?([eE]-?[0-9]+(\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u;
 
     this.OPERATOR_REGEX = regexFactory.createOperatorRegex([
       '<>',
