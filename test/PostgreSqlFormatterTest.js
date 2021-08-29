@@ -18,7 +18,7 @@ describe('PostgreSqlFormatter', () => {
   supportsCase(format);
   supportsCreateTable(format);
   supportsAlterTable(format);
-  supportsStrings(format, ['""', "''", 'U&""', "U&''"]);
+  supportsStrings(format, ['""', "''", 'U&""', "U&''", '$$']);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, [
