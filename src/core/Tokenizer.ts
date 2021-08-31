@@ -264,12 +264,13 @@ export default class Tokenizer {
 		if (previousToken && ['.', '[', '`', '"'].includes(previousToken.value)) {
 			return undefined;
 		}
-		return (
+		const out =
 			this.getTopLevelReservedToken(input) ||
 			this.getNewlineReservedToken(input) ||
 			this.getTopLevelReservedTokenNoIndent(input) ||
-			this.getPlainReservedToken(input)
-		);
+			this.getPlainReservedToken(input);
+		// if (!out) console.log(out, input);
+		return out;
 	}
 
 	getTopLevelReservedToken(input: string) {

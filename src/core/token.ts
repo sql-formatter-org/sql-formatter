@@ -27,6 +27,11 @@ export const isWindow = isToken(tokenTypes.RESERVED_TOP_LEVEL, /^WINDOW$/iu);
 
 export const isEnd = isToken(tokenTypes.CLOSE_PAREN, /^END$/iu);
 
+export const isTopLevel = (token: Token) =>
+	token &&
+	(token.type === tokenTypes.RESERVED_TOP_LEVEL ||
+		token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT);
+
 export const isReserved = (token: Token) =>
 	token &&
 	(token.type === tokenTypes.RESERVED ||
@@ -34,3 +39,4 @@ export const isReserved = (token: Token) =>
 		token.type === tokenTypes.RESERVED_TOP_LEVEL ||
 		token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT);
 
+export const isSelect = isToken(tokenTypes.RESERVED_TOP_LEVEL, /^SELECT$/iu);

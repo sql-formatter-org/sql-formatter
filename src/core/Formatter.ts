@@ -3,7 +3,17 @@ import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { trimSpacesEnd } from '../utils';
-import { isAnd, isAs, isBetween, isLimit, isReserved, Token } from './token';
+import {
+	isAnd,
+	isAs,
+	isBetween,
+	isEnd,
+	isLimit,
+	isReserved,
+	isSelect,
+	isTopLevel,
+	Token,
+} from './token';
 import Tokenizer from './Tokenizer';
 import { FormatOptions } from '../sqlFormatter';
 
@@ -17,6 +27,7 @@ export default class Formatter {
 	params: Params;
 
 	previousReservedToken: Token;
+	withinSelect: boolean;
 	tokens: Token[];
 	index: number;
 
@@ -42,6 +53,7 @@ export default class Formatter {
 		this.params = new Params(this.cfg.params);
 
 		this.previousReservedToken = {} as Token;
+		this.withinSelect = false;
 		this.tokens = [];
 		this.index = 0;
 	}
@@ -92,9 +104,11 @@ export default class Formatter {
 			} else if (token.type === tokenTypes.RESERVED_TOP_LEVEL) {
 				formattedQuery = this.formatTopLevelReservedWord(token, formattedQuery);
 				this.previousReservedToken = token;
+				this.withinSelect = isSelect(token);
 			} else if (token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT) {
 				formattedQuery = this.formatTopLevelReservedWordNoIndent(token, formattedQuery);
 				this.previousReservedToken = token;
+				this.withinSelect = false;
 			} else if (token.type === tokenTypes.RESERVED_NEWLINE) {
 				formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
 				this.previousReservedToken = token;
@@ -145,18 +159,18 @@ export default class Formatter {
 
 		const missingSelectColumnAlias = // if select column alias is missing and alias is not never
 			this.cfg.aliasAs !== 'never' &&
+			this.withinSelect &&
 			token.type === tokenTypes.WORD &&
-			// isAs(prevToken) ||
-			prevToken?.type === tokenTypes.WORD &&
-			(nextToken?.value === ',' || isReserved(nextToken));
+			(isEnd(prevToken) || // isAs(prevToken) ||
+				(prevToken?.type === tokenTypes.WORD &&
+					(nextToken?.value === ',' || isTopLevel(nextToken))));
 
 		const removeAs = this.cfg.aliasAs === 'never' && isAs(token); // if no alias
 
 		if (missingTableAlias) {
 			return this.formatWithSpaces(asToken, query);
 		} else if (missingSelectColumnAlias) {
-			console.log(this.previousReservedToken, prevToken, token, nextToken);
-			// return this.formatWithSpaces(asToken, query);
+			return this.formatWithSpaces(asToken, query);
 		} else if (removeAs) {
 			return undefined; // do not format normally, skip this token
 		}
