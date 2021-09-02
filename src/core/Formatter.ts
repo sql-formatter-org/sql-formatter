@@ -167,9 +167,7 @@ export default class Formatter {
 
 		const removeAs = this.cfg.aliasAs === 'never' && isAs(token); // if no alias
 
-		if (missingTableAlias) {
-			return this.formatWithSpaces(asToken, query);
-		} else if (missingSelectColumnAlias) {
+		if (missingTableAlias || missingSelectColumnAlias) {
 			return this.formatWithSpaces(asToken, query);
 		} else if (removeAs) {
 			return undefined; // do not format normally, skip this token

@@ -8,6 +8,7 @@ import supportsOperators from './features/operators';
  * @param {Function} format
  */
 export default function behavesLikeSqlFormatter(format) {
+	supportsAliases(format);
 	supportsComments(format);
 	supportsConfigOptions(format);
 	supportsOperators(['=', '+', '-', '*', '/', '<>', '>', '<', '>=', '<=']);
