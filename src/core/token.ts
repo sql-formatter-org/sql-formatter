@@ -2,14 +2,14 @@ import tokenTypes from './tokenTypes';
 
 export type TokenType = typeof tokenTypes[keyof typeof tokenTypes];
 export interface Token {
-	value: string;
-	type: TokenType;
-	key?: string;
-	whitespaceBefore?: string;
+  value: string;
+  type: TokenType;
+  key?: string;
+  whitespaceBefore?: string;
 }
 
 const isToken = (type: TokenType, regex: RegExp) => (token: Token) =>
-	token?.type === type && regex.test(token?.value);
+  token?.type === type && regex.test(token?.value);
 
 export const isAnd = isToken(tokenTypes.RESERVED_NEWLINE, /^AND$/iu);
 

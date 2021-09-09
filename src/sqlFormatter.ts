@@ -13,31 +13,31 @@ import StandardSqlFormatter from './languages/StandardSqlFormatter';
 import TSqlFormatter from './languages/TSqlFormatter';
 
 const formatters = {
-	db2: Db2Formatter,
-	mariadb: MariaDbFormatter,
-	mysql: MySqlFormatter,
-	n1ql: N1qlFormatter,
-	plsql: PlSqlFormatter,
-	postgresql: PostgreSqlFormatter,
-	redshift: RedshiftFormatter,
-	spark: SparkSqlFormatter,
-	sql: StandardSqlFormatter,
-	tsql: TSqlFormatter,
+  db2: Db2Formatter,
+  mariadb: MariaDbFormatter,
+  mysql: MySqlFormatter,
+  n1ql: N1qlFormatter,
+  plsql: PlSqlFormatter,
+  postgresql: PostgreSqlFormatter,
+  redshift: RedshiftFormatter,
+  spark: SparkSqlFormatter,
+  sql: StandardSqlFormatter,
+  tsql: TSqlFormatter,
 };
 
 export interface NewlineOptions {
-	mode: 'always' | 'never' | 'lineWidth' | 'itemCount' | 'hybrid';
-	itemCount?: number;
+  mode: 'always' | 'never' | 'lineWidth' | 'itemCount' | 'hybrid';
+  itemCount?: number;
 }
 
 export interface FormatOptions {
-	language: keyof typeof formatters;
-	params?: ParamItems | string[];
-	indent: string;
-	uppercase: boolean;
-	newline: NewlineOptions;
-	lineWidth: number;
-	linesBetweenQueries: number;
+  language: keyof typeof formatters;
+  params?: ParamItems | string[];
+  indent: string;
+  uppercase: boolean;
+  newline: NewlineOptions;
+  lineWidth: number;
+  linesBetweenQueries: number;
 }
 /**
  * Format whitespace in a query to make it easier to read.
@@ -55,38 +55,38 @@ export interface FormatOptions {
  * @return {String}
  */
 export const format = (query: string, cfg: Partial<FormatOptions> = {}): string => {
-	if (typeof query !== 'string')
-		throw new Error('Invalid query argument. Expected string, instead got ' + typeof query);
+  if (typeof query !== 'string')
+    throw new Error('Invalid query argument. Expected string, instead got ' + typeof query);
 
-	if (cfg.language && !supportedDialects.includes(cfg.language))
-		throw Error(`Unsupported SQL dialect: ${cfg.language}`);
+  if (cfg.language && !supportedDialects.includes(cfg.language))
+    throw Error(`Unsupported SQL dialect: ${cfg.language}`);
 
-	if (cfg.newline && (cfg.newline.mode === 'itemCount' || cfg.newline.mode === 'hybrid')) {
-		if ((cfg.newline.itemCount ?? 0) < 0)
-			throw new Error('Error: newline.itemCount must be a positive number.');
-		if (cfg.newline.itemCount === 0) {
-			if (cfg.newline.mode === 'hybrid') cfg.newline.mode = 'lineWidth';
-			else if (cfg.newline.mode === 'itemCount') cfg.newline = { mode: 'always' };
-		}
-	}
+  if (cfg.newline && (cfg.newline.mode === 'itemCount' || cfg.newline.mode === 'hybrid')) {
+    if ((cfg.newline.itemCount ?? 0) < 0)
+      throw new Error('Error: newline.itemCount must be a positive number.');
+    if (cfg.newline.itemCount === 0) {
+      if (cfg.newline.mode === 'hybrid') cfg.newline.mode = 'lineWidth';
+      else if (cfg.newline.mode === 'itemCount') cfg.newline = { mode: 'always' };
+    }
+  }
 
-	if (cfg.lineWidth && cfg.lineWidth <= 0) {
-		console.warn('Warning: cfg.linewidth was <=0, reset to default value');
-		cfg.lineWidth = undefined;
-	}
+  if (cfg.lineWidth && cfg.lineWidth <= 0) {
+    console.warn('Warning: cfg.linewidth was <=0, reset to default value');
+    cfg.lineWidth = undefined;
+  }
 
-	const defaultOptions: FormatOptions = {
-		language: 'sql',
-		indent: '  ',
-		uppercase: true,
-		linesBetweenQueries: 1,
-		newline: { mode: 'always' },
-		lineWidth: 50,
-	};
-	cfg = { ...defaultOptions, ...cfg };
+  const defaultOptions: FormatOptions = {
+    language: 'sql',
+    indent: '  ',
+    uppercase: true,
+    linesBetweenQueries: 1,
+    newline: { mode: 'always' },
+    lineWidth: 50,
+  };
+  cfg = { ...defaultOptions, ...cfg };
 
-	const Formatter = formatters[cfg.language!];
-	return new Formatter(cfg as FormatOptions).format(query);
+  const Formatter = formatters[cfg.language!];
+  return new Formatter(cfg as FormatOptions).format(query);
 };
 
 export const supportedDialects = Object.keys(formatters);

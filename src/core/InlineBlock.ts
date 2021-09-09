@@ -9,86 +9,86 @@ import tokenTypes from './tokenTypes';
  * expressions where open-parenthesis causes newline and increase of indentation.
  */
 export default class InlineBlock {
-	level: number;
-	lineWidth: number;
+  level: number;
+  lineWidth: number;
 
-	constructor(lineWidth: number) {
-		this.level = 0;
-		this.lineWidth = lineWidth;
-	}
+  constructor(lineWidth: number) {
+    this.level = 0;
+    this.lineWidth = lineWidth;
+  }
 
-	/**
-	 * Begins inline block when lookahead through upcoming tokens determines
-	 * that the block would be smaller than INLINE_MAX_LENGTH.
-	 * @param  {Token[]} tokens Array of all tokens
-	 * @param  {Number} index Current token position
-	 */
-	beginIfPossible(tokens: Token[], index: number) {
-		if (this.level === 0 && this.isInlineBlock(tokens, index)) {
-			this.level = 1;
-		} else if (this.level > 0) {
-			this.level++;
-		} else {
-			this.level = 0;
-		}
-	}
+  /**
+   * Begins inline block when lookahead through upcoming tokens determines
+   * that the block would be smaller than INLINE_MAX_LENGTH.
+   * @param  {Token[]} tokens Array of all tokens
+   * @param  {Number} index Current token position
+   */
+  beginIfPossible(tokens: Token[], index: number) {
+    if (this.level === 0 && this.isInlineBlock(tokens, index)) {
+      this.level = 1;
+    } else if (this.level > 0) {
+      this.level++;
+    } else {
+      this.level = 0;
+    }
+  }
 
-	/**
-	 * Finishes current inline block.
-	 * There might be several nested ones.
-	 */
-	end() {
-		this.level--;
-	}
+  /**
+   * Finishes current inline block.
+   * There might be several nested ones.
+   */
+  end() {
+    this.level--;
+  }
 
-	/**
-	 * True when inside an inline block
-	 * @return {Boolean}
-	 */
-	isActive(): boolean {
-		return this.level > 0;
-	}
+  /**
+   * True when inside an inline block
+   * @return {Boolean}
+   */
+  isActive(): boolean {
+    return this.level > 0;
+  }
 
-	// Check if this should be an inline parentheses block
-	// Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
-	isInlineBlock(tokens: Token[], index: number) {
-		let length = 0;
-		let level = 0;
+  // Check if this should be an inline parentheses block
+  // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
+  isInlineBlock(tokens: Token[], index: number) {
+    let length = 0;
+    let level = 0;
 
-		for (let i = index; i < tokens.length; i++) {
-			const token = tokens[i];
-			length += token.value.length;
+    for (let i = index; i < tokens.length; i++) {
+      const token = tokens[i];
+      length += token.value.length;
 
-			// Overran max length
-			if (length > this.lineWidth) {
-				return false;
-			}
+      // Overran max length
+      if (length > this.lineWidth) {
+        return false;
+      }
 
-			if (token.type === tokenTypes.OPEN_PAREN) {
-				level++;
-			} else if (token.type === tokenTypes.CLOSE_PAREN) {
-				level--;
-				if (level === 0) {
-					return true;
-				}
-			}
+      if (token.type === tokenTypes.OPEN_PAREN) {
+        level++;
+      } else if (token.type === tokenTypes.CLOSE_PAREN) {
+        level--;
+        if (level === 0) {
+          return true;
+        }
+      }
 
-			if (this.isForbiddenToken(token)) {
-				return false;
-			}
-		}
-		return false;
-	}
+      if (this.isForbiddenToken(token)) {
+        return false;
+      }
+    }
+    return false;
+  }
 
-	// Reserved words that cause newlines, comments and semicolons
-	// are not allowed inside inline parentheses block
-	isForbiddenToken({ type, value }: Token) {
-		return (
-			type === tokenTypes.RESERVED_TOP_LEVEL ||
-			type === tokenTypes.RESERVED_NEWLINE ||
-			// type === tokenTypes.LINE_COMMENT ||
-			type === tokenTypes.BLOCK_COMMENT ||
-			value === ';'
-		);
-	}
+  // Reserved words that cause newlines, comments and semicolons
+  // are not allowed inside inline parentheses block
+  isForbiddenToken({ type, value }: Token) {
+    return (
+      type === tokenTypes.RESERVED_TOP_LEVEL ||
+      type === tokenTypes.RESERVED_NEWLINE ||
+      // type === tokenTypes.LINE_COMMENT ||
+      type === tokenTypes.BLOCK_COMMENT ||
+      value === ';'
+    );
+  }
 }
