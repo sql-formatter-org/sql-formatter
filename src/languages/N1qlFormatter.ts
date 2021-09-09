@@ -28,6 +28,7 @@ const reservedWords = [
   'CONNECT',
   'CONTINUE',
   'CORRELATE',
+  'COUNT',
   'COVER',
   'CREATE',
   'DATABASE',

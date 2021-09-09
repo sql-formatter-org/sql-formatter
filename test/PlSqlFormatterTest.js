@@ -1,5 +1,5 @@
 import dedent from 'dedent-js';
-import * as sqlFormatter from '../src/sqlFormatter';
+import * as sqlFormatter from '../src/sqlFormatter.ts';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
 import supportsAlterTableModify from './features/alterTableModify';
@@ -250,7 +250,7 @@ describe('PlSqlFormatter', () => {
           t1
         WHERE
           t2.parent_id = t1.id
-      ) SEARCH BREADTH FIRST by id set order1,
+      ) SEARCH BREADTH FIRST BY id SET order1,
       another AS (
         SELECT
           *

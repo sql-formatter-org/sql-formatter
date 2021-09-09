@@ -1,5 +1,5 @@
 import dedent from 'dedent-js';
-import * as sqlFormatter from '../src/sqlFormatter';
+import * as sqlFormatter from '../src/sqlFormatter.ts';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
@@ -89,7 +89,7 @@ describe('TSqlFormatter', () => {
         b
       FROM
         t
-        CROSS JOIN t2 on t.id = t2.id_t
+        CROSS JOIN t2 ON t.id = t2.id_t
     `);
   });
 });

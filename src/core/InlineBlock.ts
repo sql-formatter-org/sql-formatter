@@ -1,6 +1,5 @@
+import { Token } from './token';
 import tokenTypes from './tokenTypes';
-
-const INLINE_MAX_LENGTH = 50;
 
 /**
  * Bookkeeper for inline blocks.
@@ -10,17 +9,21 @@ const INLINE_MAX_LENGTH = 50;
  * expressions where open-parenthesis causes newline and increase of indentation.
  */
 export default class InlineBlock {
-  constructor() {
+  level: number;
+  lineWidth: number;
+
+  constructor(lineWidth: number) {
     this.level = 0;
+    this.lineWidth = lineWidth;
   }
 
   /**
    * Begins inline block when lookahead through upcoming tokens determines
    * that the block would be smaller than INLINE_MAX_LENGTH.
-   * @param  {Object[]} tokens Array of all tokens
+   * @param  {Token[]} tokens Array of all tokens
    * @param  {Number} index Current token position
    */
-  beginIfPossible(tokens, index) {
+  beginIfPossible(tokens: Token[], index: number) {
     if (this.level === 0 && this.isInlineBlock(tokens, index)) {
       this.level = 1;
     } else if (this.level > 0) {
@@ -42,13 +45,13 @@ export default class InlineBlock {
    * True when inside an inline block
    * @return {Boolean}
    */
-  isActive() {
+  isActive(): boolean {
     return this.level > 0;
   }
 
   // Check if this should be an inline parentheses block
   // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
-  isInlineBlock(tokens, index) {
+  isInlineBlock(tokens: Token[], index: number) {
     let length = 0;
     let level = 0;
 
@@ -57,7 +60,7 @@ export default class InlineBlock {
       length += token.value.length;
 
       // Overran max length
-      if (length > INLINE_MAX_LENGTH) {
+      if (length > this.lineWidth) {
         return false;
       }
 
@@ -79,11 +82,11 @@ export default class InlineBlock {
 
   // Reserved words that cause newlines, comments and semicolons
   // are not allowed inside inline parentheses block
-  isForbiddenToken({ type, value }) {
+  isForbiddenToken({ type, value }: Token) {
     return (
       type === tokenTypes.RESERVED_TOP_LEVEL ||
       type === tokenTypes.RESERVED_NEWLINE ||
-      type === tokenTypes.COMMENT ||
+      // type === tokenTypes.LINE_COMMENT ||
       type === tokenTypes.BLOCK_COMMENT ||
       value === ';'
     );

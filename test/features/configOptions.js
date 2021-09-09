@@ -12,7 +12,7 @@ export default function supportsConfigOptions(format) {
 
     expect(result).toBe(dedent`
       SELECT
-          count(*),
+          COUNT(*),
           Column1
       FROM
           Table1;

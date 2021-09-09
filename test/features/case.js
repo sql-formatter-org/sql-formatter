@@ -7,14 +7,14 @@ import dedent from 'dedent-js';
 export default function supportsCase(format) {
   it('formats CASE ... WHEN with a blank expression', () => {
     const result = format(
-      "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
+      "CASE WHEN [option] = 'foo' THEN 1 WHEN [option] = 'bar' THEN 2 WHEN [option] = 'baz' THEN 3 ELSE 4 END;"
     );
 
     expect(result).toBe(dedent`
       CASE
-        WHEN option = 'foo' THEN 1
-        WHEN option = 'bar' THEN 2
-        WHEN option = 'baz' THEN 3
+        WHEN [option] = 'foo' THEN 1
+        WHEN [option] = 'bar' THEN 2
+        WHEN [option] = 'baz' THEN 3
         ELSE 4
       END;
     `);
@@ -38,7 +38,7 @@ export default function supportsCase(format) {
 
   it('formats CASE ... WHEN inside SELECT', () => {
     const result = format(
-      "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table"
+      "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM [table];"
     );
 
     expect(result).toBe(dedent`
@@ -52,12 +52,12 @@ export default function supportsCase(format) {
           ELSE 3
         END
       FROM
-        table
+        [table];
     `);
   });
 
   it('recognizes lowercase CASE ... END', () => {
-    const result = format("case when option = 'foo' then 1 else 2 end;");
+    const result = format("case when option = 'foo' then 1 else 2 end;", { uppercase: false });
 
     expect(result).toBe(dedent`
       case

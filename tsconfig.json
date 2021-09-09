@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "outDir": "dist",
+    "lib": ["es6", "dom"],
+    "sourceMap": true,
+    "rootDir": "src",
+    // Generate d.ts files
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "strict": true,
+    // Additional Checks
+    "noImplicitReturns": true,
+    "resolveJsonModule": true
+  },
+  "exclude": ["node_modules"]
+}

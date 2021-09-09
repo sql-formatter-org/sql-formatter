@@ -1,6 +1,6 @@
 {
-  "name": "sql-formatter",
   "version": "4.0.2",
+  "name": "@woodler/sql-formatter",
   "description": "Format whitespace in a SQL query to make it more readable",
   "license": "MIT",
   "main": "lib/sqlFormatter.js",
@@ -24,6 +24,7 @@
     "db2"
   ],
   "contributors": [
+    "Martin Malek",
     "Adrien Pyke <adpyke@gmail.com>",
     "Andrew",
     "Benjamin Bellamy",
@@ -72,16 +73,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zeroturnaround/sql-formatter.git"
+    "url": "https://github.com/WoodlerDev/sql-formatter.git"
   },
   "bugs": {
-    "url": "https://github.com/zeroturnaround/sql-formatter/issues"
+    "url": "https://github.com/WoodlerDev/sql-formatter/issues"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.4",
     "@babel/core": "^7.10.4",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
+    "@babel/preset-typescript": "^7.15.0",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.1.0",
     "babel-loader": "^8.1.0",
@@ -95,6 +99,7 @@
     "jest": "^26.1.0",
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
+    "typescript": "^4.4.2",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
     "webpack-merge": "^5.0.8"

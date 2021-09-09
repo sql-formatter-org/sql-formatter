@@ -1,10 +1,10 @@
 import Formatter from '../core/Formatter';
-import { isBy, isSet } from '../core/token';
+import { isBy, isSet, Token } from '../core/token';
 import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
 
 const reservedWords = [
-  'A',
+  // 'A',
   'ACCESSIBLE',
   'AGENT',
   'AGGREGATE',
@@ -20,8 +20,8 @@ const reservedWords = [
   'AVG',
   'BETWEEN',
   'BFILE_BASE',
-  'BINARY_INTEGER',
   'BINARY',
+  'BINARY_INTEGER',
   'BLOB_BASE',
   'BLOCK',
   'BODY',
@@ -32,17 +32,17 @@ const reservedWords = [
   'BULK',
   'BY',
   'BYTE',
-  'C',
+  // 'C',
   'CALL',
   'CALLING',
   'CASCADE',
   'CASE',
-  'CHAR_BASE',
   'CHAR',
   'CHARACTER',
   'CHARSET',
   'CHARSETFORM',
   'CHARSETID',
+  'CHAR_BASE',
   'CHECK',
   'CLOB_BASE',
   'CLONE',
@@ -74,8 +74,8 @@ const reservedWords = [
   'CUSTOMDATUM',
   'DANGLING',
   'DATA',
-  'DATE_BASE',
   'DATE',
+  'DATE_BASE',
   'DAY',
   'DECIMAL',
   'DEFAULT',
@@ -183,8 +183,8 @@ const reservedWords = [
   'NOWAIT',
   'NULL',
   'NULLIF',
-  'NUMBER_BASE',
   'NUMBER',
+  'NUMBER_BASE',
   'OBJECT',
   'OCICOLL',
   'OCIDATE',
@@ -251,8 +251,8 @@ const reservedWords = [
   'REMAINDER',
   'RENAME',
   'RESOURCE',
-  'RESULT_CACHE',
   'RESULT',
+  'RESULT_CACHE',
   'RETURN',
   'RETURNING',
   'REVERSE',
@@ -277,8 +277,8 @@ const reservedWords = [
   'SERIALIZABLE',
   'SHARE',
   'SHORT',
-  'SIZE_T',
   'SIZE',
+  'SIZE_T',
   'SMALLINT',
   'SOME',
   'SPACE',
@@ -432,7 +432,7 @@ export default class PlSqlFormatter extends Formatter {
     });
   }
 
-  tokenOverride(token) {
+  tokenOverride(token: Token) {
     if (isSet(token) && isBy(this.previousReservedToken)) {
       return { type: tokenTypes.RESERVED, value: token.value };
     }

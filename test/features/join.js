@@ -9,9 +9,9 @@ import dedent from 'dedent-js';
  */
 export default function supportsJoin(format, { without, additionally } = {}) {
   const unsupportedJoinRegex = without ? new RegExp(without.join('|'), 'u') : /^whateve_!%&$/u;
-  const isSupportedJoin = (join) => !unsupportedJoinRegex.test(join);
+  const isSupportedJoin = join => !unsupportedJoinRegex.test(join);
 
-  ['CROSS JOIN', 'NATURAL JOIN'].filter(isSupportedJoin).forEach((join) => {
+  ['CROSS JOIN', 'NATURAL JOIN'].filter(isSupportedJoin).forEach(join => {
     it(`supports ${join}`, () => {
       const result = format(`SELECT * FROM tbl1 ${join} tbl2`);
       expect(result).toBe(dedent`
@@ -42,7 +42,7 @@ export default function supportsJoin(format, { without, additionally } = {}) {
     ...(additionally || []),
   ]
     .filter(isSupportedJoin)
-    .forEach((join) => {
+    .forEach(join => {
       it(`supports ${join}`, () => {
         const result = format(`
           SELECT customer_id.from, COUNT(order_id) AS total FROM customers

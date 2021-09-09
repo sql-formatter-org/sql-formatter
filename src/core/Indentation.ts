@@ -12,11 +12,14 @@ const INDENT_TYPE_BLOCK_LEVEL = 'block-level';
  * - TOP_LEVEL : increased by RESERVED_TOP_LEVEL words
  */
 export default class Indentation {
+  indent: string;
+  indentTypes: string[];
+
   /**
    * @param {String} indent Indent value, default is "  " (2 spaces)
    */
-  constructor(indent) {
-    this.indent = indent || '  ';
+  constructor(indent: string = '  ') {
+    this.indent = indent;
     this.indentTypes = [];
   }
 
@@ -24,7 +27,7 @@ export default class Indentation {
    * Returns current indentation string.
    * @return {String}
    */
-  getIndent() {
+  getIndent(): string {
     return this.indent.repeat(this.indentTypes.length);
   }
 

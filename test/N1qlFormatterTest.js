@@ -1,5 +1,5 @@
 import dedent from 'dedent-js';
-import * as sqlFormatter from '../src/sqlFormatter';
+import * as sqlFormatter from '../src/sqlFormatter.ts';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsBetween from './features/between';
 import supportsJoin from './features/join';

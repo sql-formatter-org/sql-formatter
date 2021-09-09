@@ -11,7 +11,7 @@ export default function supportsAlterTableModify(format) {
       ALTER TABLE
         supplier
       MODIFY
-        supplier_name char(100) NOT NULL;
+        supplier_name CHAR(100) NOT NULL;
     `);
   });
 }

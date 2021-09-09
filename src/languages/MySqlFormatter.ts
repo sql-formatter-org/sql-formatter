@@ -31,6 +31,7 @@ const reservedWords = [
   'CONSTRAINT',
   'CONTINUE',
   'CONVERT',
+  'COUNT',
   'CREATE',
   'CROSS',
   'CUBE',

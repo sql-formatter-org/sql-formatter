@@ -1,4 +1,4 @@
-import * as sqlFormatter from '../src/sqlFormatter';
+import * as sqlFormatter from '../src/sqlFormatter.ts';
 
 describe('sqlFormatter', () => {
   it('throws error when unsupported language parameter specified', () => {
