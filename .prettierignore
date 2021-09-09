@@ -2,5 +2,5 @@
 /dist
 /lib
 /node_modules
-yarn.lock
-LICENSE
+index.html
+
