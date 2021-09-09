@@ -1,11 +1,17 @@
 language: node_js
 node_js: node
 
+branches:
+  only:
+  - master
+  - stable
+  - develop
+
 install:
-  - npm install
-  - npm install coveralls
+  - yarn install
+  - yarn add coveralls
 script:
-  - npm run check
-  - npm run build
+  - yarn run check
+  - yarn run build
 after_script:
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
