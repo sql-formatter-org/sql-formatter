@@ -3,3 +3,4 @@
 /dist
 /coverage
 webpack.*.js
+.odc-report
