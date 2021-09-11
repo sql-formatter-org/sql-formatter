@@ -39,6 +39,7 @@ export interface FormatOptions {
 	aliasAs: 'always' | 'never' | 'select';
 	lineWidth: number;
 	linesBetweenQueries: number;
+	denseOperators: boolean;
 }
 /**
  * Format whitespace in a query to make it easier to read.
@@ -54,6 +55,7 @@ export interface FormatOptions {
  *  @param {String} cfg.aliasAs Whether to use AS in column aliases in only SELECT clause, both SELECT and table aliases, or never
  *  @param {Integer} cfg.lineWidth Number of characters in each line before breaking, default: 50
  *  @param {Integer} cfg.linesBetweenQueries How many line breaks between queries
+ *  @param {Boolean} cfg.denseOperators whether to format operators with spaces
  *  @param {ParamItems} cfg.params Collection of params for placeholder replacement
  * @return {String}
  */
@@ -86,6 +88,7 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 		newline: { mode: 'always' },
 		aliasAs: 'select',
 		lineWidth: 50,
+		denseOperators: false,
 	};
 	cfg = { ...defaultOptions, ...cfg };
 

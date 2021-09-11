@@ -143,6 +143,8 @@ export default class Formatter {
 				(token.value === '`' && this.tokenLookBehind(2)?.value === '`')
 			) {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
+			} else if (token.type === tokenTypes.OPERATOR && this.cfg.denseOperators) {
+				formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
 			} else {
 				if (this.cfg.aliasAs !== 'never')
 					formattedQuery = this.formatAliases(token, formattedQuery);
