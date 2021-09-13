@@ -85,9 +85,14 @@ export default class Formatter {
 	 */
 	format(query: string): string {
 		this.tokens = this.tokenizer().tokenize(query);
-		const formattedQuery = this.getFormattedQueryFromTokens();
+		const formattedQuery = this.getFormattedQueryFromTokens().trim();
+		const finalQuery = this.postFormat(formattedQuery);
 
-		return formattedQuery.trim();
+		return finalQuery;
+	}
+
+	postFormat(query: string) {
+		return query;
 	}
 
 	getFormattedQueryFromTokens() {
