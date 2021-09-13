@@ -2,7 +2,7 @@ import tokenTypes from './tokenTypes';
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
-import { trimSpacesEnd } from '../utils';
+import { maxLength, trimSpacesEnd } from '../utils';
 import {
 	isAnd,
 	isAs,
@@ -92,7 +92,32 @@ export default class Formatter {
 	}
 
 	postFormat(query: string) {
+		if (this.cfg.commaPosition !== CommaPosition.after) {
+			query = this.formatCommaPositions(query);
+		}
+
 		return query;
+	}
+
+	formatCommaPositions(query: string) {
+		const lines = query.split('\n');
+		let newQuery: string[] = [];
+		for (let i = 0; i < lines.length; i++) {
+			if (lines[i].match(/.*,$/)) {
+				let commaLines = [lines[i++]];
+				while (lines[i].match(/.*,$/)) {
+					commaLines.push(lines[i++]);
+				}
+				const commaMaxLength = maxLength(commaLines);
+				commaLines = commaLines.map(commaLine =>
+					commaLine.replace(/,$/, ' '.repeat(commaMaxLength - commaLine.length) + ',')
+				);
+				newQuery = [...newQuery, ...commaLines];
+			}
+			newQuery.push(lines[i]);
+		}
+
+		return newQuery.join('\n');
 	}
 
 	getFormattedQueryFromTokens() {
