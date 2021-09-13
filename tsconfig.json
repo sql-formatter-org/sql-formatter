@@ -2,13 +2,14 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es6",
-    "outDir": "dist",
+    "outDir": "lib",
     "lib": ["es6", "dom"],
     "sourceMap": true,
     "rootDir": "src",
     // Generate d.ts files
     "declaration": true,
-    "emitDeclarationOnly": true,
+    "emitDeclarationOnly": false,
+    // "declarationDir": "lib/types",
     "strict": true,
     // Additional Checks
     "noImplicitReturns": true,

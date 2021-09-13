@@ -1,5 +1,5 @@
 {
-  "version": "4.1.0-rc.1",
+  "version": "4.1.0-rc.2",
   "name": "@woodler/sql-formatter",
   "description": "Format whitespace in a SQL query to make it more readable",
   "license": "MIT",
@@ -66,7 +66,7 @@
     "test:watch": "npm run test -- --watch",
     "check": "npm run pretty:check && npm run lint && npm run test",
     "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
-    "build:commonjs": "babel src --out-dir lib",
+    "build:commonjs": "tsc",
     "build:umd": "webpack --config webpack.dev.js",
     "build:umd:min": "webpack --config webpack.prod.js",
     "prepare": "npm run clean && npm run check && npm run build"
