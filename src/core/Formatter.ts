@@ -100,6 +100,7 @@ export default class Formatter {
 	}
 
 	formatCommaPositions(query: string) {
+		// const trailingComma = /,$/;
 		const lines = query.split('\n');
 		let newQuery: string[] = [];
 		for (let i = 0; i < lines.length; i++) {
@@ -108,10 +109,31 @@ export default class Formatter {
 				while (lines[i].match(/.*,$/)) {
 					commaLines.push(lines[i++]);
 				}
-				const commaMaxLength = maxLength(commaLines);
-				commaLines = commaLines.map(commaLine =>
-					commaLine.replace(/,$/, ' '.repeat(commaMaxLength - commaLine.length) + ',')
-				);
+
+				if (this.cfg.commaPosition === CommaPosition.tabular) {
+					const commaMaxLength = maxLength(commaLines);
+					commaLines = commaLines.map(commaLine =>
+						commaLine.replace(/,$/, ' '.repeat(commaMaxLength - commaLine.length) + ',')
+					);
+				} else if (this.cfg.commaPosition === CommaPosition.before) {
+					const isTabs = this.cfg.indent.includes('\t'); // loose tab check
+					commaLines.push(lines[i++]);
+					commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, ''));
+					commaLines = [
+						commaLines[0],
+						...commaLines.slice(1).map(commaLine => {
+							const whitespaceRegex = this.tokenizer().WHITESPACE_REGEX;
+							return commaLine.replace(
+								whitespaceRegex,
+								commaLine.match(whitespaceRegex)![1].replace(
+									new RegExp((isTabs ? '\t' : this.cfg.indent) + '$'),
+									(isTabs ? '    ' : this.cfg.indent).replace(/ {2}$/, ', ') // using 4 width tabs
+								)
+							);
+						}),
+					];
+				}
+
 				newQuery = [...newQuery, ...commaLines];
 			}
 			newQuery.push(lines[i]);
