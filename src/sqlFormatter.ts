@@ -50,6 +50,7 @@ export interface FormatOptions {
  *  	@param {String} cfg.newline.mode always | never | lineWidth (break only when > line width) | itemCount (break when > itemCount) | hybrid (lineWidth OR itemCount)
  *  	@param {Integer} cfg.newline.itemCount Used when mode is itemCount or hybrid, must be >=0
  *  @param {Boolean} cfg.uppercase Converts keywords to uppercase
+ *  @param {Integer} cfg.lineWidth Number of characters in each line before breaking, default: 50
  *  @param {Integer} cfg.linesBetweenQueries How many line breaks between queries
  *  @param {ParamItems} cfg.params Collection of params for placeholder replacement
  * @return {String}
