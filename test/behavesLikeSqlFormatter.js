@@ -425,4 +425,13 @@ export default function behavesLikeSqlFormatter(format) {
         tbl2;
     `);
   });
+
+  it('formats correctly with false string', () => {
+    const result = format(`SELECT 'false';`);
+    expect(result).toBe(
+      dedent`
+        SELECT
+          'false';`
+    );
+  });
 }
