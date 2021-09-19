@@ -15,7 +15,7 @@ import {
 	Token,
 } from './token';
 import Tokenizer from './Tokenizer';
-import { FormatOptions } from '../sqlFormatter';
+import { FormatOptions, NewlineMode } from '../sqlFormatter';
 
 export default class Formatter {
 	cfg: FormatOptions;
@@ -173,11 +173,11 @@ export default class Formatter {
 
 	checkNewline = (index: number) => {
 		if (
-			this.newline.mode === 'always' ||
+			this.newline.mode === NewlineMode.always ||
 			this.tokens.some(({ type, value }) => type === tokenTypes.OPEN_PAREN && value.length > 1) // auto break on CASE statements
 		)
 			return true;
-		if (this.newline.mode === 'never') return false;
+		if (this.newline.mode === NewlineMode.never) return false;
 		const tail = this.tokens.slice(index + 1);
 		const nextTokens = tail.slice(
 			0,
@@ -199,15 +199,15 @@ export default class Formatter {
 			{ count: 1, inParen: false } // start with 1 for first word
 		).count;
 
-		if (this.newline.mode === 'itemCount') return numItems > this.newline.itemCount!;
+		if (this.newline.mode === NewlineMode.itemCount) return numItems > this.newline.itemCount!;
 
 		// calculate length if it were all inline
 		const inlineWidth = `${this.tokens[index].whitespaceBefore}${
 			this.tokens[index].value
 		} ${nextTokens.map(({ value }) => (value === ',' ? value + ' ' : value)).join('')}`.length;
 
-		if (this.newline.mode === 'lineWidth') return inlineWidth > this.lineWidth;
-		else if (this.newline.mode == 'hybrid')
+		if (this.newline.mode === NewlineMode.lineWidth) return inlineWidth > this.lineWidth;
+		else if (this.newline.mode === NewlineMode.hybrid)
 			return numItems > this.newline.itemCount! || inlineWidth > this.lineWidth;
 
 		return true;

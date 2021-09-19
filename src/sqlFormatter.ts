@@ -25,8 +25,15 @@ const formatters = {
 	tsql: TSqlFormatter,
 };
 
+export enum NewlineMode {
+	always,
+	never,
+	lineWidth,
+	itemCount,
+	hybrid,
+}
 export interface NewlineOptions {
-	mode: 'always' | 'never' | 'lineWidth' | 'itemCount' | 'hybrid';
+	mode: NewlineMode;
 	itemCount?: number;
 }
 
@@ -49,7 +56,7 @@ export interface FormatOptions {
  *  @param {String} cfg.indent Characters used for indentation, default is "  " (2 spaces)
  *  @param {Boolean} cfg.uppercase Converts keywords to uppercase
  *  @param {NewlineOptions} cfg.newline Determines when to break words onto a newline;
- *  	@param {String} cfg.newline.mode always | never | lineWidth (break only when > line width) | itemCount (break when > itemCount) | hybrid (lineWidth OR itemCount)
+ *  	@param {NewlineMode} cfg.newline.mode always | never | lineWidth (break only when > line width) | itemCount (break when > itemCount) | hybrid (lineWidth OR itemCount)
  *  	@param {Integer} cfg.newline.itemCount Used when mode is itemCount or hybrid, must be >=0
  *  @param {String} cfg.aliasAs Whether to use AS in column aliases in only SELECT clause, both SELECT and table aliases, or never
  *  @param {Integer} cfg.lineWidth Number of characters in each line before breaking, default: 50
@@ -64,12 +71,16 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 	if (cfg.language && !supportedDialects.includes(cfg.language))
 		throw Error(`Unsupported SQL dialect: ${cfg.language}`);
 
-	if (cfg.newline && (cfg.newline.mode === 'itemCount' || cfg.newline.mode === 'hybrid')) {
+	if (
+		cfg.newline &&
+		(cfg.newline.mode === NewlineMode.itemCount || cfg.newline.mode === NewlineMode.hybrid)
+	) {
 		if ((cfg.newline.itemCount ?? 0) < 0)
 			throw new Error('Error: newline.itemCount must be a positive number.');
 		if (cfg.newline.itemCount === 0) {
-			if (cfg.newline.mode === 'hybrid') cfg.newline.mode = 'lineWidth';
-			else if (cfg.newline.mode === 'itemCount') cfg.newline = { mode: 'always' };
+			if (cfg.newline.mode === NewlineMode.hybrid) cfg.newline.mode = NewlineMode.lineWidth;
+			else if (cfg.newline.mode === NewlineMode.itemCount)
+				cfg.newline = { mode: NewlineMode.always };
 		}
 	}
 
@@ -83,7 +94,7 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 		indent: '  ',
 		uppercase: true,
 		linesBetweenQueries: 1,
-		newline: { mode: 'always' },
+		newline: { mode: NewlineMode.always },
 		aliasAs: 'select',
 		lineWidth: 50,
 	};
