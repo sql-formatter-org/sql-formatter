@@ -13,3 +13,9 @@ export interface NewlineOptions {
 	mode: NewlineMode;
 	itemCount?: number;
 }
+
+export enum AliasMode {
+	always,
+	never,
+	select,
+}

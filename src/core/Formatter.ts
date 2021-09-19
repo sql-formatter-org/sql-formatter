@@ -17,7 +17,7 @@ import {
 import Tokenizer from './Tokenizer';
 
 import { FormatOptions } from '../sqlFormatter';
-import { NewlineMode } from '../types';
+import { AliasMode, NewlineMode } from '../types';
 
 export default class Formatter {
 	cfg: FormatOptions;
@@ -39,7 +39,7 @@ export default class Formatter {
 	 *  @param {String} cfg.indent
 	 *  @param {Boolean} cfg.uppercase
 	 *  @param {NewlineOptions} cfg.newline
-	 * 		@param {String} cfg.newline.mode
+	 * 		@param {NewlineMode} cfg.newline.mode
 	 * 		@param {Integer} cfg.newline.itemCount
 	 *  @param {Integer} cfg.lineWidth
 	 *  @param {Integer} cfg.linesBetweenQueries
@@ -116,7 +116,7 @@ export default class Formatter {
 				formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
 				this.previousReservedToken = token;
 			} else if (token.type === tokenTypes.RESERVED) {
-				if (!(isAs(token) && this.cfg.aliasAs === 'never')) {
+				if (!(isAs(token) && this.cfg.aliasAs === AliasMode.never)) {
 					// do not format if skipping AS
 					formattedQuery = this.formatWithSpaces(token, formattedQuery);
 					this.previousReservedToken = token;
@@ -146,7 +146,7 @@ export default class Formatter {
 			) {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
 			} else {
-				if (this.cfg.aliasAs !== 'never')
+				if (this.cfg.aliasAs !== AliasMode.never)
 					formattedQuery = this.formatAliases(token, formattedQuery);
 				formattedQuery = this.formatWithSpaces(token, formattedQuery);
 			}
@@ -160,7 +160,9 @@ export default class Formatter {
 		const asToken = { type: tokenTypes.RESERVED, value: this.cfg.uppercase ? 'AS' : 'as' };
 
 		const missingTableAlias = // if table alias is missing and alias is always
-			this.cfg.aliasAs === 'always' && token.type === tokenTypes.WORD && prevToken?.value === ')';
+			this.cfg.aliasAs === AliasMode.always &&
+			token.type === tokenTypes.WORD &&
+			prevToken?.value === ')';
 
 		const missingSelectColumnAlias = // if select column alias is missing and alias is not never
 			this.withinSelect &&
