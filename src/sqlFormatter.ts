@@ -33,7 +33,7 @@ export interface FormatOptions {
 	indent: string;
 	uppercase: boolean;
 	newline: NewlineOptions;
-	aliasAs: AliasMode;
+	aliasAs: AliasMode | keyof typeof AliasMode;
 	lineWidth: number;
 	linesBetweenQueries: number;
 }

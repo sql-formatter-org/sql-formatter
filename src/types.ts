@@ -3,19 +3,19 @@ import { formatters } from './sqlFormatter';
 export type FormatterLanguage = keyof typeof formatters;
 
 export enum NewlineMode {
-	always,
-	never,
-	lineWidth,
-	itemCount,
-	hybrid,
+	always = 'always',
+	never = 'never',
+	lineWidth = 'lineWidth',
+	itemCount = 'itemCount',
+	hybrid = 'hybrid',
 }
 export interface NewlineOptions {
-	mode: NewlineMode;
+	mode: NewlineMode | keyof typeof NewlineMode;
 	itemCount?: number;
 }
 
 export enum AliasMode {
-	always,
-	never,
-	select,
+	always = 'always',
+	never = 'never',
+	select = 'select',
 }
