@@ -15,7 +15,9 @@ import {
 	Token,
 } from './token';
 import Tokenizer from './Tokenizer';
-import { FormatOptions, NewlineMode } from '../sqlFormatter';
+
+import { FormatOptions } from '../sqlFormatter';
+import { NewlineMode } from '../types';
 
 export default class Formatter {
 	cfg: FormatOptions;

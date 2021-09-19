@@ -12,7 +12,9 @@ import SparkSqlFormatter from './languages/SparkSqlFormatter';
 import StandardSqlFormatter from './languages/StandardSqlFormatter';
 import TSqlFormatter from './languages/TSqlFormatter';
 
-const formatters = {
+import { FormatterLanguage, NewlineMode, NewlineOptions } from './types';
+
+export const formatters = {
 	db2: Db2Formatter,
 	mariadb: MariaDbFormatter,
 	mysql: MySqlFormatter,
@@ -25,20 +27,8 @@ const formatters = {
 	tsql: TSqlFormatter,
 };
 
-export enum NewlineMode {
-	always,
-	never,
-	lineWidth,
-	itemCount,
-	hybrid,
-}
-export interface NewlineOptions {
-	mode: NewlineMode;
-	itemCount?: number;
-}
-
 export interface FormatOptions {
-	language: keyof typeof formatters;
+	language: FormatterLanguage;
 	params?: ParamItems | string[];
 	indent: string;
 	uppercase: boolean;
