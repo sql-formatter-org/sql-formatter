@@ -29,13 +29,13 @@ export const formatters = {
 
 export interface FormatOptions {
 	language: FormatterLanguage;
-	params?: ParamItems | string[];
 	indent: string;
 	uppercase: boolean;
 	newline: NewlineOptions;
 	aliasAs: AliasMode | keyof typeof AliasMode;
 	lineWidth: number;
 	linesBetweenQueries: number;
+	params?: ParamItems | string[];
 }
 /**
  * Format whitespace in a query to make it easier to read.
@@ -83,10 +83,10 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 		language: 'sql',
 		indent: '  ',
 		uppercase: true,
-		linesBetweenQueries: 1,
 		newline: { mode: NewlineMode.always },
 		aliasAs: AliasMode.select,
 		lineWidth: 50,
+		linesBetweenQueries: 1,
 	};
 	cfg = { ...defaultOptions, ...cfg };
 
