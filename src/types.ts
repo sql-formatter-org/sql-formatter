@@ -15,3 +15,9 @@ export enum AliasMode {
 	never = 'never',
 	select = 'select',
 }
+
+export enum CommaPosition {
+	before = 'before',
+	after = 'after',
+	tabular = 'tabular',
+}

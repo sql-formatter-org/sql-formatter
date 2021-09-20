@@ -16,7 +16,7 @@ import {
 } from './token';
 import Tokenizer from './Tokenizer';
 import type { FormatOptions } from '../sqlFormatter';
-import { AliasMode, NewlineMode } from '../types';
+import { AliasMode, CommaPosition, NewlineMode } from '../types';
 
 export default class Formatter {
 	cfg: FormatOptions;
