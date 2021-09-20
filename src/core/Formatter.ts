@@ -2,7 +2,7 @@ import tokenTypes from './tokenTypes';
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
-import { trimSpacesEnd } from '../utils';
+import { maxLength, trimSpacesEnd } from '../utils';
 import {
 	isAnd,
 	isAs,
@@ -16,7 +16,7 @@ import {
 } from './token';
 import Tokenizer from './Tokenizer';
 import type { FormatOptions } from '../sqlFormatter';
-import { AliasMode, CommaPosition, NewlineMode } from '../types';
+import { AliasMode, NewlineMode } from '../types';
 
 export default class Formatter {
 	cfg: FormatOptions;
@@ -92,7 +92,46 @@ export default class Formatter {
 	}
 
 	postFormat(query: string) {
+		if (this.cfg.tabulateAlias) {
+			query = this.formatAliasPositions(query);
+		}
+
 		return query;
+	}
+
+	formatAliasPositions(query: string) {
+		const hasAliasRegex = /.*( AS)? .*,$/;
+		const lines = query.split('\n');
+
+		let newQuery: string[] = [];
+		for (let i = 0; i < lines.length; i++) {
+			// find SELECT rows with trailing comma, if no comma (only one row) - no-op
+			if (lines[i].match(hasAliasRegex)) {
+				let aliasLines = [lines[i++]];
+				do {
+					aliasLines.push(lines[i++]);
+				} while (lines[i].match(hasAliasRegex));
+
+				const [precedingText, aliases] = aliasLines
+					.map(line => line.trimStart().split(/ (AS )?(?=[^\s]+,?$)/)) // break lines into alias with optional AS, and all preceding text
+					.reduce(
+						([textAcc, aliasAcc], cur) => [
+							[...textAcc, cur[0]],
+							[...aliasAcc, cur.slice(1).join('')],
+						],
+						[[], []] as [string[], string[]]
+					);
+
+				const aliasMaxLength = maxLength(precedingText);
+				aliasLines = precedingText.map(
+					(text, i) => text + ' '.repeat(aliasMaxLength - text.length + 1) + aliases[i]
+				);
+				newQuery = [...newQuery, ...aliasLines];
+			}
+			newQuery.push(lines[i]);
+		}
+
+		return newQuery.join('\n');
 	}
 
 	getFormattedQueryFromTokens() {
