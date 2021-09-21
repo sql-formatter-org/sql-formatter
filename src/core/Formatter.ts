@@ -113,8 +113,11 @@ export default class Formatter {
 				formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
 				this.previousReservedToken = token;
 			} else if (token.type === tokenTypes.RESERVED) {
-				formattedQuery = this.formatWithSpaces(token, formattedQuery);
-				this.previousReservedToken = token;
+				if (!(isAs(token) && this.cfg.aliasAs === 'never')) {
+					// do not format if skipping AS
+					formattedQuery = this.formatWithSpaces(token, formattedQuery);
+					this.previousReservedToken = token;
+				}
 			} else if (token.type === tokenTypes.OPEN_PAREN) {
 				formattedQuery = this.formatOpeningParentheses(token, formattedQuery);
 			} else if (token.type === tokenTypes.CLOSE_PAREN) {
@@ -140,10 +143,9 @@ export default class Formatter {
 			) {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
 			} else {
-				const formattedQueryOrSkipAs = this.formatAliases(token, formattedQuery);
-				if (formattedQueryOrSkipAs === undefined) return; // if skipping AS token
-
-				formattedQuery = this.formatWithSpaces(token, formattedQueryOrSkipAs);
+				if (this.cfg.aliasAs !== 'never')
+					formattedQuery = this.formatAliases(token, formattedQuery);
+				formattedQuery = this.formatWithSpaces(token, formattedQuery);
 			}
 		});
 		return formattedQuery;
@@ -158,20 +160,13 @@ export default class Formatter {
 			this.cfg.aliasAs === 'always' && token.type === tokenTypes.WORD && prevToken?.value === ')';
 
 		const missingSelectColumnAlias = // if select column alias is missing and alias is not never
-			this.cfg.aliasAs !== 'never' &&
 			this.withinSelect &&
 			token.type === tokenTypes.WORD &&
 			(isEnd(prevToken) || // isAs(prevToken) ||
 				(prevToken?.type === tokenTypes.WORD &&
 					(nextToken?.value === ',' || isTopLevel(nextToken))));
 
-		const removeAs = this.cfg.aliasAs === 'never' && isAs(token); // if no alias
-
-		if (missingTableAlias || missingSelectColumnAlias) {
-			return this.formatWithSpaces(asToken, query);
-		} else if (removeAs) {
-			return undefined; // do not format normally, skip this token
-		}
+		if (missingTableAlias || missingSelectColumnAlias) return this.formatWithSpaces(asToken, query);
 		return query;
 	}
 

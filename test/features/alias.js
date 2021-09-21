@@ -7,7 +7,7 @@ import dedent from 'dedent-js';
 export default function supportsAliases(format) {
 	it('supports always mode', () => {
 		expect(
-			format('SELECT a a_column, b bColumn FROM ( SELECT * FROM x ) y WHERE z;', {
+			format('SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;', {
 				aliasAs: 'always',
 			})
 		).toBe(
@@ -30,7 +30,7 @@ export default function supportsAliases(format) {
 
 	it('supports never mode', () => {
 		expect(
-			format('SELECT a a_column, b bColumn FROM ( SELECT * FROM x ) y WHERE z;', {
+			format('SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;', {
 				aliasAs: 'never',
 			})
 		).toBe(
@@ -53,7 +53,7 @@ export default function supportsAliases(format) {
 
 	it('supports select only mode', () => {
 		expect(
-			format('SELECT a a_column, b bColumn FROM ( SELECT * FROM x ) y WHERE z;', {
+			format('SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;', {
 				aliasAs: 'select',
 			})
 		).toBe(
