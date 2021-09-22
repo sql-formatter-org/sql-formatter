@@ -11,7 +11,7 @@ import StandardSqlFormatter from './languages/StandardSqlFormatter';
 import TSqlFormatter from './languages/TSqlFormatter';
 
 import type { NewlineOptions } from './types';
-import { AliasMode, NewlineMode } from './types';
+import { AliasMode, KeywordMode, NewlineMode } from './types';
 
 export const formatters = {
 	db2: Db2Formatter,
@@ -32,6 +32,7 @@ export interface FormatOptions {
 	language: FormatterLanguage;
 	indent: string;
 	uppercase: boolean;
+	keywordPosition: KeywordMode | keyof typeof KeywordMode;
 	newline: NewlineOptions;
 	aliasAs: AliasMode | keyof typeof AliasMode;
 	lineWidth: number;
@@ -48,6 +49,7 @@ export interface FormatOptions {
  *  @param {String} cfg.language Query language, default is Standard SQL
  *  @param {String} cfg.indent Characters used for indentation, default is "  " (2 spaces)
  *  @param {Boolean} cfg.uppercase Converts keywords to uppercase
+ *  @param {KeywordMode} cfg.keywordPosition Sets main keyword position style, see keywordPosition.md for examples
  *  @param {NewlineOptions} cfg.newline Determines when to break words onto a newline;
  *  	@param {NewlineMode} cfg.newline.mode always | never | lineWidth (break only when > line width) | itemCount (break when > itemCount) | hybrid (lineWidth OR itemCount)
  *  	@param {Integer} cfg.newline.itemCount Used when mode is itemCount or hybrid, must be >=0
@@ -93,6 +95,7 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 		language: 'sql',
 		indent: '  ',
 		uppercase: true,
+		keywordPosition: KeywordMode.standard,
 		newline: { mode: NewlineMode.always },
 		aliasAs: AliasMode.select,
 		lineWidth: 50,
