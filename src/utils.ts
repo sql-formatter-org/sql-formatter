@@ -16,3 +16,6 @@ export const sortByLengthDesc = (strings: string[]) =>
 	strings.sort((a, b) => {
 		return b.length - a.length || a.localeCompare(b);
 	});
+
+export const maxLength = (strings: string[]) =>
+	strings.reduce((max, cur) => Math.max(max, cur.length), 0);
