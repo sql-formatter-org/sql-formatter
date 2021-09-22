@@ -19,3 +19,11 @@ export const sortByLengthDesc = (strings: string[]) =>
 
 export const maxLength = (strings: string[]) =>
 	strings.reduce((max, cur) => Math.max(max, cur.length), 0);
+
+export const tabulateLines = (...columns: string[][]) =>
+	columns.reduce((lines, cur) => {
+		const existingMaxLength = maxLength(lines);
+		return lines.map(
+			(line, i) => line + ' '.repeat(Math.max(existingMaxLength - line.length, 0) + 1) + cur[i]
+		);
+	});
