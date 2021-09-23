@@ -97,6 +97,12 @@ export default class Formatter {
 			this.index = index;
 
 			token = this.tokenOverride(token);
+			if (isReserved(token)) {
+				this.previousReservedToken = token;
+				if (isTopLevel(token)) {
+					this.withinSelect = isSelect(token);
+				}
+			}
 
 			if (token.type === tokenTypes.LINE_COMMENT) {
 				formattedQuery = this.formatLineComment(token, formattedQuery);
@@ -105,15 +111,10 @@ export default class Formatter {
 			} else if (token.type === tokenTypes.RESERVED_TOP_LEVEL) {
 				this.currentNewline = this.checkNewline(index);
 				formattedQuery = this.formatTopLevelReservedWord(token, formattedQuery);
-				this.previousReservedToken = token;
-				this.withinSelect = isSelect(token);
 			} else if (token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT) {
 				formattedQuery = this.formatTopLevelReservedWordNoIndent(token, formattedQuery);
-				this.previousReservedToken = token;
-				this.withinSelect = false;
 			} else if (token.type === tokenTypes.RESERVED_NEWLINE) {
 				formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
-				this.previousReservedToken = token;
 			} else if (token.type === tokenTypes.RESERVED) {
 				if (!(isAs(token) && this.cfg.aliasAs === AliasMode.never)) {
 					// do not format if skipping AS
@@ -247,17 +248,17 @@ export default class Formatter {
 	}
 
 	formatTopLevelReservedWordNoIndent(token: Token, query: string) {
-		this.indentation.decreaseTopLevel();
+		// this.indentation.decreaseTopLevel();
 		query = this.addNewline(query) + this.equalizeWhitespace(this.show(token));
 		return this.addNewline(query);
 	}
 
 	formatTopLevelReservedWord(token: Token, query: string) {
-		this.indentation.decreaseTopLevel();
+		// this.indentation.decreaseTopLevel();
 
 		query = this.addNewline(query);
 
-		this.indentation.increaseTopLevel();
+		// this.indentation.increaseTopLevel();
 
 		query += this.equalizeWhitespace(this.show(token));
 		if (this.currentNewline) {
