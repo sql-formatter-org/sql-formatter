@@ -71,6 +71,13 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 	}
 
 	if (
+		cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
+		cfg.keywordPosition === KeywordMode.tenSpaceRight
+	) {
+		cfg.indent = ' '.repeat(10);
+	}
+
+	if (
 		cfg.newline &&
 		(cfg.newline.mode === NewlineMode.itemCount || cfg.newline.mode === NewlineMode.hybrid)
 	) {

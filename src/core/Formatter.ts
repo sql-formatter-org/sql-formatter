@@ -16,7 +16,7 @@ import {
 } from './token';
 import Tokenizer from './Tokenizer';
 import type { FormatOptions } from '../sqlFormatter';
-import { AliasMode, NewlineMode } from '../types';
+import { AliasMode, KeywordMode, NewlineMode } from '../types';
 
 export default class Formatter {
 	cfg: FormatOptions;
@@ -27,6 +27,7 @@ export default class Formatter {
 	inlineBlock: InlineBlock;
 	params: Params;
 
+	falseSpace: string;
 	previousReservedToken: Token;
 	withinSelect: boolean;
 	tokens: Token[];
@@ -53,6 +54,7 @@ export default class Formatter {
 		this.inlineBlock = new InlineBlock(this.lineWidth);
 		this.params = new Params(this.cfg.params);
 
+		this.falseSpace = '​'; // uses zero-width space (&#8203; / U+200B)
 		this.previousReservedToken = {} as Token;
 		this.withinSelect = false;
 		this.tokens = [];
@@ -99,6 +101,9 @@ export default class Formatter {
 			token = this.tokenOverride(token);
 			if (isReserved(token)) {
 				this.previousReservedToken = token;
+				if (token.type !== tokenTypes.RESERVED) {
+					token = this.tenSpacedToken(token);
+				}
 				if (isTopLevel(token)) {
 					this.withinSelect = isSelect(token);
 				}
@@ -154,7 +159,7 @@ export default class Formatter {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery);
 			}
 		});
-		return formattedQuery;
+		return formattedQuery.replace(new RegExp(this.falseSpace, 'gim'), ' ');
 	}
 
 	formatAliases(token: Token, query: string) {
@@ -375,6 +380,15 @@ export default class Formatter {
 			query += '\n';
 		}
 		return query + this.indentation.getIndent();
+	}
+
+	tenSpacedToken(token: Token) {
+		if (this.cfg.keywordPosition === KeywordMode.tenSpaceLeft) {
+			token.value += this.falseSpace.repeat(9 - token.value.length);
+		} else if (this.cfg.keywordPosition === KeywordMode.tenSpaceRight) {
+			token.value = this.falseSpace.repeat(9 - token.value.length) + token.value;
+		}
+		return token;
 	}
 
 	tokenLookBehind(n = 1) {
