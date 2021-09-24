@@ -300,7 +300,6 @@ const reservedWords = [
 	'OFFSET',
 	'OLD',
 	'OLD_TABLE',
-	'ON',
 	'ONLY',
 	'OPEN',
 	'OPTIMIZATION',
@@ -450,7 +449,6 @@ const reservedWords = [
 	'TABLE',
 	'TABLESAMPLE',
 	'TABLESPACE',
-	'THEN',
 	'TIME',
 	'TIMESTAMP',
 	'TIMEZONE_HOUR',
@@ -489,7 +487,6 @@ const reservedWords = [
 	'VIEW',
 	'VOLATILE',
 	'VOLUMES',
-	'WHEN',
 	'WHENEVER',
 	'WHILE',
 	'WIDTH_BUCKET',
@@ -536,6 +533,9 @@ const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'U
 const reservedNewlineWords = [
 	'AND',
 	'OR',
+	'ON',
+	'WHEN',
+	'THEN',
 	// joins
 	'JOIN',
 	'INNER JOIN',
