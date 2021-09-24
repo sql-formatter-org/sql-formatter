@@ -266,7 +266,13 @@ export default class Formatter {
 		// this.indentation.increaseTopLevel();
 
 		query += this.equalizeWhitespace(this.show(token));
-		if (this.currentNewline) {
+		if (
+			this.currentNewline &&
+			!(
+				this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
+				this.cfg.keywordPosition === KeywordMode.tenSpaceRight
+			)
+		) {
 			query = this.addNewline(query);
 		} else {
 			query += ' ';
@@ -336,6 +342,14 @@ export default class Formatter {
 		} else if (isLimit(this.previousReservedToken)) {
 			return query;
 		} else if (this.currentNewline) {
+			return this.addNewline(query);
+		} else if (this.currentNewline) {
+			if (
+				this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
+				this.cfg.keywordPosition === KeywordMode.tenSpaceRight
+			) {
+				return this.addNewline(query) + this.cfg.indent;
+			}
 			return this.addNewline(query);
 		} else {
 			return query;
