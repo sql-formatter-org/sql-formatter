@@ -397,10 +397,26 @@ export default class Formatter {
 	}
 
 	tenSpacedToken(token: Token) {
-		if (this.cfg.keywordPosition === KeywordMode.tenSpaceLeft) {
-			token.value += this.falseSpace.repeat(9 - token.value.length);
-		} else if (this.cfg.keywordPosition === KeywordMode.tenSpaceRight) {
-			token.value = this.falseSpace.repeat(9 - token.value.length) + token.value;
+		const addBuffer = (string: String, bufferLength = 9) =>
+			this.falseSpace.repeat(Math.max(bufferLength - string.length, 0));
+		if (
+			this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
+			this.cfg.keywordPosition === KeywordMode.tenSpaceRight
+		) {
+			let bufferItem = token.value; // store which part of keyword receives 10-space buffer
+			let tail = [] as string[]; // rest of keyword
+			const needsSplit = bufferItem.length >= 10 && bufferItem.includes(' '); // split for long keywords like INNER JOIN or UNION DISTINCT
+			if (needsSplit) {
+				[bufferItem, ...tail] = bufferItem.split(' ');
+			}
+
+			if (this.cfg.keywordPosition === KeywordMode.tenSpaceLeft) {
+				bufferItem += addBuffer(bufferItem, needsSplit ? 10 : 9);
+			} else {
+				bufferItem = addBuffer(bufferItem, needsSplit ? 10 : 9) + bufferItem;
+			}
+
+			token.value = bufferItem + tail.join(' ');
 		}
 		return token;
 	}
