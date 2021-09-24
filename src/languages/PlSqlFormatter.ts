@@ -79,7 +79,6 @@ const reservedWords = [
 	'DECIMAL',
 	'DEFAULT',
 	'DEFINE',
-	'DELETE',
 	'DEPTH',
 	'DESC',
 	'DETERMINISTIC',
@@ -110,7 +109,6 @@ const reservedWords = [
 	'FOR',
 	'FORALL',
 	'FORCE',
-	'FROM',
 	'FUNCTION',
 	'GENERAL',
 	'GOTO',
@@ -346,7 +344,6 @@ const reservedWords = [
 	'VOID',
 	'WHENEVER',
 	'WHILE',
-	'WITH',
 	'WORK',
 	'WRAPPED',
 	'WRITE',
@@ -384,6 +381,7 @@ const reservedTopLevelWords = [
 	'UPDATE',
 	'VALUES',
 	'WHERE',
+	'WITH',
 ];
 
 const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'UNION', 'UNION ALL'];
