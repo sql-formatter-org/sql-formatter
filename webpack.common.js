@@ -9,7 +9,7 @@ module.exports = {
 		libraryTarget: 'umd',
 	},
 	resolve: {
-		extension: ['.js', '.ts'],
+		extensions: ['.js', '.ts'],
 	},
 	module: {
 		rules: [
