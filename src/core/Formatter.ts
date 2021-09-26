@@ -323,7 +323,9 @@ export default class Formatter {
 
 	formatQuerySeparator(token: Token, query: string) {
 		this.indentation.resetIndentation();
-		return trimSpacesEnd(query) + this.show(token) + '\n'.repeat(this.cfg.linesBetweenQueries || 1);
+		query = trimSpacesEnd(query);
+		this.cfg.semicolonNewline && (query += '\n');
+		return query + this.show(token) + '\n'.repeat(this.cfg.linesBetweenQueries || 1);
 	}
 
 	// Converts token to string (uppercasing it if needed)

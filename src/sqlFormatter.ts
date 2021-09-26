@@ -39,6 +39,7 @@ export interface FormatOptions {
 	aliasAs: 'always' | 'never' | 'select';
 	lineWidth: number;
 	linesBetweenQueries: number;
+	semicolonNewline: false;
 }
 /**
  * Format whitespace in a query to make it easier to read.
@@ -55,6 +56,7 @@ export interface FormatOptions {
  *  @param {Integer} cfg.lineWidth Number of characters in each line before breaking, default: 50
  *  @param {Integer} cfg.linesBetweenQueries How many line breaks between queries
  *  @param {ParamItems} cfg.params Collection of params for placeholder replacement
+ *  @param {Boolean} cfg.semicolonNewline Whether to place semicolon on newline
  * @return {String}
  */
 export const format = (query: string, cfg: Partial<FormatOptions> = {}): string => {
@@ -86,6 +88,7 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 		newline: { mode: 'always' },
 		aliasAs: 'select',
 		lineWidth: 50,
+		semicolonNewline: false,
 	};
 	cfg = { ...defaultOptions, ...cfg };
 
