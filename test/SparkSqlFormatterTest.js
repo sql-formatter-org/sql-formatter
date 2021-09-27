@@ -42,6 +42,29 @@ describe('SparkSqlFormatter', () => {
     ],
   });
 
+  it('formats array_sort with lambda like function', () => {
+    const result = format(
+      `select array_sort(array('bc', 'ab', 'dc'), (left, right) -> case when left is null and right is null then 0 when left is null then -1 when right is null then 1 when left < right then 1 when left > right then -1 else 0 end);`
+    );
+    expect(result).toBe(dedent`
+    select
+      array_sort(
+        array('bc', 'ab', 'dc'),
+        (left, right) -> case
+          when left is null
+          and right is null then 0
+          when left is null then -1
+          when right is null then 1
+          when left < right then 1
+          when left > right then -1
+          else 0
+        end
+      );
+    `);
+  });
+
+
+
   it('formats WINDOW specification as top level', () => {
     const result = format(
       'SELECT *, LAG(value) OVER wnd AS next_value FROM tbl WINDOW wnd as (PARTITION BY id ORDER BY time);'
