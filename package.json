@@ -61,6 +61,7 @@
 		"lint": "eslint .",
 		"pretty": "prettier --write .",
 		"pretty:check": "prettier --check .",
+		"fix": "npm run pretty && eslint --fix .",
 		"test": "jest",
 		"test:watch": "npm run test -- --watch",
 		"check": "npm run pretty:check && npm run lint && npm run test",
@@ -68,7 +69,7 @@
 		"build:commonjs": "babel src --out-dir lib",
 		"build:umd": "webpack --config webpack.dev.js",
 		"build:umd:min": "webpack --config webpack.prod.js",
-		"prepare": "npm run clean && npm run check && npm run build"
+		"prepare": "npm run clean && npm run fix && npm run check && npm run build"
 	},
 	"repository": {
 		"type": "git",

@@ -25,6 +25,8 @@ const formatters = {
 	tsql: TSqlFormatter,
 };
 
+export const supportedDialects = Object.keys(formatters);
+
 export interface NewlineOptions {
 	mode: 'always' | 'never' | 'lineWidth' | 'itemCount' | 'hybrid';
 	itemCount?: number;
@@ -58,18 +60,24 @@ export interface FormatOptions {
  * @return {String}
  */
 export const format = (query: string, cfg: Partial<FormatOptions> = {}): string => {
-	if (typeof query !== 'string')
+	if (typeof query !== 'string') {
 		throw new Error('Invalid query argument. Expected string, instead got ' + typeof query);
+	}
 
-	if (cfg.language && !supportedDialects.includes(cfg.language))
+	if (cfg.language && !supportedDialects.includes(cfg.language)) {
 		throw Error(`Unsupported SQL dialect: ${cfg.language}`);
+	}
 
 	if (cfg.newline && (cfg.newline.mode === 'itemCount' || cfg.newline.mode === 'hybrid')) {
-		if ((cfg.newline.itemCount ?? 0) < 0)
+		if ((cfg.newline.itemCount ?? 0) < 0) {
 			throw new Error('Error: newline.itemCount must be a positive number.');
+		}
 		if (cfg.newline.itemCount === 0) {
-			if (cfg.newline.mode === 'hybrid') cfg.newline.mode = 'lineWidth';
-			else if (cfg.newline.mode === 'itemCount') cfg.newline = { mode: 'always' };
+			if (cfg.newline.mode === 'hybrid') {
+				cfg.newline.mode = 'lineWidth';
+			} else if (cfg.newline.mode === 'itemCount') {
+				cfg.newline = { mode: 'always' };
+			}
 		}
 	}
 
@@ -92,5 +100,3 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 	const Formatter = formatters[cfg.language!];
 	return new Formatter(cfg as FormatOptions).format(query);
 };
-
-export const supportedDialects = Object.keys(formatters);
