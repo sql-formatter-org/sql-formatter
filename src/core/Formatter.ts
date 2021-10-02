@@ -15,7 +15,7 @@ import {
 	Token,
 } from './token';
 import Tokenizer from './Tokenizer';
-import { FormatOptions } from '../sqlFormatter';
+import type { FormatOptions } from '../sqlFormatter';
 
 export default class Formatter {
 	cfg: FormatOptions;

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { escapeRegExp, isEmpty, sortByLengthDesc } from '../utils';
 
 export function createOperatorRegex(multiLetterOperators: string[]) {

@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import tokenTypes from './tokenTypes';
 import * as regexFactory from './regexFactory';
 import { escapeRegExp } from '../utils';
-import { Token, TokenType } from './token';
+import type { Token, TokenType } from './token';
 
 interface TokenizerOptions {
 	reservedWords: string[];

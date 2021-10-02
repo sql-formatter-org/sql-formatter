@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
-import { ParamItems } from './core/Params';
+import type { ParamItems } from './core/Params';
 import Db2Formatter from './languages/Db2Formatter';
 import MariaDbFormatter from './languages/MariaDbFormatter';
 import MySqlFormatter from './languages/MySqlFormatter';
