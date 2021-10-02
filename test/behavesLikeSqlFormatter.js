@@ -3,6 +3,7 @@ import supportsComments from './features/comments';
 import supportsConfigOptions from './features/configOptions';
 import supportsOperators from './features/operators';
 import supportsAliases from './features/alias';
+import supportsNewlineOptions from './features/newline';
 
 /**
  * Core tests for all SQL formatters
@@ -10,6 +11,7 @@ import supportsAliases from './features/alias';
  */
 export default function behavesLikeSqlFormatter(format) {
 	supportsAliases(format);
+	supportsNewlineOptions(format);
 	supportsComments(format);
 	supportsConfigOptions(format);
 	supportsOperators(['=', '+', '-', '*', '/', '<>', '>', '<', '>=', '<=']);
