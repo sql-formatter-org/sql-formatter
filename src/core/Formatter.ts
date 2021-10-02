@@ -102,6 +102,7 @@ export default class Formatter {
 			} else if (token.type === tokenTypes.BLOCK_COMMENT) {
 				formattedQuery = this.formatBlockComment(token, formattedQuery);
 			} else if (token.type === tokenTypes.RESERVED_TOP_LEVEL) {
+				this.currentNewline = this.checkNewline(index);
 				formattedQuery = this.formatTopLevelReservedWord(token, formattedQuery);
 				this.previousReservedToken = token;
 				this.withinSelect = isSelect(token);
@@ -170,6 +171,48 @@ export default class Formatter {
 		return query;
 	}
 
+	checkNewline = (index: number) => {
+		if (
+			this.newline.mode === 'always' ||
+			this.tokens.some(({ type, value }) => type === tokenTypes.OPEN_PAREN && value.length > 1) // auto break on CASE statements
+		)
+			return true;
+		if (this.newline.mode === 'never') return false;
+		const tail = this.tokens.slice(index + 1);
+		const nextTokens = tail.slice(
+			0,
+			tail.findIndex(
+				({ type }) =>
+					type === tokenTypes.RESERVED_TOP_LEVEL ||
+					type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT ||
+					type === tokenTypes.RESERVED_NEWLINE
+			)
+		);
+
+		const numItems = nextTokens.reduce(
+			(acc, { type, value }) => {
+				if (value == ',' && !acc.inParen) return { ...acc, count: acc.count + 1 }; // count commas between items in clause
+				if (type === tokenTypes.OPEN_PAREN) return { ...acc, inParen: true }; // don't count commas in functions
+				if (type === tokenTypes.CLOSE_PAREN) return { ...acc, inParen: false };
+				return acc;
+			},
+			{ count: 1, inParen: false } // start with 1 for first word
+		).count;
+
+		if (this.newline.mode === 'itemCount') return numItems > this.newline.itemCount!;
+
+		// calculate length if it were all inline
+		const inlineWidth = `${this.tokens[index].whitespaceBefore}${
+			this.tokens[index].value
+		} ${nextTokens.map(({ value }) => (value === ',' ? value + ' ' : value)).join('')}`.length;
+
+		if (this.newline.mode === 'lineWidth') return inlineWidth > this.lineWidth;
+		else if (this.newline.mode == 'hybrid')
+			return numItems > this.newline.itemCount! || inlineWidth > this.lineWidth;
+
+		return true;
+	};
+
 	formatLineComment(token: Token, query: string) {
 		return this.addNewline(query + this.show(token));
 	}
@@ -196,7 +239,9 @@ export default class Formatter {
 		this.indentation.increaseTopLevel();
 
 		query += this.equalizeWhitespace(this.show(token));
-		return this.addNewline(query);
+		if (this.currentNewline) query = this.addNewline(query);
+		else query += ' ';
+		return query;
 	}
 
 	formatNewlineReservedWord(token: Token, query: string) {
@@ -261,7 +306,8 @@ export default class Formatter {
 		} else if (isLimit(this.previousReservedToken)) {
 			return query;
 		} else {
-			return this.addNewline(query);
+			if (this.currentNewline) return this.addNewline(query);
+			else return query;
 		}
 	}
 
@@ -293,9 +339,7 @@ export default class Formatter {
 
 	addNewline(query: string) {
 		query = trimSpacesEnd(query);
-		if (!query.endsWith('\n')) {
-			query += '\n';
-		}
+		if (!query.endsWith('\n')) query += '\n';
 		return query + this.indentation.getIndent();
 	}
 
