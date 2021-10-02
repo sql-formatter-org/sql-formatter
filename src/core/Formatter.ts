@@ -3,7 +3,17 @@ import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { trimSpacesEnd } from '../utils';
-import { isAnd, isBetween, isLimit, Token } from './token';
+import {
+	isAnd,
+	isAs,
+	isBetween,
+	isEnd,
+	isLimit,
+	isReserved,
+	isSelect,
+	isTopLevel,
+	Token,
+} from './token';
 import Tokenizer from './Tokenizer';
 import { FormatOptions } from '../sqlFormatter';
 
@@ -17,6 +27,7 @@ export default class Formatter {
 	params: Params;
 
 	previousReservedToken: Token;
+	withinSelect: boolean;
 	tokens: Token[];
 	index: number;
 
@@ -42,6 +53,7 @@ export default class Formatter {
 		this.params = new Params(this.cfg.params);
 
 		this.previousReservedToken = {} as Token;
+		this.withinSelect = false;
 		this.tokens = [];
 		this.index = 0;
 	}
@@ -92,15 +104,20 @@ export default class Formatter {
 			} else if (token.type === tokenTypes.RESERVED_TOP_LEVEL) {
 				formattedQuery = this.formatTopLevelReservedWord(token, formattedQuery);
 				this.previousReservedToken = token;
+				this.withinSelect = isSelect(token);
 			} else if (token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT) {
 				formattedQuery = this.formatTopLevelReservedWordNoIndent(token, formattedQuery);
 				this.previousReservedToken = token;
+				this.withinSelect = false;
 			} else if (token.type === tokenTypes.RESERVED_NEWLINE) {
 				formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
 				this.previousReservedToken = token;
 			} else if (token.type === tokenTypes.RESERVED) {
-				formattedQuery = this.formatWithSpaces(token, formattedQuery);
-				this.previousReservedToken = token;
+				if (!(isAs(token) && this.cfg.aliasAs === 'never')) {
+					// do not format if skipping AS
+					formattedQuery = this.formatWithSpaces(token, formattedQuery);
+					this.previousReservedToken = token;
+				}
 			} else if (token.type === tokenTypes.OPEN_PAREN) {
 				formattedQuery = this.formatOpeningParentheses(token, formattedQuery);
 			} else if (token.type === tokenTypes.CLOSE_PAREN) {
@@ -126,10 +143,31 @@ export default class Formatter {
 			) {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
 			} else {
+				if (this.cfg.aliasAs !== 'never')
+					formattedQuery = this.formatAliases(token, formattedQuery);
 				formattedQuery = this.formatWithSpaces(token, formattedQuery);
 			}
 		});
 		return formattedQuery;
+	}
+
+	formatAliases(token: Token, query: string) {
+		const prevToken = this.tokenLookBehind();
+		const nextToken = this.tokenLookAhead();
+		const asToken = { type: tokenTypes.RESERVED, value: this.cfg.uppercase ? 'AS' : 'as' };
+
+		const missingTableAlias = // if table alias is missing and alias is always
+			this.cfg.aliasAs === 'always' && token.type === tokenTypes.WORD && prevToken?.value === ')';
+
+		const missingSelectColumnAlias = // if select column alias is missing and alias is not never
+			this.withinSelect &&
+			token.type === tokenTypes.WORD &&
+			(isEnd(prevToken) || // isAs(prevToken) ||
+				(prevToken?.type === tokenTypes.WORD &&
+					(nextToken?.value === ',' || isTopLevel(nextToken))));
+
+		if (missingTableAlias || missingSelectColumnAlias) return this.formatWithSpaces(asToken, query);
+		return query;
 	}
 
 	formatLineComment(token: Token, query: string) {
@@ -243,17 +281,14 @@ export default class Formatter {
 	}
 
 	// Converts token to string (uppercasing it if needed)
-	show({ type, value }: Token) {
+	show(token: Token) {
 		if (
-			type === tokenTypes.RESERVED ||
-			type === tokenTypes.RESERVED_TOP_LEVEL ||
-			type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT ||
-			type === tokenTypes.RESERVED_NEWLINE ||
-			type === tokenTypes.OPEN_PAREN ||
-			type === tokenTypes.CLOSE_PAREN
+			isReserved(token) ||
+			token.type === tokenTypes.OPEN_PAREN ||
+			token.type === tokenTypes.CLOSE_PAREN
 		) {
-			return this.cfg.uppercase ? value.toUpperCase() : value.toLowerCase();
-		} else return value;
+			return this.cfg.uppercase ? token.value.toUpperCase() : token.value.toLowerCase();
+		} else return token.value;
 	}
 
 	addNewline(query: string) {
