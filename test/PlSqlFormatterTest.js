@@ -1,5 +1,5 @@
 import dedent from 'dedent-js';
-import * as sqlFormatter from '../src/sqlFormatter.ts';
+import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
 import supportsAlterTableModify from './features/alterTableModify';

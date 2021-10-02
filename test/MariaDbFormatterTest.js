@@ -1,4 +1,4 @@
-import * as sqlFormatter from '../src/sqlFormatter.ts';
+import * as sqlFormatter from '../src/sqlFormatter';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
 describe('MariaDbFormatter', () => {
