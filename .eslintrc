@@ -18,6 +18,7 @@
 		"no-use-before-define": "warn",
 		"lines-between-class-members": "off",
 		"@typescript-eslint/naming-convention": "warn",
+		"@typescript-eslint/indent": "off",
 		"@typescript-eslint/semi": "warn"
 	},
 	"settings": {
