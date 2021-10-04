@@ -1,4 +1,4 @@
-import { Token } from './token';
+import type { Token } from './token';
 
 export type ParamItems = { [k: string]: string };
 
@@ -23,9 +23,13 @@ export default class Params {
 	 * @return {String} param or token.value when params are missing
 	 */
 	get({ key, value }: Token): string {
-		if (!this.params) return value;
+		if (!this.params) {
+			return value;
+		}
 
-		if (key) return (this.params as ParamItems)[key];
+		if (key) {
+			return (this.params as ParamItems)[key];
+		}
 		return (this.params as string[])[this.index++];
 	}
 }

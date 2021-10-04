@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import tokenTypes from './tokenTypes';
 import * as regexFactory from './regexFactory';
 import { escapeRegExp } from '../utils';
-import { Token, TokenType } from './token';
+import type { Token, TokenType } from './token';
 
 interface TokenizerOptions {
 	reservedWords: string[];
@@ -107,7 +105,7 @@ export default class Tokenizer {
 	 */
 	tokenize(input: string) {
 		const tokens: Token[] = [];
-		let token: Token | undefined = undefined;
+		let token: Token | undefined;
 
 		// Keep processing the string until it is empty
 		while (input.length) {
@@ -313,7 +311,9 @@ export default class Tokenizer {
 	}
 
 	getTokenOnFirstMatch({ input, type, regex }: { input: string; type: TokenType; regex?: RegExp }) {
-		if (!regex) return undefined;
+		if (!regex) {
+			return undefined;
+		}
 		const matches = input.match(regex);
 		return matches ? ({ type, value: matches[1] } as Token) : undefined;
 	}

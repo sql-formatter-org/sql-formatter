@@ -1,5 +1,5 @@
 import Formatter from '../core/Formatter';
-import { isBy, isSet, Token } from '../core/token';
+import { isBy, isSet, Token } from '../core/token'; // convert to partial type import in TS 4.5
 import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
 

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { escapeRegExp, isEmpty, sortByLengthDesc } from '../utils';
 
 export function createOperatorRegex(multiLetterOperators: string[]) {
@@ -33,10 +31,6 @@ export function createWordRegex(specialChars: string[] = []) {
 	);
 }
 
-export function createStringRegex(stringTypes: StringPatternType[]) {
-	return new RegExp('^(' + createStringPattern(stringTypes) + ')', 'u');
-}
-
 // This enables the following string patterns:
 // 1. backtick quoted string using `` to escape
 // 2. square bracket quoted string (SQL Server) using ]] to escape
@@ -62,8 +56,8 @@ export function createStringPattern(stringTypes: StringPatternType[]) {
 	return stringTypes.map(t => patterns[t]).join('|');
 }
 
-export function createParenRegex(parens: string[]) {
-	return new RegExp('^(' + parens.map(escapeParen).join('|') + ')', 'iu');
+export function createStringRegex(stringTypes: StringPatternType[]) {
+	return new RegExp('^(' + createStringPattern(stringTypes) + ')', 'u');
 }
 
 function escapeParen(paren: string) {
@@ -74,6 +68,10 @@ function escapeParen(paren: string) {
 		// longer word
 		return '\\b' + paren + '\\b';
 	}
+}
+
+export function createParenRegex(parens: string[]) {
+	return new RegExp('^(' + parens.map(escapeParen).join('|') + ')', 'iu');
 }
 
 export function createPlaceholderRegex(types: string[], pattern: string) {

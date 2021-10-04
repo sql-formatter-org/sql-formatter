@@ -15,7 +15,7 @@ import {
 	Token,
 } from './token';
 import Tokenizer from './Tokenizer';
-import { FormatOptions } from '../sqlFormatter';
+import type { FormatOptions } from '../sqlFormatter';
 
 export default class Formatter {
 	cfg: FormatOptions;
@@ -144,8 +144,9 @@ export default class Formatter {
 			) {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
 			} else {
-				if (this.cfg.aliasAs !== 'never')
+				if (this.cfg.aliasAs !== 'never') {
 					formattedQuery = this.formatAliases(token, formattedQuery);
+				}
 				formattedQuery = this.formatWithSpaces(token, formattedQuery);
 			}
 		});
@@ -167,7 +168,9 @@ export default class Formatter {
 				(prevToken?.type === tokenTypes.WORD &&
 					(nextToken?.value === ',' || isTopLevel(nextToken))));
 
-		if (missingTableAlias || missingSelectColumnAlias) return this.formatWithSpaces(asToken, query);
+		if (missingTableAlias || missingSelectColumnAlias) {
+			return this.formatWithSpaces(asToken, query);
+		}
 		return query;
 	}
 
@@ -175,9 +178,12 @@ export default class Formatter {
 		if (
 			this.newline.mode === 'always' ||
 			this.tokens.some(({ type, value }) => type === tokenTypes.OPEN_PAREN && value.length > 1) // auto break on CASE statements
-		)
+		) {
 			return true;
-		if (this.newline.mode === 'never') return false;
+		}
+		if (this.newline.mode === 'never') {
+			return false;
+		}
 		const tail = this.tokens.slice(index + 1);
 		const nextTokens = tail.slice(
 			0,
@@ -191,24 +197,34 @@ export default class Formatter {
 
 		const numItems = nextTokens.reduce(
 			(acc, { type, value }) => {
-				if (value == ',' && !acc.inParen) return { ...acc, count: acc.count + 1 }; // count commas between items in clause
-				if (type === tokenTypes.OPEN_PAREN) return { ...acc, inParen: true }; // don't count commas in functions
-				if (type === tokenTypes.CLOSE_PAREN) return { ...acc, inParen: false };
+				if (value === ',' && !acc.inParen) {
+					return { ...acc, count: acc.count + 1 };
+				} // count commas between items in clause
+				if (type === tokenTypes.OPEN_PAREN) {
+					return { ...acc, inParen: true };
+				} // don't count commas in functions
+				if (type === tokenTypes.CLOSE_PAREN) {
+					return { ...acc, inParen: false };
+				}
 				return acc;
 			},
 			{ count: 1, inParen: false } // start with 1 for first word
 		).count;
 
-		if (this.newline.mode === 'itemCount') return numItems > this.newline.itemCount!;
+		if (this.newline.mode === 'itemCount') {
+			return numItems > this.newline.itemCount!;
+		}
 
 		// calculate length if it were all inline
 		const inlineWidth = `${this.tokens[index].whitespaceBefore}${
 			this.tokens[index].value
 		} ${nextTokens.map(({ value }) => (value === ',' ? value + ' ' : value)).join('')}`.length;
 
-		if (this.newline.mode === 'lineWidth') return inlineWidth > this.lineWidth;
-		else if (this.newline.mode == 'hybrid')
+		if (this.newline.mode === 'lineWidth') {
+			return inlineWidth > this.lineWidth;
+		} else if (this.newline.mode === 'hybrid') {
 			return numItems > this.newline.itemCount! || inlineWidth > this.lineWidth;
+		}
 
 		return true;
 	};
@@ -239,8 +255,11 @@ export default class Formatter {
 		this.indentation.increaseTopLevel();
 
 		query += this.equalizeWhitespace(this.show(token));
-		if (this.currentNewline) query = this.addNewline(query);
-		else query += ' ';
+		if (this.currentNewline) {
+			query = this.addNewline(query);
+		} else {
+			query += ' ';
+		}
 		return query;
 	}
 
@@ -305,9 +324,10 @@ export default class Formatter {
 			return query;
 		} else if (isLimit(this.previousReservedToken)) {
 			return query;
+		} else if (this.currentNewline) {
+			return this.addNewline(query);
 		} else {
-			if (this.currentNewline) return this.addNewline(query);
-			else return query;
+			return query;
 		}
 	}
 
@@ -334,12 +354,16 @@ export default class Formatter {
 			token.type === tokenTypes.CLOSE_PAREN
 		) {
 			return this.cfg.uppercase ? token.value.toUpperCase() : token.value.toLowerCase();
-		} else return token.value;
+		} else {
+			return token.value;
+		}
 	}
 
 	addNewline(query: string) {
 		query = trimSpacesEnd(query);
-		if (!query.endsWith('\n')) query += '\n';
+		if (!query.endsWith('\n')) {
+			query += '\n';
+		}
 		return query + this.indentation.getIndent();
 	}
 
