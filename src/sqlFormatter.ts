@@ -10,7 +10,10 @@ import SparkSqlFormatter from './languages/SparkSqlFormatter';
 import StandardSqlFormatter from './languages/StandardSqlFormatter';
 import TSqlFormatter from './languages/TSqlFormatter';
 
-const formatters = {
+import type { NewlineOptions } from './types';
+import { AliasMode, NewlineMode } from './types';
+
+export const formatters = {
 	db2: Db2Formatter,
 	mariadb: MariaDbFormatter,
 	mysql: MySqlFormatter,
@@ -22,24 +25,19 @@ const formatters = {
 	sql: StandardSqlFormatter,
 	tsql: TSqlFormatter,
 };
-
+export type FormatterLanguage = keyof typeof formatters;
 export const supportedDialects = Object.keys(formatters);
 
-export interface NewlineOptions {
-	mode: 'always' | 'never' | 'lineWidth' | 'itemCount' | 'hybrid';
-	itemCount?: number;
-}
-
 export interface FormatOptions {
-	language: keyof typeof formatters;
-	params?: ParamItems | string[];
+	language: FormatterLanguage;
 	indent: string;
 	uppercase: boolean;
 	newline: NewlineOptions;
-	aliasAs: 'always' | 'never' | 'select';
+	aliasAs: AliasMode | keyof typeof AliasMode;
 	lineWidth: number;
 	linesBetweenQueries: number;
 	denseOperators: boolean;
+	params?: ParamItems | string[];
 }
 /**
  * Format whitespace in a query to make it easier to read.
@@ -50,9 +48,9 @@ export interface FormatOptions {
  *  @param {String} cfg.indent Characters used for indentation, default is "  " (2 spaces)
  *  @param {Boolean} cfg.uppercase Converts keywords to uppercase
  *  @param {NewlineOptions} cfg.newline Determines when to break words onto a newline;
- *  	@param {String} cfg.newline.mode always | never | lineWidth (break only when > line width) | itemCount (break when > itemCount) | hybrid (lineWidth OR itemCount)
+ *  	@param {NewlineMode} cfg.newline.mode always | never | lineWidth (break only when > line width) | itemCount (break when > itemCount) | hybrid (lineWidth OR itemCount)
  *  	@param {Integer} cfg.newline.itemCount Used when mode is itemCount or hybrid, must be >=0
- *  @param {String} cfg.aliasAs Whether to use AS in column aliases in only SELECT clause, both SELECT and table aliases, or never
+ *  @param {AliasMode} cfg.aliasAs Whether to use AS in column aliases in only SELECT clause, both SELECT and table aliases, or never
  *  @param {Integer} cfg.lineWidth Number of characters in each line before breaking, default: 50
  *  @param {Integer} cfg.linesBetweenQueries How many line breaks between queries
  *  @param {Boolean} cfg.denseOperators whether to format operators with spaces
@@ -68,15 +66,18 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 		throw Error(`Unsupported SQL dialect: ${cfg.language}`);
 	}
 
-	if (cfg.newline && (cfg.newline.mode === 'itemCount' || cfg.newline.mode === 'hybrid')) {
+	if (
+		cfg.newline &&
+		(cfg.newline.mode === NewlineMode.itemCount || cfg.newline.mode === NewlineMode.hybrid)
+	) {
 		if ((cfg.newline.itemCount ?? 0) < 0) {
 			throw new Error('Error: newline.itemCount must be a positive number.');
 		}
 		if (cfg.newline.itemCount === 0) {
-			if (cfg.newline.mode === 'hybrid') {
-				cfg.newline.mode = 'lineWidth';
-			} else if (cfg.newline.mode === 'itemCount') {
-				cfg.newline = { mode: 'always' };
+			if (cfg.newline.mode === NewlineMode.hybrid) {
+				cfg.newline.mode = NewlineMode.lineWidth;
+			} else if (cfg.newline.mode === NewlineMode.itemCount) {
+				cfg.newline = { mode: NewlineMode.always };
 			}
 		}
 	}
@@ -90,10 +91,10 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 		language: 'sql',
 		indent: '  ',
 		uppercase: true,
-		linesBetweenQueries: 1,
-		newline: { mode: 'always' },
-		aliasAs: 'select',
+		newline: { mode: NewlineMode.always },
+		aliasAs: AliasMode.select,
 		lineWidth: 50,
+		linesBetweenQueries: 1,
 		denseOperators: false,
 	};
 	cfg = { ...defaultOptions, ...cfg };
