@@ -1,3 +1,5 @@
+import dedent from 'dedent-js';
+
 /**
  * Tests support for various operators
  * @param {Function} format
@@ -14,5 +16,26 @@ export default function supportsOperators(format, operators = []) {
 		it(`supports ${op} operator in dense mode`, () => {
 			expect(format(`foo ${op} bar`, { denseOperators: true })).toBe(`foo${op}bar`);
 		});
+	});
+
+	it('supports semicolon on same line', () => {
+		const result = format(`SELECT a FROM b;`);
+		expect(result).toBe(dedent`
+      SELECT
+        a
+      FROM
+        b;
+		`);
+	});
+
+	it('supports semicolon on new line', () => {
+		const result = format(`SELECT a FROM b;`, { semicolonNewline: true });
+		expect(result).toBe(dedent`
+      SELECT
+        a
+      FROM
+        b
+      ;
+		`);
 	});
 }

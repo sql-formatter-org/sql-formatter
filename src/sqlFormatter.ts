@@ -37,6 +37,7 @@ export interface FormatOptions {
 	lineWidth: number;
 	linesBetweenQueries: number;
 	denseOperators: boolean;
+	semicolonNewline: false;
 	params?: ParamItems | string[];
 }
 /**
@@ -55,6 +56,7 @@ export interface FormatOptions {
  *  @param {Integer} cfg.linesBetweenQueries How many line breaks between queries
  *  @param {Boolean} cfg.denseOperators whether to format operators with spaces
  *  @param {ParamItems} cfg.params Collection of params for placeholder replacement
+ *  @param {Boolean} cfg.semicolonNewline Whether to place semicolon on newline
  * @return {String}
  */
 export const format = (query: string, cfg: Partial<FormatOptions> = {}): string => {
@@ -96,6 +98,7 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 		lineWidth: 50,
 		linesBetweenQueries: 1,
 		denseOperators: false,
+		semicolonNewline: false,
 	};
 	cfg = { ...defaultOptions, ...cfg };
 

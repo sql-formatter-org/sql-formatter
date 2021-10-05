@@ -14,7 +14,7 @@ export default function behavesLikeSqlFormatter(format) {
 	supportsNewlineOptions(format);
 	supportsComments(format);
 	supportsConfigOptions(format);
-	supportsOperators(['=', '+', '-', '*', '/', '<>', '>', '<', '>=', '<=']);
+	supportsOperators(format, ['=', '+', '-', '*', '/', '<>', '>', '<', '>=', '<=']);
 
 	it('does nothing with empty input', () => {
 		const result = format('');
