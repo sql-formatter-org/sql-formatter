@@ -9,4 +9,10 @@ export default function supportsOperators(format, operators = []) {
 			expect(format(`foo${op}bar`)).toBe(`foo ${op} bar`);
 		});
 	});
+
+	operators.forEach(op => {
+		it(`supports ${op} operator in dense mode`, () => {
+			expect(format(`foo ${op} bar`, { denseOperators: true })).toBe(`foo${op}bar`);
+		});
+	});
 }
