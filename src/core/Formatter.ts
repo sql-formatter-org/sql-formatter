@@ -88,7 +88,7 @@ export default class Formatter {
 		const formattedQuery = this.getFormattedQueryFromTokens().trim();
 		const finalQuery = this.postFormat(formattedQuery);
 
-		return finalQuery;
+		return finalQuery.trimEnd();
 	}
 
 	postFormat(query: string) {
@@ -105,33 +105,35 @@ export default class Formatter {
 		let newQuery: string[] = [];
 		for (let i = 0; i < lines.length; i++) {
 			if (lines[i].match(/.*,$/)) {
-				let commaLines = [lines[i++]];
-				while (lines[i].match(/.*,$/)) {
-					commaLines.push(lines[i++]);
+				let commaLines = [lines[i]];
+				// find all lines in comma-bound clause, + 1
+				while (lines[i++].match(/.*,$/)) {
+					commaLines.push(lines[i]);
 				}
 
 				if (this.cfg.commaPosition === CommaPosition.tabular) {
-					const commaMaxLength = maxLength(commaLines);
-					commaLines = commaLines.map(commaLine =>
-						commaLine.replace(/,$/, ' '.repeat(commaMaxLength - commaLine.length) + ',')
+					commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, ''));
+					const commaMaxLength = maxLength(commaLines); // get longest for alignment
+					commaLines = commaLines.map((commaLine, j) =>
+						j < commaLines.length - 1 // do not add comma for last item
+							? commaLine + ' '.repeat(commaMaxLength - commaLine.length) + ','
+							: commaLine
 					);
 				} else if (this.cfg.commaPosition === CommaPosition.before) {
 					const isTabs = this.cfg.indent.includes('\t'); // loose tab check
-					commaLines.push(lines[i++]);
 					commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, ''));
-					commaLines = [
-						commaLines[0],
-						...commaLines.slice(1).map(commaLine => {
-							const whitespaceRegex = this.tokenizer().WHITESPACE_REGEX;
-							return commaLine.replace(
-								whitespaceRegex,
-								commaLine.match(whitespaceRegex)![1].replace(
-									new RegExp((isTabs ? '\t' : this.cfg.indent) + '$'),
-									(isTabs ? '    ' : this.cfg.indent).replace(/ {2}$/, ', ') // using 4 width tabs
-								)
-							);
-						}),
-					];
+					const whitespaceRegex = this.tokenizer().WHITESPACE_REGEX;
+					commaLines = commaLines.map((commaLine, j) =>
+						j // do not add comma for first item
+							? commaLine.replace(
+									whitespaceRegex,
+									commaLine.match(whitespaceRegex)![1].replace(
+										new RegExp((isTabs ? '\t' : this.cfg.indent) + '$'), // replace last two spaces in preceding whitespace with ', '
+										(isTabs ? '    ' : this.cfg.indent).replace(/ {2}$/, ', ') // using 4 width tabs
+									)
+							  )
+							: commaLine
+					);
 				}
 
 				newQuery = [...newQuery, ...commaLines];
