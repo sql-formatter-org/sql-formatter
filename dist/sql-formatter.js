@@ -412,19 +412,28 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    SqlUtils.formatSubstringCase = function formatSubstringCase(string, tokenizer) {
 	        var toks = tokenizer.tokenize(string);
-	        var prev = toks[0];
-	        prev.value = this.formatTextCase(prev);
 	        var substring = "";
 	        var lowCase = string.toLowerCase();
-	        for (var i = 1; i < toks.length; i++) {
-	            var token = toks[i];
-	            token.value = SqlUtils.formatTextCase(token);
+	        for (var _iterator = toks, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+	            var _ref;
+
+	            if (_isArray) {
+	                if (_i >= _iterator.length) break;
+	                _ref = _iterator[_i++];
+	            } else {
+	                _i = _iterator.next();
+	                if (_i.done) break;
+	                _ref = _i.value;
+	            }
+
+	            var token = _ref;
+
 	            if (token.type != _tokenTypes2["default"].WHITESPACE) {
+	                token.value = SqlUtils.formatTextCase(token);
 	                var end = lowCase.indexOf(token.value.toLowerCase());
 	                var current = lowCase.substring(0, end) + token.value;
 	                substring += current;
 	                lowCase = lowCase.substring(lowCase.indexOf(current.toLowerCase()) + current.length);
-	                prev = token;
 	            }
 	        }
 	        return substring;

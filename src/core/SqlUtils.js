@@ -62,19 +62,15 @@ export default class SqlUtils {
 
     static formatSubstringCase(string, tokenizer) {
         const toks = tokenizer.tokenize(string);
-        let prev = toks[0];
-        prev.value = this.formatTextCase(prev);
         let substring = "";
         let lowCase = string.toLowerCase();
-        for (let i = 1; i < toks.length; i++) {
-            const token = toks[i];
-            token.value = SqlUtils.formatTextCase(token);
+        for (let token of toks) {
             if (token.type != tokenTypes.WHITESPACE) {
+                token.value = SqlUtils.formatTextCase(token);
                 const end = lowCase.indexOf(token.value.toLowerCase());
                 const current = lowCase.substring(0, end) + token.value;
                 substring += current;
                 lowCase = lowCase.substring(lowCase.indexOf(current.toLowerCase()) + current.length);
-                prev = token;
             }
         }
         return substring;
