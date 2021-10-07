@@ -100,31 +100,37 @@ export default class Formatter {
 	}
 
 	formatAliasPositions(query: string) {
-		const hasAliasRegex = /.*( AS)? .*,$/;
 		const lines = query.split('\n');
 
 		let newQuery: string[] = [];
 		for (let i = 0; i < lines.length; i++) {
 			// find SELECT rows with trailing comma, if no comma (only one row) - no-op
-			if (lines[i].match(hasAliasRegex)) {
-				let aliasLines = [lines[i++]];
-				do {
-					aliasLines.push(lines[i++]);
-				} while (lines[i].match(hasAliasRegex));
+			if (lines[i].match(/SELECT/i)) {
+				newQuery.push(lines[i]); // add select to new query
 
-				const [precedingText, aliases] = aliasLines
-					.map(line => line.trimStart().split(/ (AS )?(?=[^\s]+,?$)/)) // break lines into alias with optional AS, and all preceding text
-					.reduce(
-						([textAcc, aliasAcc], cur) => [
-							[...textAcc, cur[0]],
-							[...aliasAcc, cur.slice(1).join('')],
-						],
-						[[], []] as [string[], string[]]
-					);
+				let aliasLines = [lines[++i]];
+				// get all lines in SELECT clause
+				while (lines[i++].match(/.*,$/)) {
+					aliasLines.push(lines[i]);
+				}
 
-				const aliasMaxLength = maxLength(precedingText);
-				aliasLines = precedingText.map(
-					(text, i) => text + ' '.repeat(aliasMaxLength - text.length + 1) + aliases[i]
+				const splitLines = aliasLines
+					.map(line => line.split(/(?<=[^\s]+) (AS )?(?=[^\s]+,?$)/)) // break lines into alias with optional AS, and all preceding text
+					.map(slugs => ({
+						precedingText: slugs[0], // always first split
+						alias: slugs.length > 1 ? slugs[slugs.length - 1] : undefined, // always last in split
+						as: slugs.length === 3 ? slugs[1] : undefined, // 2nd if AS is present, else omitted
+					}));
+
+				const aliasMaxLength = maxLength(
+					splitLines.map(({ precedingText }) => precedingText.replace(/\s*,\s*$/, '')) // get longest of precedingText, trim trailing comma for non-alias columns
+				);
+				aliasLines = splitLines.map(
+					({ precedingText, as, alias }) =>
+						precedingText +
+						(alias
+							? ' '.repeat(aliasMaxLength - precedingText.length + 1) + (as ?? '') + alias
+							: '')
 				);
 				newQuery = [...newQuery, ...aliasLines];
 			}
