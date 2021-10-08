@@ -86,41 +86,117 @@ export default function supportsAliases(format) {
 			{ tabulateAlias: true }
 		);
 
-		expect(result).toBe(dedent`
-		SELECT
-		  alpha     AS A,
-		  MAX(beta),
-		  epsilon   AS E
-		FROM
-		  (
-		    SELECT
-		      delta AS d,
-		      iota  AS i
-		    FROM
-		      gamma
-		  );
-		`);
+		expect(result).toBe(
+			dedent`
+				SELECT
+				  alpha     AS A,
+				  MAX(beta),
+				  epsilon   AS E
+				FROM
+				  (
+				    SELECT
+				      delta AS d,
+				      iota  AS i
+				    FROM
+				      gamma
+				  );
+			`
+		);
 	});
 
-	it('tabulates alias with aliasAs on', () => {
+	it('accepts tabular alias with aliasAs on', () => {
+		const result = format(
+			dedent`
+				SELECT
+				  alpha     AS A,
+				  MAX(beta),
+				  epsilon   AS E
+				FROM
+				  (
+				    SELECT
+				      delta AS d,
+				      iota  AS i
+				    FROM
+				      gamma
+				  );
+			`
+		);
+
+		expect(result).toBe(
+			dedent`
+				SELECT
+				  alpha AS A,
+				  MAX(beta),
+				  epsilon AS E
+				FROM
+				  (
+				    SELECT
+				      delta AS d,
+				      iota AS i
+				    FROM
+				      gamma
+				  );
+			`
+		);
+	});
+
+	it('tabulates alias with aliasAs off', () => {
 		const result = format(
 			'SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT delta AS d, iota i FROM gamma );',
 			{ tabulateAlias: true, aliasAs: 'never' }
 		);
 
-		expect(result).toBe(dedent`
-		SELECT
-		  alpha     A,
-		  MAX(beta),
-		  epsilon   E
-		FROM
-		  (
-		    SELECT
-		      delta d,
-		      iota  i
-		    FROM
-		      gamma
-		  );
-		`);
+		expect(result).toBe(
+			dedent`
+				SELECT
+				  alpha     A,
+				  MAX(beta),
+				  epsilon   E
+				FROM
+				  (
+				    SELECT
+				      delta d,
+				      iota  i
+				    FROM
+				      gamma
+				  );
+			`
+		);
+	});
+
+	it('accepts tabular alias with aliasAs off', () => {
+		const result = format(
+			dedent`
+				SELECT
+				  alpha     A,
+				  MAX(beta),
+				  epsilon   E
+				FROM
+				  (
+				    SELECT
+				      delta d,
+				      iota  i
+				    FROM
+				      gamma
+				  );
+			`
+		);
+
+		expect(result).toBe(
+			dedent`
+				SELECT
+				  alpha AS A,
+				  MAX(beta),
+				  epsilon AS E
+				FROM
+				  (
+				    SELECT
+				      delta AS d,
+				      iota AS i
+				    FROM
+				      gamma
+				  );
+			`
+		);
 	});
 }
