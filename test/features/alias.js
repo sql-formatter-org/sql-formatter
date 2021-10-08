@@ -82,7 +82,7 @@ export default function supportsAliases(format) {
 
 	it('tabulates alias with aliasAs on', () => {
 		const result = format(
-			'SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT delta AS d, iota i FROM gamma );',
+			'SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );',
 			{ tabulateAlias: true }
 		);
 
@@ -95,8 +95,8 @@ export default function supportsAliases(format) {
 				FROM
 				  (
 				    SELECT
-				      delta AS d,
-				      iota  AS i
+				      mu   AS m,
+				      iota AS i
 				    FROM
 				      gamma
 				  );
@@ -114,8 +114,8 @@ export default function supportsAliases(format) {
 				FROM
 				  (
 				    SELECT
-				      delta AS d,
-				      iota  AS i
+				      mu   AS m,
+				      iota AS i
 				    FROM
 				      gamma
 				  );
@@ -131,7 +131,7 @@ export default function supportsAliases(format) {
 				FROM
 				  (
 				    SELECT
-				      delta AS d,
+				      mu AS m,
 				      iota AS i
 				    FROM
 				      gamma
@@ -142,7 +142,7 @@ export default function supportsAliases(format) {
 
 	it('tabulates alias with aliasAs off', () => {
 		const result = format(
-			'SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT delta AS d, iota i FROM gamma );',
+			'SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );',
 			{ tabulateAlias: true, aliasAs: 'never' }
 		);
 
@@ -155,8 +155,8 @@ export default function supportsAliases(format) {
 				FROM
 				  (
 				    SELECT
-				      delta d,
-				      iota  i
+				      mu   m,
+				      iota i
 				    FROM
 				      gamma
 				  );
@@ -174,8 +174,8 @@ export default function supportsAliases(format) {
 				FROM
 				  (
 				    SELECT
-				      delta d,
-				      iota  i
+				      mu   m,
+				      iota i
 				    FROM
 				      gamma
 				  );
@@ -191,7 +191,7 @@ export default function supportsAliases(format) {
 				FROM
 				  (
 				    SELECT
-				      delta AS d,
+				      mu AS m,
 				      iota AS i
 				    FROM
 				      gamma
