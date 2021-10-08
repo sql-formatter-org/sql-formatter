@@ -48,12 +48,44 @@ export default function supportsCommaModes(format) {
 		);
 	});
 
+	it('accepts comma before column', () => {
+		const result = format(
+			dedent(`
+			SELECT
+				alpha
+			, MAX(beta)
+			, delta AS d
+			, epsilon
+			FROM
+				gamma
+			GROUP BY
+				alpha
+			, delta
+			, epsilon
+			`)
+		);
+		expect(result).toBe(
+			dedent(`
+			SELECT
+			  alpha,
+			  MAX(beta),
+			  delta AS d,
+			  epsilon
+			FROM
+			  gamma
+			GROUP BY
+			  alpha,
+			  delta,
+			  epsilon
+			`)
+		);
+	});
+
 	it('supports tabular mode', () => {
 		const result = format(
 			'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon',
 			{ commaPosition: 'tabular' }
 		);
-		console.log(result);
 		expect(result).toBe(
 			dedent(`
 			SELECT
@@ -66,6 +98,39 @@ export default function supportsCommaModes(format) {
 			GROUP BY
 			  alpha  ,
 			  delta  ,
+			  epsilon
+			`)
+		);
+	});
+
+	it('accepts tabular mode', () => {
+		const result = format(
+			dedent(`
+			SELECT
+				alpha     ,
+				MAX(beta) ,
+				delta AS d,
+				epsilon
+			FROM
+				gamma
+			GROUP BY
+				alpha  ,
+				delta  ,
+				epsilon
+			`)
+		);
+		expect(result).toBe(
+			dedent(`
+			SELECT
+			  alpha,
+			  MAX(beta),
+			  delta AS d,
+			  epsilon
+			FROM
+			  gamma
+			GROUP BY
+			  alpha,
+			  delta,
 			  epsilon
 			`)
 		);
