@@ -115,7 +115,7 @@ export default class Formatter {
 				}
 
 				const splitLines = aliasLines
-					.map(line => line.split(/(?<=[^\s]+) (AS )?(?=[^\s]+,?$)/)) // break lines into alias with optional AS, and all preceding text
+					.map(line => line.split(/(?<=[^\s]+) (AS )?(?=[^\s]+,?$)/i)) // break lines into alias with optional AS, and all preceding text
 					.map(slugs => ({
 						precedingText: slugs[0], // always first split
 						alias: slugs.length > 1 ? slugs[slugs.length - 1] : undefined, // always last in split

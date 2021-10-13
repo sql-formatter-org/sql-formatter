@@ -15,7 +15,6 @@
 		"no-useless-concat": "off",
 		"prefer-template": "off",
 		"prettier/prettier": ["error"],
-		"require-unicode-regexp": ["warn"],
 		"@typescript-eslint/comma-dangle": "off",
 		"@typescript-eslint/indent": "off",
 		"@typescript-eslint/lines-between-class-members": "off",
