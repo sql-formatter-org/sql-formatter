@@ -89,7 +89,7 @@ export default class Formatter {
 		this.tokens = this.tokenizer().tokenize(query);
 		const formattedQuery = this.getFormattedQueryFromTokens();
 
-		return formattedQuery.trim();
+		return formattedQuery.replace(/^\n*/u, '').trimEnd();
 	}
 
 	getFormattedQueryFromTokens() {
@@ -159,7 +159,7 @@ export default class Formatter {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery);
 			}
 		});
-		return formattedQuery.replace(new RegExp(this.falseSpace, 'gim'), ' ');
+		return formattedQuery.replace(new RegExp(this.falseSpace, 'ugim'), ' ');
 	}
 
 	formatAliases(token: Token, query: string) {
@@ -253,17 +253,19 @@ export default class Formatter {
 	}
 
 	formatTopLevelReservedWordNoIndent(token: Token, query: string) {
-		// this.indentation.decreaseTopLevel();
+		this.indentation.decreaseTopLevel();
 		query = this.addNewline(query) + this.equalizeWhitespace(this.show(token));
 		return this.addNewline(query);
 	}
 
 	formatTopLevelReservedWord(token: Token, query: string) {
-		// this.indentation.decreaseTopLevel();
+		this.indentation.decreaseTopLevel();
 
 		query = this.addNewline(query);
 
-		// this.indentation.increaseTopLevel();
+		if (this.tokenLookAhead()?.value !== '(') {
+			this.indentation.increaseTopLevel();
+		}
 
 		query += this.equalizeWhitespace(this.show(token));
 		if (
@@ -283,6 +285,13 @@ export default class Formatter {
 	formatNewlineReservedWord(token: Token, query: string) {
 		if (isAnd(token) && isBetween(this.tokenLookBehind(2))) {
 			return this.formatWithSpaces(token, query);
+		}
+
+		if (
+			this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
+			this.cfg.keywordPosition === KeywordMode.tenSpaceRight
+		) {
+			this.indentation.decreaseTopLevel();
 		}
 		return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
 	}
@@ -325,7 +334,14 @@ export default class Formatter {
 			return this.formatWithSpaces(token, query, 'after');
 		} else {
 			this.indentation.decreaseBlockLevel();
-			return this.formatWithSpaces(token, this.addNewline(query));
+			query = this.addNewline(query);
+			if (
+				this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
+				this.cfg.keywordPosition === KeywordMode.tenSpaceRight
+			) {
+				query += this.cfg.indent;
+			}
+			return this.formatWithSpaces(token, query);
 		}
 	}
 
