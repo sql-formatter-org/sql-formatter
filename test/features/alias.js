@@ -16,12 +16,12 @@ export default function supportsAliases(format) {
 			  a AS a_column,
 			  b AS bColumn
 			FROM
-			  (
-			    SELECT
-			      *
-			    FROM
-			      x
-			  ) AS y
+			(
+			  SELECT
+			    *
+			  FROM
+			    x
+			) AS y
 			WHERE
 			  z;
 			`)
@@ -39,12 +39,12 @@ export default function supportsAliases(format) {
 			  a a_column,
 			  b bColumn
 			FROM
-			  (
-			    SELECT
-			      *
-			    FROM
-			      x
-			  ) y
+			(
+			  SELECT
+			    *
+			  FROM
+			    x
+			) y
 			WHERE
 			  z;
 			`)
@@ -62,12 +62,12 @@ export default function supportsAliases(format) {
 			  a AS a_column,
 			  b AS bColumn
 			FROM
-			  (
-			    SELECT
-			      *
-			    FROM
-			      x
-			  ) y
+			(
+			  SELECT
+			    *
+			  FROM
+			    x
+			) y
 			WHERE
 			  z;
 			`)

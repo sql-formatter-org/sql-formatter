@@ -164,14 +164,14 @@ export default function behavesLikeSqlFormatter(format) {
         *,
         SUM(*) AS total
       FROM
-        (
-          SELECT
-            *
-          FROM
-            Posts
-          LIMIT
-            30
-        )
+      (
+        SELECT
+          *
+        FROM
+          Posts
+        LIMIT
+          30
+      )
       WHERE
         a > b
     `);
@@ -300,12 +300,12 @@ export default function behavesLikeSqlFormatter(format) {
       SET
         total_orders = order_summary.total
       FROM
-        (
-          SELECT
-            *
-          FROM
-            bank
-        ) AS order_summary
+      (
+        SELECT
+          *
+        FROM
+          bank
+      ) AS order_summary
     `);
 	});
 

@@ -8,6 +8,7 @@ import {
 	isAs,
 	isBetween,
 	isEnd,
+	isFrom,
 	isLimit,
 	isReserved,
 	isSelect,
@@ -19,7 +20,7 @@ import type { FormatOptions } from '../sqlFormatter';
 import { AliasMode, KeywordMode, NewlineMode } from '../types';
 
 export default class Formatter {
-	cfg: FormatOptions;
+	cfg: FormatOptions & { tenSpace?: boolean };
 	newline: FormatOptions['newline'];
 	currentNewline: boolean;
 	lineWidth: number;
@@ -47,6 +48,9 @@ export default class Formatter {
 	 */
 	constructor(cfg: FormatOptions) {
 		this.cfg = cfg;
+		this.cfg.tenSpace =
+			this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
+			this.cfg.keywordPosition === KeywordMode.tenSpaceRight;
 		this.newline = cfg.newline;
 		this.currentNewline = true;
 		this.lineWidth = cfg.lineWidth;
@@ -263,18 +267,16 @@ export default class Formatter {
 
 		query = this.addNewline(query);
 
-		if (this.tokenLookAhead()?.value !== '(') {
+		if (this.cfg.tenSpace) {
+			if (this.tokenLookAhead()?.value !== '(') {
+				this.indentation.increaseTopLevel();
+			}
+		} else if (!(this.tokenLookAhead()?.value === '(' && isFrom(token))) {
 			this.indentation.increaseTopLevel();
 		}
 
 		query += this.equalizeWhitespace(this.show(token));
-		if (
-			this.currentNewline &&
-			!(
-				this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
-				this.cfg.keywordPosition === KeywordMode.tenSpaceRight
-			)
-		) {
+		if (this.currentNewline && !this.cfg.tenSpace) {
 			query = this.addNewline(query);
 		} else {
 			query += ' ';
@@ -287,10 +289,7 @@ export default class Formatter {
 			return this.formatWithSpaces(token, query);
 		}
 
-		if (
-			this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
-			this.cfg.keywordPosition === KeywordMode.tenSpaceRight
-		) {
+		if (this.cfg.tenSpace) {
 			this.indentation.decreaseTopLevel();
 		}
 		return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
@@ -335,10 +334,7 @@ export default class Formatter {
 		} else {
 			this.indentation.decreaseBlockLevel();
 			query = this.addNewline(query);
-			if (
-				this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
-				this.cfg.keywordPosition === KeywordMode.tenSpaceRight
-			) {
+			if (this.cfg.tenSpace) {
 				query += this.cfg.indent;
 			}
 			return this.formatWithSpaces(token, query);
@@ -360,10 +356,7 @@ export default class Formatter {
 		} else if (this.currentNewline) {
 			return this.addNewline(query);
 		} else if (this.currentNewline) {
-			if (
-				this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
-				this.cfg.keywordPosition === KeywordMode.tenSpaceRight
-			) {
+			if (this.cfg.tenSpace) {
 				return this.addNewline(query) + this.cfg.indent;
 			}
 			return this.addNewline(query);
@@ -415,10 +408,7 @@ export default class Formatter {
 	tenSpacedToken(token: Token) {
 		const addBuffer = (string: String, bufferLength = 9) =>
 			this.falseSpace.repeat(Math.max(bufferLength - string.length, 0));
-		if (
-			this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
-			this.cfg.keywordPosition === KeywordMode.tenSpaceRight
-		) {
+		if (this.cfg.tenSpace) {
 			let bufferItem = token.value; // store which part of keyword receives 10-space buffer
 			let tail = [] as string[]; // rest of keyword
 			const needsSplit = bufferItem.length >= 10 && bufferItem.includes(' '); // split for long keywords like INNER JOIN or UNION DISTINCT
