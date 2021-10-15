@@ -300,7 +300,6 @@ const reservedWords = [
 	'OFFSET',
 	'OLD',
 	'OLD_TABLE',
-	'ON',
 	'ONLY',
 	'OPEN',
 	'OPTIMIZATION',
@@ -536,6 +535,7 @@ const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'U
 const reservedNewlineWords = [
 	'AND',
 	'OR',
+	'ON',
 	// joins
 	'JOIN',
 	'INNER JOIN',

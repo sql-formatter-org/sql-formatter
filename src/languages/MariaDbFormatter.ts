@@ -149,7 +149,6 @@ const reservedWords = [
 	'NO_WRITE_TO_BINLOG',
 	'NULL',
 	'NUMERIC',
-	'ON',
 	'OPTIMIZE',
 	'OPTION',
 	'OPTIONALLY',
@@ -278,6 +277,7 @@ const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'UNION', 'U
 const reservedNewlineWords = [
 	'AND',
 	'ELSE',
+	'ON',
 	'OR',
 	'WHEN',
 	// joins

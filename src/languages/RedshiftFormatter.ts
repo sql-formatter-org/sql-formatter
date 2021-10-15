@@ -116,7 +116,6 @@ const reservedWords = [
 	'OFFLINE',
 	'OFFSET',
 	'OLD',
-	'ON',
 	'ONLY',
 	'OPEN',
 	'ORC',
@@ -299,6 +298,7 @@ const reservedTopLevelWordsNoIndent: string[] = [];
 const reservedNewlineWords = [
 	'AND',
 	'ELSE',
+	'ON',
 	'OR',
 	'OUTER APPLY',
 	'WHEN',

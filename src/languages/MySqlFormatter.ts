@@ -163,7 +163,6 @@ const reservedWords = [
 	'NULL',
 	'NUMERIC',
 	'OF',
-	'ON',
 	'OPTIMIZE',
 	'OPTIMIZER_COSTS',
 	'OPTION',
@@ -291,6 +290,7 @@ const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'UNION', 'U
 const reservedNewlineWords = [
 	'AND',
 	'ELSE',
+	'ON',
 	'OR',
 	'WHEN',
 	// joins
