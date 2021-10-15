@@ -4,6 +4,7 @@ import supportsConfigOptions from './features/configOptions';
 import supportsOperators from './features/operators';
 import supportsAliases from './features/alias';
 import supportsNewlineOptions from './features/newline';
+import supportsKeywordPositions from './features/keywordPosition';
 
 /**
  * Core tests for all SQL formatters
@@ -11,6 +12,7 @@ import supportsNewlineOptions from './features/newline';
  */
 export default function behavesLikeSqlFormatter(format) {
 	supportsAliases(format);
+	supportsKeywordPositions(format);
 	supportsNewlineOptions(format);
 	supportsComments(format);
 	supportsConfigOptions(format);
