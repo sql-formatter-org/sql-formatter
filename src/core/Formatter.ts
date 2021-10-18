@@ -91,18 +91,18 @@ export default class Formatter {
 	 */
 	format(query: string): string {
 		this.tokens = this.tokenizer().tokenize(query);
-		const formattedQuery = this.getFormattedQueryFromTokens().trim();
+		const formattedQuery = this.getFormattedQueryFromTokens();
 		const finalQuery = this.postFormat(formattedQuery);
 
 		return finalQuery.replace(/^\n*/u, '').trimEnd();
 	}
 
 	postFormat(query: string) {
-		if (this.cfg.commaPosition !== CommaPosition.after) {
-			query = this.formatCommaPositions(query);
-		}
 		if (this.cfg.tabulateAlias) {
 			query = this.formatAliasPositions(query);
+		}
+		if (this.cfg.commaPosition !== CommaPosition.after) {
+			query = this.formatCommaPositions(query);
 		}
 
 		return query;
