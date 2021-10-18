@@ -5,5 +5,6 @@
 	"semi": true,
 	"bracketSpacing": true,
 	"useTabs": true,
-	"tabWidth": 2
+	"tabWidth": 2,
+	"endOfLine": "auto"
 }

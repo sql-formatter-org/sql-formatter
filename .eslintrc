@@ -15,17 +15,18 @@
 		"no-useless-concat": "off",
 		"prefer-template": "off",
 		"prettier/prettier": ["error"],
-		"require-unicode-regexp": ["error"],
-		"@typescript-eslint/naming-convention": "warn",
-		"@typescript-eslint/indent": "off",
-		"@typescript-eslint/semi": "warn",
-		"@typescript-eslint/lines-between-class-members": "off",
+		"require-unicode-regexp": ["warn"],
 		"@typescript-eslint/comma-dangle": "off",
+		"@typescript-eslint/indent": "off",
+		"@typescript-eslint/lines-between-class-members": "off",
+		"@typescript-eslint/naming-convention": "warn",
+		"@typescript-eslint/no-unused-vars": "warn",
 		"@typescript-eslint/quotes": [
 			"warn",
 			"single",
 			{ "avoidEscape": true, "allowTemplateLiterals": true }
-		]
+		],
+		"@typescript-eslint/semi": "warn"
 	},
 	"settings": {
 		"import/resolver": {

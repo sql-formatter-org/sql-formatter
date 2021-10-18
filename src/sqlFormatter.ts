@@ -11,7 +11,7 @@ import StandardSqlFormatter from './languages/StandardSqlFormatter';
 import TSqlFormatter from './languages/TSqlFormatter';
 
 import type { NewlineOptions } from './types';
-import { AliasMode, NewlineMode } from './types';
+import { AliasMode, CommaPosition, NewlineMode } from './types';
 
 export const formatters = {
 	db2: Db2Formatter,
@@ -34,6 +34,7 @@ export interface FormatOptions {
 	uppercase: boolean;
 	newline: NewlineOptions;
 	aliasAs: AliasMode | keyof typeof AliasMode;
+	commaPosition: CommaPosition | keyof typeof CommaPosition;
 	lineWidth: number;
 	linesBetweenQueries: number;
 	denseOperators: boolean;
@@ -52,6 +53,7 @@ export interface FormatOptions {
  *  	@param {NewlineMode} cfg.newline.mode always | never | lineWidth (break only when > line width) | itemCount (break when > itemCount) | hybrid (lineWidth OR itemCount)
  *  	@param {Integer} cfg.newline.itemCount Used when mode is itemCount or hybrid, must be >=0
  *  @param {AliasMode} cfg.aliasAs Whether to use AS in column aliases in only SELECT clause, both SELECT and table aliases, or never
+ *  @param {CommaPosition} cfg.commaPosition Where to place the comma in listed clauses
  *  @param {Integer} cfg.lineWidth Number of characters in each line before breaking, default: 50
  *  @param {Integer} cfg.linesBetweenQueries How many line breaks between queries
  *  @param {Boolean} cfg.denseOperators whether to format operators with spaces
@@ -95,6 +97,7 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 		uppercase: true,
 		newline: { mode: NewlineMode.always },
 		aliasAs: AliasMode.select,
+		commaPosition: CommaPosition.after,
 		lineWidth: 50,
 		linesBetweenQueries: 1,
 		denseOperators: false,
