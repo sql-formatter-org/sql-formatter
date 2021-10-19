@@ -34,29 +34,6 @@ WHERE
 GROUP BY column4
 ```
 
-### Standard Tabbed (standardTabbed)
-
-```
-SELECT
-	COUNT(a.column1),
-	MAX(b.column2 + b.column3),
-	b.column4 AS four
-FROM
-(
-	SELECT
-		column1,
-		column5
-	FROM
-		table1
-) a
-JOIN table2 b
-	ON a.column5 = b.column5
-WHERE
-	column6
-	AND column7
-GROUP BY column4
-```
-
 ### 10-Space Left-aligned (tenSpaceLeft)
 
 ```
@@ -91,21 +68,4 @@ GROUP BY  column4
     WHERE column6
       AND column7
  GROUP BY column4
-```
-
-### Tabular (tabular)
-
-```
-SELECT    COUNT(a.column1)           AS one   ,
-          MAX(b.column2 + b.column3) AS 2plus3,
-          b.column4                  AS four
-FROM      (
-          SELECT    column1,
-                    column5
-          FROM      table1
-          ) a
-JOIN      table2 b                   ON a.column5 = b.column5
-WHERE     column6
-AND       column7
-GROUP BY  column4
 ```
