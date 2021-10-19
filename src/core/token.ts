@@ -8,19 +8,44 @@ export interface Token {
 	whitespaceBefore?: string;
 }
 
+export const ZWS = '​'; // uses zero-width space (&#8203; / U+200B)
+const ZWS_REGEX = '\u200b';
+const spaces = `[${ZWS_REGEX}\\s]`;
+
 const isToken = (type: TokenType, regex: RegExp) => (token: Token) =>
 	token?.type === type && regex.test(token?.value);
 
-export const isAs = isToken(tokenTypes.RESERVED, /^AS$/iu);
-export const isAnd = isToken(tokenTypes.RESERVED_NEWLINE, /^AND$/iu);
-export const isBetween = isToken(tokenTypes.RESERVED, /^BETWEEN$/iu);
-export const isBy = isToken(tokenTypes.RESERVED, /^BY$/iu);
-export const isEnd = isToken(tokenTypes.CLOSE_PAREN, /^END$/iu);
-export const isFrom = isToken(tokenTypes.RESERVED_TOP_LEVEL, /^FROM$/iu);
-export const isLimit = isToken(tokenTypes.RESERVED_TOP_LEVEL, /^LIMIT$/iu);
-export const isSelect = isToken(tokenTypes.RESERVED_TOP_LEVEL, /^SELECT$/iu);
-export const isSet = isToken(tokenTypes.RESERVED_TOP_LEVEL, /^SET$/iu);
-export const isWindow = isToken(tokenTypes.RESERVED_TOP_LEVEL, /^WINDOW$/iu);
+export const isAs = isToken(tokenTypes.RESERVED, new RegExp(`^${spaces}*AS${spaces}*$`, 'iu'));
+export const isAnd = isToken(
+	tokenTypes.RESERVED_NEWLINE,
+	new RegExp(`^${spaces}*AND${spaces}*$`, 'iu')
+);
+export const isBetween = isToken(
+	tokenTypes.RESERVED,
+	new RegExp(`^${spaces}*BETWEEN${spaces}*$`, 'iu')
+);
+export const isBy = isToken(tokenTypes.RESERVED, new RegExp(`^${spaces}*BY${spaces}*$`, 'iu'));
+export const isEnd = isToken(tokenTypes.CLOSE_PAREN, new RegExp(`^${spaces}*END${spaces}*$`, 'iu'));
+export const isFrom = isToken(
+	tokenTypes.RESERVED_TOP_LEVEL,
+	new RegExp(`^${spaces}*FROM${spaces}*$`, 'iu')
+);
+export const isLimit = isToken(
+	tokenTypes.RESERVED_TOP_LEVEL,
+	new RegExp(`^${spaces}*LIMIT${spaces}*$`, 'iu')
+);
+export const isSelect = isToken(
+	tokenTypes.RESERVED_TOP_LEVEL,
+	new RegExp(`^${spaces}*SELECT${spaces}*$`, 'iu')
+);
+export const isSet = isToken(
+	tokenTypes.RESERVED_TOP_LEVEL,
+	new RegExp(`^${spaces}*SET${spaces}*$`, 'iu')
+);
+export const isWindow = isToken(
+	tokenTypes.RESERVED_TOP_LEVEL,
+	new RegExp(`^${spaces}*WINDOW${spaces}*$`, 'iu')
+);
 
 export const isTopLevel = (token: Token) =>
 	token &&

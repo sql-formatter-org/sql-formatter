@@ -140,4 +140,57 @@ export default function supportsAliases(format) {
 
 		expect(result).toBe(finalQueryWithAlias);
 	});
+
+	it('handles edge case of newline.never', () => {
+		const result = format(
+			dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
+			{ newline: { mode: 'never' }, tabulateAlias: true }
+		);
+
+		expect(result).toBe(dedent`
+      SELECT alpha AS A, MAX(beta), epsilon AS E
+      FROM (
+        SELECT mu AS m, iota AS i
+        FROM gamma
+      );
+		`);
+	});
+
+	it('handles edge case of tenSpaceLeft', () => {
+		const result = format(
+			dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
+			{ keywordPosition: 'tenSpaceLeft', tabulateAlias: true }
+		);
+
+		expect(result).toBe(dedent`
+      SELECT    alpha     AS A,
+                MAX(beta),
+                epsilon   AS E
+      FROM      (
+                SELECT    mu   AS m,
+                          iota AS i
+                FROM      gamma
+                );
+		`);
+	});
+
+	it('handles edge case of tenSpaceRight', () => {
+		const result = format(
+			dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
+			{ keywordPosition: 'tenSpaceRight', tabulateAlias: true }
+		);
+
+		expect(result).toBe(
+			[
+				'   SELECT alpha     AS A,',
+				'          MAX(beta),',
+				'          epsilon   AS E',
+				'     FROM (',
+				'             SELECT mu   AS m,',
+				'                    iota AS i',
+				'               FROM gamma',
+				'          );',
+			].join('\n')
+		);
+	});
 }

@@ -14,6 +14,7 @@ import {
 	isSelect,
 	isTopLevel,
 	Token,
+	ZWS,
 } from './token';
 import Tokenizer from './Tokenizer';
 import type { FormatOptions } from '../sqlFormatter';
@@ -28,23 +29,22 @@ export default class Formatter {
 	inlineBlock: InlineBlock;
 	params: Params;
 
-	falseSpace: string;
 	previousReservedToken: Token;
 	withinSelect: boolean;
 	tokens: Token[];
 	index: number;
 
 	/**
-	 * @param {FormatOptions} cfg
-	 *  @param {String} cfg.language
-	 *  @param {String} cfg.indent
-	 *  @param {Boolean} cfg.uppercase
-	 *  @param {NewlineOptions} cfg.newline
+	 *	@param {FormatOptions} cfg
+	 *	@param {String} cfg.language
+	 *	@param {String} cfg.indent
+	 *	@param {Boolean} cfg.uppercase
+	 *	@param {NewlineOptions} cfg.newline
 	 * 		@param {NewlineMode} cfg.newline.mode
 	 * 		@param {Integer} cfg.newline.itemCount
-	 *  @param {Integer} cfg.lineWidth
-	 *  @param {Integer} cfg.linesBetweenQueries
-	 *  @param {ParamItems | string[]} cfg.params
+	 *	@param {Integer} cfg.lineWidth
+	 *	@param {Integer} cfg.linesBetweenQueries
+	 *	@param {ParamItems | string[]} cfg.params
 	 */
 	constructor(cfg: FormatOptions) {
 		this.cfg = cfg;
@@ -58,7 +58,6 @@ export default class Formatter {
 		this.inlineBlock = new InlineBlock(this.lineWidth);
 		this.params = new Params(this.cfg.params);
 
-		this.falseSpace = '​'; // uses zero-width space (&#8203; / U+200B)
 		this.previousReservedToken = {} as Token;
 		this.withinSelect = false;
 		this.tokens = [];
@@ -159,10 +158,18 @@ export default class Formatter {
 		let newQuery: string[] = [];
 		for (let i = 0; i < lines.length; i++) {
 			// find SELECT rows with trailing comma, if no comma (only one row) - no-op
-			if (lines[i].match(/SELECT/i)) {
-				newQuery.push(lines[i]); // add select to new query
+			if (lines[i].match(/^\s*SELECT/i)) {
+				let aliasLines: string[] = [];
+				if (lines[i].match(/.*,$/)) {
+					aliasLines = [lines[i]]; // add select to aliasLines in case of tenSpace formats
+				} else {
+					newQuery.push(lines[i]); // add select to new query
+					if (lines[i].match(/^\s*SELECT\s+.+(?!,$)/i)) {
+						continue;
+					}
+					aliasLines.push(lines[++i]);
+				}
 
-				let aliasLines = [lines[++i]];
 				// get all lines in SELECT clause
 				while (lines[i++].match(/.*,$/)) {
 					aliasLines.push(lines[i]);
@@ -261,7 +268,7 @@ export default class Formatter {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery);
 			}
 		});
-		return formattedQuery.replace(new RegExp(this.falseSpace, 'ugim'), ' ');
+		return formattedQuery.replace(new RegExp(ZWS, 'ugim'), ' ');
 	}
 
 	formatAliases(token: Token, query: string) {
@@ -505,7 +512,7 @@ export default class Formatter {
 
 	tenSpacedToken(token: Token) {
 		const addBuffer = (string: String, bufferLength = 9) =>
-			this.falseSpace.repeat(Math.max(bufferLength - string.length, 0));
+			ZWS.repeat(Math.max(bufferLength - string.length, 0));
 		if (this.cfg.tenSpace) {
 			let bufferItem = token.value; // store which part of keyword receives 10-space buffer
 			let tail = [] as string[]; // rest of keyword
