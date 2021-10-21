@@ -552,6 +552,7 @@ const reservedWords = {
 	 */
 };
 
+// https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
 const reservedTopLevelWords = [
 	'ABORT',
 	'ALTER DATABASE',
