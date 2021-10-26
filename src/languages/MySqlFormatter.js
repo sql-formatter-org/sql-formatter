@@ -24,6 +24,7 @@ const reservedWords = [
   'CHANGE',
   'CHAR',
   'CHARACTER',
+  'CHARACTER SET',
   'CHECK',
   'COLLATE',
   'COLUMN',

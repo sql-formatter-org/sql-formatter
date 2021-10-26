@@ -73,4 +73,11 @@ export default function behavesLikeMariaDbFormatter(format) {
         );
     `);
   });
+
+  it('supports CHARACTER SET keyword', () => {
+    expect(format('ALTER TABLE t MODIFY col1 VARCHAR(50) CHARACTER SET greek')).toBe(dedent`
+      ALTER TABLE
+        t MODIFY col1 VARCHAR(50) CHARACTER SET greek
+    `);
+  });
 }
