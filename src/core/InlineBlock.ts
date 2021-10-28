@@ -1,4 +1,4 @@
-import type { Token } from './token';
+import { isCase, Token } from './token';
 import tokenTypes from './tokenTypes';
 
 /**
@@ -64,7 +64,8 @@ export default class InlineBlock {
 				return false;
 			}
 
-			if (token.type === tokenTypes.OPEN_PAREN) {
+			// CASE cannot start inline block
+			if (token.type === tokenTypes.OPEN_PAREN && !isCase(token)) {
 				level++;
 			} else if (token.type === tokenTypes.CLOSE_PAREN) {
 				level--;

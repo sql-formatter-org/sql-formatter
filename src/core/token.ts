@@ -24,6 +24,10 @@ export const isBetween = isToken(
 	tokenTypes.RESERVED,
 	new RegExp(`^${spaces}*BETWEEN${spaces}*$`, 'iu')
 );
+export const isCase = isToken(
+	tokenTypes.OPEN_PAREN,
+	new RegExp(`^${spaces}*CASE${spaces}*$`, 'iu')
+);
 export const isBy = isToken(tokenTypes.RESERVED, new RegExp(`^${spaces}*BY${spaces}*$`, 'iu'));
 export const isEnd = isToken(tokenTypes.CLOSE_PAREN, new RegExp(`^${spaces}*END${spaces}*$`, 'iu'));
 export const isFrom = isToken(
