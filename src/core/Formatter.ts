@@ -460,11 +460,6 @@ export default class Formatter {
 			return query;
 		} else if (this.currentNewline) {
 			return this.addNewline(query);
-		} else if (this.currentNewline) {
-			if (this.cfg.tenSpace) {
-				return this.addNewline(query) + this.cfg.indent;
-			}
-			return this.addNewline(query);
 		} else {
 			return query;
 		}
@@ -516,18 +511,18 @@ export default class Formatter {
 		if (this.cfg.tenSpace) {
 			let bufferItem = token.value; // store which part of keyword receives 10-space buffer
 			let tail = [] as string[]; // rest of keyword
-			const needsSplit = bufferItem.length >= 10 && bufferItem.includes(' '); // split for long keywords like INNER JOIN or UNION DISTINCT
-			if (needsSplit) {
+			if (bufferItem.length >= 10 && bufferItem.includes(' ')) {
+				// split for long keywords like INNER JOIN or UNION DISTINCT
 				[bufferItem, ...tail] = bufferItem.split(' ');
 			}
 
 			if (this.cfg.keywordPosition === KeywordMode.tenSpaceLeft) {
-				bufferItem += addBuffer(bufferItem, needsSplit ? 10 : 9);
+				bufferItem += addBuffer(bufferItem);
 			} else {
-				bufferItem = addBuffer(bufferItem, needsSplit ? 10 : 9) + bufferItem;
+				bufferItem = addBuffer(bufferItem) + bufferItem;
 			}
 
-			token.value = bufferItem + tail.join(' ');
+			token.value = bufferItem + ['', ...tail].join(' ');
 		}
 		return token;
 	}

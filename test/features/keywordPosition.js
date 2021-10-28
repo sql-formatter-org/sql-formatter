@@ -14,42 +14,42 @@ export default function supportsKeywordPositions(format) {
 	`;
 
 	const standardResult = dedent(`
-		SELECT
-		  COUNT(a.column1),
-		  MAX(b.column2 + b.column3),
-		  b.column4 AS four
-		FROM
-		(
-		  SELECT
-		    column1,
-		    column5
-		  FROM
-		    table1
-		) a
-		JOIN table2 b
-		ON a.column5 = b.column5
-		WHERE
-		  column6
-		  AND column7
-		GROUP BY
-		  column4;
-		`);
+    SELECT
+      COUNT(a.column1),
+      MAX(b.column2 + b.column3),
+      b.column4 AS four
+    FROM
+    (
+      SELECT
+        column1,
+        column5
+      FROM
+        table1
+    ) a
+    JOIN table2 b
+    ON a.column5 = b.column5
+    WHERE
+      column6
+      AND column7
+    GROUP BY
+      column4;
+    `);
 
 	const tenSpaceLeftResult = dedent(`
-		SELECT    COUNT(a.column1),
-		          MAX(b.column2 + b.column3),
-		          b.column4 AS four
-		FROM      (
-		          SELECT    column1,
-		                    column5
-		          FROM      table1
-		          ) a
-		JOIN      table2 b
-		ON        a.column5 = b.column5
-		WHERE     column6
-		AND       column7
-		GROUP BY  column4;
-		`);
+    SELECT    COUNT(a.column1),
+              MAX(b.column2 + b.column3),
+              b.column4 AS four
+    FROM      (
+              SELECT    column1,
+                        column5
+              FROM      table1
+              ) a
+    JOIN      table2 b
+    ON        a.column5 = b.column5
+    WHERE     column6
+    AND       column7
+    GROUP BY  column4;
+    `);
 
 	const tenSpaceRightResult = [
 		'   SELECT COUNT(a.column1),',
@@ -85,4 +85,27 @@ export default function supportsKeywordPositions(format) {
 	});
 
 	it('accepts tenSpaceRight mode', () => expect(format(tenSpaceRightResult)).toBe(standardResult));
+
+	it('handles long keyword', () => {
+		expect(
+			format(
+				dedent`
+					SELECT *
+					FROM a
+					UNION DISTINCT
+					SELECT *
+					FROM b
+					FULL OUTER JOIN c;
+				`,
+				{ keywordPosition: 'tenSpaceLeft' }
+			)
+		).toBe(dedent`
+			SELECT    *
+			FROM      a
+			UNION     DISTINCT
+			SELECT    *
+			FROM      b
+			FULL      OUTER JOIN c;
+		`);
+	});
 }
