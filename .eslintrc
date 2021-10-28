@@ -8,6 +8,7 @@
 		"curly": ["error", "all"],
 		"eqeqeq": "warn",
 		"func-names": "error",
+		"no-continue": "off",
 		"no-param-reassign": "off",
 		"no-plusplus": "off",
 		"no-else-return": "off",

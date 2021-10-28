@@ -109,7 +109,6 @@ const reservedWords = [
 	'OF',
 	'OFF',
 	'OFFSETS',
-	'ON',
 	'OPEN',
 	'OPENDATASOURCE',
 	'OPENQUERY',
@@ -219,6 +218,7 @@ const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'U
 const reservedNewlineWords = [
 	'AND',
 	'ELSE',
+	'ON',
 	'OR',
 	'WHEN',
 	// joins

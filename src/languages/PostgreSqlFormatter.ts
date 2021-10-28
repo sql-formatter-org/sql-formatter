@@ -261,7 +261,6 @@ const reservedWords = [
 	'OFFSET',
 	'OIDS',
 	'OLD',
-	'ON',
 	'ONLY',
 	'OPERATOR',
 	'OPTION',
@@ -486,6 +485,7 @@ const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'UNION', 'U
 const reservedNewlineWords = [
 	'AND',
 	'ELSE',
+	'ON',
 	'OR',
 	'WHEN',
 	// joins

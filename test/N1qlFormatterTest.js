@@ -98,14 +98,15 @@ describe('N1qlFormatter', () => {
       ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;
     `);
 		expect(result).toBe(dedent`
-      SELECT
-        *
-      FROM
-        usr
-      USE KEYS
-        'Elinor_33313792'
-      NEST
-        orders_with_users orders ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;
+			SELECT
+			  *
+			FROM
+			  usr
+			USE KEYS
+			  'Elinor_33313792'
+			NEST
+			  orders_with_users orders
+			  ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;
     `);
 	});
 

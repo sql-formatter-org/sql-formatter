@@ -8,18 +8,20 @@ import {
 	isAs,
 	isBetween,
 	isEnd,
+	isFrom,
 	isLimit,
 	isReserved,
 	isSelect,
 	isTopLevel,
 	Token,
+	ZWS,
 } from './token';
 import Tokenizer from './Tokenizer';
 import type { FormatOptions } from '../sqlFormatter';
-import { AliasMode, CommaPosition, NewlineMode } from '../types';
+import { AliasMode, CommaPosition, KeywordMode, NewlineMode } from '../types';
 
 export default class Formatter {
-	cfg: FormatOptions;
+	cfg: FormatOptions & { tenSpace?: boolean };
 	newline: FormatOptions['newline'];
 	currentNewline: boolean;
 	lineWidth: number;
@@ -33,19 +35,22 @@ export default class Formatter {
 	index: number;
 
 	/**
-	 * @param {FormatOptions} cfg
-	 *  @param {String} cfg.language
-	 *  @param {String} cfg.indent
-	 *  @param {Boolean} cfg.uppercase
-	 *  @param {NewlineOptions} cfg.newline
+	 *	@param {FormatOptions} cfg
+	 *	@param {String} cfg.language
+	 *	@param {String} cfg.indent
+	 *	@param {Boolean} cfg.uppercase
+	 *	@param {NewlineOptions} cfg.newline
 	 * 		@param {NewlineMode} cfg.newline.mode
 	 * 		@param {Integer} cfg.newline.itemCount
-	 *  @param {Integer} cfg.lineWidth
-	 *  @param {Integer} cfg.linesBetweenQueries
-	 *  @param {ParamItems | string[]} cfg.params
+	 *	@param {Integer} cfg.lineWidth
+	 *	@param {Integer} cfg.linesBetweenQueries
+	 *	@param {ParamItems | string[]} cfg.params
 	 */
 	constructor(cfg: FormatOptions) {
 		this.cfg = cfg;
+		this.cfg.tenSpace =
+			this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
+			this.cfg.keywordPosition === KeywordMode.tenSpaceRight;
 		this.newline = cfg.newline;
 		this.currentNewline = true;
 		this.lineWidth = cfg.lineWidth;
@@ -85,18 +90,18 @@ export default class Formatter {
 	 */
 	format(query: string): string {
 		this.tokens = this.tokenizer().tokenize(query);
-		const formattedQuery = this.getFormattedQueryFromTokens().trim();
+		const formattedQuery = this.getFormattedQueryFromTokens();
 		const finalQuery = this.postFormat(formattedQuery);
 
-		return finalQuery.trimEnd();
+		return finalQuery.replace(/^\n*/u, '').trimEnd();
 	}
 
 	postFormat(query: string) {
-		if (this.cfg.commaPosition !== CommaPosition.after) {
-			query = this.formatCommaPositions(query);
-		}
 		if (this.cfg.tabulateAlias) {
 			query = this.formatAliasPositions(query);
+		}
+		if (this.cfg.commaPosition !== CommaPosition.after) {
+			query = this.formatCommaPositions(query);
 		}
 
 		return query;
@@ -153,10 +158,18 @@ export default class Formatter {
 		let newQuery: string[] = [];
 		for (let i = 0; i < lines.length; i++) {
 			// find SELECT rows with trailing comma, if no comma (only one row) - no-op
-			if (lines[i].match(/SELECT/i)) {
-				newQuery.push(lines[i]); // add select to new query
+			if (lines[i].match(/^\s*SELECT/i)) {
+				let aliasLines: string[] = [];
+				if (lines[i].match(/.*,$/)) {
+					aliasLines = [lines[i]]; // add select to aliasLines in case of tenSpace formats
+				} else {
+					newQuery.push(lines[i]); // add select to new query
+					if (lines[i].match(/^\s*SELECT\s+.+(?!,$)/i)) {
+						continue;
+					}
+					aliasLines.push(lines[++i]);
+				}
 
-				let aliasLines = [lines[++i]];
 				// get all lines in SELECT clause
 				while (lines[i++].match(/.*,$/)) {
 					aliasLines.push(lines[i]);
@@ -195,6 +208,15 @@ export default class Formatter {
 			this.index = index;
 
 			token = this.tokenOverride(token);
+			if (isReserved(token)) {
+				this.previousReservedToken = token;
+				if (token.type !== tokenTypes.RESERVED) {
+					token = this.tenSpacedToken(token);
+				}
+				if (isTopLevel(token)) {
+					this.withinSelect = isSelect(token);
+				}
+			}
 
 			if (token.type === tokenTypes.LINE_COMMENT) {
 				formattedQuery = this.formatLineComment(token, formattedQuery);
@@ -203,15 +225,10 @@ export default class Formatter {
 			} else if (token.type === tokenTypes.RESERVED_TOP_LEVEL) {
 				this.currentNewline = this.checkNewline(index);
 				formattedQuery = this.formatTopLevelReservedWord(token, formattedQuery);
-				this.previousReservedToken = token;
-				this.withinSelect = isSelect(token);
 			} else if (token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT) {
 				formattedQuery = this.formatTopLevelReservedWordNoIndent(token, formattedQuery);
-				this.previousReservedToken = token;
-				this.withinSelect = false;
 			} else if (token.type === tokenTypes.RESERVED_NEWLINE) {
 				formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
-				this.previousReservedToken = token;
 			} else if (token.type === tokenTypes.RESERVED) {
 				if (!(isAs(token) && this.cfg.aliasAs === AliasMode.never)) {
 					// do not format if skipping AS
@@ -251,7 +268,7 @@ export default class Formatter {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery);
 			}
 		});
-		return formattedQuery;
+		return formattedQuery.replace(new RegExp(ZWS, 'ugim'), ' ');
 	}
 
 	formatAliases(token: Token, query: string) {
@@ -355,10 +372,16 @@ export default class Formatter {
 
 		query = this.addNewline(query);
 
-		this.indentation.increaseTopLevel();
+		if (this.cfg.tenSpace) {
+			if (this.tokenLookAhead()?.value !== '(') {
+				this.indentation.increaseTopLevel();
+			}
+		} else if (!(this.tokenLookAhead()?.value === '(' && isFrom(token))) {
+			this.indentation.increaseTopLevel();
+		}
 
 		query += this.equalizeWhitespace(this.show(token));
-		if (this.currentNewline) {
+		if (this.currentNewline && !this.cfg.tenSpace) {
 			query = this.addNewline(query);
 		} else {
 			query += ' ';
@@ -369,6 +392,10 @@ export default class Formatter {
 	formatNewlineReservedWord(token: Token, query: string) {
 		if (isAnd(token) && isBetween(this.tokenLookBehind(2))) {
 			return this.formatWithSpaces(token, query);
+		}
+
+		if (this.cfg.tenSpace) {
+			this.indentation.decreaseTopLevel();
 		}
 		return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
 	}
@@ -411,7 +438,11 @@ export default class Formatter {
 			return this.formatWithSpaces(token, query, 'after');
 		} else {
 			this.indentation.decreaseBlockLevel();
-			return this.formatWithSpaces(token, this.addNewline(query));
+			query = this.addNewline(query);
+			if (this.cfg.tenSpace) {
+				query += this.cfg.indent;
+			}
+			return this.formatWithSpaces(token, query);
 		}
 	}
 
@@ -472,6 +503,28 @@ export default class Formatter {
 			query += '\n';
 		}
 		return query + this.indentation.getIndent();
+	}
+
+	tenSpacedToken(token: Token) {
+		const addBuffer = (string: String, bufferLength = 9) =>
+			ZWS.repeat(Math.max(bufferLength - string.length, 0));
+		if (this.cfg.tenSpace) {
+			let bufferItem = token.value; // store which part of keyword receives 10-space buffer
+			let tail = [] as string[]; // rest of keyword
+			if (bufferItem.length >= 10 && bufferItem.includes(' ')) {
+				// split for long keywords like INNER JOIN or UNION DISTINCT
+				[bufferItem, ...tail] = bufferItem.split(' ');
+			}
+
+			if (this.cfg.keywordPosition === KeywordMode.tenSpaceLeft) {
+				bufferItem += addBuffer(bufferItem);
+			} else {
+				bufferItem = addBuffer(bufferItem) + bufferItem;
+			}
+
+			token.value = bufferItem + ['', ...tail].join(' ');
+		}
+		return token;
 	}
 
 	tokenLookBehind(n = 1) {

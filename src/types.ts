@@ -1,3 +1,9 @@
+export enum KeywordMode {
+	standard = 'standard',
+	tenSpaceLeft = 'tenSpaceLeft',
+	tenSpaceRight = 'tenSpaceRight',
+}
+
 export enum NewlineMode {
 	always = 'always',
 	never = 'never',

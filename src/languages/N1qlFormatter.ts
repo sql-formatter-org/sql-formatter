@@ -104,7 +104,6 @@ const reservedWords = [
 	'NUMBER',
 	'OBJECT',
 	'OFFSET',
-	'ON',
 	'OPTION',
 	'OR',
 	'ORDER',
@@ -211,6 +210,7 @@ const reservedNewlineWords = [
 	'AND',
 	'OR',
 	'XOR',
+	'ON',
 	// joins
 	'JOIN',
 	'INNER JOIN',
