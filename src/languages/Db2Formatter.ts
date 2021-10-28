@@ -790,7 +790,6 @@ const reservedTopLevelWords = [
 	'ADD',
 	'AFTER',
 	'DELETE FROM',
-	'EXCEPT',
 	'FETCH FIRST',
 	'FROM',
 	'GROUP BY',
@@ -804,7 +803,17 @@ const reservedTopLevelWords = [
 	'WHERE',
 ];
 
-const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'UNION', 'UNION ALL'];
+const reservedTopLevelWordsNoIndent = [
+	'INTERSECT',
+	'INTERSECT ALL',
+	'INTERSECT DISTINCT',
+	'UNION',
+	'UNION ALL',
+	'UNION DISTINCT',
+	'EXCEPT',
+	'EXCEPT ALL',
+	'EXCEPT DISTINCT',
+];
 
 const reservedNewlineWords = [
 	'AND',

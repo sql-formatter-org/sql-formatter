@@ -389,7 +389,6 @@ const reservedWords = {
 		'ENCODE',
 		'ENCRYPT',
 		'ENCRYPTION',
-		'EXCEPT',
 		'EXPLICIT',
 		'FALSE',
 		'FOR',
@@ -644,11 +643,16 @@ const reservedTopLevelWords = [
 	'WITH',
 ];
 
-const reservedTopLevelWordsNoIndent: string[] = [
+const reservedTopLevelWordsNoIndent = [
 	'INTERSECT',
 	'INTERSECT ALL',
+	'INTERSECT DISTINCT',
 	'UNION',
 	'UNION ALL',
+	'UNION DISTINCT',
+	'EXCEPT',
+	'EXCEPT ALL',
+	'EXCEPT DISTINCT',
 ];
 
 const reservedNewlineWords = [

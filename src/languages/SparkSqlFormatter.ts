@@ -712,14 +712,16 @@ const reservedTopLevelWords = [
 ];
 
 const reservedTopLevelWordsNoIndent = [
-	'EXCEPT ALL',
-	'EXCEPT',
-	'INTERSECT ALL',
 	'INTERSECT',
-	'UNION ALL',
+	'INTERSECT ALL',
+	'INTERSECT DISTINCT',
 	'UNION',
+	'UNION ALL',
+	'UNION DISTINCT',
+	'EXCEPT',
+	'EXCEPT ALL',
+	'EXCEPT DISTINCT',
 ];
-
 const reservedNewlineWords = [
 	'AND',
 	'OR',

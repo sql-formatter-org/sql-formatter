@@ -1245,7 +1245,6 @@ const reservedTopLevelWords = [
 	'ADD',
 	'ALTER COLUMN',
 	'DELETE FROM',
-	'EXCEPT',
 	'FROM',
 	'GROUP BY',
 	'HAVING',
@@ -1255,7 +1254,17 @@ const reservedTopLevelWords = [
 	'WHERE',
 ];
 
-const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'UNION', 'UNION ALL'];
+const reservedTopLevelWordsNoIndent = [
+	'INTERSECT',
+	'INTERSECT ALL',
+	'INTERSECT DISTINCT',
+	'UNION',
+	'UNION ALL',
+	'UNION DISTINCT',
+	'EXCEPT',
+	'EXCEPT ALL',
+	'EXCEPT DISTINCT',
+];
 
 const reservedNewlineWords = [
 	'AND',

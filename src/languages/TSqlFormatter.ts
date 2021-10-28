@@ -362,7 +362,6 @@ const reservedWords = {
 		'END',
 		'ERRLVL',
 		'ESCAPE',
-		'EXCEPT',
 		'EXEC',
 		'EXECUTE',
 		'EXISTS',
@@ -569,7 +568,6 @@ const reservedWords = {
 		'END',
 		'END-EXEC',
 		'ESCAPE',
-		'EXCEPT',
 		'EXCEPTION',
 		'EXEC',
 		'EXECUTE',
@@ -805,7 +803,6 @@ const reservedWords = {
 		'END-EXEC',
 		'EQUALS',
 		'EVERY',
-		'EXCEPTION',
 		'FALSE',
 		'FILTER',
 		'FIRST',
@@ -1171,7 +1168,6 @@ const reservedTopLevelWords = [
 	// other
 	'ALTER COLUMN',
 	'ALTER TABLE',
-	'EXCEPT',
 	'FROM',
 	'GROUP BY',
 	'HAVING',
@@ -1182,7 +1178,20 @@ const reservedTopLevelWords = [
 	'WHERE',
 ];
 
-const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'UNION', 'UNION ALL'];
+const reservedTopLevelWordsNoIndent = [
+	'INTERSECT',
+	'INTERSECT ALL',
+	'INTERSECT DISTINCT',
+	'UNION',
+	'UNION ALL',
+	'UNION DISTINCT',
+	'EXCEPT',
+	'EXCEPT ALL',
+	'EXCEPT DISTINCT',
+	'MINUS',
+	'MINUS ALL',
+	'MINUS DISTINCT',
+];
 
 const reservedNewlineWords = [
 	'AND',
