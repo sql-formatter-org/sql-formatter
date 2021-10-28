@@ -84,12 +84,13 @@ describe('TSqlFormatter', () => {
 	it('formats SELECT query with CROSS JOIN', () => {
 		const result = format('SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t');
 		expect(result).toBe(dedent`
-      SELECT
-        a,
-        b
-      FROM
-        t
-        CROSS JOIN t2 ON t.id = t2.id_t
+			SELECT
+			  a,
+			  b
+			FROM
+			  t
+			  CROSS JOIN t2
+			  ON t.id = t2.id_t
     `);
 	});
 });

@@ -8,6 +8,7 @@
 		"curly": ["error", "all"],
 		"eqeqeq": "warn",
 		"func-names": "error",
+		"no-continue": "off",
 		"no-param-reassign": "off",
 		"no-plusplus": "off",
 		"no-else-return": "off",
@@ -15,17 +16,17 @@
 		"no-useless-concat": "off",
 		"prefer-template": "off",
 		"prettier/prettier": ["error"],
-		"require-unicode-regexp": ["error"],
-		"@typescript-eslint/naming-convention": "warn",
-		"@typescript-eslint/indent": "off",
-		"@typescript-eslint/semi": "warn",
-		"@typescript-eslint/lines-between-class-members": "off",
 		"@typescript-eslint/comma-dangle": "off",
+		"@typescript-eslint/indent": "off",
+		"@typescript-eslint/lines-between-class-members": "off",
+		"@typescript-eslint/naming-convention": "warn",
+		"@typescript-eslint/no-unused-vars": "warn",
 		"@typescript-eslint/quotes": [
 			"warn",
 			"single",
 			{ "avoidEscape": true, "allowTemplateLiterals": true }
-		]
+		],
+		"@typescript-eslint/semi": "warn"
 	},
 	"settings": {
 		"import/resolver": {

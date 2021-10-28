@@ -4,6 +4,7 @@ import supportsConfigOptions from './features/configOptions';
 import supportsOperators from './features/operators';
 import supportsAliases from './features/alias';
 import supportsNewlineOptions from './features/newline';
+import supportsKeywordPositions from './features/keywordPosition';
 
 /**
  * Core tests for all SQL formatters
@@ -11,6 +12,7 @@ import supportsNewlineOptions from './features/newline';
  */
 export default function behavesLikeSqlFormatter(format) {
 	supportsAliases(format);
+	supportsKeywordPositions(format);
 	supportsNewlineOptions(format);
 	supportsComments(format);
 	supportsConfigOptions(format);
@@ -162,14 +164,14 @@ export default function behavesLikeSqlFormatter(format) {
         *,
         SUM(*) AS total
       FROM
-        (
-          SELECT
-            *
-          FROM
-            Posts
-          LIMIT
-            30
-        )
+      (
+        SELECT
+          *
+        FROM
+          Posts
+        LIMIT
+          30
+      )
       WHERE
         a > b
     `);
@@ -298,12 +300,12 @@ export default function behavesLikeSqlFormatter(format) {
       SET
         total_orders = order_summary.total
       FROM
-        (
-          SELECT
-            *
-          FROM
-            bank
-        ) AS order_summary
+      (
+        SELECT
+          *
+        FROM
+          bank
+      ) AS order_summary
     `);
 	});
 

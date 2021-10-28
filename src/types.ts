@@ -1,9 +1,7 @@
 export enum KeywordMode {
 	standard = 'standard',
-	standardTabbed = 'standardTabbed',
 	tenSpaceLeft = 'tenSpaceLeft',
 	tenSpaceRight = 'tenSpaceRight',
-	tabular = 'tabular',
 }
 
 export enum NewlineMode {
@@ -22,4 +20,10 @@ export enum AliasMode {
 	always = 'always',
 	never = 'never',
 	select = 'select',
+}
+
+export enum CommaPosition {
+	before = 'before',
+	after = 'after',
+	tabular = 'tabular',
 }

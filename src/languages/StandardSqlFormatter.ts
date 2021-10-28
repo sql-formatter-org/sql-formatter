@@ -333,6 +333,7 @@ const reservedNewlineWords = [
 	'AND',
 	'ON',
 	'OR',
+	'ON',
 	'WHEN',
 	'THEN',
 	'ELSE',

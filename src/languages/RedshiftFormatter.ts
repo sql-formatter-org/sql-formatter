@@ -654,6 +654,7 @@ const reservedTopLevelWordsNoIndent: string[] = [
 const reservedNewlineWords = [
 	'AND',
 	'ELSE',
+	'ON',
 	'OR',
 	'WHEN',
 	'THEN',
