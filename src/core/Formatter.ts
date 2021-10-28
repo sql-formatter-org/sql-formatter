@@ -227,6 +227,8 @@ export default class Formatter {
 				formattedQuery = this.formatTopLevelReservedWord(token, formattedQuery);
 			} else if (token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT) {
 				formattedQuery = this.formatTopLevelReservedWordNoIndent(token, formattedQuery);
+			} else if (token.type === tokenTypes.RESERVED_DEPENDENT_CLAUSE) {
+				formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
 			} else if (token.type === tokenTypes.RESERVED_NEWLINE) {
 				formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
 			} else if (token.type === tokenTypes.RESERVED) {

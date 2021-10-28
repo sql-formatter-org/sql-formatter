@@ -56,5 +56,6 @@ export const isReserved = (token: Token) =>
 	token &&
 	(token.type === tokenTypes.RESERVED ||
 		token.type === tokenTypes.RESERVED_NEWLINE ||
+		token.type === tokenTypes.RESERVED_DEPENDENT_CLAUSE ||
 		token.type === tokenTypes.RESERVED_TOP_LEVEL ||
 		token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT);
