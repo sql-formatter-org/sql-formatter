@@ -372,8 +372,6 @@ const reservedWords = {
 		'DSSIZE',
 		'DYNAMIC',
 		'EDITPROC',
-		'ELSE',
-		'ELSEIF',
 		'ENCODING',
 		'ENCRYPTION',
 		'ENDING',
@@ -815,12 +813,15 @@ const reservedTopLevelWordsNoIndent = [
 	'EXCEPT DISTINCT',
 ];
 
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF'];
+
 const reservedNewlineWords = [
 	'AND',
 	'OR',
-	'ON',
-	'WHEN',
-	'THEN',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -846,6 +847,7 @@ export default class Db2Formatter extends Formatter {
 			reservedWords: this.fullReservedWords,
 			reservedTopLevelWords,
 			reservedNewlineWords,
+			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,
 			stringTypes: [`""`, "''", '``', '[]'],
 			openParens: ['('],

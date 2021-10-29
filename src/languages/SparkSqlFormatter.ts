@@ -370,7 +370,6 @@ const reservedWords = [
 	'BY',
 	'CACHE',
 	'CASCADE',
-	'CASE',
 	'CAST',
 	'CHANGE',
 	'CHECK',
@@ -415,8 +414,6 @@ const reservedWords = [
 	'DISTRIBUTE',
 	'DIV',
 	'DROP',
-	'ELSE',
-	'END',
 	'ESCAPE',
 	'ESCAPED',
 	'EXCEPT',
@@ -498,7 +495,6 @@ const reservedWords = [
 	'NULL',
 	'NULLS',
 	'OF',
-	'ON',
 	'ONLY',
 	'OPTION',
 	'OPTIONS',
@@ -575,7 +571,6 @@ const reservedWords = [
 	'TBLPROPERTIES',
 	'TEMPORARY',
 	'TERMINATED',
-	'THEN',
 	'TO',
 	'TOUCH',
 	'TRAILING',
@@ -599,7 +594,6 @@ const reservedWords = [
 	'USING',
 	'VALUES',
 	'VIEW',
-	'WHEN',
 	'WHERE',
 	'WINDOW',
 	'WITH',
@@ -678,9 +672,7 @@ const reservedTopLevelWords = [
 	'SORT BY',
 	'TABLESAMPLE',
 	'WHERE',
-	'CASE',
 	'PIVOT',
-	'LATERAL VIEW',
 	'TRANSFORM',
 	'EXPLAIN',
 	'ADD FILE',
@@ -722,17 +714,18 @@ const reservedTopLevelWordsNoIndent = [
 	'EXCEPT ALL',
 	'EXCEPT DISTINCT',
 ];
+
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL VIEW'];
+
 const reservedNewlineWords = [
 	'AND',
 	'OR',
 	'XOR',
-	'CREATE',
-	'CREATE OR',
-	'ON',
-	'LATERAL VIEW',
-	'WHEN',
-	'THEN',
-	'ELSE',
+	'CROSS APPLY',
 	'OUTER APPLY',
 	// joins
 	'JOIN',
@@ -776,6 +769,7 @@ export default class SparkSqlFormatter extends Formatter {
 			reservedWords: this.fullReservedWords,
 			reservedTopLevelWords,
 			reservedNewlineWords,
+			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,
 			stringTypes: [`""`, "''", '``', '{}'],
 			openParens: ['(', 'CASE'],

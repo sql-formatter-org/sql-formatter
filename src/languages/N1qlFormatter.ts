@@ -249,7 +249,6 @@ const reservedWords = [
 	'BUILD',
 	'BY',
 	'CALL',
-	'CASE',
 	'CAST',
 	'CLUSTER',
 	'COLLATE',
@@ -276,8 +275,6 @@ const reservedWords = [
 	'DROP',
 	'EACH',
 	'ELEMENT',
-	'ELSE',
-	'END',
 	'EVERY',
 	'EXCLUDE',
 	'EXISTS',
@@ -376,7 +373,6 @@ const reservedWords = [
 	'STATISTICS',
 	'STRING',
 	'SYSTEM',
-	'THEN',
 	'TIES',
 	'TO',
 	'TRAN',
@@ -397,7 +393,6 @@ const reservedWords = [
 	'VALUED',
 	'VIA',
 	'VIEW',
-	'WHEN',
 	'WHILE',
 	'WINDOW',
 	'WITHIN',
@@ -474,11 +469,16 @@ const reservedTopLevelWordsNoIndent = [
 	'MINUS DISTINCT',
 ];
 
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
+
 const reservedNewlineWords = [
 	'AND',
 	'OR',
 	'XOR',
-	'ON',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -495,10 +495,11 @@ export default class N1qlFormatter extends Formatter {
 			reservedWords: [...reservedWords, ...reservedFunctions],
 			reservedTopLevelWords,
 			reservedNewlineWords,
+			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,
 			stringTypes: [`""`, "''", '``'],
-			openParens: ['(', '[', '{'],
-			closeParens: [')', ']', '}'],
+			openParens: ['(', '[', '{', 'CASE'],
+			closeParens: [')', ']', '}', 'END'],
 			namedPlaceholderTypes: ['$'],
 			lineCommentTypes: ['#', '--'],
 			operators: ['==', '!='],

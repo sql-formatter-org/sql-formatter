@@ -379,8 +379,6 @@ const reservedWords = [
 	'DUPLICATE',
 	'DYNAMIC',
 	'EACH',
-	'ELSEIF',
-	'ELSIF',
 	'EMPTY',
 	'ENABLE',
 	'ENCLOSED',
@@ -1106,14 +1104,16 @@ const reservedTopLevelWordsNoIndent = [
 	'MINUS DISTINCT',
 ];
 
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'ELSIF'];
+
 const reservedNewlineWords = [
 	'AND',
 	'OR',
 	'XOR',
-	'ON',
-	'WHEN',
-	'THEN',
-	'ELSE',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -1138,6 +1138,7 @@ export default class MariaDbFormatter extends Formatter {
 			reservedWords: [...reservedWords, ...reservedFunctions],
 			reservedTopLevelWords,
 			reservedNewlineWords,
+			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,
 			stringTypes: ['``', "''", '""'],
 			openParens: ['(', 'CASE'],

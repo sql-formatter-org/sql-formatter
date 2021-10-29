@@ -1,5 +1,5 @@
 import Formatter from '../core/Formatter';
-import { isBy, isSet, Token } from '../core/token'; // convert to partial type import in TS 4.5
+import { isBy, isLateral, isSet, Token } from '../core/token'; // convert to partial type import in TS 4.5
 import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
 
@@ -399,14 +399,16 @@ const reservedTopLevelWordsNoIndent = [
 	'MINUS DISTINCT',
 ];
 
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
+
 const reservedNewlineWords = [
 	'AND',
 	'OR',
 	'XOR',
-	'ON',
-	'WHEN',
-	'THEN',
-	'ELSE',
 	'CROSS APPLY',
 	'OUTER APPLY',
 	// joins
@@ -428,6 +430,7 @@ export default class PlSqlFormatter extends Formatter {
 			reservedWords,
 			reservedTopLevelWords,
 			reservedNewlineWords,
+			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,
 			stringTypes: [`""`, "N''", "''", '``'],
 			openParens: ['(', 'CASE'],
@@ -444,6 +447,14 @@ export default class PlSqlFormatter extends Formatter {
 		if (isSet(token) && isBy(this.previousReservedToken)) {
 			return { type: tokenTypes.RESERVED, value: token.value };
 		}
+
+		if (isLateral(token)) {
+			if (this.tokenLookAhead()?.type === tokenTypes.OPEN_PAREN) {
+				// This is a subquery, treat it like a join
+				return { type: tokenTypes.RESERVED_NEWLINE, value: token.value };
+			}
+		}
+
 		return token;
 	}
 }

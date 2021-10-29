@@ -452,7 +452,6 @@ const reservedWords = {
 		'TABLE',
 		'TAG',
 		'TDES',
-		'THEN',
 		'TIMESTAMP',
 		'TO',
 		'TOP',
@@ -655,15 +654,16 @@ const reservedTopLevelWordsNoIndent = [
 	'EXCEPT DISTINCT',
 ];
 
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
+
 const reservedNewlineWords = [
 	'AND',
-	'ELSE',
-	'ON',
 	'OR',
-	'WHEN',
-	'THEN',
 	// joins
-	'ON',
 	'JOIN',
 	'INNER JOIN',
 	'LEFT JOIN',
@@ -688,6 +688,7 @@ export default class RedshiftFormatter extends Formatter {
 			reservedWords: this.fullReservedWords,
 			reservedTopLevelWords,
 			reservedNewlineWords,
+			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,
 			stringTypes: [`""`, "''", '``'],
 			openParens: ['('],

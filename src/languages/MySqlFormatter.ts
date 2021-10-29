@@ -1,5 +1,7 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import tokenTypes from '../core/tokenTypes';
+import { isLateral, Token } from '../core/token';
 
 // TODO: split this into object with function categories
 // https://dev.mysql.com/doc/refman/8.0/en/built-in-function-reference.html
@@ -552,7 +554,6 @@ const reservedWords = [
 	'DUPLICATE',
 	'DYNAMIC',
 	'EACH',
-	'ELSEIF',
 	'EMPTY',
 	'ENABLE',
 	'ENCLOSED',
@@ -669,7 +670,6 @@ const reservedWords = [
 	'KEY_BLOCK_SIZE',
 	'LANGUAGE',
 	'LAST',
-	'LATERAL',
 	'LEADING',
 	'LEAVE',
 	'LEAVES',
@@ -1266,14 +1266,16 @@ const reservedTopLevelWordsNoIndent = [
 	'EXCEPT DISTINCT',
 ];
 
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'LATERAL'];
+
 const reservedNewlineWords = [
 	'AND',
 	'OR',
 	'XOR',
-	'ON',
-	'WHEN',
-	'THEN',
-	'ELSE',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -1298,6 +1300,7 @@ export default class MySqlFormatter extends Formatter {
 			reservedWords: [...reservedWords, ...reservedFunctions],
 			reservedTopLevelWords,
 			reservedNewlineWords,
+			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,
 			stringTypes: ['``', "''", '""'],
 			openParens: ['(', 'CASE'],
@@ -1308,5 +1311,16 @@ export default class MySqlFormatter extends Formatter {
 			specialWordChars: ['@'],
 			operators: [':=', '<<', '>>', '!=', '<>', '<=>', '&&', '||', '->', '->>'],
 		});
+	}
+
+	tokenOverride(token: Token) {
+		if (isLateral(token)) {
+			if (this.tokenLookAhead()?.type === tokenTypes.OPEN_PAREN) {
+				// This is a subquery, treat it like a join
+				return { type: tokenTypes.RESERVED_NEWLINE, value: token.value };
+			}
+		}
+
+		return token;
 	}
 }

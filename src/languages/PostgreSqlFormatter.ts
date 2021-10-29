@@ -1,5 +1,7 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import tokenTypes from '../core/tokenTypes';
+import { isLateral, Token } from '../core/token'; // convert to partial type import in TS 4.5
 
 // https://www.postgresql.org/docs/14/functions.html
 const reservedFunctions = {
@@ -1010,7 +1012,6 @@ const reservedWords = [
 	'LANGUAGE',
 	'LARGE',
 	'LAST',
-	'LATERAL',
 	'LEADING',
 	'LEAKPROOF',
 	'LEVEL',
@@ -1576,13 +1577,15 @@ const reservedTopLevelWordsNoIndent = [
 	'MINUS DISTINCT',
 ];
 
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL'];
+
 const reservedNewlineWords = [
 	'AND',
 	'OR',
-	'ON',
-	'WHEN',
-	'THEN',
-	'ELSE',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -1608,6 +1611,7 @@ export default class PostgreSqlFormatter extends Formatter {
 			reservedWords: this.fullReservedWords,
 			reservedTopLevelWords,
 			reservedNewlineWords,
+			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,
 			stringTypes: [`""`, "''", "U&''", 'U&""', '$$'],
 			openParens: ['(', 'CASE'],
@@ -1634,5 +1638,16 @@ export default class PostgreSqlFormatter extends Formatter {
 				'!!',
 			],
 		});
+	}
+
+	tokenOverride(token: Token) {
+		if (isLateral(token)) {
+			if (this.tokenLookAhead()?.type === tokenTypes.OPEN_PAREN) {
+				// This is a subquery, treat it like a join
+				return { type: tokenTypes.RESERVED_NEWLINE, value: token.value };
+			}
+		}
+
+		return token;
 	}
 }

@@ -7,7 +7,7 @@ interface TokenizerOptions {
 	reservedWords: string[];
 	reservedTopLevelWords: string[];
 	reservedNewlineWords: string[];
-	reservedDependentClauses?: string[];
+	reservedDependentClauses: string[];
 	reservedTopLevelWordsNoIndent: string[];
 	stringTypes: regexFactory.StringPatternType[];
 	openParens: string[];

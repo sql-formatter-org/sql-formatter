@@ -34,6 +34,10 @@ export const isFrom = isToken(
 	tokenTypes.RESERVED_TOP_LEVEL,
 	new RegExp(`^${spaces}*FROM${spaces}*$`, 'iu')
 );
+export const isLateral = isToken(
+	tokenTypes.RESERVED_DEPENDENT_CLAUSE,
+	new RegExp(`^${spaces}*LATERAL${spaces}*$`, 'iu')
+);
 export const isLimit = isToken(
 	tokenTypes.RESERVED_TOP_LEVEL,
 	new RegExp(`^${spaces}*LIMIT${spaces}*$`, 'iu')
