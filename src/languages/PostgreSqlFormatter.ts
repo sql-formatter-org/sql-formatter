@@ -1365,7 +1365,7 @@ const reservedWords = [
 ];
 
 // https://www.postgresql.org/docs/14/sql-commands.html
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ABORT',
 	'ALTER AGGREGATE',
 	'ALTER COLLATION',
@@ -1611,7 +1611,7 @@ export default class PostgreSqlFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
 			reservedWords: this.fullReservedWords,
-			reservedTopLevelWords,
+			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,

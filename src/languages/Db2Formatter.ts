@@ -668,7 +668,7 @@ const reservedWords = {
 };
 
 // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ALLOCATE CURSOR',
 	'ALTER DATABASE',
 	'ALTER FUNCTION',
@@ -847,7 +847,7 @@ export default class Db2Formatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
 			reservedWords: this.fullReservedWords,
-			reservedTopLevelWords,
+			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,

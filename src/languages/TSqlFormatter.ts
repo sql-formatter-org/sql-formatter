@@ -992,7 +992,7 @@ const reservedWords = {
 };
 
 // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ADD SENSITIVITY CLASSIFICATION',
 	'ADD SIGNATURE',
 	'AGGREGATE',
@@ -1219,7 +1219,7 @@ export default class TSqlFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
 			reservedWords: this.fullReservedWords,
-			reservedTopLevelWords,
+			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,

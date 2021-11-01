@@ -9,7 +9,7 @@ export default {
 	RESERVED: 'reserved',
 	RESERVED_DEPENDENT_CLAUSE: 'reserved-dependent-clause',
 	RESERVED_NEWLINE: 'reserved-newline',
-	RESERVED_TOP_LEVEL: 'reserved-top-level',
+	RESERVED_COMMAND: 'reserved-command',
 	RESERVED_TOP_LEVEL_NO_INDENT: 'reserved-top-level-no-indent',
 	OPERATOR: 'operator',
 	OPEN_PAREN: 'open-paren',

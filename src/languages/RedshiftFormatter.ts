@@ -561,7 +561,7 @@ const reservedWords = {
 };
 
 // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ABORT',
 	'ALTER DATABASE',
 	'ALTER DATASHARE',
@@ -706,7 +706,7 @@ export default class RedshiftFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
 			reservedWords: this.fullReservedWords,
-			reservedTopLevelWords,
+			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,

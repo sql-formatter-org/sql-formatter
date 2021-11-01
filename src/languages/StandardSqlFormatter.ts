@@ -290,7 +290,7 @@ const reservedWords = [
 	'YEAR',
 ];
 
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ADD',
 	'ALTER COLUMN',
 	'ALTER TABLE',
@@ -357,7 +357,7 @@ export default class StandardSqlFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
 			reservedWords,
-			reservedTopLevelWords,
+			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,

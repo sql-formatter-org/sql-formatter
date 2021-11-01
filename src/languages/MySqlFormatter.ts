@@ -1065,7 +1065,7 @@ const reservedWords = [
 ];
 
 // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ALTER DATABASE',
 	'ALTER EVENT',
 	'ALTER FUNCTION',
@@ -1297,7 +1297,7 @@ export default class MySqlFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
 			reservedWords: [...reservedWords, ...reservedFunctions],
-			reservedTopLevelWords,
+			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,

@@ -623,7 +623,7 @@ const reservedWords = [
 ];
 
 // http://spark.apache.org/docs/latest/sql-ref-syntax.html
-const reservedTopLevelWords = [
+const reservedCommands = [
 	// DDL
 	'ALTER COLUMN',
 	'ALTER DATABASE',
@@ -765,7 +765,7 @@ export default class SparkSqlFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
 			reservedWords: this.fullReservedWords,
-			reservedTopLevelWords,
+			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,

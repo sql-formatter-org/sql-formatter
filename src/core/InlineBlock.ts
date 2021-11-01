@@ -85,7 +85,7 @@ export default class InlineBlock {
 	// are not allowed inside inline parentheses block
 	isForbiddenToken({ type, value }: Token) {
 		return (
-			type === tokenTypes.RESERVED_TOP_LEVEL ||
+			type === tokenTypes.RESERVED_COMMAND ||
 			type === tokenTypes.RESERVED_NEWLINE ||
 			// type === tokenTypes.LINE_COMMENT ||
 			type === tokenTypes.BLOCK_COMMENT ||

@@ -872,7 +872,7 @@ const reservedWords = [
 ];
 
 // https://mariadb.com/docs/reference/mdb/sql-statements/
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ALTER DATABASE',
 	'ALTER DATABASE COMMENT',
 	'ALTER EVENT',
@@ -1136,7 +1136,7 @@ export default class MariaDbFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
 			reservedWords: [...reservedWords, ...reservedFunctions],
-			reservedTopLevelWords,
+			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,

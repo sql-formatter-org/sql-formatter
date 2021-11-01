@@ -401,7 +401,7 @@ const reservedWords = [
 ];
 
 // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ADVISE',
 	'ALTER INDEX',
 	'BEGIN TRANSACTION',
@@ -496,7 +496,7 @@ export default class N1qlFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
 			reservedWords: [...reservedWords, ...reservedFunctions],
-			reservedTopLevelWords,
+			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,

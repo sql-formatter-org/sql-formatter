@@ -351,7 +351,7 @@ const reservedWords = [
 	'ZONE',
 ];
 
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ADD',
 	'ALTER COLUMN',
 	'ALTER TABLE',
@@ -431,7 +431,7 @@ export default class PlSqlFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
 			reservedWords,
-			reservedTopLevelWords,
+			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,

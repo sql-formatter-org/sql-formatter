@@ -5,7 +5,7 @@ import type { Token, TokenType } from './token';
 
 interface TokenizerOptions {
 	reservedWords: string[];
-	reservedTopLevelWords: string[];
+	reservedCommands: string[];
 	reservedNewlineWords: string[];
 	reservedDependentClauses: string[];
 	reservedTopLevelWordsNoIndent: string[];
@@ -28,7 +28,7 @@ export default class Tokenizer {
 	RESERVED_PLAIN_REGEX: RegExp;
 	RESERVED_DEPENDENT_CLAUSE_REGEX: RegExp;
 	RESERVED_NEWLINE_REGEX: RegExp;
-	RESERVED_TOP_LEVEL_REGEX: RegExp;
+	RESERVED_COMMAND_REGEX: RegExp;
 	RESERVED_TOP_LEVEL_NO_INDENT_REGEX: RegExp;
 	WORD_REGEX: RegExp;
 	STRING_REGEX: RegExp;
@@ -43,7 +43,7 @@ export default class Tokenizer {
 	 *  @param {String[]} cfg.reservedWords: Reserved words in SQL
 	 *  @param {String[]} cfg.reservedDependentClauses: Words that following a specific Statement and must have data attached
 	 *  @param {String[]} cfg.reservedNewlineWords: Words that are set to newline
-	 *  @param {String[]} cfg.reservedTopLevelWords: Words that are set to new line separately
+	 *  @param {String[]} cfg.reservedCommands: Words that are set to new line separately
 	 *  @param {String[]} cfg.reservedTopLevelWordsNoIndent: Words that are top level but have no indentation
 	 *  @param {String[]} cfg.stringTypes: String types to enable: "", '', ``, [], N''
 	 *  @param {String[]} cfg.openParens: Opening parentheses to enable, like (, [
@@ -74,7 +74,7 @@ export default class Tokenizer {
 		this.RESERVED_DEPENDENT_CLAUSE_REGEX = regexFactory.createReservedWordRegex(
 			cfg.reservedDependentClauses ?? []
 		);
-		this.RESERVED_TOP_LEVEL_REGEX = regexFactory.createReservedWordRegex(cfg.reservedTopLevelWords);
+		this.RESERVED_COMMAND_REGEX = regexFactory.createReservedWordRegex(cfg.reservedCommands);
 		this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX = regexFactory.createReservedWordRegex(
 			cfg.reservedTopLevelWordsNoIndent
 		);
@@ -270,7 +270,7 @@ export default class Tokenizer {
 		}
 
 		const reservedTokenMap = {
-			[tokenTypes.RESERVED_TOP_LEVEL]: this.RESERVED_TOP_LEVEL_REGEX,
+			[tokenTypes.RESERVED_COMMAND]: this.RESERVED_COMMAND_REGEX,
 			[tokenTypes.RESERVED_NEWLINE]: this.RESERVED_NEWLINE_REGEX,
 			[tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT]: this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX,
 			[tokenTypes.RESERVED_DEPENDENT_CLAUSE]: this.RESERVED_DEPENDENT_CLAUSE_REGEX,

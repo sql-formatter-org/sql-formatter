@@ -31,7 +31,7 @@ export const isCase = isToken(
 export const isBy = isToken(tokenTypes.RESERVED, new RegExp(`^${spaces}*BY${spaces}*$`, 'iu'));
 export const isEnd = isToken(tokenTypes.CLOSE_PAREN, new RegExp(`^${spaces}*END${spaces}*$`, 'iu'));
 export const isFrom = isToken(
-	tokenTypes.RESERVED_TOP_LEVEL,
+	tokenTypes.RESERVED_COMMAND,
 	new RegExp(`^${spaces}*FROM${spaces}*$`, 'iu')
 );
 export const isLateral = isToken(
@@ -39,25 +39,25 @@ export const isLateral = isToken(
 	new RegExp(`^${spaces}*LATERAL${spaces}*$`, 'iu')
 );
 export const isLimit = isToken(
-	tokenTypes.RESERVED_TOP_LEVEL,
+	tokenTypes.RESERVED_COMMAND,
 	new RegExp(`^${spaces}*LIMIT${spaces}*$`, 'iu')
 );
 export const isSelect = isToken(
-	tokenTypes.RESERVED_TOP_LEVEL,
+	tokenTypes.RESERVED_COMMAND,
 	new RegExp(`^${spaces}*SELECT${spaces}*$`, 'iu')
 );
 export const isSet = isToken(
-	tokenTypes.RESERVED_TOP_LEVEL,
+	tokenTypes.RESERVED_COMMAND,
 	new RegExp(`^${spaces}*SET${spaces}*$`, 'iu')
 );
 export const isWindow = isToken(
-	tokenTypes.RESERVED_TOP_LEVEL,
+	tokenTypes.RESERVED_COMMAND,
 	new RegExp(`^${spaces}*WINDOW${spaces}*$`, 'iu')
 );
 
 export const isTopLevel = (token: Token) =>
 	token &&
-	(token.type === tokenTypes.RESERVED_TOP_LEVEL ||
+	(token.type === tokenTypes.RESERVED_COMMAND ||
 		token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT);
 
 export const isReserved = (token: Token) =>
@@ -65,5 +65,5 @@ export const isReserved = (token: Token) =>
 	(token.type === tokenTypes.RESERVED ||
 		token.type === tokenTypes.RESERVED_NEWLINE ||
 		token.type === tokenTypes.RESERVED_DEPENDENT_CLAUSE ||
-		token.type === tokenTypes.RESERVED_TOP_LEVEL ||
+		token.type === tokenTypes.RESERVED_COMMAND ||
 		token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT);
