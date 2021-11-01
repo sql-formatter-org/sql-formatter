@@ -357,8 +357,10 @@ const reservedTopLevelWords = [
 	'ALTER TABLE',
 	'BEGIN',
 	'CONNECT BY',
+	'CREATE TABLE', // verify
+	'DROP TABLE', // verify
 	'DECLARE',
-	'DELETE FROM',
+	// 'DELETE FROM', // disabled
 	'DELETE',
 	'END',
 	'EXCEPT',
@@ -370,6 +372,7 @@ const reservedTopLevelWords = [
 	'INSERT INTO',
 	'INSERT',
 	'LIMIT',
+	'OFFSET',
 	'LOOP',
 	'MODIFY',
 	'ORDER BY',

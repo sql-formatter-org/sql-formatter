@@ -535,7 +535,6 @@ const reservedWords = {
 		'VOLATILE',
 		'VOLUMES',
 		'WHILE',
-		'WITH',
 		'WLM',
 		'XMLEXISTS',
 		'XMLCAST',
@@ -786,8 +785,9 @@ const reservedTopLevelWords = [
 	'WHENEVER',
 	// other
 	'ADD',
+	'ALTER COLUMN', // verify
 	'AFTER',
-	'DELETE FROM',
+	'DROP TABLE', // verify
 	'FETCH FIRST',
 	'FROM',
 	'GROUP BY',
@@ -795,10 +795,12 @@ const reservedTopLevelWords = [
 	'HAVING',
 	'INSERT INTO',
 	'LIMIT',
+	'OFFSET',
 	'ORDER BY',
 	'SELECT',
 	'SET CURRENT SCHEMA',
 	'WHERE',
+	'WITH',
 ];
 
 const reservedTopLevelWordsNoIndent = [

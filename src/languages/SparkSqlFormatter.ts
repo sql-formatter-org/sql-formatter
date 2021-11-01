@@ -211,7 +211,7 @@ const reservedFunctions = {
 		'DECIMAL',
 		'DEGREES',
 		'DOUBLE',
-		'E',
+		// 'E',
 		'ELT',
 		'EXP',
 		'EXPM1',
@@ -419,7 +419,6 @@ const reservedWords = [
 	'EXCEPT',
 	'EXCHANGE',
 	'EXISTS',
-	'EXPLAIN',
 	'EXPORT',
 	'EXTENDED',
 	'EXTERNAL',
@@ -436,7 +435,6 @@ const reservedWords = [
 	'FOREIGN',
 	'FORMAT',
 	'FORMATTED',
-	'FROM',
 	'FULL',
 	'FUNCTION',
 	'FUNCTIONS',
@@ -444,7 +442,6 @@ const reservedWords = [
 	'GRANT',
 	'GROUP',
 	'GROUPING',
-	'HAVING',
 	'HOUR',
 	'IF',
 	'IGNORE',
@@ -455,13 +452,11 @@ const reservedWords = [
 	'INNER',
 	'INPATH',
 	'INPUTFORMAT',
-	'INSERT',
 	'INTERSECT',
 	'INTERVAL',
 	'INTO',
 	'IS',
 	'ITEMS',
-	'JOIN',
 	'KEYS',
 	'LAST',
 	'LAST_VALUE',
@@ -470,10 +465,8 @@ const reservedWords = [
 	'LEADING',
 	'LEFT',
 	'LIKE',
-	'LIMIT',
 	'LINES',
 	'LIST',
-	'LOAD',
 	'LOCAL',
 	'LOCATION',
 	'LOCK',
@@ -483,7 +476,6 @@ const reservedWords = [
 	'MAP',
 	'MATCHED',
 	'MERGE',
-	'MINUS',
 	'MINUTE',
 	'MONTH',
 	'MSCK',
@@ -512,7 +504,6 @@ const reservedWords = [
 	'PARTITIONED',
 	'PARTITIONS',
 	'PERCENT',
-	'PIVOT',
 	'PLACING',
 	'POSITION',
 	'PRECEDING',
@@ -527,11 +518,9 @@ const reservedWords = [
 	'RECOVER',
 	'REDUCE',
 	'REFERENCES',
-	'REFRESH',
 	'RENAME',
 	'REPAIR',
 	'REPLACE',
-	'RESET',
 	'RESPECT',
 	'RESTRICT',
 	'REVOKE',
@@ -551,7 +540,6 @@ const reservedWords = [
 	'SERDE',
 	'SERDEPROPERTIES',
 	'SESSION_USER',
-	'SET',
 	'SETS',
 	'SHOW',
 	'SKEWED',
@@ -567,7 +555,6 @@ const reservedWords = [
 	'SUBSTRING',
 	'TABLE',
 	'TABLES',
-	'TABLESAMPLE',
 	'TBLPROPERTIES',
 	'TEMPORARY',
 	'TERMINATED',
@@ -576,27 +563,21 @@ const reservedWords = [
 	'TRAILING',
 	'TRANSACTION',
 	'TRANSACTIONS',
-	'TRANSFORM',
 	'TRIM',
 	'TRUE',
 	'TRUNCATE',
 	'UNARCHIVE',
 	'UNBOUNDED',
 	'UNCACHE',
-	'UNION',
 	'UNIQUE',
 	'UNKNOWN',
 	'UNLOCK',
 	'UNSET',
-	'UPDATE',
 	'USE',
 	'USER',
 	'USING',
-	'VALUES',
 	'VIEW',
-	'WHERE',
 	'WINDOW',
-	'WITH',
 	'YEAR',
 	// other
 	'ANALYSE',
@@ -643,6 +624,8 @@ const reservedWords = [
 
 // http://spark.apache.org/docs/latest/sql-ref-syntax.html
 const reservedTopLevelWords = [
+	// DDL
+	'ALTER COLUMN',
 	'ALTER DATABASE',
 	'ALTER TABLE',
 	'ALTER VIEW',
@@ -657,17 +640,22 @@ const reservedTopLevelWords = [
 	'REPAIR TABLE',
 	'TRUNCATE TABLE',
 	'USE DATABASE',
+	// DML
 	'INSERT INTO',
 	'INSERT OVERWRITE',
 	'INSERT OVERWRITE DIRECTORY',
 	'LOAD',
+	// Data Retrieval
 	'SELECT',
+	'WITH',
 	'CLUSTER BY',
 	'DISTRIBUTE BY',
+	'PARTITION BY', // verify
 	'GROUP BY',
 	'HAVING',
-	'JOIN',
+	'VALUES',
 	'LIMIT',
+	'OFFSET',
 	'ORDER BY',
 	'SORT BY',
 	'TABLESAMPLE',
@@ -675,6 +663,7 @@ const reservedTopLevelWords = [
 	'PIVOT',
 	'TRANSFORM',
 	'EXPLAIN',
+	// Auxiliary
 	'ADD FILE',
 	'ADD JAR',
 	'ANALYZE TABLE',
@@ -691,6 +680,7 @@ const reservedTopLevelWords = [
 	'REFRESH FUNCTION',
 	'RESET',
 	'SET',
+	'SET SCHEMA', // verify
 	'SHOW COLUMNS',
 	'SHOW CREATE TABLE',
 	'SHOW DATABASES',
@@ -701,6 +691,11 @@ const reservedTopLevelWords = [
 	'SHOW TBLPROPERTIES',
 	'SHOW VIEWS',
 	'UNCACHE TABLE',
+	// other
+	'FROM',
+	'INSERT',
+	'UPDATE',
+	'WINDOW', // verify
 ];
 
 const reservedTopLevelWordsNoIndent = [
@@ -713,6 +708,9 @@ const reservedTopLevelWordsNoIndent = [
 	'EXCEPT',
 	'EXCEPT ALL',
 	'EXCEPT DISTINCT',
+	'MINUS',
+	'MINUS ALL',
+	'MINUS DISTINCT',
 ];
 
 /**
@@ -795,6 +793,19 @@ export default class SparkSqlFormatter extends Formatter {
 			const backToken = this.tokenLookBehind();
 			if (backToken?.type === tokenTypes.OPERATOR && backToken?.value === '.') {
 				// This is window().end (or similar) not CASE ... END
+				return { type: tokenTypes.WORD, value: token.value };
+			}
+		}
+
+		// TODO: deprecate this once ITEMS is merged with COLLECTION
+		if (/ITEMS/i.test(token.value) && token.type === tokenTypes.RESERVED) {
+			if (
+				!(
+					/COLLECTION/i.test(this.tokenLookBehind()?.value) &&
+					/TERMINATED/i.test(this.tokenLookAhead()?.value)
+				)
+			) {
+				// this is a word and not COLLECTION ITEMS
 				return { type: tokenTypes.WORD, value: token.value };
 			}
 		}

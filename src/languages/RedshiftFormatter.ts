@@ -548,6 +548,16 @@ const reservedWords = {
 	 * SVL: https://docs.aws.amazon.com/redshift/latest/dg/svl_views.html
 	 * SVV: https://docs.aws.amazon.com/redshift/latest/dg/svv_views.html
 	 */
+	dataTypes: [
+		'CHAR',
+		'CHARACTER',
+		'NCHAR',
+		'VARCHAR',
+		'CHARACTER VARYING',
+		'NVARCHAR',
+		'BPCHAR',
+		'TEXT',
+	],
 };
 
 // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
@@ -640,6 +650,16 @@ const reservedTopLevelWords = [
 	'VACUUM',
 	'WHERE',
 	'WITH',
+	// other
+	'GROUP BY',
+	'ORDER BY',
+	'LIMIT',
+	'OFFSET',
+	'VALUES',
+	'MODIFY', // verify
+	'INSERT INTO', // verify
+	'ALTER COLUMN', // verify
+	'SET SCHEMA', // verify
 ];
 
 const reservedTopLevelWordsNoIndent = [

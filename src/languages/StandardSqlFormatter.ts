@@ -285,7 +285,6 @@ const reservedWords = [
 	'WHENEVER',
 	'WIDTH_BUCKET',
 	'WINDOW',
-	'WITH',
 	'WITHIN',
 	'WITHOUT',
 	'YEAR',
@@ -295,7 +294,8 @@ const reservedTopLevelWords = [
 	'ADD',
 	'ALTER COLUMN',
 	'ALTER TABLE',
-	'DELETE FROM',
+	'CREATE TABLE',
+	'DROP TABLE',
 	'END',
 	'FETCH FIRST',
 	'FETCH NEXT',
@@ -308,6 +308,7 @@ const reservedTopLevelWords = [
 	'HAVING',
 	'INSERT INTO',
 	'LIMIT',
+	'OFFSET',
 	'ORDER BY',
 	'SELECT',
 	'SET SCHEMA',
@@ -315,6 +316,7 @@ const reservedTopLevelWords = [
 	'UPDATE',
 	'VALUES',
 	'WHERE',
+	'WITH',
 ];
 
 const reservedTopLevelWordsNoIndent = [

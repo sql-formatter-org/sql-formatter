@@ -98,22 +98,25 @@ describe('N1qlFormatter', () => {
       ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;
     `);
 		expect(result).toBe(dedent`
-			SELECT
-			  *
-			FROM
-			  usr
-			USE KEYS
-			  'Elinor_33313792'
-			NEST
-			  orders_with_users orders
-			  ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;
+      SELECT
+        *
+      FROM
+        usr
+      USE KEYS
+        'Elinor_33313792'
+      NEST
+        orders_with_users orders
+        ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history
+      END;
     `);
 	});
 
 	it('formats explained DELETE query with USE KEYS and RETURNING', () => {
 		const result = format("EXPLAIN DELETE FROM tutorial t USE KEYS 'baldwin' RETURNING t");
 		expect(result).toBe(dedent`
-      EXPLAIN DELETE FROM
+      EXPLAIN
+      DELETE
+      FROM
         tutorial t
       USE KEYS
         'baldwin' RETURNING t

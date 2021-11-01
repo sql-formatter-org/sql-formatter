@@ -167,7 +167,7 @@ const reservedFunctions = {
 	datatype: ['TO_CHAR', 'TO_DATE', 'TO_NUMBER', 'TO_TIMESTAMP'],
 	// https://www.postgresql.org/docs/14/functions-datetime.html
 	datetime: [
-		'AGE',
+		// 'AGE',
 		'CLOCK_TIMESTAMP',
 		'CURRENT_DATE',
 		'CURRENT_TIME',
@@ -953,7 +953,7 @@ const reservedWords = [
 	'HIERARCHY',
 	'HOLD',
 	'HOUR',
-	'ID',
+	// 'ID',
 	'IDENTITY',
 	'IF',
 	'IGNORE',
@@ -1552,11 +1552,13 @@ const reservedTopLevelWords = [
 	'ADD',
 	'AFTER',
 	'ALTER COLUMN',
-	'DELETE FROM',
+	'INSERT INTO', // verify
+	'SET SCHEMA', // verify
 	'FROM',
 	'GROUP BY',
 	'HAVING',
 	'LIMIT',
+	'OFFSET',
 	'ORDER BY',
 	'WHERE',
 	'WITH',

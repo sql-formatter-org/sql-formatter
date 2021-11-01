@@ -1,4 +1,5 @@
 import dedent from 'dedent-js';
+import { NewlineMode } from '../../src/types';
 
 /**
  * Tests support for alias options
@@ -65,9 +66,11 @@ export default function supportsAliases(format) {
 	});
 
 	it('does not format non select clauses', () => {
-		expect(format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT);')).toBe(
-			'CREATE TABLE items (a INT PRIMARY KEY, b TEXT);'
-		);
+		expect(
+			format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT);', {
+				newline: { mode: NewlineMode.never },
+			})
+		).toBe('CREATE TABLE items (a INT PRIMARY KEY, b TEXT);');
 	});
 
 	const tabularBaseQueryWithAlias =

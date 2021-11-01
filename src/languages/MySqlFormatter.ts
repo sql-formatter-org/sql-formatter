@@ -1233,7 +1233,6 @@ const reservedTopLevelWords = [
 	'WITH',
 	'XA',
 	// flow control
-	// 'CASE',
 	// 'IF',
 	'ITERATE',
 	'LEAVE',
@@ -1244,12 +1243,12 @@ const reservedTopLevelWords = [
 	// other
 	'ADD',
 	'ALTER COLUMN',
-	'DELETE FROM',
 	'FROM',
 	'GROUP BY',
 	'HAVING',
 	'INSERT INTO',
 	'LIMIT',
+	'OFFSET',
 	'ORDER BY',
 	'WHERE',
 ];

@@ -1157,14 +1157,20 @@ const reservedTopLevelWords = [
 	// other
 	'ALTER COLUMN',
 	'ALTER TABLE',
+	'CREATE TABLE',
 	'FROM',
 	'GROUP BY',
 	'HAVING',
+	'INSERT INTO', // verify
+	'DROP TABLE', // verify
+	'SET SCHEMA', // verify
 	'LIMIT',
+	'OFFSET',
 	'ORDER BY',
 	'SELECT',
 	'VALUES',
 	'WHERE',
+	'WITH',
 ];
 
 const reservedTopLevelWordsNoIndent = [
