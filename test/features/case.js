@@ -12,9 +12,12 @@ export default function supportsCase(format) {
 
 		expect(result).toBe(dedent`
       CASE
-        WHEN [option] = 'foo' THEN 1
-        WHEN [option] = 'bar' THEN 2
-        WHEN [option] = 'baz' THEN 3
+        WHEN [option] = 'foo'
+        THEN 1
+        WHEN [option] = 'bar'
+        THEN 2
+        WHEN [option] = 'baz'
+        THEN 3
         ELSE 4
       END;
     `);
@@ -22,15 +25,18 @@ export default function supportsCase(format) {
 
 	it('formats CASE ... WHEN with an expression', () => {
 		const result = format(
-			"CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;"
+			"CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;",
+			{ newline: { mode: 'itemCount', itemCount: 1 } }
 		);
 
 		expect(result).toBe(dedent`
-      CASE
-        toString(getNumber())
-        WHEN 'one' THEN 1
-        WHEN 'two' THEN 2
-        WHEN 'three' THEN 3
+      CASE toString(getNumber())
+        WHEN 'one'
+        THEN 1
+        WHEN 'two'
+        THEN 2
+        WHEN 'three'
+        THEN 3
         ELSE 4
       END;
     `);
@@ -38,17 +44,21 @@ export default function supportsCase(format) {
 
 	it('formats CASE ... WHEN inside SELECT', () => {
 		const result = format(
-			"SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM [table];"
+			"SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM [table];",
+			{
+				newline: { mode: 'itemCount', itemCount: 1 },
+			}
 		);
 
 		expect(result).toBe(dedent`
       SELECT
         foo,
         bar,
-        CASE
-          baz
-          WHEN 'one' THEN 1
-          WHEN 'two' THEN 2
+        CASE baz
+          WHEN 'one'
+          THEN 1
+          WHEN 'two'
+          THEN 2
           ELSE 3
         END
       FROM
@@ -57,11 +67,15 @@ export default function supportsCase(format) {
 	});
 
 	it('recognizes lowercase CASE ... END', () => {
-		const result = format("case when option = 'foo' then 1 else 2 end;", { uppercase: false });
+		const result = format("case when option = 'foo' then 1 else 2 end;", {
+			uppercase: false,
+			newline: { mode: 'itemCount', itemCount: 1 },
+		});
 
 		expect(result).toBe(dedent`
       case
-        when option = 'foo' then 1
+        when option = 'foo'
+        then 1
         else 2
       end;
     `);
@@ -83,14 +97,16 @@ export default function supportsCase(format) {
 	it('properly converts to uppercase in case statements', () => {
 		const result = format(
 			"case toString(getNumber()) when 'one' then 1 when 'two' then 2 when 'three' then 3 else 4 end;",
-			{ uppercase: true }
+			{ uppercase: true, newline: { mode: 'itemCount', itemCount: 1 } }
 		);
 		expect(result).toBe(dedent`
-      CASE
-        toString(getNumber())
-        WHEN 'one' THEN 1
-        WHEN 'two' THEN 2
-        WHEN 'three' THEN 3
+      CASE toString(getNumber())
+        WHEN 'one'
+        THEN 1
+        WHEN 'two'
+        THEN 2
+        WHEN 'three'
+        THEN 3
         ELSE 4
       END;
     `);

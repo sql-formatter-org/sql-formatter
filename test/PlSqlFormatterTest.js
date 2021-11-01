@@ -169,32 +169,33 @@ describe('PlSqlFormatter', () => {
       SELECT id, parent_id FROM t1 ORDER BY order1;
     `);
 		expect(result).toBe(dedent`
-      WITH t1(id, parent_id) AS (
-        -- Anchor member.
-        SELECT
-          id,
-          parent_id
-        FROM
-          tab1
-        WHERE
-          parent_id IS NULL
-        MINUS
-        -- Recursive member.
-        SELECT
-          t2.id,
-          t2.parent_id
-        FROM
-          tab1 t2,
-          t1
-        WHERE
-          t2.parent_id = t1.id
-      ) SEARCH BREADTH FIRST BY id SET order1,
-      another AS (
-        SELECT
-          *
-        FROM
-          dual
-      )
+      WITH
+        t1(id, parent_id) AS (
+          -- Anchor member.
+          SELECT
+            id,
+            parent_id
+          FROM
+            tab1
+          WHERE
+            parent_id IS NULL
+          MINUS
+          -- Recursive member.
+          SELECT
+            t2.id,
+            t2.parent_id
+          FROM
+            tab1 t2,
+            t1
+          WHERE
+            t2.parent_id = t1.id
+        ) SEARCH BREADTH FIRST BY id SET order1,
+        another AS (
+          SELECT
+            *
+          FROM
+            dual
+        )
       SELECT
         id,
         parent_id
@@ -231,32 +232,33 @@ describe('PlSqlFormatter', () => {
       SELECT id, parent_id FROM t1 ORDER BY order1;
     `);
 		expect(result).toBe(dedent/* sql */ `
-      WITH t1(id, parent_id) AS (
-        -- Anchor member.
-        SELECT
-          id,
-          parent_id
-        FROM
-          tab1
-        WHERE
-          parent_id IS NULL
-        MINUS
-        -- Recursive member.
-        SELECT
-          t2.id,
-          t2.parent_id
-        FROM
-          tab1 t2,
-          t1
-        WHERE
-          t2.parent_id = t1.id
-      ) SEARCH BREADTH FIRST BY id SET order1,
-      another AS (
-        SELECT
-          *
-        FROM
-          dual
-      )
+      WITH
+        t1(id, parent_id) AS (
+          -- Anchor member.
+          SELECT
+            id,
+            parent_id
+          FROM
+            tab1
+          WHERE
+            parent_id IS NULL
+          MINUS
+          -- Recursive member.
+          SELECT
+            t2.id,
+            t2.parent_id
+          FROM
+            tab1 t2,
+            t1
+          WHERE
+            t2.parent_id = t1.id
+        ) SEARCH BREADTH FIRST BY id SET order1,
+        another AS (
+          SELECT
+            *
+          FROM
+            dual
+        )
       SELECT
         id,
         parent_id

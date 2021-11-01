@@ -7,7 +7,6 @@ const reservedWords = [
 	'ALL',
 	'ALLOCATE',
 	'ALTER',
-	'AND',
 	'ANY',
 	'ARE',
 	'ARRAY',
@@ -30,7 +29,6 @@ const reservedWords = [
 	'CALLED',
 	'CARDINALITY',
 	'CASCADED',
-	'CASE',
 	'CAST',
 	'CEIL',
 	'CEILING',
@@ -91,8 +89,6 @@ const reservedWords = [
 	'DYNAMIC',
 	'EACH',
 	'ELEMENT',
-	'ELSE',
-	'END',
 	'END-EXEC',
 	'ESCAPE',
 	'EVERY',
@@ -257,7 +253,6 @@ const reservedWords = [
 	'SYSTEM_USER',
 	'TABLE',
 	'TABLESAMPLE',
-	'THEN',
 	'TIME',
 	'TIMESTAMP',
 	'TIMEZONE_HOUR',
@@ -287,12 +282,9 @@ const reservedWords = [
 	'VARYING',
 	'VAR_POP',
 	'VAR_SAMP',
-	'WHEN',
 	'WHENEVER',
-	'WHERE',
 	'WIDTH_BUCKET',
 	'WINDOW',
-	'WITH',
 	'WITHIN',
 	'WITHOUT',
 	'YEAR',
@@ -302,8 +294,8 @@ const reservedTopLevelWords = [
 	'ADD',
 	'ALTER COLUMN',
 	'ALTER TABLE',
-	'CASE',
-	'DELETE FROM',
+	'CREATE TABLE',
+	'DROP TABLE',
 	'END',
 	'FETCH FIRST',
 	'FETCH NEXT',
@@ -316,6 +308,7 @@ const reservedTopLevelWords = [
 	'HAVING',
 	'INSERT INTO',
 	'LIMIT',
+	'OFFSET',
 	'ORDER BY',
 	'SELECT',
 	'SET SCHEMA',
@@ -323,6 +316,7 @@ const reservedTopLevelWords = [
 	'UPDATE',
 	'VALUES',
 	'WHERE',
+	'WITH',
 ];
 
 const reservedTopLevelWordsNoIndent = [
@@ -337,12 +331,15 @@ const reservedTopLevelWordsNoIndent = [
 	'EXCEPT DISTINCT',
 ];
 
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
+
 const reservedNewlineWords = [
 	'AND',
-	'ELSE',
 	'OR',
-	'ON',
-	'WHEN',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -362,6 +359,7 @@ export default class StandardSqlFormatter extends Formatter {
 			reservedWords,
 			reservedTopLevelWords,
 			reservedNewlineWords,
+			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,
 			stringTypes: [`""`, "''"],
 			openParens: ['(', 'CASE'],

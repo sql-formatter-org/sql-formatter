@@ -7,6 +7,7 @@ interface TokenizerOptions {
 	reservedWords: string[];
 	reservedTopLevelWords: string[];
 	reservedNewlineWords: string[];
+	reservedDependentClauses: string[];
 	reservedTopLevelWordsNoIndent: string[];
 	stringTypes: regexFactory.StringPatternType[];
 	openParens: string[];
@@ -24,10 +25,11 @@ export default class Tokenizer {
 	OPERATOR_REGEX: RegExp;
 	BLOCK_COMMENT_REGEX: RegExp;
 	LINE_COMMENT_REGEX: RegExp;
+	RESERVED_PLAIN_REGEX: RegExp;
+	RESERVED_DEPENDENT_CLAUSE_REGEX: RegExp;
+	RESERVED_NEWLINE_REGEX: RegExp;
 	RESERVED_TOP_LEVEL_REGEX: RegExp;
 	RESERVED_TOP_LEVEL_NO_INDENT_REGEX: RegExp;
-	RESERVED_NEWLINE_REGEX: RegExp;
-	RESERVED_PLAIN_REGEX: RegExp;
 	WORD_REGEX: RegExp;
 	STRING_REGEX: RegExp;
 	OPEN_PAREN_REGEX: RegExp;
@@ -39,8 +41,9 @@ export default class Tokenizer {
 	/**
 	 * @param {TokenizerOptions} cfg
 	 *  @param {String[]} cfg.reservedWords: Reserved words in SQL
-	 *  @param {String[]} cfg.reservedTopLevelWords: Words that are set to new line separately
+	 *  @param {String[]} cfg.reservedDependentClauses: Words that following a specific Statement and must have data attached
 	 *  @param {String[]} cfg.reservedNewlineWords: Words that are set to newline
+	 *  @param {String[]} cfg.reservedTopLevelWords: Words that are set to new line separately
 	 *  @param {String[]} cfg.reservedTopLevelWordsNoIndent: Words that are top level but have no indentation
 	 *  @param {String[]} cfg.stringTypes: String types to enable: "", '', ``, [], N''
 	 *  @param {String[]} cfg.openParens: Opening parentheses to enable, like (, [
@@ -66,12 +69,15 @@ export default class Tokenizer {
 		this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/u;
 		this.LINE_COMMENT_REGEX = regexFactory.createLineCommentRegex(cfg.lineCommentTypes);
 
+		this.RESERVED_PLAIN_REGEX = regexFactory.createReservedWordRegex(cfg.reservedWords);
+		this.RESERVED_NEWLINE_REGEX = regexFactory.createReservedWordRegex(cfg.reservedNewlineWords);
+		this.RESERVED_DEPENDENT_CLAUSE_REGEX = regexFactory.createReservedWordRegex(
+			cfg.reservedDependentClauses ?? []
+		);
 		this.RESERVED_TOP_LEVEL_REGEX = regexFactory.createReservedWordRegex(cfg.reservedTopLevelWords);
 		this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX = regexFactory.createReservedWordRegex(
 			cfg.reservedTopLevelWordsNoIndent
 		);
-		this.RESERVED_NEWLINE_REGEX = regexFactory.createReservedWordRegex(cfg.reservedNewlineWords);
-		this.RESERVED_PLAIN_REGEX = regexFactory.createReservedWordRegex(cfg.reservedWords);
 
 		this.WORD_REGEX = regexFactory.createWordRegex(cfg.specialWordChars);
 		this.STRING_REGEX = regexFactory.createStringRegex(cfg.stringTypes);
@@ -262,44 +268,20 @@ export default class Tokenizer {
 		if (previousToken && ['.', '[', '`', '"'].includes(previousToken.value)) {
 			return undefined;
 		}
-		return (
-			this.getTopLevelReservedToken(input) ||
-			this.getNewlineReservedToken(input) ||
-			this.getTopLevelReservedTokenNoIndent(input) ||
-			this.getPlainReservedToken(input)
+
+		const reservedTokenMap = {
+			[tokenTypes.RESERVED_TOP_LEVEL]: this.RESERVED_TOP_LEVEL_REGEX,
+			[tokenTypes.RESERVED_NEWLINE]: this.RESERVED_NEWLINE_REGEX,
+			[tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT]: this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX,
+			[tokenTypes.RESERVED_DEPENDENT_CLAUSE]: this.RESERVED_DEPENDENT_CLAUSE_REGEX,
+			[tokenTypes.RESERVED]: this.RESERVED_PLAIN_REGEX,
+		};
+
+		return Object.entries(reservedTokenMap).reduce(
+			(matchedToken, [tokenType, tokenRegex]) =>
+				matchedToken || this.getTokenOnFirstMatch({ input, type: tokenType, regex: tokenRegex }),
+			undefined as Token | undefined
 		);
-	}
-
-	getTopLevelReservedToken(input: string) {
-		return this.getTokenOnFirstMatch({
-			input,
-			type: tokenTypes.RESERVED_TOP_LEVEL,
-			regex: this.RESERVED_TOP_LEVEL_REGEX,
-		});
-	}
-
-	getNewlineReservedToken(input: string) {
-		return this.getTokenOnFirstMatch({
-			input,
-			type: tokenTypes.RESERVED_NEWLINE,
-			regex: this.RESERVED_NEWLINE_REGEX,
-		});
-	}
-
-	getTopLevelReservedTokenNoIndent(input: string) {
-		return this.getTokenOnFirstMatch({
-			input,
-			type: tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT,
-			regex: this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX,
-		});
-	}
-
-	getPlainReservedToken(input: string) {
-		return this.getTokenOnFirstMatch({
-			input,
-			type: tokenTypes.RESERVED,
-			regex: this.RESERVED_PLAIN_REGEX,
-		});
 	}
 
 	getWordToken(input: string) {
