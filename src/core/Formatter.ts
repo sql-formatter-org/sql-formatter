@@ -452,10 +452,15 @@ export default class Formatter {
 			return this.formatWithSpaces(token, query, 'after');
 		} else {
 			this.indentation.decreaseBlockLevel();
-			query = this.addNewline(query);
+
 			if (this.cfg.tenSpace) {
-				query += this.cfg.indent;
+				query = this.addNewline(query) + this.cfg.indent;
+			} else if (this.cfg.parenOptions.closeParenNewline) {
+				query = this.addNewline(query);
+			} else {
+				query = query.trimEnd() + ' ';
 			}
+
 			return this.formatWithSpaces(token, query);
 		}
 	}
