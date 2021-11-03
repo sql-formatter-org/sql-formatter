@@ -419,16 +419,18 @@ export default class Formatter {
 		} else {
 			// Take out the preceding space unless there was whitespace there in the original query
 			// or another opening parens or line comment
-			const preserveWhitespaceFor = {
-				[tokenTypes.BLOCK_START]: true,
-				[tokenTypes.LINE_COMMENT]: true,
-				[tokenTypes.OPERATOR]: true,
-			};
+			const preserveWhitespaceFor = [
+				tokenTypes.BLOCK_START,
+				tokenTypes.LINE_COMMENT,
+				tokenTypes.OPERATOR,
+			];
 			if (
 				token.whitespaceBefore?.length === 0 &&
-				!preserveWhitespaceFor[this.tokenLookBehind()?.type]
+				!preserveWhitespaceFor.includes(this.tokenLookBehind()?.type)
 			) {
 				query = trimSpacesEnd(query);
+			} else if (!this.cfg.parenOptions.openParenNewline) {
+				query = query.trimEnd() + ' ';
 			}
 			query += this.show(token);
 			this.inlineBlock.beginIfPossible(this.tokens, this.index);
