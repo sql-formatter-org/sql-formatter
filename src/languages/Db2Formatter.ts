@@ -1,6 +1,11 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved functions
+ * distinct from Keywords due to interaction with parentheses
+ */
 const reservedFunctions = {
 	// https://www.ibm.com/docs/en/db2-for-zos/11?topic=functions-aggregate
 	aggregate: [
@@ -306,6 +311,11 @@ const reservedFunctions = {
 	olap: ['FIRST_VALUE', 'LAG', 'LAST_VALUE', 'LEAD', 'NTH_VALUE', 'NTILE', 'RATIO_TO_REPORT'],
 };
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
 const reservedKeywords = {
 	// https://www.ibm.com/docs/en/db2-for-zos/11?topic=words-reserved#db2z_reservedwords__newresword
 	standard: [
@@ -667,6 +677,11 @@ const reservedKeywords = {
 	],
 };
 
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
 // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
 const reservedCommands = [
 	'ALLOCATE CURSOR',
@@ -803,7 +818,13 @@ const reservedCommands = [
 	'WITH',
 ];
 
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
 const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -827,6 +848,7 @@ const reservedBinaryCommands = [
 ];
 
 /**
+ * Priority 3
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */

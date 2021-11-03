@@ -1,6 +1,11 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
 // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#reserved-word
 const reservedKeywords = [
 	'ABS',
@@ -290,6 +295,11 @@ const reservedKeywords = [
 	'YEAR',
 ];
 
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
 const reservedCommands = [
 	'ADD',
 	'ALTER COLUMN',
@@ -319,7 +329,13 @@ const reservedCommands = [
 	'WITH',
 ];
 
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
 const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -343,6 +359,7 @@ const reservedBinaryCommands = [
 ];
 
 /**
+ * Priority 3
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */

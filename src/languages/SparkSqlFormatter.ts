@@ -3,6 +3,11 @@ import { isEnd, isWindow, Token } from '../core/token'; // convert to partial ty
 import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved functions
+ * distinct from Keywords due to interaction with parentheses
+ */
 // http://spark.apache.org/docs/latest/sql-ref-functions.html
 const reservedFunctions = {
 	// http://spark.apache.org/docs/latest/sql-ref-functions-builtin.html#aggregate-functions
@@ -347,6 +352,11 @@ const reservedFunctions = {
 	],
 };
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
 // https://deepkb.com/CO_000013/en/kb/IMPORT-fbfa59f0-2bf1-31fe-bb7b-0f9efe9932c6/spark-sql-keywords
 const reservedKeywords = [
 	'ADD',
@@ -622,6 +632,11 @@ const reservedKeywords = [
 	'YEAR_MONTH',
 ];
 
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
 // http://spark.apache.org/docs/latest/sql-ref-syntax.html
 const reservedCommands = [
 	// DDL
@@ -698,7 +713,13 @@ const reservedCommands = [
 	'WINDOW', // verify
 ];
 
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
 const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -747,6 +768,7 @@ const reservedBinaryCommands = [
 ];
 
 /**
+ * Priority 3
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */

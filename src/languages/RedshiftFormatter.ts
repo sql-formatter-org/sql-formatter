@@ -1,6 +1,11 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved functions
+ * distinct from Keywords due to interaction with parentheses
+ */
 const reservedFunctions = {
 	// https://docs.aws.amazon.com/redshift/latest/dg/c_Aggregate_Functions.html
 	aggregate: [
@@ -355,9 +360,13 @@ const reservedFunctions = {
 	],
 };
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
 const reservedKeywords = {
 	// https://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html
-	// duplicates are removed in favour of more specific categories
 	standard: [
 		'AES128',
 		'AES256',
@@ -560,6 +569,11 @@ const reservedKeywords = {
 	],
 };
 
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
 // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
 const reservedCommands = [
 	'ABORT',
@@ -662,7 +676,13 @@ const reservedCommands = [
 	'SET SCHEMA', // verify
 ];
 
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
 const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -686,6 +706,7 @@ const reservedBinaryCommands = [
 ];
 
 /**
+ * Priority 3
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */

@@ -4,6 +4,11 @@ import tokenTypes from '../core/tokenTypes';
 import { isLateral, Token } from '../core/token';
 
 // TODO: split this into object with function categories
+/**
+ * Priority 5 (last)
+ * Full list of reserved functions
+ * distinct from Keywords due to interaction with parentheses
+ */
 // https://dev.mysql.com/doc/refman/8.0/en/built-in-function-reference.html
 const reservedFunctions = [
 	'ABS',
@@ -430,6 +435,11 @@ const reservedFunctions = [
 	'YEARWEEK',
 ];
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
 // https://dev.mysql.com/doc/refman/8.0/en/keywords.html
 const reservedKeywords = [
 	'ACCESSIBLE',
@@ -1064,6 +1074,11 @@ const reservedKeywords = [
 	'ZONE',
 ];
 
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
 // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
 const reservedCommands = [
 	'ALTER DATABASE',
@@ -1253,7 +1268,13 @@ const reservedCommands = [
 	'WHERE',
 ];
 
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
 const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -1281,6 +1302,7 @@ const reservedBinaryCommands = [
 ];
 
 /**
+ * Priority 3
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */

@@ -1,6 +1,11 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved functions
+ * distinct from Keywords due to interaction with parentheses
+ */
 // https://mariadb.com/kb/en/information-schema-sql_functions-table/
 const reservedFunctions = [
 	'ADDDATE',
@@ -239,6 +244,11 @@ const reservedFunctions = [
 	'YEARWEEK',
 ];
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
 // https://mariadb.com/kb/en/information-schema-keywords-table/
 const reservedKeywords = [
 	'ACCESSIBLE',
@@ -871,6 +881,11 @@ const reservedKeywords = [
 	'ZEROFILL',
 ];
 
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
 // https://mariadb.com/docs/reference/mdb/sql-statements/
 const reservedCommands = [
 	'ALTER DATABASE',
@@ -1089,7 +1104,13 @@ const reservedCommands = [
 	'WHERE',
 ];
 
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
 const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -1120,6 +1141,7 @@ const reservedBinaryCommands = [
 ];
 
 /**
+ * Priority 3
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
