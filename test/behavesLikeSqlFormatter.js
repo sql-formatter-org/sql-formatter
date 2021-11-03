@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
+
 import supportsComments from './features/comments';
 import supportsConfigOptions from './features/configOptions';
-import supportsOperators from './features/operators';
 import supportsAliases from './features/alias';
 import supportsNewlineOptions from './features/newline';
 import supportsKeywordPositions from './features/keywordPosition';
@@ -16,7 +16,6 @@ export default function behavesLikeSqlFormatter(format) {
 	supportsNewlineOptions(format);
 	supportsComments(format);
 	supportsConfigOptions(format);
-	supportsOperators(format, ['=', '+', '-', '*', '/', '<>', '>', '<', '>=', '<=']);
 
 	it('does nothing with empty input', () => {
 		const result = format('');

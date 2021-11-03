@@ -389,7 +389,12 @@ export default class Formatter {
 		if (this.cfg.tenSpace) {
 			this.indentation.decreaseTopLevel();
 		}
-		return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
+
+		if (this.cfg.breakBeforeBooleanOperator) {
+			return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
+		} else {
+			return this.addNewline(query + this.show(token));
+		}
 	}
 
 	// Replace any sequence of whitespace characters with single space

@@ -1,6 +1,8 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
+import RedshiftFormatter from '../src/languages/RedshiftFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+
 import supportsAlterTable from './features/alterTable';
 import supportsAlterTableModify from './features/alterTableModify';
 import supportsCreateTable from './features/createTable';
@@ -16,9 +18,13 @@ describe('RedshiftFormatter', () => {
 	supportsCreateTable(format);
 	supportsAlterTable(format);
 	supportsAlterTableModify(format);
-	supportsStrings(format, ['""', "''", '``']);
+	supportsStrings(format, RedshiftFormatter.stringTypes);
 	supportsSchema(format);
-	supportsOperators(format, ['%', '^', '|/', '||/', '<<', '>>', '&', '|', '~', '!', '!=', '||']);
+	supportsOperators(
+		format,
+		RedshiftFormatter.operators,
+		RedshiftFormatter.reservedLogicalOperators
+	);
 	supportsJoin(format);
 
 	it('formats LIMIT', () => {

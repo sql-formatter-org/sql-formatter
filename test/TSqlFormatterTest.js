@@ -1,6 +1,8 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
+import TSqlFormatter from '../src/languages/TSqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
 import supportsAlterTable from './features/alterTable';
@@ -17,28 +19,10 @@ describe('TSqlFormatter', () => {
 	supportsCase(format);
 	supportsCreateTable(format);
 	supportsAlterTable(format);
-	supportsStrings(format, ['""', "''", "N''", '[]']);
+	supportsStrings(format, TSqlFormatter.stringTypes);
 	supportsBetween(format);
 	supportsSchema(format);
-	supportsOperators(format, [
-		'%',
-		'&',
-		'|',
-		'^',
-		'~',
-		'!=',
-		'!<',
-		'!>',
-		'+=',
-		'-=',
-		'*=',
-		'/=',
-		'%=',
-		'|=',
-		'&=',
-		'^=',
-		'::',
-	]);
+	supportsOperators(format, TSqlFormatter.operators, TSqlFormatter.reservedLogicalOperators);
 	supportsJoin(format, { without: ['NATURAL'] });
 
 	// TODO: The following are duplicated from StandardSQLFormatter test
@@ -84,13 +68,13 @@ describe('TSqlFormatter', () => {
 	it('formats SELECT query with CROSS JOIN', () => {
 		const result = format('SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t');
 		expect(result).toBe(dedent`
-			SELECT
-			  a,
-			  b
-			FROM
-			  t
-			  CROSS JOIN t2
-			  ON t.id = t2.id_t
+      SELECT
+        a,
+        b
+      FROM
+        t
+        CROSS JOIN t2
+        ON t.id = t2.id_t
     `);
 	});
 });
