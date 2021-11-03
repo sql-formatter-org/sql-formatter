@@ -2,7 +2,7 @@ import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { maxLength, trimSpacesEnd } from '../utils';
-import { isReserved, isTopLevel, isToken, Token, TokenType, ZWS } from './token';
+import { isReserved, isCommand, isToken, Token, TokenType, ZWS } from './token';
 import Tokenizer from './Tokenizer';
 import type { FormatOptions } from '../sqlFormatter';
 import { AliasMode, CommaPosition, KeywordMode, NewlineMode } from '../types';
@@ -200,7 +200,7 @@ export default class Formatter {
 				if (token.type !== TokenType.RESERVED_KEYWORD) {
 					token = this.tenSpacedToken(token);
 				}
-				if (isTopLevel(token)) {
+				if (token.type === TokenType.RESERVED_COMMAND) {
 					this.withinSelect = isToken('SELECT')(token);
 				}
 			}
@@ -274,8 +274,7 @@ export default class Formatter {
 			this.withinSelect &&
 			token.type === TokenType.WORD &&
 			(isToken('END')(prevToken) || // isAs(prevToken) ||
-				(prevToken?.type === TokenType.WORD &&
-					(nextToken?.value === ',' || isTopLevel(nextToken))));
+				(prevToken?.type === TokenType.WORD && (nextToken?.value === ',' || isCommand(nextToken))));
 
 		if (missingTableAlias || missingSelectColumnAlias) {
 			return this.formatWithSpaces(asToken, query);

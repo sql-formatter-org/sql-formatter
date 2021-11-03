@@ -45,7 +45,7 @@ export const isToken = (testToken: keyof typeof testTokens) => (token: Token) =>
 	token?.type === testTokens[testToken] &&
 	new RegExp(`^${spaces}*${testToken}${spaces}*$`, 'iu').test(token?.value);
 
-export const isTopLevel = (token: Token) =>
+export const isCommand = (token: Token) =>
 	token &&
 	(token.type === TokenType.RESERVED_COMMAND || token.type === TokenType.RESERVED_BINARY_COMMAND);
 
