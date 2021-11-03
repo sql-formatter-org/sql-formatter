@@ -238,8 +238,8 @@ export default class Formatter {
 					formattedQuery = this.formatWithSpaces(token, formattedQuery);
 					this.previousReservedToken = token;
 				}
-			} else if (token.type === tokenTypes.OPEN_PAREN) {
-				formattedQuery = this.formatOpeningParentheses(token, formattedQuery);
+			} else if (token.type === tokenTypes.BLOCK_START) {
+				formattedQuery = this.formatBlockStart(token, formattedQuery);
 			} else if (token.type === tokenTypes.CLOSE_PAREN) {
 				formattedQuery = this.formatClosingParentheses(token, formattedQuery);
 			} else if (token.type === tokenTypes.PLACEHOLDER) {
@@ -300,7 +300,7 @@ export default class Formatter {
 	checkNewline = (index: number) => {
 		if (
 			this.newline.mode === NewlineMode.always ||
-			this.tokens.some(({ type, value }) => type === tokenTypes.OPEN_PAREN && value.length > 1) // auto break on CASE statements
+			this.tokens.some(({ type, value }) => type === tokenTypes.BLOCK_START && value.length > 1) // auto break on CASE statements
 		) {
 			return true;
 		}
@@ -323,7 +323,7 @@ export default class Formatter {
 				if (value === ',' && !acc.inParen) {
 					return { ...acc, count: acc.count + 1 };
 				} // count commas between items in clause
-				if (type === tokenTypes.OPEN_PAREN) {
+				if (type === tokenTypes.BLOCK_START) {
 					return { ...acc, inParen: true };
 				} // don't count commas in functions
 				if (type === tokenTypes.CLOSE_PAREN) {
@@ -413,14 +413,14 @@ export default class Formatter {
 	}
 
 	// Opening parentheses increase the block indent level and start a new line
-	formatOpeningParentheses(token: Token, query: string) {
+	formatBlockStart(token: Token, query: string) {
 		if (isCase(token)) {
 			query = this.formatWithSpaces(token, query);
 		} else {
 			// Take out the preceding space unless there was whitespace there in the original query
 			// or another opening parens or line comment
 			const preserveWhitespaceFor = {
-				[tokenTypes.OPEN_PAREN]: true,
+				[tokenTypes.BLOCK_START]: true,
 				[tokenTypes.LINE_COMMENT]: true,
 				[tokenTypes.OPERATOR]: true,
 			};
@@ -500,7 +500,7 @@ export default class Formatter {
 	show(token: Token) {
 		if (
 			isReserved(token) ||
-			token.type === tokenTypes.OPEN_PAREN ||
+			token.type === tokenTypes.BLOCK_START ||
 			token.type === tokenTypes.CLOSE_PAREN
 		) {
 			return this.cfg.uppercase ? token.value.toUpperCase() : token.value.toLowerCase();

@@ -708,7 +708,7 @@ export default class RedshiftFormatter extends Formatter {
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''", '``'],
-			openParens: ['('],
+			blockStart: ['('],
 			closeParens: [')'],
 			indexedPlaceholderTypes: ['?'],
 			namedPlaceholderTypes: ['@', '#', '$'],

@@ -1613,7 +1613,7 @@ export default class PostgreSqlFormatter extends Formatter {
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''", "U&''", 'U&""', '$$'],
-			openParens: ['(', 'CASE'],
+			blockStart: ['(', 'CASE'],
 			closeParens: [')', 'END'],
 			indexedPlaceholderTypes: ['$'],
 			namedPlaceholderTypes: [':'],
@@ -1641,7 +1641,7 @@ export default class PostgreSqlFormatter extends Formatter {
 
 	tokenOverride(token: Token) {
 		if (isLateral(token)) {
-			if (this.tokenLookAhead()?.type === tokenTypes.OPEN_PAREN) {
+			if (this.tokenLookAhead()?.type === tokenTypes.BLOCK_START) {
 				// This is a subquery, treat it like a join
 				return { type: tokenTypes.RESERVED_LOGICAL_OPERATOR, value: token.value };
 			}

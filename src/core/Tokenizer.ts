@@ -10,7 +10,7 @@ interface TokenizerOptions {
 	reservedDependentClauses: string[];
 	reservedBinaryCommands: string[];
 	stringTypes: regexFactory.StringPatternType[];
-	openParens: string[];
+	blockStart: string[];
 	closeParens: string[];
 	indexedPlaceholderTypes?: string[];
 	namedPlaceholderTypes: string[];
@@ -46,7 +46,7 @@ export default class Tokenizer {
 	 *  @param {String[]} cfg.reservedCommands: Words that are set to new line separately
 	 *  @param {String[]} cfg.reservedBinaryCommands: Words that are top level but have no indentation
 	 *  @param {String[]} cfg.stringTypes: String types to enable: "", '', ``, [], N''
-	 *  @param {String[]} cfg.openParens: Opening parentheses to enable, like (, [
+	 *  @param {String[]} cfg.blockStart: Opening parentheses to enable, like (, [
 	 *  @param {String[]} cfg.closeParens: Closing parentheses to enable, like ), ]
 	 *  @param {String[]} cfg.indexedPlaceholderTypes: Prefixes for indexed placeholders, like ?
 	 *  @param {String[]} cfg.namedPlaceholderTypes: Prefixes for named placeholders, like @ and :
@@ -84,7 +84,7 @@ export default class Tokenizer {
 		this.WORD_REGEX = regexFactory.createWordRegex(cfg.specialWordChars);
 		this.STRING_REGEX = regexFactory.createStringRegex(cfg.stringTypes);
 
-		this.OPEN_PAREN_REGEX = regexFactory.createParenRegex(cfg.openParens);
+		this.OPEN_PAREN_REGEX = regexFactory.createParenRegex(cfg.blockStart);
 		this.CLOSE_PAREN_REGEX = regexFactory.createParenRegex(cfg.closeParens);
 
 		this.INDEXED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
@@ -141,7 +141,7 @@ export default class Tokenizer {
 	getNextToken(input: string, previousToken?: Token) {
 		return (this.getCommentToken(input) ||
 			this.getStringToken(input) ||
-			this.getOpenParenToken(input) ||
+			this.getBlockStartToken(input) ||
 			this.getCloseParenToken(input) ||
 			this.getPlaceholderToken(input) ||
 			this.getNumberToken(input) ||
@@ -178,10 +178,10 @@ export default class Tokenizer {
 		});
 	}
 
-	getOpenParenToken(input: string) {
+	getBlockStartToken(input: string) {
 		return this.getTokenOnFirstMatch({
 			input,
-			type: tokenTypes.OPEN_PAREN,
+			type: tokenTypes.BLOCK_START,
 			regex: this.OPEN_PAREN_REGEX,
 		});
 	}

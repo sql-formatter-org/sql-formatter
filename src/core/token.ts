@@ -28,7 +28,7 @@ export const isBetween = isToken(
 	new RegExp(`^${spaces}*BETWEEN${spaces}*$`, 'iu')
 );
 export const isCase = isToken(
-	tokenTypes.OPEN_PAREN,
+	tokenTypes.BLOCK_START,
 	new RegExp(`^${spaces}*CASE${spaces}*$`, 'iu')
 );
 export const isBy = isToken(

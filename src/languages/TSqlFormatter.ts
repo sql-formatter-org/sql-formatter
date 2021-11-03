@@ -1221,7 +1221,7 @@ export default class TSqlFormatter extends Formatter {
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "N''", "''", '[]'],
-			openParens: ['(', 'CASE'],
+			blockStart: ['(', 'CASE'],
 			closeParens: [')', 'END'],
 			indexedPlaceholderTypes: [],
 			namedPlaceholderTypes: ['@'],

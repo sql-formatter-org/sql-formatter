@@ -359,7 +359,7 @@ export default class StandardSqlFormatter extends Formatter {
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''"],
-			openParens: ['(', 'CASE'],
+			blockStart: ['(', 'CASE'],
 			closeParens: [')', 'END'],
 			indexedPlaceholderTypes: ['?'],
 			namedPlaceholderTypes: [],

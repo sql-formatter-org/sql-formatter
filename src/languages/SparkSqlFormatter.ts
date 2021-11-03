@@ -767,7 +767,7 @@ export default class SparkSqlFormatter extends Formatter {
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''", '``', '{}'],
-			openParens: ['(', 'CASE'],
+			blockStart: ['(', 'CASE'],
 			closeParens: [')', 'END'],
 			indexedPlaceholderTypes: ['?'],
 			namedPlaceholderTypes: ['$'],
@@ -780,7 +780,7 @@ export default class SparkSqlFormatter extends Formatter {
 		// Fix cases where names are ambiguously keywords or functions
 		if (isWindow(token)) {
 			const aheadToken = this.tokenLookAhead();
-			if (aheadToken?.type === tokenTypes.OPEN_PAREN) {
+			if (aheadToken?.type === tokenTypes.BLOCK_START) {
 				// This is a function call, treat it as a reserved word
 				return { type: tokenTypes.RESERVED_KEYWORD, value: token.value };
 			}

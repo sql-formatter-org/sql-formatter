@@ -497,7 +497,7 @@ export default class N1qlFormatter extends Formatter {
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''", '``'],
-			openParens: ['(', '[', '{', 'CASE'],
+			blockStart: ['(', '[', '{', 'CASE'],
 			closeParens: [')', ']', '}', 'END'],
 			namedPlaceholderTypes: ['$'],
 			lineCommentTypes: ['#', '--'],

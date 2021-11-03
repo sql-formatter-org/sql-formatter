@@ -1137,7 +1137,7 @@ export default class MariaDbFormatter extends Formatter {
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: ['``', "''", '""'],
-			openParens: ['(', 'CASE'],
+			blockStart: ['(', 'CASE'],
 			closeParens: [')', 'END'],
 			indexedPlaceholderTypes: ['?'],
 			namedPlaceholderTypes: [],
