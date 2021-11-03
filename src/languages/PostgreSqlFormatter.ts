@@ -1564,7 +1564,7 @@ const reservedCommands = [
 	'WITH',
 ];
 
-const reservedTopLevelWordsNoIndent = [
+const reservedBinaryCommands = [
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -1614,7 +1614,7 @@ export default class PostgreSqlFormatter extends Formatter {
 			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
+			reservedBinaryCommands,
 			stringTypes: [`""`, "''", "U&''", 'U&""', '$$'],
 			openParens: ['(', 'CASE'],
 			closeParens: [')', 'END'],

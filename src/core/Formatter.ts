@@ -226,8 +226,8 @@ export default class Formatter {
 			} else if (token.type === tokenTypes.RESERVED_COMMAND) {
 				this.currentNewline = this.checkNewline(index);
 				formattedQuery = this.formatCommand(token, formattedQuery);
-			} else if (token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT) {
-				formattedQuery = this.formatTopLevelReservedWordNoIndent(token, formattedQuery);
+			} else if (token.type === tokenTypes.RESERVED_BINARY_COMMAND) {
+				formattedQuery = this.formatBinaryCommand(token, formattedQuery);
 			} else if (token.type === tokenTypes.RESERVED_DEPENDENT_CLAUSE) {
 				formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
 			} else if (token.type === tokenTypes.RESERVED_NEWLINE) {
@@ -313,7 +313,7 @@ export default class Formatter {
 			tail.findIndex(
 				({ type }) =>
 					type === tokenTypes.RESERVED_COMMAND ||
-					type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT ||
+					type === tokenTypes.RESERVED_BINARY_COMMAND ||
 					type === tokenTypes.RESERVED_NEWLINE
 			)
 		);
@@ -364,7 +364,7 @@ export default class Formatter {
 		return comment.replace(/\n[ \t]*/gu, '\n' + this.indentation.getIndent() + ' ');
 	}
 
-	formatTopLevelReservedWordNoIndent(token: Token, query: string) {
+	formatBinaryCommand(token: Token, query: string) {
 		this.indentation.decreaseTopLevel();
 		query = this.addNewline(query) + this.equalizeWhitespace(this.show(token));
 		return this.addNewline(query);

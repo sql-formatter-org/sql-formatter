@@ -1173,7 +1173,7 @@ const reservedCommands = [
 	'WITH',
 ];
 
-const reservedTopLevelWordsNoIndent = [
+const reservedBinaryCommands = [
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -1222,7 +1222,7 @@ export default class TSqlFormatter extends Formatter {
 			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
+			reservedBinaryCommands,
 			stringTypes: [`""`, "N''", "''", '[]'],
 			openParens: ['(', 'CASE'],
 			closeParens: [')', 'END'],

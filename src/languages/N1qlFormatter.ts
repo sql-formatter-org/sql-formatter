@@ -457,7 +457,7 @@ const reservedCommands = [
 	'WITH',
 ];
 
-const reservedTopLevelWordsNoIndent = [
+const reservedBinaryCommands = [
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -499,7 +499,7 @@ export default class N1qlFormatter extends Formatter {
 			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
+			reservedBinaryCommands,
 			stringTypes: [`""`, "''", '``'],
 			openParens: ['(', '[', '{', 'CASE'],
 			closeParens: [')', ']', '}', 'END'],

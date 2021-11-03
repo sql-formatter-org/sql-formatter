@@ -698,7 +698,7 @@ const reservedCommands = [
 	'WINDOW', // verify
 ];
 
-const reservedTopLevelWordsNoIndent = [
+const reservedBinaryCommands = [
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -768,7 +768,7 @@ export default class SparkSqlFormatter extends Formatter {
 			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
+			reservedBinaryCommands,
 			stringTypes: [`""`, "''", '``', '{}'],
 			openParens: ['(', 'CASE'],
 			closeParens: [')', 'END'],

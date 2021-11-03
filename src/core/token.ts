@@ -57,8 +57,7 @@ export const isWindow = isToken(
 
 export const isTopLevel = (token: Token) =>
 	token &&
-	(token.type === tokenTypes.RESERVED_COMMAND ||
-		token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT);
+	(token.type === tokenTypes.RESERVED_COMMAND || token.type === tokenTypes.RESERVED_BINARY_COMMAND);
 
 export const isReserved = (token: Token) =>
 	token &&
@@ -66,4 +65,4 @@ export const isReserved = (token: Token) =>
 		token.type === tokenTypes.RESERVED_NEWLINE ||
 		token.type === tokenTypes.RESERVED_DEPENDENT_CLAUSE ||
 		token.type === tokenTypes.RESERVED_COMMAND ||
-		token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT);
+		token.type === tokenTypes.RESERVED_BINARY_COMMAND);

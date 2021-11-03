@@ -803,7 +803,7 @@ const reservedCommands = [
 	'WITH',
 ];
 
-const reservedTopLevelWordsNoIndent = [
+const reservedBinaryCommands = [
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -850,7 +850,7 @@ export default class Db2Formatter extends Formatter {
 			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
+			reservedBinaryCommands,
 			stringTypes: [`""`, "''", '``', '[]'],
 			openParens: ['('],
 			closeParens: [')'],

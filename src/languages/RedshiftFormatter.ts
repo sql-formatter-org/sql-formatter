@@ -662,7 +662,7 @@ const reservedCommands = [
 	'SET SCHEMA', // verify
 ];
 
-const reservedTopLevelWordsNoIndent = [
+const reservedBinaryCommands = [
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -709,7 +709,7 @@ export default class RedshiftFormatter extends Formatter {
 			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
+			reservedBinaryCommands,
 			stringTypes: [`""`, "''", '``'],
 			openParens: ['('],
 			closeParens: [')'],

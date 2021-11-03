@@ -1089,7 +1089,7 @@ const reservedCommands = [
 	'WHERE',
 ];
 
-const reservedTopLevelWordsNoIndent = [
+const reservedBinaryCommands = [
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -1139,7 +1139,7 @@ export default class MariaDbFormatter extends Formatter {
 			reservedCommands,
 			reservedNewlineWords,
 			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
+			reservedBinaryCommands,
 			stringTypes: ['``', "''", '""'],
 			openParens: ['(', 'CASE'],
 			closeParens: [')', 'END'],

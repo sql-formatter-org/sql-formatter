@@ -8,7 +8,7 @@ interface TokenizerOptions {
 	reservedCommands: string[];
 	reservedNewlineWords: string[];
 	reservedDependentClauses: string[];
-	reservedTopLevelWordsNoIndent: string[];
+	reservedBinaryCommands: string[];
 	stringTypes: regexFactory.StringPatternType[];
 	openParens: string[];
 	closeParens: string[];
@@ -29,7 +29,7 @@ export default class Tokenizer {
 	RESERVED_DEPENDENT_CLAUSE_REGEX: RegExp;
 	RESERVED_NEWLINE_REGEX: RegExp;
 	RESERVED_COMMAND_REGEX: RegExp;
-	RESERVED_TOP_LEVEL_NO_INDENT_REGEX: RegExp;
+	RESERVED_BINARY_COMMAND_REGEX: RegExp;
 	WORD_REGEX: RegExp;
 	STRING_REGEX: RegExp;
 	OPEN_PAREN_REGEX: RegExp;
@@ -44,7 +44,7 @@ export default class Tokenizer {
 	 *  @param {String[]} cfg.reservedDependentClauses: Words that following a specific Statement and must have data attached
 	 *  @param {String[]} cfg.reservedNewlineWords: Words that are set to newline
 	 *  @param {String[]} cfg.reservedCommands: Words that are set to new line separately
-	 *  @param {String[]} cfg.reservedTopLevelWordsNoIndent: Words that are top level but have no indentation
+	 *  @param {String[]} cfg.reservedBinaryCommands: Words that are top level but have no indentation
 	 *  @param {String[]} cfg.stringTypes: String types to enable: "", '', ``, [], N''
 	 *  @param {String[]} cfg.openParens: Opening parentheses to enable, like (, [
 	 *  @param {String[]} cfg.closeParens: Closing parentheses to enable, like ), ]
@@ -75,8 +75,8 @@ export default class Tokenizer {
 			cfg.reservedDependentClauses ?? []
 		);
 		this.RESERVED_COMMAND_REGEX = regexFactory.createReservedWordRegex(cfg.reservedCommands);
-		this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX = regexFactory.createReservedWordRegex(
-			cfg.reservedTopLevelWordsNoIndent
+		this.RESERVED_BINARY_COMMAND_REGEX = regexFactory.createReservedWordRegex(
+			cfg.reservedBinaryCommands
 		);
 
 		this.WORD_REGEX = regexFactory.createWordRegex(cfg.specialWordChars);
@@ -272,7 +272,7 @@ export default class Tokenizer {
 		const reservedTokenMap = {
 			[tokenTypes.RESERVED_COMMAND]: this.RESERVED_COMMAND_REGEX,
 			[tokenTypes.RESERVED_NEWLINE]: this.RESERVED_NEWLINE_REGEX,
-			[tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT]: this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX,
+			[tokenTypes.RESERVED_BINARY_COMMAND]: this.RESERVED_BINARY_COMMAND_REGEX,
 			[tokenTypes.RESERVED_DEPENDENT_CLAUSE]: this.RESERVED_DEPENDENT_CLAUSE_REGEX,
 			[tokenTypes.RESERVED]: this.RESERVED_PLAIN_REGEX,
 		};
