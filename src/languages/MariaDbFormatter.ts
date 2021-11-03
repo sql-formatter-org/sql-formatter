@@ -1102,18 +1102,6 @@ const reservedBinaryCommands = [
 	'MINUS',
 	'MINUS ALL',
 	'MINUS DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'ELSIF'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
-	'XOR',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -1130,6 +1118,14 @@ const reservedNewlineWords = [
 	'NATURAL RIGHT JOIN',
 	'NATURAL RIGHT OUTER JOIN',
 ];
+
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'ELSIF'];
+
+const reservedNewlineWords = ['AND', 'OR', 'XOR'];
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {

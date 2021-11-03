@@ -1263,18 +1263,6 @@ const reservedBinaryCommands = [
 	'EXCEPT',
 	'EXCEPT ALL',
 	'EXCEPT DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'LATERAL'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
-	'XOR',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -1291,6 +1279,14 @@ const reservedNewlineWords = [
 	'NATURAL RIGHT JOIN',
 	'NATURAL RIGHT OUTER JOIN',
 ];
+
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'LATERAL'];
+
+const reservedNewlineWords = ['AND', 'OR', 'XOR'];
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {

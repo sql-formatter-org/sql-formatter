@@ -1577,17 +1577,6 @@ const reservedBinaryCommands = [
 	'MINUS',
 	'MINUS ALL',
 	'MINUS DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -1600,6 +1589,14 @@ const reservedNewlineWords = [
 	'CROSS JOIN',
 	'NATURAL JOIN',
 ];
+
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL'];
+
+const reservedNewlineWords = ['AND', 'OR'];
 
 // https://www.postgresql.org/docs/14/index.html
 export default class PostgreSqlFormatter extends Formatter {

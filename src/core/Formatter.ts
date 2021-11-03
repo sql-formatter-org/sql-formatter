@@ -364,12 +364,6 @@ export default class Formatter {
 		return comment.replace(/\n[ \t]*/gu, '\n' + this.indentation.getIndent() + ' ');
 	}
 
-	formatBinaryCommand(token: Token, query: string) {
-		this.indentation.decreaseTopLevel();
-		query = this.addNewline(query) + this.equalizeWhitespace(this.show(token));
-		return this.addNewline(query);
-	}
-
 	formatCommand(token: Token, query: string) {
 		this.indentation.decreaseTopLevel();
 
@@ -390,6 +384,16 @@ export default class Formatter {
 			query += ' ';
 		}
 		return query;
+	}
+
+	formatBinaryCommand(token: Token, query: string) {
+		const isJoin = /JOIN/i.test(token.value);
+		if (!isJoin || this.cfg.tenSpace) {
+			// decrease for boolean set operators or in tenSpace modes
+			this.indentation.decreaseTopLevel();
+		}
+		query = this.addNewline(query) + this.equalizeWhitespace(this.show(token));
+		return isJoin ? query + ' ' : this.addNewline(query);
 	}
 
 	formatNewlineReservedWord(token: Token, query: string) {

@@ -400,20 +400,6 @@ const reservedBinaryCommands = [
 	'MINUS',
 	'MINUS ALL',
 	'MINUS DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
-	'XOR',
-	'CROSS APPLY',
-	'OUTER APPLY',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -425,7 +411,18 @@ const reservedNewlineWords = [
 	'FULL OUTER JOIN',
 	'CROSS JOIN',
 	'NATURAL JOIN',
+	// apply
+	'CROSS APPLY',
+	'OUTER APPLY',
 ];
+
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
+
+const reservedNewlineWords = ['AND', 'OR', 'XOR'];
 
 export default class PlSqlFormatter extends Formatter {
 	tokenizer() {

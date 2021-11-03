@@ -470,18 +470,6 @@ const reservedBinaryCommands = [
 	'MINUS',
 	'MINUS ALL',
 	'MINUS DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
-	'XOR',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -490,6 +478,14 @@ const reservedNewlineWords = [
 	'RIGHT JOIN',
 	'RIGHT OUTER JOIN',
 ];
+
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
+
+const reservedNewlineWords = ['AND', 'OR', 'XOR'];
 
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html
 export default class N1qlFormatter extends Formatter {

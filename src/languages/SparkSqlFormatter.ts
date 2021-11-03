@@ -711,20 +711,6 @@ const reservedBinaryCommands = [
 	'MINUS',
 	'MINUS ALL',
 	'MINUS DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL VIEW'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
-	'XOR',
-	'CROSS APPLY',
-	'OUTER APPLY',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -736,6 +722,9 @@ const reservedNewlineWords = [
 	'FULL OUTER JOIN',
 	'CROSS JOIN',
 	'NATURAL JOIN',
+	// apply
+	'CROSS APPLY',
+	'OUTER APPLY',
 	// non-standard-joins
 	'ANTI JOIN',
 	'SEMI JOIN',
@@ -754,6 +743,14 @@ const reservedNewlineWords = [
 	'NATURAL RIGHT SEMI JOIN',
 	'NATURAL SEMI JOIN',
 ];
+
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL VIEW'];
+
+const reservedNewlineWords = ['AND', 'OR', 'XOR'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkSqlFormatter extends Formatter {

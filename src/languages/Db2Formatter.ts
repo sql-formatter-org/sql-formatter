@@ -813,17 +813,6 @@ const reservedBinaryCommands = [
 	'EXCEPT',
 	'EXCEPT ALL',
 	'EXCEPT DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -836,6 +825,14 @@ const reservedNewlineWords = [
 	'CROSS JOIN',
 	'NATURAL JOIN',
 ];
+
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF'];
+
+const reservedNewlineWords = ['AND', 'OR'];
 
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
