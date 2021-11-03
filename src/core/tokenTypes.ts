@@ -8,7 +8,7 @@ export default {
 	STRING: 'string',
 	RESERVED: 'reserved',
 	RESERVED_DEPENDENT_CLAUSE: 'reserved-dependent-clause',
-	RESERVED_NEWLINE: 'reserved-newline',
+	RESERVED_LOGICAL_OPERATOR: 'reserved-logical-operator',
 	RESERVED_COMMAND: 'reserved-command',
 	RESERVED_BINARY_COMMAND: 'reserved-binary-command',
 	OPERATOR: 'operator',

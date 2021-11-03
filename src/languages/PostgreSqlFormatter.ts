@@ -1596,7 +1596,7 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL'];
 
-const reservedNewlineWords = ['AND', 'OR'];
+const reservedLogicalOperators = ['AND', 'OR'];
 
 // https://www.postgresql.org/docs/14/index.html
 export default class PostgreSqlFormatter extends Formatter {
@@ -1609,7 +1609,7 @@ export default class PostgreSqlFormatter extends Formatter {
 		return new Tokenizer({
 			reservedWords: this.fullReservedWords,
 			reservedCommands,
-			reservedNewlineWords,
+			reservedLogicalOperators,
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''", "U&''", 'U&""', '$$'],
@@ -1643,7 +1643,7 @@ export default class PostgreSqlFormatter extends Formatter {
 		if (isLateral(token)) {
 			if (this.tokenLookAhead()?.type === tokenTypes.OPEN_PAREN) {
 				// This is a subquery, treat it like a join
-				return { type: tokenTypes.RESERVED_NEWLINE, value: token.value };
+				return { type: tokenTypes.RESERVED_LOGICAL_OPERATOR, value: token.value };
 			}
 		}
 

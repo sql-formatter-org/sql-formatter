@@ -86,7 +86,7 @@ export default class InlineBlock {
 	isForbiddenToken({ type, value }: Token) {
 		return (
 			type === tokenTypes.RESERVED_COMMAND ||
-			type === tokenTypes.RESERVED_NEWLINE ||
+			type === tokenTypes.RESERVED_LOGICAL_OPERATOR ||
 			// type === tokenTypes.LINE_COMMENT ||
 			type === tokenTypes.BLOCK_COMMENT ||
 			value === ';'

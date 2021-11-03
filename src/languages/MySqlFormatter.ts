@@ -1286,7 +1286,7 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'LATERAL'];
 
-const reservedNewlineWords = ['AND', 'OR', 'XOR'];
+const reservedLogicalOperators = ['AND', 'OR', 'XOR'];
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
@@ -1294,7 +1294,7 @@ export default class MySqlFormatter extends Formatter {
 		return new Tokenizer({
 			reservedWords: [...reservedWords, ...reservedFunctions],
 			reservedCommands,
-			reservedNewlineWords,
+			reservedLogicalOperators,
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: ['``', "''", '""'],
@@ -1312,7 +1312,7 @@ export default class MySqlFormatter extends Formatter {
 		if (isLateral(token)) {
 			if (this.tokenLookAhead()?.type === tokenTypes.OPEN_PAREN) {
 				// This is a subquery, treat it like a join
-				return { type: tokenTypes.RESERVED_NEWLINE, value: token.value };
+				return { type: tokenTypes.RESERVED_LOGICAL_OPERATOR, value: token.value };
 			}
 		}
 

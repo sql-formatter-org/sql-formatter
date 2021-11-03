@@ -485,7 +485,7 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
 
-const reservedNewlineWords = ['AND', 'OR', 'XOR'];
+const reservedLogicalOperators = ['AND', 'OR', 'XOR'];
 
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html
 export default class N1qlFormatter extends Formatter {
@@ -493,7 +493,7 @@ export default class N1qlFormatter extends Formatter {
 		return new Tokenizer({
 			reservedWords: [...reservedWords, ...reservedFunctions],
 			reservedCommands,
-			reservedNewlineWords,
+			reservedLogicalOperators,
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''", '``'],

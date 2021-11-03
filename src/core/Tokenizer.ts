@@ -6,7 +6,7 @@ import type { Token, TokenType } from './token';
 interface TokenizerOptions {
 	reservedWords: string[];
 	reservedCommands: string[];
-	reservedNewlineWords: string[];
+	reservedLogicalOperators: string[];
 	reservedDependentClauses: string[];
 	reservedBinaryCommands: string[];
 	stringTypes: regexFactory.StringPatternType[];
@@ -27,8 +27,8 @@ export default class Tokenizer {
 	LINE_COMMENT_REGEX: RegExp;
 	RESERVED_PLAIN_REGEX: RegExp;
 	RESERVED_DEPENDENT_CLAUSE_REGEX: RegExp;
-	RESERVED_NEWLINE_REGEX: RegExp;
 	RESERVED_COMMAND_REGEX: RegExp;
+	RESERVED_LOGICAL_OPERATOR_REGEX: RegExp;
 	RESERVED_BINARY_COMMAND_REGEX: RegExp;
 	WORD_REGEX: RegExp;
 	STRING_REGEX: RegExp;
@@ -42,7 +42,7 @@ export default class Tokenizer {
 	 * @param {TokenizerOptions} cfg
 	 *  @param {String[]} cfg.reservedWords: Reserved words in SQL
 	 *  @param {String[]} cfg.reservedDependentClauses: Words that following a specific Statement and must have data attached
-	 *  @param {String[]} cfg.reservedNewlineWords: Words that are set to newline
+	 *  @param {String[]} cfg.reservedLogicalOperators: Words that are set to newline
 	 *  @param {String[]} cfg.reservedCommands: Words that are set to new line separately
 	 *  @param {String[]} cfg.reservedBinaryCommands: Words that are top level but have no indentation
 	 *  @param {String[]} cfg.stringTypes: String types to enable: "", '', ``, [], N''
@@ -70,7 +70,9 @@ export default class Tokenizer {
 		this.LINE_COMMENT_REGEX = regexFactory.createLineCommentRegex(cfg.lineCommentTypes);
 
 		this.RESERVED_PLAIN_REGEX = regexFactory.createReservedWordRegex(cfg.reservedWords);
-		this.RESERVED_NEWLINE_REGEX = regexFactory.createReservedWordRegex(cfg.reservedNewlineWords);
+		this.RESERVED_LOGICAL_OPERATOR_REGEX = regexFactory.createReservedWordRegex(
+			cfg.reservedLogicalOperators
+		);
 		this.RESERVED_DEPENDENT_CLAUSE_REGEX = regexFactory.createReservedWordRegex(
 			cfg.reservedDependentClauses ?? []
 		);
@@ -271,9 +273,9 @@ export default class Tokenizer {
 
 		const reservedTokenMap = {
 			[tokenTypes.RESERVED_COMMAND]: this.RESERVED_COMMAND_REGEX,
-			[tokenTypes.RESERVED_NEWLINE]: this.RESERVED_NEWLINE_REGEX,
 			[tokenTypes.RESERVED_BINARY_COMMAND]: this.RESERVED_BINARY_COMMAND_REGEX,
 			[tokenTypes.RESERVED_DEPENDENT_CLAUSE]: this.RESERVED_DEPENDENT_CLAUSE_REGEX,
+			[tokenTypes.RESERVED_LOGICAL_OPERATOR]: this.RESERVED_LOGICAL_OPERATOR_REGEX,
 			[tokenTypes.RESERVED]: this.RESERVED_PLAIN_REGEX,
 		};
 

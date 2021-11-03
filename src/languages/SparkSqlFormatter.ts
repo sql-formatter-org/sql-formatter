@@ -750,7 +750,7 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL VIEW'];
 
-const reservedNewlineWords = ['AND', 'OR', 'XOR'];
+const reservedLogicalOperators = ['AND', 'OR', 'XOR'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkSqlFormatter extends Formatter {
@@ -763,7 +763,7 @@ export default class SparkSqlFormatter extends Formatter {
 		return new Tokenizer({
 			reservedWords: this.fullReservedWords,
 			reservedCommands,
-			reservedNewlineWords,
+			reservedLogicalOperators,
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''", '``', '{}'],

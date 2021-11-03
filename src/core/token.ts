@@ -17,7 +17,7 @@ const isToken = (type: TokenType, regex: RegExp) => (token: Token) =>
 
 export const isAs = isToken(tokenTypes.RESERVED, new RegExp(`^${spaces}*AS${spaces}*$`, 'iu'));
 export const isAnd = isToken(
-	tokenTypes.RESERVED_NEWLINE,
+	tokenTypes.RESERVED_LOGICAL_OPERATOR,
 	new RegExp(`^${spaces}*AND${spaces}*$`, 'iu')
 );
 export const isBetween = isToken(
@@ -62,7 +62,7 @@ export const isTopLevel = (token: Token) =>
 export const isReserved = (token: Token) =>
 	token &&
 	(token.type === tokenTypes.RESERVED ||
-		token.type === tokenTypes.RESERVED_NEWLINE ||
+		token.type === tokenTypes.RESERVED_LOGICAL_OPERATOR ||
 		token.type === tokenTypes.RESERVED_DEPENDENT_CLAUSE ||
 		token.type === tokenTypes.RESERVED_COMMAND ||
 		token.type === tokenTypes.RESERVED_BINARY_COMMAND);

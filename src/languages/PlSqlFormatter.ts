@@ -422,14 +422,14 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
 
-const reservedNewlineWords = ['AND', 'OR', 'XOR'];
+const reservedLogicalOperators = ['AND', 'OR', 'XOR'];
 
 export default class PlSqlFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
 			reservedWords,
 			reservedCommands,
-			reservedNewlineWords,
+			reservedLogicalOperators,
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "N''", "''", '``'],
@@ -451,7 +451,7 @@ export default class PlSqlFormatter extends Formatter {
 		if (isLateral(token)) {
 			if (this.tokenLookAhead()?.type === tokenTypes.OPEN_PAREN) {
 				// This is a subquery, treat it like a join
-				return { type: tokenTypes.RESERVED_NEWLINE, value: token.value };
+				return { type: tokenTypes.RESERVED_LOGICAL_OPERATOR, value: token.value };
 			}
 		}
 

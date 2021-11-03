@@ -229,9 +229,9 @@ export default class Formatter {
 			} else if (token.type === tokenTypes.RESERVED_BINARY_COMMAND) {
 				formattedQuery = this.formatBinaryCommand(token, formattedQuery);
 			} else if (token.type === tokenTypes.RESERVED_DEPENDENT_CLAUSE) {
-				formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
-			} else if (token.type === tokenTypes.RESERVED_NEWLINE) {
-				formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
+				formattedQuery = this.formatLogicalOperator(token, formattedQuery);
+			} else if (token.type === tokenTypes.RESERVED_LOGICAL_OPERATOR) {
+				formattedQuery = this.formatLogicalOperator(token, formattedQuery);
 			} else if (token.type === tokenTypes.RESERVED) {
 				if (!(isAs(token) && this.cfg.aliasAs === AliasMode.never)) {
 					// do not format if skipping AS
@@ -314,7 +314,7 @@ export default class Formatter {
 				({ type }) =>
 					type === tokenTypes.RESERVED_COMMAND ||
 					type === tokenTypes.RESERVED_BINARY_COMMAND ||
-					type === tokenTypes.RESERVED_NEWLINE
+					type === tokenTypes.RESERVED_LOGICAL_OPERATOR
 			)
 		);
 
@@ -396,7 +396,7 @@ export default class Formatter {
 		return isJoin ? query + ' ' : this.addNewline(query);
 	}
 
-	formatNewlineReservedWord(token: Token, query: string) {
+	formatLogicalOperator(token: Token, query: string) {
 		if (isAnd(token) && isBetween(this.tokenLookBehind(2))) {
 			return this.formatWithSpaces(token, query);
 		}

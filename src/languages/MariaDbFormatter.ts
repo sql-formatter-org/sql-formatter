@@ -1125,7 +1125,7 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'ELSIF'];
 
-const reservedNewlineWords = ['AND', 'OR', 'XOR'];
+const reservedLogicalOperators = ['AND', 'OR', 'XOR'];
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {
@@ -1133,7 +1133,7 @@ export default class MariaDbFormatter extends Formatter {
 		return new Tokenizer({
 			reservedWords: [...reservedWords, ...reservedFunctions],
 			reservedCommands,
-			reservedNewlineWords,
+			reservedLogicalOperators,
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: ['``', "''", '""'],

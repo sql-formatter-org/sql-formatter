@@ -691,7 +691,7 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
 
-const reservedNewlineWords = ['AND', 'OR'];
+const reservedLogicalOperators = ['AND', 'OR'];
 
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export default class RedshiftFormatter extends Formatter {
@@ -704,7 +704,7 @@ export default class RedshiftFormatter extends Formatter {
 		return new Tokenizer({
 			reservedWords: this.fullReservedWords,
 			reservedCommands,
-			reservedNewlineWords,
+			reservedLogicalOperators,
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''", '``'],
