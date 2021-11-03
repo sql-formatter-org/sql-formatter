@@ -1,6 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
-import { isBy, isLateral, isSet, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
+import { isToken, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
 import type { StringPatternType } from '../core/regexFactory';
 
 /**
@@ -473,11 +473,11 @@ export default class PlSqlFormatter extends Formatter {
 	}
 
 	tokenOverride(token: Token) {
-		if (isSet(token) && isBy(this.previousReservedToken)) {
+		if (isToken('SET')(token) && isToken('BY')(this.previousReservedToken)) {
 			return { type: TokenType.RESERVED_KEYWORD, value: token.value };
 		}
 
-		if (isLateral(token)) {
+		if (isToken('LATERAL')(token)) {
 			if (this.tokenLookAhead()?.type === TokenType.BLOCK_START) {
 				// This is a subquery, treat it like a join
 				return { type: TokenType.RESERVED_LOGICAL_OPERATOR, value: token.value };

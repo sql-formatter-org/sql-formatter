@@ -26,54 +26,24 @@ export const ZWS = '​'; // uses zero-width space (&#8203; / U+200B)
 const ZWS_REGEX = '\u200b';
 const spaces = `[${ZWS_REGEX}\\s]`;
 
-const isToken = (type: TokenType, regex: RegExp) => (token: Token) =>
-	token?.type === type && regex.test(token?.value);
+const testTokens = {
+	AS: TokenType.RESERVED_KEYWORD,
+	AND: TokenType.RESERVED_LOGICAL_OPERATOR,
+	BETWEEN: TokenType.RESERVED_KEYWORD,
+	CASE: TokenType.BLOCK_START,
+	BY: TokenType.RESERVED_KEYWORD,
+	END: TokenType.BLOCK_END,
+	FROM: TokenType.RESERVED_COMMAND,
+	LATERAL: TokenType.RESERVED_DEPENDENT_CLAUSE,
+	LIMIT: TokenType.RESERVED_COMMAND,
+	SELECT: TokenType.RESERVED_COMMAND,
+	SET: TokenType.RESERVED_COMMAND,
+	WINDOW: TokenType.RESERVED_COMMAND,
+};
 
-export const isAs = isToken(
-	TokenType.RESERVED_KEYWORD,
-	new RegExp(`^${spaces}*AS${spaces}*$`, 'iu')
-);
-export const isAnd = isToken(
-	TokenType.RESERVED_LOGICAL_OPERATOR,
-	new RegExp(`^${spaces}*AND${spaces}*$`, 'iu')
-);
-export const isBetween = isToken(
-	TokenType.RESERVED_KEYWORD,
-	new RegExp(`^${spaces}*BETWEEN${spaces}*$`, 'iu')
-);
-export const isCase = isToken(
-	TokenType.BLOCK_START,
-	new RegExp(`^${spaces}*CASE${spaces}*$`, 'iu')
-);
-export const isBy = isToken(
-	TokenType.RESERVED_KEYWORD,
-	new RegExp(`^${spaces}*BY${spaces}*$`, 'iu')
-);
-export const isEnd = isToken(TokenType.BLOCK_END, new RegExp(`^${spaces}*END${spaces}*$`, 'iu'));
-export const isFrom = isToken(
-	TokenType.RESERVED_COMMAND,
-	new RegExp(`^${spaces}*FROM${spaces}*$`, 'iu')
-);
-export const isLateral = isToken(
-	TokenType.RESERVED_DEPENDENT_CLAUSE,
-	new RegExp(`^${spaces}*LATERAL${spaces}*$`, 'iu')
-);
-export const isLimit = isToken(
-	TokenType.RESERVED_COMMAND,
-	new RegExp(`^${spaces}*LIMIT${spaces}*$`, 'iu')
-);
-export const isSelect = isToken(
-	TokenType.RESERVED_COMMAND,
-	new RegExp(`^${spaces}*SELECT${spaces}*$`, 'iu')
-);
-export const isSet = isToken(
-	TokenType.RESERVED_COMMAND,
-	new RegExp(`^${spaces}*SET${spaces}*$`, 'iu')
-);
-export const isWindow = isToken(
-	TokenType.RESERVED_COMMAND,
-	new RegExp(`^${spaces}*WINDOW${spaces}*$`, 'iu')
-);
+export const isToken = (testToken: keyof typeof testTokens) => (token: Token) =>
+	token?.type === testTokens[testToken] &&
+	new RegExp(`^${spaces}*${testToken}${spaces}*$`, 'iu').test(token?.value);
 
 export const isTopLevel = (token: Token) =>
 	token &&

@@ -2,21 +2,7 @@ import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { maxLength, trimSpacesEnd } from '../utils';
-import {
-	isAnd,
-	isAs,
-	isBetween,
-	isCase,
-	isEnd,
-	isFrom,
-	isLimit,
-	isReserved,
-	isSelect,
-	isTopLevel,
-	Token,
-	TokenType,
-	ZWS,
-} from './token';
+import { isReserved, isTopLevel, isToken, Token, TokenType, ZWS } from './token';
 import Tokenizer from './Tokenizer';
 import type { FormatOptions } from '../sqlFormatter';
 import { AliasMode, CommaPosition, KeywordMode, NewlineMode } from '../types';
@@ -215,7 +201,7 @@ export default class Formatter {
 					token = this.tenSpacedToken(token);
 				}
 				if (isTopLevel(token)) {
-					this.withinSelect = isSelect(token);
+					this.withinSelect = isToken('SELECT')(token);
 				}
 			}
 
@@ -233,7 +219,7 @@ export default class Formatter {
 			} else if (token.type === TokenType.RESERVED_LOGICAL_OPERATOR) {
 				formattedQuery = this.formatLogicalOperator(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_KEYWORD) {
-				if (!(isAs(token) && this.cfg.aliasAs === AliasMode.never)) {
+				if (!(isToken('AS')(token) && this.cfg.aliasAs === AliasMode.never)) {
 					// do not format if skipping AS
 					formattedQuery = this.formatWithSpaces(token, formattedQuery);
 					this.previousReservedToken = token;
@@ -287,7 +273,7 @@ export default class Formatter {
 		const missingSelectColumnAlias = // if select column alias is missing and alias is not never
 			this.withinSelect &&
 			token.type === TokenType.WORD &&
-			(isEnd(prevToken) || // isAs(prevToken) ||
+			(isToken('END')(prevToken) || // isAs(prevToken) ||
 				(prevToken?.type === TokenType.WORD &&
 					(nextToken?.value === ',' || isTopLevel(nextToken))));
 
@@ -373,7 +359,7 @@ export default class Formatter {
 			if (this.tokenLookAhead()?.value !== '(') {
 				this.indentation.increaseTopLevel();
 			}
-		} else if (!(this.tokenLookAhead()?.value === '(' && isFrom(token))) {
+		} else if (!(this.tokenLookAhead()?.value === '(' && isToken('FROM')(token))) {
 			this.indentation.increaseTopLevel();
 		}
 
@@ -397,7 +383,7 @@ export default class Formatter {
 	}
 
 	formatLogicalOperator(token: Token, query: string) {
-		if (isAnd(token) && isBetween(this.tokenLookBehind(2))) {
+		if (isToken('AND')(token) && isToken('BETWEEN')(this.tokenLookBehind(2))) {
 			return this.formatWithSpaces(token, query);
 		}
 
@@ -414,7 +400,7 @@ export default class Formatter {
 
 	// Opening parentheses increase the block indent level and start a new line
 	formatBlockStart(token: Token, query: string) {
-		if (isCase(token)) {
+		if (isToken('CASE')(token)) {
 			query = this.formatWithSpaces(token, query);
 		} else {
 			// Take out the preceding space unless there was whitespace there in the original query
@@ -436,7 +422,7 @@ export default class Formatter {
 
 		if (!this.inlineBlock.isActive()) {
 			this.indentation.increaseBlockLevel();
-			if (!isCase(token) || this.newline.mode === NewlineMode.always) {
+			if (!isToken('CASE')(token) || this.newline.mode === NewlineMode.always) {
 				query = this.addNewline(query);
 			}
 		}
@@ -468,7 +454,7 @@ export default class Formatter {
 
 		if (this.inlineBlock.isActive()) {
 			return query;
-		} else if (isLimit(this.previousReservedToken)) {
+		} else if (isToken('LIMIT')(this.previousReservedToken)) {
 			return query;
 		} else if (this.currentNewline) {
 			return this.addNewline(query);

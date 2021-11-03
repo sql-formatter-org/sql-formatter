@@ -1,4 +1,4 @@
-import { isCase, Token, TokenType } from './token';
+import { isToken, Token, TokenType } from './token';
 
 /**
  * Bookkeeper for inline blocks.
@@ -64,7 +64,7 @@ export default class InlineBlock {
 			}
 
 			// CASE cannot start inline block
-			if (token.type === TokenType.BLOCK_START && !isCase(token)) {
+			if (token.type === TokenType.BLOCK_START && !isToken('CASE')(token)) {
 				level++;
 			} else if (token.type === TokenType.BLOCK_END) {
 				level--;

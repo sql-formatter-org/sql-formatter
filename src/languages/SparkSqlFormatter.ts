@@ -1,6 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
-import { isEnd, isWindow, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
+import { isToken, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
 import type { StringPatternType } from '../core/regexFactory';
 
 /**
@@ -811,7 +811,7 @@ export default class SparkSqlFormatter extends Formatter {
 
 	tokenOverride(token: Token) {
 		// Fix cases where names are ambiguously keywords or functions
-		if (isWindow(token)) {
+		if (isToken('WINDOW')(token)) {
 			const aheadToken = this.tokenLookAhead();
 			if (aheadToken?.type === TokenType.BLOCK_START) {
 				// This is a function call, treat it as a reserved word
@@ -819,7 +819,7 @@ export default class SparkSqlFormatter extends Formatter {
 			}
 		}
 
-		if (isEnd(token)) {
+		if (isToken('END')(token)) {
 			const backToken = this.tokenLookBehind();
 			if (backToken?.type === TokenType.OPERATOR && backToken?.value === '.') {
 				// This is window().end (or similar) not CASE ... END
