@@ -14,12 +14,14 @@ export function createLineCommentRegex(lineCommentTypes: string[]) {
 	);
 }
 
-export function createReservedWordRegex(reservedWords: string[]) {
-	if (reservedWords.length === 0) {
+export function createReservedWordRegex(reservedKeywords: string[]) {
+	if (reservedKeywords.length === 0) {
 		return new RegExp(`^\b$`, 'u');
 	}
-	const reservedWordsPattern = sortByLengthDesc(reservedWords).join('|').replace(/ /gu, '\\s+');
-	return new RegExp(`^(${reservedWordsPattern})\\b`, 'iu');
+	const reservedKeywordsPattern = sortByLengthDesc(reservedKeywords)
+		.join('|')
+		.replace(/ /gu, '\\s+');
+	return new RegExp(`^(${reservedKeywordsPattern})\\b`, 'iu');
 }
 
 export function createWordRegex(specialChars: string[] = []) {

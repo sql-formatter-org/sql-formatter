@@ -2,8 +2,14 @@ import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
 import { isLateral, Token } from '../core/token';
+import type { StringPatternType } from '../core/regexFactory';
 
 // TODO: split this into object with function categories
+/**
+ * Priority 5 (last)
+ * Full list of reserved functions
+ * distinct from Keywords due to interaction with parentheses
+ */
 // https://dev.mysql.com/doc/refman/8.0/en/built-in-function-reference.html
 const reservedFunctions = [
 	'ABS',
@@ -430,8 +436,13 @@ const reservedFunctions = [
 	'YEARWEEK',
 ];
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
 // https://dev.mysql.com/doc/refman/8.0/en/keywords.html
-const reservedWords = [
+const reservedKeywords = [
 	'ACCESSIBLE',
 	'ACCOUNT',
 	'ACTION',
@@ -1064,8 +1075,13 @@ const reservedWords = [
 	'ZONE',
 ];
 
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
 // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ALTER DATABASE',
 	'ALTER EVENT',
 	'ALTER FUNCTION',
@@ -1253,7 +1269,13 @@ const reservedTopLevelWords = [
 	'WHERE',
 ];
 
-const reservedTopLevelWordsNoIndent = [
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
+const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -1263,18 +1285,6 @@ const reservedTopLevelWordsNoIndent = [
 	'EXCEPT',
 	'EXCEPT ALL',
 	'EXCEPT DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'LATERAL'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
-	'XOR',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -1292,31 +1302,52 @@ const reservedNewlineWords = [
 	'NATURAL RIGHT OUTER JOIN',
 ];
 
+/**
+ * Priority 3
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'LATERAL'];
+
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
+	static reservedKeywords = [...reservedKeywords, ...reservedFunctions];
+	static stringTypes: StringPatternType[] = ['``', "''", '""'];
+	static blockStart = ['(', 'CASE'];
+	static blockEnd = [')', 'END'];
+	static indexedPlaceholderTypes = ['?'];
+	static namedPlaceholderTypes = [];
+	static lineCommentTypes = ['--', '#'];
+	static specialWordChars = ['@'];
+	static operators = [':=', '<<', '>>', '!=', '<>', '<=>', '&&', '||', '->', '->>'];
+
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: [...reservedWords, ...reservedFunctions],
-			reservedTopLevelWords,
-			reservedNewlineWords,
-			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
-			stringTypes: ['``', "''", '""'],
-			openParens: ['(', 'CASE'],
-			closeParens: [')', 'END'],
-			indexedPlaceholderTypes: ['?'],
-			namedPlaceholderTypes: [],
-			lineCommentTypes: ['--', '#'],
-			specialWordChars: ['@'],
-			operators: [':=', '<<', '>>', '!=', '<>', '<=>', '&&', '||', '->', '->>'],
+			reservedCommands: MySqlFormatter.reservedCommands,
+			reservedBinaryCommands: MySqlFormatter.reservedBinaryCommands,
+			reservedDependentClauses: MySqlFormatter.reservedDependentClauses,
+			reservedLogicalOperators: MySqlFormatter.reservedLogicalOperators,
+			reservedKeywords: MySqlFormatter.reservedKeywords,
+			stringTypes: MySqlFormatter.stringTypes,
+			blockStart: MySqlFormatter.blockStart,
+			blockEnd: MySqlFormatter.blockEnd,
+			indexedPlaceholderTypes: MySqlFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: MySqlFormatter.namedPlaceholderTypes,
+			lineCommentTypes: MySqlFormatter.lineCommentTypes,
+			specialWordChars: MySqlFormatter.specialWordChars,
+			operators: MySqlFormatter.operators,
 		});
 	}
 
 	tokenOverride(token: Token) {
 		if (isLateral(token)) {
-			if (this.tokenLookAhead()?.type === tokenTypes.OPEN_PAREN) {
+			if (this.tokenLookAhead()?.type === tokenTypes.BLOCK_START) {
 				// This is a subquery, treat it like a join
-				return { type: tokenTypes.RESERVED_NEWLINE, value: token.value };
+				return { type: tokenTypes.RESERVED_LOGICAL_OPERATOR, value: token.value };
 			}
 		}
 

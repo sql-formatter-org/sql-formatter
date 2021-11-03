@@ -1,6 +1,12 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import type { StringPatternType } from '../core/regexFactory';
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved functions
+ * distinct from Keywords due to interaction with parentheses
+ */
 // https://mariadb.com/kb/en/information-schema-sql_functions-table/
 const reservedFunctions = [
 	'ADDDATE',
@@ -239,8 +245,13 @@ const reservedFunctions = [
 	'YEARWEEK',
 ];
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
 // https://mariadb.com/kb/en/information-schema-keywords-table/
-const reservedWords = [
+const reservedKeywords = [
 	'ACCESSIBLE',
 	'ACCOUNT',
 	'ACTION',
@@ -871,8 +882,13 @@ const reservedWords = [
 	'ZEROFILL',
 ];
 
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
 // https://mariadb.com/docs/reference/mdb/sql-statements/
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ALTER DATABASE',
 	'ALTER DATABASE COMMENT',
 	'ALTER EVENT',
@@ -1089,7 +1105,13 @@ const reservedTopLevelWords = [
 	'WHERE',
 ];
 
-const reservedTopLevelWordsNoIndent = [
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
+const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -1102,18 +1124,6 @@ const reservedTopLevelWordsNoIndent = [
 	'MINUS',
 	'MINUS ALL',
 	'MINUS DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'ELSIF'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
-	'XOR',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -1131,23 +1141,44 @@ const reservedNewlineWords = [
 	'NATURAL RIGHT OUTER JOIN',
 ];
 
+/**
+ * Priority 3
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'ELSIF'];
+
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedKeywords = [...reservedKeywords, ...reservedFunctions];
+	static stringTypes: StringPatternType[] = ['``', "''", '""'];
+	static blockStart = ['(', 'CASE'];
+	static blockEnd = [')', 'END'];
+	static indexedPlaceholderTypes = ['?'];
+	static namedPlaceholderTypes = [];
+	static lineCommentTypes = ['--', '#'];
+	static specialWordChars = ['@'];
+	static operators = [':=', '<<', '>>', '!=', '<>', '<=>', '&&', '||'];
+
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: [...reservedWords, ...reservedFunctions],
-			reservedTopLevelWords,
-			reservedNewlineWords,
-			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
-			stringTypes: ['``', "''", '""'],
-			openParens: ['(', 'CASE'],
-			closeParens: [')', 'END'],
-			indexedPlaceholderTypes: ['?'],
-			namedPlaceholderTypes: [],
-			lineCommentTypes: ['--', '#'],
-			specialWordChars: ['@'],
-			operators: [':=', '<<', '>>', '!=', '<>', '<=>', '&&', '||'],
+			reservedCommands: MariaDbFormatter.reservedCommands,
+			reservedBinaryCommands: MariaDbFormatter.reservedBinaryCommands,
+			reservedDependentClauses: MariaDbFormatter.reservedDependentClauses,
+			reservedLogicalOperators: MariaDbFormatter.reservedLogicalOperators,
+			reservedKeywords: MariaDbFormatter.reservedKeywords,
+			stringTypes: MariaDbFormatter.stringTypes,
+			blockStart: MariaDbFormatter.blockStart,
+			blockEnd: MariaDbFormatter.blockEnd,
+			indexedPlaceholderTypes: MariaDbFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: MariaDbFormatter.namedPlaceholderTypes,
+			lineCommentTypes: MariaDbFormatter.lineCommentTypes,
+			specialWordChars: MariaDbFormatter.specialWordChars,
+			operators: MariaDbFormatter.operators,
 		});
 	}
 }

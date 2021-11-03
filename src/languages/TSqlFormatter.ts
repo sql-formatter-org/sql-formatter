@@ -1,6 +1,12 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import type { StringPatternType } from '../core/regexFactory';
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved functions
+ * distinct from Keywords due to interaction with parentheses
+ */
 // https://docs.microsoft.com/en-us/sql/t-sql/functions/functions?view=sql-server-ver15
 const reservedFunctions = {
 	aggregate: [
@@ -303,7 +309,12 @@ const reservedFunctions = {
 
 // TODO: dedupe these reserved word lists
 // https://docs.microsoft.com/en-us/sql/t-sql/language-elements/reserved-keywords-transact-sql?view=sql-server-ver15
-const reservedWords = {
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
+const reservedKeywords = {
 	standard: [
 		'ADD',
 		'ALL',
@@ -991,8 +1002,13 @@ const reservedWords = {
 	],
 };
 
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
 // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ADD SENSITIVITY CLASSIFICATION',
 	'ADD SIGNATURE',
 	'AGGREGATE',
@@ -1173,7 +1189,13 @@ const reservedTopLevelWords = [
 	'WITH',
 ];
 
-const reservedTopLevelWordsNoIndent = [
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
+const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -1186,17 +1208,6 @@ const reservedTopLevelWordsNoIndent = [
 	'MINUS',
 	'MINUS ALL',
 	'MINUS DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -1209,44 +1220,63 @@ const reservedNewlineWords = [
 	'CROSS JOIN',
 ];
 
+/**
+ * Priority 3
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL'];
+
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export default class TSqlFormatter extends Formatter {
-	fullReservedWords = [
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR'];
+	static reservedKeywords = [
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-		...Object.values(reservedWords).reduce((acc, arr) => [...acc, ...arr], []),
+		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
+	];
+	static stringTypes: StringPatternType[] = [`""`, "N''", "''", '[]'];
+	static blockStart = ['(', 'CASE'];
+	static blockEnd = [')', 'END'];
+	static indexedPlaceholderTypes = [];
+	static namedPlaceholderTypes = ['@'];
+	static lineCommentTypes = ['--'];
+	static specialWordChars = ['#', '@'];
+	static operators = [
+		'>=',
+		'<=',
+		'<>',
+		'!=',
+		'!<',
+		'!>',
+		'+=',
+		'-=',
+		'*=',
+		'/=',
+		'%=',
+		'|=',
+		'&=',
+		'^=',
+		'::',
 	];
 
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: this.fullReservedWords,
-			reservedTopLevelWords,
-			reservedNewlineWords,
-			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
-			stringTypes: [`""`, "N''", "''", '[]'],
-			openParens: ['(', 'CASE'],
-			closeParens: [')', 'END'],
-			indexedPlaceholderTypes: [],
-			namedPlaceholderTypes: ['@'],
-			lineCommentTypes: ['--'],
-			specialWordChars: ['#', '@'],
-			operators: [
-				'>=',
-				'<=',
-				'<>',
-				'!=',
-				'!<',
-				'!>',
-				'+=',
-				'-=',
-				'*=',
-				'/=',
-				'%=',
-				'|=',
-				'&=',
-				'^=',
-				'::',
-			],
+			reservedCommands: TSqlFormatter.reservedCommands,
+			reservedBinaryCommands: TSqlFormatter.reservedBinaryCommands,
+			reservedDependentClauses: TSqlFormatter.reservedDependentClauses,
+			reservedLogicalOperators: TSqlFormatter.reservedLogicalOperators,
+			reservedKeywords: TSqlFormatter.reservedKeywords,
+			stringTypes: TSqlFormatter.stringTypes,
+			blockStart: TSqlFormatter.blockStart,
+			blockEnd: TSqlFormatter.blockEnd,
+			indexedPlaceholderTypes: TSqlFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: TSqlFormatter.namedPlaceholderTypes,
+			lineCommentTypes: TSqlFormatter.lineCommentTypes,
+			specialWordChars: TSqlFormatter.specialWordChars,
+			operators: TSqlFormatter.operators,
 			// TODO: Support for money constants
 		});
 	}

@@ -4,14 +4,14 @@ import { escapeRegExp } from '../utils';
 import type { Token, TokenType } from './token';
 
 interface TokenizerOptions {
-	reservedWords: string[];
-	reservedTopLevelWords: string[];
-	reservedNewlineWords: string[];
+	reservedKeywords: string[];
+	reservedCommands: string[];
+	reservedLogicalOperators: string[];
 	reservedDependentClauses: string[];
-	reservedTopLevelWordsNoIndent: string[];
+	reservedBinaryCommands: string[];
 	stringTypes: regexFactory.StringPatternType[];
-	openParens: string[];
-	closeParens: string[];
+	blockStart: string[];
+	blockEnd: string[];
 	indexedPlaceholderTypes?: string[];
 	namedPlaceholderTypes: string[];
 	lineCommentTypes: string[];
@@ -27,9 +27,9 @@ export default class Tokenizer {
 	LINE_COMMENT_REGEX: RegExp;
 	RESERVED_PLAIN_REGEX: RegExp;
 	RESERVED_DEPENDENT_CLAUSE_REGEX: RegExp;
-	RESERVED_NEWLINE_REGEX: RegExp;
-	RESERVED_TOP_LEVEL_REGEX: RegExp;
-	RESERVED_TOP_LEVEL_NO_INDENT_REGEX: RegExp;
+	RESERVED_COMMAND_REGEX: RegExp;
+	RESERVED_LOGICAL_OPERATOR_REGEX: RegExp;
+	RESERVED_BINARY_COMMAND_REGEX: RegExp;
 	WORD_REGEX: RegExp;
 	STRING_REGEX: RegExp;
 	OPEN_PAREN_REGEX: RegExp;
@@ -40,14 +40,14 @@ export default class Tokenizer {
 
 	/**
 	 * @param {TokenizerOptions} cfg
-	 *  @param {String[]} cfg.reservedWords: Reserved words in SQL
+	 *  @param {String[]} cfg.reservedKeywords: Reserved words in SQL
 	 *  @param {String[]} cfg.reservedDependentClauses: Words that following a specific Statement and must have data attached
-	 *  @param {String[]} cfg.reservedNewlineWords: Words that are set to newline
-	 *  @param {String[]} cfg.reservedTopLevelWords: Words that are set to new line separately
-	 *  @param {String[]} cfg.reservedTopLevelWordsNoIndent: Words that are top level but have no indentation
+	 *  @param {String[]} cfg.reservedLogicalOperators: Words that are set to newline
+	 *  @param {String[]} cfg.reservedCommands: Words that are set to new line separately
+	 *  @param {String[]} cfg.reservedBinaryCommands: Words that are top level but have no indentation
 	 *  @param {String[]} cfg.stringTypes: String types to enable: "", '', ``, [], N''
-	 *  @param {String[]} cfg.openParens: Opening parentheses to enable, like (, [
-	 *  @param {String[]} cfg.closeParens: Closing parentheses to enable, like ), ]
+	 *  @param {String[]} cfg.blockStart: Opening parentheses to enable, like (, [
+	 *  @param {String[]} cfg.blockEnd: Closing parentheses to enable, like ), ]
 	 *  @param {String[]} cfg.indexedPlaceholderTypes: Prefixes for indexed placeholders, like ?
 	 *  @param {String[]} cfg.namedPlaceholderTypes: Prefixes for named placeholders, like @ and :
 	 *  @param {String[]} cfg.lineCommentTypes: Line comments to enable, like # and --
@@ -69,21 +69,23 @@ export default class Tokenizer {
 		this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/u;
 		this.LINE_COMMENT_REGEX = regexFactory.createLineCommentRegex(cfg.lineCommentTypes);
 
-		this.RESERVED_PLAIN_REGEX = regexFactory.createReservedWordRegex(cfg.reservedWords);
-		this.RESERVED_NEWLINE_REGEX = regexFactory.createReservedWordRegex(cfg.reservedNewlineWords);
+		this.RESERVED_PLAIN_REGEX = regexFactory.createReservedWordRegex(cfg.reservedKeywords);
+		this.RESERVED_LOGICAL_OPERATOR_REGEX = regexFactory.createReservedWordRegex(
+			cfg.reservedLogicalOperators
+		);
 		this.RESERVED_DEPENDENT_CLAUSE_REGEX = regexFactory.createReservedWordRegex(
 			cfg.reservedDependentClauses ?? []
 		);
-		this.RESERVED_TOP_LEVEL_REGEX = regexFactory.createReservedWordRegex(cfg.reservedTopLevelWords);
-		this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX = regexFactory.createReservedWordRegex(
-			cfg.reservedTopLevelWordsNoIndent
+		this.RESERVED_COMMAND_REGEX = regexFactory.createReservedWordRegex(cfg.reservedCommands);
+		this.RESERVED_BINARY_COMMAND_REGEX = regexFactory.createReservedWordRegex(
+			cfg.reservedBinaryCommands
 		);
 
 		this.WORD_REGEX = regexFactory.createWordRegex(cfg.specialWordChars);
 		this.STRING_REGEX = regexFactory.createStringRegex(cfg.stringTypes);
 
-		this.OPEN_PAREN_REGEX = regexFactory.createParenRegex(cfg.openParens);
-		this.CLOSE_PAREN_REGEX = regexFactory.createParenRegex(cfg.closeParens);
+		this.OPEN_PAREN_REGEX = regexFactory.createParenRegex(cfg.blockStart);
+		this.CLOSE_PAREN_REGEX = regexFactory.createParenRegex(cfg.blockEnd);
 
 		this.INDEXED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
 			cfg.indexedPlaceholderTypes ?? [],
@@ -139,8 +141,8 @@ export default class Tokenizer {
 	getNextToken(input: string, previousToken?: Token) {
 		return (this.getCommentToken(input) ||
 			this.getStringToken(input) ||
-			this.getOpenParenToken(input) ||
-			this.getCloseParenToken(input) ||
+			this.getBlockStartToken(input) ||
+			this.getBlockEndToken(input) ||
 			this.getPlaceholderToken(input) ||
 			this.getNumberToken(input) ||
 			this.getReservedWordToken(input, previousToken) ||
@@ -176,18 +178,18 @@ export default class Tokenizer {
 		});
 	}
 
-	getOpenParenToken(input: string) {
+	getBlockStartToken(input: string) {
 		return this.getTokenOnFirstMatch({
 			input,
-			type: tokenTypes.OPEN_PAREN,
+			type: tokenTypes.BLOCK_START,
 			regex: this.OPEN_PAREN_REGEX,
 		});
 	}
 
-	getCloseParenToken(input: string) {
+	getBlockEndToken(input: string) {
 		return this.getTokenOnFirstMatch({
 			input,
-			type: tokenTypes.CLOSE_PAREN,
+			type: tokenTypes.BLOCK_END,
 			regex: this.CLOSE_PAREN_REGEX,
 		});
 	}
@@ -270,11 +272,11 @@ export default class Tokenizer {
 		}
 
 		const reservedTokenMap = {
-			[tokenTypes.RESERVED_TOP_LEVEL]: this.RESERVED_TOP_LEVEL_REGEX,
-			[tokenTypes.RESERVED_NEWLINE]: this.RESERVED_NEWLINE_REGEX,
-			[tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT]: this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX,
+			[tokenTypes.RESERVED_COMMAND]: this.RESERVED_COMMAND_REGEX,
+			[tokenTypes.RESERVED_BINARY_COMMAND]: this.RESERVED_BINARY_COMMAND_REGEX,
 			[tokenTypes.RESERVED_DEPENDENT_CLAUSE]: this.RESERVED_DEPENDENT_CLAUSE_REGEX,
-			[tokenTypes.RESERVED]: this.RESERVED_PLAIN_REGEX,
+			[tokenTypes.RESERVED_LOGICAL_OPERATOR]: this.RESERVED_LOGICAL_OPERATOR_REGEX,
+			[tokenTypes.RESERVED_KEYWORD]: this.RESERVED_PLAIN_REGEX,
 		};
 
 		return Object.entries(reservedTokenMap).reduce(

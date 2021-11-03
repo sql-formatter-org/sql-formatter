@@ -1,7 +1,13 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import type { StringPatternType } from '../core/regexFactory';
 
 // TODO: split this into object with function categories
+/**
+ * Priority 5 (last)
+ * Full list of reserved functions
+ * distinct from Keywords due to interaction with parentheses
+ */
 // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/functions.html
 const reservedFunctions = [
 	'ABORT',
@@ -230,8 +236,13 @@ const reservedFunctions = [
 	'WEEKDAY_STR',
 ];
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
 // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html
-const reservedWords = [
+const reservedKeywords = [
 	'ALL',
 	'ALTER',
 	'ANALYZE',
@@ -400,8 +411,13 @@ const reservedWords = [
 	'WORK',
 ];
 
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
 // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ADVISE',
 	'ALTER INDEX',
 	'BEGIN TRANSACTION',
@@ -457,7 +473,13 @@ const reservedTopLevelWords = [
 	'WITH',
 ];
 
-const reservedTopLevelWordsNoIndent = [
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
+const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -470,18 +492,6 @@ const reservedTopLevelWordsNoIndent = [
 	'MINUS',
 	'MINUS ALL',
 	'MINUS DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
-	'XOR',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -491,21 +501,40 @@ const reservedNewlineWords = [
 	'RIGHT OUTER JOIN',
 ];
 
+/**
+ * Priority 3
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
+
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html
 export default class N1qlFormatter extends Formatter {
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
+	static reservedKeywords = [...reservedKeywords, ...reservedFunctions];
+	static stringTypes: StringPatternType[] = [`""`, "''", '``'];
+	static blockStart = ['(', '[', '{', 'CASE'];
+	static blockEnd = [')', ']', '}', 'END'];
+	static namedPlaceholderTypes = ['$'];
+	static lineCommentTypes = ['#', '--'];
+	static operators = ['==', '!='];
+
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: [...reservedWords, ...reservedFunctions],
-			reservedTopLevelWords,
-			reservedNewlineWords,
-			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
-			stringTypes: [`""`, "''", '``'],
-			openParens: ['(', '[', '{', 'CASE'],
-			closeParens: [')', ']', '}', 'END'],
-			namedPlaceholderTypes: ['$'],
-			lineCommentTypes: ['#', '--'],
-			operators: ['==', '!='],
+			reservedCommands: N1qlFormatter.reservedCommands,
+			reservedBinaryCommands: N1qlFormatter.reservedBinaryCommands,
+			reservedDependentClauses: N1qlFormatter.reservedDependentClauses,
+			reservedLogicalOperators: N1qlFormatter.reservedLogicalOperators,
+			reservedKeywords: N1qlFormatter.reservedKeywords,
+			stringTypes: N1qlFormatter.stringTypes,
+			blockStart: N1qlFormatter.blockStart,
+			blockEnd: N1qlFormatter.blockEnd,
+			namedPlaceholderTypes: N1qlFormatter.namedPlaceholderTypes,
+			lineCommentTypes: N1qlFormatter.lineCommentTypes,
+			operators: N1qlFormatter.operators,
 		});
 	}
 }

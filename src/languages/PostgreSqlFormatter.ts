@@ -2,7 +2,13 @@ import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
 import { isLateral, Token } from '../core/token'; // convert to partial type import in TS 4.5
+import type { StringPatternType } from '../core/regexFactory';
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved functions
+ * distinct from Keywords due to interaction with parentheses
+ */
 // https://www.postgresql.org/docs/14/functions.html
 const reservedFunctions = {
 	// https://www.postgresql.org/docs/14/functions-math.html
@@ -717,8 +723,13 @@ const reservedFunctions = {
 	stats: ['PG_MCV_LIST_ITEMS'],
 };
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
 // https://www.postgresql.org/docs/14/sql-keywords-appendix.html
-const reservedWords = [
+const reservedKeywords = [
 	'ABSENT',
 	'ABSOLUTE',
 	'ACCESS',
@@ -1364,8 +1375,13 @@ const reservedWords = [
 	'ZONE',
 ];
 
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
 // https://www.postgresql.org/docs/14/sql-commands.html
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ABORT',
 	'ALTER AGGREGATE',
 	'ALTER COLLATION',
@@ -1564,7 +1580,13 @@ const reservedTopLevelWords = [
 	'WITH',
 ];
 
-const reservedTopLevelWordsNoIndent = [
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
+const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -1577,17 +1599,6 @@ const reservedTopLevelWordsNoIndent = [
 	'MINUS',
 	'MINUS ALL',
 	'MINUS DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -1601,52 +1612,70 @@ const reservedNewlineWords = [
 	'NATURAL JOIN',
 ];
 
+/**
+ * Priority 3
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL'];
+
 // https://www.postgresql.org/docs/14/index.html
 export default class PostgreSqlFormatter extends Formatter {
-	fullReservedWords = [
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR'];
+	static reservedKeywords = [
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-		...reservedWords,
+		...reservedKeywords,
+	];
+	static stringTypes: StringPatternType[] = [`""`, "''", "U&''", 'U&""', '$$'];
+	static blockStart = ['(', 'CASE'];
+	static blockEnd = [')', 'END'];
+	static indexedPlaceholderTypes = ['$'];
+	static namedPlaceholderTypes = [':'];
+	static lineCommentTypes = ['--'];
+	static operators = [
+		'!=',
+		'<<',
+		'>>',
+		'||/',
+		'|/',
+		'::',
+		'->>',
+		'->',
+		'~~*',
+		'~~',
+		'!~~*',
+		'!~~',
+		'~*',
+		'!~*',
+		'!~',
+		'!!',
 	];
 
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: this.fullReservedWords,
-			reservedTopLevelWords,
-			reservedNewlineWords,
-			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
-			stringTypes: [`""`, "''", "U&''", 'U&""', '$$'],
-			openParens: ['(', 'CASE'],
-			closeParens: [')', 'END'],
-			indexedPlaceholderTypes: ['$'],
-			namedPlaceholderTypes: [':'],
-			lineCommentTypes: ['--'],
-			operators: [
-				'!=',
-				'<<',
-				'>>',
-				'||/',
-				'|/',
-				'::',
-				'->>',
-				'->',
-				'~~*',
-				'~~',
-				'!~~*',
-				'!~~',
-				'~*',
-				'!~*',
-				'!~',
-				'!!',
-			],
+			reservedCommands: PostgreSqlFormatter.reservedCommands,
+			reservedBinaryCommands: PostgreSqlFormatter.reservedBinaryCommands,
+			reservedDependentClauses: PostgreSqlFormatter.reservedDependentClauses,
+			reservedLogicalOperators: PostgreSqlFormatter.reservedLogicalOperators,
+			reservedKeywords: PostgreSqlFormatter.reservedKeywords,
+			stringTypes: PostgreSqlFormatter.stringTypes,
+			blockStart: PostgreSqlFormatter.blockStart,
+			blockEnd: PostgreSqlFormatter.blockEnd,
+			indexedPlaceholderTypes: PostgreSqlFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: PostgreSqlFormatter.namedPlaceholderTypes,
+			lineCommentTypes: PostgreSqlFormatter.lineCommentTypes,
+			operators: PostgreSqlFormatter.operators,
 		});
 	}
 
 	tokenOverride(token: Token) {
 		if (isLateral(token)) {
-			if (this.tokenLookAhead()?.type === tokenTypes.OPEN_PAREN) {
+			if (this.tokenLookAhead()?.type === tokenTypes.BLOCK_START) {
 				// This is a subquery, treat it like a join
-				return { type: tokenTypes.RESERVED_NEWLINE, value: token.value };
+				return { type: tokenTypes.RESERVED_LOGICAL_OPERATOR, value: token.value };
 			}
 		}
 

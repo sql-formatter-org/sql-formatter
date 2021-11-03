@@ -1,8 +1,14 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import type { StringPatternType } from '../core/regexFactory';
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
 // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#reserved-word
-const reservedWords = [
+const reservedKeywords = [
 	'ABS',
 	'ALL',
 	'ALLOCATE',
@@ -290,7 +296,12 @@ const reservedWords = [
 	'YEAR',
 ];
 
-const reservedTopLevelWords = [
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
+const reservedCommands = [
 	'ADD',
 	'ALTER COLUMN',
 	'ALTER TABLE',
@@ -319,7 +330,13 @@ const reservedTopLevelWords = [
 	'WITH',
 ];
 
-const reservedTopLevelWordsNoIndent = [
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
+const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -329,17 +346,6 @@ const reservedTopLevelWordsNoIndent = [
 	'EXCEPT',
 	'EXCEPT ALL',
 	'EXCEPT DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -353,20 +359,39 @@ const reservedNewlineWords = [
 	'NATURAL JOIN',
 ];
 
+/**
+ * Priority 3
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
+
 export default class StandardSqlFormatter extends Formatter {
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR'];
+	static reservedKeywords = reservedKeywords;
+	static stringTypes: StringPatternType[] = [`""`, "''"];
+	static blockStart = ['(', 'CASE'];
+	static blockEnd = [')', 'END'];
+	static indexedPlaceholderTypes = ['?'];
+	static namedPlaceholderTypes = [];
+	static lineCommentTypes = ['--'];
+
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords,
-			reservedTopLevelWords,
-			reservedNewlineWords,
-			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
-			stringTypes: [`""`, "''"],
-			openParens: ['(', 'CASE'],
-			closeParens: [')', 'END'],
-			indexedPlaceholderTypes: ['?'],
-			namedPlaceholderTypes: [],
-			lineCommentTypes: ['--'],
+			reservedCommands: StandardSqlFormatter.reservedCommands,
+			reservedBinaryCommands: StandardSqlFormatter.reservedBinaryCommands,
+			reservedDependentClauses: StandardSqlFormatter.reservedDependentClauses,
+			reservedLogicalOperators: StandardSqlFormatter.reservedLogicalOperators,
+			reservedKeywords: StandardSqlFormatter.reservedKeywords,
+			stringTypes: StandardSqlFormatter.stringTypes,
+			blockStart: StandardSqlFormatter.blockStart,
+			blockEnd: StandardSqlFormatter.blockEnd,
+			indexedPlaceholderTypes: StandardSqlFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: StandardSqlFormatter.namedPlaceholderTypes,
+			lineCommentTypes: StandardSqlFormatter.lineCommentTypes,
 		});
 	}
 }

@@ -1,9 +1,15 @@
 import Formatter from '../core/Formatter';
-import { isBy, isLateral, isSet, Token } from '../core/token'; // convert to partial type import in TS 4.5
 import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
+import { isBy, isLateral, isSet, Token } from '../core/token'; // convert to partial type import in TS 4.5
+import type { StringPatternType } from '../core/regexFactory';
 
-const reservedWords = [
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
+const reservedKeywords = [
 	// 'A',
 	'ACCESSIBLE',
 	'AGENT',
@@ -351,7 +357,12 @@ const reservedWords = [
 	'ZONE',
 ];
 
-const reservedTopLevelWords = [
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
+const reservedCommands = [
 	'ADD',
 	'ALTER COLUMN',
 	'ALTER TABLE',
@@ -387,7 +398,13 @@ const reservedTopLevelWords = [
 	'WITH',
 ];
 
-const reservedTopLevelWordsNoIndent = [
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
+const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -400,20 +417,6 @@ const reservedTopLevelWordsNoIndent = [
 	'MINUS',
 	'MINUS ALL',
 	'MINUS DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
-	'XOR',
-	'CROSS APPLY',
-	'OUTER APPLY',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -425,36 +428,60 @@ const reservedNewlineWords = [
 	'FULL OUTER JOIN',
 	'CROSS JOIN',
 	'NATURAL JOIN',
+	// apply
+	'CROSS APPLY',
+	'OUTER APPLY',
 ];
 
+/**
+ * Priority 3
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
+
 export default class PlSqlFormatter extends Formatter {
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
+	static reservedKeywords = reservedKeywords;
+	static stringTypes: StringPatternType[] = [`""`, "N''", "''", '``'];
+	static blockStart = ['(', 'CASE'];
+	static blockEnd = [')', 'END'];
+	static indexedPlaceholderTypes = ['?'];
+	static namedPlaceholderTypes = [':'];
+	static lineCommentTypes = ['--'];
+	static specialWordChars = ['_', '$', '#', '.', '@'];
+	static operators = ['||', '**', '!=', ':='];
+
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords,
-			reservedTopLevelWords,
-			reservedNewlineWords,
-			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
-			stringTypes: [`""`, "N''", "''", '``'],
-			openParens: ['(', 'CASE'],
-			closeParens: [')', 'END'],
-			indexedPlaceholderTypes: ['?'],
-			namedPlaceholderTypes: [':'],
-			lineCommentTypes: ['--'],
-			specialWordChars: ['_', '$', '#', '.', '@'],
-			operators: ['||', '**', '!=', ':='],
+			reservedCommands: PlSqlFormatter.reservedCommands,
+			reservedBinaryCommands: PlSqlFormatter.reservedBinaryCommands,
+			reservedDependentClauses: PlSqlFormatter.reservedDependentClauses,
+			reservedLogicalOperators: PlSqlFormatter.reservedLogicalOperators,
+			reservedKeywords: PlSqlFormatter.reservedKeywords,
+			stringTypes: PlSqlFormatter.stringTypes,
+			blockStart: PlSqlFormatter.blockStart,
+			blockEnd: PlSqlFormatter.blockEnd,
+			indexedPlaceholderTypes: PlSqlFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: PlSqlFormatter.namedPlaceholderTypes,
+			lineCommentTypes: PlSqlFormatter.lineCommentTypes,
+			specialWordChars: PlSqlFormatter.specialWordChars,
+			operators: PlSqlFormatter.operators,
 		});
 	}
 
 	tokenOverride(token: Token) {
 		if (isSet(token) && isBy(this.previousReservedToken)) {
-			return { type: tokenTypes.RESERVED, value: token.value };
+			return { type: tokenTypes.RESERVED_KEYWORD, value: token.value };
 		}
 
 		if (isLateral(token)) {
-			if (this.tokenLookAhead()?.type === tokenTypes.OPEN_PAREN) {
+			if (this.tokenLookAhead()?.type === tokenTypes.BLOCK_START) {
 				// This is a subquery, treat it like a join
-				return { type: tokenTypes.RESERVED_NEWLINE, value: token.value };
+				return { type: tokenTypes.RESERVED_LOGICAL_OPERATOR, value: token.value };
 			}
 		}
 

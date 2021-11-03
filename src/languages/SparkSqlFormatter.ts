@@ -1,8 +1,14 @@
 import Formatter from '../core/Formatter';
-import { isEnd, isWindow, Token } from '../core/token'; // convert to partial type import in TS 4.5
 import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
+import { isEnd, isWindow, Token } from '../core/token'; // convert to partial type import in TS 4.5
+import type { StringPatternType } from '../core/regexFactory';
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved functions
+ * distinct from Keywords due to interaction with parentheses
+ */
 // http://spark.apache.org/docs/latest/sql-ref-functions.html
 const reservedFunctions = {
 	// http://spark.apache.org/docs/latest/sql-ref-functions-builtin.html#aggregate-functions
@@ -347,8 +353,13 @@ const reservedFunctions = {
 	],
 };
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
 // https://deepkb.com/CO_000013/en/kb/IMPORT-fbfa59f0-2bf1-31fe-bb7b-0f9efe9932c6/spark-sql-keywords
-const reservedWords = [
+const reservedKeywords = [
 	'ADD',
 	'AFTER',
 	'ALL',
@@ -622,8 +633,13 @@ const reservedWords = [
 	'YEAR_MONTH',
 ];
 
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
 // http://spark.apache.org/docs/latest/sql-ref-syntax.html
-const reservedTopLevelWords = [
+const reservedCommands = [
 	// DDL
 	'ALTER COLUMN',
 	'ALTER DATABASE',
@@ -698,7 +714,13 @@ const reservedTopLevelWords = [
 	'WINDOW', // verify
 ];
 
-const reservedTopLevelWordsNoIndent = [
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
+const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -711,20 +733,6 @@ const reservedTopLevelWordsNoIndent = [
 	'MINUS',
 	'MINUS ALL',
 	'MINUS DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL VIEW'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
-	'XOR',
-	'CROSS APPLY',
-	'OUTER APPLY',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -736,6 +744,9 @@ const reservedNewlineWords = [
 	'FULL OUTER JOIN',
 	'CROSS JOIN',
 	'NATURAL JOIN',
+	// apply
+	'CROSS APPLY',
+	'OUTER APPLY',
 	// non-standard-joins
 	'ANTI JOIN',
 	'SEMI JOIN',
@@ -753,29 +764,49 @@ const reservedNewlineWords = [
 	'NATURAL RIGHT OUTER JOIN',
 	'NATURAL RIGHT SEMI JOIN',
 	'NATURAL SEMI JOIN',
+	'CROSS APPLY',
+	'OUTER APPLY',
 ];
+
+/**
+ * Priority 3
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL VIEW'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkSqlFormatter extends Formatter {
-	fullReservedWords = [
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
+	static reservedKeywords = [
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-		...reservedWords,
+		...reservedKeywords,
 	];
+	static stringTypes: StringPatternType[] = [`""`, "''", '``', '{}'];
+	static blockStart = ['(', 'CASE'];
+	static blockEnd = [')', 'END'];
+	static indexedPlaceholderTypes = ['?'];
+	static namedPlaceholderTypes = ['$'];
+	static lineCommentTypes = ['--'];
+	static operators = ['!=', '<=>', '&&', '||', '=='];
 
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: this.fullReservedWords,
-			reservedTopLevelWords,
-			reservedNewlineWords,
-			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
-			stringTypes: [`""`, "''", '``', '{}'],
-			openParens: ['(', 'CASE'],
-			closeParens: [')', 'END'],
-			indexedPlaceholderTypes: ['?'],
-			namedPlaceholderTypes: ['$'],
-			lineCommentTypes: ['--'],
-			operators: ['!=', '<=>', '&&', '||', '=='],
+			reservedCommands: SparkSqlFormatter.reservedCommands,
+			reservedBinaryCommands: SparkSqlFormatter.reservedBinaryCommands,
+			reservedDependentClauses: SparkSqlFormatter.reservedDependentClauses,
+			reservedLogicalOperators: SparkSqlFormatter.reservedLogicalOperators,
+			reservedKeywords: SparkSqlFormatter.reservedKeywords,
+			stringTypes: SparkSqlFormatter.stringTypes,
+			blockStart: SparkSqlFormatter.blockStart,
+			blockEnd: SparkSqlFormatter.blockEnd,
+			indexedPlaceholderTypes: SparkSqlFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: SparkSqlFormatter.namedPlaceholderTypes,
+			lineCommentTypes: SparkSqlFormatter.lineCommentTypes,
+			operators: SparkSqlFormatter.operators,
 		});
 	}
 
@@ -783,9 +814,9 @@ export default class SparkSqlFormatter extends Formatter {
 		// Fix cases where names are ambiguously keywords or functions
 		if (isWindow(token)) {
 			const aheadToken = this.tokenLookAhead();
-			if (aheadToken?.type === tokenTypes.OPEN_PAREN) {
+			if (aheadToken?.type === tokenTypes.BLOCK_START) {
 				// This is a function call, treat it as a reserved word
-				return { type: tokenTypes.RESERVED, value: token.value };
+				return { type: tokenTypes.RESERVED_KEYWORD, value: token.value };
 			}
 		}
 
@@ -798,7 +829,7 @@ export default class SparkSqlFormatter extends Formatter {
 		}
 
 		// TODO: deprecate this once ITEMS is merged with COLLECTION
-		if (/ITEMS/i.test(token.value) && token.type === tokenTypes.RESERVED) {
+		if (/ITEMS/i.test(token.value) && token.type === tokenTypes.RESERVED_KEYWORD) {
 			if (
 				!(
 					/COLLECTION/i.test(this.tokenLookBehind()?.value) &&

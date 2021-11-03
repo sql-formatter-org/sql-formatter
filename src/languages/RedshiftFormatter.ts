@@ -1,6 +1,12 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import type { StringPatternType } from '../core/regexFactory';
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved functions
+ * distinct from Keywords due to interaction with parentheses
+ */
 const reservedFunctions = {
 	// https://docs.aws.amazon.com/redshift/latest/dg/c_Aggregate_Functions.html
 	aggregate: [
@@ -355,9 +361,13 @@ const reservedFunctions = {
 	],
 };
 
-const reservedWords = {
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
+const reservedKeywords = {
 	// https://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html
-	// duplicates are removed in favour of more specific categories
 	standard: [
 		'AES128',
 		'AES256',
@@ -560,8 +570,13 @@ const reservedWords = {
 	],
 };
 
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
 // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ABORT',
 	'ALTER DATABASE',
 	'ALTER DATASHARE',
@@ -662,7 +677,13 @@ const reservedTopLevelWords = [
 	'SET SCHEMA', // verify
 ];
 
-const reservedTopLevelWordsNoIndent = [
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
+const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -672,17 +693,6 @@ const reservedTopLevelWordsNoIndent = [
 	'EXCEPT',
 	'EXCEPT ALL',
 	'EXCEPT DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -696,27 +706,45 @@ const reservedNewlineWords = [
 	'NATURAL JOIN',
 ];
 
+/**
+ * Priority 3
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
+
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export default class RedshiftFormatter extends Formatter {
-	fullReservedWords = [
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR'];
+	static reservedKeywords = [
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-		...Object.values(reservedWords).reduce((acc, arr) => [...acc, ...arr], []),
+		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
 	];
+	static stringTypes: StringPatternType[] = [`""`, "''", '``'];
+	static blockStart = ['('];
+	static blockEnd = [')'];
+	static indexedPlaceholderTypes = ['?'];
+	static namedPlaceholderTypes = ['@', '#', '$'];
+	static lineCommentTypes = ['--'];
+	static operators = ['|/', '||/', '<<', '>>', '!=', '||'];
 
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: this.fullReservedWords,
-			reservedTopLevelWords,
-			reservedNewlineWords,
-			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
-			stringTypes: [`""`, "''", '``'],
-			openParens: ['('],
-			closeParens: [')'],
-			indexedPlaceholderTypes: ['?'],
-			namedPlaceholderTypes: ['@', '#', '$'],
-			lineCommentTypes: ['--'],
-			operators: ['|/', '||/', '<<', '>>', '!=', '||'],
+			reservedCommands: RedshiftFormatter.reservedCommands,
+			reservedBinaryCommands: RedshiftFormatter.reservedBinaryCommands,
+			reservedDependentClauses: RedshiftFormatter.reservedDependentClauses,
+			reservedLogicalOperators: RedshiftFormatter.reservedLogicalOperators,
+			reservedKeywords: RedshiftFormatter.reservedKeywords,
+			stringTypes: RedshiftFormatter.stringTypes,
+			blockStart: RedshiftFormatter.blockStart,
+			blockEnd: RedshiftFormatter.blockEnd,
+			indexedPlaceholderTypes: RedshiftFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: RedshiftFormatter.namedPlaceholderTypes,
+			lineCommentTypes: RedshiftFormatter.lineCommentTypes,
+			operators: RedshiftFormatter.operators,
 		});
 	}
 }

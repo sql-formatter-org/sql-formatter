@@ -1,6 +1,12 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import type { StringPatternType } from '../core/regexFactory';
 
+/**
+ * Priority 5 (last)
+ * Full list of reserved functions
+ * distinct from Keywords due to interaction with parentheses
+ */
 const reservedFunctions = {
 	// https://www.ibm.com/docs/en/db2-for-zos/11?topic=functions-aggregate
 	aggregate: [
@@ -306,7 +312,12 @@ const reservedFunctions = {
 	olap: ['FIRST_VALUE', 'LAG', 'LAST_VALUE', 'LEAD', 'NTH_VALUE', 'NTILE', 'RATIO_TO_REPORT'],
 };
 
-const reservedWords = {
+/**
+ * Priority 5 (last)
+ * Full list of reserved words
+ * any words that are in a higher priority are removed
+ */
+const reservedKeywords = {
 	// https://www.ibm.com/docs/en/db2-for-zos/11?topic=words-reserved#db2z_reservedwords__newresword
 	standard: [
 		'ALL',
@@ -667,8 +678,13 @@ const reservedWords = {
 	],
 };
 
+/**
+ * Priority 1 (first)
+ * keywords that begin a new statement
+ * will begin new indented block
+ */
 // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
-const reservedTopLevelWords = [
+const reservedCommands = [
 	'ALLOCATE CURSOR',
 	'ALTER DATABASE',
 	'ALTER FUNCTION',
@@ -803,7 +819,13 @@ const reservedTopLevelWords = [
 	'WITH',
 ];
 
-const reservedTopLevelWordsNoIndent = [
+/**
+ * Priority 2
+ * commands that operate on two tables or subqueries
+ * two main categories: joins and boolean set operators
+ */
+const reservedBinaryCommands = [
+	// set booleans
 	'INTERSECT',
 	'INTERSECT ALL',
 	'INTERSECT DISTINCT',
@@ -813,17 +835,6 @@ const reservedTopLevelWordsNoIndent = [
 	'EXCEPT',
 	'EXCEPT ALL',
 	'EXCEPT DISTINCT',
-];
-
-/**
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF'];
-
-const reservedNewlineWords = [
-	'AND',
-	'OR',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -837,28 +848,48 @@ const reservedNewlineWords = [
 	'NATURAL JOIN',
 ];
 
+/**
+ * Priority 3
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF'];
+
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
-	fullReservedWords = [
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR'];
+	static fullReservedWords = [
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-		...Object.values(reservedWords).reduce((acc, arr) => [...acc, ...arr], []),
+		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
 	];
+
+	static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]'];
+	static blockStart = ['('];
+	static blockEnd = [')'];
+	static indexedPlaceholderTypes = ['?'];
+	static namedPlaceholderTypes = [':'];
+	static lineCommentTypes = ['--'];
+	static specialWordChars = ['#', '@'];
+	static operators = ['**', '!=', '!>', '!>', '||'];
 
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: this.fullReservedWords,
-			reservedTopLevelWords,
-			reservedNewlineWords,
-			reservedDependentClauses,
-			reservedTopLevelWordsNoIndent,
-			stringTypes: [`""`, "''", '``', '[]'],
-			openParens: ['('],
-			closeParens: [')'],
-			indexedPlaceholderTypes: ['?'],
-			namedPlaceholderTypes: [':'],
-			lineCommentTypes: ['--'],
-			specialWordChars: ['#', '@'],
-			operators: ['**', '!=', '!>', '!>', '||'],
+			reservedCommands: Db2Formatter.reservedCommands,
+			reservedBinaryCommands: Db2Formatter.reservedBinaryCommands,
+			reservedDependentClauses: Db2Formatter.reservedDependentClauses,
+			reservedLogicalOperators: Db2Formatter.reservedLogicalOperators,
+			reservedKeywords: Db2Formatter.fullReservedWords,
+			stringTypes: Db2Formatter.stringTypes,
+			blockStart: Db2Formatter.blockStart,
+			blockEnd: Db2Formatter.blockEnd,
+			indexedPlaceholderTypes: Db2Formatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: Db2Formatter.namedPlaceholderTypes,
+			lineCommentTypes: Db2Formatter.lineCommentTypes,
+			specialWordChars: Db2Formatter.specialWordChars,
+			operators: Db2Formatter.operators,
 		});
 	}
 }

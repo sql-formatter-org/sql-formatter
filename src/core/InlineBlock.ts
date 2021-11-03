@@ -65,9 +65,9 @@ export default class InlineBlock {
 			}
 
 			// CASE cannot start inline block
-			if (token.type === tokenTypes.OPEN_PAREN && !isCase(token)) {
+			if (token.type === tokenTypes.BLOCK_START && !isCase(token)) {
 				level++;
-			} else if (token.type === tokenTypes.CLOSE_PAREN) {
+			} else if (token.type === tokenTypes.BLOCK_END) {
 				level--;
 				if (level === 0) {
 					return true;
@@ -85,8 +85,8 @@ export default class InlineBlock {
 	// are not allowed inside inline parentheses block
 	isForbiddenToken({ type, value }: Token) {
 		return (
-			type === tokenTypes.RESERVED_TOP_LEVEL ||
-			type === tokenTypes.RESERVED_NEWLINE ||
+			type === tokenTypes.RESERVED_COMMAND ||
+			type === tokenTypes.RESERVED_LOGICAL_OPERATOR ||
 			// type === tokenTypes.LINE_COMMENT ||
 			type === tokenTypes.BLOCK_COMMENT ||
 			value === ';'
