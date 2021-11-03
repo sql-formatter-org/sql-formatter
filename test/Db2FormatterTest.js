@@ -1,8 +1,8 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
 import Db2Formatter from '../src/languages/Db2Formatter';
-
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsCreateTable from './features/createTable';
