@@ -1,7 +1,8 @@
 import Formatter from '../core/Formatter';
-import { isBy, isLateral, isSet, Token } from '../core/token'; // convert to partial type import in TS 4.5
 import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
+import { isBy, isLateral, isSet, Token } from '../core/token'; // convert to partial type import in TS 4.5
+import type { StringPatternType } from '../core/regexFactory';
 
 /**
  * Priority 5 (last)
@@ -440,21 +441,35 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
 
 export default class PlSqlFormatter extends Formatter {
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
+	static reservedKeywords = reservedKeywords;
+	static stringTypes: StringPatternType[] = [`""`, "N''", "''", '``'];
+	static blockStart = ['(', 'CASE'];
+	static blockEnd = [')', 'END'];
+	static indexedPlaceholderTypes = ['?'];
+	static namedPlaceholderTypes = [':'];
+	static lineCommentTypes = ['--'];
+	static specialWordChars = ['_', '$', '#', '.', '@'];
+	static operators = ['||', '**', '!=', ':='];
+
 	tokenizer() {
 		return new Tokenizer({
-			reservedKeywords,
-			reservedCommands,
-			reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-			reservedDependentClauses,
-			reservedBinaryCommands,
-			stringTypes: [`""`, "N''", "''", '``'],
-			blockStart: ['(', 'CASE'],
-			blockEnd: [')', 'END'],
-			indexedPlaceholderTypes: ['?'],
-			namedPlaceholderTypes: [':'],
-			lineCommentTypes: ['--'],
-			specialWordChars: ['_', '$', '#', '.', '@'],
-			operators: ['||', '**', '!=', ':='],
+			reservedCommands: PlSqlFormatter.reservedCommands,
+			reservedBinaryCommands: PlSqlFormatter.reservedBinaryCommands,
+			reservedDependentClauses: PlSqlFormatter.reservedDependentClauses,
+			reservedLogicalOperators: PlSqlFormatter.reservedLogicalOperators,
+			reservedKeywords: PlSqlFormatter.reservedKeywords,
+			stringTypes: PlSqlFormatter.stringTypes,
+			blockStart: PlSqlFormatter.blockStart,
+			blockEnd: PlSqlFormatter.blockEnd,
+			indexedPlaceholderTypes: PlSqlFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: PlSqlFormatter.namedPlaceholderTypes,
+			lineCommentTypes: PlSqlFormatter.lineCommentTypes,
+			specialWordChars: PlSqlFormatter.specialWordChars,
+			operators: PlSqlFormatter.operators,
 		});
 	}
 

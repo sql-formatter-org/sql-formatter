@@ -1,5 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import type { StringPatternType } from '../core/regexFactory';
 
 /**
  * Priority 5 (last)
@@ -1149,21 +1150,35 @@ const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'ELSIF
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedKeywords = [...reservedKeywords, ...reservedFunctions];
+	static stringTypes: StringPatternType[] = ['``', "''", '""'];
+	static blockStart = ['(', 'CASE'];
+	static blockEnd = [')', 'END'];
+	static indexedPlaceholderTypes = ['?'];
+	static namedPlaceholderTypes = [];
+	static lineCommentTypes = ['--', '#'];
+	static specialWordChars = ['@'];
+	static operators = [':=', '<<', '>>', '!=', '<>', '<=>', '&&', '||'];
+
 	tokenizer() {
 		return new Tokenizer({
-			reservedKeywords: [...reservedKeywords, ...reservedFunctions],
-			reservedCommands,
-			reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-			reservedDependentClauses,
-			reservedBinaryCommands,
-			stringTypes: ['``', "''", '""'],
-			blockStart: ['(', 'CASE'],
-			blockEnd: [')', 'END'],
-			indexedPlaceholderTypes: ['?'],
-			namedPlaceholderTypes: [],
-			lineCommentTypes: ['--', '#'],
-			specialWordChars: ['@'],
-			operators: [':=', '<<', '>>', '!=', '<>', '<=>', '&&', '||'],
+			reservedCommands: MariaDbFormatter.reservedCommands,
+			reservedBinaryCommands: MariaDbFormatter.reservedBinaryCommands,
+			reservedDependentClauses: MariaDbFormatter.reservedDependentClauses,
+			reservedLogicalOperators: MariaDbFormatter.reservedLogicalOperators,
+			reservedKeywords: MariaDbFormatter.reservedKeywords,
+			stringTypes: MariaDbFormatter.stringTypes,
+			blockStart: MariaDbFormatter.blockStart,
+			blockEnd: MariaDbFormatter.blockEnd,
+			indexedPlaceholderTypes: MariaDbFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: MariaDbFormatter.namedPlaceholderTypes,
+			lineCommentTypes: MariaDbFormatter.lineCommentTypes,
+			specialWordChars: MariaDbFormatter.specialWordChars,
+			operators: MariaDbFormatter.operators,
 		});
 	}
 }

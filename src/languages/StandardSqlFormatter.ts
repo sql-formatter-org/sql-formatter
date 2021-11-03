@@ -1,5 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import type { StringPatternType } from '../core/regexFactory';
 
 /**
  * Priority 5 (last)
@@ -366,19 +367,31 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
 
 export default class StandardSqlFormatter extends Formatter {
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR'];
+	static reservedKeywords = reservedKeywords;
+	static stringTypes: StringPatternType[] = [`""`, "''"];
+	static blockStart = ['(', 'CASE'];
+	static blockEnd = [')', 'END'];
+	static indexedPlaceholderTypes = ['?'];
+	static namedPlaceholderTypes = [];
+	static lineCommentTypes = ['--'];
+
 	tokenizer() {
 		return new Tokenizer({
-			reservedKeywords,
-			reservedCommands,
-			reservedLogicalOperators: ['AND', 'OR'],
-			reservedDependentClauses,
-			reservedBinaryCommands,
-			stringTypes: [`""`, "''"],
-			blockStart: ['(', 'CASE'],
-			blockEnd: [')', 'END'],
-			indexedPlaceholderTypes: ['?'],
-			namedPlaceholderTypes: [],
-			lineCommentTypes: ['--'],
+			reservedCommands: StandardSqlFormatter.reservedCommands,
+			reservedBinaryCommands: StandardSqlFormatter.reservedBinaryCommands,
+			reservedDependentClauses: StandardSqlFormatter.reservedDependentClauses,
+			reservedLogicalOperators: StandardSqlFormatter.reservedLogicalOperators,
+			reservedKeywords: StandardSqlFormatter.reservedKeywords,
+			stringTypes: StandardSqlFormatter.stringTypes,
+			blockStart: StandardSqlFormatter.blockStart,
+			blockEnd: StandardSqlFormatter.blockEnd,
+			indexedPlaceholderTypes: StandardSqlFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: StandardSqlFormatter.namedPlaceholderTypes,
+			lineCommentTypes: StandardSqlFormatter.lineCommentTypes,
 		});
 	}
 }

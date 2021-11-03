@@ -1,7 +1,8 @@
 import Formatter from '../core/Formatter';
-import { isEnd, isWindow, Token } from '../core/token'; // convert to partial type import in TS 4.5
 import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
+import { isEnd, isWindow, Token } from '../core/token'; // convert to partial type import in TS 4.5
+import type { StringPatternType } from '../core/regexFactory';
 
 /**
  * Priority 5 (last)
@@ -776,25 +777,36 @@ const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL VIEW'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkSqlFormatter extends Formatter {
-	fullReservedWords = [
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
+	static reservedKeywords = [
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
 		...reservedKeywords,
 	];
+	static stringTypes: StringPatternType[] = [`""`, "''", '``', '{}'];
+	static blockStart = ['(', 'CASE'];
+	static blockEnd = [')', 'END'];
+	static indexedPlaceholderTypes = ['?'];
+	static namedPlaceholderTypes = ['$'];
+	static lineCommentTypes = ['--'];
+	static operators = ['!=', '<=>', '&&', '||', '=='];
 
 	tokenizer() {
 		return new Tokenizer({
-			reservedKeywords: this.fullReservedWords,
-			reservedCommands,
-			reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-			reservedDependentClauses,
-			reservedBinaryCommands,
-			stringTypes: [`""`, "''", '``', '{}'],
-			blockStart: ['(', 'CASE'],
-			blockEnd: [')', 'END'],
-			indexedPlaceholderTypes: ['?'],
-			namedPlaceholderTypes: ['$'],
-			lineCommentTypes: ['--'],
-			operators: ['!=', '<=>', '&&', '||', '=='],
+			reservedCommands: SparkSqlFormatter.reservedCommands,
+			reservedBinaryCommands: SparkSqlFormatter.reservedBinaryCommands,
+			reservedDependentClauses: SparkSqlFormatter.reservedDependentClauses,
+			reservedLogicalOperators: SparkSqlFormatter.reservedLogicalOperators,
+			reservedKeywords: SparkSqlFormatter.reservedKeywords,
+			stringTypes: SparkSqlFormatter.stringTypes,
+			blockStart: SparkSqlFormatter.blockStart,
+			blockEnd: SparkSqlFormatter.blockEnd,
+			indexedPlaceholderTypes: SparkSqlFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: SparkSqlFormatter.namedPlaceholderTypes,
+			lineCommentTypes: SparkSqlFormatter.lineCommentTypes,
+			operators: SparkSqlFormatter.operators,
 		});
 	}
 

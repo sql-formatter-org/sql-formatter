@@ -2,6 +2,7 @@ import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
 import { isLateral, Token } from '../core/token';
+import type { StringPatternType } from '../core/regexFactory';
 
 // TODO: split this into object with function categories
 /**
@@ -1310,21 +1311,35 @@ const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'LATER
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
+	static reservedKeywords = [...reservedKeywords, ...reservedFunctions];
+	static stringTypes: StringPatternType[] = ['``', "''", '""'];
+	static blockStart = ['(', 'CASE'];
+	static blockEnd = [')', 'END'];
+	static indexedPlaceholderTypes = ['?'];
+	static namedPlaceholderTypes = [];
+	static lineCommentTypes = ['--', '#'];
+	static specialWordChars = ['@'];
+	static operators = [':=', '<<', '>>', '!=', '<>', '<=>', '&&', '||', '->', '->>'];
+
 	tokenizer() {
 		return new Tokenizer({
-			reservedKeywords: [...reservedKeywords, ...reservedFunctions],
-			reservedCommands,
-			reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-			reservedDependentClauses,
-			reservedBinaryCommands,
-			stringTypes: ['``', "''", '""'],
-			blockStart: ['(', 'CASE'],
-			blockEnd: [')', 'END'],
-			indexedPlaceholderTypes: ['?'],
-			namedPlaceholderTypes: [],
-			lineCommentTypes: ['--', '#'],
-			specialWordChars: ['@'],
-			operators: [':=', '<<', '>>', '!=', '<>', '<=>', '&&', '||', '->', '->>'],
+			reservedCommands: MySqlFormatter.reservedCommands,
+			reservedBinaryCommands: MySqlFormatter.reservedBinaryCommands,
+			reservedDependentClauses: MySqlFormatter.reservedDependentClauses,
+			reservedLogicalOperators: MySqlFormatter.reservedLogicalOperators,
+			reservedKeywords: MySqlFormatter.reservedKeywords,
+			stringTypes: MySqlFormatter.stringTypes,
+			blockStart: MySqlFormatter.blockStart,
+			blockEnd: MySqlFormatter.blockEnd,
+			indexedPlaceholderTypes: MySqlFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: MySqlFormatter.namedPlaceholderTypes,
+			lineCommentTypes: MySqlFormatter.lineCommentTypes,
+			specialWordChars: MySqlFormatter.specialWordChars,
+			operators: MySqlFormatter.operators,
 		});
 	}
 

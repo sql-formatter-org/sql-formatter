@@ -1,5 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import type { StringPatternType } from '../core/regexFactory';
 
 /**
  * Priority 5 (last)
@@ -856,26 +857,39 @@ const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF'];
 
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
-	fullReservedWords = [
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR'];
+	static fullReservedWords = [
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
 		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
 	];
 
+	static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]'];
+	static blockStart = ['('];
+	static blockEnd = [')'];
+	static indexedPlaceholderTypes = ['?'];
+	static namedPlaceholderTypes = [':'];
+	static lineCommentTypes = ['--'];
+	static specialWordChars = ['#', '@'];
+	static operators = ['**', '!=', '!>', '!>', '||'];
+
 	tokenizer() {
 		return new Tokenizer({
-			reservedKeywords: this.fullReservedWords,
-			reservedCommands,
-			reservedLogicalOperators: ['AND', 'OR'],
-			reservedDependentClauses,
-			reservedBinaryCommands,
-			stringTypes: [`""`, "''", '``', '[]'],
-			blockStart: ['('],
-			blockEnd: [')'],
-			indexedPlaceholderTypes: ['?'],
-			namedPlaceholderTypes: [':'],
-			lineCommentTypes: ['--'],
-			specialWordChars: ['#', '@'],
-			operators: ['**', '!=', '!>', '!>', '||'],
+			reservedCommands: Db2Formatter.reservedCommands,
+			reservedBinaryCommands: Db2Formatter.reservedBinaryCommands,
+			reservedDependentClauses: Db2Formatter.reservedDependentClauses,
+			reservedLogicalOperators: Db2Formatter.reservedLogicalOperators,
+			reservedKeywords: Db2Formatter.fullReservedWords,
+			stringTypes: Db2Formatter.stringTypes,
+			blockStart: Db2Formatter.blockStart,
+			blockEnd: Db2Formatter.blockEnd,
+			indexedPlaceholderTypes: Db2Formatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: Db2Formatter.namedPlaceholderTypes,
+			lineCommentTypes: Db2Formatter.lineCommentTypes,
+			specialWordChars: Db2Formatter.specialWordChars,
+			operators: Db2Formatter.operators,
 		});
 	}
 }

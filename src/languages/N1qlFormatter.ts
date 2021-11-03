@@ -1,5 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import type { StringPatternType } from '../core/regexFactory';
 
 // TODO: split this into object with function categories
 /**
@@ -509,19 +510,31 @@ const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
 
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html
 export default class N1qlFormatter extends Formatter {
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
+	static reservedKeywords = [...reservedKeywords, ...reservedFunctions];
+	static stringTypes: StringPatternType[] = [`""`, "''", '``'];
+	static blockStart = ['(', '[', '{', 'CASE'];
+	static blockEnd = [')', ']', '}', 'END'];
+	static namedPlaceholderTypes = ['$'];
+	static lineCommentTypes = ['#', '--'];
+	static operators = ['==', '!='];
+
 	tokenizer() {
 		return new Tokenizer({
-			reservedKeywords: [...reservedKeywords, ...reservedFunctions],
-			reservedCommands,
-			reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-			reservedDependentClauses,
-			reservedBinaryCommands,
-			stringTypes: [`""`, "''", '``'],
-			blockStart: ['(', '[', '{', 'CASE'],
-			blockEnd: [')', ']', '}', 'END'],
-			namedPlaceholderTypes: ['$'],
-			lineCommentTypes: ['#', '--'],
-			operators: ['==', '!='],
+			reservedCommands: N1qlFormatter.reservedCommands,
+			reservedBinaryCommands: N1qlFormatter.reservedBinaryCommands,
+			reservedDependentClauses: N1qlFormatter.reservedDependentClauses,
+			reservedLogicalOperators: N1qlFormatter.reservedLogicalOperators,
+			reservedKeywords: N1qlFormatter.reservedKeywords,
+			stringTypes: N1qlFormatter.stringTypes,
+			blockStart: N1qlFormatter.blockStart,
+			blockEnd: N1qlFormatter.blockEnd,
+			namedPlaceholderTypes: N1qlFormatter.namedPlaceholderTypes,
+			lineCommentTypes: N1qlFormatter.lineCommentTypes,
+			operators: N1qlFormatter.operators,
 		});
 	}
 }

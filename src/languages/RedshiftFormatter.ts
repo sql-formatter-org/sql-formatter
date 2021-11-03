@@ -1,5 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import type { StringPatternType } from '../core/regexFactory';
 
 /**
  * Priority 5 (last)
@@ -714,25 +715,36 @@ const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
 
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export default class RedshiftFormatter extends Formatter {
-	fullReservedWords = [
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR'];
+	static reservedKeywords = [
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
 		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
 	];
+	static stringTypes: StringPatternType[] = [`""`, "''", '``'];
+	static blockStart = ['('];
+	static blockEnd = [')'];
+	static indexedPlaceholderTypes = ['?'];
+	static namedPlaceholderTypes = ['@', '#', '$'];
+	static lineCommentTypes = ['--'];
+	static operators = ['|/', '||/', '<<', '>>', '!=', '||'];
 
 	tokenizer() {
 		return new Tokenizer({
-			reservedKeywords: this.fullReservedWords,
-			reservedCommands,
-			reservedLogicalOperators: ['AND', 'OR'],
-			reservedDependentClauses,
-			reservedBinaryCommands,
-			stringTypes: [`""`, "''", '``'],
-			blockStart: ['('],
-			blockEnd: [')'],
-			indexedPlaceholderTypes: ['?'],
-			namedPlaceholderTypes: ['@', '#', '$'],
-			lineCommentTypes: ['--'],
-			operators: ['|/', '||/', '<<', '>>', '!=', '||'],
+			reservedCommands: RedshiftFormatter.reservedCommands,
+			reservedBinaryCommands: RedshiftFormatter.reservedBinaryCommands,
+			reservedDependentClauses: RedshiftFormatter.reservedDependentClauses,
+			reservedLogicalOperators: RedshiftFormatter.reservedLogicalOperators,
+			reservedKeywords: RedshiftFormatter.reservedKeywords,
+			stringTypes: RedshiftFormatter.stringTypes,
+			blockStart: RedshiftFormatter.blockStart,
+			blockEnd: RedshiftFormatter.blockEnd,
+			indexedPlaceholderTypes: RedshiftFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: RedshiftFormatter.namedPlaceholderTypes,
+			lineCommentTypes: RedshiftFormatter.lineCommentTypes,
+			operators: RedshiftFormatter.operators,
 		});
 	}
 }

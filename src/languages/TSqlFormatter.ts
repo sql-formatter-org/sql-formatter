@@ -1,5 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import type { StringPatternType } from '../core/regexFactory';
 
 /**
  * Priority 5 (last)
@@ -1228,42 +1229,54 @@ const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL'];
 
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export default class TSqlFormatter extends Formatter {
-	fullReservedWords = [
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR'];
+	static reservedKeywords = [
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
 		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
+	];
+	static stringTypes: StringPatternType[] = [`""`, "N''", "''", '[]'];
+	static blockStart = ['(', 'CASE'];
+	static blockEnd = [')', 'END'];
+	static indexedPlaceholderTypes = [];
+	static namedPlaceholderTypes = ['@'];
+	static lineCommentTypes = ['--'];
+	static specialWordChars = ['#', '@'];
+	static operators = [
+		'>=',
+		'<=',
+		'<>',
+		'!=',
+		'!<',
+		'!>',
+		'+=',
+		'-=',
+		'*=',
+		'/=',
+		'%=',
+		'|=',
+		'&=',
+		'^=',
+		'::',
 	];
 
 	tokenizer() {
 		return new Tokenizer({
-			reservedKeywords: this.fullReservedWords,
-			reservedCommands,
-			reservedLogicalOperators: ['AND', 'OR'],
-			reservedDependentClauses,
-			reservedBinaryCommands,
-			stringTypes: [`""`, "N''", "''", '[]'],
-			blockStart: ['(', 'CASE'],
-			blockEnd: [')', 'END'],
-			indexedPlaceholderTypes: [],
-			namedPlaceholderTypes: ['@'],
-			lineCommentTypes: ['--'],
-			specialWordChars: ['#', '@'],
-			operators: [
-				'>=',
-				'<=',
-				'<>',
-				'!=',
-				'!<',
-				'!>',
-				'+=',
-				'-=',
-				'*=',
-				'/=',
-				'%=',
-				'|=',
-				'&=',
-				'^=',
-				'::',
-			],
+			reservedCommands: TSqlFormatter.reservedCommands,
+			reservedBinaryCommands: TSqlFormatter.reservedBinaryCommands,
+			reservedDependentClauses: TSqlFormatter.reservedDependentClauses,
+			reservedLogicalOperators: TSqlFormatter.reservedLogicalOperators,
+			reservedKeywords: TSqlFormatter.reservedKeywords,
+			stringTypes: TSqlFormatter.stringTypes,
+			blockStart: TSqlFormatter.blockStart,
+			blockEnd: TSqlFormatter.blockEnd,
+			indexedPlaceholderTypes: TSqlFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: TSqlFormatter.namedPlaceholderTypes,
+			lineCommentTypes: TSqlFormatter.lineCommentTypes,
+			specialWordChars: TSqlFormatter.specialWordChars,
+			operators: TSqlFormatter.operators,
 			// TODO: Support for money constants
 		});
 	}

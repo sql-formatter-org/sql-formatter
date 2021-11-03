@@ -2,6 +2,7 @@ import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
 import { isLateral, Token } from '../core/token'; // convert to partial type import in TS 4.5
+import type { StringPatternType } from '../core/regexFactory';
 
 /**
  * Priority 5 (last)
@@ -1620,42 +1621,53 @@ const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL'];
 
 // https://www.postgresql.org/docs/14/index.html
 export default class PostgreSqlFormatter extends Formatter {
-	fullReservedWords = [
+	static reservedCommands = reservedCommands;
+	static reservedBinaryCommands = reservedBinaryCommands;
+	static reservedDependentClauses = reservedDependentClauses;
+	static reservedLogicalOperators = ['AND', 'OR'];
+	static reservedKeywords = [
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
 		...reservedKeywords,
+	];
+	static stringTypes: StringPatternType[] = [`""`, "''", "U&''", 'U&""', '$$'];
+	static blockStart = ['(', 'CASE'];
+	static blockEnd = [')', 'END'];
+	static indexedPlaceholderTypes = ['$'];
+	static namedPlaceholderTypes = [':'];
+	static lineCommentTypes = ['--'];
+	static operators = [
+		'!=',
+		'<<',
+		'>>',
+		'||/',
+		'|/',
+		'::',
+		'->>',
+		'->',
+		'~~*',
+		'~~',
+		'!~~*',
+		'!~~',
+		'~*',
+		'!~*',
+		'!~',
+		'!!',
 	];
 
 	tokenizer() {
 		return new Tokenizer({
-			reservedKeywords: this.fullReservedWords,
-			reservedCommands,
-			reservedLogicalOperators: ['AND', 'OR'],
-			reservedDependentClauses,
-			reservedBinaryCommands,
-			stringTypes: [`""`, "''", "U&''", 'U&""', '$$'],
-			blockStart: ['(', 'CASE'],
-			blockEnd: [')', 'END'],
-			indexedPlaceholderTypes: ['$'],
-			namedPlaceholderTypes: [':'],
-			lineCommentTypes: ['--'],
-			operators: [
-				'!=',
-				'<<',
-				'>>',
-				'||/',
-				'|/',
-				'::',
-				'->>',
-				'->',
-				'~~*',
-				'~~',
-				'!~~*',
-				'!~~',
-				'~*',
-				'!~*',
-				'!~',
-				'!!',
-			],
+			reservedCommands: PostgreSqlFormatter.reservedCommands,
+			reservedBinaryCommands: PostgreSqlFormatter.reservedBinaryCommands,
+			reservedDependentClauses: PostgreSqlFormatter.reservedDependentClauses,
+			reservedLogicalOperators: PostgreSqlFormatter.reservedLogicalOperators,
+			reservedKeywords: PostgreSqlFormatter.reservedKeywords,
+			stringTypes: PostgreSqlFormatter.stringTypes,
+			blockStart: PostgreSqlFormatter.blockStart,
+			blockEnd: PostgreSqlFormatter.blockEnd,
+			indexedPlaceholderTypes: PostgreSqlFormatter.indexedPlaceholderTypes,
+			namedPlaceholderTypes: PostgreSqlFormatter.namedPlaceholderTypes,
+			lineCommentTypes: PostgreSqlFormatter.lineCommentTypes,
+			operators: PostgreSqlFormatter.operators,
 		});
 	}
 
