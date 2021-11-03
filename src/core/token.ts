@@ -1,6 +1,20 @@
-import tokenTypes from './tokenTypes';
+export enum TokenType {
+	WORD = 'WORD',
+	STRING = 'STRING',
+	RESERVED_KEYWORD = 'RESERVED_KEYWORD',
+	RESERVED_LOGICAL_OPERATOR = 'RESERVED_LOGICAL_OPERATOR',
+	RESERVED_DEPENDENT_CLAUSE = 'RESERVED_DEPENDENT_CLAUSE',
+	RESERVED_BINARY_COMMAND = 'RESERVED_BINARY_COMMAND',
+	RESERVED_COMMAND = 'RESERVED_COMMAND',
+	OPERATOR = 'OPERATOR',
+	BLOCK_START = 'BLOCK_START',
+	BLOCK_END = 'BLOCK_END',
+	LINE_COMMENT = 'LINE_COMMENT',
+	BLOCK_COMMENT = 'BLOCK_COMMENT',
+	NUMBER = 'NUMBER',
+	PLACEHOLDER = 'PLACEHOLDER',
+}
 
-export type TokenType = typeof tokenTypes[keyof typeof tokenTypes];
 export interface Token {
 	value: string;
 	type: TokenType;
@@ -12,63 +26,33 @@ export const ZWS = '​'; // uses zero-width space (&#8203; / U+200B)
 const ZWS_REGEX = '\u200b';
 const spaces = `[${ZWS_REGEX}\\s]`;
 
-const isToken = (type: TokenType, regex: RegExp) => (token: Token) =>
-	token?.type === type && regex.test(token?.value);
+const testTokens = {
+	AS: TokenType.RESERVED_KEYWORD,
+	AND: TokenType.RESERVED_LOGICAL_OPERATOR,
+	BETWEEN: TokenType.RESERVED_KEYWORD,
+	CASE: TokenType.BLOCK_START,
+	BY: TokenType.RESERVED_KEYWORD,
+	END: TokenType.BLOCK_END,
+	FROM: TokenType.RESERVED_COMMAND,
+	LATERAL: TokenType.RESERVED_DEPENDENT_CLAUSE,
+	LIMIT: TokenType.RESERVED_COMMAND,
+	SELECT: TokenType.RESERVED_COMMAND,
+	SET: TokenType.RESERVED_COMMAND,
+	WINDOW: TokenType.RESERVED_COMMAND,
+};
 
-export const isAs = isToken(
-	tokenTypes.RESERVED_KEYWORD,
-	new RegExp(`^${spaces}*AS${spaces}*$`, 'iu')
-);
-export const isAnd = isToken(
-	tokenTypes.RESERVED_LOGICAL_OPERATOR,
-	new RegExp(`^${spaces}*AND${spaces}*$`, 'iu')
-);
-export const isBetween = isToken(
-	tokenTypes.RESERVED_KEYWORD,
-	new RegExp(`^${spaces}*BETWEEN${spaces}*$`, 'iu')
-);
-export const isCase = isToken(
-	tokenTypes.BLOCK_START,
-	new RegExp(`^${spaces}*CASE${spaces}*$`, 'iu')
-);
-export const isBy = isToken(
-	tokenTypes.RESERVED_KEYWORD,
-	new RegExp(`^${spaces}*BY${spaces}*$`, 'iu')
-);
-export const isEnd = isToken(tokenTypes.BLOCK_END, new RegExp(`^${spaces}*END${spaces}*$`, 'iu'));
-export const isFrom = isToken(
-	tokenTypes.RESERVED_COMMAND,
-	new RegExp(`^${spaces}*FROM${spaces}*$`, 'iu')
-);
-export const isLateral = isToken(
-	tokenTypes.RESERVED_DEPENDENT_CLAUSE,
-	new RegExp(`^${spaces}*LATERAL${spaces}*$`, 'iu')
-);
-export const isLimit = isToken(
-	tokenTypes.RESERVED_COMMAND,
-	new RegExp(`^${spaces}*LIMIT${spaces}*$`, 'iu')
-);
-export const isSelect = isToken(
-	tokenTypes.RESERVED_COMMAND,
-	new RegExp(`^${spaces}*SELECT${spaces}*$`, 'iu')
-);
-export const isSet = isToken(
-	tokenTypes.RESERVED_COMMAND,
-	new RegExp(`^${spaces}*SET${spaces}*$`, 'iu')
-);
-export const isWindow = isToken(
-	tokenTypes.RESERVED_COMMAND,
-	new RegExp(`^${spaces}*WINDOW${spaces}*$`, 'iu')
-);
+export const isToken = (testToken: keyof typeof testTokens) => (token: Token) =>
+	token?.type === testTokens[testToken] &&
+	new RegExp(`^${spaces}*${testToken}${spaces}*$`, 'iu').test(token?.value);
 
-export const isTopLevel = (token: Token) =>
+export const isCommand = (token: Token) =>
 	token &&
-	(token.type === tokenTypes.RESERVED_COMMAND || token.type === tokenTypes.RESERVED_BINARY_COMMAND);
+	(token.type === TokenType.RESERVED_COMMAND || token.type === TokenType.RESERVED_BINARY_COMMAND);
 
 export const isReserved = (token: Token) =>
 	token &&
-	(token.type === tokenTypes.RESERVED_KEYWORD ||
-		token.type === tokenTypes.RESERVED_LOGICAL_OPERATOR ||
-		token.type === tokenTypes.RESERVED_DEPENDENT_CLAUSE ||
-		token.type === tokenTypes.RESERVED_COMMAND ||
-		token.type === tokenTypes.RESERVED_BINARY_COMMAND);
+	(token.type === TokenType.RESERVED_KEYWORD ||
+		token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
+		token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
+		token.type === TokenType.RESERVED_COMMAND ||
+		token.type === TokenType.RESERVED_BINARY_COMMAND);

@@ -1,7 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
-import tokenTypes from '../core/tokenTypes';
-import { isEnd, isWindow, Token } from '../core/token'; // convert to partial type import in TS 4.5
+import { isToken, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
 import type { StringPatternType } from '../core/regexFactory';
 
 /**
@@ -812,24 +811,24 @@ export default class SparkSqlFormatter extends Formatter {
 
 	tokenOverride(token: Token) {
 		// Fix cases where names are ambiguously keywords or functions
-		if (isWindow(token)) {
+		if (isToken('WINDOW')(token)) {
 			const aheadToken = this.tokenLookAhead();
-			if (aheadToken?.type === tokenTypes.BLOCK_START) {
+			if (aheadToken?.type === TokenType.BLOCK_START) {
 				// This is a function call, treat it as a reserved word
-				return { type: tokenTypes.RESERVED_KEYWORD, value: token.value };
+				return { type: TokenType.RESERVED_KEYWORD, value: token.value };
 			}
 		}
 
-		if (isEnd(token)) {
+		if (isToken('END')(token)) {
 			const backToken = this.tokenLookBehind();
-			if (backToken?.type === tokenTypes.OPERATOR && backToken?.value === '.') {
+			if (backToken?.type === TokenType.OPERATOR && backToken?.value === '.') {
 				// This is window().end (or similar) not CASE ... END
-				return { type: tokenTypes.WORD, value: token.value };
+				return { type: TokenType.WORD, value: token.value };
 			}
 		}
 
 		// TODO: deprecate this once ITEMS is merged with COLLECTION
-		if (/ITEMS/i.test(token.value) && token.type === tokenTypes.RESERVED_KEYWORD) {
+		if (/ITEMS/i.test(token.value) && token.type === TokenType.RESERVED_KEYWORD) {
 			if (
 				!(
 					/COLLECTION/i.test(this.tokenLookBehind()?.value) &&
@@ -837,7 +836,7 @@ export default class SparkSqlFormatter extends Formatter {
 				)
 			) {
 				// this is a word and not COLLECTION ITEMS
-				return { type: tokenTypes.WORD, value: token.value };
+				return { type: TokenType.WORD, value: token.value };
 			}
 		}
 
