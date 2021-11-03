@@ -709,7 +709,7 @@ export default class RedshiftFormatter extends Formatter {
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''", '``'],
 			blockStart: ['('],
-			closeParens: [')'],
+			blockEnd: [')'],
 			indexedPlaceholderTypes: ['?'],
 			namedPlaceholderTypes: ['@', '#', '$'],
 			lineCommentTypes: ['--'],

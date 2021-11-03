@@ -434,7 +434,7 @@ export default class PlSqlFormatter extends Formatter {
 			reservedBinaryCommands,
 			stringTypes: [`""`, "N''", "''", '``'],
 			blockStart: ['(', 'CASE'],
-			closeParens: [')', 'END'],
+			blockEnd: [')', 'END'],
 			indexedPlaceholderTypes: ['?'],
 			namedPlaceholderTypes: [':'],
 			lineCommentTypes: ['--'],

@@ -13,7 +13,7 @@ export default {
 	RESERVED_BINARY_COMMAND: 'reserved-binary-command',
 	OPERATOR: 'operator',
 	BLOCK_START: 'block-start',
-	CLOSE_PAREN: 'close-paren',
+	BLOCK_END: 'block-end',
 	LINE_COMMENT: 'line-comment',
 	BLOCK_COMMENT: 'block-comment',
 	NUMBER: 'number',

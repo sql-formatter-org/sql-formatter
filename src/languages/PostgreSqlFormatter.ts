@@ -1614,7 +1614,7 @@ export default class PostgreSqlFormatter extends Formatter {
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''", "U&''", 'U&""', '$$'],
 			blockStart: ['(', 'CASE'],
-			closeParens: [')', 'END'],
+			blockEnd: [')', 'END'],
 			indexedPlaceholderTypes: ['$'],
 			namedPlaceholderTypes: [':'],
 			lineCommentTypes: ['--'],

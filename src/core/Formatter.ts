@@ -240,8 +240,8 @@ export default class Formatter {
 				}
 			} else if (token.type === tokenTypes.BLOCK_START) {
 				formattedQuery = this.formatBlockStart(token, formattedQuery);
-			} else if (token.type === tokenTypes.CLOSE_PAREN) {
-				formattedQuery = this.formatClosingParentheses(token, formattedQuery);
+			} else if (token.type === tokenTypes.BLOCK_END) {
+				formattedQuery = this.formatBlockEnd(token, formattedQuery);
 			} else if (token.type === tokenTypes.PLACEHOLDER) {
 				formattedQuery = this.formatPlaceholder(token, formattedQuery);
 			} else if (token.value === ',') {
@@ -326,7 +326,7 @@ export default class Formatter {
 				if (type === tokenTypes.BLOCK_START) {
 					return { ...acc, inParen: true };
 				} // don't count commas in functions
-				if (type === tokenTypes.CLOSE_PAREN) {
+				if (type === tokenTypes.BLOCK_END) {
 					return { ...acc, inParen: false };
 				}
 				return acc;
@@ -444,7 +444,7 @@ export default class Formatter {
 	}
 
 	// Closing parentheses decrease the block indent level
-	formatClosingParentheses(token: Token, query: string) {
+	formatBlockEnd(token: Token, query: string) {
 		if (this.inlineBlock.isActive()) {
 			this.inlineBlock.end();
 			return this.formatWithSpaces(token, query, 'after');
@@ -501,7 +501,7 @@ export default class Formatter {
 		if (
 			isReserved(token) ||
 			token.type === tokenTypes.BLOCK_START ||
-			token.type === tokenTypes.CLOSE_PAREN
+			token.type === tokenTypes.BLOCK_END
 		) {
 			return this.cfg.uppercase ? token.value.toUpperCase() : token.value.toLowerCase();
 		} else {

@@ -11,7 +11,7 @@ interface TokenizerOptions {
 	reservedBinaryCommands: string[];
 	stringTypes: regexFactory.StringPatternType[];
 	blockStart: string[];
-	closeParens: string[];
+	blockEnd: string[];
 	indexedPlaceholderTypes?: string[];
 	namedPlaceholderTypes: string[];
 	lineCommentTypes: string[];
@@ -47,7 +47,7 @@ export default class Tokenizer {
 	 *  @param {String[]} cfg.reservedBinaryCommands: Words that are top level but have no indentation
 	 *  @param {String[]} cfg.stringTypes: String types to enable: "", '', ``, [], N''
 	 *  @param {String[]} cfg.blockStart: Opening parentheses to enable, like (, [
-	 *  @param {String[]} cfg.closeParens: Closing parentheses to enable, like ), ]
+	 *  @param {String[]} cfg.blockEnd: Closing parentheses to enable, like ), ]
 	 *  @param {String[]} cfg.indexedPlaceholderTypes: Prefixes for indexed placeholders, like ?
 	 *  @param {String[]} cfg.namedPlaceholderTypes: Prefixes for named placeholders, like @ and :
 	 *  @param {String[]} cfg.lineCommentTypes: Line comments to enable, like # and --
@@ -85,7 +85,7 @@ export default class Tokenizer {
 		this.STRING_REGEX = regexFactory.createStringRegex(cfg.stringTypes);
 
 		this.OPEN_PAREN_REGEX = regexFactory.createParenRegex(cfg.blockStart);
-		this.CLOSE_PAREN_REGEX = regexFactory.createParenRegex(cfg.closeParens);
+		this.CLOSE_PAREN_REGEX = regexFactory.createParenRegex(cfg.blockEnd);
 
 		this.INDEXED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
 			cfg.indexedPlaceholderTypes ?? [],
@@ -142,7 +142,7 @@ export default class Tokenizer {
 		return (this.getCommentToken(input) ||
 			this.getStringToken(input) ||
 			this.getBlockStartToken(input) ||
-			this.getCloseParenToken(input) ||
+			this.getBlockEndToken(input) ||
 			this.getPlaceholderToken(input) ||
 			this.getNumberToken(input) ||
 			this.getReservedWordToken(input, previousToken) ||
@@ -186,10 +186,10 @@ export default class Tokenizer {
 		});
 	}
 
-	getCloseParenToken(input: string) {
+	getBlockEndToken(input: string) {
 		return this.getTokenOnFirstMatch({
 			input,
-			type: tokenTypes.CLOSE_PAREN,
+			type: tokenTypes.BLOCK_END,
 			regex: this.CLOSE_PAREN_REGEX,
 		});
 	}

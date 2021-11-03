@@ -35,7 +35,7 @@ export const isBy = isToken(
 	tokenTypes.RESERVED_KEYWORD,
 	new RegExp(`^${spaces}*BY${spaces}*$`, 'iu')
 );
-export const isEnd = isToken(tokenTypes.CLOSE_PAREN, new RegExp(`^${spaces}*END${spaces}*$`, 'iu'));
+export const isEnd = isToken(tokenTypes.BLOCK_END, new RegExp(`^${spaces}*END${spaces}*$`, 'iu'));
 export const isFrom = isToken(
 	tokenTypes.RESERVED_COMMAND,
 	new RegExp(`^${spaces}*FROM${spaces}*$`, 'iu')

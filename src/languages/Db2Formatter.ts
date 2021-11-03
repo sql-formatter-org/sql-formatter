@@ -850,7 +850,7 @@ export default class Db2Formatter extends Formatter {
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''", '``', '[]'],
 			blockStart: ['('],
-			closeParens: [')'],
+			blockEnd: [')'],
 			indexedPlaceholderTypes: ['?'],
 			namedPlaceholderTypes: [':'],
 			lineCommentTypes: ['--'],

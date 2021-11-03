@@ -742,6 +742,8 @@ const reservedBinaryCommands = [
 	'NATURAL RIGHT OUTER JOIN',
 	'NATURAL RIGHT SEMI JOIN',
 	'NATURAL SEMI JOIN',
+	'CROSS APPLY',
+	'OUTER APPLY',
 ];
 
 /**
@@ -768,7 +770,7 @@ export default class SparkSqlFormatter extends Formatter {
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''", '``', '{}'],
 			blockStart: ['(', 'CASE'],
-			closeParens: [')', 'END'],
+			blockEnd: [')', 'END'],
 			indexedPlaceholderTypes: ['?'],
 			namedPlaceholderTypes: ['$'],
 			lineCommentTypes: ['--'],
