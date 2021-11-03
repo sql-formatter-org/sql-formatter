@@ -1,7 +1,7 @@
-import tokenTypes from './tokenTypes';
 import * as regexFactory from './regexFactory';
 import { escapeRegExp } from '../utils';
-import type { Token, TokenType } from './token';
+import type { Token } from './token';
+import { TokenType } from './token';
 
 interface TokenizerOptions {
 	reservedKeywords: string[];
@@ -34,6 +34,7 @@ export default class Tokenizer {
 	STRING_REGEX: RegExp;
 	OPEN_PAREN_REGEX: RegExp;
 	CLOSE_PAREN_REGEX: RegExp;
+
 	INDEXED_PLACEHOLDER_REGEX?: RegExp;
 	IDENT_NAMED_PLACEHOLDER_REGEX?: RegExp;
 	STRING_NAMED_PLACEHOLDER_REGEX?: RegExp;
@@ -157,7 +158,7 @@ export default class Tokenizer {
 	getLineCommentToken(input: string) {
 		return this.getTokenOnFirstMatch({
 			input,
-			type: tokenTypes.LINE_COMMENT,
+			type: TokenType.LINE_COMMENT,
 			regex: this.LINE_COMMENT_REGEX,
 		});
 	}
@@ -165,7 +166,7 @@ export default class Tokenizer {
 	getBlockCommentToken(input: string) {
 		return this.getTokenOnFirstMatch({
 			input,
-			type: tokenTypes.BLOCK_COMMENT,
+			type: TokenType.BLOCK_COMMENT,
 			regex: this.BLOCK_COMMENT_REGEX,
 		});
 	}
@@ -173,7 +174,7 @@ export default class Tokenizer {
 	getStringToken(input: string) {
 		return this.getTokenOnFirstMatch({
 			input,
-			type: tokenTypes.STRING,
+			type: TokenType.STRING,
 			regex: this.STRING_REGEX,
 		});
 	}
@@ -181,7 +182,7 @@ export default class Tokenizer {
 	getBlockStartToken(input: string) {
 		return this.getTokenOnFirstMatch({
 			input,
-			type: tokenTypes.BLOCK_START,
+			type: TokenType.BLOCK_START,
 			regex: this.OPEN_PAREN_REGEX,
 		});
 	}
@@ -189,7 +190,7 @@ export default class Tokenizer {
 	getBlockEndToken(input: string) {
 		return this.getTokenOnFirstMatch({
 			input,
-			type: tokenTypes.BLOCK_END,
+			type: TokenType.BLOCK_END,
 			regex: this.CLOSE_PAREN_REGEX,
 		});
 	}
@@ -235,7 +236,7 @@ export default class Tokenizer {
 		regex?: RegExp;
 		parseKey: (k: string) => string;
 	}) {
-		const token = this.getTokenOnFirstMatch({ input, regex, type: tokenTypes.PLACEHOLDER });
+		const token = this.getTokenOnFirstMatch({ input, regex, type: TokenType.PLACEHOLDER });
 		if (token) {
 			token.key = parseKey(token.value);
 		}
@@ -250,7 +251,7 @@ export default class Tokenizer {
 	getNumberToken(input: string) {
 		return this.getTokenOnFirstMatch({
 			input,
-			type: tokenTypes.NUMBER,
+			type: TokenType.NUMBER,
 			regex: this.NUMBER_REGEX,
 		});
 	}
@@ -259,7 +260,7 @@ export default class Tokenizer {
 	getOperatorToken(input: string) {
 		return this.getTokenOnFirstMatch({
 			input,
-			type: tokenTypes.OPERATOR,
+			type: TokenType.OPERATOR,
 			regex: this.OPERATOR_REGEX,
 		});
 	}
@@ -272,16 +273,17 @@ export default class Tokenizer {
 		}
 
 		const reservedTokenMap = {
-			[tokenTypes.RESERVED_COMMAND]: this.RESERVED_COMMAND_REGEX,
-			[tokenTypes.RESERVED_BINARY_COMMAND]: this.RESERVED_BINARY_COMMAND_REGEX,
-			[tokenTypes.RESERVED_DEPENDENT_CLAUSE]: this.RESERVED_DEPENDENT_CLAUSE_REGEX,
-			[tokenTypes.RESERVED_LOGICAL_OPERATOR]: this.RESERVED_LOGICAL_OPERATOR_REGEX,
-			[tokenTypes.RESERVED_KEYWORD]: this.RESERVED_PLAIN_REGEX,
+			[TokenType.RESERVED_COMMAND]: this.RESERVED_COMMAND_REGEX,
+			[TokenType.RESERVED_BINARY_COMMAND]: this.RESERVED_BINARY_COMMAND_REGEX,
+			[TokenType.RESERVED_DEPENDENT_CLAUSE]: this.RESERVED_DEPENDENT_CLAUSE_REGEX,
+			[TokenType.RESERVED_LOGICAL_OPERATOR]: this.RESERVED_LOGICAL_OPERATOR_REGEX,
+			[TokenType.RESERVED_KEYWORD]: this.RESERVED_PLAIN_REGEX,
 		};
 
 		return Object.entries(reservedTokenMap).reduce(
 			(matchedToken, [tokenType, tokenRegex]) =>
-				matchedToken || this.getTokenOnFirstMatch({ input, type: tokenType, regex: tokenRegex }),
+				matchedToken ||
+				this.getTokenOnFirstMatch({ input, type: tokenType as TokenType, regex: tokenRegex }),
 			undefined as Token | undefined
 		);
 	}
@@ -289,7 +291,7 @@ export default class Tokenizer {
 	getWordToken(input: string) {
 		return this.getTokenOnFirstMatch({
 			input,
-			type: tokenTypes.WORD,
+			type: TokenType.WORD,
 			regex: this.WORD_REGEX,
 		});
 	}

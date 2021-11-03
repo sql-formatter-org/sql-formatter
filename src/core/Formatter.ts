@@ -1,4 +1,3 @@
-import tokenTypes from './tokenTypes';
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
@@ -15,6 +14,7 @@ import {
 	isSelect,
 	isTopLevel,
 	Token,
+	TokenType,
 	ZWS,
 } from './token';
 import Tokenizer from './Tokenizer';
@@ -211,7 +211,7 @@ export default class Formatter {
 			token = this.tokenOverride(token);
 			if (isReserved(token)) {
 				this.previousReservedToken = token;
-				if (token.type !== tokenTypes.RESERVED_KEYWORD) {
+				if (token.type !== TokenType.RESERVED_KEYWORD) {
 					token = this.tenSpacedToken(token);
 				}
 				if (isTopLevel(token)) {
@@ -219,30 +219,30 @@ export default class Formatter {
 				}
 			}
 
-			if (token.type === tokenTypes.LINE_COMMENT) {
+			if (token.type === TokenType.LINE_COMMENT) {
 				formattedQuery = this.formatLineComment(token, formattedQuery);
-			} else if (token.type === tokenTypes.BLOCK_COMMENT) {
+			} else if (token.type === TokenType.BLOCK_COMMENT) {
 				formattedQuery = this.formatBlockComment(token, formattedQuery);
-			} else if (token.type === tokenTypes.RESERVED_COMMAND) {
+			} else if (token.type === TokenType.RESERVED_COMMAND) {
 				this.currentNewline = this.checkNewline(index);
 				formattedQuery = this.formatCommand(token, formattedQuery);
-			} else if (token.type === tokenTypes.RESERVED_BINARY_COMMAND) {
+			} else if (token.type === TokenType.RESERVED_BINARY_COMMAND) {
 				formattedQuery = this.formatBinaryCommand(token, formattedQuery);
-			} else if (token.type === tokenTypes.RESERVED_DEPENDENT_CLAUSE) {
+			} else if (token.type === TokenType.RESERVED_DEPENDENT_CLAUSE) {
 				formattedQuery = this.formatLogicalOperator(token, formattedQuery);
-			} else if (token.type === tokenTypes.RESERVED_LOGICAL_OPERATOR) {
+			} else if (token.type === TokenType.RESERVED_LOGICAL_OPERATOR) {
 				formattedQuery = this.formatLogicalOperator(token, formattedQuery);
-			} else if (token.type === tokenTypes.RESERVED_KEYWORD) {
+			} else if (token.type === TokenType.RESERVED_KEYWORD) {
 				if (!(isAs(token) && this.cfg.aliasAs === AliasMode.never)) {
 					// do not format if skipping AS
 					formattedQuery = this.formatWithSpaces(token, formattedQuery);
 					this.previousReservedToken = token;
 				}
-			} else if (token.type === tokenTypes.BLOCK_START) {
+			} else if (token.type === TokenType.BLOCK_START) {
 				formattedQuery = this.formatBlockStart(token, formattedQuery);
-			} else if (token.type === tokenTypes.BLOCK_END) {
+			} else if (token.type === TokenType.BLOCK_END) {
 				formattedQuery = this.formatBlockEnd(token, formattedQuery);
-			} else if (token.type === tokenTypes.PLACEHOLDER) {
+			} else if (token.type === TokenType.PLACEHOLDER) {
 				formattedQuery = this.formatPlaceholder(token, formattedQuery);
 			} else if (token.value === ',') {
 				formattedQuery = this.formatComma(token, formattedQuery);
@@ -262,7 +262,7 @@ export default class Formatter {
 				(token.value === '`' && this.tokenLookBehind(2)?.value === '`')
 			) {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
-			} else if (token.type === tokenTypes.OPERATOR && this.cfg.denseOperators) {
+			} else if (token.type === TokenType.OPERATOR && this.cfg.denseOperators) {
 				formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
 			} else {
 				if (this.cfg.aliasAs !== AliasMode.never) {
@@ -277,18 +277,18 @@ export default class Formatter {
 	formatAliases(token: Token, query: string) {
 		const prevToken = this.tokenLookBehind();
 		const nextToken = this.tokenLookAhead();
-		const asToken = { type: tokenTypes.RESERVED_KEYWORD, value: this.cfg.uppercase ? 'AS' : 'as' };
+		const asToken = { type: TokenType.RESERVED_KEYWORD, value: this.cfg.uppercase ? 'AS' : 'as' };
 
 		const missingTableAlias = // if table alias is missing and alias is always
 			this.cfg.aliasAs === AliasMode.always &&
-			token.type === tokenTypes.WORD &&
+			token.type === TokenType.WORD &&
 			prevToken?.value === ')';
 
 		const missingSelectColumnAlias = // if select column alias is missing and alias is not never
 			this.withinSelect &&
-			token.type === tokenTypes.WORD &&
+			token.type === TokenType.WORD &&
 			(isEnd(prevToken) || // isAs(prevToken) ||
-				(prevToken?.type === tokenTypes.WORD &&
+				(prevToken?.type === TokenType.WORD &&
 					(nextToken?.value === ',' || isTopLevel(nextToken))));
 
 		if (missingTableAlias || missingSelectColumnAlias) {
@@ -300,7 +300,7 @@ export default class Formatter {
 	checkNewline = (index: number) => {
 		if (
 			this.newline.mode === NewlineMode.always ||
-			this.tokens.some(({ type, value }) => type === tokenTypes.BLOCK_START && value.length > 1) // auto break on CASE statements
+			this.tokens.some(({ type, value }) => type === TokenType.BLOCK_START && value.length > 1) // auto break on CASE statements
 		) {
 			return true;
 		}
@@ -312,9 +312,9 @@ export default class Formatter {
 			0,
 			tail.findIndex(
 				({ type }) =>
-					type === tokenTypes.RESERVED_COMMAND ||
-					type === tokenTypes.RESERVED_BINARY_COMMAND ||
-					type === tokenTypes.RESERVED_LOGICAL_OPERATOR
+					type === TokenType.RESERVED_COMMAND ||
+					type === TokenType.RESERVED_BINARY_COMMAND ||
+					type === TokenType.RESERVED_LOGICAL_OPERATOR
 			)
 		);
 
@@ -323,10 +323,10 @@ export default class Formatter {
 				if (value === ',' && !acc.inParen) {
 					return { ...acc, count: acc.count + 1 };
 				} // count commas between items in clause
-				if (type === tokenTypes.BLOCK_START) {
+				if (type === TokenType.BLOCK_START) {
 					return { ...acc, inParen: true };
 				} // don't count commas in functions
-				if (type === tokenTypes.BLOCK_END) {
+				if (type === TokenType.BLOCK_END) {
 					return { ...acc, inParen: false };
 				}
 				return acc;
@@ -419,10 +419,10 @@ export default class Formatter {
 		} else {
 			// Take out the preceding space unless there was whitespace there in the original query
 			// or another opening parens or line comment
-			const preserveWhitespaceFor = {
-				[tokenTypes.BLOCK_START]: true,
-				[tokenTypes.LINE_COMMENT]: true,
-				[tokenTypes.OPERATOR]: true,
+			const preserveWhitespaceFor: { [tokenType in TokenType]?: boolean } = {
+				[TokenType.BLOCK_START]: true,
+				[TokenType.LINE_COMMENT]: true,
+				[TokenType.OPERATOR]: true,
 			};
 			if (
 				token.whitespaceBefore?.length === 0 &&
@@ -500,8 +500,8 @@ export default class Formatter {
 	show(token: Token) {
 		if (
 			isReserved(token) ||
-			token.type === tokenTypes.BLOCK_START ||
-			token.type === tokenTypes.BLOCK_END
+			token.type === TokenType.BLOCK_START ||
+			token.type === TokenType.BLOCK_END
 		) {
 			return this.cfg.uppercase ? token.value.toUpperCase() : token.value.toLowerCase();
 		} else {
