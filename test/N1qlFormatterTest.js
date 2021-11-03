@@ -1,6 +1,8 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
+import N1qlFormatter from '../src/languages/N1qlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+
 import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
@@ -11,10 +13,10 @@ describe('N1qlFormatter', () => {
 	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'n1ql' });
 
 	behavesLikeSqlFormatter(format);
-	supportsStrings(format, ['""', "''", '``']);
+	supportsStrings(format, N1qlFormatter.stringTypes);
 	supportsBetween(format);
 	supportsSchema(format);
-	supportsOperators(format, ['%', '==', '!=']);
+	supportsOperators(format, N1qlFormatter.operators, N1qlFormatter.reservedLogicalOperators);
 	supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'] });
 
 	it('formats SELECT query with element selection expression', () => {

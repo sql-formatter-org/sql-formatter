@@ -1,7 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
-import tokenTypes from '../core/tokenTypes';
-import { isLateral, Token } from '../core/token'; // convert to partial type import in TS 4.5
+import { isToken, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
 import type { StringPatternType } from '../core/regexFactory';
 
 /**
@@ -1672,10 +1671,10 @@ export default class PostgreSqlFormatter extends Formatter {
 	}
 
 	tokenOverride(token: Token) {
-		if (isLateral(token)) {
-			if (this.tokenLookAhead()?.type === tokenTypes.BLOCK_START) {
+		if (isToken('LATERAL')(token)) {
+			if (this.tokenLookAhead()?.type === TokenType.BLOCK_START) {
 				// This is a subquery, treat it like a join
-				return { type: tokenTypes.RESERVED_LOGICAL_OPERATOR, value: token.value };
+				return { type: TokenType.RESERVED_LOGICAL_OPERATOR, value: token.value };
 			}
 		}
 

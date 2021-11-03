@@ -1,11 +1,10 @@
 import dedent from 'dedent-js';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
 import supportsAlterTable from './features/alterTable';
-import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
-import supportsOperators from './features/operators';
 import supportsJoin from './features/join';
 
 /**
@@ -17,23 +16,7 @@ export default function behavesLikeMariaDbFormatter(format) {
 	supportsCase(format);
 	supportsCreateTable(format);
 	supportsAlterTable(format);
-	supportsStrings(format, ['""', "''", '``']);
 	supportsBetween(format);
-	supportsOperators(format, [
-		'%',
-		'&',
-		'|',
-		'^',
-		'~',
-		'!=',
-		'!',
-		'<=>',
-		'<<',
-		'>>',
-		'&&',
-		'||',
-		':=',
-	]);
 	supportsJoin(format, {
 		without: ['FULL'],
 		additionally: [

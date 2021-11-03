@@ -1,6 +1,8 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
+import PostgreSqlFormatter from '../src/languages/PostgreSqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsCase from './features/case';
@@ -18,35 +20,14 @@ describe('PostgreSqlFormatter', () => {
 	supportsCase(format);
 	supportsCreateTable(format);
 	supportsAlterTable(format);
-	supportsStrings(format, ['""', "''", 'U&""', "U&''", '$$']);
+	supportsStrings(format, PostgreSqlFormatter.stringTypes);
 	supportsBetween(format);
 	supportsSchema(format);
-	supportsOperators(format, [
-		'%',
-		'^',
-		'!',
-		'!!',
-		'@',
-		'!=',
-		'&',
-		'|',
-		'~',
-		'#',
-		'<<',
-		'>>',
-		'||/',
-		'|/',
-		'::',
-		'->>',
-		'->',
-		'~~*',
-		'~~',
-		'!~~*',
-		'!~~',
-		'~*',
-		'!~*',
-		'!~',
-	]);
+	supportsOperators(
+		format,
+		PostgreSqlFormatter.operators,
+		PostgreSqlFormatter.reservedLogicalOperators
+	);
 	supportsJoin(format);
 
 	it('supports $n placeholders', () => {

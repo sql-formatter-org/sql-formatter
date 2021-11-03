@@ -1,5 +1,4 @@
-import { isCase, Token } from './token';
-import tokenTypes from './tokenTypes';
+import { isToken, Token, TokenType } from './token';
 
 /**
  * Bookkeeper for inline blocks.
@@ -65,9 +64,9 @@ export default class InlineBlock {
 			}
 
 			// CASE cannot start inline block
-			if (token.type === tokenTypes.BLOCK_START && !isCase(token)) {
+			if (token.type === TokenType.BLOCK_START && !isToken('CASE')(token)) {
 				level++;
-			} else if (token.type === tokenTypes.BLOCK_END) {
+			} else if (token.type === TokenType.BLOCK_END) {
 				level--;
 				if (level === 0) {
 					return true;
@@ -85,10 +84,10 @@ export default class InlineBlock {
 	// are not allowed inside inline parentheses block
 	isForbiddenToken({ type, value }: Token) {
 		return (
-			type === tokenTypes.RESERVED_COMMAND ||
-			type === tokenTypes.RESERVED_LOGICAL_OPERATOR ||
-			// type === tokenTypes.LINE_COMMENT ||
-			type === tokenTypes.BLOCK_COMMENT ||
+			type === TokenType.RESERVED_COMMAND ||
+			type === TokenType.RESERVED_LOGICAL_OPERATOR ||
+			// type === TokenType.LINE_COMMENT ||
+			type === TokenType.BLOCK_COMMENT ||
 			value === ';'
 		);
 	}

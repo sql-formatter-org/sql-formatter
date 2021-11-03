@@ -34,6 +34,7 @@ export interface FormatOptions {
 	uppercase: boolean;
 	keywordPosition: KeywordMode | keyof typeof KeywordMode;
 	newline: NewlineOptions;
+	breakBeforeBooleanOperator: boolean;
 	aliasAs: AliasMode | keyof typeof AliasMode;
 	tabulateAlias: boolean;
 	commaPosition: CommaPosition | keyof typeof CommaPosition;
@@ -56,6 +57,7 @@ export interface FormatOptions {
  *  @param {NewlineOptions} cfg.newline Determines when to break words onto a newline;
  *  	@param {NewlineMode} cfg.newline.mode always | never | lineWidth (break only when > line width) | itemCount (break when > itemCount) | hybrid (lineWidth OR itemCount)
  *  	@param {Integer} cfg.newline.itemCount Used when mode is itemCount or hybrid, must be >=0
+ *  @param {Boolean} cfg.breakBeforeBooleanOperator Break before boolean operator (AND, OR, XOR) ?
  *  @param {AliasMode} cfg.aliasAs Whether to use AS in column aliases in only SELECT clause, both SELECT and table aliases, or never
  *  @param {Boolean} cfg.tabulateAlias Whether to have alias following clause or aligned to right
  *  @param {CommaPosition} cfg.commaPosition Where to place the comma in listed clauses
@@ -114,6 +116,7 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 		uppercase: true,
 		keywordPosition: KeywordMode.standard,
 		newline: { mode: NewlineMode.always },
+		breakBeforeBooleanOperator: true,
 		aliasAs: AliasMode.select,
 		tabulateAlias: false,
 		commaPosition: CommaPosition.after,
