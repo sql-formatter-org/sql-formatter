@@ -21,19 +21,7 @@ interface TokenizerOptions {
 
 export default class Tokenizer {
 	WHITESPACE_REGEX: RegExp;
-	NUMBER_REGEX: RegExp;
-	OPERATOR_REGEX: RegExp;
-	BLOCK_COMMENT_REGEX: RegExp;
-	LINE_COMMENT_REGEX: RegExp;
-	RESERVED_PLAIN_REGEX: RegExp;
-	RESERVED_DEPENDENT_CLAUSE_REGEX: RegExp;
-	RESERVED_COMMAND_REGEX: RegExp;
-	RESERVED_LOGICAL_OPERATOR_REGEX: RegExp;
-	RESERVED_BINARY_COMMAND_REGEX: RegExp;
-	WORD_REGEX: RegExp;
-	STRING_REGEX: RegExp;
-	OPEN_PAREN_REGEX: RegExp;
-	CLOSE_PAREN_REGEX: RegExp;
+	REGEX_MAP: { [tokenType in Exclude<TokenType, TokenType.PLACEHOLDER>]: RegExp };
 
 	INDEXED_PLACEHOLDER_REGEX?: RegExp;
 	IDENT_NAMED_PLACEHOLDER_REGEX?: RegExp;
@@ -57,36 +45,34 @@ export default class Tokenizer {
 	 */
 	constructor(cfg: TokenizerOptions) {
 		this.WHITESPACE_REGEX = /^(\s+)/u;
-		this.NUMBER_REGEX =
-			/^((-\s*)?[0-9]+(\.[0-9]+)?([eE]-?[0-9]+(\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u;
 
-		this.OPERATOR_REGEX = regexFactory.createOperatorRegex([
-			'<>',
-			'<=',
-			'>=',
-			...(cfg.operators ?? []),
-		]);
-
-		this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/u;
-		this.LINE_COMMENT_REGEX = regexFactory.createLineCommentRegex(cfg.lineCommentTypes);
-
-		this.RESERVED_PLAIN_REGEX = regexFactory.createReservedWordRegex(cfg.reservedKeywords);
-		this.RESERVED_LOGICAL_OPERATOR_REGEX = regexFactory.createReservedWordRegex(
-			cfg.reservedLogicalOperators
-		);
-		this.RESERVED_DEPENDENT_CLAUSE_REGEX = regexFactory.createReservedWordRegex(
-			cfg.reservedDependentClauses ?? []
-		);
-		this.RESERVED_COMMAND_REGEX = regexFactory.createReservedWordRegex(cfg.reservedCommands);
-		this.RESERVED_BINARY_COMMAND_REGEX = regexFactory.createReservedWordRegex(
-			cfg.reservedBinaryCommands
-		);
-
-		this.WORD_REGEX = regexFactory.createWordRegex(cfg.specialWordChars);
-		this.STRING_REGEX = regexFactory.createStringRegex(cfg.stringTypes);
-
-		this.OPEN_PAREN_REGEX = regexFactory.createParenRegex(cfg.blockStart);
-		this.CLOSE_PAREN_REGEX = regexFactory.createParenRegex(cfg.blockEnd);
+		this.REGEX_MAP = {
+			[TokenType.WORD]: regexFactory.createWordRegex(cfg.specialWordChars),
+			[TokenType.STRING]: regexFactory.createStringRegex(cfg.stringTypes),
+			[TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(cfg.reservedKeywords),
+			[TokenType.RESERVED_DEPENDENT_CLAUSE]: regexFactory.createReservedWordRegex(
+				cfg.reservedDependentClauses ?? []
+			),
+			[TokenType.RESERVED_LOGICAL_OPERATOR]: regexFactory.createReservedWordRegex(
+				cfg.reservedLogicalOperators
+			),
+			[TokenType.RESERVED_COMMAND]: regexFactory.createReservedWordRegex(cfg.reservedCommands),
+			[TokenType.RESERVED_BINARY_COMMAND]: regexFactory.createReservedWordRegex(
+				cfg.reservedBinaryCommands
+			),
+			[TokenType.OPERATOR]: regexFactory.createOperatorRegex([
+				'<>',
+				'<=',
+				'>=',
+				...(cfg.operators ?? []),
+			]),
+			[TokenType.BLOCK_START]: regexFactory.createParenRegex(cfg.blockStart),
+			[TokenType.BLOCK_END]: regexFactory.createParenRegex(cfg.blockEnd),
+			[TokenType.LINE_COMMENT]: regexFactory.createLineCommentRegex(cfg.lineCommentTypes),
+			[TokenType.BLOCK_COMMENT]: /^(\/\*[^]*?(?:\*\/|$))/u,
+			[TokenType.NUMBER]:
+				/^((-\s*)?[0-9]+(\.[0-9]+)?([eE]-?[0-9]+(\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u,
+		};
 
 		this.INDEXED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
 			cfg.indexedPlaceholderTypes ?? [],
@@ -159,7 +145,7 @@ export default class Tokenizer {
 		return this.getTokenOnFirstMatch({
 			input,
 			type: TokenType.LINE_COMMENT,
-			regex: this.LINE_COMMENT_REGEX,
+			regex: this.REGEX_MAP[TokenType.LINE_COMMENT],
 		});
 	}
 
@@ -167,7 +153,7 @@ export default class Tokenizer {
 		return this.getTokenOnFirstMatch({
 			input,
 			type: TokenType.BLOCK_COMMENT,
-			regex: this.BLOCK_COMMENT_REGEX,
+			regex: this.REGEX_MAP[TokenType.BLOCK_COMMENT],
 		});
 	}
 
@@ -175,7 +161,7 @@ export default class Tokenizer {
 		return this.getTokenOnFirstMatch({
 			input,
 			type: TokenType.STRING,
-			regex: this.STRING_REGEX,
+			regex: this.REGEX_MAP[TokenType.STRING],
 		});
 	}
 
@@ -183,7 +169,7 @@ export default class Tokenizer {
 		return this.getTokenOnFirstMatch({
 			input,
 			type: TokenType.BLOCK_START,
-			regex: this.OPEN_PAREN_REGEX,
+			regex: this.REGEX_MAP[TokenType.BLOCK_START],
 		});
 	}
 
@@ -191,7 +177,7 @@ export default class Tokenizer {
 		return this.getTokenOnFirstMatch({
 			input,
 			type: TokenType.BLOCK_END,
-			regex: this.CLOSE_PAREN_REGEX,
+			regex: this.REGEX_MAP[TokenType.BLOCK_END],
 		});
 	}
 
@@ -252,7 +238,7 @@ export default class Tokenizer {
 		return this.getTokenOnFirstMatch({
 			input,
 			type: TokenType.NUMBER,
-			regex: this.NUMBER_REGEX,
+			regex: this.REGEX_MAP[TokenType.NUMBER],
 		});
 	}
 
@@ -261,7 +247,7 @@ export default class Tokenizer {
 		return this.getTokenOnFirstMatch({
 			input,
 			type: TokenType.OPERATOR,
-			regex: this.OPERATOR_REGEX,
+			regex: this.REGEX_MAP[TokenType.OPERATOR],
 		});
 	}
 
@@ -272,18 +258,18 @@ export default class Tokenizer {
 			return undefined;
 		}
 
-		const reservedTokenMap = {
-			[TokenType.RESERVED_COMMAND]: this.RESERVED_COMMAND_REGEX,
-			[TokenType.RESERVED_BINARY_COMMAND]: this.RESERVED_BINARY_COMMAND_REGEX,
-			[TokenType.RESERVED_DEPENDENT_CLAUSE]: this.RESERVED_DEPENDENT_CLAUSE_REGEX,
-			[TokenType.RESERVED_LOGICAL_OPERATOR]: this.RESERVED_LOGICAL_OPERATOR_REGEX,
-			[TokenType.RESERVED_KEYWORD]: this.RESERVED_PLAIN_REGEX,
-		};
+		const reservedTokenList: Exclude<TokenType, TokenType.PLACEHOLDER>[] = [
+			TokenType.RESERVED_COMMAND,
+			TokenType.RESERVED_BINARY_COMMAND,
+			TokenType.RESERVED_DEPENDENT_CLAUSE,
+			TokenType.RESERVED_LOGICAL_OPERATOR,
+			TokenType.RESERVED_KEYWORD,
+		];
 
-		return Object.entries(reservedTokenMap).reduce(
-			(matchedToken, [tokenType, tokenRegex]) =>
+		return reservedTokenList.reduce(
+			(matchedToken, tokenType) =>
 				matchedToken ||
-				this.getTokenOnFirstMatch({ input, type: tokenType as TokenType, regex: tokenRegex }),
+				this.getTokenOnFirstMatch({ input, type: tokenType, regex: this.REGEX_MAP[tokenType] }),
 			undefined as Token | undefined
 		);
 	}
@@ -292,7 +278,7 @@ export default class Tokenizer {
 		return this.getTokenOnFirstMatch({
 			input,
 			type: TokenType.WORD,
-			regex: this.WORD_REGEX,
+			regex: this.REGEX_MAP[TokenType.WORD],
 		});
 	}
 
