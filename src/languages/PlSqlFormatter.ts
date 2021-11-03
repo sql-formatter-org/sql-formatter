@@ -422,14 +422,12 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
 
-const reservedLogicalOperators = ['AND', 'OR', 'XOR'];
-
 export default class PlSqlFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
 			reservedKeywords,
 			reservedCommands,
-			reservedLogicalOperators,
+			reservedLogicalOperators: ['AND', 'OR', 'XOR'],
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "N''", "''", '``'],

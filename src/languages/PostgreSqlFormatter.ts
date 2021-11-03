@@ -1596,8 +1596,6 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL'];
 
-const reservedLogicalOperators = ['AND', 'OR'];
-
 // https://www.postgresql.org/docs/14/index.html
 export default class PostgreSqlFormatter extends Formatter {
 	fullReservedWords = [
@@ -1609,7 +1607,7 @@ export default class PostgreSqlFormatter extends Formatter {
 		return new Tokenizer({
 			reservedKeywords: this.fullReservedWords,
 			reservedCommands,
-			reservedLogicalOperators,
+			reservedLogicalOperators: ['AND', 'OR'],
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''", "U&''", 'U&""', '$$'],

@@ -832,8 +832,6 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF'];
 
-const reservedLogicalOperators = ['AND', 'OR'];
-
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
 	fullReservedWords = [
@@ -845,7 +843,7 @@ export default class Db2Formatter extends Formatter {
 		return new Tokenizer({
 			reservedKeywords: this.fullReservedWords,
 			reservedCommands,
-			reservedLogicalOperators,
+			reservedLogicalOperators: ['AND', 'OR'],
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''", '``', '[]'],

@@ -1204,8 +1204,6 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL'];
 
-const reservedLogicalOperators = ['AND', 'OR'];
-
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export default class TSqlFormatter extends Formatter {
 	fullReservedWords = [
@@ -1217,7 +1215,7 @@ export default class TSqlFormatter extends Formatter {
 		return new Tokenizer({
 			reservedKeywords: this.fullReservedWords,
 			reservedCommands,
-			reservedLogicalOperators,
+			reservedLogicalOperators: ['AND', 'OR'],
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "N''", "''", '[]'],

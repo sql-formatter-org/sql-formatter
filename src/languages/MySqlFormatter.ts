@@ -1286,15 +1286,13 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'LATERAL'];
 
-const reservedLogicalOperators = ['AND', 'OR', 'XOR'];
-
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
 			reservedKeywords: [...reservedKeywords, ...reservedFunctions],
 			reservedCommands,
-			reservedLogicalOperators,
+			reservedLogicalOperators: ['AND', 'OR', 'XOR'],
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: ['``', "''", '""'],

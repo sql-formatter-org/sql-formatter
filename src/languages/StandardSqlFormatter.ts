@@ -348,14 +348,12 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
 
-const reservedLogicalOperators = ['AND', 'OR'];
-
 export default class StandardSqlFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
 			reservedKeywords,
 			reservedCommands,
-			reservedLogicalOperators,
+			reservedLogicalOperators: ['AND', 'OR'],
 			reservedDependentClauses,
 			reservedBinaryCommands,
 			stringTypes: [`""`, "''"],
