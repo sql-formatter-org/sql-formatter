@@ -6,7 +6,7 @@
 export default {
 	WORD: 'word',
 	STRING: 'string',
-	RESERVED: 'reserved',
+	RESERVED_KEYWORD: 'reserved-keyword',
 	RESERVED_DEPENDENT_CLAUSE: 'reserved-dependent-clause',
 	RESERVED_LOGICAL_OPERATOR: 'reserved-logical-operator',
 	RESERVED_COMMAND: 'reserved-command',

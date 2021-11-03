@@ -348,7 +348,7 @@ const reservedFunctions = {
 };
 
 // https://deepkb.com/CO_000013/en/kb/IMPORT-fbfa59f0-2bf1-31fe-bb7b-0f9efe9932c6/spark-sql-keywords
-const reservedWords = [
+const reservedKeywords = [
 	'ADD',
 	'AFTER',
 	'ALL',
@@ -756,12 +756,12 @@ const reservedLogicalOperators = ['AND', 'OR', 'XOR'];
 export default class SparkSqlFormatter extends Formatter {
 	fullReservedWords = [
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-		...reservedWords,
+		...reservedKeywords,
 	];
 
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: this.fullReservedWords,
+			reservedKeywords: this.fullReservedWords,
 			reservedCommands,
 			reservedLogicalOperators,
 			reservedDependentClauses,
@@ -782,7 +782,7 @@ export default class SparkSqlFormatter extends Formatter {
 			const aheadToken = this.tokenLookAhead();
 			if (aheadToken?.type === tokenTypes.OPEN_PAREN) {
 				// This is a function call, treat it as a reserved word
-				return { type: tokenTypes.RESERVED, value: token.value };
+				return { type: tokenTypes.RESERVED_KEYWORD, value: token.value };
 			}
 		}
 
@@ -795,7 +795,7 @@ export default class SparkSqlFormatter extends Formatter {
 		}
 
 		// TODO: deprecate this once ITEMS is merged with COLLECTION
-		if (/ITEMS/i.test(token.value) && token.type === tokenTypes.RESERVED) {
+		if (/ITEMS/i.test(token.value) && token.type === tokenTypes.RESERVED_KEYWORD) {
 			if (
 				!(
 					/COLLECTION/i.test(this.tokenLookBehind()?.value) &&

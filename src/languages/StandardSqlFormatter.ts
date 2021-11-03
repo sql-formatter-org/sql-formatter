@@ -2,7 +2,7 @@ import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 
 // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#reserved-word
-const reservedWords = [
+const reservedKeywords = [
 	'ABS',
 	'ALL',
 	'ALLOCATE',
@@ -353,7 +353,7 @@ const reservedLogicalOperators = ['AND', 'OR'];
 export default class StandardSqlFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords,
+			reservedKeywords,
 			reservedCommands,
 			reservedLogicalOperators,
 			reservedDependentClauses,

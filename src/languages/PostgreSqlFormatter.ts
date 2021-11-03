@@ -718,7 +718,7 @@ const reservedFunctions = {
 };
 
 // https://www.postgresql.org/docs/14/sql-keywords-appendix.html
-const reservedWords = [
+const reservedKeywords = [
 	'ABSENT',
 	'ABSOLUTE',
 	'ACCESS',
@@ -1602,12 +1602,12 @@ const reservedLogicalOperators = ['AND', 'OR'];
 export default class PostgreSqlFormatter extends Formatter {
 	fullReservedWords = [
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-		...reservedWords,
+		...reservedKeywords,
 	];
 
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: this.fullReservedWords,
+			reservedKeywords: this.fullReservedWords,
 			reservedCommands,
 			reservedLogicalOperators,
 			reservedDependentClauses,

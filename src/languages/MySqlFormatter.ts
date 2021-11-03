@@ -431,7 +431,7 @@ const reservedFunctions = [
 ];
 
 // https://dev.mysql.com/doc/refman/8.0/en/keywords.html
-const reservedWords = [
+const reservedKeywords = [
 	'ACCESSIBLE',
 	'ACCOUNT',
 	'ACTION',
@@ -1292,7 +1292,7 @@ const reservedLogicalOperators = ['AND', 'OR', 'XOR'];
 export default class MySqlFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: [...reservedWords, ...reservedFunctions],
+			reservedKeywords: [...reservedKeywords, ...reservedFunctions],
 			reservedCommands,
 			reservedLogicalOperators,
 			reservedDependentClauses,

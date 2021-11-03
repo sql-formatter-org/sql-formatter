@@ -211,7 +211,7 @@ export default class Formatter {
 			token = this.tokenOverride(token);
 			if (isReserved(token)) {
 				this.previousReservedToken = token;
-				if (token.type !== tokenTypes.RESERVED) {
+				if (token.type !== tokenTypes.RESERVED_KEYWORD) {
 					token = this.tenSpacedToken(token);
 				}
 				if (isTopLevel(token)) {
@@ -232,7 +232,7 @@ export default class Formatter {
 				formattedQuery = this.formatLogicalOperator(token, formattedQuery);
 			} else if (token.type === tokenTypes.RESERVED_LOGICAL_OPERATOR) {
 				formattedQuery = this.formatLogicalOperator(token, formattedQuery);
-			} else if (token.type === tokenTypes.RESERVED) {
+			} else if (token.type === tokenTypes.RESERVED_KEYWORD) {
 				if (!(isAs(token) && this.cfg.aliasAs === AliasMode.never)) {
 					// do not format if skipping AS
 					formattedQuery = this.formatWithSpaces(token, formattedQuery);
@@ -277,7 +277,7 @@ export default class Formatter {
 	formatAliases(token: Token, query: string) {
 		const prevToken = this.tokenLookBehind();
 		const nextToken = this.tokenLookAhead();
-		const asToken = { type: tokenTypes.RESERVED, value: this.cfg.uppercase ? 'AS' : 'as' };
+		const asToken = { type: tokenTypes.RESERVED_KEYWORD, value: this.cfg.uppercase ? 'AS' : 'as' };
 
 		const missingTableAlias = // if table alias is missing and alias is always
 			this.cfg.aliasAs === AliasMode.always &&

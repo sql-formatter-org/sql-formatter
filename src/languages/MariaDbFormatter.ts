@@ -240,7 +240,7 @@ const reservedFunctions = [
 ];
 
 // https://mariadb.com/kb/en/information-schema-keywords-table/
-const reservedWords = [
+const reservedKeywords = [
 	'ACCESSIBLE',
 	'ACCOUNT',
 	'ACTION',
@@ -1131,7 +1131,7 @@ const reservedLogicalOperators = ['AND', 'OR', 'XOR'];
 export default class MariaDbFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: [...reservedWords, ...reservedFunctions],
+			reservedKeywords: [...reservedKeywords, ...reservedFunctions],
 			reservedCommands,
 			reservedLogicalOperators,
 			reservedDependentClauses,

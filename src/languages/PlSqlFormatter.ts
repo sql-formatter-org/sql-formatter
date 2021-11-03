@@ -3,7 +3,7 @@ import { isBy, isLateral, isSet, Token } from '../core/token'; // convert to par
 import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
 
-const reservedWords = [
+const reservedKeywords = [
 	// 'A',
 	'ACCESSIBLE',
 	'AGENT',
@@ -427,7 +427,7 @@ const reservedLogicalOperators = ['AND', 'OR', 'XOR'];
 export default class PlSqlFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords,
+			reservedKeywords,
 			reservedCommands,
 			reservedLogicalOperators,
 			reservedDependentClauses,
@@ -445,7 +445,7 @@ export default class PlSqlFormatter extends Formatter {
 
 	tokenOverride(token: Token) {
 		if (isSet(token) && isBy(this.previousReservedToken)) {
-			return { type: tokenTypes.RESERVED, value: token.value };
+			return { type: tokenTypes.RESERVED_KEYWORD, value: token.value };
 		}
 
 		if (isLateral(token)) {

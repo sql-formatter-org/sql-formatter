@@ -15,20 +15,26 @@ const spaces = `[${ZWS_REGEX}\\s]`;
 const isToken = (type: TokenType, regex: RegExp) => (token: Token) =>
 	token?.type === type && regex.test(token?.value);
 
-export const isAs = isToken(tokenTypes.RESERVED, new RegExp(`^${spaces}*AS${spaces}*$`, 'iu'));
+export const isAs = isToken(
+	tokenTypes.RESERVED_KEYWORD,
+	new RegExp(`^${spaces}*AS${spaces}*$`, 'iu')
+);
 export const isAnd = isToken(
 	tokenTypes.RESERVED_LOGICAL_OPERATOR,
 	new RegExp(`^${spaces}*AND${spaces}*$`, 'iu')
 );
 export const isBetween = isToken(
-	tokenTypes.RESERVED,
+	tokenTypes.RESERVED_KEYWORD,
 	new RegExp(`^${spaces}*BETWEEN${spaces}*$`, 'iu')
 );
 export const isCase = isToken(
 	tokenTypes.OPEN_PAREN,
 	new RegExp(`^${spaces}*CASE${spaces}*$`, 'iu')
 );
-export const isBy = isToken(tokenTypes.RESERVED, new RegExp(`^${spaces}*BY${spaces}*$`, 'iu'));
+export const isBy = isToken(
+	tokenTypes.RESERVED_KEYWORD,
+	new RegExp(`^${spaces}*BY${spaces}*$`, 'iu')
+);
 export const isEnd = isToken(tokenTypes.CLOSE_PAREN, new RegExp(`^${spaces}*END${spaces}*$`, 'iu'));
 export const isFrom = isToken(
 	tokenTypes.RESERVED_COMMAND,
@@ -61,7 +67,7 @@ export const isTopLevel = (token: Token) =>
 
 export const isReserved = (token: Token) =>
 	token &&
-	(token.type === tokenTypes.RESERVED ||
+	(token.type === tokenTypes.RESERVED_KEYWORD ||
 		token.type === tokenTypes.RESERVED_LOGICAL_OPERATOR ||
 		token.type === tokenTypes.RESERVED_DEPENDENT_CLAUSE ||
 		token.type === tokenTypes.RESERVED_COMMAND ||

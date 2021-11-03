@@ -306,7 +306,7 @@ const reservedFunctions = {
 	olap: ['FIRST_VALUE', 'LAG', 'LAST_VALUE', 'LEAD', 'NTH_VALUE', 'NTILE', 'RATIO_TO_REPORT'],
 };
 
-const reservedWords = {
+const reservedKeywords = {
 	// https://www.ibm.com/docs/en/db2-for-zos/11?topic=words-reserved#db2z_reservedwords__newresword
 	standard: [
 		'ALL',
@@ -838,12 +838,12 @@ const reservedLogicalOperators = ['AND', 'OR'];
 export default class Db2Formatter extends Formatter {
 	fullReservedWords = [
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-		...Object.values(reservedWords).reduce((acc, arr) => [...acc, ...arr], []),
+		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
 	];
 
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: this.fullReservedWords,
+			reservedKeywords: this.fullReservedWords,
 			reservedCommands,
 			reservedLogicalOperators,
 			reservedDependentClauses,

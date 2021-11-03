@@ -231,7 +231,7 @@ const reservedFunctions = [
 ];
 
 // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html
-const reservedWords = [
+const reservedKeywords = [
 	'ALL',
 	'ALTER',
 	'ANALYZE',
@@ -491,7 +491,7 @@ const reservedLogicalOperators = ['AND', 'OR', 'XOR'];
 export default class N1qlFormatter extends Formatter {
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: [...reservedWords, ...reservedFunctions],
+			reservedKeywords: [...reservedKeywords, ...reservedFunctions],
 			reservedCommands,
 			reservedLogicalOperators,
 			reservedDependentClauses,

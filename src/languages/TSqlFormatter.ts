@@ -303,7 +303,7 @@ const reservedFunctions = {
 
 // TODO: dedupe these reserved word lists
 // https://docs.microsoft.com/en-us/sql/t-sql/language-elements/reserved-keywords-transact-sql?view=sql-server-ver15
-const reservedWords = {
+const reservedKeywords = {
 	standard: [
 		'ADD',
 		'ALL',
@@ -1210,12 +1210,12 @@ const reservedLogicalOperators = ['AND', 'OR'];
 export default class TSqlFormatter extends Formatter {
 	fullReservedWords = [
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-		...Object.values(reservedWords).reduce((acc, arr) => [...acc, ...arr], []),
+		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
 	];
 
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: this.fullReservedWords,
+			reservedKeywords: this.fullReservedWords,
 			reservedCommands,
 			reservedLogicalOperators,
 			reservedDependentClauses,

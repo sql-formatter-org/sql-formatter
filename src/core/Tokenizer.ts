@@ -4,7 +4,7 @@ import { escapeRegExp } from '../utils';
 import type { Token, TokenType } from './token';
 
 interface TokenizerOptions {
-	reservedWords: string[];
+	reservedKeywords: string[];
 	reservedCommands: string[];
 	reservedLogicalOperators: string[];
 	reservedDependentClauses: string[];
@@ -40,7 +40,7 @@ export default class Tokenizer {
 
 	/**
 	 * @param {TokenizerOptions} cfg
-	 *  @param {String[]} cfg.reservedWords: Reserved words in SQL
+	 *  @param {String[]} cfg.reservedKeywords: Reserved words in SQL
 	 *  @param {String[]} cfg.reservedDependentClauses: Words that following a specific Statement and must have data attached
 	 *  @param {String[]} cfg.reservedLogicalOperators: Words that are set to newline
 	 *  @param {String[]} cfg.reservedCommands: Words that are set to new line separately
@@ -69,7 +69,7 @@ export default class Tokenizer {
 		this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/u;
 		this.LINE_COMMENT_REGEX = regexFactory.createLineCommentRegex(cfg.lineCommentTypes);
 
-		this.RESERVED_PLAIN_REGEX = regexFactory.createReservedWordRegex(cfg.reservedWords);
+		this.RESERVED_PLAIN_REGEX = regexFactory.createReservedWordRegex(cfg.reservedKeywords);
 		this.RESERVED_LOGICAL_OPERATOR_REGEX = regexFactory.createReservedWordRegex(
 			cfg.reservedLogicalOperators
 		);
@@ -276,7 +276,7 @@ export default class Tokenizer {
 			[tokenTypes.RESERVED_BINARY_COMMAND]: this.RESERVED_BINARY_COMMAND_REGEX,
 			[tokenTypes.RESERVED_DEPENDENT_CLAUSE]: this.RESERVED_DEPENDENT_CLAUSE_REGEX,
 			[tokenTypes.RESERVED_LOGICAL_OPERATOR]: this.RESERVED_LOGICAL_OPERATOR_REGEX,
-			[tokenTypes.RESERVED]: this.RESERVED_PLAIN_REGEX,
+			[tokenTypes.RESERVED_KEYWORD]: this.RESERVED_PLAIN_REGEX,
 		};
 
 		return Object.entries(reservedTokenMap).reduce(

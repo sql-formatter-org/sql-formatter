@@ -355,7 +355,7 @@ const reservedFunctions = {
 	],
 };
 
-const reservedWords = {
+const reservedKeywords = {
 	// https://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html
 	// duplicates are removed in favour of more specific categories
 	standard: [
@@ -697,12 +697,12 @@ const reservedLogicalOperators = ['AND', 'OR'];
 export default class RedshiftFormatter extends Formatter {
 	fullReservedWords = [
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-		...Object.values(reservedWords).reduce((acc, arr) => [...acc, ...arr], []),
+		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
 	];
 
 	tokenizer() {
 		return new Tokenizer({
-			reservedWords: this.fullReservedWords,
+			reservedKeywords: this.fullReservedWords,
 			reservedCommands,
 			reservedLogicalOperators,
 			reservedDependentClauses,
