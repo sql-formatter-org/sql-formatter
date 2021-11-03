@@ -108,7 +108,8 @@ describe('PlSqlFormatter', () => {
         b
       FROM
         t
-        CROSS APPLY fn(t.id)
+      CROSS APPLY
+      fn(t.id)
     `);
 	});
 
@@ -139,7 +140,8 @@ describe('PlSqlFormatter', () => {
         b
       FROM
         t
-        OUTER APPLY fn(t.id)
+      OUTER APPLY
+      fn(t.id)
     `);
 	});
 
