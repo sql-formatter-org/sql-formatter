@@ -4,7 +4,6 @@
 	"description": "Format whitespace in a SQL query to make it more readable",
 	"license": "MIT",
 	"main": "lib/sqlFormatter.js",
-	"types": "src/sqlFormatter.d.ts",
 	"bin": {
 		"sql-formatter": "./bin/sqlfmt.js"
 	},
@@ -66,7 +65,7 @@
 		"test:watch": "npm run test -- --watch",
 		"check": "npm run pretty:check && npm run lint && npm run test",
 		"build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
-		"build:commonjs": "babel src --out-dir lib",
+		"build:commonjs": "babel src --out-dir lib --extensions .ts",
 		"build:umd": "webpack --config webpack.dev.js",
 		"build:umd:min": "webpack --config webpack.prod.js",
 		"prepare": "npm run clean && npm run fix && npm run check && npm run build"
