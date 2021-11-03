@@ -1,9 +1,8 @@
 import * as regexFactory from './regexFactory';
 import { escapeRegExp } from '../utils';
-import type { Token } from './token';
-import { TokenType } from './token';
+import { Token, TokenType } from './token'; // convert to partial type import in TS 4.5
 
-const NULL_REGEX = /(?!)/;
+const NULL_REGEX = /(?!)/; // zero-width negative lookahead, matches nothing
 
 interface TokenizerOptions {
 	reservedKeywords: string[];
@@ -74,7 +73,7 @@ export default class Tokenizer {
 			[TokenType.BLOCK_COMMENT]: /^(\/\*[^]*?(?:\*\/|$))/u,
 			[TokenType.NUMBER]:
 				/^((-\s*)?[0-9]+(\.[0-9]+)?([eE]-?[0-9]+(\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u,
-			[TokenType.PLACEHOLDER]: NULL_REGEX,
+			[TokenType.PLACEHOLDER]: NULL_REGEX, // matches nothing
 		};
 
 		this.INDEXED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
