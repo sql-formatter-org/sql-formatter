@@ -409,16 +409,18 @@ export default class Formatter {
 		} else {
 			// Take out the preceding space unless there was whitespace there in the original query
 			// or another opening parens or line comment
-			const preserveWhitespaceFor: { [tokenType in TokenType]?: boolean } = {
-				[TokenType.BLOCK_START]: true,
-				[TokenType.LINE_COMMENT]: true,
-				[TokenType.OPERATOR]: true,
-			};
+			const preserveWhitespaceFor = [
+				TokenType.BLOCK_START,
+				TokenType.LINE_COMMENT,
+				TokenType.OPERATOR,
+			];
 			if (
 				token.whitespaceBefore?.length === 0 &&
-				!preserveWhitespaceFor[this.tokenLookBehind()?.type]
+				!preserveWhitespaceFor.includes(this.tokenLookBehind()?.type)
 			) {
 				query = trimSpacesEnd(query);
+			} else if (!this.cfg.parenOptions.openParenNewline) {
+				query = query.trimEnd() + ' ';
 			}
 			query += this.show(token);
 			this.inlineBlock.beginIfPossible(this.tokens, this.index);
@@ -440,10 +442,15 @@ export default class Formatter {
 			return this.formatWithSpaces(token, query, 'after');
 		} else {
 			this.indentation.decreaseBlockLevel();
-			query = this.addNewline(query);
+
 			if (this.cfg.tenSpace) {
-				query += this.cfg.indent;
+				query = this.addNewline(query) + this.cfg.indent;
+			} else if (this.cfg.parenOptions.closeParenNewline) {
+				query = this.addNewline(query);
+			} else {
+				query = query.trimEnd() + ' ';
 			}
+
 			return this.formatWithSpaces(token, query);
 		}
 	}

@@ -27,3 +27,10 @@ export enum CommaPosition {
 	after = 'after',
 	tabular = 'tabular',
 }
+
+export interface ParenOptions {
+	openParenNewline: boolean;
+	closeParenNewline: boolean;
+	// reservedFunctionParens: boolean;
+	// functionParenSpace: boolean;
+}

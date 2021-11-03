@@ -11,7 +11,7 @@ import StandardSqlFormatter from './languages/StandardSqlFormatter';
 import TSqlFormatter from './languages/TSqlFormatter';
 
 import type { NewlineOptions } from './types';
-import { AliasMode, CommaPosition, KeywordMode, NewlineMode } from './types';
+import { AliasMode, CommaPosition, KeywordMode, NewlineMode, ParenOptions } from './types';
 
 export const formatters = {
 	db2: Db2Formatter,
@@ -36,8 +36,9 @@ export interface FormatOptions {
 	newline: NewlineOptions;
 	breakBeforeBooleanOperator: boolean;
 	aliasAs: AliasMode | keyof typeof AliasMode;
-	commaPosition: CommaPosition | keyof typeof CommaPosition;
 	tabulateAlias: boolean;
+	commaPosition: CommaPosition | keyof typeof CommaPosition;
+	parenOptions: ParenOptions;
 	lineWidth: number;
 	linesBetweenQueries: number;
 	denseOperators: boolean;
@@ -58,8 +59,13 @@ export interface FormatOptions {
  *  	@param {Integer} cfg.newline.itemCount Used when mode is itemCount or hybrid, must be >=0
  *  @param {Boolean} cfg.breakBeforeBooleanOperator Break before boolean operator (AND, OR, XOR) ?
  *  @param {AliasMode} cfg.aliasAs Whether to use AS in column aliases in only SELECT clause, both SELECT and table aliases, or never
- *  @param {CommaPosition} cfg.commaPosition Where to place the comma in listed clauses
  *  @param {Boolean} cfg.tabulateAlias Whether to have alias following clause or aligned to right
+ *  @param {CommaPosition} cfg.commaPosition Where to place the comma in listed clauses
+ *  @param {ParenOptions} cfg.parenOptions Various options for parentheses
+ *  	@param {Boolean} cfg.parenOptions.openParenNewline Whether to place opening parenthesis on same line or newline
+ *  	@param {Boolean} cfg.parenOptions.closeParenNewline Whether to place closing parenthesis on same line or newline
+ *  //	@param {Boolean} cfg.parenOptions.reservedFunctionParens Whether to use parenthesis for reserved functions such as COUNT
+ *  //	@param {Boolean} cfg.parenOptions.functionParenSpace Whether to add space before reserved function parens
  *  @param {Integer} cfg.lineWidth Number of characters in each line before breaking, default: 50
  *  @param {Integer} cfg.linesBetweenQueries How many line breaks between queries
  *  @param {Boolean} cfg.denseOperators whether to format operators with spaces
@@ -112,14 +118,24 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 		newline: { mode: NewlineMode.always },
 		breakBeforeBooleanOperator: true,
 		aliasAs: AliasMode.select,
-		commaPosition: CommaPosition.after,
 		tabulateAlias: false,
+		commaPosition: CommaPosition.after,
+		parenOptions: {
+			openParenNewline: true,
+			closeParenNewline: true,
+			// reservedFunctionParens: true,
+			// functionParenSpace: false,
+		},
 		lineWidth: 50,
 		linesBetweenQueries: 1,
 		denseOperators: false,
 		semicolonNewline: false,
 	};
-	cfg = { ...defaultOptions, ...cfg };
+	cfg = {
+		...defaultOptions,
+		...cfg,
+		parenOptions: { ...defaultOptions.parenOptions, ...cfg.parenOptions },
+	};
 
 	const Formatter = formatters[cfg.language!];
 	return new Formatter(cfg as FormatOptions).format(query);
