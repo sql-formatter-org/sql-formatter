@@ -1,6 +1,8 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
+import PlSqlFormatter from '../src/languages/PlSqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+
 import supportsAlterTable from './features/alterTable';
 import supportsAlterTableModify from './features/alterTableModify';
 import supportsBetween from './features/between';
@@ -19,10 +21,10 @@ describe('PlSqlFormatter', () => {
 	supportsCreateTable(format);
 	supportsAlterTable(format);
 	supportsAlterTableModify(format);
-	supportsStrings(format, ['""', "''", '``']);
+	supportsStrings(format, PlSqlFormatter.stringTypes);
 	supportsBetween(format);
 	supportsSchema(format);
-	supportsOperators(format, ['||', '**', '!=', ':=']);
+	supportsOperators(format, PlSqlFormatter.operators, PlSqlFormatter.reservedLogicalOperators);
 	supportsJoin(format);
 
 	it('formats FETCH FIRST like LIMIT', () => {

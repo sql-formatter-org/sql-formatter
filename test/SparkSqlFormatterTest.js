@@ -1,6 +1,8 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
+import SparkSqlFormatter from '../src/languages/SparkSqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsCase from './features/case';
@@ -17,10 +19,14 @@ describe('SparkSqlFormatter', () => {
 	supportsCase(format);
 	supportsCreateTable(format);
 	supportsAlterTable(format);
-	supportsStrings(format, ['""', "''", '``']);
+	supportsStrings(format, SparkSqlFormatter.stringTypes);
 	supportsBetween(format);
 	supportsSchema(format);
-	supportsOperators(format, ['!=', '%', '|', '&', '^', '~', '!', '<=>', '%', '&&', '||', '==']);
+	supportsOperators(
+		format,
+		SparkSqlFormatter.operators,
+		SparkSqlFormatter.reservedLogicalOperators
+	);
 	supportsJoin(format, {
 		additionally: [
 			'ANTI JOIN',

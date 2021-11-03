@@ -1,5 +1,7 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
+import Db2Formatter from '../src/languages/Db2Formatter';
+
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
@@ -15,10 +17,10 @@ describe('Db2Formatter', () => {
 	behavesLikeSqlFormatter(format);
 	supportsCreateTable(format);
 	supportsAlterTable(format);
-	supportsStrings(format, ['""', "''", '``']);
+	supportsStrings(format, Db2Formatter.stringTypes);
 	supportsBetween(format);
 	supportsSchema(format);
-	supportsOperators(format, ['%', '**', '!=', '!>', '!>', '||']);
+	supportsOperators(format, Db2Formatter.operators, Db2Formatter.reservedLogicalOperators);
 	supportsJoin(format);
 
 	it('formats FETCH FIRST like LIMIT', () => {
