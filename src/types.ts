@@ -31,6 +31,6 @@ export enum CommaPosition {
 export interface ParenOptions {
 	openParenNewline: boolean;
 	closeParenNewline: boolean;
-	reservedFunctionParens: boolean;
-	functionParenSpace: boolean;
+	// reservedFunctionParens: boolean;
+	// functionParenSpace: boolean;
 }
