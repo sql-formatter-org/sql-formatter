@@ -24,11 +24,19 @@ export const isBetween = isToken(
 	tokenTypes.RESERVED,
 	new RegExp(`^${spaces}*BETWEEN${spaces}*$`, 'iu')
 );
+export const isCase = isToken(
+	tokenTypes.OPEN_PAREN,
+	new RegExp(`^${spaces}*CASE${spaces}*$`, 'iu')
+);
 export const isBy = isToken(tokenTypes.RESERVED, new RegExp(`^${spaces}*BY${spaces}*$`, 'iu'));
 export const isEnd = isToken(tokenTypes.CLOSE_PAREN, new RegExp(`^${spaces}*END${spaces}*$`, 'iu'));
 export const isFrom = isToken(
 	tokenTypes.RESERVED_TOP_LEVEL,
 	new RegExp(`^${spaces}*FROM${spaces}*$`, 'iu')
+);
+export const isLateral = isToken(
+	tokenTypes.RESERVED_DEPENDENT_CLAUSE,
+	new RegExp(`^${spaces}*LATERAL${spaces}*$`, 'iu')
 );
 export const isLimit = isToken(
 	tokenTypes.RESERVED_TOP_LEVEL,
@@ -56,5 +64,6 @@ export const isReserved = (token: Token) =>
 	token &&
 	(token.type === tokenTypes.RESERVED ||
 		token.type === tokenTypes.RESERVED_NEWLINE ||
+		token.type === tokenTypes.RESERVED_DEPENDENT_CLAUSE ||
 		token.type === tokenTypes.RESERVED_TOP_LEVEL ||
 		token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT);

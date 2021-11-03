@@ -80,7 +80,7 @@ describe('RedshiftFormatter', () => {
     `);
 	});
 
-	it('formats COPY', () => {
+	it.skip('formats COPY', () => {
 		expect(
 			format(
 				`

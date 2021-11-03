@@ -130,7 +130,9 @@ export default function behavesLikeSqlFormatter(format) {
 		const result = format('LIMIT 5 OFFSET 8;');
 		expect(result).toBe(dedent`
       LIMIT
-        5 OFFSET 8;
+        5
+      OFFSET
+        8;
     `);
 	});
 
@@ -194,16 +196,17 @@ export default function behavesLikeSqlFormatter(format) {
 			'WITH TestIds AS (VALUES (4),(5), (6),(7),(9),(10),(11)) SELECT * FROM TestIds;'
 		);
 		expect(result).toBe(dedent/* sql */ `
-      WITH TestIds AS (
-        VALUES
-          (4),
-          (5),
-          (6),
-          (7),
-          (9),
-          (10),
-          (11)
-      )
+      WITH
+        TestIds AS (
+          VALUES
+            (4),
+            (5),
+            (6),
+            (7),
+            (9),
+            (10),
+            (11)
+        )
       SELECT
         *
       FROM
@@ -269,7 +272,8 @@ export default function behavesLikeSqlFormatter(format) {
 	it('formats simple DELETE query', () => {
 		const result = format("DELETE FROM Customers WHERE CustomerName='Alfred' AND Phone=5002132;");
 		expect(result).toBe(dedent`
-      DELETE FROM
+      DELETE
+      FROM
         Customers
       WHERE
         CustomerName = 'Alfred'
@@ -279,7 +283,10 @@ export default function behavesLikeSqlFormatter(format) {
 
 	it('formats simple DROP query', () => {
 		const result = format('DROP TABLE IF EXISTS admin_role;');
-		expect(result).toBe('DROP TABLE IF EXISTS admin_role;');
+		expect(result).toBe(dedent`
+      DROP TABLE
+        IF EXISTS admin_role;
+		`);
 	});
 
 	it('formats incomplete query', () => {
@@ -390,18 +397,19 @@ export default function behavesLikeSqlFormatter(format) {
 	it('correctly indents create statement after select', () => {
 		const result = format(`
       SELECT * FROM test;
-      CREATE TABLE TEST(id NUMBER NOT NULL, col1 VARCHAR2(20), col2 VARCHAR2(20));
+      CREATE TABLE test(id NUMBER NOT NULL, col1 VARCHAR2(20), col2 VARCHAR2(20));
     `);
 		expect(result).toBe(dedent`
       SELECT
         *
       FROM
         test;
-      CREATE TABLE TEST(
-        id NUMBER NOT NULL,
-        col1 VARCHAR2(20),
-        col2 VARCHAR2(20)
-      );
+      CREATE TABLE
+        test(
+          id NUMBER NOT NULL,
+          col1 VARCHAR2(20),
+          col2 VARCHAR2(20)
+        );
     `);
 	});
 

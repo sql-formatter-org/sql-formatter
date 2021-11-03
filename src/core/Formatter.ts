@@ -7,6 +7,7 @@ import {
 	isAnd,
 	isAs,
 	isBetween,
+	isCase,
 	isEnd,
 	isFrom,
 	isLimit,
@@ -227,6 +228,8 @@ export default class Formatter {
 				formattedQuery = this.formatTopLevelReservedWord(token, formattedQuery);
 			} else if (token.type === tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT) {
 				formattedQuery = this.formatTopLevelReservedWordNoIndent(token, formattedQuery);
+			} else if (token.type === tokenTypes.RESERVED_DEPENDENT_CLAUSE) {
+				formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
 			} else if (token.type === tokenTypes.RESERVED_NEWLINE) {
 				formattedQuery = this.formatNewlineReservedWord(token, formattedQuery);
 			} else if (token.type === tokenTypes.RESERVED) {
@@ -407,26 +410,31 @@ export default class Formatter {
 
 	// Opening parentheses increase the block indent level and start a new line
 	formatOpeningParentheses(token: Token, query: string) {
-		// Take out the preceding space unless there was whitespace there in the original query
-		// or another opening parens or line comment
-		const preserveWhitespaceFor = {
-			[tokenTypes.OPEN_PAREN]: true,
-			[tokenTypes.LINE_COMMENT]: true,
-			[tokenTypes.OPERATOR]: true,
-		};
-		if (
-			token.whitespaceBefore?.length === 0 &&
-			!preserveWhitespaceFor[this.tokenLookBehind()?.type]
-		) {
-			query = trimSpacesEnd(query);
+		if (isCase(token)) {
+			query = this.formatWithSpaces(token, query);
+		} else {
+			// Take out the preceding space unless there was whitespace there in the original query
+			// or another opening parens or line comment
+			const preserveWhitespaceFor = {
+				[tokenTypes.OPEN_PAREN]: true,
+				[tokenTypes.LINE_COMMENT]: true,
+				[tokenTypes.OPERATOR]: true,
+			};
+			if (
+				token.whitespaceBefore?.length === 0 &&
+				!preserveWhitespaceFor[this.tokenLookBehind()?.type]
+			) {
+				query = trimSpacesEnd(query);
+			}
+			query += this.show(token);
+			this.inlineBlock.beginIfPossible(this.tokens, this.index);
 		}
-		query += this.show(token);
-
-		this.inlineBlock.beginIfPossible(this.tokens, this.index);
 
 		if (!this.inlineBlock.isActive()) {
 			this.indentation.increaseBlockLevel();
-			query = this.addNewline(query);
+			if (!isCase(token) || this.newline.mode === NewlineMode.always) {
+				query = this.addNewline(query);
+			}
 		}
 		return query;
 	}

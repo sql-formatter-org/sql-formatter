@@ -1,4 +1,5 @@
 import dedent from 'dedent-js';
+import { NewlineMode } from '../../src/types';
 
 /**
  * Tests support for CREATE TABLE syntax
@@ -6,9 +7,11 @@ import dedent from 'dedent-js';
  */
 export default function supportsCreateTable(format) {
 	it('formats short CREATE TABLE', () => {
-		expect(format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT);')).toBe(
-			'CREATE TABLE items (a INT PRIMARY KEY, b TEXT);'
-		);
+		expect(
+			format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT);', {
+				newline: { mode: NewlineMode.never },
+			})
+		).toBe('CREATE TABLE items (a INT PRIMARY KEY, b TEXT);');
 	});
 
 	// The decision to place it to multiple lines is made based on the length of text inside braces
@@ -17,12 +20,13 @@ export default function supportsCreateTable(format) {
 		expect(
 			format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, doggie INT NOT NULL);')
 		).toBe(dedent`
-      CREATE TABLE items (
-        a INT PRIMARY KEY,
-        b TEXT,
-        c INT NOT NULL,
-        doggie INT NOT NULL
-      );
+      CREATE TABLE
+        items (
+          a INT PRIMARY KEY,
+          b TEXT,
+          c INT NOT NULL,
+          doggie INT NOT NULL
+        );
     `);
 	});
 }

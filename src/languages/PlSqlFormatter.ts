@@ -1,5 +1,5 @@
 import Formatter from '../core/Formatter';
-import { isBy, isSet, Token } from '../core/token'; // convert to partial type import in TS 4.5
+import { isBy, isLateral, isSet, Token } from '../core/token'; // convert to partial type import in TS 4.5
 import Tokenizer from '../core/Tokenizer';
 import tokenTypes from '../core/tokenTypes';
 
@@ -36,7 +36,6 @@ const reservedWords = [
 	'CALL',
 	'CALLING',
 	'CASCADE',
-	'CASE',
 	'CHAR',
 	'CHARACTER',
 	'CHARSET',
@@ -80,7 +79,6 @@ const reservedWords = [
 	'DECIMAL',
 	'DEFAULT',
 	'DEFINE',
-	'DELETE',
 	'DEPTH',
 	'DESC',
 	'DETERMINISTIC',
@@ -93,7 +91,6 @@ const reservedWords = [
 	'ELEMENT',
 	'ELSIF',
 	'EMPTY',
-	'END',
 	'ESCAPE',
 	'EXCEPTIONS',
 	'EXCLUSIVE',
@@ -112,7 +109,6 @@ const reservedWords = [
 	'FOR',
 	'FORALL',
 	'FORCE',
-	'FROM',
 	'FUNCTION',
 	'GENERAL',
 	'GOTO',
@@ -308,7 +304,6 @@ const reservedWords = [
 	'TABLE',
 	'TDO',
 	'THE',
-	'THEN',
 	'TIME',
 	'TIMESTAMP',
 	'TIMEZONE_ABBR',
@@ -349,7 +344,6 @@ const reservedWords = [
 	'VOID',
 	'WHENEVER',
 	'WHILE',
-	'WITH',
 	'WORK',
 	'WRAPPED',
 	'WRITE',
@@ -363,8 +357,10 @@ const reservedTopLevelWords = [
 	'ALTER TABLE',
 	'BEGIN',
 	'CONNECT BY',
+	'CREATE TABLE', // verify
+	'DROP TABLE', // verify
 	'DECLARE',
-	'DELETE FROM',
+	// 'DELETE FROM', // disabled
 	'DELETE',
 	'END',
 	'EXCEPT',
@@ -376,6 +372,7 @@ const reservedTopLevelWords = [
 	'INSERT INTO',
 	'INSERT',
 	'LIMIT',
+	'OFFSET',
 	'LOOP',
 	'MODIFY',
 	'ORDER BY',
@@ -387,20 +384,36 @@ const reservedTopLevelWords = [
 	'UPDATE',
 	'VALUES',
 	'WHERE',
+	'WITH',
 ];
 
-const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'UNION', 'UNION ALL'];
+const reservedTopLevelWordsNoIndent = [
+	'INTERSECT',
+	'INTERSECT ALL',
+	'INTERSECT DISTINCT',
+	'UNION',
+	'UNION ALL',
+	'UNION DISTINCT',
+	'EXCEPT',
+	'EXCEPT ALL',
+	'EXCEPT DISTINCT',
+	'MINUS',
+	'MINUS ALL',
+	'MINUS DISTINCT',
+];
+
+/**
+ * keywords that follow a previous Statement, must be attached to subsequent data
+ * can be fully inline or on newline with optional indent
+ */
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
 
 const reservedNewlineWords = [
 	'AND',
-	'CROSS APPLY',
-	'ELSE',
-	'END',
-	'ON',
 	'OR',
-	'OUTER APPLY',
-	'WHEN',
 	'XOR',
+	'CROSS APPLY',
+	'OUTER APPLY',
 	// joins
 	'JOIN',
 	'INNER JOIN',
@@ -420,6 +433,7 @@ export default class PlSqlFormatter extends Formatter {
 			reservedWords,
 			reservedTopLevelWords,
 			reservedNewlineWords,
+			reservedDependentClauses,
 			reservedTopLevelWordsNoIndent,
 			stringTypes: [`""`, "N''", "''", '``'],
 			openParens: ['(', 'CASE'],
@@ -436,6 +450,14 @@ export default class PlSqlFormatter extends Formatter {
 		if (isSet(token) && isBy(this.previousReservedToken)) {
 			return { type: tokenTypes.RESERVED, value: token.value };
 		}
+
+		if (isLateral(token)) {
+			if (this.tokenLookAhead()?.type === tokenTypes.OPEN_PAREN) {
+				// This is a subquery, treat it like a join
+				return { type: tokenTypes.RESERVED_NEWLINE, value: token.value };
+			}
+		}
+
 		return token;
 	}
 }

@@ -95,7 +95,7 @@ export default function supportsKeywordPositions(format) {
 					UNION DISTINCT
 					SELECT *
 					FROM b
-					FULL OUTER JOIN c;
+					LEFT OUTER JOIN c;
 				`,
 				{ keywordPosition: 'tenSpaceLeft' }
 			)
@@ -105,7 +105,7 @@ export default function supportsKeywordPositions(format) {
 			UNION     DISTINCT
 			SELECT    *
 			FROM      b
-			FULL      OUTER JOIN c;
+			LEFT      OUTER JOIN c;
 		`);
 	});
 }
