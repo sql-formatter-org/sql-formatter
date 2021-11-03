@@ -5,6 +5,7 @@ import supportsOperators from './features/operators';
 import supportsAliases from './features/alias';
 import supportsNewlineOptions from './features/newline';
 import supportsKeywordPositions from './features/keywordPosition';
+import supportsParenthesesOptions from './features/parenthesis';
 
 /**
  * Core tests for all SQL formatters
@@ -12,11 +13,12 @@ import supportsKeywordPositions from './features/keywordPosition';
  */
 export default function behavesLikeSqlFormatter(format) {
 	supportsAliases(format);
-	supportsKeywordPositions(format);
-	supportsNewlineOptions(format);
 	supportsComments(format);
 	supportsConfigOptions(format);
+	supportsKeywordPositions(format);
+	supportsNewlineOptions(format);
 	supportsOperators(format, ['=', '+', '-', '*', '/', '<>', '>', '<', '>=', '<=']);
+	supportsParenthesesOptions(format);
 
 	it('does nothing with empty input', () => {
 		const result = format('');
