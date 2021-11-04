@@ -42,7 +42,7 @@ export interface FormatOptions {
 	lineWidth: number;
 	linesBetweenQueries: number;
 	denseOperators: boolean;
-	semicolonNewline: false;
+	semicolonNewline: boolean;
 	params?: ParamItems | string[];
 }
 /**
