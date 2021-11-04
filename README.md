@@ -21,7 +21,16 @@ It does not support:
 - Stored procedures.
 - Changing of the delimiter type to something else than `;`.
 
-&rarr; [Try the demo.](https://zeroturnaround.github.io/sql-formatter/)
+→ [Try the demo.](https://zeroturnaround.github.io/sql-formatter/)
+
+# Table of contents
+
+- [Install](#install)
+- [Usage](#usage)
+  - [Usage as library](#usage-as-library)
+  - [Usage from command line](#usage-from-command-line)
+  - [Usage without NPM](#usage-without-npm)
+- [Contributing](#contributing)
 
 ## Install
 
@@ -31,7 +40,9 @@ Get the latest version from NPM:
 npm install sql-formatter
 ```
 
-## Usage as library
+## Usage
+
+### Usage as library
 
 ```js
 import { format } from 'sql-formatter';
@@ -53,8 +64,8 @@ You can also pass in configuration options:
 ```js
 format('SELECT * FROM tbl', {
 	language: 'spark', // Defaults to "sql" (see the above list of supported dialects)
-	indent: '    ', // Defaults to two spaces
-	uppercase: bool, // Defaults to false (not safe to use when SQL dialect has case-sensitive identifiers)
+	indent: '  ', // Defaults to two spaces
+	uppercase: false, // Defaults to true
 	linesBetweenQueries: 2, // Defaults to 1
 });
 ```
@@ -75,7 +86,7 @@ format("SELECT * FROM tbl WHERE foo = ?", {
 
 Both result in:
 
-```
+```sql
 SELECT
   *
 FROM
@@ -84,7 +95,7 @@ WHERE
   foo = 'bar'
 ```
 
-## Usage from command line
+### Usage from command line
 
 The CLI tool will be installed under `sql-formatter`
 and may be invoked via `npx sql-formatter`:
@@ -94,34 +105,30 @@ sql-formatter -h
 ```
 
 ```
-usage: sql-formatter [-h] [-o OUTPUT] [-l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}]
-                     [-i N | -t] [-u] [--lines-between-queries N] [--version] [FILE]
+usage: sqlfmt.js [-h] [-o OUTPUT] \
+[-l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}] [-c CONFIG] [--version] [FILE]
 
 SQL Formatter
 
 positional arguments:
-  FILE                  Input SQL file (defaults to stdin)
+  FILE            Input SQL file (defaults to stdin)
 
 optional arguments:
-  -h, --help            show this help message and exit
-  -o OUTPUT, --output OUTPUT
-                        File to write SQL output (defaults to stdout)
-  -l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql},
-  --language {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}
-                        SQL Formatter dialect (defaults to basic sql)
-  -i N, --indent N      Number of spaces to indent query blocks (defaults to 2)
-  -t, --tab-indent      Indent query blocks with tabs instead of spaces
-  -u, --uppercase       Capitalize language keywords
-  --lines-between-queries N
-                        How many newlines to insert between queries (separated by ";")
-  --version             show program's version number and exit
+  -h, --help      show this help message and exit
+  -o, --output    OUTPUT
+                    File to write SQL output (defaults to stdout)
+  -l, --language  {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}
+                    SQL Formatter dialect (defaults to basic sql)
+  -c, --config    CONFIG
+                    Path to config json file (will use default configs if unspecified)
+  --version       show program's version number and exit
 ```
 
 By default, the tool takes queries from stdin and processes them to stdout but
 one can also name an input file name or use the `--output` option.
 
 ```sh
-echo 'select * from tbl where id = 3' | sql-formatter -u
+echo 'select * from tbl where id = 3' | sql-formatter
 ```
 
 ```sql
@@ -133,7 +140,34 @@ WHERE
   id = 3
 ```
 
-## Usage without NPM
+The tool also accepts a JSON config file with the `--config` option that takes this form: \
+All fields are optional and all fields that are not specified will be filled with their default values
+
+```json
+{
+	"indent": string,
+	"uppercase": boolean,
+	"keywordPosition": "standard" | "tenSpaceLeft" | "tenSpaceRight",
+	"newline": {
+		"mode": "always" | "itemCount" | "lineWidth" | "hybrid" | "never",
+		"itemCount":? number
+	},
+	"breakBeforeBooleanOperator": boolean,
+	"aliasAs": "always" | "select" | "never",
+	"tabulateAlias": boolean,
+	"commaPosition": "before" | "after" | "tabular",
+	"parenOptions": {
+		"openParenNewline": boolean,
+		"closeParenNewline": boolean
+	},
+	"lineWidth": number,
+	"linesBetweenQueries": number,
+	"denseOperators": boolean,
+	"semicolonNewline": boolean,
+}
+```
+
+### Usage without NPM
 
 If you don't use a module bundler, clone the repository, run `npm install` and grab a file from `/dist` directory to use inside a `<script>` tag.
 This makes SQL Formatter available as a global variable `window.sqlFormatter`.
