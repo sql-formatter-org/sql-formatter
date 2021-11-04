@@ -29,28 +29,8 @@ function getArgs() {
 		default: 'sql',
 	});
 
-	const indentationGroup = parser.add_mutually_exclusive_group();
-	indentationGroup.add_argument('-i', '--indent', {
-		help: 'Number of spaces to indent query blocks (defaults to 2)',
-		metavar: 'N',
-		type: 'int',
-		default: 2,
-	});
-	indentationGroup.add_argument('-t', '--tab-indent', {
-		help: 'Indent query blocks with tabs instead of spaces',
-		action: 'store_true',
-	});
-
-	parser.add_argument('-u', '--uppercase', {
-		help: 'Capitalize language keywords',
-		action: 'store_true',
-	});
-
-	parser.add_argument('--lines-between-queries', {
-		help: 'How many newlines to insert between queries (separated by ";")',
-		metavar: 'N',
-		type: 'int',
-		default: 1,
+	parser.add_argument('-c', '--config', {
+		help: 'Path to config json file (will use default configs if unspecified)',
 	});
 
 	parser.add_argument('--version', {
@@ -61,12 +41,25 @@ function getArgs() {
 	return parser.parse_args();
 }
 
-function configFromArgs(args) {
+function readConfig(args) {
+	if (args.config)
+		try {
+			const configFile = fs.readFileSync(args.config);
+			const configJson = JSON.parse(configFile);
+			return { language: args.language, ...configJson };
+		} catch (e) {
+			if (e instanceof SyntaxError) {
+				console.error(`Error: unable to parse JSON at file ${args.config}`);
+				process.exit(1);
+			}
+			if (e.code === 'ENOENT') {
+				console.error(`Error: could not open file ${args.config}`);
+				process.exit(1);
+			}
+			throw e;
+		}
 	return {
 		language: args.language,
-		indent: args.tab_indent ? '\t' : ' '.repeat(args.indent),
-		uppercase: args.uppercase,
-		linesBetweenQueries: args.lines_between_queries,
 	};
 }
 
@@ -97,7 +90,7 @@ function writeOutput(file, query) {
 }
 
 const args = getArgs();
-const cfg = configFromArgs(args);
+const cfg = readConfig(args);
 const query = getInput(args.file);
 const formattedQuery = format(query, cfg).trim() + '\n';
 writeOutput(args.output, formattedQuery);
