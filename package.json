@@ -1,10 +1,9 @@
 {
 	"name": "sql-formatter",
-	"version": "4.0.2",
+	"version": "5.0.0-beta",
 	"description": "Format whitespace in a SQL query to make it more readable",
 	"license": "MIT",
 	"main": "lib/sqlFormatter.js",
-	"types": "src/sqlFormatter.d.ts",
 	"bin": {
 		"sql-formatter": "./bin/sqlfmt.js"
 	},
@@ -46,6 +45,7 @@
 		"Rene Saarsoo <nene@triin.net>",
 		"Rodrigo Stuchi",
 		"Sasha Aliashkevich <olsender@gmail.com>",
+		"Sean Song <mail@seansong.dev>",
 		"Sergei Egorov <sergei.egorov@zeroturnaround.com>",
 		"Tyler Jones <tyler.jones@txwormhole.com>",
 		"Uku Pattak <ukupat@gmail.com>"
@@ -60,16 +60,16 @@
 		"clean": "rimraf lib dist",
 		"lint": "eslint .",
 		"pretty": "prettier --write .",
-		"pretty:check": "prettier --check .",
 		"fix": "npm run pretty && eslint --fix .",
+		"pretty:check": "prettier --check .",
 		"test": "jest",
 		"test:watch": "npm run test -- --watch",
 		"check": "npm run pretty:check && npm run lint && npm run test",
-		"build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
+		"prepare": "npm run clean && npm run fix && npm run check && npm run build",
 		"build:commonjs": "babel src --out-dir lib",
 		"build:umd": "webpack --config webpack.dev.js",
 		"build:umd:min": "webpack --config webpack.prod.js",
-		"prepare": "npm run clean && npm run fix && npm run check && npm run build"
+		"build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min"
 	},
 	"repository": {
 		"type": "git",
@@ -77,6 +77,9 @@
 	},
 	"bugs": {
 		"url": "https://github.com/zeroturnaround/sql-formatter/issues"
+	},
+	"dependencies": {
+		"argparse": "^2.0.1"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.10.4",
@@ -112,11 +115,5 @@
 		],
 		"testRegex": ".*Test",
 		"collectCoverage": true
-	},
-	"dependencies": {
-		"argparse": "^2.0.1"
-	},
-	"eslintConfig": {
-		"parser": "@typescript-eslint/parser"
 	}
 }
