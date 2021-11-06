@@ -1,5 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import { isToken, Token, TokenType } from '../core/token';
 import type { StringPatternType } from '../core/regexFactory';
 
 /**
@@ -1180,5 +1181,16 @@ export default class MariaDbFormatter extends Formatter {
 			specialWordChars: MariaDbFormatter.specialWordChars,
 			operators: MariaDbFormatter.operators,
 		});
+	}
+
+	tokenOverride(token: Token) {
+		if (isToken('SET')(token)) {
+			if (this.tokenLookAhead()?.value === '(') {
+				// This is SET datatype, not SET statement
+				return { type: TokenType.RESERVED_KEYWORD, value: token.value };
+			}
+		}
+
+		return token;
 	}
 }

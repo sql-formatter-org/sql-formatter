@@ -1350,6 +1350,13 @@ export default class MySqlFormatter extends Formatter {
 			}
 		}
 
+		if (isToken('SET')(token)) {
+			if (this.tokenLookAhead()?.value === '(') {
+				// This is SET datatype, not SET statement
+				return { type: TokenType.RESERVED_KEYWORD, value: token.value };
+			}
+		}
+
 		return token;
 	}
 }
