@@ -729,7 +729,7 @@ export default class RedshiftFormatter extends Formatter {
 	static indexedPlaceholderTypes = ['?'];
 	static namedPlaceholderTypes = ['@', '#', '$'];
 	static lineCommentTypes = ['--'];
-	static operators = ['|/', '||', '||/', '<<', '>>'];
+	static operators = ['|/', '||/', '<<', '>>', '||'];
 
 	tokenizer() {
 		return new Tokenizer({

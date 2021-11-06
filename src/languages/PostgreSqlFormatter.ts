@@ -1618,6 +1618,51 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL'];
 
+const binaryOperators = [
+	'<<',
+	'>>',
+	'||/',
+	'|/',
+	'::',
+	':=',
+	'->>',
+	'->',
+	'=>',
+	'~~*',
+	'~~',
+	'!~~*',
+	'!~~',
+	'~*',
+	'!~*',
+	'!~',
+	'!!',
+	'||',
+	'@-@',
+	'@@',
+	'##',
+	'<->',
+	'&&',
+	'&<',
+	'&>',
+	'<<|',
+	'&<|',
+	'|>>',
+	'|&>',
+	'<^',
+	'^>',
+	'?#',
+	'?-',
+	'?|',
+	'?-|',
+	'?||',
+	'@>',
+	'<@',
+	'~=',
+	'>>=',
+	'<<=',
+	'@@@',
+];
+
 // https://www.postgresql.org/docs/14/index.html
 export default class PostgreSqlFormatter extends Formatter {
 	static reservedCommands = reservedCommands;
@@ -1634,23 +1679,7 @@ export default class PostgreSqlFormatter extends Formatter {
 	static indexedPlaceholderTypes = ['$'];
 	static namedPlaceholderTypes = [':'];
 	static lineCommentTypes = ['--'];
-	static operators = [
-		'<<',
-		'>>',
-		'||/',
-		'|/',
-		'::',
-		'->>',
-		'->',
-		'~~*',
-		'~~',
-		'!~~*',
-		'!~~',
-		'~*',
-		'!~*',
-		'!~',
-		'!!',
-	];
+	static operators = binaryOperators;
 
 	tokenizer() {
 		return new Tokenizer({
