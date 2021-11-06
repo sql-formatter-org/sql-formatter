@@ -1635,7 +1635,6 @@ export default class PostgreSqlFormatter extends Formatter {
 	static namedPlaceholderTypes = [':'];
 	static lineCommentTypes = ['--'];
 	static operators = [
-		'!=',
 		'<<',
 		'>>',
 		'||/',

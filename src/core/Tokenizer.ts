@@ -65,6 +65,7 @@ export default class Tokenizer {
 				'<>',
 				'<=',
 				'>=',
+				'!=',
 				...(cfg.operators ?? []),
 			]),
 			[TokenType.BLOCK_START]: regexFactory.createParenRegex(cfg.blockStart),

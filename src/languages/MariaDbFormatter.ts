@@ -1162,7 +1162,7 @@ export default class MariaDbFormatter extends Formatter {
 	static namedPlaceholderTypes = [];
 	static lineCommentTypes = ['--', '#'];
 	static specialWordChars = ['@'];
-	static operators = [':=', '<<', '>>', '!=', '<>', '<=>', '&&', '||'];
+	static operators = [':=', '<<', '>>', '<=>', '&&', '||'];
 
 	tokenizer() {
 		return new Tokenizer({
