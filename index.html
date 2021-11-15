@@ -4,17 +4,17 @@
 	<head>
 		<meta charset="utf-8" />
 
-		<title>SQL formatter</title>
-		<meta name="description" content="A whitespace formatter for different query languages" />
+		<title>Prettier SQL Formatter</title>
+		<meta property="og:title" content="Prettier SQL" />
 
-		<meta property="og:title" content="SQL Formatter" />
+		<meta name="description" content="A whitespace formatter for different query languages" />
 		<meta
 			property="og:description"
 			content="A whitespace formatter for different query languages"
 		/>
-		<meta property="og:url" content="https://zeroturnaround.github.io/sql-formatter" />
+		<meta property="og:url" content="https://inferrinizzard.github.io/prettier-sql" />
 
-		<link rel="shortcut icon" href="https://static.zeroturnaround.com/theme55/images/favicon.ico" />
+		<!-- <link rel="shortcut icon" href="https://static.inferrinizzard.com/theme55/images/favicon.ico" /> -->
 
 		<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet" />
 
@@ -81,14 +81,14 @@
 
 	<body>
 		<header>
-			<h1>SQL Formatter</h1>
+			<h1>Prettier SQL Formatter</h1>
 
 			<div class="buttons">
-				<a href="https://www.npmjs.com/package/sql-formatter">
-					<img src="https://img.shields.io/npm/v/sql-formatter.svg" height="18" />
+				<a href="https://www.npmjs.com/package/prettier-sql">
+					<img src="https://img.shields.io/npm/v/prettier-sql.svg" height="18" />
 				</a>
 				<iframe
-					src="https://ghbtns.com/github-btn.html?user=zeroturnaround&repo=sql-formatter&type=star&count=true"
+					src="https://ghbtns.com/github-btn.html?user=inferrinizzard&repo=prettier-sql&type=star&count=true"
 					frameborder="0"
 					scrolling="0"
 					width="120px"
@@ -134,13 +134,13 @@ order by supplier_name asc,city desc;
 		</main>
 
 		<!-- Load from local (for development) -->
-		<script type="text/javascript" src="dist/sql-formatter.js"></script>
+		<script type="text/javascript" src="dist/prettier-sql.js"></script>
 		<!-- Fallback to reading from npm -->
 		<script>
 			window.sqlFormatter ||
 				document.write(
 					unescape(
-						'%3Cscript type="text/javascript" src="https://unpkg.com/sql-formatter@latest/dist/sql-formatter.min.js"%3E%3C/script%3E'
+						'%3Cscript type="text/javascript" src="https://unpkg.com/prettier-sql@latest/dist/prettier-sql.min.js"%3E%3C/script%3E'
 					)
 				);
 		</script>
