@@ -71,6 +71,9 @@
 		"build:umd:min": "webpack --config webpack.prod.js",
 		"build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min"
 	},
+	"pre-commit": [
+		"fix"
+	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/zeroturnaround/sql-formatter.git"
