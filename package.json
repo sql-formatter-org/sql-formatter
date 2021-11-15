@@ -1,11 +1,11 @@
 {
-	"name": "sql-formatter",
+	"name": "prettier-sql",
 	"version": "5.0.0-beta",
 	"description": "Format whitespace in a SQL query to make it more readable",
 	"license": "MIT",
 	"main": "lib/sqlFormatter.js",
 	"bin": {
-		"sql-formatter": "./bin/sqlfmt.js"
+		"prettier-sql": "./bin/sqlfmt.js"
 	},
 	"keywords": [
 		"sql",
@@ -76,10 +76,10 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/zeroturnaround/sql-formatter.git"
+		"url": "https://github.com/inferrinizzard/prettier-sql.git"
 	},
 	"bugs": {
-		"url": "https://github.com/zeroturnaround/sql-formatter/issues"
+		"url": "https://github.com/inferrinizzard/prettier-sql/issues"
 	},
 	"dependencies": {
 		"argparse": "^2.0.1"
