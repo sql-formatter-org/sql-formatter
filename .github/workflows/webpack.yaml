@@ -22,9 +22,9 @@ jobs:
 
     - name: Install
       run: yarn install --ignore-scripts
-
-    - name: Build
-      run: yarn build
       
     - name: Test
       run: yarn test
+
+    - name: Build
+      run: yarn build
