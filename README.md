@@ -1,4 +1,4 @@
-# SQL Formatter [![NPM version](https://img.shields.io/npm/v/sql-formatter.svg)](https://npmjs.com/package/sql-formatter) [![Build Status](https://travis-ci.org/zeroturnaround/sql-formatter.svg?branch=master)](https://travis-ci.org/zeroturnaround/sql-formatter) [![Coverage Status](https://coveralls.io/repos/github/zeroturnaround/sql-formatter/badge.svg?branch=master)](https://coveralls.io/github/zeroturnaround/sql-formatter?branch=master)
+# SQL Formatter [![NPM version](https://img.shields.io/npm/v/prettier-sql.svg)](https://npmjs.com/package/prettier-sql) [![Build Status](https://travis-ci.org/inferrinizzard/prettier-sql.svg?branch=master)](https://travis-ci.org/inferrinizzard/prettier-sql) [![Coverage Status](https://coveralls.io/repos/github/inferrinizzard/prettier-sql/badge.svg?branch=master)](https://coveralls.io/github/inferrinizzard/prettier-sql?branch=master)
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 It started as a port of a [PHP Library][], but has since considerably diverged.
@@ -21,7 +21,7 @@ It does not support:
 - Stored procedures.
 - Changing of the delimiter type to something else than `;`.
 
-→ [Try the demo.](https://zeroturnaround.github.io/sql-formatter/)
+→ [Try the demo.](https://inferrinizzard.github.io/prettier-sql/)
 
 # Table of contents
 
@@ -37,7 +37,7 @@ It does not support:
 Get the latest version from NPM:
 
 ```sh
-npm install sql-formatter
+npm install prettier-sql
 ```
 
 ## Usage
@@ -45,7 +45,7 @@ npm install sql-formatter
 ### Usage as library
 
 ```js
-import { format } from 'sql-formatter';
+import { format } from 'prettier-sql';
 
 console.log(format('SELECT * FROM tbl'));
 ```
@@ -97,11 +97,11 @@ WHERE
 
 ### Usage from command line
 
-The CLI tool will be installed under `sql-formatter`
-and may be invoked via `npx sql-formatter`:
+The CLI tool will be installed under `prettier-sql`
+and may be invoked via `npx prettier-sql`:
 
 ```sh
-sql-formatter -h
+prettier-sql -h
 ```
 
 ```
@@ -128,7 +128,7 @@ By default, the tool takes queries from stdin and processes them to stdout but
 one can also name an input file name or use the `--output` option.
 
 ```sh
-echo 'select * from tbl where id = 3' | sql-formatter
+echo 'select * from tbl where id = 3' | prettier-sql
 ```
 
 ```sql
@@ -184,7 +184,7 @@ npm run check
 
 ## License
 
-[MIT](https://github.com/zeroturnaround/sql-formatter/blob/master/LICENSE)
+[MIT](https://github.com/inferrinizzard/prettier-sql/blob/master/LICENSE)
 
 [php library]: https://github.com/jdorn/sql-formatter
 [standard sql]: https://en.wikipedia.org/wiki/SQL:2011
