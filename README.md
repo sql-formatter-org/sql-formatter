@@ -1,4 +1,4 @@
-# SQL Formatter [![NPM version](https://img.shields.io/npm/v/prettier-sql.svg)](https://npmjs.com/package/prettier-sql) [![Build Status](https://travis-ci.org/inferrinizzard/prettier-sql.svg?branch=master)](https://travis-ci.org/inferrinizzard/prettier-sql) [![Coverage Status](https://coveralls.io/repos/github/inferrinizzard/prettier-sql/badge.svg?branch=master)](https://coveralls.io/github/inferrinizzard/prettier-sql?branch=master)
+# SQL Formatter [![NPM version](https://img.shields.io/npm/v/prettier-sql.svg)](https://npmjs.com/package/prettier-sql) ![Dev Build](https://github.com/github/docs/actions/workflows/webpack.yaml/badge.svg?event=push&branch=develop) ![Prod Build](https://github.com/github/docs/actions/workflows/webpack.yaml/badge.svg?event=push&branch=master) [![Coverage Status](https://coveralls.io/repos/github/inferrinizzard/prettier-sql/badge.svg?branch=master)](https://coveralls.io/github/inferrrinizzard/prettier-sql?branch=master)
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 It started as a port of a [PHP Library][], but has since considerably diverged.
