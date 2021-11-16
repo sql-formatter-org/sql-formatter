@@ -452,7 +452,17 @@ export default class PlSqlFormatter extends Formatter {
 	static namedPlaceholderTypes = [':'];
 	static lineCommentTypes = ['--'];
 	static specialWordChars = ['_', '$', '#', '.', '@'];
-	static operators = ['||', '**', ':=', '~=', '^=', '>>', '<<', '=>', '..'];
+	static operators = [
+		'||',
+		'**',
+		':=',
+		'~=',
+		'^=',
+		'>>',
+		'<<',
+		'=>',
+		//  '..' // breaks operator test, handled by .
+	];
 
 	tokenizer() {
 		return new Tokenizer({
