@@ -491,11 +491,11 @@ export default class PlSqlFormatter extends Formatter {
 			return { type: TokenType.OPERATOR, value: token.value };
 		}
 
-		if (isToken('SET')(token) && isToken('BY')(this.previousReservedToken)) {
+		if (isToken.SET(token) && isToken.BY(this.previousReservedToken)) {
 			return { type: TokenType.RESERVED_KEYWORD, value: token.value };
 		}
 
-		if (isToken('LATERAL')(token)) {
+		if (isToken.LATERAL(token)) {
 			if (this.tokenLookAhead()?.type === TokenType.BLOCK_START) {
 				// This is a subquery, treat it like a join
 				return { type: TokenType.RESERVED_LOGICAL_OPERATOR, value: token.value };
