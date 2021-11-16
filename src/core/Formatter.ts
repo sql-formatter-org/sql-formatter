@@ -234,7 +234,9 @@ export default class Formatter {
 				formattedQuery = this.formatComma(token, formattedQuery);
 			} else if (token.value === ':') {
 				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
-			} else if (token.value === '.') {
+			} else if (token.value === '$') {
+				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'before');
+			} else if (['.', '{', '}'].includes(token.value)) {
 				formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
 			} else if (token.value === ';') {
 				formattedQuery = this.formatQuerySeparator(token, formattedQuery);

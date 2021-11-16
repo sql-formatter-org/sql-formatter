@@ -61,10 +61,13 @@ export default class Tokenizer {
 			[TokenType.RESERVED_BINARY_COMMAND]: regexFactory.createReservedWordRegex(
 				cfg.reservedBinaryCommands
 			),
-			[TokenType.OPERATOR]: regexFactory.createOperatorRegex(
-				['+', '-', '/', '*', '%', '&', '|', '^', '>', '<', '=', '.', ',', ';', '[', ']', '`', ':'],
-				['<>', '<=', '>=', '!=', ...(cfg.operators ?? [])]
-			),
+			[TokenType.OPERATOR]: regexFactory.createOperatorRegex('+-/*%&|^><=.,;[]{}`:$', [
+				'<>',
+				'<=',
+				'>=',
+				'!=',
+				...(cfg.operators ?? []),
+			]),
 			[TokenType.BLOCK_START]: regexFactory.createParenRegex(cfg.blockStart),
 			[TokenType.BLOCK_END]: regexFactory.createParenRegex(cfg.blockEnd),
 			[TokenType.LINE_COMMENT]: regexFactory.createLineCommentRegex(cfg.lineCommentTypes),

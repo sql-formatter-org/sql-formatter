@@ -1,10 +1,9 @@
 import { escapeRegExp, isEmpty, sortByLengthDesc } from '../utils';
 
-export function createOperatorRegex(monadOperators: string[], polyadOperators: string[]) {
+export function createOperatorRegex(monadOperators: string, polyadOperators: string[]) {
 	return new RegExp(
-		`^(${sortByLengthDesc(polyadOperators).map(escapeRegExp).join('|')}|[${monadOperators
-			.map(escapeRegExp)
-			.join('')}])`,
+		`^(${sortByLengthDesc(polyadOperators).map(escapeRegExp).join('|')}|` +
+			`[${monadOperators.split('').map(escapeRegExp).join('')}])`,
 		'u'
 	);
 }
