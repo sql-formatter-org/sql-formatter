@@ -230,28 +230,8 @@ export default class Formatter {
 				formattedQuery = this.formatBlockEnd(token, formattedQuery);
 			} else if (token.type === TokenType.PLACEHOLDER) {
 				formattedQuery = this.formatPlaceholder(token, formattedQuery);
-			} else if (token.value === ',') {
-				formattedQuery = this.formatComma(token, formattedQuery);
-			} else if (token.value === ':') {
-				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
-			} else if (token.value === '$') {
-				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'before');
-			} else if (['.', '{', '}'].includes(token.value)) {
-				formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
-			} else if (token.value === ';') {
-				formattedQuery = this.formatQuerySeparator(token, formattedQuery);
-			} else if (
-				token.value === '[' ||
-				(token.value === '`' && this.tokenLookAhead(2)?.value === '`')
-			) {
-				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'before');
-			} else if (
-				token.value === ']' ||
-				(token.value === '`' && this.tokenLookBehind(2)?.value === '`')
-			) {
-				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
-			} else if (token.type === TokenType.OPERATOR && this.cfg.denseOperators) {
-				formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
+			} else if (token.type === TokenType.OPERATOR) {
+				formattedQuery = this.formatOperator(token, formattedQuery);
 			} else {
 				if (this.cfg.aliasAs !== AliasMode.never) {
 					formattedQuery = this.formatAliases(token, formattedQuery);
@@ -381,6 +361,37 @@ export default class Formatter {
 		}
 		query = this.addNewline(query) + this.equalizeWhitespace(this.show(token));
 		return isJoin ? query + ' ' : this.addNewline(query);
+	}
+
+	formatOperator(token: Token, query: string) {
+		// special operator
+		if (token.value === ',') {
+			return this.formatComma(token, query);
+		} else if (token.value === ':') {
+			return this.formatWithSpaces(token, query, 'after');
+		} else if (token.value === '$') {
+			return this.formatWithSpaces(token, query, 'before');
+		} else if (['.', '{', '}'].includes(token.value)) {
+			return this.formatWithoutSpaces(token, query);
+		} else if (token.value === ';') {
+			return this.formatQuerySeparator(token, query);
+		} else if (
+			token.value === '[' ||
+			(token.value === '`' && this.tokenLookAhead(2)?.value === '`')
+		) {
+			return this.formatWithSpaces(token, query, 'before');
+		} else if (
+			token.value === ']' ||
+			(token.value === '`' && this.tokenLookBehind(2)?.value === '`')
+		) {
+			return this.formatWithSpaces(token, query, 'after');
+		}
+
+		// regular operator
+		if (this.cfg.denseOperators) {
+			return this.formatWithoutSpaces(token, query);
+		}
+		return this.formatWithSpaces(token, query);
 	}
 
 	formatLogicalOperator(token: Token, query: string) {
