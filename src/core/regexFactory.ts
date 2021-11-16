@@ -52,7 +52,7 @@ const patterns = {
 	"N''": "((N'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
 	"U&''": "((U&'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
 	'U&""': '((U&"[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+)',
-	$$: '((?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$))',
+	'$$': '((?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$))',
 };
 export type StringPatternType = keyof typeof patterns;
 export function createStringPattern(stringTypes: StringPatternType[]) {

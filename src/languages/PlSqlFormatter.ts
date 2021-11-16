@@ -483,6 +483,14 @@ export default class PlSqlFormatter extends Formatter {
 	}
 
 	tokenOverride(token: Token) {
+		if (
+			token.value === '.' &&
+			this.tokenLookAhead()?.value.startsWith('`') &&
+			this.tokenLookBehind()?.value.endsWith('`')
+		) {
+			return { type: TokenType.OPERATOR, value: token.value };
+		}
+
 		if (isToken('SET')(token) && isToken('BY')(this.previousReservedToken)) {
 			return { type: TokenType.RESERVED_KEYWORD, value: token.value };
 		}

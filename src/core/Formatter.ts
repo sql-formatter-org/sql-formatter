@@ -367,24 +367,14 @@ export default class Formatter {
 		// special operator
 		if (token.value === ',') {
 			return this.formatComma(token, query);
-		} else if (token.value === ':') {
-			return this.formatWithSpaces(token, query, 'after');
-		} else if (token.value === '$') {
-			return this.formatWithSpaces(token, query, 'before');
-		} else if (['.', '{', '}'].includes(token.value)) {
-			return this.formatWithoutSpaces(token, query);
 		} else if (token.value === ';') {
 			return this.formatQuerySeparator(token, query);
-		} else if (
-			token.value === '[' ||
-			(token.value === '`' && this.tokenLookAhead(2)?.value === '`')
-		) {
+		} else if (['$', '['].includes(token.value)) {
 			return this.formatWithSpaces(token, query, 'before');
-		} else if (
-			token.value === ']' ||
-			(token.value === '`' && this.tokenLookBehind(2)?.value === '`')
-		) {
+		} else if ([':', ']'].includes(token.value)) {
 			return this.formatWithSpaces(token, query, 'after');
+		} else if (['.', '{', '}', '`'].includes(token.value)) {
+			return this.formatWithoutSpaces(token, query);
 		}
 
 		// regular operator

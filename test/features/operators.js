@@ -76,12 +76,12 @@ export default function supportsOperators(format, operators = [], logicalOperato
 	});
 
 	it('supports backticks', () => {
-		const result = format(`SELECT \`a\` FROM b;`);
+		const result = format(`SELECT \`a\`.\`b\` FROM \`c\`.\`d\`;`);
 		expect(result).toBe(dedent`
       SELECT
-        \`a\`
+        \`a\`.\`b\`
       FROM
-        b;
+        \`c\`.\`d\`;
 		`);
 	});
 

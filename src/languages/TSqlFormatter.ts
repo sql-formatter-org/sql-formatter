@@ -1237,7 +1237,7 @@ export default class TSqlFormatter extends Formatter {
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
 		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
 	];
-	static stringTypes: StringPatternType[] = [`""`, "N''", "''", '[]'];
+	static stringTypes: StringPatternType[] = [`""`, "N''", "''", '[]', '``'];
 	static blockStart = ['(', 'CASE'];
 	static blockEnd = [')', 'END'];
 	static indexedPlaceholderTypes = [];
