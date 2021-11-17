@@ -451,7 +451,7 @@ export default class PlSqlFormatter extends Formatter {
 	static indexedPlaceholderTypes = ['?'];
 	static namedPlaceholderTypes = [':'];
 	static lineCommentTypes = ['--'];
-	static specialWordChars = ['_', '$', '#', '.', '@'];
+	static specialWordChars = { any: '_$#.@' };
 	static operators = [
 		'||',
 		'**',

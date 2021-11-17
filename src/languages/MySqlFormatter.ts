@@ -1321,7 +1321,7 @@ export default class MySqlFormatter extends Formatter {
 	static indexedPlaceholderTypes = ['?'];
 	static namedPlaceholderTypes = [];
 	static lineCommentTypes = ['--', '#'];
-	static specialWordChars = ['@'];
+	static specialWordChars = { any: '@', prefix: ':' };
 	static operators = [':=', '<<', '>>', '<=>', '&&', '||', '->', '->>'];
 
 	tokenizer() {

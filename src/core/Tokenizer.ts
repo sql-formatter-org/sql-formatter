@@ -16,7 +16,7 @@ interface TokenizerOptions {
 	indexedPlaceholderTypes?: string[];
 	namedPlaceholderTypes: string[];
 	lineCommentTypes: string[];
-	specialWordChars?: string[];
+	specialWordChars?: { prefix?: string; suffix?: string; any: string };
 	operators?: string[];
 }
 
@@ -52,23 +52,23 @@ export default class Tokenizer {
 			[TokenType.STRING]: regexFactory.createStringRegex(cfg.stringTypes),
 			[TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(
 				cfg.reservedKeywords,
-				cfg.specialWordChars
+				(cfg.specialWordChars?.any ?? '') + (cfg.specialWordChars?.suffix ?? '')
 			),
 			[TokenType.RESERVED_DEPENDENT_CLAUSE]: regexFactory.createReservedWordRegex(
 				cfg.reservedDependentClauses ?? [],
-				cfg.specialWordChars
+				(cfg.specialWordChars?.any ?? '') + (cfg.specialWordChars?.suffix ?? '')
 			),
 			[TokenType.RESERVED_LOGICAL_OPERATOR]: regexFactory.createReservedWordRegex(
 				cfg.reservedLogicalOperators,
-				cfg.specialWordChars
+				(cfg.specialWordChars?.any ?? '') + (cfg.specialWordChars?.suffix ?? '')
 			),
 			[TokenType.RESERVED_COMMAND]: regexFactory.createReservedWordRegex(
 				cfg.reservedCommands,
-				cfg.specialWordChars
+				(cfg.specialWordChars?.any ?? '') + (cfg.specialWordChars?.suffix ?? '')
 			),
 			[TokenType.RESERVED_BINARY_COMMAND]: regexFactory.createReservedWordRegex(
 				cfg.reservedBinaryCommands,
-				cfg.specialWordChars
+				(cfg.specialWordChars?.any ?? '') + (cfg.specialWordChars?.suffix ?? '')
 			),
 			[TokenType.OPERATOR]: regexFactory.createOperatorRegex('+-/*%&|^><=.,;[]{}`:$', [
 				'<>',

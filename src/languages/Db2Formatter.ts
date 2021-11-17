@@ -872,7 +872,7 @@ export default class Db2Formatter extends Formatter {
 	static indexedPlaceholderTypes = ['?'];
 	static namedPlaceholderTypes = [':'];
 	static lineCommentTypes = ['--'];
-	static specialWordChars = ['#', '@'];
+	static specialWordChars = { any: '#@' };
 	static operators = ['**', '!>', '!<', '||'];
 
 	tokenizer() {

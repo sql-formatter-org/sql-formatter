@@ -1243,7 +1243,7 @@ export default class TSqlFormatter extends Formatter {
 	static indexedPlaceholderTypes = [];
 	static namedPlaceholderTypes = ['@'];
 	static lineCommentTypes = ['--'];
-	static specialWordChars = ['#', '@'];
+	static specialWordChars = { any: '#@' };
 	static operators = ['!<', '!>', '+=', '-=', '*=', '/=', '%=', '|=', '&=', '^=', '::'];
 
 	tokenizer() {

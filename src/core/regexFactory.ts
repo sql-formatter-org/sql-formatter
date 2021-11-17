@@ -15,24 +15,29 @@ export function createLineCommentRegex(lineCommentTypes: string[]) {
 	);
 }
 
-export function createReservedWordRegex(
-	reservedKeywords: string[],
-	specialWordChars: string[] = []
-) {
+export function createReservedWordRegex(reservedKeywords: string[], specialWordChars = '') {
 	if (reservedKeywords.length === 0) {
 		return new RegExp(`^\b$`, 'u');
 	}
 	const reservedKeywordsPattern = sortByLengthDesc(reservedKeywords)
 		.join('|')
 		.replace(/ /gu, '\\s+');
-	return new RegExp(`^(${reservedKeywordsPattern})(?![${specialWordChars.join('')}]+)\\b`, 'iu');
+	return new RegExp(
+		`^(${reservedKeywordsPattern})(?![${escapeRegExp(specialWordChars)}]+)\\b`,
+		'iu'
+	);
 }
 
-export function createWordRegex(specialChars: string[] = []) {
+export function createWordRegex(
+	specialChars: { any?: string; suffix?: string; prefix?: string } = {}
+) {
+	const prefixLookBehind = `(?<=[${escapeRegExp(specialChars.prefix ?? '')}]?)`;
+	const suffixLookAhead = `(?=[${escapeRegExp(specialChars.suffix ?? '')}]?)`;
+	const unicodeWordChar =
+		'\\p{Alphabetic}\\p{Mark}\\p{Decimal_Number}\\p{Connector_Punctuation}\\p{Join_Control}';
+	const specialWordChars = `${escapeRegExp(specialChars.any ?? '')}`;
 	return new RegExp(
-		`^([\\p{Alphabetic}\\p{Mark}\\p{Decimal_Number}\\p{Connector_Punctuation}\\p{Join_Control}${specialChars.join(
-			''
-		)}]+)`,
+		`^(${prefixLookBehind}([${unicodeWordChar}${specialWordChars}]+)${suffixLookAhead})`,
 		'u'
 	);
 }
