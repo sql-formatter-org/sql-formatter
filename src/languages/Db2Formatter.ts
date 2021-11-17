@@ -866,7 +866,7 @@ export default class Db2Formatter extends Formatter {
 		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
 	];
 
-	static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]'];
+	static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]', "x''"];
 	static blockStart = ['('];
 	static blockEnd = [')'];
 	static indexedPlaceholderTypes = ['?'];
