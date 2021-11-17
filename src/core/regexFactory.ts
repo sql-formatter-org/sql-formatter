@@ -15,14 +15,17 @@ export function createLineCommentRegex(lineCommentTypes: string[]) {
 	);
 }
 
-export function createReservedWordRegex(reservedKeywords: string[]) {
+export function createReservedWordRegex(
+	reservedKeywords: string[],
+	specialWordChars: string[] = []
+) {
 	if (reservedKeywords.length === 0) {
 		return new RegExp(`^\b$`, 'u');
 	}
 	const reservedKeywordsPattern = sortByLengthDesc(reservedKeywords)
 		.join('|')
 		.replace(/ /gu, '\\s+');
-	return new RegExp(`^(${reservedKeywordsPattern})\\b`, 'iu');
+	return new RegExp(`^(${reservedKeywordsPattern})(?![${specialWordChars.join('')}]+)\\b`, 'iu');
 }
 
 export function createWordRegex(specialChars: string[] = []) {

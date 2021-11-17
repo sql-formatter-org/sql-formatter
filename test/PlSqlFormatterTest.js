@@ -52,11 +52,14 @@ describe('PlSqlFormatter', () => {
 	});
 
 	it('recognizes _, $, #, . and @ as part of identifiers', () => {
-		const result = format('SELECT my_col$1#, col.2@ FROM tbl\n');
+		const result = format('SELECT my_col$1#, col.2@, type#, procedure$, user# FROM tbl\n');
 		expect(result).toBe(dedent`
       SELECT
         my_col$1#,
-        col.2@
+        col.2@,
+        type#,
+        procedure$,
+        user#
       FROM
         tbl
     `);

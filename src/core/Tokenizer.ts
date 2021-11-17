@@ -50,16 +50,25 @@ export default class Tokenizer {
 		this.REGEX_MAP = {
 			[TokenType.WORD]: regexFactory.createWordRegex(cfg.specialWordChars),
 			[TokenType.STRING]: regexFactory.createStringRegex(cfg.stringTypes),
-			[TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(cfg.reservedKeywords),
+			[TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(
+				cfg.reservedKeywords,
+				cfg.specialWordChars
+			),
 			[TokenType.RESERVED_DEPENDENT_CLAUSE]: regexFactory.createReservedWordRegex(
-				cfg.reservedDependentClauses ?? []
+				cfg.reservedDependentClauses ?? [],
+				cfg.specialWordChars
 			),
 			[TokenType.RESERVED_LOGICAL_OPERATOR]: regexFactory.createReservedWordRegex(
-				cfg.reservedLogicalOperators
+				cfg.reservedLogicalOperators,
+				cfg.specialWordChars
 			),
-			[TokenType.RESERVED_COMMAND]: regexFactory.createReservedWordRegex(cfg.reservedCommands),
+			[TokenType.RESERVED_COMMAND]: regexFactory.createReservedWordRegex(
+				cfg.reservedCommands,
+				cfg.specialWordChars
+			),
 			[TokenType.RESERVED_BINARY_COMMAND]: regexFactory.createReservedWordRegex(
-				cfg.reservedBinaryCommands
+				cfg.reservedBinaryCommands,
+				cfg.specialWordChars
 			),
 			[TokenType.OPERATOR]: regexFactory.createOperatorRegex('+-/*%&|^><=.,;[]{}`:$', [
 				'<>',
