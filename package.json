@@ -54,11 +54,10 @@
 	"files": [
 		"bin",
 		"dist",
-		"lib",
-		"src"
+		"lib"
 	],
 	"scripts": {
-		"clean": "rimraf lib dist",
+		"clean": "rimraf lib dist coverage",
 		"lint": "eslint .",
 		"pretty": "prettier --write .",
 		"fix": "npm run pretty && eslint --fix .",
@@ -67,11 +66,10 @@
 		"test:watch": "npm run test -- --watch",
 		"check": "npm run pretty:check && npm run lint && npm run test",
 		"prepare": "npm run clean && npm run fix && npm run check && npm run build",
-		"build:commonjs": "babel src --out-dir lib --extensions .ts",
+		"build:commonjs": "babel src --out-dir lib --extensions .ts --source-maps && tsc --module commonjs --emitDeclarationOnly --isolatedModules",
 		"build:umd": "webpack --config webpack.dev.js",
 		"build:umd:min": "webpack --config webpack.prod.js",
-		"build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
-		"prepublishOnly": "npx tsc -p tsconfig.json"
+		"build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min"
 	},
 	"pre-commit": [
 		"fix"
