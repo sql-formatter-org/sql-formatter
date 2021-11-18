@@ -3,7 +3,8 @@
 	"version": "5.0.0-beta.1",
 	"description": "Format whitespace in a SQL query to make it more readable",
 	"license": "MIT",
-	"main": "lib/sqlFormatter.js",
+	"main": "lib/index.js",
+	"module": "src/index.ts",
 	"bin": {
 		"prettier-sql": "./bin/sqlfmt.js"
 	},
@@ -69,7 +70,8 @@
 		"build:commonjs": "babel src --out-dir lib --extensions .ts",
 		"build:umd": "webpack --config webpack.dev.js",
 		"build:umd:min": "webpack --config webpack.prod.js",
-		"build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min"
+		"build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
+		"prepublishOnly": "npx tsc -p tsconfig.json"
 	},
 	"pre-commit": [
 		"fix"
