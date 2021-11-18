@@ -7,7 +7,7 @@ const fs = require('fs');
 const { version } = require('../package.json');
 const { ArgumentParser } = require('argparse');
 
-function getArgs() {
+function getParser() {
 	const parser = new ArgumentParser({
 		add_help: true,
 		description: 'SQL Formatter',
@@ -38,10 +38,15 @@ function getArgs() {
 		version,
 	});
 
-	return parser.parse_args();
+	return parser;
 }
 
-function readConfig(args) {
+function readConfig(parser, args) {
+	if (Object.entries(args).every(([k, v]) => k === 'language' || v === undefined)) {
+		parser.print_help();
+		process.exit(0);
+	}
+
 	if (args.config)
 		try {
 			const configFile = fs.readFileSync(args.config);
@@ -89,8 +94,9 @@ function writeOutput(file, query) {
 	}
 }
 
-const args = getArgs();
-const cfg = readConfig(args);
+const parser = getParser();
+const args = parser.parse_args();
+const cfg = readConfig(parser, args);
 const query = getInput(args.file);
 const formattedQuery = format(query, cfg).trim() + '\n';
 writeOutput(args.output, formattedQuery);
