@@ -5,7 +5,7 @@
 	"license": "MIT",
 	"main": "lib/sqlFormatter.js",
 	"bin": {
-		"prettier-sql": "./bin/sqlfmt.js"
+		"prettier-sql": "./bin/prettier-sql-cli.js"
 	},
 	"keywords": [
 		"sql",
