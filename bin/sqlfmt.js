@@ -7,96 +7,103 @@ const fs = require('fs');
 const { version } = require('../package.json');
 const { ArgumentParser } = require('argparse');
 
-function getParser() {
-	const parser = new ArgumentParser({
-		add_help: true,
-		description: 'SQL Formatter',
-	});
+class PrettierSQLArgs {
+	constructor() {
+		this.parser = this.getParser();
+		this.args = this.parser.parse_args();
+		this.cfg = this.readConfig();
 
-	parser.add_argument('file', {
-		metavar: 'FILE',
-		nargs: '?',
-		help: 'Input SQL file (defaults to stdin)',
-	});
-
-	parser.add_argument('-o', '--output', {
-		help: 'File to write SQL output (defaults to stdout)',
-	});
-
-	parser.add_argument('-l', '--language', {
-		help: 'SQL Formatter dialect (defaults to basic sql)',
-		choices: supportedDialects,
-		default: 'sql',
-	});
-
-	parser.add_argument('-c', '--config', {
-		help: 'Path to config json file (will use default configs if unspecified)',
-	});
-
-	parser.add_argument('--version', {
-		action: 'version',
-		version,
-	});
-
-	return parser;
-}
-
-function readConfig(parser, args) {
-	if (Object.entries(args).every(([k, v]) => k === 'language' || v === undefined)) {
-		parser.print_help();
-		process.exit(0);
+		this.query = this.getInput();
+		const formattedQuery = format(this.query, this.cfg).trim() + '\n';
+		this.writeOutput(this.args.output, formattedQuery);
 	}
 
-	if (args.config)
+	getParser() {
+		const parser = new ArgumentParser({
+			add_help: true,
+			description: 'SQL Formatter',
+		});
+
+		parser.add_argument('file', {
+			metavar: 'FILE',
+			nargs: '?',
+			help: 'Input SQL file (defaults to stdin)',
+		});
+
+		parser.add_argument('-o', '--output', {
+			help: 'File to write SQL output (defaults to stdout)',
+		});
+
+		parser.add_argument('-l', '--language', {
+			help: 'SQL Formatter dialect (defaults to basic sql)',
+			choices: supportedDialects,
+			default: 'sql',
+		});
+
+		parser.add_argument('-c', '--config', {
+			help: 'Path to config json file (will use default configs if unspecified)',
+		});
+
+		parser.add_argument('--version', {
+			action: 'version',
+			version,
+		});
+
+		return parser;
+	}
+
+	readConfig() {
+		if (Object.entries(this.args).every(([k, v]) => k === 'language' || v === undefined)) {
+			this.parser.print_help();
+			process.exit(0);
+		}
+
+		if (this.args.config)
+			try {
+				const configFile = fs.readFileSync(this.args.config);
+				const configJson = JSON.parse(configFile);
+				return { language: this.args.language, ...configJson };
+			} catch (e) {
+				if (e instanceof SyntaxError) {
+					console.error(`Error: unable to parse JSON at file ${this.args.config}`);
+					process.exit(1);
+				}
+				if (e.code === 'ENOENT') {
+					console.error(`Error: could not open file ${this.args.config}`);
+					process.exit(1);
+				}
+				throw e;
+			}
+		return {
+			language: this.args.language,
+		};
+	}
+
+	getInput() {
+		const infile = this.args.file || process.stdin.fd;
 		try {
-			const configFile = fs.readFileSync(args.config);
-			const configJson = JSON.parse(configFile);
-			return { language: args.language, ...configJson };
+			return fs.readFileSync(infile, 'utf-8');
 		} catch (e) {
-			if (e instanceof SyntaxError) {
-				console.error(`Error: unable to parse JSON at file ${args.config}`);
+			if (e.code === 'EAGAIN') {
+				console.error('Error: no file specified and no data in stdin');
 				process.exit(1);
 			}
 			if (e.code === 'ENOENT') {
-				console.error(`Error: could not open file ${args.config}`);
+				console.error(`Error: could not open file ${infile}`);
 				process.exit(1);
 			}
 			throw e;
 		}
-	return {
-		language: args.language,
-	};
-}
+	}
 
-function getInput(file) {
-	const infile = file || process.stdin.fd;
-	try {
-		return fs.readFileSync(infile, 'utf-8');
-	} catch (e) {
-		if (e.code === 'EAGAIN') {
-			console.error('Error: no file specified and no data in stdin');
-			process.exit(1);
+	writeOutput(file, query) {
+		if (!file) {
+			// No output file, write to console
+			console.log(query);
+		} else {
+			fs.writeFileSync(file, query);
 		}
-		if (e.code === 'ENOENT') {
-			console.error(`Error: could not open file ${infile}`);
-			process.exit(1);
-		}
-		throw e;
 	}
 }
 
-function writeOutput(file, query) {
-	if (!file) {
-		// No output file, write to console
-		console.log(query);
-	} else {
-		fs.writeFileSync(file, query);
-	}
-}
-
-const parser = getParser();
-const args = parser.parse_args();
-const cfg = readConfig(parser, args);
-const query = getInput(args.file);
-const formattedQuery = format(query, cfg).trim() + '\n';
-writeOutput(args.output, formattedQuery);
+new PrettierSQLArgs();
