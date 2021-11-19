@@ -1,4 +1,4 @@
-name: NodeJS with Webpack
+name: webpack
 
 on:
   pull_request:
