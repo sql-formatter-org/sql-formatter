@@ -1,7 +1,7 @@
 ---
 name: Suggest Improvement/Feature
 about: Suggest new features or improvements to existing ones
-title: ''
+title: 'Feature Request: Title Here'
 labels: enhancement
 assignees: ''
 ---
