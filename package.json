@@ -4,7 +4,8 @@
 	"description": "Format whitespace in a SQL query to make it more readable",
 	"license": "MIT",
 	"main": "lib/index.js",
-	"module": "src/index.ts",
+	"module": "dist/prettier-sql.min.js",
+	"types": "lib/index.d.ts",
 	"bin": {
 		"prettier-sql": "./bin/sqlfmt.js"
 	},
