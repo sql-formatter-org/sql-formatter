@@ -31,8 +31,8 @@ export function createReservedWordRegex(reservedKeywords: string[], specialWordC
 export function createWordRegex(
 	specialChars: { any?: string; suffix?: string; prefix?: string } = {}
 ) {
-	const prefixLookBehind = `(?<=[${escapeRegExp(specialChars.prefix ?? '')}]?)`;
-	const suffixLookAhead = `(?=[${escapeRegExp(specialChars.suffix ?? '')}]?)`;
+	const prefixLookBehind = `[${escapeRegExp(specialChars.prefix ?? '')}]*`;
+	const suffixLookAhead = `[${escapeRegExp(specialChars.suffix ?? '')}]*`;
 	const unicodeWordChar =
 		'\\p{Alphabetic}\\p{Mark}\\p{Decimal_Number}\\p{Connector_Punctuation}\\p{Join_Control}';
 	const specialWordChars = `${escapeRegExp(specialChars.any ?? '')}`;

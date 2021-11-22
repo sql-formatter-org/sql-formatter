@@ -47,28 +47,29 @@ export default class Tokenizer {
 	constructor(cfg: TokenizerOptions) {
 		this.WHITESPACE_REGEX = /^(\s+)/u;
 
+		const specialWordCharsAll = Object.values(cfg.specialWordChars ?? {}).join('');
 		this.REGEX_MAP = {
 			[TokenType.WORD]: regexFactory.createWordRegex(cfg.specialWordChars),
 			[TokenType.STRING]: regexFactory.createStringRegex(cfg.stringTypes),
 			[TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(
 				cfg.reservedKeywords,
-				(cfg.specialWordChars?.any ?? '') + (cfg.specialWordChars?.suffix ?? '')
+				specialWordCharsAll
 			),
 			[TokenType.RESERVED_DEPENDENT_CLAUSE]: regexFactory.createReservedWordRegex(
 				cfg.reservedDependentClauses ?? [],
-				(cfg.specialWordChars?.any ?? '') + (cfg.specialWordChars?.suffix ?? '')
+				specialWordCharsAll
 			),
 			[TokenType.RESERVED_LOGICAL_OPERATOR]: regexFactory.createReservedWordRegex(
 				cfg.reservedLogicalOperators,
-				(cfg.specialWordChars?.any ?? '') + (cfg.specialWordChars?.suffix ?? '')
+				specialWordCharsAll
 			),
 			[TokenType.RESERVED_COMMAND]: regexFactory.createReservedWordRegex(
 				cfg.reservedCommands,
-				(cfg.specialWordChars?.any ?? '') + (cfg.specialWordChars?.suffix ?? '')
+				specialWordCharsAll
 			),
 			[TokenType.RESERVED_BINARY_COMMAND]: regexFactory.createReservedWordRegex(
 				cfg.reservedBinaryCommands,
-				(cfg.specialWordChars?.any ?? '') + (cfg.specialWordChars?.suffix ?? '')
+				specialWordCharsAll
 			),
 			[TokenType.OPERATOR]: regexFactory.createOperatorRegex('+-/*%&|^><=.,;[]{}`:$', [
 				'<>',

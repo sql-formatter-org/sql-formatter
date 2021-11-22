@@ -1161,7 +1161,7 @@ export default class MariaDbFormatter extends Formatter {
 	static indexedPlaceholderTypes = ['?'];
 	static namedPlaceholderTypes = [];
 	static lineCommentTypes = ['--', '#'];
-	static specialWordChars = { any: '@' };
+	static specialWordChars = { prefix: '@' };
 	static operators = [':=', '<<', '>>', '<=>', '&&', '||'];
 
 	tokenizer() {
