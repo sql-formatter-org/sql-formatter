@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+const attachFormat = () => {
 	const language = document.getElementById('language');
 	const uppercase = document.getElementById('uppercase');
 	const input = document.getElementById('input');
@@ -18,4 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	uppercase.addEventListener('change', format);
 
 	format();
-});
+};
+
+document.addEventListener('DOMContentLoaded', attachFormat);
