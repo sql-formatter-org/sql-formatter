@@ -23,7 +23,7 @@
 
 	<body>
 		<header>
-			<h1>Prettier SQL Formatter</h1>
+			<h1 class="title">Prettier SQL Formatter</h1>
 
 			<div class="buttons">
 				<a href="https://www.npmjs.com/package/prettier-sql">
@@ -38,41 +38,47 @@
 					style="position: relative; top: 1px"
 				></iframe>
 			</div>
-
-			<div class="select-wrapper">
-				<label for="language">Format</label>
-				<select id="language">
-					<option value="sql">SQL</option>
-					<!-- dialects -->
-					<option value="redshift">AWS Redshift</option>
-					<option value="db2">DB2</option>
-					<option value="mariadb">MariaDB</option>
-					<option value="mysql">MySQL</option>
-					<option value="n1ql">N1QL</option>
-					<option value="plsql">PL/SQL</option>
-					<option value="postgresql">PostgreSQL</option>
-					<option value="spark">Spark</option>
-					<option value="tsql">Transact-SQL</option>
-				</select>
-				|
-				<label for="uppercase">Uppercase</label>
-				<input type="checkbox" id="uppercase" name="uppercase" checked />
-			</div>
 		</header>
 		<main>
-			<section class="input">
-				<textarea id="input" autofocus="true" wrap="off">
+			<aside class="options-menu">
+				<h3 style="margin: 0.5rem 0">Options</h3>
+				<div class="select-wrapper">
+					<article class="config">
+						<label for="language">Language:</label>
+						<select id="language">
+							<option value="sql">SQL</option>
+							<!-- dialects -->
+							<option value="redshift">AWS Redshift</option>
+							<option value="db2">DB2</option>
+							<option value="mariadb">MariaDB</option>
+							<option value="mysql">MySQL</option>
+							<option value="n1ql">N1QL</option>
+							<option value="plsql">PL/SQL</option>
+							<option value="postgresql">PostgreSQL</option>
+							<option value="spark">Spark</option>
+							<option value="tsql">Transact-SQL</option>
+						</select>
+					</article>
+					<article class="config">
+						<label for="uppercase">Uppercase</label>
+						<input type="checkbox" id="uppercase" name="uppercase" checked />
+					</article>
+				</div>
+			</aside>
+			<div class="staging">
+				<section class="input">
+					<textarea id="input" autofocus wrap="off">
 select supplier_name,city from
 (select * from suppliers join addresses on suppliers.address_id=addresses.id)
 as suppliers
 where supplier_id>500
-order by supplier_name asc,city desc;
-      </textarea
-				>
-			</section>
-			<section class="output">
-				<textarea id="output" readonly="true" wrap="off"></textarea>
-			</section>
+order by supplier_name asc,city desc;</textarea
+					>
+				</section>
+				<section class="output">
+					<textarea id="output" readonly wrap="off"></textarea>
+				</section>
+			</div>
 		</main>
 
 		<script
