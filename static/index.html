@@ -44,6 +44,10 @@
 				<h3 style="margin: 0.5rem 0">Options</h3>
 				<div class="select-wrapper">
 					<article class="config">
+						<label for="font-size">Font Size:</label>
+						<input type="number" id="font-size" name="font-size" min="10" max="30" value="20" />
+					</article>
+					<article class="config">
 						<label for="language">Language:</label>
 						<select id="language">
 							<option value="sql">SQL</option>
@@ -62,6 +66,95 @@
 					<article class="config">
 						<label for="uppercase">Uppercase</label>
 						<input type="checkbox" id="uppercase" name="uppercase" checked />
+					</article>
+					<article class="config">
+						<label for="keywordPosition">Keyword Position:</label>
+						<select id="keywordPosition">
+							<option value="standard">Standard</option>
+							<option value="tenSpaceLeft">Ten-Space, Left</option>
+							<option value="tenSpaceRight">Ten-Space, Right</option>
+						</select>
+					</article>
+					<article class="config">
+						<label for="newline">Keyword Newline:</label>
+						<select id="newline">
+							<option value="always">Always</option>
+							<option value="itemCount">Item Count</option>
+							<option value="lineWidth">Line Width</option>
+							<option value="hybrid">Hybrid</option>
+							<option value="never">Never</option>
+						</select>
+					</article>
+					<article class="config">
+						<label for="newline.itemCount">Newline Item Count:</label>
+						<input
+							type="number"
+							id="newline.itemCount"
+							name="newline.itemCount"
+							min="0"
+							max="100"
+							value="1"
+						/>
+					</article>
+					<article class="config">
+						<label for="breakBeforeBooleanOperator">Break before Boolean Operator</label>
+						<input
+							type="checkbox"
+							id="breakBeforeBooleanOperator"
+							name="breakBeforeBooleanOperator"
+							checked
+						/>
+					</article>
+					<article class="config">
+						<label for="aliasAs">Use AS in alias</label>
+						<select id="aliasAs">
+							<option value="select">SELECT Only</option>
+							<option value="always">Always</option>
+							<option value="never">Never</option>
+						</select>
+					</article>
+					<article class="config">
+						<label for="tabulateAlias">Align Aliases</label>
+						<input type="checkbox" id="tabulateAlias" name="tabulateAlias" />
+					</article>
+					<article class="config">
+						<label for="commaPosition">CommaPosition</label>
+						<select id="commaPosition">
+							<option value="after">After</option>
+							<option value="before">Before</option>
+							<option value="tabular">Tabular</option>
+						</select>
+					</article>
+					<article class="config">
+						<label for="openParenNewline">Open Paren Newline</label>
+						<input type="checkbox" id="openParenNewline" name="openParenNewline" />
+					</article>
+					<article class="config">
+						<label for="closeParenNewline">Close Paren Newline</label>
+						<input type="checkbox" id="closeParenNewline" name="closeParenNewline" checked />
+					</article>
+					<article class="config">
+						<label for="lineWidth">Line Width:</label>
+						<input type="number" id="lineWidth" name="lineWidth" min="0" max="200" value="50" />
+					</article>
+					<article class="config">
+						<label for="lineBetweenQueries">Lines between queries:</label>
+						<input
+							type="number"
+							id="lineBetweenQueries"
+							name="lineBetweenQueries"
+							min="0"
+							max="5"
+							value="1"
+						/>
+					</article>
+					<article class="config">
+						<label for="denseOperators">Dense Operators</label>
+						<input type="checkbox" id="denseOperators" name="denseOperators" />
+					</article>
+					<article class="config">
+						<label for="semicolonNewline">Semicolon on Newline</label>
+						<input type="checkbox" id="semicolonNewline" name="semicolonNewline" />
 					</article>
 				</div>
 			</aside>
