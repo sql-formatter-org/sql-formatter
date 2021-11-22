@@ -1618,6 +1618,51 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL'];
 
+const binaryOperators = [
+	'<<',
+	'>>',
+	'||/',
+	'|/',
+	'::',
+	':=',
+	'->>',
+	'->',
+	'=>',
+	'~~*',
+	'~~',
+	'!~~*',
+	'!~~',
+	'~*',
+	'!~*',
+	'!~',
+	'!!',
+	'||',
+	'@-@',
+	'@@',
+	'##',
+	'<->',
+	'&&',
+	'&<',
+	'&>',
+	'<<|',
+	'&<|',
+	'|>>',
+	'|&>',
+	'<^',
+	'^>',
+	'?#',
+	'?-',
+	'?|',
+	'?-|',
+	'?||',
+	'@>',
+	'<@',
+	'~=',
+	'>>=',
+	'<<=',
+	'@@@',
+];
+
 // https://www.postgresql.org/docs/14/index.html
 export default class PostgreSqlFormatter extends Formatter {
 	static reservedCommands = reservedCommands;
@@ -1628,30 +1673,13 @@ export default class PostgreSqlFormatter extends Formatter {
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
 		...reservedKeywords,
 	];
-	static stringTypes: StringPatternType[] = [`""`, "''", "U&''", 'U&""', '$$'];
+	static stringTypes: StringPatternType[] = [`""`, "''", "U&''", 'U&""', '$$', '``'];
 	static blockStart = ['(', 'CASE'];
 	static blockEnd = [')', 'END'];
 	static indexedPlaceholderTypes = ['$'];
 	static namedPlaceholderTypes = [':'];
 	static lineCommentTypes = ['--'];
-	static operators = [
-		'!=',
-		'<<',
-		'>>',
-		'||/',
-		'|/',
-		'::',
-		'->>',
-		'->',
-		'~~*',
-		'~~',
-		'!~~*',
-		'!~~',
-		'~*',
-		'!~*',
-		'!~',
-		'!!',
-	];
+	static operators = binaryOperators;
 
 	tokenizer() {
 		return new Tokenizer({
@@ -1671,11 +1699,10 @@ export default class PostgreSqlFormatter extends Formatter {
 	}
 
 	tokenOverride(token: Token) {
-		if (isToken('LATERAL')(token)) {
-			if (this.tokenLookAhead()?.type === TokenType.BLOCK_START) {
-				// This is a subquery, treat it like a join
-				return { type: TokenType.RESERVED_LOGICAL_OPERATOR, value: token.value };
-			}
+		// [LATERAL] ( ...
+		if (isToken.LATERAL(token) && this.tokenLookAhead()?.type === TokenType.BLOCK_START) {
+			// This is a subquery, treat it like a join
+			return { type: TokenType.RESERVED_LOGICAL_OPERATOR, value: token.value };
 		}
 
 		return token;

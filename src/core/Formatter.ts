@@ -201,7 +201,7 @@ export default class Formatter {
 					token = this.tenSpacedToken(token);
 				}
 				if (token.type === TokenType.RESERVED_COMMAND) {
-					this.withinSelect = isToken('SELECT')(token);
+					this.withinSelect = isToken.SELECT(token);
 				}
 			}
 
@@ -219,7 +219,7 @@ export default class Formatter {
 			} else if (token.type === TokenType.RESERVED_LOGICAL_OPERATOR) {
 				formattedQuery = this.formatLogicalOperator(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_KEYWORD) {
-				if (!(isToken('AS')(token) && this.cfg.aliasAs === AliasMode.never)) {
+				if (!(isToken.AS(token) && this.cfg.aliasAs === AliasMode.never)) {
 					// do not format if skipping AS
 					formattedQuery = this.formatWithSpaces(token, formattedQuery);
 					this.previousReservedToken = token;
@@ -230,26 +230,8 @@ export default class Formatter {
 				formattedQuery = this.formatBlockEnd(token, formattedQuery);
 			} else if (token.type === TokenType.PLACEHOLDER) {
 				formattedQuery = this.formatPlaceholder(token, formattedQuery);
-			} else if (token.value === ',') {
-				formattedQuery = this.formatComma(token, formattedQuery);
-			} else if (token.value === ':') {
-				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
-			} else if (token.value === '.') {
-				formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
-			} else if (token.value === ';') {
-				formattedQuery = this.formatQuerySeparator(token, formattedQuery);
-			} else if (
-				token.value === '[' ||
-				(token.value === '`' && this.tokenLookAhead(2)?.value === '`')
-			) {
-				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'before');
-			} else if (
-				token.value === ']' ||
-				(token.value === '`' && this.tokenLookBehind(2)?.value === '`')
-			) {
-				formattedQuery = this.formatWithSpaces(token, formattedQuery, 'after');
-			} else if (token.type === TokenType.OPERATOR && this.cfg.denseOperators) {
-				formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
+			} else if (token.type === TokenType.OPERATOR) {
+				formattedQuery = this.formatOperator(token, formattedQuery);
 			} else {
 				if (this.cfg.aliasAs !== AliasMode.never) {
 					formattedQuery = this.formatAliases(token, formattedQuery);
@@ -273,7 +255,7 @@ export default class Formatter {
 		const missingSelectColumnAlias = // if select column alias is missing and alias is not never
 			this.withinSelect &&
 			token.type === TokenType.WORD &&
-			(isToken('END')(prevToken) || // isAs(prevToken) ||
+			(isToken.END(prevToken) || // isAs(prevToken) ||
 				(prevToken?.type === TokenType.WORD && (nextToken?.value === ',' || isCommand(nextToken))));
 
 		if (missingTableAlias || missingSelectColumnAlias) {
@@ -358,7 +340,7 @@ export default class Formatter {
 			if (this.tokenLookAhead()?.value !== '(') {
 				this.indentation.increaseTopLevel();
 			}
-		} else if (!(this.tokenLookAhead()?.value === '(' && isToken('FROM')(token))) {
+		} else if (!(this.tokenLookAhead()?.value === '(' && isToken.FROM(token))) {
 			this.indentation.increaseTopLevel();
 		}
 
@@ -381,8 +363,29 @@ export default class Formatter {
 		return isJoin ? query + ' ' : this.addNewline(query);
 	}
 
+	formatOperator(token: Token, query: string) {
+		// special operator
+		if (token.value === ',') {
+			return this.formatComma(token, query);
+		} else if (token.value === ';') {
+			return this.formatQuerySeparator(token, query);
+		} else if (['$', '['].includes(token.value)) {
+			return this.formatWithSpaces(token, query, 'before');
+		} else if ([':', ']'].includes(token.value)) {
+			return this.formatWithSpaces(token, query, 'after');
+		} else if (['.', '{', '}', '`'].includes(token.value)) {
+			return this.formatWithoutSpaces(token, query);
+		}
+
+		// regular operator
+		if (this.cfg.denseOperators) {
+			return this.formatWithoutSpaces(token, query);
+		}
+		return this.formatWithSpaces(token, query);
+	}
+
 	formatLogicalOperator(token: Token, query: string) {
-		if (isToken('AND')(token) && isToken('BETWEEN')(this.tokenLookBehind(2))) {
+		if (isToken.AND(token) && isToken.BETWEEN(this.tokenLookBehind(2))) {
 			return this.formatWithSpaces(token, query);
 		}
 
@@ -404,7 +407,7 @@ export default class Formatter {
 
 	// Opening parentheses increase the block indent level and start a new line
 	formatBlockStart(token: Token, query: string) {
-		if (isToken('CASE')(token)) {
+		if (isToken.CASE(token)) {
 			query = this.formatWithSpaces(token, query);
 		} else {
 			// Take out the preceding space unless there was whitespace there in the original query
@@ -428,7 +431,7 @@ export default class Formatter {
 
 		if (!this.inlineBlock.isActive()) {
 			this.indentation.increaseBlockLevel();
-			if (!isToken('CASE')(token) || this.newline.mode === NewlineMode.always) {
+			if (!isToken.CASE(token) || this.newline.mode === NewlineMode.always) {
 				query = this.addNewline(query);
 			}
 		}
@@ -465,7 +468,7 @@ export default class Formatter {
 
 		if (this.inlineBlock.isActive()) {
 			return query;
-		} else if (isToken('LIMIT')(this.previousReservedToken)) {
+		} else if (isToken.LIMIT(this.previousReservedToken)) {
 			return query;
 		} else if (this.currentNewline) {
 			return this.addNewline(query);

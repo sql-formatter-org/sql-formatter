@@ -26,24 +26,24 @@ export const ZWS = '​'; // uses zero-width space (&#8203; / U+200B)
 const ZWS_REGEX = '\u200b';
 const spaces = `[${ZWS_REGEX}\\s]`;
 
-const testTokens = {
-	AS: TokenType.RESERVED_KEYWORD,
-	AND: TokenType.RESERVED_LOGICAL_OPERATOR,
-	BETWEEN: TokenType.RESERVED_KEYWORD,
-	CASE: TokenType.BLOCK_START,
-	BY: TokenType.RESERVED_KEYWORD,
-	END: TokenType.BLOCK_END,
-	FROM: TokenType.RESERVED_COMMAND,
-	LATERAL: TokenType.RESERVED_DEPENDENT_CLAUSE,
-	LIMIT: TokenType.RESERVED_COMMAND,
-	SELECT: TokenType.RESERVED_COMMAND,
-	SET: TokenType.RESERVED_COMMAND,
-	WINDOW: TokenType.RESERVED_COMMAND,
-};
+export const testToken = (compareToken: Token) => (token: Token) =>
+	token?.type === compareToken.type &&
+	new RegExp(`^${spaces}*${compareToken.value}${spaces}*$`, 'iu').test(token?.value);
 
-export const isToken = (testToken: keyof typeof testTokens) => (token: Token) =>
-	token?.type === testTokens[testToken] &&
-	new RegExp(`^${spaces}*${testToken}${spaces}*$`, 'iu').test(token?.value);
+export const isToken = {
+	AS: testToken({ value: 'AS', type: TokenType.RESERVED_KEYWORD }),
+	AND: testToken({ value: 'AND', type: TokenType.RESERVED_LOGICAL_OPERATOR }),
+	BETWEEN: testToken({ value: 'BETWEEN', type: TokenType.RESERVED_KEYWORD }),
+	CASE: testToken({ value: 'CASE', type: TokenType.BLOCK_START }),
+	BY: testToken({ value: 'BY', type: TokenType.RESERVED_KEYWORD }),
+	END: testToken({ value: 'END', type: TokenType.BLOCK_END }),
+	FROM: testToken({ value: 'FROM', type: TokenType.RESERVED_COMMAND }),
+	LATERAL: testToken({ value: 'LATERAL', type: TokenType.RESERVED_DEPENDENT_CLAUSE }),
+	LIMIT: testToken({ value: 'LIMIT', type: TokenType.RESERVED_COMMAND }),
+	SELECT: testToken({ value: 'SELECT', type: TokenType.RESERVED_COMMAND }),
+	SET: testToken({ value: 'SET', type: TokenType.RESERVED_COMMAND }),
+	WINDOW: testToken({ value: 'WINDOW', type: TokenType.RESERVED_COMMAND }),
+};
 
 export const isCommand = (token: Token) =>
 	token &&
