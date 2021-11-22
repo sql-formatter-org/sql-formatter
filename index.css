@@ -1,47 +1,58 @@
 html,
 body {
 	height: 100%;
+	width: 100%;
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
 	font-family: 'Roboto Mono', monospace;
 }
 header {
+	z-index: 2;
 	position: relative;
-	height: 120px;
+	height: 4rem;
 	padding: 10px 20px;
 	border-bottom: 2px solid #8dc63f;
 	box-sizing: border-box;
 }
-.select-wrapper {
-	position: absolute;
-	bottom: 0;
-	left: 50%;
-	transform: translate(-50%, -50%);
+h1.title {
+	margin: 0 1rem 0 0;
+	display: inline-block;
 }
-h1 {
-	margin: 0 0 8px 0;
+.buttons {
+	display: inline-block;
 }
 a {
 	text-decoration: none;
 }
 main {
 	overflow: hidden;
+	height: calc(100% - 4rem);
 	display: flex;
 	flex-direction: row;
-	-webkit-align-items: stretch;
+}
+aside.options-menu {
+	padding: 0.5rem;
+	width: 11%;
+	height: 100%;
+	background-color: aliceblue;
+}
+article.config {
+	margin: 0.25rem 0;
+}
+.staging {
+	width: 89%;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
 	align-items: stretch;
-	height: calc(100% - 120px);
 }
 .input,
 .output {
 	display: flex;
-	-webkit-align-items: stretch;
 	align-items: stretch;
 	width: 50%;
 	height: 100%;
-}
-.output {
 	border-left: 2px solid #8dc63f;
 }
 textarea {
