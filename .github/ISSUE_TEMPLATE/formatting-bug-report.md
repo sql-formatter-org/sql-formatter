@@ -17,7 +17,7 @@ Please provide a code snippet of the SQL output produced by the tool.
 
 **Usage**
 
-- How are you calling / using the script? (Please provider a code snippet)
+- How are you calling / using the script? (Please provide a code snippet)
 - What SQL language(s) does this apply to?
 - What Node version? (If applicable)
 
