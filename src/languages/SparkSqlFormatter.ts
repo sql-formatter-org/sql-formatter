@@ -810,21 +810,16 @@ export default class SparkSqlFormatter extends Formatter {
 	}
 
 	tokenOverride(token: Token) {
-		// Fix cases where names are ambiguously keywords or functions
-		if (isToken.WINDOW(token)) {
-			const aheadToken = this.tokenLookAhead();
-			if (aheadToken?.type === TokenType.BLOCK_START) {
-				// This is a function call, treat it as a reserved word
-				return { type: TokenType.RESERVED_KEYWORD, value: token.value };
-			}
+		// [WINDOW](...)
+		if (isToken.WINDOW(token) && this.tokenLookAhead()?.type === TokenType.BLOCK_START) {
+			// This is a function call, treat it as a reserved word
+			return { type: TokenType.RESERVED_KEYWORD, value: token.value };
 		}
 
-		if (isToken.END(token)) {
-			const backToken = this.tokenLookBehind();
-			if (backToken?.type === TokenType.OPERATOR && backToken?.value === '.') {
-				// This is window().end (or similar) not CASE ... END
-				return { type: TokenType.WORD, value: token.value };
-			}
+		// .[END]
+		if (isToken.END(token) && this.tokenLookBehind()?.value === '.') {
+			// This is window().end (or similar) not CASE ... END
+			return { type: TokenType.WORD, value: token.value };
 		}
 
 		// TODO: deprecate this once ITEMS is merged with COLLECTION
