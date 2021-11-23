@@ -3,6 +3,10 @@
 	"parserOptions": { "project": "./tsconfig.json", "ecmaVersion": 6, "sourceType": "module" },
 	"extends": ["airbnb-base", "airbnb-typescript/base", "plugin:import/typescript", "prettier"],
 	"plugins": ["@typescript-eslint", "prettier"],
+	"globals": {
+		"document": true,
+		"prettierSql": true
+	},
 	"rules": {
 		"class-methods-use-this": "off",
 		"curly": ["error", "all"],
