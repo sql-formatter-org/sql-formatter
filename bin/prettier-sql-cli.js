@@ -2,7 +2,7 @@
 
 'use strict';
 
-const { format, supportedDialects } = require('../lib/sqlFormatter');
+const { format, supportedDialects } = require('../lib/index');
 const fs = require('fs');
 const { version } = require('../package.json');
 const { ArgumentParser } = require('argparse');
@@ -72,6 +72,8 @@ class PrettierSQLArgs {
 					console.error(`Error: could not open file ${this.args.config}`);
 					process.exit(1);
 				}
+				console.error('An unknown error has occurred, please file a bug report at:');
+				console.log('https://github.com/inferrinizzard/prettier-sql/issues\n');
 				throw e;
 			}
 		return {
@@ -92,6 +94,8 @@ class PrettierSQLArgs {
 				console.error(`Error: could not open file ${infile}`);
 				process.exit(1);
 			}
+			console.error('An unknown error has occurred, please file a bug report at:');
+			console.log('https://github.com/inferrinizzard/prettier-sql/issues\n');
 			throw e;
 		}
 	}
