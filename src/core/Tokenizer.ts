@@ -16,7 +16,7 @@ interface TokenizerOptions {
 	indexedPlaceholderTypes?: string[];
 	namedPlaceholderTypes: string[];
 	lineCommentTypes: string[];
-	specialWordChars?: { prefix?: string; suffix?: string; any: string };
+	specialWordChars?: { prefix?: string; any?: string; suffix?: string };
 	operators?: string[];
 }
 
