@@ -2,7 +2,8 @@
 
 # Prettier SQL [![NPM version](https://img.shields.io/npm/v/prettier-sql.svg)](https://npmjs.com/package/prettier-sql) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/coveralls/develop?label=Dev%20Build&logo=Github) ![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/webpack/master?event=push&label=Prod%20Build&logo=Github) ![Coveralls](https://img.shields.io/coveralls/github/inferrinizzard/prettier-sql?branch=master&label=Coverage&logo=coveralls&style=plastic)
 
-**Prettier SQL** is a JavaScript library for pretty-printing SQL queries.
+## **Prettier SQL** is a JavaScript library for pretty-printing SQL queries.
+
 It started as a port of a [PHP Library][], but has since considerably diverged.
 
 Prettier SQL supports the following dialects:
@@ -188,17 +189,11 @@ https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-
 
 ## Contributing
 
-Make sure to run all checks:
-
-```sh
-npm run check
-```
-
-...and you're ready to poke us with a pull request.
+Please see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License
 
-[MIT](https://github.com/inferrinizzard/prettier-sql/blob/master/LICENSE)
+[MIT](LICENSE)
 
 [php library]: https://github.com/jdorn/sql-formatter
 [standard sql]: https://en.wikipedia.org/wiki/SQL:2011
