@@ -1,4 +1,6 @@
-# Prettier SQL [![NPM version](https://img.shields.io/npm/v/prettier-sql.svg)](https://npmjs.com/package/prettier-sql) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/coveralls/develop?label=Dev%20Build&logo=Github) ![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/webpack/master?event=push&label=Prod%20Build&logo=Github) [![Coverage Status](https://coveralls.io/repos/github/inferrinizzard/prettier-sql/badge.svg?branch=master)](https://coveralls.io/github/inferrrinizzard/prettier-sql?branch=master)
+<img src="static/prettier-sql-clean.svg" width="128"/>
+
+# Prettier SQL [![NPM version](https://img.shields.io/npm/v/prettier-sql.svg)](https://npmjs.com/package/prettier-sql) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/coveralls/develop?label=Dev%20Build&logo=Github) ![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/webpack/master?event=push&label=Prod%20Build&logo=Github) ![Coveralls](https://img.shields.io/coveralls/github/inferrinizzard/prettier-sql?branch=master&label=Coverage&logo=coveralls&style=plastic)
 
 **Prettier SQL** is a JavaScript library for pretty-printing SQL queries.
 It started as a port of a [PHP Library][], but has since considerably diverged.
@@ -30,6 +32,7 @@ It does not support:
   - [Usage as library](#usage-as-library)
   - [Usage from command line](#usage-from-command-line)
   - [Usage without NPM](#usage-without-npm)
+  - [Usage with VSCode](#usage-with-vscode)
 - [Contributing](#contributing)
 
 ## Install
@@ -177,6 +180,11 @@ All fields are optional and all fields that are not specified will be filled wit
 
 If you don't use a module bundler, clone the repository, run `npm install` and grab a file from `/dist` directory to use inside a `<script>` tag.
 This makes Prettier SQL available as a global variable `window.prettierSql`.
+
+### Usage with VSCode
+
+Prettier SQL is also available as a VSCode extension here: \
+https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode
 
 ## Contributing
 
