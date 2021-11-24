@@ -215,7 +215,7 @@ export default class Formatter {
 			} else if (token.type === TokenType.RESERVED_BINARY_COMMAND) {
 				formattedQuery = this.formatBinaryCommand(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_DEPENDENT_CLAUSE) {
-				formattedQuery = this.formatLogicalOperator(token, formattedQuery);
+				formattedQuery = this.formatDependentClause(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_LOGICAL_OPERATOR) {
 				formattedQuery = this.formatLogicalOperator(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_KEYWORD) {
@@ -382,6 +382,10 @@ export default class Formatter {
 			return this.formatWithoutSpaces(token, query);
 		}
 		return this.formatWithSpaces(token, query);
+	}
+
+	formatDependentClause(token: Token, query: string) {
+		return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
 	}
 
 	formatLogicalOperator(token: Token, query: string) {
