@@ -153,7 +153,7 @@ describe('N1qlFormatter', () => {
 	it('replaces $variables with param values', () => {
 		const result = format('SELECT $variable, $\'var name\', $"var name", $`var name`;', {
 			params: {
-				variable: '"variable value"',
+				'variable': '"variable value"',
 				'var name': "'var value'",
 			},
 		});

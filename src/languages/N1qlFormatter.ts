@@ -520,7 +520,7 @@ export default class N1qlFormatter extends Formatter {
 	static blockEnd = [')', ']', '}', 'END'];
 	static namedPlaceholderTypes = ['$'];
 	static lineCommentTypes = ['#', '--'];
-	static operators = ['==', '!='];
+	static operators = ['=='];
 
 	tokenizer() {
 		return new Tokenizer({

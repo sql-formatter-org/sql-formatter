@@ -1162,8 +1162,8 @@ export default class MariaDbFormatter extends Formatter {
 	static indexedPlaceholderTypes = ['?'];
 	static namedPlaceholderTypes = [];
 	static lineCommentTypes = ['--', '#'];
-	static specialWordChars = ['@'];
-	static operators = [':=', '<<', '>>', '!=', '<>', '<=>', '&&', '||'];
+	static specialWordChars = { prefix: '@' };
+	static operators = [':=', '<<', '>>', '<=>', '&&', '||'];
 
 	tokenizer() {
 		return new Tokenizer({
@@ -1184,11 +1184,10 @@ export default class MariaDbFormatter extends Formatter {
 	}
 
 	tokenOverride(token: Token) {
-		if (isToken('SET')(token)) {
-			if (this.tokenLookAhead()?.value === '(') {
-				// This is SET datatype, not SET statement
-				return { type: TokenType.RESERVED_KEYWORD, value: token.value };
-			}
+		// [SET] ( ...
+		if (isToken.SET(token) && this.tokenLookAhead()?.value === '(') {
+			// This is SET datatype, not SET statement
+			return { type: TokenType.RESERVED_KEYWORD, value: token.value };
 		}
 
 		return token;

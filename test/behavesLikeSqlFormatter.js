@@ -443,4 +443,16 @@ export default function behavesLikeSqlFormatter(format) {
         tbl2;
     `);
 	});
+
+	it('handles array and map accessor', () => {
+		const result = format(`SELECT alpha[1], beta['gamma'], epsilon["zeta"] FROM eta;`);
+		expect(result).toBe(dedent`
+      SELECT
+        alpha[1],
+        beta['gamma'],
+        epsilon["zeta"]
+      FROM
+        eta;
+    `);
+	});
 }

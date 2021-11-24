@@ -6,5 +6,6 @@
 	"bracketSpacing": true,
 	"useTabs": true,
 	"tabWidth": 2,
-	"endOfLine": "auto"
+	"endOfLine": "auto",
+	"quoteProps": "consistent"
 }

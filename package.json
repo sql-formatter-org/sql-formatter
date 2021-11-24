@@ -7,7 +7,7 @@
 	"module": "dist/prettier-sql.min.js",
 	"types": "lib/index.d.ts",
 	"bin": {
-		"prettier-sql": "./bin/sqlfmt.js"
+		"prettier-sql": "./bin/prettier-sql-cli.js"
 	},
 	"keywords": [
 		"sql",
