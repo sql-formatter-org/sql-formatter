@@ -25,7 +25,7 @@ If applicable, add screenshots to help explain your problem.
 
 **Usage**
 
-- How are you calling / using the script? (Please provide a code snippet)
+- How are you calling / using the script? (Please provide a code snippet, if applicable)
 - What SQL language(s) does this apply to?
 - What Node version? (If applicable)
 
