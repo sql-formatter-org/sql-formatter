@@ -300,7 +300,8 @@ export default function behavesLikeSqlFormatter(format) {
 
 	it('formats UPDATE query with AS part', () => {
 		const result = format(
-			'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary'
+			'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary',
+			{ aliasAs: 'always' }
 		);
 		expect(result).toBe(dedent`
       UPDATE

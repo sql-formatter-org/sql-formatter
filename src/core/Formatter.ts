@@ -219,7 +219,16 @@ export default class Formatter {
 			} else if (token.type === TokenType.RESERVED_LOGICAL_OPERATOR) {
 				formattedQuery = this.formatLogicalOperator(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_KEYWORD) {
-				if (!(isToken.AS(token) && this.cfg.aliasAs === AliasMode.never)) {
+				if (
+					!(
+						isToken.AS(token) &&
+						(this.cfg.aliasAs === AliasMode.never ||
+							(this.cfg.aliasAs === AliasMode.select &&
+								this.tokenLookBehind()?.value === ')' &&
+								!this.withinSelect &&
+								this.tokenLookAhead()?.value !== '('))
+					)
+				) {
 					// do not format if skipping AS
 					formattedQuery = this.formatWithSpaces(token, formattedQuery);
 					this.previousReservedToken = token;
