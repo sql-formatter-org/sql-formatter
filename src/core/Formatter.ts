@@ -219,7 +219,16 @@ export default class Formatter {
 			} else if (token.type === TokenType.RESERVED_LOGICAL_OPERATOR) {
 				formattedQuery = this.formatLogicalOperator(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_KEYWORD) {
-				if (!(isToken.AS(token) && this.cfg.aliasAs === AliasMode.never)) {
+				if (
+					!(
+						isToken.AS(token) &&
+						(this.cfg.aliasAs === AliasMode.never || // skip all AS if never
+							(this.cfg.aliasAs === AliasMode.select &&
+								this.tokenLookBehind()?.value === ')' && // ) [AS] alias but not SELECT (a) [AS] alpha
+								!this.withinSelect && // skip WITH foo [AS] ( ...
+								this.tokenLookAhead()?.value !== '('))
+					)
+				) {
 					// do not format if skipping AS
 					formattedQuery = this.formatWithSpaces(token, formattedQuery);
 					this.previousReservedToken = token;
@@ -378,7 +387,8 @@ export default class Formatter {
 		}
 
 		// regular operator
-		if (this.cfg.denseOperators) {
+		if (this.cfg.denseOperators && this.tokenLookBehind()?.type !== TokenType.RESERVED_COMMAND) {
+			// do not trim whitespace if SELECT *
 			return this.formatWithoutSpaces(token, query);
 		}
 		return this.formatWithSpaces(token, query);

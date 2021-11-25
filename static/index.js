@@ -18,30 +18,39 @@ const attachFormat = () => {
 	const semicolonNewline = document.getElementById('semicolonNewline');
 
 	function format() {
-		console.time('formatting');
-		const config = {
-			language: language.options[language.selectedIndex].value,
-			uppercase: uppercase.checked,
-			keywordPosition: keywordPosition.options[keywordPosition.selectedIndex].value,
-			breakBeforeBooleanOperator: breakBeforeBooleanOperator.checked,
-			aliasAs: aliasAs.checked,
-			newline: {
-				mode: newline.options[newline.selectedIndex].value,
-				itemCount: itemCount.value,
-			},
-			tabulateAlias: tabulateAlias.checked,
-			commaPosition: commaPosition.options[commaPosition.selectedIndex].value,
-			parenOptions: {
-				openParenNewline: openParenNewline.checked,
-				closeParenNewline: closeParenNewline.checked,
-			},
-			lineWidth: lineWidth.value,
-			lineBetweenQueries: lineBetweenQueries.value,
-			denseOperators: denseOperators.checked,
-			semicolonNewline: semicolonNewline.checked,
-		};
-		output.value = prettierSql.format(input.value, config);
-		console.timeEnd('formatting');
+		try {
+			console.time('formatting');
+			const config = {
+				language: language.options[language.selectedIndex].value,
+				uppercase: uppercase.checked,
+				keywordPosition: keywordPosition.options[keywordPosition.selectedIndex].value,
+				breakBeforeBooleanOperator: breakBeforeBooleanOperator.checked,
+				aliasAs: aliasAs.options[aliasAs.selectedIndex].value,
+				newline: {
+					mode: newline.options[newline.selectedIndex].value,
+					itemCount: itemCount.value,
+				},
+				tabulateAlias: tabulateAlias.checked,
+				commaPosition: commaPosition.options[commaPosition.selectedIndex].value,
+				parenOptions: {
+					openParenNewline: openParenNewline.checked,
+					closeParenNewline: closeParenNewline.checked,
+				},
+				lineWidth: lineWidth.value,
+				lineBetweenQueries: lineBetweenQueries.value,
+				denseOperators: denseOperators.checked,
+				semicolonNewline: semicolonNewline.checked,
+			};
+			output.value = prettierSql.format(input.value, config);
+			console.timeEnd('formatting');
+		} catch (e) {
+			output.value = `
+An Error Occurred, please report this at:
+https://github.com/inferrinizzard/prettier-sql/issues\n
+Stack Trace:
+${e.stack.toString()}
+`;
+		}
 	}
 
 	input.addEventListener('input', format);
