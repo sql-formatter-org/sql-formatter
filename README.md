@@ -1,6 +1,6 @@
 <img src="static/prettier-sql-clean.svg" width="128"/>
 
-# Prettier SQL [![NPM version](https://img.shields.io/npm/v/prettier-sql.svg)](https://npmjs.com/package/prettier-sql) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/coveralls/develop?label=Dev%20Build&logo=Github) ![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/webpack/master?event=push&label=Prod%20Build&logo=Github) ![Coveralls](https://img.shields.io/coveralls/github/inferrinizzard/prettier-sql?branch=master&label=Coverage&logo=coveralls&style=plastic)
+# Prettier SQL [![NPM version](https://img.shields.io/npm/v/prettier-sql.svg)](https://npmjs.com/package/prettier-sql) ![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/coveralls/master?label=Build&logo=Github) ![Coveralls](https://img.shields.io/coveralls/github/inferrinizzard/prettier-sql?branch=master&label=Coverage&logo=coveralls&style=plastic)
 
 ## **Prettier SQL** is a JavaScript library for pretty-printing SQL queries.
 
@@ -24,7 +24,7 @@ It does not support:
 - Stored procedures.
 - Changing of the delimiter type to something else than `;`.
 
-→ [Try the demo.](https://inferrinizzard.github.io/prettier-sql/)
+→ [Try the demo.](https://inferrinizzard.github.io/prettier-sql/static)
 
 # Table of contents
 
