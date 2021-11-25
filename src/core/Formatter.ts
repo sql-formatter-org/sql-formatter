@@ -378,7 +378,7 @@ export default class Formatter {
 		}
 
 		// regular operator
-		if (this.cfg.denseOperators) {
+		if (this.cfg.denseOperators && this.tokenLookBehind()?.type !== TokenType.RESERVED_COMMAND) {
 			return this.formatWithoutSpaces(token, query);
 		}
 		return this.formatWithSpaces(token, query);
