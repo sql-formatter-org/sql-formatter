@@ -222,10 +222,10 @@ export default class Formatter {
 				if (
 					!(
 						isToken.AS(token) &&
-						(this.cfg.aliasAs === AliasMode.never ||
+						(this.cfg.aliasAs === AliasMode.never || // skip all AS if never
 							(this.cfg.aliasAs === AliasMode.select &&
-								this.tokenLookBehind()?.value === ')' &&
-								!this.withinSelect &&
+								this.tokenLookBehind()?.value === ')' && // ) [AS] alias but not SELECT (a) [AS] alpha
+								!this.withinSelect && // skip WITH foo [AS] ( ...
 								this.tokenLookAhead()?.value !== '('))
 					)
 				) {
@@ -388,6 +388,7 @@ export default class Formatter {
 
 		// regular operator
 		if (this.cfg.denseOperators && this.tokenLookBehind()?.type !== TokenType.RESERVED_COMMAND) {
+			// do not trim whitespace if SELECT *
 			return this.formatWithoutSpaces(token, query);
 		}
 		return this.formatWithSpaces(token, query);
