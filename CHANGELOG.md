@@ -1,10 +1,44 @@
 # CHANGELOG
 
-## NEXT [5.0.0] : 2021-11-03
+## NEXT [5.0.0] : 2021-11-22
 
 ### Added
 
-New Features:
+Source:
+
+- added support for ES6 module exports with TypeScript
+  - updated webpack with ts-loader for module types
+  - added tsc to babel commonjs build command
+- added index.ts pass-through export
+
+Other:
+
+- added GH Actions for CI build
+- added issue templates
+
+### Updated
+
+Source:
+
+- updated demo page for all new options
+
+Other:
+
+- renamed library to `prettier-sql`
+
+### Fixed
+
+- fixed bugs related to operator tokens
+
+### Removed
+
+- removed Travis CI (replaced by GH Actions)
+
+## [5.0.0-beta] : 2021-11-03
+
+### Added
+
+Source:
 
 - added option `aliasAs` to toggle use of AS in column, table, query aliases
   - modes: always (SELECT and table), select (SELECT only), never
@@ -45,22 +79,12 @@ Files Added:
 - test/newline.js (tests for newline modes)
 - test/parenthesis.js (tests for paren positions)
 
-### Removed
-
-Files Removed:
-
-- tokenTypes.ts (token types moved to TokenType enum in token.ts)
-- sqlFormatter.d.ts (converted to TypeScript)
-
 ### Updated
 
-Major changes:
+Source:
 
 - converted repo to Typescript
 - overhauled Keyword lists for all languages
-
-Other:
-
 - added default options for all configs
 - updated CLI to use config file
 - renamed Keyword categories to semantic Keyword types
@@ -70,3 +94,8 @@ Other:
   - reservedWord → reservedKeyword
   - added reservedFunctions
 - updated Tokenizer class and token.ts to be more DRY
+
+### Removed
+
+- tokenTypes.ts (token types moved to TokenType enum in token.ts)
+- sqlFormatter.d.ts (converted to TypeScript)

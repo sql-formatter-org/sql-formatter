@@ -372,7 +372,7 @@ export default class StandardSqlFormatter extends Formatter {
 	static reservedDependentClauses = reservedDependentClauses;
 	static reservedLogicalOperators = ['AND', 'OR'];
 	static reservedKeywords = reservedKeywords;
-	static stringTypes: StringPatternType[] = [`""`, "''"];
+	static stringTypes: StringPatternType[] = [`""`, "''", '``'];
 	static blockStart = ['(', 'CASE'];
 	static blockEnd = [')', 'END'];
 	static indexedPlaceholderTypes = ['?'];

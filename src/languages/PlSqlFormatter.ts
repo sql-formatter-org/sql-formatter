@@ -451,8 +451,18 @@ export default class PlSqlFormatter extends Formatter {
 	static indexedPlaceholderTypes = ['?'];
 	static namedPlaceholderTypes = [':'];
 	static lineCommentTypes = ['--'];
-	static specialWordChars = ['_', '$', '#', '.', '@'];
-	static operators = ['||', '**', '!=', ':='];
+	static specialWordChars = { any: '_$#.@' };
+	static operators = [
+		'||',
+		'**',
+		':=',
+		'~=',
+		'^=',
+		'>>',
+		'<<',
+		'=>',
+		//  '..' // breaks operator test, handled by .
+	];
 
 	tokenizer() {
 		return new Tokenizer({
@@ -473,15 +483,25 @@ export default class PlSqlFormatter extends Formatter {
 	}
 
 	tokenOverride(token: Token) {
-		if (isToken('SET')(token) && isToken('BY')(this.previousReservedToken)) {
+		// `table`[.]`column`
+		if (
+			token.value === '.' &&
+			this.tokenLookAhead()?.value.startsWith('`') &&
+			this.tokenLookBehind()?.value.endsWith('`')
+		) {
+			// This is an operator, do not insert spaces
+			return { type: TokenType.OPERATOR, value: token.value };
+		}
+
+		// BY [SET]
+		if (isToken.SET(token) && isToken.BY(this.previousReservedToken)) {
 			return { type: TokenType.RESERVED_KEYWORD, value: token.value };
 		}
 
-		if (isToken('LATERAL')(token)) {
-			if (this.tokenLookAhead()?.type === TokenType.BLOCK_START) {
-				// This is a subquery, treat it like a join
-				return { type: TokenType.RESERVED_LOGICAL_OPERATOR, value: token.value };
-			}
+		// [LATERAL] ( ...
+		if (isToken.LATERAL(token) && this.tokenLookAhead()?.type === TokenType.BLOCK_START) {
+			// This is a subquery, treat it like a join
+			return { type: TokenType.RESERVED_LOGICAL_OPERATOR, value: token.value };
 		}
 
 		return token;

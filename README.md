@@ -1,9 +1,12 @@
-# SQL Formatter [![NPM version](https://img.shields.io/npm/v/prettier-sql.svg)](https://npmjs.com/package/prettier-sql) ![Dev Build](https://github.com/github/docs/actions/workflows/webpack.yaml/badge.svg?event=push&branch=develop) ![Prod Build](https://github.com/github/docs/actions/workflows/webpack.yaml/badge.svg?event=push&branch=master) [![Coverage Status](https://coveralls.io/repos/github/inferrinizzard/prettier-sql/badge.svg?branch=master)](https://coveralls.io/github/inferrrinizzard/prettier-sql?branch=master)
+<img src="static/prettier-sql-clean.svg" width="128"/>
 
-**SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
+# Prettier SQL [![NPM version](https://img.shields.io/npm/v/prettier-sql.svg)](https://npmjs.com/package/prettier-sql) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/coveralls/develop?label=Dev%20Build&logo=Github) ![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/webpack/master?event=push&label=Prod%20Build&logo=Github) ![Coveralls](https://img.shields.io/coveralls/github/inferrinizzard/prettier-sql?branch=master&label=Coverage&logo=coveralls&style=plastic)
+
+## **Prettier SQL** is a JavaScript library for pretty-printing SQL queries.
+
 It started as a port of a [PHP Library][], but has since considerably diverged.
 
-SQL formatter supports the following dialects:
+Prettier SQL supports the following dialects:
 
 - **sql** - [Standard SQL][]
 - **mariadb** - [MariaDB][]
@@ -30,6 +33,7 @@ It does not support:
   - [Usage as library](#usage-as-library)
   - [Usage from command line](#usage-from-command-line)
   - [Usage without NPM](#usage-without-npm)
+  - [Usage with VSCode](#usage-with-vscode)
 - [Contributing](#contributing)
 
 ## Install
@@ -38,6 +42,12 @@ Get the latest version from NPM:
 
 ```sh
 npm install prettier-sql
+```
+
+Also available with yarn:
+
+```sh
+yarn add prettier-sql
 ```
 
 ## Usage
@@ -108,7 +118,7 @@ prettier-sql -h
 usage: sqlfmt.js [-h] [-o OUTPUT] \
 [-l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}] [-c CONFIG] [--version] [FILE]
 
-SQL Formatter
+Prettier SQL
 
 positional arguments:
   FILE            Input SQL file (defaults to stdin)
@@ -118,7 +128,7 @@ optional arguments:
   -o, --output    OUTPUT
                     File to write SQL output (defaults to stdout)
   -l, --language  {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}
-                    SQL Formatter dialect (defaults to basic sql)
+                    SQL dialect (defaults to standard sql)
   -c, --config    CONFIG
                     Path to config json file (will use default configs if unspecified)
   --version       show program's version number and exit
@@ -143,14 +153,14 @@ WHERE
 The tool also accepts a JSON config file with the `--config` option that takes this form: \
 All fields are optional and all fields that are not specified will be filled with their default values
 
-```json
+```ts
 {
 	"indent": string,
 	"uppercase": boolean,
 	"keywordPosition": "standard" | "tenSpaceLeft" | "tenSpaceRight",
 	"newline": {
 		"mode": "always" | "itemCount" | "lineWidth" | "hybrid" | "never",
-		"itemCount":? number
+		"itemCount"?: number // only used if newline.mode is itemCount or hybrid
 	},
 	"breakBeforeBooleanOperator": boolean,
 	"aliasAs": "always" | "select" | "never",
@@ -170,21 +180,20 @@ All fields are optional and all fields that are not specified will be filled wit
 ### Usage without NPM
 
 If you don't use a module bundler, clone the repository, run `npm install` and grab a file from `/dist` directory to use inside a `<script>` tag.
-This makes SQL Formatter available as a global variable `window.sqlFormatter`.
+This makes Prettier SQL available as a global variable `window.prettierSql`.
+
+### Usage with VSCode
+
+Prettier SQL is also available as a VSCode extension here: \
+https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode
 
 ## Contributing
 
-Make sure to run all checks:
-
-```sh
-npm run check
-```
-
-...and you're ready to poke us with a pull request.
+Please see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License
 
-[MIT](https://github.com/inferrinizzard/prettier-sql/blob/master/LICENSE)
+[MIT](LICENSE)
 
 [php library]: https://github.com/jdorn/sql-formatter
 [standard sql]: https://en.wikipedia.org/wiki/SQL:2011

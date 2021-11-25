@@ -3,9 +3,11 @@
 	"version": "5.0.0-beta.1",
 	"description": "Format whitespace in a SQL query to make it more readable",
 	"license": "MIT",
-	"main": "lib/sqlFormatter.js",
+	"main": "lib/index.js",
+	"module": "dist/prettier-sql.min.js",
+	"types": "lib/index.d.ts",
 	"bin": {
-		"prettier-sql": "./bin/sqlfmt.js"
+		"prettier-sql": "./bin/prettier-sql-cli.js"
 	},
 	"keywords": [
 		"sql",
@@ -23,41 +25,15 @@
 		"db2"
 	],
 	"contributors": [
-		"Adrien Pyke <adpyke@gmail.com>",
-		"Andrew",
-		"Benjamin Bellamy",
-		"bingou",
-		"Damon Davison <ddavison@avalere.com>",
-		"Davut Can Abacigil <can@teamsql.io>",
-		"Erik Hirmo <erik.hirmo@roguewave.com>",
-		"George Leslie-Waksman <waksman@gmail.com>",
-		"Ian Campbell <icampbell@immuta.com>",
-		"ivan baktsheev",
-		"João Pimentel Ferreira",
-		"Martin Nowak <code@dawg.eu>",
-		"Matheus Salmi <mathsalmi@gmail.com>",
-		"Matheus Teixeira <matheus.mtxr@gmail.com>",
-		"Nicolas Dermine <nicolas.dermine@gmail.com>",
-		"Offir Baron <ofir@panoply.io>",
-		"Olexandr Sydorchuk <olexandr.syd@gmail.com>",
-		"Rafael Pinto <raprp@posteo.de>",
-		"Rahel Rjadnev-Meristo <rahelini@gmail.com>",
-		"Rene Saarsoo <nene@triin.net>",
-		"Rodrigo Stuchi",
-		"Sasha Aliashkevich <olsender@gmail.com>",
-		"Sean Song <mail@seansong.dev>",
-		"Sergei Egorov <sergei.egorov@zeroturnaround.com>",
-		"Tyler Jones <tyler.jones@txwormhole.com>",
-		"Uku Pattak <ukupat@gmail.com>"
+		"Sean Song <mail@seansong.dev>"
 	],
 	"files": [
 		"bin",
 		"dist",
-		"lib",
-		"src"
+		"lib"
 	],
 	"scripts": {
-		"clean": "rimraf lib dist",
+		"clean": "rimraf lib dist coverage",
 		"lint": "eslint .",
 		"pretty": "prettier --write .",
 		"fix": "npm run pretty && eslint --fix .",
@@ -66,7 +42,7 @@
 		"test:watch": "npm run test -- --watch",
 		"check": "npm run pretty:check && npm run lint && npm run test",
 		"prepare": "npm run clean && npm run fix && npm run check && npm run build",
-		"build:commonjs": "babel src --out-dir lib --extensions .ts",
+		"build:commonjs": "babel src --out-dir lib --extensions .ts --source-maps && tsc --module commonjs --emitDeclarationOnly --isolatedModules",
 		"build:umd": "webpack --config webpack.dev.js",
 		"build:umd:min": "webpack --config webpack.prod.js",
 		"build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min"
@@ -109,10 +85,11 @@
 		"prettier": "^2.0.5",
 		"release-it": "^14.11.7",
 		"rimraf": "^3.0.2",
+		"ts-loader": "^9.2.6",
 		"typescript": "^4.3.5",
-		"webpack": "^4.43.0",
-		"webpack-cli": "^3.3.12",
-		"webpack-merge": "^5.0.8"
+		"webpack": "^5.64.1",
+		"webpack-cli": "^4.9.1",
+		"webpack-merge": "^5.8.0"
 	},
 	"jest": {
 		"roots": [

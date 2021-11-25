@@ -64,7 +64,7 @@ export default class InlineBlock {
 			}
 
 			// CASE cannot start inline block
-			if (token.type === TokenType.BLOCK_START && !isToken('CASE')(token)) {
+			if (token.type === TokenType.BLOCK_START && !isToken.CASE(token)) {
 				level++;
 			} else if (token.type === TokenType.BLOCK_END) {
 				level--;

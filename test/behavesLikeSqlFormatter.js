@@ -415,11 +415,11 @@ export default function behavesLikeSqlFormatter(format) {
 	});
 
 	it('correctly handles floats as single tokens', () => {
-		const result = format('SELECT 1e-9 AS a, 1.5e-10 AS b, 3.5E12 AS c, 3.5e12 AS d;');
+		const result = format('SELECT 1e-9 AS a, 1.5e+10 AS b, 3.5E12 AS c, 3.5e12 AS d;');
 		expect(result).toBe(dedent`
       SELECT
         1e-9 AS a,
-        1.5e-10 AS b,
+        1.5e+10 AS b,
         3.5E12 AS c,
         3.5e12 AS d;
     `);
@@ -441,6 +441,18 @@ export default function behavesLikeSqlFormatter(format) {
         *
       FROM
         tbl2;
+    `);
+	});
+
+	it('handles array and map accessor', () => {
+		const result = format(`SELECT alpha[1], beta['gamma'], epsilon["zeta"] FROM eta;`);
+		expect(result).toBe(dedent`
+      SELECT
+        alpha[1],
+        beta['gamma'],
+        epsilon["zeta"]
+      FROM
+        eta;
     `);
 	});
 }
