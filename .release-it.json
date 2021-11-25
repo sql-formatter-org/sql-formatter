@@ -7,12 +7,12 @@
 		"requireUpstream": true,
 		"requireCommits": false,
 		"addUntrackedFiles": false,
-		"commit": false,
+		"commit": true,
+		"commitMessage": "Release ${version}",
 		"tag": true,
 		"tagAnnotation": "${version}",
 		"push": true,
-		"pushArgs": ["--follow-tags"],
-		"pushRepo": ""
+		"pushArgs": ["--follow-tags"]
 	},
 	"npm": {
 		"publish": true,
@@ -28,7 +28,7 @@
 		"release": true,
 		"releaseName": "${version}",
 		"releaseNotes": "git log --pretty=format:\"* %s (%h)\" ${latestTag}...HEAD",
-		"preRelease": true,
+		"preRelease": false,
 		"draft": false,
 		"skipChecks": false,
 		"web": true
