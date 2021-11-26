@@ -1,9 +1,16 @@
 import * as vscode from 'vscode';
-import { AliasMode, CommaPosition, format, KeywordMode, NewlineMode } from 'prettier-sql';
+import { format } from 'prettier-sql';
+import type {
+	AliasMode,
+	CommaPosition,
+	FormatterLanguage,
+	KeywordMode,
+	NewlineMode,
+} from 'prettier-sql';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function activate(context: vscode.ExtensionContext) {
-	const formatProvider = {
+	const formatProvider = (language: FormatterLanguage) => ({
 		provideDocumentFormattingEdits(
 			document: vscode.TextDocument,
 			options: vscode.FormattingOptions
@@ -14,6 +21,7 @@ export default function activate(context: vscode.ExtensionContext) {
 
 			const lines = [...new Array(document.lineCount)].map((_, i) => document.lineAt(i).text);
 			const formatConfigs = {
+				language,
 				indent,
 				uppercase: settings.get<boolean>('uppercaseKeywords'),
 				keywordPosition: settings.get<KeywordMode>('keywordPosition'),
@@ -47,18 +55,21 @@ export default function activate(context: vscode.ExtensionContext) {
 				),
 			];
 		},
-	};
+	});
 
-	const languages = [
-		'sql',
-		'plsql',
-		'mysql',
-		'postgres',
-		'hql',
-		'hive-sql',
+	const languages: { [lang: string]: FormatterLanguage } = {
+		'sql': 'sql',
+		'plsql': 'plsql',
+		'mysql': 'mysql',
+		'postgres': 'postgresql',
+		'hql': 'sql',
+		'hive-sql': 'sql',
 		// 'sql-bigquery' // future
-	];
-	languages.forEach(lang =>
-		vscode.languages.registerDocumentFormattingEditProvider(lang, formatProvider)
+	};
+	Object.entries(languages).forEach(([vscodeLang, prettierLang]) =>
+		vscode.languages.registerDocumentFormattingEditProvider(
+			vscodeLang,
+			formatProvider(prettierLang)
+		)
 	);
 }
