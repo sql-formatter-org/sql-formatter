@@ -1,0 +1,221 @@
+{
+	"name": "prettier-sql-vscode",
+	"displayName": "Prettier SQL VSCode",
+	"description": "VSCode Extension to format SQL files",
+	"version": "0.1.0",
+	"publisher": "inferrinizzard",
+	"author": {
+		"name": "inferrinizzard"
+	},
+	"license": "MIT",
+	"icon": "prettier-sql-clean.png",
+	"engines": {
+		"vscode": "^1.58.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/inferrinizzard/prettier-sql-vscode"
+	},
+	"bugs": {
+		"url": "https://github.com/inferrinizzard/prettier-sql-vscode/issues"
+	},
+	"categories": [
+		"Formatters",
+		"Other"
+	],
+	"keywords": [
+		"db2",
+		"formatter",
+		"mariadb",
+		"mssql",
+		"mysql",
+		"node",
+		"n1ql",
+		"plsql",
+		"pl/sql",
+		"postgres",
+		"postgresql",
+		"prettier",
+		"redshift",
+		"spark",
+		"sparksql",
+		"sql",
+		"tsql"
+	],
+	"activationEvents": [
+		"onLanguage:sql"
+	],
+	"main": "./out/main.js",
+	"scripts": {
+		"clean": "rimraf out .vscode-test",
+		"postinstall": "npx vscode install && yarn run build:dev",
+		"compile": "tsc --emitDeclarationOnly",
+		"watch": "tsc -watch",
+		"build": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+		"build:prod": "yarn run build --minify && yarn run compile",
+		"build:dev": "yarn run build --sourcemap && yarn run compile",
+		"vscode:prepublish": "yarn run build:prod",
+		"lint": "eslint src --ext ts",
+		"pretest": "yarn run compile && yarn run lint",
+		"test": "node ./out/test/runTest.js"
+	},
+	"dependencies": {
+		"prettier-sql": "^5.0.0-beta.1"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.3",
+		"@types/mocha": "^8.2.2",
+		"@types/node": "14.x",
+		"@typescript-eslint/eslint-plugin": "^4.26.0",
+		"@typescript-eslint/parser": "^4.26.0",
+		"esbuild": "^0.13.15",
+		"eslint": "^7.27.0",
+		"glob": "^7.1.7",
+		"mocha": "^8.4.0",
+		"rimraf": "^3.0.2",
+		"typescript": "^4.3.5",
+		"vsce": "^2.4.0",
+		"vscode": "^1.1.37",
+		"vscode-test": "^1.5.2"
+	},
+	"contributes": {
+		"languages": [
+			{
+				"id": "sql",
+				"aliases": [
+					"SQL",
+					"sql"
+				],
+				"extensions": [
+					".sql",
+					".q"
+				]
+			}
+		],
+		"configuration": {
+			"title": "Prettier SQL",
+			"properties": {
+				"Prettier-SQL.uppercaseKeywords": {
+					"type": "boolean",
+					"default": true,
+					"markdownDescription": "Whether to print keywords in ALL CAPS or lowercase"
+				},
+				"Prettier-SQL.keywordPosition": {
+					"type": "string",
+					"enum": [
+						"standard",
+						"tenSpaceLeft",
+						"tenSpaceRight"
+					],
+					"enumDescriptions": [
+						"Standard SQL format, with cascading indents",
+						"Maintain space column between keyword and args, aligning keywords to left",
+						"Maintain space column between keyword and args, aligning keywords to right"
+					],
+					"default": "standard",
+					"markdownDescription": "Where to place keywords"
+				},
+				"Prettier-SQL.breakBeforeBooleanOperator": {
+					"type": "boolean",
+					"default": false,
+					"markdownDescription": "Whether to break before or after AND and OR"
+				},
+				"Prettier-SQL.aliasAS": {
+					"type": "string",
+					"enum": [
+						"always",
+						"select",
+						"never"
+					],
+					"enumDescriptions": [
+						"Use AS in SELECT clauses and for tables",
+						"Use AS only in SELECT clauses",
+						"Do not use AS for aliases"
+					],
+					"default": "select",
+					"markdownDescription": "Where to use AS in column or table aliases"
+				},
+				"Prettier-SQL.tabulateAlias": {
+					"type": "boolean",
+					"default": false,
+					"markdownDescription": "Whether to right-align aliases to the longest line in the SELECT clause"
+				},
+				"Prettier-SQL.commaPosition": {
+					"type": "string",
+					"enum": [
+						"before",
+						"after",
+						"tabular"
+					],
+					"enumDescriptions": [
+						"Comma preceding each column",
+						"Comma following each column",
+						"Comma right-aligned to longest column line"
+					],
+					"default": "after",
+					"markdownDescription": "Where to place commas for SELECT and GROUP BY clauses"
+				},
+				"Prettier-SQL.keywordNewline": {
+					"type": "string",
+					"enum": [
+						"always",
+						"itemCount",
+						"lineWidth",
+						"hybrid",
+						"never"
+					],
+					"markdownEnumDescriptions": [
+						"Always break keywords items onto a newline",
+						"Break onto newline when number of items > `#Prettier-SQL.itemCount#`",
+						"Break onto newline when line width > `#Prettier-SQL.lineWidth#` ",
+						"Break onto newline when number of items > `#Prettier-SQL.itemCount#` OR line width > `#Prettier-SQL.lineWidth#`",
+						"Place all selected columns on the same line as keyword"
+					],
+					"default": "always",
+					"markdownDescription": "Rule for when to break keyword clauses onto a newline"
+				},
+				"Prettier-SQL.itemCount": {
+					"type": [
+						"integer",
+						"null"
+					],
+					"minimum": 1,
+					"default": null,
+					"markdownDescription": "Number of items before keyword breaks onto newline (only used when `#Prettier-SQL.keywordNewline#` is itemCount or hybrid)"
+				},
+				"Prettier-SQL.openParenNewline": {
+					"type": "boolean",
+					"default": false,
+					"markdownDescription": "Place (, Open Paren, CASE on newline when creating a new block"
+				},
+				"Prettier-SQL.closeParenNewline": {
+					"type": "boolean",
+					"default": true,
+					"markdownDescription": "Place ), Close Paren, END on newline when closing a block"
+				},
+				"Prettier-SQL.lineWidth": {
+					"type": "integer",
+					"default": 50,
+					"minimum": 0,
+					"markdownDescription": "Number of characters allowed in each line before breaking"
+				},
+				"Prettier-SQL.linesBetweenStatements": {
+					"type": "integer",
+					"default": 1,
+					"minimum": 0,
+					"markdownDescription": "How many newlines to place between each query / statement"
+				},
+				"Prettier-SQL.denseOperators": {
+					"type": "boolean",
+					"default": false,
+					"markdownDescription": "Strip whitespace around operators such as + or >="
+				},
+				"Prettier-SQL.semicolonNewline": {
+					"type": "boolean",
+					"default": false,
+					"markdownDescription": "Whether to place semicolon on its own line or on previous line"
+				}
+			}
+		}
+	}
+}
