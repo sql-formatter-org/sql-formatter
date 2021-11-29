@@ -14,10 +14,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/inferrinizzard/prettier-sql-vscode"
+		"url": "https://github.com/inferrinizzard/prettier-sql"
 	},
 	"bugs": {
-		"url": "https://github.com/inferrinizzard/prettier-sql-vscode/issues"
+		"url": "https://github.com/inferrinizzard/prettier-sql/issues"
 	},
 	"categories": [
 		"Formatters",

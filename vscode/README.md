@@ -4,9 +4,9 @@ Formats SQL files using the [`prettier-sql`](https://github.com/inferrinizzard/p
 
 ## Issues
 
-Issues with the FORMATTING should be reported here: https://github.com/inferrinizzard/prettier-sql/issues
+Please report issues here: https://github.com/inferrinizzard/prettier-sql/issues
 
-Issues with running the extension in VSCode / VSCode settings not working should go here: https://github.com/inferrinizzard/prettier-sql-vscode/issues
+Use the FORMATTING template if it is an issue related the formatting of the SQL, otherwise, please use the VSCODE template for issues with running the VSCode Extension
 
 ## Configuration
 
