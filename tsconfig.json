@@ -13,6 +13,6 @@
 		/* Additional Checks */
 		"noImplicitReturns": true /* Report error when not all code paths in function return a value. */
 	},
-	"include": ["src", "test", "static", "vscode/src"],
-	"exclude": ["node_modules", "vscode/out"]
+	"include": ["src", "test", "static"],
+	"exclude": ["node_modules", "vscode"]
 }
