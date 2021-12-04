@@ -156,32 +156,23 @@
 					"markdownDescription": "Where to place commas for SELECT and GROUP BY clauses"
 				},
 				"Prettier-SQL.keywordNewline": {
-					"type": "string",
+					"type": [
+						"string",
+						"integer"
+					],
 					"enum": [
 						"always",
-						"itemCount",
 						"lineWidth",
-						"hybrid",
 						"never"
 					],
 					"markdownEnumDescriptions": [
 						"Always break keywords items onto a newline",
-						"Break onto newline when number of items > `#Prettier-SQL.itemCount#`",
 						"Break onto newline when line width > `#Prettier-SQL.lineWidth#` ",
-						"Break onto newline when number of items > `#Prettier-SQL.itemCount#` OR line width > `#Prettier-SQL.lineWidth#`",
 						"Place all selected columns on the same line as keyword"
 					],
-					"default": "always",
-					"markdownDescription": "Rule for when to break keyword clauses onto a newline"
-				},
-				"Prettier-SQL.itemCount": {
-					"type": [
-						"integer",
-						"null"
-					],
 					"minimum": 1,
-					"default": null,
-					"markdownDescription": "Number of items before keyword breaks onto newline (only used when `#Prettier-SQL.keywordNewline#` is itemCount or hybrid)"
+					"default": "always",
+					"markdownDescription": "Rule for when to break keyword clauses onto a newline, pass integer to break after n items"
 				},
 				"Prettier-SQL.openParenNewline": {
 					"type": "boolean",

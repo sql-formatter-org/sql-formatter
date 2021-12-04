@@ -24,8 +24,6 @@ Use the FORMATTING template if it is an issue related the formatting of the SQL,
 
 `Prettier-SQL.keywordNewline`: Rule for when to break keyword clauses onto a newline
 
-`Prettier-SQL.itemCount`: Number of items before keyword breaks onto newline (only used when `Prettier-SQL.keywordNewline` is itemCount or hybrid)
-
 `Prettier-SQL.openParenNewline`: Whether to place (, Open Paren, CASE on newline when creating a new block
 
 `Prettier-SQL.closeParenNewline`: Whether to place ), Close Paren, END on newline when closing a block
