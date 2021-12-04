@@ -26,9 +26,7 @@ export default class Formatter {
 	 *	@param {String} cfg.language
 	 *	@param {String} cfg.indent
 	 *	@param {Boolean} cfg.uppercase
-	 *	@param {NewlineOptions} cfg.newline
-	 * 		@param {NewlineMode} cfg.newline
-	 * 		@param {Integer} cfg.newline.itemCount
+	 *	@param {NewlineMode} cfg.newline
 	 *	@param {Integer} cfg.lineWidth
 	 *	@param {Integer} cfg.linesBetweenQueries
 	 *	@param {ParamItems | string[]} cfg.params

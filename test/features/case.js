@@ -26,7 +26,7 @@ export default function supportsCase(format) {
 	it('formats CASE ... WHEN with an expression', () => {
 		const result = format(
 			"CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;",
-			{ newline: { mode: 'itemCount', itemCount: 1 } }
+			{ newline: 1 }
 		);
 
 		expect(result).toBe(dedent`
@@ -46,7 +46,7 @@ export default function supportsCase(format) {
 		const result = format(
 			"SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM [table];",
 			{
-				newline: { mode: 'itemCount', itemCount: 1 },
+				newline: 1,
 			}
 		);
 
@@ -69,7 +69,7 @@ export default function supportsCase(format) {
 	it('recognizes lowercase CASE ... END', () => {
 		const result = format("case when option = 'foo' then 1 else 2 end;", {
 			uppercase: false,
-			newline: { mode: 'itemCount', itemCount: 1 },
+			newline: 1,
 		});
 
 		expect(result).toBe(dedent`
@@ -97,7 +97,7 @@ export default function supportsCase(format) {
 	it('properly converts to uppercase in case statements', () => {
 		const result = format(
 			"case toString(getNumber()) when 'one' then 1 when 'two' then 2 when 'three' then 3 else 4 end;",
-			{ uppercase: true, newline: { mode: 'itemCount', itemCount: 1 } }
+			{ uppercase: true, newline: 1 }
 		);
 		expect(result).toBe(dedent`
       CASE toString(getNumber())

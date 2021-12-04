@@ -53,7 +53,7 @@ export interface FormatOptions {
  *  @param {String} cfg.indent Characters used for indentation, default is "  " (2 spaces)
  *  @param {Boolean} cfg.uppercase Converts keywords to uppercase
  *  @param {KeywordMode} cfg.keywordPosition Sets main keyword position style, see keywordPosition.md for examples
- *  @param {NewlineMode} cfg.newline Determines when to break words onto a newline; always | never | lineWidth (break only when > line width) | number (break when > itemCount)
+ *  @param {NewlineMode} cfg.newline Determines when to break words onto a newline; always | never | lineWidth (break only when > line width) | number (break when > n)
  *  @param {Boolean} cfg.breakBeforeBooleanOperator Break before boolean operator (AND, OR, XOR) ?
  *  @param {AliasMode} cfg.aliasAs Whether to use AS in column aliases in only SELECT clause, both SELECT and table aliases, or never
  *  @param {Boolean} cfg.tabulateAlias Whether to have alias following clause or aligned to right
@@ -88,7 +88,7 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 
 	if (cfg.newline && !Number.isNaN(+cfg.newline)) {
 		if ((cfg.newline ?? 0) < 0) {
-			throw new Error('Error: newline.itemCount must be a positive number.');
+			throw new Error('Error: newline must be a positive number.');
 		}
 		if (cfg.newline === 0) {
 			cfg.newline = NewlineMode.always;
