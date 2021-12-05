@@ -509,7 +509,7 @@ export default class Formatter {
 		if (this.cfg.semicolonNewline) {
 			query += '\n';
 		}
-		return query + this.show(token) + '\n'.repeat(this.cfg.linesBetweenQueries || 1);
+		return query + this.show(token) + '\n'.repeat((this.cfg.linesBetweenQueries || 1) + 1);
 	}
 
 	// Converts token to string (uppercasing it if needed)
