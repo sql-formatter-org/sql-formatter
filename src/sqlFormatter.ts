@@ -1,4 +1,5 @@
 import type { ParamItems } from './core/Params';
+import BigQueryFormatter from './languages/BigQueryFormatter';
 import Db2Formatter from './languages/Db2Formatter';
 import MariaDbFormatter from './languages/MariaDbFormatter';
 import MySqlFormatter from './languages/MySqlFormatter';
@@ -14,6 +15,7 @@ import type { NewlineOptions } from './types';
 import { AliasMode, CommaPosition, KeywordMode, NewlineMode, ParenOptions } from './types';
 
 export const formatters = {
+	bigquery: BigQueryFormatter,
 	db2: Db2Formatter,
 	mariadb: MariaDbFormatter,
 	mysql: MySqlFormatter,
