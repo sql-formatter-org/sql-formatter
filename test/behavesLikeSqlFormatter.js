@@ -288,7 +288,7 @@ export default function behavesLikeSqlFormatter(format) {
 		expect(result).toBe(dedent`
       DROP TABLE
         IF EXISTS admin_role;
-		`);
+    `);
 	});
 
 	it('formats incomplete query', () => {
