@@ -612,6 +612,7 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
 
+// https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export default class HiveFormatter extends Formatter {
 	static reservedCommands = reservedCommands;
 	static reservedBinaryCommands = reservedBinaryCommands;
