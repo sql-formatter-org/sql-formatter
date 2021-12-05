@@ -26,9 +26,7 @@ export default class Formatter {
 	 *	@param {String} cfg.language
 	 *	@param {String} cfg.indent
 	 *	@param {Boolean} cfg.uppercase
-	 *	@param {NewlineOptions} cfg.newline
-	 * 		@param {NewlineMode} cfg.newline.mode
-	 * 		@param {Integer} cfg.newline.itemCount
+	 *	@param {NewlineMode} cfg.newline
 	 *	@param {Integer} cfg.lineWidth
 	 *	@param {Integer} cfg.linesBetweenQueries
 	 *	@param {ParamItems | string[]} cfg.params
@@ -275,12 +273,12 @@ export default class Formatter {
 
 	checkNewline = (index: number) => {
 		if (
-			this.newline.mode === NewlineMode.always ||
+			this.newline === NewlineMode.always ||
 			this.tokens.some(({ type, value }) => type === TokenType.BLOCK_START && value.length > 1) // auto break on CASE statements
 		) {
 			return true;
 		}
-		if (this.newline.mode === NewlineMode.never) {
+		if (this.newline === NewlineMode.never) {
 			return false;
 		}
 		const tail = this.tokens.slice(index + 1);
@@ -310,19 +308,15 @@ export default class Formatter {
 			{ count: 1, inParen: false } // start with 1 for first word
 		).count;
 
-		if (this.newline.mode === NewlineMode.itemCount) {
-			return numItems > this.newline.itemCount!;
-		}
-
 		// calculate length if it were all inline
 		const inlineWidth = `${this.tokens[index].whitespaceBefore}${
 			this.tokens[index].value
 		} ${nextTokens.map(({ value }) => (value === ',' ? value + ' ' : value)).join('')}`.length;
 
-		if (this.newline.mode === NewlineMode.lineWidth) {
+		if (this.newline === NewlineMode.lineWidth) {
 			return inlineWidth > this.lineWidth;
-		} else if (this.newline.mode === NewlineMode.hybrid) {
-			return numItems > this.newline.itemCount! || inlineWidth > this.lineWidth;
+		} else if (!Number.isNaN(this.newline)) {
+			return numItems > this.newline || inlineWidth > this.lineWidth;
 		}
 
 		return true;
@@ -445,7 +439,7 @@ export default class Formatter {
 
 		if (!this.inlineBlock.isActive()) {
 			this.indentation.increaseBlockLevel();
-			if (!isToken.CASE(token) || this.newline.mode === NewlineMode.always) {
+			if (!isToken.CASE(token) || this.newline === NewlineMode.always) {
 				query = this.addNewline(query);
 			}
 		}

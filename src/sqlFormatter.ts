@@ -10,7 +10,6 @@ import SparkSqlFormatter from './languages/SparkSqlFormatter';
 import StandardSqlFormatter from './languages/StandardSqlFormatter';
 import TSqlFormatter from './languages/TSqlFormatter';
 
-import type { NewlineOptions } from './types';
 import { AliasMode, CommaPosition, KeywordMode, NewlineMode, ParenOptions } from './types';
 
 export const formatters = {
@@ -33,7 +32,7 @@ export interface FormatOptions {
 	indent: string;
 	uppercase: boolean;
 	keywordPosition: KeywordMode | keyof typeof KeywordMode;
-	newline: NewlineOptions;
+	newline: NewlineMode | keyof typeof NewlineMode | number;
 	breakBeforeBooleanOperator: boolean;
 	aliasAs: AliasMode | keyof typeof AliasMode;
 	tabulateAlias: boolean;
@@ -54,9 +53,7 @@ export interface FormatOptions {
  *  @param {String} cfg.indent Characters used for indentation, default is "  " (2 spaces)
  *  @param {Boolean} cfg.uppercase Converts keywords to uppercase
  *  @param {KeywordMode} cfg.keywordPosition Sets main keyword position style, see keywordPosition.md for examples
- *  @param {NewlineOptions} cfg.newline Determines when to break words onto a newline;
- *  	@param {NewlineMode} cfg.newline.mode always | never | lineWidth (break only when > line width) | itemCount (break when > itemCount) | hybrid (lineWidth OR itemCount)
- *  	@param {Integer} cfg.newline.itemCount Used when mode is itemCount or hybrid, must be >=0
+ *  @param {NewlineMode} cfg.newline Determines when to break words onto a newline; always | never | lineWidth (break only when > line width) | number (break when > n)
  *  @param {Boolean} cfg.breakBeforeBooleanOperator Break before boolean operator (AND, OR, XOR) ?
  *  @param {AliasMode} cfg.aliasAs Whether to use AS in column aliases in only SELECT clause, both SELECT and table aliases, or never
  *  @param {Boolean} cfg.tabulateAlias Whether to have alias following clause or aligned to right
@@ -89,19 +86,12 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 		cfg.indent = ' '.repeat(10);
 	}
 
-	if (
-		cfg.newline &&
-		(cfg.newline.mode === NewlineMode.itemCount || cfg.newline.mode === NewlineMode.hybrid)
-	) {
-		if ((cfg.newline.itemCount ?? 0) < 0) {
-			throw new Error('Error: newline.itemCount must be a positive number.');
+	if (cfg.newline && !Number.isNaN(+cfg.newline)) {
+		if ((cfg.newline ?? 0) < 0) {
+			throw new Error('Error: newline must be a positive number.');
 		}
-		if (cfg.newline.itemCount === 0) {
-			if (cfg.newline.mode === NewlineMode.hybrid) {
-				cfg.newline.mode = NewlineMode.lineWidth;
-			} else if (cfg.newline.mode === NewlineMode.itemCount) {
-				cfg.newline = { mode: NewlineMode.always };
-			}
+		if (cfg.newline === 0) {
+			cfg.newline = NewlineMode.always;
 		}
 	}
 
@@ -115,7 +105,7 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 		indent: '  ',
 		uppercase: true,
 		keywordPosition: KeywordMode.standard,
-		newline: { mode: NewlineMode.always },
+		newline: NewlineMode.always,
 		breakBeforeBooleanOperator: true,
 		aliasAs: AliasMode.select,
 		tabulateAlias: false,
