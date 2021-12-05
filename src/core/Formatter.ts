@@ -48,7 +48,7 @@ export default class Formatter {
 		this.previousReservedToken = {} as Token;
 		this.withinSelect = false;
 		this.tokens = [];
-		this.index = 0;
+		this.index = -1;
 	}
 
 	/**
@@ -191,10 +191,9 @@ export default class Formatter {
 	getFormattedQueryFromTokens() {
 		let formattedQuery = '';
 
-		this.tokens.forEach((token: Token, index) => {
-			this.index = index;
+		for (this.index = 0; this.index < this.tokens.length; this.index++) {
+			let token = this.tokenOverride(this.tokens[this.index]);
 
-			token = this.tokenOverride(token);
 			if (isReserved(token)) {
 				this.previousReservedToken = token;
 				if (token.type !== TokenType.RESERVED_KEYWORD) {
@@ -210,7 +209,7 @@ export default class Formatter {
 			} else if (token.type === TokenType.BLOCK_COMMENT) {
 				formattedQuery = this.formatBlockComment(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_COMMAND) {
-				this.currentNewline = this.checkNewline(index);
+				this.currentNewline = this.checkNewline(this.index);
 				formattedQuery = this.formatCommand(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_BINARY_COMMAND) {
 				formattedQuery = this.formatBinaryCommand(token, formattedQuery);
@@ -247,7 +246,7 @@ export default class Formatter {
 				}
 				formattedQuery = this.formatWithSpaces(token, formattedQuery);
 			}
-		});
+		}
 		return formattedQuery.replace(new RegExp(ZWS, 'ugim'), ' ');
 	}
 
