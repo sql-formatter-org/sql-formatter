@@ -272,25 +272,28 @@ export default class Formatter {
 	}
 
 	checkNewline = (index: number) => {
+		const tail = this.tokens.slice(index + 1);
+		const nextTokens = tail.slice(
+			0,
+			tail.length
+				? tail.findIndex(
+						({ type, value }) =>
+							type === TokenType.RESERVED_COMMAND ||
+							type === TokenType.RESERVED_BINARY_COMMAND ||
+							value === ';'
+				  )
+				: undefined // add undefined for EOF
+		);
+
 		if (
 			this.newline === NewlineMode.always ||
-			this.tokens.some(({ type, value }) => type === TokenType.BLOCK_START && value.length > 1) // auto break on CASE statements
+			nextTokens.some(({ type, value }) => type === TokenType.BLOCK_START && value.length > 1) // auto break if SELECT includes CASE statements
 		) {
 			return true;
 		}
 		if (this.newline === NewlineMode.never) {
 			return false;
 		}
-		const tail = this.tokens.slice(index + 1);
-		const nextTokens = tail.slice(
-			0,
-			tail.findIndex(
-				({ type }) =>
-					type === TokenType.RESERVED_COMMAND ||
-					type === TokenType.RESERVED_BINARY_COMMAND ||
-					type === TokenType.RESERVED_LOGICAL_OPERATOR
-			)
-		);
 
 		const numItems = nextTokens.reduce(
 			(acc, { type, value }) => {
@@ -402,9 +405,14 @@ export default class Formatter {
 		}
 
 		if (this.cfg.breakBeforeBooleanOperator) {
-			return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
+			return (
+				(this.currentNewline ? this.addNewline(query) : query) +
+				this.equalizeWhitespace(this.show(token)) +
+				' '
+			);
 		} else {
-			return this.addNewline(query + this.show(token));
+			query += this.show(token);
+			return this.currentNewline ? this.addNewline(query) : query;
 		}
 	}
 
