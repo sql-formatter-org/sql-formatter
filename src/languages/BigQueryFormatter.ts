@@ -697,13 +697,14 @@ const reservedCommands = [
 	'INSERT INTO',
 	'VALUES',
 	'DELETE',
-	'DELETE FROM',
+	// 'DELETE FROM',
 	'TRUNCATE TABLE',
 	'UPDATE',
 	'MERGE',
 	'MERGE INTO',
 	// 'USING',
 	// DDL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
+	'SET SCHEMA', // added
 	'CREATE SCHEMA',
 	'CREATE TABLE',
 	'CREATE TABLE LIKE',
@@ -823,12 +824,12 @@ export default class BigQueryFormatter extends Formatter {
 
 	// double check: STRUCT<TYPE>
 	static stringTypes: StringPatternType[] = ['""', "''", '``']; // add: '''''', """""" ; prefixes: r, b
-	static blockStart = ['(', '<'];
-	static blockEnd = [')', '>'];
+	static blockStart = ['(', 'CASE'];
+	static blockEnd = [')', 'END'];
 	static indexedPlaceholderTypes = ['?'];
 	static namedPlaceholderTypes = [];
-	static lineCommentTypes = ['--', '#', '/*'];
-	static specialWordChars = { any: '-_@$' };
+	static lineCommentTypes = ['--', '#'];
+	static specialWordChars = { any: '_@$-' };
 	static operators = ['>>', '<<', '||'];
 	// TODO: handle trailing comma in select clause
 
