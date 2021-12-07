@@ -506,6 +506,9 @@ export default class Formatter {
 		query = trimSpacesEnd(query);
 		if (this.cfg.semicolonNewline) {
 			query += '\n';
+			if (this.cfg.tenSpace) {
+				query += this.cfg.indent;
+			}
 		}
 		return query + this.show(token) + '\n'.repeat(this.cfg.linesBetweenQueries || 1);
 	}
