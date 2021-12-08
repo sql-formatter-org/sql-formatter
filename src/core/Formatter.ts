@@ -218,20 +218,8 @@ export default class Formatter {
 			} else if (token.type === TokenType.RESERVED_LOGICAL_OPERATOR) {
 				formattedQuery = this.formatLogicalOperator(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_KEYWORD) {
-				if (
-					!(
-						isToken.AS(token) &&
-						(this.cfg.aliasAs === AliasMode.never || // skip all AS if never
-							(this.cfg.aliasAs === AliasMode.select &&
-								this.tokenLookBehind()?.value === ')' && // ) [AS] alias but not SELECT (a) [AS] alpha
-								!this.withinSelect && // skip WITH foo [AS] ( ...
-								this.tokenLookAhead()?.value !== '('))
-					)
-				) {
-					// do not format if skipping AS
-					formattedQuery = this.formatWithSpaces(token, formattedQuery);
-					this.previousReservedToken = token;
-				}
+				formattedQuery = this.formatKeyword(token, formattedQuery);
+				this.previousReservedToken = token;
 			} else if (token.type === TokenType.BLOCK_START) {
 				formattedQuery = this.formatBlockStart(token, formattedQuery);
 			} else if (token.type === TokenType.BLOCK_END) {
@@ -369,6 +357,22 @@ export default class Formatter {
 		}
 		query = this.addNewline(query) + this.equalizeWhitespace(this.show(token));
 		return isJoin ? query + ' ' : this.addNewline(query);
+	}
+
+	formatKeyword(token: Token, query: string) {
+		if (
+			isToken.AS(token) &&
+			(this.cfg.aliasAs === AliasMode.never || // skip all AS if never
+				(this.cfg.aliasAs === AliasMode.select &&
+					this.tokenLookBehind()?.value === ')' && // ) [AS] alias but not SELECT (a) [AS] alpha
+					!this.withinSelect && // skip WITH foo [AS] ( ...
+					this.tokenLookAhead()?.value !== '('))
+		) {
+			// do not format if skipping AS
+			return query;
+		}
+
+		return this.formatWithSpaces(token, query);
 	}
 
 	formatOperator(token: Token, query: string) {

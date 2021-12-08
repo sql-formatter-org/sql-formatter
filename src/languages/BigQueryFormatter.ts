@@ -1,6 +1,7 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import type { StringPatternType } from '../core/regexFactory';
+import { Token, TokenType } from '../core/token';
 
 /**
  * Priority 5 (last)
@@ -76,6 +77,10 @@ const reservedFunctions = {
 		'GENERATE_DATE_ARRAY',
 		'GENERATE_TIMESTAMP_ARRAY',
 		'ARRAY_REVERSE',
+		'OFFSET',
+		'SAFE_OFFSET',
+		'ORDINAL',
+		'SAFE_ORDINAL',
 	],
 	// https://cloud.google.com/bigquery/docs/reference/standard-sql/bit_functions
 	bitwise: ['BIT_COUNT'],
@@ -849,5 +854,34 @@ export default class BigQueryFormatter extends Formatter {
 			specialWordChars: BigQueryFormatter.specialWordChars,
 			operators: BigQueryFormatter.operators,
 		});
+	}
+
+	tokenOverride(token: Token) {
+		if (
+			(/ARRAY/i.test(token.value) || /STRUCT/i.test(token.value)) &&
+			this.tokenLookAhead().value === '<'
+		) {
+			let level = 0;
+			let finalToken = token.value;
+
+			do {
+				const nextToken = this.tokenLookAhead();
+				if (nextToken.value === '>' || nextToken.value === '>>') {
+					level -= nextToken.value.length;
+				} else if (nextToken.value === '<') {
+					level++;
+				}
+				finalToken += this.tokens.splice(this.index + 1, 1)[0].value;
+			} while (level > 0);
+
+			return { ...token, value: finalToken };
+		}
+
+		// if (token.value === '[' && /ARRAY/gi.test(this.tokenLookBehind().value)) {
+		// 	// return { ...token, type: TokenType.BLOCK_START };
+		// 	return token;
+		// }
+
+		return token;
 	}
 }
