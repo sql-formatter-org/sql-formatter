@@ -2,6 +2,7 @@ import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import type { StringPatternType } from '../core/regexFactory';
 import { Token, TokenType } from '../core/token';
+import { dedupe } from '../utils';
 
 /**
  * Priority 5 (last)
@@ -822,10 +823,10 @@ export default class BigQueryFormatter extends Formatter {
 	static reservedBinaryCommands = reservedBinaryCommands;
 	static reservedDependentClauses = reservedDependentClauses;
 	static reservedLogicalOperators = ['AND', 'OR'];
-	static fullReservedWords = [
+	static fullReservedWords = dedupe([
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
 		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
-	];
+	]);
 
 	static stringTypes: StringPatternType[] = ['""', "''", '``']; // add: '''''', """""" ; prefixes: r, b
 	static blockStart = ['(', 'CASE'];

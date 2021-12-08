@@ -2,6 +2,7 @@ import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import { isToken, Token, TokenType } from '../core/token';
 import type { StringPatternType } from '../core/regexFactory';
+import { dedupe } from '../utils';
 
 // TODO: split this into object with function categories
 /**
@@ -1318,7 +1319,7 @@ export default class MySqlFormatter extends Formatter {
 	static reservedBinaryCommands = reservedBinaryCommands;
 	static reservedDependentClauses = reservedDependentClauses;
 	static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
-	static reservedKeywords = [...reservedKeywords, ...reservedFunctions];
+	static reservedKeywords = dedupe([...reservedKeywords, ...reservedFunctions]);
 	static stringTypes: StringPatternType[] = ['``', "''", '""'];
 	static blockStart = ['(', 'CASE'];
 	static blockEnd = [')', 'END'];
