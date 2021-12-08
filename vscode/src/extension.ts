@@ -62,8 +62,8 @@ export default function activate(context: vscode.ExtensionContext) {
 		'plsql': 'plsql',
 		'mysql': 'mysql',
 		'postgres': 'postgresql',
-		'hql': 'sql',
-		'hive-sql': 'sql',
+		'hql': 'hive',
+		'hive-sql': 'hive',
 		// 'sql-bigquery' // future
 	};
 	Object.entries(languages).forEach(([vscodeLang, prettierLang]) =>
