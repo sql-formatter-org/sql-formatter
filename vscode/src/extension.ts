@@ -29,10 +29,7 @@ export default function activate(context: vscode.ExtensionContext) {
 				aliasAs: settings.get<AliasMode>('aliasAS'),
 				tabulateAlias: settings.get<boolean>('tabulateAlias'),
 				commaPosition: settings.get<CommaPosition>('commaPosition'),
-				newlineOptions: {
-					mode: settings.get<NewlineMode>('keywordNewline'),
-					itemCount: settings.get<number>('itemCount'),
-				},
+				newlineOptions: settings.get<NewlineMode | number>('keywordNewline'),
 				parenOptions: {
 					openParenNewline: settings.get<boolean>('openParenNewline'),
 					closeParenNewline: settings.get<boolean>('closeParenNewline'),

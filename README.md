@@ -158,10 +158,7 @@ All fields are optional and all fields that are not specified will be filled wit
 	"indent": string,
 	"uppercase": boolean,
 	"keywordPosition": "standard" | "tenSpaceLeft" | "tenSpaceRight",
-	"newline": {
-		"mode": "always" | "itemCount" | "lineWidth" | "hybrid" | "never",
-		"itemCount"?: number // only used if newline.mode is itemCount or hybrid
-	},
+	"newline": "always" | "lineWidth" | "never" | number,
 	"breakBeforeBooleanOperator": boolean,
 	"aliasAs": "always" | "select" | "never",
 	"tabulateAlias": boolean,

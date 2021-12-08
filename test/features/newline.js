@@ -7,7 +7,7 @@ import dedent from 'dedent-js';
 export default function supportsNewlineOptions(format) {
 	it('supports always mode', () => {
 		const result = format('SELECT foo, bar, baz FROM qux;', {
-			newline: { mode: 'always' },
+			newline: 'always',
 		});
 		expect(result).toBe(dedent`
 			SELECT
@@ -20,7 +20,7 @@ export default function supportsNewlineOptions(format) {
 	});
 
 	it('supports never mode', () => {
-		const result = format('SELECT foo, bar, baz, qux FROM corge;', { newline: { mode: 'never' } });
+		const result = format('SELECT foo, bar, baz, qux FROM corge;', { newline: 'never' });
 		expect(result).toBe(dedent`
 			SELECT foo, bar, baz, qux
 			FROM corge;
@@ -29,7 +29,7 @@ export default function supportsNewlineOptions(format) {
 
 	it('supports itemCount mode', () => {
 		const result = format('SELECT foo, bar, baz, qux FROM corge;', {
-			newline: { mode: 'itemCount', itemCount: 3 },
+			newline: 3,
 		});
 		expect(result).toBe(dedent`
 			SELECT
@@ -43,7 +43,7 @@ export default function supportsNewlineOptions(format) {
 
 	it('supports lineWidth mode', () => {
 		const result = format('SELECT foo, bar, baz, qux FROM corge;', {
-			newline: { mode: 'lineWidth' },
+			newline: 'lineWidth',
 			lineWidth: 20,
 		});
 		expect(result).toBe(dedent`
@@ -58,7 +58,7 @@ export default function supportsNewlineOptions(format) {
 
 	it('supports hybrid mode', () => {
 		const result = format('SELECT verylongfoo, verylongbar FROM baz GROUP BY foo, bar, baz, qux;', {
-			newline: { mode: 'hybrid', itemCount: 2 },
+			newline: 2,
 			lineWidth: 30,
 		});
 		expect(result).toBe(dedent`
