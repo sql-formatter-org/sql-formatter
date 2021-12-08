@@ -45,9 +45,7 @@ export default function supportsCase(format) {
 	it('formats CASE ... WHEN inside SELECT', () => {
 		const result = format(
 			"SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM tbl;",
-			{
-				newline: 1,
-			}
+			{ newline: 1 }
 		);
 
 		expect(result).toBe(dedent`
@@ -61,8 +59,7 @@ export default function supportsCase(format) {
           THEN 2
           ELSE 3
         END
-      FROM
-        tbl;
+      FROM tbl;
     `);
 	});
 
