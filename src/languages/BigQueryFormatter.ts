@@ -827,7 +827,6 @@ export default class BigQueryFormatter extends Formatter {
 		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
 	];
 
-	// double check: STRUCT<TYPE>
 	static stringTypes: StringPatternType[] = ['""', "''", '``']; // add: '''''', """""" ; prefixes: r, b
 	static blockStart = ['(', 'CASE'];
 	static blockEnd = [')', 'END'];
@@ -876,11 +875,6 @@ export default class BigQueryFormatter extends Formatter {
 
 			return { ...token, value: finalToken };
 		}
-
-		// if (token.value === '[' && /ARRAY/gi.test(this.tokenLookBehind().value)) {
-		// 	// return { ...token, type: TokenType.BLOCK_START };
-		// 	return token;
-		// }
 
 		return token;
 	}

@@ -32,10 +32,10 @@ describe('BigQueryFormatter', () => {
 	it('supports # line comment', () => {
 		const result = format('SELECT alpha # commment\nFROM beta');
 		expect(result).toBe(dedent`
-	    SELECT
-	      alpha # commment
-	    FROM
-	      beta
+      SELECT
+        alpha # commment
+      FROM
+        beta
 		`);
 	});
 
@@ -44,10 +44,10 @@ describe('BigQueryFormatter', () => {
 			'SELECT STRUCT("Alpha" as name, [23.4, 26.3, 26.4, 26.1] as splits) FROM beta'
 		);
 		expect(result).toBe(dedent`
-	    SELECT
-	      STRUCT("Alpha" AS name, [23.4, 26.3, 26.4, 26.1] AS splits)
-	    FROM
-	      beta
+      SELECT
+        STRUCT("Alpha" AS name, [23.4, 26.3, 26.4, 26.1] AS splits)
+      FROM
+        beta
 		`);
 	});
 
@@ -73,18 +73,18 @@ describe('BigQueryFormatter', () => {
 			DECLARE varBigdecimal BIGDECIMAL(1,1);
 		`);
 		expect(result).toBe(dedent`
-	    DECLARE
-	      varString STRING(11) '11charswide';
-	    DECLARE
-	      varBytes BYTES(8);
-	    DECLARE
-	      varNumeric NUMERIC(1, 1);
-	    DECLARE
-	      varDecimal DECIMAL(1, 1);
-	    DECLARE
-	      varBignumeric BIGNUMERIC(1, 1);
-	    DECLARE
-	      varBigdecimal BIGDECIMAL(1, 1);
+      DECLARE
+        varString STRING(11) '11charswide';
+      DECLARE
+        varBytes BYTES(8);
+      DECLARE
+        varNumeric NUMERIC(1, 1);
+      DECLARE
+        varDecimal DECIMAL(1, 1);
+      DECLARE
+        varBignumeric BIGNUMERIC(1, 1);
+      DECLARE
+        varBigdecimal BIGDECIMAL(1, 1);
 		`);
 	});
 });
