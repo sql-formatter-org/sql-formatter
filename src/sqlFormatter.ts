@@ -1,4 +1,5 @@
 import type { ParamItems } from './core/Params';
+import BigQueryFormatter from './languages/BigQueryFormatter';
 import Db2Formatter from './languages/Db2Formatter';
 import HiveFormatter from './languages/HiveFormatter';
 import MariaDbFormatter from './languages/MariaDbFormatter';
@@ -14,6 +15,7 @@ import TSqlFormatter from './languages/TSqlFormatter';
 import { AliasMode, CommaPosition, KeywordMode, NewlineMode, ParenOptions } from './types';
 
 export const formatters = {
+	bigquery: BigQueryFormatter,
 	db2: Db2Formatter,
 	hive: HiveFormatter,
 	mariadb: MariaDbFormatter,

@@ -59,9 +59,9 @@ export default function activate(context: vscode.ExtensionContext) {
 		'plsql': 'plsql',
 		'mysql': 'mysql',
 		'postgres': 'postgresql',
-		'hql': 'hive',
-		'hive-sql': 'hive',
-		// 'sql-bigquery' // future
+		'hql': 'sql',
+		'hive-sql': 'sql',
+		'sql-bigquery': 'bigquery',
 	};
 	Object.entries(languages).forEach(([vscodeLang, prettierLang]) =>
 		vscode.languages.registerDocumentFormattingEditProvider(

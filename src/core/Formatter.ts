@@ -46,7 +46,7 @@ export default class Formatter {
 		this.previousReservedToken = {} as Token;
 		this.withinSelect = false;
 		this.tokens = [];
-		this.index = 0;
+		this.index = -1;
 	}
 
 	/**
@@ -189,10 +189,9 @@ export default class Formatter {
 	getFormattedQueryFromTokens() {
 		let formattedQuery = '';
 
-		this.tokens.forEach((token: Token, index) => {
-			this.index = index;
+		for (this.index = 0; this.index < this.tokens.length; this.index++) {
+			let token = this.tokenOverride(this.tokens[this.index]);
 
-			token = this.tokenOverride(token);
 			if (isReserved(token)) {
 				this.previousReservedToken = token;
 				if (token.type !== TokenType.RESERVED_KEYWORD) {
@@ -208,7 +207,7 @@ export default class Formatter {
 			} else if (token.type === TokenType.BLOCK_COMMENT) {
 				formattedQuery = this.formatBlockComment(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_COMMAND) {
-				this.currentNewline = this.checkNewline(index);
+				this.currentNewline = this.checkNewline(this.index);
 				formattedQuery = this.formatCommand(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_BINARY_COMMAND) {
 				formattedQuery = this.formatBinaryCommand(token, formattedQuery);
@@ -217,20 +216,8 @@ export default class Formatter {
 			} else if (token.type === TokenType.RESERVED_LOGICAL_OPERATOR) {
 				formattedQuery = this.formatLogicalOperator(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_KEYWORD) {
-				if (
-					!(
-						isToken.AS(token) &&
-						(this.cfg.aliasAs === AliasMode.never || // skip all AS if never
-							(this.cfg.aliasAs === AliasMode.select &&
-								this.tokenLookBehind()?.value === ')' && // ) [AS] alias but not SELECT (a) [AS] alpha
-								!this.withinSelect && // skip WITH foo [AS] ( ...
-								this.tokenLookAhead()?.value !== '('))
-					)
-				) {
-					// do not format if skipping AS
-					formattedQuery = this.formatWithSpaces(token, formattedQuery);
-					this.previousReservedToken = token;
-				}
+				formattedQuery = this.formatKeyword(token, formattedQuery);
+				this.previousReservedToken = token;
 			} else if (token.type === TokenType.BLOCK_START) {
 				formattedQuery = this.formatBlockStart(token, formattedQuery);
 			} else if (token.type === TokenType.BLOCK_END) {
@@ -245,7 +232,7 @@ export default class Formatter {
 				}
 				formattedQuery = this.formatWithSpaces(token, formattedQuery);
 			}
-		});
+		}
 		return formattedQuery.replace(new RegExp(ZWS, 'ugim'), ' ');
 	}
 
@@ -368,6 +355,22 @@ export default class Formatter {
 		}
 		query = this.addNewline(query) + this.equalizeWhitespace(this.show(token));
 		return isJoin ? query + ' ' : this.addNewline(query);
+	}
+
+	formatKeyword(token: Token, query: string) {
+		if (
+			isToken.AS(token) &&
+			(this.cfg.aliasAs === AliasMode.never || // skip all AS if never
+				(this.cfg.aliasAs === AliasMode.select &&
+					this.tokenLookBehind()?.value === ')' && // ) [AS] alias but not SELECT (a) [AS] alpha
+					!this.withinSelect && // skip WITH foo [AS] ( ...
+					this.tokenLookAhead()?.value !== '('))
+		) {
+			// do not format if skipping AS
+			return query;
+		}
+
+		return this.formatWithSpaces(token, query);
 	}
 
 	formatOperator(token: Token, query: string) {
@@ -513,7 +516,7 @@ export default class Formatter {
 				query += this.cfg.indent;
 			}
 		}
-		return query + this.show(token) + '\n'.repeat((this.cfg.linesBetweenQueries || 1) + 1);
+		return query + this.show(token) + '\n'.repeat(this.cfg.linesBetweenQueries + 1);
 	}
 
 	// Converts token to string (uppercasing it if needed)
