@@ -10,21 +10,21 @@ export default function supportsNewlineOptions(format) {
 			newline: 'always',
 		});
 		expect(result).toBe(dedent`
-			SELECT
-			  foo,
-			  bar,
-			  baz
-			FROM
-			  qux;
-		`);
+      SELECT
+        foo,
+        bar,
+        baz
+      FROM
+        qux;
+    `);
 	});
 
 	it('supports never mode', () => {
 		const result = format('SELECT foo, bar, baz, qux FROM corge;', { newline: 'never' });
 		expect(result).toBe(dedent`
-			SELECT foo, bar, baz, qux
-			FROM corge;
-		`);
+      SELECT foo, bar, baz, qux
+      FROM corge;
+    `);
 	});
 
 	it('supports itemCount mode', () => {
@@ -32,13 +32,13 @@ export default function supportsNewlineOptions(format) {
 			newline: 3,
 		});
 		expect(result).toBe(dedent`
-			SELECT
-			  foo,
-			  bar,
-			  baz,
-			  qux
-			FROM corge;
-		`);
+      SELECT
+        foo,
+        bar,
+        baz,
+        qux
+      FROM corge;
+    `);
 	});
 
 	it('supports lineWidth mode', () => {
@@ -47,13 +47,13 @@ export default function supportsNewlineOptions(format) {
 			lineWidth: 20,
 		});
 		expect(result).toBe(dedent`
-			SELECT
-			  foo,
-			  bar,
-			  baz,
-			  qux
-			FROM corge;
-		`);
+      SELECT
+        foo,
+        bar,
+        baz,
+        qux
+      FROM corge;
+    `);
 	});
 
 	it('supports hybrid mode', () => {
@@ -62,15 +62,15 @@ export default function supportsNewlineOptions(format) {
 			lineWidth: 30,
 		});
 		expect(result).toBe(dedent`
-			SELECT
-			  verylongfoo,
-			  verylongbar
-			FROM baz
-			GROUP BY
-			  foo,
-			  bar,
-			  baz,
-			  qux;
-		`);
+      SELECT
+        verylongfoo,
+        verylongbar
+      FROM baz
+      GROUP BY
+        foo,
+        bar,
+        baz,
+        qux;
+    `);
 	});
 }

@@ -17,7 +17,7 @@ export default function supportsParenthesesOptions(format) {
         FROM
           c
       );
-		`);
+    `);
 	});
 
 	it('supports opening parenthesis on sameline', () => {
@@ -33,7 +33,7 @@ export default function supportsParenthesesOptions(format) {
         FROM
           c
       );
-		`);
+    `);
 	});
 
 	it('supports closing parenthesis on newline', () => {
@@ -48,7 +48,7 @@ export default function supportsParenthesesOptions(format) {
         FROM
           c
       );
-		`);
+    `);
 	});
 
 	it('supports closing parenthesis on sameline', () => {
@@ -64,6 +64,6 @@ export default function supportsParenthesesOptions(format) {
           b
         FROM
           c );
-		`);
+    `);
 	});
 }
