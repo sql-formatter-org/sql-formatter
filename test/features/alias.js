@@ -67,10 +67,10 @@ export default function supportsAliases(format) {
 
 	it('does not format non select clauses', () => {
 		expect(
-			format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT);', {
+			format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);', {
 				newline: { mode: NewlineMode.never },
 			})
-		).toBe('CREATE TABLE items (a INT PRIMARY KEY, b TEXT);');
+		).toBe('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);');
 	});
 
 	const tabularBaseQueryWithAlias =

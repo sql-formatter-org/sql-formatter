@@ -1,5 +1,6 @@
 import type { ParamItems } from './core/Params';
 import Db2Formatter from './languages/Db2Formatter';
+import HiveFormatter from './languages/HiveFormatter';
 import MariaDbFormatter from './languages/MariaDbFormatter';
 import MySqlFormatter from './languages/MySqlFormatter';
 import N1qlFormatter from './languages/N1qlFormatter';
@@ -14,6 +15,7 @@ import { AliasMode, CommaPosition, KeywordMode, NewlineMode, ParenOptions } from
 
 export const formatters = {
 	db2: Db2Formatter,
+	hive: HiveFormatter,
 	mariadb: MariaDbFormatter,
 	mysql: MySqlFormatter,
 	n1ql: N1qlFormatter,
