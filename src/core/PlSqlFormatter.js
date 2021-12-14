@@ -760,7 +760,7 @@ export default class PlSqlFormatter {
             this.lines.push("");
         }
         if (!SqlUtils.originalBlockCommentInNewLine(token, this.query)) {
-            while (this.getLastString().trim() == "") {
+            while (this.getLastString() && this.getLastString().trim() == "") {
                 this.lines.pop();
             }
             removeLastLine = !this.getLastString().endsWith(";");

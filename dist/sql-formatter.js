@@ -2524,7 +2524,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.lines.push("");
 	        }
 	        if (!_SqlUtils2["default"].originalBlockCommentInNewLine(token, this.query)) {
-	            while (this.getLastString().trim() == "") {
+	            while (this.getLastString() && this.getLastString().trim() == "") {
 	                this.lines.pop();
 	            }
 	            removeLastLine = !this.getLastString().endsWith(";");
