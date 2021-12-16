@@ -35,7 +35,7 @@ export default function activate(context: vscode.ExtensionContext) {
 					closeParenNewline: settings.get<boolean>('closeParenNewline'),
 				},
 				lineWidth: settings.get<number>('lineWidth'),
-				linesBetweenStatements: settings.get<number>('linesBetweenStatements'),
+				linesBetweenQueries: settings.get<number>('linesBetweenQueries'),
 				denseOperators: settings.get<boolean>('denseOperators'),
 				semicolonNewline: settings.get<boolean>('semicolonNewline'),
 			};

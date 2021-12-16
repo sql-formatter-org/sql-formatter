@@ -189,7 +189,7 @@
 					"minimum": 0,
 					"markdownDescription": "Number of characters allowed in each line before breaking"
 				},
-				"Prettier-SQL.linesBetweenStatements": {
+				"Prettier-SQL.linesBetweenQueries": {
 					"type": "integer",
 					"default": 1,
 					"minimum": 0,

@@ -30,7 +30,7 @@ Use the FORMATTING template if it is an issue related the formatting of the SQL,
 
 `Prettier-SQL.lineWidth`: Number of characters allowed in each line before breaking
 
-`Prettier-SQL.linesBetweenStatements`: How many newlines to place between each query / statement
+`Prettier-SQL.linesBetweenQueries`: How many newlines to place between each query / statement
 
 `Prettier-SQL.denseOperators`: Whether to strip whitespace around operators such as + or >=
 
