@@ -1,6 +1,7 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import type { StringPatternType } from '../core/regexFactory';
+import { dedupe } from '../utils';
 
 /**
  * Priority 5 (last)
@@ -861,10 +862,10 @@ export default class Db2Formatter extends Formatter {
 	static reservedBinaryCommands = reservedBinaryCommands;
 	static reservedDependentClauses = reservedDependentClauses;
 	static reservedLogicalOperators = ['AND', 'OR'];
-	static fullReservedWords = [
+	static fullReservedWords = dedupe([
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
 		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
-	];
+	]);
 
 	static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]', "x''"];
 	static blockStart = ['('];
