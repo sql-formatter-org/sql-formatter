@@ -8,13 +8,16 @@ import type {
 	NewlineMode,
 } from 'prettier-sql';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function activate(context: vscode.ExtensionContext) {
+export function activate(context: vscode.ExtensionContext) {
+	console.log('Prettier-SQL VSCode activated');
+
 	const formatProvider = (language: FormatterLanguage) => ({
 		provideDocumentFormattingEdits(
 			document: vscode.TextDocument,
 			options: vscode.FormattingOptions
 		): vscode.TextEdit[] {
+			console.log('Formatter language:', language);
+
 			const settings = vscode.workspace.getConfiguration('Prettier-SQL');
 			const { tabSize, insertSpaces } = options;
 			const indent = insertSpaces ? ' '.repeat(tabSize) : '\t';
@@ -61,12 +64,16 @@ export default function activate(context: vscode.ExtensionContext) {
 		'postgres': 'postgresql',
 		'hql': 'sql',
 		'hive-sql': 'sql',
-		'sql-bigquery': 'bigquery',
+		// 'sql-bigquery': 'bigquery',
 	};
 	Object.entries(languages).forEach(([vscodeLang, prettierLang]) =>
-		vscode.languages.registerDocumentFormattingEditProvider(
-			vscodeLang,
-			formatProvider(prettierLang)
+		context.subscriptions.push(
+			vscode.languages.registerDocumentFormattingEditProvider(
+				vscodeLang,
+				formatProvider(prettierLang)
+			)
 		)
 	);
 }
+
+export function deactivate() {}
