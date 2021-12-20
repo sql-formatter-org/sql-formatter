@@ -10,7 +10,7 @@ import type {
 
 const getConfigs = (
 	settings: vscode.WorkspaceConfiguration,
-	formattingOptions: vscode.FormattingOptions,
+	formattingOptions: vscode.FormattingOptions | { tabSize: number; insertSpaces: boolean },
 	language: FormatterLanguage
 ) => {
 	const { tabSize, insertSpaces } = formattingOptions;
@@ -84,6 +84,15 @@ export function activate(context: vscode.ExtensionContext) {
 			)
 		)
 	);
+
+	const formatSelectionCommand = vscode.commands.registerCommand(
+		'prettier-sql-vscode.format-selection',
+		() => {
+			console.log('format selection command');
+		}
+	);
+
+	context.subscriptions.push(formatSelectionCommand);
 }
 
 export function deactivate() {}

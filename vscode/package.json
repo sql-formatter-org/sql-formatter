@@ -89,6 +89,14 @@
 				]
 			}
 		],
+		"commands": [
+			{
+				"title": "Format Selection (Prettier-SQL)",
+				"shortTitle": "Format SQL",
+				"command": "prettier-sql-vscode.format-selection",
+				"enablement": ""
+			}
+		],
 		"configuration": {
 			"title": "Prettier SQL",
 			"properties": {
