@@ -8,6 +8,37 @@ import type {
 	NewlineMode,
 } from 'prettier-sql';
 
+const getConfigs = (
+	settings: vscode.WorkspaceConfiguration,
+	formattingOptions: vscode.FormattingOptions,
+	language: FormatterLanguage
+) => {
+	const { tabSize, insertSpaces } = formattingOptions;
+	const indent = insertSpaces ? ' '.repeat(tabSize) : '\t';
+
+	const formatConfigs = {
+		language,
+		indent,
+		uppercase: settings.get<boolean>('uppercaseKeywords'),
+		keywordPosition: settings.get<KeywordMode>('keywordPosition'),
+		breakBeforeBooleanOperator: settings.get<boolean>('breakBeforeBooleanOperator'),
+		aliasAs: settings.get<AliasMode>('aliasAS'),
+		tabulateAlias: settings.get<boolean>('tabulateAlias'),
+		commaPosition: settings.get<CommaPosition>('commaPosition'),
+		newlineOptions: settings.get<NewlineMode | number>('keywordNewline'),
+		parenOptions: {
+			openParenNewline: settings.get<boolean>('openParenNewline'),
+			closeParenNewline: settings.get<boolean>('closeParenNewline'),
+		},
+		lineWidth: settings.get<number>('lineWidth'),
+		linesBetweenQueries: settings.get<number>('linesBetweenQueries'),
+		denseOperators: settings.get<boolean>('denseOperators'),
+		semicolonNewline: settings.get<boolean>('semicolonNewline'),
+	};
+
+	return formatConfigs;
+};
+
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Prettier-SQL VSCode activated');
 
@@ -19,30 +50,9 @@ export function activate(context: vscode.ExtensionContext) {
 			console.log('Formatter language:', language);
 
 			const settings = vscode.workspace.getConfiguration('Prettier-SQL');
-			const { tabSize, insertSpaces } = options;
-			const indent = insertSpaces ? ' '.repeat(tabSize) : '\t';
+			const formatConfigs = getConfigs(settings, options, language);
 
 			const lines = [...new Array(document.lineCount)].map((_, i) => document.lineAt(i).text);
-			const formatConfigs = {
-				language,
-				indent,
-				uppercase: settings.get<boolean>('uppercaseKeywords'),
-				keywordPosition: settings.get<KeywordMode>('keywordPosition'),
-				breakBeforeBooleanOperator: settings.get<boolean>('breakBeforeBooleanOperator'),
-				aliasAs: settings.get<AliasMode>('aliasAS'),
-				tabulateAlias: settings.get<boolean>('tabulateAlias'),
-				commaPosition: settings.get<CommaPosition>('commaPosition'),
-				newlineOptions: settings.get<NewlineMode | number>('keywordNewline'),
-				parenOptions: {
-					openParenNewline: settings.get<boolean>('openParenNewline'),
-					closeParenNewline: settings.get<boolean>('closeParenNewline'),
-				},
-				lineWidth: settings.get<number>('lineWidth'),
-				linesBetweenQueries: settings.get<number>('linesBetweenQueries'),
-				denseOperators: settings.get<boolean>('denseOperators'),
-				semicolonNewline: settings.get<boolean>('semicolonNewline'),
-			};
-
 			const text = format(lines.join('\n'), formatConfigs);
 
 			return [
