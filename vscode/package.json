@@ -43,7 +43,8 @@
 		"tsql"
 	],
 	"activationEvents": [
-		"onStartupFinished"
+		"onStartupFinished",
+		"onCommand:prettier-sql-vscode.format-selection"
 	],
 	"main": "./out/extension.js",
 	"scripts": {
@@ -93,13 +94,28 @@
 			{
 				"title": "Format Selection (Prettier-SQL)",
 				"shortTitle": "Format SQL",
-				"command": "prettier-sql-vscode.format-selection",
-				"enablement": ""
+				"command": "prettier-sql-vscode.format-selection"
 			}
 		],
 		"configuration": {
 			"title": "Prettier SQL",
 			"properties": {
+				"Prettier-SQL.ignoreTabSettings": {
+					"type": "boolean",
+					"default": true,
+					"markdownDescription": "Ignore user and workplace settings for `tabSize` and `insertSpaces` (uses `#Prettier-SQL.tabSizeOverride#` and `#Prettier-SQL.insertSpacesOverride#`)? "
+				},
+				"Prettier-SQL.tabSizeOverride": {
+					"type": "number",
+					"default": 4,
+					"minimum": 1,
+					"markdownDescription": "Override for `tabSize` if `#Prettier-SQL.ignoreTabSettings#` is active"
+				},
+				"Prettier-SQL.insertSpacesOverride": {
+					"type": "boolean",
+					"default": true,
+					"markdownDescription": "Override for `insertSpaces` if `#Prettier-SQL.ignoreTabSettings#` is active"
+				},
 				"Prettier-SQL.uppercaseKeywords": {
 					"type": "boolean",
 					"default": true,

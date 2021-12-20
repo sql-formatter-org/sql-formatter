@@ -13,7 +13,13 @@ const getConfigs = (
 	formattingOptions: vscode.FormattingOptions | { tabSize: number; insertSpaces: boolean },
 	language: FormatterLanguage
 ) => {
-	const { tabSize, insertSpaces } = formattingOptions;
+	const ignoreTabSettings = settings.get<boolean>('ignoreTabSettings');
+	const { tabSize, insertSpaces } = ignoreTabSettings
+		? {
+				tabSize: settings.get<number>('tabSizeOverride')!,
+				insertSpaces: settings.get<boolean>('insertSpacesOverride')!,
+		  }
+		: formattingOptions;
 	const indent = insertSpaces ? ' '.repeat(tabSize) : '\t';
 
 	const formatConfigs = {
