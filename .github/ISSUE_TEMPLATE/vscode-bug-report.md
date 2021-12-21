@@ -2,7 +2,7 @@
 name: VSCode Bug Report
 about: Raise an issue with the VSCODE Extension
 title: '[VSCODE] Issue Title Here'
-labels: bug
+labels: vscode
 assignees: ''
 ---
 
