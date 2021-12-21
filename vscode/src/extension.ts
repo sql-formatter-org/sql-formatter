@@ -46,15 +46,11 @@ const getConfigs = (
 };
 
 export function activate(context: vscode.ExtensionContext) {
-	console.log('Prettier-SQL VSCode activated');
-
 	const formatProvider = (language: FormatterLanguage) => ({
 		provideDocumentFormattingEdits(
 			document: vscode.TextDocument,
 			options: vscode.FormattingOptions
 		): vscode.TextEdit[] {
-			console.log('Formatter language:', language);
-
 			const settings = vscode.workspace.getConfiguration('Prettier-SQL');
 			const formatConfigs = getConfigs(settings, options, language);
 
@@ -80,7 +76,7 @@ export function activate(context: vscode.ExtensionContext) {
 		'postgres': 'postgresql',
 		'hql': 'sql',
 		'hive-sql': 'sql',
-		// 'sql-bigquery': 'bigquery',
+		'sql-bigquery': 'bigquery',
 	};
 	Object.entries(languages).forEach(([vscodeLang, prettierLang]) =>
 		context.subscriptions.push(
@@ -117,7 +113,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 			const editor = vscode.window.activeTextEditor;
 			editor?.edit(editBuilder => {
-				editor?.selections?.forEach(sel =>
+				editor.selections.forEach(sel =>
 					editBuilder.replace(sel, format(editor.document.getText(sel), formatConfigs))
 				);
 			});
