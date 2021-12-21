@@ -94,7 +94,33 @@ export function activate(context: vscode.ExtensionContext) {
 	const formatSelectionCommand = vscode.commands.registerCommand(
 		'prettier-sql-vscode.format-selection',
 		() => {
-			console.log('format selection command');
+			const documentLanguage = vscode.window.activeTextEditor?.document.languageId ?? 'sql';
+			const formatterLanguage = languages[documentLanguage] ?? 'sql';
+
+			const settings = vscode.workspace.getConfiguration('Prettier-SQL');
+			const ignoreTabSettings = settings.get<boolean>('ignoreTabSettings');
+
+			const workspaceConfig = vscode.workspace.getConfiguration('editor');
+			const options = {
+				...{
+					tabSize: settings.get<number>('tabSizeOverride')!,
+					insertSpaces: settings.get<boolean>('insertSpacesOverride')!,
+				},
+				...(ignoreTabSettings
+					? {}
+					: {
+							tabSize: workspaceConfig.get<number>('tabSize'),
+							insertSpaces: workspaceConfig.get<boolean>('insertSpaces'),
+					  }),
+			};
+			const formatConfigs = getConfigs(settings, options, formatterLanguage);
+
+			const editor = vscode.window.activeTextEditor;
+			editor?.edit(editBuilder => {
+				editor?.selections?.forEach(sel =>
+					editBuilder.replace(sel, format(editor.document.getText(sel), formatConfigs))
+				);
+			});
 		}
 	);
 
