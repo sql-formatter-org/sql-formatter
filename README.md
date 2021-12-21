@@ -1,4 +1,4 @@
-<img src="static/prettier-sql-clean.svg" width="128"/>
+<a href='https://github.com/inferrinizzard/prettier-sql'><img src="static/prettier-sql-clean.svg" width="128"/></a>
 
 # Prettier SQL [![NPM version](https://img.shields.io/npm/v/prettier-sql.svg)](https://npmjs.com/package/prettier-sql) ![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/coveralls/master?label=Build&logo=Github) ![Coveralls](https://img.shields.io/coveralls/github/inferrinizzard/prettier-sql?branch=master&label=Coverage&logo=coveralls&style=plastic)
 
@@ -9,12 +9,14 @@ It started as a port of a [PHP Library][], but has since considerably diverged.
 Prettier SQL supports the following dialects:
 
 - **sql** - [Standard SQL][]
+- **bigquery** - [GCP BigQuery][]
+- **db2** - [IBM DB2][]
+- **hive** - [Apache Hive][]
 - **mariadb** - [MariaDB][]
 - **mysql** - [MySQL][]
-- **postgresql** - [PostgreSQL][]
-- **db2** - [IBM DB2][]
-- **plsql** - [Oracle PL/SQL][]
 - **n1ql** - [Couchbase N1QL][]
+- **plsql** - [Oracle PL/SQL][]
+- **postgresql** - [PostgreSQL][]
 - **redshift** - [Amazon Redshift][]
 - **spark** - [Spark][]
 - **tsql** - [SQL Server Transact-SQL][tsql]
@@ -24,7 +26,7 @@ It does not support:
 - Stored procedures.
 - Changing of the delimiter type to something else than `;`.
 
-→ [Try the demo.](https://inferrinizzard.github.io/prettier-sql/static)
+→ [Try the demo.](https://inferrinizzard.github.io/prettier-sql)
 
 # Table of contents
 
@@ -116,7 +118,7 @@ prettier-sql -h
 
 ```
 usage: sqlfmt.js [-h] [-o OUTPUT] \
-[-l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}] [-c CONFIG] [--version] [FILE]
+[-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}] [-c CONFIG] [--version] [FILE]
 
 Prettier SQL
 
@@ -127,7 +129,7 @@ optional arguments:
   -h, --help      show this help message and exit
   -o, --output    OUTPUT
                     File to write SQL output (defaults to stdout)
-  -l, --language  {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}
+  -l, --language  {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}
                     SQL dialect (defaults to standard sql)
   -c, --config    CONFIG
                     Path to config json file (will use default configs if unspecified)
@@ -194,12 +196,14 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 [php library]: https://github.com/jdorn/sql-formatter
 [standard sql]: https://en.wikipedia.org/wiki/SQL:2011
-[couchbase n1ql]: http://www.couchbase.com/n1ql
+[gcp bigquery]: https://cloud.google.com/bigquery
 [ibm db2]: https://www.ibm.com/analytics/us/en/technology/db2/
-[oracle pl/sql]: http://www.oracle.com/technetwork/database/features/plsql/index.html
-[amazon redshift]: https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
-[spark]: https://spark.apache.org/docs/latest/api/sql/index.html
-[postgresql]: https://www.postgresql.org/
+[apache hive]: https://hive.apache.org/
 [mariadb]: https://mariadb.com/
 [mysql]: https://www.mysql.com/
+[couchbase n1ql]: http://www.couchbase.com/n1ql
+[oracle pl/sql]: http://www.oracle.com/technetwork/database/features/plsql/index.html
+[postgresql]: https://www.postgresql.org/
+[amazon redshift]: https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
+[spark]: https://spark.apache.org/docs/latest/api/sql/index.html
 [tsql]: https://docs.microsoft.com/en-us/sql/sql-server/
