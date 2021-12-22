@@ -1,6 +1,59 @@
 # CHANGELOG
 
-## NEXT [5.0.0] : 2021-11-22
+## [5.1.0] : 2021-12-21
+
+### Known Issues
+
+- `newline: number` does not work with `[foo]`, `[` and `]` both count as 1 token each so `[foo]` would be 3 items
+  - `array[0]` or `map[key]` do still work as they are parsed as WORD
+- BigQuery formatter fails a few tests (ALTER TABLE, tricky line comments) due to those tests not including valid BigQuery SQL, those tests are currently skipped
+
+### Added
+
+Source:
+
+- consumed VSCode Extension as subrepo
+- added support for Hive language
+- added support for BigQuery language
+- added keyword dedupe on Formatter classes via Set
+
+VSCode:
+
+- added command `prettier-sql-vscode.format-selection`
+  - Formats SQL selections
+- added settings to override user/workspace `tabSize` and `insertSpaces` settings
+- added error message on format fail
+- added setting to override formatting language for `sql` files when SQL flavour does not have a VSCode language ID (Microsoft PostgreSQL and MSSQL Extensions)
+
+Other:
+
+- demo page now deployed as git repo subtree, served from root/ (subtree of static/)
+
+### Updated
+
+- fixed handling of `newline` options
+- simplified `NewlineMode` config
+- fixed ; indentation when used with `semicolonNewline` and `tenSpace` configs
+- Formatter now uses numeric for loop to allow for index manipulation
+- updated `linesBetweenQueries` to add an extra newline (0 lines = 1 line break, no space in between)
+- renamed Formatter class files to `<flavour>.formatter.ts`
+- renamed test files to `<flavour>.test.js`
+
+### Removed
+
+- removed `newline: hybrid` config
+  - `newline: number` now acts like `hybrid`
+
+## [5.0.1] : 2021-11-24
+
+### Updated
+
+- fixed bug when using SELECT \* and `denseOperators`
+- fixed aliasAs option on demo page
+- fixed handling of tokens with `aliasAs` flag
+- demo page now prints stack trace in textarea on error
+
+## [5.0.0] : 2021-11-22
 
 ### Added
 
