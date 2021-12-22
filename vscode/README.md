@@ -10,6 +10,14 @@ Use the FORMATTING template if it is an issue related the formatting of the SQL,
 
 ## Configuration
 
+`Prettier-SQL.SQLFlavourOverride`: Uses custom SQL Flavour to format `sql` files. Use this if you are using the Microsoft PostgreSQL or MSSQL Extensions since they do not provide a new language ID for VSCode.
+
+`Prettier-SQL.ignoreTabSettings`: Whether to ignore VSCode user/workspace settings for `tabSize` and `insertSpaces`
+
+`Prettier-SQL.tabSizeOverride`: Overrides `tabSize` if `Prettier-SQL.ignoreTabSettings` is enabled
+
+`Prettier-SQL.insertSpacesOverride`: Overrides `insertSpaces` if `Prettier-SQL.ignoreTabSettings` is enabled
+
 `Prettier-SQL.uppercaseKeywords`: Whether to print keywords in ALL CAPS or lowercase
 
 `Prettier-SQL.keywordPosition`: Switched between standard keyword positioning vs maintaining a central space column

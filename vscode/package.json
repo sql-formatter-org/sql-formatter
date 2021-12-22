@@ -24,7 +24,9 @@
 		"Other"
 	],
 	"keywords": [
+		"bigquery",
 		"db2",
+		"hive",
 		"formatter",
 		"mariadb",
 		"mssql",
@@ -40,6 +42,7 @@
 		"spark",
 		"sparksql",
 		"sql",
+		"sql server",
 		"tsql"
 	],
 	"activationEvents": [
