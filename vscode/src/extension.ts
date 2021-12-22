@@ -23,7 +23,10 @@ const getConfigs = (
 	const indent = insertSpaces ? ' '.repeat(tabSize) : '\t';
 
 	const formatConfigs = {
-		language,
+		language:
+			language === 'sql'
+				? settings.get<FormatterLanguage>('SQLFlavourOverride') ?? 'sql'
+				: language,
 		indent,
 		uppercase: settings.get<boolean>('uppercaseKeywords'),
 		keywordPosition: settings.get<KeywordMode>('keywordPosition'),

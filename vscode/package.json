@@ -100,10 +100,29 @@
 		"configuration": {
 			"title": "Prettier SQL",
 			"properties": {
+				"Prettier-SQL.SQLFlavourOverride": {
+					"type": "string",
+					"enum": [
+						"sql",
+						"bigquery",
+						"db2",
+						"hive",
+						"mariadb",
+						"mysql",
+						"n1ql",
+						"plsql",
+						"postgresql",
+						"redshift",
+						"spark",
+						"tsql"
+					],
+					"default": "sql",
+					"markdownDescription": "Formats `sql` files in another SQL Flavour when no VSCode Language exists, such as the Microsoft PostgreSQL & MSSQL Extensions"
+				},
 				"Prettier-SQL.ignoreTabSettings": {
 					"type": "boolean",
 					"default": true,
-					"markdownDescription": "Ignore user and workplace settings for `tabSize` and `insertSpaces` (uses `#Prettier-SQL.tabSizeOverride#` and `#Prettier-SQL.insertSpacesOverride#`)? "
+					"markdownDescription": "Ignore user and workplace settings for `tabSize` and `insertSpaces` (uses `#Prettier-SQL.tabSizeOverride#` and `#Prettier-SQL.insertSpacesOverride#`)?"
 				},
 				"Prettier-SQL.tabSizeOverride": {
 					"type": "number",
