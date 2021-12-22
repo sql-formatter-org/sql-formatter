@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
-import HiveFormatter from '../src/languages/HiveFormatter';
+import HiveFormatter from '../src/languages/hive.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCase from './features/case';

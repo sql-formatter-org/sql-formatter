@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
-import MySqlFormatter from '../src/languages/MySqlFormatter';
+import MySqlFormatter from '../src/languages/mysql.formatter';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
 import supportsStrings from './features/strings';

@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
-import BigQueryFormatter from '../src/languages/BigQueryFormatter';
+import BigQueryFormatter from '../src/languages/bigquery.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCase from './features/case';

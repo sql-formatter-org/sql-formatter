@@ -1,16 +1,16 @@
 import type { ParamItems } from './core/Params';
-import BigQueryFormatter from './languages/BigQueryFormatter';
-import Db2Formatter from './languages/Db2Formatter';
-import HiveFormatter from './languages/HiveFormatter';
-import MariaDbFormatter from './languages/MariaDbFormatter';
-import MySqlFormatter from './languages/MySqlFormatter';
-import N1qlFormatter from './languages/N1qlFormatter';
-import PlSqlFormatter from './languages/PlSqlFormatter';
-import PostgreSqlFormatter from './languages/PostgreSqlFormatter';
-import RedshiftFormatter from './languages/RedshiftFormatter';
-import SparkSqlFormatter from './languages/SparkSqlFormatter';
-import StandardSqlFormatter from './languages/StandardSqlFormatter';
-import TSqlFormatter from './languages/TSqlFormatter';
+import BigQueryFormatter from './languages/bigquery.formatter';
+import Db2Formatter from './languages/db2.formatter';
+import HiveFormatter from './languages/hive.formatter';
+import MariaDbFormatter from './languages/mariadb.formatter';
+import MySqlFormatter from './languages/mysql.formatter';
+import N1qlFormatter from './languages/n1ql.formatter';
+import PlSqlFormatter from './languages/pldql.formatter';
+import PostgreSqlFormatter from './languages/postgresql.formatter';
+import RedshiftFormatter from './languages/redshift.formatter';
+import SparkSqlFormatter from './languages/sparksql.formatter';
+import StandardSqlFormatter from './languages/standardsql.formatter';
+import TSqlFormatter from './languages/tsql.formatter';
 
 import { AliasMode, CommaPosition, KeywordMode, NewlineMode, ParenOptions } from './types';
 
