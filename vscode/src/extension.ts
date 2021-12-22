@@ -23,7 +23,10 @@ const getConfigs = (
 	const indent = insertSpaces ? ' '.repeat(tabSize) : '\t';
 
 	const formatConfigs = {
-		language,
+		language:
+			language === 'sql'
+				? settings.get<FormatterLanguage>('SQLFlavourOverride') ?? 'sql'
+				: language,
 		indent,
 		uppercase: settings.get<boolean>('uppercaseKeywords'),
 		keywordPosition: settings.get<KeywordMode>('keywordPosition'),
@@ -55,7 +58,13 @@ export function activate(context: vscode.ExtensionContext) {
 			const formatConfigs = getConfigs(settings, options, language);
 
 			const lines = [...new Array(document.lineCount)].map((_, i) => document.lineAt(i).text);
-			const text = format(lines.join('\n'), formatConfigs);
+			let text;
+			try {
+				text = format(lines.join('\n'), formatConfigs);
+			} catch (e) {
+				vscode.window.showErrorMessage('Unable to format SQL:\n' + e);
+				return [];
+			}
 
 			return [
 				vscode.TextEdit.replace(
@@ -112,11 +121,15 @@ export function activate(context: vscode.ExtensionContext) {
 			const formatConfigs = getConfigs(settings, options, formatterLanguage);
 
 			const editor = vscode.window.activeTextEditor;
-			editor?.edit(editBuilder => {
-				editor.selections.forEach(sel =>
-					editBuilder.replace(sel, format(editor.document.getText(sel), formatConfigs))
-				);
-			});
+			try {
+				editor?.edit(editBuilder => {
+					editor.selections.forEach(sel =>
+						editBuilder.replace(sel, format(editor.document.getText(sel), formatConfigs))
+					);
+				});
+			} catch (e) {
+				vscode.window.showErrorMessage('Unable to format SQL:\n' + e);
+			}
 		}
 	);
 
