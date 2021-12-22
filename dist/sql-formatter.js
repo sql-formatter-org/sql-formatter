@@ -2442,8 +2442,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        index--;
 	        var sqlArray = new _SqlFormatter2["default"](this.cfg).getFormatArray(sql);
 	        if (this.getLastString().trim().endsWith("(")) {
+	            while (sqlArray[sqlArray.length - 1].trim() == '' && sqlArray.length > 1) {
+	                sqlArray.pop();
+	            }
+	            sqlArray[sqlArray.length - 1] = sqlArray[sqlArray.length - 1].replace(/\s+$/g, '');
+
 	            this.insertSqlInThisLine(sqlArray);
 	            this.lines[this.lastIndex()] += ")";
+	            this.indentCount--;
 	            this.addNewLine(this.indentCount);
 	            index++;
 	        } else {
