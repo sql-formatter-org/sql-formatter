@@ -5,7 +5,7 @@ import HiveFormatter from './languages/hive.formatter';
 import MariaDbFormatter from './languages/mariadb.formatter';
 import MySqlFormatter from './languages/mysql.formatter';
 import N1qlFormatter from './languages/n1ql.formatter';
-import PlSqlFormatter from './languages/pldql.formatter';
+import PlSqlFormatter from './languages/plsql.formatter';
 import PostgreSqlFormatter from './languages/postgresql.formatter';
 import RedshiftFormatter from './languages/redshift.formatter';
 import SparkSqlFormatter from './languages/sparksql.formatter';

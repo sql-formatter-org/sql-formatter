@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
-import PlSqlFormatter from '../src/languages/pldql.formatter';
+import PlSqlFormatter from '../src/languages/plsql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
