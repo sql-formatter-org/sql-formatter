@@ -48,7 +48,8 @@
     "Sasha Aliashkevich <olsender@gmail.com>",
     "Sergei Egorov <sergei.egorov@zeroturnaround.com>",
     "Tyler Jones <tyler.jones@txwormhole.com>",
-    "Uku Pattak <ukupat@gmail.com>"
+    "Uku Pattak <ukupat@gmail.com>",
+    "Jacobo Bouzas Quiroga <jacobo.bouzas@factorial.co>"
   ],
   "files": [
     "bin",
@@ -78,8 +79,8 @@
     "url": "https://github.com/zeroturnaround/sql-formatter/issues"
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.4",
-    "@babel/core": "^7.10.4",
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.5",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
     "babel-eslint": "^10.1.0",
@@ -95,8 +96,8 @@
     "jest": "^26.1.0",
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
     "webpack-merge": "^5.0.8"
   },
   "jest": {
