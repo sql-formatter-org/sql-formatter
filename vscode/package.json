@@ -2,7 +2,7 @@
 	"name": "prettier-sql-vscode",
 	"displayName": "Prettier SQL VSCode",
 	"description": "VSCode Extension to format SQL files",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"publisher": "inferrinizzard",
 	"author": {
 		"name": "inferrinizzard"
@@ -64,7 +64,7 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"dependencies": {
-		"prettier-sql": "^5.0.1"
+		"prettier-sql": "^5.1.0"
 	},
 	"devDependencies": {
 		"@types/vscode": "^1.63.0",
