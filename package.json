@@ -21,7 +21,8 @@
     "postgresql",
     "pl/sql",
     "transact-sql",
-    "db2"
+    "db2",
+    "sqlite"
   ],
   "contributors": [
     "Adrien Pyke <adpyke@gmail.com>",
@@ -48,7 +49,8 @@
     "Sasha Aliashkevich <olsender@gmail.com>",
     "Sergei Egorov <sergei.egorov@zeroturnaround.com>",
     "Tyler Jones <tyler.jones@txwormhole.com>",
-    "Uku Pattak <ukupat@gmail.com>"
+    "Uku Pattak <ukupat@gmail.com>",
+    "Jacobo Bouzas Quiroga <jacobo.bouzas@factorial.co>"
   ],
   "files": [
     "bin",

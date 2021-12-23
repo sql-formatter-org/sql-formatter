@@ -9,6 +9,7 @@ export interface FormatOptions {
     | 'redshift'
     | 'spark'
     | 'sql'
+    | 'sqlite'
     | 'tsql';
   params?: { [x: string]: string } | string[];
   indent?: string;

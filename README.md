@@ -15,6 +15,7 @@ SQL formatter supports the following dialects:
 - **redshift** - [Amazon Redshift][]
 - **spark** - [Spark][]
 - **tsql** - [SQL Server Transact-SQL][tsql]
+- **sqlite** - [SQLite][sqlite]
 
 It does not support:
 
@@ -94,7 +95,7 @@ sql-formatter -h
 ```
 
 ```
-usage: sql-formatter [-h] [-o OUTPUT] [-l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}]
+usage: sql-formatter [-h] [-o OUTPUT] [-l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,tsql}]
                      [-i N | -t] [-u] [--lines-between-queries N] [--version] [FILE]
 
 SQL Formatter
@@ -106,8 +107,8 @@ optional arguments:
   -h, --help            show this help message and exit
   -o OUTPUT, --output OUTPUT
                         File to write SQL output (defaults to stdout)
-  -l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql},
-  --language {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}
+  -l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,tsql},
+  --language {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,tsql}
                         SQL Formatter dialect (defaults to basic sql)
   -i N, --indent N      Number of spaces to indent query blocks (defaults to 2)
   -t, --tab-indent      Indent query blocks with tabs instead of spaces
@@ -163,3 +164,4 @@ npm run check
 [mariadb]: https://mariadb.com/
 [mysql]: https://www.mysql.com/
 [tsql]: https://docs.microsoft.com/en-us/sql/sql-server/
+[sqlite]: https://sqlite.org/index.html
