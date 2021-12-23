@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
-import StandardSqlFormatter from '../src/languages/StandardSqlFormatter';
+import StandardSqlFormatter from '../src/languages/standardsql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCase from './features/case';

@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
-import Db2Formatter from '../src/languages/Db2Formatter';
+import Db2Formatter from '../src/languages/db2.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';

@@ -2,6 +2,7 @@ import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import { isToken, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
 import type { StringPatternType } from '../core/regexFactory';
+import { dedupe } from '../utils';
 
 /**
  * Priority 5 (last)
@@ -1669,10 +1670,10 @@ export default class PostgreSqlFormatter extends Formatter {
 	static reservedBinaryCommands = reservedBinaryCommands;
 	static reservedDependentClauses = reservedDependentClauses;
 	static reservedLogicalOperators = ['AND', 'OR'];
-	static reservedKeywords = [
+	static reservedKeywords = dedupe([
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
 		...reservedKeywords,
-	];
+	]);
 	static stringTypes: StringPatternType[] = [`""`, "''", "U&''", 'U&""', '$$', '``'];
 	static blockStart = ['(', 'CASE'];
 	static blockEnd = [')', 'END'];

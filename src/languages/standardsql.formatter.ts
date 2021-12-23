@@ -1,6 +1,7 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import type { StringPatternType } from '../core/regexFactory';
+import { dedupe } from '../utils';
 
 /**
  * Priority 5 (last)
@@ -371,7 +372,7 @@ export default class StandardSqlFormatter extends Formatter {
 	static reservedBinaryCommands = reservedBinaryCommands;
 	static reservedDependentClauses = reservedDependentClauses;
 	static reservedLogicalOperators = ['AND', 'OR'];
-	static reservedKeywords = reservedKeywords;
+	static reservedKeywords = dedupe(reservedKeywords);
 	static stringTypes: StringPatternType[] = [`""`, "''", '``'];
 	static blockStart = ['(', 'CASE'];
 	static blockEnd = [')', 'END'];

@@ -1,3 +1,5 @@
+export const dedupe = (arr: string[]) => [...new Set(arr)];
+
 // Only removes spaces, not newlines
 export const trimSpacesEnd = (str: string) => str.replace(/[ \t]+$/u, '');
 

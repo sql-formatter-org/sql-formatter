@@ -95,7 +95,6 @@
 		"roots": [
 			"test"
 		],
-		"testRegex": ".*Test",
 		"collectCoverage": true
 	}
 }

@@ -11,7 +11,7 @@ export default function supportsKeywordPositions(format) {
 		JOIN table2 b ON a.column5 = b.column5
 		WHERE column6 AND column7
 		GROUP BY column4;
-	`;
+  `;
 
 	const standardResult = dedent(`
     SELECT
@@ -90,22 +90,22 @@ export default function supportsKeywordPositions(format) {
 		expect(
 			format(
 				dedent`
-					SELECT *
-					FROM a
-					UNION DISTINCT
-					SELECT *
-					FROM b
-					LEFT OUTER JOIN c;
-				`,
+          SELECT *
+          FROM a
+          UNION DISTINCT
+          SELECT *
+          FROM b
+          LEFT OUTER JOIN c;
+        `,
 				{ keywordPosition: 'tenSpaceLeft' }
 			)
 		).toBe(dedent`
-			SELECT    *
-			FROM      a
-			UNION     DISTINCT
-			SELECT    *
-			FROM      b
-			LEFT      OUTER JOIN c;
-		`);
+      SELECT    *
+      FROM      a
+      UNION     DISTINCT
+      SELECT    *
+      FROM      b
+      LEFT      OUTER JOIN c;
+    `);
 	});
 }

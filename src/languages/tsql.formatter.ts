@@ -1,6 +1,7 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import type { StringPatternType } from '../core/regexFactory';
+import { dedupe } from '../utils';
 
 /**
  * Priority 5 (last)
@@ -1233,10 +1234,10 @@ export default class TSqlFormatter extends Formatter {
 	static reservedBinaryCommands = reservedBinaryCommands;
 	static reservedDependentClauses = reservedDependentClauses;
 	static reservedLogicalOperators = ['AND', 'OR'];
-	static reservedKeywords = [
+	static reservedKeywords = dedupe([
 		...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
 		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
-	];
+	]);
 	static stringTypes: StringPatternType[] = [`""`, "N''", "''", '[]', '``'];
 	static blockStart = ['(', 'CASE'];
 	static blockEnd = [')', 'END'];

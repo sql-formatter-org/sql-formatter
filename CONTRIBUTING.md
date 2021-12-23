@@ -1,7 +1,7 @@
 ## Bugs
 
 Please submit bugs and issues here: https://github.com/inferrinizzard/prettier-sql/issues \
-There are issue templates available for FORMATTING or SCRIPT related bugs.
+There are issue templates available for FORMATTING, SCRIPT, or VSCODE related bugs.
 
 # Development
 
@@ -25,6 +25,7 @@ Please use one of the following prefixes: (ie. feature/new-feature)
 
 - feature/ - development towards a new feature
 - dev/ - misc development not tied to a key feature / refactoring
+- vscode/ - development related to the VSCode Extension
 - issue/ - fix specifically for a issue #
 - bug/ - misc bug fixes not tied to a public issue
 - repo/ - meta dev related changes (ie. typescript, CI/CD, dependencies)
@@ -42,6 +43,20 @@ It can be invoked via:
 
 Please add new tests for any new features and bug fixes. \
 Language-specific tests should be included in their respective Test files, tests that apply to all languages should be in `behavesLikeSqlFormatter.js`
+
+## VSCode
+
+For development on the VSCode Extension, open the vscode/ directory as the workspace folder in VSCode and you'll be able to launch the Extension Host from the Debug menu
+
+## Publish Flow
+
+For those who have admin access on the repo, the new release publish flow is as such:
+
+- `release-it` (bumps version, git tag, git release, npm release)
+- bump VSCode version + prettier-sql dependency version (can be done beforehand, must be done before push)
+- `git subtree push --prefix static origin gh-pages` && `gh pages deploy` (pushes demo page to GH pages)
+- `git dio develop` (moves origin/develop branch head to master)
+- `vscode deploy` (run within vscode/ subrepo, deploys VSCode Extension)
 
 # Contributors
 

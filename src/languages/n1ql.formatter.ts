@@ -1,6 +1,7 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import type { StringPatternType } from '../core/regexFactory';
+import { dedupe } from '../utils';
 
 // TODO: split this into object with function categories
 /**
@@ -514,7 +515,7 @@ export default class N1qlFormatter extends Formatter {
 	static reservedBinaryCommands = reservedBinaryCommands;
 	static reservedDependentClauses = reservedDependentClauses;
 	static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
-	static reservedKeywords = [...reservedKeywords, ...reservedFunctions];
+	static reservedKeywords = dedupe([...reservedKeywords, ...reservedFunctions]);
 	static stringTypes: StringPatternType[] = [`""`, "''", '``'];
 	static blockStart = ['(', '[', '{', 'CASE'];
 	static blockEnd = [')', ']', '}', 'END'];

@@ -2,6 +2,7 @@ import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import { isToken, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
 import type { StringPatternType } from '../core/regexFactory';
+import { dedupe } from '../utils';
 
 /**
  * Priority 5 (last)
@@ -444,7 +445,7 @@ export default class PlSqlFormatter extends Formatter {
 	static reservedBinaryCommands = reservedBinaryCommands;
 	static reservedDependentClauses = reservedDependentClauses;
 	static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
-	static reservedKeywords = reservedKeywords;
+	static reservedKeywords = dedupe(reservedKeywords);
 	static stringTypes: StringPatternType[] = [`""`, "N''", "''", '``'];
 	static blockStart = ['(', 'CASE'];
 	static blockEnd = [')', 'END'];
