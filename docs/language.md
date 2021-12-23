@@ -15,6 +15,7 @@ Specifies the SQL dialect to use.
 - `"postgresql"` - [PostgreSQL][]
 - `"redshift"` - [Amazon Redshift][]
 - `"spark"` - [Spark][]
+- `"sqlite"` - [SQLite][sqlite]
 - `"tsql"` - [SQL Server Transact-SQL][tsql]
 
 The default `"sql"` dialect is meant for cases where you don't know which dialect of SQL you're about to format.
@@ -33,4 +34,5 @@ Better to always pick something more specific if possible.
 [postgresql]: https://www.postgresql.org/
 [amazon redshift]: https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 [spark]: https://spark.apache.org/docs/latest/api/sql/index.html
+[sqlite]: https://sqlite.org/index.html
 [tsql]: https://docs.microsoft.com/en-us/sql/sql-server/

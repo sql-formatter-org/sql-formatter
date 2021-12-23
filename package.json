@@ -21,7 +21,8 @@
     "postgresql",
     "pl/sql",
     "transact-sql",
-    "db2"
+    "db2",
+    "sqlite"
   ],
   "contributors": [
     "Adrien Pyke <adpyke@gmail.com>",
@@ -36,6 +37,7 @@
     "htaketani <h.taketani@gmail.com>",
     "Ian Campbell <icampbell@immuta.com>",
     "ivan baktsheev",
+    "Jacobo Bouzas Quiroga <jacobo.bouzas@factorial.co>",
     "João Pimentel Ferreira",
     "Justin Dane Vallar <jdvallar@gmail.com>",
     "Martin Nowak <code@dawg.eu>",

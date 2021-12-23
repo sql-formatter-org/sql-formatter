@@ -95,7 +95,7 @@ sql-formatter -h
 
 ```
 usage: sqlfmt.js [-h] [-o OUTPUT] \
-[-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}] [-c CONFIG] [--version] [FILE]
+[-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,tsql}] [-c CONFIG] [--version] [FILE]
 
 SQL Formatter
 
@@ -106,7 +106,7 @@ optional arguments:
   -h, --help      show this help message and exit
   -o, --output    OUTPUT
                     File to write SQL output (defaults to stdout)
-  -l, --language  {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}
+  -l, --language  {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,tsql}
                     SQL dialect (defaults to standard sql)
   -c, --config    CONFIG
                     Path to config json file (will use default configs if unspecified)
