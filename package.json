@@ -58,7 +58,9 @@
 		"url": "https://github.com/inferrinizzard/prettier-sql/issues"
 	},
 	"dependencies": {
-		"argparse": "^2.0.1"
+		"@types/moo": "^0.5.5",
+		"argparse": "^2.0.1",
+		"moo": "^0.5.1"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.10.4",
