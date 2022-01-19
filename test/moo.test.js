@@ -2,26 +2,7 @@ import StandardSqlFormatter from '../src/languages/standardsql.formatter';
 import Tokenizer from '../src/core/Tokenizer';
 import MooTokenizer from '../src/lexer/tokenizer';
 
-const testSql = `
-select
-	alpha + 1,
-	beta b,
-	gamma AS g,
-	CASE WHEN iota THEN i END
-FROM (
-	SELECT
-		MAX(epsilon)
-	FROM zeta
-	GROUP BY eta, iota HAVING chi, psi, phi
-	UNION
-	SELECT MIN(rho)
-	FROM omega
-)
-JOIN sigma ON tau = theta
-WHERE kappa AND lambda OR mu
-;
-SELECT upsilon AS y, omicron AS o FROM xi;
-`;
+import testSql from './test.sql';
 
 const options = {
 	reservedCommands: StandardSqlFormatter.reservedCommands,

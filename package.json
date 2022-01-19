@@ -75,6 +75,7 @@
 		"babel-jest": "^26.1.0",
 		"babel-loader": "^8.1.0",
 		"babel-plugin-add-module-exports": "^1.0.2",
+		"babel-plugin-inline-import": "^3.0.0",
 		"dedent-js": "^1.0.1",
 		"eslint": "^7.4.0",
 		"eslint-config-airbnb-base": "^14.2.0",
