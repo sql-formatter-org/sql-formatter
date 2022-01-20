@@ -67,3 +67,23 @@ export const wordRegex = (
 
 	return new RegExp(`${prefixLookBehind}(?:${wordChar})+${suffixLookAhead}`, 'iu');
 };
+
+export const reservedWordRegex = (reservedKeywords: string[], specialWordChars: string) => {
+	if (reservedKeywords.length === 0) {
+		return new RegExp(`^\b$`, 'u');
+	}
+	const reservedKeywordsPattern = sortByLengthDesc(reservedKeywords)
+		.map(keyword =>
+			keyword
+				.split('')
+				.map(char => (/ /gu.test(char) ? '\\s+' : `[${char.toUpperCase()}${char.toLowerCase()}]`))
+				.join('')
+		)
+		.join('|')
+		.replace(/ /gu, '\\s+');
+
+	const specialCharPattern = specialWordChars.length
+		? `(?![${escapeRegExp(specialWordChars)}]+)`
+		: '';
+	return new RegExp(`^${reservedKeywordsPattern}${specialCharPattern}\\b`, 'iu');
+};

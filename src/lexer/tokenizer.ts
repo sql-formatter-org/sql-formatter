@@ -5,12 +5,11 @@ import { TokenType } from '../core/token'; // convert to partial type import in 
 import {
 	lineCommentRegex,
 	operatorRegex,
+	reservedWordRegex,
 	StringPatternType,
 	stringRegex,
 	wordRegex,
 } from '../core/mooRegexFactory';
-
-const NULL_REGEX = /(?!)/; // zero-width negative lookahead, matches nothing
 
 interface TokenizerOptions {
 	reservedKeywords: string[];
@@ -29,14 +28,12 @@ interface TokenizerOptions {
 }
 
 export default class Tokenizer {
-	WHITESPACE_REGEX: RegExp;
-	REGEX_MAP: Partial<{ [tokenType in TokenType]: RegExp }>;
-
 	INDEXED_PLACEHOLDER_REGEX?: RegExp;
 	IDENT_NAMED_PLACEHOLDER_REGEX?: RegExp;
 	STRING_NAMED_PLACEHOLDER_REGEX?: RegExp;
 
 	LEXER_OPTIONS: { [key: string]: moo.Rule };
+	LEXER: moo.Lexer;
 
 	/**
 	 * @param {TokenizerOptions} cfg
@@ -55,32 +52,6 @@ export default class Tokenizer {
 	 *  @param {String[]} cfg.operators: Additional operators to recognize
 	 */
 	constructor(cfg: TokenizerOptions) {
-		this.WHITESPACE_REGEX = /^(\s+)/u;
-
-		const specialWordCharsAll = Object.values(cfg.specialWordChars ?? {}).join('');
-		this.REGEX_MAP = {
-			[TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(
-				cfg.reservedKeywords,
-				specialWordCharsAll
-			),
-			[TokenType.RESERVED_DEPENDENT_CLAUSE]: regexFactory.createReservedWordRegex(
-				cfg.reservedDependentClauses ?? [],
-				specialWordCharsAll
-			),
-			[TokenType.RESERVED_LOGICAL_OPERATOR]: regexFactory.createReservedWordRegex(
-				cfg.reservedLogicalOperators,
-				specialWordCharsAll
-			),
-			[TokenType.RESERVED_COMMAND]: regexFactory.createReservedWordRegex(
-				cfg.reservedCommands,
-				specialWordCharsAll
-			),
-			[TokenType.RESERVED_BINARY_COMMAND]: regexFactory.createReservedWordRegex(
-				cfg.reservedBinaryCommands,
-				specialWordCharsAll
-			),
-		};
-
 		this.INDEXED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
 			cfg.indexedPlaceholderTypes ?? [],
 			'[0-9]*'
@@ -93,6 +64,8 @@ export default class Tokenizer {
 			cfg.namedPlaceholderTypes,
 			regexFactory.createStringPattern(cfg.stringTypes)
 		);
+
+		const specialWordCharsAll = Object.values(cfg.specialWordChars ?? {}).join('');
 
 		this.LEXER_OPTIONS = {
 			WS: { match: /[ \t]+/ },
@@ -119,26 +92,52 @@ export default class Tokenizer {
 				match:
 					/^(?:(?:-\s*)?[0-9]+(?:\.[0-9]+)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u,
 			},
+			[TokenType.CASE_START]: { match: /[Cc][Aa][Ss][Ee]/u },
+			[TokenType.CASE_END]: { match: /[Ee][Nn][Dd]/u },
+			[TokenType.RESERVED_COMMAND]: {
+				match: reservedWordRegex(cfg.reservedCommands, specialWordCharsAll),
+			},
+			[TokenType.RESERVED_BINARY_COMMAND]: {
+				match: reservedWordRegex(cfg.reservedBinaryCommands, specialWordCharsAll),
+			},
+			[TokenType.RESERVED_DEPENDENT_CLAUSE]: {
+				match: reservedWordRegex(cfg.reservedDependentClauses, specialWordCharsAll),
+			},
+			[TokenType.RESERVED_LOGICAL_OPERATOR]: {
+				match: reservedWordRegex(cfg.reservedLogicalOperators, specialWordCharsAll),
+			},
+			[TokenType.RESERVED_KEYWORD]: {
+				match: reservedWordRegex(cfg.reservedKeywords, specialWordCharsAll),
+			},
 			[TokenType.STRING]: { match: stringRegex({ stringTypes: cfg.stringTypes }) },
 			[TokenType.WORD]: {
 				match: wordRegex(cfg.specialWordChars),
-				type: moo.keywords({ BLOCK_CASE: 'CASE', BLOCK_END: 'END' }),
+				// type: moo.keywords({ [TokenType.RESERVED_COMMAND]: cfg.reservedCommands }), // case sensitivity currently broken, see moo#122
 			},
 			WIP: { match: '.' },
 		};
+
 		this.LEXER_OPTIONS = Object.entries(this.LEXER_OPTIONS).reduce(
 			(acc, [name, regex]) => ({
 				...acc,
-				[name]: { ...regex, match: new RegExp(regex.match as string | RegExp, 'u') },
+				[name]: {
+					...regex,
+					match: new RegExp(
+						regex.match as string | RegExp,
+						[...(regex.match instanceof RegExp ? regex.match.flags.split('') : [])]
+							.filter(flag => !'ium'.includes(flag)) // disallowed flags
+							.join('') + 'u'
+					),
+				},
 			}),
 			{} as { [key: string]: moo.Rule }
 		);
+
+		this.LEXER = moo.compile(this.LEXER_OPTIONS);
 	}
 
 	tokenize(input: string) {
-		const lexer = moo.compile(this.LEXER_OPTIONS);
-
-		lexer.reset(input);
-		return Array.from(lexer);
+		this.LEXER.reset(input);
+		return Array.from(this.LEXER);
 	}
 }

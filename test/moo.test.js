@@ -28,7 +28,7 @@ describe('MySqlFormatter', () => {
 	const filtered = mooStream.filter(token => token.type !== 'WS' && token.type !== 'NL');
 	console.log('old:', stream.length, 'new:', filtered.length);
 
-	// console.log(filtered);
+	console.log(filtered.map(({ type, text }) => ({ type, text })));
 
 	console.log(filtered.filter(token => token.type === 'WIP').length);
 
