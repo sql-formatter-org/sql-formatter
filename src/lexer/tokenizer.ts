@@ -1,10 +1,10 @@
 import * as moo from 'moo';
 
-import * as regexFactory from '../core/regexFactory';
 import { TokenType } from '../core/token'; // convert to partial type import in TS 4.5
 import {
 	lineCommentRegex,
 	operatorRegex,
+	placeholderRegex,
 	reservedWordRegex,
 	StringPatternType,
 	stringRegex,
@@ -28,10 +28,6 @@ interface TokenizerOptions {
 }
 
 export default class Tokenizer {
-	INDEXED_PLACEHOLDER_REGEX?: RegExp;
-	IDENT_NAMED_PLACEHOLDER_REGEX?: RegExp;
-	STRING_NAMED_PLACEHOLDER_REGEX?: RegExp;
-
 	LEXER_OPTIONS: { [key: string]: moo.Rule };
 	LEXER: moo.Lexer;
 
@@ -52,19 +48,6 @@ export default class Tokenizer {
 	 *  @param {String[]} cfg.operators: Additional operators to recognize
 	 */
 	constructor(cfg: TokenizerOptions) {
-		this.INDEXED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
-			cfg.indexedPlaceholderTypes ?? [],
-			'[0-9]*'
-		);
-		this.IDENT_NAMED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
-			cfg.namedPlaceholderTypes,
-			'[a-zA-Z0-9._$]+'
-		);
-		this.STRING_NAMED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
-			cfg.namedPlaceholderTypes,
-			regexFactory.createStringPattern(cfg.stringTypes)
-		);
-
 		const specialWordCharsAll = Object.values(cfg.specialWordChars ?? {}).join('');
 
 		this.LEXER_OPTIONS = {
@@ -109,27 +92,37 @@ export default class Tokenizer {
 			[TokenType.RESERVED_KEYWORD]: {
 				match: reservedWordRegex(cfg.reservedKeywords, specialWordCharsAll),
 			},
+			INDEXED_PLACEHOLDER: { match: placeholderRegex(cfg.indexedPlaceholderTypes ?? [], '[0-9]*') },
+			NAMED_PLACEHOLDER: { match: placeholderRegex(cfg.namedPlaceholderTypes, '[a-zA-Z0-9._$]+') },
+			STRING_PLACEHOLDER: {
+				match: placeholderRegex(
+					cfg.namedPlaceholderTypes,
+					stringRegex({ stringTypes: cfg.stringTypes }).source
+				),
+			},
 			[TokenType.STRING]: { match: stringRegex({ stringTypes: cfg.stringTypes }) },
 			[TokenType.WORD]: {
 				match: wordRegex(cfg.specialWordChars),
 				// type: moo.keywords({ [TokenType.RESERVED_COMMAND]: cfg.reservedCommands }), // case sensitivity currently broken, see moo#122
 			},
-			WIP: { match: '.' },
 		};
 
 		this.LEXER_OPTIONS = Object.entries(this.LEXER_OPTIONS).reduce(
-			(acc, [name, regex]) => ({
-				...acc,
-				[name]: {
-					...regex,
-					match: new RegExp(
-						regex.match as string | RegExp,
-						[...(regex.match instanceof RegExp ? regex.match.flags.split('') : [])]
-							.filter(flag => !'ium'.includes(flag)) // disallowed flags
-							.join('') + 'u'
-					),
-				},
-			}),
+			(rules, [name, regex]) =>
+				regex.match
+					? {
+							...rules,
+							[name]: {
+								...regex,
+								match: new RegExp(
+									regex.match as string | RegExp,
+									[...(regex.match instanceof RegExp ? regex.match.flags.split('') : [])]
+										.filter(flag => !'iumgy'.includes(flag)) // disallowed flags
+										.join('') + 'u'
+								),
+							},
+					  }
+					: rules,
 			{} as { [key: string]: moo.Rule }
 		);
 

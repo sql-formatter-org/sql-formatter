@@ -18,7 +18,8 @@ const options = {
 	lineCommentTypes: StandardSqlFormatter.lineCommentTypes,
 };
 
-describe('MySqlFormatter', () => {
+describe('Moo', () => {
+	console.log(testSql);
 	const tokenizer = new Tokenizer(options);
 	const stream = tokenizer.tokenize(testSql);
 

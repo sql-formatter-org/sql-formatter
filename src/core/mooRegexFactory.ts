@@ -1,5 +1,7 @@
 import { escapeRegExp, sortByLengthDesc } from '../utils';
 
+export const NULL_REGEX = /(?!)/; // zero-width negative lookahead, matches nothing
+
 export const lineCommentRegex = (lineCommentTypes: string[]) =>
 	new RegExp(`^(?:${lineCommentTypes.map(escapeRegExp).join('|')}.*?)(?:\r\n|\r|\n|$)`, 'u');
 
@@ -86,4 +88,14 @@ export const reservedWordRegex = (reservedKeywords: string[], specialWordChars: 
 		? `(?![${escapeRegExp(specialWordChars)}]+)`
 		: '';
 	return new RegExp(`^${reservedKeywordsPattern}${specialCharPattern}\\b`, 'iu');
+};
+
+export const placeholderRegex = (types: string[], pattern: string) => {
+	if (!types.length) {
+		// return NULL_REGEX;
+		return undefined;
+	}
+	const typesRegex = types.map(escapeRegExp).join('|');
+
+	return new RegExp(`${typesRegex}(?:${pattern})`, 'u');
 };
