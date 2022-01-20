@@ -22,7 +22,7 @@ interface TokenizerOptions {
 
 export default class Tokenizer {
 	WHITESPACE_REGEX: RegExp;
-	REGEX_MAP: { [tokenType in TokenType]: RegExp };
+	REGEX_MAP: Partial<{ [tokenType in TokenType]: RegExp }>;
 
 	INDEXED_PLACEHOLDER_REGEX?: RegExp;
 	IDENT_NAMED_PLACEHOLDER_REGEX?: RegExp;
@@ -139,10 +139,11 @@ export default class Tokenizer {
 	}
 
 	matchToken = (tokenType: TokenType) => (input: string) =>
+		this.REGEX_MAP[tokenType] &&
 		this.getTokenOnFirstMatch({
 			input,
 			type: tokenType,
-			regex: this.REGEX_MAP[tokenType],
+			regex: this.REGEX_MAP[tokenType]!,
 		});
 
 	getNextToken(input: string, previousToken?: Token) {

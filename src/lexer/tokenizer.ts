@@ -1,8 +1,8 @@
 import * as moo from 'moo';
 
 import * as regexFactory from '../core/regexFactory';
-import { escapeRegExp } from '../utils';
-import { Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
+import { TokenType } from '../core/token'; // convert to partial type import in TS 4.5
+import { StringPatternType, stringRegex, wordRegex } from '../core/mooRegexFactory';
 
 const NULL_REGEX = /(?!)/; // zero-width negative lookahead, matches nothing
 
@@ -12,7 +12,7 @@ interface TokenizerOptions {
 	reservedLogicalOperators: string[];
 	reservedDependentClauses: string[];
 	reservedBinaryCommands: string[];
-	stringTypes: regexFactory.StringPatternType[];
+	stringTypes: StringPatternType[];
 	blockStart: string[];
 	blockEnd: string[];
 	indexedPlaceholderTypes?: string[];
@@ -24,11 +24,13 @@ interface TokenizerOptions {
 
 export default class Tokenizer {
 	WHITESPACE_REGEX: RegExp;
-	REGEX_MAP: { [tokenType in TokenType]: RegExp };
+	REGEX_MAP: Partial<{ [tokenType in TokenType]: RegExp }>;
 
 	INDEXED_PLACEHOLDER_REGEX?: RegExp;
 	IDENT_NAMED_PLACEHOLDER_REGEX?: RegExp;
 	STRING_NAMED_PLACEHOLDER_REGEX?: RegExp;
+
+	LEXER_OPTIONS: { [key: string]: moo.Rule };
 
 	/**
 	 * @param {TokenizerOptions} cfg
@@ -101,32 +103,32 @@ export default class Tokenizer {
 			cfg.namedPlaceholderTypes,
 			regexFactory.createStringPattern(cfg.stringTypes)
 		);
+
+		this.LEXER_OPTIONS = {
+			WS: { match: /[ \t]+/ },
+			NL: { match: /\n/, lineBreaks: true },
+			[TokenType.COMMA]: { match: /[,]/ },
+			[TokenType.OPEN_PAREN]: { match: /[(]/ },
+			[TokenType.CLOSE_PAREN]: { match: /[)]/ },
+			[TokenType.OPEN_BRACKET]: { match: /[[]/ },
+			[TokenType.CLOSE_BRACKET]: { match: /[\]]/ },
+			[TokenType.OPERATOR]: { match: new RegExp('[+-/*%&|^><=.;{}`:$]', 'u') },
+			[TokenType.STRING]: { match: stringRegex({ stringTypes: cfg.stringTypes }) },
+			[TokenType.WORD]: { match: wordRegex(cfg.specialWordChars) },
+			WIP: { match: '.' },
+		};
+		this.LEXER_OPTIONS = Object.entries(this.LEXER_OPTIONS).reduce(
+			(acc, [name, regex]) => ({
+				...acc,
+				[name]: { ...regex, match: new RegExp(regex.match as string | RegExp, 'u') },
+			}),
+			{} as { [key: string]: moo.Rule }
+		);
 	}
 
 	tokenize(input: string) {
-		let lexerOptions: { [key: string]: moo.Rule | RegExp } = {
-			WS: /[ \t]+/,
-			NL: { match: /\n/, lineBreaks: true },
-			[TokenType.WORD]: new RegExp(
-				/(?:\p{Alphabetic}|\p{Mark}|\p{Decimal_Number}|\p{Connector_Punctuation}|\p{Join_Control})+/u,
-				'u'
-			),
-			[TokenType.OPERATOR]: new RegExp('[+-/*%&|^><=.,;\\[\\]\\}\\{`:$]', 'u'),
-			[TokenType.BLOCK_START]: /[(]/,
-			[TokenType.BLOCK_END]: /[)]/,
-		};
-		lexerOptions = Object.entries(lexerOptions).reduce(
-			(acc, [name, regex]) => ({
-				...acc,
-				[name]:
-					regex instanceof RegExp
-						? new RegExp(regex, 'u')
-						: { ...regex, match: new RegExp(regex.match as string | RegExp, 'u') },
-			}),
-			{} as { [key: string]: moo.Rule | RegExp }
-		);
+		const lexer = moo.compile(this.LEXER_OPTIONS);
 
-		const lexer = moo.compile(lexerOptions);
 		lexer.reset(input);
 		return Array.from(lexer);
 	}
