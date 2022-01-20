@@ -1,15 +1,7 @@
 import * as moo from 'moo';
 
 import { TokenType } from '../core/token'; // convert to partial type import in TS 4.5
-import {
-	lineCommentRegex,
-	operatorRegex,
-	placeholderRegex,
-	reservedWordRegex,
-	StringPatternType,
-	stringRegex,
-	wordRegex,
-} from '../core/mooRegexFactory';
+import * as regex from '../core/mooRegexFactory';
 
 interface TokenizerOptions {
 	reservedKeywords: string[];
@@ -17,7 +9,7 @@ interface TokenizerOptions {
 	reservedLogicalOperators: string[];
 	reservedDependentClauses: string[];
 	reservedBinaryCommands: string[];
-	stringTypes: StringPatternType[];
+	stringTypes: regex.StringPatternType[];
 	blockStart: string[];
 	blockEnd: string[];
 	indexedPlaceholderTypes?: string[];
@@ -55,7 +47,7 @@ export default class Tokenizer {
 			NL: { match: /\n/, lineBreaks: true },
 			[TokenType.BLOCK_COMMENT]: { match: /^(?:\/\*[^]*?(?:\*\/|$))/u, lineBreaks: true },
 			[TokenType.LINE_COMMENT]: {
-				match: lineCommentRegex(cfg.lineCommentTypes),
+				match: regex.lineComment(cfg.lineCommentTypes),
 			},
 			[TokenType.COMMA]: { match: /[,]/ },
 			[TokenType.OPEN_PAREN]: { match: /[(]/ },
@@ -63,7 +55,7 @@ export default class Tokenizer {
 			[TokenType.OPEN_BRACKET]: { match: /[[]/ },
 			[TokenType.CLOSE_BRACKET]: { match: /[\]]/ },
 			[TokenType.OPERATOR]: {
-				match: operatorRegex('+-/*%&|^><=.;{}`:$', [
+				match: regex.operator('+-/*%&|^><=.;{}`:$', [
 					'<>',
 					'<=',
 					'>=',
@@ -78,45 +70,47 @@ export default class Tokenizer {
 			[TokenType.CASE_START]: { match: /[Cc][Aa][Ss][Ee]/u },
 			[TokenType.CASE_END]: { match: /[Ee][Nn][Dd]/u },
 			[TokenType.RESERVED_COMMAND]: {
-				match: reservedWordRegex(cfg.reservedCommands, specialWordCharsAll),
+				match: regex.reservedWord(cfg.reservedCommands, specialWordCharsAll),
 			},
 			[TokenType.RESERVED_BINARY_COMMAND]: {
-				match: reservedWordRegex(cfg.reservedBinaryCommands, specialWordCharsAll),
+				match: regex.reservedWord(cfg.reservedBinaryCommands, specialWordCharsAll),
 			},
 			[TokenType.RESERVED_DEPENDENT_CLAUSE]: {
-				match: reservedWordRegex(cfg.reservedDependentClauses, specialWordCharsAll),
+				match: regex.reservedWord(cfg.reservedDependentClauses, specialWordCharsAll),
 			},
 			[TokenType.RESERVED_LOGICAL_OPERATOR]: {
-				match: reservedWordRegex(cfg.reservedLogicalOperators, specialWordCharsAll),
+				match: regex.reservedWord(cfg.reservedLogicalOperators, specialWordCharsAll),
 			},
 			[TokenType.RESERVED_KEYWORD]: {
-				match: reservedWordRegex(cfg.reservedKeywords, specialWordCharsAll),
+				match: regex.reservedWord(cfg.reservedKeywords, specialWordCharsAll),
 			},
-			INDEXED_PLACEHOLDER: { match: placeholderRegex(cfg.indexedPlaceholderTypes ?? [], '[0-9]*') },
-			NAMED_PLACEHOLDER: { match: placeholderRegex(cfg.namedPlaceholderTypes, '[a-zA-Z0-9._$]+') },
+			INDEXED_PLACEHOLDER: {
+				match: regex.placeholder(cfg.indexedPlaceholderTypes ?? [], '[0-9]*'),
+			},
+			NAMED_PLACEHOLDER: { match: regex.placeholder(cfg.namedPlaceholderTypes, '[a-zA-Z0-9._$]+') },
 			STRING_PLACEHOLDER: {
-				match: placeholderRegex(
+				match: regex.placeholder(
 					cfg.namedPlaceholderTypes,
-					stringRegex({ stringTypes: cfg.stringTypes }).source
+					regex.string({ stringTypes: cfg.stringTypes }).source
 				),
 			},
-			[TokenType.STRING]: { match: stringRegex({ stringTypes: cfg.stringTypes }) },
+			[TokenType.STRING]: { match: regex.string({ stringTypes: cfg.stringTypes }) },
 			[TokenType.WORD]: {
-				match: wordRegex(cfg.specialWordChars),
+				match: regex.word(cfg.specialWordChars),
 				// type: moo.keywords({ [TokenType.RESERVED_COMMAND]: cfg.reservedCommands }), // case sensitivity currently broken, see moo#122
 			},
 		};
 
 		this.LEXER_OPTIONS = Object.entries(this.LEXER_OPTIONS).reduce(
-			(rules, [name, regex]) =>
-				regex.match
+			(rules, [name, rule]) =>
+				rule.match
 					? {
 							...rules,
 							[name]: {
-								...regex,
+								...rule,
 								match: new RegExp(
-									regex.match as string | RegExp,
-									[...(regex.match instanceof RegExp ? regex.match.flags.split('') : [])]
+									rule.match as string | RegExp,
+									[...(rule.match instanceof RegExp ? rule.match.flags.split('') : [])]
 										.filter(flag => !'iumgy'.includes(flag)) // disallowed flags
 										.join('') + 'u'
 								),

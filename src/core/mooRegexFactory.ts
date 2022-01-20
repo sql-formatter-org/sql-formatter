@@ -2,10 +2,10 @@ import { escapeRegExp, sortByLengthDesc } from '../utils';
 
 export const NULL_REGEX = /(?!)/; // zero-width negative lookahead, matches nothing
 
-export const lineCommentRegex = (lineCommentTypes: string[]) =>
+export const lineComment = (lineCommentTypes: string[]) =>
 	new RegExp(`^(?:${lineCommentTypes.map(escapeRegExp).join('|')}.*?)(?:\r\n|\r|\n|$)`, 'u');
 
-export const operatorRegex = (monadOperators: string, polyadOperators: string[]) =>
+export const operator = (monadOperators: string, polyadOperators: string[]) =>
 	new RegExp(
 		`^${sortByLengthDesc(polyadOperators).map(escapeRegExp).join('|')}|` +
 			`[${monadOperators.split('').map(escapeRegExp).join('')}]`,
@@ -32,7 +32,7 @@ const createStringPattern = (stringPrefixes: string) => ({
 export type StringPatternType = keyof ReturnType<typeof createStringPattern>;
 export type StringPatternPrefix = typeof stringPrefixList[number];
 
-export const stringRegex = ({
+export const string = ({
 	stringTypes,
 	stringPrefixes,
 }: {
@@ -45,9 +45,7 @@ export const stringRegex = ({
 	return new RegExp(`^${stringPattern}`, 'u');
 };
 
-export const wordRegex = (
-	specialChars: { any?: string; suffix?: string; prefix?: string } = {}
-) => {
+export const word = (specialChars: { any?: string; suffix?: string; prefix?: string } = {}) => {
 	// lookbehind for specialChars that only appear at start
 	const prefixLookBehind = specialChars.prefix?.length
 		? `[${escapeRegExp(specialChars.prefix)}]*`
@@ -70,7 +68,7 @@ export const wordRegex = (
 	return new RegExp(`${prefixLookBehind}(?:${wordChar})+${suffixLookAhead}`, 'iu');
 };
 
-export const reservedWordRegex = (reservedKeywords: string[], specialWordChars: string) => {
+export const reservedWord = (reservedKeywords: string[], specialWordChars: string) => {
 	if (reservedKeywords.length === 0) {
 		return new RegExp(`^\b$`, 'u');
 	}
@@ -90,12 +88,10 @@ export const reservedWordRegex = (reservedKeywords: string[], specialWordChars: 
 	return new RegExp(`^${reservedKeywordsPattern}${specialCharPattern}\\b`, 'iu');
 };
 
-export const placeholderRegex = (types: string[], pattern: string) => {
+export const placeholder = (types: string[], pattern: string) => {
 	if (!types.length) {
-		// return NULL_REGEX;
 		return undefined;
 	}
-	const typesRegex = types.map(escapeRegExp).join('|');
-
-	return new RegExp(`${typesRegex}(?:${pattern})`, 'u');
+	const typesPattern = types.map(escapeRegExp).join('|');
+	return new RegExp(`${typesPattern}(?:${pattern})`, 'u');
 };
