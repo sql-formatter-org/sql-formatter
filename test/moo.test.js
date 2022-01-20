@@ -18,16 +18,25 @@ const options = {
 	lineCommentTypes: StandardSqlFormatter.lineCommentTypes,
 };
 
-const tokenizer = new Tokenizer(options);
-const stream = tokenizer.tokenize(testSql);
+describe('MySqlFormatter', () => {
+	const tokenizer = new Tokenizer(options);
+	const stream = tokenizer.tokenize(testSql);
 
-const mooTokenizer = new MooTokenizer(options);
-const mooStream = mooTokenizer.tokenize(testSql);
+	const mooTokenizer = new MooTokenizer(options);
+	const mooStream = mooTokenizer.tokenize(testSql);
 
-const filtered = mooStream.filter(token => token.type !== 'WS' && token.type !== 'NL');
-console.log(stream.length);
-console.log(filtered.length);
+	const filtered = mooStream.filter(token => token.type !== 'WS' && token.type !== 'NL');
+	console.log('old:', stream.length, 'new:', filtered.length);
 
-stream.forEach((t, i) => {
-	console.log(t.value, filtered[i].value);
+	// console.log(filtered);
+
+	console.log(filtered.filter(token => token.type === 'WIP').length);
+
+	it('does not have any WIP tokens', () => {
+		expect(filtered).not.toContainEqual(
+			expect.objectContaining({
+				type: 'WIP',
+			})
+		);
+	});
 });

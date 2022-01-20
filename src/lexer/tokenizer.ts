@@ -2,7 +2,13 @@ import * as moo from 'moo';
 
 import * as regexFactory from '../core/regexFactory';
 import { TokenType } from '../core/token'; // convert to partial type import in TS 4.5
-import { StringPatternType, stringRegex, wordRegex } from '../core/mooRegexFactory';
+import {
+	lineCommentRegex,
+	operatorRegex,
+	StringPatternType,
+	stringRegex,
+	wordRegex,
+} from '../core/mooRegexFactory';
 
 const NULL_REGEX = /(?!)/; // zero-width negative lookahead, matches nothing
 
@@ -53,8 +59,6 @@ export default class Tokenizer {
 
 		const specialWordCharsAll = Object.values(cfg.specialWordChars ?? {}).join('');
 		this.REGEX_MAP = {
-			[TokenType.WORD]: regexFactory.createWordRegex(cfg.specialWordChars),
-			[TokenType.STRING]: regexFactory.createStringRegex(cfg.stringTypes),
 			[TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(
 				cfg.reservedKeywords,
 				specialWordCharsAll
@@ -75,20 +79,6 @@ export default class Tokenizer {
 				cfg.reservedBinaryCommands,
 				specialWordCharsAll
 			),
-			[TokenType.OPERATOR]: regexFactory.createOperatorRegex('+-/*%&|^><=.,;[]{}`:$', [
-				'<>',
-				'<=',
-				'>=',
-				'!=',
-				...(cfg.operators ?? []),
-			]),
-			[TokenType.BLOCK_START]: regexFactory.createParenRegex(cfg.blockStart),
-			[TokenType.BLOCK_END]: regexFactory.createParenRegex(cfg.blockEnd),
-			[TokenType.LINE_COMMENT]: regexFactory.createLineCommentRegex(cfg.lineCommentTypes),
-			[TokenType.BLOCK_COMMENT]: /^(\/\*[^]*?(?:\*\/|$))/u,
-			[TokenType.NUMBER]:
-				/^((-\s*)?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+(\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u,
-			[TokenType.PLACEHOLDER]: NULL_REGEX, // matches nothing
 		};
 
 		this.INDEXED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
@@ -107,14 +97,33 @@ export default class Tokenizer {
 		this.LEXER_OPTIONS = {
 			WS: { match: /[ \t]+/ },
 			NL: { match: /\n/, lineBreaks: true },
+			[TokenType.BLOCK_COMMENT]: { match: /^(?:\/\*[^]*?(?:\*\/|$))/u, lineBreaks: true },
+			[TokenType.LINE_COMMENT]: {
+				match: lineCommentRegex(cfg.lineCommentTypes),
+			},
 			[TokenType.COMMA]: { match: /[,]/ },
 			[TokenType.OPEN_PAREN]: { match: /[(]/ },
 			[TokenType.CLOSE_PAREN]: { match: /[)]/ },
 			[TokenType.OPEN_BRACKET]: { match: /[[]/ },
 			[TokenType.CLOSE_BRACKET]: { match: /[\]]/ },
-			[TokenType.OPERATOR]: { match: new RegExp('[+-/*%&|^><=.;{}`:$]', 'u') },
+			[TokenType.OPERATOR]: {
+				match: operatorRegex('+-/*%&|^><=.;{}`:$', [
+					'<>',
+					'<=',
+					'>=',
+					'!=',
+					...(cfg.operators ?? []),
+				]),
+			},
+			[TokenType.NUMBER]: {
+				match:
+					/^(?:(?:-\s*)?[0-9]+(?:\.[0-9]+)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u,
+			},
 			[TokenType.STRING]: { match: stringRegex({ stringTypes: cfg.stringTypes }) },
-			[TokenType.WORD]: { match: wordRegex(cfg.specialWordChars) },
+			[TokenType.WORD]: {
+				match: wordRegex(cfg.specialWordChars),
+				type: moo.keywords({ BLOCK_CASE: 'CASE', BLOCK_END: 'END' }),
+			},
 			WIP: { match: '.' },
 		};
 		this.LEXER_OPTIONS = Object.entries(this.LEXER_OPTIONS).reduce(

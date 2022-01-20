@@ -2,7 +2,7 @@ select
 	alpha + 1,
 	beta[0] b,
 	gamma['radiation'] AS g,
-	CASE WHEN iota THEN i END
+	case WHEN iota THEN i END
 FROM (
 	SELECT
 		MAX(epsilon)

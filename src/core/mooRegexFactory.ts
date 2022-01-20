@@ -1,4 +1,14 @@
-import { escapeRegExp } from '../utils';
+import { escapeRegExp, sortByLengthDesc } from '../utils';
+
+export const lineCommentRegex = (lineCommentTypes: string[]) =>
+	new RegExp(`^(?:${lineCommentTypes.map(escapeRegExp).join('|')}.*?)(?:\r\n|\r|\n|$)`, 'u');
+
+export const operatorRegex = (monadOperators: string, polyadOperators: string[]) =>
+	new RegExp(
+		`^${sortByLengthDesc(polyadOperators).map(escapeRegExp).join('|')}|` +
+			`[${monadOperators.split('').map(escapeRegExp).join('')}]`,
+		'u'
+	);
 
 // This enables the following string patterns:
 // 1. backtick quoted string using `` to escape
