@@ -121,7 +121,7 @@ export default function behavesLikeSqlFormatter(format) {
 		expect(result).toBe(dedent`
       LIMIT
         5;
-      
+
       SELECT
         foo,
         bar;
@@ -378,7 +378,7 @@ export default function behavesLikeSqlFormatter(format) {
         Column1
       FROM
         Table1;
-      
+
       SELECT
         COUNT(*),
         Column1
@@ -408,7 +408,7 @@ export default function behavesLikeSqlFormatter(format) {
         *
       FROM
         test;
-      
+
       CREATE TABLE
         test(
           id NUMBER NOT NULL,
@@ -427,6 +427,22 @@ export default function behavesLikeSqlFormatter(format) {
         3.5E12 AS c,
         3.5e12 AS d;
     `);
+	});
+
+	it('correctly handles floats with trailing point', () => {
+		let result = format('SELECT 1000. AS a;');
+		expect(result).toBe(dedent`
+		  SELECT
+		    1000. AS a;
+		`);
+
+		result = format('SELECT a, b / 1000. AS a_s, 100. * b / SUM(a_s);');
+		expect(result).toBe(dedent`
+		  SELECT
+        a,
+        b / 1000. AS a_s,
+        100.* b / SUM(a_s);
+		`);
 	});
 
 	it('does not split UNION ALL in half', () => {
