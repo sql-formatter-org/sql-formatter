@@ -83,7 +83,7 @@ export default class Tokenizer {
 			[TokenType.LINE_COMMENT]: regexFactory.createLineCommentRegex(cfg.lineCommentTypes),
 			[TokenType.BLOCK_COMMENT]: /^(\/\*[^]*?(?:\*\/|$))/u,
 			[TokenType.NUMBER]:
-				/^((-\s*)?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+(\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u,
+				/^((-\s*)?[0-9]+(\.[0-9]*)?([eE][-+]?[0-9]+(\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)/u,
 			[TokenType.PLACEHOLDER]: NULL_REGEX, // matches nothing
 		};
 
