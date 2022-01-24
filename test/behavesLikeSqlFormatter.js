@@ -439,10 +439,10 @@ export default function behavesLikeSqlFormatter(format) {
 		result = format('SELECT a, b / 1000. AS a_s, 100. * b / SUM(a_s);');
 		expect(result).toBe(dedent`
 		  SELECT
-        a,
-        b / 1000. AS a_s,
-        100.* b / SUM(a_s);
-		`);
+		    a,
+		    b / 1000. AS a_s,
+		    100. * b / SUM(a_s);
+	  `);
 	});
 
 	it('does not split UNION ALL in half', () => {
