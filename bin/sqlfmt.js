@@ -53,6 +53,13 @@ function getArgs() {
     default: 1,
   });
 
+  parser.add_argument('--check-diff', {
+    help:
+      'Checks if the output would differ from the input. Returns non-zero exit code if there is a difference.',
+    action: 'store_true',
+    default: false,
+  });
+
   parser.add_argument('--version', {
     action: 'version',
     version,
@@ -100,4 +107,10 @@ const args = getArgs();
 const cfg = configFromArgs(args);
 const query = getInput(args.file);
 const formattedQuery = format(query, cfg).trim() + '\n';
+
+if (args.check_diff) {
+  const exitCode = query === formattedQuery ? 0 : 1;
+  process.exit(exitCode);
+}
+
 writeOutput(args.output, formattedQuery);
