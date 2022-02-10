@@ -471,6 +471,7 @@ const reservedTopLevelWords = [
   'INSERT',
   'LIMIT',
   'ORDER BY',
+  'RETURNING',
   'SELECT',
   'SET CURRENT SCHEMA',
   'SET SCHEMA',
