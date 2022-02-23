@@ -2015,7 +2015,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    spaceCount++;
 	                    i++;
 	                }
-	                if (spaceCount > 1) {
+	                if (this.isEmptyLineAllowed(spaceCount, query)) {
 	                    if (format.endsWith("\n")) {
 	                        format += "\n";
 	                    } else {
@@ -2041,6 +2041,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	        return this.removeDupticateEmptyLine(format);
+	    };
+
+	    PlSqlFormatter.prototype.isEmptyLineAllowed = function isEmptyLineAllowed(spaceCount, formattedQueryEnd) {
+	        var isLoopConditionEnd = /^\)\s*loop\b/.test(formattedQueryEnd);
+	        return spaceCount > 1 && !isLoopConditionEnd;
 	    };
 
 	    PlSqlFormatter.prototype.removeDupticateEmptyLine = function removeDupticateEmptyLine(query) {
@@ -2342,7 +2347,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.addNewLine(this.indentCount);
 	            }
 	            if (token.value == "if" || token.value.startsWith("for") || token.value == "while" || token.value == "case") {
-	                while (this.getLastString().trim() == "") {
+	                while (this.getLastString() && this.getLastString().trim() == "") {
 	                    this.lines.pop();
 	                }
 	                this.addNewLine(this.indentCount);
