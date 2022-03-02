@@ -84,7 +84,8 @@ export default class Formatter {
         formattedQuery = this.formatWithSpaces(token, formattedQuery);
         this.previousReservedToken = token;
       } else if (token.type === tokenTypes.OPEN_PAREN) {
-        formattedQuery = this.formatOpeningParentheses(token, formattedQuery);
+        const prevLength = formattedQuery.split('\n').pop().length;
+        formattedQuery = this.formatOpeningParentheses(token, formattedQuery, prevLength);
       } else if (token.type === tokenTypes.CLOSE_PAREN) {
         formattedQuery = this.formatClosingParentheses(token, formattedQuery);
       } else if (token.type === tokenTypes.PLACEHOLDER) {
@@ -146,7 +147,7 @@ export default class Formatter {
   }
 
   // Opening parentheses increase the block indent level and start a new line
-  formatOpeningParentheses(token, query) {
+  formatOpeningParentheses(token, query, prevLength) {
     // Take out the preceding space unless there was whitespace there in the original query
     // or another opening parens or line comment
     const preserveWhitespaceFor = {
@@ -162,7 +163,7 @@ export default class Formatter {
     }
     query += this.show(token);
 
-    this.inlineBlock.beginIfPossible(this.tokens, this.index);
+    this.inlineBlock.beginIfPossible(this.tokens, this.index, prevLength);
 
     if (!this.inlineBlock.isActive()) {
       this.indentation.increaseBlockLevel();

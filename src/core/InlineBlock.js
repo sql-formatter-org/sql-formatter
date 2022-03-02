@@ -20,8 +20,8 @@ export default class InlineBlock {
    * @param  {Object[]} tokens Array of all tokens
    * @param  {Number} index Current token position
    */
-  beginIfPossible(tokens, index) {
-    if (this.level === 0 && this.isInlineBlock(tokens, index)) {
+  beginIfPossible(tokens, index, prevLength) {
+    if (this.level === 0 && this.isInlineBlock(tokens, index, prevLength)) {
       this.level = 1;
     } else if (this.level > 0) {
       this.level++;
@@ -48,13 +48,13 @@ export default class InlineBlock {
 
   // Check if this should be an inline parentheses block
   // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
-  isInlineBlock(tokens, index) {
-    let length = 0;
+  isInlineBlock(tokens, index, prevLength) {
+    let length = prevLength;
     let level = 0;
 
     for (let i = index; i < tokens.length; i++) {
       const token = tokens[i];
-      length += token.value.length;
+      length += token.value.length + token.whitespaceBefore.length;
 
       // Overran max length
       if (length > INLINE_MAX_LENGTH) {
