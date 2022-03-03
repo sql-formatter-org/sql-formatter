@@ -230,7 +230,6 @@ const reservedWords = [
   'MODE',
   'MONTH',
   'MOVE',
-  'NAME',
   'NAMES',
   'NATIONAL',
   'NATURAL',
