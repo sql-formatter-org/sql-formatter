@@ -65,12 +65,12 @@ format('SELECT * FROM tbl', {
 // Named placeholders
 format("SELECT * FROM tbl WHERE foo = @foo", {
   params: {foo: "'bar'"}
-}));
+});
 
 // Indexed placeholders
 format("SELECT * FROM tbl WHERE foo = ?", {
   params: ["'bar'"]
-}));
+});
 ```
 
 Both result in:
