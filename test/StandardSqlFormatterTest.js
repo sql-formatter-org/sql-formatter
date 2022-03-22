@@ -43,7 +43,7 @@ describe('StandardSqlFormatter', () => {
     `);
   });
 
-  it.only('formats back quote and raw string literal', () => {
+  it('formats back quote and raw string literal', () => {
     const result = format("SELECT `col` FROM `tbl` WHERE col = r'val'");
     expect(result).toBe(dedent`
       SELECT
