@@ -196,4 +196,21 @@ export default function supportsAliases(format) {
 			].join('\n')
 		);
 	});
+
+	it('handles edge case of never + CTE', () => {
+		const result = format(
+			dedent`CREATE TABLE 'test.example_table' AS WITH cte AS (SELECT a AS alpha)`,
+			{ aliasAs: 'never' }
+		);
+
+		expect(result).toBe(dedent`
+      CREATE TABLE
+        'test.example_table' AS
+      WITH
+        cte AS (
+          SELECT
+            a alpha
+        )
+		`);
+	});
 }

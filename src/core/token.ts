@@ -42,7 +42,9 @@ export const isToken = {
 	LIMIT: testToken({ value: 'LIMIT', type: TokenType.RESERVED_COMMAND }),
 	SELECT: testToken({ value: 'SELECT', type: TokenType.RESERVED_COMMAND }),
 	SET: testToken({ value: 'SET', type: TokenType.RESERVED_COMMAND }),
+	TABLE: testToken({ value: 'TABLE', type: TokenType.RESERVED_KEYWORD }),
 	WINDOW: testToken({ value: 'WINDOW', type: TokenType.RESERVED_COMMAND }),
+	WITH: testToken({ value: 'WITH', type: TokenType.RESERVED_COMMAND }),
 };
 
 export const isCommand = (token: Token) =>
