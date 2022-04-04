@@ -108,4 +108,18 @@ export default function supportsCase(format) {
       END;
     `);
 	});
+
+	it('handles edge case of ending inline block with END', () => {
+		const result = format(dedent`select sum(case a when foo then bar end) from quaz`);
+
+		expect(result).toBe(dedent`
+      SELECT
+        SUM(CASE a
+        WHEN foo
+        THEN bar END
+      )
+      FROM
+        quaz
+		`);
+	});
 }
