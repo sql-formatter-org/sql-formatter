@@ -1,9 +1,10 @@
 /**
  * Tests support for various string syntax
+ * @param {String} language
  * @param {Function} format
  * @param {String[]} stringTypes
  */
-export default function supportsStrings(format, stringTypes = []) {
+export default function supportsStrings(language, format, stringTypes = []) {
 	if (stringTypes.includes('""')) {
 		it('supports double-quoted strings', () => {
 			expect(format('"foo JOIN bar"')).toBe('"foo JOIN bar"');

@@ -13,17 +13,23 @@ import supportsOperators from './features/operators';
 import supportsJoin from './features/join';
 
 describe('TSqlFormatter', () => {
-	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'tsql' });
+	const language = 'tsql';
+	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
-	behavesLikeSqlFormatter(format);
-	supportsCase(format);
-	supportsCreateTable(format);
-	supportsAlterTable(format);
-	supportsStrings(format, TSqlFormatter.stringTypes);
-	supportsBetween(format);
-	supportsSchema(format);
-	supportsOperators(format, TSqlFormatter.operators, TSqlFormatter.reservedLogicalOperators);
-	supportsJoin(format, { without: ['NATURAL'] });
+	behavesLikeSqlFormatter(language, format);
+	supportsCase(language, format);
+	supportsCreateTable(language, format);
+	supportsAlterTable(language, format);
+	supportsStrings(language, format, TSqlFormatter.stringTypes);
+	supportsBetween(language, format);
+	supportsSchema(language, format);
+	supportsOperators(
+		language,
+		format,
+		TSqlFormatter.operators,
+		TSqlFormatter.reservedLogicalOperators
+	);
+	supportsJoin(language, format, { without: ['NATURAL'] });
 
 	// TODO: The following are duplicated from StandardSQLFormatter test
 

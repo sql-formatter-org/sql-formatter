@@ -2,9 +2,10 @@ import dedent from 'dedent-js';
 
 /**
  * Tests support for all newline options
+ * @param {String} language
  * @param {Function} format
  */
-export default function supportsParenthesesOptions(format) {
+export default function supportsParenthesesOptions(language, format) {
 	it('supports opening parenthesis on newline', () => {
 		const result = format('SELECT a FROM ( SELECT b FROM c );');
 		expect(result).toBe(dedent`

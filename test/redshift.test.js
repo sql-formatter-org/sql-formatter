@@ -12,20 +12,22 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 
 describe('RedshiftFormatter', () => {
-	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'redshift' });
+	const language = 'redshift';
+	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
-	behavesLikeSqlFormatter(format);
-	supportsCreateTable(format);
-	supportsAlterTable(format);
-	supportsAlterTableModify(format);
-	supportsStrings(format, RedshiftFormatter.stringTypes);
-	supportsSchema(format);
+	behavesLikeSqlFormatter(language, format);
+	supportsCreateTable(language, format);
+	supportsAlterTable(language, format);
+	supportsAlterTableModify(language, format);
+	supportsStrings(language, format, RedshiftFormatter.stringTypes);
+	supportsSchema(language, format);
 	supportsOperators(
+		language,
 		format,
 		RedshiftFormatter.operators,
 		RedshiftFormatter.reservedLogicalOperators
 	);
-	supportsJoin(format);
+	supportsJoin(language, format);
 
 	it('formats LIMIT', () => {
 		expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC LIMIT 10;')).toBe(dedent`

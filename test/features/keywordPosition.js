@@ -2,9 +2,10 @@ import dedent from 'dedent-js';
 
 /**
  * Tests support for keyword positions
+ * @param {String} language
  * @param {Function} format
  */
-export default function supportsKeywordPositions(format) {
+export default function supportsKeywordPositions(language, format) {
 	const baseQuery = `
 		SELECT COUNT(a.column1), MAX(b.column2 + b.column3), b.column4 AS four
 		FROM ( SELECT column1, column5 FROM table1 ) a

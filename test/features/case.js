@@ -2,9 +2,10 @@ import dedent from 'dedent-js';
 
 /**
  * Tests support for CASE [WHEN...] END syntax
+ * @param {String} language
  * @param {Function} format
  */
-export default function supportsCase(format) {
+export default function supportsCase(language, format) {
 	it('formats CASE ... WHEN with a blank expression', () => {
 		const result = format(
 			"CASE WHEN [option] = 'foo' THEN 1 WHEN [option] = 'bar' THEN 2 WHEN [option] = 'baz' THEN 3 ELSE 4 END;"

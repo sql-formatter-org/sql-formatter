@@ -2,9 +2,10 @@ import dedent from 'dedent-js';
 
 /**
  * Tests support for all newline options
+ * @param {String} language
  * @param {Function} format
  */
-export default function supportsNewlineOptions(format) {
+export default function supportsNewlineOptions(language, format) {
 	it('supports always mode', () => {
 		const result = format('SELECT foo, bar, baz FROM qux;', {
 			newline: 'always',

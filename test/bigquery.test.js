@@ -13,17 +13,19 @@ import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 
 describe('BigQueryFormatter', () => {
-	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'bigquery' });
+	const language = 'bigquery';
+	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
-	behavesLikeSqlFormatter(format);
-	supportsCase(format);
-	supportsCreateTable(format);
-	supportsAlterTable(format);
-	supportsStrings(format, BigQueryFormatter.stringTypes);
-	supportsBetween(format);
-	supportsSchema(format);
-	supportsJoin(format, { without: ['NATURAL JOIN'] });
+	behavesLikeSqlFormatter(language, format);
+	supportsCase(language, format);
+	supportsCreateTable(language, format);
+	supportsAlterTable(language, format);
+	supportsStrings(language, format, BigQueryFormatter.stringTypes);
+	supportsBetween(language, format);
+	supportsSchema(language, format);
+	supportsJoin(language, format, { without: ['NATURAL JOIN'] });
 	supportsOperators(
+		language,
 		format,
 		BigQueryFormatter.operators,
 		BigQueryFormatter.reservedLogicalOperators

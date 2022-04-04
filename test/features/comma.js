@@ -2,9 +2,10 @@ import dedent from 'dedent-js';
 
 /**
  * Tests support for alias options
+ * @param {String} language
  * @param {Function} format
  */
-export default function supportsCommaModes(format) {
+export default function supportsCommaModes(language, format) {
 	it('supports comma after column', () => {
 		const result = format(
 			'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon'

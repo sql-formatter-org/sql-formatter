@@ -14,18 +14,24 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 
 describe('PlSqlFormatter', () => {
-	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'plsql' });
+	const language = 'plsql';
+	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
-	behavesLikeSqlFormatter(format);
-	supportsCase(format);
-	supportsCreateTable(format);
-	supportsAlterTable(format);
-	supportsAlterTableModify(format);
-	supportsStrings(format, PlSqlFormatter.stringTypes);
-	supportsBetween(format);
-	supportsSchema(format);
-	supportsOperators(format, PlSqlFormatter.operators, PlSqlFormatter.reservedLogicalOperators);
-	supportsJoin(format);
+	behavesLikeSqlFormatter(language, format);
+	supportsCase(language, format);
+	supportsCreateTable(language, format);
+	supportsAlterTable(language, format);
+	supportsAlterTableModify(language, format);
+	supportsStrings(language, format, PlSqlFormatter.stringTypes);
+	supportsBetween(language, format);
+	supportsSchema(language, format);
+	supportsOperators(
+		language,
+		format,
+		PlSqlFormatter.operators,
+		PlSqlFormatter.reservedLogicalOperators
+	);
+	supportsJoin(language, format);
 
 	it('formats FETCH FIRST like LIMIT', () => {
 		expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`

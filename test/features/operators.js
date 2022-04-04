@@ -2,10 +2,11 @@ import dedent from 'dedent-js';
 
 /**
  * Tests support for various operators
+ * @param {String} language
  * @param {Function} format
  * @param {String[]} operators
  */
-export default function supportsOperators(format, operators = [], logicalOperators = []) {
+export default function supportsOperators(language, format, operators = [], logicalOperators = []) {
 	operators.forEach(op => {
 		it(`supports ${op} operator`, () => {
 			expect(format(`foo${op}bar`)).toBe(`foo ${op} bar`);

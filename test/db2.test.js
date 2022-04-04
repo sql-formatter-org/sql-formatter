@@ -12,16 +12,22 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 
 describe('Db2Formatter', () => {
-	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'db2' });
+	const language = 'db2';
+	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
-	behavesLikeSqlFormatter(format);
-	supportsCreateTable(format);
-	supportsAlterTable(format);
-	supportsStrings(format, Db2Formatter.stringTypes);
-	supportsBetween(format);
-	supportsSchema(format);
-	supportsOperators(format, Db2Formatter.operators, Db2Formatter.reservedLogicalOperators);
-	supportsJoin(format);
+	behavesLikeSqlFormatter(language, format);
+	supportsCreateTable(language, format);
+	supportsAlterTable(language, format);
+	supportsStrings(language, format, Db2Formatter.stringTypes);
+	supportsBetween(language, format);
+	supportsSchema(language, format);
+	supportsOperators(
+		language,
+		format,
+		Db2Formatter.operators,
+		Db2Formatter.reservedLogicalOperators
+	);
+	supportsJoin(language, format);
 
 	it('formats FETCH FIRST like LIMIT', () => {
 		expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
