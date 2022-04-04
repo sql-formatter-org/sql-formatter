@@ -42,6 +42,7 @@ const reservedKeywords = [
 	'CALL',
 	'CALLING',
 	'CASCADE',
+	'CAST',
 	'CHAR',
 	'CHARACTER',
 	'CHARSET',
