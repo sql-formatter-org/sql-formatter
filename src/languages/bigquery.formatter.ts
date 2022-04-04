@@ -1,7 +1,7 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import type { StringPatternType } from '../core/regexFactory';
-import { Token, TokenType } from '../core/token';
+import { Token } from '../core/token';
 import { dedupe } from '../utils';
 
 /**
@@ -630,6 +630,7 @@ const reservedKeywords = {
 		// 'SET',
 		'SOME',
 		// 'STRUCT',
+		'TABLE',
 		// 'TABLESAMPLE',
 		// 'THEN',
 		'TO',

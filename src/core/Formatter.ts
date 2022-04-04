@@ -227,16 +227,13 @@ export default class Formatter {
 			} else if (token.type === TokenType.OPERATOR) {
 				formattedQuery = this.formatOperator(token, formattedQuery);
 			} else {
-				if (this.cfg.aliasAs !== AliasMode.never) {
-					formattedQuery = this.formatAliases(token, formattedQuery);
-				}
-				formattedQuery = this.formatWithSpaces(token, formattedQuery);
+				formattedQuery = this.formatWord(token, formattedQuery);
 			}
 		}
 		return formattedQuery.replace(new RegExp(ZWS, 'ugim'), ' ');
 	}
 
-	formatAliases(token: Token, query: string) {
+	formatWord = (token: Token, query: string): string => {
 		const prevToken = this.tokenLookBehind();
 		const nextToken = this.tokenLookAhead();
 		const asToken = { type: TokenType.RESERVED_KEYWORD, value: this.cfg.uppercase ? 'AS' : 'as' };
@@ -247,16 +244,50 @@ export default class Formatter {
 			prevToken?.value === ')';
 
 		const missingSelectColumnAlias = // if select column alias is missing and alias is not never
+			this.cfg.aliasAs !== AliasMode.never &&
 			this.withinSelect &&
 			token.type === TokenType.WORD &&
 			(isToken.END(prevToken) || // isAs(prevToken) ||
-				(prevToken?.type === TokenType.WORD && (nextToken?.value === ',' || isCommand(nextToken))));
+				((prevToken?.type === TokenType.WORD || prevToken?.type === TokenType.NUMBER) &&
+					(nextToken?.value === ',' || isCommand(nextToken))));
 
+		// bandaid fix until Nearley tree
+		const missingCastTypeAs =
+			this.cfg.aliasAs === AliasMode.never && // checks for CAST(«expression» [AS] type)
+			this.withinSelect &&
+			isToken.CAST(this.previousReservedToken) &&
+			isToken.AS(nextToken) &&
+			(this.tokenLookAhead(2)?.type === TokenType.WORD ||
+				this.tokenLookAhead(2)?.type === TokenType.RESERVED_KEYWORD) &&
+			this.tokenLookAhead(3)?.value === ')';
+
+		const isEdgeCaseCTE = // checks for WITH `table` [AS] (
+			this.cfg.aliasAs === AliasMode.never &&
+			isToken.WITH(prevToken) &&
+			(nextToken?.value === '(' ||
+				(isToken.AS(nextToken) && this.tokenLookAhead(2)?.value === '('));
+
+		const isEdgeCaseCreateTable = // checks for CREATE TABLE `table` [AS] WITH (
+			this.cfg.aliasAs === AliasMode.never &&
+			(isToken.TABLE(prevToken) || prevToken?.value.endsWith('TABLE')) &&
+			(isToken.WITH(nextToken) || (isToken.AS(nextToken) && isToken.WITH(this.tokenLookAhead(2))));
+
+		let finalQuery = query;
 		if (missingTableAlias || missingSelectColumnAlias) {
-			return this.formatWithSpaces(asToken, query);
+			// insert AS before word
+			finalQuery = this.formatWithSpaces(asToken, finalQuery);
 		}
-		return query;
-	}
+
+		// insert word
+		finalQuery = this.formatWithSpaces(token, finalQuery);
+
+		if (isEdgeCaseCTE || isEdgeCaseCreateTable || missingCastTypeAs) {
+			// insert AS after word
+			finalQuery = this.formatWithSpaces(asToken, finalQuery);
+		}
+
+		return finalQuery;
+	};
 
 	checkNewline = (index: number) => {
 		const tail = this.tokens.slice(index + 1);
