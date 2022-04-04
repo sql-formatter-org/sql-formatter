@@ -35,6 +35,7 @@ export const isToken = {
 	AND: testToken({ value: 'AND', type: TokenType.RESERVED_LOGICAL_OPERATOR }),
 	BETWEEN: testToken({ value: 'BETWEEN', type: TokenType.RESERVED_KEYWORD }),
 	CASE: testToken({ value: 'CASE', type: TokenType.BLOCK_START }),
+	CAST: testToken({ value: 'CAST', type: TokenType.RESERVED_KEYWORD }),
 	BY: testToken({ value: 'BY', type: TokenType.RESERVED_KEYWORD }),
 	END: testToken({ value: 'END', type: TokenType.BLOCK_END }),
 	FROM: testToken({ value: 'FROM', type: TokenType.RESERVED_COMMAND }),

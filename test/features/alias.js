@@ -213,4 +213,19 @@ export default function supportsAliases(format) {
         )
 		`);
 	});
+
+	it('handles edge case of never + CAST', () => {
+		const result = format(
+			dedent`SELECT
+			CAST(0 AS bit),
+			'foo' AS bar`,
+			{ aliasAs: 'never' }
+		);
+
+		expect(result).toBe(dedent`
+      SELECT
+        CAST(0 AS bit),
+        'foo' bar
+		`);
+	});
 }

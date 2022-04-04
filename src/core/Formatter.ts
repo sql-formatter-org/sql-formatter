@@ -248,7 +248,18 @@ export default class Formatter {
 			this.withinSelect &&
 			token.type === TokenType.WORD &&
 			(isToken.END(prevToken) || // isAs(prevToken) ||
-				(prevToken?.type === TokenType.WORD && (nextToken?.value === ',' || isCommand(nextToken))));
+				((prevToken?.type === TokenType.WORD || prevToken?.type === TokenType.NUMBER) &&
+					(nextToken?.value === ',' || isCommand(nextToken))));
+
+		// bandaid fix until Nearley tree
+		const missingCastTypeAs =
+			this.cfg.aliasAs === AliasMode.never && // checks for CAST(«expression» [AS] type)
+			this.withinSelect &&
+			isToken.CAST(this.previousReservedToken) &&
+			isToken.AS(nextToken) &&
+			(this.tokenLookAhead(2)?.type === TokenType.WORD ||
+				this.tokenLookAhead(2)?.type === TokenType.RESERVED_KEYWORD) &&
+			this.tokenLookAhead(3)?.value === ')';
 
 		const isEdgeCaseCTE = // checks for WITH `table` [AS] (
 			this.cfg.aliasAs === AliasMode.never &&
@@ -270,7 +281,7 @@ export default class Formatter {
 		// insert word
 		finalQuery = this.formatWithSpaces(token, finalQuery);
 
-		if (isEdgeCaseCTE || isEdgeCaseCreateTable) {
+		if (isEdgeCaseCTE || isEdgeCaseCreateTable || missingCastTypeAs) {
 			// insert AS after word
 			finalQuery = this.formatWithSpaces(asToken, finalQuery);
 		}
