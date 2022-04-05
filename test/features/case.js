@@ -2,7 +2,7 @@ import dedent from 'dedent-js';
 
 /**
  * Tests support for CASE [WHEN...] END syntax
- * @param {String} language
+ * @param {string} language
  * @param {Function} format
  */
 export default function supportsCase(language, format) {

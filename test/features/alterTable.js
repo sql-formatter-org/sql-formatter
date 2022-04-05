@@ -4,7 +4,7 @@ import { itIf } from '../utils';
 
 /**
  * Tests support for ALTER TABLE syntax
- * @param {String} language
+ * @param {string} language
  * @param {Function} format
  */
 export default function supportsAlterTable(language, format) {

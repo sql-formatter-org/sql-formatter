@@ -3,8 +3,8 @@ import { isToken, Token, TokenType } from './token';
 /**
  * Bookkeeper for inline blocks.
  *
- * Inline blocks are parenthized expressions that are shorter than INLINE_MAX_LENGTH.
- * These blocks are formatted on a single line, unlike longer parenthized
+ * Inline blocks are parenthesised expressions that are shorter than INLINE_MAX_LENGTH.
+ * These blocks are formatted on a single line, unlike longer parenthesised
  * expressions where open-parenthesis causes newline and increase of indentation.
  */
 export default class InlineBlock {
@@ -42,15 +42,16 @@ export default class InlineBlock {
 
 	/**
 	 * True when inside an inline block
-	 * @return {Boolean}
 	 */
 	isActive(): boolean {
 		return this.level > 0;
 	}
 
-	// Check if this should be an inline parentheses block
-	// Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
-	isInlineBlock(tokens: Token[], index: number) {
+	/**
+	 * Check if this should be an inline parentheses block
+	 * Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
+	 */
+	isInlineBlock(tokens: Token[], index: number): boolean {
 		let length = 0;
 		let level = 0;
 

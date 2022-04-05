@@ -1,8 +1,8 @@
 /**
  * Tests support for various string syntax
- * @param {String} language
+ * @param {string} language
  * @param {Function} format
- * @param {String[]} stringTypes
+ * @param {string[]} stringTypes
  */
 export default function supportsStrings(language, format, stringTypes = []) {
 	if (stringTypes.includes('""')) {

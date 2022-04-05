@@ -4,6 +4,7 @@ import { Token, TokenType } from './token'; // convert to partial type import in
 
 const NULL_REGEX = /(?!)/; // zero-width negative lookahead, matches nothing
 
+/** Struct that defines how a SQL language can be broken into tokens */
 interface TokenizerOptions {
 	reservedKeywords: string[];
 	reservedCommands: string[];
@@ -20,6 +21,7 @@ interface TokenizerOptions {
 	operators?: string[];
 }
 
+/** Converts SQL language string into a token stream */
 export default class Tokenizer {
 	WHITESPACE_REGEX: RegExp;
 	REGEX_MAP: { [tokenType in TokenType]: RegExp };
@@ -30,19 +32,19 @@ export default class Tokenizer {
 
 	/**
 	 * @param {TokenizerOptions} cfg
-	 *  @param {String[]} cfg.reservedKeywords: Reserved words in SQL
-	 *  @param {String[]} cfg.reservedDependentClauses: Words that following a specific Statement and must have data attached
-	 *  @param {String[]} cfg.reservedLogicalOperators: Words that are set to newline
-	 *  @param {String[]} cfg.reservedCommands: Words that are set to new line separately
-	 *  @param {String[]} cfg.reservedBinaryCommands: Words that are top level but have no indentation
-	 *  @param {String[]} cfg.stringTypes: String types to enable: "", '', ``, [], N''
-	 *  @param {String[]} cfg.blockStart: Opening parentheses to enable, like (, [
-	 *  @param {String[]} cfg.blockEnd: Closing parentheses to enable, like ), ]
-	 *  @param {String[]} cfg.indexedPlaceholderTypes: Prefixes for indexed placeholders, like ?
-	 *  @param {String[]} cfg.namedPlaceholderTypes: Prefixes for named placeholders, like @ and :
-	 *  @param {String[]} cfg.lineCommentTypes: Line comments to enable, like # and --
-	 *  @param {String[]} cfg.specialWordChars: Special chars that can be found inside of words, like @ and #
-	 *  @param {String[]} cfg.operators: Additional operators to recognize
+	 *  @param {string[]} cfg.reservedKeywords - Reserved words in SQL
+	 *  @param {string[]} cfg.reservedDependentClauses - Words that following a specific Statement and must have data attached
+	 *  @param {string[]} cfg.reservedLogicalOperators - Words that are set to newline
+	 *  @param {string[]} cfg.reservedCommands - Words that are set to new line separately
+	 *  @param {string[]} cfg.reservedBinaryCommands - Words that are top level but have no indentation
+	 *  @param {string[]} cfg.stringTypes - string types to enable - "", '', ``, [], N''
+	 *  @param {string[]} cfg.blockStart - Opening parentheses to enable, like (, [
+	 *  @param {string[]} cfg.blockEnd - Closing parentheses to enable, like ), ]
+	 *  @param {string[]} cfg.indexedPlaceholderTypes - Prefixes for indexed placeholders, like ?
+	 *  @param {string[]} cfg.namedPlaceholderTypes - Prefixes for named placeholders, like @ and :
+	 *  @param {string[]} cfg.lineCommentTypes - Line comments to enable, like # and --
+	 *  @param {string[]} cfg.specialWordChars - Special chars that can be found inside of words, like @ and #
+	 *  @param {string[]} cfg.operators - Additional operators to recognize
 	 */
 	constructor(cfg: TokenizerOptions) {
 		this.WHITESPACE_REGEX = /^(\s+)/u;
@@ -105,13 +107,10 @@ export default class Tokenizer {
 	 * Takes a SQL string and breaks it into tokens.
 	 * Each token is an object with type and value.
 	 *
-	 * @param {String} input The SQL string
-	 * @return {Token[]} tokens An array of tokens.
-	 *  @return {String} token.type
-	 *  @return {String} token.value
-	 *  @return {String} token.whitespaceBefore Preceding whitespace
+	 * @param {string} input - The SQL string
+	 * @returns {Token[]} output token stream
 	 */
-	tokenize(input: string) {
+	tokenize(input: string): Token[] {
 		const tokens: Token[] = [];
 		let token: Token | undefined;
 
@@ -133,18 +132,23 @@ export default class Tokenizer {
 		return tokens;
 	}
 
-	getWhitespace(input: string) {
+	/** Matches preceding whitespace if present */
+	getWhitespace(input: string): string {
 		const matches = input.match(this.WHITESPACE_REGEX);
 		return matches ? matches[1] : '';
 	}
 
-	matchToken = (tokenType: TokenType) => (input: string) =>
-		this.getTokenOnFirstMatch({
-			input,
-			type: tokenType,
-			regex: this.REGEX_MAP[tokenType],
-		});
+	/** Curried function of `getTokenOnFirstMatch` that allows token type to be passed first */
+	matchToken =
+		(tokenType: TokenType) =>
+		(input: string): Token | undefined =>
+			this.getTokenOnFirstMatch({
+				input,
+				type: tokenType,
+				regex: this.REGEX_MAP[tokenType],
+			});
 
+	/** Attempts to match next token from input string, tests RegExp patterns in decreasing priority */
 	getNextToken(input: string, previousToken?: Token) {
 		return (this.matchToken(TokenType.LINE_COMMENT)(input) ||
 			this.matchToken(TokenType.BLOCK_COMMENT)(input) ||
@@ -158,7 +162,11 @@ export default class Tokenizer {
 			this.matchToken(TokenType.OPERATOR)(input)) as Token;
 	}
 
-	getPlaceholderToken(input: string) {
+	/**
+	 * Attempts to match a placeholder token pattern
+	 * @return {Token | undefined} - The placeholder token if found, otherwise undefined
+	 */
+	getPlaceholderToken(input: string): Token | undefined {
 		const placeholderTokenRegexMap: { regex: RegExp; parseKey: (s: string) => string }[] = [
 			{
 				regex: this.IDENT_NAMED_PLACEHOLDER_REGEX ?? NULL_REGEX,
@@ -181,13 +189,17 @@ export default class Tokenizer {
 		}, undefined as Token | undefined);
 	}
 
-	getEscapedPlaceholderKey({ key, quoteChar }: { key: string; quoteChar: string }) {
+	getEscapedPlaceholderKey({ key, quoteChar }: { key: string; quoteChar: string }): string {
 		return key.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar);
 	}
 
-	getReservedWordToken(input: string, previousToken?: Token) {
+	/**
+	 * Attempts to match a Reserved word token pattern, avoiding edge cases of Reserved words within string tokens
+	 * @return {Token | undefined} - The Reserved word token if found, otherwise undefined
+	 */
+	getReservedWordToken(input: string, previousToken?: Token): Token | undefined {
 		// A reserved word cannot be preceded by a '.', '[', '`', or '"'
-		// this makes it so for "mytable.from", [from], `from`, "from" - from is not considered a reserved word
+		// this makes it so for "mytable.from", [from], `from`, "from" - from is not considered a Reserved word
 		if (previousToken && ['.', '[', '`', '"'].includes(previousToken.value)) {
 			return undefined;
 		}
@@ -206,7 +218,22 @@ export default class Tokenizer {
 		);
 	}
 
-	getTokenOnFirstMatch({ input, type, regex }: { input: string; type: TokenType; regex: RegExp }) {
+	/**
+	 * Attempts to match RegExp from head of input, returning undefined if not found
+	 * @param {string} _.input - The string to match
+	 * @param {TokenType} _.type - The type of token to match against
+	 * @param {RegExp} _.regex - The regex to match
+	 * @return {Token | undefined} - The matched token if found, otherwise undefined
+	 */
+	getTokenOnFirstMatch({
+		input,
+		type,
+		regex,
+	}: {
+		input: string;
+		type: TokenType;
+		regex: RegExp;
+	}): Token | undefined {
 		const matches = input.match(regex);
 		return matches ? ({ type, value: matches[1] } as Token) : undefined;
 	}

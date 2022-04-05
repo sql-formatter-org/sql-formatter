@@ -2,7 +2,7 @@ import dedent from 'dedent-js';
 
 /**
  * Tests support for all newline options
- * @param {String} language
+ * @param {string} language
  * @param {Function} format
  */
 export default function supportsParenthesesOptions(language, format) {

@@ -4,7 +4,7 @@ import { itIf } from '../utils';
 
 /**
  * Tests for standard -- and /* *\/ comments
- * @param {String} language
+ * @param {string} language
  * @param {Function} format
  */
 export default function supportsComments(language, format) {

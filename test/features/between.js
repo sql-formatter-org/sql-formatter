@@ -1,6 +1,6 @@
 /**
  * Tests support for BETWEEN _ AND _ syntax
- * @param {String} language
+ * @param {string} language
  * @param {Function} format
  */
 export default function supportsBetween(language, format) {

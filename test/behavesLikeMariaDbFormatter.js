@@ -9,7 +9,7 @@ import supportsJoin from './features/join';
 
 /**
  * Shared tests for MySQL and MariaDB
- * @param {String} language
+ * @param {string} language
  * @param {Function} format
  */
 export default function behavesLikeMariaDbFormatter(language, format) {

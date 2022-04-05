@@ -16,7 +16,7 @@ export default class Indentation {
 	indentTypes: string[];
 
 	/**
-	 * @param {String} indent Indent value, default is "  " (2 spaces)
+	 * @param {string} indent Indent value, default is "  " (2 spaces)
 	 */
 	constructor(indent: string = '  ') {
 		this.indent = indent;
@@ -25,7 +25,7 @@ export default class Indentation {
 
 	/**
 	 * Returns current indentation string.
-	 * @return {String}
+	 * @return {string} indentation string based on indentTypes
 	 */
 	getIndent(): string {
 		return this.indent.repeat(this.indentTypes.length);
@@ -69,6 +69,7 @@ export default class Indentation {
 		}
 	}
 
+	/** Clears all indentation */
 	resetIndentation() {
 		this.indentTypes = [];
 	}

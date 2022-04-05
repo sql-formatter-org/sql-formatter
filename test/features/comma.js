@@ -2,7 +2,7 @@ import dedent from 'dedent-js';
 
 /**
  * Tests support for alias options
- * @param {String} language
+ * @param {string} language
  * @param {Function} format
  */
 export default function supportsCommaModes(language, format) {

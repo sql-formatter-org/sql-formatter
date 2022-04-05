@@ -3,7 +3,7 @@ import { NewlineMode } from '../../src/types';
 
 /**
  * Tests support for alias options
- * @param {String} language
+ * @param {string} language
  * @param {Function} format
  */
 export default function supportsAliases(language, format) {

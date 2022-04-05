@@ -11,7 +11,7 @@ import { itIf } from './utils';
 
 /**
  * Core tests for all SQL formatters
- * @param {String} language
+ * @param {string} language
  * @param {Function} format
  */
 export default function behavesLikeSqlFormatter(language, format) {

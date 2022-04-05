@@ -2,7 +2,7 @@ import dedent from 'dedent-js';
 
 /**
  * Tests support for ALTER TABLE ... MODIFY syntax
- * @param {String} language
+ * @param {string} language
  * @param {Function} format
  */
 export default function supportsAlterTableModify(language, format) {

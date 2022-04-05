@@ -2,9 +2,9 @@ import dedent from 'dedent-js';
 
 /**
  * Tests support for various operators
- * @param {String} language
+ * @param {string} language
  * @param {Function} format
- * @param {String[]} operators
+ * @param {string[]} operators
  */
 export default function supportsOperators(language, format, operators = [], logicalOperators = []) {
 	operators.forEach(op => {

@@ -2,7 +2,7 @@ import dedent from 'dedent-js';
 
 /**
  * Tests support for keyword positions
- * @param {String} language
+ * @param {string} language
  * @param {Function} format
  */
 export default function supportsKeywordPositions(language, format) {
