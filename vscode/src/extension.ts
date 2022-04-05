@@ -34,10 +34,13 @@ const getConfigs = (
 		aliasAs: settings.get<AliasMode>('aliasAS'),
 		tabulateAlias: settings.get<boolean>('tabulateAlias'),
 		commaPosition: settings.get<CommaPosition>('commaPosition'),
-		newlineOptions: settings.get<NewlineMode | number>('keywordNewline'),
+		newline: (newlineSetting =>
+			newlineSetting === 'itemCount'
+				? settings.get<number>('itemCount')
+				: (newlineSetting as NewlineMode))(settings.get<string>('keywordNewline')),
 		parenOptions: {
-			openParenNewline: settings.get<boolean>('openParenNewline'),
-			closeParenNewline: settings.get<boolean>('closeParenNewline'),
+			openParenNewline: settings.get<boolean>('parenOptions.openParenNewline'),
+			closeParenNewline: settings.get<boolean>('parenOptions.closeParenNewline'),
 		},
 		lineWidth: settings.get<number>('lineWidth'),
 		linesBetweenQueries: settings.get<number>('linesBetweenQueries'),
@@ -103,22 +106,14 @@ export function activate(context: vscode.ExtensionContext) {
 			const formatterLanguage = languages[documentLanguage] ?? 'sql';
 
 			const settings = vscode.workspace.getConfiguration('Prettier-SQL');
-			const ignoreTabSettings = settings.get<boolean>('ignoreTabSettings');
 
 			const workspaceConfig = vscode.workspace.getConfiguration('editor');
-			const options = {
-				...{
-					tabSize: settings.get<number>('tabSizeOverride')!,
-					insertSpaces: settings.get<boolean>('insertSpacesOverride')!,
-				},
-				...(ignoreTabSettings
-					? {}
-					: {
-							tabSize: workspaceConfig.get<number>('tabSize'),
-							insertSpaces: workspaceConfig.get<boolean>('insertSpaces'),
-					  }),
+			const tabOptions = {
+				tabSize: workspaceConfig.get<number>('tabSize')!,
+				insertSpaces: workspaceConfig.get<boolean>('insertSpaces')!,
 			};
-			const formatConfigs = getConfigs(settings, options, formatterLanguage);
+
+			const formatConfigs = getConfigs(settings, tabOptions, formatterLanguage);
 
 			const editor = vscode.window.activeTextEditor;
 			try {

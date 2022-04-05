@@ -198,31 +198,36 @@
 					"default": "after",
 					"markdownDescription": "Where to place commas for SELECT and GROUP BY clauses"
 				},
-				"Prettier-SQL.keywordNewline": {
-					"type": [
-						"string",
-						"integer"
-					],
+				"Prettier-SQL.keywordNewline.newlineMode": {
+					"type": "string",
 					"enum": [
 						"always",
 						"lineWidth",
+						"itemCount",
 						"never"
 					],
 					"markdownEnumDescriptions": [
 						"Always break keywords items onto a newline",
 						"Break onto newline when line width > `#Prettier-SQL.lineWidth#` ",
+						"Break onto newline when item count > `#Prettier-SQL.itemCount#` ",
 						"Place all selected columns on the same line as keyword"
 					],
 					"minimum": 1,
 					"default": "always",
-					"markdownDescription": "Rule for when to break keyword clauses onto a newline, pass integer to break after n items"
+					"markdownDescription": "Rule for when to break keyword clauses onto a newline"
 				},
-				"Prettier-SQL.openParenNewline": {
+				"Prettier-SQL.keywordNewline.itemCount": {
+					"type": "number",
+					"minimum": 1,
+					"default": 3,
+					"markdownDescription": "Breaks keywords clauses onto newline after n items when `#Prettier-SQL.keywordNewline#` is set to itemCount"
+				},
+				"Prettier-SQL.parenOptions.openParenNewline": {
 					"type": "boolean",
 					"default": false,
 					"markdownDescription": "Place (, Open Paren, CASE on newline when creating a new block"
 				},
-				"Prettier-SQL.closeParenNewline": {
+				"Prettier-SQL.parenOptions.closeParenNewline": {
 					"type": "boolean",
 					"default": true,
 					"markdownDescription": "Place ), Close Paren, END on newline when closing a block"
