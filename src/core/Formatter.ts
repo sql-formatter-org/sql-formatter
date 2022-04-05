@@ -116,17 +116,26 @@ export default class Formatter {
 					const isTabs = this.cfg.indent.includes('\t'); // loose tab check
 					commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, ''));
 					const whitespaceRegex = this.tokenizer().WHITESPACE_REGEX;
-					commaLines = commaLines.map((commaLine, j) =>
-						j // do not add comma for first item
-							? commaLine.replace(
-									whitespaceRegex,
-									commaLine.match(whitespaceRegex)![1].replace(
-										new RegExp((isTabs ? '\t' : this.cfg.indent) + '$'), // replace last two spaces in preceding whitespace with ', '
-										(isTabs ? '    ' : this.cfg.indent).replace(/ {2}$/, ', ') // using 4 width tabs
-									)
+
+					commaLines = commaLines.map((commaLine, j) => {
+						if (!j) {
+							// do not add comma for first item
+							return commaLine;
+						}
+						const precedingWhitespace = commaLine.match(new RegExp('^' + whitespaceRegex + ''));
+						const trimLastIndent = precedingWhitespace
+							? precedingWhitespace[1].replace(
+									new RegExp((isTabs ? '\t' : this.cfg.indent) + '$'), // remove last tab / last indent
+									''
 							  )
-							: commaLine
-					);
+							: '';
+						return (
+							trimLastIndent +
+							// add comma in place of last indent
+							(isTabs ? '    ' : this.cfg.indent).replace(/ {2}$/, ', ') + // using 4 width tabs
+							commaLine.trimStart()
+						);
+					});
 				}
 
 				newQuery = [...newQuery, ...commaLines];
