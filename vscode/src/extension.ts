@@ -14,7 +14,7 @@ const getConfigs = (
 	language: FormatterLanguage
 ) => {
 	const ignoreTabSettings = settings.get<boolean>('ignoreTabSettings');
-	const { tabSize, insertSpaces } = ignoreTabSettings
+	const { tabSize, insertSpaces } = ignoreTabSettings // override tab settings if ignoreTabSettings is true
 		? {
 				tabSize: settings.get<number>('tabSizeOverride')!,
 				insertSpaces: settings.get<boolean>('insertSpacesOverride')!,
@@ -22,9 +22,10 @@ const getConfigs = (
 		: formattingOptions;
 	const indent = insertSpaces ? ' '.repeat(tabSize) : '\t';
 
+	// build format configs from settings
 	const formatConfigs = {
 		language:
-			language === 'sql'
+			language === 'sql' // override default SQL language mode if SQLFlavourOverride is set
 				? settings.get<FormatterLanguage>('SQLFlavourOverride') ?? 'sql'
 				: language,
 		indent,
@@ -36,7 +37,7 @@ const getConfigs = (
 		commaPosition: settings.get<CommaPosition>('commaPosition'),
 		newline: (newlineSetting =>
 			newlineSetting === 'itemCount'
-				? settings.get<number>('itemCount')
+				? settings.get<number>('itemCount') // pass itemCount number if keywordNewline is itemCount mode
 				: (newlineSetting as NewlineMode))(settings.get<string>('keywordNewline')),
 		parenOptions: {
 			openParenNewline: settings.get<boolean>('parenOptions.openParenNewline'),
@@ -60,6 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const settings = vscode.workspace.getConfiguration('Prettier-SQL');
 			const formatConfigs = getConfigs(settings, options, language);
 
+			// extract all lines from document
 			const lines = [...new Array(document.lineCount)].map((_, i) => document.lineAt(i).text);
 			let text;
 			try {
@@ -69,6 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
 				return [];
 			}
 
+			// replace document with formatted text
 			return [
 				vscode.TextEdit.replace(
 					new vscode.Range(
@@ -90,6 +93,7 @@ export function activate(context: vscode.ExtensionContext) {
 		'hive-sql': 'sql',
 		'sql-bigquery': 'bigquery',
 	};
+	// add Prettier-SQL as a format provider for each language
 	Object.entries(languages).forEach(([vscodeLang, prettierLang]) =>
 		context.subscriptions.push(
 			vscode.languages.registerDocumentFormattingEditProvider(
@@ -107,6 +111,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 			const settings = vscode.workspace.getConfiguration('Prettier-SQL');
 
+			// get tab settings from workspace
 			const workspaceConfig = vscode.workspace.getConfiguration('editor');
 			const tabOptions = {
 				tabSize: workspaceConfig.get<number>('tabSize')!,
@@ -117,6 +122,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 			const editor = vscode.window.activeTextEditor;
 			try {
+				// format and replace each selection
 				editor?.edit(editBuilder => {
 					editor.selections.forEach(sel =>
 						editBuilder.replace(sel, format(editor.document.getText(sel), formatConfigs))

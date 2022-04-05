@@ -105,6 +105,7 @@ export default class Formatter {
 		const lines = query.split('\n');
 		let newQuery: string[] = [];
 		for (let i = 0; i < lines.length; i++) {
+			// if line has trailing comma
 			if (lines[i].match(/.*,$/)) {
 				let commaLines = [lines[i]];
 				// find all lines in comma-bound clause, + 1
@@ -113,8 +114,9 @@ export default class Formatter {
 				}
 
 				if (this.cfg.commaPosition === CommaPosition.tabular) {
-					commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, ''));
+					commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, '')); // trim all trailing commas
 					const commaMaxLength = maxLength(commaLines); // get longest for alignment
+					// make all lines the same length by appending spaces before comma
 					commaLines = commaLines.map((commaLine, j) =>
 						j < commaLines.length - 1 // do not add comma for last item
 							? commaLine + ' '.repeat(commaMaxLength - commaLine.length) + ','
@@ -183,6 +185,7 @@ export default class Formatter {
 				const aliasMaxLength = maxLength(
 					splitLines.map(({ precedingText }) => precedingText.replace(/\s*,\s*$/, '')) // get longest of precedingText, trim trailing comma for non-alias columns
 				);
+				// re-construct line, aligning by inserting space before AS or alias
 				aliasLines = splitLines.map(
 					({ precedingText, as, alias }) =>
 						precedingText +
@@ -208,13 +211,14 @@ export default class Formatter {
 		for (this.index = 0; this.index < this.tokens.length; this.index++) {
 			let token = this.tokenOverride(this.tokens[this.index]);
 
+			// if token is a Reserved Keyword, Command, Binary Command, Dependent Clause, Logical Operator
 			if (isReserved(token)) {
 				this.previousReservedToken = token;
 				if (token.type !== TokenType.RESERVED_KEYWORD) {
-					token = this.tenSpacedToken(token);
+					token = this.tenSpacedToken(token); // convert Reserved Command or Logical Operator to tenSpace format if needed
 				}
 				if (token.type === TokenType.RESERVED_COMMAND) {
-					this.withinSelect = isToken.SELECT(token);
+					this.withinSelect = isToken.SELECT(token); // set withinSelect flag if entering a SELECT clause, else reset
 				}
 			}
 
@@ -246,7 +250,7 @@ export default class Formatter {
 				formattedQuery = this.formatWord(token, formattedQuery);
 			}
 		}
-		return formattedQuery.replace(new RegExp(ZWS, 'ugim'), ' ');
+		return formattedQuery.replace(new RegExp(ZWS, 'ugim'), ' '); // replace all ZWS with whitespace for TenSpace formats
 	}
 
 	/**
@@ -316,8 +320,9 @@ export default class Formatter {
 	 * @return {boolean} Whether or not a newline should be inserted
 	 */
 	checkNewline(index: number): boolean {
-		const tail = this.tokens.slice(index + 1);
+		const tail = this.tokens.slice(index + 1); // get all tokens after current token
 		const nextTokens = tail.slice(
+			// get all tokens between current token and next Reserved Command or query end
 			0,
 			tail.length
 				? tail.findIndex(
@@ -395,15 +400,17 @@ export default class Formatter {
 
 		query = this.addNewline(query);
 
+		// indent TenSpace formats, except when preceding a (
 		if (this.cfg.tenSpace) {
 			if (this.tokenLookAhead()?.value !== '(') {
 				this.indentation.increaseTopLevel();
 			}
+			// indent standard format, except when is [FROM] (
 		} else if (!(this.tokenLookAhead()?.value === '(' && isToken.FROM(token))) {
 			this.indentation.increaseTopLevel();
 		}
 
-		query += this.equalizeWhitespace(this.show(token));
+		query += this.equalizeWhitespace(this.show(token)); // print token onto query
 		if (this.currentNewline && !this.cfg.tenSpace) {
 			query = this.addNewline(query);
 		} else {
@@ -418,7 +425,7 @@ export default class Formatter {
 	 * @param {string} query - formatted query so far
 	 */
 	formatBinaryCommand(token: Token, query: string): string {
-		const isJoin = /JOIN/i.test(token.value);
+		const isJoin = /JOIN/i.test(token.value); // check if token contains JOIN
 		if (!isJoin || this.cfg.tenSpace) {
 			// decrease for boolean set operators or in tenSpace modes
 			this.indentation.decreaseTopLevel();
@@ -490,6 +497,7 @@ export default class Formatter {
 	 * @param {string} query - formatted query so far
 	 */
 	formatLogicalOperator(token: Token, query: string): string {
+		// ignore AND when BETWEEN x [AND] y
 		if (isToken.AND(token) && isToken.BETWEEN(this.tokenLookBehind(2))) {
 			return this.formatWithSpaces(token, query);
 		}
@@ -637,6 +645,8 @@ export default class Formatter {
 	formatQuerySeparator(token: Token, query: string): string {
 		this.indentation.resetIndentation();
 		query = trimSpacesEnd(query);
+
+		// move delimiter to new line if specified
 		if (this.cfg.semicolonNewline) {
 			query += '\n';
 			if (this.cfg.tenSpace) {

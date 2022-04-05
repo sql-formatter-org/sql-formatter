@@ -168,15 +168,18 @@ export default class Tokenizer {
 	 */
 	getPlaceholderToken(input: string): Token | undefined {
 		const placeholderTokenRegexMap: { regex: RegExp; parseKey: (s: string) => string }[] = [
+			// pattern for placeholder with identifier name
 			{
 				regex: this.IDENT_NAMED_PLACEHOLDER_REGEX ?? NULL_REGEX,
 				parseKey: v => v.slice(1),
 			},
+			// pattern for placeholder with string name
 			{
 				regex: this.STRING_NAMED_PLACEHOLDER_REGEX ?? NULL_REGEX,
 				parseKey: v =>
 					this.getEscapedPlaceholderKey({ key: v.slice(2, -1), quoteChar: v.slice(-1) }),
 			},
+			// pattern for placeholder with numeric index
 			{
 				regex: this.INDEXED_PLACEHOLDER_REGEX ?? NULL_REGEX,
 				parseKey: v => v.slice(1),
@@ -204,6 +207,7 @@ export default class Tokenizer {
 			return undefined;
 		}
 
+		// prioritised list of Reserved token types
 		const reservedTokenList = [
 			TokenType.RESERVED_COMMAND,
 			TokenType.RESERVED_BINARY_COMMAND,
