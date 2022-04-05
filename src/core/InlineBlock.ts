@@ -58,6 +58,10 @@ export default class InlineBlock {
 			const token = tokens[i];
 			length += token.value.length;
 
+			if (this.isForbiddenToken(token)) {
+				return false;
+			}
+
 			// Overran max length
 			if (length > this.lineWidth) {
 				return false;
@@ -72,10 +76,6 @@ export default class InlineBlock {
 					return true;
 				}
 			}
-
-			if (this.isForbiddenToken(token)) {
-				return false;
-			}
 		}
 		return false;
 	}
@@ -88,7 +88,8 @@ export default class InlineBlock {
 			type === TokenType.RESERVED_LOGICAL_OPERATOR ||
 			// type === TokenType.LINE_COMMENT ||
 			type === TokenType.BLOCK_COMMENT ||
-			value === ';'
+			value === ';' ||
+			isToken.CASE({ type, value }) // CASE cannot have inline blocks
 		);
 	}
 }
