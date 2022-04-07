@@ -31,6 +31,7 @@ It does not support:
 # Table of contents
 
 - [Install](#install)
+- [Documentation](#documentation)
 - [Usage](#usage)
   - [Usage as library](#usage-as-library)
   - [Usage from command line](#usage-from-command-line)
@@ -51,6 +52,10 @@ Also available with yarn:
 ```sh
 yarn add prettier-sql
 ```
+
+## Documentation
+
+You can read more about how the library works in [DOC.md](DOC.md)
 
 ## Usage
 
