@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## [5.1.1] : 2022-04-06
+
+### Updated
+
+- restored itemCount setting for VScode extension
+- added JSDocs for all files
+- added conditional skips for Jest tests
+- added missing BigQuery, hive from demo page language dropdown
+
+### Fixed
+
+- fixed bug with CASE and Inline Block interaction
+- fixed bug with END not adding spacings before END
+- fixed bug with CommaPosition.before when the line had no preceding whitespace
+- fixed bug where AS in CAST functions would get deleted when AliasAs.never
+- fixed bug where AS would get deleted in CTE definition when AliasAs.never
+
 ## [5.1.0] : 2021-12-21
 
 ### Known Issues
