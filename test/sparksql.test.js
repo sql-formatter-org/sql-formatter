@@ -13,21 +13,23 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 
 describe('SparkSqlFormatter', () => {
-	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'spark' });
+	const language = 'spark';
+	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
-	behavesLikeSqlFormatter(format);
-	supportsCase(format);
-	supportsCreateTable(format);
-	supportsAlterTable(format);
-	supportsStrings(format, SparkSqlFormatter.stringTypes);
-	supportsBetween(format);
-	supportsSchema(format);
+	behavesLikeSqlFormatter(language, format);
+	supportsCase(language, format);
+	supportsCreateTable(language, format);
+	supportsAlterTable(language, format);
+	supportsStrings(language, format, SparkSqlFormatter.stringTypes);
+	supportsBetween(language, format);
+	supportsSchema(language, format);
 	supportsOperators(
+		language,
 		format,
 		SparkSqlFormatter.operators,
 		SparkSqlFormatter.reservedLogicalOperators
 	);
-	supportsJoin(format, {
+	supportsJoin(language, format, {
 		additionally: [
 			'ANTI JOIN',
 			'SEMI JOIN',

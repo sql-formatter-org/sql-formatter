@@ -14,7 +14,7 @@ const getConfigs = (
 	language: FormatterLanguage
 ) => {
 	const ignoreTabSettings = settings.get<boolean>('ignoreTabSettings');
-	const { tabSize, insertSpaces } = ignoreTabSettings
+	const { tabSize, insertSpaces } = ignoreTabSettings // override tab settings if ignoreTabSettings is true
 		? {
 				tabSize: settings.get<number>('tabSizeOverride')!,
 				insertSpaces: settings.get<boolean>('insertSpacesOverride')!,
@@ -22,9 +22,10 @@ const getConfigs = (
 		: formattingOptions;
 	const indent = insertSpaces ? ' '.repeat(tabSize) : '\t';
 
+	// build format configs from settings
 	const formatConfigs = {
 		language:
-			language === 'sql'
+			language === 'sql' // override default SQL language mode if SQLFlavourOverride is set
 				? settings.get<FormatterLanguage>('SQLFlavourOverride') ?? 'sql'
 				: language,
 		indent,
@@ -34,10 +35,13 @@ const getConfigs = (
 		aliasAs: settings.get<AliasMode>('aliasAS'),
 		tabulateAlias: settings.get<boolean>('tabulateAlias'),
 		commaPosition: settings.get<CommaPosition>('commaPosition'),
-		newlineOptions: settings.get<NewlineMode | number>('keywordNewline'),
+		newline: (newlineSetting =>
+			newlineSetting === 'itemCount'
+				? settings.get<number>('itemCount') // pass itemCount number if keywordNewline is itemCount mode
+				: (newlineSetting as NewlineMode))(settings.get<string>('keywordNewline')),
 		parenOptions: {
-			openParenNewline: settings.get<boolean>('openParenNewline'),
-			closeParenNewline: settings.get<boolean>('closeParenNewline'),
+			openParenNewline: settings.get<boolean>('parenOptions.openParenNewline'),
+			closeParenNewline: settings.get<boolean>('parenOptions.closeParenNewline'),
 		},
 		lineWidth: settings.get<number>('lineWidth'),
 		linesBetweenQueries: settings.get<number>('linesBetweenQueries'),
@@ -57,6 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const settings = vscode.workspace.getConfiguration('Prettier-SQL');
 			const formatConfigs = getConfigs(settings, options, language);
 
+			// extract all lines from document
 			const lines = [...new Array(document.lineCount)].map((_, i) => document.lineAt(i).text);
 			let text;
 			try {
@@ -66,6 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
 				return [];
 			}
 
+			// replace document with formatted text
 			return [
 				vscode.TextEdit.replace(
 					new vscode.Range(
@@ -87,6 +93,7 @@ export function activate(context: vscode.ExtensionContext) {
 		'hive-sql': 'sql',
 		'sql-bigquery': 'bigquery',
 	};
+	// add Prettier-SQL as a format provider for each language
 	Object.entries(languages).forEach(([vscodeLang, prettierLang]) =>
 		context.subscriptions.push(
 			vscode.languages.registerDocumentFormattingEditProvider(
@@ -103,25 +110,19 @@ export function activate(context: vscode.ExtensionContext) {
 			const formatterLanguage = languages[documentLanguage] ?? 'sql';
 
 			const settings = vscode.workspace.getConfiguration('Prettier-SQL');
-			const ignoreTabSettings = settings.get<boolean>('ignoreTabSettings');
 
+			// get tab settings from workspace
 			const workspaceConfig = vscode.workspace.getConfiguration('editor');
-			const options = {
-				...{
-					tabSize: settings.get<number>('tabSizeOverride')!,
-					insertSpaces: settings.get<boolean>('insertSpacesOverride')!,
-				},
-				...(ignoreTabSettings
-					? {}
-					: {
-							tabSize: workspaceConfig.get<number>('tabSize'),
-							insertSpaces: workspaceConfig.get<boolean>('insertSpaces'),
-					  }),
+			const tabOptions = {
+				tabSize: workspaceConfig.get<number>('tabSize')!,
+				insertSpaces: workspaceConfig.get<boolean>('insertSpaces')!,
 			};
-			const formatConfigs = getConfigs(settings, options, formatterLanguage);
+
+			const formatConfigs = getConfigs(settings, tabOptions, formatterLanguage);
 
 			const editor = vscode.window.activeTextEditor;
 			try {
+				// format and replace each selection
 				editor?.edit(editBuilder => {
 					editor.selections.forEach(sel =>
 						editBuilder.replace(sel, format(editor.document.getText(sel), formatConfigs))

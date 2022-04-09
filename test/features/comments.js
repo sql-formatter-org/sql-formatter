@@ -1,10 +1,13 @@
 import dedent from 'dedent-js';
 
+import { itIf } from '../utils';
+
 /**
  * Tests for standard -- and /* *\/ comments
+ * @param {string} language
  * @param {Function} format
  */
-export default function supportsComments(format) {
+export default function supportsComments(language, format) {
 	it('formats SELECT query with different comments', () => {
 		const result = format(dedent`
       SELECT
@@ -45,8 +48,7 @@ export default function supportsComments(format) {
 		expect(format(sql)).toBe(sql);
 	});
 
-	// currently breaks on BigQuery
-	it.skip('formats tricky line comments', () => {
+	itIf(language != 'bigquery')('formats tricky line comments', () => {
 		expect(format('SELECT a--comment, here\nFROM b--comment')).toBe(dedent`
       SELECT
         a --comment, here

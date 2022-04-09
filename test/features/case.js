@@ -2,9 +2,10 @@ import dedent from 'dedent-js';
 
 /**
  * Tests support for CASE [WHEN...] END syntax
+ * @param {string} language
  * @param {Function} format
  */
-export default function supportsCase(format) {
+export default function supportsCase(language, format) {
 	it('formats CASE ... WHEN with a blank expression', () => {
 		const result = format(
 			"CASE WHEN [option] = 'foo' THEN 1 WHEN [option] = 'bar' THEN 2 WHEN [option] = 'baz' THEN 3 ELSE 4 END;"
@@ -106,6 +107,23 @@ export default function supportsCase(format) {
         THEN 3
         ELSE 4
       END;
+    `);
+	});
+
+	it('handles edge case of ending inline block with END', () => {
+		const result = format(dedent`select sum(case a when foo then bar end) from quaz`, {
+			newline: 1,
+		});
+
+		expect(result).toBe(dedent`
+      SELECT
+        SUM(
+          CASE a
+            WHEN foo
+            THEN bar
+          END
+        )
+      FROM quaz
     `);
 	});
 }

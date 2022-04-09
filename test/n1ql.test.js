@@ -10,14 +10,20 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 
 describe('N1qlFormatter', () => {
-	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'n1ql' });
+	const language = 'n1ql';
+	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
-	behavesLikeSqlFormatter(format);
-	supportsStrings(format, N1qlFormatter.stringTypes);
-	supportsBetween(format);
-	supportsSchema(format);
-	supportsOperators(format, N1qlFormatter.operators, N1qlFormatter.reservedLogicalOperators);
-	supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'] });
+	behavesLikeSqlFormatter(language, format);
+	supportsStrings(language, format, N1qlFormatter.stringTypes);
+	supportsBetween(language, format);
+	supportsSchema(language, format);
+	supportsOperators(
+		language,
+		format,
+		N1qlFormatter.operators,
+		N1qlFormatter.reservedLogicalOperators
+	);
+	supportsJoin(language, format, { without: ['FULL', 'CROSS', 'NATURAL'] });
 
 	it('formats SELECT query with element selection expression', () => {
 		const result = format('SELECT order_lines[0].productId FROM orders;');
