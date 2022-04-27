@@ -5,7 +5,7 @@
 	"plugins": ["@typescript-eslint", "prettier"],
 	"globals": {
 		"document": true,
-		"prettierSql": true
+		"sqlFormatter": true
 	},
 	"rules": {
 		"class-methods-use-this": "off",

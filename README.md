@@ -1,12 +1,12 @@
-<a href='https://github.com/inferrinizzard/prettier-sql'><img src="static/prettier-sql-clean.svg" width="128"/></a>
+<a href='https://github.com/zeroturnaround/sql-formatter'><img src="static/prettier-sql-clean.svg" width="128"/></a>
 
-# Prettier SQL [![NPM version](https://img.shields.io/npm/v/prettier-sql.svg)](https://npmjs.com/package/prettier-sql) ![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/coveralls/master?label=Build&logo=Github) ![Coveralls](https://img.shields.io/coveralls/github/inferrinizzard/prettier-sql?branch=master&label=Coverage&logo=coveralls&style=plastic) [![VSCode](https://img.shields.io/visual-studio-marketplace/v/inferrinizzard.prettier-sql-vscode?label=vscode)](https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode)
+# SQL Formatter [![NPM version](https://img.shields.io/npm/v/sql-formatter.svg)](https://npmjs.com/package/sql-formatter) [![Build Status](https://travis-ci.org/zeroturnaround/sql-formatter.svg?branch=sql-formatter-6)](https://travis-ci.org/zeroturnaround/sql-formatter) [![Coverage Status](https://coveralls.io/repos/github/zeroturnaround/sql-formatter/badge.svg?branch=sql-formatter-6)](https://coveralls.io/github/zeroturnaround/sql-formatter?branch=master) [![VSCode](https://img.shields.io/visual-studio-marketplace/v/inferrinizzard.prettier-sql-vscode?label=vscode)](https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode)
 
-## **Prettier SQL** is a JavaScript library for pretty-printing SQL queries.
+**SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 
 It started as a port of a [PHP Library][], but has since considerably diverged.
 
-Prettier SQL supports the following dialects:
+SQL Formatter supports the following dialects:
 
 - **sql** - [Standard SQL][]
 - **bigquery** - [GCP BigQuery][]
@@ -44,13 +44,13 @@ It does not support:
 Get the latest version from NPM:
 
 ```sh
-npm install prettier-sql
+npm install sql-formatter
 ```
 
 Also available with yarn:
 
 ```sh
-yarn add prettier-sql
+yarn add sql-formatter
 ```
 
 ## Documentation
@@ -62,7 +62,7 @@ You can read more about how the library works in [DOC.md](DOC.md)
 ### Usage as library
 
 ```js
-import { format } from 'prettier-sql';
+import { format } from 'sql-formatter';
 
 console.log(format('SELECT * FROM tbl'));
 ```
@@ -91,14 +91,14 @@ format('SELECT * FROM tbl', {
 
 ```js
 // Named placeholders
-format("SELECT * FROM tbl WHERE foo = @foo", {
-  params: {foo: "'bar'"}
-}));
+format('SELECT * FROM tbl WHERE foo = @foo', {
+	params: { foo: "'bar'" },
+});
 
 // Indexed placeholders
-format("SELECT * FROM tbl WHERE foo = ?", {
-  params: ["'bar'"]
-}));
+format('SELECT * FROM tbl WHERE foo = ?', {
+	params: ["'bar'"],
+});
 ```
 
 Both result in:
@@ -118,14 +118,14 @@ The CLI tool will be installed under `prettier-sql`
 and may be invoked via `npx prettier-sql`:
 
 ```sh
-prettier-sql -h
+sql-formatter -h
 ```
 
 ```
 usage: sqlfmt.js [-h] [-o OUTPUT] \
 [-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}] [-c CONFIG] [--version] [FILE]
 
-Prettier SQL
+SQL Formatter
 
 positional arguments:
   FILE            Input SQL file (defaults to stdin)
@@ -145,7 +145,7 @@ By default, the tool takes queries from stdin and processes them to stdout but
 one can also name an input file name or use the `--output` option.
 
 ```sh
-echo 'select * from tbl where id = 3' | prettier-sql
+echo 'select * from tbl where id = 3' | sql-formatter
 ```
 
 ```sql
@@ -184,11 +184,11 @@ All fields are optional and all fields that are not specified will be filled wit
 ### Usage without NPM
 
 If you don't use a module bundler, clone the repository, run `npm install` and grab a file from `/dist` directory to use inside a `<script>` tag.
-This makes Prettier SQL available as a global variable `window.prettierSql`.
+This makes SQL Formatter available as a global variable `window.sqlFormatter`.
 
 ### Usage with VSCode
 
-Prettier SQL is also available as a VSCode extension here: \
+SQL Formatter is also available as a VSCode extension here: \
 https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode
 
 ## Contributing

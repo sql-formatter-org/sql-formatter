@@ -4,8 +4,8 @@ module.exports = {
 	entry: './src/index.ts',
 	output: {
 		path: path.join(__dirname, 'dist'),
-		filename: 'prettier-sql.js',
-		library: 'prettierSql',
+		filename: 'sql-formatter.js',
+		library: 'sqlFormatter',
 		libraryTarget: 'umd',
 	},
 	resolve: {
