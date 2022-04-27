@@ -80,7 +80,7 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 	}
 
 	if (cfg.language && !supportedDialects.includes(cfg.language)) {
-		throw Error(`Unsupported SQL dialect: ${cfg.language}`);
+		throw new Error(`Unsupported SQL dialect: ${cfg.language}`);
 	}
 
 	if (
