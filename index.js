@@ -38,7 +38,7 @@ const attachFormat = () => {
 				denseOperators: denseOperators.checked,
 				semicolonNewline: semicolonNewline.checked,
 			};
-			output.value = prettierSql.format(input.value, config);
+			output.value = sqlFormatter.format(input.value, config);
 		} catch (e) {
 			output.value = `
 An Error Occurred, please report this at:
