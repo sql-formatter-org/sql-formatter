@@ -65,8 +65,6 @@ export interface FormatOptions {
  *  @param {ParenOptions} cfg.parenOptions - Various options for parentheses
  *  	@param {Boolean} cfg.parenOptions -.openParenNewline Whether to place opening parenthesis on same line or newline
  *  	@param {Boolean} cfg.parenOptions -.closeParenNewline Whether to place closing parenthesis on same line or newline
- *  //	@param {Boolean} cfg.parenOptions -.reservedFunctionParens Whether to use parenthesis for reserved functions such as COUNT
- *  //	@param {Boolean} cfg.parenOptions -.functionParenSpace Whether to add space before reserved function parens
  *  @param {Integer} cfg.lineWidth - Number of characters in each line before breaking, default: 50
  *  @param {Integer} cfg.linesBetweenQueries - How many line breaks between queries
  *  @param {Boolean} cfg.denseOperators - whether to format operators with spaces
@@ -116,8 +114,6 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 		parenOptions: {
 			openParenNewline: true,
 			closeParenNewline: true,
-			// reservedFunctionParens: true,
-			// functionParenSpace: false,
 		},
 		lineWidth: 50,
 		linesBetweenQueries: 1,
