@@ -7,17 +7,20 @@ import supportsNewlineOptions from './features/newline';
 import supportsKeywordPositions from './features/keywordPosition';
 import supportsParenthesesOptions from './features/parenthesis';
 
+import { itIf } from './utils';
+
 /**
  * Core tests for all SQL formatters
+ * @param {string} language
  * @param {Function} format
  */
-export default function behavesLikeSqlFormatter(format) {
-	supportsAliases(format);
-	supportsComments(format);
-	supportsConfigOptions(format);
-	supportsKeywordPositions(format);
-	supportsNewlineOptions(format);
-	supportsParenthesesOptions(format);
+export default function behavesLikeSqlFormatter(language, format) {
+	supportsAliases(language, format);
+	supportsComments(language, format);
+	supportsConfigOptions(language, format);
+	supportsKeywordPositions(language, format);
+	supportsNewlineOptions(language, format);
+	supportsParenthesesOptions(language, format);
 
 	it('does nothing with empty input', () => {
 		const result = format('');
@@ -121,7 +124,7 @@ export default function behavesLikeSqlFormatter(format) {
 		expect(result).toBe(dedent`
       LIMIT
         5;
-      
+
       SELECT
         foo,
         bar;
@@ -256,7 +259,7 @@ export default function behavesLikeSqlFormatter(format) {
     `);
 	});
 
-	it('formats simple UPDATE query', () => {
+	itIf(language !== 'hive')('formats simple UPDATE query', () => {
 		const result = format(
 			"UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';"
 		);
@@ -299,7 +302,7 @@ export default function behavesLikeSqlFormatter(format) {
     `);
 	});
 
-	it('formats UPDATE query with AS part', () => {
+	itIf(language !== 'hive')('formats UPDATE query with AS part', () => {
 		const result = format(
 			'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary',
 			{ aliasAs: 'always' }
@@ -378,7 +381,7 @@ export default function behavesLikeSqlFormatter(format) {
         Column1
       FROM
         Table1;
-      
+
       SELECT
         COUNT(*),
         Column1
@@ -408,7 +411,7 @@ export default function behavesLikeSqlFormatter(format) {
         *
       FROM
         test;
-      
+
       CREATE TABLE
         test(
           id NUMBER NOT NULL,
@@ -427,6 +430,22 @@ export default function behavesLikeSqlFormatter(format) {
         3.5E12 AS c,
         3.5e12 AS d;
     `);
+	});
+
+	it('correctly handles floats with trailing point', () => {
+		let result = format('SELECT 1000. AS a;');
+		expect(result).toBe(dedent`
+		  SELECT
+		    1000. AS a;
+		`);
+
+		result = format('SELECT a, b / 1000. AS a_s, 100. * b / SUM(a_s);');
+		expect(result).toBe(dedent`
+		  SELECT
+		    a,
+		    b / 1000. AS a_s,
+		    100. * b / SUM(a_s);
+	  `);
 	});
 
 	it('does not split UNION ALL in half', () => {

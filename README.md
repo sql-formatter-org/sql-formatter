@@ -1,6 +1,6 @@
 <a href='https://github.com/inferrinizzard/prettier-sql'><img src="static/prettier-sql-clean.svg" width="128"/></a>
 
-# Prettier SQL [![NPM version](https://img.shields.io/npm/v/prettier-sql.svg)](https://npmjs.com/package/prettier-sql) ![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/coveralls/master?label=Build&logo=Github) ![Coveralls](https://img.shields.io/coveralls/github/inferrinizzard/prettier-sql?branch=master&label=Coverage&logo=coveralls&style=plastic)
+# Prettier SQL [![NPM version](https://img.shields.io/npm/v/prettier-sql.svg)](https://npmjs.com/package/prettier-sql) ![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/coveralls/master?label=Build&logo=Github) ![Coveralls](https://img.shields.io/coveralls/github/inferrinizzard/prettier-sql?branch=master&label=Coverage&logo=coveralls&style=plastic) [![VSCode](https://img.shields.io/visual-studio-marketplace/v/inferrinizzard.prettier-sql-vscode?label=vscode)](https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode)
 
 ## **Prettier SQL** is a JavaScript library for pretty-printing SQL queries.
 
@@ -31,6 +31,7 @@ It does not support:
 # Table of contents
 
 - [Install](#install)
+- [Documentation](#documentation)
 - [Usage](#usage)
   - [Usage as library](#usage-as-library)
   - [Usage from command line](#usage-from-command-line)
@@ -51,6 +52,10 @@ Also available with yarn:
 ```sh
 yarn add prettier-sql
 ```
+
+## Documentation
+
+You can read more about how the library works in [DOC.md](DOC.md)
 
 ## Usage
 

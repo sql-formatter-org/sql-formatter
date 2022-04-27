@@ -13,22 +13,23 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 
 describe('PostgreSqlFormatter', () => {
-	const format = (query, cfg = {}) =>
-		sqlFormatter.format(query, { ...cfg, language: 'postgresql' });
+	const language = 'postgresql';
+	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
-	behavesLikeSqlFormatter(format);
-	supportsCase(format);
-	supportsCreateTable(format);
-	supportsAlterTable(format);
-	supportsStrings(format, PostgreSqlFormatter.stringTypes);
-	supportsBetween(format);
-	supportsSchema(format);
+	behavesLikeSqlFormatter(language, format);
+	supportsCase(language, format);
+	supportsCreateTable(language, format);
+	supportsAlterTable(language, format);
+	supportsStrings(language, format, PostgreSqlFormatter.stringTypes);
+	supportsBetween(language, format);
+	supportsSchema(language, format);
 	supportsOperators(
+		language,
 		format,
 		PostgreSqlFormatter.operators,
 		PostgreSqlFormatter.reservedLogicalOperators
 	);
-	supportsJoin(format);
+	supportsJoin(language, format);
 
 	it('supports $n placeholders', () => {
 		const result = format('SELECT $1, $2 FROM tbl');

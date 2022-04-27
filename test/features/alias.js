@@ -3,9 +3,10 @@ import { NewlineMode } from '../../src/types';
 
 /**
  * Tests support for alias options
+ * @param {string} language
  * @param {Function} format
  */
-export default function supportsAliases(format) {
+export default function supportsAliases(language, format) {
 	const baseQuery = 'SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;';
 
 	it('supports always mode', () => {
@@ -195,5 +196,37 @@ export default function supportsAliases(format) {
 				'          );',
 			].join('\n')
 		);
+	});
+
+	it('handles edge case of never + CTE', () => {
+		const result = format(
+			dedent`CREATE TABLE 'test.example_table' AS WITH cte AS (SELECT a AS alpha)`,
+			{ aliasAs: 'never' }
+		);
+
+		expect(result).toBe(dedent`
+      CREATE TABLE
+        'test.example_table' AS
+      WITH
+        cte AS (
+          SELECT
+            a alpha
+        )
+		`);
+	});
+
+	it('handles edge case of never + CAST', () => {
+		const result = format(
+			dedent`SELECT
+			CAST(0 AS BIT),
+			'foo' AS bar`,
+			{ aliasAs: 'never' }
+		);
+
+		expect(result).toBe(dedent`
+      SELECT
+        CAST(0 AS BIT),
+        'foo' bar
+		`);
 	});
 }

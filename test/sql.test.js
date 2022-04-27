@@ -13,17 +13,19 @@ import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 
 describe('StandardSqlFormatter', () => {
-	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'sql' });
+	const language = 'sql';
+	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
-	behavesLikeSqlFormatter(format);
-	supportsCase(format);
-	supportsCreateTable(format);
-	supportsAlterTable(format);
-	supportsStrings(format, StandardSqlFormatter.stringTypes);
-	supportsBetween(format);
-	supportsSchema(format);
-	supportsJoin(format);
+	behavesLikeSqlFormatter(language, format);
+	supportsCase(language, format);
+	supportsCreateTable(language, format);
+	supportsAlterTable(language, format);
+	supportsStrings(language, format, StandardSqlFormatter.stringTypes);
+	supportsBetween(language, format);
+	supportsSchema(language, format);
+	supportsJoin(language, format);
 	supportsOperators(
+		language,
 		format,
 		StandardSqlFormatter.operators,
 		StandardSqlFormatter.reservedLogicalOperators

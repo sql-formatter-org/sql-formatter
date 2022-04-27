@@ -9,15 +9,16 @@ import supportsJoin from './features/join';
 
 /**
  * Shared tests for MySQL and MariaDB
+ * @param {string} language
  * @param {Function} format
  */
-export default function behavesLikeMariaDbFormatter(format) {
-	behavesLikeSqlFormatter(format);
-	supportsCase(format);
-	supportsCreateTable(format);
-	supportsAlterTable(format);
-	supportsBetween(format);
-	supportsJoin(format, {
+export default function behavesLikeMariaDbFormatter(language, format) {
+	behavesLikeSqlFormatter(language, format);
+	supportsCase(language, format);
+	supportsCreateTable(language, format);
+	supportsAlterTable(language, format);
+	supportsBetween(language, format);
+	supportsJoin(language, format, {
 		without: ['FULL'],
 		additionally: [
 			'STRAIGHT_JOIN',
