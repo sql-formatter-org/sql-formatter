@@ -9,7 +9,8 @@ import formatCommaPositions from './formatCommaPositions';
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {
-  cfg: FormatOptions & { tenSpace?: boolean };
+  cfg: FormatOptions;
+  tenSpace: boolean;
   newline: FormatOptions['newline'];
   currentNewline: boolean;
   lineWidth: number;
@@ -27,7 +28,7 @@ export default class Formatter {
    */
   constructor(cfg: FormatOptions) {
     this.cfg = cfg;
-    this.cfg.tenSpace =
+    this.tenSpace =
       this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
       this.cfg.keywordPosition === KeywordMode.tenSpaceRight;
     this.newline = cfg.newline;
@@ -343,7 +344,7 @@ export default class Formatter {
     query = this.addNewline(query);
 
     // indent TenSpace formats, except when preceding a (
-    if (this.cfg.tenSpace) {
+    if (this.tenSpace) {
       if (this.tokenLookAhead()?.value !== '(') {
         this.indentation.increaseTopLevel();
       }
@@ -353,7 +354,7 @@ export default class Formatter {
     }
 
     query += this.equalizeWhitespace(this.show(token)); // print token onto query
-    if (this.currentNewline && !this.cfg.tenSpace) {
+    if (this.currentNewline && !this.tenSpace) {
       query = this.addNewline(query);
     } else {
       query += ' ';
@@ -368,7 +369,7 @@ export default class Formatter {
    */
   formatBinaryCommand(token: Token, query: string): string {
     const isJoin = /JOIN/i.test(token.value); // check if token contains JOIN
-    if (!isJoin || this.cfg.tenSpace) {
+    if (!isJoin || this.tenSpace) {
       // decrease for boolean set operators or in tenSpace modes
       this.indentation.decreaseTopLevel();
     }
@@ -444,7 +445,7 @@ export default class Formatter {
       return this.formatWithSpaces(token, query);
     }
 
-    if (this.cfg.tenSpace) {
+    if (this.tenSpace) {
       this.indentation.decreaseTopLevel();
     }
 
@@ -517,7 +518,7 @@ export default class Formatter {
     } else {
       this.indentation.decreaseBlockLevel();
 
-      if (this.cfg.tenSpace) {
+      if (this.tenSpace) {
         query = this.addNewline(query) + this.cfg.indent;
       } else if (this.cfg.parenOptions.closeParenNewline) {
         query = this.addNewline(query);
@@ -591,7 +592,7 @@ export default class Formatter {
     // move delimiter to new line if specified
     if (this.cfg.semicolonNewline) {
       query += '\n';
-      if (this.cfg.tenSpace) {
+      if (this.tenSpace) {
         query += this.cfg.indent;
       }
     }
@@ -628,7 +629,7 @@ export default class Formatter {
   tenSpacedToken(token: Token): Token {
     const addBuffer = (string: string, bufferLength = 9) =>
       ZWS.repeat(Math.max(bufferLength - string.length, 0));
-    if (this.cfg.tenSpace) {
+    if (this.tenSpace) {
       let bufferItem = token.value; // store which part of keyword receives 10-space buffer
       let tail = [] as string[]; // rest of keyword
       if (bufferItem.length >= 10 && bufferItem.includes(' ')) {
