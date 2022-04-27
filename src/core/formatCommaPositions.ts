@@ -1,5 +1,4 @@
-import { FormatOptions } from '../sqlFormatter';
-import { CommaPosition } from '../types';
+import { CommaPosition, FormatOptions } from '../types';
 import { maxLength } from '../utils';
 import Tokenizer from './Tokenizer';
 

@@ -1,3 +1,5 @@
+import { ParamItems } from './core/Params';
+
 /**
  * Enum for the different keyword formats
  * @enum {string}
@@ -53,4 +55,21 @@ export enum CommaPosition {
 export interface ParenOptions {
   openParenNewline?: boolean;
   closeParenNewline?: boolean;
+}
+
+export interface FormatOptions {
+  indent: string;
+  uppercase?: boolean;
+  keywordPosition: KeywordMode;
+  newline: NewlineMode | number;
+  breakBeforeBooleanOperator: boolean;
+  aliasAs: AliasMode;
+  tabulateAlias: boolean;
+  commaPosition: CommaPosition;
+  parenOptions: ParenOptions;
+  lineWidth: number;
+  linesBetweenQueries: number;
+  denseOperators: boolean;
+  semicolonNewline: boolean;
+  params?: ParamItems | string[];
 }

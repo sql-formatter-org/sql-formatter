@@ -1,4 +1,3 @@
-import type { ParamItems } from './core/Params';
 import BigQueryFormatter from './languages/bigquery.formatter';
 import Db2Formatter from './languages/db2.formatter';
 import HiveFormatter from './languages/hive.formatter';
@@ -12,7 +11,7 @@ import SparkSqlFormatter from './languages/sparksql.formatter';
 import StandardSqlFormatter from './languages/standardsql.formatter';
 import TSqlFormatter from './languages/tsql.formatter';
 
-import { AliasMode, CommaPosition, KeywordMode, NewlineMode, ParenOptions } from './types';
+import { AliasMode, CommaPosition, FormatOptions, KeywordMode, NewlineMode } from './types';
 
 export const formatters = {
   bigquery: BigQueryFormatter,
@@ -31,22 +30,6 @@ export const formatters = {
 export type FormatterLanguage = keyof typeof formatters;
 export const supportedDialects = Object.keys(formatters);
 
-export interface FormatOptions {
-  indent: string;
-  uppercase?: boolean;
-  keywordPosition: KeywordMode;
-  newline: NewlineMode | number;
-  breakBeforeBooleanOperator: boolean;
-  aliasAs: AliasMode;
-  tabulateAlias: boolean;
-  commaPosition: CommaPosition;
-  parenOptions: ParenOptions;
-  lineWidth: number;
-  linesBetweenQueries: number;
-  denseOperators: boolean;
-  semicolonNewline: boolean;
-  params?: ParamItems | string[];
-}
 export type FormatFnOptions = FormatOptions & { language: FormatterLanguage };
 
 /**

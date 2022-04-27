@@ -4,8 +4,7 @@ import Params from './Params';
 import { maxLength, trimSpacesEnd } from '../utils';
 import { isReserved, isCommand, isToken, Token, TokenType, ZWS } from './token';
 import Tokenizer from './Tokenizer';
-import type { FormatOptions } from '../sqlFormatter';
-import { AliasMode, CommaPosition, KeywordMode, NewlineMode } from '../types';
+import { AliasMode, CommaPosition, FormatOptions, KeywordMode, NewlineMode } from '../types';
 import formatCommaPositions from './formatCommaPositions';
 
 /** Main formatter class that produces a final output string from list of tokens */
@@ -25,13 +24,6 @@ export default class Formatter {
 
   /**
    *	@param {FormatOptions} cfg - config object
-   *	@param {string} cfg.language - the current SQL dialect
-   *	@param {string} cfg.indent - the indentation string, either tabs or a number of spaces
-   *	@param {Boolean} cfg.uppercase - whether to use uppercase keywords
-   *	@param {NewlineMode} cfg.newline - setting to control when to break onto newlines
-   *	@param {Integer} cfg.lineWidth - the maximum line width before breaking
-   *	@param {Integer} cfg.linesBetweenQueries - the number of blank lines between each query
-   *	@param {ParamItems | string[]} cfg.params - placeholder tokens to substitute
    */
   constructor(cfg: FormatOptions) {
     this.cfg = cfg;
