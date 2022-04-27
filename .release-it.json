@@ -20,7 +20,7 @@
 		"publishArgs": [],
 		"tag": null,
 		"otp": null,
-		"ignoreVersion": false,
+		"ignoreVersion": true,
 		"skipChecks": false,
 		"timeout": 10
 	},
@@ -28,7 +28,7 @@
 		"release": true,
 		"releaseName": "${version}",
 		"releaseNotes": "git log --pretty=format:\"* %s (%h)\" ${latestTag}...HEAD",
-		"preRelease": false,
+		"preRelease": true,
 		"draft": false,
 		"skipChecks": false,
 		"web": true

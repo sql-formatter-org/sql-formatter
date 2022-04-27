@@ -1,6 +1,6 @@
 {
 	"name": "prettier-sql",
-	"version": "5.0.0-beta",
+	"version": "5.0.0-beta.1",
 	"description": "Format whitespace in a SQL query to make it more readable",
 	"license": "MIT",
 	"main": "lib/sqlFormatter.js",
