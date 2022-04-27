@@ -4,7 +4,6 @@ import Tokenizer from './Tokenizer';
 
 /**
  * Handles comma placement - either before, after or tabulated
- * @param {string} query - input query string
  */
 export default function formatCommaPositions(
   query: string,
