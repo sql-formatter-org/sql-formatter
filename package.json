@@ -63,16 +63,16 @@
     "clean": "rimraf lib dist coverage",
     "lint": "eslint .",
     "pretty": "prettier --write .",
-    "fix": "npm run pretty && eslint --fix .",
+    "fix": "yarn pretty && eslint --fix .",
     "pretty:check": "prettier --check .",
     "test": "jest",
-    "test:watch": "npm run test -- --watch",
-    "check": "npm run pretty:check && npm run lint && npm run test",
-    "prepare": "npm run clean && npm run fix && npm run check && npm run build",
+    "test:watch": "yarn test -- --watch",
+    "check": "yarn pretty:check && yarn lint && yarn test",
+    "prepare": "yarn clean && yarn fix && yarn check && yarn build",
     "build:commonjs": "babel src --out-dir lib --extensions .ts --source-maps && tsc --module commonjs --emitDeclarationOnly --isolatedModules",
     "build:umd": "webpack --config webpack.dev.js",
     "build:umd:min": "webpack --config webpack.prod.js",
-    "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min"
+    "build": "yarn build:commonjs && yarn build:umd && yarn build:umd:min"
   },
   "pre-push": [
     "lint"
