@@ -26,10 +26,8 @@ const attachFormat = () => {
 				keywordPosition: keywordPosition.options[keywordPosition.selectedIndex].value,
 				breakBeforeBooleanOperator: breakBeforeBooleanOperator.checked,
 				aliasAs: aliasAs.options[aliasAs.selectedIndex].value,
-				newline: {
-					mode: newline.options[newline.selectedIndex].value,
-					itemCount: itemCount.value,
-				},
+				newline:
+					itemCount.value > 0 ? itemCount.value : newline.options[newline.selectedIndex].value,
 				tabulateAlias: tabulateAlias.checked,
 				commaPosition: commaPosition.options[commaPosition.selectedIndex].value,
 				parenOptions: {
