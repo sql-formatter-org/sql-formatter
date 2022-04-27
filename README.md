@@ -114,8 +114,8 @@ WHERE
 
 ### Usage from command line
 
-The CLI tool will be installed under `prettier-sql`
-and may be invoked via `npx prettier-sql`:
+The CLI tool will be installed under `sql-formatter`
+and may be invoked via `npx sql-formatter`:
 
 ```sh
 sql-formatter -h

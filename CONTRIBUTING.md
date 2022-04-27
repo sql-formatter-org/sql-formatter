@@ -1,6 +1,6 @@
 ## Bugs
 
-Please submit bugs and issues here: https://github.com/inferrinizzard/prettier-sql/issues \
+Please submit bugs and issues here: https://github.com/zeroturnaround/sql-formatter/issues \
 There are issue templates available for FORMATTING, SCRIPT, or VSCODE related bugs.
 
 # Development

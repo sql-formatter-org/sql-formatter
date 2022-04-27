@@ -1,4 +1,4 @@
-# Prettier-SQL
+# SQL Formatter
 
 ## Overview:
 

@@ -42,7 +42,7 @@ const attachFormat = () => {
 		} catch (e) {
 			output.value = `
 An Error Occurred, please report this at:
-https://github.com/inferrinizzard/prettier-sql/issues\n
+https://github.com/zeroturnaround/sql-formatter/issues\n
 Stack Trace:
 ${e.stack.toString()}
 `;
