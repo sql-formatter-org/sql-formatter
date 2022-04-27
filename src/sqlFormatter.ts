@@ -35,12 +35,12 @@ export interface FormatOptions {
   language: FormatterLanguage;
   indent: string;
   uppercase?: boolean;
-  keywordPosition: KeywordMode | keyof typeof KeywordMode;
-  newline: NewlineMode | keyof typeof NewlineMode | number;
+  keywordPosition: KeywordMode;
+  newline: NewlineMode | number;
   breakBeforeBooleanOperator: boolean;
-  aliasAs: AliasMode | keyof typeof AliasMode;
+  aliasAs: AliasMode;
   tabulateAlias: boolean;
-  commaPosition: CommaPosition | keyof typeof CommaPosition;
+  commaPosition: CommaPosition;
   parenOptions: ParenOptions;
   lineWidth: number;
   linesBetweenQueries: number;
