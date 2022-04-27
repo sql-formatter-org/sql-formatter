@@ -32,6 +32,26 @@ export const supportedDialects = Object.keys(formatters);
 
 export type FormatFnOptions = FormatOptions & { language: FormatterLanguage };
 
+const defaultOptions: FormatFnOptions = {
+  language: 'sql',
+  indent: '  ',
+  uppercase: undefined,
+  keywordPosition: KeywordMode.standard,
+  newline: NewlineMode.always,
+  breakBeforeBooleanOperator: true,
+  aliasAs: AliasMode.select,
+  tabulateAlias: false,
+  commaPosition: CommaPosition.after,
+  parenOptions: {
+    openParenNewline: true,
+    closeParenNewline: true,
+  },
+  lineWidth: 50,
+  linesBetweenQueries: 1,
+  denseOperators: false,
+  semicolonNewline: false,
+};
+
 /**
  * Format whitespace in a query to make it easier to read.
  *
@@ -61,7 +81,18 @@ export const format = (query: string, cfg: Partial<FormatFnOptions> = {}): strin
     throw new Error('Invalid query argument. Expected string, instead got ' + typeof query);
   }
 
-  if (cfg.language && !supportedDialects.includes(cfg.language)) {
+  const options = validateConfig({
+    ...defaultOptions,
+    ...cfg,
+    parenOptions: { ...defaultOptions.parenOptions, ...cfg.parenOptions },
+  });
+
+  const Formatter = formatters[options.language];
+  return new Formatter(options).format(query);
+};
+
+function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
+  if (!supportedDialects.includes(cfg.language)) {
     throw new Error(`Unsupported SQL dialect: ${cfg.language}`);
   }
 
@@ -72,7 +103,7 @@ export const format = (query: string, cfg: Partial<FormatFnOptions> = {}): strin
     cfg.indent = ' '.repeat(10);
   }
 
-  if (cfg.newline && !Number.isNaN(+cfg.newline)) {
+  if (!Number.isNaN(+cfg.newline)) {
     if ((cfg.newline ?? 0) < 0) {
       throw new Error('Error: newline must be a positive number.');
     }
@@ -81,35 +112,9 @@ export const format = (query: string, cfg: Partial<FormatFnOptions> = {}): strin
     }
   }
 
-  if (cfg.lineWidth && cfg.lineWidth <= 0) {
+  if (cfg.lineWidth <= 0) {
     throw new Error(`lineWidth must be > 0. Received ${cfg.lineWidth} instead.`);
   }
 
-  const defaultOptions: FormatFnOptions = {
-    language: 'sql',
-    indent: '  ',
-    uppercase: undefined,
-    keywordPosition: KeywordMode.standard,
-    newline: NewlineMode.always,
-    breakBeforeBooleanOperator: true,
-    aliasAs: AliasMode.select,
-    tabulateAlias: false,
-    commaPosition: CommaPosition.after,
-    parenOptions: {
-      openParenNewline: true,
-      closeParenNewline: true,
-    },
-    lineWidth: 50,
-    linesBetweenQueries: 1,
-    denseOperators: false,
-    semicolonNewline: false,
-  };
-  const options: FormatFnOptions = {
-    ...defaultOptions,
-    ...cfg,
-    parenOptions: { ...defaultOptions.parenOptions, ...cfg.parenOptions },
-  };
-
-  const Formatter = formatters[options.language];
-  return new Formatter(options).format(query);
-};
+  return cfg;
+}
