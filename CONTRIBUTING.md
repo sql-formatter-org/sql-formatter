@@ -53,8 +53,8 @@ For development on the VSCode Extension, open the vscode/ directory as the works
 For those who have admin access on the repo, the new release publish flow is as such:
 
 - `release-it` (bumps version, git tag, git release, npm release)
-- bump VSCode version + prettier-sql dependency version (can be done beforehand)
-- `gh pages deploy` (pushes demo page to GH pages)
+- bump VSCode version + prettier-sql dependency version (can be done beforehand, must be done before push)
+- `git subtree push --prefix static origin gh-pages` && `gh pages deploy` (pushes demo page to GH pages)
 - `git dio develop` (moves origin/develop branch head to master)
 - `vscode deploy` (run within vscode/ subrepo, deploys VSCode Extension)
 
