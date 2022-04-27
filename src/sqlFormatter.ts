@@ -100,8 +100,7 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 	}
 
 	if (cfg.lineWidth && cfg.lineWidth <= 0) {
-		console.warn('Warning: cfg.linewidth was <=0, reset to default value');
-		cfg.lineWidth = undefined;
+		throw new Error(`lineWidth must be > 0. Received ${cfg.lineWidth} instead.`);
 	}
 
 	const defaultOptions: FormatOptions = {
