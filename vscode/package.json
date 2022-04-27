@@ -2,7 +2,7 @@
 	"name": "prettier-sql-vscode",
 	"displayName": "Prettier SQL VSCode",
 	"description": "VSCode Extension to format SQL files",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"publisher": "inferrinizzard",
 	"author": {
 		"name": "inferrinizzard"
