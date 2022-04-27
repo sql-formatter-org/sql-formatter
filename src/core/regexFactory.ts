@@ -32,7 +32,7 @@ export const createReservedWordRegex = (
   specialWordChars: string = ''
 ): RegExp => {
   if (reservedKeywords.length === 0) {
-    return new RegExp(`^\b$`, 'u');
+    return /^\b$/u;
   }
   const reservedKeywordsPattern = sortByLengthDesc(reservedKeywords)
     .join('|')

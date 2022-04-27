@@ -15,9 +15,7 @@ export const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\
 // Sorts strings by length, so that longer ones are first
 // Also sorts alphabetically after sorting by length.
 export const sortByLengthDesc = (strings: string[]) =>
-  strings.sort((a, b) => {
-    return b.length - a.length || a.localeCompare(b);
-  });
+  strings.sort((a, b) => b.length - a.length || a.localeCompare(b));
 
 /** Get length of longest string in list of strings */
 export const maxLength = (strings: string[]) =>
