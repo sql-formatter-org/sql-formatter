@@ -97,8 +97,8 @@ export default function supportsCommaModes(language, format) {
         FROM
           gamma
         GROUP BY
-          alpha  ,
-          delta  ,
+          alpha   ,
+          delta   ,
           epsilon
       `)
     );

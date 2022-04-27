@@ -6,6 +6,7 @@ import supportsAliases from './features/alias';
 import supportsNewlineOptions from './features/newline';
 import supportsKeywordPositions from './features/keywordPosition';
 import supportsParenthesesOptions from './features/parenthesis';
+import supportsCommaModes from './features/comma';
 
 import { itIf } from './utils';
 
@@ -21,6 +22,7 @@ export default function behavesLikeSqlFormatter(language, format) {
   supportsKeywordPositions(language, format);
   supportsNewlineOptions(language, format);
   supportsParenthesesOptions(language, format);
+  supportsCommaModes(language, format);
 
   it('does nothing with empty input', () => {
     const result = format('');
