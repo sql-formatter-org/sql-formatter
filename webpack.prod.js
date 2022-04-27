@@ -5,6 +5,6 @@ module.exports = merge(common, {
 	mode: 'production',
 	devtool: 'source-map',
 	output: {
-		filename: 'sql-formatter.min.js',
+		filename: 'prettier-sql.min.js',
 	},
 });

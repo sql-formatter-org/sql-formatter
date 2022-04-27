@@ -1,0 +1,36 @@
+{
+	"hooks": {},
+	"git": {
+		"changelog": "git log --pretty=format:\"* %s (%h)\" ${latestTag}...HEAD",
+		"requireCleanWorkingDir": true,
+		"requireBranch": "master",
+		"requireUpstream": true,
+		"requireCommits": false,
+		"addUntrackedFiles": false,
+		"commit": false,
+		"tag": true,
+		"tagAnnotation": "${version}",
+		"push": true,
+		"pushArgs": ["--follow-tags"],
+		"pushRepo": ""
+	},
+	"npm": {
+		"publish": true,
+		"publishPath": ".",
+		"publishArgs": [],
+		"tag": null,
+		"otp": null,
+		"ignoreVersion": false,
+		"skipChecks": false,
+		"timeout": 10
+	},
+	"github": {
+		"release": true,
+		"releaseName": "${version}",
+		"releaseNotes": "git log --pretty=format:\"* %s (%h)\" ${latestTag}...HEAD",
+		"preRelease": false,
+		"draft": false,
+		"skipChecks": false,
+		"web": true
+	}
+}
