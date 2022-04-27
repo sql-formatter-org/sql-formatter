@@ -11,7 +11,7 @@
     "class-methods-use-this": "off",
     "consistent-return": "off",
     "curly": ["error", "all"],
-    "eqeqeq": "warn",
+    "eqeqeq": "error",
     "func-names": "error",
     "import/no-extraneous-dependencies": [
       "error",
@@ -32,14 +32,14 @@
     "@typescript-eslint/comma-dangle": "off",
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/lines-between-class-members": "off",
-    "@typescript-eslint/naming-convention": "warn",
-    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/naming-convention": "error",
+    "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/quotes": [
-      "warn",
+      "error",
       "single",
       { "avoidEscape": true, "allowTemplateLiterals": true }
     ],
-    "@typescript-eslint/semi": "warn"
+    "@typescript-eslint/semi": "error"
   },
   "settings": {
     "import/resolver": {
