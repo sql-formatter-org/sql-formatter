@@ -26,7 +26,7 @@ It does not support:
 - Stored procedures.
 - Changing of the delimiter type to something else than `;`.
 
-→ [Try the demo.](https://inferrinizzard.github.io/prettier-sql)
+→ [Try the demo.](https://zeroturnaround.github.io/sql-formatter)
 
 # Table of contents
 
