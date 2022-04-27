@@ -62,12 +62,6 @@ For those who have admin access on the repo, the new release publish flow is as 
 
 # Contributors
 
-## `prettier-sql`
-
-- Sean Song <mail@seansong.dev>
-
-## `sql-formatter`
-
 - Adrien Pyke <adpyke@gmail.com>
 - Andrew
 - Benjamin Bellamy
@@ -79,6 +73,7 @@ For those who have admin access on the repo, the new release publish flow is as 
 - Ian Campbell <icampbell@immuta.com>
 - ivan baktsheev
 - João Pimentel Ferreira
+- Justin Dane Vallar <jdvallar@gmail.com>
 - Martin Nowak <code@dawg.eu>
 - Matheus Salmi <mathsalmi@gmail.com>
 - Matheus Teixeira <matheus.mtxr@gmail.com>
@@ -90,6 +85,8 @@ For those who have admin access on the repo, the new release publish flow is as 
 - Rene Saarsoo <nene@triin.net>
 - Rodrigo Stuchi
 - Sasha Aliashkevich <olsender@gmail.com>
+- Sean Song <mail@seansong.dev>
 - Sergei Egorov <sergei.egorov@zeroturnaround.com>
 - Tyler Jones <tyler.jones@txwormhole.com>
 - Uku Pattak <ukupat@gmail.com>
+- Xin Hu <hoosin.git@gmail.com>
