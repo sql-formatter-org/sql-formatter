@@ -32,7 +32,6 @@ export type FormatterLanguage = keyof typeof formatters;
 export const supportedDialects = Object.keys(formatters);
 
 export interface FormatOptions {
-  language: FormatterLanguage;
   indent: string;
   uppercase?: boolean;
   keywordPosition: KeywordMode;
@@ -48,6 +47,8 @@ export interface FormatOptions {
   semicolonNewline: boolean;
   params?: ParamItems | string[];
 }
+export type FormatFnOptions = FormatOptions & { language: FormatterLanguage };
+
 /**
  * Format whitespace in a query to make it easier to read.
  *
@@ -72,7 +73,7 @@ export interface FormatOptions {
  *  @param {Boolean} cfg.semicolonNewline - Whether to place semicolon on newline
  * @return {string} formatted query
  */
-export const format = (query: string, cfg: Partial<FormatOptions> = {}): string => {
+export const format = (query: string, cfg: Partial<FormatFnOptions> = {}): string => {
   if (typeof query !== 'string') {
     throw new Error('Invalid query argument. Expected string, instead got ' + typeof query);
   }
@@ -101,7 +102,7 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
     throw new Error(`lineWidth must be > 0. Received ${cfg.lineWidth} instead.`);
   }
 
-  const defaultOptions: FormatOptions = {
+  const defaultOptions: FormatFnOptions = {
     language: 'sql',
     indent: '  ',
     uppercase: undefined,
