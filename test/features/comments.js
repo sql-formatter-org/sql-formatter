@@ -48,7 +48,7 @@ export default function supportsComments(language, format) {
 		expect(format(sql)).toBe(sql);
 	});
 
-	itIf(language != 'bigquery')('formats tricky line comments', () => {
+	itIf(language !== 'bigquery')('formats tricky line comments', () => {
 		expect(format('SELECT a--comment, here\nFROM b--comment')).toBe(dedent`
       SELECT
         a --comment, here
