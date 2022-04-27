@@ -19,7 +19,6 @@ const attachFormat = () => {
 
 	function format() {
 		try {
-			console.time('formatting');
 			const config = {
 				language: language.options[language.selectedIndex].value,
 				uppercase: uppercase.checked,
@@ -40,7 +39,6 @@ const attachFormat = () => {
 				semicolonNewline: semicolonNewline.checked,
 			};
 			output.value = prettierSql.format(input.value, config);
-			console.timeEnd('formatting');
 		} catch (e) {
 			output.value = `
 An Error Occurred, please report this at:
