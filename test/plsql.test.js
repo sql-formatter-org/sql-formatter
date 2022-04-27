@@ -14,27 +14,27 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 
 describe('PlSqlFormatter', () => {
-	const language = 'plsql';
-	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
+  const language = 'plsql';
+  const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
-	behavesLikeSqlFormatter(language, format);
-	supportsCase(language, format);
-	supportsCreateTable(language, format);
-	supportsAlterTable(language, format);
-	supportsAlterTableModify(language, format);
-	supportsStrings(language, format, PlSqlFormatter.stringTypes);
-	supportsBetween(language, format);
-	supportsSchema(language, format);
-	supportsOperators(
-		language,
-		format,
-		PlSqlFormatter.operators,
-		PlSqlFormatter.reservedLogicalOperators
-	);
-	supportsJoin(language, format);
+  behavesLikeSqlFormatter(language, format);
+  supportsCase(language, format);
+  supportsCreateTable(language, format);
+  supportsAlterTable(language, format);
+  supportsAlterTableModify(language, format);
+  supportsStrings(language, format, PlSqlFormatter.stringTypes);
+  supportsBetween(language, format);
+  supportsSchema(language, format);
+  supportsOperators(
+    language,
+    format,
+    PlSqlFormatter.operators,
+    PlSqlFormatter.reservedLogicalOperators
+  );
+  supportsJoin(language, format);
 
-	it('formats FETCH FIRST like LIMIT', () => {
-		expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
+  it('formats FETCH FIRST like LIMIT', () => {
+    expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
       SELECT
         col1
       FROM
@@ -44,22 +44,22 @@ describe('PlSqlFormatter', () => {
       FETCH FIRST
         20 ROWS ONLY;
     `);
-	});
+  });
 
-	it('formats only -- as a line comment', () => {
-		const result = format('SELECT col FROM\n-- This is a comment\nMyTable;\n');
-		expect(result).toBe(dedent`
+  it('formats only -- as a line comment', () => {
+    const result = format('SELECT col FROM\n-- This is a comment\nMyTable;\n');
+    expect(result).toBe(dedent`
       SELECT
         col
       FROM
         -- This is a comment
         MyTable;
     `);
-	});
+  });
 
-	it('recognizes _, $, #, . and @ as part of identifiers', () => {
-		const result = format('SELECT my_col$1#, col.2@, type#, procedure$, user# FROM tbl\n');
-		expect(result).toBe(dedent`
+  it('recognizes _, $, #, . and @ as part of identifiers', () => {
+    const result = format('SELECT my_col$1#, col.2@, type#, procedure$, user# FROM tbl\n');
+    expect(result).toBe(dedent`
       SELECT
         my_col$1#,
         col.2@,
@@ -69,51 +69,51 @@ describe('PlSqlFormatter', () => {
       FROM
         tbl
     `);
-	});
+  });
 
-	it('formats INSERT without INTO', () => {
-		const result = format(
-			"INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
-		);
-		expect(result).toBe(dedent`
+  it('formats INSERT without INTO', () => {
+    const result = format(
+      "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
+    );
+    expect(result).toBe(dedent`
       INSERT
         Customers (ID, MoneyBalance, Address, City)
       VALUES
         (12, -123.4, 'Skagen 2111', 'Stv');
     `);
-	});
+  });
 
-	it('recognizes ?[0-9]* placeholders', () => {
-		const result = format('SELECT ?1, ?25, ?;');
-		expect(result).toBe(dedent`
+  it('recognizes ?[0-9]* placeholders', () => {
+    const result = format('SELECT ?1, ?25, ?;');
+    expect(result).toBe(dedent`
       SELECT
         ?1,
         ?25,
         ?;
     `);
-	});
+  });
 
-	it('replaces ? numbered placeholders with param values', () => {
-		const result = format('SELECT ?1, ?2, ?0;', {
-			params: {
-				0: 'first',
-				1: 'second',
-				2: 'third',
-			},
-		});
-		expect(result).toBe('SELECT\n' + '  second,\n' + '  third,\n' + '  first;');
-	});
+  it('replaces ? numbered placeholders with param values', () => {
+    const result = format('SELECT ?1, ?2, ?0;', {
+      params: {
+        0: 'first',
+        1: 'second',
+        2: 'third',
+      },
+    });
+    expect(result).toBe('SELECT\n' + '  second,\n' + '  third,\n' + '  first;');
+  });
 
-	it('replaces ? indexed placeholders with param values', () => {
-		const result = format('SELECT ?, ?, ?;', {
-			params: ['first', 'second', 'third'],
-		});
-		expect(result).toBe('SELECT\n' + '  first,\n' + '  second,\n' + '  third;');
-	});
+  it('replaces ? indexed placeholders with param values', () => {
+    const result = format('SELECT ?, ?, ?;', {
+      params: ['first', 'second', 'third'],
+    });
+    expect(result).toBe('SELECT\n' + '  first,\n' + '  second,\n' + '  third;');
+  });
 
-	it('formats SELECT query with CROSS APPLY', () => {
-		const result = format('SELECT a, b FROM t CROSS APPLY fn(t.id)');
-		expect(result).toBe(dedent`
+  it('formats SELECT query with CROSS APPLY', () => {
+    const result = format('SELECT a, b FROM t CROSS APPLY fn(t.id)');
+    expect(result).toBe(dedent`
       SELECT
         a,
         b
@@ -122,30 +122,30 @@ describe('PlSqlFormatter', () => {
       CROSS APPLY
       fn(t.id)
     `);
-	});
+  });
 
-	it('formats simple SELECT', () => {
-		const result = format('SELECT N, M FROM t');
-		expect(result).toBe(dedent`
+  it('formats simple SELECT', () => {
+    const result = format('SELECT N, M FROM t');
+    expect(result).toBe(dedent`
       SELECT
         N,
         M
       FROM
         t
     `);
-	});
+  });
 
-	it('formats simple SELECT with national characters', () => {
-		const result = format("SELECT N'value'");
-		expect(result).toBe(dedent`
+  it('formats simple SELECT with national characters', () => {
+    const result = format("SELECT N'value'");
+    expect(result).toBe(dedent`
       SELECT
         N'value'
     `);
-	});
+  });
 
-	it('formats SELECT query with OUTER APPLY', () => {
-		const result = format('SELECT a, b FROM t OUTER APPLY fn(t.id)');
-		expect(result).toBe(dedent`
+  it('formats SELECT query with OUTER APPLY', () => {
+    const result = format('SELECT a, b FROM t OUTER APPLY fn(t.id)');
+    expect(result).toBe(dedent`
       SELECT
         a,
         b
@@ -154,10 +154,10 @@ describe('PlSqlFormatter', () => {
       OUTER APPLY
       fn(t.id)
     `);
-	});
+  });
 
-	it('formats Oracle recursive sub queries', () => {
-		const result = format(`
+  it('formats Oracle recursive sub queries', () => {
+    const result = format(`
       WITH t1(id, parent_id) AS (
         -- Anchor member.
         SELECT
@@ -181,7 +181,7 @@ describe('PlSqlFormatter', () => {
       another AS (SELECT * FROM dual)
       SELECT id, parent_id FROM t1 ORDER BY order1;
     `);
-		expect(result).toBe(dedent`
+    expect(result).toBe(dedent`
       WITH
         t1(id, parent_id) AS (
           -- Anchor member.
@@ -217,10 +217,10 @@ describe('PlSqlFormatter', () => {
       ORDER BY
         order1;
     `);
-	});
+  });
 
-	it('formats Oracle recursive sub queries regardless of capitalization', () => {
-		const result = format(/* sql */ `
+  it('formats Oracle recursive sub queries regardless of capitalization', () => {
+    const result = format(/* sql */ `
       WITH t1(id, parent_id) AS (
         -- Anchor member.
         SELECT
@@ -244,7 +244,7 @@ describe('PlSqlFormatter', () => {
       another AS (SELECT * FROM dual)
       SELECT id, parent_id FROM t1 ORDER BY order1;
     `);
-		expect(result).toBe(dedent/* sql */ `
+    expect(result).toBe(dedent/* sql */ `
       WITH
         t1(id, parent_id) AS (
           -- Anchor member.
@@ -280,5 +280,5 @@ describe('PlSqlFormatter', () => {
       ORDER BY
         order1;
     `);
-	});
+  });
 });

@@ -6,9 +6,9 @@ import dedent from 'dedent-js';
  * @param {Function} format
  */
 export default function supportsParenthesesOptions(language, format) {
-	it('supports opening parenthesis on newline', () => {
-		const result = format('SELECT a FROM ( SELECT b FROM c );');
-		expect(result).toBe(dedent`
+  it('supports opening parenthesis on newline', () => {
+    const result = format('SELECT a FROM ( SELECT b FROM c );');
+    expect(result).toBe(dedent`
       SELECT
         a
       FROM
@@ -19,13 +19,13 @@ export default function supportsParenthesesOptions(language, format) {
           c
       );
     `);
-	});
+  });
 
-	it('supports opening parenthesis on sameline', () => {
-		const result = format('SELECT a FROM ( SELECT b FROM c );', {
-			parenOptions: { openParenNewline: false },
-		});
-		expect(result).toBe(dedent`
+  it('supports opening parenthesis on sameline', () => {
+    const result = format('SELECT a FROM ( SELECT b FROM c );', {
+      parenOptions: { openParenNewline: false },
+    });
+    expect(result).toBe(dedent`
       SELECT
         a
       FROM (
@@ -35,11 +35,11 @@ export default function supportsParenthesesOptions(language, format) {
           c
       );
     `);
-	});
+  });
 
-	it('supports closing parenthesis on newline', () => {
-		const result = format('SELECT a FROM ( SELECT b FROM c );');
-		expect(result).toBe(dedent`
+  it('supports closing parenthesis on newline', () => {
+    const result = format('SELECT a FROM ( SELECT b FROM c );');
+    expect(result).toBe(dedent`
       SELECT
         a
       FROM
@@ -50,13 +50,13 @@ export default function supportsParenthesesOptions(language, format) {
           c
       );
     `);
-	});
+  });
 
-	it('supports closing parenthesis on sameline', () => {
-		const result = format('SELECT a FROM ( SELECT b FROM c );', {
-			parenOptions: { closeParenNewline: false },
-		});
-		expect(result).toBe(dedent`
+  it('supports closing parenthesis on sameline', () => {
+    const result = format('SELECT a FROM ( SELECT b FROM c );', {
+      parenOptions: { closeParenNewline: false },
+    });
+    expect(result).toBe(dedent`
       SELECT
         a
       FROM
@@ -66,5 +66,5 @@ export default function supportsParenthesesOptions(language, format) {
         FROM
           c );
     `);
-	});
+  });
 }

@@ -6,16 +6,16 @@ import supportsStrings from './features/strings';
 import supportsOperators from './features/operators';
 
 describe('MariaDbFormatter', () => {
-	const language = 'mariadb';
-	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
+  const language = 'mariadb';
+  const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
-	behavesLikeMariaDbFormatter(language, format);
+  behavesLikeMariaDbFormatter(language, format);
 
-	supportsStrings(language, format, MariaDbFormatter.stringTypes);
-	supportsOperators(
-		language,
-		format,
-		MariaDbFormatter.operators,
-		MariaDbFormatter.reservedLogicalOperators
-	);
+  supportsStrings(language, format, MariaDbFormatter.stringTypes);
+  supportsOperators(
+    language,
+    format,
+    MariaDbFormatter.operators,
+    MariaDbFormatter.reservedLogicalOperators
+  );
 });

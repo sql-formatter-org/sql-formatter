@@ -7,22 +7,22 @@ import supportsStrings from './features/strings';
 import supportsOperators from './features/operators';
 
 describe('MySqlFormatter', () => {
-	const language = 'mysql';
-	const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
+  const language = 'mysql';
+  const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
 
-	behavesLikeMariaDbFormatter(language, format);
+  behavesLikeMariaDbFormatter(language, format);
 
-	supportsStrings(language, format, MySqlFormatter.stringTypes);
-	supportsOperators(
-		language,
-		format,
-		MySqlFormatter.operators,
-		MySqlFormatter.reservedLogicalOperators
-	);
+  supportsStrings(language, format, MySqlFormatter.stringTypes);
+  supportsOperators(
+    language,
+    format,
+    MySqlFormatter.operators,
+    MySqlFormatter.reservedLogicalOperators
+  );
 
-	it('supports @@ system variables', () => {
-		const result = format('SELECT @@GLOBAL.time, @@SYSTEM.date, @@hour FROM foo;');
-		expect(result).toBe(dedent`
+  it('supports @@ system variables', () => {
+    const result = format('SELECT @@GLOBAL.time, @@SYSTEM.date, @@hour FROM foo;');
+    expect(result).toBe(dedent`
       SELECT
         @@GLOBAL.time,
         @@SYSTEM.date,
@@ -30,5 +30,5 @@ describe('MySqlFormatter', () => {
       FROM
         foo;
     `);
-	});
+  });
 });

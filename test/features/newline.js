@@ -6,11 +6,11 @@ import dedent from 'dedent-js';
  * @param {Function} format
  */
 export default function supportsNewlineOptions(language, format) {
-	it('supports always mode', () => {
-		const result = format('SELECT foo, bar, baz FROM qux;', {
-			newline: 'always',
-		});
-		expect(result).toBe(dedent`
+  it('supports always mode', () => {
+    const result = format('SELECT foo, bar, baz FROM qux;', {
+      newline: 'always',
+    });
+    expect(result).toBe(dedent`
       SELECT
         foo,
         bar,
@@ -18,21 +18,21 @@ export default function supportsNewlineOptions(language, format) {
       FROM
         qux;
     `);
-	});
+  });
 
-	it('supports never mode', () => {
-		const result = format('SELECT foo, bar, baz, qux FROM corge;', { newline: 'never' });
-		expect(result).toBe(dedent`
+  it('supports never mode', () => {
+    const result = format('SELECT foo, bar, baz, qux FROM corge;', { newline: 'never' });
+    expect(result).toBe(dedent`
       SELECT foo, bar, baz, qux
       FROM corge;
     `);
-	});
+  });
 
-	it('supports itemCount mode', () => {
-		const result = format('SELECT foo, bar, baz, qux FROM corge;', {
-			newline: 3,
-		});
-		expect(result).toBe(dedent`
+  it('supports itemCount mode', () => {
+    const result = format('SELECT foo, bar, baz, qux FROM corge;', {
+      newline: 3,
+    });
+    expect(result).toBe(dedent`
       SELECT
         foo,
         bar,
@@ -40,14 +40,14 @@ export default function supportsNewlineOptions(language, format) {
         qux
       FROM corge;
     `);
-	});
+  });
 
-	it('supports lineWidth mode', () => {
-		const result = format('SELECT foo, bar, baz, qux FROM corge;', {
-			newline: 'lineWidth',
-			lineWidth: 20,
-		});
-		expect(result).toBe(dedent`
+  it('supports lineWidth mode', () => {
+    const result = format('SELECT foo, bar, baz, qux FROM corge;', {
+      newline: 'lineWidth',
+      lineWidth: 20,
+    });
+    expect(result).toBe(dedent`
       SELECT
         foo,
         bar,
@@ -55,14 +55,14 @@ export default function supportsNewlineOptions(language, format) {
         qux
       FROM corge;
     `);
-	});
+  });
 
-	it('supports hybrid mode', () => {
-		const result = format('SELECT verylongfoo, verylongbar FROM baz GROUP BY foo, bar, baz, qux;', {
-			newline: 2,
-			lineWidth: 30,
-		});
-		expect(result).toBe(dedent`
+  it('supports hybrid mode', () => {
+    const result = format('SELECT verylongfoo, verylongbar FROM baz GROUP BY foo, bar, baz, qux;', {
+      newline: 2,
+      lineWidth: 30,
+    });
+    expect(result).toBe(dedent`
       SELECT
         verylongfoo,
         verylongbar
@@ -73,5 +73,5 @@ export default function supportsNewlineOptions(language, format) {
         baz,
         qux;
     `);
-	});
+  });
 }

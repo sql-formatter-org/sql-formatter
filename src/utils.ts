@@ -15,19 +15,19 @@ export const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\
 // Sorts strings by length, so that longer ones are first
 // Also sorts alphabetically after sorting by length.
 export const sortByLengthDesc = (strings: string[]) =>
-	strings.sort((a, b) => {
-		return b.length - a.length || a.localeCompare(b);
-	});
+  strings.sort((a, b) => {
+    return b.length - a.length || a.localeCompare(b);
+  });
 
 /** Get length of longest string in list of strings */
 export const maxLength = (strings: string[]) =>
-	strings.reduce((max, cur) => Math.max(max, cur.length), 0);
+  strings.reduce((max, cur) => Math.max(max, cur.length), 0);
 
 /** Make all strings in list the same length by appending spaces */
 export const tabulateLines = (...columns: string[][]) =>
-	columns.reduce((lines, cur) => {
-		const existingMaxLength = maxLength(lines);
-		return lines.map(
-			(line, i) => line + ' '.repeat(Math.max(existingMaxLength - line.length, 0) + 1) + cur[i]
-		);
-	});
+  columns.reduce((lines, cur) => {
+    const existingMaxLength = maxLength(lines);
+    return lines.map(
+      (line, i) => line + ' '.repeat(Math.max(existingMaxLength - line.length, 0) + 1) + cur[i]
+    );
+  });

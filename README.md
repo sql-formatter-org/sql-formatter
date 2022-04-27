@@ -80,10 +80,10 @@ You can also pass in configuration options:
 
 ```js
 format('SELECT * FROM tbl', {
-	language: 'spark', // Defaults to "sql" (see the above list of supported dialects)
-	indent: '  ', // Defaults to two spaces
-	uppercase: false, // Defaults to true
-	linesBetweenQueries: 2, // Defaults to 1
+  language: 'spark', // Defaults to "sql" (see the above list of supported dialects)
+  indent: '  ', // Defaults to two spaces
+  uppercase: false, // Defaults to true
+  linesBetweenQueries: 2, // Defaults to 1
 });
 ```
 
@@ -92,12 +92,12 @@ format('SELECT * FROM tbl', {
 ```js
 // Named placeholders
 format('SELECT * FROM tbl WHERE foo = @foo', {
-	params: { foo: "'bar'" },
+  params: { foo: "'bar'" },
 });
 
 // Indexed placeholders
 format('SELECT * FROM tbl WHERE foo = ?', {
-	params: ["'bar'"],
+  params: ["'bar'"],
 });
 ```
 

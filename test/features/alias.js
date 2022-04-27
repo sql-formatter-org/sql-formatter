@@ -7,11 +7,11 @@ import { NewlineMode } from '../../src/types';
  * @param {Function} format
  */
 export default function supportsAliases(language, format) {
-	const baseQuery = 'SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;';
+  const baseQuery = 'SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;';
 
-	it('supports always mode', () => {
-		expect(format(baseQuery, { aliasAs: 'always' })).toBe(
-			dedent(`
+  it('supports always mode', () => {
+    expect(format(baseQuery, { aliasAs: 'always' })).toBe(
+      dedent(`
         SELECT
           a AS a_column,
           b AS bColumn
@@ -25,12 +25,12 @@ export default function supportsAliases(language, format) {
         WHERE
           z;
       `)
-		);
-	});
+    );
+  });
 
-	it('supports never mode', () => {
-		expect(format(baseQuery, { aliasAs: 'never' })).toBe(
-			dedent(`
+  it('supports never mode', () => {
+    expect(format(baseQuery, { aliasAs: 'never' })).toBe(
+      dedent(`
         SELECT
           a a_column,
           b bColumn
@@ -44,12 +44,12 @@ export default function supportsAliases(language, format) {
         WHERE
           z;
       `)
-		);
-	});
+    );
+  });
 
-	it('supports select only mode', () => {
-		expect(format(baseQuery, { aliasAs: 'select' })).toBe(
-			dedent(`
+  it('supports select only mode', () => {
+    expect(format(baseQuery, { aliasAs: 'select' })).toBe(
+      dedent(`
         SELECT
           a AS a_column,
           b AS bColumn
@@ -63,21 +63,21 @@ export default function supportsAliases(language, format) {
         WHERE
           z;
       `)
-		);
-	});
+    );
+  });
 
-	it('does not format non select clauses', () => {
-		expect(
-			format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);', {
-				newline: { mode: NewlineMode.never },
-			})
-		).toBe('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);');
-	});
+  it('does not format non select clauses', () => {
+    expect(
+      format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);', {
+        newline: { mode: NewlineMode.never },
+      })
+    ).toBe('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);');
+  });
 
-	const tabularBaseQueryWithAlias =
-		'SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );';
+  const tabularBaseQueryWithAlias =
+    'SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );';
 
-	const tabularFinalQueryWithAlias = dedent`
+  const tabularFinalQueryWithAlias = dedent`
     SELECT
       alpha     AS A,
       MAX(beta),
@@ -92,7 +92,7 @@ export default function supportsAliases(language, format) {
     );
   `;
 
-	const finalQueryWithAlias = dedent`
+  const finalQueryWithAlias = dedent`
     SELECT
       alpha AS A,
       MAX(beta),
@@ -107,7 +107,7 @@ export default function supportsAliases(language, format) {
     );
   `;
 
-	const tabularFinalQueryNoAlias = dedent`
+  const tabularFinalQueryNoAlias = dedent`
     SELECT
       alpha     A,
       MAX(beta),
@@ -122,51 +122,51 @@ export default function supportsAliases(language, format) {
     );
   `;
 
-	it('tabulates alias with aliasAs on', () => {
-		const result = format(tabularBaseQueryWithAlias, { tabulateAlias: true });
-		expect(result).toBe(tabularFinalQueryWithAlias);
-	});
+  it('tabulates alias with aliasAs on', () => {
+    const result = format(tabularBaseQueryWithAlias, { tabulateAlias: true });
+    expect(result).toBe(tabularFinalQueryWithAlias);
+  });
 
-	it('accepts tabular alias with aliasAs on', () => {
-		const result = format(tabularFinalQueryWithAlias);
+  it('accepts tabular alias with aliasAs on', () => {
+    const result = format(tabularFinalQueryWithAlias);
 
-		expect(result).toBe(finalQueryWithAlias);
-	});
+    expect(result).toBe(finalQueryWithAlias);
+  });
 
-	it('tabulates alias with aliasAs off', () => {
-		const result = format(tabularBaseQueryWithAlias, { tabulateAlias: true, aliasAs: 'never' });
+  it('tabulates alias with aliasAs off', () => {
+    const result = format(tabularBaseQueryWithAlias, { tabulateAlias: true, aliasAs: 'never' });
 
-		expect(result).toBe(tabularFinalQueryNoAlias);
-	});
+    expect(result).toBe(tabularFinalQueryNoAlias);
+  });
 
-	it('accepts tabular alias with aliasAs off', () => {
-		const result = format(tabularFinalQueryNoAlias);
+  it('accepts tabular alias with aliasAs off', () => {
+    const result = format(tabularFinalQueryNoAlias);
 
-		expect(result).toBe(finalQueryWithAlias);
-	});
+    expect(result).toBe(finalQueryWithAlias);
+  });
 
-	it('handles edge case of newline.never', () => {
-		const result = format(
-			dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
-			{ newline: { mode: 'never' }, tabulateAlias: true }
-		);
+  it('handles edge case of newline.never', () => {
+    const result = format(
+      dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
+      { newline: { mode: 'never' }, tabulateAlias: true }
+    );
 
-		expect(result).toBe(dedent`
+    expect(result).toBe(dedent`
       SELECT alpha AS A, MAX(beta), epsilon AS E
       FROM (
         SELECT mu AS m, iota AS i
         FROM gamma
       );
     `);
-	});
+  });
 
-	it('handles edge case of tenSpaceLeft', () => {
-		const result = format(
-			dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
-			{ keywordPosition: 'tenSpaceLeft', tabulateAlias: true }
-		);
+  it('handles edge case of tenSpaceLeft', () => {
+    const result = format(
+      dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
+      { keywordPosition: 'tenSpaceLeft', tabulateAlias: true }
+    );
 
-		expect(result).toBe(dedent`
+    expect(result).toBe(dedent`
       SELECT    alpha     AS A,
                 MAX(beta),
                 epsilon   AS E
@@ -176,35 +176,35 @@ export default function supportsAliases(language, format) {
                 FROM      gamma
                 );
     `);
-	});
+  });
 
-	it('handles edge case of tenSpaceRight', () => {
-		const result = format(
-			dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
-			{ keywordPosition: 'tenSpaceRight', tabulateAlias: true }
-		);
+  it('handles edge case of tenSpaceRight', () => {
+    const result = format(
+      dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
+      { keywordPosition: 'tenSpaceRight', tabulateAlias: true }
+    );
 
-		expect(result).toBe(
-			[
-				'   SELECT alpha     AS A,',
-				'          MAX(beta),',
-				'          epsilon   AS E',
-				'     FROM (',
-				'             SELECT mu   AS m,',
-				'                    iota AS i',
-				'               FROM gamma',
-				'          );',
-			].join('\n')
-		);
-	});
+    expect(result).toBe(
+      [
+        '   SELECT alpha     AS A,',
+        '          MAX(beta),',
+        '          epsilon   AS E',
+        '     FROM (',
+        '             SELECT mu   AS m,',
+        '                    iota AS i',
+        '               FROM gamma',
+        '          );',
+      ].join('\n')
+    );
+  });
 
-	it('handles edge case of never + CTE', () => {
-		const result = format(
-			dedent`CREATE TABLE 'test.example_table' AS WITH cte AS (SELECT a AS alpha)`,
-			{ aliasAs: 'never' }
-		);
+  it('handles edge case of never + CTE', () => {
+    const result = format(
+      dedent`CREATE TABLE 'test.example_table' AS WITH cte AS (SELECT a AS alpha)`,
+      { aliasAs: 'never' }
+    );
 
-		expect(result).toBe(dedent`
+    expect(result).toBe(dedent`
       CREATE TABLE
         'test.example_table' AS
       WITH
@@ -213,20 +213,20 @@ export default function supportsAliases(language, format) {
             a alpha
         )
 		`);
-	});
+  });
 
-	it('handles edge case of never + CAST', () => {
-		const result = format(
-			dedent`SELECT
+  it('handles edge case of never + CAST', () => {
+    const result = format(
+      dedent`SELECT
 			CAST(0 AS BIT),
 			'foo' AS bar`,
-			{ aliasAs: 'never' }
-		);
+      { aliasAs: 'never' }
+    );
 
-		expect(result).toBe(dedent`
+    expect(result).toBe(dedent`
       SELECT
         CAST(0 AS BIT),
         'foo' bar
 		`);
-	});
+  });
 }

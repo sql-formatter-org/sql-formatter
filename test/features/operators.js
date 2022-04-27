@@ -7,26 +7,26 @@ import dedent from 'dedent-js';
  * @param {string[]} operators
  */
 export default function supportsOperators(language, format, operators = [], logicalOperators = []) {
-	operators.forEach(op => {
-		it(`supports ${op} operator`, () => {
-			expect(format(`foo${op}bar`)).toBe(`foo ${op} bar`);
-		});
-	});
+  operators.forEach(op => {
+    it(`supports ${op} operator`, () => {
+      expect(format(`foo${op}bar`)).toBe(`foo ${op} bar`);
+    });
+  });
 
-	operators.forEach(op => {
-		it(`supports ${op} operator in dense mode`, () => {
-			expect(format(`foo ${op} bar`, { denseOperators: true })).toBe(`foo${op}bar`);
-		});
-	});
+  operators.forEach(op => {
+    it(`supports ${op} operator in dense mode`, () => {
+      expect(format(`foo ${op} bar`, { denseOperators: true })).toBe(`foo${op}bar`);
+    });
+  });
 
-	it('supports breaking before boolean operators', () => {
-		const result = format(`
+  it('supports breaking before boolean operators', () => {
+    const result = format(`
       SELECT a FROM b WHERE TRUE ${logicalOperators.reduce(
-				(str, op, i) => str + ` ${op} condition${i + 1}`,
-				''
-			)};
+        (str, op, i) => str + ` ${op} condition${i + 1}`,
+        ''
+      )};
     `);
-		expect(result).toBe(dedent`
+    expect(result).toBe(dedent`
       SELECT
         a
       FROM
@@ -35,19 +35,19 @@ export default function supportsOperators(language, format, operators = [], logi
         TRUE
       ${logicalOperators.map((op, i) => `  ${op} condition${i + 1}`).join('\n')};
     `);
-	});
+  });
 
-	it('supports breaking after boolean operators', () => {
-		const result = format(
-			`
+  it('supports breaking after boolean operators', () => {
+    const result = format(
+      `
 			SELECT a FROM b WHERE TRUE ${logicalOperators.reduce(
-				(str, op, i) => str + ` ${op} condition${i + 1}`,
-				''
-			)};
+        (str, op, i) => str + ` ${op} condition${i + 1}`,
+        ''
+      )};
     `,
-			{ breakBeforeBooleanOperator: false }
-		);
-		expect(result).toBe(dedent`
+      { breakBeforeBooleanOperator: false }
+    );
+    expect(result).toBe(dedent`
       SELECT
         a
       FROM
@@ -55,46 +55,46 @@ export default function supportsOperators(language, format, operators = [], logi
       WHERE
         TRUE ${logicalOperators.map((op, i) => `${op}\n  condition${i + 1}`).join(' ')};
     `);
-	});
+  });
 
-	it('supports semicolon on same line', () => {
-		const result = format(`SELECT a FROM b;`);
-		expect(result).toBe(dedent`
+  it('supports semicolon on same line', () => {
+    const result = format(`SELECT a FROM b;`);
+    expect(result).toBe(dedent`
       SELECT
         a
       FROM
         b;
     `);
-	});
+  });
 
-	it('supports semicolon on new line', () => {
-		const result = format(`SELECT a FROM b;`, { semicolonNewline: true });
-		expect(result).toBe(dedent`
+  it('supports semicolon on new line', () => {
+    const result = format(`SELECT a FROM b;`, { semicolonNewline: true });
+    expect(result).toBe(dedent`
       SELECT
         a
       FROM
         b
       ;
     `);
-	});
+  });
 
-	it('supports backticks', () => {
-		const result = format(`SELECT \`a\`.\`b\` FROM \`c\`.\`d\`;`);
-		expect(result).toBe(dedent`
+  it('supports backticks', () => {
+    const result = format(`SELECT \`a\`.\`b\` FROM \`c\`.\`d\`;`);
+    expect(result).toBe(dedent`
       SELECT
         \`a\`.\`b\`
       FROM
         \`c\`.\`d\`;
     `);
-	});
+  });
 
-	it('supports braces', () => {
-		const result = format(`SELECT $\{a} FROM $\{b};`);
-		expect(result).toBe(dedent`
+  it('supports braces', () => {
+    const result = format(`SELECT $\{a} FROM $\{b};`);
+    expect(result).toBe(dedent`
       SELECT
         $\{a}
       FROM
         $\{b};
     `);
-	});
+  });
 }

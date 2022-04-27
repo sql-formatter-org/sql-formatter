@@ -1,18 +1,18 @@
 {
-	"compilerOptions": {
-		"module": "es6",
-		"target": "es6",
-		"lib": ["es6", "dom"],
-		"rootDir": "src",
-		"outDir": "lib",
-		"sourceMap": true,
-		"declaration": true,
-		"esModuleInterop": true,
-		"moduleResolution": "node",
-		"strict": true /* enable all strict type-checking options */,
-		/* Additional Checks */
-		"noImplicitReturns": true /* Report error when not all code paths in function return a value. */
-	},
-	"include": ["src", "test", "static"],
-	"exclude": ["node_modules", "vscode"]
+  "compilerOptions": {
+    "module": "es6",
+    "target": "es6",
+    "lib": ["es6", "dom"],
+    "rootDir": "src",
+    "outDir": "lib",
+    "sourceMap": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "strict": true /* enable all strict type-checking options */,
+    /* Additional Checks */
+    "noImplicitReturns": true /* Report error when not all code paths in function return a value. */
+  },
+  "include": ["src", "test", "static"],
+  "exclude": ["node_modules", "vscode"]
 }

@@ -15,38 +15,38 @@ import TSqlFormatter from './languages/tsql.formatter';
 import { AliasMode, CommaPosition, KeywordMode, NewlineMode, ParenOptions } from './types';
 
 export const formatters = {
-	bigquery: BigQueryFormatter,
-	db2: Db2Formatter,
-	hive: HiveFormatter,
-	mariadb: MariaDbFormatter,
-	mysql: MySqlFormatter,
-	n1ql: N1qlFormatter,
-	plsql: PlSqlFormatter,
-	postgresql: PostgreSqlFormatter,
-	redshift: RedshiftFormatter,
-	spark: SparkSqlFormatter,
-	sql: StandardSqlFormatter,
-	tsql: TSqlFormatter,
+  bigquery: BigQueryFormatter,
+  db2: Db2Formatter,
+  hive: HiveFormatter,
+  mariadb: MariaDbFormatter,
+  mysql: MySqlFormatter,
+  n1ql: N1qlFormatter,
+  plsql: PlSqlFormatter,
+  postgresql: PostgreSqlFormatter,
+  redshift: RedshiftFormatter,
+  spark: SparkSqlFormatter,
+  sql: StandardSqlFormatter,
+  tsql: TSqlFormatter,
 };
 export type FormatterLanguage = keyof typeof formatters;
 export const supportedDialects = Object.keys(formatters);
 
 export interface FormatOptions {
-	language: FormatterLanguage;
-	indent: string;
-	uppercase: boolean;
-	keywordPosition: KeywordMode | keyof typeof KeywordMode;
-	newline: NewlineMode | keyof typeof NewlineMode | number;
-	breakBeforeBooleanOperator: boolean;
-	aliasAs: AliasMode | keyof typeof AliasMode;
-	tabulateAlias: boolean;
-	commaPosition: CommaPosition | keyof typeof CommaPosition;
-	parenOptions: ParenOptions;
-	lineWidth: number;
-	linesBetweenQueries: number;
-	denseOperators: boolean;
-	semicolonNewline: boolean;
-	params?: ParamItems | string[];
+  language: FormatterLanguage;
+  indent: string;
+  uppercase: boolean;
+  keywordPosition: KeywordMode | keyof typeof KeywordMode;
+  newline: NewlineMode | keyof typeof NewlineMode | number;
+  breakBeforeBooleanOperator: boolean;
+  aliasAs: AliasMode | keyof typeof AliasMode;
+  tabulateAlias: boolean;
+  commaPosition: CommaPosition | keyof typeof CommaPosition;
+  parenOptions: ParenOptions;
+  lineWidth: number;
+  linesBetweenQueries: number;
+  denseOperators: boolean;
+  semicolonNewline: boolean;
+  params?: ParamItems | string[];
 }
 /**
  * Format whitespace in a query to make it easier to read.
@@ -73,59 +73,59 @@ export interface FormatOptions {
  * @return {string} formatted query
  */
 export const format = (query: string, cfg: Partial<FormatOptions> = {}): string => {
-	if (typeof query !== 'string') {
-		throw new Error('Invalid query argument. Expected string, instead got ' + typeof query);
-	}
+  if (typeof query !== 'string') {
+    throw new Error('Invalid query argument. Expected string, instead got ' + typeof query);
+  }
 
-	if (cfg.language && !supportedDialects.includes(cfg.language)) {
-		throw new Error(`Unsupported SQL dialect: ${cfg.language}`);
-	}
+  if (cfg.language && !supportedDialects.includes(cfg.language)) {
+    throw new Error(`Unsupported SQL dialect: ${cfg.language}`);
+  }
 
-	if (
-		cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
-		cfg.keywordPosition === KeywordMode.tenSpaceRight
-	) {
-		cfg.indent = ' '.repeat(10);
-	}
+  if (
+    cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
+    cfg.keywordPosition === KeywordMode.tenSpaceRight
+  ) {
+    cfg.indent = ' '.repeat(10);
+  }
 
-	if (cfg.newline && !Number.isNaN(+cfg.newline)) {
-		if ((cfg.newline ?? 0) < 0) {
-			throw new Error('Error: newline must be a positive number.');
-		}
-		if (cfg.newline === 0) {
-			cfg.newline = NewlineMode.always;
-		}
-	}
+  if (cfg.newline && !Number.isNaN(+cfg.newline)) {
+    if ((cfg.newline ?? 0) < 0) {
+      throw new Error('Error: newline must be a positive number.');
+    }
+    if (cfg.newline === 0) {
+      cfg.newline = NewlineMode.always;
+    }
+  }
 
-	if (cfg.lineWidth && cfg.lineWidth <= 0) {
-		throw new Error(`lineWidth must be > 0. Received ${cfg.lineWidth} instead.`);
-	}
+  if (cfg.lineWidth && cfg.lineWidth <= 0) {
+    throw new Error(`lineWidth must be > 0. Received ${cfg.lineWidth} instead.`);
+  }
 
-	const defaultOptions: FormatOptions = {
-		language: 'sql',
-		indent: '  ',
-		uppercase: true,
-		keywordPosition: KeywordMode.standard,
-		newline: NewlineMode.always,
-		breakBeforeBooleanOperator: true,
-		aliasAs: AliasMode.select,
-		tabulateAlias: false,
-		commaPosition: CommaPosition.after,
-		parenOptions: {
-			openParenNewline: true,
-			closeParenNewline: true,
-		},
-		lineWidth: 50,
-		linesBetweenQueries: 1,
-		denseOperators: false,
-		semicolonNewline: false,
-	};
-	cfg = {
-		...defaultOptions,
-		...cfg,
-		parenOptions: { ...defaultOptions.parenOptions, ...cfg.parenOptions },
-	};
+  const defaultOptions: FormatOptions = {
+    language: 'sql',
+    indent: '  ',
+    uppercase: true,
+    keywordPosition: KeywordMode.standard,
+    newline: NewlineMode.always,
+    breakBeforeBooleanOperator: true,
+    aliasAs: AliasMode.select,
+    tabulateAlias: false,
+    commaPosition: CommaPosition.after,
+    parenOptions: {
+      openParenNewline: true,
+      closeParenNewline: true,
+    },
+    lineWidth: 50,
+    linesBetweenQueries: 1,
+    denseOperators: false,
+    semicolonNewline: false,
+  };
+  cfg = {
+    ...defaultOptions,
+    ...cfg,
+    parenOptions: { ...defaultOptions.parenOptions, ...cfg.parenOptions },
+  };
 
-	const Formatter = formatters[cfg.language!];
-	return new Formatter(cfg as FormatOptions).format(query);
+  const Formatter = formatters[cfg.language!];
+  return new Formatter(cfg as FormatOptions).format(query);
 };

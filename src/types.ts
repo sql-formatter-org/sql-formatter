@@ -6,9 +6,9 @@
  * @property {string} tenSpaceRight - Central aligned keyword format, keywords right-aligned
  */
 export enum KeywordMode {
-	standard = 'standard',
-	tenSpaceLeft = 'tenSpaceLeft',
-	tenSpaceRight = 'tenSpaceRight',
+  standard = 'standard',
+  tenSpaceLeft = 'tenSpaceLeft',
+  tenSpaceRight = 'tenSpaceRight',
 }
 
 /**
@@ -19,9 +19,9 @@ export enum KeywordMode {
  * @property {string} lineWidth - Use newlines when line width is greater than the specified number
  */
 export enum NewlineMode {
-	always = 'always',
-	never = 'never',
-	lineWidth = 'lineWidth',
+  always = 'always',
+  never = 'never',
+  lineWidth = 'lineWidth',
 }
 
 /**
@@ -32,9 +32,9 @@ export enum NewlineMode {
  * @property {string} select - Only use AS for SELECT clauses
  */
 export enum AliasMode {
-	always = 'always',
-	never = 'never',
-	select = 'select',
+  always = 'always',
+  never = 'never',
+  select = 'select',
 }
 
 /**
@@ -45,12 +45,12 @@ export enum AliasMode {
  * @property {string} tabular - Place commas at end of line, right-justified
  */
 export enum CommaPosition {
-	before = 'before',
-	after = 'after',
-	tabular = 'tabular',
+  before = 'before',
+  after = 'after',
+  tabular = 'tabular',
 }
 
 export interface ParenOptions {
-	openParenNewline?: boolean;
-	closeParenNewline?: boolean;
+  openParenNewline?: boolean;
+  closeParenNewline?: boolean;
 }
