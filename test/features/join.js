@@ -49,13 +49,13 @@ export default function supportsJoin(format, { without, additionally } = {}) {
           ${join} orders ON customers.customer_id = orders.customer_id;
         `);
 				expect(result).toBe(dedent`
-					SELECT
-					  customer_id.from,
-					  COUNT(order_id) AS total
-					FROM
-					  customers
-					  ${join} orders
-					  ON customers.customer_id = orders.customer_id;
+          SELECT
+            customer_id.from,
+            COUNT(order_id) AS total
+          FROM
+            customers
+            ${join} orders
+            ON customers.customer_id = orders.customer_id;
         `);
 			});
 		});

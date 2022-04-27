@@ -11,18 +11,18 @@ export default function supportsCommaModes(format) {
 		);
 		expect(result).toBe(
 			dedent(`
-			SELECT
-			  alpha,
-			  MAX(beta),
-			  delta AS d,
-			  epsilon
-			FROM
-			  gamma
-			GROUP BY
-			  alpha,
-			  delta,
-			  epsilon
-			`)
+        SELECT
+          alpha,
+          MAX(beta),
+          delta AS d,
+          epsilon
+        FROM
+          gamma
+        GROUP BY
+          alpha,
+          delta,
+          epsilon
+      `)
 		);
 	});
 
@@ -33,18 +33,18 @@ export default function supportsCommaModes(format) {
 		);
 		expect(result).toBe(
 			dedent(`
-			SELECT
-			  alpha
-			, MAX(beta)
-			, delta AS d
-			, epsilon
-			FROM
-			  gamma
-			GROUP BY
-			  alpha
-			, delta
-			, epsilon
-			`)
+        SELECT
+          alpha
+        , MAX(beta)
+        , delta AS d
+        , epsilon
+        FROM
+          gamma
+        GROUP BY
+          alpha
+        , delta
+        , epsilon
+      `)
 		);
 	});
 
@@ -62,22 +62,22 @@ export default function supportsCommaModes(format) {
 				alpha
 			, delta
 			, epsilon
-			`)
+      `)
 		);
 		expect(result).toBe(
 			dedent(`
-			SELECT
-			  alpha,
-			  MAX(beta),
-			  delta AS d,
-			  epsilon
-			FROM
-			  gamma
-			GROUP BY
-			  alpha,
-			  delta,
-			  epsilon
-			`)
+        SELECT
+          alpha,
+          MAX(beta),
+          delta AS d,
+          epsilon
+        FROM
+          gamma
+        GROUP BY
+          alpha,
+          delta,
+          epsilon
+      `)
 		);
 	});
 
@@ -88,18 +88,18 @@ export default function supportsCommaModes(format) {
 		);
 		expect(result).toBe(
 			dedent(`
-			SELECT
-			  alpha     ,
-			  MAX(beta) ,
-			  delta AS d,
-			  epsilon
-			FROM
-			  gamma
-			GROUP BY
-			  alpha  ,
-			  delta  ,
-			  epsilon
-			`)
+        SELECT
+          alpha     ,
+          MAX(beta) ,
+          delta AS d,
+          epsilon
+        FROM
+          gamma
+        GROUP BY
+          alpha  ,
+          delta  ,
+          epsilon
+      `)
 		);
 	});
 
@@ -117,22 +117,22 @@ export default function supportsCommaModes(format) {
 				alpha  ,
 				delta  ,
 				epsilon
-			`)
+      `)
 		);
 		expect(result).toBe(
 			dedent(`
-			SELECT
-			  alpha,
-			  MAX(beta),
-			  delta AS d,
-			  epsilon
-			FROM
-			  gamma
-			GROUP BY
-			  alpha,
-			  delta,
-			  epsilon
-			`)
+        SELECT
+          alpha,
+          MAX(beta),
+          delta AS d,
+          epsilon
+        FROM
+          gamma
+        GROUP BY
+          alpha,
+          delta,
+          epsilon
+      `)
 		);
 	});
 }

@@ -1,5 +1,5 @@
 import * as sqlFormatter from '../src/sqlFormatter';
-import MariaDbFormatter from '../src/languages/MariaDbFormatter';
+import MariaDbFormatter from '../src/languages/mariadb.formatter';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
 import supportsStrings from './features/strings';

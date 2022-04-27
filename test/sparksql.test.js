@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
-import SparkSqlFormatter from '../src/languages/SparkSqlFormatter';
+import SparkSqlFormatter from '../src/languages/sparksql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';

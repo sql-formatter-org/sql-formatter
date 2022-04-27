@@ -121,6 +121,7 @@ export default function behavesLikeSqlFormatter(format) {
 		expect(result).toBe(dedent`
       LIMIT
         5;
+      
       SELECT
         foo,
         bar;
@@ -287,7 +288,7 @@ export default function behavesLikeSqlFormatter(format) {
 		expect(result).toBe(dedent`
       DROP TABLE
         IF EXISTS admin_role;
-		`);
+    `);
 	});
 
 	it('formats incomplete query', () => {
@@ -363,9 +364,9 @@ export default function behavesLikeSqlFormatter(format) {
 	});
 
 	it('keeps separation between multiple statements', () => {
-		expect(format('foo;bar;')).toBe('foo;\nbar;');
-		expect(format('foo\n;bar;')).toBe('foo;\nbar;');
-		expect(format('foo\n\n\n;bar;\n\n')).toBe('foo;\nbar;');
+		expect(format('foo;bar;')).toBe('foo;\n\nbar;');
+		expect(format('foo\n;bar;')).toBe('foo;\n\nbar;');
+		expect(format('foo\n\n\n;bar;\n\n')).toBe('foo;\n\nbar;');
 
 		const result = format(`
       SELECT count(*),Column1 FROM Table1;
@@ -377,6 +378,7 @@ export default function behavesLikeSqlFormatter(format) {
         Column1
       FROM
         Table1;
+      
       SELECT
         COUNT(*),
         Column1
@@ -406,6 +408,7 @@ export default function behavesLikeSqlFormatter(format) {
         *
       FROM
         test;
+      
       CREATE TABLE
         test(
           id NUMBER NOT NULL,

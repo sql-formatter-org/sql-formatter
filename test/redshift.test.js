@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 import * as sqlFormatter from '../src/sqlFormatter';
-import RedshiftFormatter from '../src/languages/RedshiftFormatter';
+import RedshiftFormatter from '../src/languages/redshift.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
@@ -41,13 +41,11 @@ describe('RedshiftFormatter', () => {
 	});
 
 	it('formats only -- as a line comment', () => {
-		const result = format(
-			`
+		const result = format(`
       SELECT col FROM
       -- This is a comment
       MyTable;
-      `
-		);
+    `);
 		expect(result).toBe(dedent`
       SELECT
         col
@@ -88,15 +86,13 @@ describe('RedshiftFormatter', () => {
 
 	it.skip('formats COPY', () => {
 		expect(
-			format(
-				`
+			format(`
         COPY schema.table
         FROM 's3://bucket/file.csv'
         IAM_ROLE 'arn:aws:iam::123456789:role/rolename'
         FORMAT AS CSV DELIMITER ',' QUOTE '"'
         REGION AS 'us-east-1'
-        `
-			)
+      `)
 		).toBe(dedent`
       COPY
         schema.table

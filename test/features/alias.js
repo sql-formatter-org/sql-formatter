@@ -11,66 +11,66 @@ export default function supportsAliases(format) {
 	it('supports always mode', () => {
 		expect(format(baseQuery, { aliasAs: 'always' })).toBe(
 			dedent(`
-			SELECT
-			  a AS a_column,
-			  b AS bColumn
-			FROM
-			(
-			  SELECT
-			    *
-			  FROM
-			    x
-			) AS y
-			WHERE
-			  z;
-			`)
+        SELECT
+          a AS a_column,
+          b AS bColumn
+        FROM
+        (
+          SELECT
+            *
+          FROM
+            x
+        ) AS y
+        WHERE
+          z;
+      `)
 		);
 	});
 
 	it('supports never mode', () => {
 		expect(format(baseQuery, { aliasAs: 'never' })).toBe(
 			dedent(`
-			SELECT
-			  a a_column,
-			  b bColumn
-			FROM
-			(
-			  SELECT
-			    *
-			  FROM
-			    x
-			) y
-			WHERE
-			  z;
-			`)
+        SELECT
+          a a_column,
+          b bColumn
+        FROM
+        (
+          SELECT
+            *
+          FROM
+            x
+        ) y
+        WHERE
+          z;
+      `)
 		);
 	});
 
 	it('supports select only mode', () => {
 		expect(format(baseQuery, { aliasAs: 'select' })).toBe(
 			dedent(`
-			SELECT
-			  a AS a_column,
-			  b AS bColumn
-			FROM
-			(
-			  SELECT
-			    *
-			  FROM
-			    x
-			) y
-			WHERE
-			  z;
-			`)
+        SELECT
+          a AS a_column,
+          b AS bColumn
+        FROM
+        (
+          SELECT
+            *
+          FROM
+            x
+        ) y
+        WHERE
+          z;
+      `)
 		);
 	});
 
 	it('does not format non select clauses', () => {
 		expect(
-			format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT);', {
+			format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);', {
 				newline: { mode: NewlineMode.never },
 			})
-		).toBe('CREATE TABLE items (a INT PRIMARY KEY, b TEXT);');
+		).toBe('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);');
 	});
 
 	const tabularBaseQueryWithAlias =
@@ -156,7 +156,7 @@ export default function supportsAliases(format) {
         SELECT mu AS m, iota AS i
         FROM gamma
       );
-		`);
+    `);
 	});
 
 	it('handles edge case of tenSpaceLeft', () => {
@@ -174,7 +174,7 @@ export default function supportsAliases(format) {
                           iota AS i
                 FROM      gamma
                 );
-		`);
+    `);
 	});
 
 	it('handles edge case of tenSpaceRight', () => {

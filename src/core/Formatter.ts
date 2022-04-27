@@ -26,9 +26,7 @@ export default class Formatter {
 	 *	@param {String} cfg.language
 	 *	@param {String} cfg.indent
 	 *	@param {Boolean} cfg.uppercase
-	 *	@param {NewlineOptions} cfg.newline
-	 * 		@param {NewlineMode} cfg.newline.mode
-	 * 		@param {Integer} cfg.newline.itemCount
+	 *	@param {NewlineMode} cfg.newline
 	 *	@param {Integer} cfg.lineWidth
 	 *	@param {Integer} cfg.linesBetweenQueries
 	 *	@param {ParamItems | string[]} cfg.params
@@ -48,7 +46,7 @@ export default class Formatter {
 		this.previousReservedToken = {} as Token;
 		this.withinSelect = false;
 		this.tokens = [];
-		this.index = 0;
+		this.index = -1;
 	}
 
 	/**
@@ -191,10 +189,9 @@ export default class Formatter {
 	getFormattedQueryFromTokens() {
 		let formattedQuery = '';
 
-		this.tokens.forEach((token: Token, index) => {
-			this.index = index;
+		for (this.index = 0; this.index < this.tokens.length; this.index++) {
+			let token = this.tokenOverride(this.tokens[this.index]);
 
-			token = this.tokenOverride(token);
 			if (isReserved(token)) {
 				this.previousReservedToken = token;
 				if (token.type !== TokenType.RESERVED_KEYWORD) {
@@ -210,7 +207,7 @@ export default class Formatter {
 			} else if (token.type === TokenType.BLOCK_COMMENT) {
 				formattedQuery = this.formatBlockComment(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_COMMAND) {
-				this.currentNewline = this.checkNewline(index);
+				this.currentNewline = this.checkNewline(this.index);
 				formattedQuery = this.formatCommand(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_BINARY_COMMAND) {
 				formattedQuery = this.formatBinaryCommand(token, formattedQuery);
@@ -219,20 +216,8 @@ export default class Formatter {
 			} else if (token.type === TokenType.RESERVED_LOGICAL_OPERATOR) {
 				formattedQuery = this.formatLogicalOperator(token, formattedQuery);
 			} else if (token.type === TokenType.RESERVED_KEYWORD) {
-				if (
-					!(
-						isToken.AS(token) &&
-						(this.cfg.aliasAs === AliasMode.never || // skip all AS if never
-							(this.cfg.aliasAs === AliasMode.select &&
-								this.tokenLookBehind()?.value === ')' && // ) [AS] alias but not SELECT (a) [AS] alpha
-								!this.withinSelect && // skip WITH foo [AS] ( ...
-								this.tokenLookAhead()?.value !== '('))
-					)
-				) {
-					// do not format if skipping AS
-					formattedQuery = this.formatWithSpaces(token, formattedQuery);
-					this.previousReservedToken = token;
-				}
+				formattedQuery = this.formatKeyword(token, formattedQuery);
+				this.previousReservedToken = token;
 			} else if (token.type === TokenType.BLOCK_START) {
 				formattedQuery = this.formatBlockStart(token, formattedQuery);
 			} else if (token.type === TokenType.BLOCK_END) {
@@ -247,7 +232,7 @@ export default class Formatter {
 				}
 				formattedQuery = this.formatWithSpaces(token, formattedQuery);
 			}
-		});
+		}
 		return formattedQuery.replace(new RegExp(ZWS, 'ugim'), ' ');
 	}
 
@@ -274,25 +259,29 @@ export default class Formatter {
 	}
 
 	checkNewline = (index: number) => {
-		if (
-			this.newline.mode === NewlineMode.always ||
-			this.tokens.some(({ type, value }) => type === TokenType.BLOCK_START && value.length > 1) // auto break on CASE statements
-		) {
-			return true;
-		}
-		if (this.newline.mode === NewlineMode.never) {
-			return false;
-		}
 		const tail = this.tokens.slice(index + 1);
 		const nextTokens = tail.slice(
 			0,
-			tail.findIndex(
-				({ type }) =>
-					type === TokenType.RESERVED_COMMAND ||
-					type === TokenType.RESERVED_BINARY_COMMAND ||
-					type === TokenType.RESERVED_LOGICAL_OPERATOR
-			)
+			tail.length
+				? tail.findIndex(
+						({ type, value }) =>
+							type === TokenType.RESERVED_COMMAND ||
+							type === TokenType.RESERVED_BINARY_COMMAND ||
+							value === ';'
+				  )
+				: undefined // add undefined for EOF
 		);
+
+		if (
+			this.newline === NewlineMode.always ||
+			(this.withinSelect &&
+				nextTokens.some(({ type, value }) => type === TokenType.BLOCK_START && value.length > 1)) // auto break if SELECT includes CASE statements
+		) {
+			return true;
+		}
+		if (this.newline === NewlineMode.never) {
+			return false;
+		}
 
 		const numItems = nextTokens.reduce(
 			(acc, { type, value }) => {
@@ -310,19 +299,15 @@ export default class Formatter {
 			{ count: 1, inParen: false } // start with 1 for first word
 		).count;
 
-		if (this.newline.mode === NewlineMode.itemCount) {
-			return numItems > this.newline.itemCount!;
-		}
-
 		// calculate length if it were all inline
 		const inlineWidth = `${this.tokens[index].whitespaceBefore}${
 			this.tokens[index].value
 		} ${nextTokens.map(({ value }) => (value === ',' ? value + ' ' : value)).join('')}`.length;
 
-		if (this.newline.mode === NewlineMode.lineWidth) {
+		if (this.newline === NewlineMode.lineWidth) {
 			return inlineWidth > this.lineWidth;
-		} else if (this.newline.mode === NewlineMode.hybrid) {
-			return numItems > this.newline.itemCount! || inlineWidth > this.lineWidth;
+		} else if (!Number.isNaN(this.newline)) {
+			return numItems > this.newline || inlineWidth > this.lineWidth;
 		}
 
 		return true;
@@ -372,6 +357,22 @@ export default class Formatter {
 		return isJoin ? query + ' ' : this.addNewline(query);
 	}
 
+	formatKeyword(token: Token, query: string) {
+		if (
+			isToken.AS(token) &&
+			(this.cfg.aliasAs === AliasMode.never || // skip all AS if never
+				(this.cfg.aliasAs === AliasMode.select &&
+					this.tokenLookBehind()?.value === ')' && // ) [AS] alias but not SELECT (a) [AS] alpha
+					!this.withinSelect && // skip WITH foo [AS] ( ...
+					this.tokenLookAhead()?.value !== '('))
+		) {
+			// do not format if skipping AS
+			return query;
+		}
+
+		return this.formatWithSpaces(token, query);
+	}
+
 	formatOperator(token: Token, query: string) {
 		// special operator
 		if (token.value === ',') {
@@ -408,9 +409,14 @@ export default class Formatter {
 		}
 
 		if (this.cfg.breakBeforeBooleanOperator) {
-			return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
+			return (
+				(this.currentNewline ? this.addNewline(query) : query) +
+				this.equalizeWhitespace(this.show(token)) +
+				' '
+			);
 		} else {
-			return this.addNewline(query + this.show(token));
+			query += this.show(token);
+			return this.currentNewline ? this.addNewline(query) : query;
 		}
 	}
 
@@ -445,7 +451,7 @@ export default class Formatter {
 
 		if (!this.inlineBlock.isActive()) {
 			this.indentation.increaseBlockLevel();
-			if (!isToken.CASE(token) || this.newline.mode === NewlineMode.always) {
+			if (!isToken.CASE(token) || this.newline === NewlineMode.always) {
 				query = this.addNewline(query);
 			}
 		}
@@ -506,8 +512,11 @@ export default class Formatter {
 		query = trimSpacesEnd(query);
 		if (this.cfg.semicolonNewline) {
 			query += '\n';
+			if (this.cfg.tenSpace) {
+				query += this.cfg.indent;
+			}
 		}
-		return query + this.show(token) + '\n'.repeat(this.cfg.linesBetweenQueries || 1);
+		return query + this.show(token) + '\n'.repeat(this.cfg.linesBetweenQueries + 1);
 	}
 
 	// Converts token to string (uppercasing it if needed)

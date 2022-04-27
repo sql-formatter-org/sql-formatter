@@ -2,7 +2,7 @@
 name: Formatting Bug Report
 about: Raise an issue about the FORMATTING output
 title: '[FORMATTING] Issue Title Here'
-labels: bug
+labels: formatting
 assignees: ''
 ---
 

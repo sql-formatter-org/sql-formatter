@@ -19,12 +19,12 @@ export default function supportsOperators(format, operators = [], logicalOperato
 	});
 
 	it('supports breaking before boolean operators', () => {
-		const result = format(
-			`SELECT a FROM b WHERE TRUE ${logicalOperators.reduce(
+		const result = format(`
+      SELECT a FROM b WHERE TRUE ${logicalOperators.reduce(
 				(str, op, i) => str + ` ${op} condition${i + 1}`,
 				''
-			)};`
-		);
+			)};
+    `);
 		expect(result).toBe(dedent`
       SELECT
         a
@@ -33,15 +33,17 @@ export default function supportsOperators(format, operators = [], logicalOperato
       WHERE
         TRUE
       ${logicalOperators.map((op, i) => `  ${op} condition${i + 1}`).join('\n')};
-		`);
+    `);
 	});
 
 	it('supports breaking after boolean operators', () => {
 		const result = format(
-			`SELECT a FROM b WHERE TRUE ${logicalOperators.reduce(
+			`
+			SELECT a FROM b WHERE TRUE ${logicalOperators.reduce(
 				(str, op, i) => str + ` ${op} condition${i + 1}`,
 				''
-			)};`,
+			)};
+    `,
 			{ breakBeforeBooleanOperator: false }
 		);
 		expect(result).toBe(dedent`
@@ -51,7 +53,7 @@ export default function supportsOperators(format, operators = [], logicalOperato
         b
       WHERE
         TRUE ${logicalOperators.map((op, i) => `${op}\n  condition${i + 1}`).join(' ')};
-		`);
+    `);
 	});
 
 	it('supports semicolon on same line', () => {
@@ -61,7 +63,7 @@ export default function supportsOperators(format, operators = [], logicalOperato
         a
       FROM
         b;
-		`);
+    `);
 	});
 
 	it('supports semicolon on new line', () => {
@@ -72,7 +74,7 @@ export default function supportsOperators(format, operators = [], logicalOperato
       FROM
         b
       ;
-		`);
+    `);
 	});
 
 	it('supports backticks', () => {
@@ -82,7 +84,7 @@ export default function supportsOperators(format, operators = [], logicalOperato
         \`a\`.\`b\`
       FROM
         \`c\`.\`d\`;
-		`);
+    `);
 	});
 
 	it('supports braces', () => {
@@ -92,6 +94,6 @@ export default function supportsOperators(format, operators = [], logicalOperato
         $\{a}
       FROM
         $\{b};
-		`);
+    `);
 	});
 }

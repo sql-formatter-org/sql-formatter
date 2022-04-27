@@ -26,7 +26,8 @@ export default function supportsConfigOptions(format) {
         *
       FROM
         foo;
-
+      
+      
       SELECT
         *
       FROM
