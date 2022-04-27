@@ -123,6 +123,9 @@
 		"roots": [
 			"test"
 		],
-		"collectCoverage": true
+		"collectCoverage": true,
+		"collectCoverageFrom": [
+			"src/**/*.ts"
+		]
 	}
 }
