@@ -1,11 +1,11 @@
 const path = require('path');
 
 module.exports = {
-	entry: './src/sqlFormatter.ts',
+	entry: './src/index.ts',
 	output: {
 		path: path.join(__dirname, 'dist'),
 		filename: 'prettier-sql.js',
-		library: 'sqlFormatter',
+		library: 'prettierSql',
 		libraryTarget: 'umd',
 	},
 	resolve: {
@@ -14,7 +14,12 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.(js|ts)$/u,
+				test: /\.ts$/u,
+				exclude: /node_modules/u,
+				use: ['babel-loader', 'ts-loader'],
+			},
+			{
+				test: /\.js$/u,
 				exclude: /node_modules/u,
 				use: ['babel-loader'],
 			},

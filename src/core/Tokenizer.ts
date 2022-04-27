@@ -16,7 +16,7 @@ interface TokenizerOptions {
 	indexedPlaceholderTypes?: string[];
 	namedPlaceholderTypes: string[];
 	lineCommentTypes: string[];
-	specialWordChars?: string[];
+	specialWordChars?: { prefix?: string; any?: string; suffix?: string };
 	operators?: string[];
 }
 
@@ -47,24 +47,35 @@ export default class Tokenizer {
 	constructor(cfg: TokenizerOptions) {
 		this.WHITESPACE_REGEX = /^(\s+)/u;
 
+		const specialWordCharsAll = Object.values(cfg.specialWordChars ?? {}).join('');
 		this.REGEX_MAP = {
 			[TokenType.WORD]: regexFactory.createWordRegex(cfg.specialWordChars),
 			[TokenType.STRING]: regexFactory.createStringRegex(cfg.stringTypes),
-			[TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(cfg.reservedKeywords),
+			[TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(
+				cfg.reservedKeywords,
+				specialWordCharsAll
+			),
 			[TokenType.RESERVED_DEPENDENT_CLAUSE]: regexFactory.createReservedWordRegex(
-				cfg.reservedDependentClauses ?? []
+				cfg.reservedDependentClauses ?? [],
+				specialWordCharsAll
 			),
 			[TokenType.RESERVED_LOGICAL_OPERATOR]: regexFactory.createReservedWordRegex(
-				cfg.reservedLogicalOperators
+				cfg.reservedLogicalOperators,
+				specialWordCharsAll
 			),
-			[TokenType.RESERVED_COMMAND]: regexFactory.createReservedWordRegex(cfg.reservedCommands),
+			[TokenType.RESERVED_COMMAND]: regexFactory.createReservedWordRegex(
+				cfg.reservedCommands,
+				specialWordCharsAll
+			),
 			[TokenType.RESERVED_BINARY_COMMAND]: regexFactory.createReservedWordRegex(
-				cfg.reservedBinaryCommands
+				cfg.reservedBinaryCommands,
+				specialWordCharsAll
 			),
-			[TokenType.OPERATOR]: regexFactory.createOperatorRegex([
+			[TokenType.OPERATOR]: regexFactory.createOperatorRegex('+-/*%&|^><=.,;[]{}`:$', [
 				'<>',
 				'<=',
 				'>=',
+				'!=',
 				...(cfg.operators ?? []),
 			]),
 			[TokenType.BLOCK_START]: regexFactory.createParenRegex(cfg.blockStart),
@@ -72,7 +83,7 @@ export default class Tokenizer {
 			[TokenType.LINE_COMMENT]: regexFactory.createLineCommentRegex(cfg.lineCommentTypes),
 			[TokenType.BLOCK_COMMENT]: /^(\/\*[^]*?(?:\*\/|$))/u,
 			[TokenType.NUMBER]:
-				/^((-\s*)?[0-9]+(\.[0-9]+)?([eE]-?[0-9]+(\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u,
+				/^((-\s*)?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+(\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u,
 			[TokenType.PLACEHOLDER]: NULL_REGEX, // matches nothing
 		};
 

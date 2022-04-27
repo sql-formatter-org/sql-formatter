@@ -1,5 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import { isToken, Token, TokenType } from '../core/token';
 import type { StringPatternType } from '../core/regexFactory';
 
 /**
@@ -1161,8 +1162,8 @@ export default class MariaDbFormatter extends Formatter {
 	static indexedPlaceholderTypes = ['?'];
 	static namedPlaceholderTypes = [];
 	static lineCommentTypes = ['--', '#'];
-	static specialWordChars = ['@'];
-	static operators = [':=', '<<', '>>', '!=', '<>', '<=>', '&&', '||'];
+	static specialWordChars = { prefix: '@' };
+	static operators = [':=', '<<', '>>', '<=>', '&&', '||'];
 
 	tokenizer() {
 		return new Tokenizer({
@@ -1180,5 +1181,15 @@ export default class MariaDbFormatter extends Formatter {
 			specialWordChars: MariaDbFormatter.specialWordChars,
 			operators: MariaDbFormatter.operators,
 		});
+	}
+
+	tokenOverride(token: Token) {
+		// [SET] ( ...
+		if (isToken.SET(token) && this.tokenLookAhead()?.value === '(') {
+			// This is SET datatype, not SET statement
+			return { type: TokenType.RESERVED_KEYWORD, value: token.value };
+		}
+
+		return token;
 	}
 }

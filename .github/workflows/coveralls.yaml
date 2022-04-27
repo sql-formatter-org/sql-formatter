@@ -1,4 +1,4 @@
-name: Coveralls
+name: coveralls
 
 on:
   push:

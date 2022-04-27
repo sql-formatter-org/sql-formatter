@@ -52,7 +52,7 @@ describe('TSqlFormatter', () => {
 	it('replaces @variables with param values', () => {
 		const result = format('SELECT @variable, @"var name1", @[var name2];', {
 			params: {
-				variable: "'var value'",
+				'variable': "'var value'",
 				'var name1': "'var value1'",
 				'var name2': "'var value2'",
 			},

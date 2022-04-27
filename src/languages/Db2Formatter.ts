@@ -866,14 +866,14 @@ export default class Db2Formatter extends Formatter {
 		...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
 	];
 
-	static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]'];
+	static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]', "x''"];
 	static blockStart = ['('];
 	static blockEnd = [')'];
 	static indexedPlaceholderTypes = ['?'];
 	static namedPlaceholderTypes = [':'];
 	static lineCommentTypes = ['--'];
-	static specialWordChars = ['#', '@'];
-	static operators = ['**', '!=', '!>', '!>', '||'];
+	static specialWordChars = { any: '#@' };
+	static operators = ['**', '!>', '!<', '||'];
 
 	tokenizer() {
 		return new Tokenizer({

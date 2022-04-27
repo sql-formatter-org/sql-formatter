@@ -74,4 +74,24 @@ export default function supportsOperators(format, operators = [], logicalOperato
       ;
 		`);
 	});
+
+	it('supports backticks', () => {
+		const result = format(`SELECT \`a\`.\`b\` FROM \`c\`.\`d\`;`);
+		expect(result).toBe(dedent`
+      SELECT
+        \`a\`.\`b\`
+      FROM
+        \`c\`.\`d\`;
+		`);
+	});
+
+	it('supports braces', () => {
+		const result = format(`SELECT $\{a} FROM $\{b};`);
+		expect(result).toBe(dedent`
+      SELECT
+        $\{a}
+      FROM
+        $\{b};
+		`);
+	});
 }
