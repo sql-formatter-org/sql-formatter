@@ -6,6 +6,7 @@ import { isReserved, isCommand, isToken, Token, TokenType, ZWS } from './token';
 import Tokenizer from './Tokenizer';
 import type { FormatOptions } from '../sqlFormatter';
 import { AliasMode, CommaPosition, KeywordMode, NewlineMode } from '../types';
+import formatCommaPositions from './formatCommaPositions';
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {
@@ -90,70 +91,10 @@ export default class Formatter {
       query = this.formatAliasPositions(query);
     }
     if (this.cfg.commaPosition !== CommaPosition.after) {
-      query = this.formatCommaPositions(query);
+      query = formatCommaPositions(query, this.cfg, this.tokenizer());
     }
 
     return query;
-  }
-
-  /**
-   * Handles comma placement - either before, after or tabulated
-   * @param {string} query - input query string
-   */
-  formatCommaPositions(query: string): string {
-    // const trailingComma = /,$/;
-    const lines = query.split('\n');
-    let newQuery: string[] = [];
-    for (let i = 0; i < lines.length; i++) {
-      // if line has trailing comma
-      if (lines[i].match(/.*,$/)) {
-        let commaLines = [lines[i]];
-        // find all lines in comma-bound clause, + 1
-        while (lines[i++].match(/.*,$/)) {
-          commaLines.push(lines[i]);
-        }
-
-        if (this.cfg.commaPosition === CommaPosition.tabular) {
-          commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, '')); // trim all trailing commas
-          const commaMaxLength = maxLength(commaLines); // get longest for alignment
-          // make all lines the same length by appending spaces before comma
-          commaLines = commaLines.map((commaLine, j) =>
-            j < commaLines.length - 1 // do not add comma for last item
-              ? commaLine + ' '.repeat(commaMaxLength - commaLine.length) + ','
-              : commaLine
-          );
-        } else if (this.cfg.commaPosition === CommaPosition.before) {
-          const isTabs = this.cfg.indent.includes('\t'); // loose tab check
-          commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, ''));
-          const whitespaceRegex = this.tokenizer().WHITESPACE_REGEX;
-
-          commaLines = commaLines.map((commaLine, j) => {
-            if (!j) {
-              // do not add comma for first item
-              return commaLine;
-            }
-            const precedingWhitespace = commaLine.match(new RegExp('^' + whitespaceRegex + ''));
-            const trimLastIndent = precedingWhitespace
-              ? precedingWhitespace[1].replace(
-                  new RegExp((isTabs ? '\t' : this.cfg.indent) + '$'), // remove last tab / last indent
-                  ''
-                )
-              : '';
-            return (
-              trimLastIndent +
-              // add comma in place of last indent
-              (isTabs ? '    ' : this.cfg.indent).replace(/ {2}$/, ', ') + // using 4 width tabs
-              commaLine.trimStart()
-            );
-          });
-        }
-
-        newQuery = [...newQuery, ...commaLines];
-      }
-      newQuery.push(lines[i]);
-    }
-
-    return newQuery.join('\n');
   }
 
   /**
