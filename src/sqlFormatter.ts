@@ -104,12 +104,12 @@ export const format = (query: string, cfg: Partial<FormatFnOptions> = {}): strin
     denseOperators: false,
     semicolonNewline: false,
   };
-  cfg = {
+  const options: FormatFnOptions = {
     ...defaultOptions,
     ...cfg,
     parenOptions: { ...defaultOptions.parenOptions, ...cfg.parenOptions },
   };
 
-  const Formatter = formatters[cfg.language!];
-  return new Formatter(cfg as FormatOptions).format(query);
+  const Formatter = formatters[options.language];
+  return new Formatter(options).format(query);
 };
