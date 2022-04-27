@@ -47,7 +47,7 @@ describe('BigQueryFormatter', () => {
     );
     expect(result).toBe(dedent`
       SELECT
-        STRUCT("Alpha" AS name, [23.4, 26.3, 26.4, 26.1] AS splits)
+        STRUCT("Alpha" as name, [23.4, 26.3, 26.4, 26.1] as splits)
       FROM
         beta
 		`);

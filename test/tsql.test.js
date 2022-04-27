@@ -80,7 +80,7 @@ describe('TSqlFormatter', () => {
       FROM
         t
         CROSS JOIN t2
-        ON t.id = t2.id_t
+        on t.id = t2.id_t
     `);
   });
 });

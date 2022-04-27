@@ -13,7 +13,7 @@ export default function supportsConfigOptions(language, format) {
 
     expect(result).toBe(dedent`
       SELECT
-          COUNT(*),
+          count(*),
           Column1
       FROM
           Table1;
@@ -27,8 +27,8 @@ export default function supportsConfigOptions(language, format) {
         *
       FROM
         foo;
-      
-      
+
+
       SELECT
         *
       FROM

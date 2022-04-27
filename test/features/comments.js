@@ -115,7 +115,7 @@ export default function supportsComments(language, format) {
     `);
     expect(result).toBe(dedent`
       SELECT
-        COUNT(*)
+        count(*)
         /*Comment
     `);
   });

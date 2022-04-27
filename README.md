@@ -82,7 +82,7 @@ You can also pass in configuration options:
 format('SELECT * FROM tbl', {
   language: 'spark', // Defaults to "sql" (see the above list of supported dialects)
   indent: '  ', // Defaults to two spaces
-  uppercase: false, // Defaults to true
+  uppercase: true, // Defaults to undefined
   linesBetweenQueries: 2, // Defaults to 1
 });
 ```
@@ -149,11 +149,11 @@ echo 'select * from tbl where id = 3' | sql-formatter
 ```
 
 ```sql
-SELECT
+select
   *
-FROM
+from
   tbl
-WHERE
+where
   id = 3
 ```
 
@@ -163,7 +163,7 @@ All fields are optional and all fields that are not specified will be filled wit
 ```ts
 {
 	"indent": string,
-	"uppercase": boolean,
+	"uppercase": boolean | undefined,
 	"keywordPosition": "standard" | "tenSpaceLeft" | "tenSpaceRight",
 	"newline": "always" | "lineWidth" | "never" | number,
 	"breakBeforeBooleanOperator": boolean,

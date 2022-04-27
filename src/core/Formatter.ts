@@ -672,7 +672,11 @@ export default class Formatter {
       token.type === TokenType.BLOCK_START ||
       token.type === TokenType.BLOCK_END
     ) {
-      return this.cfg.uppercase ? token.value.toUpperCase() : token.value.toLowerCase();
+      if (this.cfg.uppercase === undefined) {
+        return token.value;
+      } else {
+        return this.cfg.uppercase ? token.value.toUpperCase() : token.value.toLowerCase();
+      }
     } else {
       return token.value;
     }

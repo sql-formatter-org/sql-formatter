@@ -265,7 +265,7 @@ describe('PlSqlFormatter', () => {
             t1
           WHERE
             t2.parent_id = t1.id
-        ) SEARCH BREADTH FIRST BY id SET order1,
+        ) SEARCH BREADTH FIRST by id set order1,
         another AS (
           SELECT
             *

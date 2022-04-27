@@ -66,7 +66,6 @@ export default function supportsCase(language, format) {
 
   it('recognizes lowercase CASE ... END', () => {
     const result = format("case when option = 'foo' then 1 else 2 end;", {
-      uppercase: false,
       newline: 1,
     });
 
@@ -116,14 +115,14 @@ export default function supportsCase(language, format) {
     });
 
     expect(result).toBe(dedent`
-      SELECT
-        SUM(
-          CASE a
-            WHEN foo
-            THEN bar
-          END
+      select
+        sum(
+          case a
+            when foo
+            then bar
+          end
         )
-      FROM quaz
+      from quaz
     `);
   });
 }

@@ -13,7 +13,7 @@ export default function supportsAliases(language, format) {
     expect(format(baseQuery, { aliasAs: 'always' })).toBe(
       dedent(`
         SELECT
-          a AS a_column,
+          a as a_column,
           b AS bColumn
         FROM
         (
@@ -21,7 +21,7 @@ export default function supportsAliases(language, format) {
             *
           FROM
             x
-        ) AS y
+        ) as y
         WHERE
           z;
       `)
@@ -51,7 +51,7 @@ export default function supportsAliases(language, format) {
     expect(format(baseQuery, { aliasAs: 'select' })).toBe(
       dedent(`
         SELECT
-          a AS a_column,
+          a as a_column,
           b AS bColumn
         FROM
         (
@@ -81,12 +81,12 @@ export default function supportsAliases(language, format) {
     SELECT
       alpha     AS A,
       MAX(beta),
-      epsilon   AS E
+      epsilon   as E
     FROM
     (
       SELECT
         mu   AS m,
-        iota AS i
+        iota as i
       FROM
         gamma
     );
@@ -96,12 +96,12 @@ export default function supportsAliases(language, format) {
     SELECT
       alpha AS A,
       MAX(beta),
-      epsilon AS E
+      epsilon as E
     FROM
     (
       SELECT
         mu AS m,
-        iota AS i
+        iota as i
       FROM
         gamma
     );
@@ -142,7 +142,20 @@ export default function supportsAliases(language, format) {
   it('accepts tabular alias with aliasAs off', () => {
     const result = format(tabularFinalQueryNoAlias);
 
-    expect(result).toBe(finalQueryWithAlias);
+    expect(result).toBe(dedent`
+      SELECT
+        alpha as A,
+        MAX(beta),
+        epsilon as E
+      FROM
+      (
+        SELECT
+          mu as m,
+          iota as i
+        FROM
+          gamma
+      );
+    `);
   });
 
   it('handles edge case of newline.never', () => {
@@ -152,9 +165,9 @@ export default function supportsAliases(language, format) {
     );
 
     expect(result).toBe(dedent`
-      SELECT alpha AS A, MAX(beta), epsilon AS E
+      SELECT alpha AS A, MAX(beta), epsilon as E
       FROM (
-        SELECT mu AS m, iota AS i
+        SELECT mu AS m, iota as i
         FROM gamma
       );
     `);
@@ -169,10 +182,10 @@ export default function supportsAliases(language, format) {
     expect(result).toBe(dedent`
       SELECT    alpha     AS A,
                 MAX(beta),
-                epsilon   AS E
+                epsilon   as E
       FROM      (
                 SELECT    mu   AS m,
-                          iota AS i
+                          iota as i
                 FROM      gamma
                 );
     `);
@@ -188,10 +201,10 @@ export default function supportsAliases(language, format) {
       [
         '   SELECT alpha     AS A,',
         '          MAX(beta),',
-        '          epsilon   AS E',
+        '          epsilon   as E',
         '     FROM (',
         '             SELECT mu   AS m,',
-        '                    iota AS i',
+        '                    iota as i',
         '               FROM gamma',
         '          );',
       ].join('\n')
@@ -206,9 +219,9 @@ export default function supportsAliases(language, format) {
 
     expect(result).toBe(dedent`
       CREATE TABLE
-        'test.example_table' AS
+        'test.example_table' as
       WITH
-        cte AS (
+        cte as (
           SELECT
             a alpha
         )
@@ -225,7 +238,7 @@ export default function supportsAliases(language, format) {
 
     expect(result).toBe(dedent`
       SELECT
-        CAST(0 AS BIT),
+        CAST(0 as BIT),
         'foo' bar
 		`);
   });

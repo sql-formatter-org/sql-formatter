@@ -42,7 +42,7 @@ export default function behavesLikeSqlFormatter(language, format) {
     const result = format('SELECT count(*),Column1 FROM Table1;');
     expect(result).toBe(dedent`
       SELECT
-        COUNT(*),
+        count(*),
         Column1
       FROM
         Table1;
@@ -142,25 +142,25 @@ export default function behavesLikeSqlFormatter(language, format) {
   });
 
   it('recognizes LIMIT in lowercase', () => {
-    const result = format('limit 5, 10;', { uppercase: false });
+    const result = format('limit 5, 10;');
     expect(result).toBe(dedent`
       limit
         5, 10;
     `);
   });
 
-  // it('preserves case of keywords', () => {
-  // 	const result = format('select distinct * frOM foo WHERe a > 1 and b = 3');
-  // 	expect(result).toBe(dedent`
-  //     select
-  //       distinct *
-  //     frOM
-  //       foo
-  //     WHERe
-  //       a > 1
-  //       and b = 3
-  //   `);
-  // });
+  it('preserves case of keywords', () => {
+    const result = format('select distinct * frOM foo WHERe a > 1 and b = 3');
+    expect(result).toBe(dedent`
+      select
+        distinct *
+      frOM
+        foo
+      WHERe
+        a > 1
+        and b = 3
+    `);
+  });
 
   it('formats SELECT query with SELECT query inside it', () => {
     const result = format(
@@ -298,7 +298,7 @@ export default function behavesLikeSqlFormatter(language, format) {
     const result = format('SELECT count(');
     expect(result).toBe(dedent`
       SELECT
-        COUNT(
+        count(
     `);
   });
 
@@ -377,13 +377,13 @@ export default function behavesLikeSqlFormatter(language, format) {
     `);
     expect(result).toBe(dedent`
       SELECT
-        COUNT(*),
+        count(*),
         Column1
       FROM
         Table1;
 
       SELECT
-        COUNT(*),
+        count(*),
         Column1
       FROM
         Table2;

@@ -34,7 +34,7 @@ export const supportedDialects = Object.keys(formatters);
 export interface FormatOptions {
   language: FormatterLanguage;
   indent: string;
-  uppercase: boolean;
+  uppercase?: boolean;
   keywordPosition: KeywordMode | keyof typeof KeywordMode;
   newline: NewlineMode | keyof typeof NewlineMode | number;
   breakBeforeBooleanOperator: boolean;
@@ -104,7 +104,7 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
   const defaultOptions: FormatOptions = {
     language: 'sql',
     indent: '  ',
-    uppercase: true,
+    uppercase: undefined,
     keywordPosition: KeywordMode.standard,
     newline: NewlineMode.always,
     breakBeforeBooleanOperator: true,
