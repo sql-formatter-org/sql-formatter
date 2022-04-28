@@ -229,7 +229,7 @@ export default class Formatter {
     return true;
   }
 
-  // get all tokens between current token and next Reserved Command or query end
+  /** get all tokens between current token and next Reserved Command or query end */
   private tokensUntilNextCommandOrQueryEnd(): Token[] {
     const tail = this.tokens.slice(this.index + 1);
     return tail.slice(
