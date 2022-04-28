@@ -8,8 +8,6 @@ import supportsKeywordPositions from './features/keywordPosition';
 import supportsParenthesesOptions from './features/parenthesis';
 import supportsCommaModes from './features/comma';
 
-import { itIf } from './utils';
-
 /**
  * Core tests for all SQL formatters
  * @param {string} language
@@ -261,7 +259,7 @@ export default function behavesLikeSqlFormatter(language, format) {
     `);
   });
 
-  itIf(language !== 'hive')('formats simple UPDATE query', () => {
+  it('formats simple UPDATE query', () => {
     const result = format(
       "UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';"
     );
@@ -304,7 +302,7 @@ export default function behavesLikeSqlFormatter(language, format) {
     `);
   });
 
-  itIf(language !== 'hive')('formats UPDATE query with AS part', () => {
+  it('formats UPDATE query with AS part', () => {
     const result = format(
       'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary',
       { aliasAs: 'always' }

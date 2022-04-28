@@ -565,7 +565,7 @@ const reservedCommands = [
   'OFFSET',
   'ORDER BY',
   'SELECT',
-  // 'SET',
+  'SET',
   'SET SCHEMA', // added
   'SHOW',
   'SORT BY',
