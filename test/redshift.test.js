@@ -58,9 +58,7 @@ describe('RedshiftFormatter', () => {
   });
 
   it('recognizes @ as part of identifiers', () => {
-    const result = format('SELECT @col1 FROM tbl', {
-      language: 'redshift',
-    });
+    const result = format('SELECT @col1 FROM tbl');
     expect(result).toBe(dedent`
       SELECT
         @col1
