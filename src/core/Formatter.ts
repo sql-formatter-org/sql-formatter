@@ -186,12 +186,7 @@ export default class Formatter {
    * Checks if a newline should currently be inserted
    */
   private checkNewline(index: number): boolean {
-    const tail = this.tokens.slice(index + 1); // get all tokens after current token
-    const nextTokens = tail.slice(
-      // get all tokens between current token and next Reserved Command or query end
-      0,
-      tail.length ? tail.findIndex(token => isCommand(token) || token.value === ';') : undefined // add undefined for EOF
-    );
+    const nextTokens = this.tokensUntilNextCommandOrQueryEnd();
 
     if (
       this.cfg.newline === NewlineMode.always ||
@@ -232,6 +227,15 @@ export default class Formatter {
     }
 
     return true;
+  }
+
+  // get all tokens between current token and next Reserved Command or query end
+  private tokensUntilNextCommandOrQueryEnd(): Token[] {
+    const tail = this.tokens.slice(this.index + 1);
+    return tail.slice(
+      0,
+      tail.length ? tail.findIndex(token => isCommand(token) || token.value === ';') : undefined
+    );
   }
 
   /** Formats a line comment onto query */
