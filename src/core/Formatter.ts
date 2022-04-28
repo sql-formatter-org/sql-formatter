@@ -10,16 +10,16 @@ import formatAliasPositions from './formatAliasPositions';
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {
-  cfg: FormatOptions;
-  indentation: Indentation;
-  inlineBlock: InlineBlock;
-  params: Params;
+  private cfg: FormatOptions;
+  private indentation: Indentation;
+  private inlineBlock: InlineBlock;
+  private params: Params;
 
-  currentNewline = true;
-  previousReservedToken: Token = {} as Token;
-  withinSelect = false;
-  tokens: Token[] = [];
-  index = -1;
+  private currentNewline = true;
+  protected previousReservedToken: Token = {} as Token;
+  private withinSelect = false;
+  protected tokens: Token[] = [];
+  protected index = -1;
 
   /**
    * @param {FormatOptions} cfg - config object
@@ -34,7 +34,7 @@ export default class Formatter {
   /**
    * SQL Tokenizer for this formatter, provided by subclasses.
    */
-  tokenizer(): Tokenizer {
+  protected tokenizer(): Tokenizer {
     throw new Error('tokenizer() not implemented by subclass');
   }
 
@@ -44,7 +44,7 @@ export default class Formatter {
    * @param {Token} token - The token to modify
    * @return {Token} new token or the original
    */
-  tokenOverride(token: Token): Token {
+  protected tokenOverride(token: Token): Token {
     // subclasses can override this to modify tokens during formatting
     return token;
   }
@@ -54,7 +54,7 @@ export default class Formatter {
    *
    * @param {string} query - The SQL query string
    */
-  format(query: string): string {
+  public format(query: string): string {
     this.tokens = this.tokenizer().tokenize(query);
     const formattedQuery = this.getFormattedQueryFromTokens();
     const finalQuery = this.postFormat(formattedQuery);
@@ -66,7 +66,7 @@ export default class Formatter {
    * Does post-processing on the formatted query.
    * @param {string} query - the query string produced from `this.format`
    */
-  postFormat(query: string): string {
+  private postFormat(query: string): string {
     if (this.cfg.tabulateAlias) {
       query = formatAliasPositions(query);
     }
@@ -81,7 +81,7 @@ export default class Formatter {
    * Performs main construction of query from token list, delegates to other methods for formatting based on token criteria
    * @return {string} formatted query
    */
-  getFormattedQueryFromTokens(): string {
+  private getFormattedQueryFromTokens(): string {
     let formattedQuery = '';
 
     for (this.index = 0; this.index < this.tokens.length; this.index++) {
@@ -134,7 +134,7 @@ export default class Formatter {
    * @param {Token} token - current token
    * @param {string} query - formatted query so far
    */
-  formatWord(token: Token, query: string): string {
+  private formatWord(token: Token, query: string): string {
     const prevToken = this.tokenLookBehind();
     const nextToken = this.tokenLookAhead();
     const asToken = { type: TokenType.RESERVED_KEYWORD, value: this.cfg.uppercase ? 'AS' : 'as' };
@@ -195,7 +195,7 @@ export default class Formatter {
    * @param {number} index - index of current token
    * @return {boolean} Whether or not a newline should be inserted
    */
-  checkNewline(index: number): boolean {
+  private checkNewline(index: number): boolean {
     const tail = this.tokens.slice(index + 1); // get all tokens after current token
     const nextTokens = tail.slice(
       // get all tokens between current token and next Reserved Command or query end
@@ -252,17 +252,17 @@ export default class Formatter {
   }
 
   /** Formats a line comment onto query */
-  formatLineComment(token: Token, query: string): string {
+  private formatLineComment(token: Token, query: string): string {
     return this.addNewline(query + this.show(token));
   }
 
   /** Formats a block comment onto query */
-  formatBlockComment(token: Token, query: string): string {
+  private formatBlockComment(token: Token, query: string): string {
     return this.addNewline(this.addNewline(query) + this.indentComment(token.value));
   }
 
   /** Aligns comment to current indentation level */
-  indentComment(comment: string): string {
+  private indentComment(comment: string): string {
     return comment.replace(/\n[ \t]*/gu, '\n' + this.indentation.getIndent() + ' ');
   }
 
@@ -271,7 +271,7 @@ export default class Formatter {
    * @param {Token} token - current token
    * @param {string} query - formatted query so far
    */
-  formatCommand(token: Token, query: string): string {
+  private formatCommand(token: Token, query: string): string {
     this.indentation.decreaseTopLevel();
 
     query = this.addNewline(query);
@@ -300,7 +300,7 @@ export default class Formatter {
    * @param {Token} token - current token
    * @param {string} query - formatted query so far
    */
-  formatBinaryCommand(token: Token, query: string): string {
+  private formatBinaryCommand(token: Token, query: string): string {
     const isJoin = /JOIN/i.test(token.value); // check if token contains JOIN
     if (!isJoin || this.isTenSpace()) {
       // decrease for boolean set operators or in tenSpace modes
@@ -315,7 +315,7 @@ export default class Formatter {
    * @param {Token} token - current token
    * @param {string} query - formatted query so far
    */
-  formatKeyword(token: Token, query: string): string {
+  private formatKeyword(token: Token, query: string): string {
     if (
       isToken.AS(token) &&
       (this.cfg.aliasAs === AliasMode.never || // skip all AS if never
@@ -336,7 +336,7 @@ export default class Formatter {
    * @param {Token} token - current token
    * @param {string} query - formatted query so far
    */
-  formatDependentClause(token: Token, query: string): string {
+  private formatDependentClause(token: Token, query: string): string {
     return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
   }
 
@@ -345,7 +345,7 @@ export default class Formatter {
    * @param {Token} token - current token
    * @param {string} query - formatted query so far
    */
-  formatOperator(token: Token, query: string): string {
+  private formatOperator(token: Token, query: string): string {
     // special operator
     if (token.value === ',') {
       return this.formatComma(token, query);
@@ -372,7 +372,7 @@ export default class Formatter {
    * @param {Token} token - current token
    * @param {string} query - formatted query so far
    */
-  formatLogicalOperator(token: Token, query: string): string {
+  private formatLogicalOperator(token: Token, query: string): string {
     // ignore AND when BETWEEN x [AND] y
     if (isToken.AND(token) && isToken.BETWEEN(this.tokenLookBehind(2))) {
       return this.formatWithSpaces(token, query);
@@ -395,7 +395,7 @@ export default class Formatter {
   }
 
   /** Replace any sequence of whitespace characters with single space */
-  equalizeWhitespace(string: string): string {
+  private equalizeWhitespace(string: string): string {
     return string.replace(/\s+/gu, ' ');
   }
 
@@ -404,7 +404,7 @@ export default class Formatter {
    * @param {Token} token - current token
    * @param {string} query - formatted query so far
    */
-  formatBlockStart(token: Token, query: string): string {
+  private formatBlockStart(token: Token, query: string): string {
     if (isToken.CASE(token)) {
       query = this.formatWithSpaces(token, query);
     } else {
@@ -441,7 +441,7 @@ export default class Formatter {
    * @param {Token} token - current token
    * @param {string} query - formatted query so far
    */
-  formatBlockEnd(token: Token, query: string): string {
+  private formatBlockEnd(token: Token, query: string): string {
     if (this.inlineBlock.isActive()) {
       this.inlineBlock.end();
       if (isToken.END(token)) {
@@ -477,7 +477,7 @@ export default class Formatter {
    * @param {Token} token - current token
    * @param {string} query - formatted query so far
    */
-  formatComma(token: Token, query: string): string {
+  private formatComma(token: Token, query: string): string {
     query = trimSpacesEnd(query) + this.show(token) + ' ';
 
     if (this.inlineBlock.isActive()) {
@@ -492,7 +492,7 @@ export default class Formatter {
   }
 
   /** Simple append of token onto query */
-  formatWithoutSpaces(token: Token, query: string): string {
+  private formatWithoutSpaces(token: Token, query: string): string {
     return trimSpacesEnd(query) + this.show(token);
   }
 
@@ -503,7 +503,7 @@ export default class Formatter {
    * @param {'before' | 'after' | 'both'} addSpace - where to add spaces around token
    * @return {string} token string with specified spaces
    */
-  formatWithSpaces(
+  private formatWithSpaces(
     token: Token,
     query: string,
     addSpace: 'before' | 'after' | 'both' = 'both'
@@ -518,7 +518,7 @@ export default class Formatter {
    * @param {Token} token - current token
    * @param {string} query - formatted query so far
    */
-  formatQuerySeparator(token: Token, query: string): string {
+  private formatQuerySeparator(token: Token, query: string): string {
     this.indentation.resetIndentation();
     query = trimSpacesEnd(query);
 
@@ -533,7 +533,7 @@ export default class Formatter {
   }
 
   /** Converts token to string, uppercasing if enabled */
-  show(token: Token): string {
+  private show(token: Token): string {
     if (
       isReserved(token) ||
       token.type === TokenType.BLOCK_START ||
@@ -550,7 +550,7 @@ export default class Formatter {
   }
 
   /** Inserts a newline onto the query */
-  addNewline(query: string): string {
+  private addNewline(query: string): string {
     query = trimSpacesEnd(query);
     if (!query.endsWith('\n')) {
       query += '\n';
@@ -559,7 +559,7 @@ export default class Formatter {
   }
 
   /** Produces a 10-char wide version of reserved token for TenSpace modes */
-  tenSpacedToken(token: Token): Token {
+  private tenSpacedToken(token: Token): Token {
     const addBuffer = (string: string, bufferLength = 9) =>
       ZWS.repeat(Math.max(bufferLength - string.length, 0));
     if (this.isTenSpace()) {
@@ -581,7 +581,7 @@ export default class Formatter {
     return token;
   }
 
-  isTenSpace() {
+  private isTenSpace(): boolean {
     return (
       this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
       this.cfg.keywordPosition === KeywordMode.tenSpaceRight
@@ -589,12 +589,12 @@ export default class Formatter {
   }
 
   /** Fetches nth previous token from the token stream */
-  tokenLookBehind(n = 1) {
+  protected tokenLookBehind(n = 1) {
     return this.tokens[this.index - n];
   }
 
   /** Fetches nth next token from the token stream */
-  tokenLookAhead(n = 1) {
+  protected tokenLookAhead(n = 1) {
     return this.tokens[this.index + n];
   }
 }
