@@ -105,7 +105,7 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
   }
 
   if (isNumber(cfg.newline) && cfg.newline <= 0) {
-    throw new Error('Error: newline must be a positive number.');
+    throw new Error('newline config must be a positive number.');
   }
 
   if (cfg.lineWidth <= 0) {

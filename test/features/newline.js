@@ -9,13 +9,13 @@ export default function supportsNewlineOptions(language, format) {
   it('throws error when newline is negative number', () => {
     expect(() => {
       format('SELECT *', { newline: -1 });
-    }).toThrowErrorMatchingInlineSnapshot(`"Error: newline must be a positive number."`);
+    }).toThrowErrorMatchingInlineSnapshot(`"newline config must be a positive number."`);
   });
 
   it('throws error when newline is zero', () => {
     expect(() => {
       format('SELECT *', { newline: 0 });
-    }).toThrowErrorMatchingInlineSnapshot(`"Error: newline must be a positive number."`);
+    }).toThrowErrorMatchingInlineSnapshot(`"newline config must be a positive number."`);
   });
 
   it('supports always mode', () => {
