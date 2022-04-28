@@ -5,7 +5,6 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
-import supportsAlterTable from './features/alterTable';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
@@ -19,7 +18,6 @@ describe('BigQueryFormatter', () => {
   behavesLikeSqlFormatter(language, format);
   supportsCase(language, format);
   supportsCreateTable(language, format);
-  supportsAlterTable(language, format);
   supportsStrings(language, format, BigQueryFormatter.stringTypes);
   supportsBetween(language, format);
   supportsSchema(language, format);
