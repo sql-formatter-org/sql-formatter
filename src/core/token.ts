@@ -32,7 +32,7 @@ const spaces = `[${ZWS_REGEX}\\s]`;
 /** Checks if two tokens are equivalent */
 export const testToken =
   (compareToken: Token) =>
-  (token: Token): boolean =>
+  (token?: Token): boolean =>
     token?.type === compareToken.type &&
     new RegExp(`^${spaces}*${compareToken.value}${spaces}*$`, 'iu').test(token?.value);
 
@@ -56,13 +56,13 @@ export const isToken = {
 };
 
 /** Checks if token is a Reserved Command or Reserved Binary Command */
-export const isCommand = (token: Token): boolean =>
-  token &&
+export const isCommand = (token?: Token): boolean =>
+  !!token &&
   (token.type === TokenType.RESERVED_COMMAND || token.type === TokenType.RESERVED_BINARY_COMMAND);
 
 /** Checks if token is any Reserved Keyword or Command */
-export const isReserved = (token: Token): boolean =>
-  token &&
+export const isReserved = (token?: Token): boolean =>
+  !!token &&
   (token.type === TokenType.RESERVED_KEYWORD ||
     token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
     token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
