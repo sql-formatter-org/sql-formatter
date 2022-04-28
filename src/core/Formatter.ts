@@ -190,8 +190,7 @@ export default class Formatter {
 
     if (
       this.cfg.newline === NewlineMode.always ||
-      (this.withinSelect &&
-        nextTokens.some(({ type, value }) => type === TokenType.BLOCK_START && value.length > 1)) // auto break if SELECT includes CASE statements
+      (this.withinSelect && nextTokens.some(isToken.CASE)) // auto break if SELECT includes CASE statements
     ) {
       return true;
     }
