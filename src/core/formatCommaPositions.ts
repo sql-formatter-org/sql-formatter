@@ -1,15 +1,11 @@
 import { CommaPosition, FormatOptions } from '../types';
 import { maxLength } from '../utils';
-import Tokenizer from './Tokenizer';
+import { WHITESPACE_REGEX } from './Tokenizer';
 
 /**
  * Handles comma placement - either before, after or tabulated
  */
-export default function formatCommaPositions(
-  query: string,
-  cfg: FormatOptions,
-  tokenizer: Tokenizer
-): string {
+export default function formatCommaPositions(query: string, cfg: FormatOptions): string {
   // const trailingComma = /,$/;
   const lines = query.split('\n');
   let newQuery: string[] = [];
@@ -34,7 +30,7 @@ export default function formatCommaPositions(
       } else if (cfg.commaPosition === CommaPosition.before) {
         const isTabs = cfg.indent.includes('\t'); // loose tab check
         commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, ''));
-        const whitespaceRegex = tokenizer.WHITESPACE_REGEX;
+        const whitespaceRegex = WHITESPACE_REGEX;
 
         commaLines = commaLines.map((commaLine, j) => {
           if (!j) {

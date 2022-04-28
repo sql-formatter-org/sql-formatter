@@ -2,6 +2,7 @@ import * as regexFactory from './regexFactory';
 import { escapeRegExp } from '../utils';
 import { Token, TokenType } from './token'; // convert to partial type import in TS 4.5
 
+export const WHITESPACE_REGEX = /^(\s+)/u;
 const NULL_REGEX = /(?!)/; // zero-width negative lookahead, matches nothing
 
 /** Struct that defines how a SQL language can be broken into tokens */
@@ -23,7 +24,6 @@ interface TokenizerOptions {
 
 /** Converts SQL language string into a token stream */
 export default class Tokenizer {
-  WHITESPACE_REGEX: RegExp;
   REGEX_MAP: { [tokenType in TokenType]: RegExp };
 
   INDEXED_PLACEHOLDER_REGEX?: RegExp;
@@ -47,8 +47,6 @@ export default class Tokenizer {
    *  @param {string[]} cfg.operators - Additional operators to recognize
    */
   constructor(cfg: TokenizerOptions) {
-    this.WHITESPACE_REGEX = /^(\s+)/u;
-
     const specialWordCharsAll = Object.values(cfg.specialWordChars ?? {}).join('');
     this.REGEX_MAP = {
       [TokenType.WORD]: regexFactory.createWordRegex(cfg.specialWordChars),
@@ -134,7 +132,7 @@ export default class Tokenizer {
 
   /** Matches preceding whitespace if present */
   getWhitespace(input: string): string {
-    const matches = input.match(this.WHITESPACE_REGEX);
+    const matches = input.match(WHITESPACE_REGEX);
     return matches ? matches[1] : '';
   }
 

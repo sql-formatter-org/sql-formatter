@@ -85,7 +85,7 @@ export default class Formatter {
       query = formatAliasPositions(query);
     }
     if (this.cfg.commaPosition !== CommaPosition.after) {
-      query = formatCommaPositions(query, this.cfg, this.tokenizer());
+      query = formatCommaPositions(query, this.cfg);
     }
 
     return query;
