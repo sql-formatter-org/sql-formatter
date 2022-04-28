@@ -109,7 +109,7 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
   }
 
   if (cfg.lineWidth <= 0) {
-    throw new Error(`lineWidth must be > 0. Received ${cfg.lineWidth} instead.`);
+    throw new Error(`lineWidth config must be positive number. Received ${cfg.lineWidth} instead.`);
   }
 
   return cfg;

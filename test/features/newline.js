@@ -18,6 +18,22 @@ export default function supportsNewlineOptions(language, format) {
     }).toThrowErrorMatchingInlineSnapshot(`"newline config must be a positive number."`);
   });
 
+  it('throws error when lineWidth negative number', () => {
+    expect(() => {
+      format('SELECT *', { newline: 'lineWidth', lineWidth: -2 });
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"lineWidth config must be positive number. Received -2 instead."`
+    );
+  });
+
+  it('throws error when lineWidth is zero', () => {
+    expect(() => {
+      format('SELECT *', { newline: 'lineWidth', lineWidth: 0 });
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"lineWidth config must be positive number. Received 0 instead."`
+    );
+  });
+
   it('supports always mode', () => {
     const result = format('SELECT foo, bar, baz FROM qux;', {
       newline: 'always',
