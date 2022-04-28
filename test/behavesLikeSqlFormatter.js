@@ -7,6 +7,7 @@ import supportsNewlineOptions from './features/newline';
 import supportsKeywordPositions from './features/keywordPosition';
 import supportsParenthesesOptions from './features/parenthesis';
 import supportsCommaModes from './features/comma';
+import { AliasMode } from '../src/types';
 
 /**
  * Core tests for all SQL formatters
@@ -305,7 +306,7 @@ export default function behavesLikeSqlFormatter(language, format) {
   it('formats UPDATE query with AS part', () => {
     const result = format(
       'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary',
-      { aliasAs: 'always' }
+      { aliasAs: AliasMode.always }
     );
     expect(result).toBe(dedent`
       UPDATE

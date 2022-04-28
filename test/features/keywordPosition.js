@@ -1,4 +1,5 @@
 import dedent from 'dedent-js';
+import { KeywordMode } from '../../src/types';
 
 /**
  * Tests support for keyword positions
@@ -69,19 +70,19 @@ export default function supportsKeywordPositions(language, format) {
   ].join('\n');
 
   it('supports standard mode', () => {
-    const result = format(baseQuery, { keywordPosition: 'standard' });
+    const result = format(baseQuery, { keywordPosition: KeywordMode.standard });
     expect(result).toBe(standardResult);
   });
 
   it('supports tenSpaceLeft mode', () => {
-    const result = format(baseQuery, { keywordPosition: 'tenSpaceLeft' });
+    const result = format(baseQuery, { keywordPosition: KeywordMode.tenSpaceLeft });
     expect(result).toBe(tenSpaceLeftResult);
   });
 
   it('accepts tenSpaceLeft mode', () => expect(format(tenSpaceLeftResult)).toBe(standardResult));
 
   it('supports tenSpaceRight mode', () => {
-    const result = format(baseQuery, { keywordPosition: 'tenSpaceRight' });
+    const result = format(baseQuery, { keywordPosition: KeywordMode.tenSpaceRight });
     expect(result).toBe(tenSpaceRightResult);
   });
 
@@ -98,7 +99,7 @@ export default function supportsKeywordPositions(language, format) {
           FROM b
           LEFT OUTER JOIN c;
         `,
-        { keywordPosition: 'tenSpaceLeft' }
+        { keywordPosition: KeywordMode.tenSpaceLeft }
       )
     ).toBe(dedent`
       SELECT    *

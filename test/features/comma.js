@@ -1,4 +1,5 @@
 import dedent from 'dedent-js';
+import { CommaPosition } from '../../src/types';
 
 /**
  * Tests support for alias options
@@ -30,7 +31,7 @@ export default function supportsCommaModes(language, format) {
   it('supports comma before column', () => {
     const result = format(
       'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon',
-      { commaPosition: 'before' }
+      { commaPosition: CommaPosition.before }
     );
     expect(result).toBe(
       dedent(`
@@ -85,7 +86,7 @@ export default function supportsCommaModes(language, format) {
   it('supports tabular mode', () => {
     const result = format(
       'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon',
-      { commaPosition: 'tabular' }
+      { commaPosition: CommaPosition.tabular }
     );
     expect(result).toBe(
       dedent(`

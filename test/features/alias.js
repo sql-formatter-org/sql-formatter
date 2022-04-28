@@ -1,5 +1,5 @@
 import dedent from 'dedent-js';
-import { NewlineMode } from '../../src/types';
+import { AliasMode, KeywordMode, NewlineMode } from '../../src/types';
 
 /**
  * Tests support for alias options
@@ -27,7 +27,7 @@ export default function supportsAliases(language, format) {
   });
 
   it('supports always mode', () => {
-    expect(format(baseQuery, { aliasAs: 'always' })).toBe(
+    expect(format(baseQuery, { aliasAs: AliasMode.always })).toBe(
       dedent(`
         SELECT
           a as a_column,
@@ -46,7 +46,7 @@ export default function supportsAliases(language, format) {
   });
 
   it('supports never mode', () => {
-    expect(format(baseQuery, { aliasAs: 'never' })).toBe(
+    expect(format(baseQuery, { aliasAs: AliasMode.never })).toBe(
       dedent(`
         SELECT
           a a_column,
@@ -65,7 +65,7 @@ export default function supportsAliases(language, format) {
   });
 
   it('supports select only mode', () => {
-    expect(format(baseQuery, { aliasAs: 'select' })).toBe(
+    expect(format(baseQuery, { aliasAs: AliasMode.select })).toBe(
       dedent(`
         SELECT
           a as a_column,
@@ -140,7 +140,10 @@ export default function supportsAliases(language, format) {
   `;
 
   it('tabulates alias with aliasAs on', () => {
-    const result = format(tabularBaseQueryWithAlias, { aliasAs: 'always', tabulateAlias: true });
+    const result = format(tabularBaseQueryWithAlias, {
+      aliasAs: AliasMode.always,
+      tabulateAlias: true,
+    });
     expect(result).toBe(tabularFinalQueryWithAlias);
   });
 
@@ -151,7 +154,10 @@ export default function supportsAliases(language, format) {
   });
 
   it('tabulates alias with aliasAs off', () => {
-    const result = format(tabularBaseQueryWithAlias, { tabulateAlias: true, aliasAs: 'never' });
+    const result = format(tabularBaseQueryWithAlias, {
+      tabulateAlias: true,
+      aliasAs: AliasMode.never,
+    });
 
     expect(result).toBe(tabularFinalQueryNoAlias);
   });
@@ -178,7 +184,7 @@ export default function supportsAliases(language, format) {
   it('handles edge case of newline.never', () => {
     const result = format(
       dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
-      { newline: NewlineMode.never, aliasAs: 'always', tabulateAlias: true }
+      { newline: NewlineMode.never, aliasAs: AliasMode.always, tabulateAlias: true }
     );
 
     expect(result).toBe(dedent`
@@ -193,7 +199,7 @@ export default function supportsAliases(language, format) {
   it('handles edge case of tenSpaceLeft', () => {
     const result = format(
       dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
-      { keywordPosition: 'tenSpaceLeft', aliasAs: 'always', tabulateAlias: true }
+      { keywordPosition: KeywordMode.tenSpaceLeft, aliasAs: AliasMode.always, tabulateAlias: true }
     );
 
     expect(result).toBe(dedent`
@@ -211,7 +217,7 @@ export default function supportsAliases(language, format) {
   it('handles edge case of tenSpaceRight', () => {
     const result = format(
       dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
-      { keywordPosition: 'tenSpaceRight', aliasAs: 'always', tabulateAlias: true }
+      { keywordPosition: KeywordMode.tenSpaceRight, aliasAs: AliasMode.always, tabulateAlias: true }
     );
 
     expect(result).toBe(
@@ -231,7 +237,7 @@ export default function supportsAliases(language, format) {
   it('handles edge case of never + CTE', () => {
     const result = format(
       dedent`CREATE TABLE 'test.example_table' AS WITH cte AS (SELECT a AS alpha)`,
-      { aliasAs: 'never' }
+      { aliasAs: AliasMode.never }
     );
 
     expect(result).toBe(dedent`
@@ -250,7 +256,7 @@ export default function supportsAliases(language, format) {
       dedent`SELECT
       CAST(0 AS BIT),
       'foo' AS bar`,
-      { aliasAs: 'never' }
+      { aliasAs: AliasMode.never }
     );
 
     expect(result).toBe(dedent`
