@@ -158,8 +158,8 @@ export default class Formatter {
       token.type === TokenType.WORD &&
       prevToken?.value === ')';
 
-    const missingSelectColumnAlias = // if select column alias is missing and alias is not never
-      this.cfg.aliasAs !== AliasMode.never &&
+    const missingSelectColumnAlias = // if select column alias is missing and alias is always or select
+      (this.cfg.aliasAs === AliasMode.always || this.cfg.aliasAs === AliasMode.select) &&
       this.withinSelect &&
       token.type === TokenType.WORD &&
       (isToken.END(prevToken) || // isAs(prevToken) ||

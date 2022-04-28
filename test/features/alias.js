@@ -9,6 +9,25 @@ import { NewlineMode } from '../../src/types';
 export default function supportsAliases(language, format) {
   const baseQuery = 'SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;';
 
+  it('supports preserving original uses of AS', () => {
+    expect(
+      format('SELECT a a_column, b AS bColumn FROM table1 t1 JOIN table2 as t2 WHERE z;', {
+        aliasAs: 'preserve',
+      })
+    ).toBe(
+      dedent(`
+        SELECT
+          a a_column,
+          b AS bColumn
+        FROM
+          table1 t1
+          JOIN table2 as t2
+        WHERE
+          z;
+      `)
+    );
+  });
+
   it('supports always mode', () => {
     expect(format(baseQuery, { aliasAs: 'always' })).toBe(
       dedent(`

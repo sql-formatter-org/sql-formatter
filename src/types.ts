@@ -29,11 +29,13 @@ export enum NewlineMode {
 /**
  * Enum for when to place AS for column aliases
  * @enum {string}
+ * @property {string} preserve - Don't change, keep like in original
  * @property {string} always - Always use AS
  * @property {string} never - Never use AS
  * @property {string} select - Only use AS for SELECT clauses
  */
 export enum AliasMode {
+  preserve = 'preserve',
   always = 'always',
   never = 'never',
   select = 'select',
