@@ -39,7 +39,7 @@ const defaultOptions: FormatFnOptions = {
   keywordPosition: KeywordMode.standard,
   newline: NewlineMode.always,
   breakBeforeBooleanOperator: true,
-  aliasAs: AliasMode.select,
+  aliasAs: AliasMode.preserve,
   tabulateAlias: false,
   commaPosition: CommaPosition.after,
   parenOptions: {

@@ -186,8 +186,9 @@ All fields are optional and all fields that are not specified will be filled wit
   - number (break when > n)
 - **`breakBeforeBooleanOperator`**: `boolean` (default: `true`)
   Adds newline before boolean operator (AND, OR, XOR).
-- **`aliasAs`**: `"always" | "never" | "select"` (default: `"select"`)
+- **`aliasAs`**: `"preserve" | "always" | "never" | "select"` (default: `"preserve"`)
   Whether to use AS keyword for creating aliases or not:
+  - preserve - keep as is
   - always - add AS keywords everywhere
   - never - remove AS keywords from everywhere
   - select - add AS keywords to SELECT clause, remove from everywhere else

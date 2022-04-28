@@ -9,11 +9,9 @@ import { NewlineMode } from '../../src/types';
 export default function supportsAliases(language, format) {
   const baseQuery = 'SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;';
 
-  it('supports preserving original uses of AS', () => {
+  it('defaults to preserving original uses of AS', () => {
     expect(
-      format('SELECT a a_column, b AS bColumn FROM table1 t1 JOIN table2 as t2 WHERE z;', {
-        aliasAs: 'preserve',
-      })
+      format('SELECT a a_column, b AS bColumn FROM table1 t1 JOIN table2 as t2 WHERE z;')
     ).toBe(
       dedent(`
         SELECT
@@ -142,7 +140,7 @@ export default function supportsAliases(language, format) {
   `;
 
   it('tabulates alias with aliasAs on', () => {
-    const result = format(tabularBaseQueryWithAlias, { tabulateAlias: true });
+    const result = format(tabularBaseQueryWithAlias, { aliasAs: 'always', tabulateAlias: true });
     expect(result).toBe(tabularFinalQueryWithAlias);
   });
 
@@ -163,14 +161,14 @@ export default function supportsAliases(language, format) {
 
     expect(result).toBe(dedent`
       SELECT
-        alpha as A,
+        alpha A,
         MAX(beta),
-        epsilon as E
+        epsilon E
       FROM
       (
         SELECT
-          mu as m,
-          iota as i
+          mu m,
+          iota i
         FROM
           gamma
       );
@@ -180,7 +178,7 @@ export default function supportsAliases(language, format) {
   it('handles edge case of newline.never', () => {
     const result = format(
       dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
-      { newline: { mode: 'never' }, tabulateAlias: true }
+      { newline: { mode: 'never' }, aliasAs: 'always', tabulateAlias: true }
     );
 
     expect(result).toBe(dedent`
@@ -195,7 +193,7 @@ export default function supportsAliases(language, format) {
   it('handles edge case of tenSpaceLeft', () => {
     const result = format(
       dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
-      { keywordPosition: 'tenSpaceLeft', tabulateAlias: true }
+      { keywordPosition: 'tenSpaceLeft', aliasAs: 'always', tabulateAlias: true }
     );
 
     expect(result).toBe(dedent`
@@ -213,7 +211,7 @@ export default function supportsAliases(language, format) {
   it('handles edge case of tenSpaceRight', () => {
     const result = format(
       dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
-      { keywordPosition: 'tenSpaceRight', tabulateAlias: true }
+      { keywordPosition: 'tenSpaceRight', aliasAs: 'always', tabulateAlias: true }
     );
 
     expect(result).toBe(
