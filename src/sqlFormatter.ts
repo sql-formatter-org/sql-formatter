@@ -103,13 +103,8 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
     cfg.indent = ' '.repeat(10);
   }
 
-  if (!Number.isNaN(+cfg.newline)) {
-    if ((cfg.newline ?? 0) < 0) {
-      throw new Error('Error: newline must be a positive number.');
-    }
-    if (cfg.newline === 0) {
-      cfg.newline = NewlineMode.always;
-    }
+  if (!Number.isNaN(+cfg.newline) && cfg.newline <= 0) {
+    throw new Error('Error: newline must be a positive number.');
   }
 
   if (cfg.lineWidth <= 0) {

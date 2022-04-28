@@ -12,6 +12,12 @@ export default function supportsNewlineOptions(language, format) {
     }).toThrowErrorMatchingInlineSnapshot(`"Error: newline must be a positive number."`);
   });
 
+  it('throws error when newline is zero', () => {
+    expect(() => {
+      format('SELECT *', { newline: 0 });
+    }).toThrowErrorMatchingInlineSnapshot(`"Error: newline must be a positive number."`);
+  });
+
   it('supports always mode', () => {
     const result = format('SELECT foo, bar, baz FROM qux;', {
       newline: 'always',
