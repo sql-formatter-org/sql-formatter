@@ -20,3 +20,5 @@ export const sortByLengthDesc = (strings: string[]) =>
 /** Get length of longest string in list of strings */
 export const maxLength = (strings: string[]) =>
   strings.reduce((max, cur) => Math.max(max, cur.length), 0);
+
+export const isNumber = (value: any): value is number => typeof value === 'number';

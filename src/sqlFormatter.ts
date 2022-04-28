@@ -12,6 +12,7 @@ import StandardSqlFormatter from './languages/standardsql.formatter';
 import TSqlFormatter from './languages/tsql.formatter';
 
 import { AliasMode, CommaPosition, FormatOptions, KeywordMode, NewlineMode } from './types';
+import { isNumber } from './utils';
 
 export const formatters = {
   bigquery: BigQueryFormatter,
@@ -103,7 +104,7 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
     cfg.indent = ' '.repeat(10);
   }
 
-  if (!Number.isNaN(+cfg.newline) && cfg.newline <= 0) {
+  if (isNumber(cfg.newline) && cfg.newline <= 0) {
     throw new Error('Error: newline must be a positive number.');
   }
 

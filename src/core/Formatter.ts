@@ -1,7 +1,7 @@
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
-import { trimSpacesEnd } from '../utils';
+import { isNumber, trimSpacesEnd } from '../utils';
 import { isReserved, isCommand, isToken, Token, TokenType, ZWS } from './token';
 import Tokenizer from './Tokenizer';
 import { AliasMode, CommaPosition, FormatOptions, KeywordMode, NewlineMode } from '../types';
@@ -244,7 +244,7 @@ export default class Formatter {
 
     if (this.cfg.newline === NewlineMode.lineWidth) {
       return inlineWidth > this.cfg.lineWidth;
-    } else if (!Number.isNaN(this.cfg.newline)) {
+    } else if (isNumber(this.cfg.newline)) {
       return numItems > this.cfg.newline || inlineWidth > this.cfg.lineWidth;
     }
 
