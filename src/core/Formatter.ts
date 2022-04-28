@@ -21,9 +21,6 @@ export default class Formatter {
   protected tokens: Token[] = [];
   protected index = -1;
 
-  /**
-   * @param {FormatOptions} cfg - config object
-   */
   constructor(cfg: FormatOptions) {
     this.cfg = cfg;
     this.indentation = new Indentation(this.cfg.indent);
@@ -40,19 +37,18 @@ export default class Formatter {
 
   /**
    * Reprocess and modify a token based on parsed context.
-   *
+   * Subclasses can override this to modify tokens during formatting.
    * @param {Token} token - The token to modify
    * @return {Token} new token or the original
    */
   protected tokenOverride(token: Token): Token {
-    // subclasses can override this to modify tokens during formatting
     return token;
   }
 
   /**
-   * Formats whitespace in a SQL string to make it easier to read.
-   *
-   * @param {string} query - The SQL query string
+   * Formats an SQL query.
+   * @param {string} query - The SQL query string to be formatted
+   * @return {string} The formatter query
    */
   public format(query: string): string {
     this.tokens = this.tokenizer().tokenize(query);
@@ -64,7 +60,6 @@ export default class Formatter {
 
   /**
    * Does post-processing on the formatted query.
-   * @param {string} query - the query string produced from `this.format`
    */
   private postFormat(query: string): string {
     if (this.cfg.tabulateAlias) {
@@ -79,7 +74,6 @@ export default class Formatter {
 
   /**
    * Performs main construction of query from token list, delegates to other methods for formatting based on token criteria
-   * @return {string} formatted query
    */
   private getFormattedQueryFromTokens(): string {
     let formattedQuery = '';
@@ -131,8 +125,6 @@ export default class Formatter {
 
   /**
    * Formats word tokens + any potential AS tokens for aliases
-   * @param {Token} token - current token
-   * @param {string} query - formatted query so far
    */
   private formatWord(token: Token, query: string): string {
     const prevToken = this.tokenLookBehind();
@@ -192,8 +184,6 @@ export default class Formatter {
 
   /**
    * Checks if a newline should currently be inserted
-   * @param {number} index - index of current token
-   * @return {boolean} Whether or not a newline should be inserted
    */
   private checkNewline(index: number): boolean {
     const tail = this.tokens.slice(index + 1); // get all tokens after current token
@@ -268,8 +258,6 @@ export default class Formatter {
 
   /**
    * Formats a Reserved Command onto query, increasing indentation level where necessary
-   * @param {Token} token - current token
-   * @param {string} query - formatted query so far
    */
   private formatCommand(token: Token, query: string): string {
     this.indentation.decreaseTopLevel();
@@ -297,8 +285,6 @@ export default class Formatter {
 
   /**
    * Formats a Reserved Binary Command onto query, joining neighbouring tokens
-   * @param {Token} token - current token
-   * @param {string} query - formatted query so far
    */
   private formatBinaryCommand(token: Token, query: string): string {
     const isJoin = /JOIN/i.test(token.value); // check if token contains JOIN
@@ -312,8 +298,6 @@ export default class Formatter {
 
   /**
    * Formats a Reserved Keyword onto query, skipping AS if disabled
-   * @param {Token} token - current token
-   * @param {string} query - formatted query so far
    */
   private formatKeyword(token: Token, query: string): string {
     if (
@@ -333,8 +317,6 @@ export default class Formatter {
 
   /**
    * Formats a Reserved Dependent Clause token onto query, supporting the keyword that precedes it
-   * @param {Token} token - current token
-   * @param {string} query - formatted query so far
    */
   private formatDependentClause(token: Token, query: string): string {
     return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
@@ -342,8 +324,6 @@ export default class Formatter {
 
   /**
    * Formats an Operator onto query, following rules for specific characters
-   * @param {Token} token - current token
-   * @param {string} query - formatted query so far
    */
   private formatOperator(token: Token, query: string): string {
     // special operator
@@ -369,8 +349,6 @@ export default class Formatter {
 
   /**
    * Formats a Logical Operator onto query, joining boolean conditions
-   * @param {Token} token - current token
-   * @param {string} query - formatted query so far
    */
   private formatLogicalOperator(token: Token, query: string): string {
     // ignore AND when BETWEEN x [AND] y
@@ -401,8 +379,6 @@ export default class Formatter {
 
   /**
    * Formats a Block Start token (left paren/bracket/brace, CASE) onto query, beginning an Inline Block or increasing indentation where necessary
-   * @param {Token} token - current token
-   * @param {string} query - formatted query so far
    */
   private formatBlockStart(token: Token, query: string): string {
     if (isToken.CASE(token)) {
@@ -438,8 +414,6 @@ export default class Formatter {
 
   /**
    * Formats a Block End token (right paren/bracket/brace, END) onto query, closing an Inline Block or decreasing indentation where necessary
-   * @param {Token} token - current token
-   * @param {string} query - formatted query so far
    */
   private formatBlockEnd(token: Token, query: string): string {
     if (this.inlineBlock.isActive()) {
@@ -465,8 +439,6 @@ export default class Formatter {
 
   /**
    * Formats a Placeholder item onto query, to be replaced with the value of the placeholder
-   * @param {Token} token - current token
-   * @param {string} query - formatted query so far
    */
   formatPlaceholder(token: Token, query: string): string {
     return query + this.params.get(token) + ' ';
@@ -474,8 +446,6 @@ export default class Formatter {
 
   /**
    * Formats a comma Operator onto query, ending line unless in an Inline Block
-   * @param {Token} token - current token
-   * @param {string} query - formatted query so far
    */
   private formatComma(token: Token, query: string): string {
     query = trimSpacesEnd(query) + this.show(token) + ' ';
@@ -498,10 +468,6 @@ export default class Formatter {
 
   /**
    * Add token onto query with spaces - either before, after, or both
-   * @param {Token} token - current token
-   * @param {string} query - formatted query so far
-   * @param {'before' | 'after' | 'both'} addSpace - where to add spaces around token
-   * @return {string} token string with specified spaces
    */
   private formatWithSpaces(
     token: Token,
@@ -515,8 +481,6 @@ export default class Formatter {
 
   /**
    * Format Delimiter token onto query, adding newlines accoring to `this.cfg.linesBetweenQueries`
-   * @param {Token} token - current token
-   * @param {string} query - formatted query so far
    */
   private formatQuerySeparator(token: Token, query: string): string {
     this.indentation.resetIndentation();
