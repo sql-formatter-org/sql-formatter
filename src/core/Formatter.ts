@@ -13,7 +13,6 @@ export default class Formatter {
   cfg: FormatOptions;
   tenSpace: boolean;
   currentNewline: boolean;
-  lineWidth: number;
   indentation: Indentation;
   inlineBlock: InlineBlock;
   params: Params;
@@ -32,9 +31,8 @@ export default class Formatter {
       this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
       this.cfg.keywordPosition === KeywordMode.tenSpaceRight;
     this.currentNewline = true;
-    this.lineWidth = cfg.lineWidth;
     this.indentation = new Indentation(this.cfg.indent);
-    this.inlineBlock = new InlineBlock(this.lineWidth);
+    this.inlineBlock = new InlineBlock(this.cfg.lineWidth);
     this.params = new Params(this.cfg.params);
 
     this.previousReservedToken = {} as Token;
@@ -255,9 +253,9 @@ export default class Formatter {
     } ${nextTokens.map(({ value }) => (value === ',' ? value + ' ' : value)).join('')}`.length;
 
     if (this.cfg.newline === NewlineMode.lineWidth) {
-      return inlineWidth > this.lineWidth;
+      return inlineWidth > this.cfg.lineWidth;
     } else if (!Number.isNaN(this.cfg.newline)) {
-      return numItems > this.cfg.newline || inlineWidth > this.lineWidth;
+      return numItems > this.cfg.newline || inlineWidth > this.cfg.lineWidth;
     }
 
     return true;
