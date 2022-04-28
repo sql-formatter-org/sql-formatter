@@ -80,10 +80,10 @@ You can also pass in configuration options:
 
 ```js
 format('SELECT * FROM tbl', {
-  language: 'spark', // Defaults to "sql" (see the above list of supported dialects)
-  indent: '  ', // Defaults to two spaces
-  uppercase: true, // Defaults to undefined
-  linesBetweenQueries: 2, // Defaults to 1
+  language: 'spark',
+  indent: '  ',
+  uppercase: true,
+  linesBetweenQueries: 2,
 });
 ```
 
@@ -157,30 +157,18 @@ where
   id = 3
 ```
 
-The tool also accepts a JSON config file with the `--config` option that takes this form: \
-All fields are optional and all fields that are not specified will be filled with their default values
+The tool also accepts a JSON config file with the `--config` option that takes this form:
 
 ```ts
 {
-  "language": "sql" | "mariadb" | "mysql" | "postgresql" | "db2" | "plsql" | "n1ql" | "redshift" | "spark" | "tsql" | "bigquery" | "hive",
-	"indent": string,
-	"uppercase": boolean | undefined,
-	"keywordPosition": "standard" | "tenSpaceLeft" | "tenSpaceRight",
-	"newline": "always" | "lineWidth" | "never" | number,
-	"breakBeforeBooleanOperator": boolean,
-	"aliasAs": "always" | "select" | "never",
-	"tabulateAlias": boolean,
-	"commaPosition": "before" | "after" | "tabular",
-	"parenOptions": {
-		"openParenNewline": boolean,
-		"closeParenNewline": boolean
-	},
-	"lineWidth": number,
-	"linesBetweenQueries": number,
-	"denseOperators": boolean,
-	"semicolonNewline": boolean,
+  "language": "spark",
+  "indent": "  ",
+  "uppercase": true,
+  "linesBetweenQueries": 2,
 }
 ```
+
+All fields are optional and all fields that are not specified will be filled with their default values.
 
 ### Configuration options
 
