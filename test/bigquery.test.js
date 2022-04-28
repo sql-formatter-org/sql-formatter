@@ -39,6 +39,21 @@ describe('BigQueryFormatter', () => {
 		`);
   });
 
+  // Note: BigQuery supports dashes inside identifiers, so a--comment would be
+  // detected as identifier, while other SQL dialects would detect it as
+  // identifier a followed by comment.
+  // https://cloud.google.com/bigquery/docs/reference/standard-sql/lexical
+  it('supports dashes inside identifiers', () => {
+    const result = format('SELECT alpha--foo, bar-foo\nFROM beta');
+    expect(result).toBe(dedent`
+      SELECT
+        alpha--foo,
+        bar-foo
+      FROM
+        beta
+    `);
+  });
+
   it('supports STRUCT types', () => {
     const result = format(
       'SELECT STRUCT("Alpha" as name, [23.4, 26.3, 26.4, 26.1] as splits) FROM beta'
