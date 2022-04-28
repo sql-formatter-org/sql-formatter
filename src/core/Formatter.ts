@@ -198,22 +198,6 @@ export default class Formatter {
       return false;
     }
 
-    const numItems = nextTokens.reduce(
-      (acc, { type, value }) => {
-        if (value === ',' && !acc.inParen) {
-          return { ...acc, count: acc.count + 1 };
-        } // count commas between items in clause
-        if (type === TokenType.BLOCK_START) {
-          return { ...acc, inParen: true };
-        } // don't count commas in functions
-        if (type === TokenType.BLOCK_END) {
-          return { ...acc, inParen: false };
-        }
-        return acc;
-      },
-      { count: 1, inParen: false } // start with 1 for first word
-    ).count;
-
     // calculate length if it were all inline
     const inlineWidth = `${this.tokens[this.index].whitespaceBefore}${
       this.tokens[this.index].value
@@ -222,10 +206,33 @@ export default class Formatter {
     if (this.cfg.newline === NewlineMode.lineWidth) {
       return inlineWidth > this.cfg.lineWidth;
     } else if (isNumber(this.cfg.newline)) {
-      return numItems > this.cfg.newline || inlineWidth > this.cfg.lineWidth;
+      return this.countClauses(nextTokens) > this.cfg.newline || inlineWidth > this.cfg.lineWidth;
     }
 
     return true;
+  }
+
+  /**
+   * Counts comma-separated clauses (doesn't count commas inside blocks)
+   * Note: There's always at least one clause.
+   * XXX: We're not correctly balancing braces here (BLOCK_START / BLOCK_END)
+   */
+  private countClauses(tokens: Token[]): number {
+    return tokens.reduce(
+      (acc, { type, value }) => {
+        if (value === ',' && !acc.inParen) {
+          return { ...acc, count: acc.count + 1 };
+        }
+        if (type === TokenType.BLOCK_START) {
+          return { ...acc, inParen: true };
+        }
+        if (type === TokenType.BLOCK_END) {
+          return { ...acc, inParen: false };
+        }
+        return acc;
+      },
+      { count: 1, inParen: false }
+    ).count;
   }
 
   /** get all tokens between current token and next Reserved Command or query end */
