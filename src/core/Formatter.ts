@@ -11,30 +11,24 @@ import formatAliasPositions from './formatAliasPositions';
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {
   cfg: FormatOptions;
-  currentNewline: boolean;
   indentation: Indentation;
   inlineBlock: InlineBlock;
   params: Params;
 
-  previousReservedToken: Token;
-  withinSelect: boolean;
-  tokens: Token[];
-  index: number;
+  currentNewline = true;
+  previousReservedToken: Token = {} as Token;
+  withinSelect = false;
+  tokens: Token[] = [];
+  index = -1;
 
   /**
    * @param {FormatOptions} cfg - config object
    */
   constructor(cfg: FormatOptions) {
     this.cfg = cfg;
-    this.currentNewline = true;
     this.indentation = new Indentation(this.cfg.indent);
     this.inlineBlock = new InlineBlock(this.cfg.lineWidth);
     this.params = new Params(this.cfg.params);
-
-    this.previousReservedToken = {} as Token;
-    this.withinSelect = false;
-    this.tokens = [];
-    this.index = -1;
   }
 
   /**
