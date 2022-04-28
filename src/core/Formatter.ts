@@ -12,7 +12,6 @@ import formatAliasPositions from './formatAliasPositions';
 export default class Formatter {
   cfg: FormatOptions;
   tenSpace: boolean;
-  newline: FormatOptions['newline'];
   currentNewline: boolean;
   lineWidth: number;
   indentation: Indentation;
@@ -32,7 +31,6 @@ export default class Formatter {
     this.tenSpace =
       this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
       this.cfg.keywordPosition === KeywordMode.tenSpaceRight;
-    this.newline = cfg.newline;
     this.currentNewline = true;
     this.lineWidth = cfg.lineWidth;
     this.indentation = new Indentation(this.cfg.indent);
@@ -225,13 +223,13 @@ export default class Formatter {
     );
 
     if (
-      this.newline === NewlineMode.always ||
+      this.cfg.newline === NewlineMode.always ||
       (this.withinSelect &&
         nextTokens.some(({ type, value }) => type === TokenType.BLOCK_START && value.length > 1)) // auto break if SELECT includes CASE statements
     ) {
       return true;
     }
-    if (this.newline === NewlineMode.never) {
+    if (this.cfg.newline === NewlineMode.never) {
       return false;
     }
 
@@ -256,10 +254,10 @@ export default class Formatter {
       this.tokens[index].value
     } ${nextTokens.map(({ value }) => (value === ',' ? value + ' ' : value)).join('')}`.length;
 
-    if (this.newline === NewlineMode.lineWidth) {
+    if (this.cfg.newline === NewlineMode.lineWidth) {
       return inlineWidth > this.lineWidth;
-    } else if (!Number.isNaN(this.newline)) {
-      return numItems > this.newline || inlineWidth > this.lineWidth;
+    } else if (!Number.isNaN(this.cfg.newline)) {
+      return numItems > this.cfg.newline || inlineWidth > this.lineWidth;
     }
 
     return true;
@@ -443,7 +441,7 @@ export default class Formatter {
 
     if (!this.inlineBlock.isActive()) {
       this.indentation.increaseBlockLevel();
-      if (!isToken.CASE(token) || this.newline === NewlineMode.always) {
+      if (!isToken.CASE(token) || this.cfg.newline === NewlineMode.always) {
         query = this.addNewline(query);
       }
     }
