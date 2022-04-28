@@ -10,7 +10,7 @@ export default function supportsCreateTable(language, format) {
   it('formats short CREATE TABLE', () => {
     expect(
       format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);', {
-        newline: { mode: NewlineMode.never },
+        newline: NewlineMode.never,
       })
     ).toBe('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);');
   });

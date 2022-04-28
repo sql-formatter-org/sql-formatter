@@ -86,7 +86,7 @@ export default function supportsAliases(language, format) {
   it('does not format non select clauses', () => {
     expect(
       format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);', {
-        newline: { mode: NewlineMode.never },
+        newline: NewlineMode.never,
       })
     ).toBe('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);');
   });
@@ -178,7 +178,7 @@ export default function supportsAliases(language, format) {
   it('handles edge case of newline.never', () => {
     const result = format(
       dedent`SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );`,
-      { newline: { mode: 'never' }, aliasAs: 'always', tabulateAlias: true }
+      { newline: NewlineMode.never, aliasAs: 'always', tabulateAlias: true }
     );
 
     expect(result).toBe(dedent`
