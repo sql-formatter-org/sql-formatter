@@ -190,14 +190,7 @@ export default class Formatter {
     const nextTokens = tail.slice(
       // get all tokens between current token and next Reserved Command or query end
       0,
-      tail.length
-        ? tail.findIndex(
-            ({ type, value }) =>
-              type === TokenType.RESERVED_COMMAND ||
-              type === TokenType.RESERVED_BINARY_COMMAND ||
-              value === ';'
-          )
-        : undefined // add undefined for EOF
+      tail.length ? tail.findIndex(token => isCommand(token) || token.value === ';') : undefined // add undefined for EOF
     );
 
     if (
