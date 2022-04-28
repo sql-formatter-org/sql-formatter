@@ -97,7 +97,7 @@ export default class Formatter {
       } else if (token.type === TokenType.BLOCK_COMMENT) {
         formattedQuery = this.formatBlockComment(token, formattedQuery);
       } else if (token.type === TokenType.RESERVED_COMMAND) {
-        this.currentNewline = this.checkNewline(this.index);
+        this.currentNewline = this.checkNewline();
         formattedQuery = this.formatCommand(token, formattedQuery);
       } else if (token.type === TokenType.RESERVED_BINARY_COMMAND) {
         formattedQuery = this.formatBinaryCommand(token, formattedQuery);
@@ -185,7 +185,7 @@ export default class Formatter {
   /**
    * Checks if a newline should currently be inserted
    */
-  private checkNewline(index: number): boolean {
+  private checkNewline(): boolean {
     const nextTokens = this.tokensUntilNextCommandOrQueryEnd();
 
     if (
@@ -216,8 +216,8 @@ export default class Formatter {
     ).count;
 
     // calculate length if it were all inline
-    const inlineWidth = `${this.tokens[index].whitespaceBefore}${
-      this.tokens[index].value
+    const inlineWidth = `${this.tokens[this.index].whitespaceBefore}${
+      this.tokens[this.index].value
     } ${nextTokens.map(({ value }) => (value === ',' ? value + ' ' : value)).join('')}`.length;
 
     if (this.cfg.newline === NewlineMode.lineWidth) {
