@@ -61,6 +61,7 @@
   ],
   "scripts": {
     "clean": "rimraf lib dist coverage",
+    "ts:check": "tsc --noEmit",
     "lint": "eslint .",
     "pretty": "prettier --write .",
     "fix": "yarn pretty && eslint --fix .",
