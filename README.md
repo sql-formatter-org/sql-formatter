@@ -162,6 +162,7 @@ All fields are optional and all fields that are not specified will be filled wit
 
 ```ts
 {
+  "language": "sql" | "mariadb" | "mysql" | "postgresql" | "db2" | "plsql" | "n1ql" | "redshift" | "spark" | "tsql" | "bigquery" | "hive",
 	"indent": string,
 	"uppercase": boolean | undefined,
 	"keywordPosition": "standard" | "tenSpaceLeft" | "tenSpaceRight",
@@ -180,6 +181,45 @@ All fields are optional and all fields that are not specified will be filled wit
 	"semicolonNewline": boolean,
 }
 ```
+
+### Configuration options
+
+- **`language`**: `"sql" | "mariadb" | "mysql" | "postgresql" | "db2" | "plsql" | "n1ql" | "redshift" | "spark" | "tsql" | "bigquery" | "hive"` (default: `"sql"`)
+  The SQL dialect to use.
+- **`indent`**: `string` (default: `" "` 2 spaces)
+  Characters used for indentation.
+- **`uppercase`**: `boolean | undefined` (default: `undefined`)
+  To either uppercase or lowercase all keywords, or preserve the case when undefined.
+- **`keywordPosition`**: `"standard" | "tenSpaceLeft" | "tenSpaceRight"` (default: `"standard"`)
+  Sets keyword position style, see [keywordPosition.md](keywordPosition.md).
+- **`newline`**: `"always" | "never" | "lineWidth" | number` (default: `"always"`)
+  Determines when to break listed clauses to multiple lines.
+  - lineWidth (break only when > line width)
+  - number (break when > n)
+- **`breakBeforeBooleanOperator`**: `boolean` (default: `true`)
+  Adds newline before boolean operator (AND, OR, XOR).
+- **`aliasAs`**: `"always" | "never" | "select"` (default: `"select"`)
+  Whether to use AS keyword for creating aliases or not:
+  - always - add AS keywords everywhere
+  - never - remove AS keywords from everywhere
+  - select - add AS keywords to SELECT clause, remove from everywhere else
+- **`tabulateAlias`**: `boolean` (default: `false`)
+  True to align AS keywords to single column
+- **`commaPosition`**: `"before" | "after" | "tabular"` (default: `"after"`)
+  Where to place the comma in listed clauses
+- **`parenOptions`**:
+  - `openParenNewline`: `boolean` - True to place opening parenthesis on new line (default: true)
+  - `closeParenNewline`: `boolean` - True to place closing parenthesis on new line (default: true)
+- **`lineWidth`**: `number` (default: `50`)
+  Number of characters in each line before breaking.
+- **`linesBetweenQueries`**: `number` (default: `1`)
+  How many newlines to insert between queries.
+- **`denseOperators`**: `boolean` (default: `false`)
+  True to pack operators densely without spaces.
+- **`params`**: `Object | Array`
+  Collection of params for placeholder replacement.
+- **`semicolonNewline`**: `boolean` (default: `false`)
+  True to place semicolon on separate line.
 
 ### Usage without NPM
 
