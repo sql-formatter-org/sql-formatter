@@ -225,14 +225,14 @@ export default function supportsAliases(language, format) {
           SELECT
             a alpha
         )
-		`);
+    `);
   });
 
   it('handles edge case of never + CAST', () => {
     const result = format(
       dedent`SELECT
-			CAST(0 AS BIT),
-			'foo' AS bar`,
+      CAST(0 AS BIT),
+      'foo' AS bar`,
       { aliasAs: 'never' }
     );
 
@@ -240,6 +240,6 @@ export default function supportsAliases(language, format) {
       SELECT
         CAST(0 as BIT),
         'foo' bar
-		`);
+    `);
   });
 }

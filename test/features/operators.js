@@ -40,7 +40,7 @@ export default function supportsOperators(language, format, operators = [], logi
   it('supports breaking after boolean operators', () => {
     const result = format(
       `
-			SELECT a FROM b WHERE TRUE ${logicalOperators.reduce(
+      SELECT a FROM b WHERE TRUE ${logicalOperators.reduce(
         (str, op, i) => str + ` ${op} condition${i + 1}`,
         ''
       )};

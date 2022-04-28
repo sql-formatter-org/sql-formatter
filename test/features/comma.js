@@ -52,17 +52,17 @@ export default function supportsCommaModes(language, format) {
   it('accepts comma before column', () => {
     const result = format(
       dedent(`
-			SELECT
-				alpha
-			, MAX(beta)
-			, delta AS d
-			, epsilon
-			FROM
-				gamma
-			GROUP BY
-				alpha
-			, delta
-			, epsilon
+      SELECT
+        alpha
+      , MAX(beta)
+      , delta AS d
+      , epsilon
+      FROM
+        gamma
+      GROUP BY
+        alpha
+      , delta
+      , epsilon
       `)
     );
     expect(result).toBe(
@@ -107,17 +107,17 @@ export default function supportsCommaModes(language, format) {
   it('accepts tabular mode', () => {
     const result = format(
       dedent(`
-			SELECT
-				alpha     ,
-				MAX(beta) ,
-				delta AS d,
-				epsilon
-			FROM
-				gamma
-			GROUP BY
-				alpha  ,
-				delta  ,
-				epsilon
+      SELECT
+        alpha     ,
+        MAX(beta) ,
+        delta AS d,
+        epsilon
+      FROM
+        gamma
+      GROUP BY
+        alpha  ,
+        delta  ,
+        epsilon
       `)
     );
     expect(result).toBe(

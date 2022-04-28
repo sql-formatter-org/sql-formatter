@@ -25,7 +25,7 @@ export default class Formatter {
   index: number;
 
   /**
-   *	@param {FormatOptions} cfg - config object
+   * @param {FormatOptions} cfg - config object
    */
   constructor(cfg: FormatOptions) {
     this.cfg = cfg;

@@ -435,17 +435,17 @@ export default function behavesLikeSqlFormatter(language, format) {
   it('correctly handles floats with trailing point', () => {
     let result = format('SELECT 1000. AS a;');
     expect(result).toBe(dedent`
-		  SELECT
-		    1000. AS a;
-		`);
+      SELECT
+        1000. AS a;
+    `);
 
     result = format('SELECT a, b / 1000. AS a_s, 100. * b / SUM(a_s);');
     expect(result).toBe(dedent`
-		  SELECT
-		    a,
-		    b / 1000. AS a_s,
-		    100. * b / SUM(a_s);
-	  `);
+      SELECT
+        a,
+        b / 1000. AS a_s,
+        100. * b / SUM(a_s);
+    `);
   });
 
   it('does not split UNION ALL in half', () => {

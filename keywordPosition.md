@@ -16,21 +16,21 @@ This query would be output in the following formats using the different Keyword 
 
 ```
 SELECT
-	COUNT(a.column1),
-	MAX(b.column2 + b.column3),
-	b.column4 AS four
+  COUNT(a.column1),
+  MAX(b.column2 + b.column3),
+  b.column4 AS four
 FROM (
-	SELECT
-		column1,
-		column5
-	FROM
-		table1
+  SELECT
+    column1,
+    column5
+  FROM
+    table1
 ) a
 JOIN table2 b
 ON a.column5 = b.column5
 WHERE
-	column6
-	AND column7
+  column6
+  AND column7
 GROUP BY column4
 ```
 

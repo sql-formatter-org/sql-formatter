@@ -67,8 +67,8 @@ const defaultOptions: FormatFnOptions = {
  *  @param {Boolean} cfg.tabulateAlias - Whether to have alias following clause or aligned to right
  *  @param {CommaPosition} cfg.commaPosition - Where to place the comma in listed clauses
  *  @param {ParenOptions} cfg.parenOptions - Various options for parentheses
- *  	@param {Boolean} cfg.parenOptions -.openParenNewline Whether to place opening parenthesis on same line or newline
- *  	@param {Boolean} cfg.parenOptions -.closeParenNewline Whether to place closing parenthesis on same line or newline
+ *    @param {Boolean} cfg.parenOptions -.openParenNewline Whether to place opening parenthesis on same line or newline
+ *    @param {Boolean} cfg.parenOptions -.closeParenNewline Whether to place closing parenthesis on same line or newline
  *  @param {Integer} cfg.lineWidth - Number of characters in each line before breaking, default: 50
  *  @param {Integer} cfg.linesBetweenQueries - How many line breaks between queries
  *  @param {Boolean} cfg.denseOperators - whether to format operators with spaces

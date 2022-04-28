@@ -36,7 +36,7 @@ describe('BigQueryFormatter', () => {
         alpha # commment
       FROM
         beta
-		`);
+    `);
   });
 
   // Note: BigQuery supports dashes inside identifiers, so a--comment would be
@@ -63,7 +63,7 @@ describe('BigQueryFormatter', () => {
         STRUCT("Alpha" as name, [23.4, 26.3, 26.4, 26.1] as splits)
       FROM
         beta
-		`);
+    `);
   });
 
   it('supports parametric ARRAY and STRUCT', () => {
@@ -75,19 +75,19 @@ describe('BigQueryFormatter', () => {
         ARRAY<FLOAT> [1]
       FROM
         tbl
-		`);
+    `);
   });
 
   it('supports parameterised types', () => {
     const result = format(
       `
-			DECLARE varString STRING(11) '11charswide';
-			DECLARE varBytes BYTES(8);
-			DECLARE varNumeric NUMERIC(1,1);
-			DECLARE varDecimal DECIMAL(1,1);
-			DECLARE varBignumeric BIGNUMERIC(1,1);
-			DECLARE varBigdecimal BIGDECIMAL(1,1);
-		`,
+      DECLARE varString STRING(11) '11charswide';
+      DECLARE varBytes BYTES(8);
+      DECLARE varNumeric NUMERIC(1,1);
+      DECLARE varDecimal DECIMAL(1,1);
+      DECLARE varBignumeric BIGNUMERIC(1,1);
+      DECLARE varBigdecimal BIGDECIMAL(1,1);
+    `,
       { linesBetweenQueries: 0 }
     );
     expect(result).toBe(dedent`
@@ -103,6 +103,6 @@ describe('BigQueryFormatter', () => {
         varBignumeric BIGNUMERIC(1, 1);
       DECLARE
         varBigdecimal BIGDECIMAL(1, 1);
-		`);
+    `);
   });
 });
