@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
 
 import supportsComments from './features/comments';
-import supportsConfigOptions from './features/configOptions';
+import supportsIndent from './features/indent';
 import supportsAliases from './features/alias';
 import supportsNewlineOptions from './features/newline';
 import supportsKeywordCase from './features/keywordCase';
@@ -19,7 +19,7 @@ import supportsLinesBetweenQueries from './features/linesBetweenQueries';
 export default function behavesLikeSqlFormatter(language, format) {
   supportsAliases(language, format);
   supportsComments(language, format);
-  supportsConfigOptions(language, format);
+  supportsIndent(language, format);
   supportsKeywordCase(language, format);
   supportsKeywordPositions(language, format);
   supportsLinesBetweenQueries(language, format);
