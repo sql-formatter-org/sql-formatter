@@ -18,14 +18,7 @@ export default function formatCommaPositions(query: string, cfg: FormatOptions):
       }
 
       if (cfg.commaPosition === CommaPosition.tabular) {
-        commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, '')); // trim all trailing commas
-        const commaMaxLength = maxLength(commaLines); // get longest for alignment
-        // make all lines the same length by appending spaces before comma
-        commaLines = commaLines.map((commaLine, j) =>
-          j < commaLines.length - 1 // do not add comma for last item
-            ? commaLine + ' '.repeat(commaMaxLength - commaLine.length) + ','
-            : commaLine
-        );
+        commaLines = formatTabular(commaLines);
       } else if (cfg.commaPosition === CommaPosition.before) {
         const isTabs = cfg.indent.includes('\t'); // loose tab check
         commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, ''));
@@ -58,4 +51,15 @@ export default function formatCommaPositions(query: string, cfg: FormatOptions):
   }
 
   return newQuery.join('\n');
+}
+
+function formatTabular(commaLines: string[]): string[] {
+  commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, '')); // trim all trailing commas
+  const commaMaxLength = maxLength(commaLines); // get longest for alignment
+  // make all lines the same length by appending spaces before comma
+  return commaLines.map((commaLine, i) =>
+    i < commaLines.length - 1 // do not add comma for last item
+      ? commaLine + ' '.repeat(commaMaxLength - commaLine.length) + ','
+      : commaLine
+  );
 }
