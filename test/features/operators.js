@@ -19,7 +19,18 @@ export default function supportsOperators(language, format, operators = [], logi
     });
   });
 
-  it('supports breaking before boolean operators', () => {
+  logicalOperators.forEach(op => {
+    describe(`supports ${op} operator`, () => {
+      const result = format(`SELECT true ${op} false AS foo;`);
+      expect(result).toBe(dedent`
+        SELECT
+          true
+          ${op} false AS foo;
+      `);
+    });
+  });
+
+  it('supports logical operators', () => {
     const result = format(`
       SELECT a FROM b WHERE TRUE ${logicalOperators.reduce(
         (str, op, i) => str + ` ${op} condition${i + 1}`,
