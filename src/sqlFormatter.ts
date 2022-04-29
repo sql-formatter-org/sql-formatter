@@ -55,7 +55,7 @@ const defaultOptions: FormatFnOptions = {
   lineWidth: 50,
   linesBetweenQueries: 1,
   denseOperators: false,
-  semicolonNewline: false,
+  newlineBeforeSemicolon: false,
 };
 
 /**

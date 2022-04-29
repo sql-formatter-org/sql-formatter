@@ -68,7 +68,7 @@ export default function supportsOperators(language, format, operators = [], logi
   });
 
   it('supports semicolon on new line', () => {
-    const result = format(`SELECT a FROM b;`, { semicolonNewline: true });
+    const result = format(`SELECT a FROM b;`, { newlineBeforeSemicolon: true });
     expect(result).toBe(dedent`
       SELECT
         a

@@ -208,7 +208,7 @@ All fields are optional and all fields that are not specified will be filled wit
   True to pack operators densely without spaces.
 - **`params`**: `Object | Array`
   Collection of params for placeholder replacement.
-- **`semicolonNewline`**: `boolean` (default: `false`)
+- **`newlineBeforeSemicolon`**: `boolean` (default: `false`)
   True to place semicolon on separate line.
 
 ### Usage without NPM

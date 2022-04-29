@@ -74,6 +74,6 @@ export interface FormatOptions {
   lineWidth: number;
   linesBetweenQueries: number;
   denseOperators: boolean;
-  semicolonNewline: boolean;
+  newlineBeforeSemicolon: boolean;
   params?: ParamItems | string[];
 }

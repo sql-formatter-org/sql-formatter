@@ -499,7 +499,7 @@ export default class Formatter {
     query = trimSpacesEnd(query);
 
     // move delimiter to new line if specified
-    if (this.cfg.semicolonNewline) {
+    if (this.cfg.newlineBeforeSemicolon) {
       query += '\n';
       if (this.isTenSpace()) {
         query += this.cfg.indent;
