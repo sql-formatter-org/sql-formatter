@@ -4,6 +4,7 @@ import supportsComments from './features/comments';
 import supportsConfigOptions from './features/configOptions';
 import supportsAliases from './features/alias';
 import supportsNewlineOptions from './features/newline';
+import supportsKeywordCase from './features/keywordCase';
 import supportsKeywordPositions from './features/keywordPosition';
 import supportsParenthesesOptions from './features/parenthesis';
 import supportsCommaModes from './features/comma';
@@ -18,6 +19,7 @@ export default function behavesLikeSqlFormatter(language, format) {
   supportsAliases(language, format);
   supportsComments(language, format);
   supportsConfigOptions(language, format);
+  supportsKeywordCase(language, format);
   supportsKeywordPositions(language, format);
   supportsNewlineOptions(language, format);
   supportsParenthesesOptions(language, format);
