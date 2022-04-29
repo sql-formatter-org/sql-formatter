@@ -43,7 +43,6 @@ function formatTabular(commaLines: string[]): string[] {
 }
 
 function formatBefore(commaLines: string[], cfg: FormatOptions): string[] {
-  const isTabs = cfg.indent.includes('\t'); // loose tab check
   commaLines = trimTrailingCommas(commaLines);
 
   return commaLines.map((commaLine, i) => {
@@ -54,8 +53,7 @@ function formatBefore(commaLines: string[], cfg: FormatOptions): string[] {
     const [whitespace] = commaLine.match(WHITESPACE_REGEX) || [''];
     return (
       removeLastIndent(whitespace, cfg.indent) +
-      // add comma in place of last indent
-      (isTabs ? '    ' : cfg.indent).replace(/ {2}$/, ', ') + // using 4 width tabs
+      cfg.indent.replace(/ {2}$/, ', ') + // add comma to the end of last indent
       commaLine.trimStart()
     );
   });

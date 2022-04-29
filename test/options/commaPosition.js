@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals';
 import dedent from 'dedent-js';
 import { CommaPosition } from '../../src/types';
 
@@ -68,26 +69,15 @@ export default function supportsCommaPosition(language, format) {
       );
     });
 
-    // It seems that this style is fundamentally incompatible with tabs
-    it('does not work with tabs :(', () => {
-      const result = format(
-        'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon',
-        { commaPosition: CommaPosition.before, indent: '\t' }
-      );
-      expect(result).toBe(
-        [
-          'SELECT',
-          '\talpha',
-          '  , MAX(beta)',
-          '  , delta AS d',
-          '  , epsilon',
-          'FROM',
-          '\tgamma',
-          'GROUP BY',
-          '\talpha',
-          '  , delta',
-          '  , epsilon',
-        ].join('\n')
+    // This style is fundamentally incompatible with tabs
+    it('throws error when tabs used for indentation', () => {
+      expect(() => {
+        format('SELECT alpha, MAX(beta), delta AS d, epsilon', {
+          commaPosition: CommaPosition.before,
+          indent: '\t',
+        });
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"commaPosition: before does not work when tabs are used for indentation."`
       );
     });
   });

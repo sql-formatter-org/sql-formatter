@@ -99,5 +99,9 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
     throw new Error(`lineWidth config must be positive number. Received ${cfg.lineWidth} instead.`);
   }
 
+  if (cfg.commaPosition === CommaPosition.before && cfg.indent === '\t') {
+    throw new Error('commaPosition: before does not work when tabs are used for indentation.');
+  }
+
   return cfg;
 }
