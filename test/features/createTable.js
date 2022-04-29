@@ -1,5 +1,4 @@
 import dedent from 'dedent-js';
-import { NewlineMode } from '../../src/types';
 
 /**
  * Tests support for CREATE TABLE syntax
@@ -8,11 +7,10 @@ import { NewlineMode } from '../../src/types';
  */
 export default function supportsCreateTable(language, format) {
   it('formats short CREATE TABLE', () => {
-    expect(
-      format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);', {
-        newline: NewlineMode.never,
-      })
-    ).toBe('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);');
+    expect(format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);')).toBe(dedent`
+      CREATE TABLE
+        tbl (a INT PRIMARY KEY, b TEXT);
+    `);
   });
 
   // The decision to place it to multiple lines is made based on the length of text inside braces
