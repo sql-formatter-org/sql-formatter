@@ -1,16 +1,16 @@
 import dedent from 'dedent-js';
 
 import supportsComments from './features/comments';
-import supportsIndent from './features/indent';
-import supportsAliases from './features/alias';
-import supportsNewlineOptions from './features/newline';
-import supportsKeywordCase from './features/keywordCase';
-import supportsKeywordPositions from './features/keywordPosition';
-import supportsNewlineBeforeParen from './features/newlineBeforeParen';
-import supportsCommaModes from './features/comma';
+import supportsIndent from './options/indent';
+import supportsAliases from './options/alias';
+import supportsNewlineOptions from './options/newline';
+import supportsKeywordCase from './options/keywordCase';
+import supportsKeywordPositions from './options/keywordPosition';
+import supportsNewlineBeforeParen from './options/newlineBeforeParen';
+import supportsCommaModes from './options/comma';
 import { AliasMode } from '../src/types';
-import supportsLinesBetweenQueries from './features/linesBetweenQueries';
-import supportsNewlineBeforeSemicolon from './features/newlineBeforeSemicolon';
+import supportsLinesBetweenQueries from './options/linesBetweenQueries';
+import supportsNewlineBeforeSemicolon from './options/newlineBeforeSemicolon';
 
 /**
  * Core tests for all SQL formatters
