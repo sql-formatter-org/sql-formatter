@@ -51,7 +51,7 @@ function formatBefore(commaLines: string[], cfg: FormatOptions): string[] {
       // do not add comma for first item
       return commaLine;
     }
-    const precedingWhitespace = commaLine.match(new RegExp('^' + WHITESPACE_REGEX + ''));
+    const precedingWhitespace = commaLine.match(WHITESPACE_REGEX);
     const trimLastIndent = precedingWhitespace
       ? precedingWhitespace[1].replace(
           new RegExp((isTabs ? '\t' : cfg.indent) + '$'), // remove last tab / last indent
