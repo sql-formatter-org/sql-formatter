@@ -6,7 +6,6 @@ import { WHITESPACE_REGEX } from './Tokenizer';
  * Handles comma placement - either before, after or tabulated
  */
 export default function formatCommaPositions(query: string, cfg: FormatOptions): string {
-  // const trailingComma = /,$/;
   const lines = query.split('\n');
   let newQuery: string[] = [];
   for (let i = 0; i < lines.length; i++) {
