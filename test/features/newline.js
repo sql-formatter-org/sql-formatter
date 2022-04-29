@@ -1,4 +1,5 @@
 import dedent from 'dedent-js';
+import { NewlineMode } from '../../src/types';
 
 /**
  * Tests support for all newline options
@@ -20,7 +21,7 @@ export default function supportsNewlineOptions(language, format) {
 
   it('throws error when lineWidth negative number', () => {
     expect(() => {
-      format('SELECT *', { newline: 'lineWidth', lineWidth: -2 });
+      format('SELECT *', { newline: NewlineMode.lineWidth, lineWidth: -2 });
     }).toThrowErrorMatchingInlineSnapshot(
       `"lineWidth config must be positive number. Received -2 instead."`
     );
@@ -28,7 +29,7 @@ export default function supportsNewlineOptions(language, format) {
 
   it('throws error when lineWidth is zero', () => {
     expect(() => {
-      format('SELECT *', { newline: 'lineWidth', lineWidth: 0 });
+      format('SELECT *', { newline: NewlineMode.lineWidth, lineWidth: 0 });
     }).toThrowErrorMatchingInlineSnapshot(
       `"lineWidth config must be positive number. Received 0 instead."`
     );
@@ -36,7 +37,7 @@ export default function supportsNewlineOptions(language, format) {
 
   it('supports always mode', () => {
     const result = format('SELECT foo, bar, baz FROM qux;', {
-      newline: 'always',
+      newline: NewlineMode.always,
     });
     expect(result).toBe(dedent`
       SELECT
@@ -49,7 +50,7 @@ export default function supportsNewlineOptions(language, format) {
   });
 
   it('supports never mode', () => {
-    const result = format('SELECT foo, bar, baz, qux FROM corge;', { newline: 'never' });
+    const result = format('SELECT foo, bar, baz, qux FROM corge;', { newline: NewlineMode.never });
     expect(result).toBe(dedent`
       SELECT foo, bar, baz, qux
       FROM corge;
@@ -72,7 +73,7 @@ export default function supportsNewlineOptions(language, format) {
 
   it('supports lineWidth mode', () => {
     const result = format('SELECT foo, bar, baz, qux FROM corge;', {
-      newline: 'lineWidth',
+      newline: NewlineMode.lineWidth,
       lineWidth: 20,
     });
     expect(result).toBe(dedent`
