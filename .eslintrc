@@ -27,6 +27,7 @@
     "no-use-before-define": "off",
     "no-useless-concat": "off",
     "prefer-template": "off",
+    "default-case": "off",
     "prettier/prettier": ["error"],
     "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/comma-dangle": "off",

@@ -1,4 +1,5 @@
 import dedent from 'dedent-js';
+import { KeywordCase } from '../../src/types';
 
 /**
  * Tests for all the config options
@@ -36,9 +37,9 @@ export default function supportsConfigOptions(language, format) {
     `);
   });
 
-  it('supports uppercase option', () => {
+  it('supports keywordCase option', () => {
     const result = format('select distinct * frOM foo left join bar WHERe cola > 1 and colb = 3', {
-      uppercase: true,
+      keywordCase: KeywordCase.upper,
     });
     expect(result).toBe(dedent`
       SELECT

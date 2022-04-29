@@ -4,7 +4,14 @@ import Params from './Params';
 import { isNumber, trimSpacesEnd } from '../utils';
 import { isReserved, isCommand, isToken, Token, TokenType, ZWS } from './token';
 import Tokenizer from './Tokenizer';
-import { AliasMode, CommaPosition, FormatOptions, KeywordMode, NewlineMode } from '../types';
+import {
+  AliasMode,
+  CommaPosition,
+  FormatOptions,
+  KeywordCase,
+  KeywordMode,
+  NewlineMode,
+} from '../types';
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
 
@@ -129,7 +136,10 @@ export default class Formatter {
   private formatWord(token: Token, query: string): string {
     const prevToken = this.tokenLookBehind();
     const nextToken = this.tokenLookAhead();
-    const asToken = { type: TokenType.RESERVED_KEYWORD, value: this.cfg.uppercase ? 'AS' : 'as' };
+    const asToken = {
+      type: TokenType.RESERVED_KEYWORD,
+      value: this.cfg.keywordCase === KeywordCase.upper ? 'AS' : 'as',
+    };
 
     const missingTableAlias = // if table alias is missing and alias is always
       this.cfg.aliasAs === AliasMode.always &&
@@ -506,10 +516,13 @@ export default class Formatter {
       token.type === TokenType.BLOCK_START ||
       token.type === TokenType.BLOCK_END
     ) {
-      if (this.cfg.uppercase === undefined) {
-        return token.value;
-      } else {
-        return this.cfg.uppercase ? token.value.toUpperCase() : token.value.toLowerCase();
+      switch (this.cfg.keywordCase) {
+        case KeywordCase.preserve:
+          return token.value;
+        case KeywordCase.upper:
+          return token.value.toUpperCase();
+        case KeywordCase.lower:
+          return token.value.toLowerCase();
       }
     } else {
       return token.value;

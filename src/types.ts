@@ -13,6 +13,12 @@ export enum KeywordMode {
   tenSpaceRight = 'tenSpaceRight',
 }
 
+export enum KeywordCase {
+  preserve = 'preserve',
+  upper = 'upper',
+  lower = 'lower',
+}
+
 /**
  * Enum for the different newline modes
  * @enum {string}
@@ -61,7 +67,7 @@ export interface ParenOptions {
 
 export interface FormatOptions {
   indent: string;
-  uppercase?: boolean;
+  keywordCase: KeywordCase;
   keywordPosition: KeywordMode;
   newline: NewlineMode | number;
   breakBeforeBooleanOperator: boolean;

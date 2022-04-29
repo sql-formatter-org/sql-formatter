@@ -11,7 +11,14 @@ import SparkSqlFormatter from './languages/sparksql.formatter';
 import StandardSqlFormatter from './languages/standardsql.formatter';
 import TSqlFormatter from './languages/tsql.formatter';
 
-import { AliasMode, CommaPosition, FormatOptions, KeywordMode, NewlineMode } from './types';
+import {
+  AliasMode,
+  CommaPosition,
+  FormatOptions,
+  KeywordCase,
+  KeywordMode,
+  NewlineMode,
+} from './types';
 import { isNumber } from './utils';
 
 export const formatters = {
@@ -36,7 +43,7 @@ export type FormatFnOptions = FormatOptions & { language: FormatterLanguage };
 const defaultOptions: FormatFnOptions = {
   language: 'sql',
   indent: '  ',
-  uppercase: undefined,
+  keywordCase: KeywordCase.preserve,
   keywordPosition: KeywordMode.standard,
   newline: NewlineMode.always,
   breakBeforeBooleanOperator: true,

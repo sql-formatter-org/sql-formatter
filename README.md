@@ -82,7 +82,7 @@ You can also pass in configuration options:
 format('SELECT * FROM tbl', {
   language: 'spark',
   indent: '  ',
-  uppercase: true,
+  keywordCase: 'upper',
   linesBetweenQueries: 2,
 });
 ```
@@ -163,7 +163,7 @@ The tool also accepts a JSON config file with the `--config` option that takes t
 {
   "language": "spark",
   "indent": "  ",
-  "uppercase": true,
+  "keywordCase": "upper",
   "linesBetweenQueries": 2,
 }
 ```
@@ -176,8 +176,8 @@ All fields are optional and all fields that are not specified will be filled wit
   The SQL dialect to use.
 - **`indent`**: `string` (default: `" "` 2 spaces)
   Characters used for indentation.
-- **`uppercase`**: `boolean | undefined` (default: `undefined`)
-  To either uppercase or lowercase all keywords, or preserve the case when undefined.
+- **`keywordCase`**: `"preserve" | "upper" | "lower"` (default: `"preserve"`)
+  To either uppercase or lowercase all keywords, or preserve the original case.
 - **`keywordPosition`**: `"standard" | "tenSpaceLeft" | "tenSpaceRight"` (default: `"standard"`)
   Sets keyword position style, see [keywordPosition.md](keywordPosition.md).
 - **`newline`**: `"always" | "never" | "lineWidth" | number` (default: `"always"`)

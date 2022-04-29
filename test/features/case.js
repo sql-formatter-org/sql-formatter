@@ -1,4 +1,5 @@
 import dedent from 'dedent-js';
+import { KeywordCase } from '../../src/types';
 
 /**
  * Tests support for CASE [WHEN...] END syntax
@@ -94,7 +95,7 @@ export default function supportsCase(language, format) {
   it('properly converts to uppercase in case statements', () => {
     const result = format(
       "case toString(getNumber()) when 'one' then 1 when 'two' then 2 when 'three' then 3 else 4 end;",
-      { uppercase: true, newline: 1 }
+      { keywordCase: KeywordCase.upper, newline: 1 }
     );
     expect(result).toBe(dedent`
       CASE toString(getNumber())
