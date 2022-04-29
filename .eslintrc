@@ -26,6 +26,7 @@
     "no-else-return": "off",
     "no-use-before-define": "off",
     "no-useless-concat": "off",
+    "no-restricted-syntax": "off",
     "prefer-template": "off",
     "default-case": "off",
     "prettier/prettier": ["error"],

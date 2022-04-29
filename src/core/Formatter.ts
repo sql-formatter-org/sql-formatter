@@ -226,24 +226,22 @@ export default class Formatter {
   /**
    * Counts comma-separated clauses (doesn't count commas inside blocks)
    * Note: There's always at least one clause.
-   * XXX: We're not correctly balancing braces here (BLOCK_START / BLOCK_END)
    */
   private countClauses(tokens: Token[]): number {
-    return tokens.reduce(
-      (acc, { type, value }) => {
-        if (value === ',' && !acc.inParen) {
-          return { ...acc, count: acc.count + 1 };
-        }
-        if (type === TokenType.BLOCK_START) {
-          return { ...acc, inParen: true };
-        }
-        if (type === TokenType.BLOCK_END) {
-          return { ...acc, inParen: false };
-        }
-        return acc;
-      },
-      { count: 1, inParen: false }
-    ).count;
+    let count = 1;
+    let openBlocks = 0;
+    for (const { type, value } of tokens) {
+      if (value === ',' && openBlocks === 0) {
+        count++;
+      }
+      if (type === TokenType.BLOCK_START) {
+        openBlocks++;
+      }
+      if (type === TokenType.BLOCK_END) {
+        openBlocks--;
+      }
+    }
+    return count;
   }
 
   /** get all tokens between current token and next Reserved Command or query end */

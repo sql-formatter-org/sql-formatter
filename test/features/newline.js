@@ -148,6 +148,18 @@ export default function supportsNewlineOptions(language, format) {
         FROM table1;
       `);
     });
+
+    // TODO: the placement of closing paren is wrong
+    it('ignores commas inside nested parenthesis', () => {
+      const result = format('SELECT foo, func1(func2(a), b, c, d)) AS bar FROM table1;', {
+        newline: 3,
+      });
+      expect(result).toBe(dedent`
+        SELECT foo, func1(func2(a), b, c, d)
+        ) AS bar
+        FROM table1;
+      `);
+    });
   });
 
   describe('newline: lineWidth', () => {
