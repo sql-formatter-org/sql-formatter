@@ -98,8 +98,8 @@ export default function supportsCommaPosition(language, format) {
           FROM
             gamma
           GROUP BY
-            alpha   ,
-            delta   ,
+            alpha  ,
+            delta  ,
             epsilon
         `)
       );
@@ -120,8 +120,8 @@ export default function supportsCommaPosition(language, format) {
           FROM
                 gamma
           GROUP BY
-                alpha   ,
-                delta   ,
+                alpha  ,
+                delta  ,
                 epsilon
         `)
       );

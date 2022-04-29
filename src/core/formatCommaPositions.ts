@@ -32,12 +32,11 @@ export default function formatCommaPositions(query: string, cfg: FormatOptions):
 }
 
 function formatTabular(commaLines: string[]): string[] {
-  commaLines = trimTrailingCommas(commaLines);
-  const commaMaxLength = maxLength(commaLines); // get longest for alignment
+  const maxLineLength = maxLength(commaLines); // get longest for alignment
   // make all lines the same length by appending spaces before comma
-  return commaLines.map((line, i) =>
+  return trimTrailingCommas(commaLines).map((line, i) =>
     i < commaLines.length - 1 // do not add comma for last item
-      ? line + ' '.repeat(commaMaxLength - line.length) + ','
+      ? line + ' '.repeat(maxLineLength - line.length - 1) + ','
       : line
   );
 }
