@@ -46,8 +46,8 @@ function formatBefore(commaLines: string[], cfg: FormatOptions): string[] {
   const isTabs = cfg.indent.includes('\t'); // loose tab check
   commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, ''));
 
-  return commaLines.map((commaLine, j) => {
-    if (!j) {
+  return commaLines.map((commaLine, i) => {
+    if (!i) {
       // do not add comma for first item
       return commaLine;
     }
