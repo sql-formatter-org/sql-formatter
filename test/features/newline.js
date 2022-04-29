@@ -140,14 +140,11 @@ export default function supportsNewlineOptions(language, format) {
     });
 
     it('ignores commas inside parenthesis when counting clauses', () => {
-      const result = format('SELECT foo, (SELECT a, b, c FROM table2) AS bar FROM table1;', {
+      const result = format('SELECT foo, some_function(a, b, c) AS bar FROM table1;', {
         newline: 3,
       });
       expect(result).toBe(dedent`
-        SELECT foo, (
-            SELECT a, b, c
-            FROM table2
-          ) AS bar
+        SELECT foo, some_function(a, b, c) AS bar
         FROM table1;
       `);
     });
