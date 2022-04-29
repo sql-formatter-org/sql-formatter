@@ -6,29 +6,54 @@ import { WHITESPACE_REGEX } from './Tokenizer';
  * Handles comma placement - either before, after or tabulated
  */
 export default function formatCommaPositions(query: string, cfg: FormatOptions): string {
-  const lines = query.split('\n');
-  const newQuery: string[] = [];
-  for (let i = 0; i < lines.length; i++) {
-    // if line has trailing comma
-    if (lines[i].match(/.*,$/)) {
-      let commaLines = [lines[i]];
-      // find all lines in comma-bound clause, + 1
-      while (lines[i++].match(/.*,$/)) {
-        commaLines.push(lines[i]);
-      }
-
-      if (cfg.commaPosition === CommaPosition.tabular) {
-        commaLines = formatTabular(commaLines);
+  return groupCommaDelimitedLines(query.split('\n'))
+    .flatMap(commaLines => {
+      if (commaLines.length === 1) {
+        return commaLines;
+      } else if (cfg.commaPosition === CommaPosition.tabular) {
+        return formatTabular(commaLines);
       } else if (cfg.commaPosition === CommaPosition.before) {
-        commaLines = formatBefore(commaLines, cfg);
+        return formatBefore(commaLines, cfg);
+      } else {
+        throw new Error(`Unexpected commaPosition: ${cfg.commaPosition}`);
       }
+    })
+    .join('\n');
+}
 
-      newQuery.push(...commaLines);
+/**
+ * Given lines like this:
+ *
+ *     [
+ *       'SELECT',
+ *       '  foo,',
+ *       '  bar,',
+ *       '  baz',
+ *       'FROM'
+ *     ]
+ *
+ * Returns groups like this:
+ *
+ *     [
+ *       ['SELECT'],
+ *       ['  foo,', '  bar,', '  baz'],
+ *       ['FROM']
+ *     ]
+ */
+function groupCommaDelimitedLines(lines: string[]): string[][] {
+  const groups: string[][] = [];
+  for (let i = 0; i < lines.length; i++) {
+    const group = [lines[i]];
+    // when line ends with comma,
+    // gather together all following lines that also end with comma,
+    // plus one (which doesn't end with comma)
+    while (lines[i].match(/.*,$/)) {
+      i++;
+      group.push(lines[i]);
     }
-    newQuery.push(lines[i]);
+    groups.push(group);
   }
-
-  return newQuery.join('\n');
+  return groups;
 }
 
 // makes all lines the same length by appending spaces before comma
