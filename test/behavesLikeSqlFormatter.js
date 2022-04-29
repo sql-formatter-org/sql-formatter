@@ -9,6 +9,7 @@ import supportsKeywordPositions from './features/keywordPosition';
 import supportsParenthesesOptions from './features/parenthesis';
 import supportsCommaModes from './features/comma';
 import { AliasMode } from '../src/types';
+import supportsLinesBetweenQueries from './features/linesBetweenQueries';
 
 /**
  * Core tests for all SQL formatters
@@ -21,6 +22,7 @@ export default function behavesLikeSqlFormatter(language, format) {
   supportsConfigOptions(language, format);
   supportsKeywordCase(language, format);
   supportsKeywordPositions(language, format);
+  supportsLinesBetweenQueries(language, format);
   supportsNewlineOptions(language, format);
   supportsParenthesesOptions(language, format);
   supportsCommaModes(language, format);

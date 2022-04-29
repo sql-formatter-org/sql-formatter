@@ -19,20 +19,4 @@ export default function supportsConfigOptions(language, format) {
           Table1;
     `);
   });
-
-  it('supports linesBetweenQueries option', () => {
-    const result = format('SELECT * FROM foo; SELECT * FROM bar;', { linesBetweenQueries: 2 });
-    expect(result).toBe(dedent`
-      SELECT
-        *
-      FROM
-        foo;
-
-
-      SELECT
-        *
-      FROM
-        bar;
-    `);
-  });
 }
