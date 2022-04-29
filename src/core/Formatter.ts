@@ -104,7 +104,7 @@ export default class Formatter {
       } else if (token.type === TokenType.BLOCK_COMMENT) {
         formattedQuery = this.formatBlockComment(token, formattedQuery);
       } else if (token.type === TokenType.RESERVED_COMMAND) {
-        this.currentNewline = this.checkNewline();
+        this.currentNewline = this.checkNewline(token);
         formattedQuery = this.formatCommand(token, formattedQuery);
       } else if (token.type === TokenType.RESERVED_BINARY_COMMAND) {
         formattedQuery = this.formatBinaryCommand(token, formattedQuery);
@@ -195,7 +195,7 @@ export default class Formatter {
   /**
    * Checks if a newline should currently be inserted
    */
-  private checkNewline(): boolean {
+  private checkNewline(token: Token): boolean {
     const nextTokens = this.tokensUntilNextCommandOrQueryEnd();
 
     // auto break if SELECT includes CASE statements
@@ -209,17 +209,16 @@ export default class Formatter {
       case NewlineMode.never:
         return false;
       case NewlineMode.lineWidth:
-        return this.inlineWidth(nextTokens) > this.cfg.lineWidth;
+        return this.inlineWidth(token, nextTokens) > this.cfg.lineWidth;
       default: // newline mode is a number
         return (
           this.countClauses(nextTokens) > this.cfg.newline ||
-          this.inlineWidth(nextTokens) > this.cfg.lineWidth
+          this.inlineWidth(token, nextTokens) > this.cfg.lineWidth
         );
     }
   }
 
-  private inlineWidth(tokens: Token[]): number {
-    const token = this.tokens[this.index];
+  private inlineWidth(token: Token, tokens: Token[]): number {
     const tokensString = tokens.map(({ value }) => (value === ',' ? value + ' ' : value)).join('');
     return `${token.whitespaceBefore}${token.value} ${tokensString}`.length;
   }
