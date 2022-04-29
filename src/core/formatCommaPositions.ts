@@ -35,24 +35,24 @@ function formatTabular(commaLines: string[]): string[] {
   commaLines = trimTrailingCommas(commaLines);
   const commaMaxLength = maxLength(commaLines); // get longest for alignment
   // make all lines the same length by appending spaces before comma
-  return commaLines.map((commaLine, i) =>
+  return commaLines.map((line, i) =>
     i < commaLines.length - 1 // do not add comma for last item
-      ? commaLine + ' '.repeat(commaMaxLength - commaLine.length) + ','
-      : commaLine
+      ? line + ' '.repeat(commaMaxLength - line.length) + ','
+      : line
   );
 }
 
 function formatBefore(commaLines: string[], cfg: FormatOptions): string[] {
-  return trimTrailingCommas(commaLines).map((commaLine, i) => {
+  return trimTrailingCommas(commaLines).map((line, i) => {
     if (!i) {
       // do not add comma for first item
-      return commaLine;
+      return line;
     }
-    const [whitespace] = commaLine.match(WHITESPACE_REGEX) || [''];
+    const [whitespace] = line.match(WHITESPACE_REGEX) || [''];
     return (
       removeLastIndent(whitespace, cfg.indent) +
       cfg.indent.replace(/ {2}$/, ', ') + // add comma to the end of last indent
-      commaLine.trimStart()
+      line.trimStart()
     );
   });
 }
