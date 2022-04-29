@@ -53,7 +53,7 @@ function formatBefore(commaLines: string[], cfg: FormatOptions): string[] {
     }
     const [precedingWhitespace] = commaLine.match(WHITESPACE_REGEX) || [''];
     const trimLastIndent = precedingWhitespace.replace(
-      new RegExp((isTabs ? '\t' : cfg.indent) + '$'), // remove last tab / last indent
+      new RegExp(cfg.indent + '$'), // remove last indent
       ''
     );
     return (
