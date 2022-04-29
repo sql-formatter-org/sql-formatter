@@ -1,6 +1,6 @@
 const attachFormat = () => {
   const language = document.getElementById('language');
-  const uppercase = document.getElementById('uppercase');
+  const keywordCase = document.getElementById('keywordCase');
   const input = document.getElementById('input');
   const output = document.getElementById('output');
   const keywordPosition = document.getElementById('keywordPosition');
@@ -21,7 +21,7 @@ const attachFormat = () => {
     try {
       const config = {
         language: language.options[language.selectedIndex].value,
-        uppercase: uppercase.checked,
+        keywordCase: keywordCase.options[keywordCase.selectedIndex].value,
         keywordPosition: keywordPosition.options[keywordPosition.selectedIndex].value,
         breakBeforeBooleanOperator: breakBeforeBooleanOperator.checked,
         aliasAs: aliasAs.options[aliasAs.selectedIndex].value,
@@ -52,7 +52,7 @@ ${e.stack.toString()}
   input.addEventListener('input', format);
   [
     language,
-    uppercase,
+    keywordCase,
     keywordPosition,
     newline,
     itemCount,
