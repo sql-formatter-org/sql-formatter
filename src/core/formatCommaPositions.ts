@@ -43,9 +43,7 @@ function formatTabular(commaLines: string[]): string[] {
 }
 
 function formatBefore(commaLines: string[], cfg: FormatOptions): string[] {
-  commaLines = trimTrailingCommas(commaLines);
-
-  return commaLines.map((commaLine, i) => {
+  return trimTrailingCommas(commaLines).map((commaLine, i) => {
     if (!i) {
       // do not add comma for first item
       return commaLine;
