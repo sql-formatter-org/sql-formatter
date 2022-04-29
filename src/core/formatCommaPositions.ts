@@ -31,9 +31,9 @@ export default function formatCommaPositions(query: string, cfg: FormatOptions):
   return newQuery.join('\n');
 }
 
+// makes all lines the same length by appending spaces before comma
 function formatTabular(commaLines: string[]): string[] {
-  const maxLineLength = maxLength(commaLines); // get longest for alignment
-  // make all lines the same length by appending spaces before comma
+  const maxLineLength = maxLength(commaLines);
   return trimTrailingCommas(commaLines).map((line, i) => {
     if (i === commaLines.length - 1) {
       return line; // do not add comma for last item
