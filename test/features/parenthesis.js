@@ -6,7 +6,7 @@ import dedent from 'dedent-js';
  * @param {Function} format
  */
 export default function supportsParenthesesOptions(language, format) {
-  it('supports opening parenthesis on newline', () => {
+  it('defaults to newline before opening and closing parenthesis', () => {
     const result = format('SELECT a FROM ( SELECT b FROM c );');
     expect(result).toBe(dedent`
       SELECT
@@ -21,9 +21,9 @@ export default function supportsParenthesesOptions(language, format) {
     `);
   });
 
-  it('supports opening parenthesis on sameline', () => {
+  it('supports opening parenthesis on same line', () => {
     const result = format('SELECT a FROM ( SELECT b FROM c );', {
-      parenOptions: { openParenNewline: false },
+      newlineBeforeOpenParen: false,
     });
     expect(result).toBe(dedent`
       SELECT
@@ -37,8 +37,10 @@ export default function supportsParenthesesOptions(language, format) {
     `);
   });
 
-  it('supports closing parenthesis on newline', () => {
-    const result = format('SELECT a FROM ( SELECT b FROM c );');
+  it('supports closing parenthesis on same line', () => {
+    const result = format('SELECT a FROM ( SELECT b FROM c );', {
+      newlineBeforeCloseParen: false,
+    });
     expect(result).toBe(dedent`
       SELECT
         a
@@ -47,20 +49,19 @@ export default function supportsParenthesesOptions(language, format) {
         SELECT
           b
         FROM
-          c
-      );
+          c );
     `);
   });
 
-  it('supports closing parenthesis on sameline', () => {
+  it('supports both opening and closing parenthesis on same line', () => {
     const result = format('SELECT a FROM ( SELECT b FROM c );', {
-      parenOptions: { closeParenNewline: false },
+      newlineBeforeOpenParen: false,
+      newlineBeforeCloseParen: false,
     });
     expect(result).toBe(dedent`
       SELECT
         a
-      FROM
-      (
+      FROM (
         SELECT
           b
         FROM

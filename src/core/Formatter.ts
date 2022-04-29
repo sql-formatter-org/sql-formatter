@@ -409,7 +409,7 @@ export default class Formatter {
         !preserveWhitespaceFor.includes(this.tokenLookBehind()?.type)
       ) {
         query = trimSpacesEnd(query);
-      } else if (!this.cfg.parenOptions.openParenNewline) {
+      } else if (!this.cfg.newlineBeforeOpenParen) {
         query = query.trimEnd() + ' ';
       }
       query += this.show(token);
@@ -440,7 +440,7 @@ export default class Formatter {
 
       if (this.isTenSpace()) {
         query = this.addNewline(query) + this.cfg.indent;
-      } else if (this.cfg.parenOptions.closeParenNewline) {
+      } else if (this.cfg.newlineBeforeCloseParen) {
         query = this.addNewline(query);
       } else {
         query = query.trimEnd() + ' ';

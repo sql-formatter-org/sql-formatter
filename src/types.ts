@@ -60,11 +60,6 @@ export enum CommaPosition {
   tabular = 'tabular',
 }
 
-export interface ParenOptions {
-  openParenNewline?: boolean;
-  closeParenNewline?: boolean;
-}
-
 export interface FormatOptions {
   indent: string;
   keywordCase: KeywordCase;
@@ -74,7 +69,8 @@ export interface FormatOptions {
   aliasAs: AliasMode;
   tabulateAlias: boolean;
   commaPosition: CommaPosition;
-  parenOptions: ParenOptions;
+  newlineBeforeOpenParen: boolean;
+  newlineBeforeCloseParen: boolean;
   lineWidth: number;
   linesBetweenQueries: number;
   denseOperators: boolean;

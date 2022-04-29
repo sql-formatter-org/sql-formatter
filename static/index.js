@@ -10,8 +10,8 @@ const attachFormat = () => {
   const itemCount = document.getElementById('newline.itemCount');
   const tabulateAlias = document.getElementById('tabulateAlias');
   const commaPosition = document.getElementById('commaPosition');
-  const openParenNewline = document.getElementById('openParenNewline');
-  const closeParenNewline = document.getElementById('closeParenNewline');
+  const newlineBeforeOpenParen = document.getElementById('newlineBeforeOpenParen');
+  const newlineBeforeCloseParen = document.getElementById('newlineBeforeCloseParen');
   const lineWidth = document.getElementById('lineWidth');
   const lineBetweenQueries = document.getElementById('lineBetweenQueries');
   const denseOperators = document.getElementById('denseOperators');
@@ -29,10 +29,8 @@ const attachFormat = () => {
           itemCount.value > 0 ? itemCount.value : newline.options[newline.selectedIndex].value,
         tabulateAlias: tabulateAlias.checked,
         commaPosition: commaPosition.options[commaPosition.selectedIndex].value,
-        parenOptions: {
-          openParenNewline: openParenNewline.checked,
-          closeParenNewline: closeParenNewline.checked,
-        },
+        newlineBeforeOpenParen: newlineBeforeOpenParen.checked,
+        newlineBeforeCloseParen: newlineBeforeCloseParen.checked,
         lineWidth: lineWidth.value,
         lineBetweenQueries: lineBetweenQueries.value,
         denseOperators: denseOperators.checked,
@@ -60,8 +58,8 @@ ${e.stack.toString()}
     aliasAs,
     tabulateAlias,
     commaPosition,
-    openParenNewline,
-    closeParenNewline,
+    newlineBeforeOpenParen,
+    newlineBeforeCloseParen,
     lineWidth,
     lineBetweenQueries,
     denseOperators,

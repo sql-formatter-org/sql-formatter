@@ -50,10 +50,8 @@ const defaultOptions: FormatFnOptions = {
   aliasAs: AliasMode.preserve,
   tabulateAlias: false,
   commaPosition: CommaPosition.after,
-  parenOptions: {
-    openParenNewline: true,
-    closeParenNewline: true,
-  },
+  newlineBeforeOpenParen: true,
+  newlineBeforeCloseParen: true,
   lineWidth: 50,
   linesBetweenQueries: 1,
   denseOperators: false,
@@ -75,7 +73,6 @@ export const format = (query: string, cfg: Partial<FormatFnOptions> = {}): strin
   const options = validateConfig({
     ...defaultOptions,
     ...cfg,
-    parenOptions: { ...defaultOptions.parenOptions, ...cfg.parenOptions },
   });
 
   const Formatter = formatters[options.language];

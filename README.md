@@ -196,9 +196,10 @@ All fields are optional and all fields that are not specified will be filled wit
   True to align AS keywords to single column
 - **`commaPosition`**: `"before" | "after" | "tabular"` (default: `"after"`)
   Where to place the comma in listed clauses
-- **`parenOptions`**:
-  - `openParenNewline`: `boolean` - True to place opening parenthesis on new line (default: true)
-  - `closeParenNewline`: `boolean` - True to place closing parenthesis on new line (default: true)
+- **`newlineBeforeOpenParen`**: `boolean` (default: `true`)
+  True to place opening parenthesis on new line.
+- **`newlineBeforeCloseParen`**: `boolean` (default: `true`)
+  True to place closing parenthesis on new line.
 - **`lineWidth`**: `number` (default: `50`)
   Number of characters in each line before breaking.
 - **`linesBetweenQueries`**: `number` (default: `1`)
