@@ -57,27 +57,6 @@ export default function supportsOperators(language, format, operators = [], logi
     `);
   });
 
-  it('supports semicolon on same line', () => {
-    const result = format(`SELECT a FROM b;`);
-    expect(result).toBe(dedent`
-      SELECT
-        a
-      FROM
-        b;
-    `);
-  });
-
-  it('supports semicolon on new line', () => {
-    const result = format(`SELECT a FROM b;`, { newlineBeforeSemicolon: true });
-    expect(result).toBe(dedent`
-      SELECT
-        a
-      FROM
-        b
-      ;
-    `);
-  });
-
   it('supports backticks', () => {
     const result = format(`SELECT \`a\`.\`b\` FROM \`c\`.\`d\`;`);
     expect(result).toBe(dedent`

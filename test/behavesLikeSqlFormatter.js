@@ -10,6 +10,7 @@ import supportsNewlineBeforeParen from './features/newlineBeforeParen';
 import supportsCommaModes from './features/comma';
 import { AliasMode } from '../src/types';
 import supportsLinesBetweenQueries from './features/linesBetweenQueries';
+import supportsNewlineBeforeSemicolon from './features/newlineBeforeSemicolon';
 
 /**
  * Core tests for all SQL formatters
@@ -25,6 +26,7 @@ export default function behavesLikeSqlFormatter(language, format) {
   supportsLinesBetweenQueries(language, format);
   supportsNewlineOptions(language, format);
   supportsNewlineBeforeParen(language, format);
+  supportsNewlineBeforeSemicolon(language, format);
   supportsCommaModes(language, format);
 
   it('does nothing with empty input', () => {
