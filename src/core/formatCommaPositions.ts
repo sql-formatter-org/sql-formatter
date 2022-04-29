@@ -7,7 +7,7 @@ import { WHITESPACE_REGEX } from './Tokenizer';
  */
 export default function formatCommaPositions(query: string, cfg: FormatOptions): string {
   const lines = query.split('\n');
-  let newQuery: string[] = [];
+  const newQuery: string[] = [];
   for (let i = 0; i < lines.length; i++) {
     // if line has trailing comma
     if (lines[i].match(/.*,$/)) {
@@ -52,7 +52,7 @@ export default function formatCommaPositions(query: string, cfg: FormatOptions):
         });
       }
 
-      newQuery = [...newQuery, ...commaLines];
+      newQuery.push(...commaLines);
     }
     newQuery.push(lines[i]);
   }
