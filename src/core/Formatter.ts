@@ -72,7 +72,10 @@ export default class Formatter {
     if (this.cfg.tabulateAlias) {
       query = formatAliasPositions(query);
     }
-    if (this.cfg.commaPosition !== CommaPosition.after) {
+    if (
+      this.cfg.commaPosition === CommaPosition.before ||
+      this.cfg.commaPosition === CommaPosition.tabular
+    ) {
       query = formatCommaPositions(query, this.cfg);
     }
 
