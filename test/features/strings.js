@@ -1,9 +1,3 @@
-/**
- * Tests support for various string syntax
- * @param {string} language
- * @param {Function} format
- * @param {string[]} stringTypes
- */
 export default function supportsStrings(language, format, stringTypes = []) {
   if (stringTypes.includes('""')) {
     it('supports double-quoted strings', () => {

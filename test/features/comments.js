@@ -2,11 +2,6 @@ import dedent from 'dedent-js';
 
 import { itIf } from '../utils';
 
-/**
- * Tests for standard -- and /* *\/ comments
- * @param {string} language
- * @param {Function} format
- */
 export default function supportsComments(language, format) {
   it('formats SELECT query with different comments', () => {
     const result = format(dedent`

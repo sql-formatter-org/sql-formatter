@@ -1,11 +1,6 @@
 import dedent from 'dedent-js';
 import { NewlineMode } from '../../src/types';
 
-/**
- * Tests support for all newline options
- * @param {string} language
- * @param {Function} format
- */
 export default function supportsNewlineOptions(language, format) {
   it('throws error when newline is negative number', () => {
     expect(() => {

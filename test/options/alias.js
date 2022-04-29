@@ -1,11 +1,6 @@
 import dedent from 'dedent-js';
 import { AliasMode, KeywordMode, NewlineMode } from '../../src/types';
 
-/**
- * Tests support for alias options
- * @param {string} language
- * @param {Function} format
- */
 export default function supportsAliases(language, format) {
   const baseQuery = 'SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;';
 

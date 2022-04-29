@@ -1,11 +1,6 @@
 import dedent from 'dedent-js';
 import { KeywordMode } from '../../src/types';
 
-/**
- * Tests support for keyword positions
- * @param {string} language
- * @param {Function} format
- */
 export default function supportsKeywordPositions(language, format) {
   const baseQuery = `
     SELECT COUNT(a.column1), MAX(b.column2 + b.column3), b.column4 AS four

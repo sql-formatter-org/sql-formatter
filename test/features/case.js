@@ -1,11 +1,6 @@
 import dedent from 'dedent-js';
 import { KeywordCase } from '../../src/types';
 
-/**
- * Tests support for CASE [WHEN...] END syntax
- * @param {string} language
- * @param {Function} format
- */
 export default function supportsCase(language, format) {
   it('formats CASE ... WHEN with a blank expression', () => {
     const result = format(

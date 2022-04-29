@@ -15,8 +15,6 @@ import supportsBreakBeforeBooleanOperator from './options/breakBeforeBooleanOper
 
 /**
  * Core tests for all SQL formatters
- * @param {string} language
- * @param {Function} format
  */
 export default function behavesLikeSqlFormatter(language, format) {
   supportsAliases(language, format);

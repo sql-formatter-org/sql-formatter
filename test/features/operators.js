@@ -1,11 +1,5 @@
 import dedent from 'dedent-js';
 
-/**
- * Tests support for various operators
- * @param {string} language
- * @param {Function} format
- * @param {string[]} operators
- */
 export default function supportsOperators(language, format, operators = [], logicalOperators = []) {
   operators.forEach(op => {
     it(`supports ${op} operator`, () => {

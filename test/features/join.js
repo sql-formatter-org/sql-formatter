@@ -1,13 +1,5 @@
 import dedent from 'dedent-js';
 
-/**
- * Tests support for various joins
- * @param {string} language
- * @param {Function} format
- * @param {Object} opts
- * @param {string[]} opts.without
- * @param {string[]} opts.additionally
- */
 export default function supportsJoin(language, format, { without, additionally } = {}) {
   const unsupportedJoinRegex = without ? new RegExp(without.join('|'), 'u') : /^whateve_!%&$/u;
   const isSupportedJoin = join => !unsupportedJoinRegex.test(join);
