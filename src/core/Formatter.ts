@@ -1,7 +1,7 @@
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
-import { isNumber, trimSpacesEnd } from '../utils';
+import { trimSpacesEnd } from '../utils';
 import { isReserved, isCommand, isToken, Token, TokenType, ZWS } from './token';
 import Tokenizer from './Tokenizer';
 import {
@@ -198,28 +198,30 @@ export default class Formatter {
   private checkNewline(): boolean {
     const nextTokens = this.tokensUntilNextCommandOrQueryEnd();
 
-    if (
-      this.cfg.newline === NewlineMode.always ||
-      (this.withinSelect && nextTokens.some(isToken.CASE)) // auto break if SELECT includes CASE statements
-    ) {
+    // auto break if SELECT includes CASE statements
+    if (this.withinSelect && nextTokens.some(isToken.CASE)) {
       return true;
     }
-    if (this.cfg.newline === NewlineMode.never) {
-      return false;
+
+    switch (this.cfg.newline) {
+      case NewlineMode.always:
+        return true;
+      case NewlineMode.never:
+        return false;
+      case NewlineMode.lineWidth:
+        return this.inlineWidth(nextTokens) > this.cfg.lineWidth;
+      default: // newline mode is a number
+        return (
+          this.countClauses(nextTokens) > this.cfg.newline ||
+          this.inlineWidth(nextTokens) > this.cfg.lineWidth
+        );
     }
+  }
 
-    // calculate length if it were all inline
-    const inlineWidth = `${this.tokens[this.index].whitespaceBefore}${
-      this.tokens[this.index].value
-    } ${nextTokens.map(({ value }) => (value === ',' ? value + ' ' : value)).join('')}`.length;
-
-    if (this.cfg.newline === NewlineMode.lineWidth) {
-      return inlineWidth > this.cfg.lineWidth;
-    } else if (isNumber(this.cfg.newline)) {
-      return this.countClauses(nextTokens) > this.cfg.newline || inlineWidth > this.cfg.lineWidth;
-    }
-
-    return true;
+  private inlineWidth(tokens: Token[]): number {
+    const token = this.tokens[this.index];
+    const tokensString = tokens.map(({ value }) => (value === ',' ? value + ' ' : value)).join('');
+    return `${token.whitespaceBefore}${token.value} ${tokensString}`.length;
   }
 
   /**
