@@ -7,7 +7,7 @@ import supportsNewlineOptions from './options/newline';
 import supportsKeywordCase from './options/keywordCase';
 import supportsKeywordPositions from './options/keywordPosition';
 import supportsNewlineBeforeParen from './options/newlineBeforeParen';
-import supportsCommaModes from './options/comma';
+import supportsCommaPosition from './options/commaPosition';
 import { AliasMode } from '../src/types';
 import supportsLinesBetweenQueries from './options/linesBetweenQueries';
 import supportsNewlineBeforeSemicolon from './options/newlineBeforeSemicolon';
@@ -28,7 +28,7 @@ export default function behavesLikeSqlFormatter(language, format) {
   supportsNewlineOptions(language, format);
   supportsNewlineBeforeParen(language, format);
   supportsNewlineBeforeSemicolon(language, format);
-  supportsCommaModes(language, format);
+  supportsCommaPosition(language, format);
   supportsBreakBeforeBooleanOperator(language, format);
 
   it('does nothing with empty input', () => {

@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
 import { CommaPosition } from '../../src/types';
 
-export default function supportsCommaModes(language, format) {
+export default function supportsCommaPosition(language, format) {
   it('defaults to comma after column', () => {
     const result = format(
       'SELECT alpha , MAX(beta) , delta AS d ,epsilon FROM gamma GROUP BY alpha , delta, epsilon'
