@@ -51,18 +51,18 @@ function formatBefore(commaLines: string[], cfg: FormatOptions): string[] {
       // do not add comma for first item
       return commaLine;
     }
-    const [precedingWhitespace] = commaLine.match(WHITESPACE_REGEX) || [''];
-    const trimLastIndent = precedingWhitespace.replace(
-      new RegExp(cfg.indent + '$'), // remove last indent
-      ''
-    );
+    const [whitespace] = commaLine.match(WHITESPACE_REGEX) || [''];
     return (
-      trimLastIndent +
+      removeLastIndent(whitespace, cfg.indent) +
       // add comma in place of last indent
       (isTabs ? '    ' : cfg.indent).replace(/ {2}$/, ', ') + // using 4 width tabs
       commaLine.trimStart()
     );
   });
+}
+
+function removeLastIndent(whitespace: string, indent: string): string {
+  return whitespace.replace(new RegExp(indent + '$'), '');
 }
 
 function trimTrailingCommas(lines: string[]): string[] {
