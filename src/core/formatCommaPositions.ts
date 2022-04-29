@@ -34,18 +34,18 @@ export default function formatCommaPositions(query: string, cfg: FormatOptions):
 function formatTabular(commaLines: string[]): string[] {
   const maxLineLength = maxLength(commaLines); // get longest for alignment
   // make all lines the same length by appending spaces before comma
-  return trimTrailingCommas(commaLines).map((line, i) =>
-    i < commaLines.length - 1 // do not add comma for last item
-      ? line + ' '.repeat(maxLineLength - line.length - 1) + ','
-      : line
-  );
+  return trimTrailingCommas(commaLines).map((line, i) => {
+    if (i === commaLines.length - 1) {
+      return line; // do not add comma for last item
+    }
+    return line + ' '.repeat(maxLineLength - line.length - 1) + ',';
+  });
 }
 
 function formatBefore(commaLines: string[], cfg: FormatOptions): string[] {
   return trimTrailingCommas(commaLines).map((line, i) => {
-    if (!i) {
-      // do not add comma for first item
-      return line;
+    if (i === 0) {
+      return line; // do not add comma for first item
     }
     const [whitespace] = line.match(WHITESPACE_REGEX) || [''];
     return (
