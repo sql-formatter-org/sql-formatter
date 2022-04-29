@@ -15,7 +15,7 @@ const attachFormat = () => {
   const lineWidth = document.getElementById('lineWidth');
   const lineBetweenQueries = document.getElementById('lineBetweenQueries');
   const denseOperators = document.getElementById('denseOperators');
-  const semicolonNewline = document.getElementById('semicolonNewline');
+  const newlineBeforeSemicolon = document.getElementById('newlineBeforeSemicolon');
 
   function format() {
     try {
@@ -34,7 +34,7 @@ const attachFormat = () => {
         lineWidth: lineWidth.value,
         lineBetweenQueries: lineBetweenQueries.value,
         denseOperators: denseOperators.checked,
-        semicolonNewline: semicolonNewline.checked,
+        newlineBeforeSemicolon: newlineBeforeSemicolon.checked,
       };
       output.value = sqlFormatter.format(input.value, config);
     } catch (e) {
@@ -63,7 +63,7 @@ ${e.stack.toString()}
     lineWidth,
     lineBetweenQueries,
     denseOperators,
-    semicolonNewline,
+    newlineBeforeSemicolon,
   ].forEach(option => option.addEventListener('change', format));
 
   format();
