@@ -45,14 +45,13 @@ function formatTabular(commaLines: string[]): string[] {
 function formatBefore(commaLines: string[], cfg: FormatOptions): string[] {
   const isTabs = cfg.indent.includes('\t'); // loose tab check
   commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, ''));
-  const whitespaceRegex = WHITESPACE_REGEX;
 
   return commaLines.map((commaLine, j) => {
     if (!j) {
       // do not add comma for first item
       return commaLine;
     }
-    const precedingWhitespace = commaLine.match(new RegExp('^' + whitespaceRegex + ''));
+    const precedingWhitespace = commaLine.match(new RegExp('^' + WHITESPACE_REGEX + ''));
     const trimLastIndent = precedingWhitespace
       ? precedingWhitespace[1].replace(
           new RegExp((isTabs ? '\t' : cfg.indent) + '$'), // remove last tab / last indent
