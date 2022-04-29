@@ -32,7 +32,7 @@ export default function formatCommaPositions(query: string, cfg: FormatOptions):
 }
 
 function formatTabular(commaLines: string[]): string[] {
-  commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, '')); // trim all trailing commas
+  commaLines = trimTrailingCommas(commaLines);
   const commaMaxLength = maxLength(commaLines); // get longest for alignment
   // make all lines the same length by appending spaces before comma
   return commaLines.map((commaLine, i) =>
@@ -44,7 +44,7 @@ function formatTabular(commaLines: string[]): string[] {
 
 function formatBefore(commaLines: string[], cfg: FormatOptions): string[] {
   const isTabs = cfg.indent.includes('\t'); // loose tab check
-  commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, ''));
+  commaLines = trimTrailingCommas(commaLines);
 
   return commaLines.map((commaLine, i) => {
     if (!i) {
@@ -65,4 +65,8 @@ function formatBefore(commaLines: string[], cfg: FormatOptions): string[] {
       commaLine.trimStart()
     );
   });
+}
+
+function trimTrailingCommas(lines: string[]): string[] {
+  return lines.map(line => line.replace(/,$/, ''));
 }
