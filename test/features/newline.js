@@ -35,26 +35,31 @@ export default function supportsNewlineOptions(language, format) {
     );
   });
 
-  it('supports always mode', () => {
-    const result = format('SELECT foo, bar, baz FROM qux;', {
-      newline: NewlineMode.always,
+  describe('newline: always', () => {
+    it('always splits to multiple lines, even when just a single clause', () => {
+      const result = format('SELECT foo, bar FROM qux;', {
+        newline: NewlineMode.always,
+      });
+      expect(result).toBe(dedent`
+        SELECT
+          foo,
+          bar
+        FROM
+          qux;
+      `);
     });
-    expect(result).toBe(dedent`
-      SELECT
-        foo,
-        bar,
-        baz
-      FROM
-        qux;
-    `);
   });
 
-  it('supports never mode', () => {
-    const result = format('SELECT foo, bar, baz, qux FROM corge;', { newline: NewlineMode.never });
-    expect(result).toBe(dedent`
-      SELECT foo, bar, baz, qux
-      FROM corge;
-    `);
+  describe('newline: never', () => {
+    it('never splits to multiple lines, regardless of count', () => {
+      const result = format('SELECT foo, bar, baz, qux FROM corge;', {
+        newline: NewlineMode.never,
+      });
+      expect(result).toBe(dedent`
+        SELECT foo, bar, baz, qux
+        FROM corge;
+      `);
+    });
   });
 
   describe('newline: number', () => {
@@ -148,18 +153,22 @@ export default function supportsNewlineOptions(language, format) {
     });
   });
 
-  it('supports lineWidth mode', () => {
-    const result = format('SELECT foo, bar, baz, qux FROM corge;', {
-      newline: NewlineMode.lineWidth,
-      lineWidth: 20,
+  describe('newline: lineWidth', () => {
+    it('splits to multiple lines when single line would exceed specified lineWidth', () => {
+      const result = format(
+        'SELECT first_field, second_field FROM some_excessively_long_table_name;',
+        {
+          newline: NewlineMode.lineWidth,
+          lineWidth: 20,
+        }
+      );
+      expect(result).toBe(dedent`
+        SELECT
+          first_field,
+          second_field
+        FROM
+          some_excessively_long_table_name;
+      `);
     });
-    expect(result).toBe(dedent`
-      SELECT
-        foo,
-        bar,
-        baz,
-        qux
-      FROM corge;
-    `);
   });
 }
