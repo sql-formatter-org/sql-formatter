@@ -24,44 +24,6 @@ export default function supportsOperators(language, format, operators = [], logi
     });
   });
 
-  it('supports logical operators', () => {
-    const result = format(`
-      SELECT a FROM b WHERE TRUE ${logicalOperators.reduce(
-        (str, op, i) => str + ` ${op} condition${i + 1}`,
-        ''
-      )};
-    `);
-    expect(result).toBe(dedent`
-      SELECT
-        a
-      FROM
-        b
-      WHERE
-        TRUE
-      ${logicalOperators.map((op, i) => `  ${op} condition${i + 1}`).join('\n')};
-    `);
-  });
-
-  it('supports breaking after boolean operators', () => {
-    const result = format(
-      `
-      SELECT a FROM b WHERE TRUE ${logicalOperators.reduce(
-        (str, op, i) => str + ` ${op} condition${i + 1}`,
-        ''
-      )};
-    `,
-      { breakBeforeBooleanOperator: false }
-    );
-    expect(result).toBe(dedent`
-      SELECT
-        a
-      FROM
-        b
-      WHERE
-        TRUE ${logicalOperators.map((op, i) => `${op}\n  condition${i + 1}`).join(' ')};
-    `);
-  });
-
   it('supports backticks', () => {
     const result = format(`SELECT \`a\`.\`b\` FROM \`c\`.\`d\`;`);
     expect(result).toBe(dedent`
