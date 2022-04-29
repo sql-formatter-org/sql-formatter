@@ -20,29 +20,7 @@ export default function formatCommaPositions(query: string, cfg: FormatOptions):
       if (cfg.commaPosition === CommaPosition.tabular) {
         commaLines = formatTabular(commaLines);
       } else if (cfg.commaPosition === CommaPosition.before) {
-        const isTabs = cfg.indent.includes('\t'); // loose tab check
-        commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, ''));
-        const whitespaceRegex = WHITESPACE_REGEX;
-
-        commaLines = commaLines.map((commaLine, j) => {
-          if (!j) {
-            // do not add comma for first item
-            return commaLine;
-          }
-          const precedingWhitespace = commaLine.match(new RegExp('^' + whitespaceRegex + ''));
-          const trimLastIndent = precedingWhitespace
-            ? precedingWhitespace[1].replace(
-                new RegExp((isTabs ? '\t' : cfg.indent) + '$'), // remove last tab / last indent
-                ''
-              )
-            : '';
-          return (
-            trimLastIndent +
-            // add comma in place of last indent
-            (isTabs ? '    ' : cfg.indent).replace(/ {2}$/, ', ') + // using 4 width tabs
-            commaLine.trimStart()
-          );
-        });
+        commaLines = formatBefore(commaLines, cfg);
       }
 
       newQuery.push(...commaLines);
@@ -62,4 +40,30 @@ function formatTabular(commaLines: string[]): string[] {
       ? commaLine + ' '.repeat(commaMaxLength - commaLine.length) + ','
       : commaLine
   );
+}
+
+function formatBefore(commaLines: string[], cfg: FormatOptions): string[] {
+  const isTabs = cfg.indent.includes('\t'); // loose tab check
+  commaLines = commaLines.map(commaLine => commaLine.replace(/,$/, ''));
+  const whitespaceRegex = WHITESPACE_REGEX;
+
+  return commaLines.map((commaLine, j) => {
+    if (!j) {
+      // do not add comma for first item
+      return commaLine;
+    }
+    const precedingWhitespace = commaLine.match(new RegExp('^' + whitespaceRegex + ''));
+    const trimLastIndent = precedingWhitespace
+      ? precedingWhitespace[1].replace(
+          new RegExp((isTabs ? '\t' : cfg.indent) + '$'), // remove last tab / last indent
+          ''
+        )
+      : '';
+    return (
+      trimLastIndent +
+      // add comma in place of last indent
+      (isTabs ? '    ' : cfg.indent).replace(/ {2}$/, ', ') + // using 4 width tabs
+      commaLine.trimStart()
+    );
+  });
 }
