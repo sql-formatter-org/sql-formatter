@@ -403,6 +403,18 @@ export default function behavesLikeSqlFormatter(language: SqlLanguage, format: F
     `);
   });
 
+  it('supports decimal numbers', () => {
+    const result = format('SELECT 42, -35.04, 105., 2.53E+3, 1.085E-5;');
+    expect(result).toBe(dedent`
+      SELECT
+        42,
+        -35.04,
+        105.,
+        2.53E+3,
+        1.085E-5;
+    `);
+  });
+
   it('correctly indents create statement after select', () => {
     const result = format(`
       SELECT * FROM test;
