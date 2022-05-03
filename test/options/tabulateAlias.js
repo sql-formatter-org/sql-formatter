@@ -49,6 +49,29 @@ export default function supportsTabulateAlias(language, format) {
     `);
   });
 
+  it('tabulates aliases that sometimes use AS keyword', () => {
+    const result = format(
+      'SELECT alpha AS alp, MAX(beta), epsilon E FROM ( SELECT mu m, iota AS io FROM gamma );',
+      {
+        tabulateAlias: true,
+      }
+    );
+    expect(result).toBe(dedent`
+      SELECT
+        alpha     AS alp,
+        MAX(beta),
+        epsilon   E
+      FROM
+      (
+        SELECT
+          mu   m,
+          iota AS io
+        FROM
+          gamma
+      );
+    `);
+  });
+
   it('does not tabulate aliases when newline:never used', () => {
     const result = format(
       'SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );',
