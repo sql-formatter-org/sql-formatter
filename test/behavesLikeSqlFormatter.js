@@ -12,12 +12,14 @@ import { AliasMode } from '../src/types';
 import supportsLinesBetweenQueries from './options/linesBetweenQueries';
 import supportsNewlineBeforeSemicolon from './options/newlineBeforeSemicolon';
 import supportsBreakBeforeBooleanOperator from './options/breakBeforeBooleanOperator';
+import supportsTabulateAlias from './options/tabulateAlias';
 
 /**
  * Core tests for all SQL formatters
  */
 export default function behavesLikeSqlFormatter(language, format) {
   supportsAliases(language, format);
+  supportsTabulateAlias(language, format);
   supportsComments(language, format);
   supportsIndent(language, format);
   supportsKeywordCase(language, format);
