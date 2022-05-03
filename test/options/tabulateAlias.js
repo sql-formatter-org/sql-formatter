@@ -2,36 +2,6 @@ import dedent from 'dedent-js';
 import { AliasMode, KeywordMode, NewlineMode } from '../../src/types';
 
 export default function supportsTabulateAlias(language, format) {
-  const tabularFinalQueryWithAlias = dedent`
-    SELECT
-      alpha     AS A,
-      MAX(beta),
-      epsilon   as E
-    FROM
-    (
-      SELECT
-        mu   AS m,
-        iota as i
-      FROM
-        gamma
-    );
-  `;
-
-  const tabularFinalQueryNoAlias = dedent`
-    SELECT
-      alpha     A,
-      MAX(beta),
-      epsilon   E
-    FROM
-    (
-      SELECT
-        mu   m,
-        iota i
-      FROM
-        gamma
-    );
-  `;
-
   it('tabulates alias with aliasAs on', () => {
     const result = format(
       'SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );',
@@ -40,7 +10,20 @@ export default function supportsTabulateAlias(language, format) {
         tabulateAlias: true,
       }
     );
-    expect(result).toBe(tabularFinalQueryWithAlias);
+    expect(result).toBe(dedent`
+      SELECT
+        alpha     AS A,
+        MAX(beta),
+        epsilon   as E
+      FROM
+      (
+        SELECT
+          mu   AS m,
+          iota as i
+        FROM
+          gamma
+      );
+    `);
   });
 
   it('tabulates alias with aliasAs off', () => {
@@ -52,7 +35,20 @@ export default function supportsTabulateAlias(language, format) {
       }
     );
 
-    expect(result).toBe(tabularFinalQueryNoAlias);
+    expect(result).toBe(dedent`
+      SELECT
+        alpha     A,
+        MAX(beta),
+        epsilon   E
+      FROM
+      (
+        SELECT
+          mu   m,
+          iota i
+        FROM
+          gamma
+      );
+    `);
   });
 
   it('handles edge case of newline.never', () => {
