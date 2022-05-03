@@ -59,6 +59,16 @@ export default function supportsAliases(language, format) {
     );
   });
 
+  it('only adds AS keyword to columns with a name', () => {
+    expect(format('SELECT a + b name1, a + b', { aliasAs: AliasMode.always })).toBe(
+      dedent(`
+        SELECT
+          a + b as name1,
+          a + b
+      `)
+    );
+  });
+
   it('supports select only mode', () => {
     expect(format(baseQuery, { aliasAs: AliasMode.select })).toBe(
       dedent(`
