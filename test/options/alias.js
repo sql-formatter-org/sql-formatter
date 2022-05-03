@@ -2,8 +2,6 @@ import dedent from 'dedent-js';
 import { AliasMode } from '../../src/types';
 
 export default function supportsAliases(language, format) {
-  const baseQuery = 'SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;';
-
   it('defaults to preserving original uses of AS', () => {
     expect(
       format('SELECT a a_column, b AS bColumn FROM table1 t1 JOIN table2 as t2 WHERE z;')
@@ -22,7 +20,11 @@ export default function supportsAliases(language, format) {
   });
 
   it('supports always mode', () => {
-    expect(format(baseQuery, { aliasAs: AliasMode.always })).toBe(
+    expect(
+      format('SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;', {
+        aliasAs: AliasMode.always,
+      })
+    ).toBe(
       dedent(`
         SELECT
           a as a_column,
@@ -41,7 +43,11 @@ export default function supportsAliases(language, format) {
   });
 
   it('supports never mode', () => {
-    expect(format(baseQuery, { aliasAs: AliasMode.never })).toBe(
+    expect(
+      format('SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;', {
+        aliasAs: AliasMode.never,
+      })
+    ).toBe(
       dedent(`
         SELECT
           a a_column,
@@ -70,7 +76,11 @@ export default function supportsAliases(language, format) {
   });
 
   it('supports select only mode', () => {
-    expect(format(baseQuery, { aliasAs: AliasMode.select })).toBe(
+    expect(
+      format('SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;', {
+        aliasAs: AliasMode.select,
+      })
+    ).toBe(
       dedent(`
         SELECT
           a as a_column,
