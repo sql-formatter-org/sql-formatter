@@ -400,13 +400,13 @@ export default function behavesLikeSqlFormatter(language, format) {
   });
 
   it('formats unicode correctly', () => {
-    const result = format('SELECT 结合使用, тест FROM [table];');
+    const result = format('SELECT 结合使用, тест FROM töörõõm;');
     expect(result).toBe(dedent`
       SELECT
         结合使用,
         тест
       FROM
-        [table];
+        töörõõm;
     `);
   });
 
