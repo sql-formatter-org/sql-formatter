@@ -49,7 +49,7 @@ export default function supportsTabulateAlias(language, format) {
     `);
   });
 
-  it('handles edge case of newline.never', () => {
+  it('does not tabulate aliases when newline:never used', () => {
     const result = format(
       'SELECT alpha AS A, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS i FROM gamma );',
       { newline: NewlineMode.never, tabulateAlias: true }
@@ -64,7 +64,7 @@ export default function supportsTabulateAlias(language, format) {
     `);
   });
 
-  it('handles edge case of tenSpaceLeft', () => {
+  it('works together with keywordPosition:tenSpaceLeft', () => {
     const result = format(
       dedent`SELECT alpha AS A, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS i FROM gamma );`,
       { keywordPosition: KeywordMode.tenSpaceLeft, tabulateAlias: true }
@@ -82,7 +82,7 @@ export default function supportsTabulateAlias(language, format) {
     `);
   });
 
-  it('handles edge case of tenSpaceRight', () => {
+  it('works together with keywordPosition:tenSpaceRight', () => {
     const result = format(
       dedent`SELECT alpha AS A, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS i FROM gamma );`,
       { keywordPosition: KeywordMode.tenSpaceRight, tabulateAlias: true }
