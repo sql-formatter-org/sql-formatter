@@ -150,27 +150,6 @@ export default function behavesLikeSqlFormatter(language, format) {
     `);
   });
 
-  it('recognizes LIMIT in lowercase', () => {
-    const result = format('limit 5, 10;');
-    expect(result).toBe(dedent`
-      limit
-        5, 10;
-    `);
-  });
-
-  it('preserves case of keywords', () => {
-    const result = format('select distinct * frOM foo WHERe a > 1 and b = 3');
-    expect(result).toBe(dedent`
-      select
-        distinct *
-      frOM
-        foo
-      WHERe
-        a > 1
-        and b = 3
-    `);
-  });
-
   it('formats SELECT query with SELECT query inside it', () => {
     const result = format(
       'SELECT *, SUM(*) AS total FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b'
