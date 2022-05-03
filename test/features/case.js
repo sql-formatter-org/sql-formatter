@@ -4,16 +4,16 @@ import { KeywordCase } from '../../src/types';
 export default function supportsCase(language, format) {
   it('formats CASE ... WHEN with a blank expression', () => {
     const result = format(
-      "CASE WHEN [option] = 'foo' THEN 1 WHEN [option] = 'bar' THEN 2 WHEN [option] = 'baz' THEN 3 ELSE 4 END;"
+      "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
     );
 
     expect(result).toBe(dedent`
       CASE
-        WHEN [option] = 'foo'
+        WHEN option = 'foo'
         THEN 1
-        WHEN [option] = 'bar'
+        WHEN option = 'bar'
         THEN 2
-        WHEN [option] = 'baz'
+        WHEN option = 'baz'
         THEN 3
         ELSE 4
       END;
