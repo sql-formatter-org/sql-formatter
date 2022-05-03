@@ -219,10 +219,10 @@ All fields are optional and all fields that are not specified will be filled wit
 If you don't use a module bundler, clone the repository, run `npm install` and grab a file from `/dist` directory to use inside a `<script>` tag.
 This makes SQL Formatter available as a global variable `window.sqlFormatter`.
 
-### Usage with VSCode
+### Usage in editors
 
-SQL Formatter is also available as a VSCode extension here: \
-https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode
+- [VSCode extension](https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode)
+- [Vim extension](https://github.com/fannheyward/coc-sql/)
 
 ## Contributing
 
