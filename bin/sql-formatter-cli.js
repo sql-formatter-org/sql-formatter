@@ -103,7 +103,7 @@ class PrettierSQLArgs {
   writeOutput(file, query) {
     if (!file) {
       // No output file, write to console
-      console.log(query);
+      process.stdout.write(query);
     } else {
       fs.writeFileSync(file, query);
     }
