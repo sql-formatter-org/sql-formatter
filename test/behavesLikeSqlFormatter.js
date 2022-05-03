@@ -132,20 +132,6 @@ export default function behavesLikeSqlFormatter(language, format) {
     `);
   });
 
-  it('treats quoted keywords as identifiers', () => {
-    const result = format('SELECT "select", `from`, [Where] FROM "limit" WHERE [column] > 10;');
-    expect(result).toBe(dedent`
-      SELECT
-        "select",
-        \`from\`,
-        [Where]
-      FROM
-        "limit"
-      WHERE
-        [column] > 10;
-    `);
-  });
-
   it('formats LIMIT with two comma-separated values on single line', () => {
     const result = format('LIMIT 5, 10;');
     expect(result).toBe(dedent`

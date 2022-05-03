@@ -1,8 +1,17 @@
+import { expect } from '@jest/globals';
+import dedent from 'dedent-js';
+
 export default function supportsStrings(language, format, stringTypes = []) {
   if (stringTypes.includes('""')) {
     it('supports double-quoted strings', () => {
       expect(format('"foo JOIN bar"')).toBe('"foo JOIN bar"');
       expect(format('"foo \\" JOIN bar"')).toBe('"foo \\" JOIN bar"');
+      expect(format('SELECT "where" FROM "update"')).toBe(dedent`
+        SELECT
+          "where"
+        FROM
+          "update"
+      `);
     });
   }
 
@@ -10,6 +19,12 @@ export default function supportsStrings(language, format, stringTypes = []) {
     it('supports single-quoted strings', () => {
       expect(format("'foo JOIN bar'")).toBe("'foo JOIN bar'");
       expect(format("'foo \\' JOIN bar'")).toBe("'foo \\' JOIN bar'");
+      expect(format("SELECT 'where' FROM 'update'")).toBe(dedent`
+        SELECT
+          'where'
+        FROM
+          'update'
+      `);
     });
   }
 
@@ -17,6 +32,12 @@ export default function supportsStrings(language, format, stringTypes = []) {
     it('supports backtick-quoted strings', () => {
       expect(format('`foo JOIN bar`')).toBe('`foo JOIN bar`');
       expect(format('`foo `` JOIN bar`')).toBe('`foo `` JOIN bar`');
+      expect(format('SELECT `where` FROM `update`')).toBe(dedent`
+        SELECT
+          \`where\`
+        FROM
+          \`update\`
+      `);
     });
   }
 
@@ -24,6 +45,12 @@ export default function supportsStrings(language, format, stringTypes = []) {
     it('supports unicode double-quoted strings', () => {
       expect(format('U&"foo JOIN bar"')).toBe('U&"foo JOIN bar"');
       expect(format('U&"foo \\" JOIN bar"')).toBe('U&"foo \\" JOIN bar"');
+      expect(format('SELECT U&"where" FROM U&"update"')).toBe(dedent`
+        SELECT
+          U&"where"
+        FROM
+          U&"update"
+      `);
     });
   }
 
@@ -31,6 +58,12 @@ export default function supportsStrings(language, format, stringTypes = []) {
     it('supports single-quoted strings', () => {
       expect(format("U&'foo JOIN bar'")).toBe("U&'foo JOIN bar'");
       expect(format("U&'foo \\' JOIN bar'")).toBe("U&'foo \\' JOIN bar'");
+      expect(format("SELECT U&'where' FROM U&'update'")).toBe(dedent`
+        SELECT
+          U&'where'
+        FROM
+          U&'update'
+      `);
     });
   }
 
@@ -42,6 +75,12 @@ export default function supportsStrings(language, format, stringTypes = []) {
       expect(format('$$foo JOIN bar$$')).toBe('$$foo JOIN bar$$');
       expect(format('$$foo $ JOIN bar$$')).toBe('$$foo $ JOIN bar$$');
       expect(format('$$foo \n bar$$')).toBe('$$foo \n bar$$');
+      expect(format('SELECT $$where$$ FROM $$update$$')).toBe(dedent`
+        SELECT
+          $$where$$
+        FROM
+          $$update$$
+      `);
     });
   }
 
@@ -49,6 +88,12 @@ export default function supportsStrings(language, format, stringTypes = []) {
     it('supports [bracket-quoted identifiers]', () => {
       expect(format('[foo JOIN bar]')).toBe('[foo JOIN bar]');
       expect(format('[foo ]] JOIN bar]')).toBe('[foo ]] JOIN bar]');
+      expect(format('SELECT [where] FROM [update]')).toBe(dedent`
+        SELECT
+          [where]
+        FROM
+          [update]
+      `);
     });
   }
 
@@ -56,6 +101,12 @@ export default function supportsStrings(language, format, stringTypes = []) {
     it('supports T-SQL unicode strings', () => {
       expect(format("N'foo JOIN bar'")).toBe("N'foo JOIN bar'");
       expect(format("N'foo \\' JOIN bar'")).toBe("N'foo \\' JOIN bar'");
+      expect(format("SELECT N'where' FROM N'update'")).toBe(dedent`
+        SELECT
+          N'where'
+        FROM
+          N'update'
+      `);
     });
   }
 }
