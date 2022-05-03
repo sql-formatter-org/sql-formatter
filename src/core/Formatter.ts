@@ -525,6 +525,8 @@ export default class Formatter {
           return token.value.toUpperCase();
         case KeywordCase.lower:
           return token.value.toLowerCase();
+        default:
+          throw new Error(`Unexpected keywordCase: ${this.cfg.keywordCase}`);
       }
     } else {
       return token.value;

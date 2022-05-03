@@ -60,15 +60,21 @@ export enum CommaPosition {
   tabular = 'tabular',
 }
 
+// The `keyof typeof Enum` expansions are used to allow this API
+// to be called in two ways:
+//
+//   keywordCase: "upper"
+//   keywordCase: KeywordCase.upper
+//
 export interface FormatOptions {
   indent: string;
-  keywordCase: KeywordCase;
-  keywordPosition: KeywordMode;
-  newline: NewlineMode | number;
+  keywordCase: KeywordCase | keyof typeof KeywordCase;
+  keywordPosition: KeywordMode | keyof typeof KeywordCase;
+  newline: NewlineMode | keyof typeof NewlineMode | number;
   breakBeforeBooleanOperator: boolean;
-  aliasAs: AliasMode;
+  aliasAs: AliasMode | keyof typeof AliasMode;
   tabulateAlias: boolean;
-  commaPosition: CommaPosition;
+  commaPosition: CommaPosition | keyof typeof CommaPosition;
   newlineBeforeOpenParen: boolean;
   newlineBeforeCloseParen: boolean;
   lineWidth: number;
