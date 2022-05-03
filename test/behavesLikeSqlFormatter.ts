@@ -415,6 +415,16 @@ export default function behavesLikeSqlFormatter(language: SqlLanguage, format: F
     `);
   });
 
+  it('supports hex and binary numbers', () => {
+    const result = format('SELECT 0xAE, 0x10F, 0b1010001;');
+    expect(result).toBe(dedent`
+      SELECT
+        0xAE,
+        0x10F,
+        0b1010001;
+    `);
+  });
+
   it('correctly indents create statement after select', () => {
     const result = format(`
       SELECT * FROM test;
