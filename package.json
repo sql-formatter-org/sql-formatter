@@ -1,12 +1,13 @@
 {
   "name": "sql-formatter",
-  "version": "4.0.2",
+  "version": "5.1.1",
   "description": "Format whitespace in a SQL query to make it more readable",
   "license": "MIT",
-  "main": "lib/sqlFormatter.js",
-  "types": "src/sqlFormatter.d.ts",
+  "main": "lib/index.js",
+  "module": "dist/sql-formatter.min.js",
+  "types": "lib/index.d.ts",
   "bin": {
-    "sql-formatter": "./bin/sqlfmt.js"
+    "sql-formatter": "./bin/sql-formatter-cli.js"
   },
   "keywords": [
     "sql",
@@ -35,6 +36,7 @@
     "Ian Campbell <icampbell@immuta.com>",
     "ivan baktsheev",
     "João Pimentel Ferreira",
+    "Justin Dane Vallar <jdvallar@gmail.com>",
     "Martin Nowak <code@dawg.eu>",
     "Matheus Salmi <mathsalmi@gmail.com>",
     "Matheus Teixeira <matheus.mtxr@gmail.com>",
@@ -46,30 +48,37 @@
     "Rene Saarsoo <nene@triin.net>",
     "Rodrigo Stuchi",
     "Sasha Aliashkevich <olsender@gmail.com>",
+    "Sean Song <mail@seansong.dev>",
     "Sergei Egorov <sergei.egorov@zeroturnaround.com>",
     "Tyler Jones <tyler.jones@txwormhole.com>",
-    "Uku Pattak <ukupat@gmail.com>"
+    "Uku Pattak <ukupat@gmail.com>",
+    "Xin Hu <hoosin.git@gmail.com>"
   ],
   "files": [
     "bin",
     "dist",
-    "lib",
-    "src"
+    "lib"
   ],
   "scripts": {
-    "clean": "rimraf lib dist",
+    "clean": "rimraf lib dist coverage",
+    "ts:check": "tsc --noEmit",
     "lint": "eslint .",
     "pretty": "prettier --write .",
+    "fix": "yarn pretty && eslint --fix .",
     "pretty:check": "prettier --check .",
     "test": "jest",
-    "test:watch": "npm run test -- --watch",
-    "check": "npm run pretty:check && npm run lint && npm run test",
-    "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
-    "build:commonjs": "babel src --out-dir lib",
+    "test:watch": "yarn test -- --watch",
+    "check": "yarn ts:check && yarn pretty:check && yarn lint && yarn test",
+    "prepare": "yarn clean && yarn fix && yarn check && yarn build",
+    "build:commonjs": "babel src --out-dir lib --extensions .ts --source-maps && tsc --module commonjs --emitDeclarationOnly --isolatedModules",
     "build:umd": "webpack --config webpack.dev.js",
     "build:umd:min": "webpack --config webpack.prod.js",
-    "prepare": "npm run clean && npm run check && npm run build"
+    "build": "yarn build:commonjs && yarn build:umd && yarn build:umd:min"
   },
+  "pre-push": [
+    "ts:check",
+    "lint"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/zeroturnaround/sql-formatter.git"
@@ -77,36 +86,51 @@
   "bugs": {
     "url": "https://github.com/zeroturnaround/sql-formatter/issues"
   },
+  "dependencies": {
+    "argparse": "^2.0.1"
+  },
   "devDependencies": {
     "@babel/cli": "^7.10.4",
     "@babel/core": "^7.10.4",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
+    "@babel/preset-typescript": "^7.15.0",
+    "@jest/globals": "^28.0.2",
+    "@types/babel__core": "^7.1.15",
+    "@types/jest": "^27.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.21.0",
+    "@typescript-eslint/parser": "^5.21.0",
     "babel-eslint": "^10.1.0",
-    "babel-jest": "^26.1.0",
+    "babel-jest": "^28.0.2",
     "babel-loader": "^8.1.0",
     "babel-plugin-add-module-exports": "^1.0.2",
     "dedent-js": "^1.0.1",
-    "eslint": "^7.4.0",
-    "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-config-prettier": "^6.11.0",
+    "eslint": "^8.14.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "jest": "^26.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^28.0.2",
+    "pre-push": "^0.1.2",
     "prettier": "^2.0.5",
+    "release-it": "^14.11.7",
     "rimraf": "^3.0.2",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-merge": "^5.0.8"
+    "ts-jest": "^28.0.0",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.3.5",
+    "webpack": "^5.64.1",
+    "webpack-cli": "^4.9.1",
+    "webpack-merge": "^5.8.0"
   },
   "jest": {
+    "preset": "ts-jest",
     "roots": [
       "test"
     ],
-    "testRegex": ".*Test",
-    "collectCoverage": true
-  },
-  "dependencies": {
-    "argparse": "^2.0.1"
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ]
   }
 }

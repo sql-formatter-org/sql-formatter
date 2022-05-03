@@ -2,4 +2,5 @@
 /lib
 /dist
 /coverage
+/vscode
 webpack.*.js

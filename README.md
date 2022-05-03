@@ -1,17 +1,22 @@
-# SQL Formatter [![NPM version](https://img.shields.io/npm/v/sql-formatter.svg)](https://npmjs.com/package/sql-formatter) [![Build Status](https://travis-ci.org/zeroturnaround/sql-formatter.svg?branch=master)](https://travis-ci.org/zeroturnaround/sql-formatter) [![Coverage Status](https://coveralls.io/repos/github/zeroturnaround/sql-formatter/badge.svg?branch=master)](https://coveralls.io/github/zeroturnaround/sql-formatter?branch=master)
+<a href='https://github.com/zeroturnaround/sql-formatter'><img src="static/prettier-sql-clean.svg" width="128"/></a>
+
+# SQL Formatter [![NPM version](https://img.shields.io/npm/v/sql-formatter.svg)](https://npmjs.com/package/sql-formatter) [![Build Status](https://travis-ci.org/zeroturnaround/sql-formatter.svg?branch=sql-formatter-6)](https://travis-ci.org/zeroturnaround/sql-formatter) [![Coverage Status](https://coveralls.io/repos/github/zeroturnaround/sql-formatter/badge.svg?branch=sql-formatter-6)](https://coveralls.io/github/zeroturnaround/sql-formatter?branch=sql-formatter-6) [![VSCode](https://img.shields.io/visual-studio-marketplace/v/inferrinizzard.prettier-sql-vscode?label=vscode)](https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode)
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
+
 It started as a port of a [PHP Library][], but has since considerably diverged.
 
-SQL formatter supports the following dialects:
+SQL Formatter supports the following dialects:
 
 - **sql** - [Standard SQL][]
+- **bigquery** - [GCP BigQuery][]
+- **db2** - [IBM DB2][]
+- **hive** - [Apache Hive][]
 - **mariadb** - [MariaDB][]
 - **mysql** - [MySQL][]
-- **postgresql** - [PostgreSQL][]
-- **db2** - [IBM DB2][]
-- **plsql** - [Oracle PL/SQL][]
 - **n1ql** - [Couchbase N1QL][]
+- **plsql** - [Oracle PL/SQL][]
+- **postgresql** - [PostgreSQL][]
 - **redshift** - [Amazon Redshift][]
 - **spark** - [Spark][]
 - **tsql** - [SQL Server Transact-SQL][tsql]
@@ -21,7 +26,18 @@ It does not support:
 - Stored procedures.
 - Changing of the delimiter type to something else than `;`.
 
-&rarr; [Try the demo.](https://zeroturnaround.github.io/sql-formatter/)
+→ [Try the demo.](https://zeroturnaround.github.io/sql-formatter)
+
+# Table of contents
+
+- [Install](#install)
+- [Documentation](#documentation)
+- [Usage](#usage)
+  - [Usage as library](#usage-as-library)
+  - [Usage from command line](#usage-from-command-line)
+  - [Usage without NPM](#usage-without-npm)
+  - [Usage with VSCode](#usage-with-vscode)
+- [Contributing](#contributing)
 
 ## Install
 
@@ -31,7 +47,19 @@ Get the latest version from NPM:
 npm install sql-formatter
 ```
 
-## Usage as library
+Also available with yarn:
+
+```sh
+yarn add sql-formatter
+```
+
+## Documentation
+
+You can read more about how the library works in [DOC.md](DOC.md)
+
+## Usage
+
+### Usage as library
 
 ```js
 import { format } from 'sql-formatter';
@@ -52,10 +80,10 @@ You can also pass in configuration options:
 
 ```js
 format('SELECT * FROM tbl', {
-  language: 'spark', // Defaults to "sql" (see the above list of supported dialects)
-  indent: '    ', // Defaults to two spaces
-  uppercase: bool, // Defaults to false (not safe to use when SQL dialect has case-sensitive identifiers)
-  linesBetweenQueries: 2, // Defaults to 1
+  language: 'spark',
+  indent: '  ',
+  keywordCase: 'upper',
+  linesBetweenQueries: 2,
 });
 ```
 
@@ -63,19 +91,19 @@ format('SELECT * FROM tbl', {
 
 ```js
 // Named placeholders
-format("SELECT * FROM tbl WHERE foo = @foo", {
-  params: {foo: "'bar'"}
-}));
+format('SELECT * FROM tbl WHERE foo = @foo', {
+  params: { foo: "'bar'" },
+});
 
 // Indexed placeholders
-format("SELECT * FROM tbl WHERE foo = ?", {
-  params: ["'bar'"]
-}));
+format('SELECT * FROM tbl WHERE foo = ?', {
+  params: ["'bar'"],
+});
 ```
 
 Both result in:
 
-```
+```sql
 SELECT
   *
 FROM
@@ -84,7 +112,7 @@ WHERE
   foo = 'bar'
 ```
 
-## Usage from command line
+### Usage from command line
 
 The CLI tool will be installed under `sql-formatter`
 and may be invoked via `npx sql-formatter`:
@@ -94,72 +122,123 @@ sql-formatter -h
 ```
 
 ```
-usage: sql-formatter [-h] [-o OUTPUT] [-l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}]
-                     [-i N | -t] [-u] [--lines-between-queries N] [--version] [FILE]
+usage: sqlfmt.js [-h] [-o OUTPUT] \
+[-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}] [-c CONFIG] [--version] [FILE]
 
 SQL Formatter
 
 positional arguments:
-  FILE                  Input SQL file (defaults to stdin)
+  FILE            Input SQL file (defaults to stdin)
 
 optional arguments:
-  -h, --help            show this help message and exit
-  -o OUTPUT, --output OUTPUT
-                        File to write SQL output (defaults to stdout)
-  -l {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql},
-  --language {db2,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}
-                        SQL Formatter dialect (defaults to basic sql)
-  -i N, --indent N      Number of spaces to indent query blocks (defaults to 2)
-  -t, --tab-indent      Indent query blocks with tabs instead of spaces
-  -u, --uppercase       Capitalize language keywords
-  --lines-between-queries N
-                        How many newlines to insert between queries (separated by ";")
-  --version             show program's version number and exit
+  -h, --help      show this help message and exit
+  -o, --output    OUTPUT
+                    File to write SQL output (defaults to stdout)
+  -l, --language  {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}
+                    SQL dialect (defaults to standard sql)
+  -c, --config    CONFIG
+                    Path to config json file (will use default configs if unspecified)
+  --version       show program's version number and exit
 ```
 
 By default, the tool takes queries from stdin and processes them to stdout but
 one can also name an input file name or use the `--output` option.
 
 ```sh
-echo 'select * from tbl where id = 3' | sql-formatter -u
+echo 'select * from tbl where id = 3' | sql-formatter
 ```
 
 ```sql
-SELECT
+select
   *
-FROM
+from
   tbl
-WHERE
+where
   id = 3
 ```
 
-## Usage without NPM
+The tool also accepts a JSON config file with the `--config` option that takes this form:
+
+```ts
+{
+  "language": "spark",
+  "indent": "  ",
+  "keywordCase": "upper",
+  "linesBetweenQueries": 2,
+}
+```
+
+All fields are optional and all fields that are not specified will be filled with their default values.
+
+### Configuration options
+
+- **`language`**: `"sql" | "mariadb" | "mysql" | "postgresql" | "db2" | "plsql" | "n1ql" | "redshift" | "spark" | "tsql" | "bigquery" | "hive"` (default: `"sql"`)
+  The SQL dialect to use.
+- **`indent`**: `string` (default: `" "` 2 spaces)
+  Characters used for indentation.
+- **`keywordCase`**: `"preserve" | "upper" | "lower"` (default: `"preserve"`)
+  To either uppercase or lowercase all keywords, or preserve the original case.
+- **`keywordPosition`**: `"standard" | "tenSpaceLeft" | "tenSpaceRight"` (default: `"standard"`)
+  Sets keyword position style, see [keywordPosition.md](keywordPosition.md).
+- **`newline`**: `"always" | "never" | "lineWidth" | number` (default: `"always"`)
+  Determines when to break listed clauses to multiple lines.
+  - lineWidth (break only when line longer than specified by lineWidth option)
+  - number (break only when more then n clauses)
+- **`breakBeforeBooleanOperator`**: `boolean` (default: `true`)
+  Adds newline before boolean operator (AND, OR, XOR).
+- **`aliasAs`**: `"preserve" | "always" | "never" | "select"` (default: `"preserve"`)
+  Whether to use AS keyword for creating aliases or not:
+  - preserve - keep as is
+  - always - add AS keywords everywhere
+  - never - remove AS keywords from everywhere
+  - select - add AS keywords to SELECT clause, remove from everywhere else
+- **`tabulateAlias`**: `boolean` (default: `false`)
+  True to align AS keywords to single column
+- **`commaPosition`**: `"before" | "after" | "tabular"` (default: `"after"`)
+  Where to place the comma in listed clauses
+- **`newlineBeforeOpenParen`**: `boolean` (default: `true`)
+  True to place opening parenthesis on new line.
+- **`newlineBeforeCloseParen`**: `boolean` (default: `true`)
+  True to place closing parenthesis on new line.
+- **`lineWidth`**: `number` (default: `50`)
+  Number of characters in each line before breaking.
+- **`linesBetweenQueries`**: `number` (default: `1`)
+  How many newlines to insert between queries.
+- **`denseOperators`**: `boolean` (default: `false`)
+  True to pack operators densely without spaces.
+- **`params`**: `Object | Array`
+  Collection of params for placeholder replacement.
+- **`newlineBeforeSemicolon`**: `boolean` (default: `false`)
+  True to place semicolon on separate line.
+
+### Usage without NPM
 
 If you don't use a module bundler, clone the repository, run `npm install` and grab a file from `/dist` directory to use inside a `<script>` tag.
 This makes SQL Formatter available as a global variable `window.sqlFormatter`.
 
+### Usage with VSCode
+
+SQL Formatter is also available as a VSCode extension here: \
+https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode
+
 ## Contributing
 
-Make sure to run all checks:
-
-```sh
-npm run check
-```
-
-...and you're ready to poke us with a pull request.
+Please see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License
 
-[MIT](https://github.com/zeroturnaround/sql-formatter/blob/master/LICENSE)
+[MIT](LICENSE)
 
 [php library]: https://github.com/jdorn/sql-formatter
 [standard sql]: https://en.wikipedia.org/wiki/SQL:2011
-[couchbase n1ql]: http://www.couchbase.com/n1ql
+[gcp bigquery]: https://cloud.google.com/bigquery
 [ibm db2]: https://www.ibm.com/analytics/us/en/technology/db2/
-[oracle pl/sql]: http://www.oracle.com/technetwork/database/features/plsql/index.html
-[amazon redshift]: https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
-[spark]: https://spark.apache.org/docs/latest/api/sql/index.html
-[postgresql]: https://www.postgresql.org/
+[apache hive]: https://hive.apache.org/
 [mariadb]: https://mariadb.com/
 [mysql]: https://www.mysql.com/
+[couchbase n1ql]: http://www.couchbase.com/n1ql
+[oracle pl/sql]: http://www.oracle.com/technetwork/database/features/plsql/index.html
+[postgresql]: https://www.postgresql.org/
+[amazon redshift]: https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
+[spark]: https://spark.apache.org/docs/latest/api/sql/index.html
 [tsql]: https://docs.microsoft.com/en-us/sql/sql-server/
