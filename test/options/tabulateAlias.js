@@ -4,21 +4,21 @@ import { KeywordMode, NewlineMode } from '../../src/types';
 export default function supportsTabulateAlias(language, format) {
   it('tabulates aliases which use AS keyword', () => {
     const result = format(
-      'SELECT alpha AS A, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS i FROM gamma );',
+      'SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );',
       {
         tabulateAlias: true,
       }
     );
     expect(result).toBe(dedent`
       SELECT
-        alpha     AS A,
+        alpha     AS alp,
         MAX(beta),
         epsilon   AS E
       FROM
       (
         SELECT
           mu   AS m,
-          iota AS i
+          iota AS io
         FROM
           gamma
       );
@@ -27,7 +27,7 @@ export default function supportsTabulateAlias(language, format) {
 
   it('tabulates alias which do not use AS keyword', () => {
     const result = format(
-      'SELECT alpha A, MAX(beta), epsilon E FROM ( SELECT mu m, iota i FROM gamma );',
+      'SELECT alpha alp, MAX(beta), epsilon E FROM ( SELECT mu m, iota io FROM gamma );',
       {
         tabulateAlias: true,
       }
@@ -35,14 +35,14 @@ export default function supportsTabulateAlias(language, format) {
 
     expect(result).toBe(dedent`
       SELECT
-        alpha     A,
+        alpha     alp,
         MAX(beta),
         epsilon   E
       FROM
       (
         SELECT
           mu   m,
-          iota i
+          iota io
         FROM
           gamma
       );
@@ -51,14 +51,14 @@ export default function supportsTabulateAlias(language, format) {
 
   it('does not tabulate aliases when newline:never used', () => {
     const result = format(
-      'SELECT alpha AS A, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS i FROM gamma );',
+      'SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );',
       { newline: NewlineMode.never, tabulateAlias: true }
     );
 
     expect(result).toBe(dedent`
-      SELECT alpha AS A, MAX(beta), epsilon AS E
+      SELECT alpha AS alp, MAX(beta), epsilon AS E
       FROM (
-        SELECT mu AS m, iota AS i
+        SELECT mu AS m, iota AS io
         FROM gamma
       );
     `);
@@ -66,17 +66,17 @@ export default function supportsTabulateAlias(language, format) {
 
   it('works together with keywordPosition:tenSpaceLeft', () => {
     const result = format(
-      dedent`SELECT alpha AS A, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS i FROM gamma );`,
+      dedent`SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );`,
       { keywordPosition: KeywordMode.tenSpaceLeft, tabulateAlias: true }
     );
 
     expect(result).toBe(dedent`
-      SELECT    alpha     AS A,
+      SELECT    alpha     AS alp,
                 MAX(beta),
                 epsilon   AS E
       FROM      (
                 SELECT    mu   AS m,
-                          iota AS i
+                          iota AS io
                 FROM      gamma
                 );
     `);
@@ -84,18 +84,18 @@ export default function supportsTabulateAlias(language, format) {
 
   it('works together with keywordPosition:tenSpaceRight', () => {
     const result = format(
-      dedent`SELECT alpha AS A, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS i FROM gamma );`,
+      dedent`SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );`,
       { keywordPosition: KeywordMode.tenSpaceRight, tabulateAlias: true }
     );
 
     expect(result).toBe(
       [
-        '   SELECT alpha     AS A,',
+        '   SELECT alpha     AS alp,',
         '          MAX(beta),',
         '          epsilon   AS E',
         '     FROM (',
         '             SELECT mu   AS m,',
-        '                    iota AS i',
+        '                    iota AS io',
         '               FROM gamma',
         '          );',
       ].join('\n')
