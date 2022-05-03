@@ -17,21 +17,6 @@ export default function supportsTabulateAlias(language, format) {
     );
   `;
 
-  const finalQueryWithAlias = dedent`
-    SELECT
-      alpha AS A,
-      MAX(beta),
-      epsilon as E
-    FROM
-    (
-      SELECT
-        mu AS m,
-        iota as i
-      FROM
-        gamma
-    );
-  `;
-
   const tabularFinalQueryNoAlias = dedent`
     SELECT
       alpha     A,
@@ -58,12 +43,6 @@ export default function supportsTabulateAlias(language, format) {
     expect(result).toBe(tabularFinalQueryWithAlias);
   });
 
-  it('accepts tabular alias with aliasAs on', () => {
-    const result = format(tabularFinalQueryWithAlias);
-
-    expect(result).toBe(finalQueryWithAlias);
-  });
-
   it('tabulates alias with aliasAs off', () => {
     const result = format(
       'SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );',
@@ -74,25 +53,6 @@ export default function supportsTabulateAlias(language, format) {
     );
 
     expect(result).toBe(tabularFinalQueryNoAlias);
-  });
-
-  it('accepts tabular alias with aliasAs off', () => {
-    const result = format(tabularFinalQueryNoAlias);
-
-    expect(result).toBe(dedent`
-      SELECT
-        alpha A,
-        MAX(beta),
-        epsilon E
-      FROM
-      (
-        SELECT
-          mu m,
-          iota i
-        FROM
-          gamma
-      );
-    `);
   });
 
   it('handles edge case of newline.never', () => {
