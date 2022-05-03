@@ -74,14 +74,10 @@ export default function supportsKeywordPositions(language, format) {
     expect(result).toBe(tenSpaceLeftResult);
   });
 
-  it('accepts tenSpaceLeft mode', () => expect(format(tenSpaceLeftResult)).toBe(standardResult));
-
   it('supports tenSpaceRight mode', () => {
     const result = format(baseQuery, { keywordPosition: KeywordMode.tenSpaceRight });
     expect(result).toBe(tenSpaceRightResult);
   });
-
-  it('accepts tenSpaceRight mode', () => expect(format(tenSpaceRightResult)).toBe(standardResult));
 
   it('handles long keyword', () => {
     expect(
