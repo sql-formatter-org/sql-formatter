@@ -84,6 +84,7 @@ For those who have admin access on the repo, the new release publish flow is as 
 - Rahel Rjadnev-Meristo <rahelini@gmail.com>
 - Rene Saarsoo <nene@triin.net>
 - Rodrigo Stuchi
+- Romain Rigaux <hello@getromain.com>
 - Sasha Aliashkevich <olsender@gmail.com>
 - Sean Song <mail@seansong.dev>
 - Sergei Egorov <sergei.egorov@zeroturnaround.com>
