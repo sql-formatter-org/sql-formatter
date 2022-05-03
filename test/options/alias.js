@@ -1,5 +1,5 @@
 import dedent from 'dedent-js';
-import { AliasMode, NewlineMode } from '../../src/types';
+import { AliasMode } from '../../src/types';
 
 export default function supportsAliases(language, format) {
   const baseQuery = 'SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;';
@@ -86,14 +86,6 @@ export default function supportsAliases(language, format) {
           z;
       `)
     );
-  });
-
-  it('does not format non select clauses', () => {
-    expect(
-      format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);', {
-        newline: NewlineMode.never,
-      })
-    ).toBe('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);');
   });
 
   it('handles edge case of never + CTE', () => {

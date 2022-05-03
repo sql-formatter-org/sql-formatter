@@ -55,6 +55,14 @@ export default function supportsNewlineOptions(language, format) {
         FROM corge;
       `);
     });
+
+    it('places whole CREATE TABLE to single line', () => {
+      expect(
+        format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);', {
+          newline: NewlineMode.never,
+        })
+      ).toBe('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);');
+    });
   });
 
   describe('newline: number', () => {
