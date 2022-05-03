@@ -2,7 +2,7 @@ import dedent from 'dedent-js';
 
 import supportsComments from './features/comments';
 import supportsIndent from './options/indent';
-import supportsAliases from './options/alias';
+import supportsAliasAs from './options/aliasAs';
 import supportsNewlineOptions from './options/newline';
 import supportsKeywordCase from './options/keywordCase';
 import supportsKeywordPositions from './options/keywordPosition';
@@ -18,7 +18,7 @@ import supportsTabulateAlias from './options/tabulateAlias';
  * Core tests for all SQL formatters
  */
 export default function behavesLikeSqlFormatter(language, format) {
-  supportsAliases(language, format);
+  supportsAliasAs(language, format);
   supportsTabulateAlias(language, format);
   supportsComments(language, format);
   supportsIndent(language, format);

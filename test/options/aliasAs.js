@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
 import { AliasMode } from '../../src/types';
 
-export default function supportsAliases(language, format) {
+export default function supportsAliasAs(language, format) {
   it('defaults to preserving original uses of AS', () => {
     expect(
       format('SELECT a a_column, b AS bColumn FROM table1 t1 JOIN table2 as t2 WHERE z;')
