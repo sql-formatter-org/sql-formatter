@@ -96,27 +96,53 @@ export default function behavesLikeSqlFormatter(language, format) {
 
   it('formats SELECT with top level reserved words', () => {
     const result = format(`
-      SELECT "select", \`from\`, [Where], foo.else FROM foo WHERE "name" = 'John' GROUP BY some_column
-      HAVING [column] > 10 ORDER BY other_column LIMIT 5;
+      SELECT * FROM foo WHERE name = 'John' GROUP BY some_column
+      HAVING column > 10 ORDER BY other_column LIMIT 5;
     `);
     expect(result).toBe(dedent`
       SELECT
-        "select",
-        \`from\`,
-        [Where],
-        foo.else
+        *
       FROM
         foo
       WHERE
-        "name" = 'John'
+        name = 'John'
       GROUP BY
         some_column
       HAVING
-        [column] > 10
+        column > 10
       ORDER BY
         other_column
       LIMIT
         5;
+    `);
+  });
+
+  it('allows keywords as column names in tbl.col syntax', () => {
+    const result = format(
+      'SELECT mytable.update, mytable.select FROM mytable WHERE mytable.from > 10;'
+    );
+    expect(result).toBe(dedent`
+      SELECT
+        mytable.update,
+        mytable.select
+      FROM
+        mytable
+      WHERE
+        mytable.from > 10;
+    `);
+  });
+
+  it('treats quoted keywords as identifiers', () => {
+    const result = format('SELECT "select", `from`, [Where] FROM "limit" WHERE [column] > 10;');
+    expect(result).toBe(dedent`
+      SELECT
+        "select",
+        \`from\`,
+        [Where]
+      FROM
+        "limit"
+      WHERE
+        [column] > 10;
     `);
   });
 
