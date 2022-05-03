@@ -10,7 +10,7 @@ describe('sqlFormatter', () => {
 
   it('supports strings in place of enum keys in option values', () => {
     expect(format('SELECT *', { keywordCase: 'lower' })).toBe(dedent`
-      SELECT
+      select
         *
     `);
   });
