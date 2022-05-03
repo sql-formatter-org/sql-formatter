@@ -124,6 +124,7 @@
     "webpack-merge": "^5.8.0"
   },
   "jest": {
+    "preset": "ts-jest",
     "roots": [
       "test"
     ],

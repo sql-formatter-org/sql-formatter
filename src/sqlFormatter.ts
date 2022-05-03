@@ -35,10 +35,10 @@ export const formatters = {
   sql: StandardSqlFormatter,
   tsql: TSqlFormatter,
 };
-export type FormatterLanguage = keyof typeof formatters;
+export type SqlLanguage = keyof typeof formatters;
 export const supportedDialects = Object.keys(formatters);
 
-export type FormatFnOptions = FormatOptions & { language: FormatterLanguage };
+export type FormatFnOptions = FormatOptions & { language: SqlLanguage };
 
 const defaultOptions: FormatFnOptions = {
   language: 'sql',
@@ -105,3 +105,5 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
 
   return cfg;
 }
+
+export type FormatFn = typeof format;

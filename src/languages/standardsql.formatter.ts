@@ -379,6 +379,7 @@ export default class StandardSqlFormatter extends Formatter {
   static indexedPlaceholderTypes = ['?'];
   static namedPlaceholderTypes = [];
   static lineCommentTypes = ['--'];
+  static operators = [];
 
   tokenizer() {
     return new Tokenizer({
