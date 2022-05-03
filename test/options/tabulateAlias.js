@@ -2,9 +2,6 @@ import dedent from 'dedent-js';
 import { AliasMode, KeywordMode, NewlineMode } from '../../src/types';
 
 export default function supportsTabulateAlias(language, format) {
-  const tabularBaseQueryWithAlias =
-    'SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );';
-
   const tabularFinalQueryWithAlias = dedent`
     SELECT
       alpha     AS A,
@@ -51,10 +48,13 @@ export default function supportsTabulateAlias(language, format) {
   `;
 
   it('tabulates alias with aliasAs on', () => {
-    const result = format(tabularBaseQueryWithAlias, {
-      aliasAs: AliasMode.always,
-      tabulateAlias: true,
-    });
+    const result = format(
+      'SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );',
+      {
+        aliasAs: AliasMode.always,
+        tabulateAlias: true,
+      }
+    );
     expect(result).toBe(tabularFinalQueryWithAlias);
   });
 
@@ -65,10 +65,13 @@ export default function supportsTabulateAlias(language, format) {
   });
 
   it('tabulates alias with aliasAs off', () => {
-    const result = format(tabularBaseQueryWithAlias, {
-      tabulateAlias: true,
-      aliasAs: AliasMode.never,
-    });
+    const result = format(
+      'SELECT alpha AS A, MAX(beta), epsilon E FROM ( SELECT mu AS m, iota i FROM gamma );',
+      {
+        tabulateAlias: true,
+        aliasAs: AliasMode.never,
+      }
+    );
 
     expect(result).toBe(tabularFinalQueryNoAlias);
   });
