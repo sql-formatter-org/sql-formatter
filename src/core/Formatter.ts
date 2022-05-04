@@ -14,7 +14,7 @@ import {
 } from '../types';
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
-import toTenSpaceToken, { replaceTenSpacePlaceholders } from './toTenSpaceToken';
+import { toTenSpaceToken, replaceTenSpacePlaceholders } from './tenSpace';
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {

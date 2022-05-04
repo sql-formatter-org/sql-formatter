@@ -11,7 +11,7 @@ import { Token, ZWS } from './token';
  * They'll be converted to normal spaces in the end of
  * all the normal formatting with the replaceTenSpacePlaceholders()
  */
-export default function toTenSpaceToken(
+export function toTenSpaceToken(
   token: Token,
   keywordPosition: KeywordMode | keyof typeof KeywordMode
 ): Token {
