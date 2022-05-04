@@ -16,6 +16,8 @@ import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
 import { toTenSpaceToken, replaceTenSpacePlaceholders } from './tenSpace';
 
+const TENSPACE_INDENT = ' '.repeat(10);
+
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {
   private cfg: FormatOptions;
@@ -31,7 +33,7 @@ export default class Formatter {
 
   constructor(cfg: FormatOptions) {
     this.cfg = cfg;
-    this.indentation = new Indentation(this.cfg.indent);
+    this.indentation = new Indentation(this.isTenSpace() ? TENSPACE_INDENT : this.cfg.indent);
     this.inlineBlock = new InlineBlock(this.cfg.lineWidth);
     this.params = new Params(this.cfg.params);
   }
@@ -466,7 +468,7 @@ export default class Formatter {
 
       if (this.isTenSpace()) {
         // +1 extra indentation step for the closing paren
-        query = this.addNewline(query) + this.cfg.indent;
+        query = this.addNewline(query) + this.indentation.getSingleIndent();
       } else if (this.cfg.newlineBeforeCloseParen) {
         query = this.addNewline(query);
       } else {

@@ -84,13 +84,6 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
     throw new Error(`Unsupported SQL dialect: ${cfg.language}`);
   }
 
-  if (
-    cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
-    cfg.keywordPosition === KeywordMode.tenSpaceRight
-  ) {
-    cfg.indent = ' '.repeat(10);
-  }
-
   if (isNumber(cfg.newline) && cfg.newline <= 0) {
     throw new Error('newline config must be a positive number.');
   }

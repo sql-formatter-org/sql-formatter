@@ -24,6 +24,13 @@ export default class Indentation {
   }
 
   /**
+   * Returns indentation string for single indentation step.
+   */
+  getSingleIndent(): string {
+    return this.indent;
+  }
+
+  /**
    * Returns current indentation string.
    * @return {string} indentation string based on indentTypes
    */
