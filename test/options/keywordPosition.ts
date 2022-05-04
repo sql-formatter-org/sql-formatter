@@ -79,6 +79,33 @@ export default function supportsKeywordPositions(language: SqlLanguage, format: 
       `);
     });
 
+    it('handles multiple levels of nested queries', () => {
+      expect(
+        format(
+          'SELECT age FROM (SELECT fname, lname, age FROM (SELECT fname, lname FROM persons) JOIN (SELECT age FROM ages)) as mytable;',
+          {
+            keywordPosition: KeywordMode.tenSpaceLeft,
+          }
+        )
+      ).toBe(dedent`
+        SELECT    age
+        FROM      (
+                  SELECT    fname,
+                            lname,
+                            age
+                  FROM      (
+                            SELECT    fname,
+                                      lname
+                            FROM      persons
+                            )
+                  JOIN      (
+                            SELECT    age
+                            FROM      ages
+                            )
+                  ) as mytable;
+      `);
+    });
+
     it('does not indent semicolon when newlineBeforeSemicolon:true used', () => {
       expect(
         format('SELECT firstname, lastname, age FROM customers;', {
