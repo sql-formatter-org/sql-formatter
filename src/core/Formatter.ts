@@ -26,7 +26,7 @@ export default class Formatter {
   private params: Params;
 
   private currentNewline = true;
-  protected previousReservedToken?: Token;
+  protected previousReservedToken: Token = EOF_TOKEN;
   private withinSelect = false;
   protected tokens: Token[] = [];
   protected index = -1;

@@ -39,9 +39,9 @@ const spaces = `[${ZWS_REGEX}\\s]`;
 /** Checks if two tokens are equivalent */
 export const testToken =
   (compareToken: Token) =>
-  (token?: Token): boolean =>
-    token?.type === compareToken.type &&
-    new RegExp(`^${spaces}*${compareToken.value}${spaces}*$`, 'iu').test(token?.value);
+  (token: Token): boolean =>
+    token.type === compareToken.type &&
+    new RegExp(`^${spaces}*${compareToken.value}${spaces}*$`, 'iu').test(token.value);
 
 /** Util object that allows for easy checking of Reserved Keywords */
 export const isToken = {
@@ -63,15 +63,13 @@ export const isToken = {
 };
 
 /** Checks if token is a Reserved Command or Reserved Binary Command */
-export const isCommand = (token?: Token): boolean =>
-  !!token &&
-  (token.type === TokenType.RESERVED_COMMAND || token.type === TokenType.RESERVED_BINARY_COMMAND);
+export const isCommand = (token: Token): boolean =>
+  token.type === TokenType.RESERVED_COMMAND || token.type === TokenType.RESERVED_BINARY_COMMAND;
 
 /** Checks if token is any Reserved Keyword or Command */
-export const isReserved = (token?: Token): boolean =>
-  !!token &&
-  (token.type === TokenType.RESERVED_KEYWORD ||
-    token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
-    token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
-    token.type === TokenType.RESERVED_COMMAND ||
-    token.type === TokenType.RESERVED_BINARY_COMMAND);
+export const isReserved = (token: Token): boolean =>
+  token.type === TokenType.RESERVED_KEYWORD ||
+  token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
+  token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
+  token.type === TokenType.RESERVED_COMMAND ||
+  token.type === TokenType.RESERVED_BINARY_COMMAND;
