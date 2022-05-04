@@ -95,7 +95,8 @@ export default class Formatter {
       if (isReserved(token)) {
         this.previousReservedToken = token;
         if (token.type !== TokenType.RESERVED_KEYWORD) {
-          token = this.tenSpacedToken(token); // convert Reserved Command or Logical Operator to tenSpace format if needed
+          // convert Reserved Command or Logical Operator to tenSpace format if needed
+          token = this.isTenSpace() ? this.tenSpacedToken(token) : token;
         }
         if (token.type === TokenType.RESERVED_COMMAND) {
           this.withinSelect = isToken.SELECT(token); // set withinSelect flag if entering a SELECT clause, else reset
@@ -544,22 +545,20 @@ export default class Formatter {
 
   /** Produces a 10-char wide version of reserved token for TenSpace modes */
   private tenSpacedToken(token: Token): Token {
-    if (this.isTenSpace()) {
-      let bufferItem = token.value; // store which part of keyword receives 10-space buffer
-      let tail = [] as string[]; // rest of keyword
-      if (bufferItem.length >= 10 && bufferItem.includes(' ')) {
-        // split for long keywords like INNER JOIN or UNION DISTINCT
-        [bufferItem, ...tail] = bufferItem.split(' ');
-      }
-
-      if (this.cfg.keywordPosition === KeywordMode.tenSpaceLeft) {
-        bufferItem += this.addBuffer(bufferItem);
-      } else {
-        bufferItem = this.addBuffer(bufferItem) + bufferItem;
-      }
-
-      token.value = bufferItem + ['', ...tail].join(' ');
+    let bufferItem = token.value; // store which part of keyword receives 10-space buffer
+    let tail = [] as string[]; // rest of keyword
+    if (bufferItem.length >= 10 && bufferItem.includes(' ')) {
+      // split for long keywords like INNER JOIN or UNION DISTINCT
+      [bufferItem, ...tail] = bufferItem.split(' ');
     }
+
+    if (this.cfg.keywordPosition === KeywordMode.tenSpaceLeft) {
+      bufferItem += this.addBuffer(bufferItem);
+    } else {
+      bufferItem = this.addBuffer(bufferItem) + bufferItem;
+    }
+
+    token.value = bufferItem + ['', ...tail].join(' ');
     return token;
   }
 
