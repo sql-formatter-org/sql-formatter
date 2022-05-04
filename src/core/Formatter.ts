@@ -21,7 +21,7 @@ export default class Formatter {
   private params: Params;
 
   private currentNewline = true;
-  public previousReservedToken: Token = EOF_TOKEN;
+  private previousReservedToken: Token = EOF_TOKEN;
   private previousCommandToken: Token = EOF_TOKEN;
   protected tokens: Token[] = [];
   protected index = -1;
@@ -422,7 +422,7 @@ export default class Formatter {
 
     if (this.inlineBlock.isActive()) {
       return query;
-    } else if (isToken.LIMIT(this.previousReservedToken)) {
+    } else if (isToken.LIMIT(this.getPreviousReservedToken())) {
       return query;
     } else if (this.currentNewline) {
       return this.addNewline(query);
@@ -495,6 +495,11 @@ export default class Formatter {
       this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
       this.cfg.keywordPosition === KeywordMode.tenSpaceRight
     );
+  }
+
+  /** Returns the latest encountered reserved keyword token */
+  public getPreviousReservedToken(): Token {
+    return this.previousReservedToken;
   }
 
   /** True when currently within SELECT command */

@@ -3,7 +3,7 @@ import { isCommand, isToken, Token, TokenType } from './token';
 
 export interface TokenStream {
   isWithinSelect(): boolean;
-  previousReservedToken: Token;
+  getPreviousReservedToken(): Token;
   tokenLookBehind(n?: number): Token;
   tokenLookAhead(n?: number): Token;
 }
@@ -53,7 +53,7 @@ export default class AliasAs {
     return (
       this.aliasAs === AliasMode.never &&
       this.formatter.isWithinSelect() &&
-      isToken.CAST(this.formatter.previousReservedToken) &&
+      isToken.CAST(this.formatter.getPreviousReservedToken()) &&
       isToken.AS(this.lookAhead()) &&
       (this.lookAhead(2).type === TokenType.WORD ||
         this.lookAhead(2).type === TokenType.RESERVED_KEYWORD) &&

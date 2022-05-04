@@ -496,7 +496,7 @@ export default class PlSqlFormatter extends Formatter {
     }
 
     // BY [SET]
-    if (isToken.SET(token) && isToken.BY(this.previousReservedToken)) {
+    if (isToken.SET(token) && isToken.BY(this.getPreviousReservedToken())) {
       return { type: TokenType.RESERVED_KEYWORD, value: token.value };
     }
 
