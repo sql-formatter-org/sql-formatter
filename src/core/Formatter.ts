@@ -145,42 +145,11 @@ export default class Formatter {
       value: this.cfg.keywordCase === KeywordCase.upper ? 'AS' : 'as',
     };
 
-    const missingTableAlias = // if table alias is missing and alias is always
-      this.cfg.aliasAs === AliasMode.always &&
-      token.type === TokenType.WORD &&
-      prevToken?.value === ')';
-
-    const missingSelectColumnAlias = // if select column alias is missing and alias is always or select
-      (this.cfg.aliasAs === AliasMode.always || this.cfg.aliasAs === AliasMode.select) &&
-      this.withinSelect &&
-      token.type === TokenType.WORD &&
-      (isToken.END(prevToken) || // isAs(prevToken) ||
-        ((prevToken?.type === TokenType.WORD || prevToken?.type === TokenType.NUMBER) &&
-          (nextToken?.value === ',' || isCommand(nextToken))));
-
-    // bandaid fix until Nearley tree
-    const missingCastTypeAs =
-      this.cfg.aliasAs === AliasMode.never && // checks for CAST(«expression» [AS] type)
-      this.withinSelect &&
-      isToken.CAST(this.previousReservedToken) &&
-      isToken.AS(nextToken) &&
-      (this.tokenLookAhead(2)?.type === TokenType.WORD ||
-        this.tokenLookAhead(2)?.type === TokenType.RESERVED_KEYWORD) &&
-      this.tokenLookAhead(3)?.value === ')';
-
-    const isEdgeCaseCTE = // checks for WITH `table` [AS] (
-      this.cfg.aliasAs === AliasMode.never &&
-      isToken.WITH(prevToken) &&
-      (nextToken?.value === '(' ||
-        (isToken.AS(nextToken) && this.tokenLookAhead(2)?.value === '('));
-
-    const isEdgeCaseCreateTable = // checks for CREATE TABLE `table` [AS] WITH (
-      this.cfg.aliasAs === AliasMode.never &&
-      (isToken.TABLE(prevToken) || prevToken?.value.endsWith('TABLE')) &&
-      (isToken.WITH(nextToken) || (isToken.AS(nextToken) && isToken.WITH(this.tokenLookAhead(2))));
-
     let finalQuery = query;
-    if (missingTableAlias || missingSelectColumnAlias) {
+    if (
+      this.isMissingTableAlias(token, prevToken) ||
+      this.isMissingSelectColumnAlias(token, prevToken, nextToken)
+    ) {
       // insert AS before word
       finalQuery = this.formatWithSpaces(asToken, finalQuery);
     }
@@ -188,12 +157,68 @@ export default class Formatter {
     // insert word
     finalQuery = this.formatWithSpaces(token, finalQuery);
 
-    if (isEdgeCaseCTE || isEdgeCaseCreateTable || missingCastTypeAs) {
+    if (
+      this.isEdgeCaseCTE(prevToken, nextToken) ||
+      this.isEdgeCaseCreateTable(prevToken, nextToken) ||
+      this.isMissingTypeCastAs(nextToken)
+    ) {
       // insert AS after word
       finalQuery = this.formatWithSpaces(asToken, finalQuery);
     }
 
     return finalQuery;
+  }
+
+  // if table alias is missing and should be added
+  private isMissingTableAlias(token: Token, prevToken: Token): boolean {
+    return (
+      this.cfg.aliasAs === AliasMode.always &&
+      token.type === TokenType.WORD &&
+      prevToken?.value === ')'
+    );
+  }
+
+  // if select column alias is missing and should be added
+  private isMissingSelectColumnAlias(token: Token, prevToken: Token, nextToken: Token): boolean {
+    return (
+      (this.cfg.aliasAs === AliasMode.always || this.cfg.aliasAs === AliasMode.select) &&
+      this.withinSelect &&
+      token.type === TokenType.WORD &&
+      (isToken.END(prevToken) ||
+        ((prevToken?.type === TokenType.WORD || prevToken?.type === TokenType.NUMBER) &&
+          (nextToken?.value === ',' || isCommand(nextToken))))
+    );
+  }
+
+  // checks for CAST(«expression» [AS] type)
+  private isMissingTypeCastAs(nextToken: Token): boolean {
+    return (
+      this.cfg.aliasAs === AliasMode.never &&
+      this.withinSelect &&
+      isToken.CAST(this.previousReservedToken) &&
+      isToken.AS(nextToken) &&
+      (this.tokenLookAhead(2)?.type === TokenType.WORD ||
+        this.tokenLookAhead(2)?.type === TokenType.RESERVED_KEYWORD) &&
+      this.tokenLookAhead(3)?.value === ')'
+    );
+  }
+
+  // checks for WITH `table` [AS] (
+  private isEdgeCaseCTE(prevToken: Token, nextToken: Token): boolean {
+    return (
+      this.cfg.aliasAs === AliasMode.never &&
+      isToken.WITH(prevToken) &&
+      (nextToken?.value === '(' || (isToken.AS(nextToken) && this.tokenLookAhead(2)?.value === '('))
+    );
+  }
+
+  // checks for CREATE TABLE `table` [AS] WITH (
+  private isEdgeCaseCreateTable(prevToken: Token, nextToken: Token): boolean {
+    return (
+      this.cfg.aliasAs === AliasMode.never &&
+      (isToken.TABLE(prevToken) || prevToken?.value.endsWith('TABLE')) &&
+      (isToken.WITH(nextToken) || (isToken.AS(nextToken) && isToken.WITH(this.tokenLookAhead(2))))
+    );
   }
 
   /**
