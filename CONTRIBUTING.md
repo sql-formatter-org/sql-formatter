@@ -21,7 +21,7 @@ For those who have admin access on the repo, the new release publish flow is as 
 - `git dio develop` (moves origin/develop branch head to master)
   - alias for `git push --force-with-lease origin HEAD:develop`
 
-# Contributors
+## Contributors
 
 - Adrien Pyke <adpyke@gmail.com>
 - Alexandr Kozhevnikov <aedkozhevnikov@sberbank.ru>
