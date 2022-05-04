@@ -4,6 +4,7 @@
 
 const { format, supportedDialects } = require('../lib/index');
 const fs = require('fs');
+const tty = require('tty');
 const { version } = require('../package.json');
 const { ArgumentParser } = require('argparse');
 
@@ -53,7 +54,7 @@ class PrettierSQLArgs {
   }
 
   readConfig() {
-    if (Object.entries(this.args).every(([k, v]) => k === 'language' || v === undefined)) {
+    if (tty.isatty(0) && Object.entries(this.args).every(([k, v]) => k === 'language' || v === undefined)) {
       this.parser.print_help();
       process.exit(0);
     }
