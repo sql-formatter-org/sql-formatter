@@ -2,7 +2,7 @@ import { AliasMode } from '../types';
 import { isCommand, isToken, Token, TokenType } from './token';
 
 export interface TokenStream {
-  withinSelect: boolean;
+  isWithinSelect(): boolean;
   previousReservedToken: Token;
   tokenLookBehind(n?: number): Token;
   tokenLookAhead(n?: number): Token;
@@ -35,7 +35,7 @@ export default class AliasAs {
     const nextToken = this.lookAhead();
     return (
       (this.aliasAs === AliasMode.always || this.aliasAs === AliasMode.select) &&
-      this.formatter.withinSelect &&
+      this.formatter.isWithinSelect() &&
       token.type === TokenType.WORD &&
       (isToken.END(prevToken) ||
         ((prevToken.type === TokenType.WORD || prevToken.type === TokenType.NUMBER) &&
@@ -52,7 +52,7 @@ export default class AliasAs {
   private isMissingTypeCastAs(): boolean {
     return (
       this.aliasAs === AliasMode.never &&
-      this.formatter.withinSelect &&
+      this.formatter.isWithinSelect() &&
       isToken.CAST(this.formatter.previousReservedToken) &&
       isToken.AS(this.lookAhead()) &&
       (this.lookAhead(2).type === TokenType.WORD ||
@@ -93,7 +93,7 @@ export default class AliasAs {
   private isRemovableNonSelectAs(): boolean {
     return (
       this.lookBehind().value === ')' && // ) [AS] alias but not SELECT (a) [AS] alpha
-      !this.formatter.withinSelect &&
+      !this.formatter.isWithinSelect() &&
       this.lookAhead().value !== '(' // skip WITH foo [AS] ( ...
     );
   }

@@ -22,7 +22,7 @@ export default class Formatter {
 
   private currentNewline = true;
   public previousReservedToken: Token = EOF_TOKEN;
-  public withinSelect = false;
+  private previousCommandToken: Token = EOF_TOKEN;
   protected tokens: Token[] = [];
   protected index = -1;
 
@@ -98,7 +98,7 @@ export default class Formatter {
           token = toTenSpaceToken(token, this.cfg.keywordPosition);
         }
         if (token.type === TokenType.RESERVED_COMMAND) {
-          this.withinSelect = isToken.SELECT(token); // set withinSelect flag if entering a SELECT clause, else reset
+          this.previousCommandToken = token;
         }
       }
 
@@ -164,7 +164,7 @@ export default class Formatter {
     const nextTokens = this.tokensUntilNextCommandOrQueryEnd();
 
     // auto break if SELECT includes CASE statements
-    if (this.withinSelect && nextTokens.some(isToken.CASE)) {
+    if (this.isWithinSelect() && nextTokens.some(isToken.CASE)) {
       return true;
     }
 
@@ -495,6 +495,11 @@ export default class Formatter {
       this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
       this.cfg.keywordPosition === KeywordMode.tenSpaceRight
     );
+  }
+
+  /** True when currently within SELECT command */
+  public isWithinSelect(): boolean {
+    return isToken.SELECT(this.previousCommandToken);
   }
 
   /** Fetches nth previous token from the token stream */
