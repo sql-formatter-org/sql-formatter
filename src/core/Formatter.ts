@@ -552,19 +552,15 @@ export default class Formatter {
     }
 
     if (this.cfg.keywordPosition === KeywordMode.tenSpaceLeft) {
-      bufferItem += this.addBuffer(bufferItem);
+      bufferItem = bufferItem.padEnd(9, ZWS);
     } else {
-      bufferItem = this.addBuffer(bufferItem) + bufferItem;
+      bufferItem = bufferItem.padStart(9, ZWS);
     }
 
     return {
       ...token,
       value: bufferItem + ['', ...tail].join(' '),
     };
-  }
-
-  private addBuffer(string: string, bufferLength = 9): string {
-    return ZWS.repeat(Math.max(bufferLength - string.length, 0));
   }
 
   private isTenSpace(): boolean {
