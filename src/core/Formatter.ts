@@ -96,7 +96,7 @@ export default class Formatter {
         this.previousReservedToken = token;
         if (token.type !== TokenType.RESERVED_KEYWORD) {
           // convert Reserved Command or Logical Operator to tenSpace format if needed
-          token = this.isTenSpace() ? this.tenSpacedToken(token) : token;
+          token = this.isTenSpace() ? this.toTenSpaceToken(token) : token;
         }
         if (token.type === TokenType.RESERVED_COMMAND) {
           this.withinSelect = isToken.SELECT(token); // set withinSelect flag if entering a SELECT clause, else reset
@@ -544,7 +544,7 @@ export default class Formatter {
   }
 
   /** Produces a 10-char wide version of reserved token for TenSpace modes */
-  private tenSpacedToken(token: Token): Token {
+  private toTenSpaceToken(token: Token): Token {
     let bufferItem = token.value; // store which part of keyword receives 10-space buffer
     let tail = [] as string[]; // rest of keyword
     if (bufferItem.length >= 10 && bufferItem.includes(' ')) {
