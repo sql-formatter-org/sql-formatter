@@ -558,8 +558,10 @@ export default class Formatter {
       bufferItem = this.addBuffer(bufferItem) + bufferItem;
     }
 
-    token.value = bufferItem + ['', ...tail].join(' ');
-    return token;
+    return {
+      ...token,
+      value: bufferItem + ['', ...tail].join(' '),
+    };
   }
 
   private addBuffer(string: string, bufferLength = 9): string {
