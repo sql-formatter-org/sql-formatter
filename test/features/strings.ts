@@ -127,4 +127,17 @@ export default function supportsStrings(
       `);
     });
   }
+
+  if (stringTypes.includes("E''")) {
+    it('supports strings with C-style escapes', () => {
+      expect(format("E'blah blah'")).toBe("E'blah blah'");
+      expect(format("E'some \\' FROM escapes'")).toBe("E'some \\' FROM escapes'");
+      expect(format("SELECT E'blah' FROM foo")).toBe(dedent`
+        SELECT
+          E'blah'
+        FROM
+          foo
+      `);
+    });
+  }
 }

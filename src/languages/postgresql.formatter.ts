@@ -1674,7 +1674,7 @@ export default class PostgreSqlFormatter extends Formatter {
     ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
     ...reservedKeywords,
   ]);
-  static stringTypes: StringPatternType[] = [`""`, "''", "U&''", 'U&""', '$$', '``'];
+  static stringTypes: StringPatternType[] = [`""`, "''", "U&''", 'U&""', '$$', '``', "E''"];
   static blockStart = ['(', 'CASE'];
   static blockEnd = [')', 'END'];
   static indexedPlaceholderTypes = ['$'];
