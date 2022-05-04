@@ -138,15 +138,10 @@ export default class Formatter {
    * Formats word tokens + any potential AS tokens for aliases
    */
   private formatWord(token: Token, query: string): string {
-    const asToken = {
-      type: TokenType.RESERVED_KEYWORD,
-      value: this.cfg.keywordCase === KeywordCase.upper ? 'AS' : 'as',
-    };
-
     let finalQuery = query;
     if (this.isMissingTableAlias(token) || this.isMissingSelectColumnAlias(token)) {
       // insert AS before word
-      finalQuery = this.formatWithSpaces(asToken, finalQuery);
+      finalQuery = this.formatWithSpaces(this.asToken(), finalQuery);
     }
 
     // insert word
@@ -154,7 +149,7 @@ export default class Formatter {
 
     if (this.isEdgeCaseCTE() || this.isEdgeCaseCreateTable() || this.isMissingTypeCastAs()) {
       // insert AS after word
-      finalQuery = this.formatWithSpaces(asToken, finalQuery);
+      finalQuery = this.formatWithSpaces(this.asToken(), finalQuery);
     }
 
     return finalQuery;
@@ -215,6 +210,13 @@ export default class Formatter {
       (isToken.TABLE(prevToken) || prevToken?.value.endsWith('TABLE')) &&
       (isToken.WITH(nextToken) || (isToken.AS(nextToken) && isToken.WITH(this.tokenLookAhead(2))))
     );
+  }
+
+  private asToken(): Token {
+    return {
+      type: TokenType.RESERVED_KEYWORD,
+      value: this.cfg.keywordCase === KeywordCase.upper ? 'AS' : 'as',
+    };
   }
 
   /**
