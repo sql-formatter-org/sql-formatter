@@ -12,8 +12,8 @@ const INDENT_TYPE_BLOCK_LEVEL = 'block-level';
  * - TOP_LEVEL : increased by RESERVED_COMMAND words
  */
 export default class Indentation {
-  indent: string;
-  indentTypes: string[];
+  private indent: string;
+  private indentTypes: string[];
 
   /**
    * @param {string} indent Indent value, default is "  " (2 spaces)
