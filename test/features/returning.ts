@@ -1,0 +1,19 @@
+import dedent from 'dedent-js';
+import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
+
+export default function supportsReturning(language: SqlLanguage, format: FormatFn) {
+  it('places RETURNING to new line', () => {
+    const result = format(
+      "INSERT INTO users (firstname, lastname) VALUES ('Joe', 'Cool') RETURNING id, firstname;"
+    );
+    expect(result).toBe(dedent`
+      INSERT INTO
+        users (firstname, lastname)
+      VALUES
+        ('Joe', 'Cool')
+      RETURNING
+        id,
+        firstname;
+    `);
+  });
+}

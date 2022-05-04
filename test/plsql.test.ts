@@ -12,6 +12,7 @@ import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
+import supportsReturning from './features/returning';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -32,6 +33,7 @@ describe('PlSqlFormatter', () => {
     PlSqlFormatter.reservedLogicalOperators
   );
   supportsJoin(language, format);
+  supportsReturning(language, format);
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`

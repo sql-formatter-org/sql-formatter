@@ -8,6 +8,7 @@ import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
+import supportsReturning from './features/returning';
 
 describe('N1qlFormatter', () => {
   const language = 'n1ql';
@@ -24,6 +25,7 @@ describe('N1qlFormatter', () => {
     N1qlFormatter.reservedLogicalOperators
   );
   supportsJoin(language, format, { without: ['FULL', 'CROSS', 'NATURAL'] });
+  supportsReturning(language, format);
 
   it('formats SELECT query with element selection expression', () => {
     const result = format('SELECT order_lines[0].productId FROM orders;');
@@ -119,29 +121,27 @@ describe('N1qlFormatter', () => {
     `);
   });
 
-  it('formats explained DELETE query with USE KEYS and RETURNING', () => {
-    const result = format("EXPLAIN DELETE FROM tutorial t USE KEYS 'baldwin' RETURNING t");
+  it('formats explained DELETE query with USE KEYS', () => {
+    const result = format("EXPLAIN DELETE FROM tutorial t USE KEYS 'baldwin'");
     expect(result).toBe(dedent`
       EXPLAIN
       DELETE
       FROM
         tutorial t
       USE KEYS
-        'baldwin' RETURNING t
+        'baldwin'
     `);
   });
 
-  it('formats UPDATE query with USE KEYS and RETURNING', () => {
-    const result = format(
-      "UPDATE tutorial USE KEYS 'baldwin' SET type = 'actor' RETURNING tutorial.type"
-    );
+  it('formats UPDATE query with USE KEYS', () => {
+    const result = format("UPDATE tutorial USE KEYS 'baldwin' SET type = 'actor'");
     expect(result).toBe(dedent`
       UPDATE
         tutorial
       USE KEYS
         'baldwin'
       SET
-        type = 'actor' RETURNING tutorial.type
+        type = 'actor'
     `);
   });
 

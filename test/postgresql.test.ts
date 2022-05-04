@@ -11,6 +11,7 @@ import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
+import supportsReturning from './features/returning';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -30,6 +31,7 @@ describe('PostgreSqlFormatter', () => {
     PostgreSqlFormatter.reservedLogicalOperators
   );
   supportsJoin(language, format);
+  supportsReturning(language, format);
 
   it('supports $n placeholders', () => {
     const result = format('SELECT $1, $2 FROM tbl');
