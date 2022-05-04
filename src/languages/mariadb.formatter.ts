@@ -302,6 +302,7 @@ const reservedKeywords = [
   'CHANGED',
   'CHAR',
   'CHARACTER',
+  'CHARACTER SET',
   'CHARSET',
   'CHECK',
   'CHECKPOINT',

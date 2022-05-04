@@ -493,6 +493,7 @@ const reservedKeywords = [
   'CHANGED',
   'CHANNEL',
   'CHARACTER',
+  'CHARACTER SET',
   'CHECK',
   'CHECKSUM',
   'CIPHER',

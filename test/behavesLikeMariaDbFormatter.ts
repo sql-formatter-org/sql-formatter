@@ -56,4 +56,12 @@ export default function behavesLikeMariaDbFormatter(language: SqlLanguage, forma
         );
     `);
   });
+
+  // Issue #181
+  it('does not wrap CHARACTER SET to multiple lines', () => {
+    expect(format('ALTER TABLE t MODIFY col1 VARCHAR(50) CHARACTER SET greek')).toBe(dedent`
+      ALTER TABLE
+        t MODIFY col1 VARCHAR(50) CHARACTER SET greek
+    `);
+  });
 }
