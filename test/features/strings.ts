@@ -114,4 +114,17 @@ export default function supportsStrings(
       `);
     });
   }
+
+  if (stringTypes.includes("x''")) {
+    it('supports hex byte sequences', () => {
+      expect(format("x'0E'")).toBe("x'0E'");
+      expect(format("X'1F0A89C3'")).toBe("X'1F0A89C3'");
+      expect(format("SELECT x'2B' FROM foo")).toBe(dedent`
+        SELECT
+          x'2B'
+        FROM
+          foo
+      `);
+    });
+  }
 }
