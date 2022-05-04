@@ -528,9 +528,6 @@ export default class Formatter {
     // move delimiter to new line if specified
     if (this.cfg.newlineBeforeSemicolon) {
       query += '\n';
-      if (this.isTenSpace()) {
-        query += this.cfg.indent;
-      }
     }
     return query + this.show(token) + '\n'.repeat(this.cfg.linesBetweenQueries + 1);
   }

@@ -78,6 +78,21 @@ export default function supportsKeywordPositions(language: SqlLanguage, format: 
         LEFT      OUTER JOIN c;
       `);
     });
+
+    it('does not indent semicolon when newlineBeforeSemicolon:true used', () => {
+      expect(
+        format('SELECT firstname, lastname, age FROM customers;', {
+          keywordPosition: KeywordMode.tenSpaceLeft,
+          newlineBeforeSemicolon: true,
+        })
+      ).toBe(dedent`
+        SELECT    firstname,
+                  lastname,
+                  age
+        FROM      customers
+        ;
+      `);
+    });
   });
 
   describe('keywordPosition: tenSpaceRight', () => {
