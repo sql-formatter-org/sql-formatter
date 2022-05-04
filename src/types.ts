@@ -69,7 +69,7 @@ export enum CommaPosition {
 export interface FormatOptions {
   indent: string;
   keywordCase: KeywordCase | keyof typeof KeywordCase;
-  keywordPosition: KeywordMode | keyof typeof KeywordCase;
+  keywordPosition: KeywordMode | keyof typeof KeywordMode;
   newline: NewlineMode | keyof typeof NewlineMode | number;
   breakBeforeBooleanOperator: boolean;
   aliasAs: AliasMode | keyof typeof AliasMode;
