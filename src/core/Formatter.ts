@@ -518,18 +518,14 @@ export default class Formatter {
     return before + this.show(token) + after;
   }
 
-  /**
-   * Format Delimiter token onto query, adding newlines accoring to `this.cfg.linesBetweenQueries`
-   */
   private formatQuerySeparator(token: Token, query: string): string {
     this.indentation.resetIndentation();
-    query = trimSpacesEnd(query);
-
-    // move delimiter to new line if specified
-    if (this.cfg.newlineBeforeSemicolon) {
-      query += '\n';
-    }
-    return query + this.show(token) + '\n'.repeat(this.cfg.linesBetweenQueries + 1);
+    return [
+      trimSpacesEnd(query),
+      this.cfg.newlineBeforeSemicolon ? '\n' : '',
+      this.show(token),
+      '\n'.repeat(this.cfg.linesBetweenQueries + 1),
+    ].join('');
   }
 
   /** Converts token to string, uppercasing if enabled */
