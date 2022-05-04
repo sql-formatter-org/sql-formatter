@@ -14,6 +14,7 @@ import {
 } from '../types';
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
+import toTenSpaceToken from './toTenSpaceToken';
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {
@@ -96,7 +97,7 @@ export default class Formatter {
         this.previousReservedToken = token;
         if (token.type !== TokenType.RESERVED_KEYWORD) {
           // convert Reserved Command or Logical Operator to tenSpace format if needed
-          token = this.isTenSpace() ? this.toTenSpaceToken(token) : token;
+          token = toTenSpaceToken(token, this.cfg.keywordPosition);
         }
         if (token.type === TokenType.RESERVED_COMMAND) {
           this.withinSelect = isToken.SELECT(token); // set withinSelect flag if entering a SELECT clause, else reset
@@ -540,27 +541,6 @@ export default class Formatter {
       query += '\n';
     }
     return query + this.indentation.getIndent();
-  }
-
-  /** Produces a 10-char wide version of reserved token for TenSpace modes */
-  private toTenSpaceToken(token: Token): Token {
-    let bufferItem = token.value; // store which part of keyword receives 10-space buffer
-    let tail = [] as string[]; // rest of keyword
-    if (bufferItem.length >= 10 && bufferItem.includes(' ')) {
-      // split for long keywords like INNER JOIN or UNION DISTINCT
-      [bufferItem, ...tail] = bufferItem.split(' ');
-    }
-
-    if (this.cfg.keywordPosition === KeywordMode.tenSpaceLeft) {
-      bufferItem = bufferItem.padEnd(9, ZWS);
-    } else {
-      bufferItem = bufferItem.padStart(9, ZWS);
-    }
-
-    return {
-      ...token,
-      value: bufferItem + ['', ...tail].join(' '),
-    };
   }
 
   private isTenSpace(): boolean {
