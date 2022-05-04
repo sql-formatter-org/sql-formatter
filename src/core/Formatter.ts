@@ -2,7 +2,7 @@ import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { trimSpacesEnd } from '../utils';
-import { isReserved, isCommand, isToken, Token, TokenType, ZWS } from './token';
+import { isReserved, isCommand, isToken, Token, TokenType } from './token';
 import Tokenizer from './Tokenizer';
 import {
   AliasMode,
@@ -14,7 +14,7 @@ import {
 } from '../types';
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
-import toTenSpaceToken from './toTenSpaceToken';
+import toTenSpaceToken, { replaceTenSpacePlaceholders } from './toTenSpaceToken';
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {
@@ -131,7 +131,7 @@ export default class Formatter {
         formattedQuery = this.formatWord(token, formattedQuery);
       }
     }
-    return formattedQuery.replace(new RegExp(ZWS, 'ugim'), ' '); // replace all ZWS with whitespace for TenSpace formats
+    return replaceTenSpacePlaceholders(formattedQuery);
   }
 
   /**

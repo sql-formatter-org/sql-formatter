@@ -9,7 +9,7 @@ import { Token, ZWS } from './token';
  * instead of normal spaces, so that these spaces will survive
  * trimming of spaces in other parts of formatter.
  * They'll be converted to normal spaces in the end of
- * all the normal formatting.
+ * all the normal formatting with the replaceTenSpacePlaceholders()
  */
 export default function toTenSpaceToken(
   token: Token,
@@ -36,4 +36,11 @@ export default function toTenSpaceToken(
     ...token,
     value: bufferItem + ['', ...tail].join(' '),
   };
+}
+
+/**
+ * Replaces zero-width-spaces added by the above function
+ */
+export function replaceTenSpacePlaceholders(query: string): string {
+  return query.replace(new RegExp(ZWS, 'ugim'), ' ');
 }
