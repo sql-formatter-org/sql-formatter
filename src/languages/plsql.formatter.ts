@@ -488,8 +488,8 @@ export default class PlSqlFormatter extends Formatter {
     // `table`[.]`column`
     if (
       token.value === '.' &&
-      this.tokenLookAhead()?.value.startsWith('`') &&
-      this.tokenLookBehind()?.value.endsWith('`')
+      this.tokenLookAhead().value.startsWith('`') &&
+      this.tokenLookBehind().value.endsWith('`')
     ) {
       // This is an operator, do not insert spaces
       return { type: TokenType.OPERATOR, value: token.value };
@@ -501,7 +501,7 @@ export default class PlSqlFormatter extends Formatter {
     }
 
     // [LATERAL] ( ...
-    if (isToken.LATERAL(token) && this.tokenLookAhead()?.type === TokenType.BLOCK_START) {
+    if (isToken.LATERAL(token) && this.tokenLookAhead().type === TokenType.BLOCK_START) {
       // This is a subquery, treat it like a join
       return { type: TokenType.RESERVED_LOGICAL_OPERATOR, value: token.value };
     }

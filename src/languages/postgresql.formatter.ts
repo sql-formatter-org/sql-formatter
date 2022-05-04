@@ -1701,7 +1701,7 @@ export default class PostgreSqlFormatter extends Formatter {
 
   tokenOverride(token: Token) {
     // [LATERAL] ( ...
-    if (isToken.LATERAL(token) && this.tokenLookAhead()?.type === TokenType.BLOCK_START) {
+    if (isToken.LATERAL(token) && this.tokenLookAhead().type === TokenType.BLOCK_START) {
       // This is a subquery, treat it like a join
       return { type: TokenType.RESERVED_LOGICAL_OPERATOR, value: token.value };
     }

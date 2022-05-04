@@ -85,6 +85,7 @@ export default class Tokenizer {
       [TokenType.NUMBER]:
         /^(0x[0-9a-fA-F]+|0b[01]+|(-\s*)?[0-9]+(\.[0-9]*)?([eE][-+]?[0-9]+(\.[0-9]+)?)?)/u,
       [TokenType.PLACEHOLDER]: NULL_REGEX, // matches nothing
+      [TokenType.EOF]: NULL_REGEX, // matches nothing
     };
 
     this.INDEXED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(

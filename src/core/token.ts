@@ -14,6 +14,7 @@ export enum TokenType {
   BLOCK_COMMENT = 'BLOCK_COMMENT',
   NUMBER = 'NUMBER',
   PLACEHOLDER = 'PLACEHOLDER',
+  EOF = 'EOF',
 }
 
 /** Struct to store the most basic cohesive unit of language grammar */
@@ -23,6 +24,12 @@ export interface Token {
   key?: string;
   whitespaceBefore?: string;
 }
+
+/**
+ * For use as a "missing token"
+ * e.g. in lookAhead and lookBehind to avoid dealing with null values
+ */
+export const EOF_TOKEN = { type: TokenType.EOF, value: '«EOF»' };
 
 /** Special Unicode character to serve as a placeholder for TenSpace formats as \w whitespace is unavailable */
 export const ZWS = '​'; // uses zero-width space (&#8203; / U+200B)

@@ -1187,7 +1187,7 @@ export default class MariaDbFormatter extends Formatter {
 
   tokenOverride(token: Token) {
     // [SET] ( ...
-    if (isToken.SET(token) && this.tokenLookAhead()?.value === '(') {
+    if (isToken.SET(token) && this.tokenLookAhead().value === '(') {
       // This is SET datatype, not SET statement
       return { type: TokenType.RESERVED_KEYWORD, value: token.value };
     }

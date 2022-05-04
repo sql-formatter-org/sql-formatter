@@ -2,7 +2,7 @@ import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { trimSpacesEnd } from '../utils';
-import { isReserved, isCommand, isToken, Token, TokenType } from './token';
+import { isReserved, isCommand, isToken, Token, TokenType, EOF_TOKEN } from './token';
 import Tokenizer from './Tokenizer';
 import {
   AliasMode,
@@ -162,7 +162,7 @@ export default class Formatter {
     return (
       this.cfg.aliasAs === AliasMode.always &&
       token.type === TokenType.WORD &&
-      this.tokenLookBehind()?.value === ')'
+      this.tokenLookBehind().value === ')'
     );
   }
 
@@ -175,8 +175,8 @@ export default class Formatter {
       this.withinSelect &&
       token.type === TokenType.WORD &&
       (isToken.END(prevToken) ||
-        ((prevToken?.type === TokenType.WORD || prevToken?.type === TokenType.NUMBER) &&
-          (nextToken?.value === ',' || isCommand(nextToken))))
+        ((prevToken.type === TokenType.WORD || prevToken.type === TokenType.NUMBER) &&
+          (nextToken.value === ',' || isCommand(nextToken))))
     );
   }
 
@@ -187,9 +187,9 @@ export default class Formatter {
       this.withinSelect &&
       isToken.CAST(this.previousReservedToken) &&
       isToken.AS(this.tokenLookAhead()) &&
-      (this.tokenLookAhead(2)?.type === TokenType.WORD ||
-        this.tokenLookAhead(2)?.type === TokenType.RESERVED_KEYWORD) &&
-      this.tokenLookAhead(3)?.value === ')'
+      (this.tokenLookAhead(2).type === TokenType.WORD ||
+        this.tokenLookAhead(2).type === TokenType.RESERVED_KEYWORD) &&
+      this.tokenLookAhead(3).value === ')'
     );
   }
 
@@ -199,7 +199,7 @@ export default class Formatter {
     return (
       this.cfg.aliasAs === AliasMode.never &&
       isToken.WITH(this.tokenLookBehind()) &&
-      (nextToken?.value === '(' || (isToken.AS(nextToken) && this.tokenLookAhead(2)?.value === '('))
+      (nextToken.value === '(' || (isToken.AS(nextToken) && this.tokenLookAhead(2).value === '('))
     );
   }
 
@@ -209,7 +209,7 @@ export default class Formatter {
     const nextToken = this.tokenLookAhead();
     return (
       this.cfg.aliasAs === AliasMode.never &&
-      (isToken.TABLE(prevToken) || prevToken?.value.endsWith('TABLE')) &&
+      (isToken.TABLE(prevToken) || prevToken.value.endsWith('TABLE')) &&
       (isToken.WITH(nextToken) || (isToken.AS(nextToken) && isToken.WITH(this.tokenLookAhead(2))))
     );
   }
@@ -307,11 +307,11 @@ export default class Formatter {
 
     // indent TenSpace formats, except when preceding a (
     if (this.isTenSpace()) {
-      if (this.tokenLookAhead()?.value !== '(') {
+      if (this.tokenLookAhead().value !== '(') {
         this.indentation.increaseTopLevel();
       }
       // indent standard format, except when is [FROM] (
-    } else if (!(this.tokenLookAhead()?.value === '(' && isToken.FROM(token))) {
+    } else if (!(this.tokenLookAhead().value === '(' && isToken.FROM(token))) {
       this.indentation.increaseTopLevel();
     }
 
@@ -345,9 +345,9 @@ export default class Formatter {
       isToken.AS(token) &&
       (this.cfg.aliasAs === AliasMode.never || // skip all AS if never
         (this.cfg.aliasAs === AliasMode.select &&
-          this.tokenLookBehind()?.value === ')' && // ) [AS] alias but not SELECT (a) [AS] alpha
+          this.tokenLookBehind().value === ')' && // ) [AS] alias but not SELECT (a) [AS] alpha
           !this.withinSelect && // skip WITH foo [AS] ( ...
-          this.tokenLookAhead()?.value !== '('))
+          this.tokenLookAhead().value !== '('))
     ) {
       // do not format if skipping AS
       return query;
@@ -381,7 +381,7 @@ export default class Formatter {
     }
 
     // regular operator
-    if (this.cfg.denseOperators && this.tokenLookBehind()?.type !== TokenType.RESERVED_COMMAND) {
+    if (this.cfg.denseOperators && this.tokenLookBehind().type !== TokenType.RESERVED_COMMAND) {
       // do not trim whitespace if SELECT *
       return this.formatWithoutSpaces(token, query);
     }
@@ -434,7 +434,7 @@ export default class Formatter {
       ];
       if (
         token.whitespaceBefore?.length === 0 &&
-        !preserveWhitespaceFor.includes(this.tokenLookBehind()?.type)
+        !preserveWhitespaceFor.includes(this.tokenLookBehind().type)
       ) {
         query = trimSpacesEnd(query);
       } else if (!this.cfg.newlineBeforeOpenParen) {
@@ -570,12 +570,12 @@ export default class Formatter {
   }
 
   /** Fetches nth previous token from the token stream */
-  protected tokenLookBehind(n = 1) {
-    return this.tokens[this.index - n];
+  protected tokenLookBehind(n = 1): Token {
+    return this.tokens[this.index - n] || EOF_TOKEN;
   }
 
   /** Fetches nth next token from the token stream */
-  protected tokenLookAhead(n = 1) {
-    return this.tokens[this.index + n];
+  protected tokenLookAhead(n = 1): Token {
+    return this.tokens[this.index + n] || EOF_TOKEN;
   }
 }

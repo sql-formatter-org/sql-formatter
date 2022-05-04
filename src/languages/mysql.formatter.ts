@@ -1350,13 +1350,13 @@ export default class MySqlFormatter extends Formatter {
 
   tokenOverride(token: Token) {
     // [LATERAL] ( ...
-    if (isToken.LATERAL(token) && this.tokenLookAhead()?.type === TokenType.BLOCK_START) {
+    if (isToken.LATERAL(token) && this.tokenLookAhead().type === TokenType.BLOCK_START) {
       // This is a subquery, treat it like a join
       return { type: TokenType.RESERVED_LOGICAL_OPERATOR, value: token.value };
     }
 
     // [SET] ( ...
-    if (isToken.SET(token) && this.tokenLookAhead()?.value === '(') {
+    if (isToken.SET(token) && this.tokenLookAhead().value === '(') {
       // This is SET datatype, not SET statement
       return { type: TokenType.RESERVED_KEYWORD, value: token.value };
     }

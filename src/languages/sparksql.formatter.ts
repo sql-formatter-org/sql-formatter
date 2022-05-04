@@ -812,13 +812,13 @@ export default class SparkSqlFormatter extends Formatter {
 
   tokenOverride(token: Token) {
     // [WINDOW](...)
-    if (isToken.WINDOW(token) && this.tokenLookAhead()?.type === TokenType.BLOCK_START) {
+    if (isToken.WINDOW(token) && this.tokenLookAhead().type === TokenType.BLOCK_START) {
       // This is a function call, treat it as a reserved word
       return { type: TokenType.RESERVED_KEYWORD, value: token.value };
     }
 
     // .[END]
-    if (isToken.END(token) && this.tokenLookBehind()?.value === '.') {
+    if (isToken.END(token) && this.tokenLookBehind().value === '.') {
       // This is window().end (or similar) not CASE ... END
       return { type: TokenType.WORD, value: token.value };
     }
@@ -827,8 +827,8 @@ export default class SparkSqlFormatter extends Formatter {
     if (/ITEMS/i.test(token.value) && token.type === TokenType.RESERVED_KEYWORD) {
       if (
         !(
-          /COLLECTION/i.test(this.tokenLookBehind()?.value) &&
-          /TERMINATED/i.test(this.tokenLookAhead()?.value)
+          /COLLECTION/i.test(this.tokenLookBehind().value) &&
+          /TERMINATED/i.test(this.tokenLookAhead().value)
         )
       ) {
         // this is a word and not COLLECTION ITEMS
