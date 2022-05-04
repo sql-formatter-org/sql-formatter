@@ -118,7 +118,6 @@ export default class Formatter {
         formattedQuery = this.formatLogicalOperator(token, formattedQuery);
       } else if (token.type === TokenType.RESERVED_KEYWORD) {
         formattedQuery = this.formatKeyword(token, formattedQuery);
-        this.previousReservedToken = token;
       } else if (token.type === TokenType.BLOCK_START) {
         formattedQuery = this.formatBlockStart(token, formattedQuery);
       } else if (token.type === TokenType.BLOCK_END) {
