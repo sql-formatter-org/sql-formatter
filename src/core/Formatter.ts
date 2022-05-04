@@ -4,14 +4,7 @@ import Params from './Params';
 import { trimSpacesEnd } from '../utils';
 import { isReserved, isCommand, isToken, Token, TokenType, EOF_TOKEN } from './token';
 import Tokenizer from './Tokenizer';
-import {
-  AliasMode,
-  CommaPosition,
-  FormatOptions,
-  KeywordCase,
-  KeywordMode,
-  NewlineMode,
-} from '../types';
+import { CommaPosition, FormatOptions, KeywordCase, KeywordMode, NewlineMode } from '../types';
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
 import { toTenSpaceToken, replaceTenSpacePlaceholders } from './tenSpace';
@@ -284,15 +277,7 @@ export default class Formatter {
    * Formats a Reserved Keyword onto query, skipping AS if disabled
    */
   private formatKeyword(token: Token, query: string): string {
-    if (
-      isToken.AS(token) &&
-      (this.cfg.aliasAs === AliasMode.never || // skip all AS if never
-        (this.cfg.aliasAs === AliasMode.select &&
-          this.tokenLookBehind().value === ')' && // ) [AS] alias but not SELECT (a) [AS] alpha
-          !this.withinSelect && // skip WITH foo [AS] ( ...
-          this.tokenLookAhead().value !== '('))
-    ) {
-      // do not format if skipping AS
+    if (isToken.AS(token) && this.aliasAs.shouldRemove()) {
       return query;
     }
 

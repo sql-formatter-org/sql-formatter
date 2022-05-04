@@ -8,7 +8,7 @@ export interface TokenStream {
   tokenLookAhead(n?: number): Token;
 }
 
-/** Decides addition of AS tokens */
+/** Decides addition and removal of AS tokens */
 export default class AliasAs {
   constructor(
     private aliasAs: AliasMode | keyof typeof AliasMode,
@@ -79,6 +79,22 @@ export default class AliasAs {
       this.aliasAs === AliasMode.never &&
       (isToken.TABLE(prevToken) || prevToken.value.endsWith('TABLE')) &&
       (isToken.WITH(nextToken) || (isToken.AS(nextToken) && isToken.WITH(this.lookAhead(2))))
+    );
+  }
+
+  /* True when the current AS token should be discarded */
+  public shouldRemove(): boolean {
+    return (
+      this.aliasAs === AliasMode.never ||
+      (this.aliasAs === AliasMode.select && this.isRemovableNonSelectAs())
+    );
+  }
+
+  private isRemovableNonSelectAs(): boolean {
+    return (
+      this.lookBehind().value === ')' && // ) [AS] alias but not SELECT (a) [AS] alpha
+      !this.formatter.withinSelect &&
+      this.lookAhead().value !== '(' // skip WITH foo [AS] ( ...
     );
   }
 
