@@ -15,6 +15,7 @@ import {
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
 import { toTenSpaceToken, replaceTenSpacePlaceholders } from './tenSpace';
+import AliasAs from './AliasAs';
 
 const TENSPACE_INDENT = ' '.repeat(10);
 
@@ -23,11 +24,12 @@ export default class Formatter {
   private cfg: FormatOptions;
   private indentation: Indentation;
   private inlineBlock: InlineBlock;
+  private aliasAs: AliasAs;
   private params: Params;
 
   private currentNewline = true;
-  protected previousReservedToken: Token = EOF_TOKEN;
-  private withinSelect = false;
+  public previousReservedToken: Token = EOF_TOKEN;
+  public withinSelect = false;
   protected tokens: Token[] = [];
   protected index = -1;
 
@@ -35,6 +37,7 @@ export default class Formatter {
     this.cfg = cfg;
     this.indentation = new Indentation(this.isTenSpace() ? TENSPACE_INDENT : this.cfg.indent);
     this.inlineBlock = new InlineBlock(this.cfg.lineWidth);
+    this.aliasAs = new AliasAs(this.cfg.aliasAs, this);
     this.params = new Params(this.cfg.params);
   }
 
@@ -141,77 +144,17 @@ export default class Formatter {
    */
   private formatWord(token: Token, query: string): string {
     let finalQuery = query;
-    if (this.isMissingTableAlias(token) || this.isMissingSelectColumnAlias(token)) {
-      // insert AS before word
+    if (this.aliasAs.shouldAddBefore(token)) {
       finalQuery = this.formatWithSpaces(this.asToken(), finalQuery);
     }
 
-    // insert word
     finalQuery = this.formatWithSpaces(token, finalQuery);
 
-    if (this.isEdgeCaseCTE() || this.isEdgeCaseCreateTable() || this.isMissingTypeCastAs()) {
-      // insert AS after word
+    if (this.aliasAs.shouldAddAfter()) {
       finalQuery = this.formatWithSpaces(this.asToken(), finalQuery);
     }
 
     return finalQuery;
-  }
-
-  // if table alias is missing and should be added
-  private isMissingTableAlias(token: Token): boolean {
-    return (
-      this.cfg.aliasAs === AliasMode.always &&
-      token.type === TokenType.WORD &&
-      this.tokenLookBehind().value === ')'
-    );
-  }
-
-  // if select column alias is missing and should be added
-  private isMissingSelectColumnAlias(token: Token): boolean {
-    const prevToken = this.tokenLookBehind();
-    const nextToken = this.tokenLookAhead();
-    return (
-      (this.cfg.aliasAs === AliasMode.always || this.cfg.aliasAs === AliasMode.select) &&
-      this.withinSelect &&
-      token.type === TokenType.WORD &&
-      (isToken.END(prevToken) ||
-        ((prevToken.type === TokenType.WORD || prevToken.type === TokenType.NUMBER) &&
-          (nextToken.value === ',' || isCommand(nextToken))))
-    );
-  }
-
-  // checks for CAST(«expression» [AS] type)
-  private isMissingTypeCastAs(): boolean {
-    return (
-      this.cfg.aliasAs === AliasMode.never &&
-      this.withinSelect &&
-      isToken.CAST(this.previousReservedToken) &&
-      isToken.AS(this.tokenLookAhead()) &&
-      (this.tokenLookAhead(2).type === TokenType.WORD ||
-        this.tokenLookAhead(2).type === TokenType.RESERVED_KEYWORD) &&
-      this.tokenLookAhead(3).value === ')'
-    );
-  }
-
-  // checks for WITH `table` [AS] (
-  private isEdgeCaseCTE(): boolean {
-    const nextToken = this.tokenLookAhead();
-    return (
-      this.cfg.aliasAs === AliasMode.never &&
-      isToken.WITH(this.tokenLookBehind()) &&
-      (nextToken.value === '(' || (isToken.AS(nextToken) && this.tokenLookAhead(2).value === '('))
-    );
-  }
-
-  // checks for CREATE TABLE `table` [AS] WITH (
-  private isEdgeCaseCreateTable(): boolean {
-    const prevToken = this.tokenLookBehind();
-    const nextToken = this.tokenLookAhead();
-    return (
-      this.cfg.aliasAs === AliasMode.never &&
-      (isToken.TABLE(prevToken) || prevToken.value.endsWith('TABLE')) &&
-      (isToken.WITH(nextToken) || (isToken.AS(nextToken) && isToken.WITH(this.tokenLookAhead(2))))
-    );
   }
 
   private asToken(): Token {
@@ -570,12 +513,12 @@ export default class Formatter {
   }
 
   /** Fetches nth previous token from the token stream */
-  protected tokenLookBehind(n = 1): Token {
+  public tokenLookBehind(n = 1): Token {
     return this.tokens[this.index - n] || EOF_TOKEN;
   }
 
   /** Fetches nth next token from the token stream */
-  protected tokenLookAhead(n = 1): Token {
+  public tokenLookAhead(n = 1): Token {
     return this.tokens[this.index + n] || EOF_TOKEN;
   }
 }
