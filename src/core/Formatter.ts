@@ -465,6 +465,7 @@ export default class Formatter {
       this.indentation.decreaseBlockLevel();
 
       if (this.isTenSpace()) {
+        // +1 extra indentation step for the closing paren
         query = this.addNewline(query) + this.cfg.indent;
       } else if (this.cfg.newlineBeforeCloseParen) {
         query = this.addNewline(query);
