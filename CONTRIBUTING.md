@@ -63,6 +63,7 @@ For those who have admin access on the repo, the new release publish flow is as 
 # Contributors
 
 - Adrien Pyke <adpyke@gmail.com>
+- Alexandr Kozhevnikov <aedkozhevnikov@sberbank.ru>
 - Andrew
 - Benjamin Bellamy
 - bingou
