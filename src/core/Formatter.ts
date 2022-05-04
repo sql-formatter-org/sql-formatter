@@ -544,8 +544,6 @@ export default class Formatter {
 
   /** Produces a 10-char wide version of reserved token for TenSpace modes */
   private tenSpacedToken(token: Token): Token {
-    const addBuffer = (string: string, bufferLength = 9) =>
-      ZWS.repeat(Math.max(bufferLength - string.length, 0));
     if (this.isTenSpace()) {
       let bufferItem = token.value; // store which part of keyword receives 10-space buffer
       let tail = [] as string[]; // rest of keyword
@@ -555,14 +553,18 @@ export default class Formatter {
       }
 
       if (this.cfg.keywordPosition === KeywordMode.tenSpaceLeft) {
-        bufferItem += addBuffer(bufferItem);
+        bufferItem += this.addBuffer(bufferItem);
       } else {
-        bufferItem = addBuffer(bufferItem) + bufferItem;
+        bufferItem = this.addBuffer(bufferItem) + bufferItem;
       }
 
       token.value = bufferItem + ['', ...tail].join(' ');
     }
     return token;
+  }
+
+  private addBuffer(string: string, bufferLength = 9): string {
+    return ZWS.repeat(Math.max(bufferLength - string.length, 0));
   }
 
   private isTenSpace(): boolean {
