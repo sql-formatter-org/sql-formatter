@@ -173,14 +173,14 @@ export default function behavesLikeSqlFormatter(language: SqlLanguage, format: F
         *,
         SUM(*) AS total
       FROM
-      (
-        SELECT
-          *
-        FROM
-          Posts
-        LIMIT
-          30
-      )
+        (
+          SELECT
+            *
+          FROM
+            Posts
+          LIMIT
+            30
+        )
       WHERE
         a > b
     `);
@@ -315,12 +315,12 @@ export default function behavesLikeSqlFormatter(language: SqlLanguage, format: F
       SET
         total_orders = order_summary.total
       FROM
-      (
-        SELECT
-          *
-        FROM
-          bank
-      ) AS order_summary
+        (
+          SELECT
+            *
+          FROM
+            bank
+        ) AS order_summary
     `);
   });
 

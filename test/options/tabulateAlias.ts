@@ -16,13 +16,13 @@ export default function supportsTabulateAlias(language: SqlLanguage, format: For
         MAX(beta),
         epsilon   AS E
       FROM
-      (
-        SELECT
-          mu   AS m,
-          iota AS io
-        FROM
-          gamma
-      );
+        (
+          SELECT
+            mu   AS m,
+            iota AS io
+          FROM
+            gamma
+        );
     `);
   });
 
@@ -40,13 +40,13 @@ export default function supportsTabulateAlias(language: SqlLanguage, format: For
         MAX(beta),
         epsilon   E
       FROM
-      (
-        SELECT
-          mu   m,
-          iota io
-        FROM
-          gamma
-      );
+        (
+          SELECT
+            mu   m,
+            iota io
+          FROM
+            gamma
+        );
     `);
   });
 
@@ -63,13 +63,13 @@ export default function supportsTabulateAlias(language: SqlLanguage, format: For
         MAX(beta),
         epsilon   E
       FROM
-      (
-        SELECT
-          mu   m,
-          iota AS io
-        FROM
-          gamma
-      );
+        (
+          SELECT
+            mu   m,
+            iota AS io
+          FROM
+            gamma
+        );
     `);
   });
 
@@ -82,9 +82,9 @@ export default function supportsTabulateAlias(language: SqlLanguage, format: For
     expect(result).toBe(dedent`
       SELECT alpha AS alp, MAX(beta), epsilon AS E
       FROM (
-        SELECT mu AS m, iota AS io
-        FROM gamma
-      );
+          SELECT mu AS m, iota AS io
+          FROM gamma
+        );
     `);
   });
 

@@ -246,8 +246,7 @@ export default class Formatter {
       if (this.tokenLookAhead().value !== '(') {
         this.indentation.increaseTopLevel();
       }
-      // indent standard format, except when is [FROM] (
-    } else if (!(this.tokenLookAhead().value === '(' && isToken.FROM(token))) {
+    } else {
       this.indentation.increaseTopLevel();
     }
 

@@ -31,12 +31,12 @@ export default function supportsAliasAs(language: SqlLanguage, format: FormatFn)
           a as a_column,
           b AS bColumn
         FROM
-        (
-          SELECT
-            *
-          FROM
-            x
-        ) as y
+          (
+            SELECT
+              *
+            FROM
+              x
+          ) as y
         WHERE
           z;
       `)
@@ -54,12 +54,12 @@ export default function supportsAliasAs(language: SqlLanguage, format: FormatFn)
           a a_column,
           b bColumn
         FROM
-        (
-          SELECT
-            *
-          FROM
-            x
-        ) y
+          (
+            SELECT
+              *
+            FROM
+              x
+          ) y
         WHERE
           z;
       `)
@@ -87,12 +87,12 @@ export default function supportsAliasAs(language: SqlLanguage, format: FormatFn)
           a as a_column,
           b AS bColumn
         FROM
-        (
-          SELECT
-            *
-          FROM
-            x
-        ) y
+          (
+            SELECT
+              *
+            FROM
+              x
+          ) y
         WHERE
           z;
       `)

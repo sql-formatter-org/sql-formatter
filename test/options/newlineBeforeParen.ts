@@ -10,12 +10,12 @@ export default function supportsNewlineBeforeParen(language: SqlLanguage, format
       SELECT
         a
       FROM
-      (
-        SELECT
-          b
-        FROM
-          c
-      );
+        (
+          SELECT
+            b
+          FROM
+            c
+        );
     `);
   });
 
@@ -27,11 +27,11 @@ export default function supportsNewlineBeforeParen(language: SqlLanguage, format
       SELECT
         a
       FROM (
-        SELECT
-          b
-        FROM
-          c
-      );
+          SELECT
+            b
+          FROM
+            c
+        );
     `);
   });
 
@@ -43,11 +43,11 @@ export default function supportsNewlineBeforeParen(language: SqlLanguage, format
       SELECT
         a
       FROM
-      (
-        SELECT
-          b
-        FROM
-          c );
+        (
+          SELECT
+            b
+          FROM
+            c );
     `);
   });
 
@@ -60,10 +60,10 @@ export default function supportsNewlineBeforeParen(language: SqlLanguage, format
       SELECT
         a
       FROM (
-        SELECT
-          b
-        FROM
-          c );
+          SELECT
+            b
+          FROM
+            c );
     `);
   });
 

@@ -19,15 +19,15 @@ export default function supportsKeywordPositions(language: SqlLanguage, format: 
         MAX(b.column2 + b.column3),
         b.column4 AS four
       FROM
-      (
-        SELECT
-          column1,
-          column5
-        FROM
-          table1
-      ) a
-      JOIN table2 b
-      ON a.column5 = b.column5
+        (
+          SELECT
+            column1,
+            column5
+          FROM
+            table1
+        ) a
+        JOIN table2 b
+        ON a.column5 = b.column5
       WHERE
         column6
         AND column7
