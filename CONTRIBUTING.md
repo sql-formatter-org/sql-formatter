@@ -30,6 +30,7 @@ For those who have admin access on the repo, the new release publish flow is as 
 - Davut Can Abacigil <can@teamsql.io>
 - Erik Hirmo <erik.hirmo@roguewave.com>
 - George Leslie-Waksman <waksman@gmail.com>
+- htaketani <h.taketani@gmail.com>
 - Ian Campbell <icampbell@immuta.com>
 - ivan baktsheev
 - João Pimentel Ferreira
