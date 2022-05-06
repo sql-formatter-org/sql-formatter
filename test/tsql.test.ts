@@ -79,8 +79,7 @@ describe('TSqlFormatter', () => {
         b
       FROM
         t
-        CROSS JOIN t2
-        on t.id = t2.id_t
+        CROSS JOIN t2 on t.id = t2.id_t
     `);
   });
 });

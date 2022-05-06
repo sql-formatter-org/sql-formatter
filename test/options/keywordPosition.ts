@@ -26,8 +26,7 @@ export default function supportsKeywordPositions(language: SqlLanguage, format: 
           FROM
             table1
         ) a
-        JOIN table2 b
-        ON a.column5 = b.column5
+        JOIN table2 b ON a.column5 = b.column5
       WHERE
         column6
         AND column7
@@ -48,8 +47,7 @@ export default function supportsKeywordPositions(language: SqlLanguage, format: 
                             column5
                   FROM      table1
                   ) a
-        JOIN      table2 b
-        ON        a.column5 = b.column5
+        JOIN      table2 b ON a.column5 = b.column5
         WHERE     column6
         AND       column7
         GROUP BY  column4;
@@ -135,8 +133,7 @@ export default function supportsKeywordPositions(language: SqlLanguage, format: 
           '                    column5',
           '               FROM table1',
           '          ) a',
-          '     JOIN table2 b',
-          '       ON a.column5 = b.column5',
+          '     JOIN table2 b ON a.column5 = b.column5',
           '    WHERE column6',
           '      AND column7',
           ' GROUP BY column4;',

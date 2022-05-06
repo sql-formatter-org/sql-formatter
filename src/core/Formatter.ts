@@ -93,7 +93,10 @@ export default class Formatter {
       // if token is a Reserved Keyword, Command, Binary Command, Dependent Clause, Logical Operator
       if (isReserved(token)) {
         this.previousReservedToken = token;
-        if (token.type !== TokenType.RESERVED_KEYWORD) {
+        if (
+          token.type !== TokenType.RESERVED_KEYWORD &&
+          token.type !== TokenType.RESERVED_JOIN_CONDITION
+        ) {
           // convert Reserved Command or Logical Operator to tenSpace format if needed
           token = toTenSpaceToken(token, this.cfg.keywordPosition);
         }
@@ -294,7 +297,7 @@ export default class Formatter {
 
   // Formats ON and USING keywords
   private formatJoinCondition(token: Token, query: string): string {
-    return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
+    return query + this.equalizeWhitespace(this.show(token)) + ' ';
   }
 
   /**

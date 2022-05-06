@@ -54,8 +54,7 @@ export default function supportsJoin(
             COUNT(order_id) AS total
           FROM
             customers
-            ${join} orders
-            ON customers.customer_id = orders.customer_id;
+            ${join} orders ON customers.customer_id = orders.customer_id;
         `);
       });
     });
