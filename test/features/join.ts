@@ -45,16 +45,17 @@ export default function supportsJoin(
     .forEach(join => {
       it(`supports ${join}`, () => {
         const result = format(`
-          SELECT customer_id.from, COUNT(order_id) AS total FROM customers
-          ${join} orders ON customers.customer_id = orders.customer_id;
+          SELECT * FROM customers
+          ${join} orders ON customers.customer_id = orders.customer_id
+          ${join} items USING (item_id, name);
         `);
         expect(result).toBe(dedent`
           SELECT
-            customer_id.from,
-            COUNT(order_id) AS total
+            *
           FROM
             customers
-            ${join} orders ON customers.customer_id = orders.customer_id;
+            ${join} orders ON customers.customer_id = orders.customer_id
+            ${join} items USING (item_id, name);
         `);
       });
     });
