@@ -495,7 +495,6 @@ const reservedKeywords = {
     'UNIQUEJOIN',
     // 'UPDATE',
     'USER',
-    'USING',
     'UTC_TMESTAMP',
     // 'VALUES',
     'VARCHAR',
@@ -611,7 +610,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous 'Statement', must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'USING'];
 
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export default class HiveFormatter extends Formatter {

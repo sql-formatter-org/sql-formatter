@@ -469,7 +469,6 @@ const reservedKeywords = {
     'TRAILING',
     'TRUE',
     'UNIQUE',
-    'USING',
     'VERBOSE',
     'WALLET',
     'WITHOUT',
@@ -712,7 +711,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE'];
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'USING'];
 
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export default class RedshiftFormatter extends Formatter {

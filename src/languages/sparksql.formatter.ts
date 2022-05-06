@@ -586,7 +586,6 @@ const reservedKeywords = [
   'UNSET',
   'USE',
   'USER',
-  'USING',
   'VIEW',
   'WINDOW',
   'YEAR',
@@ -773,7 +772,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL VIEW'];
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL VIEW', 'USING'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkSqlFormatter extends Formatter {

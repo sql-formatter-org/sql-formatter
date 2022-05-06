@@ -1052,7 +1052,6 @@ const reservedKeywords = [
   'USAGE',
   'USER_RESOURCES',
   'USE_FRM',
-  'USING',
   'VALIDATION',
   'VALUE',
   'VARBINARY',
@@ -1312,7 +1311,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'LATERAL'];
+const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'LATERAL', 'USING'];
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
