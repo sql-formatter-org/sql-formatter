@@ -506,13 +506,14 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'USING'];
+const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE'];
 
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html
 export default class N1qlFormatter extends Formatter {
   static reservedCommands = reservedCommands;
   static reservedBinaryCommands = reservedBinaryCommands;
   static reservedDependentClauses = reservedDependentClauses;
+  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
   static reservedKeywords = dedupe([...reservedKeywords, ...reservedFunctions]);
   static stringTypes: StringPatternType[] = [`""`, "''", '``'];
@@ -527,6 +528,7 @@ export default class N1qlFormatter extends Formatter {
       reservedCommands: N1qlFormatter.reservedCommands,
       reservedBinaryCommands: N1qlFormatter.reservedBinaryCommands,
       reservedDependentClauses: N1qlFormatter.reservedDependentClauses,
+      reservedJoinConditions: N1qlFormatter.reservedJoinConditions,
       reservedLogicalOperators: N1qlFormatter.reservedLogicalOperators,
       reservedKeywords: N1qlFormatter.reservedKeywords,
       stringTypes: N1qlFormatter.stringTypes,

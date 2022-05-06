@@ -364,12 +364,13 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'USING'];
+const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE'];
 
 export default class StandardSqlFormatter extends Formatter {
   static reservedCommands = reservedCommands;
   static reservedBinaryCommands = reservedBinaryCommands;
   static reservedDependentClauses = reservedDependentClauses;
+  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR'];
   static reservedKeywords = dedupe(reservedKeywords);
   static stringTypes: StringPatternType[] = [`""`, "''", '``'];
@@ -385,6 +386,7 @@ export default class StandardSqlFormatter extends Formatter {
       reservedCommands: StandardSqlFormatter.reservedCommands,
       reservedBinaryCommands: StandardSqlFormatter.reservedBinaryCommands,
       reservedDependentClauses: StandardSqlFormatter.reservedDependentClauses,
+      reservedJoinConditions: StandardSqlFormatter.reservedJoinConditions,
       reservedLogicalOperators: StandardSqlFormatter.reservedLogicalOperators,
       reservedKeywords: StandardSqlFormatter.reservedKeywords,
       stringTypes: StandardSqlFormatter.stringTypes,

@@ -438,12 +438,13 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'USING'];
+const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE'];
 
 export default class PlSqlFormatter extends Formatter {
   static reservedCommands = reservedCommands;
   static reservedBinaryCommands = reservedBinaryCommands;
   static reservedDependentClauses = reservedDependentClauses;
+  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
   static reservedKeywords = dedupe(reservedKeywords);
   static stringTypes: StringPatternType[] = [`""`, "N''", "''", '``'];
@@ -470,6 +471,7 @@ export default class PlSqlFormatter extends Formatter {
       reservedCommands: PlSqlFormatter.reservedCommands,
       reservedBinaryCommands: PlSqlFormatter.reservedBinaryCommands,
       reservedDependentClauses: PlSqlFormatter.reservedDependentClauses,
+      reservedJoinConditions: PlSqlFormatter.reservedJoinConditions,
       reservedLogicalOperators: PlSqlFormatter.reservedLogicalOperators,
       reservedKeywords: PlSqlFormatter.reservedKeywords,
       stringTypes: PlSqlFormatter.stringTypes,

@@ -772,13 +772,14 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL VIEW', 'USING'];
+const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE', 'LATERAL VIEW'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkSqlFormatter extends Formatter {
   static reservedCommands = reservedCommands;
   static reservedBinaryCommands = reservedBinaryCommands;
   static reservedDependentClauses = reservedDependentClauses;
+  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
   static reservedKeywords = dedupe([
     ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
@@ -797,6 +798,7 @@ export default class SparkSqlFormatter extends Formatter {
       reservedCommands: SparkSqlFormatter.reservedCommands,
       reservedBinaryCommands: SparkSqlFormatter.reservedBinaryCommands,
       reservedDependentClauses: SparkSqlFormatter.reservedDependentClauses,
+      reservedJoinConditions: SparkSqlFormatter.reservedJoinConditions,
       reservedLogicalOperators: SparkSqlFormatter.reservedLogicalOperators,
       reservedKeywords: SparkSqlFormatter.reservedKeywords,
       stringTypes: SparkSqlFormatter.stringTypes,

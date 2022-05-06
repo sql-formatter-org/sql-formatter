@@ -12,6 +12,7 @@ interface TokenizerOptions {
   reservedLogicalOperators: string[];
   reservedDependentClauses: string[];
   reservedBinaryCommands: string[];
+  reservedJoinConditions: string[];
   stringTypes: regexFactory.StringPatternType[];
   blockStart: string[];
   blockEnd: string[];
@@ -37,6 +38,7 @@ export default class Tokenizer {
    *  @param {string[]} cfg.reservedLogicalOperators - Words that are set to newline
    *  @param {string[]} cfg.reservedCommands - Words that are set to new line separately
    *  @param {string[]} cfg.reservedBinaryCommands - Words that are top level but have no indentation
+   *  @param {string[]} cfg.reservedJoinConditions - ON and USING
    *  @param {string[]} cfg.stringTypes - string types to enable - "", '', ``, [], N''
    *  @param {string[]} cfg.blockStart - Opening parentheses to enable, like (, [
    *  @param {string[]} cfg.blockEnd - Closing parentheses to enable, like ), ]
@@ -69,6 +71,10 @@ export default class Tokenizer {
       ),
       [TokenType.RESERVED_BINARY_COMMAND]: regexFactory.createReservedWordRegex(
         cfg.reservedBinaryCommands,
+        specialWordCharsAll
+      ),
+      [TokenType.RESERVED_JOIN_CONDITION]: regexFactory.createReservedWordRegex(
+        cfg.reservedJoinConditions,
         specialWordCharsAll
       ),
       [TokenType.OPERATOR]: regexFactory.createOperatorRegex('+-/*%&|^><=.,;[]{}`:$', [
@@ -212,6 +218,7 @@ export default class Tokenizer {
       TokenType.RESERVED_BINARY_COMMAND,
       TokenType.RESERVED_DEPENDENT_CLAUSE,
       TokenType.RESERVED_LOGICAL_OPERATOR,
+      TokenType.RESERVED_JOIN_CONDITION,
       TokenType.RESERVED_KEYWORD,
     ];
 

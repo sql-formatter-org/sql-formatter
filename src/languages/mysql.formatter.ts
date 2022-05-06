@@ -1311,13 +1311,14 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'LATERAL', 'USING'];
+const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE', 'ELSEIF', 'LATERAL'];
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
   static reservedCommands = reservedCommands;
   static reservedBinaryCommands = reservedBinaryCommands;
   static reservedDependentClauses = reservedDependentClauses;
+  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
   static reservedKeywords = dedupe([...reservedKeywords, ...reservedFunctions]);
   static stringTypes: StringPatternType[] = ['``', "''", '""'];
@@ -1334,6 +1335,7 @@ export default class MySqlFormatter extends Formatter {
       reservedCommands: MySqlFormatter.reservedCommands,
       reservedBinaryCommands: MySqlFormatter.reservedBinaryCommands,
       reservedDependentClauses: MySqlFormatter.reservedDependentClauses,
+      reservedJoinConditions: MySqlFormatter.reservedJoinConditions,
       reservedLogicalOperators: MySqlFormatter.reservedLogicalOperators,
       reservedKeywords: MySqlFormatter.reservedKeywords,
       stringTypes: MySqlFormatter.stringTypes,

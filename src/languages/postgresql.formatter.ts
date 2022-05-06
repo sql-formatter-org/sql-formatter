@@ -1616,7 +1616,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL', 'USING'];
+const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE', 'LATERAL'];
 
 const binaryOperators = [
   '<<',
@@ -1668,6 +1668,7 @@ export default class PostgreSqlFormatter extends Formatter {
   static reservedCommands = reservedCommands;
   static reservedBinaryCommands = reservedBinaryCommands;
   static reservedDependentClauses = reservedDependentClauses;
+  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR'];
   static reservedKeywords = dedupe([
     ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
@@ -1686,6 +1687,7 @@ export default class PostgreSqlFormatter extends Formatter {
       reservedCommands: PostgreSqlFormatter.reservedCommands,
       reservedBinaryCommands: PostgreSqlFormatter.reservedBinaryCommands,
       reservedDependentClauses: PostgreSqlFormatter.reservedDependentClauses,
+      reservedJoinConditions: PostgreSqlFormatter.reservedJoinConditions,
       reservedLogicalOperators: PostgreSqlFormatter.reservedLogicalOperators,
       reservedKeywords: PostgreSqlFormatter.reservedKeywords,
       stringTypes: PostgreSqlFormatter.stringTypes,

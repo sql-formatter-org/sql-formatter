@@ -610,13 +610,14 @@ const reservedBinaryCommands = [
  * keywords that follow a previous 'Statement', must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'USING'];
+const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE'];
 
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export default class HiveFormatter extends Formatter {
   static reservedCommands = reservedCommands;
   static reservedBinaryCommands = reservedBinaryCommands;
   static reservedDependentClauses = reservedDependentClauses;
+  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR'];
   static fullReservedWords = dedupe([
     ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
@@ -637,6 +638,7 @@ export default class HiveFormatter extends Formatter {
       reservedCommands: HiveFormatter.reservedCommands,
       reservedBinaryCommands: HiveFormatter.reservedBinaryCommands,
       reservedDependentClauses: HiveFormatter.reservedDependentClauses,
+      reservedJoinConditions: HiveFormatter.reservedJoinConditions,
       reservedLogicalOperators: HiveFormatter.reservedLogicalOperators,
       reservedKeywords: HiveFormatter.fullReservedWords,
       stringTypes: HiveFormatter.stringTypes,

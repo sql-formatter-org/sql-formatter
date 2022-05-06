@@ -853,13 +853,14 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'USING'];
+const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE', 'ELSEIF'];
 
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
   static reservedCommands = reservedCommands;
   static reservedBinaryCommands = reservedBinaryCommands;
   static reservedDependentClauses = reservedDependentClauses;
+  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR'];
   static fullReservedWords = dedupe([
     ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
@@ -880,6 +881,7 @@ export default class Db2Formatter extends Formatter {
       reservedCommands: Db2Formatter.reservedCommands,
       reservedBinaryCommands: Db2Formatter.reservedBinaryCommands,
       reservedDependentClauses: Db2Formatter.reservedDependentClauses,
+      reservedJoinConditions: Db2Formatter.reservedJoinConditions,
       reservedLogicalOperators: Db2Formatter.reservedLogicalOperators,
       reservedKeywords: Db2Formatter.fullReservedWords,
       stringTypes: Db2Formatter.stringTypes,

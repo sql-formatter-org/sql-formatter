@@ -816,13 +816,14 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'USING'];
+const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE'];
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
 export default class BigQueryFormatter extends Formatter {
   static reservedCommands = reservedCommands;
   static reservedBinaryCommands = reservedBinaryCommands;
   static reservedDependentClauses = reservedDependentClauses;
+  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR'];
   static fullReservedWords = dedupe([
     ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
@@ -844,6 +845,7 @@ export default class BigQueryFormatter extends Formatter {
       reservedCommands: BigQueryFormatter.reservedCommands,
       reservedBinaryCommands: BigQueryFormatter.reservedBinaryCommands,
       reservedDependentClauses: BigQueryFormatter.reservedDependentClauses,
+      reservedJoinConditions: BigQueryFormatter.reservedJoinConditions,
       reservedLogicalOperators: BigQueryFormatter.reservedLogicalOperators,
       reservedKeywords: BigQueryFormatter.fullReservedWords,
       stringTypes: BigQueryFormatter.stringTypes,

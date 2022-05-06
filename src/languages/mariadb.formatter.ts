@@ -1148,12 +1148,13 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'ELSEIF', 'ELSIF', 'USING'];
+const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE', 'ELSEIF', 'ELSIF'];
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {
   static reservedCommands = reservedCommands;
   static reservedBinaryCommands = reservedBinaryCommands;
+  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
   static reservedDependentClauses = reservedDependentClauses;
   static reservedKeywords = dedupe([...reservedKeywords, ...reservedFunctions]);
@@ -1171,6 +1172,7 @@ export default class MariaDbFormatter extends Formatter {
       reservedCommands: MariaDbFormatter.reservedCommands,
       reservedBinaryCommands: MariaDbFormatter.reservedBinaryCommands,
       reservedDependentClauses: MariaDbFormatter.reservedDependentClauses,
+      reservedJoinConditions: MariaDbFormatter.reservedJoinConditions,
       reservedLogicalOperators: MariaDbFormatter.reservedLogicalOperators,
       reservedKeywords: MariaDbFormatter.reservedKeywords,
       stringTypes: MariaDbFormatter.stringTypes,

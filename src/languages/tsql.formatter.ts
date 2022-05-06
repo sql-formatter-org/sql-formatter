@@ -1225,13 +1225,14 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['ON', 'WHEN', 'THEN', 'ELSE', 'LATERAL', 'USING'];
+const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE', 'LATERAL'];
 
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export default class TSqlFormatter extends Formatter {
   static reservedCommands = reservedCommands;
   static reservedBinaryCommands = reservedBinaryCommands;
   static reservedDependentClauses = reservedDependentClauses;
+  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR'];
   static reservedKeywords = dedupe([
     ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
@@ -1251,6 +1252,7 @@ export default class TSqlFormatter extends Formatter {
       reservedCommands: TSqlFormatter.reservedCommands,
       reservedBinaryCommands: TSqlFormatter.reservedBinaryCommands,
       reservedDependentClauses: TSqlFormatter.reservedDependentClauses,
+      reservedJoinConditions: TSqlFormatter.reservedJoinConditions,
       reservedLogicalOperators: TSqlFormatter.reservedLogicalOperators,
       reservedKeywords: TSqlFormatter.reservedKeywords,
       stringTypes: TSqlFormatter.stringTypes,

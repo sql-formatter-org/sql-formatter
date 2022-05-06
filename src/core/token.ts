@@ -7,6 +7,7 @@ export enum TokenType {
   RESERVED_DEPENDENT_CLAUSE = 'RESERVED_DEPENDENT_CLAUSE',
   RESERVED_BINARY_COMMAND = 'RESERVED_BINARY_COMMAND',
   RESERVED_COMMAND = 'RESERVED_COMMAND',
+  RESERVED_JOIN_CONDITION = 'RESERVED_JOIN_CONDITION',
   OPERATOR = 'OPERATOR',
   BLOCK_START = 'BLOCK_START',
   BLOCK_END = 'BLOCK_END',
@@ -71,5 +72,6 @@ export const isReserved = (token: Token): boolean =>
   token.type === TokenType.RESERVED_KEYWORD ||
   token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
   token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
+  token.type === TokenType.RESERVED_JOIN_CONDITION ||
   token.type === TokenType.RESERVED_COMMAND ||
   token.type === TokenType.RESERVED_BINARY_COMMAND;

@@ -113,6 +113,8 @@ export default class Formatter {
         formattedQuery = this.formatBinaryCommand(token, formattedQuery);
       } else if (token.type === TokenType.RESERVED_DEPENDENT_CLAUSE) {
         formattedQuery = this.formatDependentClause(token, formattedQuery);
+      } else if (token.type === TokenType.RESERVED_JOIN_CONDITION) {
+        formattedQuery = this.formatJoinCondition(token, formattedQuery);
       } else if (token.type === TokenType.RESERVED_LOGICAL_OPERATOR) {
         formattedQuery = this.formatLogicalOperator(token, formattedQuery);
       } else if (token.type === TokenType.RESERVED_KEYWORD) {
@@ -287,6 +289,11 @@ export default class Formatter {
    * Formats a Reserved Dependent Clause token onto query, supporting the keyword that precedes it
    */
   private formatDependentClause(token: Token, query: string): string {
+    return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
+  }
+
+  // Formats ON and USING keywords
+  private formatJoinCondition(token: Token, query: string): string {
     return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
   }
 
