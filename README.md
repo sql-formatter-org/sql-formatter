@@ -182,7 +182,7 @@ All fields are optional and all fields that are not specified will be filled wit
 - **`keywordCase`**: `"preserve" | "upper" | "lower"` (default: `"preserve"`)
   To either uppercase or lowercase all keywords, or preserve the original case.
 - **`keywordPosition`**: `"standard" | "tenSpaceLeft" | "tenSpaceRight"` (default: `"standard"`)
-  Sets keyword position style, see [keywordPosition.md](keywordPosition.md).
+  Sets keyword position style, see [keywordPosition.md](docs/keywordPosition.md).
 - **`newline`**: `"always" | "never" | "lineWidth" | number` (default: `"always"`)
   Determines when to break listed clauses to multiple lines.
   - lineWidth (break only when line longer than specified by lineWidth option)
