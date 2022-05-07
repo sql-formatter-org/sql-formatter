@@ -177,12 +177,12 @@ All fields are optional and all fields that are not specified will be filled wit
 
 - **`language`**: `"sql" | "mariadb" | "mysql" | "postgresql" | "db2" | "plsql" | "n1ql" | "redshift" | "spark" | "tsql" | "bigquery" | "hive"` (default: `"sql"`)
   The SQL dialect to use.
-- **`indent`**: `string` (default: `" "` 2 spaces)
+- [**`indent`**](docs/indent.md): `string` (default: `" \ "` 2 spaces)
   Characters used for indentation.
 - **`keywordCase`**: `"preserve" | "upper" | "lower"` (default: `"preserve"`)
   To either uppercase or lowercase all keywords, or preserve the original case.
-- **`keywordPosition`**: `"standard" | "tenSpaceLeft" | "tenSpaceRight"` (default: `"standard"`)
-  Sets keyword position style, see [keywordPosition.md](docs/keywordPosition.md).
+- [**`keywordPosition`**](docs/keywordPosition.md): `"standard" | "tenSpaceLeft" | "tenSpaceRight"` (default: `"standard"`)
+  Sets keyword position style.
 - **`newline`**: `"always" | "never" | "lineWidth" | number` (default: `"always"`)
   Determines when to break listed clauses to multiple lines.
   - lineWidth (break only when line longer than specified by lineWidth option)
