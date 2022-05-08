@@ -183,5 +183,16 @@ export default function supportsNewlineOptions(language: SqlLanguage, format: Fo
           some_excessively_long_table_name;
       `);
     });
+
+    it('does not split to multiple lines when line at or below specified lineWidth', () => {
+      const result = format('SELECT field1, field2 FROM table_name;', {
+        newline: NewlineMode.lineWidth,
+        lineWidth: 21,
+      });
+      expect(result).toBe(dedent`
+        SELECT field1, field2
+        FROM table_name;
+      `);
+    });
   });
 }
