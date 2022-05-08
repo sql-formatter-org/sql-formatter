@@ -195,9 +195,9 @@ All fields are optional and all fields that are not specified will be filled wit
   True to align AS keywords to single column
 - [**`commaPosition`**](docs/commaPosition.md): `"before" | "after" | "tabular"` (default: `"after"`)
   Where to place the comma in column lists
-- **`newlineBeforeOpenParen`**: `boolean` (default: `true`)
+- [**`newlineBeforeOpenParen`**](docs/newlineBeforeOpenParen.md): `boolean` (default: `true`)
   True to place opening parenthesis on new line.
-- **`newlineBeforeCloseParen`**: `boolean` (default: `true`)
+- [**`newlineBeforeCloseParen`**](docs/newlineBeforeCloseParen.md): `boolean` (default: `true`)
   True to place closing parenthesis on new line.
 - **`lineWidth`**: `number` (default: `50`)
   Number of characters in each line before breaking.
