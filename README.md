@@ -189,12 +189,8 @@ All fields are optional and all fields that are not specified will be filled wit
   - number (break only when more then n clauses)
 - [**`logicalOperatorNewline`**](docs/logicalOperatorNewline.md): `"before" | "after"` (default: `before`)
   Adds newline before or after boolean operator (AND, OR, XOR).
-- **`aliasAs`**: `"preserve" | "always" | "never" | "select"` (default: `"preserve"`)
-  Whether to use AS keyword for creating aliases or not:
-  - preserve - keep as is
-  - always - add AS keywords everywhere
-  - never - remove AS keywords from everywhere
-  - select - add AS keywords to SELECT clause, remove from everywhere else
+- [**`aliasAs`**](docs/aliasAs.md): `"preserve" | "always" | "never" | "select"` (default: `"preserve"`)
+  Whether to use AS keyword for creating aliases or not.
 - **`tabulateAlias`**: `boolean` (default: `false`)
   True to align AS keywords to single column
 - **`commaPosition`**: `"before" | "after" | "tabular"` (default: `"after"`)
