@@ -187,7 +187,7 @@ All fields are optional and all fields that are not specified will be filled wit
   Determines when to break listed clauses to multiple lines.
   - lineWidth (break only when line longer than specified by lineWidth option)
   - number (break only when more then n clauses)
-- **`logicalOperatorNewline`**: `"before" | "after"` (default: `before`)
+- [**`logicalOperatorNewline`**](docs/logicalOperatorNewline.md): `"before" | "after"` (default: `before`)
   Adds newline before or after boolean operator (AND, OR, XOR).
 - **`aliasAs`**: `"preserve" | "always" | "never" | "select"` (default: `"preserve"`)
   Whether to use AS keyword for creating aliases or not:
