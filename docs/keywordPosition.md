@@ -4,9 +4,9 @@ Switches between different indentation styles.
 
 ## Options
 
-- `"standard"` (default) Indents code by the amount specified by `indent` option.
-- `"tenSpaceLeft"` - Indents in tabular style with 10 spaces, aligning keywords to left.
-- `"tenSpaceRight"` - Indents in tabular style with 10 spaces, aligning keywords to right.
+- `"standard"` (default) indents code by the amount specified by `indent` option.
+- `"tenSpaceLeft"` indents in tabular style with 10 spaces, aligning keywords to left.
+- `"tenSpaceRight"` indents in tabular style with 10 spaces, aligning keywords to right.
 
 Caveats of using `"tenSpaceLeft"` and `"tenSpaceRight"`:
 

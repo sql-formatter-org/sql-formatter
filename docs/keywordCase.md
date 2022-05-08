@@ -5,8 +5,8 @@ Converts reserved keywords and builtin function names to upper or lowercase.
 ## Options
 
 - `"preserve"` (default) preserves the original case.
-- `"upper"` - converts to uppercase.
-- `"lower"` - converts to lowercase.
+- `"upper"` converts to uppercase.
+- `"lower"` converts to lowercase.
 
 ### preserve
 
