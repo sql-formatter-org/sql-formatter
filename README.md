@@ -205,10 +205,10 @@ All fields are optional and all fields that are not specified will be filled wit
   How many newlines to insert between queries.
 - [**`denseOperators`**](docs/denseOperators.md): `boolean` (default: `false`)
   True to pack operators densely without spaces.
+- [**`newlineBeforeSemicolon`**](docs/newlineBeforeSemicolon.md): `boolean` (default: `false`)
+  True to place semicolon on separate line.
 - **`params`**: `Object | Array`
   Collection of params for placeholder replacement.
-- **`newlineBeforeSemicolon`**: `boolean` (default: `false`)
-  True to place semicolon on separate line.
 
 ### Usage without NPM
 
