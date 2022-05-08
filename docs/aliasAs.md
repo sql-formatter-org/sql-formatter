@@ -1,6 +1,6 @@
 # aliasAs
 
-Enforces consist use of `AS` keywords in alias declarations.
+Enforces consistent use of `AS` keywords in alias declarations.
 
 ## Options
 
