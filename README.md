@@ -92,19 +92,15 @@ format('SELECT * FROM tbl', {
 
 ### Placeholders replacement
 
-```js
-// Named placeholders
-format('SELECT * FROM tbl WHERE foo = @foo', {
-  params: { foo: "'bar'" },
-});
+In addition to formatting, this library can also perform placeholder replacement in prepared SQL statements:
 
-// Indexed placeholders
+```js
 format('SELECT * FROM tbl WHERE foo = ?', {
   params: ["'bar'"],
 });
 ```
 
-Both result in:
+Results in:
 
 ```sql
 SELECT
@@ -114,6 +110,8 @@ FROM
 WHERE
   foo = 'bar'
 ```
+
+For more details see [docs of params option.](docs/params.md)
 
 ### Usage from command line
 
@@ -207,7 +205,7 @@ All fields are optional and all fields that are not specified will be filled wit
   True to pack operators densely without spaces.
 - [**`newlineBeforeSemicolon`**](docs/newlineBeforeSemicolon.md): `boolean` (default: `false`)
   True to place semicolon on separate line.
-- **`params`**: `Object | Array`
+- [**`params`**](docs/params.md): `Object | Array`
   Collection of params for placeholder replacement.
 
 ### Usage without NPM
