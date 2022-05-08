@@ -181,10 +181,8 @@ All fields are optional and all fields that are not specified will be filled wit
   To either uppercase or lowercase all keywords, or preserve the original case.
 - [**`keywordPosition`**](docs/keywordPosition.md): `"standard" | "tenSpaceLeft" | "tenSpaceRight"` (default: `"standard"`)
   Sets keyword position style.
-- **`newline`**: `"always" | "never" | "lineWidth" | number` (default: `"always"`)
-  Determines when to break listed clauses to multiple lines.
-  - lineWidth (break only when line longer than specified by lineWidth option)
-  - number (break only when more then n clauses)
+- [**`newline`**](docs/newline.md): `"always" | "never" | "lineWidth" | number` (default: `"always"`)
+  Determines when to break lists of items to multiple lines.
 - [**`logicalOperatorNewline`**](docs/logicalOperatorNewline.md): `"before" | "after"` (default: `before`)
   Adds newline before or after boolean operator (AND, OR, XOR).
 - [**`aliasAs`**](docs/aliasAs.md): `"preserve" | "always" | "never" | "select"` (default: `"preserve"`)
