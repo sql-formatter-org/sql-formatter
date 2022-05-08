@@ -193,8 +193,8 @@ All fields are optional and all fields that are not specified will be filled wit
   Whether to use AS keyword for creating aliases or not.
 - [**`tabulateAlias`**](docs/tabulateAlias.md): `boolean` (default: `false`)
   True to align AS keywords to single column
-- **`commaPosition`**: `"before" | "after" | "tabular"` (default: `"after"`)
-  Where to place the comma in listed clauses
+- [**`commaPosition`**](docs/commaPosition.md): `"before" | "after" | "tabular"` (default: `"after"`)
+  Where to place the comma in column lists
 - **`newlineBeforeOpenParen`**: `boolean` (default: `true`)
   True to place opening parenthesis on new line.
 - **`newlineBeforeCloseParen`**: `boolean` (default: `true`)
