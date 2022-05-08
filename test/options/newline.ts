@@ -15,22 +15,6 @@ export default function supportsNewlineOptions(language: SqlLanguage, format: Fo
     }).toThrowErrorMatchingInlineSnapshot(`"newline config must be a positive number."`);
   });
 
-  it('throws error when lineWidth negative number', () => {
-    expect(() => {
-      format('SELECT *', { newline: NewlineMode.lineWidth, lineWidth: -2 });
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"lineWidth config must be positive number. Received -2 instead."`
-    );
-  });
-
-  it('throws error when lineWidth is zero', () => {
-    expect(() => {
-      format('SELECT *', { newline: NewlineMode.lineWidth, lineWidth: 0 });
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"lineWidth config must be positive number. Received 0 instead."`
-    );
-  });
-
   describe('newline: always', () => {
     it('always splits to multiple lines, even when just a single clause', () => {
       const result = format('SELECT foo, bar FROM qux;', {
