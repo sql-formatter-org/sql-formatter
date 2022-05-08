@@ -100,7 +100,7 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
       `);
     });
 
-    it('does not smaller nr of clauses when their line width is exactly 50', () => {
+    it('does not split smaller nr of clauses when their line width is exactly 50', () => {
       const result = format('SELECT customer.phone phone, customer.addr AS addr FROM customers;', {
         newline: 3,
       });
