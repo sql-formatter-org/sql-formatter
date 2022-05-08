@@ -3,7 +3,7 @@ const attachFormat = () => {
   const keywordCase = document.getElementById('keywordCase');
   const input = document.getElementById('input');
   const output = document.getElementById('output');
-  const keywordPosition = document.getElementById('keywordPosition');
+  const indentStyle = document.getElementById('indentStyle');
   const logicalOperatorNewline = document.getElementById('logicalOperatorNewline');
   const aliasAs = document.getElementById('aliasAs');
   const newline = document.getElementById('newline');
@@ -22,7 +22,7 @@ const attachFormat = () => {
       const config = {
         language: language.options[language.selectedIndex].value,
         keywordCase: keywordCase.options[keywordCase.selectedIndex].value,
-        keywordPosition: keywordPosition.options[keywordPosition.selectedIndex].value,
+        indentStyle: indentStyle.options[indentStyle.selectedIndex].value,
         logicalOperatorNewline:
           logicalOperatorNewline.options[logicalOperatorNewline.selectedIndex].value,
         aliasAs: aliasAs.options[aliasAs.selectedIndex].value,
@@ -52,7 +52,7 @@ ${e.stack.toString()}
   [
     language,
     keywordCase,
-    keywordPosition,
+    indentStyle,
     newline,
     itemCount,
     logicalOperatorNewline,
