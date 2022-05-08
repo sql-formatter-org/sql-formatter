@@ -67,6 +67,31 @@ export default function supportsNewlineBeforeParen(language: SqlLanguage, format
     `);
   });
 
+  it('does not effect function parenthesis', () => {
+    const withNewlineOn = format(
+      "SELECT COUNT(col1), REGEXP_REPLACE(col2, '(_+)(X_+)?', '<space>') FROM tbl;",
+      {
+        newlineBeforeOpenParen: true,
+        newlineBeforeCloseParen: true,
+      }
+    );
+    const withNewlineOff = format(
+      "SELECT COUNT(col1), REGEXP_REPLACE(col2, '(_+)(X_+)?', '<space>') FROM tbl;",
+      {
+        newlineBeforeOpenParen: false,
+        newlineBeforeCloseParen: false,
+      }
+    );
+    expect(withNewlineOn).toBe(withNewlineOff);
+    expect(withNewlineOn).toBe(dedent`
+      SELECT
+        COUNT(col1),
+        REGEXP_REPLACE(col2, '(_+)(X_+)?', '<space>')
+      FROM
+        tbl;
+    `);
+  });
+
   // TODO: I think this is not as intended.
   it('has no effect when used together with keywordPosition:tenSpaceLeft', () => {
     const withNewlineOn = format('SELECT a FROM ( SELECT b FROM c );', {
