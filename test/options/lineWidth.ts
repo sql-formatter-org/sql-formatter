@@ -19,34 +19,34 @@ export default function supportsLineWidth(language: SqlLanguage, format: FormatF
   });
 
   it('breaks paranthesized expressions to multiple lines when they exceed lineWidth', () => {
-    const result = format('SELECT (price * tax) AS total FROM table_name WHERE (amount > 25);', {
-      lineWidth: 10,
-    });
+    const result = format(
+      'SELECT product.price + (product.original_price * product.sales_tax) AS total FROM product;',
+      {
+        lineWidth: 40,
+      }
+    );
     expect(result).toBe(dedent`
       SELECT
-        (
-          price * tax
+        product.price + (
+          product.original_price * product.sales_tax
         ) AS total
       FROM
-        table_name
-      WHERE
-        (
-          amount > 25
-        );
+        product;
     `);
   });
 
   it('keeps paranthesized expressions on single lines when they do not exceed lineWidth', () => {
-    const result = format('SELECT (price * tax) AS total FROM table_name WHERE (amount > 25);', {
-      lineWidth: 11,
-    });
+    const result = format(
+      'SELECT product.price + (product.original_price * product.sales_tax) AS total FROM product;',
+      {
+        lineWidth: 50,
+      }
+    );
     expect(result).toBe(dedent`
       SELECT
-        (price * tax) AS total
+        product.price + (product.original_price * product.sales_tax) AS total
       FROM
-        table_name
-      WHERE
-        (amount > 25);
+        product;
     `);
   });
 
