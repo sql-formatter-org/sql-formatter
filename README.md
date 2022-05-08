@@ -179,7 +179,7 @@ All fields are optional and all fields that are not specified will be filled wit
   The SQL dialect to use.
 - [**`indent`**](docs/indent.md): `string` (default: `" \ "` 2 spaces)
   Characters used for indentation.
-- **`keywordCase`**: `"preserve" | "upper" | "lower"` (default: `"preserve"`)
+- [**`keywordCase`**](docs/keywordCase.md): `"preserve" | "upper" | "lower"` (default: `"preserve"`)
   To either uppercase or lowercase all keywords, or preserve the original case.
 - [**`keywordPosition`**](docs/keywordPosition.md): `"standard" | "tenSpaceLeft" | "tenSpaceRight"` (default: `"standard"`)
   Sets keyword position style.
