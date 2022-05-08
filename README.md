@@ -9,20 +9,9 @@ For the latest release, see [v4.0.2](https://github.com/zeroturnaround/sql-forma
 
 It started as a port of a [PHP Library][], but has since considerably diverged.
 
-SQL Formatter supports the following dialects:
-
-- **sql** - [Standard SQL][]
-- **bigquery** - [GCP BigQuery][]
-- **db2** - [IBM DB2][]
-- **hive** - [Apache Hive][]
-- **mariadb** - [MariaDB][]
-- **mysql** - [MySQL][]
-- **n1ql** - [Couchbase N1QL][]
-- **plsql** - [Oracle PL/SQL][]
-- **postgresql** - [PostgreSQL][]
-- **redshift** - [Amazon Redshift][]
-- **spark** - [Spark][]
-- **tsql** - [SQL Server Transact-SQL][tsql]
+It supports various SQL dialects:
+GCP BigQuery, IBM DB2, Apache Hive, MariaDB, MySQL, Couchbase N1QL, Oracle PL/SQL, PostgreSQL, Amazon Redshift, Spark, SQL Server Transact-SQL.
+See [language option docs](docs/language.md) for more details.
 
 It does not support:
 
@@ -173,8 +162,7 @@ All fields are optional and all fields that are not specified will be filled wit
 
 ### Configuration options
 
-- **`language`**: `"sql" | "mariadb" | "mysql" | "postgresql" | "db2" | "plsql" | "n1ql" | "redshift" | "spark" | "tsql" | "bigquery" | "hive"` (default: `"sql"`)
-  The SQL dialect to use.
+- [**`language`**](docs/language.md) the SQL dialect to use.
 - [**`indent`**](docs/indent.md) amount of indentation to use (and whether to use tabs).
 - [**`keywordCase`**](docs/keywordCase.md) uppercases or lowercases keywords.
 - [**`keywordPosition`**](docs/keywordPosition.md) defines overall indentation style.
@@ -210,15 +198,3 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md)
 [MIT](LICENSE)
 
 [php library]: https://github.com/jdorn/sql-formatter
-[standard sql]: https://en.wikipedia.org/wiki/SQL:2011
-[gcp bigquery]: https://cloud.google.com/bigquery
-[ibm db2]: https://www.ibm.com/analytics/us/en/technology/db2/
-[apache hive]: https://hive.apache.org/
-[mariadb]: https://mariadb.com/
-[mysql]: https://www.mysql.com/
-[couchbase n1ql]: http://www.couchbase.com/n1ql
-[oracle pl/sql]: http://www.oracle.com/technetwork/database/features/plsql/index.html
-[postgresql]: https://www.postgresql.org/
-[amazon redshift]: https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
-[spark]: https://spark.apache.org/docs/latest/api/sql/index.html
-[tsql]: https://docs.microsoft.com/en-us/sql/sql-server/
