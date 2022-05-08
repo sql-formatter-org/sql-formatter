@@ -191,7 +191,7 @@ All fields are optional and all fields that are not specified will be filled wit
   Adds newline before or after boolean operator (AND, OR, XOR).
 - [**`aliasAs`**](docs/aliasAs.md): `"preserve" | "always" | "never" | "select"` (default: `"preserve"`)
   Whether to use AS keyword for creating aliases or not.
-- **`tabulateAlias`**: `boolean` (default: `false`)
+- [**`tabulateAlias`**](docs/tabulateAlias.md): `boolean` (default: `false`)
   True to align AS keywords to single column
 - **`commaPosition`**: `"before" | "after" | "tabular"` (default: `"after"`)
   Where to place the comma in listed clauses
