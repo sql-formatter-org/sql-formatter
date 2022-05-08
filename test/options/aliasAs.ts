@@ -23,25 +23,56 @@ export default function supportsAliasAs(language: SqlLanguage, format: FormatFn)
   });
 
   describe('aliasAs: always', () => {
-    it('adds AS keywords where missing', () => {
+    it('adds AS keywords to columns', () => {
       expect(
-        format('SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;', {
+        format('SELECT a a_column, b AS bColumn, c cColumn FROM foo;', {
           aliasAs: AliasMode.always,
         })
       ).toBe(
         dedent(`
           SELECT
             a AS a_column,
-            b AS bColumn
+            b AS bColumn,
+            c AS cColumn
+          FROM
+            foo;
+        `)
+      );
+    });
+
+    // XXX: this is not correct
+    it('does not add AS keywords to table names', () => {
+      expect(
+        format('SELECT * FROM table1 t1 JOIN table2 t2;', {
+          aliasAs: AliasMode.always,
+        })
+      ).toBe(
+        dedent(`
+          SELECT
+            *
+          FROM
+            table1 t1
+            JOIN table2 t2;
+        `)
+      );
+    });
+
+    it('adds AS keywords to (subquery) AS name', () => {
+      expect(
+        format('SELECT * FROM ( SELECT * FROM x ) y;', {
+          aliasAs: AliasMode.always,
+        })
+      ).toBe(
+        dedent(`
+          SELECT
+            *
           FROM
             (
               SELECT
                 *
               FROM
                 x
-            ) AS y
-          WHERE
-            z;
+            ) as y;
         `)
       );
     });
@@ -124,25 +155,53 @@ export default function supportsAliasAs(language: SqlLanguage, format: FormatFn)
   });
 
   describe('aliasAs: never', () => {
-    it('removes AS keywords where present', () => {
+    it('removes AS keywords from column names', () => {
       expect(
-        format('SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;', {
+        format('SELECT a AS a_column, b AS bColumn, c cColumn;', {
           aliasAs: AliasMode.never,
         })
       ).toBe(
         dedent(`
           SELECT
             a a_column,
-            b bColumn
+            b bColumn,
+            c cColumn;
+        `)
+      );
+    });
+
+    it('removes AS keywords from (subquery) aliases', () => {
+      expect(
+        format('SELECT * FROM ( SELECT * FROM x ) AS y;', {
+          aliasAs: AliasMode.never,
+        })
+      ).toBe(
+        dedent(`
+          SELECT
+            *
           FROM
             (
               SELECT
                 *
               FROM
                 x
-            ) y
-          WHERE
-            z;
+            ) y;
+        `)
+      );
+    });
+
+    it('removes AS keywords from tablename aliases', () => {
+      expect(
+        format('SELECT * FROM table1 AS t1 JOIN table2 AS t2;', {
+          aliasAs: AliasMode.never,
+        })
+      ).toBe(
+        dedent(`
+          SELECT
+            *
+          FROM
+            table1 t1
+            JOIN table2 t2;
         `)
       );
     });
