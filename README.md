@@ -20,17 +20,6 @@ It does not support:
 
 → [Try the demo.](https://zeroturnaround.github.io/sql-formatter)
 
-# Table of contents
-
-- [Install](#install)
-- [Documentation](#documentation)
-- [Usage](#usage)
-  - [Usage as library](#usage-as-library)
-  - [Usage from command line](#usage-from-command-line)
-  - [Usage without NPM](#usage-without-npm)
-  - [Usage with VSCode](#usage-with-vscode)
-- [Contributing](#contributing)
-
 ## Install
 
 Get the latest version from NPM:
