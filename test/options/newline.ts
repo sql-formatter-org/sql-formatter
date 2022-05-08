@@ -2,7 +2,7 @@ import dedent from 'dedent-js';
 import { NewlineMode } from '../../src/types';
 import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
 
-export default function supportsNewlineOptions(language: SqlLanguage, format: FormatFn) {
+export default function supportsNewline(language: SqlLanguage, format: FormatFn) {
   it('throws error when newline is negative number', () => {
     expect(() => {
       format('SELECT *', { newline: -1 });
