@@ -201,7 +201,7 @@ All fields are optional and all fields that are not specified will be filled wit
   True to place closing parenthesis on new line.
 - **`lineWidth`**: `number` (default: `50`)
   Number of characters in each line before breaking.
-- **`linesBetweenQueries`**: `number` (default: `1`)
+- [**`linesBetweenQueries`**](docs/linesBetweenQueries.md): `number` (default: `1`)
   How many newlines to insert between queries.
 - **`denseOperators`**: `boolean` (default: `false`)
   True to pack operators densely without spaces.
