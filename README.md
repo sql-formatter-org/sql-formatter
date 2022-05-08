@@ -34,10 +34,6 @@ Also available with yarn:
 yarn add sql-formatter
 ```
 
-## Documentation
-
-You can read more about how the library works in [DOC.md](DOC.md)
-
 ## Usage
 
 ### Usage as library
@@ -181,6 +177,8 @@ This makes SQL Formatter available as a global variable `window.sqlFormatter`.
 ## Contributing
 
 Please see [CONTRIBUTING.md](CONTRIBUTING.md)
+
+You can read more about how the library works in [DOC.md](DOC.md)
 
 ## License
 
