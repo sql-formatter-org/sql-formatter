@@ -203,7 +203,7 @@ All fields are optional and all fields that are not specified will be filled wit
   Number of characters in each line before breaking.
 - [**`linesBetweenQueries`**](docs/linesBetweenQueries.md): `number` (default: `1`)
   How many newlines to insert between queries.
-- **`denseOperators`**: `boolean` (default: `false`)
+- [**`denseOperators`**](docs/denseOperators.md): `boolean` (default: `false`)
   True to pack operators densely without spaces.
 - **`params`**: `Object | Array`
   Collection of params for placeholder replacement.
