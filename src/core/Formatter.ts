@@ -165,8 +165,16 @@ export default class Formatter {
   private asToken(): Token {
     return {
       type: TokenType.RESERVED_KEYWORD,
-      value: this.cfg.keywordCase === KeywordCase.upper ? 'AS' : 'as',
+      value: this.asTokenValue(),
     };
+  }
+
+  private asTokenValue(): 'AS' | 'as' {
+    const keywordCase =
+      this.cfg.keywordCase === KeywordCase.preserve
+        ? this.aliasAs.autoDetectCase(this.tokens)
+        : this.cfg.keywordCase;
+    return keywordCase === KeywordCase.upper ? 'AS' : 'as';
   }
 
   /**

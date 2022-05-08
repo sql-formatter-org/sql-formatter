@@ -1,5 +1,5 @@
 import dedent from 'dedent-js';
-import { AliasMode } from '../../src/types';
+import { AliasMode, KeywordCase } from '../../src/types';
 import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
 
 export default function supportsAliasAs(language: SqlLanguage, format: FormatFn) {
@@ -31,7 +31,7 @@ export default function supportsAliasAs(language: SqlLanguage, format: FormatFn)
       ).toBe(
         dedent(`
           SELECT
-            a as a_column,
+            a AS a_column,
             b AS bColumn
           FROM
             (
@@ -39,7 +39,7 @@ export default function supportsAliasAs(language: SqlLanguage, format: FormatFn)
                 *
               FROM
                 x
-            ) as y
+            ) AS y
           WHERE
             z;
         `)
@@ -52,6 +52,72 @@ export default function supportsAliasAs(language: SqlLanguage, format: FormatFn)
           SELECT
             a + b as name1,
             a + b
+        `)
+      );
+    });
+
+    it('inserts lowercase AS when existing code mostly uses lowercase AS', () => {
+      expect(
+        format('SELECT first_name as fname, last_name lname, full_age as age, occupation AS pos', {
+          aliasAs: AliasMode.always,
+        })
+      ).toBe(
+        dedent(`
+          SELECT
+            first_name as fname,
+            last_name as lname,
+            full_age as age,
+            occupation AS pos
+        `)
+      );
+    });
+
+    it('inserts uppercase AS when existing code mostly uses uppercase AS', () => {
+      expect(
+        format('SELECT first_name AS fname, last_name lname, full_age as age, occupation AS pos', {
+          aliasAs: AliasMode.always,
+        })
+      ).toBe(
+        dedent(`
+          SELECT
+            first_name AS fname,
+            last_name AS lname,
+            full_age as age,
+            occupation AS pos
+        `)
+      );
+    });
+
+    it('inserts uppercase AS when keywordCase: upper', () => {
+      expect(
+        format('SELECT first_name as fname, last_name lname, full_age age, occupation as pos', {
+          aliasAs: AliasMode.always,
+          keywordCase: KeywordCase.upper,
+        })
+      ).toBe(
+        dedent(`
+          SELECT
+            first_name AS fname,
+            last_name AS lname,
+            full_age AS age,
+            occupation AS pos
+        `)
+      );
+    });
+
+    it('inserts lowercase AS when keywordCase: lower', () => {
+      expect(
+        format('SELECT first_name AS fname, last_name lname, full_age age, occupation AS pos', {
+          aliasAs: AliasMode.always,
+          keywordCase: KeywordCase.lower,
+        })
+      ).toBe(
+        dedent(`
+          select
+            first_name as fname,
+            last_name as lname,
+            full_age as age,
+            occupation as pos
         `)
       );
     });
@@ -89,9 +155,9 @@ export default function supportsAliasAs(language: SqlLanguage, format: FormatFn)
 
       expect(result).toBe(dedent`
         CREATE TABLE
-          'test.example_table' as
+          'test.example_table' AS
         WITH
-          cte as (
+          cte AS (
             SELECT
               a alpha
           )
@@ -108,7 +174,7 @@ export default function supportsAliasAs(language: SqlLanguage, format: FormatFn)
 
       expect(result).toBe(dedent`
         SELECT
-          CAST(0 as BIT),
+          CAST(0 AS BIT),
           'foo' bar
       `);
     });
@@ -123,7 +189,7 @@ export default function supportsAliasAs(language: SqlLanguage, format: FormatFn)
       ).toBe(
         dedent(`
           SELECT
-            a as a_column,
+            a AS a_column,
             b AS bColumn
           FROM
             (
