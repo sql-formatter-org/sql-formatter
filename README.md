@@ -175,36 +175,21 @@ All fields are optional and all fields that are not specified will be filled wit
 
 - **`language`**: `"sql" | "mariadb" | "mysql" | "postgresql" | "db2" | "plsql" | "n1ql" | "redshift" | "spark" | "tsql" | "bigquery" | "hive"` (default: `"sql"`)
   The SQL dialect to use.
-- [**`indent`**](docs/indent.md): `string` (default: `" \ "` 2 spaces)
-  Characters used for indentation.
-- [**`keywordCase`**](docs/keywordCase.md): `"preserve" | "upper" | "lower"` (default: `"preserve"`)
-  To either uppercase or lowercase all keywords, or preserve the original case.
-- [**`keywordPosition`**](docs/keywordPosition.md): `"standard" | "tenSpaceLeft" | "tenSpaceRight"` (default: `"standard"`)
-  Sets keyword position style.
-- [**`newline`**](docs/newline.md): `"always" | "never" | "lineWidth" | number` (default: `"always"`)
-  Determines when to break lists of items to multiple lines.
-- [**`logicalOperatorNewline`**](docs/logicalOperatorNewline.md): `"before" | "after"` (default: `before`)
-  Adds newline before or after boolean operator (AND, OR, XOR).
-- [**`aliasAs`**](docs/aliasAs.md): `"preserve" | "always" | "never" | "select"` (default: `"preserve"`)
-  Whether to use AS keyword for creating aliases or not.
-- [**`tabulateAlias`**](docs/tabulateAlias.md): `boolean` (default: `false`)
-  True to align AS keywords to single column
-- [**`commaPosition`**](docs/commaPosition.md): `"before" | "after" | "tabular"` (default: `"after"`)
-  Where to place the comma in column lists
-- [**`newlineBeforeOpenParen`**](docs/newlineBeforeOpenParen.md): `boolean` (default: `true`)
-  True to place opening parenthesis on new line.
-- [**`newlineBeforeCloseParen`**](docs/newlineBeforeCloseParen.md): `boolean` (default: `true`)
-  True to place closing parenthesis on new line.
-- [**`lineWidth`**](docs/lineWidth.md): `number` (default: `50`)
-  Number of characters in each line before breaking.
-- [**`linesBetweenQueries`**](docs/linesBetweenQueries.md): `number` (default: `1`)
-  How many newlines to insert between queries.
-- [**`denseOperators`**](docs/denseOperators.md): `boolean` (default: `false`)
-  True to pack operators densely without spaces.
-- [**`newlineBeforeSemicolon`**](docs/newlineBeforeSemicolon.md): `boolean` (default: `false`)
-  True to place semicolon on separate line.
-- [**`params`**](docs/params.md): `Object | Array`
-  Collection of params for placeholder replacement.
+- [**`indent`**](docs/indent.md) amount of indentation to use (and whether to use tabs).
+- [**`keywordCase`**](docs/keywordCase.md) uppercases or lowercases keywords.
+- [**`keywordPosition`**](docs/keywordPosition.md) defines overall indentation style.
+- [**`newline`**](docs/newline.md) determines when to break lists of items to multiple lines.
+- [**`logicalOperatorNewline`**](docs/logicalOperatorNewline.md) newline before or after boolean operator (AND, OR, XOR).
+- [**`aliasAs`**](docs/aliasAs.md) enforces or forbids use of AS keyword for aliases.
+- [**`tabulateAlias`**](docs/tabulateAlias.md) aligns column aliases vertically.
+- [**`commaPosition`**](docs/commaPosition.md) where to place the comma in column lists.
+- [**`newlineBeforeOpenParen`**](docs/newlineBeforeOpenParen.md) placement of opening parenthesis.
+- [**`newlineBeforeCloseParen`**](docs/newlineBeforeCloseParen.md) placement of closing parenthesis.
+- [**`lineWidth`**](docs/lineWidth.md) maximum number of characters in parenthesized expressions to be kept on single line.
+- [**`linesBetweenQueries`**](docs/linesBetweenQueries.md) how many newlines to insert between queries.
+- [**`denseOperators`**](docs/denseOperators.md) packs operators densely without spaces.
+- [**`newlineBeforeSemicolon`**](docs/newlineBeforeSemicolon.md) places semicolon on separate line.
+- [**`params`**](docs/params.md) collection of values for placeholder replacement.
 
 ### Usage without NPM
 
