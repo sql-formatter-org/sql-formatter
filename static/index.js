@@ -4,7 +4,7 @@ const attachFormat = () => {
   const input = document.getElementById('input');
   const output = document.getElementById('output');
   const keywordPosition = document.getElementById('keywordPosition');
-  const breakBeforeBooleanOperator = document.getElementById('breakBeforeBooleanOperator');
+  const logicalOperatorNewline = document.getElementById('logicalOperatorNewline');
   const aliasAs = document.getElementById('aliasAs');
   const newline = document.getElementById('newline');
   const itemCount = document.getElementById('newline.itemCount');
@@ -23,7 +23,8 @@ const attachFormat = () => {
         language: language.options[language.selectedIndex].value,
         keywordCase: keywordCase.options[keywordCase.selectedIndex].value,
         keywordPosition: keywordPosition.options[keywordPosition.selectedIndex].value,
-        breakBeforeBooleanOperator: breakBeforeBooleanOperator.checked,
+        logicalOperatorNewline:
+          logicalOperatorNewline.options[logicalOperatorNewline.selectedIndex].value,
         aliasAs: aliasAs.options[aliasAs.selectedIndex].value,
         newline:
           itemCount.value > 0 ? itemCount.value : newline.options[newline.selectedIndex].value,
@@ -54,7 +55,7 @@ ${e.stack.toString()}
     keywordPosition,
     newline,
     itemCount,
-    breakBeforeBooleanOperator,
+    logicalOperatorNewline,
     aliasAs,
     tabulateAlias,
     commaPosition,
