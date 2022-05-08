@@ -78,7 +78,7 @@ export default function supportsAliasAs(language: SqlLanguage, format: FormatFn)
 
   it('supports select only mode', () => {
     expect(
-      format('SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) y WHERE z;', {
+      format('SELECT a a_column, b AS bColumn FROM ( SELECT * FROM x ) AS y WHERE z;', {
         aliasAs: AliasMode.select,
       })
     ).toBe(
