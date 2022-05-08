@@ -73,6 +73,28 @@ export default function supportsTabulateAlias(language: SqlLanguage, format: For
     `);
   });
 
+  it('does not tabulate table name aliases', () => {
+    const result = format(
+      'SELECT * FROM person_names AS names JOIN person_age_data AS ages JOIN (SELECT * FROM foo) AS f;',
+      {
+        tabulateAlias: true,
+      }
+    );
+    expect(result).toBe(dedent`
+      SELECT
+        *
+      FROM
+        person_names AS names
+        JOIN person_age_data AS ages
+        JOIN (
+          SELECT
+            *
+          FROM
+            foo
+        ) AS f;
+    `);
+  });
+
   it('does not tabulate aliases when newline:never used', () => {
     const result = format(
       'SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );',
