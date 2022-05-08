@@ -93,16 +93,16 @@ export default function supportsNewlineBeforeParen(language: SqlLanguage, format
   });
 
   // TODO: I think this is not as intended.
-  it('has no effect when used together with indentStyle:tenSpaceLeft', () => {
+  it('has no effect when used together with indentStyle:tabularLeft', () => {
     const withNewlineOn = format('SELECT a FROM ( SELECT b FROM c );', {
       newlineBeforeOpenParen: true,
       newlineBeforeCloseParen: true,
-      indentStyle: IndentStyle.tenSpaceLeft,
+      indentStyle: IndentStyle.tabularLeft,
     });
     const withNewlineOff = format('SELECT a FROM ( SELECT b FROM c );', {
       newlineBeforeOpenParen: false,
       newlineBeforeCloseParen: false,
-      indentStyle: IndentStyle.tenSpaceLeft,
+      indentStyle: IndentStyle.tabularLeft,
     });
 
     expect(withNewlineOn).toBe(withNewlineOff);

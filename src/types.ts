@@ -4,13 +4,13 @@ import { ParamItems } from './core/Params';
  * Enum for the different keyword formats
  * @enum {string}
  * @property {string} standard - Standard keyword format
- * @property {string} tenSpaceLeft - Central aligned keyword format, keywords left-aligned
- * @property {string} tenSpaceRight - Central aligned keyword format, keywords right-aligned
+ * @property {string} tabularLeft - Central aligned keyword format, keywords left-aligned
+ * @property {string} tabularRight - Central aligned keyword format, keywords right-aligned
  */
 export enum IndentStyle {
   standard = 'standard',
-  tenSpaceLeft = 'tenSpaceLeft',
-  tenSpaceRight = 'tenSpaceRight',
+  tabularLeft = 'tabularLeft',
+  tabularRight = 'tabularRight',
 }
 
 export enum KeywordCase {

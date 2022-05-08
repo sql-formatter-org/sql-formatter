@@ -5,10 +5,10 @@ Switches between different indentation styles.
 ## Options
 
 - `"standard"` (default) indents code by the amount specified by `indent` option.
-- `"tenSpaceLeft"` indents in tabular style with 10 spaces, aligning keywords to left.
-- `"tenSpaceRight"` indents in tabular style with 10 spaces, aligning keywords to right.
+- `"tabularLeft"` indents in tabular style with 10 spaces, aligning keywords to left.
+- `"tabularRight"` indents in tabular style with 10 spaces, aligning keywords to right.
 
-Caveats of using `"tenSpaceLeft"` and `"tenSpaceRight"`:
+Caveats of using `"tabularLeft"` and `"tabularRight"`:
 
 - `indent` option is ignored. Indentation will always be 10 spaces, regardless of what is specified by `indent`.
 - `newlineBeforeOpenParen` option is ignored.
@@ -36,7 +36,7 @@ WHERE
 GROUP BY column4
 ```
 
-### tenSpaceLeft
+### tabularLeft
 
 ```
 SELECT    COUNT(a.column1),
@@ -53,7 +53,7 @@ AND       column7
 GROUP BY  column4
 ```
 
-### tenSpaceRight
+### tabularRight
 
 ```
    SELECT COUNT(a.column1),

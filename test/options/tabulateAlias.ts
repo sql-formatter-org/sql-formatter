@@ -110,10 +110,10 @@ export default function supportsTabulateAlias(language: SqlLanguage, format: For
     `);
   });
 
-  it('works together with indentStyle:tenSpaceLeft', () => {
+  it('works together with indentStyle:tabularLeft', () => {
     const result = format(
       dedent`SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );`,
-      { indentStyle: IndentStyle.tenSpaceLeft, tabulateAlias: true }
+      { indentStyle: IndentStyle.tabularLeft, tabulateAlias: true }
     );
 
     expect(result).toBe(dedent`
@@ -128,10 +128,10 @@ export default function supportsTabulateAlias(language: SqlLanguage, format: For
     `);
   });
 
-  it('works together with indentStyle:tenSpaceRight', () => {
+  it('works together with indentStyle:tabularRight', () => {
     const result = format(
       dedent`SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );`,
-      { indentStyle: IndentStyle.tenSpaceRight, tabulateAlias: true }
+      { indentStyle: IndentStyle.tabularRight, tabulateAlias: true }
     );
 
     expect(result).toBe(

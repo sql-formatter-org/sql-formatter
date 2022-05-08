@@ -508,8 +508,8 @@ export default class Formatter {
 
   private isTenSpace(): boolean {
     return (
-      this.cfg.indentStyle === IndentStyle.tenSpaceLeft ||
-      this.cfg.indentStyle === IndentStyle.tenSpaceRight
+      this.cfg.indentStyle === IndentStyle.tabularLeft ||
+      this.cfg.indentStyle === IndentStyle.tabularRight
     );
   }
 

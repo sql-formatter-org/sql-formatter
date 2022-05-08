@@ -26,7 +26,7 @@ export function toTenSpaceToken(
     [bufferItem, ...tail] = bufferItem.split(' ');
   }
 
-  if (indentStyle === IndentStyle.tenSpaceLeft) {
+  if (indentStyle === IndentStyle.tabularLeft) {
     bufferItem = bufferItem.padEnd(9, ZWS);
   } else {
     bufferItem = bufferItem.padStart(9, ZWS);

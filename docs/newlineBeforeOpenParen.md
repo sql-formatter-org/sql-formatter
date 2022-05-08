@@ -9,7 +9,7 @@ Decides whether to place open-parenthesis `(` of sub-queries on a separate line.
 
 Caveats:
 
-This option is ignored when `indentStyle: "tenSpaceLeft"` or `"tenSpaceRight"` is used.
+This option is ignored when `indentStyle: "tabularLeft"` or `"tabularRight"` is used.
 
 ### newlineBeforeOpenParen: true
 
