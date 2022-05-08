@@ -16,6 +16,7 @@ import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
 import { toTabularToken, replaceTabularPlaceholders } from './tabularStyle';
 import AliasAs from './AliasAs';
+import AsTokenFactory from './AsTokenFactory';
 
 const TABULAR_INDENT = ' '.repeat(10);
 
@@ -26,6 +27,7 @@ export default class Formatter {
   private inlineBlock: InlineBlock;
   private aliasAs: AliasAs;
   private params: Params;
+  private asTokenFactory: AsTokenFactory;
 
   private currentNewline = true;
   private previousReservedToken: Token = EOF_TOKEN;
@@ -39,6 +41,7 @@ export default class Formatter {
     this.inlineBlock = new InlineBlock(this.cfg.lineWidth);
     this.aliasAs = new AliasAs(this.cfg.aliasAs, this);
     this.params = new Params(this.cfg.params);
+    this.asTokenFactory = new AsTokenFactory(this.cfg.keywordCase);
   }
 
   /**
@@ -65,6 +68,7 @@ export default class Formatter {
    */
   public format(query: string): string {
     this.tokens = this.tokenizer().tokenize(query);
+    this.asTokenFactory = new AsTokenFactory(this.cfg.keywordCase, this.tokens);
     const formattedQuery = this.getFormattedQueryFromTokens();
     const finalQuery = this.postFormat(formattedQuery);
 
@@ -150,31 +154,16 @@ export default class Formatter {
   private formatWord(token: Token, query: string): string {
     let finalQuery = query;
     if (this.aliasAs.shouldAddBefore(token)) {
-      finalQuery = this.formatWithSpaces(this.asToken(), finalQuery);
+      finalQuery = this.formatWithSpaces(this.asTokenFactory.token(), finalQuery);
     }
 
     finalQuery = this.formatWithSpaces(token, finalQuery);
 
     if (this.aliasAs.shouldAddAfter()) {
-      finalQuery = this.formatWithSpaces(this.asToken(), finalQuery);
+      finalQuery = this.formatWithSpaces(this.asTokenFactory.token(), finalQuery);
     }
 
     return finalQuery;
-  }
-
-  private asToken(): Token {
-    return {
-      type: TokenType.RESERVED_KEYWORD,
-      value: this.asTokenValue(),
-    };
-  }
-
-  private asTokenValue(): 'AS' | 'as' {
-    const keywordCase =
-      this.cfg.keywordCase === KeywordCase.preserve
-        ? this.aliasAs.autoDetectCase(this.tokens)
-        : this.cfg.keywordCase;
-    return keywordCase === KeywordCase.upper ? 'AS' : 'as';
   }
 
   /**

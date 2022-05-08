@@ -1,4 +1,4 @@
-import { AliasMode, KeywordCase } from '../types';
+import { AliasMode } from '../types';
 import { isCommand, isToken, Token, TokenType } from './token';
 
 export interface TokenStream {
@@ -10,8 +10,6 @@ export interface TokenStream {
 
 /** Decides addition and removal of AS tokens */
 export default class AliasAs {
-  private detectedCase?: KeywordCase = undefined;
-
   constructor(
     private aliasAs: AliasMode | keyof typeof AliasMode,
     private formatter: TokenStream
@@ -106,17 +104,5 @@ export default class AliasAs {
 
   private lookAhead(n?: number): Token {
     return this.formatter.tokenLookAhead(n);
-  }
-
-  /** Detects whether existing AS keywords are commonly in upper- or lowercase */
-  public autoDetectCase(tokens: Token[]): KeywordCase {
-    if (this.detectedCase) {
-      return this.detectedCase;
-    }
-    const asTokens = tokens.filter(isToken.AS);
-    const upperAsTokens = asTokens.filter(({ value }) => value === 'AS');
-    this.detectedCase =
-      upperAsTokens.length > asTokens.length / 2 ? KeywordCase.upper : KeywordCase.lower;
-    return this.detectedCase;
   }
 }
