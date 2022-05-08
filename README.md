@@ -195,7 +195,7 @@ All fields are optional and all fields that are not specified will be filled wit
   True to place opening parenthesis on new line.
 - [**`newlineBeforeCloseParen`**](docs/newlineBeforeCloseParen.md): `boolean` (default: `true`)
   True to place closing parenthesis on new line.
-- **`lineWidth`**: `number` (default: `50`)
+- [**`lineWidth`**](docs/lineWidth.md): `number` (default: `50`)
   Number of characters in each line before breaking.
 - [**`linesBetweenQueries`**](docs/linesBetweenQueries.md): `number` (default: `1`)
   How many newlines to insert between queries.
