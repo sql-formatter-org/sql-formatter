@@ -32,7 +32,7 @@ export interface Token {
  */
 export const EOF_TOKEN = { type: TokenType.EOF, value: '«EOF»' };
 
-/** Special Unicode character to serve as a placeholder for TenSpace formats as \w whitespace is unavailable */
+/** Special Unicode character to serve as a placeholder for tabular formats as \w whitespace is unavailable */
 export const ZWS = '​'; // uses zero-width space (&#8203; / U+200B)
 const ZWS_REGEX = '\u200b';
 const spaces = `[${ZWS_REGEX}\\s]`;

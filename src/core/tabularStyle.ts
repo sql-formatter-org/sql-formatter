@@ -2,16 +2,16 @@ import { IndentStyle } from '../types';
 import { Token, ZWS } from './token';
 
 /**
- * When tenSpace mode enabled,
+ * When tabular style enabled,
  * produces a 10-char wide version of reserved token.
  *
  * It'll be padded by zero-width space characters
  * instead of normal spaces, so that these spaces will survive
  * trimming of spaces in other parts of formatter.
  * They'll be converted to normal spaces in the end of
- * all the normal formatting with the replaceTenSpacePlaceholders()
+ * all the normal formatting with the replaceTabularPlaceholders()
  */
-export function toTenSpaceToken(
+export function toTabularToken(
   token: Token,
   indentStyle: IndentStyle | keyof typeof IndentStyle
 ): Token {
@@ -41,6 +41,6 @@ export function toTenSpaceToken(
 /**
  * Replaces zero-width-spaces added by the above function
  */
-export function replaceTenSpacePlaceholders(query: string): string {
+export function replaceTabularPlaceholders(query: string): string {
   return query.replace(new RegExp(ZWS, 'ugim'), ' ');
 }

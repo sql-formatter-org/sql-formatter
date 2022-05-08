@@ -12,7 +12,7 @@ export default function formatAliasPositions(query: string): string {
     if (lines[i].match(/^\s*SELECT/i)) {
       let aliasLines: string[] = [];
       if (lines[i].match(/.*,$/)) {
-        aliasLines = [lines[i]]; // add select to aliasLines in case of tenSpace formats
+        aliasLines = [lines[i]]; // add select to aliasLines in case of tabular formats
       } else {
         newQuery.push(lines[i]); // add select to new query
         if (lines[i].match(/^\s*SELECT\s+.+(?!,$)/i)) {

@@ -14,10 +14,10 @@ import {
 } from '../types';
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
-import { toTenSpaceToken, replaceTenSpacePlaceholders } from './tenSpace';
+import { toTabularToken, replaceTabularPlaceholders } from './tabularStyle';
 import AliasAs from './AliasAs';
 
-const TENSPACE_INDENT = ' '.repeat(10);
+const TABULAR_INDENT = ' '.repeat(10);
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {
@@ -35,7 +35,7 @@ export default class Formatter {
 
   constructor(cfg: FormatOptions) {
     this.cfg = cfg;
-    this.indentation = new Indentation(this.isTenSpace() ? TENSPACE_INDENT : this.cfg.indent);
+    this.indentation = new Indentation(this.isTabularStyle() ? TABULAR_INDENT : this.cfg.indent);
     this.inlineBlock = new InlineBlock(this.cfg.lineWidth);
     this.aliasAs = new AliasAs(this.cfg.aliasAs, this);
     this.params = new Params(this.cfg.params);
@@ -104,8 +104,8 @@ export default class Formatter {
           token.type !== TokenType.RESERVED_KEYWORD &&
           token.type !== TokenType.RESERVED_JOIN_CONDITION
         ) {
-          // convert Reserved Command or Logical Operator to tenSpace format if needed
-          token = toTenSpaceToken(token, this.cfg.indentStyle);
+          // convert Reserved Command or Logical Operator to tabular format if needed
+          token = toTabularToken(token, this.cfg.indentStyle);
         }
         if (token.type === TokenType.RESERVED_COMMAND) {
           this.previousCommandToken = token;
@@ -141,7 +141,7 @@ export default class Formatter {
         formattedQuery = this.formatWord(token, formattedQuery);
       }
     }
-    return replaceTenSpacePlaceholders(formattedQuery);
+    return replaceTabularPlaceholders(formattedQuery);
   }
 
   /**
@@ -253,8 +253,8 @@ export default class Formatter {
 
     query = this.addNewline(query);
 
-    // indent TenSpace formats, except when preceding a (
-    if (this.isTenSpace()) {
+    // indent tabular formats, except when preceding a (
+    if (this.isTabularStyle()) {
       if (this.tokenLookAhead().value !== '(') {
         this.indentation.increaseTopLevel();
       }
@@ -263,7 +263,7 @@ export default class Formatter {
     }
 
     query += this.equalizeWhitespace(this.show(token)); // print token onto query
-    if (this.currentNewline && !this.isTenSpace()) {
+    if (this.currentNewline && !this.isTabularStyle()) {
       query = this.addNewline(query);
     } else {
       query += ' ';
@@ -276,8 +276,8 @@ export default class Formatter {
    */
   private formatBinaryCommand(token: Token, query: string): string {
     const isJoin = /JOIN/i.test(token.value); // check if token contains JOIN
-    if (!isJoin || this.isTenSpace()) {
-      // decrease for boolean set operators or in tenSpace modes
+    if (!isJoin || this.isTabularStyle()) {
+      // decrease for boolean set operators or in tabular mode
       this.indentation.decreaseTopLevel();
     }
     query = this.addNewline(query) + this.equalizeWhitespace(this.show(token));
@@ -341,7 +341,7 @@ export default class Formatter {
       return this.formatWithSpaces(token, query);
     }
 
-    if (this.isTenSpace()) {
+    if (this.isTabularStyle()) {
       this.indentation.decreaseTopLevel();
     }
 
@@ -410,7 +410,7 @@ export default class Formatter {
     } else {
       this.indentation.decreaseBlockLevel();
 
-      if (this.isTenSpace()) {
+      if (this.isTabularStyle()) {
         // +1 extra indentation step for the closing paren
         query = this.addNewline(query) + this.indentation.getSingleIndent();
       } else if (this.cfg.newlineBeforeCloseParen) {
@@ -506,7 +506,7 @@ export default class Formatter {
     return query + this.indentation.getIndent();
   }
 
-  private isTenSpace(): boolean {
+  private isTabularStyle(): boolean {
     return (
       this.cfg.indentStyle === IndentStyle.tabularLeft ||
       this.cfg.indentStyle === IndentStyle.tabularRight
