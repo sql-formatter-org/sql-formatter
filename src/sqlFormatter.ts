@@ -17,6 +17,7 @@ import {
   FormatOptions,
   KeywordCase,
   KeywordMode,
+  LogicalOperatorNewline,
   NewlineMode,
 } from './types';
 import { isNumber } from './utils';
@@ -46,7 +47,7 @@ const defaultOptions: FormatFnOptions = {
   keywordCase: KeywordCase.preserve,
   keywordPosition: KeywordMode.standard,
   newline: NewlineMode.always,
-  breakBeforeBooleanOperator: true,
+  logicalOperatorNewline: LogicalOperatorNewline.before,
   aliasAs: AliasMode.preserve,
   tabulateAlias: false,
   commaPosition: CommaPosition.after,

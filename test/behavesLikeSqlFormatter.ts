@@ -12,7 +12,7 @@ import supportsNewlineBeforeParen from './options/newlineBeforeParen';
 import supportsCommaPosition from './options/commaPosition';
 import supportsLinesBetweenQueries from './options/linesBetweenQueries';
 import supportsNewlineBeforeSemicolon from './options/newlineBeforeSemicolon';
-import supportsBreakBeforeBooleanOperator from './options/breakBeforeBooleanOperator';
+import supportsLogicalOperatorNewline from './options/logicalOperatorNewline';
 import supportsTabulateAlias from './options/tabulateAlias';
 
 /**
@@ -31,7 +31,7 @@ export default function behavesLikeSqlFormatter(language: SqlLanguage, format: F
   supportsNewlineBeforeParen(language, format);
   supportsNewlineBeforeSemicolon(language, format);
   supportsCommaPosition(language, format);
-  supportsBreakBeforeBooleanOperator(language, format);
+  supportsLogicalOperatorNewline(language, format);
 
   it('does nothing with empty input', () => {
     const result = format('');

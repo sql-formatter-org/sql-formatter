@@ -60,6 +60,11 @@ export enum CommaPosition {
   tabular = 'tabular',
 }
 
+export enum LogicalOperatorNewline {
+  before = 'before',
+  after = 'after',
+}
+
 // The `keyof typeof Enum` expansions are used to allow this API
 // to be called in two ways:
 //
@@ -71,7 +76,7 @@ export interface FormatOptions {
   keywordCase: KeywordCase | keyof typeof KeywordCase;
   keywordPosition: KeywordMode | keyof typeof KeywordMode;
   newline: NewlineMode | keyof typeof NewlineMode | number;
-  breakBeforeBooleanOperator: boolean;
+  logicalOperatorNewline: LogicalOperatorNewline | keyof typeof LogicalOperatorNewline;
   aliasAs: AliasMode | keyof typeof AliasMode;
   tabulateAlias: boolean;
   commaPosition: CommaPosition | keyof typeof CommaPosition;

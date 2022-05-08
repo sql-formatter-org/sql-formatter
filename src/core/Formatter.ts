@@ -4,7 +4,14 @@ import Params from './Params';
 import { trimSpacesEnd } from '../utils';
 import { isReserved, isCommand, isToken, Token, TokenType, EOF_TOKEN } from './token';
 import Tokenizer from './Tokenizer';
-import { CommaPosition, FormatOptions, KeywordCase, KeywordMode, NewlineMode } from '../types';
+import {
+  CommaPosition,
+  FormatOptions,
+  KeywordCase,
+  KeywordMode,
+  LogicalOperatorNewline,
+  NewlineMode,
+} from '../types';
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
 import { toTenSpaceToken, replaceTenSpacePlaceholders } from './tenSpace';
@@ -338,7 +345,7 @@ export default class Formatter {
       this.indentation.decreaseTopLevel();
     }
 
-    if (this.cfg.breakBeforeBooleanOperator) {
+    if (this.cfg.logicalOperatorNewline === LogicalOperatorNewline.before) {
       return (
         (this.currentNewline ? this.addNewline(query) : query) +
         this.equalizeWhitespace(this.show(token)) +
