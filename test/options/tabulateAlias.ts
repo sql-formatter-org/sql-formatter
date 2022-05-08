@@ -1,5 +1,5 @@
 import dedent from 'dedent-js';
-import { KeywordMode, NewlineMode } from '../../src/types';
+import { IndentStyle, NewlineMode } from '../../src/types';
 import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
 
 export default function supportsTabulateAlias(language: SqlLanguage, format: FormatFn) {
@@ -110,10 +110,10 @@ export default function supportsTabulateAlias(language: SqlLanguage, format: For
     `);
   });
 
-  it('works together with keywordPosition:tenSpaceLeft', () => {
+  it('works together with indentStyle:tenSpaceLeft', () => {
     const result = format(
       dedent`SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );`,
-      { keywordPosition: KeywordMode.tenSpaceLeft, tabulateAlias: true }
+      { indentStyle: IndentStyle.tenSpaceLeft, tabulateAlias: true }
     );
 
     expect(result).toBe(dedent`
@@ -128,10 +128,10 @@ export default function supportsTabulateAlias(language: SqlLanguage, format: For
     `);
   });
 
-  it('works together with keywordPosition:tenSpaceRight', () => {
+  it('works together with indentStyle:tenSpaceRight', () => {
     const result = format(
       dedent`SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );`,
-      { keywordPosition: KeywordMode.tenSpaceRight, tabulateAlias: true }
+      { indentStyle: IndentStyle.tenSpaceRight, tabulateAlias: true }
     );
 
     expect(result).toBe(

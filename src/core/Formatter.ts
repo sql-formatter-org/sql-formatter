@@ -8,7 +8,7 @@ import {
   CommaPosition,
   FormatOptions,
   KeywordCase,
-  KeywordMode,
+  IndentStyle,
   LogicalOperatorNewline,
   NewlineMode,
 } from '../types';
@@ -105,7 +105,7 @@ export default class Formatter {
           token.type !== TokenType.RESERVED_JOIN_CONDITION
         ) {
           // convert Reserved Command or Logical Operator to tenSpace format if needed
-          token = toTenSpaceToken(token, this.cfg.keywordPosition);
+          token = toTenSpaceToken(token, this.cfg.indentStyle);
         }
         if (token.type === TokenType.RESERVED_COMMAND) {
           this.previousCommandToken = token;
@@ -508,8 +508,8 @@ export default class Formatter {
 
   private isTenSpace(): boolean {
     return (
-      this.cfg.keywordPosition === KeywordMode.tenSpaceLeft ||
-      this.cfg.keywordPosition === KeywordMode.tenSpaceRight
+      this.cfg.indentStyle === IndentStyle.tenSpaceLeft ||
+      this.cfg.indentStyle === IndentStyle.tenSpaceRight
     );
   }
 

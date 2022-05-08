@@ -1,8 +1,8 @@
 import dedent from 'dedent-js';
-import { KeywordMode } from '../../src/types';
+import { IndentStyle } from '../../src/types';
 import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
 
-export default function supportsKeywordPositions(language: SqlLanguage, format: FormatFn) {
+export default function supportsIndentStyle(language: SqlLanguage, format: FormatFn) {
   const baseQuery = `
     SELECT COUNT(a.column1), MAX(b.column2 + b.column3), b.column4 AS four
     FROM ( SELECT column1, column5 FROM table1 ) a
@@ -12,7 +12,7 @@ export default function supportsKeywordPositions(language: SqlLanguage, format: 
   `;
 
   it('supports standard mode', () => {
-    const result = format(baseQuery, { keywordPosition: KeywordMode.standard });
+    const result = format(baseQuery, { indentStyle: IndentStyle.standard });
     expect(result).toBe(dedent`
       SELECT
         COUNT(a.column1),
@@ -35,9 +35,9 @@ export default function supportsKeywordPositions(language: SqlLanguage, format: 
     `);
   });
 
-  describe('keywordPosition: tenSpaceLeft', () => {
+  describe('indentStyle: tenSpaceLeft', () => {
     it('aligns command keywords to left', () => {
-      const result = format(baseQuery, { keywordPosition: KeywordMode.tenSpaceLeft });
+      const result = format(baseQuery, { indentStyle: IndentStyle.tenSpaceLeft });
       expect(result).toBe(dedent`
         SELECT    COUNT(a.column1),
                   MAX(b.column2 + b.column3),
@@ -65,7 +65,7 @@ export default function supportsKeywordPositions(language: SqlLanguage, format: 
             FROM b
             LEFT OUTER JOIN c;
           `,
-          { keywordPosition: KeywordMode.tenSpaceLeft }
+          { indentStyle: IndentStyle.tenSpaceLeft }
         )
       ).toBe(dedent`
         SELECT    *
@@ -82,7 +82,7 @@ export default function supportsKeywordPositions(language: SqlLanguage, format: 
         format(
           'SELECT age FROM (SELECT fname, lname, age FROM (SELECT fname, lname FROM persons) JOIN (SELECT age FROM ages)) as mytable;',
           {
-            keywordPosition: KeywordMode.tenSpaceLeft,
+            indentStyle: IndentStyle.tenSpaceLeft,
           }
         )
       ).toBe(dedent`
@@ -107,7 +107,7 @@ export default function supportsKeywordPositions(language: SqlLanguage, format: 
     it('does not indent semicolon when newlineBeforeSemicolon:true used', () => {
       expect(
         format('SELECT firstname, lastname, age FROM customers;', {
-          keywordPosition: KeywordMode.tenSpaceLeft,
+          indentStyle: IndentStyle.tenSpaceLeft,
           newlineBeforeSemicolon: true,
         })
       ).toBe(dedent`
@@ -120,9 +120,9 @@ export default function supportsKeywordPositions(language: SqlLanguage, format: 
     });
   });
 
-  describe('keywordPosition: tenSpaceRight', () => {
+  describe('indentStyle: tenSpaceRight', () => {
     it('aligns command keywords to right', () => {
-      const result = format(baseQuery, { keywordPosition: KeywordMode.tenSpaceRight });
+      const result = format(baseQuery, { indentStyle: IndentStyle.tenSpaceRight });
       expect(result).toBe(
         [
           '   SELECT COUNT(a.column1),',
@@ -152,7 +152,7 @@ export default function supportsKeywordPositions(language: SqlLanguage, format: 
             FROM b
             LEFT OUTER JOIN c;
           `,
-          { keywordPosition: KeywordMode.tenSpaceRight }
+          { indentStyle: IndentStyle.tenSpaceRight }
         )
       ).toBe(
         [

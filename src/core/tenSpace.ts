@@ -1,4 +1,4 @@
-import { KeywordMode } from '../types';
+import { IndentStyle } from '../types';
 import { Token, ZWS } from './token';
 
 /**
@@ -13,9 +13,9 @@ import { Token, ZWS } from './token';
  */
 export function toTenSpaceToken(
   token: Token,
-  keywordPosition: KeywordMode | keyof typeof KeywordMode
+  indentStyle: IndentStyle | keyof typeof IndentStyle
 ): Token {
-  if (keywordPosition === KeywordMode.standard) {
+  if (indentStyle === IndentStyle.standard) {
     return token;
   }
 
@@ -26,7 +26,7 @@ export function toTenSpaceToken(
     [bufferItem, ...tail] = bufferItem.split(' ');
   }
 
-  if (keywordPosition === KeywordMode.tenSpaceLeft) {
+  if (indentStyle === IndentStyle.tenSpaceLeft) {
     bufferItem = bufferItem.padEnd(9, ZWS);
   } else {
     bufferItem = bufferItem.padStart(9, ZWS);

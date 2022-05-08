@@ -8,7 +8,7 @@ import supportsAliasAs from './options/aliasAs';
 import supportsNewline from './options/newline';
 import supportsLineWidth from './options/lineWidth';
 import supportsKeywordCase from './options/keywordCase';
-import supportsKeywordPositions from './options/keywordPosition';
+import supportsIndentStyle from './options/indentStyle';
 import supportsNewlineBeforeParen from './options/newlineBeforeParen';
 import supportsCommaPosition from './options/commaPosition';
 import supportsLinesBetweenQueries from './options/linesBetweenQueries';
@@ -26,7 +26,7 @@ export default function behavesLikeSqlFormatter(language: SqlLanguage, format: F
   supportsTabulateAlias(language, format);
   supportsIndent(language, format);
   supportsKeywordCase(language, format);
-  supportsKeywordPositions(language, format);
+  supportsIndentStyle(language, format);
   supportsLinesBetweenQueries(language, format);
   supportsNewline(language, format);
   supportsLineWidth(language, format);

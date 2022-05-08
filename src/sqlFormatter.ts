@@ -16,7 +16,7 @@ import {
   CommaPosition,
   FormatOptions,
   KeywordCase,
-  KeywordMode,
+  IndentStyle,
   LogicalOperatorNewline,
   NewlineMode,
 } from './types';
@@ -45,7 +45,7 @@ const defaultOptions: FormatFnOptions = {
   language: 'sql',
   indent: '  ',
   keywordCase: KeywordCase.preserve,
-  keywordPosition: KeywordMode.standard,
+  indentStyle: IndentStyle.standard,
   newline: NewlineMode.always,
   logicalOperatorNewline: LogicalOperatorNewline.before,
   aliasAs: AliasMode.preserve,

@@ -1,4 +1,4 @@
-# keywordPosition
+# indentStyle
 
 Switches between different indentation styles.
 

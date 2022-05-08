@@ -7,7 +7,7 @@ import { ParamItems } from './core/Params';
  * @property {string} tenSpaceLeft - Central aligned keyword format, keywords left-aligned
  * @property {string} tenSpaceRight - Central aligned keyword format, keywords right-aligned
  */
-export enum KeywordMode {
+export enum IndentStyle {
   standard = 'standard',
   tenSpaceLeft = 'tenSpaceLeft',
   tenSpaceRight = 'tenSpaceRight',
@@ -74,7 +74,7 @@ export enum LogicalOperatorNewline {
 export interface FormatOptions {
   indent: string;
   keywordCase: KeywordCase | keyof typeof KeywordCase;
-  keywordPosition: KeywordMode | keyof typeof KeywordMode;
+  indentStyle: IndentStyle | keyof typeof IndentStyle;
   newline: NewlineMode | keyof typeof NewlineMode | number;
   logicalOperatorNewline: LogicalOperatorNewline | keyof typeof LogicalOperatorNewline;
   aliasAs: AliasMode | keyof typeof AliasMode;

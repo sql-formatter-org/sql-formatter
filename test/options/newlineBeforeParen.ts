@@ -1,6 +1,6 @@
 import { expect } from '@jest/globals';
 import dedent from 'dedent-js';
-import { KeywordMode } from '../../src/types';
+import { IndentStyle } from '../../src/types';
 import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
 
 export default function supportsNewlineBeforeParen(language: SqlLanguage, format: FormatFn) {
@@ -93,16 +93,16 @@ export default function supportsNewlineBeforeParen(language: SqlLanguage, format
   });
 
   // TODO: I think this is not as intended.
-  it('has no effect when used together with keywordPosition:tenSpaceLeft', () => {
+  it('has no effect when used together with indentStyle:tenSpaceLeft', () => {
     const withNewlineOn = format('SELECT a FROM ( SELECT b FROM c );', {
       newlineBeforeOpenParen: true,
       newlineBeforeCloseParen: true,
-      keywordPosition: KeywordMode.tenSpaceLeft,
+      indentStyle: IndentStyle.tenSpaceLeft,
     });
     const withNewlineOff = format('SELECT a FROM ( SELECT b FROM c );', {
       newlineBeforeOpenParen: false,
       newlineBeforeCloseParen: false,
-      keywordPosition: KeywordMode.tenSpaceLeft,
+      indentStyle: IndentStyle.tenSpaceLeft,
     });
 
     expect(withNewlineOn).toBe(withNewlineOff);
