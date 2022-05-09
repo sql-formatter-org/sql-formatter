@@ -4,7 +4,6 @@
   "description": "Format whitespace in a SQL query to make it more readable",
   "license": "MIT",
   "main": "lib/index.js",
-  "module": "dist/sql-formatter.min.js",
   "types": "lib/src/index.d.ts",
   "bin": {
     "sql-formatter": "./bin/sql-formatter-cli.js"
@@ -61,7 +60,6 @@
   ],
   "files": [
     "bin",
-    "dist",
     "lib"
   ],
   "scripts": {
