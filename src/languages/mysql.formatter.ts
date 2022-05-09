@@ -683,6 +683,7 @@ const reservedKeywords = [
   'KEY_BLOCK_SIZE',
   'LANGUAGE',
   'LAST',
+  'LATERAL',
   'LEADING',
   'LEAVE',
   'LEAVES',
@@ -1311,7 +1312,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE', 'ELSEIF', 'LATERAL'];
+const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE', 'ELSEIF'];
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
@@ -1350,12 +1351,6 @@ export default class MySqlFormatter extends Formatter {
   }
 
   tokenOverride(token: Token) {
-    // [LATERAL] ( ...
-    if (isToken.LATERAL(token) && this.tokenLookAhead().type === TokenType.BLOCK_START) {
-      // This is a subquery, treat it like a join
-      return { type: TokenType.RESERVED_LOGICAL_OPERATOR, value: token.value };
-    }
-
     // [SET] ( ...
     if (isToken.SET(token) && this.tokenLookAhead().value === '(') {
       // This is SET datatype, not SET statement

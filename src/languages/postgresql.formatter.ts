@@ -1,6 +1,5 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
-import { isToken, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
 import type { StringPatternType } from '../core/regexFactory';
 import { dedupe } from '../utils';
 
@@ -1023,6 +1022,7 @@ const reservedKeywords = [
   'LANGUAGE',
   'LARGE',
   'LAST',
+  'LATERAL',
   'LEADING',
   'LEAKPROOF',
   'LEVEL',
@@ -1616,7 +1616,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE', 'LATERAL'];
+const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE'];
 
 const binaryOperators = [
   '<<',
@@ -1698,15 +1698,5 @@ export default class PostgreSqlFormatter extends Formatter {
       lineCommentTypes: PostgreSqlFormatter.lineCommentTypes,
       operators: PostgreSqlFormatter.operators,
     });
-  }
-
-  tokenOverride(token: Token) {
-    // [LATERAL] ( ...
-    if (isToken.LATERAL(token) && this.tokenLookAhead().type === TokenType.BLOCK_START) {
-      // This is a subquery, treat it like a join
-      return { type: TokenType.RESERVED_LOGICAL_OPERATOR, value: token.value };
-    }
-
-    return token;
   }
 }

@@ -836,6 +836,7 @@ const reservedKeywords = {
     'LANGUAGE',
     'LARGE',
     'LAST',
+    'LATERAL',
     'LEADING',
     'LESS',
     'LEVEL',
@@ -1225,7 +1226,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE', 'LATERAL'];
+const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE'];
 
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export default class TSqlFormatter extends Formatter {

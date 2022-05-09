@@ -54,7 +54,6 @@ export const isToken = {
   BY: testToken({ value: 'BY', type: TokenType.RESERVED_KEYWORD }),
   END: testToken({ value: 'END', type: TokenType.BLOCK_END }),
   FROM: testToken({ value: 'FROM', type: TokenType.RESERVED_COMMAND }),
-  LATERAL: testToken({ value: 'LATERAL', type: TokenType.RESERVED_DEPENDENT_CLAUSE }),
   LIMIT: testToken({ value: 'LIMIT', type: TokenType.RESERVED_COMMAND }),
   SELECT: testToken({ value: 'SELECT', type: TokenType.RESERVED_COMMAND }),
   SET: testToken({ value: 'SET', type: TokenType.RESERVED_COMMAND }),

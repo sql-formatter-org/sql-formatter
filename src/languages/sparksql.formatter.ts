@@ -709,6 +709,7 @@ const reservedCommands = [
   // other
   'FROM',
   'INSERT',
+  'LATERAL VIEW',
   'UPDATE',
   'WINDOW', // verify
 ];
@@ -772,7 +773,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE', 'LATERAL VIEW'];
+const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkSqlFormatter extends Formatter {
