@@ -16,7 +16,7 @@ export interface FormatOptions {
   indent: string;
   keywordCase: KeywordCase;
   indentStyle: IndentStyle;
-  newline: NewlineMode | number;
+  multilineLists: NewlineMode | number;
   logicalOperatorNewline: LogicalOperatorNewline;
   aliasAs: AliasMode;
   tabulateAlias: boolean;

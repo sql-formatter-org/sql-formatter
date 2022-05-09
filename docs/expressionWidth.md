@@ -7,7 +7,7 @@ Determines maximum length of parenthesized expressions.
 A number (default `50`) specifying the maximum length of parenthesized expression
 that's does not get split up to multiple lines.
 
-Note: `expressionWidth` also effects formatting of comma-separated lists when `newline: "expressionWidth"` used.
+Note: `expressionWidth` also effects formatting of comma-separated lists when `multilineLists: "expressionWidth"` used.
 
 ### expressionWidth: 50 (default)
 

@@ -1,23 +1,23 @@
 import dedent from 'dedent-js';
 import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
 
-export default function supportsNewline(language: SqlLanguage, format: FormatFn) {
-  it('throws error when newline is negative number', () => {
+export default function supportsMultilineLists(language: SqlLanguage, format: FormatFn) {
+  it('throws error when multilineLists is negative number', () => {
     expect(() => {
-      format('SELECT *', { newline: -1 });
-    }).toThrowErrorMatchingInlineSnapshot(`"newline config must be a positive number."`);
+      format('SELECT *', { multilineLists: -1 });
+    }).toThrowErrorMatchingInlineSnapshot(`"multilineLists config must be a positive number."`);
   });
 
-  it('throws error when newline is zero', () => {
+  it('throws error when multilineLists is zero', () => {
     expect(() => {
-      format('SELECT *', { newline: 0 });
-    }).toThrowErrorMatchingInlineSnapshot(`"newline config must be a positive number."`);
+      format('SELECT *', { multilineLists: 0 });
+    }).toThrowErrorMatchingInlineSnapshot(`"multilineLists config must be a positive number."`);
   });
 
-  describe('newline: always', () => {
+  describe('multilineLists: always', () => {
     it('always splits to multiple lines, even when just a single clause', () => {
       const result = format('SELECT foo, bar FROM qux;', {
-        newline: 'always',
+        multilineLists: 'always',
       });
       expect(result).toBe(dedent`
         SELECT
@@ -29,10 +29,10 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
     });
   });
 
-  describe('newline: never', () => {
+  describe('multilineLists: never', () => {
     it('never splits to multiple lines, regardless of count', () => {
       const result = format('SELECT foo, bar, baz, qux FROM corge;', {
-        newline: 'never',
+        multilineLists: 'never',
       });
       expect(result).toBe(dedent`
         SELECT foo, bar, baz, qux
@@ -43,16 +43,16 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
     it('places whole CREATE TABLE to single line', () => {
       expect(
         format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);', {
-          newline: 'never',
+          multilineLists: 'never',
         })
       ).toBe('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);');
     });
   });
 
-  describe('newline: number', () => {
+  describe('multilineLists: number', () => {
     it('splits to multiple lines when more clauses than than the specified number', () => {
       const result = format('SELECT foo, bar, baz, qux FROM corge;', {
-        newline: 3,
+        multilineLists: 3,
       });
       expect(result).toBe(dedent`
         SELECT
@@ -66,7 +66,7 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
 
     it('does not split to multiple lines when the same number of clauses as specified number', () => {
       const result = format('SELECT foo, bar, baz FROM corge;', {
-        newline: 3,
+        multilineLists: 3,
       });
       expect(result).toBe(dedent`
         SELECT foo, bar, baz
@@ -76,7 +76,7 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
 
     it('does not split to multiple lines when less clauses than than the specified number', () => {
       const result = format('SELECT foo, bar FROM corge;', {
-        newline: 3,
+        multilineLists: 3,
       });
       expect(result).toBe(dedent`
         SELECT foo, bar
@@ -88,7 +88,7 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
       const result = format(
         'SELECT customers.phone_number AS phone, customers.address AS addr FROM customers;',
         {
-          newline: 3,
+          multilineLists: 3,
         }
       );
       expect(result).toBe(dedent`
@@ -101,7 +101,7 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
 
     it('does not split smaller nr of clauses when their line width is exactly 50', () => {
       const result = format('SELECT customer.phone phone, customer.addr AS addr FROM customers;', {
-        newline: 3,
+        multilineLists: 3,
       });
       expect(result).toBe(dedent`
         SELECT customer.phone phone, customer.addr AS addr
@@ -111,7 +111,7 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
 
     it('splits up even short clauses when expressionWidth is small', () => {
       const result = format('SELECT foo, bar FROM customers GROUP BY foo, bar;', {
-        newline: 3,
+        multilineLists: 3,
         expressionWidth: 10,
       });
       expect(result).toBe(dedent`
@@ -128,7 +128,7 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
 
     it('ignores commas inside parenthesis when counting clauses', () => {
       const result = format('SELECT foo, some_function(a, b, c) AS bar FROM table1;', {
-        newline: 3,
+        multilineLists: 3,
       });
       expect(result).toBe(dedent`
         SELECT foo, some_function(a, b, c) AS bar
@@ -139,7 +139,7 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
     // TODO: the placement of closing paren is wrong
     it('ignores commas inside nested parenthesis', () => {
       const result = format('SELECT foo, func1(func2(a), b, c, d)) AS bar FROM table1;', {
-        newline: 3,
+        multilineLists: 3,
       });
       expect(result).toBe(dedent`
         SELECT foo, func1(func2(a), b, c, d)
@@ -149,12 +149,12 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
     });
   });
 
-  describe('newline: expressionWidth', () => {
+  describe('multilineLists: expressionWidth', () => {
     it('splits to multiple lines when single line would exceed specified expressionWidth', () => {
       const result = format(
         'SELECT first_field, second_field FROM some_excessively_long_table_name;',
         {
-          newline: 'expressionWidth',
+          multilineLists: 'expressionWidth',
           expressionWidth: 20,
         }
       );
@@ -169,7 +169,7 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
 
     it('does not split to multiple lines when line at or below specified expressionWidth', () => {
       const result = format('SELECT field1, field2 FROM table_name;', {
-        newline: 'expressionWidth',
+        multilineLists: 'expressionWidth',
         expressionWidth: 21,
       });
       expect(result).toBe(dedent`

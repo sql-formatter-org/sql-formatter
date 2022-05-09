@@ -38,7 +38,7 @@ const defaultOptions: FormatFnOptions = {
   indent: '  ',
   keywordCase: 'preserve',
   indentStyle: 'standard',
-  newline: 'always',
+  multilineLists: 'always',
   logicalOperatorNewline: 'before',
   aliasAs: 'preserve',
   tabulateAlias: false,
@@ -77,8 +77,8 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
     throw new Error(`Unsupported SQL dialect: ${cfg.language}`);
   }
 
-  if (isNumber(cfg.newline) && cfg.newline <= 0) {
-    throw new Error('newline config must be a positive number.');
+  if (isNumber(cfg.multilineLists) && cfg.multilineLists <= 0) {
+    throw new Error('multilineLists config must be a positive number.');
   }
 
   if (cfg.expressionWidth <= 0) {

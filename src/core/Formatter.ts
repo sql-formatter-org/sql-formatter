@@ -167,16 +167,16 @@ export default class Formatter {
       return true;
     }
 
-    switch (this.cfg.newline) {
+    switch (this.cfg.multilineLists) {
       case 'always':
         return true;
       case 'never':
         return false;
       case 'expressionWidth':
         return this.inlineWidth(token, nextTokens) > this.cfg.expressionWidth;
-      default: // newline mode is a number
+      default: // multilineLists mode is a number
         return (
-          this.countClauses(nextTokens) > this.cfg.newline ||
+          this.countClauses(nextTokens) > this.cfg.multilineLists ||
           this.inlineWidth(token, nextTokens) > this.cfg.expressionWidth
         );
     }
@@ -377,7 +377,7 @@ export default class Formatter {
 
     if (!this.inlineBlock.isActive()) {
       this.indentation.increaseBlockLevel();
-      if (!isToken.CASE(token) || this.cfg.newline === 'always') {
+      if (!isToken.CASE(token) || this.cfg.multilineLists === 'always') {
         query = this.addNewline(query);
       }
     }

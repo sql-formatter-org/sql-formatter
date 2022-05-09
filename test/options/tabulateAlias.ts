@@ -94,10 +94,10 @@ export default function supportsTabulateAlias(language: SqlLanguage, format: For
     `);
   });
 
-  it('does not tabulate aliases when newline:never used', () => {
+  it('does not tabulate aliases when multilineLists:never used', () => {
     const result = format(
       'SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );',
-      { newline: 'never', tabulateAlias: true }
+      { multilineLists: 'never', tabulateAlias: true }
     );
 
     expect(result).toBe(dedent`

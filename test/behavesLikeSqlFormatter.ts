@@ -4,7 +4,7 @@ import { FormatFn, SqlLanguage } from '../src/sqlFormatter';
 import supportsComments from './features/comments';
 import supportsIndent from './options/indent';
 import supportsAliasAs from './options/aliasAs';
-import supportsNewline from './options/newline';
+import supportsMultilineLists from './options/multilineLists';
 import supportsExpressionWidth from './options/expressionWidth';
 import supportsKeywordCase from './options/keywordCase';
 import supportsIndentStyle from './options/indentStyle';
@@ -27,7 +27,7 @@ export default function behavesLikeSqlFormatter(language: SqlLanguage, format: F
   supportsKeywordCase(language, format);
   supportsIndentStyle(language, format);
   supportsLinesBetweenQueries(language, format);
-  supportsNewline(language, format);
+  supportsMultilineLists(language, format);
   supportsExpressionWidth(language, format);
   supportsNewlineBeforeParen(language, format);
   supportsNewlineBeforeSemicolon(language, format);

@@ -23,7 +23,7 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
   it('formats CASE ... WHEN with an expression', () => {
     const result = format(
       "CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;",
-      { newline: 1 }
+      { multilineLists: 1 }
     );
 
     expect(result).toBe(dedent`
@@ -42,7 +42,7 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
   it('formats CASE ... WHEN inside SELECT', () => {
     const result = format(
       "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM tbl;",
-      { newline: 1 }
+      { multilineLists: 1 }
     );
 
     expect(result).toBe(dedent`
@@ -62,7 +62,7 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
 
   it('recognizes lowercase CASE ... END', () => {
     const result = format("case when option = 'foo' then 1 else 2 end;", {
-      newline: 1,
+      multilineLists: 1,
     });
 
     expect(result).toBe(dedent`
@@ -90,7 +90,7 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
   it('properly converts to uppercase in case statements', () => {
     const result = format(
       "case toString(getNumber()) when 'one' then 1 when 'two' then 2 when 'three' then 3 else 4 end;",
-      { keywordCase: 'upper', newline: 1 }
+      { keywordCase: 'upper', multilineLists: 1 }
     );
     expect(result).toBe(dedent`
       CASE toString(getNumber())
@@ -107,7 +107,7 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
 
   it('handles edge case of ending inline block with END', () => {
     const result = format(dedent`select sum(case a when foo then bar end) from quaz`, {
-      newline: 1,
+      multilineLists: 1,
     });
 
     expect(result).toBe(dedent`

@@ -1,4 +1,4 @@
-# newline
+# multilineLists
 
 Determines when to break lists of items (e.g. columns in `SELECT` clause) to multiple lines.
 
@@ -34,7 +34,7 @@ GROUP BY age, occupation
 
 ### number
 
-Using `newline: 1`:
+Using `multilineLists: 1`:
 
 ```
 SELECT
@@ -48,7 +48,7 @@ GROUP BY
   occupation
 ```
 
-Using `newline: 2`:
+Using `multilineLists: 2`:
 
 ```
 SELECT
@@ -60,7 +60,7 @@ FROM persons
 GROUP BY age, occupation
 ```
 
-Using `newline: 4`:
+Using `multilineLists: 4`:
 
 ```
 SELECT first_name, last_name, occupation, age
@@ -70,7 +70,7 @@ GROUP BY age, occupation
 
 ### expressionWidth
 
-Using `newline: "expressionWidth", expressionWidth: 13`:
+Using `multilineLists: "expressionWidth", expressionWidth: 13`:
 
 ```
 SELECT
@@ -84,7 +84,7 @@ GROUP BY
   occupation
 ```
 
-Using `newline: "expressionWidth", expressionWidth: 15`:
+Using `multilineLists: "expressionWidth", expressionWidth: 15`:
 
 ```
 SELECT
@@ -96,7 +96,7 @@ FROM persons
 GROUP BY age, occupation
 ```
 
-Using `newline: "expressionWidth", expressionWidth: 50`:
+Using `multilineLists: "expressionWidth", expressionWidth: 50`:
 
 ```
 SELECT first_name, last_name, occupation, age
