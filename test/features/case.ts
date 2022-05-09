@@ -22,12 +22,12 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
 
   it('formats CASE ... WHEN with an expression', () => {
     const result = format(
-      "CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;",
-      { multilineLists: 1 }
+      "CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;"
     );
 
     expect(result).toBe(dedent`
-      CASE toString(getNumber())
+      CASE
+        toString(getNumber())
         WHEN 'one'
         THEN 1
         WHEN 'two'
@@ -41,29 +41,28 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
 
   it('formats CASE ... WHEN inside SELECT', () => {
     const result = format(
-      "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM tbl;",
-      { multilineLists: 1 }
+      "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM tbl;"
     );
 
     expect(result).toBe(dedent`
       SELECT
         foo,
         bar,
-        CASE baz
+        CASE
+          baz
           WHEN 'one'
           THEN 1
           WHEN 'two'
           THEN 2
           ELSE 3
         END
-      FROM tbl;
+      FROM
+        tbl;
     `);
   });
 
   it('recognizes lowercase CASE ... END', () => {
-    const result = format("case when option = 'foo' then 1 else 2 end;", {
-      multilineLists: 1,
-    });
+    const result = format("case when option = 'foo' then 1 else 2 end;");
 
     expect(result).toBe(dedent`
       case
@@ -90,10 +89,11 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
   it('properly converts to uppercase in case statements', () => {
     const result = format(
       "case toString(getNumber()) when 'one' then 1 when 'two' then 2 when 'three' then 3 else 4 end;",
-      { keywordCase: 'upper', multilineLists: 1 }
+      { keywordCase: 'upper' }
     );
     expect(result).toBe(dedent`
-      CASE toString(getNumber())
+      CASE
+        toString(getNumber())
         WHEN 'one'
         THEN 1
         WHEN 'two'
@@ -106,19 +106,19 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
   });
 
   it('handles edge case of ending inline block with END', () => {
-    const result = format(dedent`select sum(case a when foo then bar end) from quaz`, {
-      multilineLists: 1,
-    });
+    const result = format(dedent`select sum(case a when foo then bar end) from quaz`);
 
     expect(result).toBe(dedent`
       select
         sum(
-          case a
+          case
+            a
             when foo
             then bar
           end
         )
-      from quaz
+      from
+        quaz
     `);
   });
 }
