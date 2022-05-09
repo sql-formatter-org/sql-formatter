@@ -32,6 +32,21 @@ FROM persons
 GROUP BY age, occupation
 ```
 
+But switches to multiple lines when CASE expression is seen:
+
+```
+SELECT
+  first_name,
+  CASE sex
+    WHEN 'F'
+    THEN 'ms'
+    WHEN 'M'
+    THEN 'mr'
+  END AS title
+FROM persons
+GROUP BY age, occupation
+```
+
 ### number
 
 Using `multilineLists: 1`:
