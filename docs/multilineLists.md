@@ -5,7 +5,7 @@ Determines when to break lists of items (e.g. columns in `SELECT` clause) to mul
 ## Options
 
 - `"always"` (default) always breaks to multiple lines (even when just a single item).
-- `"never"` never breaks to multiple lines, regardless of item count or line length.
+- `"avoid"` avoids breaking to multiple lines, regardless of item count or line length.
 - `number` breaks to multiple lines when there are more items than the specified number.
 - `"expressionWidth"` breaks to multiple lines when the line would exceed value of `expressionWidth` option.
 
@@ -24,7 +24,7 @@ GROUP BY
   occupation
 ```
 
-### never
+### avoid
 
 ```
 SELECT first_name, last_name, occupation, age

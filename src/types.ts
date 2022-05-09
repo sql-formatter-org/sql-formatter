@@ -4,7 +4,7 @@ export type IndentStyle = 'standard' | 'tabularLeft' | 'tabularRight';
 
 export type KeywordCase = 'preserve' | 'upper' | 'lower';
 
-export type NewlineMode = 'always' | 'never' | 'expressionWidth';
+export type NewlineMode = 'always' | 'avoid' | 'expressionWidth';
 
 export type AliasMode = 'preserve' | 'always' | 'never' | 'select';
 

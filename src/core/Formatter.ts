@@ -170,7 +170,7 @@ export default class Formatter {
     switch (this.cfg.multilineLists) {
       case 'always':
         return true;
-      case 'never':
+      case 'avoid':
         return false;
       case 'expressionWidth':
         return this.inlineWidth(token, nextTokens) > this.cfg.expressionWidth;

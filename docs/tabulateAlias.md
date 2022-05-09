@@ -10,7 +10,7 @@ Does not effect table name aliases.
 
 Caveats:
 
-Does not work when option `multilineLists: "never"` is used.
+Does not work when option `multilineLists: "avoid"` is used.
 
 ### tabulateAlias: false
 

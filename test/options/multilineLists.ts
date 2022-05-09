@@ -29,10 +29,10 @@ export default function supportsMultilineLists(language: SqlLanguage, format: Fo
     });
   });
 
-  describe('multilineLists: never', () => {
-    it('never splits to multiple lines, regardless of count', () => {
+  describe('multilineLists: avoid', () => {
+    it('does not split to multiple lines, regardless of count', () => {
       const result = format('SELECT foo, bar, baz, qux FROM corge;', {
-        multilineLists: 'never',
+        multilineLists: 'avoid',
       });
       expect(result).toBe(dedent`
         SELECT foo, bar, baz, qux
@@ -43,7 +43,7 @@ export default function supportsMultilineLists(language: SqlLanguage, format: Fo
     it('places whole CREATE TABLE to single line', () => {
       expect(
         format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);', {
-          multilineLists: 'never',
+          multilineLists: 'avoid',
         })
       ).toBe('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);');
     });
