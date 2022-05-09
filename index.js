@@ -12,7 +12,7 @@ const attachFormat = () => {
   const commaPosition = document.getElementById('commaPosition');
   const newlineBeforeOpenParen = document.getElementById('newlineBeforeOpenParen');
   const newlineBeforeCloseParen = document.getElementById('newlineBeforeCloseParen');
-  const lineWidth = document.getElementById('lineWidth');
+  const expressionWidth = document.getElementById('expressionWidth');
   const lineBetweenQueries = document.getElementById('lineBetweenQueries');
   const denseOperators = document.getElementById('denseOperators');
   const newlineBeforeSemicolon = document.getElementById('newlineBeforeSemicolon');
@@ -32,7 +32,7 @@ const attachFormat = () => {
         commaPosition: commaPosition.options[commaPosition.selectedIndex].value,
         newlineBeforeOpenParen: newlineBeforeOpenParen.checked,
         newlineBeforeCloseParen: newlineBeforeCloseParen.checked,
-        lineWidth: lineWidth.value,
+        expressionWidth: expressionWidth.value,
         lineBetweenQueries: lineBetweenQueries.value,
         denseOperators: denseOperators.checked,
         newlineBeforeSemicolon: newlineBeforeSemicolon.checked,
@@ -61,7 +61,7 @@ ${e.stack.toString()}
     commaPosition,
     newlineBeforeOpenParen,
     newlineBeforeCloseParen,
-    lineWidth,
+    expressionWidth,
     lineBetweenQueries,
     denseOperators,
     newlineBeforeSemicolon,
