@@ -1,5 +1,4 @@
 import dedent from 'dedent-js';
-import { IndentStyle } from '../../src/types';
 import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
 
 export default function supportsIndentStyle(language: SqlLanguage, format: FormatFn) {
@@ -12,7 +11,7 @@ export default function supportsIndentStyle(language: SqlLanguage, format: Forma
   `;
 
   it('supports standard mode', () => {
-    const result = format(baseQuery, { indentStyle: IndentStyle.standard });
+    const result = format(baseQuery, { indentStyle: 'standard' });
     expect(result).toBe(dedent`
       SELECT
         COUNT(a.column1),
@@ -37,7 +36,7 @@ export default function supportsIndentStyle(language: SqlLanguage, format: Forma
 
   describe('indentStyle: tabularLeft', () => {
     it('aligns command keywords to left', () => {
-      const result = format(baseQuery, { indentStyle: IndentStyle.tabularLeft });
+      const result = format(baseQuery, { indentStyle: 'tabularLeft' });
       expect(result).toBe(dedent`
         SELECT    COUNT(a.column1),
                   MAX(b.column2 + b.column3),
@@ -65,7 +64,7 @@ export default function supportsIndentStyle(language: SqlLanguage, format: Forma
             FROM b
             LEFT OUTER JOIN c;
           `,
-          { indentStyle: IndentStyle.tabularLeft }
+          { indentStyle: 'tabularLeft' }
         )
       ).toBe(dedent`
         SELECT    *
@@ -82,7 +81,7 @@ export default function supportsIndentStyle(language: SqlLanguage, format: Forma
         format(
           'SELECT age FROM (SELECT fname, lname, age FROM (SELECT fname, lname FROM persons) JOIN (SELECT age FROM ages)) as mytable;',
           {
-            indentStyle: IndentStyle.tabularLeft,
+            indentStyle: 'tabularLeft',
           }
         )
       ).toBe(dedent`
@@ -107,7 +106,7 @@ export default function supportsIndentStyle(language: SqlLanguage, format: Forma
     it('does not indent semicolon when newlineBeforeSemicolon:true used', () => {
       expect(
         format('SELECT firstname, lastname, age FROM customers;', {
-          indentStyle: IndentStyle.tabularLeft,
+          indentStyle: 'tabularLeft',
           newlineBeforeSemicolon: true,
         })
       ).toBe(dedent`
@@ -122,7 +121,7 @@ export default function supportsIndentStyle(language: SqlLanguage, format: Forma
 
   describe('indentStyle: tabularRight', () => {
     it('aligns command keywords to right', () => {
-      const result = format(baseQuery, { indentStyle: IndentStyle.tabularRight });
+      const result = format(baseQuery, { indentStyle: 'tabularRight' });
       expect(result).toBe(
         [
           '   SELECT COUNT(a.column1),',
@@ -152,7 +151,7 @@ export default function supportsIndentStyle(language: SqlLanguage, format: Forma
             FROM b
             LEFT OUTER JOIN c;
           `,
-          { indentStyle: IndentStyle.tabularRight }
+          { indentStyle: 'tabularRight' }
         )
       ).toBe(
         [

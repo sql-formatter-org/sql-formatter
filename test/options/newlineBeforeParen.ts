@@ -1,6 +1,5 @@
 import { expect } from '@jest/globals';
 import dedent from 'dedent-js';
-import { IndentStyle } from '../../src/types';
 import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
 
 export default function supportsNewlineBeforeParen(language: SqlLanguage, format: FormatFn) {
@@ -97,12 +96,12 @@ export default function supportsNewlineBeforeParen(language: SqlLanguage, format
     const withNewlineOn = format('SELECT a FROM ( SELECT b FROM c );', {
       newlineBeforeOpenParen: true,
       newlineBeforeCloseParen: true,
-      indentStyle: IndentStyle.tabularLeft,
+      indentStyle: 'tabularLeft',
     });
     const withNewlineOff = format('SELECT a FROM ( SELECT b FROM c );', {
       newlineBeforeOpenParen: false,
       newlineBeforeCloseParen: false,
-      indentStyle: IndentStyle.tabularLeft,
+      indentStyle: 'tabularLeft',
     });
 
     expect(withNewlineOn).toBe(withNewlineOff);

@@ -1,6 +1,5 @@
 import { expect } from '@jest/globals';
 import dedent from 'dedent-js';
-import { CommaPosition } from '../../src/types';
 import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
 
 export default function supportsCommaPosition(language: SqlLanguage, format: FormatFn) {
@@ -29,7 +28,7 @@ export default function supportsCommaPosition(language: SqlLanguage, format: For
     it('adds comma before column', () => {
       const result = format(
         'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon',
-        { commaPosition: CommaPosition.before }
+        { commaPosition: 'before' }
       );
       expect(result).toBe(
         dedent(`
@@ -51,7 +50,7 @@ export default function supportsCommaPosition(language: SqlLanguage, format: For
     it('works with larger indent', () => {
       const result = format(
         'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon',
-        { commaPosition: CommaPosition.before, indent: '    ' }
+        { commaPosition: 'before', indent: '    ' }
       );
       expect(result).toBe(
         dedent(`
@@ -74,7 +73,7 @@ export default function supportsCommaPosition(language: SqlLanguage, format: For
     it('throws error when tabs used for indentation', () => {
       expect(() => {
         format('SELECT alpha, MAX(beta), delta AS d, epsilon', {
-          commaPosition: CommaPosition.before,
+          commaPosition: 'before',
           indent: '\t',
         });
       }).toThrowErrorMatchingInlineSnapshot(
@@ -87,7 +86,7 @@ export default function supportsCommaPosition(language: SqlLanguage, format: For
     it('aligns commas to a column', () => {
       const result = format(
         'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon',
-        { commaPosition: CommaPosition.tabular }
+        { commaPosition: 'tabular' }
       );
       expect(result).toBe(
         dedent(`
@@ -109,7 +108,7 @@ export default function supportsCommaPosition(language: SqlLanguage, format: For
     it('is not effected by indent size', () => {
       const result = format(
         'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon',
-        { commaPosition: CommaPosition.tabular, indent: '      ' }
+        { commaPosition: 'tabular', indent: '      ' }
       );
       expect(result).toBe(
         dedent(`
@@ -130,7 +129,7 @@ export default function supportsCommaPosition(language: SqlLanguage, format: For
 
     it('handles tabs', () => {
       const result = format('SELECT alpha, MAX(beta), delta AS d, epsilon', {
-        commaPosition: CommaPosition.tabular,
+        commaPosition: 'tabular',
         indent: '\t',
       });
       expect(result).toBe(

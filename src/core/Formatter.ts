@@ -4,14 +4,7 @@ import Params from './Params';
 import { trimSpacesEnd } from '../utils';
 import { isReserved, isCommand, isToken, Token, TokenType, EOF_TOKEN } from './token';
 import Tokenizer from './Tokenizer';
-import {
-  CommaPosition,
-  FormatOptions,
-  KeywordCase,
-  IndentStyle,
-  LogicalOperatorNewline,
-  NewlineMode,
-} from '../types';
+import { FormatOptions } from '../types';
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
 import { toTabularToken, replaceTabularPlaceholders } from './tabularStyle';
@@ -82,10 +75,7 @@ export default class Formatter {
     if (this.cfg.tabulateAlias) {
       query = formatAliasPositions(query);
     }
-    if (
-      this.cfg.commaPosition === CommaPosition.before ||
-      this.cfg.commaPosition === CommaPosition.tabular
-    ) {
+    if (this.cfg.commaPosition === 'before' || this.cfg.commaPosition === 'tabular') {
       query = formatCommaPositions(query, this.cfg);
     }
 
@@ -178,11 +168,11 @@ export default class Formatter {
     }
 
     switch (this.cfg.newline) {
-      case NewlineMode.always:
+      case 'always':
         return true;
-      case NewlineMode.never:
+      case 'never':
         return false;
-      case NewlineMode.lineWidth:
+      case 'lineWidth':
         return this.inlineWidth(token, nextTokens) > this.cfg.lineWidth;
       default: // newline mode is a number
         return (
@@ -342,7 +332,7 @@ export default class Formatter {
       this.indentation.decreaseTopLevel();
     }
 
-    if (this.cfg.logicalOperatorNewline === LogicalOperatorNewline.before) {
+    if (this.cfg.logicalOperatorNewline === 'before') {
       return (
         (this.currentNewline ? this.addNewline(query) : query) +
         this.equalizeWhitespace(this.show(token)) +
@@ -387,7 +377,7 @@ export default class Formatter {
 
     if (!this.inlineBlock.isActive()) {
       this.indentation.increaseBlockLevel();
-      if (!isToken.CASE(token) || this.cfg.newline === NewlineMode.always) {
+      if (!isToken.CASE(token) || this.cfg.newline === 'always') {
         query = this.addNewline(query);
       }
     }
@@ -480,14 +470,12 @@ export default class Formatter {
       token.type === TokenType.BLOCK_END
     ) {
       switch (this.cfg.keywordCase) {
-        case KeywordCase.preserve:
+        case 'preserve':
           return token.value;
-        case KeywordCase.upper:
+        case 'upper':
           return token.value.toUpperCase();
-        case KeywordCase.lower:
+        case 'lower':
           return token.value.toLowerCase();
-        default:
-          throw new Error(`Unexpected keywordCase: ${this.cfg.keywordCase}`);
       }
     } else {
       return token.value;
@@ -504,10 +492,7 @@ export default class Formatter {
   }
 
   private isTabularStyle(): boolean {
-    return (
-      this.cfg.indentStyle === IndentStyle.tabularLeft ||
-      this.cfg.indentStyle === IndentStyle.tabularRight
-    );
+    return this.cfg.indentStyle === 'tabularLeft' || this.cfg.indentStyle === 'tabularRight';
   }
 
   /** Returns the latest encountered reserved keyword token */

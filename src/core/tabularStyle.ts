@@ -11,11 +11,8 @@ import { Token, ZWS } from './token';
  * They'll be converted to normal spaces in the end of
  * all the normal formatting with the replaceTabularPlaceholders()
  */
-export function toTabularToken(
-  token: Token,
-  indentStyle: IndentStyle | keyof typeof IndentStyle
-): Token {
-  if (indentStyle === IndentStyle.standard) {
+export function toTabularToken(token: Token, indentStyle: IndentStyle): Token {
+  if (indentStyle === 'standard') {
     return token;
   }
 
@@ -26,7 +23,7 @@ export function toTabularToken(
     [bufferItem, ...tail] = bufferItem.split(' ');
   }
 
-  if (indentStyle === IndentStyle.tabularLeft) {
+  if (indentStyle === 'tabularLeft') {
     bufferItem = bufferItem.padEnd(9, ZWS);
   } else {
     bufferItem = bufferItem.padStart(9, ZWS);

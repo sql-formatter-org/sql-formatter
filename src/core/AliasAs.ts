@@ -10,10 +10,7 @@ export interface TokenStream {
 
 /** Decides addition and removal of AS tokens */
 export default class AliasAs {
-  constructor(
-    private aliasAs: AliasMode | keyof typeof AliasMode,
-    private formatter: TokenStream
-  ) {}
+  constructor(private aliasAs: AliasMode, private formatter: TokenStream) {}
 
   /** True when AS keyword should be added *before* current token */
   public shouldAddBefore(token: Token): boolean {
@@ -23,9 +20,7 @@ export default class AliasAs {
   // if table alias is missing and should be added
   private isMissingTableAlias(token: Token): boolean {
     return (
-      this.aliasAs === AliasMode.always &&
-      token.type === TokenType.WORD &&
-      this.lookBehind().value === ')'
+      this.aliasAs === 'always' && token.type === TokenType.WORD && this.lookBehind().value === ')'
     );
   }
 
@@ -34,7 +29,7 @@ export default class AliasAs {
     const prevToken = this.lookBehind();
     const nextToken = this.lookAhead();
     return (
-      (this.aliasAs === AliasMode.always || this.aliasAs === AliasMode.select) &&
+      (this.aliasAs === 'always' || this.aliasAs === 'select') &&
       this.formatter.isWithinSelect() &&
       token.type === TokenType.WORD &&
       (isToken.END(prevToken) ||
@@ -51,7 +46,7 @@ export default class AliasAs {
   // checks for CAST(«expression» [AS] type)
   private isMissingTypeCastAs(): boolean {
     return (
-      this.aliasAs === AliasMode.never &&
+      this.aliasAs === 'never' &&
       this.formatter.isWithinSelect() &&
       isToken.CAST(this.formatter.getPreviousReservedToken()) &&
       isToken.AS(this.lookAhead()) &&
@@ -65,7 +60,7 @@ export default class AliasAs {
   private isEdgeCaseCTE(): boolean {
     const nextToken = this.lookAhead();
     return (
-      this.aliasAs === AliasMode.never &&
+      this.aliasAs === 'never' &&
       isToken.WITH(this.lookBehind()) &&
       (nextToken.value === '(' || (isToken.AS(nextToken) && this.lookAhead(2).value === '('))
     );
@@ -76,7 +71,7 @@ export default class AliasAs {
     const prevToken = this.lookBehind();
     const nextToken = this.lookAhead();
     return (
-      this.aliasAs === AliasMode.never &&
+      this.aliasAs === 'never' &&
       (isToken.TABLE(prevToken) || prevToken.value.endsWith('TABLE')) &&
       (isToken.WITH(nextToken) || (isToken.AS(nextToken) && isToken.WITH(this.lookAhead(2))))
     );
@@ -84,10 +79,7 @@ export default class AliasAs {
 
   /* True when the current AS token should be discarded */
   public shouldRemove(): boolean {
-    return (
-      this.aliasAs === AliasMode.never ||
-      (this.aliasAs === AliasMode.select && this.isRemovableNonSelectAs())
-    );
+    return this.aliasAs === 'never' || (this.aliasAs === 'select' && this.isRemovableNonSelectAs());
   }
 
   private isRemovableNonSelectAs(): boolean {

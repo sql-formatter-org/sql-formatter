@@ -1,56 +1,26 @@
 import { ParamItems } from './core/Params';
 
-export enum IndentStyle {
-  standard = 'standard',
-  tabularLeft = 'tabularLeft',
-  tabularRight = 'tabularRight',
-}
+export type IndentStyle = 'standard' | 'tabularLeft' | 'tabularRight';
 
-export enum KeywordCase {
-  preserve = 'preserve',
-  upper = 'upper',
-  lower = 'lower',
-}
+export type KeywordCase = 'preserve' | 'upper' | 'lower';
 
-export enum NewlineMode {
-  always = 'always',
-  never = 'never',
-  lineWidth = 'lineWidth',
-}
+export type NewlineMode = 'always' | 'never' | 'lineWidth';
 
-export enum AliasMode {
-  preserve = 'preserve',
-  always = 'always',
-  never = 'never',
-  select = 'select',
-}
+export type AliasMode = 'preserve' | 'always' | 'never' | 'select';
 
-export enum CommaPosition {
-  before = 'before',
-  after = 'after',
-  tabular = 'tabular',
-}
+export type CommaPosition = 'before' | 'after' | 'tabular';
 
-export enum LogicalOperatorNewline {
-  before = 'before',
-  after = 'after',
-}
+export type LogicalOperatorNewline = 'before' | 'after';
 
-// The `keyof typeof Enum` expansions are used to allow this API
-// to be called in two ways:
-//
-//   keywordCase: "upper"
-//   keywordCase: KeywordCase.upper
-//
 export interface FormatOptions {
   indent: string;
-  keywordCase: KeywordCase | keyof typeof KeywordCase;
-  indentStyle: IndentStyle | keyof typeof IndentStyle;
-  newline: NewlineMode | keyof typeof NewlineMode | number;
-  logicalOperatorNewline: LogicalOperatorNewline | keyof typeof LogicalOperatorNewline;
-  aliasAs: AliasMode | keyof typeof AliasMode;
+  keywordCase: KeywordCase;
+  indentStyle: IndentStyle;
+  newline: NewlineMode | number;
+  logicalOperatorNewline: LogicalOperatorNewline;
+  aliasAs: AliasMode;
   tabulateAlias: boolean;
-  commaPosition: CommaPosition | keyof typeof CommaPosition;
+  commaPosition: CommaPosition;
   newlineBeforeOpenParen: boolean;
   newlineBeforeCloseParen: boolean;
   lineWidth: number;

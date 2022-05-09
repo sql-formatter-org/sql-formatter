@@ -11,15 +11,7 @@ import SparkSqlFormatter from './languages/sparksql.formatter';
 import StandardSqlFormatter from './languages/standardsql.formatter';
 import TSqlFormatter from './languages/tsql.formatter';
 
-import {
-  AliasMode,
-  CommaPosition,
-  FormatOptions,
-  KeywordCase,
-  IndentStyle,
-  LogicalOperatorNewline,
-  NewlineMode,
-} from './types';
+import { FormatOptions } from './types';
 import { isNumber } from './utils';
 
 export const formatters = {
@@ -44,13 +36,13 @@ export type FormatFnOptions = FormatOptions & { language: SqlLanguage };
 const defaultOptions: FormatFnOptions = {
   language: 'sql',
   indent: '  ',
-  keywordCase: KeywordCase.preserve,
-  indentStyle: IndentStyle.standard,
-  newline: NewlineMode.always,
-  logicalOperatorNewline: LogicalOperatorNewline.before,
-  aliasAs: AliasMode.preserve,
+  keywordCase: 'preserve',
+  indentStyle: 'standard',
+  newline: 'always',
+  logicalOperatorNewline: 'before',
+  aliasAs: 'preserve',
   tabulateAlias: false,
-  commaPosition: CommaPosition.after,
+  commaPosition: 'after',
   newlineBeforeOpenParen: true,
   newlineBeforeCloseParen: true,
   lineWidth: 50,
@@ -93,7 +85,7 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
     throw new Error(`lineWidth config must be positive number. Received ${cfg.lineWidth} instead.`);
   }
 
-  if (cfg.commaPosition === CommaPosition.before && cfg.indent === '\t') {
+  if (cfg.commaPosition === 'before' && cfg.indent === '\t') {
     throw new Error('commaPosition: before does not work when tabs are used for indentation.');
   }
 

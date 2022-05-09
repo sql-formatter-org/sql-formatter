@@ -1,5 +1,4 @@
 import dedent from 'dedent-js';
-import { IndentStyle, NewlineMode } from '../../src/types';
 import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
 
 export default function supportsTabulateAlias(language: SqlLanguage, format: FormatFn) {
@@ -98,7 +97,7 @@ export default function supportsTabulateAlias(language: SqlLanguage, format: For
   it('does not tabulate aliases when newline:never used', () => {
     const result = format(
       'SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );',
-      { newline: NewlineMode.never, tabulateAlias: true }
+      { newline: 'never', tabulateAlias: true }
     );
 
     expect(result).toBe(dedent`
@@ -113,7 +112,7 @@ export default function supportsTabulateAlias(language: SqlLanguage, format: For
   it('works together with indentStyle:tabularLeft', () => {
     const result = format(
       dedent`SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );`,
-      { indentStyle: IndentStyle.tabularLeft, tabulateAlias: true }
+      { indentStyle: 'tabularLeft', tabulateAlias: true }
     );
 
     expect(result).toBe(dedent`
@@ -131,7 +130,7 @@ export default function supportsTabulateAlias(language: SqlLanguage, format: For
   it('works together with indentStyle:tabularRight', () => {
     const result = format(
       dedent`SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );`,
-      { indentStyle: IndentStyle.tabularRight, tabulateAlias: true }
+      { indentStyle: 'tabularRight', tabulateAlias: true }
     );
 
     expect(result).toBe(

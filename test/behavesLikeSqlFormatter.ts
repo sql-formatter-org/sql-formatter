@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
 import { FormatFn, SqlLanguage } from '../src/sqlFormatter';
-import { AliasMode } from '../src/types';
 import supportsComments from './features/comments';
 import supportsIndent from './options/indent';
 import supportsAliasAs from './options/aliasAs';
@@ -309,7 +308,7 @@ export default function behavesLikeSqlFormatter(language: SqlLanguage, format: F
   it('formats UPDATE query with AS part', () => {
     const result = format(
       'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary',
-      { aliasAs: AliasMode.always }
+      { aliasAs: 'always' }
     );
     expect(result).toBe(dedent`
       UPDATE

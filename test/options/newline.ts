@@ -1,5 +1,4 @@
 import dedent from 'dedent-js';
-import { NewlineMode } from '../../src/types';
 import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
 
 export default function supportsNewline(language: SqlLanguage, format: FormatFn) {
@@ -18,7 +17,7 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
   describe('newline: always', () => {
     it('always splits to multiple lines, even when just a single clause', () => {
       const result = format('SELECT foo, bar FROM qux;', {
-        newline: NewlineMode.always,
+        newline: 'always',
       });
       expect(result).toBe(dedent`
         SELECT
@@ -33,7 +32,7 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
   describe('newline: never', () => {
     it('never splits to multiple lines, regardless of count', () => {
       const result = format('SELECT foo, bar, baz, qux FROM corge;', {
-        newline: NewlineMode.never,
+        newline: 'never',
       });
       expect(result).toBe(dedent`
         SELECT foo, bar, baz, qux
@@ -44,7 +43,7 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
     it('places whole CREATE TABLE to single line', () => {
       expect(
         format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);', {
-          newline: NewlineMode.never,
+          newline: 'never',
         })
       ).toBe('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);');
     });
@@ -155,7 +154,7 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
       const result = format(
         'SELECT first_field, second_field FROM some_excessively_long_table_name;',
         {
-          newline: NewlineMode.lineWidth,
+          newline: 'lineWidth',
           lineWidth: 20,
         }
       );
@@ -170,7 +169,7 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
 
     it('does not split to multiple lines when line at or below specified lineWidth', () => {
       const result = format('SELECT field1, field2 FROM table_name;', {
-        newline: NewlineMode.lineWidth,
+        newline: 'lineWidth',
         lineWidth: 21,
       });
       expect(result).toBe(dedent`

@@ -1,4 +1,4 @@
-import { CommaPosition, FormatOptions } from '../types';
+import { FormatOptions } from '../types';
 import { maxLength } from '../utils';
 import { WHITESPACE_REGEX } from './Tokenizer';
 
@@ -10,9 +10,9 @@ export default function formatCommaPositions(query: string, cfg: FormatOptions):
     .flatMap(commaLines => {
       if (commaLines.length === 1) {
         return commaLines;
-      } else if (cfg.commaPosition === CommaPosition.tabular) {
+      } else if (cfg.commaPosition === 'tabular') {
         return formatTabular(commaLines);
-      } else if (cfg.commaPosition === CommaPosition.before) {
+      } else if (cfg.commaPosition === 'before') {
         return formatBefore(commaLines, cfg);
       } else {
         throw new Error(`Unexpected commaPosition: ${cfg.commaPosition}`);
