@@ -86,7 +86,7 @@
             <label for="newline">Keyword Newline:</label>
             <select id="newline">
               <option value="always">Always</option>
-              <option value="lineWidth">Line Width</option>
+              <option value="expressionWidth">Expression width</option>
               <option value="never">Never</option>
             </select>
           </article>
@@ -148,8 +148,15 @@
             />
           </article>
           <article class="config">
-            <label for="lineWidth">Line Width:</label>
-            <input type="number" id="lineWidth" name="lineWidth" min="0" max="200" value="50" />
+            <label for="expressionWidth">Expression width:</label>
+            <input
+              type="number"
+              id="expressionWidth"
+              name="expressionWidth"
+              min="0"
+              max="200"
+              value="50"
+            />
           </article>
           <article class="config">
             <label for="lineBetweenQueries">Lines between queries:</label>

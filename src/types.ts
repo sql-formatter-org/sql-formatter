@@ -4,7 +4,7 @@ export type IndentStyle = 'standard' | 'tabularLeft' | 'tabularRight';
 
 export type KeywordCase = 'preserve' | 'upper' | 'lower';
 
-export type NewlineMode = 'always' | 'never' | 'lineWidth';
+export type NewlineMode = 'always' | 'never' | 'expressionWidth';
 
 export type AliasMode = 'preserve' | 'always' | 'never' | 'select';
 
@@ -23,7 +23,7 @@ export interface FormatOptions {
   commaPosition: CommaPosition;
   newlineBeforeOpenParen: boolean;
   newlineBeforeCloseParen: boolean;
-  lineWidth: number;
+  expressionWidth: number;
   linesBetweenQueries: number;
   denseOperators: boolean;
   newlineBeforeSemicolon: boolean;

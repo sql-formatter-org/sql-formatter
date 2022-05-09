@@ -1,4 +1,4 @@
-# lineWidth
+# expressionWidth
 
 Determines maximum length of parenthesized expressions.
 
@@ -7,9 +7,9 @@ Determines maximum length of parenthesized expressions.
 A number (default `50`) specifying the maximum length of parenthesized expression
 that's does not get split up to multiple lines.
 
-Note: `lineWidth` also effects formatting of comma-separated lists when `newline: "lineWidth"` used.
+Note: `expressionWidth` also effects formatting of comma-separated lists when `newline: "expressionWidth"` used.
 
-### lineWidth: 50 (default)
+### expressionWidth: 50 (default)
 
 Keeps the parenthesized expression (with length of 42) on single line:
 
@@ -20,7 +20,7 @@ FROM
   product
 ```
 
-### lineWidth: 40
+### expressionWidth: 40
 
 Splits the parenthesized expression (with length of 42) to multiple lines:
 

@@ -5,7 +5,7 @@ import supportsComments from './features/comments';
 import supportsIndent from './options/indent';
 import supportsAliasAs from './options/aliasAs';
 import supportsNewline from './options/newline';
-import supportsLineWidth from './options/lineWidth';
+import supportsExpressionWidth from './options/expressionWidth';
 import supportsKeywordCase from './options/keywordCase';
 import supportsIndentStyle from './options/indentStyle';
 import supportsNewlineBeforeParen from './options/newlineBeforeParen';
@@ -28,7 +28,7 @@ export default function behavesLikeSqlFormatter(language: SqlLanguage, format: F
   supportsIndentStyle(language, format);
   supportsLinesBetweenQueries(language, format);
   supportsNewline(language, format);
-  supportsLineWidth(language, format);
+  supportsExpressionWidth(language, format);
   supportsNewlineBeforeParen(language, format);
   supportsNewlineBeforeSemicolon(language, format);
   supportsCommaPosition(language, format);

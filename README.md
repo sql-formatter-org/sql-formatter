@@ -158,7 +158,7 @@ All fields are optional and all fields that are not specified will be filled wit
 - [**`commaPosition`**](docs/commaPosition.md) where to place the comma in column lists.
 - [**`newlineBeforeOpenParen`**](docs/newlineBeforeOpenParen.md) placement of opening parenthesis.
 - [**`newlineBeforeCloseParen`**](docs/newlineBeforeCloseParen.md) placement of closing parenthesis.
-- [**`lineWidth`**](docs/lineWidth.md) maximum number of characters in parenthesized expressions to be kept on single line.
+- [**`expressionWidth`**](docs/expressionWidth.md) maximum number of characters in parenthesized expressions to be kept on single line.
 - [**`linesBetweenQueries`**](docs/linesBetweenQueries.md) how many newlines to insert between queries.
 - [**`denseOperators`**](docs/denseOperators.md) packs operators densely without spaces.
 - [**`newlineBeforeSemicolon`**](docs/newlineBeforeSemicolon.md) places semicolon on separate line.

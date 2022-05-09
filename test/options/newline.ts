@@ -84,7 +84,7 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
       `);
     });
 
-    it('regardless of count, splits up long clauses (exceeding default lineWidth 50)', () => {
+    it('regardless of count, splits up long clauses (exceeding default expressionWidth 50)', () => {
       const result = format(
         'SELECT customers.phone_number AS phone, customers.address AS addr FROM customers;',
         {
@@ -109,10 +109,10 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
       `);
     });
 
-    it('splits up even short clauses when lineWidth is small', () => {
+    it('splits up even short clauses when expressionWidth is small', () => {
       const result = format('SELECT foo, bar FROM customers GROUP BY foo, bar;', {
         newline: 3,
-        lineWidth: 10,
+        expressionWidth: 10,
       });
       expect(result).toBe(dedent`
         SELECT
@@ -149,13 +149,13 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
     });
   });
 
-  describe('newline: lineWidth', () => {
-    it('splits to multiple lines when single line would exceed specified lineWidth', () => {
+  describe('newline: expressionWidth', () => {
+    it('splits to multiple lines when single line would exceed specified expressionWidth', () => {
       const result = format(
         'SELECT first_field, second_field FROM some_excessively_long_table_name;',
         {
-          newline: 'lineWidth',
-          lineWidth: 20,
+          newline: 'expressionWidth',
+          expressionWidth: 20,
         }
       );
       expect(result).toBe(dedent`
@@ -167,10 +167,10 @@ export default function supportsNewline(language: SqlLanguage, format: FormatFn)
       `);
     });
 
-    it('does not split to multiple lines when line at or below specified lineWidth', () => {
+    it('does not split to multiple lines when line at or below specified expressionWidth', () => {
       const result = format('SELECT field1, field2 FROM table_name;', {
-        newline: 'lineWidth',
-        lineWidth: 21,
+        newline: 'expressionWidth',
+        expressionWidth: 21,
       });
       expect(result).toBe(dedent`
         SELECT field1, field2

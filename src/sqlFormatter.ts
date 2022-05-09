@@ -45,7 +45,7 @@ const defaultOptions: FormatFnOptions = {
   commaPosition: 'after',
   newlineBeforeOpenParen: true,
   newlineBeforeCloseParen: true,
-  lineWidth: 50,
+  expressionWidth: 50,
   linesBetweenQueries: 1,
   denseOperators: false,
   newlineBeforeSemicolon: false,
@@ -81,8 +81,10 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
     throw new Error('newline config must be a positive number.');
   }
 
-  if (cfg.lineWidth <= 0) {
-    throw new Error(`lineWidth config must be positive number. Received ${cfg.lineWidth} instead.`);
+  if (cfg.expressionWidth <= 0) {
+    throw new Error(
+      `expressionWidth config must be positive number. Received ${cfg.expressionWidth} instead.`
+    );
   }
 
   if (cfg.commaPosition === 'before' && cfg.indent === '\t') {

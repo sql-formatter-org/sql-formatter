@@ -9,11 +9,11 @@ import { isToken, Token, TokenType } from './token';
  */
 export default class InlineBlock {
   level: number;
-  lineWidth: number;
+  expressionWidth: number;
 
-  constructor(lineWidth: number) {
+  constructor(expressionWidth: number) {
     this.level = 0;
-    this.lineWidth = lineWidth;
+    this.expressionWidth = expressionWidth;
   }
 
   /**
@@ -64,7 +64,7 @@ export default class InlineBlock {
       }
 
       // Overran max length
-      if (length > this.lineWidth) {
+      if (length > this.expressionWidth) {
         return false;
       }
 

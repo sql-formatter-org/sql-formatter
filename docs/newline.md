@@ -7,7 +7,7 @@ Determines when to break lists of items (e.g. columns in `SELECT` clause) to mul
 - `"always"` (default) always breaks to multiple lines (even when just a single item).
 - `"never"` never breaks to multiple lines, regardless of item count or line length.
 - `number` breaks to multiple lines when there are more items than the specified number.
-- `"lineWidth"` breaks to multiple lines when the line would exceed value of `lineWidth` option.
+- `"expressionWidth"` breaks to multiple lines when the line would exceed value of `expressionWidth` option.
 
 ### always (default)
 
@@ -68,9 +68,9 @@ FROM persons
 GROUP BY age, occupation
 ```
 
-### lineWidth
+### expressionWidth
 
-Using `newline: "lineWidth", lineWidth: 13`:
+Using `newline: "expressionWidth", expressionWidth: 13`:
 
 ```
 SELECT
@@ -84,7 +84,7 @@ GROUP BY
   occupation
 ```
 
-Using `newline: "lineWidth", lineWidth: 15`:
+Using `newline: "expressionWidth", expressionWidth: 15`:
 
 ```
 SELECT
@@ -96,7 +96,7 @@ FROM persons
 GROUP BY age, occupation
 ```
 
-Using `newline: "lineWidth", lineWidth: 50`:
+Using `newline: "expressionWidth", expressionWidth: 50`:
 
 ```
 SELECT first_name, last_name, occupation, age

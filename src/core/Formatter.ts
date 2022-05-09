@@ -31,7 +31,7 @@ export default class Formatter {
   constructor(cfg: FormatOptions) {
     this.cfg = cfg;
     this.indentation = new Indentation(this.isTabularStyle() ? TABULAR_INDENT : this.cfg.indent);
-    this.inlineBlock = new InlineBlock(this.cfg.lineWidth);
+    this.inlineBlock = new InlineBlock(this.cfg.expressionWidth);
     this.aliasAs = new AliasAs(this.cfg.aliasAs, this);
     this.params = new Params(this.cfg.params);
     this.asTokenFactory = new AsTokenFactory(this.cfg.keywordCase);
@@ -172,12 +172,12 @@ export default class Formatter {
         return true;
       case 'never':
         return false;
-      case 'lineWidth':
-        return this.inlineWidth(token, nextTokens) > this.cfg.lineWidth;
+      case 'expressionWidth':
+        return this.inlineWidth(token, nextTokens) > this.cfg.expressionWidth;
       default: // newline mode is a number
         return (
           this.countClauses(nextTokens) > this.cfg.newline ||
-          this.inlineWidth(token, nextTokens) > this.cfg.lineWidth
+          this.inlineWidth(token, nextTokens) > this.cfg.expressionWidth
         );
     }
   }
