@@ -1,10 +1,10 @@
 # lineWidth
 
-Determines maximum length of parenthesize expressions.
+Determines maximum length of parenthesized expressions.
 
 ## Option value
 
-A number (default `50`) specifying the maximum length of parenthesize expression
+A number (default `50`) specifying the maximum length of parenthesized expression
 that's does not get split up to multiple lines.
 
 Note: `lineWidth` also effects formatting of comma-separated lists when `newline: "lineWidth"` used.
