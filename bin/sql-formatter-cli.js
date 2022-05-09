@@ -54,7 +54,10 @@ class PrettierSQLArgs {
   }
 
   readConfig() {
-    if (tty.isatty(0) && Object.entries(this.args).every(([k, v]) => k === 'language' || v === undefined)) {
+    if (
+      tty.isatty(0) &&
+      Object.entries(this.args).every(([k, v]) => k === 'language' || v === undefined)
+    ) {
       this.parser.print_help();
       process.exit(0);
     }
