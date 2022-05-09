@@ -32,7 +32,7 @@ The current priority order is:
 
   - Reserved Commands (begins its own clause, such as `SELECT`)
   - Reserved Binary Commands (connect two adjacent clauses, such as joins or set operations)
-  - Reserved Dependent Clauses (keywords that are dependent on the previous clause, such as `ON` for joins or `WHEN` and `THEN` for CASE)
+  - Reserved Dependent Clauses (keywords that are dependent on the previous clause, such as `WHEN` and `ELSE` for CASE)
   - Reserved Logical Operator (boolean operators such as `AND` and `OR`)
   - Reserved Keywords/Functions (other reserved words)
 
