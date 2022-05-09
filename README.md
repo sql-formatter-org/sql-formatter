@@ -1,6 +1,6 @@
 <a href='https://github.com/zeroturnaround/sql-formatter'><img src="static/prettier-sql-clean.svg" width="128"/></a>
 
-# SQL Formatter [![NPM version](https://img.shields.io/npm/v/sql-formatter.svg)](https://npmjs.com/package/sql-formatter) [![Build Status](https://travis-ci.org/zeroturnaround/sql-formatter.svg?branch=sql-formatter-6)](https://travis-ci.org/zeroturnaround/sql-formatter) [![Coverage Status](https://coveralls.io/repos/github/zeroturnaround/sql-formatter/badge.svg?branch=sql-formatter-6)](https://coveralls.io/github/zeroturnaround/sql-formatter?branch=sql-formatter-6) [![VSCode](https://img.shields.io/visual-studio-marketplace/v/inferrinizzard.prettier-sql-vscode?label=vscode)](https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode)
+# SQL Formatter [![NPM version](https://img.shields.io/npm/v/sql-formatter.svg)](https://npmjs.com/package/sql-formatter) ![Build status](https://img.shields.io/github/workflow/status/zeroturnaround/sql-formatter/coveralls/master?label=Build&logo=Github) ![Coverage status](https://img.shields.io/coveralls/github/zeroturnaround/sql-formatter?branch=master&label=Coverage&logo=coveralls&style=plastic) [![VSCode](https://img.shields.io/visual-studio-marketplace/v/inferrinizzard.prettier-sql-vscode?label=vscode)](https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode)
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 
