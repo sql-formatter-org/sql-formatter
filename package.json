@@ -59,6 +59,7 @@
     "Xin Hu <hoosin.git@gmail.com>"
   ],
   "files": [
+    "dist",
     "bin",
     "lib"
   ],
