@@ -23,7 +23,7 @@ FROM
   persons
 ```
 
-### tabualteAlias: true
+### tabulateAlias: true
 
 ```
 SELECT
