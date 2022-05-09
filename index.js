@@ -6,8 +6,8 @@ const attachFormat = () => {
   const indentStyle = document.getElementById('indentStyle');
   const logicalOperatorNewline = document.getElementById('logicalOperatorNewline');
   const aliasAs = document.getElementById('aliasAs');
-  const newline = document.getElementById('newline');
-  const itemCount = document.getElementById('newline.itemCount');
+  const multilineLists = document.getElementById('multilineLists');
+  const itemCount = document.getElementById('multilineLists.itemCount');
   const tabulateAlias = document.getElementById('tabulateAlias');
   const commaPosition = document.getElementById('commaPosition');
   const newlineBeforeOpenParen = document.getElementById('newlineBeforeOpenParen');
@@ -26,8 +26,10 @@ const attachFormat = () => {
         logicalOperatorNewline:
           logicalOperatorNewline.options[logicalOperatorNewline.selectedIndex].value,
         aliasAs: aliasAs.options[aliasAs.selectedIndex].value,
-        newline:
-          itemCount.value > 0 ? itemCount.value : newline.options[newline.selectedIndex].value,
+        multilineLists:
+          itemCount.value > 0
+            ? itemCount.value
+            : multilineLists.options[multilineLists.selectedIndex].value,
         tabulateAlias: tabulateAlias.checked,
         commaPosition: commaPosition.options[commaPosition.selectedIndex].value,
         newlineBeforeOpenParen: newlineBeforeOpenParen.checked,
@@ -53,7 +55,7 @@ ${e.stack.toString()}
     language,
     keywordCase,
     indentStyle,
-    newline,
+    multilineLists,
     itemCount,
     logicalOperatorNewline,
     aliasAs,
