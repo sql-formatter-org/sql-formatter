@@ -463,6 +463,7 @@ const reservedKeywords = {
     'TABLE',
     'TAG',
     'TDES',
+    'THEN',
     'TIMESTAMP',
     'TO',
     'TOP',
@@ -711,7 +712,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE'];
+const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export default class RedshiftFormatter extends Formatter {

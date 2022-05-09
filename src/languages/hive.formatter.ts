@@ -483,7 +483,7 @@ const reservedKeywords = {
     'SMALLINT',
     'TABLE',
     'TABLESAMPLE',
-    // 'THEN',
+    'THEN',
     'TIMESTAMP',
     'TO',
     'TRANSFORM',
@@ -610,7 +610,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous 'Statement', must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE'];
+const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export default class HiveFormatter extends Formatter {

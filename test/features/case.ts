@@ -9,12 +9,9 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
 
     expect(result).toBe(dedent`
       CASE
-        WHEN option = 'foo'
-        THEN 1
-        WHEN option = 'bar'
-        THEN 2
-        WHEN option = 'baz'
-        THEN 3
+        WHEN option = 'foo' THEN 1
+        WHEN option = 'bar' THEN 2
+        WHEN option = 'baz' THEN 3
         ELSE 4
       END;
     `);
@@ -28,12 +25,9 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
     expect(result).toBe(dedent`
       CASE
         toString(getNumber())
-        WHEN 'one'
-        THEN 1
-        WHEN 'two'
-        THEN 2
-        WHEN 'three'
-        THEN 3
+        WHEN 'one' THEN 1
+        WHEN 'two' THEN 2
+        WHEN 'three' THEN 3
         ELSE 4
       END;
     `);
@@ -50,10 +44,8 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
         bar,
         CASE
           baz
-          WHEN 'one'
-          THEN 1
-          WHEN 'two'
-          THEN 2
+          WHEN 'one' THEN 1
+          WHEN 'two' THEN 2
           ELSE 3
         END
       FROM
@@ -66,8 +58,7 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
 
     expect(result).toBe(dedent`
       case
-        when option = 'foo'
-        then 1
+        when option = 'foo' then 1
         else 2
       end;
     `);
@@ -94,12 +85,9 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
     expect(result).toBe(dedent`
       CASE
         toString(getNumber())
-        WHEN 'one'
-        THEN 1
-        WHEN 'two'
-        THEN 2
-        WHEN 'three'
-        THEN 3
+        WHEN 'one' THEN 1
+        WHEN 'two' THEN 2
+        WHEN 'three' THEN 3
         ELSE 4
       END;
     `);
@@ -113,8 +101,7 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
         sum(
           case
             a
-            when foo
-            then bar
+            when foo then bar
           end
         )
       from
@@ -132,8 +119,7 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
         foo,
         bar,
         CASE baz
-          WHEN 'one'
-          THEN 1
+          WHEN 'one' THEN 1
           ELSE 2
         END
       FROM tbl;

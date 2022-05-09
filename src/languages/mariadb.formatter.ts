@@ -813,6 +813,7 @@ const reservedKeywords = [
   'TERMINATED',
   'TEXT',
   'THAN',
+  'THEN',
   'TIES',
   'TIME',
   'TIMESTAMP',
@@ -1148,7 +1149,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE', 'ELSEIF', 'ELSIF'];
+const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF', 'ELSIF'];
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {

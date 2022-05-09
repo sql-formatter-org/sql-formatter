@@ -260,6 +260,7 @@ const reservedKeywords = [
   'SYSTEM_USER',
   'TABLE',
   'TABLESAMPLE',
+  'THEN',
   'TIME',
   'TIMESTAMP',
   'TIMEZONE_HOUR',
@@ -364,7 +365,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE'];
+const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class StandardSqlFormatter extends Formatter {
   static reservedCommands = reservedCommands;

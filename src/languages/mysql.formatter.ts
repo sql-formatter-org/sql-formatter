@@ -1021,6 +1021,7 @@ const reservedKeywords = [
   'TERMINATED',
   'TEXT',
   'THAN',
+  'THEN',
   'THREAD_PRIORITY',
   'TIES',
   'TINYBLOB',
@@ -1312,7 +1313,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE', 'ELSEIF'];
+const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {

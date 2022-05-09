@@ -310,6 +310,7 @@ const reservedKeywords = [
   'TABLE',
   'TDO',
   'THE',
+  'THEN',
   'TIME',
   'TIMESTAMP',
   'TIMEZONE_ABBR',
@@ -438,7 +439,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE'];
+const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class PlSqlFormatter extends Formatter {
   static reservedCommands = reservedCommands;

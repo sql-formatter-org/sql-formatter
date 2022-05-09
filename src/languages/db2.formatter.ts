@@ -530,6 +530,7 @@ const reservedKeywords = {
     'SYSTIMESTAMP',
     'TABLE',
     'TABLESPACE',
+    'THEN',
     'TO',
     'TRIGGER',
     'TYPE',
@@ -853,7 +854,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE', 'ELSEIF'];
+const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
 
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {

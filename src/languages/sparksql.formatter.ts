@@ -569,6 +569,7 @@ const reservedKeywords = [
   'TBLPROPERTIES',
   'TEMPORARY',
   'TERMINATED',
+  'THEN',
   'TO',
   'TOUCH',
   'TRAILING',
@@ -773,7 +774,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE'];
+const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkSqlFormatter extends Formatter {

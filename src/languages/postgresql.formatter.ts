@@ -1284,6 +1284,7 @@ const reservedKeywords = [
   'TEMP',
   'TEMPLATE',
   'TEMPORARY',
+  'THEN',
   'THROUGH',
   'TIES',
   'TIME',
@@ -1616,7 +1617,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE'];
+const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 const binaryOperators = [
   '<<',

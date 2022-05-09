@@ -632,7 +632,7 @@ const reservedKeywords = {
     // 'STRUCT',
     'TABLE',
     // 'TABLESAMPLE',
-    // 'THEN',
+    'THEN',
     'TO',
     'TREAT',
     'TRUE',
@@ -816,7 +816,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['WHEN', 'THEN', 'ELSE'];
+const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
 export default class BigQueryFormatter extends Formatter {
