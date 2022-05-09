@@ -4,7 +4,7 @@ export type IndentStyle = 'standard' | 'tabularLeft' | 'tabularRight';
 
 export type KeywordCase = 'preserve' | 'upper' | 'lower';
 
-export type NewlineMode = 'always' | 'avoid' | 'expressionWidth';
+export type MultilineListsMode = 'always' | 'avoid' | 'expressionWidth';
 
 export type AliasMode = 'preserve' | 'always' | 'never' | 'select';
 
@@ -16,7 +16,7 @@ export interface FormatOptions {
   indent: string;
   keywordCase: KeywordCase;
   indentStyle: IndentStyle;
-  multilineLists: NewlineMode | number;
+  multilineLists: MultilineListsMode | number;
   logicalOperatorNewline: LogicalOperatorNewline;
   aliasAs: AliasMode;
   tabulateAlias: boolean;
