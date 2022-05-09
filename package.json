@@ -78,7 +78,8 @@
     "build:commonjs": "babel src --out-dir lib --extensions .ts --source-maps && tsc --module commonjs --emitDeclarationOnly --isolatedModules",
     "build:umd": "webpack --config webpack.dev.js",
     "build:umd:min": "webpack --config webpack.prod.js",
-    "build": "yarn build:commonjs && yarn build:umd && yarn build:umd:min"
+    "build": "yarn build:commonjs && yarn build:umd && yarn build:umd:min",
+    "release": "release-it"
   },
   "pre-push": [
     "ts:check",

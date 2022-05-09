@@ -16,7 +16,7 @@ Tests that apply to all languages should be in `behavesLikeSqlFormatter.ts`.
 
 For those who have admin access on the repo, the new release publish flow is as such:
 
-- `release-it` (bumps version, git tag, git release, npm release)
+- `yarn release` (bumps version, git tag, git release, npm release)
 - `git subtree push --prefix static origin gh-pages` (pushes demo page to GH pages)
 
 ## Contributors
