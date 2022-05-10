@@ -9,7 +9,7 @@ const attachFormat = () => {
   const logicalOperatorNewline = document.getElementById('logicalOperatorNewline');
   const aliasAs = document.getElementById('aliasAs');
   const multilineLists = document.getElementById('multilineLists');
-  const itemCount = document.getElementById('multilineLists.itemCount');
+  const itemCount = document.getElementById('multilineLists-itemCount');
   const tabulateAlias = document.getElementById('tabulateAlias');
   const commaPosition = document.getElementById('commaPosition');
   const newlineBeforeOpenParen = document.getElementById('newlineBeforeOpenParen');
@@ -20,6 +20,12 @@ const attachFormat = () => {
   const newlineBeforeSemicolon = document.getElementById('newlineBeforeSemicolon');
 
   function format() {
+    if (multilineLists.options[multilineLists.selectedIndex].value === 'itemCount') {
+      itemCount.style.display = 'inline';
+    } else {
+      itemCount.style.display = 'none';
+    }
+
     try {
       const config = {
         language: language.options[language.selectedIndex].value,
@@ -31,7 +37,7 @@ const attachFormat = () => {
           logicalOperatorNewline.options[logicalOperatorNewline.selectedIndex].value,
         aliasAs: aliasAs.options[aliasAs.selectedIndex].value,
         multilineLists:
-          itemCount.value > 0
+          multilineLists.options[multilineLists.selectedIndex].value === 'itemCount'
             ? itemCount.value
             : multilineLists.options[multilineLists.selectedIndex].value,
         tabulateAlias: tabulateAlias.checked,
