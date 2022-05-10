@@ -73,23 +73,27 @@ export const format = (query: string, cfg: Partial<FormatFnOptions> = {}): strin
   return new Formatter(options).format(query);
 };
 
+export class ConfigError extends Error {}
+
 function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
   if (!supportedDialects.includes(cfg.language)) {
-    throw new Error(`Unsupported SQL dialect: ${cfg.language}`);
+    throw new ConfigError(`Unsupported SQL dialect: ${cfg.language}`);
   }
 
   if (isNumber(cfg.multilineLists) && cfg.multilineLists <= 0) {
-    throw new Error('multilineLists config must be a positive number.');
+    throw new ConfigError('multilineLists config must be a positive number.');
   }
 
   if (cfg.expressionWidth <= 0) {
-    throw new Error(
+    throw new ConfigError(
       `expressionWidth config must be positive number. Received ${cfg.expressionWidth} instead.`
     );
   }
 
   if (cfg.commaPosition === 'before' && cfg.useTabs) {
-    throw new Error('commaPosition: before does not work when tabs are used for indentation.');
+    throw new ConfigError(
+      'commaPosition: before does not work when tabs are used for indentation.'
+    );
   }
 
   return cfg;
