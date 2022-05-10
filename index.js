@@ -76,12 +76,6 @@ ${e.stack.toString()}
   ].forEach(option => option.addEventListener('change', format));
 
   format();
-
-  const fontSize = document.getElementById('font-size');
-  fontSize.addEventListener('change', () => {
-    input.style.fontSize = fontSize.value + 'px';
-    output.style.fontSize = fontSize.value + 'px';
-  });
 };
 
 document.addEventListener('DOMContentLoaded', attachFormat);
