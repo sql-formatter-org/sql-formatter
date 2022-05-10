@@ -4,9 +4,6 @@
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 
-**Note.** The docs here are for the latest dev version.
-For the latest release, see [v4.0.2](https://github.com/zeroturnaround/sql-formatter/tree/v4.0.2).
-
 It started as a port of a [PHP Library][], but has since considerably diverged.
 
 It supports various SQL dialects:
