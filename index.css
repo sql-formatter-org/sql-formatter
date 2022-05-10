@@ -42,6 +42,9 @@ article.config {
   padding-bottom: 0.5rem;
   border-bottom: 1px black solid;
 }
+article.config input[type='number'] {
+  width: 3rem;
+}
 .staging {
   width: 89%;
   height: 100%;
