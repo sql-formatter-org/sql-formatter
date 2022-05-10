@@ -71,3 +71,9 @@ textarea {
   line-height: 1.3;
   font-family: 'Roboto Mono', monospace;
 }
+.error {
+  width: 100%;
+  padding: 20px;
+  border: 4px solid salmon;
+  background: rgb(255, 237, 230);
+}
