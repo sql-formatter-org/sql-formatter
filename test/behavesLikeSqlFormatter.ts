@@ -2,7 +2,8 @@ import dedent from 'dedent-js';
 
 import { FormatFn, SqlLanguage } from '../src/sqlFormatter';
 import supportsComments from './features/comments';
-import supportsIndent from './options/indent';
+import supportsTabWidth from './options/tabWidth';
+import supportsUseTabs from './options/useTabs';
 import supportsAliasAs from './options/aliasAs';
 import supportsMultilineLists from './options/multilineLists';
 import supportsExpressionWidth from './options/expressionWidth';
@@ -23,7 +24,8 @@ export default function behavesLikeSqlFormatter(language: SqlLanguage, format: F
 
   supportsAliasAs(language, format);
   supportsTabulateAlias(language, format);
-  supportsIndent(language, format);
+  supportsTabWidth(language, format);
+  supportsUseTabs(language, format);
   supportsKeywordCase(language, format);
   supportsIndentStyle(language, format);
   supportsLinesBetweenQueries(language, format);
