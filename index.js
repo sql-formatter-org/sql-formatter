@@ -1,5 +1,6 @@
 const attachFormat = () => {
   const language = document.getElementById('language');
+  const tabWidth = document.getElementById('tabWidth');
   const keywordCase = document.getElementById('keywordCase');
   const input = document.getElementById('input');
   const output = document.getElementById('output');
@@ -21,6 +22,7 @@ const attachFormat = () => {
     try {
       const config = {
         language: language.options[language.selectedIndex].value,
+        tabWidth: tabWidth.value,
         keywordCase: keywordCase.options[keywordCase.selectedIndex].value,
         indentStyle: indentStyle.options[indentStyle.selectedIndex].value,
         logicalOperatorNewline:
@@ -53,6 +55,7 @@ ${e.stack.toString()}
   input.addEventListener('input', format);
   [
     language,
+    tabWidth,
     keywordCase,
     indentStyle,
     multilineLists,
