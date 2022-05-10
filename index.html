@@ -92,17 +92,16 @@
               <option value="always">Always</option>
               <option value="avoid">Avoid</option>
               <option value="expressionWidth">Expression width</option>
+              <option value="itemCount">Item count</option>
             </select>
-          </article>
-          <article class="config">
-            <label for="multilineLists.itemCount">Newline item count:</label>
             <input
               type="number"
-              id="multilineLists.itemCount"
-              name="multilineLists.itemCount"
-              min="0"
+              id="multilineLists-itemCount"
+              name="multilineLists-itemCount"
+              min="1"
               max="100"
-              value="0"
+              value="1"
+              style="display: none"
             />
           </article>
           <article class="config">
