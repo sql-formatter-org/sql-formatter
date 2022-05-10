@@ -16,7 +16,7 @@ export default function supportsIndent(language: SqlLanguage, format: FormatFn) 
 
   it('supports indenting with 4 spaces', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;', {
-      indent: '    ',
+      tabWidth: 4,
     });
 
     expect(result).toBe(dedent`
@@ -30,7 +30,7 @@ export default function supportsIndent(language: SqlLanguage, format: FormatFn) 
 
   it('supports indenting with tabs', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;', {
-      indent: '\t',
+      useTabs: true,
     });
 
     expect(result).toBe(['SELECT', '\tcount(*),', '\tColumn1', 'FROM', '\tTable1;'].join('\n'));

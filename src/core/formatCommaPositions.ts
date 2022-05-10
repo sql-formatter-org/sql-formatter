@@ -1,21 +1,25 @@
-import { FormatOptions } from '../types';
+import { CommaPosition } from '../types';
 import { maxLength } from '../utils';
 import { WHITESPACE_REGEX } from './Tokenizer';
 
 /**
  * Handles comma placement - either before, after or tabulated
  */
-export default function formatCommaPositions(query: string, cfg: FormatOptions): string {
+export default function formatCommaPositions(
+  query: string,
+  commaPosition: CommaPosition,
+  indent: string
+): string {
   return groupCommaDelimitedLines(query.split('\n'))
     .flatMap(commaLines => {
       if (commaLines.length === 1) {
         return commaLines;
-      } else if (cfg.commaPosition === 'tabular') {
+      } else if (commaPosition === 'tabular') {
         return formatTabular(commaLines);
-      } else if (cfg.commaPosition === 'before') {
-        return formatBefore(commaLines, cfg);
+      } else if (commaPosition === 'before') {
+        return formatBefore(commaLines, indent);
       } else {
-        throw new Error(`Unexpected commaPosition: ${cfg.commaPosition}`);
+        throw new Error(`Unexpected commaPosition: ${commaPosition}`);
       }
     })
     .join('\n');
@@ -67,15 +71,15 @@ function formatTabular(commaLines: string[]): string[] {
   });
 }
 
-function formatBefore(commaLines: string[], cfg: FormatOptions): string[] {
+function formatBefore(commaLines: string[], indent: string): string[] {
   return trimTrailingCommas(commaLines).map((line, i) => {
     if (i === 0) {
       return line; // do not add comma for first item
     }
     const [whitespace] = line.match(WHITESPACE_REGEX) || [''];
     return (
-      removeLastIndent(whitespace, cfg.indent) +
-      cfg.indent.replace(/ {2}$/, ', ') + // add comma to the end of last indent
+      removeLastIndent(whitespace, indent) +
+      indent.replace(/ {2}$/, ', ') + // add comma to the end of last indent
       line.trimStart()
     );
   });

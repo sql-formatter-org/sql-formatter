@@ -4,13 +4,13 @@ Switches between different indentation styles.
 
 ## Options
 
-- `"standard"` (default) indents code by the amount specified by `indent` option.
+- `"standard"` (default) indents code by the amount specified by `tabWidth` option.
 - `"tabularLeft"` indents in tabular style with 10 spaces, aligning keywords to left.
 - `"tabularRight"` indents in tabular style with 10 spaces, aligning keywords to right.
 
 Caveats of using `"tabularLeft"` and `"tabularRight"`:
 
-- `indent` option is ignored. Indentation will always be 10 spaces, regardless of what is specified by `indent`.
+- `tabWidth` option is ignored. Indentation will always be 10 spaces, regardless of what is specified by `tabWidth`.
 - `newlineBeforeOpenParen` option is ignored.
 - `newlineBeforeCloseParen` option is ignored.
 

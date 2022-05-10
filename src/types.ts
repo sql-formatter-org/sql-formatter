@@ -13,7 +13,8 @@ export type CommaPosition = 'before' | 'after' | 'tabular';
 export type LogicalOperatorNewline = 'before' | 'after';
 
 export interface FormatOptions {
-  indent: string;
+  tabWidth: number;
+  useTabs: boolean;
   keywordCase: KeywordCase;
   indentStyle: IndentStyle;
   multilineLists: MultilineListsMode | number;

@@ -58,7 +58,7 @@ You can also pass in configuration options:
 ```js
 format('SELECT * FROM tbl', {
   language: 'spark',
-  indent: '  ',
+  tabWidth: 2,
   keywordCase: 'upper',
   linesBetweenQueries: 2,
 });
@@ -137,7 +137,7 @@ The tool also accepts a JSON config file with the `--config` option that takes t
 ```ts
 {
   "language": "spark",
-  "indent": "  ",
+  "tabWidth": 2,
   "keywordCase": "upper",
   "linesBetweenQueries": 2,
 }
@@ -148,7 +148,8 @@ All fields are optional and all fields that are not specified will be filled wit
 ### Configuration options
 
 - [**`language`**](docs/language.md) the SQL dialect to use.
-- [**`indent`**](docs/indent.md) amount of indentation to use (and whether to use tabs).
+- [**`tabWidth`**](docs/tabWidth.md) amount of indentation to use.
+- [**`useTabs`**](docs/useTabs.md) to use tabs for indentation.
 - [**`keywordCase`**](docs/keywordCase.md) uppercases or lowercases keywords.
 - [**`indentStyle`**](docs/indentStyle.md) defines overall indentation style.
 - [**`multilineLists`**](docs/multilineLists.md) determines when to break lists of items to multiple lines.

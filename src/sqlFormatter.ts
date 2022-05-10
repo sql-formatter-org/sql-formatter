@@ -35,7 +35,8 @@ export type FormatFnOptions = FormatOptions & { language: SqlLanguage };
 
 const defaultOptions: FormatFnOptions = {
   language: 'sql',
-  indent: '  ',
+  tabWidth: 2,
+  useTabs: false,
   keywordCase: 'preserve',
   indentStyle: 'standard',
   multilineLists: 'always',
@@ -87,7 +88,7 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
     );
   }
 
-  if (cfg.commaPosition === 'before' && cfg.indent === '\t') {
+  if (cfg.commaPosition === 'before' && cfg.useTabs) {
     throw new Error('commaPosition: before does not work when tabs are used for indentation.');
   }
 

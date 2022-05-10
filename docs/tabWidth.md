@@ -1,11 +1,13 @@
-# indent
+# tabWidth
 
-Specifies characters to be used for indentation.
+Specifies amount of spaces to be used for indentation.
 
 ## Option value
 
 A string containing the characters of one indentation step.
 Defaults to two spaces (`" \ "`).
+
+This option is ignored when `useTabs` option is enabled.
 
 ### Indenting by 2 spaces (default)
 
@@ -29,7 +31,7 @@ GROUP BY column4
 
 ### Indenting by 4 spaces
 
-Using `indent: " \ \ \ "`:
+Using `indent: 4`:
 
 ```
 SELECT

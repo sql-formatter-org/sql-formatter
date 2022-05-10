@@ -11,8 +11,6 @@ import { toTabularToken, replaceTabularPlaceholders } from './tabularStyle';
 import AliasAs from './AliasAs';
 import AsTokenFactory from './AsTokenFactory';
 
-const TABULAR_INDENT = ' '.repeat(10);
-
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {
   private cfg: FormatOptions;
@@ -30,11 +28,21 @@ export default class Formatter {
 
   constructor(cfg: FormatOptions) {
     this.cfg = cfg;
-    this.indentation = new Indentation(this.isTabularStyle() ? TABULAR_INDENT : this.cfg.indent);
+    this.indentation = new Indentation(this.indentString());
     this.inlineBlock = new InlineBlock(this.cfg.expressionWidth);
     this.aliasAs = new AliasAs(this.cfg.aliasAs, this);
     this.params = new Params(this.cfg.params);
     this.asTokenFactory = new AsTokenFactory(this.cfg.keywordCase);
+  }
+
+  private indentString(): string {
+    if (this.isTabularStyle()) {
+      return ' '.repeat(10);
+    }
+    if (this.cfg.useTabs) {
+      return '\t';
+    }
+    return ' '.repeat(this.cfg.tabWidth);
   }
 
   /**
@@ -76,7 +84,7 @@ export default class Formatter {
       query = formatAliasPositions(query);
     }
     if (this.cfg.commaPosition === 'before' || this.cfg.commaPosition === 'tabular') {
-      query = formatCommaPositions(query, this.cfg);
+      query = formatCommaPositions(query, this.cfg.commaPosition, this.indentString());
     }
 
     return query;
