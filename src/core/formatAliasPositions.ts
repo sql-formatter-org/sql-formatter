@@ -26,13 +26,19 @@ export default function formatAliasPositions(query: string): string {
         aliasLines.push(lines[i]);
       }
 
+      // break lines into alias with optional AS, and all preceding text
       const splitLines = aliasLines
-        .map(line => line.split(/(?<=[^\s]+) (AS )?(?=[^\s]+,?$)/i)) // break lines into alias with optional AS, and all preceding text
-        .map(slugs => ({
-          precedingText: slugs[0], // always first split
-          alias: slugs.length > 1 ? slugs[slugs.length - 1] : undefined, // always last in split
-          as: slugs.length === 3 ? slugs[1] : undefined, // 2nd if AS is present, else omitted
-        }));
+        .map(line => ({ line, matches: line.match(/(^.*?\S) (AS )?(\S+,?$)/i) }))
+        .map(({ line, matches }) => {
+          if (!matches) {
+            return { precedingText: line };
+          }
+          return {
+            precedingText: matches[1],
+            as: matches[2],
+            alias: matches[3],
+          };
+        });
 
       const aliasMaxLength = maxLength(
         splitLines.map(({ precedingText }) => precedingText.replace(/\s*,\s*$/, '')) // get longest of precedingText, trim trailing comma for non-alias columns
