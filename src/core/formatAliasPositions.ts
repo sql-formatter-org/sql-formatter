@@ -40,8 +40,9 @@ export default function formatAliasPositions(query: string): string {
           };
         });
 
+      // get longest of precedingText, trim trailing comma for non-alias columns
       const aliasMaxLength = maxLength(
-        splitLines.map(({ precedingText }) => precedingText.replace(/\s*,\s*$/, '')) // get longest of precedingText, trim trailing comma for non-alias columns
+        splitLines.map(({ precedingText }) => precedingText.replace(/\s*,\s*$/, ''))
       );
       // re-construct line, aligning by inserting space before AS or alias
       aliasLines = splitLines.map(
