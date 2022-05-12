@@ -94,7 +94,7 @@ sql-formatter -h
 ```
 
 ```
-usage: sqlfmt.js [-h] [-o OUTPUT] \
+usage: sql-formatter [-h] [-o OUTPUT] \
 [-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,tsql}] [-c CONFIG] [--version] [FILE]
 
 SQL Formatter
