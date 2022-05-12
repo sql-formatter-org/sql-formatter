@@ -33,6 +33,7 @@ For those who have admin access on the repo, the new release publish flow is as 
 - htaketani <h.taketani@gmail.com>
 - Ian Campbell <icampbell@immuta.com>
 - ivan baktsheev
+- Jacobo Bouzas Quiroga <jacobo.bouzas@factorial.co>
 - João Pimentel Ferreira
 - Justin Dane Vallar <jdvallar@gmail.com>
 - Martin Nowak <code@dawg.eu>
