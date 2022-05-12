@@ -12,6 +12,7 @@ import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsReturning from './features/returning';
+import supportsConstraints from './features/constraints';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -20,6 +21,7 @@ describe('PostgreSqlFormatter', () => {
   behavesLikeSqlFormatter(language, format);
   supportsCase(language, format);
   supportsCreateTable(language, format);
+  supportsConstraints(language, format);
   supportsAlterTable(language, format);
   supportsStrings(language, format, PostgreSqlFormatter.stringTypes);
   supportsBetween(language, format);

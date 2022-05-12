@@ -789,6 +789,8 @@ const reservedKeywords = [
   'OFFSET',
   'OJ',
   'OLD',
+  'ON DELETE',
+  'ON UPDATE',
   'ONE',
   'ONLY',
   'OPEN',

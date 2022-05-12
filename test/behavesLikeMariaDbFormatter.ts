@@ -6,6 +6,7 @@ import supportsCreateTable from './features/createTable';
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsJoin from './features/join';
+import supportsConstraints from './features/constraints';
 import { FormatFn, SqlLanguage } from '../src/sqlFormatter';
 
 /**
@@ -15,6 +16,7 @@ export default function behavesLikeMariaDbFormatter(language: SqlLanguage, forma
   behavesLikeSqlFormatter(language, format);
   supportsCase(language, format);
   supportsCreateTable(language, format);
+  supportsConstraints(language, format);
   supportsAlterTable(language, format);
   supportsBetween(language, format);
   supportsJoin(language, format, {

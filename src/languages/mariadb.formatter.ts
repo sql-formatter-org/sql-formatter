@@ -614,6 +614,8 @@ const reservedKeywords = [
   'OF',
   'OFFSET',
   'OLD_PASSWORD',
+  'ON DELETE',
+  'ON UPDATE',
   'ONE',
   'ONLINE',
   'ONLY',

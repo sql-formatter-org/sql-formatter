@@ -11,6 +11,7 @@ import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
+import supportsConstraints from './features/constraints';
 
 describe('StandardSqlFormatter', () => {
   const language = 'sql';
@@ -19,6 +20,7 @@ describe('StandardSqlFormatter', () => {
   behavesLikeSqlFormatter(language, format);
   supportsCase(language, format);
   supportsCreateTable(language, format);
+  supportsConstraints(language, format);
   supportsAlterTable(language, format);
   supportsStrings(language, format, StandardSqlFormatter.stringTypes);
   supportsBetween(language, format);

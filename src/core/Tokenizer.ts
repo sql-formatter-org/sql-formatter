@@ -218,8 +218,8 @@ export default class Tokenizer {
       TokenType.RESERVED_BINARY_COMMAND,
       TokenType.RESERVED_DEPENDENT_CLAUSE,
       TokenType.RESERVED_LOGICAL_OPERATOR,
-      TokenType.RESERVED_JOIN_CONDITION,
       TokenType.RESERVED_KEYWORD,
+      TokenType.RESERVED_JOIN_CONDITION,
     ];
 
     return reservedTokenList.reduce(

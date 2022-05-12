@@ -457,6 +457,8 @@ const reservedKeywords = {
     'OBID',
     'OF',
     'OLD',
+    'ON DELETE',
+    'ON UPDATE',
     'OPTIMIZATION',
     'OPTIMIZE',
     'ORDER',

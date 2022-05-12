@@ -13,6 +13,7 @@ import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsReturning from './features/returning';
+import supportsConstraints from './features/constraints';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -21,6 +22,7 @@ describe('PlSqlFormatter', () => {
   behavesLikeSqlFormatter(language, format);
   supportsCase(language, format);
   supportsCreateTable(language, format);
+  supportsConstraints(language, format);
   supportsAlterTable(language, format);
   supportsAlterTableModify(language, format);
   supportsStrings(language, format, PlSqlFormatter.stringTypes);

@@ -204,6 +204,8 @@ const reservedKeywords = [
   'OCITYPE',
   'OF',
   'OLD',
+  'ON DELETE',
+  'ON UPDATE',
   'ONLY',
   'OPAQUE',
   'OPEN',

@@ -420,6 +420,8 @@ const reservedKeywords = {
     'OF',
     'OFF',
     'OFFSETS',
+    'ON DELETE',
+    'ON UPDATE',
     'OPEN',
     'OPENDATASOURCE',
     'OPENQUERY',

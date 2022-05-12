@@ -180,6 +180,8 @@ const reservedKeywords = [
   'OCTET_LENGTH',
   'OF',
   'OLD',
+  'ON DELETE',
+  'ON UPDATE',
   'ONLY',
   'OPEN',
   'ORDER',

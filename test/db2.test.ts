@@ -10,6 +10,7 @@ import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
+import supportsConstraints from './features/constraints';
 
 describe('Db2Formatter', () => {
   const language = 'db2';
@@ -17,6 +18,7 @@ describe('Db2Formatter', () => {
 
   behavesLikeSqlFormatter(language, format);
   supportsCreateTable(language, format);
+  supportsConstraints(language, format);
   supportsAlterTable(language, format);
   supportsStrings(language, format, Db2Formatter.stringTypes);
   supportsBetween(language, format);
