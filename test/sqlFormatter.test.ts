@@ -6,4 +6,10 @@ describe('sqlFormatter', () => {
       format('SELECT *', { language: 'blah' as SqlLanguage });
     }).toThrow('Unsupported SQL dialect: blah');
   });
+
+  it('throws error when encountering unsupported characters', () => {
+    expect(() => {
+      format('SELECT «weird-stuff»');
+    }).toThrow('Parse error: Unexpected "«weird-stuff»"');
+  });
 });

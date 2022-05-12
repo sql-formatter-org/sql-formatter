@@ -128,6 +128,9 @@ export default class Tokenizer {
       if (input.length) {
         // Get the next token and the token type
         token = this.getNextToken(input, token);
+        if (!token) {
+          throw new Error(`Parse error: Unexpected "${input.slice(0, 100)}"`);
+        }
         // Advance the string
         input = input.substring(token.value.length);
 
@@ -154,8 +157,9 @@ export default class Tokenizer {
       });
 
   /** Attempts to match next token from input string, tests RegExp patterns in decreasing priority */
-  getNextToken(input: string, previousToken?: Token) {
-    return (this.matchToken(TokenType.LINE_COMMENT)(input) ||
+  getNextToken(input: string, previousToken?: Token): Token | undefined {
+    return (
+      this.matchToken(TokenType.LINE_COMMENT)(input) ||
       this.matchToken(TokenType.BLOCK_COMMENT)(input) ||
       this.matchToken(TokenType.STRING)(input) ||
       this.matchToken(TokenType.BLOCK_START)(input) ||
@@ -164,7 +168,8 @@ export default class Tokenizer {
       this.matchToken(TokenType.NUMBER)(input) ||
       this.getReservedWordToken(input, previousToken) ||
       this.matchToken(TokenType.WORD)(input) ||
-      this.matchToken(TokenType.OPERATOR)(input)) as Token;
+      this.matchToken(TokenType.OPERATOR)(input)
+    );
   }
 
   /**
