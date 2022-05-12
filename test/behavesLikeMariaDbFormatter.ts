@@ -1,5 +1,6 @@
 import dedent from 'dedent-js';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import { FormatFn, SqlLanguage } from '../src/sqlFormatter';
 
 import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
@@ -7,7 +8,7 @@ import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsConstraints from './features/constraints';
-import { FormatFn, SqlLanguage } from '../src/sqlFormatter';
+import supportsDeleteFrom from './features/deleteFrom';
 
 /**
  * Shared tests for MySQL and MariaDB
@@ -18,6 +19,7 @@ export default function behavesLikeMariaDbFormatter(language: SqlLanguage, forma
   supportsCreateTable(language, format);
   supportsConstraints(language, format);
   supportsAlterTable(language, format);
+  supportsDeleteFrom(language, format);
   supportsBetween(language, format);
   supportsJoin(language, format, {
     without: ['FULL'],

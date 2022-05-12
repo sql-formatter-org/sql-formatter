@@ -10,6 +10,7 @@ import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
+import supportsDeleteFrom from './features/deleteFrom';
 
 describe('RedshiftFormatter', () => {
   const language = 'redshift';
@@ -19,6 +20,7 @@ describe('RedshiftFormatter', () => {
   supportsCreateTable(language, format);
   supportsAlterTable(language, format);
   supportsAlterTableModify(language, format);
+  supportsDeleteFrom(language, format);
   supportsStrings(language, format, RedshiftFormatter.stringTypes);
   supportsSchema(language, format);
   supportsOperators(

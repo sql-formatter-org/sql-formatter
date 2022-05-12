@@ -279,18 +279,6 @@ export default function behavesLikeSqlFormatter(language: SqlLanguage, format: F
     `);
   });
 
-  it('formats simple DELETE query', () => {
-    const result = format("DELETE FROM Customers WHERE CustomerName='Alfred' AND Phone=5002132;");
-    expect(result).toBe(dedent`
-      DELETE
-      FROM
-        Customers
-      WHERE
-        CustomerName = 'Alfred'
-        AND Phone = 5002132;
-    `);
-  });
-
   it('formats simple DROP query', () => {
     const result = format('DROP TABLE IF EXISTS admin_role;');
     expect(result).toBe(dedent`

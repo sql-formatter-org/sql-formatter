@@ -10,6 +10,7 @@ import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
+import supportsDeleteFrom from './features/deleteFrom';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';
@@ -18,6 +19,7 @@ describe('BigQueryFormatter', () => {
   behavesLikeSqlFormatter(language, format);
   supportsCase(language, format);
   supportsCreateTable(language, format);
+  supportsDeleteFrom(language, format);
   supportsStrings(language, format, BigQueryFormatter.stringTypes);
   supportsBetween(language, format);
   supportsSchema(language, format);

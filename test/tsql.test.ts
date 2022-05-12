@@ -12,6 +12,7 @@ import supportsBetween from './features/between';
 import supportsOperators from './features/operators';
 import supportsJoin from './features/join';
 import supportsConstraints from './features/constraints';
+import supportsDeleteFrom from './features/deleteFrom';
 
 describe('TSqlFormatter', () => {
   const language = 'tsql';
@@ -22,6 +23,7 @@ describe('TSqlFormatter', () => {
   supportsCreateTable(language, format);
   supportsConstraints(language, format);
   supportsAlterTable(language, format);
+  supportsDeleteFrom(language, format);
   supportsStrings(language, format, TSqlFormatter.stringTypes);
   supportsBetween(language, format);
   supportsSchema(language, format);

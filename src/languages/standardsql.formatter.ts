@@ -310,6 +310,7 @@ const reservedCommands = [
   'ALTER TABLE',
   'CREATE TABLE',
   'DROP TABLE',
+  'DELETE FROM',
   'END',
   'FETCH FIRST',
   'FETCH NEXT',

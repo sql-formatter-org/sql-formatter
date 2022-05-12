@@ -704,7 +704,7 @@ const reservedCommands = [
   'INSERT INTO',
   'VALUES',
   'DELETE',
-  // 'DELETE FROM',
+  'DELETE FROM',
   'TRUNCATE TABLE',
   'UPDATE',
   'MERGE',

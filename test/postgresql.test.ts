@@ -13,6 +13,7 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsReturning from './features/returning';
 import supportsConstraints from './features/constraints';
+import supportsDeleteFrom from './features/deleteFrom';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -23,6 +24,7 @@ describe('PostgreSqlFormatter', () => {
   supportsCreateTable(language, format);
   supportsConstraints(language, format);
   supportsAlterTable(language, format);
+  supportsDeleteFrom(language, format);
   supportsStrings(language, format, PostgreSqlFormatter.stringTypes);
   supportsBetween(language, format);
   supportsSchema(language, format);

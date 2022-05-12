@@ -12,6 +12,7 @@ import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsConstraints from './features/constraints';
+import supportsDeleteFrom from './features/deleteFrom';
 
 describe('SqliteFormatter', () => {
   const language = 'sqlite';
@@ -22,6 +23,7 @@ describe('SqliteFormatter', () => {
   supportsCreateTable(language, format);
   supportsConstraints(language, format);
   supportsAlterTable(language, format);
+  supportsDeleteFrom(language, format);
   supportsStrings(language, format, SqliteFormatter.stringTypes);
   supportsBetween(language, format);
   supportsSchema(language, format);

@@ -619,6 +619,7 @@ const reservedCommands = [
   'DEALLOCATE',
   'DECLARE',
   'DELETE',
+  'DELETE FROM',
   'DESC DATASHARE',
   'DROP DATABASE',
   'DROP DATASHARE',

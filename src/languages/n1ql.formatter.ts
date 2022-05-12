@@ -430,6 +430,7 @@ const reservedCommands = [
   'CREATE SCOPE',
   'CREATE TABLE', // verify
   'DELETE',
+  'DELETE FROM',
   'DROP COLLECTION',
   'DROP FUNCTION',
   'DROP INDEX',

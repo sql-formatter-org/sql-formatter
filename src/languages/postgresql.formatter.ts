@@ -1482,6 +1482,7 @@ const reservedCommands = [
   'DEALLOCATE',
   'DECLARE',
   'DELETE',
+  'DELETE FROM',
   'DISCARD',
   'DO',
   'DROP ACCESS METHOD',

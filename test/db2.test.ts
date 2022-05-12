@@ -11,6 +11,7 @@ import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsConstraints from './features/constraints';
+import supportsDeleteFrom from './features/deleteFrom';
 
 describe('Db2Formatter', () => {
   const language = 'db2';
@@ -20,6 +21,7 @@ describe('Db2Formatter', () => {
   supportsCreateTable(language, format);
   supportsConstraints(language, format);
   supportsAlterTable(language, format);
+  supportsDeleteFrom(language, format);
   supportsStrings(language, format, Db2Formatter.stringTypes);
   supportsBetween(language, format);
   supportsSchema(language, format);

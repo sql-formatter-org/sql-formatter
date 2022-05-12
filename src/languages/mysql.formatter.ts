@@ -1131,6 +1131,7 @@ const reservedCommands = [
   'CREATE VIEW',
   'DEALLOCATE PREPARE',
   'DELETE',
+  'DELETE FROM',
   'DESCRIBE',
   'DO',
   'DROP DATABASE',

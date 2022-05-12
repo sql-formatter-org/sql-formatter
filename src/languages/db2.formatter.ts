@@ -736,6 +736,7 @@ const reservedCommands = [
   'DECLARE TABLE',
   'DECLARE VARIABLE',
   'DELETE',
+  'DELETE FROM',
   'DESCRIBE CURSOR',
   'DESCRIBE INPUT',
   'DESCRIBE OUTPUT',

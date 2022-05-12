@@ -1062,6 +1062,7 @@ const reservedCommands = [
   'DEADLOCK_PRIORITY',
   'DEFAULT',
   'DELETE',
+  'DELETE FROM',
   'DENY',
   'DENY XML',
   'DISABLE TRIGGER',

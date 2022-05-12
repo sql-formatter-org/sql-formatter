@@ -373,8 +373,8 @@ const reservedCommands = [
   'CREATE TABLE', // verify
   'DROP TABLE', // verify
   'DECLARE',
-  // 'DELETE FROM', // disabled
   'DELETE',
+  'DELETE FROM',
   'END',
   'EXCEPT',
   'EXCEPTION',

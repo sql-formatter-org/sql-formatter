@@ -14,6 +14,7 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsReturning from './features/returning';
 import supportsConstraints from './features/constraints';
+import supportsDeleteFrom from './features/deleteFrom';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -25,6 +26,7 @@ describe('PlSqlFormatter', () => {
   supportsConstraints(language, format);
   supportsAlterTable(language, format);
   supportsAlterTableModify(language, format);
+  supportsDeleteFrom(language, format);
   supportsStrings(language, format, PlSqlFormatter.stringTypes);
   supportsBetween(language, format);
   supportsSchema(language, format);

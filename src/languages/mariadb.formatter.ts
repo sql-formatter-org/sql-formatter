@@ -936,6 +936,7 @@ const reservedCommands = [
   'CREATE VIEW',
   'DEALLOCATE PREPARE',
   'DELETE',
+  'DELETE FROM',
   'DESC',
   'DESCRIBE',
   'DO',

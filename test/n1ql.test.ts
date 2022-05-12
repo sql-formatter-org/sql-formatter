@@ -9,12 +9,14 @@ import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsReturning from './features/returning';
+import supportsDeleteFrom from './features/deleteFrom';
 
 describe('N1qlFormatter', () => {
   const language = 'n1ql';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
+  supportsDeleteFrom(language, format);
   supportsStrings(language, format, N1qlFormatter.stringTypes);
   supportsBetween(language, format);
   supportsSchema(language, format);
@@ -124,8 +126,7 @@ describe('N1qlFormatter', () => {
     const result = format("EXPLAIN DELETE FROM tutorial t USE KEYS 'baldwin'");
     expect(result).toBe(dedent`
       EXPLAIN
-      DELETE
-      FROM
+      DELETE FROM
         tutorial t
       USE KEYS
         'baldwin'
