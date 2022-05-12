@@ -77,7 +77,7 @@ export default class Tokenizer {
         cfg.reservedJoinConditions,
         specialWordCharsAll
       ),
-      [TokenType.OPERATOR]: regexFactory.createOperatorRegex('+-/*%&|^><=.,;[]{}`:$', [
+      [TokenType.OPERATOR]: regexFactory.createOperatorRegex('+-/*%&|^><=.,;[]{}`:$@', [
         '<>',
         '<=',
         '>=',

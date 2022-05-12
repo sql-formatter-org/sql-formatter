@@ -54,4 +54,19 @@ describe('StandardSqlFormatter', () => {
         2 ROWS ONLY;
     `);
   });
+
+  // This is a crappy behavior, but at least we don't crash
+  it('does not crash when encountering characters or operators it does not recognize', () => {
+    expect(
+      format(`
+        SELECT @name, :bar FROM {foo};
+      `)
+    ).toBe(dedent`
+      SELECT
+        @ name,
+      : bar
+      FROM
+      {foo};
+    `);
+  });
 });
