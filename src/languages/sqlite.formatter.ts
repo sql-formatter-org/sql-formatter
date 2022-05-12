@@ -1,4 +1,5 @@
 import Formatter from '../core/Formatter';
+import { StringPatternType } from '../core/regexFactory';
 import Tokenizer from '../core/Tokenizer';
 
 // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#reserved-word
@@ -178,7 +179,8 @@ const standardReservedWords = [
   'OCCURRENCES_REGEX',
   'OF',
   'OLD',
-  'ON',
+  'ON DELETE',
+  'ON UPDATE',
   'ONLY',
   'OPEN',
   'OR',
@@ -295,7 +297,6 @@ const standardReservedWords = [
   'WHERE',
   'WIDTH_BUCKET',
   'WINDOW',
-  'WITH',
   'WITHIN',
   'WITHOUT',
   'YEAR',
@@ -343,7 +344,6 @@ const nonStandardSqliteReservedWords = [
   'NOTHING',
   'NOTNULL',
   'NULLS',
-  'OFFSET',
   'OTHERS',
   'PLAN',
   'PRAGMA',
@@ -366,15 +366,13 @@ const nonStandardSqliteReservedWords = [
   'VIRTUAL',
 ];
 
-const reservedWords = [...standardReservedWords, ...nonStandardSqliteReservedWords];
-
-const reservedTopLevelWords = [
+const reservedCommands = [
   'ADD',
   'ALTER COLUMN',
   'ALTER TABLE',
-  'CASE',
-  'DELETE FROM',
-  'END',
+  'CREATE TABLE',
+  'DROP TABLE',
+  'DELETE',
   'FETCH FIRST',
   'FETCH NEXT',
   'FETCH PRIOR',
@@ -386,6 +384,7 @@ const reservedTopLevelWords = [
   'HAVING',
   'INSERT INTO',
   'LIMIT',
+  'OFFSET',
   'ORDER BY',
   'SELECT',
   'SET SCHEMA',
@@ -393,9 +392,11 @@ const reservedTopLevelWords = [
   'UPDATE',
   'VALUES',
   'WHERE',
+  'WITH',
 ];
 
-const reservedTopLevelWordsNoIndent = [
+const reservedBinaryCommands = [
+  // set booleans
   'INTERSECT',
   'INTERSECT ALL',
   'INTERSECT DISTINCT',
@@ -405,13 +406,6 @@ const reservedTopLevelWordsNoIndent = [
   'EXCEPT',
   'EXCEPT ALL',
   'EXCEPT DISTINCT',
-];
-
-const reservedNewlineWords = [
-  'AND',
-  'ELSE',
-  'OR',
-  'WHEN',
   // joins - https://www.sqlite.org/syntax/join-operator.html
   'JOIN',
   'LEFT JOIN',
@@ -425,47 +419,41 @@ const reservedNewlineWords = [
   'NATURAL CROSS JOIN',
 ];
 
-// https://www.sqlite.org/lang_expr.html
-const operators = [
-  // non-binary
-  '~',
-  '+',
-  '-',
-  // concat
-  '||',
-  // arithmetic
-  '+',
-  '-',
-  '*',
-  '/',
-  '%',
-  // bitwise
-  '&',
-  '|',
-  '<<',
-  '>>',
-  // comparison
-  '<',
-  '>',
-  '=',
-  '==',
-  '!=',
-];
+const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class SqliteFormatter extends Formatter {
+  static reservedCommands = reservedCommands;
+  static reservedBinaryCommands = reservedBinaryCommands;
+  static reservedDependentClauses = reservedDependentClauses;
+  static reservedJoinConditions = ['ON', 'USING'];
+  static reservedLogicalOperators = ['AND', 'OR'];
+  static reservedKeywords = [...standardReservedWords, ...nonStandardSqliteReservedWords];
+  // https://www.sqlite.org/lang_keywords.html
+  static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]'];
+  static blockStart = ['(', 'CASE'];
+  static blockEnd = [')', 'END'];
+  // https://www.sqlite.org/lang_expr.html#parameters
+  static indexedPlaceholderTypes = ['?'];
+  static namedPlaceholderTypes = [':', '@', '$'];
+  static lineCommentTypes = ['--'];
+  // https://www.sqlite.org/lang_expr.html
+  static operators = ['||', '<<', '>>', '==', '!='];
+
   tokenizer() {
     return new Tokenizer({
-      reservedWords,
-      reservedTopLevelWords,
-      reservedNewlineWords,
-      reservedTopLevelWordsNoIndent,
-      stringTypes: [`""`, "''"],
-      openParens: ['(', 'CASE'],
-      closeParens: [')', 'END'],
-      indexedPlaceholderTypes: ['?'],
-      namedPlaceholderTypes: [],
-      lineCommentTypes: ['--'],
-      operators,
+      reservedCommands: SqliteFormatter.reservedCommands,
+      reservedBinaryCommands: SqliteFormatter.reservedBinaryCommands,
+      reservedDependentClauses: SqliteFormatter.reservedDependentClauses,
+      reservedJoinConditions: SqliteFormatter.reservedJoinConditions,
+      reservedLogicalOperators: SqliteFormatter.reservedLogicalOperators,
+      reservedKeywords: SqliteFormatter.reservedKeywords,
+      stringTypes: SqliteFormatter.stringTypes,
+      blockStart: SqliteFormatter.blockStart,
+      blockEnd: SqliteFormatter.blockEnd,
+      indexedPlaceholderTypes: SqliteFormatter.indexedPlaceholderTypes,
+      namedPlaceholderTypes: SqliteFormatter.namedPlaceholderTypes,
+      lineCommentTypes: SqliteFormatter.lineCommentTypes,
+      operators: SqliteFormatter.operators,
     });
   }
 }
