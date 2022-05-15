@@ -1,6 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
-import { isToken, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
+import { EOF_TOKEN, isToken, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
 import type { StringPatternType } from '../core/regexFactory';
 import { dedupe } from '../utils';
 
@@ -813,32 +813,32 @@ export default class SparkSqlFormatter extends Formatter {
     });
   }
 
-  tokenOverride(token: Token) {
-    // [WINDOW](...)
-    if (isToken.WINDOW(token) && this.tokenLookAhead().type === TokenType.BLOCK_START) {
-      // This is a function call, treat it as a reserved word
-      return { type: TokenType.RESERVED_KEYWORD, value: token.value };
-    }
+  preprocess(tokens: Token[]) {
+    return tokens.map((token, i) => {
+      const prevToken = tokens[i - 1] || EOF_TOKEN;
+      const nextToken = tokens[i + 1] || EOF_TOKEN;
 
-    // .[END]
-    if (isToken.END(token) && this.tokenLookBehind().value === '.') {
-      // This is window().end (or similar) not CASE ... END
-      return { type: TokenType.WORD, value: token.value };
-    }
+      // [WINDOW](...)
+      if (isToken.WINDOW(token) && nextToken.type === TokenType.BLOCK_START) {
+        // This is a function call, treat it as a reserved word
+        return { type: TokenType.RESERVED_KEYWORD, value: token.value };
+      }
 
-    // TODO: deprecate this once ITEMS is merged with COLLECTION
-    if (/ITEMS/i.test(token.value) && token.type === TokenType.RESERVED_KEYWORD) {
-      if (
-        !(
-          /COLLECTION/i.test(this.tokenLookBehind().value) &&
-          /TERMINATED/i.test(this.tokenLookAhead().value)
-        )
-      ) {
-        // this is a word and not COLLECTION ITEMS
+      // .[END]
+      if (isToken.END(token) && prevToken.value === '.') {
+        // This is window().end (or similar) not CASE ... END
         return { type: TokenType.WORD, value: token.value };
       }
-    }
 
-    return token;
+      // TODO: deprecate this once ITEMS is merged with COLLECTION
+      if (/ITEMS/i.test(token.value) && token.type === TokenType.RESERVED_KEYWORD) {
+        if (!(/COLLECTION/i.test(prevToken.value) && /TERMINATED/i.test(nextToken.value))) {
+          // this is a word and not COLLECTION ITEMS
+          return { type: TokenType.WORD, value: token.value };
+        }
+      }
+
+      return token;
+    });
   }
 }

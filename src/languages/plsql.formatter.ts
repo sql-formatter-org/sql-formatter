@@ -1,6 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
-import { isToken, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
+import { EOF_TOKEN, isReserved, isToken, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
 import type { StringPatternType } from '../core/regexFactory';
 import { dedupe } from '../utils';
 
@@ -488,22 +488,29 @@ export default class PlSqlFormatter extends Formatter {
     });
   }
 
-  tokenOverride(token: Token) {
-    // `table`[.]`column`
-    if (
-      token.value === '.' &&
-      this.tokenLookAhead().value.startsWith('`') &&
-      this.tokenLookBehind().value.endsWith('`')
-    ) {
-      // This is an operator, do not insert spaces
-      return { type: TokenType.OPERATOR, value: token.value };
-    }
+  preprocess(tokens: Token[]) {
+    let previousReservedToken: Token = EOF_TOKEN;
 
-    // BY [SET]
-    if (isToken.SET(token) && isToken.BY(this.getPreviousReservedToken())) {
-      return { type: TokenType.RESERVED_KEYWORD, value: token.value };
-    }
+    return tokens.map((token, i) => {
+      const prevToken = tokens[i - 1] || EOF_TOKEN;
+      const nextToken = tokens[i + 1] || EOF_TOKEN;
 
-    return token;
+      // `table`[.]`column`
+      if (token.value === '.' && nextToken.value.startsWith('`') && prevToken.value.endsWith('`')) {
+        // This is an operator, do not insert spaces
+        return { type: TokenType.OPERATOR, value: token.value };
+      }
+
+      // BY [SET]
+      if (isToken.SET(token) && isToken.BY(previousReservedToken)) {
+        return { type: TokenType.RESERVED_KEYWORD, value: token.value };
+      }
+
+      if (isReserved(token)) {
+        previousReservedToken = token;
+      }
+
+      return token;
+    });
   }
 }

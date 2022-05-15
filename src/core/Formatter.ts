@@ -53,13 +53,12 @@ export default class Formatter {
   }
 
   /**
-   * Reprocess and modify a token based on parsed context.
-   * Subclasses can override this to modify tokens during formatting.
-   * @param {Token} token - The token to modify
-   * @return {Token} new token or the original
+   * Subclasses can override this to modify tokens before formatting.
+   * @param {Token[]} tokens - Original tokens
+   * @return {Token[]} modified tokens
    */
-  protected tokenOverride(token: Token): Token {
-    return token;
+  protected preprocess(tokens: Token[]): Token[] {
+    return tokens;
   }
 
   /**
@@ -69,6 +68,7 @@ export default class Formatter {
    */
   public format(query: string): string {
     this.tokens = this.tokenizer().tokenize(query);
+    this.tokens = this.preprocess(this.tokens);
     this.asTokenFactory = new AsTokenFactory(this.cfg.keywordCase, this.tokens);
     const formattedQuery = this.getFormattedQueryFromTokens();
     const finalQuery = this.postFormat(formattedQuery);
@@ -97,7 +97,7 @@ export default class Formatter {
     let formattedQuery = '';
 
     for (this.index = 0; this.index < this.tokens.length; this.index++) {
-      let token = this.tokenOverride(this.tokens[this.index]);
+      let token = this.tokens[this.index];
 
       // if token is a Reserved Keyword, Command, Binary Command, Dependent Clause, Logical Operator
       if (isReserved(token)) {

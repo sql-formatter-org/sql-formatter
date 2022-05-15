@@ -1,7 +1,7 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import type { StringPatternType } from '../core/regexFactory';
-import { Token } from '../core/token';
+import { EOF_TOKEN, Token } from '../core/token';
 import { dedupe } from '../utils';
 
 /**
@@ -859,27 +859,44 @@ export default class BigQueryFormatter extends Formatter {
     });
   }
 
-  tokenOverride(token: Token) {
-    if (
-      (/ARRAY/i.test(token.value) || /STRUCT/i.test(token.value)) &&
-      this.tokenLookAhead().value === '<'
-    ) {
-      let level = 0;
-      let finalToken = token.value;
+  preprocess(tokens: Token[]) {
+    const processed: Token[] = [];
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+      const nextToken = tokens[i + 1] || EOF_TOKEN;
 
-      do {
-        const nextToken = this.tokenLookAhead();
-        if (nextToken.value === '>' || nextToken.value === '>>') {
-          level -= nextToken.value.length;
-        } else if (nextToken.value === '<') {
-          level++;
-        }
-        finalToken += this.tokens.splice(this.index + 1, 1)[0].value;
-      } while (level > 0);
-
-      return { ...token, value: finalToken };
+      if ((/ARRAY/i.test(token.value) || /STRUCT/i.test(token.value)) && nextToken.value === '<') {
+        const endIndex = this.findClosingAngleBracketIndex(tokens, i + 1);
+        processed.push({
+          ...token,
+          value: tokens
+            .slice(i, endIndex + 1)
+            .map(t => t.value)
+            .join(''),
+        });
+        i = endIndex;
+      } else {
+        processed.push(token);
+      }
     }
+    return processed;
+  }
 
-    return token;
+  private findClosingAngleBracketIndex(tokens: Token[], startIndex: number): number {
+    let level = 0;
+    for (let i = startIndex; i < tokens.length; i++) {
+      const token = tokens[i];
+      if (token.value === '<') {
+        level++;
+      } else if (token.value === '>') {
+        level--;
+      } else if (token.value === '>>') {
+        level -= 2;
+      }
+      if (level === 0) {
+        return i;
+      }
+    }
+    return tokens.length - 1;
   }
 }

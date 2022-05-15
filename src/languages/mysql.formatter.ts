@@ -1,6 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
-import { isToken, Token, TokenType } from '../core/token';
+import { EOF_TOKEN, isToken, Token, TokenType } from '../core/token';
 import type { StringPatternType } from '../core/regexFactory';
 import { dedupe } from '../utils';
 
@@ -1354,13 +1354,14 @@ export default class MySqlFormatter extends Formatter {
     });
   }
 
-  tokenOverride(token: Token) {
-    // [SET] ( ...
-    if (isToken.SET(token) && this.tokenLookAhead().value === '(') {
-      // This is SET datatype, not SET statement
-      return { type: TokenType.RESERVED_KEYWORD, value: token.value };
-    }
-
-    return token;
+  preprocess(tokens: Token[]) {
+    return tokens.map((token, i) => {
+      const nextToken = tokens[i + 1] || EOF_TOKEN;
+      if (isToken.SET(token) && nextToken.value === '(') {
+        // This is SET datatype, not SET statement
+        return { type: TokenType.RESERVED_KEYWORD, value: token.value };
+      }
+      return token;
+    });
   }
 }
