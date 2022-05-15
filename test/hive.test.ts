@@ -10,6 +10,7 @@ import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
+import supportsArray from './features/array';
 
 describe('HiveFormatter', () => {
   const language = 'hive';
@@ -29,4 +30,5 @@ describe('HiveFormatter', () => {
     HiveFormatter.operators,
     HiveFormatter.reservedLogicalOperators
   );
+  supportsArray(language, format);
 });

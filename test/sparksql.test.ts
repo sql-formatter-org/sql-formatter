@@ -11,6 +11,7 @@ import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
+import supportsArray from './features/array';
 
 describe('SparkSqlFormatter', () => {
   const language = 'spark';
@@ -29,6 +30,7 @@ describe('SparkSqlFormatter', () => {
     SparkSqlFormatter.operators,
     SparkSqlFormatter.reservedLogicalOperators
   );
+  supportsArray(language, format);
   supportsJoin(language, format, {
     additionally: [
       'ANTI JOIN',

@@ -10,6 +10,7 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsReturning from './features/returning';
 import supportsDeleteFrom from './features/deleteFrom';
+import supportsArray from './features/array';
 
 describe('N1qlFormatter', () => {
   const language = 'n1ql';
@@ -26,18 +27,9 @@ describe('N1qlFormatter', () => {
     N1qlFormatter.operators,
     N1qlFormatter.reservedLogicalOperators
   );
+  supportsArray(language, format);
   supportsJoin(language, format, { without: ['FULL', 'CROSS', 'NATURAL'] });
   supportsReturning(language, format);
-
-  it('formats SELECT query with element selection expression', () => {
-    const result = format('SELECT order_lines[0].productId FROM orders;');
-    expect(result).toBe(dedent`
-      SELECT
-        order_lines[0].productId
-      FROM
-        orders;
-    `);
-  });
 
   it('formats SELECT query with primary key querying', () => {
     const result = format("SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];");
