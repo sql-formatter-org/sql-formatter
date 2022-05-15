@@ -1,7 +1,7 @@
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
-import { trimSpacesEnd } from '../utils';
+import { trimNewlinesStart, trimSpacesEnd } from '../utils';
 import { isReserved, isCommand, isToken, Token, TokenType, EOF_TOKEN } from './token';
 import Tokenizer from './Tokenizer';
 import { FormatOptions } from '../types';
@@ -10,6 +10,7 @@ import formatAliasPositions from './formatAliasPositions';
 import { toTabularToken, replaceTabularPlaceholders } from './tabularStyle';
 import AliasAs from './AliasAs';
 import AsTokenFactory from './AsTokenFactory';
+import Parser, { Statement } from './Parser';
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {
@@ -19,6 +20,7 @@ export default class Formatter {
   private aliasAs: AliasAs;
   private params: Params;
   private asTokenFactory: AsTokenFactory;
+  private parser = new Parser();
 
   private currentNewline = true;
   private previousReservedToken: Token = EOF_TOKEN;
@@ -58,12 +60,13 @@ export default class Formatter {
    * @return {string} The formatter query
    */
   public format(query: string): string {
-    this.tokens = this.tokenizer().tokenize(query);
-    this.asTokenFactory = new AsTokenFactory(this.cfg.keywordCase, this.tokens);
-    const formattedQuery = this.getFormattedQueryFromTokens();
+    const tokens = this.tokenizer().tokenize(query);
+    this.asTokenFactory = new AsTokenFactory(this.cfg.keywordCase, tokens);
+
+    const formattedQuery = this.formatSql(this.parser.parse(tokens));
     const finalQuery = this.postFormat(formattedQuery);
 
-    return finalQuery.replace(/^\n*/u, '').trimEnd();
+    return finalQuery.trimEnd();
   }
 
   /**
@@ -80,11 +83,20 @@ export default class Formatter {
     return query;
   }
 
-  /**
-   * Performs main construction of query from token list, delegates to other methods for formatting based on token criteria
-   */
-  private getFormattedQueryFromTokens(): string {
+  private formatSql(statements: Statement[]): string {
+    return statements
+      .map(this.formatStatement, this)
+      .map(trimNewlinesStart) // Each command token will start with a newline
+      .join('\n'.repeat(this.cfg.linesBetweenQueries + 1));
+  }
+
+  private formatStatement(statement: Statement): string {
+    this.tokens = statement.tokens;
     let formattedQuery = '';
+    this.previousCommandToken = EOF_TOKEN;
+    this.previousReservedToken = EOF_TOKEN;
+    this.currentNewline = true;
+    this.indentation.resetIndentation();
 
     for (this.index = 0; this.index < this.tokens.length; this.index++) {
       let token = this.tokens[this.index];
@@ -451,12 +463,10 @@ export default class Formatter {
   }
 
   private formatQuerySeparator(token: Token, query: string): string {
-    this.indentation.resetIndentation();
     return [
       trimSpacesEnd(query),
       this.cfg.newlineBeforeSemicolon ? '\n' : '',
       this.show(token),
-      '\n'.repeat(this.cfg.linesBetweenQueries + 1),
     ].join('');
   }
 

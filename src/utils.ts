@@ -3,6 +3,9 @@ export const dedupe = (arr: string[]) => [...new Set(arr)];
 // Only removes spaces, not newlines
 export const trimSpacesEnd = (str: string) => str.replace(/[ \t]+$/u, '');
 
+// Only removes newlines
+export const trimNewlinesStart = (str: string) => str.replace(/^\n*/u, '');
+
 // Last element from array
 export const last = <T extends any>(arr: T[]) => arr[arr.length - 1];
 
