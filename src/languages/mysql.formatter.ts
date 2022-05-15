@@ -1351,17 +1351,18 @@ export default class MySqlFormatter extends Formatter {
       lineCommentTypes: MySqlFormatter.lineCommentTypes,
       specialWordChars: MySqlFormatter.specialWordChars,
       operators: MySqlFormatter.operators,
+      preprocess,
     });
   }
+}
 
-  preprocess(tokens: Token[]) {
-    return tokens.map((token, i) => {
-      const nextToken = tokens[i + 1] || EOF_TOKEN;
-      if (isToken.SET(token) && nextToken.value === '(') {
-        // This is SET datatype, not SET statement
-        return { type: TokenType.RESERVED_KEYWORD, value: token.value };
-      }
-      return token;
-    });
-  }
+function preprocess(tokens: Token[]) {
+  return tokens.map((token, i) => {
+    const nextToken = tokens[i + 1] || EOF_TOKEN;
+    if (isToken.SET(token) && nextToken.value === '(') {
+      // This is SET datatype, not SET statement
+      return { type: TokenType.RESERVED_KEYWORD, value: token.value };
+    }
+    return token;
+  });
 }

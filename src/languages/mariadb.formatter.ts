@@ -1187,17 +1187,18 @@ export default class MariaDbFormatter extends Formatter {
       lineCommentTypes: MariaDbFormatter.lineCommentTypes,
       specialWordChars: MariaDbFormatter.specialWordChars,
       operators: MariaDbFormatter.operators,
+      preprocess,
     });
   }
+}
 
-  preprocess(tokens: Token[]) {
-    return tokens.map((token, i) => {
-      const nextToken = tokens[i + 1] || EOF_TOKEN;
-      if (isToken.SET(token) && nextToken.value === '(') {
-        // This is SET datatype, not SET statement
-        return { type: TokenType.RESERVED_KEYWORD, value: token.value };
-      }
-      return token;
-    });
-  }
+function preprocess(tokens: Token[]) {
+  return tokens.map((token, i) => {
+    const nextToken = tokens[i + 1] || EOF_TOKEN;
+    if (isToken.SET(token) && nextToken.value === '(') {
+      // This is SET datatype, not SET statement
+      return { type: TokenType.RESERVED_KEYWORD, value: token.value };
+    }
+    return token;
+  });
 }

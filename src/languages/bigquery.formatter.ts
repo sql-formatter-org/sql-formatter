@@ -856,47 +856,48 @@ export default class BigQueryFormatter extends Formatter {
       lineCommentTypes: BigQueryFormatter.lineCommentTypes,
       specialWordChars: BigQueryFormatter.specialWordChars,
       operators: BigQueryFormatter.operators,
+      preprocess,
     });
   }
+}
 
-  preprocess(tokens: Token[]) {
-    const processed: Token[] = [];
-    for (let i = 0; i < tokens.length; i++) {
-      const token = tokens[i];
-      const nextToken = tokens[i + 1] || EOF_TOKEN;
+function preprocess(tokens: Token[]) {
+  const processed: Token[] = [];
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+    const nextToken = tokens[i + 1] || EOF_TOKEN;
 
-      if ((/ARRAY/i.test(token.value) || /STRUCT/i.test(token.value)) && nextToken.value === '<') {
-        const endIndex = this.findClosingAngleBracketIndex(tokens, i + 1);
-        processed.push({
-          ...token,
-          value: tokens
-            .slice(i, endIndex + 1)
-            .map(t => t.value)
-            .join(''),
-        });
-        i = endIndex;
-      } else {
-        processed.push(token);
-      }
+    if ((/ARRAY/i.test(token.value) || /STRUCT/i.test(token.value)) && nextToken.value === '<') {
+      const endIndex = findClosingAngleBracketIndex(tokens, i + 1);
+      processed.push({
+        ...token,
+        value: tokens
+          .slice(i, endIndex + 1)
+          .map(t => t.value)
+          .join(''),
+      });
+      i = endIndex;
+    } else {
+      processed.push(token);
     }
-    return processed;
   }
+  return processed;
+}
 
-  private findClosingAngleBracketIndex(tokens: Token[], startIndex: number): number {
-    let level = 0;
-    for (let i = startIndex; i < tokens.length; i++) {
-      const token = tokens[i];
-      if (token.value === '<') {
-        level++;
-      } else if (token.value === '>') {
-        level--;
-      } else if (token.value === '>>') {
-        level -= 2;
-      }
-      if (level === 0) {
-        return i;
-      }
+function findClosingAngleBracketIndex(tokens: Token[], startIndex: number): number {
+  let level = 0;
+  for (let i = startIndex; i < tokens.length; i++) {
+    const token = tokens[i];
+    if (token.value === '<') {
+      level++;
+    } else if (token.value === '>') {
+      level--;
+    } else if (token.value === '>>') {
+      level -= 2;
     }
-    return tokens.length - 1;
+    if (level === 0) {
+      return i;
+    }
   }
+  return tokens.length - 1;
 }

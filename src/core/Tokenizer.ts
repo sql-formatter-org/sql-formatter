@@ -21,6 +21,7 @@ interface TokenizerOptions {
   lineCommentTypes: string[];
   specialWordChars?: { prefix?: string; any?: string; suffix?: string };
   operators?: string[];
+  preprocess?: (tokens: Token[]) => Token[];
 }
 
 /** Converts SQL language string into a token stream */
@@ -30,6 +31,8 @@ export default class Tokenizer {
   INDEXED_PLACEHOLDER_REGEX?: RegExp;
   IDENT_NAMED_PLACEHOLDER_REGEX?: RegExp;
   STRING_NAMED_PLACEHOLDER_REGEX?: RegExp;
+
+  private preprocess = (tokens: Token[]) => tokens;
 
   /**
    * @param {TokenizerOptions} cfg
@@ -47,8 +50,13 @@ export default class Tokenizer {
    *  @param {string[]} cfg.lineCommentTypes - Line comments to enable, like # and --
    *  @param {string[]} cfg.specialWordChars - Special chars that can be found inside of words, like @ and #
    *  @param {string[]} cfg.operators - Additional operators to recognize
+   *  @param {Function} cfg.preprocess - Optional function to process tokens before emitting
    */
   constructor(cfg: TokenizerOptions) {
+    if (cfg.preprocess) {
+      this.preprocess = cfg.preprocess;
+    }
+
     const specialWordCharsAll = Object.values(cfg.specialWordChars ?? {}).join('');
     this.REGEX_MAP = {
       [TokenType.WORD]: regexFactory.createWordRegex(cfg.specialWordChars),
@@ -137,7 +145,7 @@ export default class Tokenizer {
         tokens.push({ ...token, whitespaceBefore });
       }
     }
-    return tokens;
+    return this.preprocess(tokens);
   }
 
   /** Matches preceding whitespace if present */

@@ -53,22 +53,12 @@ export default class Formatter {
   }
 
   /**
-   * Subclasses can override this to modify tokens before formatting.
-   * @param {Token[]} tokens - Original tokens
-   * @return {Token[]} modified tokens
-   */
-  protected preprocess(tokens: Token[]): Token[] {
-    return tokens;
-  }
-
-  /**
    * Formats an SQL query.
    * @param {string} query - The SQL query string to be formatted
    * @return {string} The formatter query
    */
   public format(query: string): string {
     this.tokens = this.tokenizer().tokenize(query);
-    this.tokens = this.preprocess(this.tokens);
     this.asTokenFactory = new AsTokenFactory(this.cfg.keywordCase, this.tokens);
     const formattedQuery = this.getFormattedQueryFromTokens();
     const finalQuery = this.postFormat(formattedQuery);

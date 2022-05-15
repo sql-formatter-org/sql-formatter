@@ -485,32 +485,33 @@ export default class PlSqlFormatter extends Formatter {
       lineCommentTypes: PlSqlFormatter.lineCommentTypes,
       specialWordChars: PlSqlFormatter.specialWordChars,
       operators: PlSqlFormatter.operators,
+      preprocess,
     });
   }
+}
 
-  preprocess(tokens: Token[]) {
-    let previousReservedToken: Token = EOF_TOKEN;
+function preprocess(tokens: Token[]) {
+  let previousReservedToken: Token = EOF_TOKEN;
 
-    return tokens.map((token, i) => {
-      const prevToken = tokens[i - 1] || EOF_TOKEN;
-      const nextToken = tokens[i + 1] || EOF_TOKEN;
+  return tokens.map((token, i) => {
+    const prevToken = tokens[i - 1] || EOF_TOKEN;
+    const nextToken = tokens[i + 1] || EOF_TOKEN;
 
-      // `table`[.]`column`
-      if (token.value === '.' && nextToken.value.startsWith('`') && prevToken.value.endsWith('`')) {
-        // This is an operator, do not insert spaces
-        return { type: TokenType.OPERATOR, value: token.value };
-      }
+    // `table`[.]`column`
+    if (token.value === '.' && nextToken.value.startsWith('`') && prevToken.value.endsWith('`')) {
+      // This is an operator, do not insert spaces
+      return { type: TokenType.OPERATOR, value: token.value };
+    }
 
-      // BY [SET]
-      if (isToken.SET(token) && isToken.BY(previousReservedToken)) {
-        return { type: TokenType.RESERVED_KEYWORD, value: token.value };
-      }
+    // BY [SET]
+    if (isToken.SET(token) && isToken.BY(previousReservedToken)) {
+      return { type: TokenType.RESERVED_KEYWORD, value: token.value };
+    }
 
-      if (isReserved(token)) {
-        previousReservedToken = token;
-      }
+    if (isReserved(token)) {
+      previousReservedToken = token;
+    }
 
-      return token;
-    });
-  }
+    return token;
+  });
 }

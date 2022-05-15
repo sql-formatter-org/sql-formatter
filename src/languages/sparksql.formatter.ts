@@ -810,35 +810,36 @@ export default class SparkSqlFormatter extends Formatter {
       namedPlaceholderTypes: SparkSqlFormatter.namedPlaceholderTypes,
       lineCommentTypes: SparkSqlFormatter.lineCommentTypes,
       operators: SparkSqlFormatter.operators,
+      preprocess,
     });
   }
+}
 
-  preprocess(tokens: Token[]) {
-    return tokens.map((token, i) => {
-      const prevToken = tokens[i - 1] || EOF_TOKEN;
-      const nextToken = tokens[i + 1] || EOF_TOKEN;
+function preprocess(tokens: Token[]) {
+  return tokens.map((token, i) => {
+    const prevToken = tokens[i - 1] || EOF_TOKEN;
+    const nextToken = tokens[i + 1] || EOF_TOKEN;
 
-      // [WINDOW](...)
-      if (isToken.WINDOW(token) && nextToken.type === TokenType.BLOCK_START) {
-        // This is a function call, treat it as a reserved word
-        return { type: TokenType.RESERVED_KEYWORD, value: token.value };
-      }
+    // [WINDOW](...)
+    if (isToken.WINDOW(token) && nextToken.type === TokenType.BLOCK_START) {
+      // This is a function call, treat it as a reserved word
+      return { type: TokenType.RESERVED_KEYWORD, value: token.value };
+    }
 
-      // .[END]
-      if (isToken.END(token) && prevToken.value === '.') {
-        // This is window().end (or similar) not CASE ... END
+    // .[END]
+    if (isToken.END(token) && prevToken.value === '.') {
+      // This is window().end (or similar) not CASE ... END
+      return { type: TokenType.WORD, value: token.value };
+    }
+
+    // TODO: deprecate this once ITEMS is merged with COLLECTION
+    if (/ITEMS/i.test(token.value) && token.type === TokenType.RESERVED_KEYWORD) {
+      if (!(/COLLECTION/i.test(prevToken.value) && /TERMINATED/i.test(nextToken.value))) {
+        // this is a word and not COLLECTION ITEMS
         return { type: TokenType.WORD, value: token.value };
       }
+    }
 
-      // TODO: deprecate this once ITEMS is merged with COLLECTION
-      if (/ITEMS/i.test(token.value) && token.type === TokenType.RESERVED_KEYWORD) {
-        if (!(/COLLECTION/i.test(prevToken.value) && /TERMINATED/i.test(nextToken.value))) {
-          // this is a word and not COLLECTION ITEMS
-          return { type: TokenType.WORD, value: token.value };
-        }
-      }
-
-      return token;
-    });
-  }
+    return token;
+  });
 }
