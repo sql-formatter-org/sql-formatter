@@ -1244,8 +1244,8 @@ export default class TSqlFormatter extends Formatter {
     ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
   ]);
   static stringTypes: StringPatternType[] = [`""`, "N''", "''", '[]', '``'];
-  static blockStart = ['(', 'CASE'];
-  static blockEnd = [')', 'END'];
+  static blockStart = ['('];
+  static blockEnd = [')'];
   static indexedPlaceholderTypes = [];
   static namedPlaceholderTypes = ['@'];
   static lineCommentTypes = ['--'];
@@ -1263,6 +1263,7 @@ export default class TSqlFormatter extends Formatter {
       stringTypes: TSqlFormatter.stringTypes,
       blockStart: TSqlFormatter.blockStart,
       blockEnd: TSqlFormatter.blockEnd,
+      supportsCase: true,
       indexedPlaceholderTypes: TSqlFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: TSqlFormatter.namedPlaceholderTypes,
       lineCommentTypes: TSqlFormatter.lineCommentTypes,

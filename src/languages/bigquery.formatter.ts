@@ -86,7 +86,12 @@ const reservedFunctions = {
   // https://cloud.google.com/bigquery/docs/reference/standard-sql/bit_functions
   bitwise: ['BIT_COUNT'],
   // https://cloud.google.com/bigquery/docs/reference/standard-sql/conversion_functions
-  conversion: ['CASE', 'PARSE_BIGNUMERIC', 'PARSE_NUMERIC', 'SAFE_CAST'],
+  conversion: [
+    // 'CASE',
+    'PARSE_BIGNUMERIC',
+    'PARSE_NUMERIC',
+    'SAFE_CAST',
+  ],
   // https://cloud.google.com/bigquery/docs/reference/standard-sql/date_functions
   date: [
     'CURRENT_DATE',
@@ -831,8 +836,8 @@ export default class BigQueryFormatter extends Formatter {
   ]);
 
   static stringTypes: StringPatternType[] = ['""', "''", '``']; // add: '''''', """""" ; prefixes: r, b
-  static blockStart = ['(', 'CASE'];
-  static blockEnd = [')', 'END'];
+  static blockStart = ['('];
+  static blockEnd = [')'];
   static indexedPlaceholderTypes = ['?'];
   static namedPlaceholderTypes = [];
   static lineCommentTypes = ['--', '#'];
@@ -851,6 +856,7 @@ export default class BigQueryFormatter extends Formatter {
       stringTypes: BigQueryFormatter.stringTypes,
       blockStart: BigQueryFormatter.blockStart,
       blockEnd: BigQueryFormatter.blockEnd,
+      supportsCase: true,
       indexedPlaceholderTypes: BigQueryFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: BigQueryFormatter.namedPlaceholderTypes,
       lineCommentTypes: BigQueryFormatter.lineCommentTypes,

@@ -1163,8 +1163,8 @@ export default class MariaDbFormatter extends Formatter {
   static reservedDependentClauses = reservedDependentClauses;
   static reservedKeywords = dedupe([...reservedKeywords, ...reservedFunctions]);
   static stringTypes: StringPatternType[] = ['``', "''", '""'];
-  static blockStart = ['(', 'CASE'];
-  static blockEnd = [')', 'END'];
+  static blockStart = ['('];
+  static blockEnd = [')'];
   static indexedPlaceholderTypes = ['?'];
   static namedPlaceholderTypes = [];
   static lineCommentTypes = ['--', '#'];
@@ -1182,6 +1182,7 @@ export default class MariaDbFormatter extends Formatter {
       stringTypes: MariaDbFormatter.stringTypes,
       blockStart: MariaDbFormatter.blockStart,
       blockEnd: MariaDbFormatter.blockEnd,
+      supportsCase: true,
       indexedPlaceholderTypes: MariaDbFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: MariaDbFormatter.namedPlaceholderTypes,
       lineCommentTypes: MariaDbFormatter.lineCommentTypes,

@@ -625,8 +625,8 @@ export default class HiveFormatter extends Formatter {
   ]);
 
   static stringTypes: StringPatternType[] = ['""', "''", '``'];
-  static blockStart = ['(', 'CASE'];
-  static blockEnd = [')', 'END'];
+  static blockStart = ['('];
+  static blockEnd = [')'];
   static indexedPlaceholderTypes = ['?'];
   static namedPlaceholderTypes = [];
   static lineCommentTypes = ['--'];
@@ -644,6 +644,7 @@ export default class HiveFormatter extends Formatter {
       stringTypes: HiveFormatter.stringTypes,
       blockStart: HiveFormatter.blockStart,
       blockEnd: HiveFormatter.blockEnd,
+      supportsCase: true,
       indexedPlaceholderTypes: HiveFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: HiveFormatter.namedPlaceholderTypes,
       lineCommentTypes: HiveFormatter.lineCommentTypes,

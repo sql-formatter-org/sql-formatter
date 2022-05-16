@@ -39,7 +39,6 @@ const reservedFunctions = [
   'CAN_ACCESS_TABLE',
   'CAN_ACCESS_USER',
   'CAN_ACCESS_VIEW',
-  'CASE',
   'CAST',
   'CEIL',
   'CEILING',
@@ -1327,8 +1326,8 @@ export default class MySqlFormatter extends Formatter {
   static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
   static reservedKeywords = dedupe([...reservedKeywords, ...reservedFunctions]);
   static stringTypes: StringPatternType[] = ['``', "''", '""'];
-  static blockStart = ['(', 'CASE'];
-  static blockEnd = [')', 'END'];
+  static blockStart = ['('];
+  static blockEnd = [')'];
   static indexedPlaceholderTypes = ['?'];
   static namedPlaceholderTypes = [];
   static lineCommentTypes = ['--', '#'];
@@ -1346,6 +1345,7 @@ export default class MySqlFormatter extends Formatter {
       stringTypes: MySqlFormatter.stringTypes,
       blockStart: MySqlFormatter.blockStart,
       blockEnd: MySqlFormatter.blockEnd,
+      supportsCase: true,
       indexedPlaceholderTypes: MySqlFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: MySqlFormatter.namedPlaceholderTypes,
       lineCommentTypes: MySqlFormatter.lineCommentTypes,

@@ -31,7 +31,6 @@ const standardReservedWords = [
   'CALLED',
   'CARDINALITY',
   'CASCADED',
-  'CASE',
   'CAST',
   'CEIL',
   'CEILING',
@@ -431,8 +430,8 @@ export default class SqliteFormatter extends Formatter {
   static reservedKeywords = [...standardReservedWords, ...nonStandardSqliteReservedWords];
   // https://www.sqlite.org/lang_keywords.html
   static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]'];
-  static blockStart = ['(', 'CASE'];
-  static blockEnd = [')', 'END'];
+  static blockStart = ['('];
+  static blockEnd = [')'];
   // https://www.sqlite.org/lang_expr.html#parameters
   static indexedPlaceholderTypes = ['?'];
   static namedPlaceholderTypes = [':', '@', '$'];
@@ -451,6 +450,7 @@ export default class SqliteFormatter extends Formatter {
       stringTypes: SqliteFormatter.stringTypes,
       blockStart: SqliteFormatter.blockStart,
       blockEnd: SqliteFormatter.blockEnd,
+      supportsCase: true,
       indexedPlaceholderTypes: SqliteFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: SqliteFormatter.namedPlaceholderTypes,
       lineCommentTypes: SqliteFormatter.lineCommentTypes,

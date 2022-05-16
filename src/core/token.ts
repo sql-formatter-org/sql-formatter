@@ -8,6 +8,8 @@ export enum TokenType {
   RESERVED_BINARY_COMMAND = 'RESERVED_BINARY_COMMAND',
   RESERVED_COMMAND = 'RESERVED_COMMAND',
   RESERVED_JOIN_CONDITION = 'RESERVED_JOIN_CONDITION',
+  RESERVED_CASE_START = 'RESERVED_CASE_START',
+  RESERVED_CASE_END = 'RESERVED_CASE_END',
   OPERATOR = 'OPERATOR',
   BLOCK_START = 'BLOCK_START',
   BLOCK_END = 'BLOCK_END',
@@ -49,10 +51,10 @@ export const isToken = {
   AS: testToken({ value: 'AS', type: TokenType.RESERVED_KEYWORD }),
   AND: testToken({ value: 'AND', type: TokenType.RESERVED_LOGICAL_OPERATOR }),
   BETWEEN: testToken({ value: 'BETWEEN', type: TokenType.RESERVED_KEYWORD }),
-  CASE: testToken({ value: 'CASE', type: TokenType.BLOCK_START }),
+  CASE: testToken({ value: 'CASE', type: TokenType.RESERVED_CASE_START }),
   CAST: testToken({ value: 'CAST', type: TokenType.RESERVED_KEYWORD }),
   BY: testToken({ value: 'BY', type: TokenType.RESERVED_KEYWORD }),
-  END: testToken({ value: 'END', type: TokenType.BLOCK_END }),
+  END: testToken({ value: 'END', type: TokenType.RESERVED_CASE_END }),
   FROM: testToken({ value: 'FROM', type: TokenType.RESERVED_COMMAND }),
   LIMIT: testToken({ value: 'LIMIT', type: TokenType.RESERVED_COMMAND }),
   SELECT: testToken({ value: 'SELECT', type: TokenType.RESERVED_COMMAND }),
@@ -73,4 +75,6 @@ export const isReserved = (token: Token): boolean =>
   token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
   token.type === TokenType.RESERVED_JOIN_CONDITION ||
   token.type === TokenType.RESERVED_COMMAND ||
-  token.type === TokenType.RESERVED_BINARY_COMMAND;
+  token.type === TokenType.RESERVED_BINARY_COMMAND ||
+  token.type === TokenType.RESERVED_CASE_START ||
+  token.type === TokenType.RESERVED_CASE_END;

@@ -451,8 +451,8 @@ export default class PlSqlFormatter extends Formatter {
   static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
   static reservedKeywords = dedupe(reservedKeywords);
   static stringTypes: StringPatternType[] = [`""`, "N''", "''", '``'];
-  static blockStart = ['(', 'CASE'];
-  static blockEnd = [')', 'END'];
+  static blockStart = ['('];
+  static blockEnd = [')'];
   static indexedPlaceholderTypes = ['?'];
   static namedPlaceholderTypes = [':'];
   static lineCommentTypes = ['--'];
@@ -480,6 +480,7 @@ export default class PlSqlFormatter extends Formatter {
       stringTypes: PlSqlFormatter.stringTypes,
       blockStart: PlSqlFormatter.blockStart,
       blockEnd: PlSqlFormatter.blockEnd,
+      supportsCase: true,
       indexedPlaceholderTypes: PlSqlFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: PlSqlFormatter.namedPlaceholderTypes,
       lineCommentTypes: PlSqlFormatter.lineCommentTypes,

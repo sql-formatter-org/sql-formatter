@@ -100,14 +100,15 @@ export default class Formatter {
     for (this.index = 0; this.index < this.tokens.length; this.index++) {
       let token = this.tokens[this.index];
 
-      // if token is a Reserved Keyword, Command, Binary Command, Dependent Clause, Logical Operator
+      // if token is a Reserved Keyword, Command, Binary Command, Dependent Clause, Logical Operator, CASE, END
       if (isReserved(token)) {
         this.previousReservedToken = token;
         if (
-          token.type !== TokenType.RESERVED_KEYWORD &&
-          token.type !== TokenType.RESERVED_JOIN_CONDITION
+          token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
+          token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
+          token.type === TokenType.RESERVED_COMMAND ||
+          token.type === TokenType.RESERVED_BINARY_COMMAND
         ) {
-          // convert Reserved Command or Logical Operator to tabular format if needed
           token = toTabularToken(token, this.cfg.indentStyle);
         }
         if (token.type === TokenType.RESERVED_COMMAND) {
@@ -136,6 +137,10 @@ export default class Formatter {
         formattedQuery = this.formatBlockStart(token, formattedQuery);
       } else if (token.type === TokenType.BLOCK_END) {
         formattedQuery = this.formatBlockEnd(token, formattedQuery);
+      } else if (token.type === TokenType.RESERVED_CASE_START) {
+        formattedQuery = this.formatCaseStart(token, formattedQuery);
+      } else if (token.type === TokenType.RESERVED_CASE_END) {
+        formattedQuery = this.formatCaseEnd(token, formattedQuery);
       } else if (token.type === TokenType.PLACEHOLDER) {
         formattedQuery = this.formatPlaceholder(token, formattedQuery);
       } else if (token.type === TokenType.OPERATOR) {
@@ -358,62 +363,67 @@ export default class Formatter {
     return string.replace(/\s+/gu, ' ');
   }
 
-  /**
-   * Formats a Block Start token (left paren/bracket/brace, CASE) onto query, beginning an Inline Block or increasing indentation where necessary
-   */
   private formatBlockStart(token: Token, query: string): string {
-    if (isToken.CASE(token)) {
-      query = this.formatWithSpaces(token, query);
-    } else {
-      // Take out the preceding space unless there was whitespace there in the original query
-      // or another opening parens or line comment
-      const preserveWhitespaceFor = [
-        TokenType.BLOCK_START,
-        TokenType.LINE_COMMENT,
-        TokenType.OPERATOR,
-      ];
-      if (
-        token.whitespaceBefore?.length === 0 &&
-        !preserveWhitespaceFor.includes(this.tokenLookBehind().type)
-      ) {
-        query = trimSpacesEnd(query);
-      } else if (!this.cfg.newlineBeforeOpenParen) {
-        query = query.trimEnd() + ' ';
-      }
-      query += this.show(token);
-      this.inlineBlock.beginIfPossible(this.tokens, this.index);
+    // Take out the preceding space unless there was whitespace there in the original query
+    // or another opening parens or line comment
+    const preserveWhitespaceFor = [
+      TokenType.BLOCK_START,
+      TokenType.LINE_COMMENT,
+      TokenType.OPERATOR,
+    ];
+    if (
+      token.whitespaceBefore?.length === 0 &&
+      !preserveWhitespaceFor.includes(this.tokenLookBehind().type)
+    ) {
+      query = trimSpacesEnd(query);
+    } else if (!this.cfg.newlineBeforeOpenParen) {
+      query = query.trimEnd() + ' ';
     }
+    query += this.show(token);
+    this.inlineBlock.beginIfPossible(this.tokens, this.index);
 
     if (!this.inlineBlock.isActive()) {
       this.indentation.increaseBlockLevel();
-      if (!isToken.CASE(token) || this.cfg.multilineLists === 'always') {
-        query = this.addNewline(query);
-      }
+      query = this.addNewline(query);
     }
     return query;
   }
 
-  /**
-   * Formats a Block End token (right paren/bracket/brace, END) onto query, closing an Inline Block or decreasing indentation where necessary
-   */
   private formatBlockEnd(token: Token, query: string): string {
     if (this.inlineBlock.isActive()) {
       this.inlineBlock.end();
       return this.formatWithSpaces(token, query, 'after'); // do not add space before )
     } else {
-      this.indentation.decreaseBlockLevel();
-
-      if (this.isTabularStyle()) {
-        // +1 extra indentation step for the closing paren
-        query = this.addNewline(query) + this.indentation.getSingleIndent();
-      } else if (this.cfg.newlineBeforeCloseParen) {
-        query = this.addNewline(query);
-      } else {
-        query = query.trimEnd() + ' ';
-      }
-
-      return this.formatWithSpaces(token, query);
+      return this.formatMultilineBlockEnd(token, query);
     }
+  }
+
+  private formatCaseStart(token: Token, query: string): string {
+    query = this.formatWithSpaces(token, query);
+    this.indentation.increaseBlockLevel();
+    if (this.cfg.multilineLists === 'always') {
+      query = this.addNewline(query);
+    }
+    return query;
+  }
+
+  private formatCaseEnd(token: Token, query: string): string {
+    return this.formatMultilineBlockEnd(token, query);
+  }
+
+  private formatMultilineBlockEnd(token: Token, query: string): string {
+    this.indentation.decreaseBlockLevel();
+
+    if (this.isTabularStyle()) {
+      // +1 extra indentation step for the closing paren
+      query = this.addNewline(query) + this.indentation.getSingleIndent();
+    } else if (this.cfg.newlineBeforeCloseParen) {
+      query = this.addNewline(query);
+    } else {
+      query = query.trimEnd() + ' ';
+    }
+
+    return this.formatWithSpaces(token, query);
   }
 
   /**
@@ -468,11 +478,7 @@ export default class Formatter {
 
   /** Converts token to string, uppercasing if enabled */
   private show(token: Token): string {
-    if (
-      isReserved(token) ||
-      token.type === TokenType.BLOCK_START ||
-      token.type === TokenType.BLOCK_END
-    ) {
+    if (isReserved(token)) {
       switch (this.cfg.keywordCase) {
         case 'preserve':
           return token.value;

@@ -788,8 +788,8 @@ export default class SparkSqlFormatter extends Formatter {
     ...reservedKeywords,
   ]);
   static stringTypes: StringPatternType[] = [`""`, "''", '``', '{}'];
-  static blockStart = ['(', 'CASE'];
-  static blockEnd = [')', 'END'];
+  static blockStart = ['('];
+  static blockEnd = [')'];
   static indexedPlaceholderTypes = ['?'];
   static namedPlaceholderTypes = ['$'];
   static lineCommentTypes = ['--'];
@@ -806,6 +806,7 @@ export default class SparkSqlFormatter extends Formatter {
       stringTypes: SparkSqlFormatter.stringTypes,
       blockStart: SparkSqlFormatter.blockStart,
       blockEnd: SparkSqlFormatter.blockEnd,
+      supportsCase: true,
       indexedPlaceholderTypes: SparkSqlFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: SparkSqlFormatter.namedPlaceholderTypes,
       lineCommentTypes: SparkSqlFormatter.lineCommentTypes,

@@ -519,8 +519,8 @@ export default class N1qlFormatter extends Formatter {
   static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
   static reservedKeywords = dedupe([...reservedKeywords, ...reservedFunctions]);
   static stringTypes: StringPatternType[] = [`""`, "''", '``'];
-  static blockStart = ['(', '[', '{', 'CASE'];
-  static blockEnd = [')', ']', '}', 'END'];
+  static blockStart = ['(', '[', '{'];
+  static blockEnd = [')', ']', '}'];
   static namedPlaceholderTypes = ['$'];
   static lineCommentTypes = ['#', '--'];
   static operators = ['=='];
@@ -536,6 +536,7 @@ export default class N1qlFormatter extends Formatter {
       stringTypes: N1qlFormatter.stringTypes,
       blockStart: N1qlFormatter.blockStart,
       blockEnd: N1qlFormatter.blockEnd,
+      supportsCase: true,
       namedPlaceholderTypes: N1qlFormatter.namedPlaceholderTypes,
       lineCommentTypes: N1qlFormatter.lineCommentTypes,
       operators: N1qlFormatter.operators,

@@ -378,8 +378,8 @@ export default class StandardSqlFormatter extends Formatter {
   static reservedLogicalOperators = ['AND', 'OR'];
   static reservedKeywords = dedupe(reservedKeywords);
   static stringTypes: StringPatternType[] = [`""`, "''", '``'];
-  static blockStart = ['(', 'CASE'];
-  static blockEnd = [')', 'END'];
+  static blockStart = ['('];
+  static blockEnd = [')'];
   static indexedPlaceholderTypes = ['?'];
   static namedPlaceholderTypes = [];
   static lineCommentTypes = ['--'];
@@ -396,6 +396,7 @@ export default class StandardSqlFormatter extends Formatter {
       stringTypes: StandardSqlFormatter.stringTypes,
       blockStart: StandardSqlFormatter.blockStart,
       blockEnd: StandardSqlFormatter.blockEnd,
+      supportsCase: true,
       indexedPlaceholderTypes: StandardSqlFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: StandardSqlFormatter.namedPlaceholderTypes,
       lineCommentTypes: StandardSqlFormatter.lineCommentTypes,
