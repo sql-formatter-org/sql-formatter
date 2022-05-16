@@ -1528,7 +1528,6 @@ const reservedCommands = [
   'DROP USER',
   'DROP USER MAPPING',
   'DROP VIEW',
-  'END',
   'EXECUTE',
   'EXPLAIN',
   'FETCH',

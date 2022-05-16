@@ -375,7 +375,6 @@ const reservedCommands = [
   'DECLARE',
   'DELETE',
   'DELETE FROM',
-  'END',
   'EXCEPT',
   'EXCEPTION',
   'FETCH FIRST',

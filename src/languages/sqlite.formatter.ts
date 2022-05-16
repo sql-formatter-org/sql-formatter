@@ -92,7 +92,6 @@ const standardReservedWords = [
   'EACH',
   'ELEMENT',
   'ELSE',
-  'END',
   'END-EXEC',
   'ESCAPE',
   'EVERY',

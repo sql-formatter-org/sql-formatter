@@ -311,7 +311,6 @@ const reservedCommands = [
   'CREATE TABLE',
   'DROP TABLE',
   'DELETE FROM',
-  'END',
   'FETCH FIRST',
   'FETCH NEXT',
   'FETCH PRIOR',
