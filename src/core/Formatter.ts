@@ -24,8 +24,8 @@ export default class Formatter {
   private currentNewline = true;
   private previousReservedToken: Token = EOF_TOKEN;
   private previousCommandToken: Token = EOF_TOKEN;
-  protected tokens: Token[] = [];
-  protected index = -1;
+  private tokens: Token[] = [];
+  private index = -1;
 
   constructor(cfg: FormatOptions) {
     this.cfg = cfg;
