@@ -1,7 +1,7 @@
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
-import { trimNewlinesStart, trimSpacesEnd } from '../utils';
+import { trimSpacesEnd } from '../utils';
 import { isReserved, isCommand, isToken, Token, TokenType, EOF_TOKEN } from './token';
 import Tokenizer from './Tokenizer';
 import { FormatOptions } from '../types';
@@ -86,7 +86,6 @@ export default class Formatter {
   private formatSql(statements: Statement[]): string {
     return statements
       .map(this.formatStatement, this)
-      .map(trimNewlinesStart) // Each command token will start with a newline
       .join('\n'.repeat(this.cfg.linesBetweenQueries + 1));
   }
 
@@ -493,7 +492,7 @@ export default class Formatter {
   /** Inserts a newline onto the query */
   private addNewline(query: string): string {
     query = trimSpacesEnd(query);
-    if (!query.endsWith('\n')) {
+    if (!query.endsWith('\n') && query !== '') {
       query += '\n';
     }
     return query + this.indentation.getIndent();
