@@ -479,7 +479,6 @@ export default class PlSqlFormatter extends Formatter {
       stringTypes: PlSqlFormatter.stringTypes,
       blockStart: PlSqlFormatter.blockStart,
       blockEnd: PlSqlFormatter.blockEnd,
-      supportsCase: true,
       indexedPlaceholderTypes: PlSqlFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: PlSqlFormatter.namedPlaceholderTypes,
       lineCommentTypes: PlSqlFormatter.lineCommentTypes,

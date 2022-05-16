@@ -11,14 +11,12 @@ import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsDeleteFrom from './features/deleteFrom';
-import supportsCase from './features/case';
 
 describe('RedshiftFormatter', () => {
   const language = 'redshift';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
-  supportsCase(language, format);
   supportsCreateTable(language, format);
   supportsAlterTable(language, format);
   supportsAlterTableModify(language, format);

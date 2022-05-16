@@ -3,7 +3,6 @@ import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
 import TSqlFormatter from '../src/languages/tsql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
-import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
 import supportsAlterTable from './features/alterTable';
 import supportsSchema from './features/schema';
@@ -19,7 +18,6 @@ describe('TSqlFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
-  supportsCase(language, format);
   supportsCreateTable(language, format);
   supportsConstraints(language, format);
   supportsAlterTable(language, format);

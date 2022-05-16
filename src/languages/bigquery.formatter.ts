@@ -856,7 +856,6 @@ export default class BigQueryFormatter extends Formatter {
       stringTypes: BigQueryFormatter.stringTypes,
       blockStart: BigQueryFormatter.blockStart,
       blockEnd: BigQueryFormatter.blockEnd,
-      supportsCase: true,
       indexedPlaceholderTypes: BigQueryFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: BigQueryFormatter.namedPlaceholderTypes,
       lineCommentTypes: BigQueryFormatter.lineCommentTypes,

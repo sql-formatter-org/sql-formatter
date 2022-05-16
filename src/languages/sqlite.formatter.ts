@@ -449,7 +449,6 @@ export default class SqliteFormatter extends Formatter {
       stringTypes: SqliteFormatter.stringTypes,
       blockStart: SqliteFormatter.blockStart,
       blockEnd: SqliteFormatter.blockEnd,
-      supportsCase: true,
       indexedPlaceholderTypes: SqliteFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: SqliteFormatter.namedPlaceholderTypes,
       lineCommentTypes: SqliteFormatter.lineCommentTypes,

@@ -16,7 +16,6 @@ interface TokenizerOptions {
   stringTypes: regexFactory.StringPatternType[];
   blockStart: string[];
   blockEnd: string[];
-  supportsCase?: boolean;
   indexedPlaceholderTypes?: string[];
   namedPlaceholderTypes: string[];
   lineCommentTypes: string[];
@@ -46,7 +45,6 @@ export default class Tokenizer {
    *  @param {string[]} cfg.stringTypes - string types to enable - "", '', ``, [], N''
    *  @param {string[]} cfg.blockStart - Opening parentheses to enable, like (, [
    *  @param {string[]} cfg.blockEnd - Closing parentheses to enable, like ), ]
-   *  @param {boolean} cfg.supportsCase - True when the dialect supports CASE..END expressions
    *  @param {string[]} cfg.indexedPlaceholderTypes - Prefixes for indexed placeholders, like ?
    *  @param {string[]} cfg.namedPlaceholderTypes - Prefixes for named placeholders, like @ and :
    *  @param {string[]} cfg.lineCommentTypes - Line comments to enable, like # and --
@@ -96,8 +94,8 @@ export default class Tokenizer {
       ]),
       [TokenType.BLOCK_START]: regexFactory.createParenRegex(cfg.blockStart),
       [TokenType.BLOCK_END]: regexFactory.createParenRegex(cfg.blockEnd),
-      [TokenType.RESERVED_CASE_START]: cfg.supportsCase ? /^(CASE)\b/iu : NULL_REGEX,
-      [TokenType.RESERVED_CASE_END]: cfg.supportsCase ? /^(END)\b/iu : NULL_REGEX,
+      [TokenType.RESERVED_CASE_START]: /^(CASE)\b/iu,
+      [TokenType.RESERVED_CASE_END]: /^(END)\b/iu,
       [TokenType.LINE_COMMENT]: regexFactory.createLineCommentRegex(cfg.lineCommentTypes),
       [TokenType.BLOCK_COMMENT]: /^(\/\*[^]*?(?:\*\/|$))/u,
       [TokenType.NUMBER]:

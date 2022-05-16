@@ -806,7 +806,6 @@ export default class SparkSqlFormatter extends Formatter {
       stringTypes: SparkSqlFormatter.stringTypes,
       blockStart: SparkSqlFormatter.blockStart,
       blockEnd: SparkSqlFormatter.blockEnd,
-      supportsCase: true,
       indexedPlaceholderTypes: SparkSqlFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: SparkSqlFormatter.namedPlaceholderTypes,
       lineCommentTypes: SparkSqlFormatter.lineCommentTypes,

@@ -1697,7 +1697,6 @@ export default class PostgreSqlFormatter extends Formatter {
       stringTypes: PostgreSqlFormatter.stringTypes,
       blockStart: PostgreSqlFormatter.blockStart,
       blockEnd: PostgreSqlFormatter.blockEnd,
-      supportsCase: true,
       indexedPlaceholderTypes: PostgreSqlFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: PostgreSqlFormatter.namedPlaceholderTypes,
       lineCommentTypes: PostgreSqlFormatter.lineCommentTypes,

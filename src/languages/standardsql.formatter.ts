@@ -395,7 +395,6 @@ export default class StandardSqlFormatter extends Formatter {
       stringTypes: StandardSqlFormatter.stringTypes,
       blockStart: StandardSqlFormatter.blockStart,
       blockEnd: StandardSqlFormatter.blockEnd,
-      supportsCase: true,
       indexedPlaceholderTypes: StandardSqlFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: StandardSqlFormatter.namedPlaceholderTypes,
       lineCommentTypes: StandardSqlFormatter.lineCommentTypes,

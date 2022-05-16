@@ -1182,7 +1182,6 @@ export default class MariaDbFormatter extends Formatter {
       stringTypes: MariaDbFormatter.stringTypes,
       blockStart: MariaDbFormatter.blockStart,
       blockEnd: MariaDbFormatter.blockEnd,
-      supportsCase: true,
       indexedPlaceholderTypes: MariaDbFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: MariaDbFormatter.namedPlaceholderTypes,
       lineCommentTypes: MariaDbFormatter.lineCommentTypes,

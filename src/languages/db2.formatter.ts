@@ -889,7 +889,6 @@ export default class Db2Formatter extends Formatter {
       stringTypes: Db2Formatter.stringTypes,
       blockStart: Db2Formatter.blockStart,
       blockEnd: Db2Formatter.blockEnd,
-      supportsCase: true,
       indexedPlaceholderTypes: Db2Formatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: Db2Formatter.namedPlaceholderTypes,
       lineCommentTypes: Db2Formatter.lineCommentTypes,

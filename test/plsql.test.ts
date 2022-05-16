@@ -6,7 +6,6 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
 import supportsAlterTableModify from './features/alterTableModify';
 import supportsBetween from './features/between';
-import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
@@ -21,7 +20,6 @@ describe('PlSqlFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
-  supportsCase(language, format);
   supportsCreateTable(language, format);
   supportsConstraints(language, format);
   supportsAlterTable(language, format);

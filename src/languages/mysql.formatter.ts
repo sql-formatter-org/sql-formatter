@@ -1345,7 +1345,6 @@ export default class MySqlFormatter extends Formatter {
       stringTypes: MySqlFormatter.stringTypes,
       blockStart: MySqlFormatter.blockStart,
       blockEnd: MySqlFormatter.blockEnd,
-      supportsCase: true,
       indexedPlaceholderTypes: MySqlFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: MySqlFormatter.namedPlaceholderTypes,
       lineCommentTypes: MySqlFormatter.lineCommentTypes,

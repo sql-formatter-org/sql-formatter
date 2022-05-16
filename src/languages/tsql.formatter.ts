@@ -1261,7 +1261,6 @@ export default class TSqlFormatter extends Formatter {
       stringTypes: TSqlFormatter.stringTypes,
       blockStart: TSqlFormatter.blockStart,
       blockEnd: TSqlFormatter.blockEnd,
-      supportsCase: true,
       indexedPlaceholderTypes: TSqlFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: TSqlFormatter.namedPlaceholderTypes,
       lineCommentTypes: TSqlFormatter.lineCommentTypes,

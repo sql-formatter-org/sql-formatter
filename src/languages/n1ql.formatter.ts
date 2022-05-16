@@ -536,7 +536,6 @@ export default class N1qlFormatter extends Formatter {
       stringTypes: N1qlFormatter.stringTypes,
       blockStart: N1qlFormatter.blockStart,
       blockEnd: N1qlFormatter.blockEnd,
-      supportsCase: true,
       namedPlaceholderTypes: N1qlFormatter.namedPlaceholderTypes,
       lineCommentTypes: N1qlFormatter.lineCommentTypes,
       operators: N1qlFormatter.operators,

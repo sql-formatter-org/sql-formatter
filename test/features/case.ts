@@ -79,12 +79,12 @@ export default function supportsCase(language: SqlLanguage, format: FormatFn) {
 
   it('properly converts to uppercase in case statements', () => {
     const result = format(
-      "case toString(getNumber()) when 'one' then 1 when 'two' then 2 when 'three' then 3 else 4 end;",
+      "case stringify(getNumber()) when 'one' then 1 when 'two' then 2 when 'three' then 3 else 4 end;",
       { keywordCase: 'upper' }
     );
     expect(result).toBe(dedent`
       CASE
-        toString(getNumber())
+        stringify(getNumber())
         WHEN 'one' THEN 1
         WHEN 'two' THEN 2
         WHEN 'three' THEN 3

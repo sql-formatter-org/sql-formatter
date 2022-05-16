@@ -3,7 +3,6 @@ import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
 import BigQueryFormatter from '../src/languages/bigquery.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
-import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
@@ -17,7 +16,6 @@ describe('BigQueryFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
-  supportsCase(language, format);
   supportsCreateTable(language, format);
   supportsDeleteFrom(language, format);
   supportsStrings(language, format, BigQueryFormatter.stringTypes);

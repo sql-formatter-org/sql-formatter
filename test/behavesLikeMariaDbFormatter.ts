@@ -2,7 +2,6 @@ import dedent from 'dedent-js';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import { FormatFn, SqlLanguage } from '../src/sqlFormatter';
 
-import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
@@ -15,7 +14,6 @@ import supportsDeleteFrom from './features/deleteFrom';
  */
 export default function behavesLikeMariaDbFormatter(language: SqlLanguage, format: FormatFn) {
   behavesLikeSqlFormatter(language, format);
-  supportsCase(language, format);
   supportsCreateTable(language, format);
   supportsConstraints(language, format);
   supportsAlterTable(language, format);

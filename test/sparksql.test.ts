@@ -5,7 +5,6 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
-import supportsCase from './features/case';
 import supportsCreateTable from './features/createTable';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
@@ -18,7 +17,6 @@ describe('SparkSqlFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
-  supportsCase(language, format);
   supportsCreateTable(language, format);
   supportsAlterTable(language, format);
   supportsStrings(language, format, SparkSqlFormatter.stringTypes);

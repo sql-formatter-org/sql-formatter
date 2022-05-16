@@ -744,7 +744,6 @@ export default class RedshiftFormatter extends Formatter {
       stringTypes: RedshiftFormatter.stringTypes,
       blockStart: RedshiftFormatter.blockStart,
       blockEnd: RedshiftFormatter.blockEnd,
-      supportsCase: true,
       indexedPlaceholderTypes: RedshiftFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: RedshiftFormatter.namedPlaceholderTypes,
       lineCommentTypes: RedshiftFormatter.lineCommentTypes,
