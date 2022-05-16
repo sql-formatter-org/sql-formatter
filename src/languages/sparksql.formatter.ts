@@ -827,12 +827,6 @@ function preprocess(tokens: Token[]) {
       return { type: TokenType.RESERVED_KEYWORD, value: token.value };
     }
 
-    // .[END]
-    if (isToken.END(token) && prevToken.value === '.') {
-      // This is window().end (or similar) not CASE ... END
-      return { type: TokenType.WORD, value: token.value };
-    }
-
     // TODO: deprecate this once ITEMS is merged with COLLECTION
     if (/ITEMS/i.test(token.value) && token.type === TokenType.RESERVED_KEYWORD) {
       if (!(/COLLECTION/i.test(prevToken.value) && /TERMINATED/i.test(nextToken.value))) {
