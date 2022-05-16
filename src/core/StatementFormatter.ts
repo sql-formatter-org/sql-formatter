@@ -259,9 +259,9 @@ export default class StatementFormatter {
     } else if (token.value === ';') {
       return this.formatQuerySeparator(token, query);
     } else if (['$', '['].includes(token.value)) {
-      return this.formatWithSpaces(token, query, 'before');
+      return this.formatWithSpaceBefore(token, query);
     } else if ([':', ']'].includes(token.value)) {
-      return this.formatWithSpaces(token, query, 'after');
+      return this.formatWithSpaceAfter(token, query);
     } else if (['.', '{', '}', '`'].includes(token.value)) {
       return this.formatWithoutSpaces(token, query);
     }
@@ -333,7 +333,7 @@ export default class StatementFormatter {
   private formatBlockEnd(token: Token, query: string): string {
     if (this.inlineBlock.isActive()) {
       this.inlineBlock.end();
-      return this.formatWithSpaces(token, query, 'after'); // do not add space before )
+      return this.formatWithSpaceAfter(token, query); // do not add space before )
     } else {
       return this.formatMultilineBlockEnd(token, query);
     }
@@ -396,17 +396,16 @@ export default class StatementFormatter {
     return trimSpacesEnd(query) + this.show(token);
   }
 
-  /**
-   * Add token onto query with spaces - either before, after, or both
-   */
-  private formatWithSpaces(
-    token: Token,
-    query: string,
-    addSpace: 'before' | 'after' | 'both' = 'both'
-  ): string {
-    const before = addSpace === 'after' ? trimSpacesEnd(query) : query;
-    const after = addSpace === 'before' ? '' : ' ';
-    return before + this.show(token) + after;
+  private formatWithSpaces(token: Token, query: string): string {
+    return query + this.show(token) + ' ';
+  }
+
+  private formatWithSpaceBefore(token: Token, query: string) {
+    return query + this.show(token);
+  }
+
+  private formatWithSpaceAfter(token: Token, query: string) {
+    return trimSpacesEnd(query) + this.show(token) + ' ';
   }
 
   private formatQuerySeparator(token: Token, query: string): string {
