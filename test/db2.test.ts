@@ -12,12 +12,14 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
+import supportsCase from './features/case';
 
 describe('Db2Formatter', () => {
   const language = 'db2';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
+  supportsCase(language, format);
   supportsCreateTable(language, format);
   supportsConstraints(language, format);
   supportsAlterTable(language, format);
