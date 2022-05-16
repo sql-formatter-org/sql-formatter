@@ -38,7 +38,7 @@ const reservedFunctions = {
   // https://docs.aws.amazon.com/redshift/latest/dg/c_bitwise_aggregate_functions.html
   bitwise: ['BIT_AND', 'BIT_OR', 'BOOL_AND', 'BOOL_OR'],
   // https://docs.aws.amazon.com/redshift/latest/dg/c_conditional_expressions.html
-  conditional: ['CASE', 'COALESCE', 'DECODE', 'GREATEST', 'LEAST', 'NVL', 'NVL2', 'NULLIF'],
+  conditional: ['COALESCE', 'DECODE', 'GREATEST', 'LEAST', 'NVL', 'NVL2', 'NULLIF'],
   // https://docs.aws.amazon.com/redshift/latest/dg/Date_functions_header.html
   dateTime: [
     'ADD_MONTHS',
@@ -634,7 +634,6 @@ const reservedCommands = [
   'DROP USER',
   'DROP VIEW',
   'DROP',
-  'END',
   'EXECUTE',
   'EXPLAIN',
   'FETCH',
@@ -745,6 +744,7 @@ export default class RedshiftFormatter extends Formatter {
       stringTypes: RedshiftFormatter.stringTypes,
       blockStart: RedshiftFormatter.blockStart,
       blockEnd: RedshiftFormatter.blockEnd,
+      supportsCase: true,
       indexedPlaceholderTypes: RedshiftFormatter.indexedPlaceholderTypes,
       namedPlaceholderTypes: RedshiftFormatter.namedPlaceholderTypes,
       lineCommentTypes: RedshiftFormatter.lineCommentTypes,
