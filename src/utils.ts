@@ -22,3 +22,9 @@ export const maxLength = (strings: string[]) =>
   strings.reduce((max, cur) => Math.max(max, cur.length), 0);
 
 export const isNumber = (value: any): value is number => typeof value === 'number';
+
+// replaces long whitespace sequences with just one space
+export const equalizeWhitespace = (s: string) => s.replace(/\s+/gu, ' ');
+
+// identity function
+export const id = <T>(x: T) => x;

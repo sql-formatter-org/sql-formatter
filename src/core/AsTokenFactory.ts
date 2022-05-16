@@ -10,7 +10,7 @@ export default class AsTokenFactory {
 
   private autoDetectCase(tokens: Token[]) {
     const asTokens = tokens.filter(isToken.AS);
-    const upperAsTokens = asTokens.filter(({ value }) => value === 'AS');
+    const upperAsTokens = asTokens.filter(({ text }) => text === 'AS');
     return upperAsTokens.length > asTokens.length / 2 ? 'upper' : 'lower';
   }
 
@@ -19,6 +19,7 @@ export default class AsTokenFactory {
     return {
       type: TokenType.RESERVED_KEYWORD,
       value: this.asTokenValue(),
+      text: this.asTokenValue(),
     };
   }
 

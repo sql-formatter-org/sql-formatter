@@ -82,14 +82,14 @@ export default class InlineBlock {
 
   // Reserved words that cause newlines, comments and semicolons
   // are not allowed inside inline parentheses block
-  isForbiddenToken({ type, value }: Token) {
+  isForbiddenToken(token: Token) {
     return (
-      type === TokenType.RESERVED_COMMAND ||
-      type === TokenType.RESERVED_LOGICAL_OPERATOR ||
-      // type === TokenType.LINE_COMMENT ||
-      type === TokenType.BLOCK_COMMENT ||
-      value === ';' ||
-      isToken.CASE({ type, value }) // CASE cannot have inline blocks
+      token.type === TokenType.RESERVED_COMMAND ||
+      token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
+      // token.type === TokenType.LINE_COMMENT ||
+      token.type === TokenType.BLOCK_COMMENT ||
+      token.value === ';' ||
+      isToken.CASE(token) // CASE cannot have inline blocks
     );
   }
 }

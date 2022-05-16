@@ -1,9 +1,11 @@
 import * as regexFactory from './regexFactory';
-import { escapeRegExp } from '../utils';
+import { equalizeWhitespace, escapeRegExp, id } from '../utils';
 import { Token, TokenType } from './token'; // convert to partial type import in TS 4.5
 
 export const WHITESPACE_REGEX = /^(\s+)/u;
 const NULL_REGEX = /(?!)/; // zero-width negative lookahead, matches nothing
+
+const toCanonicalKeyword = (text: string) => equalizeWhitespace(text.toUpperCase());
 
 /** Struct that defines how a SQL language can be broken into tokens */
 interface TokenizerOptions {
@@ -142,7 +144,7 @@ export default class Tokenizer {
           throw new Error(`Parse error: Unexpected "${input.slice(0, 100)}"`);
         }
         // Advance the string
-        input = input.substring(token.value.length);
+        input = input.substring(token.text.length);
 
         tokens.push({ ...token, whitespaceBefore });
       }
@@ -164,6 +166,7 @@ export default class Tokenizer {
         input,
         type: tokenType,
         regex: this.REGEX_MAP[tokenType],
+        transform: id,
       });
 
   /** Attempts to match next token from input string, tests RegExp patterns in decreasing priority */
@@ -207,7 +210,12 @@ export default class Tokenizer {
     ];
 
     return placeholderTokenRegexMap.reduce((acc, { regex, parseKey }) => {
-      const token = this.getTokenOnFirstMatch({ input, regex, type: TokenType.PLACEHOLDER });
+      const token = this.getTokenOnFirstMatch({
+        input,
+        regex,
+        type: TokenType.PLACEHOLDER,
+        transform: id,
+      });
       return token ? { ...token, key: parseKey(token.value) } : acc;
     }, undefined as Token | undefined);
   }
@@ -240,8 +248,15 @@ export default class Tokenizer {
     ];
 
     return reservedTokenList.reduce(
-      (matchedToken, tokenType) => matchedToken || this.matchToken(tokenType)(input),
-      undefined as Token | undefined
+      (matchedToken: Token | undefined, tokenType) =>
+        matchedToken ||
+        this.getTokenOnFirstMatch({
+          input,
+          type: tokenType,
+          regex: this.REGEX_MAP[tokenType],
+          transform: toCanonicalKeyword,
+        }),
+      undefined
     );
   }
 
@@ -256,12 +271,21 @@ export default class Tokenizer {
     input,
     type,
     regex,
+    transform,
   }: {
     input: string;
     type: TokenType;
     regex: RegExp;
+    transform: (s: string) => string;
   }): Token | undefined {
     const matches = input.match(regex);
-    return matches ? ({ type, value: matches[1] } as Token) : undefined;
+    if (matches) {
+      return {
+        type,
+        text: matches[1],
+        value: transform(matches[1]),
+      };
+    }
+    return undefined;
   }
 }

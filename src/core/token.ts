@@ -22,8 +22,9 @@ export enum TokenType {
 
 /** Struct to store the most basic cohesive unit of language grammar */
 export interface Token {
-  value: string;
   type: TokenType;
+  text: string; // The raw original text that was matched
+  value: string; // Cleaned up `text` e.g. keyword converted to uppercase and extra spaces removed
   key?: string;
   whitespaceBefore?: string;
 }
@@ -32,19 +33,16 @@ export interface Token {
  * For use as a "missing token"
  * e.g. in lookAhead and lookBehind to avoid dealing with null values
  */
-export const EOF_TOKEN = { type: TokenType.EOF, value: '«EOF»' };
+export const EOF_TOKEN = { type: TokenType.EOF, text: '«EOF»', value: '«EOF»' };
 
 /** Special Unicode character to serve as a placeholder for tabular formats as \w whitespace is unavailable */
 export const ZWS = '​'; // uses zero-width space (&#8203; / U+200B)
-const ZWS_REGEX = '\u200b';
-const spaces = `[${ZWS_REGEX}\\s]`;
 
 /** Checks if two tokens are equivalent */
 export const testToken =
-  (compareToken: Token) =>
+  (compareToken: { type: TokenType; value: string }) =>
   (token: Token): boolean =>
-    token.type === compareToken.type &&
-    new RegExp(`^${spaces}*${compareToken.value}${spaces}*$`, 'iu').test(token.value);
+    token.type === compareToken.type && token.value === compareToken.value;
 
 /** Util object that allows for easy checking of Reserved Keywords */
 export const isToken = {

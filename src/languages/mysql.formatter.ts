@@ -1360,7 +1360,7 @@ function preprocess(tokens: Token[]) {
     const nextToken = tokens[i + 1] || EOF_TOKEN;
     if (isToken.SET(token) && nextToken.value === '(') {
       // This is SET datatype, not SET statement
-      return { type: TokenType.RESERVED_KEYWORD, value: token.value };
+      return { ...token, type: TokenType.RESERVED_KEYWORD };
     }
     return token;
   });

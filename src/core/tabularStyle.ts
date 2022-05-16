@@ -16,7 +16,7 @@ export function toTabularToken(token: Token, indentStyle: IndentStyle): Token {
     return token;
   }
 
-  let bufferItem = token.value; // store which part of keyword receives 10-space buffer
+  let bufferItem = token.text; // store which part of keyword receives 10-space buffer
   let tail = [] as string[]; // rest of keyword
   if (bufferItem.length >= 10 && bufferItem.includes(' ')) {
     // split for long keywords like INNER JOIN or UNION DISTINCT
@@ -31,7 +31,7 @@ export function toTabularToken(token: Token, indentStyle: IndentStyle): Token {
 
   return {
     ...token,
-    value: bufferItem + ['', ...tail].join(' '),
+    text: bufferItem + ['', ...tail].join(' '),
   };
 }
 

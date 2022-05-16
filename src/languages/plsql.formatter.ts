@@ -499,12 +499,12 @@ function preprocess(tokens: Token[]) {
     // `table`[.]`column`
     if (token.value === '.' && nextToken.value.startsWith('`') && prevToken.value.endsWith('`')) {
       // This is an operator, do not insert spaces
-      return { type: TokenType.OPERATOR, value: token.value };
+      return { ...token, type: TokenType.OPERATOR };
     }
 
     // BY [SET]
     if (isToken.SET(token) && isToken.BY(previousReservedToken)) {
-      return { type: TokenType.RESERVED_KEYWORD, value: token.value };
+      return { ...token, type: TokenType.RESERVED_KEYWORD };
     }
 
     if (isReserved(token)) {

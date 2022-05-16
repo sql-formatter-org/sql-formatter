@@ -823,14 +823,14 @@ function preprocess(tokens: Token[]) {
     // [WINDOW](...)
     if (isToken.WINDOW(token) && nextToken.type === TokenType.BLOCK_START) {
       // This is a function call, treat it as a reserved word
-      return { type: TokenType.RESERVED_KEYWORD, value: token.value };
+      return { ...token, type: TokenType.RESERVED_KEYWORD };
     }
 
     // TODO: deprecate this once ITEMS is merged with COLLECTION
-    if (/ITEMS/i.test(token.value) && token.type === TokenType.RESERVED_KEYWORD) {
-      if (!(/COLLECTION/i.test(prevToken.value) && /TERMINATED/i.test(nextToken.value))) {
+    if (token.value === 'ITEMS' && token.type === TokenType.RESERVED_KEYWORD) {
+      if (!(prevToken.value === 'COLLECTION' && nextToken.value === 'TERMINATED')) {
         // this is a word and not COLLECTION ITEMS
-        return { type: TokenType.WORD, value: token.value };
+        return { type: TokenType.WORD, text: token.text, value: token.text };
       }
     }
 

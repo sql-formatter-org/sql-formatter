@@ -872,14 +872,13 @@ function preprocess(tokens: Token[]) {
     const token = tokens[i];
     const nextToken = tokens[i + 1] || EOF_TOKEN;
 
-    if ((/ARRAY/i.test(token.value) || /STRUCT/i.test(token.value)) && nextToken.value === '<') {
+    if ((token.value === 'ARRAY' || token.value === 'STRUCT') && nextToken.value === '<') {
       const endIndex = findClosingAngleBracketIndex(tokens, i + 1);
+      const typeDefTokens = tokens.slice(i, endIndex + 1);
       processed.push({
         ...token,
-        value: tokens
-          .slice(i, endIndex + 1)
-          .map(t => t.value)
-          .join(''),
+        value: typeDefTokens.map(t => t.value).join(''),
+        text: typeDefTokens.map(t => t.text).join(''),
       });
       i = endIndex;
     } else {

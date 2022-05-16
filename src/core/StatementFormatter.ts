@@ -1,7 +1,7 @@
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
-import { trimSpacesEnd } from '../utils';
+import { equalizeWhitespace, trimSpacesEnd } from '../utils';
 import { isReserved, isCommand, isToken, Token, TokenType, EOF_TOKEN } from './token';
 import { FormatOptions } from '../types';
 import { toTabularToken, replaceTabularPlaceholders } from './tabularStyle';
@@ -204,7 +204,7 @@ export default class StatementFormatter {
       this.indentation.increaseTopLevel();
     }
 
-    query += this.equalizeWhitespace(this.show(token)); // print token onto query
+    query += this.show(token); // print token onto query
     if (this.currentNewline && !isTabularStyle(this.cfg)) {
       query = this.addNewline(query);
     } else {
@@ -222,7 +222,7 @@ export default class StatementFormatter {
       // decrease for boolean set operators or in tabular mode
       this.indentation.decreaseTopLevel();
     }
-    query = this.addNewline(query) + this.equalizeWhitespace(this.show(token));
+    query = this.addNewline(query) + this.show(token);
     return isJoin ? query + ' ' : this.addNewline(query);
   }
 
@@ -241,12 +241,12 @@ export default class StatementFormatter {
    * Formats a Reserved Dependent Clause token onto query, supporting the keyword that precedes it
    */
   private formatDependentClause(token: Token, query: string): string {
-    return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + ' ';
+    return this.addNewline(query) + this.show(token) + ' ';
   }
 
   // Formats ON and USING keywords
   private formatJoinCondition(token: Token, query: string): string {
-    return query + this.equalizeWhitespace(this.show(token)) + ' ';
+    return query + this.show(token) + ' ';
   }
 
   /**
@@ -288,20 +288,11 @@ export default class StatementFormatter {
     }
 
     if (this.cfg.logicalOperatorNewline === 'before') {
-      return (
-        (this.currentNewline ? this.addNewline(query) : query) +
-        this.equalizeWhitespace(this.show(token)) +
-        ' '
-      );
+      return (this.currentNewline ? this.addNewline(query) : query) + this.show(token) + ' ';
     } else {
       query += this.show(token);
       return this.currentNewline ? this.addNewline(query) : query;
     }
-  }
-
-  /** Replace any sequence of whitespace characters with single space */
-  private equalizeWhitespace(string: string): string {
-    return string.replace(/\s+/gu, ' ');
   }
 
   private formatBlockStart(token: Token, query: string): string {
@@ -421,11 +412,11 @@ export default class StatementFormatter {
     if (isReserved(token)) {
       switch (this.cfg.keywordCase) {
         case 'preserve':
-          return token.value;
+          return equalizeWhitespace(token.text);
         case 'upper':
-          return token.value.toUpperCase();
+          return equalizeWhitespace(token.text.toUpperCase());
         case 'lower':
-          return token.value.toLowerCase();
+          return equalizeWhitespace(token.text.toLowerCase());
       }
     } else {
       return token.value;
