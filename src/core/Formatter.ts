@@ -20,7 +20,6 @@ export default class Formatter {
   private aliasAs: AliasAs;
   private params: Params;
   private asTokenFactory: AsTokenFactory;
-  private parser = new Parser();
 
   private currentNewline = true;
   private previousReservedToken: Token = EOF_TOKEN;
@@ -63,7 +62,7 @@ export default class Formatter {
     const tokens = this.tokenizer().tokenize(query);
     this.asTokenFactory = new AsTokenFactory(this.cfg.keywordCase, tokens);
 
-    const formattedQuery = this.formatSql(this.parser.parse(tokens));
+    const formattedQuery = this.formatSql(new Parser(tokens).parse());
     const finalQuery = this.postFormat(formattedQuery);
 
     return finalQuery.trimEnd();

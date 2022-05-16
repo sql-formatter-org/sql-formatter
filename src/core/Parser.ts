@@ -1,4 +1,5 @@
-import { Token } from './token';
+import { EOF_TOKEN, Token, TokenType } from './token';
+/* eslint-disable no-cond-assign */
 
 export type Statement = {
   type: 'statement';
@@ -9,25 +10,44 @@ export type Statement = {
  * A rudimentary parser that slices token stream into list of SQL statements.
  */
 export default class Parser {
-  parse(tokens: Token[]): Statement[] {
-    let currentStatement: Statement = {
-      type: 'statement',
-      tokens: [],
-    };
-    const statements = [currentStatement];
+  private index = 0;
 
-    for (const token of tokens) {
-      currentStatement.tokens.push(token);
+  constructor(private tokens: Token[]) {}
 
-      if (token.value === ';') {
-        currentStatement = {
-          type: 'statement',
-          tokens: [],
-        };
-        statements.push(currentStatement);
+  public parse(): Statement[] {
+    const statements: Statement[] = [];
+    let stat: Statement | undefined;
+    while ((stat = this.statement())) {
+      statements.push(stat);
+    }
+    return statements;
+  }
+
+  private statement(): Statement | undefined {
+    const tokens: Token[] = [];
+    while (true) {
+      if (this.look().value === ';') {
+        tokens.push(this.next());
+        return { type: 'statement', tokens };
+      } else if (this.look().type === TokenType.EOF) {
+        if (tokens.length > 0) {
+          return { type: 'statement', tokens };
+        } else {
+          return undefined;
+        }
+      } else {
+        tokens.push(this.next());
       }
     }
+  }
 
-    return statements;
+  // Returns current token without advancing the pointer
+  private look(): Token {
+    return this.tokens[this.index] || EOF_TOKEN;
+  }
+
+  // Returns current token and advances the pointer to next token
+  private next(): Token {
+    return this.tokens[this.index++] || EOF_TOKEN;
   }
 }
