@@ -62,7 +62,8 @@ export default class Formatter {
     const tokens = this.tokenizer().tokenize(query);
     this.asTokenFactory = new AsTokenFactory(this.cfg.keywordCase, tokens);
 
-    const formattedQuery = this.formatSql(new Parser(tokens).parse());
+    const ast = new Parser(tokens).parse();
+    const formattedQuery = this.formatAst(ast);
     const finalQuery = this.postFormat(formattedQuery);
 
     return finalQuery.trimEnd();
@@ -82,7 +83,7 @@ export default class Formatter {
     return query;
   }
 
-  private formatSql(statements: Statement[]): string {
+  private formatAst(statements: Statement[]): string {
     return statements
       .map(this.formatStatement, this)
       .join('\n'.repeat(this.cfg.linesBetweenQueries + 1));
