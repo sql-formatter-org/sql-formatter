@@ -399,9 +399,6 @@ export default class Formatter {
   private formatBlockEnd(token: Token, query: string): string {
     if (this.inlineBlock.isActive()) {
       this.inlineBlock.end();
-      if (isToken.END(token)) {
-        return this.formatWithSpaces(token, query); // add space before END when closing inline block
-      }
       return this.formatWithSpaces(token, query, 'after'); // do not add space before )
     } else {
       this.indentation.decreaseBlockLevel();
