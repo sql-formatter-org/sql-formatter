@@ -1,4 +1,3 @@
-import { indentString } from './Indentation';
 import Params from './Params';
 import Tokenizer from './Tokenizer';
 import { FormatOptions } from '../types';
@@ -8,6 +7,7 @@ import AsTokenFactory from './AsTokenFactory';
 import Parser, { Statement } from './Parser';
 import StatementFormatter from './StatementFormatter';
 import { Token } from './token';
+import { indentString } from './config';
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {

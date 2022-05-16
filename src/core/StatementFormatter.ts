@@ -1,4 +1,4 @@
-import Indentation, { indentString } from './Indentation';
+import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { trimSpacesEnd } from '../utils';
@@ -8,6 +8,7 @@ import { toTabularToken, replaceTabularPlaceholders } from './tabularStyle';
 import AliasAs from './AliasAs';
 import AsTokenFactory from './AsTokenFactory';
 import { Statement } from './Parser';
+import { indentString, isTabularStyle } from './config';
 
 /** Formats single SQL statement */
 export default class StatementFormatter {
@@ -195,7 +196,7 @@ export default class StatementFormatter {
     query = this.addNewline(query);
 
     // indent tabular formats, except when preceding a (
-    if (this.isTabularStyle()) {
+    if (isTabularStyle(this.cfg)) {
       if (this.tokenLookAhead().value !== '(') {
         this.indentation.increaseTopLevel();
       }
@@ -204,7 +205,7 @@ export default class StatementFormatter {
     }
 
     query += this.equalizeWhitespace(this.show(token)); // print token onto query
-    if (this.currentNewline && !this.isTabularStyle()) {
+    if (this.currentNewline && !isTabularStyle(this.cfg)) {
       query = this.addNewline(query);
     } else {
       query += ' ';
@@ -217,7 +218,7 @@ export default class StatementFormatter {
    */
   private formatBinaryCommand(token: Token, query: string): string {
     const isJoin = /JOIN/i.test(token.value); // check if token contains JOIN
-    if (!isJoin || this.isTabularStyle()) {
+    if (!isJoin || isTabularStyle(this.cfg)) {
       // decrease for boolean set operators or in tabular mode
       this.indentation.decreaseTopLevel();
     }
@@ -282,7 +283,7 @@ export default class StatementFormatter {
       return this.formatWithSpaces(token, query);
     }
 
-    if (this.isTabularStyle()) {
+    if (isTabularStyle(this.cfg)) {
       this.indentation.decreaseTopLevel();
     }
 
@@ -354,7 +355,7 @@ export default class StatementFormatter {
   private formatMultilineBlockEnd(token: Token, query: string): string {
     this.indentation.decreaseBlockLevel();
 
-    if (this.isTabularStyle()) {
+    if (isTabularStyle(this.cfg)) {
       // +1 extra indentation step for the closing paren
       query = this.addNewline(query) + this.indentation.getSingleIndent();
     } else if (this.cfg.newlineBeforeCloseParen) {
@@ -439,10 +440,6 @@ export default class StatementFormatter {
       query += '\n';
     }
     return query + this.indentation.getIndent();
-  }
-
-  private isTabularStyle(): boolean {
-    return this.cfg.indentStyle === 'tabularLeft' || this.cfg.indentStyle === 'tabularRight';
   }
 
   /** Returns the latest encountered reserved keyword token */

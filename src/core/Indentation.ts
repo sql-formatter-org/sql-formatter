@@ -1,4 +1,3 @@
-import { FormatOptions } from '../types';
 import { last } from '../utils';
 
 const INDENT_TYPE_TOP_LEVEL = 'top-level';
@@ -77,17 +76,4 @@ export default class Indentation {
   resetIndentation() {
     this.indentTypes = [];
   }
-}
-
-/**
- * Creates a string to use for one step of indentation.
- */
-export function indentString(cfg: FormatOptions): string {
-  if (cfg.indentStyle === 'tabularLeft' || cfg.indentStyle === 'tabularRight') {
-    return ' '.repeat(10);
-  }
-  if (cfg.useTabs) {
-    return '\t';
-  }
-  return ' '.repeat(cfg.tabWidth);
 }
