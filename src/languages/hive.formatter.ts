@@ -614,7 +614,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export default class HiveFormatter extends Formatter {
-  static reservedLogicalOperators = ['AND', 'OR'];
   static stringTypes: StringPatternType[] = ['""', "''", '``'];
   static operators = ['<=>', '==', '||'];
 
@@ -623,7 +622,6 @@ export default class HiveFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedLogicalOperators: HiveFormatter.reservedLogicalOperators,
       reservedKeywords: dedupe([
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),

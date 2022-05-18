@@ -421,7 +421,6 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class SqliteFormatter extends Formatter {
-  static reservedLogicalOperators = ['AND', 'OR'];
   static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]'];
   // https://www.sqlite.org/lang_expr.html
   static operators = ['||', '<<', '>>', '==', '!='];
@@ -431,7 +430,6 @@ export default class SqliteFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedLogicalOperators: SqliteFormatter.reservedLogicalOperators,
       // https://www.sqlite.org/lang_keywords.html
       reservedKeywords: [...standardReservedWords, ...nonStandardSqliteReservedWords],
       stringTypes: SqliteFormatter.stringTypes,

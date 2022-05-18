@@ -1232,7 +1232,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export default class TSqlFormatter extends Formatter {
-  static reservedLogicalOperators = ['AND', 'OR'];
   static stringTypes: StringPatternType[] = [`""`, "N''", "''", '[]', '``'];
   static operators = ['!<', '!>', '+=', '-=', '*=', '/=', '%=', '|=', '&=', '^=', '::'];
 
@@ -1241,7 +1240,6 @@ export default class TSqlFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedLogicalOperators: TSqlFormatter.reservedLogicalOperators,
       reservedKeywords: dedupe([
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),

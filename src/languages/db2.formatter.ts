@@ -859,7 +859,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
 
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
-  static reservedLogicalOperators = ['AND', 'OR'];
   static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]', "x''"];
   static operators = ['**', '!>', '!<', '||'];
 
@@ -868,7 +867,6 @@ export default class Db2Formatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedLogicalOperators: Db2Formatter.reservedLogicalOperators,
       reservedKeywords: dedupe([
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),

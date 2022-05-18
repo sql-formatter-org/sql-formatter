@@ -28,12 +28,7 @@ describe('PlSqlFormatter', () => {
   supportsStrings(language, format, PlSqlFormatter.stringTypes);
   supportsBetween(language, format);
   supportsSchema(language, format);
-  supportsOperators(
-    language,
-    format,
-    PlSqlFormatter.operators,
-    PlSqlFormatter.reservedLogicalOperators
-  );
+  supportsOperators(language, format, PlSqlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsJoin(language, format);
   supportsReturning(language, format);
 

@@ -25,12 +25,7 @@ describe('TSqlFormatter', () => {
   supportsStrings(language, format, TSqlFormatter.stringTypes);
   supportsBetween(language, format);
   supportsSchema(language, format);
-  supportsOperators(
-    language,
-    format,
-    TSqlFormatter.operators,
-    TSqlFormatter.reservedLogicalOperators
-  );
+  supportsOperators(language, format, TSqlFormatter.operators);
   supportsJoin(language, format, { without: ['NATURAL'] });
 
   // TODO: The following are duplicated from StandardSQLFormatter test

@@ -1156,7 +1156,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF', 'ELSIF'];
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {
-  static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
   static stringTypes: StringPatternType[] = ['``', "''", '""'];
   static operators = [':=', '<<', '>>', '<=>', '&&', '||'];
 
@@ -1165,7 +1164,7 @@ export default class MariaDbFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedLogicalOperators: MariaDbFormatter.reservedLogicalOperators,
+      reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
       stringTypes: MariaDbFormatter.stringTypes,
       indexedPlaceholderTypes: ['?'],

@@ -26,12 +26,7 @@ describe('SqlFormatter', () => {
   supportsBetween(language, format);
   supportsSchema(language, format);
   supportsJoin(language, format);
-  supportsOperators(
-    language,
-    format,
-    SqlFormatter.operators,
-    SqlFormatter.reservedLogicalOperators
-  );
+  supportsOperators(language, format, SqlFormatter.operators);
 
   it('replaces ? indexed placeholders with param values', () => {
     const result = format('SELECT ?, ?, ?;', {

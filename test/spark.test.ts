@@ -22,12 +22,7 @@ describe('SparkFormatter', () => {
   supportsStrings(language, format, SparkFormatter.stringTypes);
   supportsBetween(language, format);
   supportsSchema(language, format);
-  supportsOperators(
-    language,
-    format,
-    SparkFormatter.operators,
-    SparkFormatter.reservedLogicalOperators
-  );
+  supportsOperators(language, format, SparkFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsArray(language, format);
   supportsJoin(language, format, {
     additionally: [

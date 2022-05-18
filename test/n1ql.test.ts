@@ -21,12 +21,7 @@ describe('N1qlFormatter', () => {
   supportsStrings(language, format, N1qlFormatter.stringTypes);
   supportsBetween(language, format);
   supportsSchema(language, format);
-  supportsOperators(
-    language,
-    format,
-    N1qlFormatter.operators,
-    N1qlFormatter.reservedLogicalOperators
-  );
+  supportsOperators(language, format, N1qlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsArray(language, format);
   supportsJoin(language, format, { without: ['FULL', 'CROSS', 'NATURAL'] });
   supportsReturning(language, format);

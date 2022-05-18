@@ -1319,7 +1319,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
-  static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
   static stringTypes: StringPatternType[] = ['``', "''", '""'];
   static operators = [':=', '<<', '>>', '<=>', '&&', '||', '->', '->>'];
 
@@ -1328,7 +1327,7 @@ export default class MySqlFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedLogicalOperators: MySqlFormatter.reservedLogicalOperators,
+      reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
       stringTypes: MySqlFormatter.stringTypes,
       indexedPlaceholderTypes: ['?'],

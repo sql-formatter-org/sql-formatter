@@ -23,12 +23,7 @@ describe('RedshiftFormatter', () => {
   supportsDeleteFrom(language, format);
   supportsStrings(language, format, RedshiftFormatter.stringTypes);
   supportsSchema(language, format);
-  supportsOperators(
-    language,
-    format,
-    RedshiftFormatter.operators,
-    RedshiftFormatter.reservedLogicalOperators
-  );
+  supportsOperators(language, format, RedshiftFormatter.operators);
   supportsJoin(language, format);
 
   it('formats LIMIT', () => {

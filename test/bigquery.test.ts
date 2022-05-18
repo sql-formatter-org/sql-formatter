@@ -22,12 +22,7 @@ describe('BigQueryFormatter', () => {
   supportsBetween(language, format);
   supportsSchema(language, format);
   supportsJoin(language, format, { without: ['NATURAL JOIN'] });
-  supportsOperators(
-    language,
-    format,
-    BigQueryFormatter.operators,
-    BigQueryFormatter.reservedLogicalOperators
-  );
+  supportsOperators(language, format, BigQueryFormatter.operators);
 
   it('supports # line comment', () => {
     const result = format('SELECT alpha # commment\nFROM beta');

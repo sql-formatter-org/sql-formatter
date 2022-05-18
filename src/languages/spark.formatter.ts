@@ -778,7 +778,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkFormatter extends Formatter {
-  static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
   static stringTypes: StringPatternType[] = [`""`, "''", '``', '{}'];
   static operators = ['<=>', '&&', '||', '==', '->'];
 
@@ -787,7 +786,7 @@ export default class SparkFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedLogicalOperators: SparkFormatter.reservedLogicalOperators,
+      reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe([
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...reservedKeywords,

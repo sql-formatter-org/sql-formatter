@@ -29,12 +29,7 @@ describe('SqliteFormatter', () => {
     without: ['FULL', 'RIGHT'],
     additionally: ['NATURAL LEFT JOIN', 'NATURAL LEFT OUTER JOIN'],
   });
-  supportsOperators(
-    language,
-    format,
-    SqliteFormatter.operators,
-    SqliteFormatter.reservedLogicalOperators
-  );
+  supportsOperators(language, format, SqliteFormatter.operators);
 
   it('replaces ? indexed placeholders with param values', () => {
     const result = format('SELECT ?, ?, ?;', {

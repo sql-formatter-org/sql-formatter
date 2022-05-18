@@ -825,7 +825,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
 export default class BigQueryFormatter extends Formatter {
-  static reservedLogicalOperators = ['AND', 'OR'];
   static stringTypes: StringPatternType[] = ['""', "''", '``']; // add: '''''', """""" ; prefixes: r, b
   static operators = ['>>', '<<', '||'];
   // TODO: handle trailing comma in select clause
@@ -835,7 +834,6 @@ export default class BigQueryFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedLogicalOperators: BigQueryFormatter.reservedLogicalOperators,
       reservedKeywords: dedupe([
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),

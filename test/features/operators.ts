@@ -5,7 +5,7 @@ export default function supportsOperators(
   language: SqlLanguage,
   format: FormatFn,
   operators: string[],
-  logicalOperators: string[]
+  logicalOperators: string[] = ['AND', 'OR']
 ) {
   operators.forEach(op => {
     it(`supports ${op} operator`, () => {

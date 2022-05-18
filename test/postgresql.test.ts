@@ -26,12 +26,7 @@ describe('PostgreSqlFormatter', () => {
   supportsStrings(language, format, PostgreSqlFormatter.stringTypes);
   supportsBetween(language, format);
   supportsSchema(language, format);
-  supportsOperators(
-    language,
-    format,
-    PostgreSqlFormatter.operators,
-    PostgreSqlFormatter.reservedLogicalOperators
-  );
+  supportsOperators(language, format, PostgreSqlFormatter.operators);
   supportsJoin(language, format);
   supportsReturning(language, format);
 

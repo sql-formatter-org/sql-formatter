@@ -22,11 +22,6 @@ describe('HiveFormatter', () => {
   supportsBetween(language, format);
   supportsSchema(language, format);
   supportsJoin(language, format, { without: ['NATURAL JOIN'] });
-  supportsOperators(
-    language,
-    format,
-    HiveFormatter.operators,
-    HiveFormatter.reservedLogicalOperators
-  );
+  supportsOperators(language, format, HiveFormatter.operators);
   supportsArray(language, format);
 });

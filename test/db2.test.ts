@@ -25,12 +25,7 @@ describe('Db2Formatter', () => {
   supportsStrings(language, format, Db2Formatter.stringTypes);
   supportsBetween(language, format);
   supportsSchema(language, format);
-  supportsOperators(
-    language,
-    format,
-    Db2Formatter.operators,
-    Db2Formatter.reservedLogicalOperators
-  );
+  supportsOperators(language, format, Db2Formatter.operators);
   supportsJoin(language, format);
 
   it('formats FETCH FIRST like LIMIT', () => {

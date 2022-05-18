@@ -1669,7 +1669,6 @@ const binaryOperators = [
 
 // https://www.postgresql.org/docs/14/index.html
 export default class PostgreSqlFormatter extends Formatter {
-  static reservedLogicalOperators = ['AND', 'OR'];
   static stringTypes: StringPatternType[] = [`""`, "''", "U&''", 'U&""', '$$', '``', "E''"];
   static operators = binaryOperators;
 
@@ -1678,7 +1677,6 @@ export default class PostgreSqlFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedLogicalOperators: PostgreSqlFormatter.reservedLogicalOperators,
       reservedKeywords: dedupe([
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...reservedKeywords,

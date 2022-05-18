@@ -370,7 +370,6 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class SqlFormatter extends Formatter {
-  static reservedLogicalOperators = ['AND', 'OR'];
   static stringTypes: StringPatternType[] = [`""`, "''", '``'];
   static operators = [];
 
@@ -379,7 +378,6 @@ export default class SqlFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedLogicalOperators: SqlFormatter.reservedLogicalOperators,
       reservedKeywords: dedupe(reservedKeywords),
       stringTypes: SqlFormatter.stringTypes,
       indexedPlaceholderTypes: ['?'],

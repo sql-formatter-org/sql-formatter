@@ -13,11 +13,6 @@ describe('MariaDbFormatter', () => {
   behavesLikeMariaDbFormatter(language, format);
 
   supportsStrings(language, format, MariaDbFormatter.stringTypes);
-  supportsOperators(
-    language,
-    format,
-    MariaDbFormatter.operators,
-    MariaDbFormatter.reservedLogicalOperators
-  );
+  supportsOperators(language, format, MariaDbFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsReturning(language, format);
 });
