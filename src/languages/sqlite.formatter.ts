@@ -431,17 +431,13 @@ export default class SqliteFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: SqliteFormatter.reservedLogicalOperators,
       // https://www.sqlite.org/lang_keywords.html
       reservedKeywords: [...standardReservedWords, ...nonStandardSqliteReservedWords],
       stringTypes: SqliteFormatter.stringTypes,
-      blockStart: ['('],
-      blockEnd: [')'],
       // https://www.sqlite.org/lang_expr.html#parameters
       indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: [':', '@', '$'],
-      lineCommentTypes: ['--'],
       operators: SqliteFormatter.operators,
     });
   }

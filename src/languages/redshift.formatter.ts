@@ -725,18 +725,14 @@ export default class RedshiftFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: RedshiftFormatter.reservedLogicalOperators,
       reservedKeywords: dedupe([
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
       stringTypes: RedshiftFormatter.stringTypes,
-      blockStart: ['('],
-      blockEnd: [')'],
       indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: ['@', '#', '$'],
-      lineCommentTypes: ['--'],
       operators: RedshiftFormatter.operators,
     });
   }

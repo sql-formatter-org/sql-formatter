@@ -623,19 +623,13 @@ export default class HiveFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: HiveFormatter.reservedLogicalOperators,
       reservedKeywords: dedupe([
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
       stringTypes: HiveFormatter.stringTypes,
-      blockStart: ['('],
-      blockEnd: [')'],
       indexedPlaceholderTypes: ['?'],
-      namedPlaceholderTypes: [],
-      lineCommentTypes: ['--'],
-      specialWordChars: {},
       operators: HiveFormatter.operators,
     });
   }

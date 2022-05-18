@@ -1678,18 +1678,14 @@ export default class PostgreSqlFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: PostgreSqlFormatter.reservedLogicalOperators,
       reservedKeywords: dedupe([
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...reservedKeywords,
       ]),
       stringTypes: PostgreSqlFormatter.stringTypes,
-      blockStart: ['('],
-      blockEnd: [')'],
       indexedPlaceholderTypes: ['$'],
       namedPlaceholderTypes: [':'],
-      lineCommentTypes: ['--'],
       operators: PostgreSqlFormatter.operators,
     });
   }

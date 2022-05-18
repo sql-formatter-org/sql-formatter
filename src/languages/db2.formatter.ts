@@ -868,18 +868,14 @@ export default class Db2Formatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: Db2Formatter.reservedLogicalOperators,
       reservedKeywords: dedupe([
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
       stringTypes: Db2Formatter.stringTypes,
-      blockStart: ['('],
-      blockEnd: [')'],
       indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: [':'],
-      lineCommentTypes: ['--'],
       specialWordChars: { any: '#@' },
       operators: Db2Formatter.operators,
     });

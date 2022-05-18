@@ -379,15 +379,10 @@ export default class SqlFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: SqlFormatter.reservedLogicalOperators,
       reservedKeywords: dedupe(reservedKeywords),
       stringTypes: SqlFormatter.stringTypes,
-      blockStart: ['('],
-      blockEnd: [')'],
       indexedPlaceholderTypes: ['?'],
-      namedPlaceholderTypes: [],
-      lineCommentTypes: ['--'],
     });
   }
 }

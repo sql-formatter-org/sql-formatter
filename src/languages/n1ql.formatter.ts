@@ -521,7 +521,6 @@ export default class N1qlFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: N1qlFormatter.reservedLogicalOperators,
       reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
       stringTypes: N1qlFormatter.stringTypes,

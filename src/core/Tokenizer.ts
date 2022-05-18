@@ -11,16 +11,16 @@ const toCanonicalKeyword = (text: string) => equalizeWhitespace(text.toUpperCase
 interface TokenizerOptions {
   reservedKeywords: string[];
   reservedCommands: string[];
-  reservedLogicalOperators: string[];
+  reservedLogicalOperators?: string[];
   reservedDependentClauses: string[];
   reservedBinaryCommands: string[];
-  reservedJoinConditions: string[];
+  reservedJoinConditions?: string[];
   stringTypes: regexFactory.StringPatternType[];
-  blockStart: string[];
-  blockEnd: string[];
+  blockStart?: string[];
+  blockEnd?: string[];
   indexedPlaceholderTypes?: string[];
-  namedPlaceholderTypes: string[];
-  lineCommentTypes: string[];
+  namedPlaceholderTypes?: string[];
+  lineCommentTypes?: string[];
   specialWordChars?: { prefix?: string; any?: string; suffix?: string };
   operators?: string[];
   preprocess?: (tokens: Token[]) => Token[];
@@ -72,7 +72,7 @@ export default class Tokenizer {
         specialWordCharsAll
       ),
       [TokenType.RESERVED_LOGICAL_OPERATOR]: regexFactory.createReservedWordRegex(
-        cfg.reservedLogicalOperators,
+        cfg.reservedLogicalOperators ?? ['AND', 'OR'],
         specialWordCharsAll
       ),
       [TokenType.RESERVED_COMMAND]: regexFactory.createReservedWordRegex(
@@ -84,7 +84,7 @@ export default class Tokenizer {
         specialWordCharsAll
       ),
       [TokenType.RESERVED_JOIN_CONDITION]: regexFactory.createReservedWordRegex(
-        cfg.reservedJoinConditions,
+        cfg.reservedJoinConditions ?? ['ON', 'USING'],
         specialWordCharsAll
       ),
       [TokenType.OPERATOR]: regexFactory.createOperatorRegex('+-/*%&|^><=.,;[]{}`:$@', [
@@ -94,11 +94,11 @@ export default class Tokenizer {
         '!=',
         ...(cfg.operators ?? []),
       ]),
-      [TokenType.BLOCK_START]: regexFactory.createParenRegex(cfg.blockStart),
-      [TokenType.BLOCK_END]: regexFactory.createParenRegex(cfg.blockEnd),
+      [TokenType.BLOCK_START]: regexFactory.createParenRegex(cfg.blockStart ?? ['(']),
+      [TokenType.BLOCK_END]: regexFactory.createParenRegex(cfg.blockEnd ?? [')']),
       [TokenType.RESERVED_CASE_START]: /^(CASE)\b/iu,
       [TokenType.RESERVED_CASE_END]: /^(END)\b/iu,
-      [TokenType.LINE_COMMENT]: regexFactory.createLineCommentRegex(cfg.lineCommentTypes),
+      [TokenType.LINE_COMMENT]: regexFactory.createLineCommentRegex(cfg.lineCommentTypes ?? ['--']),
       [TokenType.BLOCK_COMMENT]: /^(\/\*[^]*?(?:\*\/|$))/u,
       [TokenType.NUMBER]:
         /^(0x[0-9a-fA-F]+|0b[01]+|(-\s*)?[0-9]+(\.[0-9]*)?([eE][-+]?[0-9]+(\.[0-9]+)?)?)/u,
@@ -111,11 +111,11 @@ export default class Tokenizer {
       '[0-9]*'
     );
     this.IDENT_NAMED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
-      cfg.namedPlaceholderTypes,
+      cfg.namedPlaceholderTypes ?? [],
       '[a-zA-Z0-9._$]+'
     );
     this.STRING_NAMED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
-      cfg.namedPlaceholderTypes,
+      cfg.namedPlaceholderTypes ?? [],
       regexFactory.createStringPattern(cfg.stringTypes)
     );
   }

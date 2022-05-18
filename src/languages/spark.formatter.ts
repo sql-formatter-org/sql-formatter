@@ -787,18 +787,14 @@ export default class SparkFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: SparkFormatter.reservedLogicalOperators,
       reservedKeywords: dedupe([
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...reservedKeywords,
       ]),
       stringTypes: SparkFormatter.stringTypes,
-      blockStart: ['('],
-      blockEnd: [')'],
       indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: ['$'],
-      lineCommentTypes: ['--'],
       operators: SparkFormatter.operators,
       preprocess,
     });

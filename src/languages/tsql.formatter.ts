@@ -1241,18 +1241,13 @@ export default class TSqlFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: TSqlFormatter.reservedLogicalOperators,
       reservedKeywords: dedupe([
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
       stringTypes: TSqlFormatter.stringTypes,
-      blockStart: ['('],
-      blockEnd: [')'],
-      indexedPlaceholderTypes: [],
       namedPlaceholderTypes: ['@'],
-      lineCommentTypes: ['--'],
       specialWordChars: { any: '#@' },
       operators: TSqlFormatter.operators,
       // TODO: Support for money constants
