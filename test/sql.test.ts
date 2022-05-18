@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
-import StandardSqlFormatter from '../src/languages/standardsql.formatter';
+import SqlFormatter from '../src/languages/sql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
@@ -13,7 +13,7 @@ import supportsOperators from './features/operators';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 
-describe('StandardSqlFormatter', () => {
+describe('SqlFormatter', () => {
   const language = 'sql';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
@@ -22,15 +22,15 @@ describe('StandardSqlFormatter', () => {
   supportsConstraints(language, format);
   supportsAlterTable(language, format);
   supportsDeleteFrom(language, format);
-  supportsStrings(language, format, StandardSqlFormatter.stringTypes);
+  supportsStrings(language, format, SqlFormatter.stringTypes);
   supportsBetween(language, format);
   supportsSchema(language, format);
   supportsJoin(language, format);
   supportsOperators(
     language,
     format,
-    StandardSqlFormatter.operators,
-    StandardSqlFormatter.reservedLogicalOperators
+    SqlFormatter.operators,
+    SqlFormatter.reservedLogicalOperators
   );
 
   it('replaces ? indexed placeholders with param values', () => {

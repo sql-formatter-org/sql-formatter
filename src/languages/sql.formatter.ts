@@ -369,7 +369,7 @@ const reservedBinaryCommands = [
  */
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
-export default class StandardSqlFormatter extends Formatter {
+export default class SqlFormatter extends Formatter {
   static reservedCommands = reservedCommands;
   static reservedBinaryCommands = reservedBinaryCommands;
   static reservedDependentClauses = reservedDependentClauses;
@@ -386,18 +386,18 @@ export default class StandardSqlFormatter extends Formatter {
 
   tokenizer() {
     return new Tokenizer({
-      reservedCommands: StandardSqlFormatter.reservedCommands,
-      reservedBinaryCommands: StandardSqlFormatter.reservedBinaryCommands,
-      reservedDependentClauses: StandardSqlFormatter.reservedDependentClauses,
-      reservedJoinConditions: StandardSqlFormatter.reservedJoinConditions,
-      reservedLogicalOperators: StandardSqlFormatter.reservedLogicalOperators,
-      reservedKeywords: StandardSqlFormatter.reservedKeywords,
-      stringTypes: StandardSqlFormatter.stringTypes,
-      blockStart: StandardSqlFormatter.blockStart,
-      blockEnd: StandardSqlFormatter.blockEnd,
-      indexedPlaceholderTypes: StandardSqlFormatter.indexedPlaceholderTypes,
-      namedPlaceholderTypes: StandardSqlFormatter.namedPlaceholderTypes,
-      lineCommentTypes: StandardSqlFormatter.lineCommentTypes,
+      reservedCommands: SqlFormatter.reservedCommands,
+      reservedBinaryCommands: SqlFormatter.reservedBinaryCommands,
+      reservedDependentClauses: SqlFormatter.reservedDependentClauses,
+      reservedJoinConditions: SqlFormatter.reservedJoinConditions,
+      reservedLogicalOperators: SqlFormatter.reservedLogicalOperators,
+      reservedKeywords: SqlFormatter.reservedKeywords,
+      stringTypes: SqlFormatter.stringTypes,
+      blockStart: SqlFormatter.blockStart,
+      blockEnd: SqlFormatter.blockEnd,
+      indexedPlaceholderTypes: SqlFormatter.indexedPlaceholderTypes,
+      namedPlaceholderTypes: SqlFormatter.namedPlaceholderTypes,
+      lineCommentTypes: SqlFormatter.lineCommentTypes,
     });
   }
 }

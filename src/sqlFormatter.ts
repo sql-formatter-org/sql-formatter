@@ -9,7 +9,7 @@ import PostgreSqlFormatter from './languages/postgresql.formatter';
 import RedshiftFormatter from './languages/redshift.formatter';
 import SparkFormatter from './languages/spark.formatter';
 import SqliteFormatter from './languages/sqlite.formatter';
-import StandardSqlFormatter from './languages/standardsql.formatter';
+import SqlFormatter from './languages/sql.formatter';
 import TSqlFormatter from './languages/tsql.formatter';
 
 import { FormatOptions } from './types';
@@ -26,7 +26,7 @@ export const formatters = {
   postgresql: PostgreSqlFormatter,
   redshift: RedshiftFormatter,
   spark: SparkFormatter,
-  sql: StandardSqlFormatter,
+  sql: SqlFormatter,
   sqlite: SqliteFormatter,
   tsql: TSqlFormatter,
 };

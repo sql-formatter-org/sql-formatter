@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
-import SqliteFormatter from '../src/languages/standardsql.formatter';
+import SqliteFormatter from '../src/languages/sqlite.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
