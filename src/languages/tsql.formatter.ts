@@ -1232,39 +1232,28 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export default class TSqlFormatter extends Formatter {
-  static reservedCommands = reservedCommands;
-  static reservedBinaryCommands = reservedBinaryCommands;
-  static reservedDependentClauses = reservedDependentClauses;
-  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR'];
-  static reservedKeywords = dedupe([
-    ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-    ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
-  ]);
   static stringTypes: StringPatternType[] = [`""`, "N''", "''", '[]', '``'];
-  static blockStart = ['('];
-  static blockEnd = [')'];
-  static indexedPlaceholderTypes = [];
-  static namedPlaceholderTypes = ['@'];
-  static lineCommentTypes = ['--'];
-  static specialWordChars = { any: '#@' };
   static operators = ['!<', '!>', '+=', '-=', '*=', '/=', '%=', '|=', '&=', '^=', '::'];
 
   tokenizer() {
     return new Tokenizer({
-      reservedCommands: TSqlFormatter.reservedCommands,
-      reservedBinaryCommands: TSqlFormatter.reservedBinaryCommands,
-      reservedDependentClauses: TSqlFormatter.reservedDependentClauses,
-      reservedJoinConditions: TSqlFormatter.reservedJoinConditions,
+      reservedCommands,
+      reservedBinaryCommands,
+      reservedDependentClauses,
+      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: TSqlFormatter.reservedLogicalOperators,
-      reservedKeywords: TSqlFormatter.reservedKeywords,
+      reservedKeywords: dedupe([
+        ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
+        ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
+      ]),
       stringTypes: TSqlFormatter.stringTypes,
-      blockStart: TSqlFormatter.blockStart,
-      blockEnd: TSqlFormatter.blockEnd,
-      indexedPlaceholderTypes: TSqlFormatter.indexedPlaceholderTypes,
-      namedPlaceholderTypes: TSqlFormatter.namedPlaceholderTypes,
-      lineCommentTypes: TSqlFormatter.lineCommentTypes,
-      specialWordChars: TSqlFormatter.specialWordChars,
+      blockStart: ['('],
+      blockEnd: [')'],
+      indexedPlaceholderTypes: [],
+      namedPlaceholderTypes: ['@'],
+      lineCommentTypes: ['--'],
+      specialWordChars: { any: '#@' },
       operators: TSqlFormatter.operators,
       // TODO: Support for money constants
     });

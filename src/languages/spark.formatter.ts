@@ -778,37 +778,27 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkFormatter extends Formatter {
-  static reservedCommands = reservedCommands;
-  static reservedBinaryCommands = reservedBinaryCommands;
-  static reservedDependentClauses = reservedDependentClauses;
-  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
-  static reservedKeywords = dedupe([
-    ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-    ...reservedKeywords,
-  ]);
   static stringTypes: StringPatternType[] = [`""`, "''", '``', '{}'];
-  static blockStart = ['('];
-  static blockEnd = [')'];
-  static indexedPlaceholderTypes = ['?'];
-  static namedPlaceholderTypes = ['$'];
-  static lineCommentTypes = ['--'];
   static operators = ['<=>', '&&', '||', '==', '->'];
 
   tokenizer() {
     return new Tokenizer({
-      reservedCommands: SparkFormatter.reservedCommands,
-      reservedBinaryCommands: SparkFormatter.reservedBinaryCommands,
-      reservedDependentClauses: SparkFormatter.reservedDependentClauses,
-      reservedJoinConditions: SparkFormatter.reservedJoinConditions,
+      reservedCommands,
+      reservedBinaryCommands,
+      reservedDependentClauses,
+      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: SparkFormatter.reservedLogicalOperators,
-      reservedKeywords: SparkFormatter.reservedKeywords,
+      reservedKeywords: dedupe([
+        ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
+        ...reservedKeywords,
+      ]),
       stringTypes: SparkFormatter.stringTypes,
-      blockStart: SparkFormatter.blockStart,
-      blockEnd: SparkFormatter.blockEnd,
-      indexedPlaceholderTypes: SparkFormatter.indexedPlaceholderTypes,
-      namedPlaceholderTypes: SparkFormatter.namedPlaceholderTypes,
-      lineCommentTypes: SparkFormatter.lineCommentTypes,
+      blockStart: ['('],
+      blockEnd: [')'],
+      indexedPlaceholderTypes: ['?'],
+      namedPlaceholderTypes: ['$'],
+      lineCommentTypes: ['--'],
       operators: SparkFormatter.operators,
       preprocess,
     });

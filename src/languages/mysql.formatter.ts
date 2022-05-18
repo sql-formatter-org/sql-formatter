@@ -1319,36 +1319,25 @@ const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
-  static reservedCommands = reservedCommands;
-  static reservedBinaryCommands = reservedBinaryCommands;
-  static reservedDependentClauses = reservedDependentClauses;
-  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
-  static reservedKeywords = dedupe([...reservedKeywords, ...reservedFunctions]);
   static stringTypes: StringPatternType[] = ['``', "''", '""'];
-  static blockStart = ['('];
-  static blockEnd = [')'];
-  static indexedPlaceholderTypes = ['?'];
-  static namedPlaceholderTypes = [];
-  static lineCommentTypes = ['--', '#'];
-  static specialWordChars = { prefix: '@:' };
   static operators = [':=', '<<', '>>', '<=>', '&&', '||', '->', '->>'];
 
   tokenizer() {
     return new Tokenizer({
-      reservedCommands: MySqlFormatter.reservedCommands,
-      reservedBinaryCommands: MySqlFormatter.reservedBinaryCommands,
-      reservedDependentClauses: MySqlFormatter.reservedDependentClauses,
-      reservedJoinConditions: MySqlFormatter.reservedJoinConditions,
+      reservedCommands,
+      reservedBinaryCommands,
+      reservedDependentClauses,
+      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: MySqlFormatter.reservedLogicalOperators,
-      reservedKeywords: MySqlFormatter.reservedKeywords,
+      reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
       stringTypes: MySqlFormatter.stringTypes,
-      blockStart: MySqlFormatter.blockStart,
-      blockEnd: MySqlFormatter.blockEnd,
-      indexedPlaceholderTypes: MySqlFormatter.indexedPlaceholderTypes,
-      namedPlaceholderTypes: MySqlFormatter.namedPlaceholderTypes,
-      lineCommentTypes: MySqlFormatter.lineCommentTypes,
-      specialWordChars: MySqlFormatter.specialWordChars,
+      blockStart: ['('],
+      blockEnd: [')'],
+      indexedPlaceholderTypes: ['?'],
+      namedPlaceholderTypes: [],
+      lineCommentTypes: ['--', '#'],
+      specialWordChars: { prefix: '@:' },
       operators: MySqlFormatter.operators,
       preprocess,
     });

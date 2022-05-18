@@ -1156,36 +1156,25 @@ const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF', 'ELSIF'];
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {
-  static reservedCommands = reservedCommands;
-  static reservedBinaryCommands = reservedBinaryCommands;
-  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
-  static reservedDependentClauses = reservedDependentClauses;
-  static reservedKeywords = dedupe([...reservedKeywords, ...reservedFunctions]);
   static stringTypes: StringPatternType[] = ['``', "''", '""'];
-  static blockStart = ['('];
-  static blockEnd = [')'];
-  static indexedPlaceholderTypes = ['?'];
-  static namedPlaceholderTypes = [];
-  static lineCommentTypes = ['--', '#'];
-  static specialWordChars = { prefix: '@' };
   static operators = [':=', '<<', '>>', '<=>', '&&', '||'];
 
   tokenizer() {
     return new Tokenizer({
-      reservedCommands: MariaDbFormatter.reservedCommands,
-      reservedBinaryCommands: MariaDbFormatter.reservedBinaryCommands,
-      reservedDependentClauses: MariaDbFormatter.reservedDependentClauses,
-      reservedJoinConditions: MariaDbFormatter.reservedJoinConditions,
+      reservedCommands,
+      reservedBinaryCommands,
+      reservedDependentClauses,
+      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: MariaDbFormatter.reservedLogicalOperators,
-      reservedKeywords: MariaDbFormatter.reservedKeywords,
+      reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
       stringTypes: MariaDbFormatter.stringTypes,
-      blockStart: MariaDbFormatter.blockStart,
-      blockEnd: MariaDbFormatter.blockEnd,
-      indexedPlaceholderTypes: MariaDbFormatter.indexedPlaceholderTypes,
-      namedPlaceholderTypes: MariaDbFormatter.namedPlaceholderTypes,
-      lineCommentTypes: MariaDbFormatter.lineCommentTypes,
-      specialWordChars: MariaDbFormatter.specialWordChars,
+      blockStart: ['('],
+      blockEnd: [')'],
+      indexedPlaceholderTypes: ['?'],
+      namedPlaceholderTypes: [],
+      lineCommentTypes: ['--', '#'],
+      specialWordChars: { prefix: '@' },
       operators: MariaDbFormatter.operators,
       preprocess,
     });

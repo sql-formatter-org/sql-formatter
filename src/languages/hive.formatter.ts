@@ -614,40 +614,28 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export default class HiveFormatter extends Formatter {
-  static reservedCommands = reservedCommands;
-  static reservedBinaryCommands = reservedBinaryCommands;
-  static reservedDependentClauses = reservedDependentClauses;
-  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR'];
-  static fullReservedWords = dedupe([
-    ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-    ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
-  ]);
-
   static stringTypes: StringPatternType[] = ['""', "''", '``'];
-  static blockStart = ['('];
-  static blockEnd = [')'];
-  static indexedPlaceholderTypes = ['?'];
-  static namedPlaceholderTypes = [];
-  static lineCommentTypes = ['--'];
-  static specialWordChars = {};
   static operators = ['<=>', '==', '||'];
 
   tokenizer() {
     return new Tokenizer({
-      reservedCommands: HiveFormatter.reservedCommands,
-      reservedBinaryCommands: HiveFormatter.reservedBinaryCommands,
-      reservedDependentClauses: HiveFormatter.reservedDependentClauses,
-      reservedJoinConditions: HiveFormatter.reservedJoinConditions,
+      reservedCommands,
+      reservedBinaryCommands,
+      reservedDependentClauses,
+      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: HiveFormatter.reservedLogicalOperators,
-      reservedKeywords: HiveFormatter.fullReservedWords,
+      reservedKeywords: dedupe([
+        ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
+        ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
+      ]),
       stringTypes: HiveFormatter.stringTypes,
-      blockStart: HiveFormatter.blockStart,
-      blockEnd: HiveFormatter.blockEnd,
-      indexedPlaceholderTypes: HiveFormatter.indexedPlaceholderTypes,
-      namedPlaceholderTypes: HiveFormatter.namedPlaceholderTypes,
-      lineCommentTypes: HiveFormatter.lineCommentTypes,
-      specialWordChars: HiveFormatter.specialWordChars,
+      blockStart: ['('],
+      blockEnd: [')'],
+      indexedPlaceholderTypes: ['?'],
+      namedPlaceholderTypes: [],
+      lineCommentTypes: ['--'],
+      specialWordChars: {},
       operators: HiveFormatter.operators,
     });
   }

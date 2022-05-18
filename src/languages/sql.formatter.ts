@@ -370,34 +370,24 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class SqlFormatter extends Formatter {
-  static reservedCommands = reservedCommands;
-  static reservedBinaryCommands = reservedBinaryCommands;
-  static reservedDependentClauses = reservedDependentClauses;
-  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR'];
-  static reservedKeywords = dedupe(reservedKeywords);
   static stringTypes: StringPatternType[] = [`""`, "''", '``'];
-  static blockStart = ['('];
-  static blockEnd = [')'];
-  static indexedPlaceholderTypes = ['?'];
-  static namedPlaceholderTypes = [];
-  static lineCommentTypes = ['--'];
   static operators = [];
 
   tokenizer() {
     return new Tokenizer({
-      reservedCommands: SqlFormatter.reservedCommands,
-      reservedBinaryCommands: SqlFormatter.reservedBinaryCommands,
-      reservedDependentClauses: SqlFormatter.reservedDependentClauses,
-      reservedJoinConditions: SqlFormatter.reservedJoinConditions,
+      reservedCommands,
+      reservedBinaryCommands,
+      reservedDependentClauses,
+      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: SqlFormatter.reservedLogicalOperators,
-      reservedKeywords: SqlFormatter.reservedKeywords,
+      reservedKeywords: dedupe(reservedKeywords),
       stringTypes: SqlFormatter.stringTypes,
-      blockStart: SqlFormatter.blockStart,
-      blockEnd: SqlFormatter.blockEnd,
-      indexedPlaceholderTypes: SqlFormatter.indexedPlaceholderTypes,
-      namedPlaceholderTypes: SqlFormatter.namedPlaceholderTypes,
-      lineCommentTypes: SqlFormatter.lineCommentTypes,
+      blockStart: ['('],
+      blockEnd: [')'],
+      indexedPlaceholderTypes: ['?'],
+      namedPlaceholderTypes: [],
+      lineCommentTypes: ['--'],
     });
   }
 }

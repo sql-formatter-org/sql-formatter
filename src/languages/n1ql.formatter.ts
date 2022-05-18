@@ -512,32 +512,23 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html
 export default class N1qlFormatter extends Formatter {
-  static reservedCommands = reservedCommands;
-  static reservedBinaryCommands = reservedBinaryCommands;
-  static reservedDependentClauses = reservedDependentClauses;
-  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
-  static reservedKeywords = dedupe([...reservedKeywords, ...reservedFunctions]);
   static stringTypes: StringPatternType[] = [`""`, "''", '``'];
-  static blockStart = ['(', '[', '{'];
-  static blockEnd = [')', ']', '}'];
-  static namedPlaceholderTypes = ['$'];
-  static lineCommentTypes = ['#', '--'];
   static operators = ['=='];
 
   tokenizer() {
     return new Tokenizer({
-      reservedCommands: N1qlFormatter.reservedCommands,
-      reservedBinaryCommands: N1qlFormatter.reservedBinaryCommands,
-      reservedDependentClauses: N1qlFormatter.reservedDependentClauses,
-      reservedJoinConditions: N1qlFormatter.reservedJoinConditions,
+      reservedCommands,
+      reservedBinaryCommands,
+      reservedDependentClauses,
+      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: N1qlFormatter.reservedLogicalOperators,
-      reservedKeywords: N1qlFormatter.reservedKeywords,
+      reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
       stringTypes: N1qlFormatter.stringTypes,
-      blockStart: N1qlFormatter.blockStart,
-      blockEnd: N1qlFormatter.blockEnd,
-      namedPlaceholderTypes: N1qlFormatter.namedPlaceholderTypes,
-      lineCommentTypes: N1qlFormatter.lineCommentTypes,
+      blockStart: ['(', '[', '{'],
+      blockEnd: [')', ']', '}'],
+      namedPlaceholderTypes: ['$'],
+      lineCommentTypes: ['#', '--'],
       operators: N1qlFormatter.operators,
     });
   }

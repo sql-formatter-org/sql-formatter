@@ -825,41 +825,29 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
 export default class BigQueryFormatter extends Formatter {
-  static reservedCommands = reservedCommands;
-  static reservedBinaryCommands = reservedBinaryCommands;
-  static reservedDependentClauses = reservedDependentClauses;
-  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR'];
-  static fullReservedWords = dedupe([
-    ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-    ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
-  ]);
-
   static stringTypes: StringPatternType[] = ['""', "''", '``']; // add: '''''', """""" ; prefixes: r, b
-  static blockStart = ['('];
-  static blockEnd = [')'];
-  static indexedPlaceholderTypes = ['?'];
-  static namedPlaceholderTypes = [];
-  static lineCommentTypes = ['--', '#'];
-  static specialWordChars = { any: '_@$-' };
   static operators = ['>>', '<<', '||'];
   // TODO: handle trailing comma in select clause
 
   tokenizer() {
     return new Tokenizer({
-      reservedCommands: BigQueryFormatter.reservedCommands,
-      reservedBinaryCommands: BigQueryFormatter.reservedBinaryCommands,
-      reservedDependentClauses: BigQueryFormatter.reservedDependentClauses,
-      reservedJoinConditions: BigQueryFormatter.reservedJoinConditions,
+      reservedCommands,
+      reservedBinaryCommands,
+      reservedDependentClauses,
+      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: BigQueryFormatter.reservedLogicalOperators,
-      reservedKeywords: BigQueryFormatter.fullReservedWords,
+      reservedKeywords: dedupe([
+        ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
+        ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
+      ]),
       stringTypes: BigQueryFormatter.stringTypes,
-      blockStart: BigQueryFormatter.blockStart,
-      blockEnd: BigQueryFormatter.blockEnd,
-      indexedPlaceholderTypes: BigQueryFormatter.indexedPlaceholderTypes,
-      namedPlaceholderTypes: BigQueryFormatter.namedPlaceholderTypes,
-      lineCommentTypes: BigQueryFormatter.lineCommentTypes,
-      specialWordChars: BigQueryFormatter.specialWordChars,
+      blockStart: ['('],
+      blockEnd: [')'],
+      indexedPlaceholderTypes: ['?'],
+      namedPlaceholderTypes: [],
+      lineCommentTypes: ['--', '#'],
+      specialWordChars: { any: '_@$-' },
       operators: BigQueryFormatter.operators,
       preprocess,
     });

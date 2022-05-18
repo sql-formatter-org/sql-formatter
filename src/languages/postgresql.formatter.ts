@@ -1669,37 +1669,27 @@ const binaryOperators = [
 
 // https://www.postgresql.org/docs/14/index.html
 export default class PostgreSqlFormatter extends Formatter {
-  static reservedCommands = reservedCommands;
-  static reservedBinaryCommands = reservedBinaryCommands;
-  static reservedDependentClauses = reservedDependentClauses;
-  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR'];
-  static reservedKeywords = dedupe([
-    ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-    ...reservedKeywords,
-  ]);
   static stringTypes: StringPatternType[] = [`""`, "''", "U&''", 'U&""', '$$', '``', "E''"];
-  static blockStart = ['('];
-  static blockEnd = [')'];
-  static indexedPlaceholderTypes = ['$'];
-  static namedPlaceholderTypes = [':'];
-  static lineCommentTypes = ['--'];
   static operators = binaryOperators;
 
   tokenizer() {
     return new Tokenizer({
-      reservedCommands: PostgreSqlFormatter.reservedCommands,
-      reservedBinaryCommands: PostgreSqlFormatter.reservedBinaryCommands,
-      reservedDependentClauses: PostgreSqlFormatter.reservedDependentClauses,
-      reservedJoinConditions: PostgreSqlFormatter.reservedJoinConditions,
+      reservedCommands,
+      reservedBinaryCommands,
+      reservedDependentClauses,
+      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: PostgreSqlFormatter.reservedLogicalOperators,
-      reservedKeywords: PostgreSqlFormatter.reservedKeywords,
+      reservedKeywords: dedupe([
+        ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
+        ...reservedKeywords,
+      ]),
       stringTypes: PostgreSqlFormatter.stringTypes,
-      blockStart: PostgreSqlFormatter.blockStart,
-      blockEnd: PostgreSqlFormatter.blockEnd,
-      indexedPlaceholderTypes: PostgreSqlFormatter.indexedPlaceholderTypes,
-      namedPlaceholderTypes: PostgreSqlFormatter.namedPlaceholderTypes,
-      lineCommentTypes: PostgreSqlFormatter.lineCommentTypes,
+      blockStart: ['('],
+      blockEnd: [')'],
+      indexedPlaceholderTypes: ['$'],
+      namedPlaceholderTypes: [':'],
+      lineCommentTypes: ['--'],
       operators: PostgreSqlFormatter.operators,
     });
   }

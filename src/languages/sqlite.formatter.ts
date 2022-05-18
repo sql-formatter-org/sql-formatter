@@ -421,37 +421,27 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class SqliteFormatter extends Formatter {
-  static reservedCommands = reservedCommands;
-  static reservedBinaryCommands = reservedBinaryCommands;
-  static reservedDependentClauses = reservedDependentClauses;
-  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR'];
-  static reservedKeywords = [...standardReservedWords, ...nonStandardSqliteReservedWords];
-  // https://www.sqlite.org/lang_keywords.html
   static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]'];
-  static blockStart = ['('];
-  static blockEnd = [')'];
-  // https://www.sqlite.org/lang_expr.html#parameters
-  static indexedPlaceholderTypes = ['?'];
-  static namedPlaceholderTypes = [':', '@', '$'];
-  static lineCommentTypes = ['--'];
   // https://www.sqlite.org/lang_expr.html
   static operators = ['||', '<<', '>>', '==', '!='];
 
   tokenizer() {
     return new Tokenizer({
-      reservedCommands: SqliteFormatter.reservedCommands,
-      reservedBinaryCommands: SqliteFormatter.reservedBinaryCommands,
-      reservedDependentClauses: SqliteFormatter.reservedDependentClauses,
-      reservedJoinConditions: SqliteFormatter.reservedJoinConditions,
+      reservedCommands,
+      reservedBinaryCommands,
+      reservedDependentClauses,
+      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: SqliteFormatter.reservedLogicalOperators,
-      reservedKeywords: SqliteFormatter.reservedKeywords,
+      // https://www.sqlite.org/lang_keywords.html
+      reservedKeywords: [...standardReservedWords, ...nonStandardSqliteReservedWords],
       stringTypes: SqliteFormatter.stringTypes,
-      blockStart: SqliteFormatter.blockStart,
-      blockEnd: SqliteFormatter.blockEnd,
-      indexedPlaceholderTypes: SqliteFormatter.indexedPlaceholderTypes,
-      namedPlaceholderTypes: SqliteFormatter.namedPlaceholderTypes,
-      lineCommentTypes: SqliteFormatter.lineCommentTypes,
+      blockStart: ['('],
+      blockEnd: [')'],
+      // https://www.sqlite.org/lang_expr.html#parameters
+      indexedPlaceholderTypes: ['?'],
+      namedPlaceholderTypes: [':', '@', '$'],
+      lineCommentTypes: ['--'],
       operators: SqliteFormatter.operators,
     });
   }

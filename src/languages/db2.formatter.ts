@@ -859,40 +859,28 @@ const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
 
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
-  static reservedCommands = reservedCommands;
-  static reservedBinaryCommands = reservedBinaryCommands;
-  static reservedDependentClauses = reservedDependentClauses;
-  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR'];
-  static fullReservedWords = dedupe([
-    ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
-    ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
-  ]);
-
   static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]', "x''"];
-  static blockStart = ['('];
-  static blockEnd = [')'];
-  static indexedPlaceholderTypes = ['?'];
-  static namedPlaceholderTypes = [':'];
-  static lineCommentTypes = ['--'];
-  static specialWordChars = { any: '#@' };
   static operators = ['**', '!>', '!<', '||'];
 
   tokenizer() {
     return new Tokenizer({
-      reservedCommands: Db2Formatter.reservedCommands,
-      reservedBinaryCommands: Db2Formatter.reservedBinaryCommands,
-      reservedDependentClauses: Db2Formatter.reservedDependentClauses,
-      reservedJoinConditions: Db2Formatter.reservedJoinConditions,
+      reservedCommands,
+      reservedBinaryCommands,
+      reservedDependentClauses,
+      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: Db2Formatter.reservedLogicalOperators,
-      reservedKeywords: Db2Formatter.fullReservedWords,
+      reservedKeywords: dedupe([
+        ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
+        ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
+      ]),
       stringTypes: Db2Formatter.stringTypes,
-      blockStart: Db2Formatter.blockStart,
-      blockEnd: Db2Formatter.blockEnd,
-      indexedPlaceholderTypes: Db2Formatter.indexedPlaceholderTypes,
-      namedPlaceholderTypes: Db2Formatter.namedPlaceholderTypes,
-      lineCommentTypes: Db2Formatter.lineCommentTypes,
-      specialWordChars: Db2Formatter.specialWordChars,
+      blockStart: ['('],
+      blockEnd: [')'],
+      indexedPlaceholderTypes: ['?'],
+      namedPlaceholderTypes: [':'],
+      lineCommentTypes: ['--'],
+      specialWordChars: { any: '#@' },
       operators: Db2Formatter.operators,
     });
   }

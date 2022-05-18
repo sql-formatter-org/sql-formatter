@@ -443,19 +443,8 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class PlSqlFormatter extends Formatter {
-  static reservedCommands = reservedCommands;
-  static reservedBinaryCommands = reservedBinaryCommands;
-  static reservedDependentClauses = reservedDependentClauses;
-  static reservedJoinConditions = ['ON', 'USING'];
   static reservedLogicalOperators = ['AND', 'OR', 'XOR'];
-  static reservedKeywords = dedupe(reservedKeywords);
   static stringTypes: StringPatternType[] = [`""`, "N''", "''", '``'];
-  static blockStart = ['('];
-  static blockEnd = [')'];
-  static indexedPlaceholderTypes = ['?'];
-  static namedPlaceholderTypes = [':'];
-  static lineCommentTypes = ['--'];
-  static specialWordChars = { any: '_$#.@' };
   static operators = [
     '||',
     '**',
@@ -470,19 +459,19 @@ export default class PlSqlFormatter extends Formatter {
 
   tokenizer() {
     return new Tokenizer({
-      reservedCommands: PlSqlFormatter.reservedCommands,
-      reservedBinaryCommands: PlSqlFormatter.reservedBinaryCommands,
-      reservedDependentClauses: PlSqlFormatter.reservedDependentClauses,
-      reservedJoinConditions: PlSqlFormatter.reservedJoinConditions,
+      reservedCommands,
+      reservedBinaryCommands,
+      reservedDependentClauses,
+      reservedJoinConditions: ['ON', 'USING'],
       reservedLogicalOperators: PlSqlFormatter.reservedLogicalOperators,
-      reservedKeywords: PlSqlFormatter.reservedKeywords,
+      reservedKeywords: dedupe(reservedKeywords),
       stringTypes: PlSqlFormatter.stringTypes,
-      blockStart: PlSqlFormatter.blockStart,
-      blockEnd: PlSqlFormatter.blockEnd,
-      indexedPlaceholderTypes: PlSqlFormatter.indexedPlaceholderTypes,
-      namedPlaceholderTypes: PlSqlFormatter.namedPlaceholderTypes,
-      lineCommentTypes: PlSqlFormatter.lineCommentTypes,
-      specialWordChars: PlSqlFormatter.specialWordChars,
+      blockStart: ['('],
+      blockEnd: [')'],
+      indexedPlaceholderTypes: ['?'],
+      namedPlaceholderTypes: [':'],
+      lineCommentTypes: ['--'],
+      specialWordChars: { any: '_$#.@' },
       operators: PlSqlFormatter.operators,
       preprocess,
     });
