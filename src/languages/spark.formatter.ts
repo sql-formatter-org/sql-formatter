@@ -777,7 +777,7 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
-export default class SparkSqlFormatter extends Formatter {
+export default class SparkFormatter extends Formatter {
   static reservedCommands = reservedCommands;
   static reservedBinaryCommands = reservedBinaryCommands;
   static reservedDependentClauses = reservedDependentClauses;
@@ -797,19 +797,19 @@ export default class SparkSqlFormatter extends Formatter {
 
   tokenizer() {
     return new Tokenizer({
-      reservedCommands: SparkSqlFormatter.reservedCommands,
-      reservedBinaryCommands: SparkSqlFormatter.reservedBinaryCommands,
-      reservedDependentClauses: SparkSqlFormatter.reservedDependentClauses,
-      reservedJoinConditions: SparkSqlFormatter.reservedJoinConditions,
-      reservedLogicalOperators: SparkSqlFormatter.reservedLogicalOperators,
-      reservedKeywords: SparkSqlFormatter.reservedKeywords,
-      stringTypes: SparkSqlFormatter.stringTypes,
-      blockStart: SparkSqlFormatter.blockStart,
-      blockEnd: SparkSqlFormatter.blockEnd,
-      indexedPlaceholderTypes: SparkSqlFormatter.indexedPlaceholderTypes,
-      namedPlaceholderTypes: SparkSqlFormatter.namedPlaceholderTypes,
-      lineCommentTypes: SparkSqlFormatter.lineCommentTypes,
-      operators: SparkSqlFormatter.operators,
+      reservedCommands: SparkFormatter.reservedCommands,
+      reservedBinaryCommands: SparkFormatter.reservedBinaryCommands,
+      reservedDependentClauses: SparkFormatter.reservedDependentClauses,
+      reservedJoinConditions: SparkFormatter.reservedJoinConditions,
+      reservedLogicalOperators: SparkFormatter.reservedLogicalOperators,
+      reservedKeywords: SparkFormatter.reservedKeywords,
+      stringTypes: SparkFormatter.stringTypes,
+      blockStart: SparkFormatter.blockStart,
+      blockEnd: SparkFormatter.blockEnd,
+      indexedPlaceholderTypes: SparkFormatter.indexedPlaceholderTypes,
+      namedPlaceholderTypes: SparkFormatter.namedPlaceholderTypes,
+      lineCommentTypes: SparkFormatter.lineCommentTypes,
+      operators: SparkFormatter.operators,
       preprocess,
     });
   }

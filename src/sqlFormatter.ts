@@ -7,7 +7,7 @@ import N1qlFormatter from './languages/n1ql.formatter';
 import PlSqlFormatter from './languages/plsql.formatter';
 import PostgreSqlFormatter from './languages/postgresql.formatter';
 import RedshiftFormatter from './languages/redshift.formatter';
-import SparkSqlFormatter from './languages/sparksql.formatter';
+import SparkFormatter from './languages/spark.formatter';
 import SqliteFormatter from './languages/sqlite.formatter';
 import StandardSqlFormatter from './languages/standardsql.formatter';
 import TSqlFormatter from './languages/tsql.formatter';
@@ -25,7 +25,7 @@ export const formatters = {
   plsql: PlSqlFormatter,
   postgresql: PostgreSqlFormatter,
   redshift: RedshiftFormatter,
-  spark: SparkSqlFormatter,
+  spark: SparkFormatter,
   sql: StandardSqlFormatter,
   sqlite: SqliteFormatter,
   tsql: TSqlFormatter,
