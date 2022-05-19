@@ -345,30 +345,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     expect(format('foo OR bar')).toBe('foo\nOR bar');
   });
 
-  it('keeps separation between multiple statements', () => {
-    expect(format('foo;bar;')).toBe('foo;\n\nbar;');
-    expect(format('foo\n;bar;')).toBe('foo;\n\nbar;');
-    expect(format('foo\n\n\n;bar;\n\n')).toBe('foo;\n\nbar;');
-
-    const result = format(`
-      SELECT count(*),Column1 FROM Table1;
-      SELECT count(*),Column1 FROM Table2;
-    `);
-    expect(result).toBe(dedent`
-      SELECT
-        count(*),
-        Column1
-      FROM
-        Table1;
-
-      SELECT
-        count(*),
-        Column1
-      FROM
-        Table2;
-    `);
-  });
-
   it('formats unicode correctly', () => {
     const result = format('SELECT 结合使用, тест FROM töörõõm;');
     expect(result).toBe(dedent`
@@ -377,26 +353,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
         тест
       FROM
         töörõõm;
-    `);
-  });
-
-  it('correctly indents create statement after select', () => {
-    const result = format(`
-      SELECT * FROM test;
-      CREATE TABLE test(id NUMBER NOT NULL, col1 VARCHAR2(20), col2 VARCHAR2(20));
-    `);
-    expect(result).toBe(dedent`
-      SELECT
-        *
-      FROM
-        test;
-
-      CREATE TABLE
-        test(
-          id NUMBER NOT NULL,
-          col1 VARCHAR2(20),
-          col2 VARCHAR2(20)
-        );
     `);
   });
 
