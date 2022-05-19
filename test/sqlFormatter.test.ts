@@ -12,4 +12,16 @@ describe('sqlFormatter', () => {
       format('SELECT «weird-stuff»');
     }).toThrow('Parse error: Unexpected "«weird-stuff»"');
   });
+
+  it('does nothing with empty input', () => {
+    const result = format('');
+
+    expect(result).toBe('');
+  });
+
+  it('throws error when query argument is not string', () => {
+    expect(() => format(undefined as unknown as string)).toThrow(
+      'Invalid query argument. Expected string, instead got undefined'
+    );
+  });
 });

@@ -36,18 +36,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsCommaPosition(format);
   supportsLogicalOperatorNewline(format);
 
-  it('does nothing with empty input', () => {
-    const result = format('');
-
-    expect(result).toBe('');
-  });
-
-  it('throws error when query argument is not string', () => {
-    expect(() => format(undefined as unknown as string)).toThrow(
-      'Invalid query argument. Expected string, instead got undefined'
-    );
-  });
-
   it('formats lonely semicolon', () => {
     expect(format(';')).toBe(';');
   });
