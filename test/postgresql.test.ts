@@ -1,4 +1,3 @@
-import dedent from 'dedent-js';
 import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
 import PostgreSqlFormatter from '../src/languages/postgresql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
@@ -30,21 +29,5 @@ describe('PostgreSqlFormatter', () => {
   supportsOperators(language, format, PostgreSqlFormatter.operators);
   supportsJoin(language, format);
   supportsReturning(language, format);
-  supportsParams(language, format, { indexed: ['$'] });
-
-  it('supports :name placeholders', () => {
-    expect(format('foo = :bar')).toBe('foo = :bar');
-  });
-
-  it('replaces :name placeholders with param values', () => {
-    expect(
-      format(`foo = :bar AND :"field" = 10 OR col = :'val'`, {
-        params: { bar: "'Hello'", field: 'some_col', val: '7' },
-      })
-    ).toBe(dedent`
-      foo = 'Hello'
-      AND some_col = 10
-      OR col = 7
-    `);
-  });
+  supportsParams(language, format, { indexed: ['$'], named: [':'] });
 });

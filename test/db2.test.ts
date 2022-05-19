@@ -28,7 +28,7 @@ describe('Db2Formatter', () => {
   supportsSchema(language, format);
   supportsOperators(language, format, Db2Formatter.operators);
   supportsJoin(language, format);
-  supportsParams(language, format, { indexed: ['?'] });
+  supportsParams(language, format, { indexed: ['?'], named: [':'] });
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
@@ -66,23 +66,6 @@ describe('Db2Formatter', () => {
         @col2
       FROM
         tbl
-    `);
-  });
-
-  it('recognizes :variables', () => {
-    expect(format('SELECT :variable;')).toBe(dedent`
-      SELECT
-        :variable;
-    `);
-  });
-
-  it('replaces :variables with param values', () => {
-    const result = format('SELECT :variable', {
-      params: { variable: '"variable value"' },
-    });
-    expect(result).toBe(dedent`
-      SELECT
-        "variable value"
     `);
   });
 });

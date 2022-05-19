@@ -2,7 +2,8 @@ import dedent from 'dedent-js';
 import { SqlLanguage, FormatFn } from '../../src/sqlFormatter';
 
 interface ParamsTypes {
-  indexed: ('?' | '$')[];
+  indexed?: ('?' | '$')[];
+  named?: ':'[];
 }
 
 export default function supportsParams(
@@ -11,7 +12,7 @@ export default function supportsParams(
   params: ParamsTypes
 ) {
   describe('supports params', () => {
-    if (params.indexed.includes('?')) {
+    if (params.indexed?.includes('?')) {
       it('leaves ? indexed placeholders as is when no params config provided', () => {
         const result = format('SELECT ?, ?, ?;');
         expect(result).toBe(dedent`
@@ -61,7 +62,7 @@ export default function supportsParams(
       });
     }
 
-    if (params.indexed.includes('$')) {
+    if (params.indexed?.includes('$')) {
       it('recognizes $n placeholders', () => {
         const result = format('SELECT $1, $2 FROM tbl');
         expect(result).toBe(dedent`
@@ -83,6 +84,50 @@ export default function supportsParams(
             "blah"
           FROM
             tbl
+        `);
+      });
+    }
+
+    if (params.named?.includes(':')) {
+      it('recognizes :name placeholders', () => {
+        expect(format('SELECT :foo, :bar, :baz;')).toBe(dedent`
+          SELECT
+            :foo,
+            :bar,
+            :baz;
+        `);
+      });
+
+      it('replaces :name placeholders with param values', () => {
+        expect(
+          format(`WHERE name = :name AND age > :current_age;`, {
+            params: { name: "'John'", current_age: '10' },
+          })
+        ).toBe(dedent`
+          WHERE
+            name = 'John'
+            AND age > 10;
+        `);
+      });
+
+      it(`recognizes :'name' and :"name" placeholders`, () => {
+        expect(format(`SELECT :'foo', :"bar", :"baz";`)).toBe(dedent`
+          SELECT
+            :'foo',
+            :"bar",
+            :"baz";
+        `);
+      });
+
+      it(`replaces :'name' and :"name" placeholders with param values`, () => {
+        expect(
+          format(`WHERE name = :"name" AND age > :'current_age';`, {
+            params: { name: "'John'", current_age: '10' },
+          })
+        ).toBe(dedent`
+          WHERE
+            name = 'John'
+            AND age > 10;
         `);
       });
     }

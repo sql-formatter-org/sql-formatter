@@ -32,7 +32,7 @@ describe('PlSqlFormatter', () => {
   supportsOperators(language, format, PlSqlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsJoin(language, format);
   supportsReturning(language, format);
-  supportsParams(language, format, { indexed: ['?'] });
+  supportsParams(language, format, { indexed: ['?'], named: [':'] });
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
