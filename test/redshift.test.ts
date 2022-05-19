@@ -26,7 +26,7 @@ describe('RedshiftFormatter', () => {
   supportsSchema(language, format);
   supportsOperators(language, format, RedshiftFormatter.operators);
   supportsJoin(language, format);
-  supportsParams(language, format, { indexed: ['?'], named: ['$'] });
+  supportsParams(language, format, { indexed: ['?'], named: ['$', '@', '@""'] });
 
   it('formats LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC LIMIT 10;')).toBe(dedent`
@@ -53,16 +53,6 @@ describe('RedshiftFormatter', () => {
       FROM
         -- This is a comment
         MyTable;
-    `);
-  });
-
-  it('recognizes @ as part of identifiers', () => {
-    const result = format('SELECT @col1 FROM tbl');
-    expect(result).toBe(dedent`
-      SELECT
-        @col1
-      FROM
-        tbl
     `);
   });
 

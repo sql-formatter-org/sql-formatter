@@ -12,6 +12,7 @@ import supportsOperators from './features/operators';
 import supportsJoin from './features/join';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
+import supportsParams from './options/param';
 
 describe('TSqlFormatter', () => {
   const language = 'tsql';
@@ -27,6 +28,7 @@ describe('TSqlFormatter', () => {
   supportsSchema(language, format);
   supportsOperators(language, format, TSqlFormatter.operators);
   supportsJoin(language, format, { without: ['NATURAL'] });
+  supportsParams(language, format, { named: ['@', '@""', '@[]'] });
 
   // TODO: The following are duplicated from StandardSQLFormatter test
 
@@ -39,32 +41,6 @@ describe('TSqlFormatter', () => {
         Customers (ID, MoneyBalance, Address, City)
       VALUES
         (12, -123.4, 'Skagen 2111', 'Stv');
-    `);
-  });
-
-  it('recognizes @variables', () => {
-    const result = format('SELECT @variable, @"var name", @[var name];');
-    expect(result).toBe(dedent`
-      SELECT
-        @variable,
-        @"var name",
-        @[var name];
-    `);
-  });
-
-  it('replaces @variables with param values', () => {
-    const result = format('SELECT @variable, @"var name1", @[var name2];', {
-      params: {
-        'variable': "'var value'",
-        'var name1': "'var value1'",
-        'var name2': "'var value2'",
-      },
-    });
-    expect(result).toBe(dedent`
-      SELECT
-        'var value',
-        'var value1',
-        'var value2';
     `);
   });
 

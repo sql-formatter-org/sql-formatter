@@ -3,7 +3,7 @@ import { SqlLanguage, FormatFn } from '../../src/sqlFormatter';
 
 interface ParamsTypes {
   indexed?: ('?' | '$')[];
-  named?: (':' | '$' | '${}')[];
+  named?: (':' | '$' | '${}' | '@' | '@""' | '@[]')[];
 }
 
 export default function supportsParams(
@@ -222,4 +222,71 @@ export default function supportsParams(
       });
     }
   });
+
+  if (params.named?.includes('@')) {
+    it('recognizes @name placeholders', () => {
+      expect(format('SELECT @foo, @bar, @baz;')).toBe(dedent`
+        SELECT
+          @foo,
+          @bar,
+          @baz;
+      `);
+    });
+
+    it('replaces @name placeholders with param values', () => {
+      expect(
+        format(`WHERE name = @name AND age > @current_age;`, {
+          params: { name: "'John'", current_age: '10' },
+        })
+      ).toBe(dedent`
+        WHERE
+          name = 'John'
+          AND age > 10;
+      `);
+    });
+  }
+
+  if (params.named?.includes('@""')) {
+    it(`recognizes @"name" placeholders`, () => {
+      expect(format(`SELECT @"foo", @"foo bar";`)).toBe(dedent`
+        SELECT
+          @"foo",
+          @"foo bar";
+      `);
+    });
+
+    it(`replaces @"name" placeholders with param values`, () => {
+      expect(
+        format(`WHERE name = @"name" AND age > @"current age";`, {
+          params: { 'name': "'John'", 'current age': '10' },
+        })
+      ).toBe(dedent`
+        WHERE
+          name = 'John'
+          AND age > 10;
+      `);
+    });
+  }
+
+  if (params.named?.includes('@[]')) {
+    it(`recognizes @[name] placeholders`, () => {
+      expect(format(`SELECT @[foo], @[foo bar];`)).toBe(dedent`
+        SELECT
+          @[foo],
+          @[foo bar];
+      `);
+    });
+
+    it(`replaces @[name] placeholders with param values`, () => {
+      expect(
+        format(`WHERE name = @[name] AND age > @[current age];`, {
+          params: { 'name': "'John'", 'current age': '10' },
+        })
+      ).toBe(dedent`
+        WHERE
+          name = 'John'
+          AND age > 10;
+      `);
+    });
+  }
 }
