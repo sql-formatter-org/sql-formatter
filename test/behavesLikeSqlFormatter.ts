@@ -340,11 +340,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     expect(format('UNIQUE foo')).toBe('UNIQUE foo');
   });
 
-  it('formats AND/OR operators', () => {
-    expect(format('foo AND bar')).toBe('foo\nAND bar');
-    expect(format('foo OR bar')).toBe('foo\nOR bar');
-  });
-
   it('formats unicode correctly', () => {
     const result = format('SELECT 结合使用, тест FROM töörõõm;');
     expect(result).toBe(dedent`
