@@ -20,7 +20,7 @@ describe('SqliteFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
-  supportsComments(language, format);
+  supportsComments(format);
   supportsCreateTable(format);
   supportsConstraints(format);
   supportsAlterTable(format);

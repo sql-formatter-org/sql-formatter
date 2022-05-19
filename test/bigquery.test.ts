@@ -18,7 +18,7 @@ describe('BigQueryFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
-  supportsComments(language, format);
+  supportsComments(format, { skipTrickyCommentsTest: true });
   supportsCreateTable(format);
   supportsDeleteFrom(format);
   supportsStrings(format, BigQueryFormatter.stringTypes);

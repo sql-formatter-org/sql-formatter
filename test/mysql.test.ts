@@ -10,7 +10,7 @@ describe('MySqlFormatter', () => {
   const language = 'mysql';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
-  behavesLikeMariaDbFormatter(language, format);
+  behavesLikeMariaDbFormatter(format);
 
   supportsStrings(format, MySqlFormatter.stringTypes);
   supportsOperators(format, MySqlFormatter.operators, ['AND', 'OR', 'XOR']);

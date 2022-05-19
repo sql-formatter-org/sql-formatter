@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
-import { FormatFn, SqlLanguage } from '../src/sqlFormatter';
+import { FormatFn } from '../src/sqlFormatter';
 
 import supportsCreateTable from './features/createTable';
 import supportsAlterTable from './features/alterTable';
@@ -14,9 +14,9 @@ import supportsComments from './features/comments';
 /**
  * Shared tests for MySQL and MariaDB
  */
-export default function behavesLikeMariaDbFormatter(language: SqlLanguage, format: FormatFn) {
+export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   behavesLikeSqlFormatter(format);
-  supportsComments(language, format);
+  supportsComments(format);
   supportsCreateTable(format);
   supportsConstraints(format);
   supportsAlterTable(format);

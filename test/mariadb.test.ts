@@ -10,7 +10,7 @@ describe('MariaDbFormatter', () => {
   const language = 'mariadb';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
-  behavesLikeMariaDbFormatter(language, format);
+  behavesLikeMariaDbFormatter(format);
 
   supportsStrings(format, MariaDbFormatter.stringTypes);
   supportsOperators(format, MariaDbFormatter.operators, ['AND', 'OR', 'XOR']);

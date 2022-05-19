@@ -19,7 +19,7 @@ describe('N1qlFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
-  supportsComments(language, format);
+  supportsComments(format);
   supportsDeleteFrom(format);
   supportsStrings(format, N1qlFormatter.stringTypes);
   supportsBetween(format);
