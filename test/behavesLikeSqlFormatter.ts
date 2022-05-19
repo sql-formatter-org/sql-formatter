@@ -330,16 +330,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     expect(result).toBe("((foo = 'bar'))");
   });
 
-  it('formats logical operators', () => {
-    expect(format('foo ALL bar')).toBe('foo ALL bar');
-    expect(format('foo = ANY (1, 2, 3)')).toBe('foo = ANY (1, 2, 3)');
-    expect(format('EXISTS bar')).toBe('EXISTS bar');
-    expect(format('foo IN (1, 2, 3)')).toBe('foo IN (1, 2, 3)');
-    expect(format("foo LIKE 'hello%'")).toBe("foo LIKE 'hello%'");
-    expect(format('foo IS NULL')).toBe('foo IS NULL');
-    expect(format('UNIQUE foo')).toBe('UNIQUE foo');
-  });
-
   it('formats unicode correctly', () => {
     const result = format('SELECT 结合使用, тест FROM töörõõm;');
     expect(result).toBe(dedent`
