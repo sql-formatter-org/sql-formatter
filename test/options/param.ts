@@ -2,7 +2,7 @@ import dedent from 'dedent-js';
 import { SqlLanguage, FormatFn } from '../../src/sqlFormatter';
 
 interface ParamsTypes {
-  indexed: '?'[];
+  indexed: ('?' | '$')[];
 }
 
 export default function supportsParams(
@@ -57,6 +57,32 @@ export default function supportsParams(
             second,
             third,
             first;
+        `);
+      });
+    }
+
+    if (params.indexed.includes('$')) {
+      it('recognizes $n placeholders', () => {
+        const result = format('SELECT $1, $2 FROM tbl');
+        expect(result).toBe(dedent`
+          SELECT
+            $1,
+            $2
+          FROM
+            tbl
+        `);
+      });
+
+      it('replaces $n placeholders with param values', () => {
+        const result = format('SELECT $1, $2 FROM tbl', {
+          params: { 1: '"variable value"', 2: '"blah"' },
+        });
+        expect(result).toBe(dedent`
+          SELECT
+            "variable value",
+            "blah"
+          FROM
+            tbl
         `);
       });
     }

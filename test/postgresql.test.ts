@@ -13,6 +13,7 @@ import supportsStrings from './features/strings';
 import supportsReturning from './features/returning';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
+import supportsParams from './options/param';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -29,30 +30,7 @@ describe('PostgreSqlFormatter', () => {
   supportsOperators(language, format, PostgreSqlFormatter.operators);
   supportsJoin(language, format);
   supportsReturning(language, format);
-
-  it('supports $n placeholders', () => {
-    const result = format('SELECT $1, $2 FROM tbl');
-    expect(result).toBe(dedent`
-      SELECT
-        $1,
-        $2
-      FROM
-        tbl
-    `);
-  });
-
-  it('replaces $n placeholders with param values', () => {
-    const result = format('SELECT $1, $2 FROM tbl', {
-      params: { 1: '"variable value"', 2: '"blah"' },
-    });
-    expect(result).toBe(dedent`
-      SELECT
-        "variable value",
-        "blah"
-      FROM
-        tbl
-    `);
-  });
+  supportsParams(language, format, { indexed: ['$'] });
 
   it('supports :name placeholders', () => {
     expect(format('foo = :bar')).toBe('foo = :bar');
