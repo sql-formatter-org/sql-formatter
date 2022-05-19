@@ -13,12 +13,14 @@ import supportsJoin from './features/join';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsParams from './options/param';
+import supportsComments from './features/comments';
 
 describe('TSqlFormatter', () => {
   const language = 'tsql';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
-  behavesLikeSqlFormatter(language, format);
+  behavesLikeSqlFormatter(format);
+  supportsComments(language, format);
   supportsCreateTable(format);
   supportsConstraints(format);
   supportsAlterTable(format);

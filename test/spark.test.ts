@@ -12,12 +12,14 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsArray from './features/array';
 import supportsParams from './options/param';
+import supportsComments from './features/comments';
 
 describe('SparkFormatter', () => {
   const language = 'spark';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
-  behavesLikeSqlFormatter(language, format);
+  behavesLikeSqlFormatter(format);
+  supportsComments(language, format);
   supportsCreateTable(format);
   supportsAlterTable(format);
   supportsStrings(format, SparkFormatter.stringTypes);

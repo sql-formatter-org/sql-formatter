@@ -12,12 +12,14 @@ import supportsReturning from './features/returning';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsArray from './features/array';
 import supportsParams from './options/param';
+import supportsComments from './features/comments';
 
 describe('N1qlFormatter', () => {
   const language = 'n1ql';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
-  behavesLikeSqlFormatter(language, format);
+  behavesLikeSqlFormatter(format);
+  supportsComments(language, format);
   supportsDeleteFrom(format);
   supportsStrings(format, N1qlFormatter.stringTypes);
   supportsBetween(format);

@@ -11,12 +11,14 @@ import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsArray from './features/array';
 import supportsParams from './options/param';
+import supportsComments from './features/comments';
 
 describe('HiveFormatter', () => {
   const language = 'hive';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
-  behavesLikeSqlFormatter(language, format);
+  behavesLikeSqlFormatter(format);
+  supportsComments(language, format);
   supportsCreateTable(format);
   supportsAlterTable(format);
   supportsStrings(format, HiveFormatter.stringTypes);

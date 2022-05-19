@@ -9,12 +9,14 @@ import supportsJoin from './features/join';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsParams from './options/param';
+import supportsComments from './features/comments';
 
 /**
  * Shared tests for MySQL and MariaDB
  */
 export default function behavesLikeMariaDbFormatter(language: SqlLanguage, format: FormatFn) {
-  behavesLikeSqlFormatter(language, format);
+  behavesLikeSqlFormatter(format);
+  supportsComments(language, format);
   supportsCreateTable(format);
   supportsConstraints(format);
   supportsAlterTable(format);

@@ -11,12 +11,14 @@ import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsParams from './options/param';
+import supportsComments from './features/comments';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
-  behavesLikeSqlFormatter(language, format);
+  behavesLikeSqlFormatter(format);
+  supportsComments(language, format);
   supportsCreateTable(format);
   supportsDeleteFrom(format);
   supportsStrings(format, BigQueryFormatter.stringTypes);

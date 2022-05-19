@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
-import { FormatFn, SqlLanguage } from '../src/sqlFormatter';
-import supportsComments from './features/comments';
+import { FormatFn } from '../src/sqlFormatter';
 import supportsCase from './features/case';
 import supportsTabWidth from './options/tabWidth';
 import supportsUseTabs from './options/useTabs';
@@ -20,8 +19,7 @@ import supportsTabulateAlias from './options/tabulateAlias';
 /**
  * Core tests for all SQL formatters
  */
-export default function behavesLikeSqlFormatter(language: SqlLanguage, format: FormatFn) {
-  supportsComments(language, format);
+export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsCase(format);
 
   supportsAliasAs(format);
