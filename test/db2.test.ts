@@ -12,6 +12,7 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
+import supportsParams from './options/param';
 
 describe('Db2Formatter', () => {
   const language = 'db2';
@@ -27,6 +28,7 @@ describe('Db2Formatter', () => {
   supportsSchema(language, format);
   supportsOperators(language, format, Db2Formatter.operators);
   supportsJoin(language, format);
+  supportsParams(language, format, { indexed: ['?'] });
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`

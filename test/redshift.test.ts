@@ -11,6 +11,7 @@ import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsDeleteFrom from './features/deleteFrom';
+import supportsParams from './options/param';
 
 describe('RedshiftFormatter', () => {
   const language = 'redshift';
@@ -25,6 +26,7 @@ describe('RedshiftFormatter', () => {
   supportsSchema(language, format);
   supportsOperators(language, format, RedshiftFormatter.operators);
   supportsJoin(language, format);
+  supportsParams(language, format, { indexed: ['?'] });
 
   it('formats LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC LIMIT 10;')).toBe(dedent`

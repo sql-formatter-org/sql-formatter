@@ -10,6 +10,7 @@ import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsDeleteFrom from './features/deleteFrom';
+import supportsParams from './options/param';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';
@@ -23,6 +24,7 @@ describe('BigQueryFormatter', () => {
   supportsSchema(language, format);
   supportsJoin(language, format, { without: ['NATURAL JOIN'] });
   supportsOperators(language, format, BigQueryFormatter.operators);
+  supportsParams(language, format, { indexed: ['?'] });
 
   it('supports # line comment', () => {
     const result = format('SELECT alpha # commment\nFROM beta');

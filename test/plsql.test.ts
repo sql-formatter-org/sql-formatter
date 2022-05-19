@@ -14,6 +14,7 @@ import supportsStrings from './features/strings';
 import supportsReturning from './features/returning';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
+import supportsParams from './options/param';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -31,6 +32,7 @@ describe('PlSqlFormatter', () => {
   supportsOperators(language, format, PlSqlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsJoin(language, format);
   supportsReturning(language, format);
+  supportsParams(language, format, { indexed: ['?'] });
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
@@ -80,34 +82,6 @@ describe('PlSqlFormatter', () => {
       VALUES
         (12, -123.4, 'Skagen 2111', 'Stv');
     `);
-  });
-
-  it('recognizes ?[0-9]* placeholders', () => {
-    const result = format('SELECT ?1, ?25, ?;');
-    expect(result).toBe(dedent`
-      SELECT
-        ?1,
-        ?25,
-        ?;
-    `);
-  });
-
-  it('replaces ? numbered placeholders with param values', () => {
-    const result = format('SELECT ?1, ?2, ?0;', {
-      params: {
-        0: 'first',
-        1: 'second',
-        2: 'third',
-      },
-    });
-    expect(result).toBe('SELECT\n' + '  second,\n' + '  third,\n' + '  first;');
-  });
-
-  it('replaces ? indexed placeholders with param values', () => {
-    const result = format('SELECT ?, ?, ?;', {
-      params: ['first', 'second', 'third'],
-    });
-    expect(result).toBe('SELECT\n' + '  first,\n' + '  second,\n' + '  third;');
   });
 
   it('formats SELECT query with CROSS APPLY', () => {

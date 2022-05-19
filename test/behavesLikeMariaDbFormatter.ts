@@ -8,6 +8,7 @@ import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
+import supportsParams from './options/param';
 
 /**
  * Shared tests for MySQL and MariaDB
@@ -29,6 +30,7 @@ export default function behavesLikeMariaDbFormatter(language: SqlLanguage, forma
       'NATURAL RIGHT OUTER JOIN',
     ],
   });
+  supportsParams(language, format, { indexed: ['?'] });
 
   it('supports # comments', () => {
     expect(format('SELECT a # comment\nFROM b # comment')).toBe(dedent`

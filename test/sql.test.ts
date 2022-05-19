@@ -12,6 +12,7 @@ import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
+import supportsParams from './options/param';
 
 describe('SqlFormatter', () => {
   const language = 'sql';
@@ -27,18 +28,7 @@ describe('SqlFormatter', () => {
   supportsSchema(language, format);
   supportsJoin(language, format);
   supportsOperators(language, format, SqlFormatter.operators);
-
-  it('replaces ? indexed placeholders with param values', () => {
-    const result = format('SELECT ?, ?, ?;', {
-      params: ['first', 'second', 'third'],
-    });
-    expect(result).toBe(dedent`
-      SELECT
-        first,
-        second,
-        third;
-    `);
-  });
+  supportsParams(language, format, { indexed: ['?'] });
 
   it('formats FETCH FIRST like LIMIT', () => {
     const result = format('SELECT * FETCH FIRST 2 ROWS ONLY;');

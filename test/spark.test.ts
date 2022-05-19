@@ -11,6 +11,7 @@ import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsArray from './features/array';
+import supportsParams from './options/param';
 
 describe('SparkFormatter', () => {
   const language = 'spark';
@@ -44,6 +45,7 @@ describe('SparkFormatter', () => {
       'NATURAL SEMI JOIN',
     ],
   });
+  supportsParams(language, format, { indexed: ['?'] });
 
   it('formats WINDOW specification as top level', () => {
     const result = format(

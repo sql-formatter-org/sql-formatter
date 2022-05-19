@@ -10,6 +10,7 @@ import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsArray from './features/array';
+import supportsParams from './options/param';
 
 describe('HiveFormatter', () => {
   const language = 'hive';
@@ -24,4 +25,5 @@ describe('HiveFormatter', () => {
   supportsJoin(language, format, { without: ['NATURAL JOIN'] });
   supportsOperators(language, format, HiveFormatter.operators);
   supportsArray(language, format);
+  supportsParams(language, format, { indexed: ['?'] });
 });
