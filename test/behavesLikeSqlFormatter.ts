@@ -36,10 +36,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsCommaPosition(format);
   supportsLogicalOperatorNewline(format);
 
-  it('formats lonely semicolon', () => {
-    expect(format(';')).toBe(';');
-  });
-
   it('formats simple SELECT query', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;');
     expect(result).toBe(dedent`
