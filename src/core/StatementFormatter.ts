@@ -369,7 +369,7 @@ export default class StatementFormatter {
    * Formats a comma Operator onto query, ending line unless in an Inline Block
    */
   private formatComma(token: Token, query: string): string {
-    query = trimSpacesEnd(query) + this.show(token) + ' ';
+    query = this.formatWithSpaceAfter(token, query);
 
     if (this.inlineBlock.isActive()) {
       return query;
