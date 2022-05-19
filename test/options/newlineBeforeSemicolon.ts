@@ -30,4 +30,25 @@ export default function supportsNewlineBeforeSemicolon(format: FormatFn) {
       ;
     `);
   });
+
+  // the nr of empty lines here depends on linesBetweenQueries option
+  it('formats multiple lonely semicolons', () => {
+    expect(format(';;;')).toBe(dedent`
+      ;
+
+      ;
+
+      ;
+    `);
+  });
+
+  it('does not introduce extra empty lines between semicolons when newlineBeforeSemicolon:true', () => {
+    expect(format(';;;', { newlineBeforeSemicolon: true })).toBe(dedent`
+      ;
+
+      ;
+
+      ;
+    `);
+  });
 }
