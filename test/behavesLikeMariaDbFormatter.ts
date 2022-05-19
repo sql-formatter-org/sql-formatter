@@ -16,7 +16,7 @@ import supportsComments from './features/comments';
  */
 export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   behavesLikeSqlFormatter(format);
-  supportsComments(format);
+  supportsComments(format, { hashComments: true });
   supportsCreateTable(format);
   supportsConstraints(format);
   supportsAlterTable(format);
@@ -33,15 +33,6 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
     ],
   });
   supportsParams(format, { indexed: ['?'] });
-
-  it('supports # comments', () => {
-    expect(format('SELECT a # comment\nFROM b # comment')).toBe(dedent`
-      SELECT
-        a # comment
-      FROM
-        b # comment
-    `);
-  });
 
   it('supports @variables', () => {
     expect(format('SELECT @foo, @bar')).toBe(dedent`

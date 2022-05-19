@@ -2,10 +2,12 @@ import dedent from 'dedent-js';
 import { FormatFn } from '../../src/sqlFormatter';
 import { itIf } from '../utils';
 
-export default function supportsComments(
-  format: FormatFn,
-  { skipTrickyCommentsTest }: { skipTrickyCommentsTest?: boolean } = {}
-) {
+interface CommentsConfig {
+  hashComments?: boolean;
+  skipTrickyCommentsTest?: boolean;
+}
+
+export default function supportsComments(format: FormatFn, opts: CommentsConfig = {}) {
   it('formats SELECT query with different comments', () => {
     const result = format(dedent`
       SELECT
@@ -49,7 +51,7 @@ export default function supportsComments(
   // TODO: This currently fails for BigQuery
   // BigQuery supports single dashes inside identifiers e.g. first-name,
   // but we mistakenly support multiple dashes e.g. first--name
-  itIf(!skipTrickyCommentsTest)('formats tricky line comments', () => {
+  itIf(!opts.skipTrickyCommentsTest)('formats tricky line comments', () => {
     expect(format('SELECT a--comment, here\nFROM b--comment')).toBe(dedent`
       SELECT
         a --comment, here
@@ -120,4 +122,16 @@ export default function supportsComments(
         /*Comment
     `);
   });
+
+  if (opts.hashComments) {
+    it('supports # line comment', () => {
+      const result = format('SELECT alpha # commment\nFROM beta');
+      expect(result).toBe(dedent`
+        SELECT
+          alpha # commment
+        FROM
+          beta
+      `);
+    });
+  }
 }
