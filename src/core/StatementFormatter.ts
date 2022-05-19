@@ -400,11 +400,10 @@ export default class StatementFormatter {
   }
 
   private formatQuerySeparator(token: Token, query: string): string {
-    return [
-      trimSpacesEnd(query),
-      this.cfg.newlineBeforeSemicolon ? '\n' : '',
-      this.show(token),
-    ].join('');
+    return this.formatWithoutSpaces(
+      token,
+      this.cfg.newlineBeforeSemicolon ? this.addNewline(query) : query
+    );
   }
 
   /** Converts token to string, uppercasing if enabled */
