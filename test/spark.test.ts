@@ -45,7 +45,7 @@ describe('SparkFormatter', () => {
       'NATURAL SEMI JOIN',
     ],
   });
-  supportsParams(language, format, { indexed: ['?'] });
+  supportsParams(language, format, { indexed: ['?'], named: ['$', '${}'] });
 
   it('formats WINDOW specification as top level', () => {
     const result = format(
@@ -77,32 +77,6 @@ describe('SparkFormatter', () => {
         window(time, "1 hour").end AS window_end
       FROM
         tbl;
-    `);
-  });
-
-  // eslint-disable-next-line no-template-curly-in-string
-  it('does not add spaces around ${value} params', () => {
-    // eslint-disable-next-line no-template-curly-in-string
-    const result = format('SELECT ${var_name};');
-    expect(result).toBe(dedent`
-      SELECT
-        \${var_name};
-    `);
-  });
-
-  // eslint-disable-next-line no-template-curly-in-string
-  it('replaces $variables and ${variables} with param values', () => {
-    // eslint-disable-next-line no-template-curly-in-string
-    const result = format('SELECT $var1, ${var2};', {
-      params: {
-        var1: "'var one'",
-        var2: "'var two'",
-      },
-    });
-    expect(result).toBe(dedent`
-      SELECT
-        'var one',
-        'var two';
     `);
   });
 });

@@ -3,7 +3,7 @@ import { SqlLanguage, FormatFn } from '../../src/sqlFormatter';
 
 interface ParamsTypes {
   indexed?: ('?' | '$')[];
-  named?: ':'[];
+  named?: (':' | '$' | '${}')[];
 }
 
 export default function supportsParams(
@@ -128,6 +128,96 @@ export default function supportsParams(
           WHERE
             name = 'John'
             AND age > 10;
+        `);
+      });
+    }
+
+    if (params.named?.includes('$')) {
+      it('recognizes $name placeholders', () => {
+        expect(format('SELECT $foo, $bar, $baz;')).toBe(dedent`
+          SELECT
+            $foo,
+            $bar,
+            $baz;
+        `);
+      });
+
+      it('replaces $name placeholders with param values', () => {
+        expect(
+          format(`WHERE name = $name AND age > $current_age;`, {
+            params: { name: "'John'", current_age: '10' },
+          })
+        ).toBe(dedent`
+          WHERE
+            name = 'John'
+            AND age > 10;
+        `);
+      });
+
+      it(`recognizes $'name' and $"name" and $\`name\` placeholders`, () => {
+        expect(format(`SELECT $'foo', $"bar", $\`baz\`;`)).toBe(dedent`
+          SELECT
+            $'foo',
+            $"bar",
+            $\`baz\`;
+        `);
+      });
+
+      it(`replaces $'name' and $"name" and $\`name\` placeholders with param values`, () => {
+        expect(
+          format(`WHERE name = $"name" AND age > $'current_age' OR addr = $\`addr\`;`, {
+            params: { name: "'John'", current_age: '10', addr: "'Baker street'" },
+          })
+        ).toBe(dedent`
+          WHERE
+            name = 'John'
+            AND age > 10
+            OR addr = 'Baker street';
+        `);
+      });
+
+      it('replaces $n numbered placeholders with param values', () => {
+        const result = format('SELECT $1, $2, $0;', {
+          params: {
+            0: 'first',
+            1: 'second',
+            2: 'third',
+          },
+        });
+        expect(result).toBe(dedent`
+          SELECT
+            second,
+            third,
+            first;
+        `);
+      });
+    }
+
+    if (params.named?.includes('${}')) {
+      // eslint-disable-next-line no-template-curly-in-string
+      it('recognizes ${name} placeholders', () => {
+        // eslint-disable-next-line no-template-curly-in-string
+        const result = format('SELECT ${var_name}, ${var name};');
+        expect(result).toBe(dedent`
+          SELECT
+            \${var_name},
+            \${var name};
+        `);
+      });
+
+      // eslint-disable-next-line no-template-curly-in-string
+      it('replaces ${variables} with param values', () => {
+        // eslint-disable-next-line no-template-curly-in-string
+        const result = format('SELECT ${var 1}, ${var2};', {
+          params: {
+            'var 1': "'var one'",
+            'var2': "'var two'",
+          },
+        });
+        expect(result).toBe(dedent`
+          SELECT
+            'var one',
+            'var two';
         `);
       });
     }

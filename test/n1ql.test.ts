@@ -11,6 +11,7 @@ import supportsStrings from './features/strings';
 import supportsReturning from './features/returning';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsArray from './features/array';
+import supportsParams from './options/param';
 
 describe('N1qlFormatter', () => {
   const language = 'n1ql';
@@ -25,6 +26,7 @@ describe('N1qlFormatter', () => {
   supportsArray(language, format);
   supportsJoin(language, format, { without: ['FULL', 'CROSS', 'NATURAL'] });
   supportsReturning(language, format);
+  supportsParams(language, format, { named: ['$'] });
 
   it('formats SELECT query with primary key querying', () => {
     const result = format("SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];");
@@ -129,49 +131,6 @@ describe('N1qlFormatter', () => {
         'baldwin'
       SET
         type = 'actor'
-    `);
-  });
-
-  it('recognizes $variables', () => {
-    const result = format('SELECT $variable, $\'var name\', $"var name", $`var name`;');
-    expect(result).toBe(dedent`
-      SELECT
-        $variable,
-        $'var name',
-        $"var name",
-        $\`var name\`;
-    `);
-  });
-
-  it('replaces $variables with param values', () => {
-    const result = format('SELECT $variable, $\'var name\', $"var name", $`var name`;', {
-      params: {
-        'variable': '"variable value"',
-        'var name': "'var value'",
-      },
-    });
-    expect(result).toBe(dedent`
-      SELECT
-        "variable value",
-        'var value',
-        'var value',
-        'var value';
-    `);
-  });
-
-  it('replaces $ numbered placeholders with param values', () => {
-    const result = format('SELECT $1, $2, $0;', {
-      params: {
-        0: 'first',
-        1: 'second',
-        2: 'third',
-      },
-    });
-    expect(result).toBe(dedent`
-      SELECT
-        second,
-        third,
-        first;
     `);
   });
 });
