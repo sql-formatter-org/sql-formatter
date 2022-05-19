@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
-import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsReturning(language: SqlLanguage, format: FormatFn) {
+export default function supportsReturning(format: FormatFn) {
   it('places RETURNING to new line', () => {
     const result = format(
       "INSERT INTO users (firstname, lastname) VALUES ('Joe', 'Cool') RETURNING id, firstname;"

@@ -1,6 +1,6 @@
-import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsUseTabs(language: SqlLanguage, format: FormatFn) {
+export default function supportsUseTabs(format: FormatFn) {
   it('supports indenting with tabs', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;', {
       useTabs: true,

@@ -19,16 +19,16 @@ describe('TSqlFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
-  supportsCreateTable(language, format);
-  supportsConstraints(language, format);
-  supportsAlterTable(language, format);
-  supportsDeleteFrom(language, format);
-  supportsStrings(language, format, TSqlFormatter.stringTypes);
-  supportsBetween(language, format);
-  supportsSchema(language, format);
-  supportsOperators(language, format, TSqlFormatter.operators);
-  supportsJoin(language, format, { without: ['NATURAL'] });
-  supportsParams(language, format, { named: ['@', '@""', '@[]'] });
+  supportsCreateTable(format);
+  supportsConstraints(format);
+  supportsAlterTable(format);
+  supportsDeleteFrom(format);
+  supportsStrings(format, TSqlFormatter.stringTypes);
+  supportsBetween(format);
+  supportsSchema(format);
+  supportsOperators(format, TSqlFormatter.operators);
+  supportsJoin(format, { without: ['NATURAL'] });
+  supportsParams(format, { named: ['@', '@""', '@[]'] });
 
   // TODO: The following are duplicated from StandardSQLFormatter test
 

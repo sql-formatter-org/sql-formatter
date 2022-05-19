@@ -17,14 +17,14 @@ describe('BigQueryFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
-  supportsCreateTable(language, format);
-  supportsDeleteFrom(language, format);
-  supportsStrings(language, format, BigQueryFormatter.stringTypes);
-  supportsBetween(language, format);
-  supportsSchema(language, format);
-  supportsJoin(language, format, { without: ['NATURAL JOIN'] });
-  supportsOperators(language, format, BigQueryFormatter.operators);
-  supportsParams(language, format, { indexed: ['?'] });
+  supportsCreateTable(format);
+  supportsDeleteFrom(format);
+  supportsStrings(format, BigQueryFormatter.stringTypes);
+  supportsBetween(format);
+  supportsSchema(format);
+  supportsJoin(format, { without: ['NATURAL JOIN'] });
+  supportsOperators(format, BigQueryFormatter.operators);
+  supportsParams(format, { indexed: ['?'] });
 
   it('supports # line comment', () => {
     const result = format('SELECT alpha # commment\nFROM beta');

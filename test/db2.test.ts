@@ -19,16 +19,16 @@ describe('Db2Formatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
-  supportsCreateTable(language, format);
-  supportsConstraints(language, format);
-  supportsAlterTable(language, format);
-  supportsDeleteFrom(language, format);
-  supportsStrings(language, format, Db2Formatter.stringTypes);
-  supportsBetween(language, format);
-  supportsSchema(language, format);
-  supportsOperators(language, format, Db2Formatter.operators);
-  supportsJoin(language, format);
-  supportsParams(language, format, { indexed: ['?'], named: [':'] });
+  supportsCreateTable(format);
+  supportsConstraints(format);
+  supportsAlterTable(format);
+  supportsDeleteFrom(format);
+  supportsStrings(format, Db2Formatter.stringTypes);
+  supportsBetween(format);
+  supportsSchema(format);
+  supportsOperators(format, Db2Formatter.operators);
+  supportsJoin(format);
+  supportsParams(format, { indexed: ['?'], named: [':'] });
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`

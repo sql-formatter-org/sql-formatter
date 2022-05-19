@@ -1,8 +1,8 @@
 import { expect } from '@jest/globals';
 import dedent from 'dedent-js';
-import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsNewlineBeforeParen(language: SqlLanguage, format: FormatFn) {
+export default function supportsNewlineBeforeParen(format: FormatFn) {
   it('defaults to newline before opening and closing parenthesis', () => {
     const result = format('SELECT a FROM ( SELECT b FROM c );');
     expect(result).toBe(dedent`

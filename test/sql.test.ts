@@ -19,16 +19,16 @@ describe('SqlFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
-  supportsCreateTable(language, format);
-  supportsConstraints(language, format);
-  supportsAlterTable(language, format);
-  supportsDeleteFrom(language, format);
-  supportsStrings(language, format, SqlFormatter.stringTypes);
-  supportsBetween(language, format);
-  supportsSchema(language, format);
-  supportsJoin(language, format);
-  supportsOperators(language, format, SqlFormatter.operators);
-  supportsParams(language, format, { indexed: ['?'] });
+  supportsCreateTable(format);
+  supportsConstraints(format);
+  supportsAlterTable(format);
+  supportsDeleteFrom(format);
+  supportsStrings(format, SqlFormatter.stringTypes);
+  supportsBetween(format);
+  supportsSchema(format);
+  supportsJoin(format);
+  supportsOperators(format, SqlFormatter.operators);
+  supportsParams(format, { indexed: ['?'] });
 
   it('formats FETCH FIRST like LIMIT', () => {
     const result = format('SELECT * FETCH FIRST 2 ROWS ONLY;');

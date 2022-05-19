@@ -15,12 +15,12 @@ import supportsParams from './options/param';
  */
 export default function behavesLikeMariaDbFormatter(language: SqlLanguage, format: FormatFn) {
   behavesLikeSqlFormatter(language, format);
-  supportsCreateTable(language, format);
-  supportsConstraints(language, format);
-  supportsAlterTable(language, format);
-  supportsDeleteFrom(language, format);
-  supportsBetween(language, format);
-  supportsJoin(language, format, {
+  supportsCreateTable(format);
+  supportsConstraints(format);
+  supportsAlterTable(format);
+  supportsDeleteFrom(format);
+  supportsBetween(format);
+  supportsJoin(format, {
     without: ['FULL'],
     additionally: [
       'STRAIGHT_JOIN',
@@ -30,7 +30,7 @@ export default function behavesLikeMariaDbFormatter(language: SqlLanguage, forma
       'NATURAL RIGHT OUTER JOIN',
     ],
   });
-  supportsParams(language, format, { indexed: ['?'] });
+  supportsParams(format, { indexed: ['?'] });
 
   it('supports # comments', () => {
     expect(format('SELECT a # comment\nFROM b # comment')).toBe(dedent`

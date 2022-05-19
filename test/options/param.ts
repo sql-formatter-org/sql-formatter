@@ -1,16 +1,12 @@
 import dedent from 'dedent-js';
-import { SqlLanguage, FormatFn } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
 interface ParamsTypes {
   indexed?: ('?' | '$')[];
   named?: (':' | '$' | '${}' | '@' | '@""' | '@[]')[];
 }
 
-export default function supportsParams(
-  language: SqlLanguage,
-  format: FormatFn,
-  params: ParamsTypes
-) {
+export default function supportsParams(format: FormatFn, params: ParamsTypes) {
   describe('supports params', () => {
     if (params.indexed?.includes('?')) {
       it('leaves ? indexed placeholders as is when no params config provided', () => {

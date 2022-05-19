@@ -12,8 +12,8 @@ describe('MySqlFormatter', () => {
 
   behavesLikeMariaDbFormatter(language, format);
 
-  supportsStrings(language, format, MySqlFormatter.stringTypes);
-  supportsOperators(language, format, MySqlFormatter.operators, ['AND', 'OR', 'XOR']);
+  supportsStrings(format, MySqlFormatter.stringTypes);
+  supportsOperators(format, MySqlFormatter.operators, ['AND', 'OR', 'XOR']);
 
   it('supports @@ system variables', () => {
     const result = format('SELECT @@GLOBAL.time, @@SYSTEM.date, @@hour FROM foo;');

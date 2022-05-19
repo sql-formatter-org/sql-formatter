@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
-import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsExpressionWidth(language: SqlLanguage, format: FormatFn) {
+export default function supportsExpressionWidth(format: FormatFn) {
   it('throws error when expressionWidth negative number', () => {
     expect(() => {
       format('SELECT *', { expressionWidth: -2 });

@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
-import { SqlLanguage, FormatFn } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsConstraints(language: SqlLanguage, format: FormatFn) {
+export default function supportsConstraints(format: FormatFn) {
   it('treats ON UPDATE & ON DELETE as distinct keywords from ON', () => {
     expect(
       format(`

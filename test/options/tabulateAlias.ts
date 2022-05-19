@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
-import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsTabulateAlias(language: SqlLanguage, format: FormatFn) {
+export default function supportsTabulateAlias(format: FormatFn) {
   it('tabulates aliases which use AS keyword', () => {
     const result = format(
       'SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );',

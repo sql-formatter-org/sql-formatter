@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
-import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsMultilineLists(language: SqlLanguage, format: FormatFn) {
+export default function supportsMultilineLists(format: FormatFn) {
   it('throws error when multilineLists is negative number', () => {
     expect(() => {
       format('SELECT *', { multilineLists: -1 });

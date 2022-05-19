@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
-import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsLinesBetweenQueries(language: SqlLanguage, format: FormatFn) {
+export default function supportsLinesBetweenQueries(format: FormatFn) {
   it('defaults to single empty line between queries', () => {
     const result = format('SELECT * FROM foo; SELECT * FROM bar;');
     expect(result).toBe(dedent`

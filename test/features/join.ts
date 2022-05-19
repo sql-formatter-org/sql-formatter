@@ -1,13 +1,9 @@
 import dedent from 'dedent-js';
-import { SqlLanguage, FormatFn } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
 type Options = { without?: string[]; additionally?: string[] };
 
-export default function supportsJoin(
-  language: SqlLanguage,
-  format: FormatFn,
-  { without, additionally }: Options = {}
-) {
+export default function supportsJoin(format: FormatFn, { without, additionally }: Options = {}) {
   const unsupportedJoinRegex = without ? new RegExp(without.join('|'), 'u') : /^whateve_!%&$/u;
   const isSupportedJoin = (join: string) => !unsupportedJoinRegex.test(join);
 

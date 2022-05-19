@@ -18,14 +18,14 @@ describe('SparkFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
-  supportsCreateTable(language, format);
-  supportsAlterTable(language, format);
-  supportsStrings(language, format, SparkFormatter.stringTypes);
-  supportsBetween(language, format);
-  supportsSchema(language, format);
-  supportsOperators(language, format, SparkFormatter.operators, ['AND', 'OR', 'XOR']);
-  supportsArray(language, format);
-  supportsJoin(language, format, {
+  supportsCreateTable(format);
+  supportsAlterTable(format);
+  supportsStrings(format, SparkFormatter.stringTypes);
+  supportsBetween(format);
+  supportsSchema(format);
+  supportsOperators(format, SparkFormatter.operators, ['AND', 'OR', 'XOR']);
+  supportsArray(format);
+  supportsJoin(format, {
     additionally: [
       'ANTI JOIN',
       'SEMI JOIN',
@@ -45,7 +45,7 @@ describe('SparkFormatter', () => {
       'NATURAL SEMI JOIN',
     ],
   });
-  supportsParams(language, format, { indexed: ['?'], named: ['$', '${}'] });
+  supportsParams(format, { indexed: ['?'], named: ['$', '${}'] });
 
   it('formats WINDOW specification as top level', () => {
     const result = format(

@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
-import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsTabWidth(language: SqlLanguage, format: FormatFn) {
+export default function supportsTabWidth(format: FormatFn) {
   it('indents with 2 spaces by default', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;');
 

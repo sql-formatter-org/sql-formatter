@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
-import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsKeywordCase(language: SqlLanguage, format: FormatFn) {
+export default function supportsKeywordCase(format: FormatFn) {
   it('preserves keyword case by default', () => {
     const result = format('select distinct * frOM foo left JOIN bar WHERe cola > 1 and colb = 3');
     expect(result).toBe(dedent`

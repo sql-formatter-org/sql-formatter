@@ -17,13 +17,13 @@ describe('HiveFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
-  supportsCreateTable(language, format);
-  supportsAlterTable(language, format);
-  supportsStrings(language, format, HiveFormatter.stringTypes);
-  supportsBetween(language, format);
-  supportsSchema(language, format);
-  supportsJoin(language, format, { without: ['NATURAL JOIN'] });
-  supportsOperators(language, format, HiveFormatter.operators);
-  supportsArray(language, format);
-  supportsParams(language, format, { indexed: ['?'] });
+  supportsCreateTable(format);
+  supportsAlterTable(format);
+  supportsStrings(format, HiveFormatter.stringTypes);
+  supportsBetween(format);
+  supportsSchema(format);
+  supportsJoin(format, { without: ['NATURAL JOIN'] });
+  supportsOperators(format, HiveFormatter.operators);
+  supportsArray(format);
+  supportsParams(format, { indexed: ['?'] });
 });

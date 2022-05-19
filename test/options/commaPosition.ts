@@ -1,8 +1,8 @@
 import { expect } from '@jest/globals';
 import dedent from 'dedent-js';
-import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsCommaPosition(language: SqlLanguage, format: FormatFn) {
+export default function supportsCommaPosition(format: FormatFn) {
   it('defaults to comma after column', () => {
     const result = format(
       'SELECT alpha , MAX(beta) , delta AS d ,epsilon FROM gamma GROUP BY alpha , delta, epsilon'

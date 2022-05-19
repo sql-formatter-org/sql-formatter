@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
-import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsIndentStyle(language: SqlLanguage, format: FormatFn) {
+export default function supportsIndentStyle(format: FormatFn) {
   const baseQuery = `
     SELECT COUNT(a.column1), MAX(b.column2 + b.column3), b.column4 AS four
     FROM ( SELECT column1, column5 FROM table1 ) a

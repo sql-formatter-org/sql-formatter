@@ -1,8 +1,7 @@
 import dedent from 'dedent-js';
-import { SqlLanguage, FormatFn } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
 export default function supportsOperators(
-  language: SqlLanguage,
   format: FormatFn,
   operators: string[],
   logicalOperators: string[] = ['AND', 'OR']

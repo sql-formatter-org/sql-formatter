@@ -18,15 +18,15 @@ describe('RedshiftFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
-  supportsCreateTable(language, format);
-  supportsAlterTable(language, format);
-  supportsAlterTableModify(language, format);
-  supportsDeleteFrom(language, format);
-  supportsStrings(language, format, RedshiftFormatter.stringTypes);
-  supportsSchema(language, format);
-  supportsOperators(language, format, RedshiftFormatter.operators);
-  supportsJoin(language, format);
-  supportsParams(language, format, { indexed: ['?'], named: ['$', '@', '@""'] });
+  supportsCreateTable(format);
+  supportsAlterTable(format);
+  supportsAlterTableModify(format);
+  supportsDeleteFrom(format);
+  supportsStrings(format, RedshiftFormatter.stringTypes);
+  supportsSchema(format);
+  supportsOperators(format, RedshiftFormatter.operators);
+  supportsJoin(format);
+  supportsParams(format, { indexed: ['?'], named: ['$', '@', '@""'] });
 
   it('formats LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC LIMIT 10;')).toBe(dedent`

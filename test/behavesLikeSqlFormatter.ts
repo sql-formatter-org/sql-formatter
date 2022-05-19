@@ -22,21 +22,21 @@ import supportsTabulateAlias from './options/tabulateAlias';
  */
 export default function behavesLikeSqlFormatter(language: SqlLanguage, format: FormatFn) {
   supportsComments(language, format);
-  supportsCase(language, format);
+  supportsCase(format);
 
-  supportsAliasAs(language, format);
-  supportsTabulateAlias(language, format);
-  supportsTabWidth(language, format);
-  supportsUseTabs(language, format);
-  supportsKeywordCase(language, format);
-  supportsIndentStyle(language, format);
-  supportsLinesBetweenQueries(language, format);
-  supportsMultilineLists(language, format);
-  supportsExpressionWidth(language, format);
-  supportsNewlineBeforeParen(language, format);
-  supportsNewlineBeforeSemicolon(language, format);
-  supportsCommaPosition(language, format);
-  supportsLogicalOperatorNewline(language, format);
+  supportsAliasAs(format);
+  supportsTabulateAlias(format);
+  supportsTabWidth(format);
+  supportsUseTabs(format);
+  supportsKeywordCase(format);
+  supportsIndentStyle(format);
+  supportsLinesBetweenQueries(format);
+  supportsMultilineLists(format);
+  supportsExpressionWidth(format);
+  supportsNewlineBeforeParen(format);
+  supportsNewlineBeforeSemicolon(format);
+  supportsCommaPosition(format);
+  supportsLogicalOperatorNewline(format);
 
   it('does nothing with empty input', () => {
     const result = format('');

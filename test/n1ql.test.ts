@@ -18,15 +18,15 @@ describe('N1qlFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
-  supportsDeleteFrom(language, format);
-  supportsStrings(language, format, N1qlFormatter.stringTypes);
-  supportsBetween(language, format);
-  supportsSchema(language, format);
-  supportsOperators(language, format, N1qlFormatter.operators, ['AND', 'OR', 'XOR']);
-  supportsArray(language, format);
-  supportsJoin(language, format, { without: ['FULL', 'CROSS', 'NATURAL'] });
-  supportsReturning(language, format);
-  supportsParams(language, format, { named: ['$'] });
+  supportsDeleteFrom(format);
+  supportsStrings(format, N1qlFormatter.stringTypes);
+  supportsBetween(format);
+  supportsSchema(format);
+  supportsOperators(format, N1qlFormatter.operators, ['AND', 'OR', 'XOR']);
+  supportsArray(format);
+  supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'] });
+  supportsReturning(format);
+  supportsParams(format, { named: ['$'] });
 
   it('formats SELECT query with primary key querying', () => {
     const result = format("SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];");

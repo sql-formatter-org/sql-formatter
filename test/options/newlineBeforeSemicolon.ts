@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
-import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsNewlineBeforeSemicolon(language: SqlLanguage, format: FormatFn) {
+export default function supportsNewlineBeforeSemicolon(format: FormatFn) {
   it('defaults to semicolon on end of last line', () => {
     const result = format(`SELECT a FROM b;`);
     expect(result).toBe(dedent`

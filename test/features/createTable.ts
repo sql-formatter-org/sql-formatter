@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
-import { SqlLanguage, FormatFn } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsCreateTable(language: SqlLanguage, format: FormatFn) {
+export default function supportsCreateTable(format: FormatFn) {
   it('formats short CREATE TABLE', () => {
     expect(format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);')).toBe(dedent`
       CREATE TABLE

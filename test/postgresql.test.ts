@@ -19,15 +19,15 @@ describe('PostgreSqlFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(language, format);
-  supportsCreateTable(language, format);
-  supportsConstraints(language, format);
-  supportsAlterTable(language, format);
-  supportsDeleteFrom(language, format);
-  supportsStrings(language, format, PostgreSqlFormatter.stringTypes);
-  supportsBetween(language, format);
-  supportsSchema(language, format);
-  supportsOperators(language, format, PostgreSqlFormatter.operators);
-  supportsJoin(language, format);
-  supportsReturning(language, format);
-  supportsParams(language, format, { indexed: ['$'], named: [':'] });
+  supportsCreateTable(format);
+  supportsConstraints(format);
+  supportsAlterTable(format);
+  supportsDeleteFrom(format);
+  supportsStrings(format, PostgreSqlFormatter.stringTypes);
+  supportsBetween(format);
+  supportsSchema(format);
+  supportsOperators(format, PostgreSqlFormatter.operators);
+  supportsJoin(format);
+  supportsReturning(format);
+  supportsParams(format, { indexed: ['$'], named: [':'] });
 });

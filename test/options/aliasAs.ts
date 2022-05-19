@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
-import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsAliasAs(language: SqlLanguage, format: FormatFn) {
+export default function supportsAliasAs(format: FormatFn) {
   describe('by default', () => {
     it('preserves original uses of AS', () => {
       expect(

@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
-import { FormatFn, SqlLanguage } from '../../src/sqlFormatter';
+import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsLogicalOperatorNewline(language: SqlLanguage, format: FormatFn) {
+export default function supportsLogicalOperatorNewline(format: FormatFn) {
   it('by default adds newline before logical operator', () => {
     const result = format('SELECT a WHERE true AND false;');
     expect(result).toBe(dedent`
