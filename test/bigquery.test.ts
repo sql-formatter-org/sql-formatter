@@ -38,16 +38,16 @@ describe('BigQueryFormatter', () => {
     `);
   });
 
-  // Note: BigQuery supports dashes inside identifiers, so a--comment would be
+  // Note: BigQuery supports single dashes inside identifiers, so my-ident would be
   // detected as identifier, while other SQL dialects would detect it as
-  // identifier a followed by comment.
+  // "my" <minus> "ident"
   // https://cloud.google.com/bigquery/docs/reference/standard-sql/lexical
   it('supports dashes inside identifiers', () => {
-    const result = format('SELECT alpha--foo, bar-foo\nFROM beta');
+    const result = format('SELECT alpha-foo, some-long-identifier\nFROM beta');
     expect(result).toBe(dedent`
       SELECT
-        alpha--foo,
-        bar-foo
+        alpha-foo,
+        some-long-identifier
       FROM
         beta
     `);
