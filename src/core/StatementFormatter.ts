@@ -382,14 +382,12 @@ export default class StatementFormatter {
   private formatComma(token: Token) {
     this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);
 
-    if (this.inlineBlock.isActive()) {
-      // nothing
-    } else if (isToken.LIMIT(this.getPreviousReservedToken())) {
-      // nothing
-    } else if (this.currentNewline) {
+    if (
+      !this.inlineBlock.isActive() &&
+      !isToken.LIMIT(this.getPreviousReservedToken()) &&
+      this.currentNewline
+    ) {
       this.query.add(WS.NEWLINE, WS.INDENT);
-    } else {
-      // nothing
     }
   }
 
