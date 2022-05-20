@@ -35,6 +35,13 @@ export default class Indentation {
   }
 
   /**
+   * Returns current indentation level
+   */
+  getLevel(): number {
+    return this.indentTypes.length;
+  }
+
+  /**
    * Increases indentation by one top-level indent.
    */
   increaseTopLevel() {
