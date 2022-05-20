@@ -271,13 +271,13 @@ export default class StatementFormatter {
       return;
     }
 
-    // regular operator
+    // other operators
+    // in dense operators mode do not trim whitespace if SELECT *
     if (this.cfg.denseOperators && this.tokenLookBehind().type !== TokenType.RESERVED_COMMAND) {
-      // do not trim whitespace if SELECT *
       this.query.add(WS.NO_SPACE, this.show(token));
-      return;
+    } else {
+      this.query.add(this.show(token), WS.SPACE);
     }
-    this.query.add(this.show(token), WS.SPACE);
   }
 
   /**
