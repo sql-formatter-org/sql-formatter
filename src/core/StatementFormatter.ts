@@ -343,10 +343,11 @@ export default class StatementFormatter {
   }
 
   private formatCaseStart(token: Token) {
-    this.query.add(this.show(token), WS.SPACE);
     this.indentation.increaseBlockLevel();
     if (this.cfg.multilineLists === 'always') {
-      this.query.add(WS.NEWLINE, WS.INDENT);
+      this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
+    } else {
+      this.query.add(this.show(token), WS.SPACE);
     }
   }
 
