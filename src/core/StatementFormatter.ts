@@ -393,9 +393,10 @@ export default class StatementFormatter {
 
   private formatQuerySeparator(token: Token) {
     if (this.cfg.newlineBeforeSemicolon) {
-      this.query.add(WS.NEWLINE, WS.INDENT);
+      this.query.add(WS.NEWLINE, this.show(token));
+    } else {
+      this.query.add(WS.NO_SPACE, this.show(token));
     }
-    this.query.add(WS.NO_SPACE, this.show(token));
   }
 
   /** Converts token to string, uppercasing if enabled */
