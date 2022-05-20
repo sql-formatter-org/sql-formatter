@@ -296,13 +296,16 @@ export default class StatementFormatter {
 
     if (this.cfg.logicalOperatorNewline === 'before') {
       if (this.currentNewline) {
-        this.query.add(WS.NEWLINE, WS.INDENT);
+        this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+      } else {
+        this.query.add(this.show(token), WS.SPACE);
       }
-      this.query.add(this.show(token), WS.SPACE);
     } else {
-      this.query.add(this.show(token));
+      // eslint-disable-next-line no-lonely-if
       if (this.currentNewline) {
-        this.query.add(WS.NEWLINE, WS.INDENT);
+        this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
+      } else {
+        this.query.add(this.show(token));
       }
     }
   }
