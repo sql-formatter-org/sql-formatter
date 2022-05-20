@@ -1,37 +1,48 @@
 import { trimSpacesEnd } from '../utils';
 import Indentation from './Indentation';
 
+export enum WS {
+  SPACE = 1,
+  NO_SPACE = 2,
+  NEWLINE = 3,
+  NO_NEWLINE = 4,
+  INDENT = 5,
+}
+
 export default class StringBuilder {
   private query = '';
 
   constructor(private indentation: Indentation) {}
 
-  public addWithoutSpaces(text: string) {
-    this.query = trimSpacesEnd(this.query) + text;
+  public add(...items: (WS | string)[]) {
+    for (const item of items) {
+      switch (item) {
+        case WS.SPACE:
+          this.query += ' ';
+          break;
+        case WS.NO_SPACE:
+          this.query = trimSpacesEnd(this.query);
+          break;
+        case WS.NEWLINE:
+          this.addNewline();
+          break;
+        case WS.NO_NEWLINE:
+          this.query = this.query.trimEnd();
+          break;
+        case WS.INDENT:
+          this.query += this.indentation.getIndent();
+          break;
+        default:
+          this.query += item;
+      }
+    }
   }
 
-  public addWithSpaces(text: string) {
-    this.query += text + ' ';
-  }
-
-  public addWithSpaceBefore(text: string) {
-    this.query += text;
-  }
-
-  public addWithSpaceAfter(text: string) {
-    this.query = trimSpacesEnd(this.query) + text + ' ';
-  }
-
-  public addNewline() {
+  private addNewline() {
     this.query = trimSpacesEnd(this.query);
     if (!this.query.endsWith('\n') && this.query !== '') {
       this.query += '\n';
     }
-    this.query += this.indentation.getIndent();
-  }
-
-  public addWithoutNewlinesBefore(text: string) {
-    this.query = this.query.trimEnd() + ' ' + text;
   }
 
   public toString(): string {
