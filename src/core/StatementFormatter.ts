@@ -206,11 +206,11 @@ export default class StatementFormatter {
       this.indentation.increaseTopLevel();
     }
 
-    this.query.addWithSpaceBefore(this.show(token)); // print token onto query
     if (this.currentNewline && !isTabularStyle(this.cfg)) {
+      this.query.addWithSpaceBefore(this.show(token));
       this.query.addNewline();
     } else {
-      this.query.addWithSpaceBefore(' ');
+      this.query.addWithSpaces(this.show(token));
     }
   }
 
@@ -224,10 +224,10 @@ export default class StatementFormatter {
       this.indentation.decreaseTopLevel();
     }
     this.query.addNewline();
-    this.query.addWithSpaceBefore(this.show(token));
     if (isJoin) {
-      this.query.addWithSpaceBefore(' ');
+      this.query.addWithSpaces(this.show(token));
     } else {
+      this.query.addWithSpaceBefore(this.show(token));
       this.query.addNewline();
     }
   }
