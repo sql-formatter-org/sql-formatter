@@ -380,14 +380,14 @@ export default class StatementFormatter {
    * Formats a comma Operator onto query, ending line unless in an Inline Block
    */
   private formatComma(token: Token) {
-    this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);
-
     if (
       !this.inlineBlock.isActive() &&
       !isToken.LIMIT(this.getPreviousReservedToken()) &&
       this.currentNewline
     ) {
-      this.query.add(WS.NEWLINE, WS.INDENT);
+      this.query.add(WS.NO_SPACE, this.show(token), WS.NEWLINE, WS.INDENT);
+    } else {
+      this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);
     }
   }
 
