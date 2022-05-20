@@ -16,7 +16,7 @@ export enum WS {
  * It hides the internal implementation, so it can be rewritten to
  * use something more efficient than current string concatenation.
  */
-export default class StringBuilder {
+export default class WhitespaceBuilder {
   private query = '';
 
   constructor(private indentation: Indentation) {}

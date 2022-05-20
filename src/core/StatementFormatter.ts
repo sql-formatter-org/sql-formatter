@@ -9,7 +9,7 @@ import AliasAs from './AliasAs';
 import AsTokenFactory from './AsTokenFactory';
 import { Statement } from './Parser';
 import { indentString, isTabularStyle } from './config';
-import StringBuilder, { WS } from './StringBuilder';
+import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
 
 /** Formats single SQL statement */
 export default class StatementFormatter {
@@ -19,7 +19,7 @@ export default class StatementFormatter {
   private aliasAs: AliasAs;
   private params: Params;
   private asTokenFactory: AsTokenFactory;
-  private query: StringBuilder;
+  private query: WhitespaceBuilder;
 
   private currentNewline = true;
   private previousReservedToken: Token = EOF_TOKEN;
@@ -34,7 +34,7 @@ export default class StatementFormatter {
     this.aliasAs = new AliasAs(this.cfg.aliasAs, this);
     this.params = params;
     this.asTokenFactory = asTokenFactory;
-    this.query = new StringBuilder(this.indentation);
+    this.query = new WhitespaceBuilder(this.indentation);
   }
 
   public format(statement: Statement): string {
