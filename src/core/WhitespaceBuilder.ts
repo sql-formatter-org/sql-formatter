@@ -8,6 +8,7 @@ export enum WS {
   NEWLINE = 3, // Adds single newline
   NO_NEWLINE = 4, // Removes all preceding whitespace (including newlines)
   INDENT = 5, // Adds indentation (as much as needed for current indentation level)
+  SINGLE_INDENT = 6, // Adds whitespace for single indentation step
 }
 
 /**
@@ -41,6 +42,9 @@ export default class WhitespaceBuilder {
           break;
         case WS.INDENT:
           this.query += this.indentation.getIndent();
+          break;
+        case WS.SINGLE_INDENT:
+          this.query += this.indentation.getSingleIndent();
           break;
         default:
           this.query += item;

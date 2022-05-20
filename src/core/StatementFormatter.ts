@@ -359,13 +359,7 @@ export default class StatementFormatter {
 
     if (isTabularStyle(this.cfg)) {
       // +1 extra indentation step for the closing paren
-      this.query.add(
-        WS.NEWLINE,
-        WS.INDENT,
-        this.indentation.getSingleIndent(),
-        this.show(token),
-        WS.SPACE
-      );
+      this.query.add(WS.NEWLINE, WS.INDENT, WS.SINGLE_INDENT, this.show(token), WS.SPACE);
     } else if (this.cfg.newlineBeforeCloseParen) {
       this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
     } else {
