@@ -173,15 +173,12 @@ export default class StatementFormatter {
 
   /** Formats a line comment onto query */
   private formatLineComment(token: Token) {
-    this.query.add(this.show(token));
-    this.query.add(WS.NEWLINE, WS.INDENT);
+    this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
   }
 
   /** Formats a block comment onto query */
   private formatBlockComment(token: Token) {
-    this.query.add(WS.NEWLINE, WS.INDENT);
-    this.query.add(this.indentComment(token.value));
-    this.query.add(WS.NEWLINE, WS.INDENT);
+    this.query.add(WS.NEWLINE, WS.INDENT, this.indentComment(token.value), WS.NEWLINE, WS.INDENT);
   }
 
   /** Aligns comment to current indentation level */
@@ -207,8 +204,7 @@ export default class StatementFormatter {
     }
 
     if (this.currentNewline && !isTabularStyle(this.cfg)) {
-      this.query.add(this.show(token));
-      this.query.add(WS.NEWLINE, WS.INDENT);
+      this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
     } else {
       this.query.add(this.show(token), WS.SPACE);
     }
@@ -223,12 +219,10 @@ export default class StatementFormatter {
       // decrease for boolean set operators or in tabular mode
       this.indentation.decreaseTopLevel();
     }
-    this.query.add(WS.NEWLINE, WS.INDENT);
     if (isJoin) {
-      this.query.add(this.show(token), WS.SPACE);
+      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
     } else {
-      this.query.add(this.show(token));
-      this.query.add(WS.NEWLINE, WS.INDENT);
+      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.NEWLINE, WS.INDENT);
     }
   }
 
@@ -247,8 +241,7 @@ export default class StatementFormatter {
    * Formats a Reserved Dependent Clause token onto query, supporting the keyword that precedes it
    */
   private formatDependentClause(token: Token) {
-    this.query.add(WS.NEWLINE, WS.INDENT);
-    this.query.add(this.show(token), WS.SPACE);
+    this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
   }
 
   // Formats ON and USING keywords
@@ -366,8 +359,7 @@ export default class StatementFormatter {
 
     if (isTabularStyle(this.cfg)) {
       // +1 extra indentation step for the closing paren
-      this.query.add(WS.NEWLINE, WS.INDENT);
-      this.query.add(this.indentation.getSingleIndent());
+      this.query.add(WS.NEWLINE, WS.INDENT, this.indentation.getSingleIndent());
     } else if (this.cfg.newlineBeforeCloseParen) {
       this.query.add(WS.NEWLINE, WS.INDENT);
     } else {
