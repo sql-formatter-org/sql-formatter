@@ -1,7 +1,7 @@
 export const dedupe = (arr: string[]) => [...new Set(arr)];
 
 // Last element from array
-export const last = <T extends any>(arr: T[]) => arr[arr.length - 1];
+export const last = <T>(arr: T[]): T | undefined => arr[arr.length - 1];
 
 // True array is empty, or it's not an array at all
 export const isEmpty = (arr: any[]) => !Array.isArray(arr) || arr.length === 0;

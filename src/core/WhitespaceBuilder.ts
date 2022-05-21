@@ -1,3 +1,4 @@
+import { last } from '../utils';
 import Indentation from './Indentation';
 
 /** Whitespace modifiers to be used with add() method */
@@ -99,5 +100,3 @@ const isHorizontalWhitespace = (item: WS | string | undefined) =>
 
 const isWhitespace = (item: WS | string | undefined) =>
   item === WS.SPACE || item === WS.SINGLE_INDENT || item === WS.NEWLINE;
-
-const last = <T>(arr: T[]): T | undefined => arr[arr.length - 1];
