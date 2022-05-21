@@ -418,9 +418,9 @@ export default class StatementFormatter {
         case 'preserve':
           return equalizeWhitespace(token.text);
         case 'upper':
-          return equalizeWhitespace(token.text.toUpperCase());
+          return token.value;
         case 'lower':
-          return equalizeWhitespace(token.text.toLowerCase());
+          return token.value.toLowerCase();
       }
     } else {
       return token.value;
