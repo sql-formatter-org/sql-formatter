@@ -35,9 +35,6 @@ export interface Token {
  */
 export const EOF_TOKEN = { type: TokenType.EOF, text: '«EOF»', value: '«EOF»' };
 
-/** Special Unicode character to serve as a placeholder for tabular formats as \w whitespace is unavailable */
-export const ZWS = '​'; // uses zero-width space (&#8203; / U+200B)
-
 /** Checks if two tokens are equivalent */
 export const testToken =
   (compareToken: { type: TokenType; value: string }) =>
