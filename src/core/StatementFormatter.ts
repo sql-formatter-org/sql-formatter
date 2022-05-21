@@ -4,7 +4,7 @@ import Params from './Params';
 import { equalizeWhitespace } from '../utils';
 import { isReserved, isCommand, isToken, Token, TokenType, EOF_TOKEN } from './token';
 import { FormatOptions } from '../types';
-import { toTabularToken, replaceTabularPlaceholders } from './tabularStyle';
+import toTabularFormat from './tabularStyle';
 import AliasAs from './AliasAs';
 import AsTokenFactory from './AsTokenFactory';
 import { Statement } from './Parser';
@@ -41,19 +41,11 @@ export default class StatementFormatter {
     this.tokens = statement.tokens;
 
     for (this.index = 0; this.index < this.tokens.length; this.index++) {
-      let token = this.tokens[this.index];
+      const token = this.tokens[this.index];
 
       // if token is a Reserved Keyword, Command, Binary Command, Dependent Clause, Logical Operator, CASE, END
       if (isReserved(token)) {
         this.previousReservedToken = token;
-        if (
-          token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
-          token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
-          token.type === TokenType.RESERVED_COMMAND ||
-          token.type === TokenType.RESERVED_BINARY_COMMAND
-        ) {
-          token = toTabularToken(token, this.cfg.indentStyle);
-        }
         if (token.type === TokenType.RESERVED_COMMAND) {
           this.previousCommandToken = token;
         }
@@ -92,7 +84,7 @@ export default class StatementFormatter {
         this.formatWord(token);
       }
     }
-    return replaceTabularPlaceholders(this.query.toString());
+    return this.query.toString();
   }
 
   /**
@@ -401,8 +393,26 @@ export default class StatementFormatter {
     }
   }
 
-  /** Converts token to string, uppercasing if enabled */
   private show(token: Token): string {
+    if (this.isTabularToken(token)) {
+      return toTabularFormat(this.showToken(token), this.cfg.indentStyle);
+    } else {
+      return this.showToken(token);
+    }
+  }
+
+  // These token types can be formatted in tabular style
+  private isTabularToken(token: Token): boolean {
+    return (
+      token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
+      token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
+      token.type === TokenType.RESERVED_COMMAND ||
+      token.type === TokenType.RESERVED_BINARY_COMMAND
+    );
+  }
+
+  // don't call this directly, always use show() instead.
+  private showToken(token: Token): string {
     if (isReserved(token)) {
       switch (this.cfg.keywordCase) {
         case 'preserve':

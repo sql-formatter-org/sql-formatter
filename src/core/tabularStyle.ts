@@ -1,43 +1,25 @@
 import { IndentStyle } from '../types';
-import { Token, ZWS } from './token';
 
 /**
  * When tabular style enabled,
- * produces a 10-char wide version of reserved token.
- *
- * It'll be padded by zero-width space characters
- * instead of normal spaces, so that these spaces will survive
- * trimming of spaces in other parts of formatter.
- * They'll be converted to normal spaces in the end of
- * all the normal formatting with the replaceTabularPlaceholders()
+ * produces a 10-char wide version of token text.
  */
-export function toTabularToken(token: Token, indentStyle: IndentStyle): Token {
+export default function toTabularFormat(tokenText: string, indentStyle: IndentStyle): string {
   if (indentStyle === 'standard') {
-    return token;
+    return tokenText;
   }
 
-  let bufferItem = token.text; // store which part of keyword receives 10-space buffer
   let tail = [] as string[]; // rest of keyword
-  if (bufferItem.length >= 10 && bufferItem.includes(' ')) {
+  if (tokenText.length >= 10 && tokenText.includes(' ')) {
     // split for long keywords like INNER JOIN or UNION DISTINCT
-    [bufferItem, ...tail] = bufferItem.split(' ');
+    [tokenText, ...tail] = tokenText.split(' ');
   }
 
   if (indentStyle === 'tabularLeft') {
-    bufferItem = bufferItem.padEnd(9, ZWS);
+    tokenText = tokenText.padEnd(9, ' ');
   } else {
-    bufferItem = bufferItem.padStart(9, ZWS);
+    tokenText = tokenText.padStart(9, ' ');
   }
 
-  return {
-    ...token,
-    text: bufferItem + ['', ...tail].join(' '),
-  };
-}
-
-/**
- * Replaces zero-width-spaces added by the above function
- */
-export function replaceTabularPlaceholders(query: string): string {
-  return query.replace(new RegExp(ZWS, 'ugim'), ' ');
+  return tokenText + ['', ...tail].join(' ');
 }
