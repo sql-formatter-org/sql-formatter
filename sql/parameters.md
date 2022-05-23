@@ -2,20 +2,19 @@
 
 Parameter placeholder markers used in prepared statements.
 
+**Note:** Apache Hive and Spark don't support prepared statements.
+
 ## Positional parameters
 
-- [BigQuery][]: `?`
-- [DB2][]: `?`
-- Hive: —
-- [MariaDB][]: `?`
-- [MySQL][]: `?`
-- [N1QL][]: `?`
-- PL/SQL: —
-- PostgreSQL: —
-- Redshift: —
-- Spark: —
-- [SQLite][]: `?`
-- [Transact-SQL][]: `?`<sup>1</sup>
+These come in the form of single question mark (`?`), supported by:
+
+- [BigQuery][]
+- [DB2][]
+- [MariaDB][]
+- [MySQL][]
+- [N1QL][]
+- [SQLite][]
+- [Transact-SQL][]<sup>1</sup>
 
 ## Numbered parameters
 
@@ -30,14 +29,8 @@ Parameter placeholder markers used in prepared statements.
 
 - [BigQuery][]: `@` followed by [identifier][] (either quoted or unquoted)
 - [DB2][]: colon (`:`) followed by name (the name can include letters, numbers, and the symbols `@`, `#`, `$`, and `_`)
-- Hive: —
-- MariaDB: —
-- MySQL: —
 - [N1QL][]: `$` followed by unquoted [identifier][]
 - [PL/SQL][]: colon (`:`) followed by name (`[a-zA-Z][a-zA-Z0-9_]*`)
-- PostgreSQL: —
-- Redshift: —
-- Spark: —
 - [SQLite][]: `$`, `@` or `:` followed by unquoted [identifier][]
 - [Transact-SQL][]: `@` or `:`<sup>3</sup> followed by name (see also [identifier][] syntax)
 
