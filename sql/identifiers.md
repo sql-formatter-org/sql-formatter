@@ -35,12 +35,13 @@ There is a considerable variation in implementations:
 - `".."` [Redshift][]
 - `` `..` `` [Spark][]
 - `".."`, `` `..` ``, `[..]` [SQLite][sqlite-keywords]
-- `".."`, `[..]` [Transact-SQL][]
+- `".."`<sup>3</sup>, `[..]` [Transact-SQL][]
 
 Notes:
 
 1. when ANSI_QUOTES mode enabled
 2. when MSSQL mode enabled
+3. unless QUOTED_IDENTIFIER option has been set OFF
 
 [bigquery]: https://cloud.google.com/bigquery/docs/reference/standard-sql/lexical
 [db2]: https://www.ibm.com/docs/en/db2/9.7?topic=elements-identifiers
