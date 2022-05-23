@@ -15,18 +15,16 @@ Parameter placeholder markers used in prepared statements.
 - Redshift: —
 - Spark: —
 - [SQLite][]: `?`
-- [Transact-SQL][]: `?`
+- [Transact-SQL][]: `?`<sup>1</sup>
 
 ## Numbered parameters
 
-- [MariaDB][]: `:1`, `:2`, ...<sup>1</sup>
+- [MariaDB][]: `:1`, `:2`, ...<sup>2</sup>
 - [N1QL][]: `$1`, `$2`, ...
 - [PL/SQL][]: `:1`, `:2`, ...
 - [PostgreSQL][]: `$1`, `$2`, ...
 - [Redshift][]: `$1`, `$2`, ...
 - [SQLite][]: `?1`, `?2`, ...
-
-1. When SQL_MODE=ORACLE enabled.
 
 ## Named parameters
 
@@ -41,7 +39,13 @@ Parameter placeholder markers used in prepared statements.
 - Redshift: —
 - Spark: —
 - [SQLite][]: `$`, `@` or `:` followed by unquoted [identifier][]
-- [Transact-SQL][]: `@` or `:` followed by name (see also [identifier][] syntax)
+- [Transact-SQL][]: `@` or `:`<sup>3</sup> followed by name (see also [identifier][] syntax)
+
+### Notes:
+
+1. When using ODBC or OLE DB driver
+2. When SQL_MODE=ORACLE enabled.
+3. When using Oracle driver.
 
 [identifier]: ./identifiers.md
 [bigquery]: https://cloud.google.com/bigquery/docs/reference/standard-sql/lexical#query_parameters
