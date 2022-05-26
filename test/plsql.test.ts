@@ -49,17 +49,6 @@ describe('PlSqlFormatter', () => {
     `);
   });
 
-  it('formats only -- as a line comment', () => {
-    const result = format('SELECT col FROM\n-- This is a comment\nMyTable;\n');
-    expect(result).toBe(dedent`
-      SELECT
-        col
-      FROM
-        -- This is a comment
-        MyTable;
-    `);
-  });
-
   it('recognizes _, $, #, . and @ as part of identifiers', () => {
     const result = format('SELECT my_col$1#, col.2@, type#, procedure$, user# FROM tbl\n');
     expect(result).toBe(dedent`
@@ -96,17 +85,6 @@ describe('PlSqlFormatter', () => {
         t
       CROSS APPLY
       fn(t.id)
-    `);
-  });
-
-  it('formats simple SELECT', () => {
-    const result = format('SELECT N, M FROM t');
-    expect(result).toBe(dedent`
-      SELECT
-        N,
-        M
-      FROM
-        t
     `);
   });
 
