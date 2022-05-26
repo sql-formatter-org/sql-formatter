@@ -1,6 +1,5 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
-import type { StringPatternType } from '../core/regexFactory';
 import { dedupe } from '../utils';
 
 // TODO: split this into object with function categories
@@ -512,11 +511,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html
 export default class N1qlFormatter extends Formatter {
-  // NOTE: single quotes are actually not supported in N1QL,
-  // but we support them anyway as all other SQL dialects do,
-  // which simplifies writing tests that are shared between all dialects.
-  static stringTypes: StringPatternType[] = [`""`, "''"];
-  static identifierTypes: StringPatternType[] = ['``'];
   static operators = ['=='];
 
   tokenizer() {
@@ -526,8 +520,11 @@ export default class N1qlFormatter extends Formatter {
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
-      stringTypes: N1qlFormatter.stringTypes,
-      identifierTypes: N1qlFormatter.identifierTypes,
+      // NOTE: single quotes are actually not supported in N1QL,
+      // but we support them anyway as all other SQL dialects do,
+      // which simplifies writing tests that are shared between all dialects.
+      stringTypes: [`""`, "''"],
+      identifierTypes: ['``'],
       blockStart: ['(', '[', '{'],
       blockEnd: [')', ']', '}'],
       namedPlaceholderTypes: ['$'],

@@ -1,7 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import { EOF_TOKEN, isReserved, isToken, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
-import type { StringPatternType } from '../core/regexFactory';
 import { dedupe } from '../utils';
 
 /**
@@ -443,8 +442,6 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class PlSqlFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = ["''", "N''"];
-  static identifierTypes: StringPatternType[] = [`""`];
   static operators = [
     '||',
     '**',
@@ -464,8 +461,8 @@ export default class PlSqlFormatter extends Formatter {
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe(reservedKeywords),
-      stringTypes: PlSqlFormatter.stringTypes,
-      identifierTypes: PlSqlFormatter.identifierTypes,
+      stringTypes: ["''", "N''"],
+      identifierTypes: [`""`],
       indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: [':'],
       specialWordChars: { any: '_$#' },

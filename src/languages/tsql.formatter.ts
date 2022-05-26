@@ -1,6 +1,5 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
-import type { StringPatternType } from '../core/regexFactory';
 import { dedupe } from '../utils';
 
 /**
@@ -1232,8 +1231,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export default class TSqlFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = ["N''", "''"];
-  static identifierTypes: StringPatternType[] = [`""`, '[]'];
   static operators = ['!<', '!>', '+=', '-=', '*=', '/=', '%=', '|=', '&=', '^=', '::'];
 
   tokenizer() {
@@ -1245,8 +1242,8 @@ export default class TSqlFormatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
-      stringTypes: TSqlFormatter.stringTypes,
-      identifierTypes: TSqlFormatter.identifierTypes,
+      stringTypes: ["N''", "''"],
+      identifierTypes: [`""`, '[]'],
       namedPlaceholderTypes: ['@'],
       specialWordChars: { any: '#@' },
       operators: TSqlFormatter.operators,

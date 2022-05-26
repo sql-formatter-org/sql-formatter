@@ -1,6 +1,5 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
-import type { StringPatternType } from '../core/regexFactory';
 import { EOF_TOKEN, Token } from '../core/token';
 import { dedupe } from '../utils';
 
@@ -825,8 +824,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
 export default class BigQueryFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = ['""', "''"]; // add: '''''', """""" ; prefixes: r, b
-  static identifierTypes: StringPatternType[] = ['``'];
   static operators = ['>>', '<<', '||'];
   // TODO: handle trailing comma in select clause
 
@@ -839,8 +836,8 @@ export default class BigQueryFormatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
-      stringTypes: BigQueryFormatter.stringTypes,
-      identifierTypes: BigQueryFormatter.identifierTypes,
+      stringTypes: ['""', "''"], // add: '''''', """""" ; prefixes: r, b
+      identifierTypes: ['``'],
       indexedPlaceholderTypes: ['?'],
       lineCommentTypes: ['--', '#'],
       specialWordChars: { any: '_@$-' },

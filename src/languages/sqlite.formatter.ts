@@ -1,5 +1,4 @@
 import Formatter from '../core/Formatter';
-import { StringPatternType } from '../core/regexFactory';
 import Tokenizer from '../core/Tokenizer';
 
 // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#reserved-word
@@ -421,8 +420,6 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class SqliteFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = ["''"];
-  static identifierTypes: StringPatternType[] = [`""`, '``', '[]'];
   // https://www.sqlite.org/lang_expr.html
   static operators = ['||', '<<', '>>', '==', '!='];
 
@@ -433,8 +430,8 @@ export default class SqliteFormatter extends Formatter {
       reservedDependentClauses,
       // https://www.sqlite.org/lang_keywords.html
       reservedKeywords: [...standardReservedWords, ...nonStandardSqliteReservedWords],
-      stringTypes: SqliteFormatter.stringTypes,
-      identifierTypes: SqliteFormatter.identifierTypes,
+      stringTypes: ["''"],
+      identifierTypes: [`""`, '``', '[]'],
       // https://www.sqlite.org/lang_expr.html#parameters
       indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: [':', '@', '$'],

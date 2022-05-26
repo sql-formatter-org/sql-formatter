@@ -1,6 +1,5 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
-import type { StringPatternType } from '../core/regexFactory';
 import { dedupe } from '../utils';
 
 /**
@@ -614,8 +613,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export default class HiveFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = ['""', "''"];
-  static identifierTypes: StringPatternType[] = ['``'];
   static operators = ['<=>', '==', '||'];
 
   tokenizer() {
@@ -627,8 +624,8 @@ export default class HiveFormatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
-      stringTypes: HiveFormatter.stringTypes,
-      identifierTypes: HiveFormatter.identifierTypes,
+      stringTypes: ['""', "''"],
+      identifierTypes: ['``'],
       operators: HiveFormatter.operators,
     });
   }

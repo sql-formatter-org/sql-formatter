@@ -1,7 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import { EOF_TOKEN, isToken, Token, TokenType } from '../core/token';
-import type { StringPatternType } from '../core/regexFactory';
 import { dedupe } from '../utils';
 
 // TODO: split this into object with function categories
@@ -1319,8 +1318,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = ["''", '""'];
-  static identifierTypes: StringPatternType[] = ['``'];
   static operators = [':=', '<<', '>>', '<=>', '&&', '||', '->', '->>'];
 
   tokenizer() {
@@ -1330,8 +1327,8 @@ export default class MySqlFormatter extends Formatter {
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
-      stringTypes: MySqlFormatter.stringTypes,
-      identifierTypes: MySqlFormatter.identifierTypes,
+      stringTypes: ["''", '""'],
+      identifierTypes: ['``'],
       indexedPlaceholderTypes: ['?'],
       lineCommentTypes: ['--', '#'],
       specialWordChars: { prefix: '@:' },

@@ -1,7 +1,6 @@
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
 import { EOF_TOKEN, isToken, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
-import type { StringPatternType } from '../core/regexFactory';
 import { dedupe } from '../utils';
 
 /**
@@ -778,8 +777,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = ["''"];
-  static identifierTypes: StringPatternType[] = ['``'];
   static operators = ['<=>', '&&', '||', '==', '->'];
 
   tokenizer() {
@@ -792,8 +789,8 @@ export default class SparkFormatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...reservedKeywords,
       ]),
-      stringTypes: SparkFormatter.stringTypes,
-      identifierTypes: SparkFormatter.identifierTypes,
+      stringTypes: ["''"],
+      identifierTypes: ['``'],
       operators: SparkFormatter.operators,
       preprocess,
     });
