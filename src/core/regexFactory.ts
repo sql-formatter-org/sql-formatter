@@ -74,12 +74,16 @@ export const createWordRegex = (
 // 3. double quoted using "" or \" to escape
 // 4. single quoted using '' or \' to escape
 // 5. PostgreSQL dollar-quoted
+// 6. BigQuery '''triple-quoted'''
+// 7. BigQuery """triple-quoted"""
 const quotePatterns = {
   '``': '(`[^`]*($|`))+',
   '[]': '(\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*',
   '""': '("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+',
   "''": "('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
   '$$': '(?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$)',
+  "'''..'''": "'''[^\\\\]*?(?:\\\\.[^\\\\]*?)*?('''|$)",
+  '""".."""': '"""[^\\\\]*?(?:\\\\.[^\\\\]*?)*?("""|$)',
 };
 export type PlainQuoteType = keyof typeof quotePatterns;
 

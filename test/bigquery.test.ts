@@ -71,6 +71,37 @@ describe('BigQueryFormatter', () => {
     `);
   });
 
+  it('supports triple-quoted strings', () => {
+    expect(
+      format(`SELECT '''hello 'my' world''', """hello "my" world""", """\\"quoted\\"""" FROM foo`)
+    ).toBe(dedent`
+      SELECT
+        '''hello 'my' world''',
+        """hello "my" world""",
+        """\\"quoted\\""""
+      FROM
+        foo
+    `);
+  });
+
+  it('supports strings with r, b and rb prefixes with triple-quoted strings', () => {
+    expect(
+      format(
+        `SELECT R'''blah''', B'''sah''', rb"""hu"h""", br'''bulu bulu''', r"""haha""", BR'''la' la''' FROM foo`
+      )
+    ).toBe(dedent`
+      SELECT
+        R'''blah''',
+        B'''sah''',
+        rb"""hu"h""",
+        br'''bulu bulu''',
+        r"""haha""",
+        BR'''la' la'''
+      FROM
+        foo
+    `);
+  });
+
   it('supports STRUCT types', () => {
     const result = format(
       'SELECT STRUCT("Alpha" as name, [23.4, 26.3, 26.4, 26.1] as splits) FROM beta'
