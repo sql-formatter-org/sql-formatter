@@ -97,7 +97,7 @@ const toCaseInsensitivePattern = (prefix: string): string =>
     .map(char => '[' + char.toUpperCase() + char.toLowerCase() + ']')
     .join('');
 
-const createQuotePattern = (type: QuoteType): string => {
+const createSingleQuotePattern = (type: QuoteType): string => {
   if (typeof type === 'string') {
     return '(' + patterns[type] + ')';
   } else {
@@ -105,19 +105,13 @@ const createQuotePattern = (type: QuoteType): string => {
   }
 };
 
-/**
- * Builds a string pattern for matching string patterns for all given string types
- * @param {QuoteType[]} stringTypes - list of strings that denote string patterns
- */
-export const createStringPattern = (stringTypes: QuoteType[]): string =>
-  stringTypes.map(createQuotePattern).join('|');
+/** Builds a quote-delimited pattern for matching all given quote types */
+export const createQuotePattern = (quoteTypes: QuoteType[]): string =>
+  quoteTypes.map(createSingleQuotePattern).join('|');
 
-/**
- * Builds a RegExp for matching string patterns using `createStringPattern`
- * @param {QuoteType[]} stringTypes - list of strings that denote string patterns
- */
-export const createStringRegex = (stringTypes: QuoteType[]): RegExp =>
-  new RegExp('^(' + createStringPattern(stringTypes) + ')', 'u');
+/** Builds a RegExp for matching quote-delimited patterns */
+export const createQuoteRegex = (quoteTypes: QuoteType[]): RegExp =>
+  new RegExp('^(' + createQuotePattern(quoteTypes) + ')', 'u');
 
 /** Escapes paren characters for RegExp patterns */
 const escapeParen = (paren: string): string => {
