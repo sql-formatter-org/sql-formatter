@@ -1242,7 +1242,7 @@ export default class TSqlFormatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
-      stringTypes: ["N''", "''"],
+      stringTypes: ["''", { prefix: 'N', quote: "''" }],
       identifierTypes: [`""`, '[]'],
       namedPlaceholderTypes: ['@'],
       specialWordChars: { any: '#@' },

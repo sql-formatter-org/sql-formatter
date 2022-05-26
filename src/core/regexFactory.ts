@@ -73,25 +73,37 @@ export const createWordRegex = (
 // 2. square bracket quoted string (SQL Server) using ]] to escape
 // 3. double quoted string using "" or \" to escape
 // 4. single quoted string using '' or \' to escape
-// 5. national character quoted string using N'' or N\' to escape
-// 6. Unicode single-quoted string using \' to escape
-// 7. Unicode double-quoted string using \" to escape
-// 8. PostgreSQL dollar-quoted strings
+// 5. PostgreSQL dollar-quoted strings
 const patterns = {
   '``': '(`[^`]*($|`))+',
   '[]': '(\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*',
   '""': '("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+',
   "''": "('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
-  "N''": "N('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
-  "X''": "[xX]('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
-  "E''": "E('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
-  "U&''": "U&('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
-  'U&""': 'U&("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+',
   '$$': '(?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$)',
 };
-export type StringPatternType = keyof typeof patterns;
+export type PlainQuoteType = keyof typeof patterns;
 
-const createQuotePattern = (type: StringPatternType): string => '(' + patterns[type] + ')';
+export type PrefixedQuoteType = {
+  quote: PlainQuoteType;
+  prefix: string;
+};
+
+export type StringPatternType = PlainQuoteType | PrefixedQuoteType;
+
+// Converts "ab" to "[Aa][Bb]"
+const toCaseInsensitivePattern = (prefix: string): string =>
+  prefix
+    .split('')
+    .map(char => '[' + char.toUpperCase() + char.toLowerCase() + ']')
+    .join('');
+
+const createQuotePattern = (type: StringPatternType): string => {
+  if (typeof type === 'string') {
+    return '(' + patterns[type] + ')';
+  } else {
+    return '(' + toCaseInsensitivePattern(type.prefix) + patterns[type.quote] + ')';
+  }
+};
 
 /**
  * Builds a string pattern for matching string patterns for all given string types

@@ -461,7 +461,7 @@ export default class PlSqlFormatter extends Formatter {
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe(reservedKeywords),
-      stringTypes: ["''", "N''"],
+      stringTypes: ["''", { prefix: 'N', quote: "''" }],
       identifierTypes: [`""`],
       indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: [':'],
