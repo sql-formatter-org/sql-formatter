@@ -68,20 +68,20 @@ export const createWordRegex = (
   );
 };
 
-// This enables the following string patterns:
-// 1. backtick quoted string using `` to escape
-// 2. square bracket quoted string (SQL Server) using ]] to escape
-// 3. double quoted string using "" or \" to escape
-// 4. single quoted string using '' or \' to escape
-// 5. PostgreSQL dollar-quoted strings
-const patterns = {
+// This enables the following quote styles:
+// 1. backtick quoted using `` to escape
+// 2. square bracket quoted (SQL Server) using ]] to escape
+// 3. double quoted using "" or \" to escape
+// 4. single quoted using '' or \' to escape
+// 5. PostgreSQL dollar-quoted
+const quotePatterns = {
   '``': '(`[^`]*($|`))+',
   '[]': '(\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*',
   '""': '("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+',
   "''": "('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
   '$$': '(?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$)',
 };
-export type PlainQuoteType = keyof typeof patterns;
+export type PlainQuoteType = keyof typeof quotePatterns;
 
 export type PrefixedQuoteType = {
   quote: PlainQuoteType;
@@ -99,9 +99,9 @@ const toCaseInsensitivePattern = (prefix: string): string =>
 
 const createSingleQuotePattern = (type: QuoteType): string => {
   if (typeof type === 'string') {
-    return '(' + patterns[type] + ')';
+    return '(' + quotePatterns[type] + ')';
   } else {
-    return '(' + toCaseInsensitivePattern(type.prefix) + patterns[type.quote] + ')';
+    return '(' + toCaseInsensitivePattern(type.prefix) + quotePatterns[type.quote] + ')';
   }
 };
 
