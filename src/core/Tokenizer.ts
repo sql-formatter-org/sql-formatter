@@ -28,14 +28,13 @@ interface TokenizerOptions {
   preprocess?: (tokens: Token[]) => Token[];
 }
 
+type PlaceholderPattern = { regex: RegExp; parseKey: (s: string) => string };
+
 /** Converts SQL language string into a token stream */
 export default class Tokenizer {
   REGEX_MAP: { [tokenType in TokenType]: RegExp };
 
-  POSITIONAL_PLACEHOLDER_REGEX?: RegExp;
-  INDEXED_PLACEHOLDER_REGEX?: RegExp;
-  IDENT_NAMED_PLACEHOLDER_REGEX?: RegExp;
-  STRING_NAMED_PLACEHOLDER_REGEX?: RegExp;
+  private placeholderPatterns: PlaceholderPattern[];
 
   private preprocess = (tokens: Token[]) => tokens;
 
@@ -112,19 +111,41 @@ export default class Tokenizer {
       [TokenType.EOF]: NULL_REGEX, // matches nothing
     };
 
-    this.POSITIONAL_PLACEHOLDER_REGEX = cfg.positionalPlaceholders ? /^(\?)/ : undefined;
-    this.INDEXED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
-      cfg.indexedPlaceholderTypes ?? [],
-      '[0-9]+'
-    );
-    this.IDENT_NAMED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
-      cfg.namedPlaceholderTypes ?? [],
-      '[a-zA-Z0-9._$]+'
-    );
-    this.STRING_NAMED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
-      cfg.namedPlaceholderTypes ?? [],
-      regexFactory.createQuotePattern(cfg.identifierTypes)
-    );
+    this.placeholderPatterns = this.excludePatternsWithoutRegexes([
+      {
+        // :name placeholders
+        regex: regexFactory.createPlaceholderRegex(
+          cfg.namedPlaceholderTypes ?? [],
+          '[a-zA-Z0-9._$]+'
+        ),
+        parseKey: v => v.slice(1),
+      },
+      {
+        // :"name" placeholders
+        regex: regexFactory.createPlaceholderRegex(
+          cfg.namedPlaceholderTypes ?? [],
+          regexFactory.createQuotePattern(cfg.identifierTypes)
+        ),
+        parseKey: v =>
+          this.getEscapedPlaceholderKey({ key: v.slice(2, -1), quoteChar: v.slice(-1) }),
+      },
+      {
+        // :1, :2, :3 placeholders
+        regex: regexFactory.createPlaceholderRegex(cfg.indexedPlaceholderTypes ?? [], '[0-9]+'),
+        parseKey: v => v.slice(1),
+      },
+      {
+        // ? placeholders
+        regex: cfg.positionalPlaceholders ? /^(\?)/ : undefined,
+        parseKey: v => v.slice(1),
+      },
+    ]);
+  }
+
+  private excludePatternsWithoutRegexes(
+    patterns: { regex?: RegExp; parseKey: (s: string) => string }[]
+  ) {
+    return patterns.filter((p): p is PlaceholderPattern => p.regex !== undefined);
   }
 
   /**
@@ -198,31 +219,7 @@ export default class Tokenizer {
    * @return {Token | undefined} - The placeholder token if found, otherwise undefined
    */
   getPlaceholderToken(input: string): Token | undefined {
-    const placeholderTokenRegexMap: { regex: RegExp; parseKey: (s: string) => string }[] = [
-      // pattern for placeholder with identifier name
-      {
-        regex: this.IDENT_NAMED_PLACEHOLDER_REGEX ?? NULL_REGEX,
-        parseKey: v => v.slice(1),
-      },
-      // pattern for placeholder with string name
-      {
-        regex: this.STRING_NAMED_PLACEHOLDER_REGEX ?? NULL_REGEX,
-        parseKey: v =>
-          this.getEscapedPlaceholderKey({ key: v.slice(2, -1), quoteChar: v.slice(-1) }),
-      },
-      // pattern for placeholder with numeric index
-      {
-        regex: this.INDEXED_PLACEHOLDER_REGEX ?? NULL_REGEX,
-        parseKey: v => v.slice(1),
-      },
-      // pattern for positional placeholder
-      {
-        regex: this.POSITIONAL_PLACEHOLDER_REGEX ?? NULL_REGEX,
-        parseKey: v => v.slice(1),
-      },
-    ];
-
-    for (const { regex, parseKey } of placeholderTokenRegexMap) {
+    for (const { regex, parseKey } of this.placeholderPatterns) {
       const token = this.getTokenOnFirstMatch({
         input,
         regex,
