@@ -5,6 +5,7 @@ import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
 import supportsStrings from './features/strings';
 import supportsOperators from './features/operators';
+import supportsIdentifiers from './features/identifiers';
 
 describe('MySqlFormatter', () => {
   const language = 'mysql';
@@ -13,6 +14,7 @@ describe('MySqlFormatter', () => {
   behavesLikeMariaDbFormatter(format);
 
   supportsStrings(format, MySqlFormatter.stringTypes);
+  supportsIdentifiers(format, MySqlFormatter.identifierTypes);
   supportsOperators(format, MySqlFormatter.operators, ['AND', 'OR', 'XOR']);
 
   it('supports @@ system variables', () => {

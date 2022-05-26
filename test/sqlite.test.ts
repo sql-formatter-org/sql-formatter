@@ -14,6 +14,7 @@ import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsParams from './options/param';
 import supportsComments from './features/comments';
+import supportsIdentifiers from './features/identifiers';
 
 describe('SqliteFormatter', () => {
   const language = 'sqlite';
@@ -26,6 +27,7 @@ describe('SqliteFormatter', () => {
   supportsAlterTable(format);
   supportsDeleteFrom(format);
   supportsStrings(format, SqliteFormatter.stringTypes);
+  supportsIdentifiers(format, SqliteFormatter.identifierTypes);
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format, {

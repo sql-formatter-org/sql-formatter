@@ -29,19 +29,6 @@ export default function supportsStrings(format: FormatFn, stringTypes: string[])
     });
   }
 
-  if (stringTypes.includes('``')) {
-    it('supports backtick-quoted strings', () => {
-      expect(format('`foo JOIN bar`')).toBe('`foo JOIN bar`');
-      expect(format('`foo `` JOIN bar`')).toBe('`foo `` JOIN bar`');
-      expect(format('SELECT `where` FROM `update`')).toBe(dedent`
-        SELECT
-          \`where\`
-        FROM
-          \`update\`
-      `);
-    });
-  }
-
   if (stringTypes.includes('U&""')) {
     it('supports unicode double-quoted strings', () => {
       expect(format('U&"foo JOIN bar"')).toBe('U&"foo JOIN bar"');
@@ -81,19 +68,6 @@ export default function supportsStrings(format: FormatFn, stringTypes: string[])
           $$where$$
         FROM
           $$update$$
-      `);
-    });
-  }
-
-  if (stringTypes.includes('[]')) {
-    it('supports [bracket-quoted identifiers]', () => {
-      expect(format('[foo JOIN bar]')).toBe('[foo JOIN bar]');
-      expect(format('[foo ]] JOIN bar]')).toBe('[foo ]] JOIN bar]');
-      expect(format('SELECT [where] FROM [update]')).toBe(dedent`
-        SELECT
-          [where]
-        FROM
-          [update]
       `);
     });
   }

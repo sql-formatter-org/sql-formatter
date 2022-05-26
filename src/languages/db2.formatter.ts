@@ -859,7 +859,8 @@ const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
 
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]', "x''"];
+  static stringTypes: StringPatternType[] = ["''", "x''"];
+  static identifierTypes: StringPatternType[] = [`""`, '``', '[]'];
   static operators = ['**', '!>', '!<', '||'];
 
   tokenizer() {
@@ -872,6 +873,7 @@ export default class Db2Formatter extends Formatter {
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
       stringTypes: Db2Formatter.stringTypes,
+      identifierTypes: Db2Formatter.identifierTypes,
       indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: [':'],
       specialWordChars: { any: '#@' },

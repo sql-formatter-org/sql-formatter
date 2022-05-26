@@ -13,6 +13,7 @@ import supportsStrings from './features/strings';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsParams from './options/param';
 import supportsComments from './features/comments';
+import supportsIdentifiers from './features/identifiers';
 
 describe('RedshiftFormatter', () => {
   const language = 'redshift';
@@ -25,6 +26,7 @@ describe('RedshiftFormatter', () => {
   supportsAlterTableModify(format);
   supportsDeleteFrom(format);
   supportsStrings(format, RedshiftFormatter.stringTypes);
+  supportsIdentifiers(format, RedshiftFormatter.identifierTypes);
   supportsSchema(format);
   supportsOperators(format, RedshiftFormatter.operators);
   supportsJoin(format);

@@ -443,7 +443,8 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class PlSqlFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "N''", "''", '``'];
+  static stringTypes: StringPatternType[] = ["N''", "''"];
+  static identifierTypes: StringPatternType[] = [`""`, '``'];
   static operators = [
     '||',
     '**',
@@ -464,6 +465,7 @@ export default class PlSqlFormatter extends Formatter {
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe(reservedKeywords),
       stringTypes: PlSqlFormatter.stringTypes,
+      identifierTypes: PlSqlFormatter.identifierTypes,
       indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: [':'],
       specialWordChars: { any: '_$#' },

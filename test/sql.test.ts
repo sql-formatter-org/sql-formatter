@@ -14,6 +14,7 @@ import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsParams from './options/param';
 import supportsComments from './features/comments';
+import supportsIdentifiers from './features/identifiers';
 
 describe('SqlFormatter', () => {
   const language = 'sql';
@@ -26,6 +27,7 @@ describe('SqlFormatter', () => {
   supportsAlterTable(format);
   supportsDeleteFrom(format);
   supportsStrings(format, SqlFormatter.stringTypes);
+  supportsIdentifiers(format, SqlFormatter.identifierTypes);
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format);

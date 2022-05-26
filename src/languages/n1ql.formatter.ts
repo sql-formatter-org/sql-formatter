@@ -512,7 +512,8 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html
 export default class N1qlFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "''", '``'];
+  static stringTypes: StringPatternType[] = [`""`, "''"];
+  static identifierTypes: StringPatternType[] = ['``'];
   static operators = ['=='];
 
   tokenizer() {
@@ -523,6 +524,7 @@ export default class N1qlFormatter extends Formatter {
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
       stringTypes: N1qlFormatter.stringTypes,
+      identifierTypes: N1qlFormatter.identifierTypes,
       blockStart: ['(', '[', '{'],
       blockEnd: [')', ']', '}'],
       namedPlaceholderTypes: ['$'],

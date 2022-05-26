@@ -421,7 +421,8 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class SqliteFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]'];
+  static stringTypes: StringPatternType[] = ["''"];
+  static identifierTypes: StringPatternType[] = [`""`, '``', '[]'];
   // https://www.sqlite.org/lang_expr.html
   static operators = ['||', '<<', '>>', '==', '!='];
 
@@ -433,6 +434,7 @@ export default class SqliteFormatter extends Formatter {
       // https://www.sqlite.org/lang_keywords.html
       reservedKeywords: [...standardReservedWords, ...nonStandardSqliteReservedWords],
       stringTypes: SqliteFormatter.stringTypes,
+      identifierTypes: SqliteFormatter.identifierTypes,
       // https://www.sqlite.org/lang_expr.html#parameters
       indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: [':', '@', '$'],

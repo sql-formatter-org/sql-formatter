@@ -778,7 +778,8 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "''", '``', '{}'];
+  static stringTypes: StringPatternType[] = [`""`, "''"];
+  static identifierTypes: StringPatternType[] = ['``', '{}'];
   static operators = ['<=>', '&&', '||', '==', '->'];
 
   tokenizer() {
@@ -792,6 +793,7 @@ export default class SparkFormatter extends Formatter {
         ...reservedKeywords,
       ]),
       stringTypes: SparkFormatter.stringTypes,
+      identifierTypes: SparkFormatter.identifierTypes,
       indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: ['$'],
       operators: SparkFormatter.operators,

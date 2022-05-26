@@ -16,6 +16,7 @@ interface TokenizerOptions {
   reservedBinaryCommands: string[];
   reservedJoinConditions?: string[];
   stringTypes: regexFactory.StringPatternType[];
+  identifierTypes: regexFactory.StringPatternType[];
   blockStart?: string[];
   blockEnd?: string[];
   indexedPlaceholderTypes?: string[];
@@ -44,7 +45,8 @@ export default class Tokenizer {
    *  @param {string[]} cfg.reservedCommands - Words that are set to new line separately
    *  @param {string[]} cfg.reservedBinaryCommands - Words that are top level but have no indentation
    *  @param {string[]} cfg.reservedJoinConditions - ON and USING
-   *  @param {string[]} cfg.stringTypes - string types to enable - "", '', ``, [], N''
+   *  @param {string[]} cfg.stringTypes - string types to enable - '', "", N'', ...
+   *  @param {string[]} cfg.identifierTypes - identifier types to enable - "", ``, [], ...
    *  @param {string[]} cfg.blockStart - Opening parentheses to enable, like (, [
    *  @param {string[]} cfg.blockEnd - Closing parentheses to enable, like ), ]
    *  @param {string[]} cfg.indexedPlaceholderTypes - Prefixes for indexed placeholders, like ?
@@ -62,6 +64,7 @@ export default class Tokenizer {
     const specialWordCharsAll = Object.values(cfg.specialWordChars ?? {}).join('');
     this.REGEX_MAP = {
       [TokenType.WORD]: regexFactory.createWordRegex(cfg.specialWordChars),
+      [TokenType.IDENT]: regexFactory.createStringRegex(cfg.identifierTypes),
       [TokenType.STRING]: regexFactory.createStringRegex(cfg.stringTypes),
       [TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(
         cfg.reservedKeywords,
@@ -116,7 +119,7 @@ export default class Tokenizer {
     );
     this.STRING_NAMED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
       cfg.namedPlaceholderTypes ?? [],
-      regexFactory.createStringPattern(cfg.stringTypes)
+      regexFactory.createStringPattern(cfg.identifierTypes)
     );
   }
 
@@ -175,6 +178,7 @@ export default class Tokenizer {
       this.matchToken(TokenType.LINE_COMMENT)(input) ||
       this.matchToken(TokenType.BLOCK_COMMENT)(input) ||
       this.matchToken(TokenType.STRING)(input) ||
+      this.matchToken(TokenType.IDENT)(input) ||
       this.matchToken(TokenType.BLOCK_START)(input) ||
       this.matchToken(TokenType.BLOCK_END)(input) ||
       this.getPlaceholderToken(input) ||

@@ -13,6 +13,7 @@ import supportsStrings from './features/strings';
 import supportsArray from './features/array';
 import supportsParams from './options/param';
 import supportsComments from './features/comments';
+import supportsIdentifiers from './features/identifiers';
 
 describe('SparkFormatter', () => {
   const language = 'spark';
@@ -23,6 +24,7 @@ describe('SparkFormatter', () => {
   supportsCreateTable(format);
   supportsAlterTable(format);
   supportsStrings(format, SparkFormatter.stringTypes);
+  supportsIdentifiers(format, SparkFormatter.identifierTypes);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, SparkFormatter.operators, ['AND', 'OR', 'XOR']);

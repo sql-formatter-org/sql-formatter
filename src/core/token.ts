@@ -1,6 +1,7 @@
 /** Token type enum for all possible Token categories */
 export enum TokenType {
   WORD = 'WORD',
+  IDENT = 'IDENT',
   STRING = 'STRING',
   RESERVED_KEYWORD = 'RESERVED_KEYWORD',
   RESERVED_LOGICAL_OPERATOR = 'RESERVED_LOGICAL_OPERATOR',

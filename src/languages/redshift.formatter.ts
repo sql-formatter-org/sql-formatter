@@ -716,7 +716,8 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export default class RedshiftFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "''", '``'];
+  static stringTypes: StringPatternType[] = ["''"];
+  static identifierTypes: StringPatternType[] = [`""`, '``'];
   static operators = ['|/', '||/', '<<', '>>', '||'];
 
   tokenizer() {
@@ -729,6 +730,7 @@ export default class RedshiftFormatter extends Formatter {
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
       stringTypes: RedshiftFormatter.stringTypes,
+      identifierTypes: RedshiftFormatter.identifierTypes,
       indexedPlaceholderTypes: ['?'],
       // XXX: Seems like redshift only supports $1, $2, $3 parameters,
       // but for some reason we list lots of types in here.

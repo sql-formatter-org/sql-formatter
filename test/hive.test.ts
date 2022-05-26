@@ -12,6 +12,7 @@ import supportsOperators from './features/operators';
 import supportsArray from './features/array';
 import supportsParams from './options/param';
 import supportsComments from './features/comments';
+import supportsIdentifiers from './features/identifiers';
 
 describe('HiveFormatter', () => {
   const language = 'hive';
@@ -22,6 +23,7 @@ describe('HiveFormatter', () => {
   supportsCreateTable(format);
   supportsAlterTable(format);
   supportsStrings(format, HiveFormatter.stringTypes);
+  supportsIdentifiers(format, HiveFormatter.identifierTypes);
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format, { without: ['NATURAL JOIN'] });

@@ -105,27 +105,6 @@ export default function supportsParams(format: FormatFn, params: ParamsTypes) {
             AND age > 10;
         `);
       });
-
-      it(`recognizes :'name' and :"name" placeholders`, () => {
-        expect(format(`SELECT :'foo', :"bar", :"baz";`)).toBe(dedent`
-          SELECT
-            :'foo',
-            :"bar",
-            :"baz";
-        `);
-      });
-
-      it(`replaces :'name' and :"name" placeholders with param values`, () => {
-        expect(
-          format(`WHERE name = :"name" AND age > :'current_age';`, {
-            params: { name: "'John'", current_age: '10' },
-          })
-        ).toBe(dedent`
-          WHERE
-            name = 'John'
-            AND age > 10;
-        `);
-      });
     }
 
     if (params.named?.includes('$')) {
@@ -147,28 +126,6 @@ export default function supportsParams(format: FormatFn, params: ParamsTypes) {
           WHERE
             name = 'John'
             AND age > 10;
-        `);
-      });
-
-      it(`recognizes $'name' and $"name" and $\`name\` placeholders`, () => {
-        expect(format(`SELECT $'foo', $"bar", $\`baz\`;`)).toBe(dedent`
-          SELECT
-            $'foo',
-            $"bar",
-            $\`baz\`;
-        `);
-      });
-
-      it(`replaces $'name' and $"name" and $\`name\` placeholders with param values`, () => {
-        expect(
-          format(`WHERE name = $"name" AND age > $'current_age' OR addr = $\`addr\`;`, {
-            params: { name: "'John'", current_age: '10', addr: "'Baker street'" },
-          })
-        ).toBe(dedent`
-          WHERE
-            name = 'John'
-            AND age > 10
-            OR addr = 'Baker street';
         `);
       });
 

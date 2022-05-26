@@ -12,6 +12,7 @@ import supportsOperators from './features/operators';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsParams from './options/param';
 import supportsComments from './features/comments';
+import supportsIdentifiers from './features/identifiers';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';
@@ -22,6 +23,7 @@ describe('BigQueryFormatter', () => {
   supportsCreateTable(format);
   supportsDeleteFrom(format);
   supportsStrings(format, BigQueryFormatter.stringTypes);
+  supportsIdentifiers(format, BigQueryFormatter.identifierTypes);
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format, { without: ['NATURAL JOIN'] });

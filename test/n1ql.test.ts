@@ -13,6 +13,7 @@ import supportsDeleteFrom from './features/deleteFrom';
 import supportsArray from './features/array';
 import supportsParams from './options/param';
 import supportsComments from './features/comments';
+import supportsIdentifiers from './features/identifiers';
 
 describe('N1qlFormatter', () => {
   const language = 'n1ql';
@@ -22,6 +23,7 @@ describe('N1qlFormatter', () => {
   supportsComments(format, { hashComments: true });
   supportsDeleteFrom(format);
   supportsStrings(format, N1qlFormatter.stringTypes);
+  supportsIdentifiers(format, N1qlFormatter.identifierTypes);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, N1qlFormatter.operators, ['AND', 'OR', 'XOR']);

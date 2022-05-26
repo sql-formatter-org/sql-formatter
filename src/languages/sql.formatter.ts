@@ -370,7 +370,8 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class SqlFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "''", '``'];
+  static stringTypes: StringPatternType[] = ["''"];
+  static identifierTypes: StringPatternType[] = [`""`, '``'];
   static operators = [];
 
   tokenizer() {
@@ -380,6 +381,7 @@ export default class SqlFormatter extends Formatter {
       reservedDependentClauses,
       reservedKeywords: dedupe(reservedKeywords),
       stringTypes: SqlFormatter.stringTypes,
+      identifierTypes: SqlFormatter.identifierTypes,
       indexedPlaceholderTypes: ['?'],
     });
   }

@@ -614,7 +614,8 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export default class HiveFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = ['""', "''", '``'];
+  static stringTypes: StringPatternType[] = ['""', "''"];
+  static identifierTypes: StringPatternType[] = ['``'];
   static operators = ['<=>', '==', '||'];
 
   tokenizer() {
@@ -627,6 +628,7 @@ export default class HiveFormatter extends Formatter {
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
       stringTypes: HiveFormatter.stringTypes,
+      identifierTypes: HiveFormatter.identifierTypes,
       indexedPlaceholderTypes: ['?'],
       operators: HiveFormatter.operators,
     });

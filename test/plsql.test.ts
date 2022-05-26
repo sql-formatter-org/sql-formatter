@@ -16,6 +16,7 @@ import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsParams from './options/param';
 import supportsComments from './features/comments';
+import supportsIdentifiers from './features/identifiers';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -29,6 +30,7 @@ describe('PlSqlFormatter', () => {
   supportsAlterTableModify(format);
   supportsDeleteFrom(format);
   supportsStrings(format, PlSqlFormatter.stringTypes);
+  supportsIdentifiers(format, PlSqlFormatter.identifierTypes);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, PlSqlFormatter.operators, ['AND', 'OR', 'XOR']);
