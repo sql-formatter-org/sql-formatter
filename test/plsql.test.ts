@@ -49,17 +49,17 @@ describe('PlSqlFormatter', () => {
     `);
   });
 
-  it('recognizes _, $, #, . and @ as part of identifiers', () => {
-    const result = format('SELECT my_col$1#, col.2@, type#, procedure$, user# FROM tbl\n');
+  it('recognizes _, $, # as part of identifiers', () => {
+    const result = format('SELECT my_col$1#, col.a$, type#, procedure$, user# FROM tbl;');
     expect(result).toBe(dedent`
       SELECT
         my_col$1#,
-        col.2@,
+        col.a$,
         type#,
         procedure$,
         user#
       FROM
-        tbl
+        tbl;
     `);
   });
 

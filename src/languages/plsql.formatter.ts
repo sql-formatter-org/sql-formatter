@@ -466,7 +466,7 @@ export default class PlSqlFormatter extends Formatter {
       stringTypes: PlSqlFormatter.stringTypes,
       indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: [':'],
-      specialWordChars: { any: '_$#.@' },
+      specialWordChars: { any: '_$#' },
       operators: PlSqlFormatter.operators,
       preprocess,
     });
