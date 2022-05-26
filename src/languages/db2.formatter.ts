@@ -859,7 +859,7 @@ const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
 
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
-  static stringTypes: StringPatternType[] = ["''", "x''"];
+  static stringTypes: StringPatternType[] = ["''", "X''"];
   static identifierTypes: StringPatternType[] = [`""`];
   static operators = ['**', '!>', '!<', '||'];
 

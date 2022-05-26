@@ -85,7 +85,7 @@ export default function supportsStrings(format: FormatFn, stringTypes: string[])
     });
   }
 
-  if (stringTypes.includes("x''")) {
+  if (stringTypes.includes("X''")) {
     it('supports hex byte sequences', () => {
       expect(format("x'0E'")).toBe("x'0E'");
       expect(format("X'1F0A89C3'")).toBe("X'1F0A89C3'");
