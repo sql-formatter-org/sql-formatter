@@ -10,6 +10,8 @@ import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsParams from './options/param';
 import supportsComments from './features/comments';
+import supportsStrings from './features/strings';
+import supportsIdentifiers from './features/identifiers';
 
 /**
  * Shared tests for MySQL and MariaDB
@@ -17,6 +19,8 @@ import supportsComments from './features/comments';
 export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   behavesLikeSqlFormatter(format);
   supportsComments(format, { hashComments: true });
+  supportsStrings(format, ["''", '""', "X''"]);
+  supportsIdentifiers(format, ['``']);
   supportsCreateTable(format);
   supportsConstraints(format);
   supportsAlterTable(format);

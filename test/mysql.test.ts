@@ -3,9 +3,7 @@ import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
 import MySqlFormatter from '../src/languages/mysql.formatter';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
-import supportsStrings from './features/strings';
 import supportsOperators from './features/operators';
-import supportsIdentifiers from './features/identifiers';
 
 describe('MySqlFormatter', () => {
   const language = 'mysql';
@@ -13,8 +11,6 @@ describe('MySqlFormatter', () => {
 
   behavesLikeMariaDbFormatter(format);
 
-  supportsStrings(format, ["''", '""', "X''"]);
-  supportsIdentifiers(format, ['``']);
   supportsOperators(format, MySqlFormatter.operators, ['AND', 'OR', 'XOR']);
 
   it('supports @@ system variables', () => {
