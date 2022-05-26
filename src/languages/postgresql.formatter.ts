@@ -1672,7 +1672,7 @@ const binaryOperators = [
 // https://www.postgresql.org/docs/14/index.html
 export default class PostgreSqlFormatter extends Formatter {
   static stringTypes: StringPatternType[] = ["''", "U&''", '$$', "E''"];
-  static identifierTypes: StringPatternType[] = [`""`, 'U&""', '``'];
+  static identifierTypes: StringPatternType[] = [`""`, 'U&""'];
   static operators = binaryOperators;
 
   tokenizer() {

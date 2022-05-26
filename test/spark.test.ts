@@ -73,12 +73,12 @@ describe('SparkFormatter', () => {
 
   it('formats window function and end as inline', () => {
     const result = format(
-      'SELECT window(time, "1 hour").start AS window_start, window(time, "1 hour").end AS window_end FROM tbl;'
+      `SELECT window(time, '1 hour').start AS window_start, window(time, '1 hour').end AS window_end FROM tbl;`
     );
     expect(result).toBe(dedent`
       SELECT
-        window(time, "1 hour").start AS window_start,
-        window(time, "1 hour").end AS window_end
+        window(time, '1 hour').start AS window_start,
+        window(time, '1 hour').end AS window_end
       FROM
         tbl;
     `);

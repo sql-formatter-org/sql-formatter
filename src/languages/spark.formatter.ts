@@ -778,8 +778,8 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "''"];
-  static identifierTypes: StringPatternType[] = ['``', '{}'];
+  static stringTypes: StringPatternType[] = ["''"];
+  static identifierTypes: StringPatternType[] = ['``', '{}']; // TODO: the ${} syntax is currently used for placeholders, but prepared statements are actually not supported in Spark
   static operators = ['<=>', '&&', '||', '==', '->'];
 
   tokenizer() {

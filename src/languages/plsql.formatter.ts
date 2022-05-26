@@ -443,8 +443,8 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class PlSqlFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = ["N''", "''"];
-  static identifierTypes: StringPatternType[] = [`""`, '``'];
+  static stringTypes: StringPatternType[] = ["''", "N''"];
+  static identifierTypes: StringPatternType[] = [`""`];
   static operators = [
     '||',
     '**',

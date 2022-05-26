@@ -1319,8 +1319,8 @@ const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = ["''"];
-  static identifierTypes: StringPatternType[] = ['``', '""'];
+  static stringTypes: StringPatternType[] = ["''", '""'];
+  static identifierTypes: StringPatternType[] = ['``'];
   static operators = [':=', '<<', '>>', '<=>', '&&', '||', '->', '->>'];
 
   tokenizer() {
