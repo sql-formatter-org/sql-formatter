@@ -1,3 +1,4 @@
+import dedent from 'dedent-js';
 import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
 import PostgreSqlFormatter from '../src/languages/postgresql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
@@ -34,4 +35,13 @@ describe('PostgreSqlFormatter', () => {
   supportsJoin(format);
   supportsReturning(format);
   supportsParams(format, { indexed: ['$'], named: [':'] });
+
+  // Postgres-specific string types
+  it('supports bit strings', () => {
+    expect(format(`SELECT B'0110010', B'1101000';`)).toBe(dedent`
+      SELECT
+        B'0110010',
+        B'1101000';
+    `);
+  });
 });
