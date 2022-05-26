@@ -26,7 +26,7 @@ describe('SqlFormatter', () => {
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, ["''"]);
+  supportsStrings(format, ["''", "X''"]);
   supportsIdentifiers(format, [`""`, '``']);
   supportsBetween(format);
   supportsSchema(format);
