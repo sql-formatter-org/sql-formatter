@@ -13,7 +13,7 @@ describe('MySqlFormatter', () => {
 
   behavesLikeMariaDbFormatter(format);
 
-  supportsStrings(format, ["''", '""']);
+  supportsStrings(format, ["''", '""', "X''"]);
   supportsIdentifiers(format, ['``']);
   supportsOperators(format, MySqlFormatter.operators, ['AND', 'OR', 'XOR']);
 

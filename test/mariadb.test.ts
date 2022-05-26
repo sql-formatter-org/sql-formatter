@@ -13,7 +13,7 @@ describe('MariaDbFormatter', () => {
 
   behavesLikeMariaDbFormatter(format);
 
-  supportsStrings(format, ["''", '""']);
+  supportsStrings(format, ["''", '""', "X''"]);
   supportsIdentifiers(format, ['``']);
   supportsOperators(format, MariaDbFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsReturning(format);
