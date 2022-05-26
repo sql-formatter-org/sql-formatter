@@ -15,8 +15,8 @@ interface TokenizerOptions {
   reservedDependentClauses: string[];
   reservedBinaryCommands: string[];
   reservedJoinConditions?: string[];
-  stringTypes: regexFactory.StringPatternType[];
-  identifierTypes: regexFactory.StringPatternType[];
+  stringTypes: regexFactory.QuoteType[];
+  identifierTypes: regexFactory.QuoteType[];
   blockStart?: string[];
   blockEnd?: string[];
   indexedPlaceholderTypes?: string[];

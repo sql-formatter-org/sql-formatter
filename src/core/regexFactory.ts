@@ -88,7 +88,7 @@ export type PrefixedQuoteType = {
   prefix: string;
 };
 
-export type StringPatternType = PlainQuoteType | PrefixedQuoteType;
+export type QuoteType = PlainQuoteType | PrefixedQuoteType;
 
 // Converts "ab" to "[Aa][Bb]"
 const toCaseInsensitivePattern = (prefix: string): string =>
@@ -97,7 +97,7 @@ const toCaseInsensitivePattern = (prefix: string): string =>
     .map(char => '[' + char.toUpperCase() + char.toLowerCase() + ']')
     .join('');
 
-const createQuotePattern = (type: StringPatternType): string => {
+const createQuotePattern = (type: QuoteType): string => {
   if (typeof type === 'string') {
     return '(' + patterns[type] + ')';
   } else {
@@ -107,16 +107,16 @@ const createQuotePattern = (type: StringPatternType): string => {
 
 /**
  * Builds a string pattern for matching string patterns for all given string types
- * @param {StringPatternType[]} stringTypes - list of strings that denote string patterns
+ * @param {QuoteType[]} stringTypes - list of strings that denote string patterns
  */
-export const createStringPattern = (stringTypes: StringPatternType[]): string =>
+export const createStringPattern = (stringTypes: QuoteType[]): string =>
   stringTypes.map(createQuotePattern).join('|');
 
 /**
  * Builds a RegExp for matching string patterns using `createStringPattern`
- * @param {StringPatternType[]} stringTypes - list of strings that denote string patterns
+ * @param {QuoteType[]} stringTypes - list of strings that denote string patterns
  */
-export const createStringRegex = (stringTypes: StringPatternType[]): RegExp =>
+export const createStringRegex = (stringTypes: QuoteType[]): RegExp =>
   new RegExp('^(' + createStringPattern(stringTypes) + ')', 'u');
 
 /** Escapes paren characters for RegExp patterns */
