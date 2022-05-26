@@ -478,16 +478,7 @@ export default class PlSqlFormatter extends Formatter {
 function preprocess(tokens: Token[]) {
   let previousReservedToken: Token = EOF_TOKEN;
 
-  return tokens.map((token, i) => {
-    const prevToken = tokens[i - 1] || EOF_TOKEN;
-    const nextToken = tokens[i + 1] || EOF_TOKEN;
-
-    // `table`[.]`column`
-    if (token.value === '.' && nextToken.value.startsWith('`') && prevToken.value.endsWith('`')) {
-      // This is an operator, do not insert spaces
-      return { ...token, type: TokenType.OPERATOR };
-    }
-
+  return tokens.map(token => {
     // BY [SET]
     if (isToken.SET(token) && isToken.BY(previousReservedToken)) {
       return { ...token, type: TokenType.RESERVED_KEYWORD };
