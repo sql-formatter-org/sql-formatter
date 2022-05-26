@@ -2,14 +2,15 @@ import dedent from 'dedent-js';
 import { FormatFn } from '../../src/sqlFormatter';
 
 interface ParamsTypes {
+  positional?: boolean;
   indexed?: ('?' | '$')[];
   named?: (':' | '$' | '@' | '@""' | '@[]')[];
 }
 
 export default function supportsParams(format: FormatFn, params: ParamsTypes) {
   describe('supports params', () => {
-    if (params.indexed?.includes('?')) {
-      it('leaves ? indexed placeholders as is when no params config provided', () => {
+    if (params.positional) {
+      it('leaves ? positional placeholders as is when no params config provided', () => {
         const result = format('SELECT ?, ?, ?;');
         expect(result).toBe(dedent`
           SELECT
@@ -19,7 +20,7 @@ export default function supportsParams(format: FormatFn, params: ParamsTypes) {
         `);
       });
 
-      it('replaces ? indexed placeholders with param values', () => {
+      it('replaces ? positional placeholders with param values', () => {
         const result = format('SELECT ?, ?, ?;', {
           params: ['first', 'second', 'third'],
         });
@@ -30,14 +31,16 @@ export default function supportsParams(format: FormatFn, params: ParamsTypes) {
             third;
         `);
       });
+    }
 
-      it('recognizes ?[0-9]* placeholders', () => {
-        const result = format('SELECT ?1, ?25, ?;');
+    if (params.indexed?.includes('?')) {
+      it('recognizes ? numbered placeholders', () => {
+        const result = format('SELECT ?1, ?25, ?2;');
         expect(result).toBe(dedent`
           SELECT
             ?1,
             ?25,
-            ?;
+            ?2;
         `);
       });
 

@@ -461,9 +461,9 @@ export default class PlSqlFormatter extends Formatter {
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe(reservedKeywords),
+      // TODO: support custom-delimited strings: Q'{..}' q'<..>' etc
       stringTypes: ["''", { prefix: 'N', quote: "''" }],
       identifierTypes: [`""`],
-      indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: [':'],
       specialWordChars: { any: '_$#' },
       operators: PlSqlFormatter.operators,

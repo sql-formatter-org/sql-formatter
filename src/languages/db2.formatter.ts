@@ -879,7 +879,7 @@ export default class Db2Formatter extends Formatter {
         { prefix: 'U&', quote: "''" },
       ],
       identifierTypes: [`""`],
-      indexedPlaceholderTypes: ['?'],
+      positionalPlaceholders: true,
       namedPlaceholderTypes: [':'],
       specialWordChars: { any: '#@' },
       operators: Db2Formatter.operators,

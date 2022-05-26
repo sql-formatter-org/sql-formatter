@@ -1329,7 +1329,7 @@ export default class MySqlFormatter extends Formatter {
       reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
       stringTypes: ["''", '""', { prefix: 'X', quote: "''" }],
       identifierTypes: ['``'],
-      indexedPlaceholderTypes: ['?'],
+      positionalPlaceholders: true,
       lineCommentTypes: ['--', '#'],
       specialWordChars: { prefix: '@:' },
       operators: MySqlFormatter.operators,

@@ -19,6 +19,7 @@ interface TokenizerOptions {
   identifierTypes: regexFactory.QuoteType[];
   blockStart?: string[];
   blockEnd?: string[];
+  positionalPlaceholders?: boolean;
   indexedPlaceholderTypes?: string[];
   namedPlaceholderTypes?: string[];
   lineCommentTypes?: string[];
@@ -31,6 +32,7 @@ interface TokenizerOptions {
 export default class Tokenizer {
   REGEX_MAP: { [tokenType in TokenType]: RegExp };
 
+  POSITIONAL_PLACEHOLDER_REGEX?: RegExp;
   INDEXED_PLACEHOLDER_REGEX?: RegExp;
   IDENT_NAMED_PLACEHOLDER_REGEX?: RegExp;
   STRING_NAMED_PLACEHOLDER_REGEX?: RegExp;
@@ -49,6 +51,7 @@ export default class Tokenizer {
    *  @param {string[]} cfg.identifierTypes - identifier types to enable - "", ``, [], ...
    *  @param {string[]} cfg.blockStart - Opening parentheses to enable, like (, [
    *  @param {string[]} cfg.blockEnd - Closing parentheses to enable, like ), ]
+   *  @param {boolean} cfg.positionalPlaceholders - True to enable positional placeholders "?"
    *  @param {string[]} cfg.indexedPlaceholderTypes - Prefixes for indexed placeholders, like ?
    *  @param {string[]} cfg.namedPlaceholderTypes - Prefixes for named placeholders, like @ and :
    *  @param {string[]} cfg.lineCommentTypes - Line comments to enable, like # and --
@@ -109,9 +112,10 @@ export default class Tokenizer {
       [TokenType.EOF]: NULL_REGEX, // matches nothing
     };
 
+    this.POSITIONAL_PLACEHOLDER_REGEX = cfg.positionalPlaceholders ? /^(\?)/ : undefined;
     this.INDEXED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
       cfg.indexedPlaceholderTypes ?? [],
-      '[0-9]*'
+      '[0-9]+'
     );
     this.IDENT_NAMED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
       cfg.namedPlaceholderTypes ?? [],
@@ -211,17 +215,25 @@ export default class Tokenizer {
         regex: this.INDEXED_PLACEHOLDER_REGEX ?? NULL_REGEX,
         parseKey: v => v.slice(1),
       },
+      // pattern for positional placeholder
+      {
+        regex: this.POSITIONAL_PLACEHOLDER_REGEX ?? NULL_REGEX,
+        parseKey: v => v.slice(1),
+      },
     ];
 
-    return placeholderTokenRegexMap.reduce((acc, { regex, parseKey }) => {
+    for (const { regex, parseKey } of placeholderTokenRegexMap) {
       const token = this.getTokenOnFirstMatch({
         input,
         regex,
         type: TokenType.PLACEHOLDER,
         transform: id,
       });
-      return token ? { ...token, key: parseKey(token.value) } : acc;
-    }, undefined as Token | undefined);
+      if (token) {
+        return { ...token, key: parseKey(token.value) };
+      }
+    }
+    return undefined;
   }
 
   getEscapedPlaceholderKey({ key, quoteChar }: { key: string; quoteChar: string }): string {

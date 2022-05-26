@@ -32,7 +32,7 @@ describe('Db2Formatter', () => {
   supportsSchema(format);
   supportsOperators(format, Db2Formatter.operators);
   supportsJoin(format);
-  supportsParams(format, { indexed: ['?'], named: [':'] });
+  supportsParams(format, { positional: true, named: [':'] });
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`

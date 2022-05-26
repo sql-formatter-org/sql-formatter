@@ -728,7 +728,6 @@ export default class RedshiftFormatter extends Formatter {
       ]),
       stringTypes: ["''"],
       identifierTypes: [`""`],
-      indexedPlaceholderTypes: ['?'],
       // XXX: Seems like redshift only supports $1, $2, $3 parameters,
       // but for some reason we list lots of types in here.
       // https://docs.aws.amazon.com/redshift/latest/dg/r_PREPARE.html

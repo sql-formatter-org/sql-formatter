@@ -30,7 +30,7 @@ describe('RedshiftFormatter', () => {
   supportsSchema(format);
   supportsOperators(format, RedshiftFormatter.operators);
   supportsJoin(format);
-  supportsParams(format, { indexed: ['?'], named: ['$', '@', '@""'] });
+  supportsParams(format, { named: ['$', '@', '@""'] });
 
   it('formats LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC LIMIT 10;')).toBe(dedent`

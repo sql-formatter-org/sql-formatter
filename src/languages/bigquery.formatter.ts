@@ -861,7 +861,7 @@ export default class BigQueryFormatter extends Formatter {
         { prefix: 'BR', quote: "''" },
       ],
       identifierTypes: ['``'],
-      indexedPlaceholderTypes: ['?'],
+      positionalPlaceholders: true,
       lineCommentTypes: ['--', '#'],
       specialWordChars: { any: '_@$-' },
       operators: BigQueryFormatter.operators,

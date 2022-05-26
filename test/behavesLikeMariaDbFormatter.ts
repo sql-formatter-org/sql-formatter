@@ -36,7 +36,7 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
       'NATURAL RIGHT OUTER JOIN',
     ],
   });
-  supportsParams(format, { indexed: ['?'] });
+  supportsParams(format, { positional: true });
 
   it('supports @variables', () => {
     expect(format('SELECT @foo, @bar')).toBe(dedent`

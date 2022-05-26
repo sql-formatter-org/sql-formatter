@@ -433,6 +433,7 @@ export default class SqliteFormatter extends Formatter {
       stringTypes: ["''", { prefix: 'X', quote: "''" }],
       identifierTypes: [`""`, '``', '[]'],
       // https://www.sqlite.org/lang_expr.html#parameters
+      positionalPlaceholders: true,
       indexedPlaceholderTypes: ['?'],
       namedPlaceholderTypes: [':', '@', '$'],
       operators: SqliteFormatter.operators,
