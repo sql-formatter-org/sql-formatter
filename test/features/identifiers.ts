@@ -22,6 +22,10 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: s
           "my table"."col name";
       `);
     });
+
+    it('supports escaping double-quote by doubling it', () => {
+      expect(format('"foo""bar"')).toBe('"foo""bar"');
+    });
   }
 
   if (identifierTypes.includes('``')) {
@@ -63,6 +67,10 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: s
         SELECT
           U&"my table".U&"col name";
       `);
+    });
+
+    it('detects consequitive U&"" identifiers as separate ones', () => {
+      expect(format('U&"foo"U&"bar"')).toBe('U&"foo" U&"bar"');
     });
   }
 

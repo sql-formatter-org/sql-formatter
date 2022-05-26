@@ -14,6 +14,10 @@ export default function supportsStrings(format: FormatFn, stringTypes: string[])
           "update"
       `);
     });
+
+    it('supports escaping double-quote by doubling it', () => {
+      expect(format('"foo""bar"')).toBe('"foo""bar"');
+    });
   }
 
   if (stringTypes.includes("''")) {
@@ -27,6 +31,10 @@ export default function supportsStrings(format: FormatFn, stringTypes: string[])
           'update'
       `);
     });
+
+    it('supports escaping single-quote by doubling it', () => {
+      expect(format("'foo''bar'")).toBe("'foo''bar'");
+    });
   }
 
   if (stringTypes.includes('U&""')) {
@@ -39,6 +47,10 @@ export default function supportsStrings(format: FormatFn, stringTypes: string[])
         FROM
           U&"update"
       `);
+    });
+
+    it("detects consequitive U&'' strings as separate ones", () => {
+      expect(format("U&'foo'U&'bar'")).toBe("U&'foo' U&'bar'");
     });
   }
 
@@ -83,6 +95,10 @@ export default function supportsStrings(format: FormatFn, stringTypes: string[])
           N'update'
       `);
     });
+
+    it("detects consequitive N'' strings as separate ones", () => {
+      expect(format("N'foo'N'bar'")).toBe("N'foo' N'bar'");
+    });
   }
 
   if (stringTypes.includes("X''")) {
@@ -96,6 +112,10 @@ export default function supportsStrings(format: FormatFn, stringTypes: string[])
           foo
       `);
     });
+
+    it("detects consequitive X'' strings as separate ones", () => {
+      expect(format("X'AE01'X'01F6'")).toBe("X'AE01' X'01F6'");
+    });
   }
 
   if (stringTypes.includes("E''")) {
@@ -108,6 +128,10 @@ export default function supportsStrings(format: FormatFn, stringTypes: string[])
         FROM
           foo
       `);
+    });
+
+    it("detects consequitive E'' strings as separate ones", () => {
+      expect(format("E'foo'E'bar'")).toBe("E'foo' E'bar'");
     });
   }
 }
