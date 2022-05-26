@@ -2,7 +2,7 @@ import { expect } from '@jest/globals';
 import dedent from 'dedent-js';
 import { FormatFn } from '../../src/sqlFormatter';
 
-type StringType = '""' | "''" | 'U&""' | "U&''" | '$$' | "N''" | "X''" | "E''";
+type StringType = '""' | "''" | 'U&""' | "U&''" | "N''" | "X''";
 
 export default function supportsStrings(format: FormatFn, stringTypes: StringType[]) {
   if (stringTypes.includes('""')) {
@@ -69,23 +69,6 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
     });
   }
 
-  if (stringTypes.includes('$$')) {
-    it('supports dollar-quoted strings', () => {
-      expect(format('$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$')).toBe(
-        '$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$'
-      );
-      expect(format('$$foo JOIN bar$$')).toBe('$$foo JOIN bar$$');
-      expect(format('$$foo $ JOIN bar$$')).toBe('$$foo $ JOIN bar$$');
-      expect(format('$$foo \n bar$$')).toBe('$$foo \n bar$$');
-      expect(format('SELECT $$where$$ FROM $$update$$')).toBe(dedent`
-        SELECT
-          $$where$$
-        FROM
-          $$update$$
-      `);
-    });
-  }
-
   if (stringTypes.includes("N''")) {
     it('supports T-SQL unicode strings', () => {
       expect(format("N'foo JOIN bar'")).toBe("N'foo JOIN bar'");
@@ -117,23 +100,6 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
 
     it("detects consequitive X'' strings as separate ones", () => {
       expect(format("X'AE01'X'01F6'")).toBe("X'AE01' X'01F6'");
-    });
-  }
-
-  if (stringTypes.includes("E''")) {
-    it('supports strings with C-style escapes', () => {
-      expect(format("E'blah blah'")).toBe("E'blah blah'");
-      expect(format("E'some \\' FROM escapes'")).toBe("E'some \\' FROM escapes'");
-      expect(format("SELECT E'blah' FROM foo")).toBe(dedent`
-        SELECT
-          E'blah'
-        FROM
-          foo
-      `);
-    });
-
-    it("detects consequitive E'' strings as separate ones", () => {
-      expect(format("E'foo'E'bar'")).toBe("E'foo' E'bar'");
     });
   }
 }
