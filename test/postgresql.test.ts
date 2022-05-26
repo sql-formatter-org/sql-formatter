@@ -26,7 +26,7 @@ describe('PostgreSqlFormatter', () => {
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, ["''", "U&''", '$$', "E''"]);
+  supportsStrings(format, ["''", "U&''", '$$', "E''", "X''"]);
   supportsIdentifiers(format, [`""`, 'U&""']);
   supportsBetween(format);
   supportsSchema(format);
