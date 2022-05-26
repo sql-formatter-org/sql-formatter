@@ -629,7 +629,6 @@ export default class HiveFormatter extends Formatter {
       ]),
       stringTypes: HiveFormatter.stringTypes,
       identifierTypes: HiveFormatter.identifierTypes,
-      indexedPlaceholderTypes: ['?'],
       operators: HiveFormatter.operators,
     });
   }
