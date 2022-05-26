@@ -2,7 +2,9 @@ import { expect } from '@jest/globals';
 import dedent from 'dedent-js';
 import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsStrings(format: FormatFn, stringTypes: string[]) {
+type StringType = '""' | "''" | 'U&""' | "U&''" | '$$' | "N''" | "X''" | "E''";
+
+export default function supportsStrings(format: FormatFn, stringTypes: StringType[]) {
   if (stringTypes.includes('""')) {
     it('supports double-quoted strings', () => {
       expect(format('"foo JOIN bar"')).toBe('"foo JOIN bar"');

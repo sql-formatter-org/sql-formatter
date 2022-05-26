@@ -2,7 +2,9 @@ import { expect } from '@jest/globals';
 import dedent from 'dedent-js';
 import { FormatFn } from '../../src/sqlFormatter';
 
-export default function supportsIdentifiers(format: FormatFn, identifierTypes: string[]) {
+type IdentType = '""' | '``' | '[]' | 'U&""';
+
+export default function supportsIdentifiers(format: FormatFn, identifierTypes: IdentType[]) {
   if (identifierTypes.includes('""')) {
     it('supports double-quoted identifiers', () => {
       expect(format('"foo JOIN bar"')).toBe('"foo JOIN bar"');
