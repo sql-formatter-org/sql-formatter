@@ -78,25 +78,27 @@ export const createWordRegex = (
 // 7. Unicode double-quoted string using \" to escape
 // 8. PostgreSQL dollar-quoted strings
 const patterns = {
-  '``': '((`[^`]*($|`))+)',
-  '[]': '((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)',
-  '""': '(("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+)',
-  "''": "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
-  "N''": "((N'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
-  "x''": "(([xX]'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
-  "E''": "((E'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
-  "U&''": "((U&'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
-  'U&""': '((U&"[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+)',
-  '$$': '((?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$))',
+  '``': '(`[^`]*($|`))+',
+  '[]': '(\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*',
+  '""': '("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+',
+  "''": "('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
+  "N''": "(N'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
+  "x''": "([xX]'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
+  "E''": "(E'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
+  "U&''": "(U&'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
+  'U&""': '(U&"[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+',
+  '$$': '(?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$)',
 };
 export type StringPatternType = keyof typeof patterns;
+
+const createQuotePattern = (type: StringPatternType): string => '(' + patterns[type] + ')';
 
 /**
  * Builds a string pattern for matching string patterns for all given string types
  * @param {StringPatternType[]} stringTypes - list of strings that denote string patterns
  */
 export const createStringPattern = (stringTypes: StringPatternType[]): string =>
-  stringTypes.map(t => patterns[t]).join('|');
+  stringTypes.map(createQuotePattern).join('|');
 
 /**
  * Builds a RegExp for matching string patterns using `createStringPattern`
