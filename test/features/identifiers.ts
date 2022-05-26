@@ -14,6 +14,14 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: s
           "update"
       `);
     });
+
+    it('no space around dot between two double-quoted identifiers', () => {
+      const result = format(`SELECT "my table"."col name";`);
+      expect(result).toBe(dedent`
+        SELECT
+          "my table"."col name";
+      `);
+    });
   }
 
   if (identifierTypes.includes('``')) {
@@ -28,13 +36,11 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: s
       `);
     });
 
-    it('supports backticks', () => {
-      const result = format(`SELECT \`a\`.\`b\` FROM \`c\`.\`d\`;`);
+    it('no space around dot between two backtick-quoted identifiers', () => {
+      const result = format(`SELECT \`my table\`.\`col name\`;`);
       expect(result).toBe(dedent`
         SELECT
-          \`a\`.\`b\`
-        FROM
-          \`c\`.\`d\`;
+          \`my table\`.\`col name\`;
       `);
     });
   }
@@ -50,6 +56,14 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: s
           U&"update"
       `);
     });
+
+    it('no space around dot between unicode double-quoted identifiers', () => {
+      const result = format(`SELECT U&"my table".U&"col name";`);
+      expect(result).toBe(dedent`
+        SELECT
+          U&"my table".U&"col name";
+      `);
+    });
   }
 
   if (identifierTypes.includes('[]')) {
@@ -61,6 +75,14 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: s
           [where]
         FROM
           [update]
+      `);
+    });
+
+    it('no space around dot between two [bracket-quoted identifiers]', () => {
+      const result = format(`SELECT [my table].[col name];`);
+      expect(result).toBe(dedent`
+        SELECT
+          [my table].[col name];
       `);
     });
   }
