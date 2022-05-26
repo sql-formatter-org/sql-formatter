@@ -81,4 +81,10 @@ describe('SparkFormatter', () => {
         tbl;
     `);
   });
+
+  it('throws error when params option used', () => {
+    expect(() => format('SELECT *', { params: ['1', '2', '3'] })).toThrow(
+      'Unexpected "params" option. Prepared statement placeholders not supported for Spark.'
+    );
+  });
 });

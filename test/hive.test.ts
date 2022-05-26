@@ -28,4 +28,10 @@ describe('HiveFormatter', () => {
   supportsJoin(format, { without: ['NATURAL JOIN'] });
   supportsOperators(format, HiveFormatter.operators);
   supportsArray(format);
+
+  it('throws error when params option used', () => {
+    expect(() => format('SELECT *', { params: ['1', '2', '3'] })).toThrow(
+      'Unexpected "params" option. Prepared statement placeholders not supported for Hive.'
+    );
+  });
 });
