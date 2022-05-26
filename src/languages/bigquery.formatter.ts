@@ -836,7 +836,19 @@ export default class BigQueryFormatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
-      stringTypes: ['""', "''"], // add: '''''', """""" ; prefixes: r, b
+      // TODO: add '''''', """"""
+      stringTypes: [
+        '""',
+        { prefix: 'R', quote: '""' },
+        { prefix: 'B', quote: '""' },
+        { prefix: 'RB', quote: '""' },
+        { prefix: 'BR', quote: '""' },
+        "''",
+        { prefix: 'R', quote: "''" },
+        { prefix: 'B', quote: "''" },
+        { prefix: 'RB', quote: "''" },
+        { prefix: 'BR', quote: "''" },
+      ],
       identifierTypes: ['``'],
       indexedPlaceholderTypes: ['?'],
       lineCommentTypes: ['--', '#'],

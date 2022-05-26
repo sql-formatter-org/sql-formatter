@@ -55,6 +55,22 @@ describe('BigQueryFormatter', () => {
     `);
   });
 
+  // BigQuery-specific string types
+  it('supports strings with r, b and rb prefixes', () => {
+    expect(format(`SELECT R'blah', B'sah', rb"huh", br'bulu bulu', r"haha", BR'la la' FROM foo`))
+      .toBe(dedent`
+      SELECT
+        R'blah',
+        B'sah',
+        rb"huh",
+        br'bulu bulu',
+        r"haha",
+        BR'la la'
+      FROM
+        foo
+    `);
+  });
+
   it('supports STRUCT types', () => {
     const result = format(
       'SELECT STRUCT("Alpha" as name, [23.4, 26.3, 26.4, 26.1] as splits) FROM beta'
