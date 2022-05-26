@@ -430,7 +430,7 @@ export default class SqliteFormatter extends Formatter {
       reservedDependentClauses,
       // https://www.sqlite.org/lang_keywords.html
       reservedKeywords: [...standardReservedWords, ...nonStandardSqliteReservedWords],
-      stringTypes: ["''"],
+      stringTypes: ["''", { prefix: 'X', quote: "''" }],
       identifierTypes: [`""`, '``', '[]'],
       // https://www.sqlite.org/lang_expr.html#parameters
       indexedPlaceholderTypes: ['?'],
