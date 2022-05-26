@@ -26,8 +26,8 @@ describe('SqliteFormatter', () => {
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, SqliteFormatter.stringTypes);
-  supportsIdentifiers(format, SqliteFormatter.identifierTypes);
+  supportsStrings(format, ["''"]);
+  supportsIdentifiers(format, [`""`, '``', '[]']);
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format, {

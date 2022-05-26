@@ -22,8 +22,8 @@ describe('N1qlFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format, { hashComments: true });
   supportsDeleteFrom(format);
-  supportsStrings(format, N1qlFormatter.stringTypes);
-  supportsIdentifiers(format, N1qlFormatter.identifierTypes);
+  supportsStrings(format, [`""`]);
+  supportsIdentifiers(format, ['``']);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, N1qlFormatter.operators, ['AND', 'OR', 'XOR']);

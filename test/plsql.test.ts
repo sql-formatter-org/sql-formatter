@@ -29,8 +29,8 @@ describe('PlSqlFormatter', () => {
   supportsAlterTable(format);
   supportsAlterTableModify(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, PlSqlFormatter.stringTypes);
-  supportsIdentifiers(format, PlSqlFormatter.identifierTypes);
+  supportsStrings(format, ["''", "N''"]);
+  supportsIdentifiers(format, [`""`]);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, PlSqlFormatter.operators, ['AND', 'OR', 'XOR']);

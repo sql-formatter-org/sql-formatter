@@ -13,8 +13,8 @@ describe('MariaDbFormatter', () => {
 
   behavesLikeMariaDbFormatter(format);
 
-  supportsStrings(format, MariaDbFormatter.stringTypes);
-  supportsIdentifiers(format, MariaDbFormatter.identifierTypes);
+  supportsStrings(format, ["''", '""']);
+  supportsIdentifiers(format, ['``']);
   supportsOperators(format, MariaDbFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsReturning(format);
 });

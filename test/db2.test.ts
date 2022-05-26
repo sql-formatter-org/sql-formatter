@@ -26,8 +26,8 @@ describe('Db2Formatter', () => {
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, Db2Formatter.stringTypes);
-  supportsIdentifiers(format, Db2Formatter.identifierTypes);
+  supportsStrings(format, ["''", "X''"]);
+  supportsIdentifiers(format, [`""`]);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, Db2Formatter.operators);

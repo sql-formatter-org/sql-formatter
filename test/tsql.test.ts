@@ -26,8 +26,8 @@ describe('TSqlFormatter', () => {
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, TSqlFormatter.stringTypes);
-  supportsIdentifiers(format, TSqlFormatter.identifierTypes);
+  supportsStrings(format, ["N''", "''"]);
+  supportsIdentifiers(format, [`""`, '[]']);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, TSqlFormatter.operators);

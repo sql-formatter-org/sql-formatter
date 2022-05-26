@@ -22,8 +22,8 @@ describe('SparkFormatter', () => {
   supportsComments(format);
   supportsCreateTable(format);
   supportsAlterTable(format);
-  supportsStrings(format, SparkFormatter.stringTypes);
-  supportsIdentifiers(format, SparkFormatter.identifierTypes);
+  supportsStrings(format, ["''"]);
+  supportsIdentifiers(format, ['``']);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, SparkFormatter.operators, ['AND', 'OR', 'XOR']);

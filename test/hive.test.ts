@@ -21,8 +21,8 @@ describe('HiveFormatter', () => {
   supportsComments(format);
   supportsCreateTable(format);
   supportsAlterTable(format);
-  supportsStrings(format, HiveFormatter.stringTypes);
-  supportsIdentifiers(format, HiveFormatter.identifierTypes);
+  supportsStrings(format, ['""', "''"]);
+  supportsIdentifiers(format, ['``']);
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format, { without: ['NATURAL JOIN'] });
