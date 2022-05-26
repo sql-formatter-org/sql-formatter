@@ -512,7 +512,10 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html
 export default class N1qlFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "''"]; // TODO: single quotes actually not supported in N1QL
+  // NOTE: single quotes are actually not supported in N1QL,
+  // but we support them anyway as all other SQL dialects do,
+  // which simplifies writing tests that are shared between all dialects.
+  static stringTypes: StringPatternType[] = [`""`, "''"];
   static identifierTypes: StringPatternType[] = ['``'];
   static operators = ['=='];
 
