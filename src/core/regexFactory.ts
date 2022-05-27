@@ -50,7 +50,7 @@ export const createReservedWordRegex = (
  * @param {string} specialChars.prefix - concatenated string of chars that only appear at the beginning of a valid identifier
  * @param {string} specialChars.suffix - concatenated string of chars that only appear at the end of a valid identifier
  */
-export const createWordRegex = (
+export const createIdentRegex = (
   specialChars: { any?: string; prefix?: string; suffix?: string } = {}
 ): RegExp => {
   const prefixLookBehind = `[${escapeRegExp(specialChars.prefix ?? '')}]*`;

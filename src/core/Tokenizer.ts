@@ -68,7 +68,7 @@ export default class Tokenizer {
     this.quotedIdentRegex = regexFactory.createQuoteRegex(cfg.identifierTypes);
 
     this.REGEX_MAP = {
-      [TokenType.IDENT]: regexFactory.createWordRegex(cfg.specialIdentChars),
+      [TokenType.IDENT]: regexFactory.createIdentRegex(cfg.specialIdentChars),
       [TokenType.STRING]: regexFactory.createQuoteRegex(cfg.stringTypes),
       [TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(
         cfg.reservedKeywords,
