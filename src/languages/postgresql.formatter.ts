@@ -1691,7 +1691,6 @@ export default class PostgreSqlFormatter extends Formatter {
       ],
       identifierTypes: [`""`, { prefix: 'U&', quote: '""' }],
       numberedPlaceholderTypes: ['$'],
-      namedPlaceholderTypes: [':'],
       operators: PostgreSqlFormatter.operators,
     });
   }
