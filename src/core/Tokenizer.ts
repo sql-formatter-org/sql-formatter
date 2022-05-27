@@ -33,7 +33,7 @@ type PlaceholderPattern = { regex: RegExp; parseKey: (s: string) => string };
 
 /** Converts SQL language string into a token stream */
 export default class Tokenizer {
-  REGEX_MAP: Record<TokenType, RegExp>;
+  private REGEX_MAP: Record<TokenType, RegExp>;
   private quotedIdentRegex: RegExp;
   private placeholderPatterns: PlaceholderPattern[];
 
@@ -157,7 +157,7 @@ export default class Tokenizer {
    * @param {string} input - The SQL string
    * @returns {Token[]} output token stream
    */
-  tokenize(input: string): Token[] {
+  public tokenize(input: string): Token[] {
     const tokens: Token[] = [];
     let token: Token | undefined;
 
@@ -183,13 +183,13 @@ export default class Tokenizer {
   }
 
   /** Matches preceding whitespace if present */
-  getWhitespace(input: string): string {
+  private getWhitespace(input: string): string {
     const matches = input.match(WHITESPACE_REGEX);
     return matches ? matches[1] : '';
   }
 
   /** Curried function of `getTokenOnFirstMatch` that allows token type to be passed first */
-  matchToken =
+  private matchToken =
     (tokenType: TokenType) =>
     (input: string): Token | undefined =>
       this.getTokenOnFirstMatch({
@@ -200,7 +200,7 @@ export default class Tokenizer {
       });
 
   /** Attempts to match next token from input string, tests RegExp patterns in decreasing priority */
-  getNextToken(input: string, previousToken?: Token): Token | undefined {
+  private getNextToken(input: string, previousToken?: Token): Token | undefined {
     return (
       this.matchToken(TokenType.LINE_COMMENT)(input) ||
       this.matchToken(TokenType.BLOCK_COMMENT)(input) ||
@@ -220,7 +220,7 @@ export default class Tokenizer {
    * Attempts to match a placeholder token pattern
    * @return {Token | undefined} - The placeholder token if found, otherwise undefined
    */
-  getPlaceholderToken(input: string): Token | undefined {
+  private getPlaceholderToken(input: string): Token | undefined {
     for (const { regex, parseKey } of this.placeholderPatterns) {
       const token = this.getTokenOnFirstMatch({
         input,
@@ -235,11 +235,11 @@ export default class Tokenizer {
     return undefined;
   }
 
-  getEscapedPlaceholderKey({ key, quoteChar }: { key: string; quoteChar: string }): string {
+  private getEscapedPlaceholderKey({ key, quoteChar }: { key: string; quoteChar: string }): string {
     return key.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar);
   }
 
-  getQuotedIdentToken(input: string): Token | undefined {
+  private getQuotedIdentToken(input: string): Token | undefined {
     return this.getTokenOnFirstMatch({
       input,
       regex: this.quotedIdentRegex,
@@ -252,7 +252,7 @@ export default class Tokenizer {
    * Attempts to match a Reserved word token pattern, avoiding edge cases of Reserved words within string tokens
    * @return {Token | undefined} - The Reserved word token if found, otherwise undefined
    */
-  getReservedWordToken(input: string, previousToken?: Token): Token | undefined {
+  private getReservedWordToken(input: string, previousToken?: Token): Token | undefined {
     // A reserved word cannot be preceded by a '.'
     // this makes it so in "mytable.from", "from" is not considered a reserved word
     if (previousToken?.value === '.') {
@@ -291,7 +291,7 @@ export default class Tokenizer {
    * @param {RegExp} _.regex - The regex to match
    * @return {Token | undefined} - The matched token if found, otherwise undefined
    */
-  getTokenOnFirstMatch({
+  private getTokenOnFirstMatch({
     input,
     type,
     regex,
