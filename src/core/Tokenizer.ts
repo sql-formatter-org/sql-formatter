@@ -211,7 +211,7 @@ export default class Tokenizer {
    */
   private matchPlaceholderToken(input: string): Token | undefined {
     for (const { regex, parseKey } of this.placeholderPatterns) {
-      const token = this.getTokenOnFirstMatch({
+      const token = this.match({
         input,
         regex,
         type: TokenType.PLACEHOLDER,
@@ -229,7 +229,7 @@ export default class Tokenizer {
   }
 
   private matchQuotedIdentToken(input: string): Token | undefined {
-    return this.getTokenOnFirstMatch({
+    return this.match({
       input,
       regex: this.quotedIdentRegex,
       type: TokenType.IDENT,
@@ -263,7 +263,7 @@ export default class Tokenizer {
     return reservedTokenList.reduce(
       (matchedToken: Token | undefined, tokenType) =>
         matchedToken ||
-        this.getTokenOnFirstMatch({
+        this.match({
           input,
           type: tokenType,
           regex: this.REGEX_MAP[tokenType],
@@ -273,9 +273,9 @@ export default class Tokenizer {
     );
   }
 
-  // Shorthand for `getTokenOnFirstMatch` that looks up regex for REGEX_MAP
+  // Shorthand for `match` that looks up regex from REGEX_MAP
   private matchToken(tokenType: TokenType, input: string): Token | undefined {
-    return this.getTokenOnFirstMatch({
+    return this.match({
       input,
       type: tokenType,
       regex: this.REGEX_MAP[tokenType],
@@ -290,7 +290,7 @@ export default class Tokenizer {
    * @param {RegExp} _.regex - The regex to match
    * @return {Token | undefined} - The matched token if found, otherwise undefined
    */
-  private getTokenOnFirstMatch({
+  private match({
     input,
     type,
     regex,
