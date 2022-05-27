@@ -188,31 +188,20 @@ export default class Tokenizer {
     return matches ? matches[1] : '';
   }
 
-  /** Curried function of `getTokenOnFirstMatch` that allows token type to be passed first */
-  private matchToken =
-    (tokenType: TokenType) =>
-    (input: string): Token | undefined =>
-      this.getTokenOnFirstMatch({
-        input,
-        type: tokenType,
-        regex: this.REGEX_MAP[tokenType],
-        transform: id,
-      });
-
   /** Attempts to match next token from input string, tests RegExp patterns in decreasing priority */
   private getNextToken(input: string, previousToken?: Token): Token | undefined {
     return (
-      this.matchToken(TokenType.LINE_COMMENT)(input) ||
-      this.matchToken(TokenType.BLOCK_COMMENT)(input) ||
-      this.matchToken(TokenType.STRING)(input) ||
+      this.matchToken(TokenType.LINE_COMMENT, input) ||
+      this.matchToken(TokenType.BLOCK_COMMENT, input) ||
+      this.matchToken(TokenType.STRING, input) ||
       this.matchQuotedIdentToken(input) ||
-      this.matchToken(TokenType.BLOCK_START)(input) ||
-      this.matchToken(TokenType.BLOCK_END)(input) ||
+      this.matchToken(TokenType.BLOCK_START, input) ||
+      this.matchToken(TokenType.BLOCK_END, input) ||
       this.matchPlaceholderToken(input) ||
-      this.matchToken(TokenType.NUMBER)(input) ||
+      this.matchToken(TokenType.NUMBER, input) ||
       this.matchReservedWordToken(input, previousToken) ||
-      this.matchToken(TokenType.IDENT)(input) ||
-      this.matchToken(TokenType.OPERATOR)(input)
+      this.matchToken(TokenType.IDENT, input) ||
+      this.matchToken(TokenType.OPERATOR, input)
     );
   }
 
@@ -282,6 +271,16 @@ export default class Tokenizer {
         }),
       undefined
     );
+  }
+
+  // Shorthand for `getTokenOnFirstMatch` that looks up regex for REGEX_MAP
+  private matchToken(tokenType: TokenType, input: string): Token | undefined {
+    return this.getTokenOnFirstMatch({
+      input,
+      type: tokenType,
+      regex: this.REGEX_MAP[tokenType],
+      transform: id,
+    });
   }
 
   /**
