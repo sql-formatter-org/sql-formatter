@@ -35,7 +35,7 @@ describe('SqliteFormatter', () => {
     additionally: ['NATURAL LEFT JOIN', 'NATURAL LEFT OUTER JOIN'],
   });
   supportsOperators(format, SqliteFormatter.operators);
-  supportsParams(format, { positional: true, numbered: ['?'], named: [':', '$', '@', '@""'] });
+  supportsParams(format, { positional: true, numbered: ['?'], named: [':', '$', '@'] });
 
   it('formats FETCH FIRST like LIMIT', () => {
     const result = format('SELECT * FETCH FIRST 2 ROWS ONLY;');
