@@ -249,28 +249,26 @@ export default class Tokenizer {
     }
 
     // prioritised list of Reserved token types
-    const reservedTokenList = [
-      TokenType.RESERVED_CASE_START,
-      TokenType.RESERVED_CASE_END,
-      TokenType.RESERVED_COMMAND,
-      TokenType.RESERVED_BINARY_COMMAND,
-      TokenType.RESERVED_DEPENDENT_CLAUSE,
-      TokenType.RESERVED_LOGICAL_OPERATOR,
-      TokenType.RESERVED_KEYWORD,
-      TokenType.RESERVED_JOIN_CONDITION,
-    ];
-
-    return reservedTokenList.reduce(
-      (matchedToken: Token | undefined, tokenType) =>
-        matchedToken ||
-        this.match({
-          input,
-          type: tokenType,
-          regex: this.REGEX_MAP[tokenType],
-          transform: toCanonicalKeyword,
-        }),
-      undefined
+    return (
+      this.matchReservedToken(TokenType.RESERVED_CASE_START, input) ||
+      this.matchReservedToken(TokenType.RESERVED_CASE_END, input) ||
+      this.matchReservedToken(TokenType.RESERVED_COMMAND, input) ||
+      this.matchReservedToken(TokenType.RESERVED_BINARY_COMMAND, input) ||
+      this.matchReservedToken(TokenType.RESERVED_DEPENDENT_CLAUSE, input) ||
+      this.matchReservedToken(TokenType.RESERVED_LOGICAL_OPERATOR, input) ||
+      this.matchReservedToken(TokenType.RESERVED_KEYWORD, input) ||
+      this.matchReservedToken(TokenType.RESERVED_JOIN_CONDITION, input)
     );
+  }
+
+  // Helper for matching RESERVED_* tokens which need to be transformed to canonical form
+  private matchReservedToken(tokenType: TokenType, input: string): Token | undefined {
+    return this.match({
+      input,
+      type: tokenType,
+      regex: this.REGEX_MAP[tokenType],
+      transform: toCanonicalKeyword,
+    });
   }
 
   // Shorthand for `match` that looks up regex from REGEX_MAP
