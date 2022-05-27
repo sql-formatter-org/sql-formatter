@@ -4,7 +4,8 @@ import { FormatFn } from '../../src/sqlFormatter';
 interface ParamsTypes {
   positional?: boolean;
   numbered?: ('?' | '$' | ':')[];
-  named?: (':' | '$' | '@' | '@""' | '@[]')[];
+  named?: (':' | '$' | '@')[];
+  quoted?: ('@""' | '@[]')[];
 }
 
 export default function supportsParams(format: FormatFn, params: ParamsTypes) {
@@ -199,7 +200,7 @@ export default function supportsParams(format: FormatFn, params: ParamsTypes) {
     });
   }
 
-  if (params.named?.includes('@""')) {
+  if (params.quoted?.includes('@""')) {
     it(`recognizes @"name" placeholders`, () => {
       expect(format(`SELECT @"foo", @"foo bar";`)).toBe(dedent`
         SELECT
@@ -221,7 +222,7 @@ export default function supportsParams(format: FormatFn, params: ParamsTypes) {
     });
   }
 
-  if (params.named?.includes('@[]')) {
+  if (params.quoted?.includes('@[]')) {
     it(`recognizes @[name] placeholders`, () => {
       expect(format(`SELECT @[foo], @[foo bar];`)).toBe(dedent`
         SELECT

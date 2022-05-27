@@ -22,6 +22,7 @@ interface TokenizerOptions {
   positionalPlaceholders?: boolean;
   numberedPlaceholderTypes?: string[];
   namedPlaceholderTypes?: string[];
+  quotedPlaceholderTypes?: string[];
   lineCommentTypes?: string[];
   specialWordChars?: { prefix?: string; any?: string; suffix?: string };
   operators?: string[];
@@ -123,7 +124,7 @@ export default class Tokenizer {
       {
         // :"name" placeholders
         regex: regexFactory.createPlaceholderRegex(
-          cfg.namedPlaceholderTypes ?? [],
+          cfg.quotedPlaceholderTypes ?? [],
           regexFactory.createQuotePattern(cfg.identifierTypes)
         ),
         parseKey: v =>

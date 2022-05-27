@@ -1245,6 +1245,7 @@ export default class TSqlFormatter extends Formatter {
       stringTypes: ["''", { prefix: 'N', quote: "''" }],
       identifierTypes: [`""`, '[]'],
       namedPlaceholderTypes: ['@'],
+      quotedPlaceholderTypes: ['@'],
       specialWordChars: { any: '#@' },
       operators: TSqlFormatter.operators,
       // TODO: Support for money constants
