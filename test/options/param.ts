@@ -3,7 +3,7 @@ import { FormatFn } from '../../src/sqlFormatter';
 
 interface ParamsTypes {
   positional?: boolean;
-  indexed?: ('?' | '$' | ':')[];
+  numbered?: ('?' | '$' | ':')[];
   named?: (':' | '$' | '@' | '@""' | '@[]')[];
 }
 
@@ -33,7 +33,7 @@ export default function supportsParams(format: FormatFn, params: ParamsTypes) {
       });
     }
 
-    if (params.indexed?.includes('?')) {
+    if (params.numbered?.includes('?')) {
       it('recognizes ? numbered placeholders', () => {
         const result = format('SELECT ?1, ?25, ?2;');
         expect(result).toBe(dedent`
@@ -61,7 +61,7 @@ export default function supportsParams(format: FormatFn, params: ParamsTypes) {
       });
     }
 
-    if (params.indexed?.includes('$')) {
+    if (params.numbered?.includes('$')) {
       it('recognizes $n placeholders', () => {
         const result = format('SELECT $1, $2 FROM tbl');
         expect(result).toBe(dedent`
@@ -87,7 +87,7 @@ export default function supportsParams(format: FormatFn, params: ParamsTypes) {
       });
     }
 
-    if (params.indexed?.includes(':')) {
+    if (params.numbered?.includes(':')) {
       it('recognizes :n placeholders', () => {
         const result = format('SELECT :1, :2 FROM tbl');
         expect(result).toBe(dedent`

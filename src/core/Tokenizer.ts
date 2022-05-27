@@ -20,7 +20,7 @@ interface TokenizerOptions {
   blockStart?: string[];
   blockEnd?: string[];
   positionalPlaceholders?: boolean;
-  indexedPlaceholderTypes?: string[];
+  numberedPlaceholderTypes?: string[];
   namedPlaceholderTypes?: string[];
   lineCommentTypes?: string[];
   specialWordChars?: { prefix?: string; any?: string; suffix?: string };
@@ -51,7 +51,7 @@ export default class Tokenizer {
    *  @param {string[]} cfg.blockStart - Opening parentheses to enable, like (, [
    *  @param {string[]} cfg.blockEnd - Closing parentheses to enable, like ), ]
    *  @param {boolean} cfg.positionalPlaceholders - True to enable positional placeholders "?"
-   *  @param {string[]} cfg.indexedPlaceholderTypes - Prefixes for indexed placeholders, like ?
+   *  @param {string[]} cfg.numberedPlaceholderTypes - Prefixes for numbered placeholders, like ":" for :1, :2, :3
    *  @param {string[]} cfg.namedPlaceholderTypes - Prefixes for named placeholders, like @ and :
    *  @param {string[]} cfg.lineCommentTypes - Line comments to enable, like # and --
    *  @param {string[]} cfg.specialWordChars - Special chars that can be found inside of words, like @ and #
@@ -131,7 +131,7 @@ export default class Tokenizer {
       },
       {
         // :1, :2, :3 placeholders
-        regex: regexFactory.createPlaceholderRegex(cfg.indexedPlaceholderTypes ?? [], '[0-9]+'),
+        regex: regexFactory.createPlaceholderRegex(cfg.numberedPlaceholderTypes ?? [], '[0-9]+'),
         parseKey: v => v.slice(1),
       },
       {

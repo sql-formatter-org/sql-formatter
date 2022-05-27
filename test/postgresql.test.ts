@@ -34,7 +34,7 @@ describe('PostgreSqlFormatter', () => {
   supportsOperators(format, PostgreSqlFormatter.operators);
   supportsJoin(format);
   supportsReturning(format);
-  supportsParams(format, { indexed: ['$'], named: [':'] });
+  supportsParams(format, { numbered: ['$'], named: [':'] });
 
   // Postgres-specific string types
   it('supports bit strings', () => {
