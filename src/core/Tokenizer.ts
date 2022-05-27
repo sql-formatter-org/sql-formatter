@@ -33,7 +33,7 @@ type PlaceholderPattern = { regex: RegExp; parseKey: (s: string) => string };
 
 /** Converts SQL language string into a token stream */
 export default class Tokenizer {
-  REGEX_MAP: { [tokenType in TokenType]: RegExp };
+  REGEX_MAP: Record<TokenType, RegExp>;
 
   private placeholderPatterns: PlaceholderPattern[];
 
