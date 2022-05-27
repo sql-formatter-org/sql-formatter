@@ -66,8 +66,8 @@ export default class Tokenizer {
 
     const specialWordCharsAll = Object.values(cfg.specialWordChars ?? {}).join('');
     this.REGEX_MAP = {
-      [TokenType.WORD]: regexFactory.createWordRegex(cfg.specialWordChars),
-      [TokenType.IDENT]: regexFactory.createQuoteRegex(cfg.identifierTypes),
+      [TokenType.IDENT]: regexFactory.createWordRegex(cfg.specialWordChars),
+      [TokenType.QUOTED_IDENT]: regexFactory.createQuoteRegex(cfg.identifierTypes),
       [TokenType.STRING]: regexFactory.createQuoteRegex(cfg.stringTypes),
       [TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(
         cfg.reservedKeywords,
@@ -204,13 +204,13 @@ export default class Tokenizer {
       this.matchToken(TokenType.LINE_COMMENT)(input) ||
       this.matchToken(TokenType.BLOCK_COMMENT)(input) ||
       this.matchToken(TokenType.STRING)(input) ||
-      this.matchToken(TokenType.IDENT)(input) ||
+      this.matchToken(TokenType.QUOTED_IDENT)(input) ||
       this.matchToken(TokenType.BLOCK_START)(input) ||
       this.matchToken(TokenType.BLOCK_END)(input) ||
       this.getPlaceholderToken(input) ||
       this.matchToken(TokenType.NUMBER)(input) ||
       this.getReservedWordToken(input, previousToken) ||
-      this.matchToken(TokenType.WORD)(input) ||
+      this.matchToken(TokenType.IDENT)(input) ||
       this.matchToken(TokenType.OPERATOR)(input)
     );
   }

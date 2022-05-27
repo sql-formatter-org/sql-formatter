@@ -812,7 +812,7 @@ function preprocess(tokens: Token[]) {
     if (token.value === 'ITEMS' && token.type === TokenType.RESERVED_KEYWORD) {
       if (!(prevToken.value === 'COLLECTION' && nextToken.value === 'TERMINATED')) {
         // this is a word and not COLLECTION ITEMS
-        return { type: TokenType.WORD, text: token.text, value: token.text };
+        return { type: TokenType.IDENT, text: token.text, value: token.text };
       }
     }
 

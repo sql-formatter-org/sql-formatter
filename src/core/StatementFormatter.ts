@@ -87,8 +87,8 @@ export default class StatementFormatter {
         return this.formatPlaceholder(token);
       case TokenType.OPERATOR:
         return this.formatOperator(token);
-      case TokenType.WORD:
       case TokenType.IDENT:
+      case TokenType.QUOTED_IDENT:
       case TokenType.STRING:
       case TokenType.NUMBER:
         return this.formatWord(token);
