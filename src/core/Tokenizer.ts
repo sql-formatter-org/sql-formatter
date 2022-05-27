@@ -34,7 +34,7 @@ type PlaceholderPattern = { regex: RegExp; parseKey: (s: string) => string };
 /** Converts SQL language string into a token stream */
 export default class Tokenizer {
   REGEX_MAP: Record<TokenType, RegExp>;
-
+  private quotedIdentRegex: RegExp;
   private placeholderPatterns: PlaceholderPattern[];
 
   private preprocess = (tokens: Token[]) => tokens;
@@ -65,9 +65,10 @@ export default class Tokenizer {
     }
 
     const specialWordCharsAll = Object.values(cfg.specialWordChars ?? {}).join('');
+    this.quotedIdentRegex = regexFactory.createQuoteRegex(cfg.identifierTypes);
+
     this.REGEX_MAP = {
       [TokenType.IDENT]: regexFactory.createWordRegex(cfg.specialWordChars),
-      [TokenType.QUOTED_IDENT]: regexFactory.createQuoteRegex(cfg.identifierTypes),
       [TokenType.STRING]: regexFactory.createQuoteRegex(cfg.stringTypes),
       [TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(
         cfg.reservedKeywords,
@@ -204,7 +205,7 @@ export default class Tokenizer {
       this.matchToken(TokenType.LINE_COMMENT)(input) ||
       this.matchToken(TokenType.BLOCK_COMMENT)(input) ||
       this.matchToken(TokenType.STRING)(input) ||
-      this.matchToken(TokenType.QUOTED_IDENT)(input) ||
+      this.getQuotedIdentToken(input) ||
       this.matchToken(TokenType.BLOCK_START)(input) ||
       this.matchToken(TokenType.BLOCK_END)(input) ||
       this.getPlaceholderToken(input) ||
@@ -236,6 +237,15 @@ export default class Tokenizer {
 
   getEscapedPlaceholderKey({ key, quoteChar }: { key: string; quoteChar: string }): string {
     return key.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar);
+  }
+
+  getQuotedIdentToken(input: string): Token | undefined {
+    return this.getTokenOnFirstMatch({
+      input,
+      regex: this.quotedIdentRegex,
+      type: TokenType.IDENT,
+      transform: id,
+    });
   }
 
   /**
