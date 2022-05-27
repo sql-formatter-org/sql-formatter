@@ -28,7 +28,7 @@ describe('BigQueryFormatter', () => {
   supportsSchema(format);
   supportsJoin(format, { without: ['NATURAL JOIN'] });
   supportsOperators(format, BigQueryFormatter.operators);
-  supportsParams(format, { positional: true });
+  supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
 
   it('supports # line comment', () => {
     const result = format('SELECT alpha # commment\nFROM beta');
