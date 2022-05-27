@@ -205,12 +205,12 @@ export default class Tokenizer {
       this.matchToken(TokenType.LINE_COMMENT)(input) ||
       this.matchToken(TokenType.BLOCK_COMMENT)(input) ||
       this.matchToken(TokenType.STRING)(input) ||
-      this.getQuotedIdentToken(input) ||
+      this.matchQuotedIdentToken(input) ||
       this.matchToken(TokenType.BLOCK_START)(input) ||
       this.matchToken(TokenType.BLOCK_END)(input) ||
-      this.getPlaceholderToken(input) ||
+      this.matchPlaceholderToken(input) ||
       this.matchToken(TokenType.NUMBER)(input) ||
-      this.getReservedWordToken(input, previousToken) ||
+      this.matchReservedWordToken(input, previousToken) ||
       this.matchToken(TokenType.IDENT)(input) ||
       this.matchToken(TokenType.OPERATOR)(input)
     );
@@ -220,7 +220,7 @@ export default class Tokenizer {
    * Attempts to match a placeholder token pattern
    * @return {Token | undefined} - The placeholder token if found, otherwise undefined
    */
-  private getPlaceholderToken(input: string): Token | undefined {
+  private matchPlaceholderToken(input: string): Token | undefined {
     for (const { regex, parseKey } of this.placeholderPatterns) {
       const token = this.getTokenOnFirstMatch({
         input,
@@ -239,7 +239,7 @@ export default class Tokenizer {
     return key.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar);
   }
 
-  private getQuotedIdentToken(input: string): Token | undefined {
+  private matchQuotedIdentToken(input: string): Token | undefined {
     return this.getTokenOnFirstMatch({
       input,
       regex: this.quotedIdentRegex,
@@ -252,7 +252,7 @@ export default class Tokenizer {
    * Attempts to match a Reserved word token pattern, avoiding edge cases of Reserved words within string tokens
    * @return {Token | undefined} - The Reserved word token if found, otherwise undefined
    */
-  private getReservedWordToken(input: string, previousToken?: Token): Token | undefined {
+  private matchReservedWordToken(input: string, previousToken?: Token): Token | undefined {
     // A reserved word cannot be preceded by a '.'
     // this makes it so in "mytable.from", "from" is not considered a reserved word
     if (previousToken?.value === '.') {
