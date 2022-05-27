@@ -30,7 +30,7 @@ describe('N1qlFormatter', () => {
   supportsArray(format);
   supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'] });
   supportsReturning(format);
-  supportsParams(format, { positional: true, named: ['$'] });
+  supportsParams(format, { positional: true, indexed: ['$'], named: ['$'] });
 
   it('formats SELECT query with primary key querying', () => {
     const result = format("SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];");
