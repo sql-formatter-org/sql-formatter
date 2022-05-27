@@ -20,9 +20,9 @@ interface TokenizerOptions {
   blockStart?: string[];
   blockEnd?: string[];
   positionalPlaceholders?: boolean;
-  numberedPlaceholderTypes?: string[];
-  namedPlaceholderTypes?: string[];
-  quotedPlaceholderTypes?: string[];
+  numberedPlaceholderTypes?: ('?' | ':' | '$')[];
+  namedPlaceholderTypes?: (':' | '@' | '$')[];
+  quotedPlaceholderTypes?: (':' | '@' | '$')[];
   lineCommentTypes?: string[];
   specialWordChars?: { prefix?: string; any?: string; suffix?: string };
   operators?: string[];
