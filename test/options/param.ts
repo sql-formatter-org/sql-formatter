@@ -3,7 +3,7 @@ import { FormatFn } from '../../src/sqlFormatter';
 
 interface ParamsTypes {
   positional?: boolean;
-  indexed?: ('?' | '$')[];
+  indexed?: ('?' | '$' | ':')[];
   named?: (':' | '$' | '@' | '@""' | '@[]')[];
 }
 
@@ -75,6 +75,32 @@ export default function supportsParams(format: FormatFn, params: ParamsTypes) {
 
       it('replaces $n placeholders with param values', () => {
         const result = format('SELECT $1, $2 FROM tbl', {
+          params: { 1: '"variable value"', 2: '"blah"' },
+        });
+        expect(result).toBe(dedent`
+          SELECT
+            "variable value",
+            "blah"
+          FROM
+            tbl
+        `);
+      });
+    }
+
+    if (params.indexed?.includes(':')) {
+      it('recognizes :n placeholders', () => {
+        const result = format('SELECT :1, :2 FROM tbl');
+        expect(result).toBe(dedent`
+          SELECT
+            :1,
+            :2
+          FROM
+            tbl
+        `);
+      });
+
+      it('replaces :n placeholders with param values', () => {
+        const result = format('SELECT :1, :2 FROM tbl', {
           params: { 1: '"variable value"', 2: '"blah"' },
         });
         expect(result).toBe(dedent`
