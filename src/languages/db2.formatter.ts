@@ -881,7 +881,7 @@ export default class Db2Formatter extends Formatter {
       identifierTypes: [`""`],
       positionalPlaceholders: true,
       namedPlaceholderTypes: [':'],
-      specialWordChars: { any: '#@' },
+      specialIdentChars: { any: '#@' },
       operators: Db2Formatter.operators,
     });
   }

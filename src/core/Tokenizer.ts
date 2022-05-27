@@ -24,7 +24,7 @@ interface TokenizerOptions {
   namedPlaceholderTypes?: (':' | '@' | '$')[];
   quotedPlaceholderTypes?: (':' | '@' | '$')[];
   lineCommentTypes?: string[];
-  specialWordChars?: { prefix?: string; any?: string; suffix?: string };
+  specialIdentChars?: { prefix?: string; any?: string; suffix?: string };
   operators?: string[];
   preprocess?: (tokens: Token[]) => Token[];
 }
@@ -55,7 +55,7 @@ export default class Tokenizer {
    *  @param {string[]} cfg.numberedPlaceholderTypes - Prefixes for numbered placeholders, like ":" for :1, :2, :3
    *  @param {string[]} cfg.namedPlaceholderTypes - Prefixes for named placeholders, like @ and :
    *  @param {string[]} cfg.lineCommentTypes - Line comments to enable, like # and --
-   *  @param {string[]} cfg.specialWordChars - Special chars that can be found inside of words, like @ and #
+   *  @param {string[]} cfg.specialIdentChars - Special chars that can be found inside identifiers, like @ and #
    *  @param {string[]} cfg.operators - Additional operators to recognize
    *  @param {Function} cfg.preprocess - Optional function to process tokens before emitting
    */
@@ -64,35 +64,35 @@ export default class Tokenizer {
       this.preprocess = cfg.preprocess;
     }
 
-    const specialWordCharsAll = Object.values(cfg.specialWordChars ?? {}).join('');
+    const specialIdentCharsAll = Object.values(cfg.specialIdentChars ?? {}).join('');
     this.quotedIdentRegex = regexFactory.createQuoteRegex(cfg.identifierTypes);
 
     this.REGEX_MAP = {
-      [TokenType.IDENT]: regexFactory.createWordRegex(cfg.specialWordChars),
+      [TokenType.IDENT]: regexFactory.createWordRegex(cfg.specialIdentChars),
       [TokenType.STRING]: regexFactory.createQuoteRegex(cfg.stringTypes),
       [TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(
         cfg.reservedKeywords,
-        specialWordCharsAll
+        specialIdentCharsAll
       ),
       [TokenType.RESERVED_DEPENDENT_CLAUSE]: regexFactory.createReservedWordRegex(
         cfg.reservedDependentClauses ?? [],
-        specialWordCharsAll
+        specialIdentCharsAll
       ),
       [TokenType.RESERVED_LOGICAL_OPERATOR]: regexFactory.createReservedWordRegex(
         cfg.reservedLogicalOperators ?? ['AND', 'OR'],
-        specialWordCharsAll
+        specialIdentCharsAll
       ),
       [TokenType.RESERVED_COMMAND]: regexFactory.createReservedWordRegex(
         cfg.reservedCommands,
-        specialWordCharsAll
+        specialIdentCharsAll
       ),
       [TokenType.RESERVED_BINARY_COMMAND]: regexFactory.createReservedWordRegex(
         cfg.reservedBinaryCommands,
-        specialWordCharsAll
+        specialIdentCharsAll
       ),
       [TokenType.RESERVED_JOIN_CONDITION]: regexFactory.createReservedWordRegex(
         cfg.reservedJoinConditions ?? ['ON', 'USING'],
-        specialWordCharsAll
+        specialIdentCharsAll
       ),
       [TokenType.OPERATOR]: regexFactory.createOperatorRegex('+-/*%&|^><=.,;[]{}`:$@', [
         '<>',
