@@ -117,7 +117,7 @@ export default class Tokenizer {
         // :name placeholders
         regex: regexFactory.createPlaceholderRegex(
           cfg.namedPlaceholderTypes ?? [],
-          '[a-zA-Z0-9._$]+'
+          '[a-zA-Z0-9_$]+'
         ),
         parseKey: v => v.slice(1),
       },
