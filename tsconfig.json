@@ -5,6 +5,10 @@
     "lib": ["es6", "dom"],
     "rootDirs": ["src"],
     "outDir": "lib",
+    "baseUrl": "./",
+    "paths": {
+      "src/*": ["./src/*"]
+    },
     "sourceMap": true,
     "declaration": true,
     "esModuleInterop": true,
