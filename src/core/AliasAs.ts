@@ -1,6 +1,6 @@
-import { AliasMode } from 'src/types';
+import type { AliasMode } from 'src/types';
 
-import { isCommand, isToken, Token, TokenType } from './token';
+import { isCommand, isToken, type Token, TokenType } from './token';
 
 export interface TokenStream {
   isWithinSelect(): boolean;

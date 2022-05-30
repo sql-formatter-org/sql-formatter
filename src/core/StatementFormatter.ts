@@ -1,14 +1,14 @@
-import { FormatOptions } from 'src/types';
+import type { FormatOptions } from 'src/types';
 import { equalizeWhitespace } from 'src/utils';
 
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
-import { isReserved, isCommand, isToken, Token, TokenType, EOF_TOKEN } from './token';
+import { isReserved, isCommand, isToken, type Token, TokenType, EOF_TOKEN } from './token';
 import toTabularFormat from './tabularStyle';
 import AliasAs from './AliasAs';
 import AsTokenFactory from './AsTokenFactory';
-import { Statement } from './Parser';
+import { type Statement } from './Parser';
 import { indentString, isTabularStyle } from './config';
 import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
 

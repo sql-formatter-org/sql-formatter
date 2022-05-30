@@ -1,4 +1,4 @@
-import { CommaPosition } from 'src/types';
+import type { CommaPosition } from 'src/types';
 import { maxLength } from 'src/utils';
 
 import { WHITESPACE_REGEX } from './Tokenizer';

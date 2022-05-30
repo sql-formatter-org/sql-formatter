@@ -1,7 +1,7 @@
 import { equalizeWhitespace, escapeRegExp, id } from 'src/utils';
 
 import * as regexFactory from './regexFactory';
-import { Token, TokenType } from './token'; // convert to partial type import in TS 4.5
+import { type Token, TokenType } from './token';
 
 export const WHITESPACE_REGEX = /^(\s+)/u;
 const NULL_REGEX = /(?!)/; // zero-width negative lookahead, matches nothing

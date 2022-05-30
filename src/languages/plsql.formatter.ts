@@ -1,7 +1,7 @@
 import Formatter from 'src/core/Formatter';
 import Tokenizer from 'src/core/Tokenizer';
-import { EOF_TOKEN, isReserved, isToken, Token, TokenType } from 'src/core/token'; // convert to partial type import in TS 4.5
-import type { StringPatternType } from 'src/core/regexFactory';
+import { EOF_TOKEN, isReserved, isToken, type Token, TokenType } from 'src/core/token';
+import { type StringPatternType } from 'src/core/regexFactory';
 import { dedupe } from 'src/utils';
 
 /**

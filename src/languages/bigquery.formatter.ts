@@ -1,7 +1,7 @@
 import Formatter from 'src/core/Formatter';
 import Tokenizer from 'src/core/Tokenizer';
-import type { StringPatternType } from 'src/core/regexFactory';
-import { EOF_TOKEN, Token } from 'src/core/token';
+import { type StringPatternType } from 'src/core/regexFactory';
+import { EOF_TOKEN, type Token } from 'src/core/token';
 import { dedupe } from 'src/utils';
 
 /**
