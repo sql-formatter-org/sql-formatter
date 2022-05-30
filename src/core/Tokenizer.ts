@@ -1,5 +1,6 @@
+import { equalizeWhitespace, escapeRegExp, id } from 'src/utils';
+
 import * as regexFactory from './regexFactory';
-import { equalizeWhitespace, escapeRegExp, id } from '../utils';
 import { Token, TokenType } from './token'; // convert to partial type import in TS 4.5
 
 export const WHITESPACE_REGEX = /^(\s+)/u;

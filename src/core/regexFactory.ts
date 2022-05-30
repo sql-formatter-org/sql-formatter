@@ -1,4 +1,4 @@
-import { escapeRegExp, isEmpty, sortByLengthDesc } from '../utils';
+import { escapeRegExp, isEmpty, sortByLengthDesc } from 'src/utils';
 
 /**
  * Builds a RegExp containing all operators for a SQL dialect

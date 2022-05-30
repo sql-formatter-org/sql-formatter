@@ -1,8 +1,8 @@
-import Formatter from '../core/Formatter';
-import Tokenizer from '../core/Tokenizer';
-import { EOF_TOKEN, isToken, Token, TokenType } from '../core/token';
-import type { StringPatternType } from '../core/regexFactory';
-import { dedupe } from '../utils';
+import Formatter from 'src/core/Formatter';
+import Tokenizer from 'src/core/Tokenizer';
+import { EOF_TOKEN, isToken, Token, TokenType } from 'src/core/token';
+import type { StringPatternType } from 'src/core/regexFactory';
+import { dedupe } from 'src/utils';
 
 // TODO: split this into object with function categories
 /**
