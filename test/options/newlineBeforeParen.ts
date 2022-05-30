@@ -1,6 +1,7 @@
 import { expect } from '@jest/globals';
 import dedent from 'dedent-js';
-import { FormatFn } from '../../src/sqlFormatter';
+
+import { FormatFn } from 'src/sqlFormatter';
 
 export default function supportsNewlineBeforeParen(format: FormatFn) {
   it('defaults to newline before opening and closing parenthesis', () => {

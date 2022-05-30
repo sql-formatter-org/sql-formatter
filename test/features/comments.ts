@@ -1,5 +1,6 @@
 import dedent from 'dedent-js';
-import { FormatFn } from '../../src/sqlFormatter';
+
+import { FormatFn } from 'src/sqlFormatter';
 import { itIf } from '../utils';
 
 interface CommentsConfig {

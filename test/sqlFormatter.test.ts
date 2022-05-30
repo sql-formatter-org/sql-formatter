@@ -1,4 +1,4 @@
-import { format, SqlLanguage } from '../src/sqlFormatter';
+import { format, SqlLanguage } from 'src/sqlFormatter';
 
 describe('sqlFormatter', () => {
   it('throws error when unsupported language parameter specified', () => {
