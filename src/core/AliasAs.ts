@@ -1,4 +1,5 @@
-import { AliasMode } from '../types';
+import { AliasMode } from 'src/types';
+
 import { isCommand, isToken, Token, TokenType } from './token';
 
 export interface TokenStream {

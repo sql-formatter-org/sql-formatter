@@ -1,4 +1,4 @@
-import { last } from '../utils';
+import { last } from 'src/utils';
 
 const INDENT_TYPE_TOP_LEVEL = 'top-level';
 const INDENT_TYPE_BLOCK_LEVEL = 'block-level';

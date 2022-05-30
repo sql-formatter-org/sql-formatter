@@ -1,5 +1,6 @@
-import { CommaPosition } from '../types';
-import { maxLength } from '../utils';
+import { CommaPosition } from 'src/types';
+import { maxLength } from 'src/utils';
+
 import { WHITESPACE_REGEX } from './Tokenizer';
 
 /**
