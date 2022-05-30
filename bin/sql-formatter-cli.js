@@ -1,0 +1,117 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const { format, supportedDialects } = require('../lib/index');
+const fs = require('fs');
+const tty = require('tty');
+const { version } = require('../package.json');
+const { ArgumentParser } = require('argparse');
+
+class PrettierSQLArgs {
+  constructor() {
+    this.parser = this.getParser();
+    this.args = this.parser.parse_args();
+    this.cfg = this.readConfig();
+
+    this.query = this.getInput();
+    const formattedQuery = format(this.query, this.cfg).trim() + '\n';
+    this.writeOutput(this.args.output, formattedQuery);
+  }
+
+  getParser() {
+    const parser = new ArgumentParser({
+      add_help: true,
+      description: 'SQL Formatter',
+    });
+
+    parser.add_argument('file', {
+      metavar: 'FILE',
+      nargs: '?',
+      help: 'Input SQL file (defaults to stdin)',
+    });
+
+    parser.add_argument('-o', '--output', {
+      help: 'File to write SQL output (defaults to stdout)',
+    });
+
+    parser.add_argument('-l', '--language', {
+      help: 'SQL Formatter dialect (defaults to basic sql)',
+      choices: supportedDialects,
+      default: 'sql',
+    });
+
+    parser.add_argument('-c', '--config', {
+      help: 'Path to config json file (will use default configs if unspecified)',
+    });
+
+    parser.add_argument('--version', {
+      action: 'version',
+      version,
+    });
+
+    return parser;
+  }
+
+  readConfig() {
+    if (
+      tty.isatty(0) &&
+      Object.entries(this.args).every(([k, v]) => k === 'language' || v === undefined)
+    ) {
+      this.parser.print_help();
+      process.exit(0);
+    }
+
+    if (this.args.config)
+      try {
+        const configFile = fs.readFileSync(this.args.config);
+        const configJson = JSON.parse(configFile);
+        return { language: this.args.language, ...configJson };
+      } catch (e) {
+        if (e instanceof SyntaxError) {
+          console.error(`Error: unable to parse JSON at file ${this.args.config}`);
+          process.exit(1);
+        }
+        if (e.code === 'ENOENT') {
+          console.error(`Error: could not open file ${this.args.config}`);
+          process.exit(1);
+        }
+        console.error('An unknown error has occurred, please file a bug report at:');
+        console.log('https://github.com/zeroturnaround/sql-formatter/issues\n');
+        throw e;
+      }
+    return {
+      language: this.args.language,
+    };
+  }
+
+  getInput() {
+    const infile = this.args.file || process.stdin.fd;
+    try {
+      return fs.readFileSync(infile, 'utf-8');
+    } catch (e) {
+      if (e.code === 'EAGAIN') {
+        console.error('Error: no file specified and no data in stdin');
+        process.exit(1);
+      }
+      if (e.code === 'ENOENT') {
+        console.error(`Error: could not open file ${infile}`);
+        process.exit(1);
+      }
+      console.error('An unknown error has occurred, please file a bug report at:');
+      console.log('https://github.com/zeroturnaround/sql-formatter/issues\n');
+      throw e;
+    }
+  }
+
+  writeOutput(file, query) {
+    if (!file) {
+      // No output file, write to console
+      process.stdout.write(query);
+    } else {
+      fs.writeFileSync(file, query);
+    }
+  }
+}
+
+new PrettierSQLArgs();

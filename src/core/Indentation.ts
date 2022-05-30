@@ -12,65 +12,75 @@ const INDENT_TYPE_BLOCK_LEVEL = 'block-level';
  * - TOP_LEVEL : increased by RESERVED_COMMAND words
  */
 export default class Indentation {
-	indent: string;
-	indentTypes: string[];
+  private indentTypes: string[] = [];
 
-	/**
-	 * @param {string} indent Indent value, default is "  " (2 spaces)
-	 */
-	constructor(indent: string = '  ') {
-		this.indent = indent;
-		this.indentTypes = [];
-	}
+  /**
+   * @param {string} indent A string to indent with
+   */
+  constructor(private indent: string) {}
 
-	/**
-	 * Returns current indentation string.
-	 * @return {string} indentation string based on indentTypes
-	 */
-	getIndent(): string {
-		return this.indent.repeat(this.indentTypes.length);
-	}
+  /**
+   * Returns indentation string for single indentation step.
+   */
+  getSingleIndent(): string {
+    return this.indent;
+  }
 
-	/**
-	 * Increases indentation by one top-level indent.
-	 */
-	increaseTopLevel() {
-		this.indentTypes.push(INDENT_TYPE_TOP_LEVEL);
-	}
+  /**
+   * Returns current indentation string.
+   * @return {string} indentation string based on indentTypes
+   */
+  getIndent(): string {
+    return this.indent.repeat(this.indentTypes.length);
+  }
 
-	/**
-	 * Increases indentation by one block-level indent.
-	 */
-	increaseBlockLevel() {
-		this.indentTypes.push(INDENT_TYPE_BLOCK_LEVEL);
-	}
+  /**
+   * Returns current indentation level
+   */
+  getLevel(): number {
+    return this.indentTypes.length;
+  }
 
-	/**
-	 * Decreases indentation by one top-level indent.
-	 * Does nothing when the previous indent is not top-level.
-	 */
-	decreaseTopLevel() {
-		if (this.indentTypes.length > 0 && last(this.indentTypes) === INDENT_TYPE_TOP_LEVEL) {
-			this.indentTypes.pop();
-		}
-	}
+  /**
+   * Increases indentation by one top-level indent.
+   */
+  increaseTopLevel() {
+    this.indentTypes.push(INDENT_TYPE_TOP_LEVEL);
+  }
 
-	/**
-	 * Decreases indentation by one block-level indent.
-	 * If there are top-level indents within the block-level indent,
-	 * throws away these as well.
-	 */
-	decreaseBlockLevel() {
-		while (this.indentTypes.length > 0) {
-			const type = this.indentTypes.pop();
-			if (type !== INDENT_TYPE_TOP_LEVEL) {
-				break;
-			}
-		}
-	}
+  /**
+   * Increases indentation by one block-level indent.
+   */
+  increaseBlockLevel() {
+    this.indentTypes.push(INDENT_TYPE_BLOCK_LEVEL);
+  }
 
-	/** Clears all indentation */
-	resetIndentation() {
-		this.indentTypes = [];
-	}
+  /**
+   * Decreases indentation by one top-level indent.
+   * Does nothing when the previous indent is not top-level.
+   */
+  decreaseTopLevel() {
+    if (this.indentTypes.length > 0 && last(this.indentTypes) === INDENT_TYPE_TOP_LEVEL) {
+      this.indentTypes.pop();
+    }
+  }
+
+  /**
+   * Decreases indentation by one block-level indent.
+   * If there are top-level indents within the block-level indent,
+   * throws away these as well.
+   */
+  decreaseBlockLevel() {
+    while (this.indentTypes.length > 0) {
+      const type = this.indentTypes.pop();
+      if (type !== INDENT_TYPE_TOP_LEVEL) {
+        break;
+      }
+    }
+  }
+
+  /** Clears all indentation */
+  resetIndentation() {
+    this.indentTypes = [];
+  }
 }

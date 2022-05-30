@@ -1,263 +1,263 @@
 {
-	"name": "prettier-sql-vscode",
-	"displayName": "Prettier SQL VSCode",
-	"description": "VSCode Extension to format SQL files",
-	"version": "0.3.0",
-	"publisher": "inferrinizzard",
-	"author": {
-		"name": "inferrinizzard"
-	},
-	"license": "MIT",
-	"icon": "prettier-sql-clean.png",
-	"engines": {
-		"vscode": "^1.63.0"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/inferrinizzard/prettier-sql"
-	},
-	"bugs": {
-		"url": "https://github.com/inferrinizzard/prettier-sql/issues"
-	},
-	"categories": [
-		"Formatters",
-		"Other"
-	],
-	"keywords": [
-		"bigquery",
-		"db2",
-		"hive",
-		"formatter",
-		"mariadb",
-		"mssql",
-		"mysql",
-		"node",
-		"n1ql",
-		"plsql",
-		"pl/sql",
-		"postgres",
-		"postgresql",
-		"prettier",
-		"redshift",
-		"spark",
-		"sparksql",
-		"sql",
-		"sql server",
-		"tsql"
-	],
-	"activationEvents": [
-		"onStartupFinished",
-		"onCommand:prettier-sql-vscode.format-selection"
-	],
-	"main": "./out/extension.js",
-	"scripts": {
-		"clean": "rimraf out .vscode-test",
-		"compile": "tsc --project ./tsconfig.json",
-		"compile:types": "tsc --emitDeclarationOnly --project ./tsconfig.json",
-		"watch": "tsc --watch --project ./",
-		"build": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
-		"build:prod": "yarn run build --minify && yarn run compile:types",
-		"build:dev": "yarn run build --sourcemap && yarn run compile:types",
-		"vscode:prepublish": "yarn run build:prod",
-		"lint": "eslint src --ext ts",
-		"pretest": "yarn run compile && yarn run lint",
-		"test": "node ./out/test/runTest.js",
-		"vsce": "vsce"
-	},
-	"dependencies": {
-		"prettier-sql": "^5.1.0"
-	},
-	"devDependencies": {
-		"@types/glob": "^7.1.4",
-		"@types/mocha": "^9.0.0",
-		"@types/node": "14.x",
-		"@types/vscode": "^1.63.0",
-		"@typescript-eslint/eslint-plugin": "^5.1.0",
-		"@typescript-eslint/parser": "^5.1.0",
-		"@vscode/test-electron": "^1.6.2",
-		"esbuild": "^0.14.8",
-		"eslint": "^8.1.0",
-		"glob": "^7.1.7",
-		"mocha": "^9.1.3",
-		"typescript": "^4.4.4",
-		"vsce": "^2.7.0"
-	},
-	"contributes": {
-		"languages": [
-			{
-				"id": "sql",
-				"aliases": [
-					"SQL",
-					"sql"
-				],
-				"extensions": [
-					".sql",
-					".q"
-				]
-			}
-		],
-		"commands": [
-			{
-				"title": "Format Selection (Prettier-SQL)",
-				"shortTitle": "Format SQL",
-				"command": "prettier-sql-vscode.format-selection"
-			}
-		],
-		"configuration": {
-			"title": "Prettier SQL",
-			"properties": {
-				"Prettier-SQL.SQLFlavourOverride": {
-					"type": "string",
-					"enum": [
-						"sql",
-						"bigquery",
-						"db2",
-						"hive",
-						"mariadb",
-						"mysql",
-						"n1ql",
-						"plsql",
-						"postgresql",
-						"redshift",
-						"spark",
-						"tsql"
-					],
-					"default": "sql",
-					"markdownDescription": "Formats `sql` files in another SQL Flavour when no VSCode Language exists, such as the Microsoft PostgreSQL & MSSQL Extensions"
-				},
-				"Prettier-SQL.ignoreTabSettings": {
-					"type": "boolean",
-					"default": true,
-					"markdownDescription": "Ignore user and workplace settings for `tabSize` and `insertSpaces` (uses `#Prettier-SQL.tabSizeOverride#` and `#Prettier-SQL.insertSpacesOverride#`)?"
-				},
-				"Prettier-SQL.tabSizeOverride": {
-					"type": "number",
-					"default": 4,
-					"minimum": 1,
-					"markdownDescription": "Override for `tabSize` if `#Prettier-SQL.ignoreTabSettings#` is active"
-				},
-				"Prettier-SQL.insertSpacesOverride": {
-					"type": "boolean",
-					"default": true,
-					"markdownDescription": "Override for `insertSpaces` if `#Prettier-SQL.ignoreTabSettings#` is active"
-				},
-				"Prettier-SQL.uppercaseKeywords": {
-					"type": "boolean",
-					"default": true,
-					"markdownDescription": "Whether to print keywords in ALL CAPS or lowercase"
-				},
-				"Prettier-SQL.keywordPosition": {
-					"type": "string",
-					"enum": [
-						"standard",
-						"tenSpaceLeft",
-						"tenSpaceRight"
-					],
-					"enumDescriptions": [
-						"Standard SQL format, with cascading indents",
-						"Maintain space column between keyword and args, aligning keywords to left",
-						"Maintain space column between keyword and args, aligning keywords to right"
-					],
-					"default": "standard",
-					"markdownDescription": "Where to place keywords"
-				},
-				"Prettier-SQL.breakBeforeBooleanOperator": {
-					"type": "boolean",
-					"default": false,
-					"markdownDescription": "Whether to break before or after AND and OR"
-				},
-				"Prettier-SQL.aliasAS": {
-					"type": "string",
-					"enum": [
-						"always",
-						"select",
-						"never"
-					],
-					"enumDescriptions": [
-						"Use AS in SELECT clauses and for tables",
-						"Use AS only in SELECT clauses",
-						"Do not use AS for aliases"
-					],
-					"default": "select",
-					"markdownDescription": "Where to use AS in column or table aliases"
-				},
-				"Prettier-SQL.tabulateAlias": {
-					"type": "boolean",
-					"default": false,
-					"markdownDescription": "Whether to right-align aliases to the longest line in the SELECT clause"
-				},
-				"Prettier-SQL.commaPosition": {
-					"type": "string",
-					"enum": [
-						"before",
-						"after",
-						"tabular"
-					],
-					"enumDescriptions": [
-						"Comma preceding each column",
-						"Comma following each column",
-						"Comma right-aligned to longest column line"
-					],
-					"default": "after",
-					"markdownDescription": "Where to place commas for SELECT and GROUP BY clauses"
-				},
-				"Prettier-SQL.keywordNewline.newlineMode": {
-					"type": "string",
-					"enum": [
-						"always",
-						"lineWidth",
-						"itemCount",
-						"never"
-					],
-					"markdownEnumDescriptions": [
-						"Always break keywords items onto a newline",
-						"Break onto newline when line width > `#Prettier-SQL.lineWidth#` ",
-						"Break onto newline when item count > `#Prettier-SQL.itemCount#` ",
-						"Place all selected columns on the same line as keyword"
-					],
-					"minimum": 1,
-					"default": "always",
-					"markdownDescription": "Rule for when to break keyword clauses onto a newline"
-				},
-				"Prettier-SQL.keywordNewline.itemCount": {
-					"type": "number",
-					"minimum": 1,
-					"default": 3,
-					"markdownDescription": "Breaks keywords clauses onto newline after n items when `#Prettier-SQL.keywordNewline#` is set to itemCount"
-				},
-				"Prettier-SQL.parenOptions.openParenNewline": {
-					"type": "boolean",
-					"default": false,
-					"markdownDescription": "Place (, Open Paren, CASE on newline when creating a new block"
-				},
-				"Prettier-SQL.parenOptions.closeParenNewline": {
-					"type": "boolean",
-					"default": true,
-					"markdownDescription": "Place ), Close Paren, END on newline when closing a block"
-				},
-				"Prettier-SQL.lineWidth": {
-					"type": "integer",
-					"default": 50,
-					"minimum": 0,
-					"markdownDescription": "Number of characters allowed in each line before breaking"
-				},
-				"Prettier-SQL.linesBetweenQueries": {
-					"type": "integer",
-					"default": 1,
-					"minimum": 0,
-					"markdownDescription": "How many newlines to place between each query / statement"
-				},
-				"Prettier-SQL.denseOperators": {
-					"type": "boolean",
-					"default": false,
-					"markdownDescription": "Strip whitespace around operators such as + or >="
-				},
-				"Prettier-SQL.semicolonNewline": {
-					"type": "boolean",
-					"default": false,
-					"markdownDescription": "Whether to place semicolon on its own line or on previous line"
-				}
-			}
-		}
-	}
+  "name": "prettier-sql-vscode",
+  "displayName": "Prettier SQL VSCode",
+  "description": "VSCode Extension to format SQL files",
+  "version": "0.3.0",
+  "publisher": "inferrinizzard",
+  "author": {
+    "name": "inferrinizzard"
+  },
+  "license": "MIT",
+  "icon": "prettier-sql-clean.png",
+  "engines": {
+    "vscode": "^1.63.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/inferrinizzard/prettier-sql"
+  },
+  "bugs": {
+    "url": "https://github.com/inferrinizzard/prettier-sql/issues"
+  },
+  "categories": [
+    "Formatters",
+    "Other"
+  ],
+  "keywords": [
+    "bigquery",
+    "db2",
+    "hive",
+    "formatter",
+    "mariadb",
+    "mssql",
+    "mysql",
+    "node",
+    "n1ql",
+    "plsql",
+    "pl/sql",
+    "postgres",
+    "postgresql",
+    "prettier",
+    "redshift",
+    "spark",
+    "sparksql",
+    "sql",
+    "sql server",
+    "tsql"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:prettier-sql-vscode.format-selection"
+  ],
+  "main": "./out/extension.js",
+  "scripts": {
+    "clean": "rimraf out .vscode-test",
+    "compile": "tsc --project ./tsconfig.json",
+    "compile:types": "tsc --emitDeclarationOnly --project ./tsconfig.json",
+    "watch": "tsc --watch --project ./",
+    "build": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
+    "build:prod": "yarn run build --minify && yarn run compile:types",
+    "build:dev": "yarn run build --sourcemap && yarn run compile:types",
+    "vscode:prepublish": "yarn run build:prod",
+    "lint": "eslint src --ext ts",
+    "pretest": "yarn run compile && yarn run lint",
+    "test": "node ./out/test/runTest.js",
+    "vsce": "vsce"
+  },
+  "dependencies": {
+    "prettier-sql": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.4",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "14.x",
+    "@types/vscode": "^1.63.0",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
+    "@vscode/test-electron": "^1.6.2",
+    "esbuild": "^0.14.8",
+    "eslint": "^8.1.0",
+    "glob": "^7.1.7",
+    "mocha": "^9.1.3",
+    "typescript": "^4.4.4",
+    "vsce": "^2.7.0"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "sql",
+        "aliases": [
+          "SQL",
+          "sql"
+        ],
+        "extensions": [
+          ".sql",
+          ".q"
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "title": "Format Selection (Prettier-SQL)",
+        "shortTitle": "Format SQL",
+        "command": "prettier-sql-vscode.format-selection"
+      }
+    ],
+    "configuration": {
+      "title": "Prettier SQL",
+      "properties": {
+        "Prettier-SQL.SQLFlavourOverride": {
+          "type": "string",
+          "enum": [
+            "sql",
+            "bigquery",
+            "db2",
+            "hive",
+            "mariadb",
+            "mysql",
+            "n1ql",
+            "plsql",
+            "postgresql",
+            "redshift",
+            "spark",
+            "tsql"
+          ],
+          "default": "sql",
+          "markdownDescription": "Formats `sql` files in another SQL Flavour when no VSCode Language exists, such as the Microsoft PostgreSQL & MSSQL Extensions"
+        },
+        "Prettier-SQL.ignoreTabSettings": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Ignore user and workplace settings for `tabSize` and `insertSpaces` (uses `#Prettier-SQL.tabSizeOverride#` and `#Prettier-SQL.insertSpacesOverride#`)?"
+        },
+        "Prettier-SQL.tabSizeOverride": {
+          "type": "number",
+          "default": 4,
+          "minimum": 1,
+          "markdownDescription": "Override for `tabSize` if `#Prettier-SQL.ignoreTabSettings#` is active"
+        },
+        "Prettier-SQL.insertSpacesOverride": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Override for `insertSpaces` if `#Prettier-SQL.ignoreTabSettings#` is active"
+        },
+        "Prettier-SQL.uppercaseKeywords": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to print keywords in ALL CAPS or lowercase"
+        },
+        "Prettier-SQL.keywordPosition": {
+          "type": "string",
+          "enum": [
+            "standard",
+            "tenSpaceLeft",
+            "tenSpaceRight"
+          ],
+          "enumDescriptions": [
+            "Standard SQL format, with cascading indents",
+            "Maintain space column between keyword and args, aligning keywords to left",
+            "Maintain space column between keyword and args, aligning keywords to right"
+          ],
+          "default": "standard",
+          "markdownDescription": "Where to place keywords"
+        },
+        "Prettier-SQL.breakBeforeBooleanOperator": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Whether to break before or after AND and OR"
+        },
+        "Prettier-SQL.aliasAS": {
+          "type": "string",
+          "enum": [
+            "always",
+            "select",
+            "never"
+          ],
+          "enumDescriptions": [
+            "Use AS in SELECT clauses and for tables",
+            "Use AS only in SELECT clauses",
+            "Do not use AS for aliases"
+          ],
+          "default": "select",
+          "markdownDescription": "Where to use AS in column or table aliases"
+        },
+        "Prettier-SQL.tabulateAlias": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Whether to right-align aliases to the longest line in the SELECT clause"
+        },
+        "Prettier-SQL.commaPosition": {
+          "type": "string",
+          "enum": [
+            "before",
+            "after",
+            "tabular"
+          ],
+          "enumDescriptions": [
+            "Comma preceding each column",
+            "Comma following each column",
+            "Comma right-aligned to longest column line"
+          ],
+          "default": "after",
+          "markdownDescription": "Where to place commas for SELECT and GROUP BY clauses"
+        },
+        "Prettier-SQL.keywordNewline.newlineMode": {
+          "type": "string",
+          "enum": [
+            "always",
+            "lineWidth",
+            "itemCount",
+            "never"
+          ],
+          "markdownEnumDescriptions": [
+            "Always break keywords items onto a newline",
+            "Break onto newline when line width > `#Prettier-SQL.lineWidth#` ",
+            "Break onto newline when item count > `#Prettier-SQL.itemCount#` ",
+            "Place all selected columns on the same line as keyword"
+          ],
+          "minimum": 1,
+          "default": "always",
+          "markdownDescription": "Rule for when to break keyword clauses onto a newline"
+        },
+        "Prettier-SQL.keywordNewline.itemCount": {
+          "type": "number",
+          "minimum": 1,
+          "default": 3,
+          "markdownDescription": "Breaks keywords clauses onto newline after n items when `#Prettier-SQL.keywordNewline#` is set to itemCount"
+        },
+        "Prettier-SQL.parenOptions.openParenNewline": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Place (, Open Paren, CASE on newline when creating a new block"
+        },
+        "Prettier-SQL.parenOptions.closeParenNewline": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Place ), Close Paren, END on newline when closing a block"
+        },
+        "Prettier-SQL.lineWidth": {
+          "type": "integer",
+          "default": 50,
+          "minimum": 0,
+          "markdownDescription": "Number of characters allowed in each line before breaking"
+        },
+        "Prettier-SQL.linesBetweenQueries": {
+          "type": "integer",
+          "default": 1,
+          "minimum": 0,
+          "markdownDescription": "How many newlines to place between each query / statement"
+        },
+        "Prettier-SQL.denseOperators": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Strip whitespace around operators such as + or >="
+        },
+        "Prettier-SQL.semicolonNewline": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Whether to place semicolon on its own line or on previous line"
+        }
+      }
+    }
+  }
 }

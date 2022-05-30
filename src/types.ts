@@ -1,58 +1,32 @@
-/**
- * Enum for the different keyword formats
- * @enum {string}
- * @property {string} standard - Standard keyword format
- * @property {string} tenSpaceLeft - Central aligned keyword format, keywords left-aligned
- * @property {string} tenSpaceRight - Central aligned keyword format, keywords right-aligned
- */
-export enum KeywordMode {
-	standard = 'standard',
-	tenSpaceLeft = 'tenSpaceLeft',
-	tenSpaceRight = 'tenSpaceRight',
-}
+import { ParamItems } from './core/Params';
 
-/**
- * Enum for the different newline modes
- * @enum {string}
- * @property {string} always - Always use newlines
- * @property {string} never - Never use newlines
- * @property {string} lineWidth - Use newlines when line width is greater than the specified number
- */
-export enum NewlineMode {
-	always = 'always',
-	never = 'never',
-	lineWidth = 'lineWidth',
-}
+export type IndentStyle = 'standard' | 'tabularLeft' | 'tabularRight';
 
-/**
- * Enum for when to place AS for column aliases
- * @enum {string}
- * @property {string} always - Always use AS
- * @property {string} never - Never use AS
- * @property {string} select - Only use AS for SELECT clauses
- */
-export enum AliasMode {
-	always = 'always',
-	never = 'never',
-	select = 'select',
-}
+export type KeywordCase = 'preserve' | 'upper' | 'lower';
 
-/**
- * Enum for when to place commas in listed clauses
- * @enum {string}
- * @property {string} after - Place after each item
- * @property {string} before - Place before each item
- * @property {string} tabular - Place commas at end of line, right-justified
- */
-export enum CommaPosition {
-	before = 'before',
-	after = 'after',
-	tabular = 'tabular',
-}
+export type MultilineListsMode = 'always' | 'avoid' | 'expressionWidth';
 
-export interface ParenOptions {
-	openParenNewline?: boolean;
-	closeParenNewline?: boolean;
-	// reservedFunctionParens: boolean;
-	// functionParenSpace: boolean;
+export type AliasMode = 'preserve' | 'always' | 'never' | 'select';
+
+export type CommaPosition = 'before' | 'after' | 'tabular';
+
+export type LogicalOperatorNewline = 'before' | 'after';
+
+export interface FormatOptions {
+  tabWidth: number;
+  useTabs: boolean;
+  keywordCase: KeywordCase;
+  indentStyle: IndentStyle;
+  multilineLists: MultilineListsMode | number;
+  logicalOperatorNewline: LogicalOperatorNewline;
+  aliasAs: AliasMode;
+  tabulateAlias: boolean;
+  commaPosition: CommaPosition;
+  newlineBeforeOpenParen: boolean;
+  newlineBeforeCloseParen: boolean;
+  expressionWidth: number;
+  linesBetweenQueries: number;
+  denseOperators: boolean;
+  newlineBeforeSemicolon: boolean;
+  params?: ParamItems | string[];
 }

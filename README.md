@@ -1,68 +1,42 @@
-<a href='https://github.com/inferrinizzard/prettier-sql'><img src="static/prettier-sql-clean.svg" width="128"/></a>
+<a href='https://github.com/zeroturnaround/sql-formatter'><img src="static/prettier-sql-clean.svg" width="128"/></a>
 
-# Prettier SQL [![NPM version](https://img.shields.io/npm/v/prettier-sql.svg)](https://npmjs.com/package/prettier-sql) ![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/inferrinizzard/prettier-sql/coveralls/master?label=Build&logo=Github) ![Coveralls](https://img.shields.io/coveralls/github/inferrinizzard/prettier-sql?branch=master&label=Coverage&logo=coveralls&style=plastic) [![VSCode](https://img.shields.io/visual-studio-marketplace/v/inferrinizzard.prettier-sql-vscode?label=vscode)](https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode)
+# SQL Formatter [![NPM version](https://img.shields.io/npm/v/sql-formatter.svg)](https://npmjs.com/package/sql-formatter) ![Build status](https://img.shields.io/github/workflow/status/zeroturnaround/sql-formatter/coveralls/master?label=Build&logo=Github) ![Coverage status](https://img.shields.io/coveralls/github/zeroturnaround/sql-formatter?branch=master&label=Coverage&logo=coveralls&style=plastic) [![VSCode](https://img.shields.io/visual-studio-marketplace/v/inferrinizzard.prettier-sql-vscode?label=vscode)](https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode)
 
-## **Prettier SQL** is a JavaScript library for pretty-printing SQL queries.
+**SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 
 It started as a port of a [PHP Library][], but has since considerably diverged.
 
-Prettier SQL supports the following dialects:
-
-- **sql** - [Standard SQL][]
-- **bigquery** - [GCP BigQuery][]
-- **db2** - [IBM DB2][]
-- **hive** - [Apache Hive][]
-- **mariadb** - [MariaDB][]
-- **mysql** - [MySQL][]
-- **n1ql** - [Couchbase N1QL][]
-- **plsql** - [Oracle PL/SQL][]
-- **postgresql** - [PostgreSQL][]
-- **redshift** - [Amazon Redshift][]
-- **spark** - [Spark][]
-- **tsql** - [SQL Server Transact-SQL][tsql]
+It supports various SQL dialects:
+GCP BigQuery, IBM DB2, Apache Hive, MariaDB, MySQL, Couchbase N1QL, Oracle PL/SQL, PostgreSQL, Amazon Redshift, Spark, SQL Server Transact-SQL.
+See [language option docs](docs/language.md) for more details.
 
 It does not support:
 
 - Stored procedures.
 - Changing of the delimiter type to something else than `;`.
 
-→ [Try the demo.](https://inferrinizzard.github.io/prettier-sql)
-
-# Table of contents
-
-- [Install](#install)
-- [Documentation](#documentation)
-- [Usage](#usage)
-  - [Usage as library](#usage-as-library)
-  - [Usage from command line](#usage-from-command-line)
-  - [Usage without NPM](#usage-without-npm)
-  - [Usage with VSCode](#usage-with-vscode)
-- [Contributing](#contributing)
+→ [Try the demo.](https://zeroturnaround.github.io/sql-formatter)
 
 ## Install
 
 Get the latest version from NPM:
 
 ```sh
-npm install prettier-sql
+npm install sql-formatter
 ```
 
 Also available with yarn:
 
 ```sh
-yarn add prettier-sql
+yarn add sql-formatter
 ```
-
-## Documentation
-
-You can read more about how the library works in [DOC.md](DOC.md)
 
 ## Usage
 
 ### Usage as library
 
 ```js
-import { format } from 'prettier-sql';
+import { format } from 'sql-formatter';
 
 console.log(format('SELECT * FROM tbl'));
 ```
@@ -80,28 +54,24 @@ You can also pass in configuration options:
 
 ```js
 format('SELECT * FROM tbl', {
-	language: 'spark', // Defaults to "sql" (see the above list of supported dialects)
-	indent: '  ', // Defaults to two spaces
-	uppercase: false, // Defaults to true
-	linesBetweenQueries: 2, // Defaults to 1
+  language: 'spark',
+  tabWidth: 2,
+  keywordCase: 'upper',
+  linesBetweenQueries: 2,
 });
 ```
 
 ### Placeholders replacement
 
-```js
-// Named placeholders
-format("SELECT * FROM tbl WHERE foo = @foo", {
-  params: {foo: "'bar'"}
-}));
+In addition to formatting, this library can also perform placeholder replacement in prepared SQL statements:
 
-// Indexed placeholders
-format("SELECT * FROM tbl WHERE foo = ?", {
-  params: ["'bar'"]
-}));
+```js
+format('SELECT * FROM tbl WHERE foo = ?', {
+  params: ["'bar'"],
+});
 ```
 
-Both result in:
+Results in:
 
 ```sql
 SELECT
@@ -112,20 +82,22 @@ WHERE
   foo = 'bar'
 ```
 
+For more details see [docs of params option.](docs/params.md)
+
 ### Usage from command line
 
-The CLI tool will be installed under `prettier-sql`
-and may be invoked via `npx prettier-sql`:
+The CLI tool will be installed under `sql-formatter`
+and may be invoked via `npx sql-formatter`:
 
 ```sh
-prettier-sql -h
+sql-formatter -h
 ```
 
 ```
-usage: sqlfmt.js [-h] [-o OUTPUT] \
-[-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}] [-c CONFIG] [--version] [FILE]
+usage: sql-formatter [-h] [-o OUTPUT] \
+[-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,tsql}] [-c CONFIG] [--version] [FILE]
 
-Prettier SQL
+SQL Formatter
 
 positional arguments:
   FILE            Input SQL file (defaults to stdin)
@@ -134,7 +106,7 @@ optional arguments:
   -h, --help      show this help message and exit
   -o, --output    OUTPUT
                     File to write SQL output (defaults to stdout)
-  -l, --language  {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,tsql}
+  -l, --language  {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,tsql}
                     SQL dialect (defaults to standard sql)
   -c, --config    CONFIG
                     Path to config json file (will use default configs if unspecified)
@@ -145,70 +117,69 @@ By default, the tool takes queries from stdin and processes them to stdout but
 one can also name an input file name or use the `--output` option.
 
 ```sh
-echo 'select * from tbl where id = 3' | prettier-sql
+echo 'select * from tbl where id = 3' | sql-formatter
 ```
 
 ```sql
-SELECT
+select
   *
-FROM
+from
   tbl
-WHERE
+where
   id = 3
 ```
 
-The tool also accepts a JSON config file with the `--config` option that takes this form: \
-All fields are optional and all fields that are not specified will be filled with their default values
+The tool also accepts a JSON config file with the `--config` option that takes this form:
 
 ```ts
 {
-	"indent": string,
-	"uppercase": boolean,
-	"keywordPosition": "standard" | "tenSpaceLeft" | "tenSpaceRight",
-	"newline": "always" | "lineWidth" | "never" | number,
-	"breakBeforeBooleanOperator": boolean,
-	"aliasAs": "always" | "select" | "never",
-	"tabulateAlias": boolean,
-	"commaPosition": "before" | "after" | "tabular",
-	"parenOptions": {
-		"openParenNewline": boolean,
-		"closeParenNewline": boolean
-	},
-	"lineWidth": number,
-	"linesBetweenQueries": number,
-	"denseOperators": boolean,
-	"semicolonNewline": boolean,
+  "language": "spark",
+  "tabWidth": 2,
+  "keywordCase": "upper",
+  "linesBetweenQueries": 2,
 }
 ```
+
+All fields are optional and all fields that are not specified will be filled with their default values.
+
+### Configuration options
+
+- [**`language`**](docs/language.md) the SQL dialect to use.
+- [**`tabWidth`**](docs/tabWidth.md) amount of indentation to use.
+- [**`useTabs`**](docs/useTabs.md) to use tabs for indentation.
+- [**`keywordCase`**](docs/keywordCase.md) uppercases or lowercases keywords.
+- [**`indentStyle`**](docs/indentStyle.md) defines overall indentation style.
+- [**`multilineLists`**](docs/multilineLists.md) determines when to break lists of items to multiple lines.
+- [**`logicalOperatorNewline`**](docs/logicalOperatorNewline.md) newline before or after boolean operator (AND, OR, XOR).
+- [**`aliasAs`**](docs/aliasAs.md) enforces or forbids use of AS keyword for aliases.
+- [**`tabulateAlias`**](docs/tabulateAlias.md) aligns column aliases vertically.
+- [**`commaPosition`**](docs/commaPosition.md) where to place the comma in column lists.
+- [**`newlineBeforeOpenParen`**](docs/newlineBeforeOpenParen.md) placement of opening parenthesis.
+- [**`newlineBeforeCloseParen`**](docs/newlineBeforeCloseParen.md) placement of closing parenthesis.
+- [**`expressionWidth`**](docs/expressionWidth.md) maximum number of characters in parenthesized expressions to be kept on single line.
+- [**`linesBetweenQueries`**](docs/linesBetweenQueries.md) how many newlines to insert between queries.
+- [**`denseOperators`**](docs/denseOperators.md) packs operators densely without spaces.
+- [**`newlineBeforeSemicolon`**](docs/newlineBeforeSemicolon.md) places semicolon on separate line.
+- [**`params`**](docs/params.md) collection of values for placeholder replacement.
 
 ### Usage without NPM
 
 If you don't use a module bundler, clone the repository, run `npm install` and grab a file from `/dist` directory to use inside a `<script>` tag.
-This makes Prettier SQL available as a global variable `window.prettierSql`.
+This makes SQL Formatter available as a global variable `window.sqlFormatter`.
 
-### Usage with VSCode
+### Usage in editors
 
-Prettier SQL is also available as a VSCode extension here: \
-https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode
+- [VSCode extension](https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode)
+- [Vim extension](https://github.com/fannheyward/coc-sql/)
 
 ## Contributing
 
 Please see [CONTRIBUTING.md](CONTRIBUTING.md)
+
+You can read more about how the library works in [DOC.md](DOC.md)
 
 ## License
 
 [MIT](LICENSE)
 
 [php library]: https://github.com/jdorn/sql-formatter
-[standard sql]: https://en.wikipedia.org/wiki/SQL:2011
-[gcp bigquery]: https://cloud.google.com/bigquery
-[ibm db2]: https://www.ibm.com/analytics/us/en/technology/db2/
-[apache hive]: https://hive.apache.org/
-[mariadb]: https://mariadb.com/
-[mysql]: https://www.mysql.com/
-[couchbase n1ql]: http://www.couchbase.com/n1ql
-[oracle pl/sql]: http://www.oracle.com/technetwork/database/features/plsql/index.html
-[postgresql]: https://www.postgresql.org/
-[amazon redshift]: https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
-[spark]: https://spark.apache.org/docs/latest/api/sql/index.html
-[tsql]: https://docs.microsoft.com/en-us/sql/sql-server/

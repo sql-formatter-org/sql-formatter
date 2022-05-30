@@ -1,184 +1,209 @@
 <!DOCTYPE html>
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
+  <head>
+    <meta charset="utf-8" />
 
-		<title>Prettier SQL Formatter</title>
-		<meta property="og:title" content="Prettier SQL" />
+    <title>SQL Formatter</title>
+    <meta property="og:title" content="SQL Formatter" />
 
-		<meta name="description" content="A whitespace formatter for different query languages" />
-		<meta
-			property="og:description"
-			content="A whitespace formatter for different query languages"
-		/>
-		<meta property="og:url" content="https://inferrinizzard.github.io/prettier-sql" />
+    <meta name="description" content="A whitespace formatter for different query languages" />
+    <meta
+      property="og:description"
+      content="A whitespace formatter for different query languages"
+    />
+    <meta property="og:url" content="https://zeroturnaround.github.io/sql-formatter" />
 
-		<link rel="shortcut icon" href="./prettier-sql-clean.svg" />
+    <link rel="shortcut icon" href="./prettier-sql-clean.svg" />
 
-		<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet" />
 
-		<link href="index.css" rel="stylesheet" />
-	</head>
+    <link href="index.css" rel="stylesheet" />
+  </head>
 
-	<body>
-		<header>
-			<img src="./prettier-sql-clean.svg" height="32" width="32" alt="logo" />
-			<h1 class="title">Prettier SQL Formatter</h1>
+  <body>
+    <header>
+      <img src="./prettier-sql-clean.svg" height="32" width="32" alt="logo" />
+      <h1 class="title">SQL Formatter</h1>
 
-			<div class="buttons">
-				<a href="https://www.npmjs.com/package/prettier-sql">
-					<img src="https://img.shields.io/npm/v/prettier-sql.svg" height="18" />
-				</a>
-				<iframe
-					src="https://ghbtns.com/github-btn.html?user=inferrinizzard&repo=prettier-sql&type=star&count=true"
-					frameborder="0"
-					scrolling="0"
-					width="120px"
-					height="20px"
-					style="position: relative; top: 1px"
-				></iframe>
-			</div>
-		</header>
-		<main>
-			<aside class="options-menu">
-				<h3 style="margin: 0.5rem 0">Options</h3>
-				<div class="select-wrapper">
-					<article class="config">
-						<label for="font-size">Font Size:</label>
-						<input type="number" id="font-size" name="font-size" min="10" max="30" value="20" />
-					</article>
-					<article class="config">
-						<label for="language">Language:</label>
-						<select id="language">
-							<option value="sql">SQL</option>
-							<!-- dialects -->
-							<option value="redshift">AWS Redshift</option>
-							<option value="bigquery">BigQuery</option>
-							<option value="db2">DB2</option>
-							<option value="hive">Hive</option>
-							<option value="mariadb">MariaDB</option>
-							<option value="mysql">MySQL</option>
-							<option value="n1ql">N1QL</option>
-							<option value="plsql">PL/SQL</option>
-							<option value="postgresql">PostgreSQL</option>
-							<option value="spark">Spark</option>
-							<option value="tsql">Transact-SQL</option>
-						</select>
-					</article>
-					<article class="config">
-						<label for="uppercase">Uppercase</label>
-						<input type="checkbox" id="uppercase" name="uppercase" checked />
-					</article>
-					<article class="config">
-						<label for="keywordPosition">Keyword Position:</label>
-						<select id="keywordPosition">
-							<option value="standard">Standard</option>
-							<option value="tenSpaceLeft">Ten-Space, Left</option>
-							<option value="tenSpaceRight">Ten-Space, Right</option>
-						</select>
-					</article>
-					<article class="config">
-						<label for="newline">Keyword Newline:</label>
-						<select id="newline">
-							<option value="always">Always</option>
-							<option value="lineWidth">Line Width</option>
-							<option value="never">Never</option>
-						</select>
-					</article>
-					<article class="config">
-						<label for="newline.itemCount">Newline Item Count:</label>
-						<input
-							type="number"
-							id="newline.itemCount"
-							name="newline.itemCount"
-							min="0"
-							max="100"
-							value="0"
-						/>
-					</article>
-					<article class="config">
-						<label for="breakBeforeBooleanOperator">Break before Boolean Operator</label>
-						<input
-							type="checkbox"
-							id="breakBeforeBooleanOperator"
-							name="breakBeforeBooleanOperator"
-							checked
-						/>
-					</article>
-					<article class="config">
-						<label for="aliasAs">Use AS in alias</label>
-						<select id="aliasAs">
-							<option value="select">SELECT Only</option>
-							<option value="always">Always</option>
-							<option value="never">Never</option>
-						</select>
-					</article>
-					<article class="config">
-						<label for="tabulateAlias">Align Aliases</label>
-						<input type="checkbox" id="tabulateAlias" name="tabulateAlias" />
-					</article>
-					<article class="config">
-						<label for="commaPosition">CommaPosition</label>
-						<select id="commaPosition">
-							<option value="after">After</option>
-							<option value="before">Before</option>
-							<option value="tabular">Tabular</option>
-						</select>
-					</article>
-					<article class="config">
-						<label for="openParenNewline">Open Paren Newline</label>
-						<input type="checkbox" id="openParenNewline" name="openParenNewline" />
-					</article>
-					<article class="config">
-						<label for="closeParenNewline">Close Paren Newline</label>
-						<input type="checkbox" id="closeParenNewline" name="closeParenNewline" checked />
-					</article>
-					<article class="config">
-						<label for="lineWidth">Line Width:</label>
-						<input type="number" id="lineWidth" name="lineWidth" min="0" max="200" value="50" />
-					</article>
-					<article class="config">
-						<label for="lineBetweenQueries">Lines between queries:</label>
-						<input
-							type="number"
-							id="lineBetweenQueries"
-							name="lineBetweenQueries"
-							min="0"
-							max="5"
-							value="1"
-						/>
-					</article>
-					<article class="config">
-						<label for="denseOperators">Dense Operators</label>
-						<input type="checkbox" id="denseOperators" name="denseOperators" />
-					</article>
-					<article class="config">
-						<label for="semicolonNewline">Semicolon on Newline</label>
-						<input type="checkbox" id="semicolonNewline" name="semicolonNewline" />
-					</article>
-				</div>
-			</aside>
-			<div class="staging">
-				<section class="input">
-					<textarea id="input" autofocus wrap="off">
+      <div class="buttons">
+        <a href="https://www.npmjs.com/package/sql-formatter">
+          <img src="https://img.shields.io/npm/v/sql-formatter.svg" height="18" />
+        </a>
+        <iframe
+          src="https://ghbtns.com/github-btn.html?user=zeroturnaround&repo=sql-formatter&type=star&count=true"
+          frameborder="0"
+          scrolling="0"
+          width="120px"
+          height="20px"
+          style="position: relative; top: 1px"
+        ></iframe>
+      </div>
+    </header>
+    <main>
+      <aside class="options-menu">
+        <h3 style="margin: 0.5rem 0">Options</h3>
+        <div class="select-wrapper">
+          <article class="config">
+            <label for="tabWidth">Tab width:</label>
+            <input type="number" id="tabWidth" name="tabWidth" min="1" max="80" value="2" />
+          </article>
+          <article class="config">
+            <label for="useTabs">Use tabs</label>
+            <input type="checkbox" id="useTabs" name="useTabs" />
+          </article>
+          <article class="config">
+            <label for="language">Language:</label>
+            <select id="language">
+              <option value="sql">SQL</option>
+              <!-- dialects -->
+              <option value="redshift">AWS Redshift</option>
+              <option value="bigquery">BigQuery</option>
+              <option value="db2">DB2</option>
+              <option value="hive">Hive</option>
+              <option value="mariadb">MariaDB</option>
+              <option value="mysql">MySQL</option>
+              <option value="n1ql">N1QL</option>
+              <option value="plsql">PL/SQL</option>
+              <option value="postgresql">PostgreSQL</option>
+              <option value="spark">Spark</option>
+              <option value="sqlite">SQLite</option>
+              <option value="tsql">Transact-SQL</option>
+            </select>
+          </article>
+          <article class="config">
+            <label for="keywordCase">Case:</label>
+            <select id="keywordCase">
+              <option value="preserve">Preserve</option>
+              <option value="upper">Uppercase</option>
+              <option value="lower">Lowercase</option>
+            </select>
+          </article>
+          <article class="config">
+            <label for="indentStyle">Indentation style:</label>
+            <select id="indentStyle">
+              <option value="standard">Standard</option>
+              <option value="tabularLeft">Tabular, Left</option>
+              <option value="tabularRight">Tabular, Right</option>
+            </select>
+          </article>
+          <article class="config">
+            <label for="multilineLists">Multiline lists:</label>
+            <select id="multilineLists">
+              <option value="always">Always</option>
+              <option value="avoid">Avoid</option>
+              <option value="expressionWidth">Expression width</option>
+              <option value="itemCount">Item count</option>
+            </select>
+            <input
+              type="number"
+              id="multilineLists-itemCount"
+              name="multilineLists-itemCount"
+              min="1"
+              max="100"
+              value="1"
+              style="display: none"
+            />
+          </article>
+          <article class="config">
+            <label for="logicalOperatorNewline">AND/OR newlines:</label>
+            <select id="logicalOperatorNewline">
+              <option value="before">before</option>
+              <option value="after">after</option>
+            </select>
+          </article>
+          <article class="config">
+            <label for="aliasAs">AS in alias:</label>
+            <select id="aliasAs">
+              <option value="preserve">Preserve</option>
+              <option value="select">SELECT Only</option>
+              <option value="always">Always</option>
+              <option value="never">Never</option>
+            </select>
+          </article>
+          <article class="config">
+            <label for="tabulateAlias">Align aliases</label>
+            <input type="checkbox" id="tabulateAlias" name="tabulateAlias" />
+          </article>
+          <article class="config">
+            <label for="commaPosition">Comma position:</label>
+            <select id="commaPosition">
+              <option value="after">After</option>
+              <option value="before">Before</option>
+              <option value="tabular">Tabular</option>
+            </select>
+          </article>
+          <article class="config">
+            <label for="newlineBeforeOpenParen">\n before (</label>
+            <input
+              type="checkbox"
+              id="newlineBeforeOpenParen"
+              name="newlineBeforeOpenParen"
+              checked
+            />
+          </article>
+          <article class="config">
+            <label for="newlineBeforeCloseParen">\n before )</label>
+            <input
+              type="checkbox"
+              id="newlineBeforeCloseParen"
+              name="newlineBeforeCloseParen"
+              checked
+            />
+          </article>
+          <article class="config">
+            <label for="expressionWidth">Expression width:</label>
+            <input
+              type="number"
+              id="expressionWidth"
+              name="expressionWidth"
+              min="0"
+              max="200"
+              value="50"
+            />
+          </article>
+          <article class="config">
+            <label for="lineBetweenQueries">Lines between queries:</label>
+            <input
+              type="number"
+              id="lineBetweenQueries"
+              name="lineBetweenQueries"
+              min="0"
+              max="5"
+              value="1"
+            />
+          </article>
+          <article class="config">
+            <label for="denseOperators">Dense operators</label>
+            <input type="checkbox" id="denseOperators" name="denseOperators" />
+          </article>
+          <article class="config">
+            <label for="newlineBeforeSemicolon">Semicolon on separate line</label>
+            <input type="checkbox" id="newlineBeforeSemicolon" name="newlineBeforeSemicolon" />
+          </article>
+        </div>
+      </aside>
+      <div class="staging">
+        <section class="input">
+          <textarea id="input" autofocus wrap="off">
 select supplier_name,city from
 (select * from suppliers join addresses on suppliers.address_id=addresses.id)
 as suppliers
 where supplier_id>500
 order by supplier_name asc,city desc;</textarea
-					>
-				</section>
-				<section class="output">
-					<textarea id="output" readonly wrap="off"></textarea>
-				</section>
-			</div>
-		</main>
+          >
+        </section>
+        <section class="output">
+          <textarea id="output" readonly wrap="off"></textarea>
+          <div id="error" class="error"></div>
+        </section>
+      </div>
+    </main>
 
-		<script
-			type="text/javascript"
-			src="https://unpkg.com/prettier-sql@latest/dist/prettier-sql.min.js"
-		></script>
-		<script type="text/javascript" src="index.js"></script>
-	</body>
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/sql-formatter@latest/dist/sql-formatter.min.js"
+    ></script>
+    <script type="text/javascript" src="index.js"></script>
+  </body>
 </html>
