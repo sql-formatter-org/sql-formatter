@@ -12,7 +12,7 @@ import SqliteFormatter from 'src/languages/sqlite.formatter';
 import SqlFormatter from 'src/languages/sql.formatter';
 import TSqlFormatter from 'src/languages/tsql.formatter';
 
-import { FormatOptions } from './types';
+import type { FormatOptions } from './types';
 import { isNumber } from './utils';
 
 export const formatters = {

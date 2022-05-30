@@ -1,4 +1,4 @@
-import { isToken, Token, TokenType } from './token';
+import { isToken, type Token, TokenType } from './token';
 
 /**
  * Bookkeeper for inline blocks.

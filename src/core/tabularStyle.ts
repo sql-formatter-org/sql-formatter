@@ -1,4 +1,4 @@
-import { IndentStyle } from 'src/types';
+import type { IndentStyle } from 'src/types';
 
 /**
  * When tabular style enabled,

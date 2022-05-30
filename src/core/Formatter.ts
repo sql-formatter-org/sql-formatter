@@ -1,12 +1,12 @@
 import Params from './Params';
 import Tokenizer from './Tokenizer';
-import { FormatOptions } from '../types';
+import type { FormatOptions } from '../types';
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
 import AsTokenFactory from './AsTokenFactory';
-import Parser, { Statement } from './Parser';
+import Parser, { type Statement } from './Parser';
 import StatementFormatter from './StatementFormatter';
-import { Token } from './token';
+import { type Token } from './token';
 import { indentString } from './config';
 
 /** Main formatter class that produces a final output string from list of tokens */

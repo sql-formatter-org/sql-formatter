@@ -1,5 +1,5 @@
 import Formatter from 'src/core/Formatter';
-import { StringPatternType } from 'src/core/regexFactory';
+import { type StringPatternType } from 'src/core/regexFactory';
 import Tokenizer from 'src/core/Tokenizer';
 
 // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#reserved-word
