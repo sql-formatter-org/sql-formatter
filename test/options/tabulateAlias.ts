@@ -1,5 +1,6 @@
 import dedent from 'dedent-js';
-import { FormatFn } from '../../src/sqlFormatter';
+
+import { FormatFn } from 'src/sqlFormatter';
 
 export default function supportsTabulateAlias(format: FormatFn) {
   it('tabulates aliases which use AS keyword', () => {

@@ -1,5 +1,6 @@
-import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
-import HiveFormatter from '../src/languages/hive.formatter';
+import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
+
+import HiveFormatter from 'src/languages/hive.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
@@ -10,8 +11,8 @@ import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsArray from './features/array';
-import supportsParams from './options/param';
 import supportsComments from './features/comments';
+import supportsParams from './options/param';
 
 describe('HiveFormatter', () => {
   const language = 'hive';
