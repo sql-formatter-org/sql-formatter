@@ -1,103 +1,146 @@
 {
-	"name": "prettier-sql",
-	"version": "5.1.0",
-	"description": "Format whitespace in a SQL query to make it more readable",
-	"license": "MIT",
-	"main": "lib/index.js",
-	"module": "dist/prettier-sql.min.js",
-	"types": "lib/index.d.ts",
-	"bin": {
-		"prettier-sql": "./bin/prettier-sql-cli.js"
-	},
-	"keywords": [
-		"sql",
-		"formatter",
-		"format",
-		"n1ql",
-		"redshift",
-		"spark",
-		"whitespace",
-		"mysql",
-		"mariadb",
-		"postgresql",
-		"pl/sql",
-		"transact-sql",
-		"db2"
-	],
-	"contributors": [
-		"Sean Song <mail@seansong.dev>"
-	],
-	"files": [
-		"bin",
-		"dist",
-		"lib"
-	],
-	"scripts": {
-		"clean": "rimraf lib dist coverage",
-		"lint": "eslint .",
-		"pretty": "prettier --write .",
-		"fix": "npm run pretty && eslint --fix .",
-		"pretty:check": "prettier --check .",
-		"test": "jest",
-		"test:watch": "npm run test -- --watch",
-		"check": "npm run pretty:check && npm run lint && npm run test",
-		"prepare": "npm run clean && npm run fix && npm run check && npm run build",
-		"build:commonjs": "babel src --out-dir lib --extensions .ts --source-maps && tsc --module commonjs --emitDeclarationOnly --isolatedModules",
-		"build:umd": "webpack --config webpack.dev.js",
-		"build:umd:min": "webpack --config webpack.prod.js",
-		"build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min"
-	},
-	"pre-commit": [
-		"fix"
-	],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/inferrinizzard/prettier-sql.git"
-	},
-	"bugs": {
-		"url": "https://github.com/inferrinizzard/prettier-sql/issues"
-	},
-	"dependencies": {
-		"@types/moo": "^0.5.5",
-		"argparse": "^2.0.1",
-		"moo": "^0.5.1"
-	},
-	"devDependencies": {
-		"@babel/cli": "^7.10.4",
-		"@babel/core": "^7.10.4",
-		"@babel/plugin-proposal-class-properties": "^7.10.4",
-		"@babel/preset-env": "^7.10.4",
-		"@babel/preset-typescript": "^7.15.0",
-		"@types/babel__core": "^7.1.15",
-		"@typescript-eslint/eslint-plugin": "^4.31.2",
-		"@typescript-eslint/parser": "^4.32.0",
-		"babel-eslint": "^10.1.0",
-		"babel-jest": "^26.1.0",
-		"babel-loader": "^8.1.0",
-		"babel-plugin-add-module-exports": "^1.0.2",
-		"babel-plugin-inline-import": "^3.0.0",
-		"dedent-js": "^1.0.1",
-		"eslint": "^7.4.0",
-		"eslint-config-airbnb-base": "^14.2.0",
-		"eslint-config-airbnb-typescript": "^14.0.0",
-		"eslint-config-prettier": "^6.11.0",
-		"eslint-plugin-import": "^2.22.0",
-		"eslint-plugin-prettier": "^3.1.4",
-		"jest": "^26.1.0",
-		"pre-commit": "^1.2.2",
-		"prettier": "^2.0.5",
-		"release-it": "^14.11.7",
-		"rimraf": "^3.0.2",
-		"ts-loader": "^9.2.6",
-		"typescript": "^4.3.5",
-		"webpack": "^5.64.1",
-		"webpack-cli": "^4.9.1",
-		"webpack-merge": "^5.8.0"
-	},
-	"jest": {
-		"roots": [
-			"test"
-		],
-		"collectCoverage": true
-	}
+  "name": "sql-formatter",
+  "version": "6.1.2",
+  "description": "Format whitespace in a SQL query to make it more readable",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/src/index.d.ts",
+  "bin": {
+    "sql-formatter": "./bin/sql-formatter-cli.js"
+  },
+  "keywords": [
+    "sql",
+    "formatter",
+    "format",
+    "n1ql",
+    "redshift",
+    "spark",
+    "whitespace",
+    "mysql",
+    "mariadb",
+    "postgresql",
+    "pl/sql",
+    "transact-sql",
+    "db2",
+    "sqlite"
+  ],
+  "contributors": [
+    "Adrien Pyke <adpyke@gmail.com>",
+    "Alexandr Kozhevnikov <aedkozhevnikov@sberbank.ru>",
+    "Andrew",
+    "Benjamin Bellamy",
+    "bingou",
+    "Damon Davison <ddavison@avalere.com>",
+    "Davut Can Abacigil <can@teamsql.io>",
+    "Erik Hirmo <erik.hirmo@roguewave.com>",
+    "George Leslie-Waksman <waksman@gmail.com>",
+    "htaketani <h.taketani@gmail.com>",
+    "Ian Campbell <icampbell@immuta.com>",
+    "ivan baktsheev",
+    "Jacobo Bouzas Quiroga <jacobo.bouzas@factorial.co>",
+    "João Pimentel Ferreira",
+    "Justin Dane Vallar <jdvallar@gmail.com>",
+    "Martin Nowak <code@dawg.eu>",
+    "Matheus Salmi <mathsalmi@gmail.com>",
+    "Matheus Teixeira <matheus.mtxr@gmail.com>",
+    "Nicolas Dermine <nicolas.dermine@gmail.com>",
+    "Offir Baron <ofir@panoply.io>",
+    "Olexandr Sydorchuk <olexandr.syd@gmail.com>",
+    "Rafael Pinto <raprp@posteo.de>",
+    "Rahel Rjadnev-Meristo <rahelini@gmail.com>",
+    "Rene Saarsoo <nene@triin.net>",
+    "Rodrigo Stuchi",
+    "Romain Rigaux <hello@getromain.com>",
+    "Sasha Aliashkevich <olsender@gmail.com>",
+    "Sean Song <mail@seansong.dev>",
+    "Sergei Egorov <sergei.egorov@zeroturnaround.com>",
+    "Steven Yung <stevenyung@fastmail.com>",
+    "Toliver <teejae@gmail.com>",
+    "Tyler Jones <tyler.jones@txwormhole.com>",
+    "Uku Pattak <ukupat@gmail.com>",
+    "Xin Hu <hoosin.git@gmail.com>"
+  ],
+  "files": [
+    "dist",
+    "bin",
+    "lib"
+  ],
+  "scripts": {
+    "clean": "rimraf lib dist coverage",
+    "ts:check": "tsc --noEmit",
+    "lint": "eslint .",
+    "pretty": "prettier --write .",
+    "fix": "yarn pretty && eslint --fix .",
+    "pretty:check": "prettier --check .",
+    "test": "jest",
+    "test:watch": "yarn test -- --watch",
+    "check": "yarn ts:check && yarn pretty:check && yarn lint && yarn test",
+    "prepare": "yarn clean && yarn fix && yarn check && yarn build",
+    "build:commonjs": "babel src --out-dir lib --extensions .ts --source-maps && tsc --module commonjs --emitDeclarationOnly --isolatedModules",
+    "build:umd": "webpack --config webpack.dev.js",
+    "build:umd:min": "webpack --config webpack.prod.js",
+    "build": "yarn build:commonjs && yarn build:umd && yarn build:umd:min",
+    "release": "release-it"
+  },
+  "pre-push": [
+    "ts:check",
+    "lint"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zeroturnaround/sql-formatter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zeroturnaround/sql-formatter/issues"
+  },
+  "dependencies": {
+    "argparse": "^2.0.1",
+    "moo": "^0.5.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.4",
+    "@babel/core": "^7.10.4",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-typescript": "^7.15.0",
+    "@jest/globals": "^28.0.2",
+    "@types/babel__core": "^7.1.15",
+    "@types/jest": "^27.5.0",
+    "@types/moo": "^0.5.5",
+    "@typescript-eslint/eslint-plugin": "^5.21.0",
+    "@typescript-eslint/parser": "^5.21.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^28.0.2",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-add-module-exports": "^1.0.2",
+    "babel-plugin-inline-import": "^3.0.0",
+    "dedent-js": "^1.0.1",
+    "eslint": "^8.14.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^28.0.2",
+    "pre-push": "^0.1.2",
+    "prettier": "^2.0.5",
+    "release-it": "^14.11.7",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^28.0.0",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.3.5",
+    "webpack": "^5.64.1",
+    "webpack-cli": "^4.9.1",
+    "webpack-merge": "^5.8.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "roots": [
+      "test"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ]
+  }
 }

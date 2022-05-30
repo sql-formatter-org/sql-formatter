@@ -1,53 +1,57 @@
 {
-	"parser": "@typescript-eslint/parser",
-	"parserOptions": { "project": "./tsconfig.json", "ecmaVersion": 6, "sourceType": "module" },
-	"extends": ["airbnb-base", "airbnb-typescript/base", "plugin:import/typescript", "prettier"],
-	"plugins": ["@typescript-eslint", "prettier"],
-	"globals": {
-		"document": true,
-		"prettierSql": true
-	},
-	"rules": {
-		"class-methods-use-this": "off",
-		"consistent-return": "off",
-		"curly": ["error", "all"],
-		"eqeqeq": "warn",
-		"func-names": "error",
-		"import/no-extraneous-dependencies": [
-			"error",
-			{
-				"devDependencies": ["test/**", "**/*.test.js", "**/*.test.ts", "vscode/src/test/**"],
-				"packageDir": ["./"]
-			}
-		],
-		"no-continue": "off",
-		"no-param-reassign": "off",
-		"no-plusplus": "off",
-		"no-else-return": "off",
-		"no-use-before-define": "warn",
-		"no-useless-concat": "off",
-		"prefer-template": "off",
-		"prettier/prettier": ["error"],
-		"@typescript-eslint/comma-dangle": "off",
-		"@typescript-eslint/indent": "off",
-		"@typescript-eslint/lines-between-class-members": "off",
-		"@typescript-eslint/naming-convention": "warn",
-		"@typescript-eslint/no-unused-vars": "warn",
-		"@typescript-eslint/quotes": [
-			"warn",
-			"single",
-			{ "avoidEscape": true, "allowTemplateLiterals": true }
-		],
-		"@typescript-eslint/semi": "warn"
-	},
-	"settings": {
-		"import/resolver": {
-			"node": {
-				"extensions": [".js", ".ts"]
-			}
-		}
-	},
-	"env": {
-		"jest": true
-	}
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": { "project": "./tsconfig.json", "ecmaVersion": 6, "sourceType": "module" },
+  "extends": ["airbnb-base", "airbnb-typescript/base", "plugin:import/typescript", "prettier"],
+  "plugins": ["@typescript-eslint", "prettier"],
+  "globals": {
+    "document": true,
+    "sqlFormatter": true
+  },
+  "rules": {
+    "class-methods-use-this": "off",
+    "consistent-return": "off",
+    "curly": ["error", "all"],
+    "eqeqeq": "error",
+    "func-names": "error",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": ["test/**", "**/*.test.js", "**/*.test.ts", "vscode/src/test/**"],
+        "packageDir": ["./"]
+      }
+    ],
+    "no-continue": "off",
+    "no-param-reassign": "off",
+    "no-plusplus": "off",
+    "no-else-return": "off",
+    "no-use-before-define": "off",
+    "no-useless-concat": "off",
+    "no-restricted-syntax": "off",
+    "no-constant-condition": "off",
+    "prefer-template": "off",
+    "default-case": "off",
+    "prettier/prettier": ["error"],
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/comma-dangle": "off",
+    "@typescript-eslint/indent": "off",
+    "@typescript-eslint/lines-between-class-members": "off",
+    "@typescript-eslint/naming-convention": "error",
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/quotes": [
+      "error",
+      "single",
+      { "avoidEscape": true, "allowTemplateLiterals": true }
+    ],
+    "@typescript-eslint/semi": "error"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ts"]
+      }
+    }
+  },
+  "env": {
+    "jest": true
+  }
 }

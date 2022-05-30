@@ -1,30 +1,32 @@
-export enum KeywordMode {
-	standard = 'standard',
-	tenSpaceLeft = 'tenSpaceLeft',
-	tenSpaceRight = 'tenSpaceRight',
-}
+import { ParamItems } from './core/Params';
 
-export enum NewlineMode {
-	always = 'always',
-	never = 'never',
-	lineWidth = 'lineWidth',
-}
+export type IndentStyle = 'standard' | 'tabularLeft' | 'tabularRight';
 
-export enum AliasMode {
-	always = 'always',
-	never = 'never',
-	select = 'select',
-}
+export type KeywordCase = 'preserve' | 'upper' | 'lower';
 
-export enum CommaPosition {
-	before = 'before',
-	after = 'after',
-	tabular = 'tabular',
-}
+export type MultilineListsMode = 'always' | 'avoid' | 'expressionWidth';
 
-export interface ParenOptions {
-	openParenNewline?: boolean;
-	closeParenNewline?: boolean;
-	// reservedFunctionParens: boolean;
-	// functionParenSpace: boolean;
+export type AliasMode = 'preserve' | 'always' | 'never' | 'select';
+
+export type CommaPosition = 'before' | 'after' | 'tabular';
+
+export type LogicalOperatorNewline = 'before' | 'after';
+
+export interface FormatOptions {
+  tabWidth: number;
+  useTabs: boolean;
+  keywordCase: KeywordCase;
+  indentStyle: IndentStyle;
+  multilineLists: MultilineListsMode | number;
+  logicalOperatorNewline: LogicalOperatorNewline;
+  aliasAs: AliasMode;
+  tabulateAlias: boolean;
+  commaPosition: CommaPosition;
+  newlineBeforeOpenParen: boolean;
+  newlineBeforeCloseParen: boolean;
+  expressionWidth: number;
+  linesBetweenQueries: number;
+  denseOperators: boolean;
+  newlineBeforeSemicolon: boolean;
+  params?: ParamItems | string[];
 }
