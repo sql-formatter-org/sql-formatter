@@ -4775,6 +4775,15 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
+pre-commit@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/pre-commit/-/pre-commit-1.2.2.tgz#dbcee0ee9de7235e57f79c56d7ce94641a69eec6"
+  integrity sha1-287g7p3nI15X95xW186UZBpp7sY=
+  dependencies:
+    cross-spawn "^5.0.1"
+    spawn-sync "^1.0.15"
+    which "1.2.x"
+
 pre-push@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/pre-push/-/pre-push-0.1.2.tgz#185bbde6e8dfe2ab6dff937b674f0cbfc5a98295"

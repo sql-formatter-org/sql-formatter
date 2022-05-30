@@ -82,10 +82,11 @@
     "build": "yarn build:commonjs && yarn build:umd && yarn build:umd:min",
     "release": "release-it"
   },
-  "pre-push": [
+  "pre-commit": [
     "ts:check",
     "lint"
   ],
+  "pre-push": "build",
   "repository": {
     "type": "git",
     "url": "https://github.com/zeroturnaround/sql-formatter.git"
@@ -119,6 +120,7 @@
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^28.0.2",
+    "pre-commit": "^1.2.2",
     "pre-push": "^0.1.2",
     "prettier": "^2.0.5",
     "release-it": "^14.11.7",
