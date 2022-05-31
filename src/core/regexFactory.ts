@@ -48,8 +48,6 @@ export interface IdentChars {
   any?: string;
   // concatenated string of chars that only appear at the beginning of a valid identifier
   prefix?: string;
-  // concatenated string of chars that only appear at the end of a valid identifier
-  suffix?: string;
 }
 
 /**
@@ -58,7 +56,6 @@ export interface IdentChars {
  */
 export const createIdentRegex = (specialChars: IdentChars = {}): RegExp => {
   const prefix = specialChars.prefix ? `[${escapeRegExp(specialChars.prefix)}]*` : '';
-  const suffix = specialChars.suffix ? `[${escapeRegExp(specialChars.suffix)}]*` : '';
   const unicodeWordChar =
     '\\p{Alphabetic}\\p{Mark}\\p{Decimal_Number}\\p{Connector_Punctuation}\\p{Join_Control}';
   const specialWordChars = escapeRegExp(specialChars.any ?? '');
@@ -67,7 +64,7 @@ export const createIdentRegex = (specialChars: IdentChars = {}): RegExp => {
   const mapAccessor = `\\[['"][${unicodeWordChar}]+['"]\\]`;
 
   return new RegExp(
-    `^((${prefix}([${unicodeWordChar}${specialWordChars}]+)${suffix})(${arrayAccessor}|${mapAccessor})?)`,
+    `^((${prefix}([${unicodeWordChar}${specialWordChars}]+))(${arrayAccessor}|${mapAccessor})?)`,
     'u'
   );
 };
