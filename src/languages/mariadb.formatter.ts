@@ -1168,7 +1168,6 @@ export default class MariaDbFormatter extends Formatter {
       identifierTypes: ['``'],
       positionalPlaceholders: true,
       lineCommentTypes: ['--', '#'],
-      specialIdentChars: { prefix: '@' },
       operators: MariaDbFormatter.operators,
       preprocess,
     });
