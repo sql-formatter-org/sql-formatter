@@ -79,16 +79,14 @@
     "test:watch": "yarn test -- --watch",
     "check": "yarn ts:check && yarn pretty:check && yarn lint && yarn test",
     "prepare": "yarn clean && yarn fix && yarn check && yarn build",
+    "pre-commit": "npm-run-all --parallel ts:changes lint:changes",
     "build:commonjs": "babel src --out-dir lib --extensions .ts --source-maps && tsc --module commonjs --emitDeclarationOnly --isolatedModules",
     "build:umd": "webpack --config webpack.dev.js",
     "build:umd:min": "webpack --config webpack.prod.js",
     "build": "yarn build:commonjs && yarn build:umd && yarn build:umd:min",
     "release": "release-it"
   },
-  "pre-commit": [
-    "ts:changes",
-    "lint:changes"
-  ],
+  "pre-commit": "pre-commit",
   "pre-push": "build",
   "repository": {
     "type": "git",
