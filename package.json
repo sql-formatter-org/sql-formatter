@@ -67,11 +67,14 @@
   ],
   "scripts": {
     "clean": "rimraf lib dist coverage",
+    "git:changes": "git diff --name-only --diff-filter d | xargs",
     "ts:check": "tsc --noEmit",
-    "lint": "eslint .",
+    "ts:changes": "tsc --noEmit --incremental",
+    "lint": "eslint --cache .",
+    "lint:changes": "sh -c eslint --cache $(git:changes)",
     "pretty": "prettier --write .",
-    "fix": "yarn pretty && eslint --fix .",
     "pretty:check": "prettier --check .",
+    "fix": "yarn pretty && eslint --fix .",
     "test": "jest",
     "test:watch": "yarn test -- --watch",
     "check": "yarn ts:check && yarn pretty:check && yarn lint && yarn test",
@@ -83,8 +86,8 @@
     "release": "release-it"
   },
   "pre-commit": [
-    "ts:check",
-    "lint"
+    "ts:changes",
+    "lint:changes"
   ],
   "pre-push": "build",
   "repository": {
