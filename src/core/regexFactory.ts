@@ -53,8 +53,8 @@ export const createReservedWordRegex = (
 export const createIdentRegex = (
   specialChars: { any?: string; prefix?: string; suffix?: string } = {}
 ): RegExp => {
-  const prefix = `[${escapeRegExp(specialChars.prefix ?? '')}]*`;
-  const suffix = `[${escapeRegExp(specialChars.suffix ?? '')}]*`;
+  const prefix = specialChars.prefix ? `[${escapeRegExp(specialChars.prefix)}]*` : '';
+  const suffix = specialChars.suffix ? `[${escapeRegExp(specialChars.suffix)}]*` : '';
   const unicodeWordChar =
     '\\p{Alphabetic}\\p{Mark}\\p{Decimal_Number}\\p{Connector_Punctuation}\\p{Join_Control}';
   const specialWordChars = `${escapeRegExp(specialChars.any ?? '')}`;
