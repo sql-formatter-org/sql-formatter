@@ -330,7 +330,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     expect(result).toBe("((foo = 'bar'))");
   });
 
-  it('formats unicode correctly', () => {
+  it('supports unicode letters in identifiers', () => {
     const result = format('SELECT 结合使用, тест FROM töörõõm;');
     expect(result).toBe(dedent`
       SELECT
@@ -338,6 +338,17 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
         тест
       FROM
         töörõõm;
+    `);
+  });
+
+  // Using Myanmar and Tibetan digits 1, 2, 3
+  it('supports unicode numbers in identifiers', () => {
+    const result = format('SELECT my၁၂၃ FROM tbl༡༢༣;');
+    expect(result).toBe(dedent`
+      SELECT
+        my၁၂၃
+      FROM
+        tbl༡༢༣;
     `);
   });
 
