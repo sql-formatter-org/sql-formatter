@@ -57,7 +57,7 @@ export const createIdentRegex = (
   const suffix = specialChars.suffix ? `[${escapeRegExp(specialChars.suffix)}]*` : '';
   const unicodeWordChar =
     '\\p{Alphabetic}\\p{Mark}\\p{Decimal_Number}\\p{Connector_Punctuation}\\p{Join_Control}';
-  const specialWordChars = `${escapeRegExp(specialChars.any ?? '')}`;
+  const specialWordChars = escapeRegExp(specialChars.any ?? '');
 
   const arrayAccessor = '\\[\\d\\]';
   const mapAccessor = `\\[['"][${unicodeWordChar}]+['"]\\]`;
