@@ -59,4 +59,16 @@ describe('TSqlFormatter', () => {
         CROSS JOIN t2 on t.id = t2.id_t
     `);
   });
+
+  it('recognizes @, $, # as part of identifiers', () => {
+    const result = format('SELECT from@bar, where#to, join$me FROM tbl;');
+    expect(result).toBe(dedent`
+      SELECT
+        from@bar,
+        where#to,
+        join$me
+      FROM
+        tbl;
+    `);
+  });
 });
