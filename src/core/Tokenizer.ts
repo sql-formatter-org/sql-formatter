@@ -9,23 +9,45 @@ const toCanonicalKeyword = (text: string) => equalizeWhitespace(text.toUpperCase
 
 /** Struct that defines how a SQL language can be broken into tokens */
 interface TokenizerOptions {
-  reservedKeywords: string[];
+  // Main clauses that start new block, like: SELECT, FROM, WHERE, ORDER BY
   reservedCommands: string[];
+  // Logical operator keywords, defaults to: [AND, OR]
   reservedLogicalOperators?: string[];
+  // Keywords in CASE expressions that begin new line, like: WHEN, ELSE
   reservedDependentClauses: string[];
+  // Keywords that create newline but no indentaion of their body.
+  // These contain set operations like UNION and various joins like LEFT OUTER JOIN
   reservedBinaryCommands: string[];
+  // keywords used for JOIN conditions, defaults to: [ON, USING]
   reservedJoinConditions?: string[];
+  // all other reserved words (not included to any of the above lists)
+  reservedKeywords: string[];
+  // Types of quotes to use for strings
   stringTypes: regexFactory.QuoteType[];
+  // Types of quotes to use for quoted identifiers
   identifierTypes: regexFactory.QuoteType[];
+  // Open-parenthesis characters, like: (, [, {
   blockStart?: string[];
+  // Close-parenthesis characters, like: ), ], }
   blockEnd?: string[];
+  // True to allow for positional "?" parameter placeholders
   positionalPlaceholders?: boolean;
+  // Prefixes for numbered parameter placeholders to support, e.g. :1, :2, :3
   numberedPlaceholderTypes?: ('?' | ':' | '$')[];
+  // Prefixes for named parameter placeholders to support, e.g. :name
   namedPlaceholderTypes?: (':' | '@' | '$')[];
+  // Prefixes for quoted parameter placeholders to support, e.g. :"name"
+  // The type of quotes will depend on `identifierTypes` option.
   quotedPlaceholderTypes?: (':' | '@' | '$')[];
+  // Line comment types to support, defaults to --
   lineCommentTypes?: string[];
+  // Additioanl characters to support in identifiers
   specialIdentChars?: { prefix?: string; any?: string; suffix?: string };
+  // Additional multi-character operators to support, in addition to <=, >=, <>, !=
   operators?: string[];
+  // Allows custom modifications on the token array.
+  // Called after the whole input string has been split into tokens.
+  // The result of this will be the output of the tokenizer.
   preprocess?: (tokens: Token[]) => Token[];
 }
 
@@ -39,26 +61,6 @@ export default class Tokenizer {
 
   private preprocess = (tokens: Token[]) => tokens;
 
-  /**
-   * @param {TokenizerOptions} cfg
-   *  @param {string[]} cfg.reservedKeywords - Reserved words in SQL
-   *  @param {string[]} cfg.reservedDependentClauses - Words that following a specific Statement and must have data attached
-   *  @param {string[]} cfg.reservedLogicalOperators - Words that are set to newline
-   *  @param {string[]} cfg.reservedCommands - Words that are set to new line separately
-   *  @param {string[]} cfg.reservedBinaryCommands - Words that are top level but have no indentation
-   *  @param {string[]} cfg.reservedJoinConditions - ON and USING
-   *  @param {string[]} cfg.stringTypes - string types to enable - '', "", N'', ...
-   *  @param {string[]} cfg.identifierTypes - identifier types to enable - "", ``, [], ...
-   *  @param {string[]} cfg.blockStart - Opening parentheses to enable, like (, [
-   *  @param {string[]} cfg.blockEnd - Closing parentheses to enable, like ), ]
-   *  @param {boolean} cfg.positionalPlaceholders - True to enable positional placeholders "?"
-   *  @param {string[]} cfg.numberedPlaceholderTypes - Prefixes for numbered placeholders, like ":" for :1, :2, :3
-   *  @param {string[]} cfg.namedPlaceholderTypes - Prefixes for named placeholders, like @ and :
-   *  @param {string[]} cfg.lineCommentTypes - Line comments to enable, like # and --
-   *  @param {string[]} cfg.specialIdentChars - Special chars that can be found inside identifiers, like @ and #
-   *  @param {string[]} cfg.operators - Additional operators to recognize
-   *  @param {Function} cfg.preprocess - Optional function to process tokens before emitting
-   */
   constructor(cfg: TokenizerOptions) {
     if (cfg.preprocess) {
       this.preprocess = cfg.preprocess;
