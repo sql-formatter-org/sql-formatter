@@ -120,6 +120,7 @@
             "postgresql",
             "redshift",
             "spark",
+            "sqlite",
             "tsql"
           ],
           "default": "sql",
@@ -141,17 +142,22 @@
           "default": true,
           "markdownDescription": "Override for `insertSpaces` if `#Prettier-SQL.ignoreTabSettings#` is active"
         },
-        "Prettier-SQL.uppercaseKeywords": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "Whether to print keywords in ALL CAPS or lowercase"
+        "Prettier-SQL.keywordCase": {
+          "type": "string",
+          "enum": [
+            "preserve",
+            "upper",
+            "lower"
+          ],
+          "default": "preserve",
+          "markdownDescription": "Whether to print keywords in ALL CAPS, lowercase, or preserve existing"
         },
-        "Prettier-SQL.keywordPosition": {
+        "Prettier-SQL.indentStyle": {
           "type": "string",
           "enum": [
             "standard",
-            "tenSpaceLeft",
-            "tenSpaceRight"
+            "tabularLeft",
+            "tabularRight"
           ],
           "enumDescriptions": [
             "Standard SQL format, with cascading indents",
@@ -161,19 +167,25 @@
           "default": "standard",
           "markdownDescription": "Where to place keywords"
         },
-        "Prettier-SQL.breakBeforeBooleanOperator": {
-          "type": "boolean",
-          "default": false,
+        "Prettier-SQL.logicalOperatorNewline": {
+          "type": "string",
+          "enum": [
+            "before",
+            "after"
+          ],
+          "default": "before",
           "markdownDescription": "Whether to break before or after AND and OR"
         },
         "Prettier-SQL.aliasAS": {
           "type": "string",
           "enum": [
+            "preserve",
             "always",
             "select",
             "never"
           ],
           "enumDescriptions": [
+            "Preserve existing AS usage",
             "Use AS in SELECT clauses and for tables",
             "Use AS only in SELECT clauses",
             "Do not use AS for aliases"
@@ -201,41 +213,17 @@
           "default": "after",
           "markdownDescription": "Where to place commas for SELECT and GROUP BY clauses"
         },
-        "Prettier-SQL.keywordNewline.newlineMode": {
-          "type": "string",
-          "enum": [
-            "always",
-            "lineWidth",
-            "itemCount",
-            "never"
-          ],
-          "markdownEnumDescriptions": [
-            "Always break keywords items onto a newline",
-            "Break onto newline when line width > `#Prettier-SQL.lineWidth#` ",
-            "Break onto newline when item count > `#Prettier-SQL.itemCount#` ",
-            "Place all selected columns on the same line as keyword"
-          ],
-          "minimum": 1,
-          "default": "always",
-          "markdownDescription": "Rule for when to break keyword clauses onto a newline"
-        },
-        "Prettier-SQL.keywordNewline.itemCount": {
-          "type": "number",
-          "minimum": 1,
-          "default": 3,
-          "markdownDescription": "Breaks keywords clauses onto newline after n items when `#Prettier-SQL.keywordNewline#` is set to itemCount"
-        },
-        "Prettier-SQL.parenOptions.openParenNewline": {
+        "Prettier-SQL.parenOptions.newlineBeforeOpenParen": {
           "type": "boolean",
           "default": false,
           "markdownDescription": "Place (, Open Paren, CASE on newline when creating a new block"
         },
-        "Prettier-SQL.parenOptions.closeParenNewline": {
+        "Prettier-SQL.parenOptions.newlineBeforeCloseParen": {
           "type": "boolean",
           "default": true,
           "markdownDescription": "Place ), Close Paren, END on newline when closing a block"
         },
-        "Prettier-SQL.lineWidth": {
+        "Prettier-SQL.expressionWidth": {
           "type": "integer",
           "default": 50,
           "minimum": 0,
@@ -252,7 +240,7 @@
           "default": false,
           "markdownDescription": "Strip whitespace around operators such as + or >="
         },
-        "Prettier-SQL.semicolonNewline": {
+        "Prettier-SQL.newlineBeforeSemicolon": {
           "type": "boolean",
           "default": false,
           "markdownDescription": "Whether to place semicolon on its own line or on previous line"
