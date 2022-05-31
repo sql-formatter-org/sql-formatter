@@ -66,13 +66,16 @@ export const createIdentRegex = (specialChars: IdentChars = {}): RegExp =>
  */
 export const createIdentPattern = (specialChars: IdentChars = {}): string => {
   const prefix = specialChars.prefix ? `[${escapeRegExp(specialChars.prefix)}]*` : '';
-  const unicodeWordChar = '\\p{Alphabetic}\\p{Mark}\\p{Decimal_Number}_';
+  // Unicode letters, diacritical marks and underscore
+  const letter = '\\p{Alphabetic}\\p{Mark}_';
+  // Numbers 0..9, plus various unicode numbers
+  const number = '\\p{Decimal_Number}';
   const specialWordChars = escapeRegExp(specialChars.any ?? '');
 
   const arrayAccessor = '\\[\\d\\]';
-  const mapAccessor = `\\[['"][${unicodeWordChar}]+['"]\\]`;
+  const mapAccessor = `\\[['"][${letter}${number}]+['"]\\]`;
 
-  return `(${prefix}([${unicodeWordChar}${specialWordChars}]+))(${arrayAccessor}|${mapAccessor})?`;
+  return `(${prefix}([${letter}${number}${specialWordChars}]+))(${arrayAccessor}|${mapAccessor})?`;
 };
 
 // This enables the following quote styles:
