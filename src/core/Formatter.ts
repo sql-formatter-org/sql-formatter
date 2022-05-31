@@ -1,6 +1,6 @@
+import type { FormatOptions } from 'src/types';
 import Params from './Params';
 import Tokenizer from './Tokenizer';
-import type { FormatOptions } from '../types';
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
 import AsTokenFactory from './AsTokenFactory';
