@@ -71,7 +71,7 @@
     "ts:check": "tsc --noEmit",
     "ts:changes": "tsc --noEmit --incremental",
     "lint": "eslint --cache .",
-    "lint:changes": "sh -c eslint --cache $(git:changes)",
+    "lint:changes": "sh -c eslint --cache $(yarn git:changes)",
     "pretty": "prettier --write .",
     "pretty:check": "prettier --check .",
     "fix": "yarn pretty && eslint --fix .",
