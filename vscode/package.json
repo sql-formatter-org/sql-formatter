@@ -65,7 +65,7 @@
     "vsce": "vsce"
   },
   "dependencies": {
-    "prettier-sql": "^5.1.0"
+    "sql-formatter": "^6.1.2"
   },
   "devDependencies": {
     "@types/glob": "^7.1.4",
