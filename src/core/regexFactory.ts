@@ -52,9 +52,14 @@ export interface IdentChars {
 
 /**
  * Builds a RegExp for valid identifiers in a SQL dialect
- * @param {IdentChars} specialChars
  */
-export const createIdentRegex = (specialChars: IdentChars = {}): RegExp => {
+export const createIdentRegex = (specialChars: IdentChars = {}): RegExp =>
+  new RegExp(`^(${createIdentPattern(specialChars)})`, 'u');
+
+/**
+ * Builds a RegExp string for valid identifiers in a SQL dialect
+ */
+export const createIdentPattern = (specialChars: IdentChars = {}): string => {
   const prefix = specialChars.prefix ? `[${escapeRegExp(specialChars.prefix)}]*` : '';
   const unicodeWordChar =
     '\\p{Alphabetic}\\p{Mark}\\p{Decimal_Number}\\p{Connector_Punctuation}\\p{Join_Control}';
@@ -63,10 +68,7 @@ export const createIdentRegex = (specialChars: IdentChars = {}): RegExp => {
   const arrayAccessor = '\\[\\d\\]';
   const mapAccessor = `\\[['"][${unicodeWordChar}]+['"]\\]`;
 
-  return new RegExp(
-    `^((${prefix}([${unicodeWordChar}${specialWordChars}]+))(${arrayAccessor}|${mapAccessor})?)`,
-    'u'
-  );
+  return `(${prefix}([${unicodeWordChar}${specialWordChars}]+))(${arrayAccessor}|${mapAccessor})?`;
 };
 
 // This enables the following quote styles:
