@@ -24,23 +24,28 @@ export const createLineCommentRegex = (lineCommentTypes: string[]): RegExp =>
 
 /**
  * Builds a RegExp for all Reserved Keywords in a SQL dialect
- * @param {string[]} reservedKeywords - list of strings of all Reserved Keywords
- * @param {string} specialWordChars - concatenated string of all special chars that can appear in valid identifiers (and not in Reserved Keywords)
  */
 export const createReservedWordRegex = (
   reservedKeywords: string[],
-  specialWordChars: string = ''
+  specialChars: IdentChars = {}
 ): RegExp => {
   if (reservedKeywords.length === 0) {
     return /^\b$/u;
   }
+
+  // Negative lookahead to avoid matching a keyword that's actually part of identifier,
+  // which can happen when identifier allows word-boundary characters inside it.
+  //
+  // For example "SELECT$ME" should be tokenized as:
+  // - ["SELECT$ME"] when $ is allowed inside identifiers
+  // - ["SELECT", "$", "ME"] when $ can't be part of identifiers.
+  const avoidIdentChars = specialChars.any ? `(?![${escapeRegExp(specialChars.any)}])` : '';
+
   const reservedKeywordsPattern = sortByLengthDesc(reservedKeywords)
     .join('|')
     .replace(/ /gu, '\\s+');
-  return new RegExp(
-    `^(${reservedKeywordsPattern})(?![${escapeRegExp(specialWordChars)}]+)\\b`,
-    'iu'
-  );
+
+  return new RegExp(`^(${reservedKeywordsPattern})${avoidIdentChars}\\b`, 'iu');
 };
 
 export interface IdentChars {

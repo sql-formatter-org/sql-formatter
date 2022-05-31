@@ -66,7 +66,6 @@ export default class Tokenizer {
       this.preprocess = cfg.preprocess;
     }
 
-    const specialIdentCharsAll = Object.values(cfg.specialIdentChars ?? {}).join('');
     this.quotedIdentRegex = regexFactory.createQuoteRegex(cfg.identifierTypes);
 
     this.REGEX_MAP = {
@@ -74,27 +73,27 @@ export default class Tokenizer {
       [TokenType.STRING]: regexFactory.createQuoteRegex(cfg.stringTypes),
       [TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(
         cfg.reservedKeywords,
-        specialIdentCharsAll
+        cfg.specialIdentChars
       ),
       [TokenType.RESERVED_DEPENDENT_CLAUSE]: regexFactory.createReservedWordRegex(
         cfg.reservedDependentClauses ?? [],
-        specialIdentCharsAll
+        cfg.specialIdentChars
       ),
       [TokenType.RESERVED_LOGICAL_OPERATOR]: regexFactory.createReservedWordRegex(
         cfg.reservedLogicalOperators ?? ['AND', 'OR'],
-        specialIdentCharsAll
+        cfg.specialIdentChars
       ),
       [TokenType.RESERVED_COMMAND]: regexFactory.createReservedWordRegex(
         cfg.reservedCommands,
-        specialIdentCharsAll
+        cfg.specialIdentChars
       ),
       [TokenType.RESERVED_BINARY_COMMAND]: regexFactory.createReservedWordRegex(
         cfg.reservedBinaryCommands,
-        specialIdentCharsAll
+        cfg.specialIdentChars
       ),
       [TokenType.RESERVED_JOIN_CONDITION]: regexFactory.createReservedWordRegex(
         cfg.reservedJoinConditions ?? ['ON', 'USING'],
-        specialIdentCharsAll
+        cfg.specialIdentChars
       ),
       [TokenType.OPERATOR]: regexFactory.createOperatorRegex('+-/*%&|^><=.,;[]{}`:$@', [
         '<>',
