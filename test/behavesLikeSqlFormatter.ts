@@ -352,6 +352,17 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     `);
   });
 
+  it('supports unicode diacritical marks in identifiers', () => {
+    const COMBINING_TILDE = String.fromCodePoint(0x0303);
+    const result = format('SELECT o' + COMBINING_TILDE + ' FROM tbl;');
+    expect(result).toBe(dedent`
+      SELECT
+        õ
+      FROM
+        tbl;
+    `);
+  });
+
   it('does not split UNION ALL in half', () => {
     const result = format(`
       SELECT * FROM tbl1
