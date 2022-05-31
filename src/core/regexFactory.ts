@@ -66,7 +66,7 @@ export const createIdentRegex = (specialChars: IdentChars = {}): RegExp =>
  */
 export const createIdentPattern = (specialChars: IdentChars = {}): string => {
   const prefix = specialChars.prefix ? `[${escapeRegExp(specialChars.prefix)}]*` : '';
-  const unicodeWordChar = '\\p{Alphabetic}\\p{Mark}\\p{Decimal_Number}\\p{Connector_Punctuation}';
+  const unicodeWordChar = '\\p{Alphabetic}\\p{Mark}\\p{Decimal_Number}_';
   const specialWordChars = escapeRegExp(specialChars.any ?? '');
 
   const arrayAccessor = '\\[\\d\\]';
