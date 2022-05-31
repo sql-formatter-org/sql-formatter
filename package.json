@@ -120,7 +120,6 @@
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^28.0.2",
-    "npm-cli": "^0.1.0",
     "pre-commit": "^1.2.2",
     "pre-push": "^0.1.2",
     "prettier": "^2.0.5",
