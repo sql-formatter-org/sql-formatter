@@ -42,7 +42,7 @@ interface TokenizerOptions {
   // Line comment types to support, defaults to --
   lineCommentTypes?: string[];
   // Additioanl characters to support in identifiers
-  specialIdentChars?: { prefix?: string; any?: string; suffix?: string };
+  specialIdentChars?: regexFactory.IdentChars;
   // Additional multi-character operators to support, in addition to <=, >=, <>, !=
   operators?: string[];
   // Allows custom modifications on the token array.

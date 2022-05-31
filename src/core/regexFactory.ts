@@ -43,16 +43,20 @@ export const createReservedWordRegex = (
   );
 };
 
+export interface IdentChars {
+  // concatenated string of chars that can appear anywhere in a valid identifier
+  any?: string;
+  // concatenated string of chars that only appear at the beginning of a valid identifier
+  prefix?: string;
+  // concatenated string of chars that only appear at the end of a valid identifier
+  suffix?: string;
+}
+
 /**
  * Builds a RegExp for valid identifiers in a SQL dialect
- * @param {Object} specialChars
- * @param {string} specialChars.any - concatenated string of chars that can appear anywhere in a valid identifier
- * @param {string} specialChars.prefix - concatenated string of chars that only appear at the beginning of a valid identifier
- * @param {string} specialChars.suffix - concatenated string of chars that only appear at the end of a valid identifier
+ * @param {IdentChars} specialChars
  */
-export const createIdentRegex = (
-  specialChars: { any?: string; prefix?: string; suffix?: string } = {}
-): RegExp => {
+export const createIdentRegex = (specialChars: IdentChars = {}): RegExp => {
   const prefix = specialChars.prefix ? `[${escapeRegExp(specialChars.prefix)}]*` : '';
   const suffix = specialChars.suffix ? `[${escapeRegExp(specialChars.suffix)}]*` : '';
   const unicodeWordChar =
