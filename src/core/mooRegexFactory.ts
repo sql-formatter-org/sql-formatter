@@ -70,7 +70,8 @@ export const word = (specialChars: { any?: string; suffix?: string; prefix?: str
 
 export const reservedWord = (reservedKeywords: string[], specialWordChars: string) => {
   if (reservedKeywords.length === 0) {
-    return new RegExp(`^\b$`, 'u');
+    // return new RegExp(`^\b$`, 'u');
+    return /^\b$/u;
   }
   const reservedKeywordsPattern = sortByLengthDesc(reservedKeywords)
     .map(keyword =>

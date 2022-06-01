@@ -1,7 +1,7 @@
-import Formatter from '../core/Formatter';
-import Tokenizer from '../core/Tokenizer';
-import type { StringPatternType } from '../core/regexFactory';
-import { dedupe } from '../utils';
+import Formatter from 'src/core/Formatter';
+import Tokenizer from 'src/core/Tokenizer';
+import { type StringPatternType } from 'src/core/regexFactory';
+import { dedupe } from 'src/utils';
 
 /**
  * Priority 5 (last)
