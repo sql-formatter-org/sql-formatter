@@ -1,6 +1,7 @@
 import dedent from 'dedent-js';
-import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
-import MySqlFormatter from '../src/languages/mysql.formatter';
+
+import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
+import MySqlFormatter from 'src/languages/mysql.formatter';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
 import supportsOperators from './features/operators';

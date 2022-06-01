@@ -1,5 +1,5 @@
-import Formatter from '../core/Formatter';
-import Tokenizer from '../core/Tokenizer';
+import Formatter from 'src/core/Formatter';
+import Tokenizer from 'src/core/Tokenizer';
 
 // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#reserved-word
 const standardReservedWords = [

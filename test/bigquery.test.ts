@@ -1,6 +1,7 @@
 import dedent from 'dedent-js';
-import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
-import BigQueryFormatter from '../src/languages/bigquery.formatter';
+
+import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
+import BigQueryFormatter from 'src/languages/bigquery.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
@@ -10,9 +11,9 @@ import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsDeleteFrom from './features/deleteFrom';
-import supportsParams from './options/param';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
+import supportsParams from './options/param';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';

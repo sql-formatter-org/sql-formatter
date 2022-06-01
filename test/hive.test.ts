@@ -1,5 +1,6 @@
-import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
-import HiveFormatter from '../src/languages/hive.formatter';
+import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
+
+import HiveFormatter from 'src/languages/hive.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';

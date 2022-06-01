@@ -1,8 +1,9 @@
 import dedent from 'dedent-js';
-import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
-import PostgreSqlFormatter from '../src/languages/postgresql.formatter';
-import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
+import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
+import PostgreSqlFormatter from 'src/languages/postgresql.formatter';
+
+import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsCreateTable from './features/createTable';
@@ -13,9 +14,9 @@ import supportsStrings from './features/strings';
 import supportsReturning from './features/returning';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
-import supportsParams from './options/param';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
+import supportsParams from './options/param';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';

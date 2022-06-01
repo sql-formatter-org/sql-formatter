@@ -1,6 +1,7 @@
 import dedent from 'dedent-js';
-import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
-import PlSqlFormatter from '../src/languages/plsql.formatter';
+
+import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
+import PlSqlFormatter from 'src/languages/plsql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
@@ -14,9 +15,9 @@ import supportsStrings from './features/strings';
 import supportsReturning from './features/returning';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
-import supportsParams from './options/param';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
+import supportsParams from './options/param';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';

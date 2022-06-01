@@ -1,6 +1,6 @@
-import Formatter from '../core/Formatter';
-import Tokenizer from '../core/Tokenizer';
-import { dedupe } from '../utils';
+import Formatter from 'src/core/Formatter';
+import Tokenizer from 'src/core/Tokenizer';
+import { dedupe } from 'src/utils';
 
 /**
  * Priority 5 (last)

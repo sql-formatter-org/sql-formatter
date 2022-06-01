@@ -1,6 +1,7 @@
 import dedent from 'dedent-js';
+
+import { FormatFn } from 'src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
-import { FormatFn } from '../src/sqlFormatter';
 
 import supportsCreateTable from './features/createTable';
 import supportsAlterTable from './features/alterTable';
@@ -8,10 +9,10 @@ import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
-import supportsParams from './options/param';
 import supportsComments from './features/comments';
 import supportsStrings from './features/strings';
 import supportsIdentifiers from './features/identifiers';
+import supportsParams from './options/param';
 
 /**
  * Shared tests for MySQL and MariaDB

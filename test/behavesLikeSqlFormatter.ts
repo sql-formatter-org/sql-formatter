@@ -1,7 +1,9 @@
 import dedent from 'dedent-js';
 
-import { FormatFn } from '../src/sqlFormatter';
+import { FormatFn } from 'src/sqlFormatter';
+
 import supportsCase from './features/case';
+import supportsNumbers from './features/numbers';
 import supportsTabWidth from './options/tabWidth';
 import supportsUseTabs from './options/useTabs';
 import supportsAliasAs from './options/aliasAs';
@@ -15,7 +17,6 @@ import supportsLinesBetweenQueries from './options/linesBetweenQueries';
 import supportsNewlineBeforeSemicolon from './options/newlineBeforeSemicolon';
 import supportsLogicalOperatorNewline from './options/logicalOperatorNewline';
 import supportsTabulateAlias from './options/tabulateAlias';
-import supportsNumbers from './features/numbers';
 
 /**
  * Core tests for all SQL formatters

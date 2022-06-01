@@ -1,6 +1,7 @@
 import dedent from 'dedent-js';
-import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
-import RedshiftFormatter from '../src/languages/redshift.formatter';
+
+import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
+import RedshiftFormatter from 'src/languages/redshift.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
@@ -11,9 +12,9 @@ import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsDeleteFrom from './features/deleteFrom';
-import supportsParams from './options/param';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
+import supportsParams from './options/param';
 
 describe('RedshiftFormatter', () => {
   const language = 'redshift';

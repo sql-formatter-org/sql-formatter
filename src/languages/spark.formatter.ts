@@ -1,7 +1,7 @@
-import Formatter from '../core/Formatter';
-import Tokenizer from '../core/Tokenizer';
-import { EOF_TOKEN, isToken, Token, TokenType } from '../core/token'; // convert to partial type import in TS 4.5
-import { dedupe } from '../utils';
+import Formatter from 'src/core/Formatter';
+import Tokenizer from 'src/core/Tokenizer';
+import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/core/token';
+import { dedupe } from 'src/utils';
 
 /**
  * Priority 5 (last)
