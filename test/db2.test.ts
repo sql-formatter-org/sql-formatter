@@ -1,6 +1,7 @@
 import dedent from 'dedent-js';
-import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
-import Db2Formatter from '../src/languages/db2.formatter';
+
+import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
+import Db2Formatter from 'src/languages/db2.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
@@ -12,8 +13,8 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
-import supportsParams from './options/param';
 import supportsComments from './features/comments';
+import supportsParams from './options/param';
 
 describe('Db2Formatter', () => {
   const language = 'db2';

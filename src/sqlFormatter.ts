@@ -1,18 +1,18 @@
-import BigQueryFormatter from './languages/bigquery.formatter';
-import Db2Formatter from './languages/db2.formatter';
-import HiveFormatter from './languages/hive.formatter';
-import MariaDbFormatter from './languages/mariadb.formatter';
-import MySqlFormatter from './languages/mysql.formatter';
-import N1qlFormatter from './languages/n1ql.formatter';
-import PlSqlFormatter from './languages/plsql.formatter';
-import PostgreSqlFormatter from './languages/postgresql.formatter';
-import RedshiftFormatter from './languages/redshift.formatter';
-import SparkFormatter from './languages/spark.formatter';
-import SqliteFormatter from './languages/sqlite.formatter';
-import SqlFormatter from './languages/sql.formatter';
-import TSqlFormatter from './languages/tsql.formatter';
+import BigQueryFormatter from 'src/languages/bigquery.formatter';
+import Db2Formatter from 'src/languages/db2.formatter';
+import HiveFormatter from 'src/languages/hive.formatter';
+import MariaDbFormatter from 'src/languages/mariadb.formatter';
+import MySqlFormatter from 'src/languages/mysql.formatter';
+import N1qlFormatter from 'src/languages/n1ql.formatter';
+import PlSqlFormatter from 'src/languages/plsql.formatter';
+import PostgreSqlFormatter from 'src/languages/postgresql.formatter';
+import RedshiftFormatter from 'src/languages/redshift.formatter';
+import SparkFormatter from 'src/languages/spark.formatter';
+import SqliteFormatter from 'src/languages/sqlite.formatter';
+import SqlFormatter from 'src/languages/sql.formatter';
+import TSqlFormatter from 'src/languages/tsql.formatter';
 
-import { FormatOptions } from './types';
+import type { FormatOptions } from './types';
 import { isNumber } from './utils';
 
 export const formatters = {

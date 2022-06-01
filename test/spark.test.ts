@@ -1,6 +1,7 @@
 import dedent from 'dedent-js';
-import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
-import SparkFormatter from '../src/languages/spark.formatter';
+
+import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
+import SparkFormatter from 'src/languages/spark.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
@@ -11,8 +12,8 @@ import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsArray from './features/array';
-import supportsParams from './options/param';
 import supportsComments from './features/comments';
+import supportsParams from './options/param';
 
 describe('SparkFormatter', () => {
   const language = 'spark';

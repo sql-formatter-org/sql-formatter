@@ -1,6 +1,7 @@
 import dedent from 'dedent-js';
-import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
-import SqliteFormatter from '../src/languages/sqlite.formatter';
+
+import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
+import SqliteFormatter from 'src/languages/sqlite.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
@@ -12,8 +13,8 @@ import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
-import supportsParams from './options/param';
 import supportsComments from './features/comments';
+import supportsParams from './options/param';
 
 describe('SqliteFormatter', () => {
   const language = 'sqlite';

@@ -1,4 +1,5 @@
-import { last } from '../utils';
+import { last } from 'src/utils';
+
 import Indentation from './Indentation';
 
 /** Whitespace modifiers to be used with add() method */
