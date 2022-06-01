@@ -1,6 +1,7 @@
 import dedent from 'dedent-js';
-import { format as originalFormat, FormatFn } from '../src/sqlFormatter';
-import N1qlFormatter from '../src/languages/n1ql.formatter';
+
+import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
+import N1qlFormatter from 'src/languages/n1ql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsBetween from './features/between';
@@ -11,8 +12,8 @@ import supportsStrings from './features/strings';
 import supportsReturning from './features/returning';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsArray from './features/array';
-import supportsParams from './options/param';
 import supportsComments from './features/comments';
+import supportsParams from './options/param';
 
 describe('N1qlFormatter', () => {
   const language = 'n1ql';

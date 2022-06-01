@@ -1,4 +1,4 @@
-import { FormatOptions } from '../types';
+import type { FormatOptions } from 'src/types';
 
 // Utility functions for config options
 

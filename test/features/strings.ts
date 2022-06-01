@@ -1,6 +1,7 @@
 import { expect } from '@jest/globals';
 import dedent from 'dedent-js';
-import { FormatFn } from '../../src/sqlFormatter';
+
+import { FormatFn } from 'src/sqlFormatter';
 
 export default function supportsStrings(format: FormatFn, stringTypes: string[]) {
   if (stringTypes.includes('""')) {

@@ -1,4 +1,4 @@
-import { ParamItems } from './core/Params';
+import { type ParamItems } from './core/Params';
 
 export type IndentStyle = 'standard' | 'tabularLeft' | 'tabularRight';
 

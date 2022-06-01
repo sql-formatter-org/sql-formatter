@@ -1,5 +1,6 @@
 import dedent from 'dedent-js';
-import { FormatFn } from '../../src/sqlFormatter';
+
+import { FormatFn } from 'src/sqlFormatter';
 
 export default function supportsLinesBetweenQueries(format: FormatFn) {
   it('defaults to single empty line between queries', () => {

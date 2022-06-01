@@ -1,4 +1,4 @@
-import { EOF_TOKEN, Token, TokenType } from './token';
+import { EOF_TOKEN, type Token, TokenType } from './token';
 /* eslint-disable no-cond-assign */
 
 export type Statement = {
