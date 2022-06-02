@@ -1,17 +1,18 @@
 import * as vscode from 'vscode';
-import { format } from 'prettier-sql';
+import { format } from 'sql-formatter';
 import type {
+  SqlLanguage,
+  KeywordCase,
+  IndentStyle,
   AliasMode,
   CommaPosition,
-  FormatterLanguage,
-  KeywordMode,
-  NewlineMode,
-} from 'prettier-sql';
+  LogicalOperatorNewline,
+} from 'sql-formatter';
 
 const getConfigs = (
   settings: vscode.WorkspaceConfiguration,
   formattingOptions: vscode.FormattingOptions | { tabSize: number; insertSpaces: boolean },
-  language: FormatterLanguage
+  language: SqlLanguage
 ) => {
   const ignoreTabSettings = settings.get<boolean>('ignoreTabSettings');
   const { tabSize, insertSpaces } = ignoreTabSettings // override tab settings if ignoreTabSettings is true
@@ -26,34 +27,28 @@ const getConfigs = (
   const formatConfigs = {
     language:
       language === 'sql' // override default SQL language mode if SQLFlavourOverride is set
-        ? settings.get<FormatterLanguage>('SQLFlavourOverride') ?? 'sql'
+        ? settings.get<SqlLanguage>('SQLFlavourOverride') ?? 'sql'
         : language,
     indent,
-    uppercase: settings.get<boolean>('uppercaseKeywords'),
-    keywordPosition: settings.get<KeywordMode>('keywordPosition'),
-    breakBeforeBooleanOperator: settings.get<boolean>('breakBeforeBooleanOperator'),
+    keywordCase: settings.get<KeywordCase>('keywordCase'),
+    indentStyle: settings.get<IndentStyle>('indentStyle'),
+    logicalOperatorNewline: settings.get<LogicalOperatorNewline>('logicalOperatorNewline'),
     aliasAs: settings.get<AliasMode>('aliasAS'),
     tabulateAlias: settings.get<boolean>('tabulateAlias'),
     commaPosition: settings.get<CommaPosition>('commaPosition'),
-    newline: (newlineSetting =>
-      newlineSetting === 'itemCount'
-        ? settings.get<number>('itemCount') // pass itemCount number if keywordNewline is itemCount mode
-        : (newlineSetting as NewlineMode))(settings.get<string>('keywordNewline')),
-    parenOptions: {
-      openParenNewline: settings.get<boolean>('parenOptions.openParenNewline'),
-      closeParenNewline: settings.get<boolean>('parenOptions.closeParenNewline'),
-    },
-    lineWidth: settings.get<number>('lineWidth'),
+    newlineBeforeOpenParen: settings.get<boolean>('newlineBeforeOpenParen'),
+    newlineBeforeCloseParen: settings.get<boolean>('newlineBeforeCloseParen'),
+    expressionWidth: settings.get<number>('expressionWidth'),
     linesBetweenQueries: settings.get<number>('linesBetweenQueries'),
     denseOperators: settings.get<boolean>('denseOperators'),
-    semicolonNewline: settings.get<boolean>('semicolonNewline'),
+    newlineBeforeSemicolon: settings.get<boolean>('newlineBeforeSemicolon'),
   };
 
   return formatConfigs;
 };
 
 export function activate(context: vscode.ExtensionContext) {
-  const formatProvider = (language: FormatterLanguage) => ({
+  const formatProvider = (language: SqlLanguage) => ({
     provideDocumentFormattingEdits(
       document: vscode.TextDocument,
       options: vscode.FormattingOptions
@@ -84,14 +79,15 @@ export function activate(context: vscode.ExtensionContext) {
     },
   });
 
-  const languages: { [lang: string]: FormatterLanguage } = {
+  const languages: { [lang: string]: SqlLanguage } = {
     'sql': 'sql',
     'plsql': 'plsql',
     'mysql': 'mysql',
     'postgres': 'postgresql',
-    'hql': 'sql',
-    'hive-sql': 'sql',
+    'hql': 'hive',
+    'hive-sql': 'hive',
     'sql-bigquery': 'bigquery',
+    'sqlite': 'sqlite',
   };
   // add Prettier-SQL as a format provider for each language
   Object.entries(languages).forEach(([vscodeLang, prettierLang]) =>
