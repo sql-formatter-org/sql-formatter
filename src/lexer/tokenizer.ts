@@ -1,7 +1,7 @@
 import * as moo from 'moo';
 
 import { TokenType } from 'src/core/token';
-import * as regex from 'src/core/mooRegexFactory';
+import * as regex from 'src/lexer/regexFactory';
 
 interface TokenizerOptions {
   reservedKeywords: string[];

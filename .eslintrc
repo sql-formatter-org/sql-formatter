@@ -28,6 +28,7 @@
     "no-useless-concat": "off",
     "no-restricted-syntax": "off",
     "no-constant-condition": "off",
+    "no-unused-expressions": "warn",
     "prefer-template": "off",
     "default-case": "off",
     "prettier/prettier": ["error"],
@@ -36,7 +37,7 @@
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/lines-between-class-members": "off",
     "@typescript-eslint/naming-convention": "error",
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/quotes": [
       "error",
       "single",
