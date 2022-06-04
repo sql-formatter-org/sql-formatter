@@ -46,7 +46,7 @@ export default class Tokenizer {
     this.LEXER_OPTIONS = {
       WS: { match: /[ \t]+/ },
       NL: { match: /\n/, lineBreaks: true },
-      [TokenType.BLOCK_COMMENT]: { match: /^(?:\/\*[^]*?(?:\*\/|$))/u, lineBreaks: true },
+      [TokenType.BLOCK_COMMENT]: { match: /(?:\/\*[^]*?(?:\*\/|$))/, lineBreaks: true },
       [TokenType.LINE_COMMENT]: {
         match: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
       },
@@ -64,7 +64,7 @@ export default class Tokenizer {
       },
       [TokenType.NUMBER]: {
         match:
-          /^(?:(?:-\s*)?[0-9]+(?:\.[0-9]+)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u,
+          /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)/,
       },
       [TokenType.RESERVED_CASE_START]: { match: /[Cc][Aa][Ss][Ee]/u },
       [TokenType.RESERVED_CASE_END]: { match: /[Ee][Nn][Dd]/u },
@@ -78,7 +78,16 @@ export default class Tokenizer {
         match: regex.reservedWord(cfg.reservedDependentClauses, specialWordCharsAll),
       },
       [TokenType.RESERVED_LOGICAL_OPERATOR]: {
-        match: regex.reservedWord(cfg.reservedLogicalOperators ?? [], specialWordCharsAll),
+        match: regex.reservedWord(
+          cfg.reservedLogicalOperators ?? ['AND', 'OR'],
+          specialWordCharsAll
+        ),
+      },
+      [TokenType.RESERVED_JOIN_CONDITION]: {
+        match: regex.reservedWord(
+          cfg.reservedJoinConditions ?? ['ON', 'USING'],
+          specialWordCharsAll
+        ),
       },
       [TokenType.RESERVED_KEYWORD]: {
         match: regex.reservedWord(cfg.reservedKeywords, specialWordCharsAll),

@@ -3,11 +3,11 @@ import { escapeRegExp, sortByLengthDesc } from '../utils';
 export const NULL_REGEX = /(?!)/; // zero-width negative lookahead, matches nothing
 
 export const lineComment = (lineCommentTypes: string[]) =>
-  new RegExp(`^(?:${lineCommentTypes.map(escapeRegExp).join('|')}.*?)(?:\r\n|\r|\n|$)`, 'u');
+  new RegExp(`(?:${lineCommentTypes.map(escapeRegExp).join('|')}.*?)(?:\r\n|\r|\n|$)`, 'u');
 
 export const operator = (monadOperators: string, polyadOperators: string[]) =>
   new RegExp(
-    `^${sortByLengthDesc(polyadOperators).map(escapeRegExp).join('|')}|` +
+    `${sortByLengthDesc(polyadOperators).map(escapeRegExp).join('|')}|` +
       `[${monadOperators.split('').map(escapeRegExp).join('')}]`,
     'u'
   );
@@ -42,7 +42,7 @@ export const string = ({
   const stringPrefix = stringPrefixes?.length ? `(?:${stringPrefixes.join('|')})?` : '';
   const stringPatternMap = createStringPattern(stringPrefix);
   const stringPattern = stringTypes.map(stringType => stringPatternMap[stringType]).join('|');
-  return new RegExp(`^${stringPattern}`, 'u');
+  return new RegExp(`${stringPattern}`, 'u');
 };
 
 export const word = (specialChars: { any?: string; suffix?: string; prefix?: string } = {}) => {
@@ -86,7 +86,7 @@ export const reservedWord = (reservedKeywords: string[], specialWordChars: strin
   const specialCharPattern = specialWordChars.length
     ? `(?![${escapeRegExp(specialWordChars)}]+)`
     : '';
-  return new RegExp(`^${reservedKeywordsPattern}${specialCharPattern}\\b`, 'iu');
+  return new RegExp(`${reservedKeywordsPattern}${specialCharPattern}`, 'iu');
 };
 
 export const placeholder = (types: string[], pattern: string) => {
