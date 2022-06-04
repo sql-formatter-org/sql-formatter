@@ -19,7 +19,7 @@ export const operator = (monadOperators: string, polyadOperators: string[]) =>
 // 4. single quoted string using '' or \' to escape, with optional prefix for format-specific strings
 // 8. PostgreSQL dollar-quoted strings (does not check for matching tags due to moo not allowing capturing groups)
 
-const stringPrefixList = ['[Nn]', '_utf8', 'U&', 'x'];
+const stringPrefixList = ['[Nn]', '_utf8', 'U&', 'x', '[Rr]', '[Bb]', 'E'];
 const createStringPattern = (stringPrefixes: string) => ({
   '``': '(?:`[^`]*(?:$|`))+',
   '{}': '(?:\\{[^\\}]*(?:$|\\}))+',

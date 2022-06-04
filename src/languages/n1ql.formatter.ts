@@ -521,7 +521,7 @@ export default class N1qlFormatter extends Formatter {
       reservedBinaryCommands,
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-      reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
+      reservedKeywords: dedupe(reservedKeywords.concat(reservedFunctions)),
       stringTypes: N1qlFormatter.stringTypes,
       blockStart: ['(', '[', '{'],
       blockEnd: [')', ']', '}'],

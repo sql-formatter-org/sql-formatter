@@ -1165,7 +1165,7 @@ export default class MariaDbFormatter extends Formatter {
       reservedBinaryCommands,
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-      reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
+      reservedKeywords: dedupe(reservedKeywords.concat(reservedFunctions)),
       stringTypes: MariaDbFormatter.stringTypes,
       indexedPlaceholderTypes: ['?'],
       lineCommentTypes: ['--', '#'],
