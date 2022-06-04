@@ -1,20 +1,21 @@
 import * as moo from 'moo';
 
-import { TokenType } from '../core/token'; // convert to partial type import in TS 4.5
-import * as regex from '../core/mooRegexFactory';
+import { TokenType } from 'src/core/token';
+import * as regex from 'src/core/mooRegexFactory';
 
 interface TokenizerOptions {
   reservedKeywords: string[];
   reservedCommands: string[];
-  reservedLogicalOperators: string[];
+  reservedLogicalOperators?: string[];
   reservedDependentClauses: string[];
   reservedBinaryCommands: string[];
+  reservedJoinConditions?: string[];
   stringTypes: regex.StringPatternType[];
-  blockStart: string[];
-  blockEnd: string[];
+  blockStart?: string[];
+  blockEnd?: string[];
   indexedPlaceholderTypes?: string[];
-  namedPlaceholderTypes: string[];
-  lineCommentTypes: string[];
+  namedPlaceholderTypes?: string[];
+  lineCommentTypes?: string[];
   specialWordChars?: { prefix?: string; any?: string; suffix?: string };
   operators?: string[];
 }
@@ -47,13 +48,11 @@ export default class Tokenizer {
       NL: { match: /\n/, lineBreaks: true },
       [TokenType.BLOCK_COMMENT]: { match: /^(?:\/\*[^]*?(?:\*\/|$))/u, lineBreaks: true },
       [TokenType.LINE_COMMENT]: {
-        match: regex.lineComment(cfg.lineCommentTypes),
+        match: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
       },
       [TokenType.COMMA]: { match: /[,]/ },
-      [TokenType.OPEN_PAREN]: { match: /[(]/ },
-      [TokenType.CLOSE_PAREN]: { match: /[)]/ },
-      [TokenType.OPEN_BRACKET]: { match: /[[]/ },
-      [TokenType.CLOSE_BRACKET]: { match: /[\]]/ },
+      [TokenType.BLOCK_START]: { match: /[([]/ }, // add params later
+      [TokenType.BLOCK_END]: { match: /[)\]]/ }, // add params later
       [TokenType.OPERATOR]: {
         match: regex.operator('+-/*%&|^><=.;{}`:$', [
           '<>',
@@ -67,8 +66,8 @@ export default class Tokenizer {
         match:
           /^(?:(?:-\s*)?[0-9]+(?:\.[0-9]+)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\b/u,
       },
-      [TokenType.CASE_START]: { match: /[Cc][Aa][Ss][Ee]/u },
-      [TokenType.CASE_END]: { match: /[Ee][Nn][Dd]/u },
+      [TokenType.RESERVED_CASE_START]: { match: /[Cc][Aa][Ss][Ee]/u },
+      [TokenType.RESERVED_CASE_END]: { match: /[Ee][Nn][Dd]/u },
       [TokenType.RESERVED_COMMAND]: {
         match: regex.reservedWord(cfg.reservedCommands, specialWordCharsAll),
       },
@@ -79,7 +78,7 @@ export default class Tokenizer {
         match: regex.reservedWord(cfg.reservedDependentClauses, specialWordCharsAll),
       },
       [TokenType.RESERVED_LOGICAL_OPERATOR]: {
-        match: regex.reservedWord(cfg.reservedLogicalOperators, specialWordCharsAll),
+        match: regex.reservedWord(cfg.reservedLogicalOperators ?? [], specialWordCharsAll),
       },
       [TokenType.RESERVED_KEYWORD]: {
         match: regex.reservedWord(cfg.reservedKeywords, specialWordCharsAll),
@@ -87,10 +86,12 @@ export default class Tokenizer {
       INDEXED_PLACEHOLDER: {
         match: regex.placeholder(cfg.indexedPlaceholderTypes ?? [], '[0-9]*'),
       },
-      NAMED_PLACEHOLDER: { match: regex.placeholder(cfg.namedPlaceholderTypes, '[a-zA-Z0-9._$]+') },
+      NAMED_PLACEHOLDER: {
+        match: regex.placeholder(cfg.namedPlaceholderTypes ?? [], '[a-zA-Z0-9._$]+'),
+      },
       STRING_PLACEHOLDER: {
         match: regex.placeholder(
-          cfg.namedPlaceholderTypes,
+          cfg.namedPlaceholderTypes ?? [],
           regex.string({ stringTypes: cfg.stringTypes }).source
         ),
       },
@@ -123,7 +124,7 @@ export default class Tokenizer {
     this.LEXER = moo.compile(this.LEXER_OPTIONS);
   }
 
-  tokenize(input: string) {
+  tokenize(input: string): moo.Token[] {
     this.LEXER.reset(input);
     return Array.from(this.LEXER);
   }
