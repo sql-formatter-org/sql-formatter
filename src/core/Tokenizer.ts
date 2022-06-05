@@ -52,7 +52,10 @@ interface TokenizerOptions {
   preprocess?: (tokens: Token[]) => Token[];
 }
 
-type PlaceholderPattern = { regex: RegExp; parseKey: (s: string) => string };
+interface PlaceholderPattern {
+  regex: RegExp;
+  parseKey: (s: string) => string;
+}
 
 /** Converts SQL language string into a token stream */
 export default class Tokenizer {
