@@ -1,6 +1,6 @@
 import * as moo from 'moo';
 
-import { TokenType } from 'src/core/token';
+import { Token, TokenType } from 'src/core/token';
 import * as regex from 'src/lexer/regexFactory';
 
 interface TokenizerOptions {
@@ -138,3 +138,27 @@ export default class Tokenizer {
     return Array.from(this.LEXER);
   }
 }
+
+// temporary converter for moo.Token to Token
+export const tokenConverter = (tokens: moo.Token[]): Token[] => {
+  const outTokens = [] as Token[];
+  for (let i = 0; i < tokens.length; i++) {
+    // collect whitespaceBefore
+    let whitespace = '';
+    while (tokens[i].type === 'WS' || tokens[i].type === 'NL') {
+      whitespace += tokens[i].value;
+      if (!tokens[++i]) {
+        break;
+      }
+    }
+    const token = tokens[i];
+
+    outTokens.push({
+      type: token.type as TokenType,
+      text: token.text,
+      value: token.value,
+      whitespaceBefore: whitespace,
+    });
+  }
+  return outTokens;
+};

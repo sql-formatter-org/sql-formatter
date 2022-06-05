@@ -6,7 +6,7 @@ import SqlFormatter, {
   reservedKeywords,
 } from 'src/languages/sql.formatter';
 import Tokenizer from 'src/core/Tokenizer';
-import MooTokenizer from 'src/lexer/tokenizer';
+import MooTokenizer, { tokenConverter } from 'src/lexer/tokenizer';
 
 import fs from 'fs';
 
@@ -18,7 +18,7 @@ const options = {
   reservedCommands,
   reservedBinaryCommands,
   reservedDependentClauses,
-  reservedLogicalOperators: ['AND', 'OR'],
+  // reservedLogicalOperators: ['AND', 'OR'],
   stringTypes: SqlFormatter.stringTypes as any[],
   // blockStart: blockStart,
   // blockEnd: blockEnd,
@@ -36,11 +36,31 @@ describe('Moo', () => {
   const mooStream = mooTokenizer.tokenize(testSql);
 
   const filtered = mooStream.filter(token => token.type !== 'WS' && token.type !== 'NL');
-  console.log('old:', stream.length, 'new:', filtered.length);
+  // console.log('old:', stream.length, 'new:', filtered.length);
 
-  console.log(filtered.map(({ type, text }) => ({ type, text })));
+  // console.log(filtered.map(({ type, text, value }) => ({ type, text, value })));
 
-  console.log(filtered.filter(token => token.type === 'WIP').length);
+  // console.log(filtered.filter(token => token.type === 'WIP').length);
+
+  console.log(stream.length, tokenConverter(mooStream).length);
+
+  console.log(
+    stream.map(({ type, text, value, whitespaceBefore }) => ({
+      type,
+      text,
+      value,
+      ws: whitespaceBefore,
+    }))
+  );
+
+  console.log(
+    tokenConverter(mooStream).map(({ type, text, value, whitespaceBefore }) => ({
+      type,
+      text,
+      value,
+      ws: whitespaceBefore,
+    }))
+  );
 
   it('does not have any WIP tokens', () => {
     expect(filtered).not.toContainEqual(
