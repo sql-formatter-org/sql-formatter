@@ -52,7 +52,7 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
       `);
     });
 
-    it("detects consequitive U&'' strings as separate ones", () => {
+    it("detects consecutive U&'' strings as separate ones", () => {
       expect(format("U&'foo'U&'bar'")).toBe("U&'foo' U&'bar'");
     });
   }
@@ -82,7 +82,7 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
       `);
     });
 
-    it("detects consequitive N'' strings as separate ones", () => {
+    it("detects consecutive N'' strings as separate ones", () => {
       expect(format("N'foo'N'bar'")).toBe("N'foo' N'bar'");
     });
   }
@@ -99,7 +99,7 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
       `);
     });
 
-    it("detects consequitive X'' strings as separate ones", () => {
+    it("detects consecutive X'' strings as separate ones", () => {
       expect(format("X'AE01'X'01F6'")).toBe("X'AE01' X'01F6'");
     });
   }

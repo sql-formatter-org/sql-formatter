@@ -71,7 +71,7 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: I
       `);
     });
 
-    it('detects consequitive U&"" identifiers as separate ones', () => {
+    it('detects consecuitive U&"" identifiers as separate ones', () => {
       expect(format('U&"foo"U&"bar"')).toBe('U&"foo" U&"bar"');
     });
   }
