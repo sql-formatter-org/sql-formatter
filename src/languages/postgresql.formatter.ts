@@ -1681,15 +1681,8 @@ export default class PostgreSqlFormatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...reservedKeywords,
       ]),
-      stringTypes: [
-        "''",
-        '$$',
-        { prefix: 'U&', quote: "''" },
-        { prefix: 'E', quote: "''" },
-        { prefix: 'X', quote: "''" },
-        { prefix: 'B', quote: "''" },
-      ],
-      identifierTypes: [`""`, { prefix: 'U&', quote: '""' }],
+      stringTypes: [{ quote: "''", prefixes: ['U&', 'E', 'X', 'B'] }, '$$'],
+      identifierTypes: [{ quote: '""', prefixes: ['U&'] }],
       numberedPlaceholderTypes: ['$'],
       operators: PostgreSqlFormatter.operators,
     });

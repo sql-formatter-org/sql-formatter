@@ -99,7 +99,7 @@ export type PlainQuoteType = keyof typeof quotePatterns;
 
 export type PrefixedQuoteType = {
   quote: PlainQuoteType;
-  prefix: string;
+  prefixes: string[];
 };
 
 export type QuoteType = PlainQuoteType | PrefixedQuoteType;
@@ -111,11 +111,15 @@ const toCaseInsensitivePattern = (prefix: string): string =>
     .map(char => '[' + char.toUpperCase() + char.toLowerCase() + ']')
     .join('');
 
+// Converts ["a", "b"] to "(?:[Aa]|[Bb|)"
+const prefixesPattern = (prefixes: string[]): string =>
+  '(?:' + prefixes.map(toCaseInsensitivePattern).join('|') + '|)';
+
 const createSingleQuotePattern = (type: QuoteType): string => {
   if (typeof type === 'string') {
     return '(' + quotePatterns[type] + ')';
   } else {
-    return '(' + toCaseInsensitivePattern(type.prefix) + quotePatterns[type.quote] + ')';
+    return '(' + prefixesPattern(type.prefixes) + quotePatterns[type.quote] + ')';
   }
 };
 

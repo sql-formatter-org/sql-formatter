@@ -789,7 +789,7 @@ export default class SparkFormatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...reservedKeywords,
       ]),
-      stringTypes: ["''", { prefix: 'X', quote: "''" }],
+      stringTypes: [{ quote: "''", prefixes: ['X'] }],
       identifierTypes: ['``'],
       operators: SparkFormatter.operators,
       preprocess,

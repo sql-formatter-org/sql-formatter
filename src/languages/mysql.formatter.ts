@@ -1327,7 +1327,7 @@ export default class MySqlFormatter extends Formatter {
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
-      stringTypes: ["''", '""', { prefix: 'X', quote: "''" }],
+      stringTypes: ['""', { quote: "''", prefixes: ['X'] }],
       identifierTypes: ['``'],
       positionalPlaceholders: true,
       lineCommentTypes: ['--', '#'],
