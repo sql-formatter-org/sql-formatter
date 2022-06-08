@@ -40,6 +40,8 @@ export interface IdentChars {
   any?: string;
   // concatenated string of chars that only appear at the beginning of a valid identifier
   prefix?: string;
+  // True to allow single dashes (-) inside identifiers, but not at the beginning or end
+  dashes?: boolean;
 }
 
 /**
@@ -68,7 +70,7 @@ export const createLineCommentRegex = (lineCommentTypes: string[]): RegExp =>
  */
 export const createReservedWordRegex = (
   reservedKeywords: string[],
-  specialChars: IdentChars = {}
+  { any, dashes }: IdentChars = {}
 ): RegExp => {
   if (reservedKeywords.length === 0) {
     return /^\b$/u;
@@ -80,7 +82,8 @@ export const createReservedWordRegex = (
   // For example "SELECT$ME" should be tokenized as:
   // - ["SELECT$ME"] when $ is allowed inside identifiers
   // - ["SELECT", "$", "ME"] when $ can't be part of identifiers.
-  const avoidIdentChars = specialChars.any ? `(?![${escapeRegExp(specialChars.any)}])` : '';
+  const avoidIdentChars =
+    any || dashes ? `(?![${escapeRegExp(any || '')}${dashes ? '-' : ''}])` : '';
 
   const reservedKeywordsPattern = sortByLengthDesc(reservedKeywords)
     .join('|')
@@ -98,16 +101,20 @@ export const createIdentRegex = (specialChars: IdentChars = {}): RegExp =>
 /**
  * Builds a RegExp string for valid identifiers in a SQL dialect
  */
-export const createIdentPattern = (specialChars: IdentChars = {}): string => {
-  const prefix = specialChars.prefix ? `[${escapeRegExp(specialChars.prefix)}]*` : '';
+export const createIdentPattern = ({ prefix, any, dashes }: IdentChars = {}): string => {
+  const prefixChars = prefix ? `[${escapeRegExp(prefix)}]*` : '';
   // Unicode letters, diacritical marks and underscore
   const letter = '\\p{Alphabetic}\\p{Mark}_';
   // Numbers 0..9, plus various unicode numbers
   const number = '\\p{Decimal_Number}';
-  const specialWordChars = escapeRegExp(specialChars.any ?? '');
+  const specialWordChars = escapeRegExp(any ?? '');
 
-  return `${prefix}[${letter}${number}${specialWordChars}]+`;
+  const pattern = `${prefixChars}[${letter}${number}${specialWordChars}]+`;
+
+  return dashes ? withDashes(pattern) : pattern;
 };
+
+const withDashes = (pattern: string): string => pattern + '(?:-' + pattern + ')*';
 
 // Converts "ab" to "[Aa][Bb]"
 const toCaseInsensitivePattern = (prefix: string): string =>

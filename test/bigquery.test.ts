@@ -46,11 +46,21 @@ describe('BigQueryFormatter', () => {
   // "my" <minus> "ident"
   // https://cloud.google.com/bigquery/docs/reference/standard-sql/lexical
   it('supports dashes inside identifiers', () => {
-    const result = format('SELECT alpha-foo, some-long-identifier\nFROM beta');
+    const result = format('SELECT alpha-foo, where-long-identifier\nFROM beta');
     expect(result).toBe(dedent`
       SELECT
         alpha-foo,
-        some-long-identifier
+        where-long-identifier
+      FROM
+        beta
+    `);
+  });
+
+  it('treats repeated dashes as comments', () => {
+    const result = format('SELECT alpha--foo, where-long-identifier\nFROM beta');
+    expect(result).toBe(dedent`
+      SELECT
+        alpha --foo, where-long-identifier
       FROM
         beta
     `);

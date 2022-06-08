@@ -849,7 +849,7 @@ export default class BigQueryFormatter extends Formatter {
       namedPlaceholderTypes: ['@'],
       quotedPlaceholderTypes: ['@'],
       lineCommentTypes: ['--', '#'],
-      specialIdentChars: { any: '-' },
+      specialIdentChars: { dashes: true },
       operators: BigQueryFormatter.operators,
       preprocess,
     });
