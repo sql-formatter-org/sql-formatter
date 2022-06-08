@@ -107,9 +107,9 @@ export type PrefixedQuoteType = {
 
 export type QuoteType = PlainQuoteType | PrefixedQuoteType;
 
-export type VariableRegex = {
+export interface VariableRegex {
   regex: string;
-};
+}
 
 export type VariableType = VariableRegex | PrefixedQuoteType;
 
