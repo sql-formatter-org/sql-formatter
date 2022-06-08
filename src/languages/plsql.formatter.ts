@@ -464,6 +464,7 @@ export default class PlSqlFormatter extends Formatter {
       // TODO: support custom-delimited strings: Q'{..}' q'<..>' etc
       stringTypes: [{ quote: "''", prefixes: ['N'] }],
       identifierTypes: [`""`],
+      variableTypes: [{ regex: '&{1,2}[A-Za-z][A-Za-z0-9_$#]*' }],
       numberedPlaceholderTypes: [':'],
       namedPlaceholderTypes: [':'],
       specialIdentChars: { any: '$#' },

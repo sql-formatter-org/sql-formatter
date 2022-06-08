@@ -66,6 +66,18 @@ describe('PlSqlFormatter', () => {
     `);
   });
 
+  it('supports &name substitution variables', () => {
+    const result = format('SELECT &name, &some$Special#Chars_, &hah123 FROM &&tbl');
+    expect(result).toBe(dedent`
+      SELECT
+        &name,
+        &some$Special#Chars_,
+        &hah123
+      FROM
+        &&tbl
+    `);
+  });
+
   it('formats INSERT without INTO', () => {
     const result = format(
       "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
