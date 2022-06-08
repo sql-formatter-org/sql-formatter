@@ -27,6 +27,8 @@ interface TokenizerOptions {
   stringTypes: regexFactory.QuoteType[];
   // Types of quotes to use for quoted identifiers
   identifierTypes: regexFactory.QuoteType[];
+  // Types of quotes to use for variables
+  variableTypes?: regexFactory.QuoteType[];
   // Open-parenthesis characters, like: (, [, {
   blockStart?: string[];
   // Close-parenthesis characters, like: ), ], }
@@ -75,6 +77,9 @@ export default class Tokenizer {
     this.REGEX_MAP = {
       [TokenType.IDENT]: regexFactory.createIdentRegex(cfg.specialIdentChars),
       [TokenType.STRING]: regexFactory.createQuoteRegex(cfg.stringTypes),
+      [TokenType.VARIABLE]: cfg.variableTypes
+        ? regexFactory.createQuoteRegex(cfg.variableTypes)
+        : NULL_REGEX,
       [TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(
         cfg.reservedKeywords,
         cfg.specialIdentChars
@@ -200,6 +205,7 @@ export default class Tokenizer {
       this.matchToken(TokenType.BLOCK_COMMENT, input) ||
       this.matchToken(TokenType.STRING, input) ||
       this.matchQuotedIdentToken(input) ||
+      this.matchToken(TokenType.VARIABLE, input) ||
       this.matchToken(TokenType.BLOCK_START, input) ||
       this.matchToken(TokenType.BLOCK_END, input) ||
       this.matchPlaceholderToken(input) ||

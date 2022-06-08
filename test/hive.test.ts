@@ -1,3 +1,5 @@
+import dedent from 'dedent-js';
+
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
 
 import HiveFormatter from 'src/languages/hive.formatter';
@@ -34,5 +36,22 @@ describe('HiveFormatter', () => {
     expect(() => format('SELECT *', { params: ['1', '2', '3'] })).toThrow(
       'Unexpected "params" option. Prepared statement placeholders not supported for Hive.'
     );
+  });
+
+  // eslint-disable-next-line no-template-curly-in-string
+  it('recognizes ${hivevar:name} substitution variables', () => {
+    const result = format(
+      // eslint-disable-next-line no-template-curly-in-string
+      "SELECT ${var1}, ${ var 2 } FROM ${hivevar:table_name} WHERE name = '${hivevar:name}';"
+    );
+    expect(result).toBe(dedent`
+      SELECT
+        \${var1},
+        \${ var 2 }
+      FROM
+        \${hivevar:table_name}
+      WHERE
+        name = '\${hivevar:name}';
+    `);
   });
 });

@@ -91,6 +91,7 @@ export default class StatementFormatter {
       case TokenType.IDENT:
       case TokenType.STRING:
       case TokenType.NUMBER:
+      case TokenType.VARIABLE:
         return this.formatWord(token);
       default:
         throw new Error(`Unexpected token type: ${token.type}`);

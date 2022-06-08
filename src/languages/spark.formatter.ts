@@ -791,6 +791,7 @@ export default class SparkFormatter extends Formatter {
       ]),
       stringTypes: [{ quote: "''", prefixes: ['X'] }],
       identifierTypes: ['``'],
+      variableTypes: ['${}'],
       operators: SparkFormatter.operators,
       preprocess,
     });

@@ -86,6 +86,7 @@ export const createIdentPattern = (specialChars: IdentChars = {}): string => {
 // 5. PostgreSQL dollar-quoted
 // 6. BigQuery '''triple-quoted'''
 // 7. BigQuery """triple-quoted"""
+// 8. Hive and Spark variables: ${name}
 const quotePatterns = {
   '``': '(`[^`]*($|`))+',
   '[]': '(\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*',
@@ -94,6 +95,7 @@ const quotePatterns = {
   '$$': '(?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$)',
   "'''..'''": "'''[^\\\\]*?(?:\\\\.[^\\\\]*?)*?('''|$)",
   '""".."""': '"""[^\\\\]*?(?:\\\\.[^\\\\]*?)*?("""|$)',
+  '${}': '(\\$\\{[^\\}]*($|\\}))',
 };
 export type PlainQuoteType = keyof typeof quotePatterns;
 

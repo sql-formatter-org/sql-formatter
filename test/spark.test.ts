@@ -88,4 +88,21 @@ describe('SparkFormatter', () => {
       'Unexpected "params" option. Prepared statement placeholders not supported for Spark.'
     );
   });
+
+  // eslint-disable-next-line no-template-curly-in-string
+  it('recognizes ${name} substitution variables', () => {
+    const result = format(
+      // eslint-disable-next-line no-template-curly-in-string
+      "SELECT ${var1}, ${ var 2 } FROM ${table_name} WHERE name = '${name}';"
+    );
+    expect(result).toBe(dedent`
+      SELECT
+        \${var1},
+        \${ var 2 }
+      FROM
+        \${table_name}
+      WHERE
+        name = '\${name}';
+    `);
+  });
 });
