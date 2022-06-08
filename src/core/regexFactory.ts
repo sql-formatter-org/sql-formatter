@@ -106,7 +106,7 @@ export const createIdentPattern = (specialChars: IdentChars = {}): string => {
   const number = '\\p{Decimal_Number}';
   const specialWordChars = escapeRegExp(specialChars.any ?? '');
 
-  return `(${prefix}([${letter}${number}${specialWordChars}]+))`;
+  return `${prefix}[${letter}${number}${specialWordChars}]+`;
 };
 
 // Converts "ab" to "[Aa][Bb]"
@@ -122,9 +122,9 @@ const prefixesPattern = ({ prefixes, required }: PrefixedQuoteType): string =>
 
 const createSingleQuotePattern = (type: QuoteType): string => {
   if (typeof type === 'string') {
-    return '(' + quotePatterns[type] + ')';
+    return quotePatterns[type];
   } else {
-    return '(' + prefixesPattern(type) + quotePatterns[type.quote] + ')';
+    return prefixesPattern(type) + quotePatterns[type.quote];
   }
 };
 
@@ -134,7 +134,7 @@ export const createQuotePattern = (quoteTypes: QuoteType[]): string =>
 
 const createSingleVariablePattern = (type: VariableType): string => {
   if ('regex' in type) {
-    return '(' + type.regex + ')';
+    return type.regex;
   } else {
     return createSingleQuotePattern(type);
   }
