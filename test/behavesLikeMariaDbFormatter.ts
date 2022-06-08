@@ -61,6 +61,29 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
     `);
   });
 
+  it('supports @"name", @\'name\', @`name` variables', () => {
+    expect(format(`SELECT @"foo fo", @'bar ar', @\`baz zaz\` FROM tbl;`)).toBe(dedent`
+      SELECT
+        @"foo fo",
+        @'bar ar',
+        @\`baz zaz\`
+      FROM
+        tbl;
+    `);
+  });
+
+  it('supports setting variables: @"var" :=', () => {
+    expect(format('SET @"foo" := (SELECT * FROM tbl);')).toBe(dedent`
+      SET
+        @"foo" := (
+          SELECT
+            *
+          FROM
+            tbl
+        );
+    `);
+  });
+
   // Issue #181
   it('does not wrap CHARACTER SET to multiple lines', () => {
     expect(format('ALTER TABLE t MODIFY col1 VARCHAR(50) CHARACTER SET greek')).toBe(dedent`

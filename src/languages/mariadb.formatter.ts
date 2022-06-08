@@ -1166,6 +1166,11 @@ export default class MariaDbFormatter extends Formatter {
       reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
       stringTypes: ['""', { quote: "''", prefixes: ['X'] }],
       identifierTypes: ['``'],
+      variableTypes: [
+        { quote: '""', prefixes: ['@'], required: true },
+        { quote: "''", prefixes: ['@'], required: true },
+        { quote: '``', prefixes: ['@'], required: true },
+      ],
       positionalPlaceholders: true,
       lineCommentTypes: ['--', '#'],
       operators: MariaDbFormatter.operators,
