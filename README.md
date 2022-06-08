@@ -15,7 +15,7 @@ It does not support:
 - Stored procedures.
 - Changing of the delimiter type to something else than `;`.
 
-→ [Try the demo.](https://zeroturnaround.github.io/sql-formatter)
+→ [Try the demo.](https://sql-formatter-org.github.io/sql-formatter)
 
 ## Install
 
