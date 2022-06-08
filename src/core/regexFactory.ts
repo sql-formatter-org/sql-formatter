@@ -106,10 +106,7 @@ export const createIdentPattern = (specialChars: IdentChars = {}): string => {
   const number = '\\p{Decimal_Number}';
   const specialWordChars = escapeRegExp(specialChars.any ?? '');
 
-  const arrayAccessor = '\\[\\d\\]';
-  const mapAccessor = `\\[['"][${letter}${number}]+['"]\\]`;
-
-  return `(${prefix}([${letter}${number}${specialWordChars}]+))(${arrayAccessor}|${mapAccessor})?`;
+  return `(${prefix}([${letter}${number}${specialWordChars}]+))`;
 };
 
 // Converts "ab" to "[Aa][Bb]"
