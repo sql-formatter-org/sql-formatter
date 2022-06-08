@@ -2,17 +2,21 @@
 
 - [BigQuery][]: identifier syntax
 - [DB2][]: identifier syntax
-- [Hive][]: `${hivevar:name}` or `${hiveconf:name}`. Although referred to as variables, they are more akin to prepared statement parameters.
+- [Hive][]: `${hivevar:name}`, `${hiveconf:name}` or `${name}`. These are substitution variables (as in Oracle SQL terminology).
+  They behave more like string-interpolation, that is, the values aren't automatically escaped by the system.
+  A common example is to place the variable inside a string: `SELECT * FROM users WHERE name = '${hivevar:USER_NAME}'`.
+  Also one can use the variable to parameterize table or column name (`SELECT * FROM ${hivevar:my_table}`).
 - [MariaDB][]: `@name` (where the name consists of alphanumeric characters, `.`, `_`, and `$`), `@'var name'`, `@"var name"`, `` @`var name` `` (can be quoted as string or identifier)
 - [MySQL][]: Same as MariaDB
 - N1QL: _N/A_
-- [PL/SQL][]: `&name` substitution variables and `:name` bind variables.
+- [PL/SQL][]: `&name` substitution variables (and `:name` bind variables - see [parameters][]).
 - [PostgreSQL][]: identifier syntax (only in PL/pgSQL).
 - Redshift: _N/A_
-- [Spark][]: `${name}` Like with Hive, these seem to be more similar to prepared statement properties.
+- [Spark][]: `${name}` Like with Hive, these are substitution variables.
 - SQLite: _N/A_
 - [Transact-SQL][]: `@name` (using identifier syntax for name)
 
+[parameters]: ./parameters.md
 [bigquery]: https://cloud.google.com/bigquery/docs/reference/standard-sql/procedural-language
 [db2]: https://www.ibm.com/docs/en/db2-for-zos/11?topic=pl-references-sql-parameters-variables
 [hive]: https://stackoverflow.com/questions/12464636/how-to-set-variables-in-hive-scripts
