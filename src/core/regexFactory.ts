@@ -107,6 +107,12 @@ export type PrefixedQuoteType = {
 
 export type QuoteType = PlainQuoteType | PrefixedQuoteType;
 
+export type VariableRegex = {
+  regex: string;
+};
+
+export type VariableType = VariableRegex | PrefixedQuoteType;
+
 // Converts "ab" to "[Aa][Bb]"
 const toCaseInsensitivePattern = (prefix: string): string =>
   prefix
@@ -130,9 +136,23 @@ const createSingleQuotePattern = (type: QuoteType): string => {
 export const createQuotePattern = (quoteTypes: QuoteType[]): string =>
   quoteTypes.map(createSingleQuotePattern).join('|');
 
+const createSingleVariablePattern = (type: VariableType): string => {
+  if ('regex' in type) {
+    return '(' + type.regex + ')';
+  } else {
+    return createSingleQuotePattern(type);
+  }
+};
+
+const patternToRegex = (pattern: string): RegExp => new RegExp('^(' + pattern + ')', 'u');
+
+/** Builds a RegExp for matching variables */
+export const createVariableRegex = (varTypes: VariableType[]): RegExp =>
+  patternToRegex(varTypes.map(createSingleVariablePattern).join('|'));
+
 /** Builds a RegExp for matching quote-delimited patterns */
 export const createQuoteRegex = (quoteTypes: QuoteType[]): RegExp =>
-  new RegExp('^(' + createQuotePattern(quoteTypes) + ')', 'u');
+  patternToRegex(createQuotePattern(quoteTypes));
 
 /** Escapes paren characters for RegExp patterns */
 const escapeParen = (paren: string): string => {

@@ -1167,6 +1167,7 @@ export default class MariaDbFormatter extends Formatter {
       stringTypes: ['""', { quote: "''", prefixes: ['X'] }],
       identifierTypes: ['``'],
       variableTypes: [
+        { regex: '@[A-Za-z0-9_.$]+' },
         { quote: '""', prefixes: ['@'], required: true },
         { quote: "''", prefixes: ['@'], required: true },
         { quote: '``', prefixes: ['@'], required: true },

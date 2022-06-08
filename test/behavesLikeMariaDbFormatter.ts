@@ -39,25 +39,18 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   });
   supportsParams(format, { positional: true });
 
-  // TODO: Disabled for now.
-  // Bring these back later by implementing a generic support for variables in all dialects.
-  it.skip('supports @variables', () => {
-    expect(format('SELECT @foo, @bar')).toBe(dedent`
+  it('supports @variables', () => {
+    expect(format('SELECT @foo, @some_long.var$with$special.chars')).toBe(dedent`
       SELECT
         @foo,
-        @bar
+        @some_long.var$with$special.chars
     `);
   });
 
-  it.skip('supports setting variables: @var :=', () => {
-    expect(format('SET @foo := (SELECT * FROM tbl);')).toBe(dedent`
+  it('supports setting variables: @var :=', () => {
+    expect(format('SET @foo := 10;')).toBe(dedent`
       SET
-        @foo := (
-          SELECT
-            *
-          FROM
-            tbl
-        );
+        @foo := 10;
     `);
   });
 
