@@ -95,13 +95,14 @@ const quotePatterns = {
   '$$': '(?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$)',
   "'''..'''": "'''[^\\\\]*?(?:\\\\.[^\\\\]*?)*?('''|$)",
   '""".."""': '"""[^\\\\]*?(?:\\\\.[^\\\\]*?)*?("""|$)',
-  '${}': '(\\$\\{[^\\}]*($|\\}))',
+  '{}': '(\\{[^\\}]*($|\\}))',
 };
 export type PlainQuoteType = keyof typeof quotePatterns;
 
 export type PrefixedQuoteType = {
   quote: PlainQuoteType;
   prefixes: string[];
+  required?: boolean; // True when prefix is required
 };
 
 export type QuoteType = PlainQuoteType | PrefixedQuoteType;
@@ -113,15 +114,15 @@ const toCaseInsensitivePattern = (prefix: string): string =>
     .map(char => '[' + char.toUpperCase() + char.toLowerCase() + ']')
     .join('');
 
-// Converts ["a", "b"] to "(?:[Aa]|[Bb|)"
-const prefixesPattern = (prefixes: string[]): string =>
-  '(?:' + prefixes.map(toCaseInsensitivePattern).join('|') + '|)';
+// Converts ["a", "b"] to "(?:[Aa]|[Bb]|)" or "(?:[Aa]|[Bb])" when required = true
+const prefixesPattern = ({ prefixes, required }: PrefixedQuoteType): string =>
+  '(?:' + prefixes.map(toCaseInsensitivePattern).join('|') + (required ? '' : '|') + ')';
 
 const createSingleQuotePattern = (type: QuoteType): string => {
   if (typeof type === 'string') {
     return '(' + quotePatterns[type] + ')';
   } else {
-    return '(' + prefixesPattern(type.prefixes) + quotePatterns[type.quote] + ')';
+    return '(' + prefixesPattern(type) + quotePatterns[type.quote] + ')';
   }
 };
 

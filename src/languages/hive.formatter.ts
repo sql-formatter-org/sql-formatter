@@ -626,7 +626,7 @@ export default class HiveFormatter extends Formatter {
       ]),
       stringTypes: ['""', "''"],
       identifierTypes: ['``'],
-      variableTypes: ['${}'],
+      variableTypes: [{ quote: '{}', prefixes: ['$'], required: true }],
       operators: HiveFormatter.operators,
     });
   }
