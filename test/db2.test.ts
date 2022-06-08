@@ -63,17 +63,6 @@ describe('Db2Formatter', () => {
     `);
   });
 
-  it('recognizes @ and # as part of identifiers', () => {
-    const result = format('SELECT col#1, @col2 FROM tbl');
-    expect(result).toBe(dedent`
-      SELECT
-        col#1,
-        @col2
-      FROM
-        tbl
-    `);
-  });
-
   // DB2-specific string types
   it('supports strings with G, GX, UX prefixes', () => {
     expect(format(`SELECT G'blah blah', GX'01AC', UX'CCF239' FROM foo`)).toBe(dedent`
