@@ -1,5 +1,47 @@
 import { escapeRegExp, isEmpty, sortByLengthDesc } from 'src/utils';
 
+// This enables the following quote styles:
+// 1. backtick quoted using `` to escape
+// 2. square bracket quoted (SQL Server) using ]] to escape
+// 3. double quoted using "" or \" to escape
+// 4. single quoted using '' or \' to escape
+// 5. PostgreSQL dollar-quoted
+// 6. BigQuery '''triple-quoted'''
+// 7. BigQuery """triple-quoted"""
+// 8. Hive and Spark variables: ${name}
+const quotePatterns = {
+  '``': '(`[^`]*($|`))+',
+  '[]': '(\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*',
+  '""': '("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+',
+  "''": "('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
+  '$$': '(?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$)',
+  "'''..'''": "'''[^\\\\]*?(?:\\\\.[^\\\\]*?)*?('''|$)",
+  '""".."""': '"""[^\\\\]*?(?:\\\\.[^\\\\]*?)*?("""|$)',
+  '{}': '(\\{[^\\}]*($|\\}))',
+};
+export type PlainQuoteType = keyof typeof quotePatterns;
+
+export type PrefixedQuoteType = {
+  quote: PlainQuoteType;
+  prefixes: string[];
+  required?: boolean; // True when prefix is required
+};
+
+export type QuoteType = PlainQuoteType | PrefixedQuoteType;
+
+export interface VariableRegex {
+  regex: string;
+}
+
+export type VariableType = VariableRegex | PrefixedQuoteType;
+
+export interface IdentChars {
+  // concatenated string of chars that can appear anywhere in a valid identifier
+  any?: string;
+  // concatenated string of chars that only appear at the beginning of a valid identifier
+  prefix?: string;
+}
+
 /**
  * Builds a RegExp containing all operators for a SQL dialect
  * @param {string} monadOperators - concatenated string of all 1-length operators
@@ -48,13 +90,6 @@ export const createReservedWordRegex = (
   return new RegExp(`^(${reservedKeywordsPattern})${avoidIdentChars}\\b`, 'iu');
 };
 
-export interface IdentChars {
-  // concatenated string of chars that can appear anywhere in a valid identifier
-  any?: string;
-  // concatenated string of chars that only appear at the beginning of a valid identifier
-  prefix?: string;
-}
-
 /**
  * Builds a RegExp for valid identifiers in a SQL dialect
  */
@@ -77,41 +112,6 @@ export const createIdentPattern = (specialChars: IdentChars = {}): string => {
 
   return `(${prefix}([${letter}${number}${specialWordChars}]+))(${arrayAccessor}|${mapAccessor})?`;
 };
-
-// This enables the following quote styles:
-// 1. backtick quoted using `` to escape
-// 2. square bracket quoted (SQL Server) using ]] to escape
-// 3. double quoted using "" or \" to escape
-// 4. single quoted using '' or \' to escape
-// 5. PostgreSQL dollar-quoted
-// 6. BigQuery '''triple-quoted'''
-// 7. BigQuery """triple-quoted"""
-// 8. Hive and Spark variables: ${name}
-const quotePatterns = {
-  '``': '(`[^`]*($|`))+',
-  '[]': '(\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*',
-  '""': '("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+',
-  "''": "('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
-  '$$': '(?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$)',
-  "'''..'''": "'''[^\\\\]*?(?:\\\\.[^\\\\]*?)*?('''|$)",
-  '""".."""': '"""[^\\\\]*?(?:\\\\.[^\\\\]*?)*?("""|$)',
-  '{}': '(\\{[^\\}]*($|\\}))',
-};
-export type PlainQuoteType = keyof typeof quotePatterns;
-
-export type PrefixedQuoteType = {
-  quote: PlainQuoteType;
-  prefixes: string[];
-  required?: boolean; // True when prefix is required
-};
-
-export type QuoteType = PlainQuoteType | PrefixedQuoteType;
-
-export interface VariableRegex {
-  regex: string;
-}
-
-export type VariableType = VariableRegex | PrefixedQuoteType;
 
 // Converts "ab" to "[Aa][Bb]"
 const toCaseInsensitivePattern = (prefix: string): string =>
