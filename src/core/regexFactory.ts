@@ -48,10 +48,9 @@ export interface IdentChars {
  * @param {string[]} polyadOperators - list of strings of all >1-length operators
  */
 export const createOperatorRegex = (monadOperators: string, polyadOperators: string[]): RegExp =>
-  new RegExp(
-    `^(${sortByLengthDesc(polyadOperators).map(escapeRegExp).join('|')}|` +
-      `[${monadOperators.split('').map(escapeRegExp).join('')}])`,
-    'u'
+  patternToRegex(
+    `${sortByLengthDesc(polyadOperators).map(escapeRegExp).join('|')}|` +
+      `[${monadOperators.split('').map(escapeRegExp).join('')}]`
   );
 
 /**
@@ -94,7 +93,7 @@ export const createReservedWordRegex = (
  * Builds a RegExp for valid identifiers in a SQL dialect
  */
 export const createIdentRegex = (specialChars: IdentChars = {}): RegExp =>
-  new RegExp(`^(${createIdentPattern(specialChars)})`, 'u');
+  patternToRegex(createIdentPattern(specialChars));
 
 /**
  * Builds a RegExp string for valid identifiers in a SQL dialect
@@ -144,8 +143,6 @@ const createSingleVariablePattern = (type: VariableType): string => {
   }
 };
 
-const patternToRegex = (pattern: string): RegExp => new RegExp('^(' + pattern + ')', 'u');
-
 /** Builds a RegExp for matching variables */
 export const createVariableRegex = (varTypes: VariableType[]): RegExp =>
   patternToRegex(varTypes.map(createSingleVariablePattern).join('|'));
@@ -170,7 +167,7 @@ const escapeParen = (paren: string): string => {
  * @param {string[]} parens - list of strings that denote parenthesis patterns
  */
 export const createParenRegex = (parens: string[]): RegExp =>
-  new RegExp('^(' + parens.map(escapeParen).join('|') + ')', 'iu');
+  patternToRegex(parens.map(escapeParen).join('|'));
 
 /**
  * Builds a RegExp for placeholder patterns
@@ -183,5 +180,7 @@ export const createPlaceholderRegex = (types: string[], pattern: string): RegExp
   }
   const typesRegex = types.map(escapeRegExp).join('|');
 
-  return new RegExp(`^((?:${typesRegex})(?:${pattern}))`, 'u');
+  return patternToRegex(`(?:${typesRegex})(?:${pattern})`);
 };
+
+const patternToRegex = (pattern: string): RegExp => new RegExp('^(' + pattern + ')', 'u');
