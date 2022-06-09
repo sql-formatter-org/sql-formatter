@@ -727,7 +727,7 @@ export default class RedshiftFormatter extends Formatter {
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
       stringTypes: ["''"],
-      identifierTypes: [`""`],
+      identTypes: [`""`],
       numberedPlaceholderTypes: ['$'],
       operators: RedshiftFormatter.operators,
     });

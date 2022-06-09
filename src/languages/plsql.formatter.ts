@@ -463,7 +463,7 @@ export default class PlSqlFormatter extends Formatter {
       reservedKeywords: dedupe(reservedKeywords),
       // TODO: support custom-delimited strings: Q'{..}' q'<..>' etc
       stringTypes: [{ quote: "''", prefixes: ['N'] }],
-      identifierTypes: [`""`],
+      identTypes: [`""`],
       identChars: { rest: '$#' },
       variableTypes: [{ regex: '&{1,2}[A-Za-z][A-Za-z0-9_$#]*' }],
       numberedPlaceholderTypes: [':'],

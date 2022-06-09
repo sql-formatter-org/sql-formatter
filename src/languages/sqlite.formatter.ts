@@ -431,7 +431,7 @@ export default class SqliteFormatter extends Formatter {
       // https://www.sqlite.org/lang_keywords.html
       reservedKeywords: [...standardReservedWords, ...nonStandardSqliteReservedWords],
       stringTypes: [{ quote: "''", prefixes: ['X'] }],
-      identifierTypes: [`""`, '``', '[]'],
+      identTypes: [`""`, '``', '[]'],
       // https://www.sqlite.org/lang_expr.html#parameters
       positionalPlaceholders: true,
       numberedPlaceholderTypes: ['?'],

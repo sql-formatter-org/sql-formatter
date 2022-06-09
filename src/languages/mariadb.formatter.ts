@@ -1165,7 +1165,7 @@ export default class MariaDbFormatter extends Formatter {
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
       stringTypes: ['""', { quote: "''", prefixes: ['X'] }],
-      identifierTypes: ['``'],
+      identTypes: ['``'],
       identChars: { first: '$', rest: '$' },
       variableTypes: [
         { regex: '@[A-Za-z0-9_.$]+' },

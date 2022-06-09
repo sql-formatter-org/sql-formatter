@@ -26,7 +26,7 @@ interface TokenizerOptions {
   // Types of quotes to use for strings
   stringTypes: regexFactory.QuoteType[];
   // Types of quotes to use for quoted identifiers
-  identifierTypes: regexFactory.QuoteType[];
+  identTypes: regexFactory.QuoteType[];
   // Types of quotes to use for variables
   variableTypes?: regexFactory.VariableType[];
   // Open-parenthesis characters, like: (, [, {
@@ -72,7 +72,7 @@ export default class Tokenizer {
       this.preprocess = cfg.preprocess;
     }
 
-    this.quotedIdentRegex = regexFactory.createQuoteRegex(cfg.identifierTypes);
+    this.quotedIdentRegex = regexFactory.createQuoteRegex(cfg.identTypes);
 
     this.REGEX_MAP = {
       [TokenType.IDENT]: regexFactory.createIdentRegex(cfg.identChars),
@@ -136,7 +136,7 @@ export default class Tokenizer {
         // :"name" placeholders
         regex: regexFactory.createPlaceholderRegex(
           cfg.quotedPlaceholderTypes ?? [],
-          regexFactory.createQuotePattern(cfg.identifierTypes)
+          regexFactory.createQuotePattern(cfg.identTypes)
         ),
         parseKey: v =>
           this.getEscapedPlaceholderKey({ key: v.slice(2, -1), quoteChar: v.slice(-1) }),

@@ -870,7 +870,7 @@ export default class Db2Formatter extends Formatter {
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
       stringTypes: [{ quote: "''", prefixes: ['X', 'G', 'N', 'GX', 'UX', 'U&'] }],
-      identifierTypes: [`""`],
+      identTypes: [`""`],
       positionalPlaceholders: true,
       namedPlaceholderTypes: [':'],
       operators: Db2Formatter.operators,

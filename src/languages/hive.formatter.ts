@@ -625,7 +625,7 @@ export default class HiveFormatter extends Formatter {
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
       stringTypes: ['""', "''"],
-      identifierTypes: ['``'],
+      identTypes: ['``'],
       variableTypes: [{ quote: '{}', prefixes: ['$'], required: true }],
       operators: HiveFormatter.operators,
     });

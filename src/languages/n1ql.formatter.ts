@@ -524,7 +524,7 @@ export default class N1qlFormatter extends Formatter {
       // but we support them anyway as all other SQL dialects do,
       // which simplifies writing tests that are shared between all dialects.
       stringTypes: [`""`, "''"],
-      identifierTypes: ['``'],
+      identTypes: ['``'],
       blockStart: ['(', '[', '{'],
       blockEnd: [')', ']', '}'],
       positionalPlaceholders: true,

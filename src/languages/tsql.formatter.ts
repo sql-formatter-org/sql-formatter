@@ -1243,7 +1243,7 @@ export default class TSqlFormatter extends Formatter {
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
       stringTypes: [{ quote: "''", prefixes: ['N'] }],
-      identifierTypes: [`""`, '[]'],
+      identTypes: [`""`, '[]'],
       identChars: { first: '#@', rest: '#@$' },
       namedPlaceholderTypes: ['@'],
       quotedPlaceholderTypes: ['@'],

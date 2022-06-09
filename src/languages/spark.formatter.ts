@@ -790,7 +790,7 @@ export default class SparkFormatter extends Formatter {
         ...reservedKeywords,
       ]),
       stringTypes: [{ quote: "''", prefixes: ['X'] }],
-      identifierTypes: ['``'],
+      identTypes: ['``'],
       variableTypes: [{ quote: '{}', prefixes: ['$'], required: true }],
       operators: SparkFormatter.operators,
       preprocess,

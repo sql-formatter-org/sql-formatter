@@ -1682,7 +1682,7 @@ export default class PostgreSqlFormatter extends Formatter {
         ...reservedKeywords,
       ]),
       stringTypes: [{ quote: "''", prefixes: ['U&', 'E', 'X', 'B'] }, '$$'],
-      identifierTypes: [{ quote: '""', prefixes: ['U&'] }],
+      identTypes: [{ quote: '""', prefixes: ['U&'] }],
       identChars: { rest: '$' },
       numberedPlaceholderTypes: ['$'],
       operators: PostgreSqlFormatter.operators,

@@ -378,7 +378,7 @@ export default class SqlFormatter extends Formatter {
       reservedDependentClauses,
       reservedKeywords: dedupe(reservedKeywords),
       stringTypes: [{ quote: "''", prefixes: ['X'] }],
-      identifierTypes: [`""`, '``'],
+      identTypes: [`""`, '``'],
       positionalPlaceholders: true,
     });
   }
