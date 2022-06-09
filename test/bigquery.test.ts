@@ -7,6 +7,7 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsCreateTable from './features/createTable';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
+import supportsArrayLiterals from './features/arrayLiterals';
 import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
@@ -25,6 +26,7 @@ describe('BigQueryFormatter', () => {
   supportsDeleteFrom(format);
   supportsStrings(format, ['""', "''"]);
   supportsIdentifiers(format, ['``']);
+  supportsArrayLiterals(format);
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format, { without: ['NATURAL JOIN'] });
@@ -127,11 +129,10 @@ describe('BigQueryFormatter', () => {
 
   it('supports parametric ARRAY and STRUCT', () => {
     const result = format('SELECT STRUCT<ARRAY<INT64>>([]), ARRAY<FLOAT>[1] FROM tbl');
-    // TODO, v6: ARRAY<FLOAT> [] should be ARRAY<FLOAT>[]
     expect(result).toBe(dedent`
       SELECT
         STRUCT<ARRAY<INT64>>([]),
-        ARRAY<FLOAT> [1]
+        ARRAY<FLOAT>[1]
       FROM
         tbl
     `);

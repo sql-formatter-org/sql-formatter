@@ -836,6 +836,8 @@ export default class BigQueryFormatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
+      blockStart: ['(', '['],
+      blockEnd: [')', ']'],
       stringTypes: [
         // The triple-quoted strings are listed first, so they get matched first.
         // Otherwise the first two quotes of """ will get matched as an empty "" string.

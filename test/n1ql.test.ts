@@ -12,6 +12,7 @@ import supportsStrings from './features/strings';
 import supportsReturning from './features/returning';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
+import supportsArrayLiterals from './features/arrayLiterals';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
@@ -29,22 +30,10 @@ describe('N1qlFormatter', () => {
   supportsSchema(format);
   supportsOperators(format, N1qlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsArrayAndMapAccessors(format);
+  supportsArrayLiterals(format);
   supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'] });
   supportsReturning(format);
   supportsParams(format, { positional: true, numbered: ['$'], named: ['$'] });
-
-  it('formats SELECT query with primary key querying', () => {
-    const result = format("SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];");
-    expect(result).toBe(dedent`
-      SELECT
-        fname,
-        email
-      FROM
-        tutorial
-      USE KEYS
-        ['dave', 'ian'];
-    `);
-  });
 
   it('formats INSERT with {} object literal', () => {
     const result = format(
