@@ -159,22 +159,6 @@ export default function supportsParams(format: FormatFn, params: ParamsTypes) {
             AND age > 10;
         `);
       });
-
-      it('replaces $n numbered placeholders with param values', () => {
-        const result = format('SELECT $1, $2, $0;', {
-          params: {
-            0: 'first',
-            1: 'second',
-            2: 'third',
-          },
-        });
-        expect(result).toBe(dedent`
-          SELECT
-            second,
-            third,
-            first;
-        `);
-      });
     }
   });
 
