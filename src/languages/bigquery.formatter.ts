@@ -845,11 +845,11 @@ export default class BigQueryFormatter extends Formatter {
         { quote: "''", prefixes: ['R', 'B', 'RB', 'BR'] },
       ],
       identifierTypes: ['``'],
+      identChars: { dashes: true },
       positionalPlaceholders: true,
       namedPlaceholderTypes: ['@'],
       quotedPlaceholderTypes: ['@'],
       lineCommentTypes: ['--', '#'],
-      identChars: { dashes: true },
       operators: BigQueryFormatter.operators,
       preprocess,
     });
