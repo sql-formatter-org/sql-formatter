@@ -12,12 +12,14 @@ export default function supportsArrayAndMapAccessors(format: FormatFn) {
     `);
   });
 
+  // The check for yota['foo.bar-baz'] is for Issue #230
   it('supports square brackets for map lookup', () => {
-    const result = format(`SELECT alpha['a'], beta['gamma'].zeta;`);
+    const result = format(`SELECT alpha['a'], beta['gamma'].zeta, yota['foo.bar-baz'];`);
     expect(result).toBe(dedent`
       SELECT
         alpha['a'],
-        beta['gamma'].zeta;
+        beta['gamma'].zeta,
+        yota['foo.bar-baz'];
     `);
   });
 }
