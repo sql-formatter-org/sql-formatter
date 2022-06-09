@@ -789,6 +789,8 @@ export default class SparkFormatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...reservedKeywords,
       ]),
+      blockStart: ['(', '['],
+      blockEnd: [')', ']'],
       stringTypes: [{ quote: "''", prefixes: ['X'] }],
       identTypes: ['``'],
       variableTypes: [{ quote: '{}', prefixes: ['$'], required: true }],

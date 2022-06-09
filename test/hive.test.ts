@@ -12,7 +12,7 @@ import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
-import supportsArray from './features/array';
+import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 
@@ -30,7 +30,7 @@ describe('HiveFormatter', () => {
   supportsSchema(format);
   supportsJoin(format, { without: ['NATURAL JOIN'] });
   supportsOperators(format, HiveFormatter.operators);
-  supportsArray(format);
+  supportsArrayAndMapAccessors(format);
 
   it('throws error when params option used', () => {
     expect(() => format('SELECT *', { params: ['1', '2', '3'] })).toThrow(

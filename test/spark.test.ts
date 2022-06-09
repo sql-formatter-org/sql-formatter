@@ -11,7 +11,7 @@ import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
-import supportsArray from './features/array';
+import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 
@@ -28,7 +28,7 @@ describe('SparkFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, SparkFormatter.operators, ['AND', 'OR', 'XOR']);
-  supportsArray(format);
+  supportsArrayAndMapAccessors(format);
   supportsJoin(format, {
     additionally: [
       'ANTI JOIN',

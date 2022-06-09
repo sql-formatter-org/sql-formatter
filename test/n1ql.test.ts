@@ -11,7 +11,7 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsReturning from './features/returning';
 import supportsDeleteFrom from './features/deleteFrom';
-import supportsArray from './features/array';
+import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
@@ -28,7 +28,7 @@ describe('N1qlFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, N1qlFormatter.operators, ['AND', 'OR', 'XOR']);
-  supportsArray(format);
+  supportsArrayAndMapAccessors(format);
   supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'] });
   supportsReturning(format);
   supportsParams(format, { positional: true, numbered: ['$'], named: ['$'] });
