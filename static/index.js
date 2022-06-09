@@ -74,7 +74,7 @@ const attachFormat = () => {
 <p><strong>${e.message}</strong></p>
 <p>
   Please report this at
-  <a href="https://github.com/zeroturnaround/sql-formatter/issues">Github issues page.<a>
+  <a href="https://github.com/sql-formatter-org/sql-formatter/issues">Github issues page.<a>
 </p>
 <p>Stack Trace:</p>
 <pre>${e.stack.toString()}</pre>

@@ -77,7 +77,7 @@ class PrettierSQLArgs {
           process.exit(1);
         }
         console.error('An unknown error has occurred, please file a bug report at:');
-        console.log('https://github.com/zeroturnaround/sql-formatter/issues\n');
+        console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
         throw e;
       }
     return {
@@ -99,7 +99,7 @@ class PrettierSQLArgs {
         process.exit(1);
       }
       console.error('An unknown error has occurred, please file a bug report at:');
-      console.log('https://github.com/zeroturnaround/sql-formatter/issues\n');
+      console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
       throw e;
     }
   }

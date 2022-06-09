@@ -90,10 +90,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zeroturnaround/sql-formatter.git"
+    "url": "https://github.com/sql-formatter-org/sql-formatter.git"
   },
   "bugs": {
-    "url": "https://github.com/zeroturnaround/sql-formatter/issues"
+    "url": "https://github.com/sql-formatter-org/sql-formatter/issues"
   },
   "dependencies": {
     "argparse": "^2.0.1"
