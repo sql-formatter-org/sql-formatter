@@ -46,6 +46,10 @@ interface TokenizerOptions {
   lineCommentTypes?: string[];
   // Additional characters to support in identifiers
   identChars?: regexFactory.IdentChars;
+  // Additional characters to support in named parameters
+  // Use this when parameters allow different characters from identifiers
+  // Defaults to `identChars`.
+  paramChars?: regexFactory.IdentChars;
   // Additional multi-character operators to support, in addition to <=, >=, <>, !=
   operators?: string[];
   // Allows custom modifications on the token array.
@@ -128,7 +132,7 @@ export default class Tokenizer {
         // :name placeholders
         regex: regexFactory.createParameterRegex(
           cfg.namedParamTypes ?? [],
-          regexFactory.createIdentPattern(cfg.identChars)
+          regexFactory.createIdentPattern(cfg.paramChars || cfg.identChars)
         ),
         parseKey: v => v.slice(1),
       },

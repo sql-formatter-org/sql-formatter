@@ -74,4 +74,16 @@ describe('Db2Formatter', () => {
         foo
     `);
   });
+
+  it('supports @, #, $ characters in named parameters', () => {
+    expect(format(`SELECT :foo@bar, :foo#bar, :foo$bar, :@zip, :#zap, :$zop`)).toBe(dedent`
+      SELECT
+        :foo@bar,
+        :foo#bar,
+        :foo$bar,
+        :@zip,
+        :#zap,
+        :$zop
+    `);
+  });
 });

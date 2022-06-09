@@ -873,6 +873,7 @@ export default class Db2Formatter extends Formatter {
       identTypes: [`""`],
       positionalParams: true,
       namedParamTypes: [':'],
+      paramChars: { first: '@#$', rest: '@#$' },
       operators: Db2Formatter.operators,
     });
   }
