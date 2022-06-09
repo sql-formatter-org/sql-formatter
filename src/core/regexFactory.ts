@@ -38,8 +38,6 @@ export type VariableType = VariableRegex | PrefixedQuoteType;
 export interface IdentChars {
   // concatenated string of chars that can appear anywhere in a valid identifier
   any?: string;
-  // concatenated string of chars that only appear at the beginning of a valid identifier
-  prefix?: string;
   // True to allow single dashes (-) inside identifiers, but not at the beginning or end
   dashes?: boolean;
 }
@@ -101,15 +99,14 @@ export const createIdentRegex = (specialChars: IdentChars = {}): RegExp =>
 /**
  * Builds a RegExp string for valid identifiers in a SQL dialect
  */
-export const createIdentPattern = ({ prefix, any, dashes }: IdentChars = {}): string => {
-  const prefixChars = prefix ? `[${escapeRegExp(prefix)}]*` : '';
+export const createIdentPattern = ({ any, dashes }: IdentChars = {}): string => {
   // Unicode letters, diacritical marks and underscore
   const letter = '\\p{Alphabetic}\\p{Mark}_';
   // Numbers 0..9, plus various unicode numbers
   const number = '\\p{Decimal_Number}';
   const specialWordChars = escapeRegExp(any ?? '');
 
-  const pattern = `${prefixChars}[${letter}${number}${specialWordChars}]+`;
+  const pattern = `[${letter}${number}${specialWordChars}]+`;
 
   return dashes ? withDashes(pattern) : pattern;
 };
