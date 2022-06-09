@@ -468,6 +468,7 @@ export default class PlSqlFormatter extends Formatter {
       variableTypes: [{ regex: '&{1,2}[A-Za-z][A-Za-z0-9_$#]*' }],
       numberedParamTypes: [':'],
       namedParamTypes: [':'],
+      paramChars: {}, // Empty object used on purpose to not allow $ and # chars as specified in identChars
       operators: PlSqlFormatter.operators,
       preprocess,
     });
