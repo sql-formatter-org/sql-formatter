@@ -72,4 +72,17 @@ describe('TSqlFormatter', () => {
         tbl;
     `);
   });
+
+  it('allows @ and # at the start of identifiers', () => {
+    const result = format('SELECT @bar, #baz, @@some, ##flam FROM tbl;');
+    expect(result).toBe(dedent`
+      SELECT
+        @bar,
+        #baz,
+        @@some,
+        ##flam
+      FROM
+        tbl;
+    `);
+  });
 });

@@ -467,7 +467,7 @@ export default class PlSqlFormatter extends Formatter {
       variableTypes: [{ regex: '&{1,2}[A-Za-z][A-Za-z0-9_$#]*' }],
       numberedPlaceholderTypes: [':'],
       namedPlaceholderTypes: [':'],
-      specialIdentChars: { any: '$#' },
+      specialIdentChars: { rest: '$#' },
       operators: PlSqlFormatter.operators,
       preprocess,
     });

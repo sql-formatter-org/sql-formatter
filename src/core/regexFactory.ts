@@ -36,8 +36,12 @@ export interface VariableRegex {
 export type VariableType = VariableRegex | PrefixedQuoteType;
 
 export interface IdentChars {
-  // concatenated string of chars that can appear anywhere in a valid identifier
-  any?: string;
+  // Additional characters that can be used as first character of an identifier.
+  // That is: in addition to letters and underscore.
+  first?: string;
+  // Additional characters that can appear after the first character of identifier.
+  // That is: in addition to letters, numbers and underscore.
+  rest?: string;
   // True to allow single dashes (-) inside identifiers, but not at the beginning or end
   dashes?: boolean;
 }
@@ -68,20 +72,13 @@ export const createLineCommentRegex = (lineCommentTypes: string[]): RegExp =>
  */
 export const createReservedWordRegex = (
   reservedKeywords: string[],
-  { any, dashes }: IdentChars = {}
+  identChars: IdentChars = {}
 ): RegExp => {
   if (reservedKeywords.length === 0) {
     return /^\b$/u;
   }
 
-  // Negative lookahead to avoid matching a keyword that's actually part of identifier,
-  // which can happen when identifier allows word-boundary characters inside it.
-  //
-  // For example "SELECT$ME" should be tokenized as:
-  // - ["SELECT$ME"] when $ is allowed inside identifiers
-  // - ["SELECT", "$", "ME"] when $ can't be part of identifiers.
-  const avoidIdentChars =
-    any || dashes ? `(?![${escapeRegExp(any || '')}${dashes ? '-' : ''}])` : '';
+  const avoidIdentChars = rejectIdentCharsPattern(identChars);
 
   const reservedKeywordsPattern = sortByLengthDesc(reservedKeywords)
     .join('|')
@@ -89,6 +86,15 @@ export const createReservedWordRegex = (
 
   return new RegExp(`^(${reservedKeywordsPattern})${avoidIdentChars}\\b`, 'iu');
 };
+
+// Negative lookahead to avoid matching a keyword that's actually part of identifier,
+// which can happen when identifier allows word-boundary characters inside it.
+//
+// For example "SELECT$ME" should be tokenized as:
+// - ["SELECT$ME"] when $ is allowed inside identifiers
+// - ["SELECT", "$", "ME"] when $ can't be part of identifiers.
+const rejectIdentCharsPattern = ({ rest, dashes }: IdentChars): string =>
+  rest || dashes ? `(?![${rest || ''}${dashes ? '-' : ''}])` : '';
 
 /**
  * Builds a RegExp for valid identifiers in a SQL dialect
@@ -99,14 +105,16 @@ export const createIdentRegex = (specialChars: IdentChars = {}): RegExp =>
 /**
  * Builds a RegExp string for valid identifiers in a SQL dialect
  */
-export const createIdentPattern = ({ any, dashes }: IdentChars = {}): string => {
+export const createIdentPattern = ({ first, rest, dashes }: IdentChars = {}): string => {
   // Unicode letters, diacritical marks and underscore
   const letter = '\\p{Alphabetic}\\p{Mark}_';
   // Numbers 0..9, plus various unicode numbers
   const number = '\\p{Decimal_Number}';
-  const specialWordChars = escapeRegExp(any ?? '');
 
-  const pattern = `[${letter}${number}${specialWordChars}]+`;
+  const firstChars = escapeRegExp(first ?? '');
+  const restChars = escapeRegExp(rest ?? '');
+
+  const pattern = `[${letter}${firstChars}][${letter}${number}${restChars}]*`;
 
   return dashes ? withDashes(pattern) : pattern;
 };
