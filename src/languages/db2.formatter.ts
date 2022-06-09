@@ -871,8 +871,8 @@ export default class Db2Formatter extends Formatter {
       ]),
       stringTypes: [{ quote: "''", prefixes: ['X', 'G', 'N', 'GX', 'UX', 'U&'] }],
       identTypes: [`""`],
-      positionalPlaceholders: true,
-      namedPlaceholderTypes: [':'],
+      positionalParams: true,
+      namedParamTypes: [':'],
       operators: Db2Formatter.operators,
     });
   }

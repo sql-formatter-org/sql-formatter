@@ -527,9 +527,9 @@ export default class N1qlFormatter extends Formatter {
       identTypes: ['``'],
       blockStart: ['(', '[', '{'],
       blockEnd: [')', ']', '}'],
-      positionalPlaceholders: true,
-      numberedPlaceholderTypes: ['$'],
-      namedPlaceholderTypes: ['$'],
+      positionalParams: true,
+      numberedParamTypes: ['$'],
+      namedParamTypes: ['$'],
       lineCommentTypes: ['#', '--'],
       operators: N1qlFormatter.operators,
     });

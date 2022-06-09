@@ -379,7 +379,7 @@ export default class SqlFormatter extends Formatter {
       reservedKeywords: dedupe(reservedKeywords),
       stringTypes: [{ quote: "''", prefixes: ['X'] }],
       identTypes: [`""`, '``'],
-      positionalPlaceholders: true,
+      positionalParams: true,
     });
   }
 }

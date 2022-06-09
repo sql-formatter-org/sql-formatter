@@ -728,7 +728,7 @@ export default class RedshiftFormatter extends Formatter {
       ]),
       stringTypes: ["''"],
       identTypes: [`""`],
-      numberedPlaceholderTypes: ['$'],
+      numberedParamTypes: ['$'],
       operators: RedshiftFormatter.operators,
     });
   }

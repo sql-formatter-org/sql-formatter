@@ -179,11 +179,11 @@ export const createParenRegex = (parens: string[]): RegExp =>
   patternToRegex(parens.map(escapeParen).join('|'));
 
 /**
- * Builds a RegExp for placeholder patterns
+ * Builds a RegExp for parameter placeholder patterns
  * @param {string[]} types - list of strings that denote placeholder types
  * @param {string} pattern - string that denotes placeholder pattern
  */
-export const createPlaceholderRegex = (types: string[], pattern: string): RegExp | undefined => {
+export const createParameterRegex = (types: string[], pattern: string): RegExp | undefined => {
   if (isEmpty(types)) {
     return undefined;
   }

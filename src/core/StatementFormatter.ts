@@ -84,8 +84,8 @@ export default class StatementFormatter {
         return this.formatCaseStart(token);
       case TokenType.RESERVED_CASE_END:
         return this.formatCaseEnd(token);
-      case TokenType.PLACEHOLDER:
-        return this.formatPlaceholder(token);
+      case TokenType.PARAMETER:
+        return this.formatParameter(token);
       case TokenType.OPERATOR:
         return this.formatOperator(token);
       case TokenType.IDENT:
@@ -375,9 +375,9 @@ export default class StatementFormatter {
   }
 
   /**
-   * Formats a Placeholder item onto query, to be replaced with the value of the placeholder
+   * Formats a parameter placeholder item onto query, to be replaced with the value of the placeholder
    */
-  formatPlaceholder(token: Token) {
+  private formatParameter(token: Token) {
     this.query.add(this.params.get(token), WS.SPACE);
   }
 

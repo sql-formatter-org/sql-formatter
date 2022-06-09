@@ -34,14 +34,14 @@ interface TokenizerOptions {
   // Close-parenthesis characters, like: ), ], }
   blockEnd?: string[];
   // True to allow for positional "?" parameter placeholders
-  positionalPlaceholders?: boolean;
+  positionalParams?: boolean;
   // Prefixes for numbered parameter placeholders to support, e.g. :1, :2, :3
-  numberedPlaceholderTypes?: ('?' | ':' | '$')[];
+  numberedParamTypes?: ('?' | ':' | '$')[];
   // Prefixes for named parameter placeholders to support, e.g. :name
-  namedPlaceholderTypes?: (':' | '@' | '$')[];
+  namedParamTypes?: (':' | '@' | '$')[];
   // Prefixes for quoted parameter placeholders to support, e.g. :"name"
   // The type of quotes will depend on `identifierTypes` option.
-  quotedPlaceholderTypes?: (':' | '@' | '$')[];
+  quotedParamTypes?: (':' | '@' | '$')[];
   // Line comment types to support, defaults to --
   lineCommentTypes?: string[];
   // Additional characters to support in identifiers
@@ -54,7 +54,7 @@ interface TokenizerOptions {
   preprocess?: (tokens: Token[]) => Token[];
 }
 
-interface PlaceholderPattern {
+interface ParamPattern {
   regex: RegExp;
   parseKey: (s: string) => string;
 }
@@ -63,7 +63,7 @@ interface PlaceholderPattern {
 export default class Tokenizer {
   private REGEX_MAP: Record<TokenType, RegExp>;
   private quotedIdentRegex: RegExp;
-  private placeholderPatterns: PlaceholderPattern[];
+  private paramPatterns: ParamPattern[];
 
   private preprocess = (tokens: Token[]) => tokens;
 
@@ -119,23 +119,23 @@ export default class Tokenizer {
       [TokenType.BLOCK_COMMENT]: /^(\/\*[^]*?(?:\*\/|$))/u,
       [TokenType.NUMBER]:
         /^(0x[0-9a-fA-F]+|0b[01]+|(-\s*)?[0-9]+(\.[0-9]*)?([eE][-+]?[0-9]+(\.[0-9]+)?)?)/u,
-      [TokenType.PLACEHOLDER]: NULL_REGEX, // matches nothing
+      [TokenType.PARAMETER]: NULL_REGEX, // matches nothing
       [TokenType.EOF]: NULL_REGEX, // matches nothing
     };
 
-    this.placeholderPatterns = this.excludePatternsWithoutRegexes([
+    this.paramPatterns = this.excludePatternsWithoutRegexes([
       {
         // :name placeholders
-        regex: regexFactory.createPlaceholderRegex(
-          cfg.namedPlaceholderTypes ?? [],
+        regex: regexFactory.createParameterRegex(
+          cfg.namedParamTypes ?? [],
           regexFactory.createIdentPattern(cfg.identChars)
         ),
         parseKey: v => v.slice(1),
       },
       {
         // :"name" placeholders
-        regex: regexFactory.createPlaceholderRegex(
-          cfg.quotedPlaceholderTypes ?? [],
+        regex: regexFactory.createParameterRegex(
+          cfg.quotedParamTypes ?? [],
           regexFactory.createQuotePattern(cfg.identTypes)
         ),
         parseKey: v =>
@@ -143,12 +143,12 @@ export default class Tokenizer {
       },
       {
         // :1, :2, :3 placeholders
-        regex: regexFactory.createPlaceholderRegex(cfg.numberedPlaceholderTypes ?? [], '[0-9]+'),
+        regex: regexFactory.createParameterRegex(cfg.numberedParamTypes ?? [], '[0-9]+'),
         parseKey: v => v.slice(1),
       },
       {
         // ? placeholders
-        regex: cfg.positionalPlaceholders ? /^(\?)/ : undefined,
+        regex: cfg.positionalParams ? /^(\?)/ : undefined,
         parseKey: v => v.slice(1),
       },
     ]);
@@ -157,7 +157,7 @@ export default class Tokenizer {
   private excludePatternsWithoutRegexes(
     patterns: { regex?: RegExp; parseKey: (s: string) => string }[]
   ) {
-    return patterns.filter((p): p is PlaceholderPattern => p.regex !== undefined);
+    return patterns.filter((p): p is ParamPattern => p.regex !== undefined);
   }
 
   /**
@@ -221,11 +221,11 @@ export default class Tokenizer {
    * @return {Token | undefined} - The placeholder token if found, otherwise undefined
    */
   private matchPlaceholderToken(input: string): Token | undefined {
-    for (const { regex, parseKey } of this.placeholderPatterns) {
+    for (const { regex, parseKey } of this.paramPatterns) {
       const token = this.match({
         input,
         regex,
-        type: TokenType.PLACEHOLDER,
+        type: TokenType.PARAMETER,
         transform: id,
       });
       if (token) {
