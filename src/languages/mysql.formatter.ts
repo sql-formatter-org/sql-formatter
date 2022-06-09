@@ -1335,6 +1335,7 @@ export default class MySqlFormatter extends Formatter {
         { quote: "''", prefixes: ['@'], required: true },
         { quote: '``', prefixes: ['@'], required: true },
       ],
+      specialIdentChars: { first: '$', rest: '$' },
       positionalPlaceholders: true,
       lineCommentTypes: ['--', '#'],
       operators: MySqlFormatter.operators,

@@ -39,6 +39,14 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   });
   supportsParams(format, { positional: true });
 
+  it('allows $ character as part of identifiers', () => {
+    expect(format('SELECT $foo, some$$ident')).toBe(dedent`
+      SELECT
+        $foo,
+        some$$ident
+    `);
+  });
+
   it('supports @variables', () => {
     expect(format('SELECT @foo, @some_long.var$with$special.chars')).toBe(dedent`
       SELECT
