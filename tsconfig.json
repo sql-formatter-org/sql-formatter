@@ -9,6 +9,12 @@
     "paths": {
       "src/*": ["./src/*"]
     },
+    "plugins": [
+      {
+        "transform": "@zerollup/ts-transform-paths",
+        "exclude": ["*"]
+      }
+    ],
     "sourceMap": true,
     "declaration": true,
     "esModuleInterop": true,
