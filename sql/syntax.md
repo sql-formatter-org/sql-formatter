@@ -6,4 +6,5 @@ Reference of SQL syntax variations.
 - [Parameters](./parameters.md)
 - [Variables](./variables.md)
 - [Strings](./strings.md)
+- [Arrays and Maps](./arrays-and-maps.md)
 - [SELECT](./select.md)
