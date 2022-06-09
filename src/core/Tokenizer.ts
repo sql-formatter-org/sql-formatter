@@ -45,7 +45,7 @@ interface TokenizerOptions {
   // Line comment types to support, defaults to --
   lineCommentTypes?: string[];
   // Additional characters to support in identifiers
-  specialIdentChars?: regexFactory.IdentChars;
+  identChars?: regexFactory.IdentChars;
   // Additional multi-character operators to support, in addition to <=, >=, <>, !=
   operators?: string[];
   // Allows custom modifications on the token array.
@@ -75,34 +75,34 @@ export default class Tokenizer {
     this.quotedIdentRegex = regexFactory.createQuoteRegex(cfg.identifierTypes);
 
     this.REGEX_MAP = {
-      [TokenType.IDENT]: regexFactory.createIdentRegex(cfg.specialIdentChars),
+      [TokenType.IDENT]: regexFactory.createIdentRegex(cfg.identChars),
       [TokenType.STRING]: regexFactory.createQuoteRegex(cfg.stringTypes),
       [TokenType.VARIABLE]: cfg.variableTypes
         ? regexFactory.createVariableRegex(cfg.variableTypes)
         : NULL_REGEX,
       [TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(
         cfg.reservedKeywords,
-        cfg.specialIdentChars
+        cfg.identChars
       ),
       [TokenType.RESERVED_DEPENDENT_CLAUSE]: regexFactory.createReservedWordRegex(
         cfg.reservedDependentClauses ?? [],
-        cfg.specialIdentChars
+        cfg.identChars
       ),
       [TokenType.RESERVED_LOGICAL_OPERATOR]: regexFactory.createReservedWordRegex(
         cfg.reservedLogicalOperators ?? ['AND', 'OR'],
-        cfg.specialIdentChars
+        cfg.identChars
       ),
       [TokenType.RESERVED_COMMAND]: regexFactory.createReservedWordRegex(
         cfg.reservedCommands,
-        cfg.specialIdentChars
+        cfg.identChars
       ),
       [TokenType.RESERVED_BINARY_COMMAND]: regexFactory.createReservedWordRegex(
         cfg.reservedBinaryCommands,
-        cfg.specialIdentChars
+        cfg.identChars
       ),
       [TokenType.RESERVED_JOIN_CONDITION]: regexFactory.createReservedWordRegex(
         cfg.reservedJoinConditions ?? ['ON', 'USING'],
-        cfg.specialIdentChars
+        cfg.identChars
       ),
       [TokenType.OPERATOR]: regexFactory.createOperatorRegex('+-/*%&|^><=.,;[]{}`:$@', [
         '<>',
@@ -128,7 +128,7 @@ export default class Tokenizer {
         // :name placeholders
         regex: regexFactory.createPlaceholderRegex(
           cfg.namedPlaceholderTypes ?? [],
-          regexFactory.createIdentPattern(cfg.specialIdentChars)
+          regexFactory.createIdentPattern(cfg.identChars)
         ),
         parseKey: v => v.slice(1),
       },

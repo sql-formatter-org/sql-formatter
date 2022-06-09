@@ -1172,7 +1172,7 @@ export default class MariaDbFormatter extends Formatter {
         { quote: "''", prefixes: ['@'], required: true },
         { quote: '``', prefixes: ['@'], required: true },
       ],
-      specialIdentChars: { first: '$', rest: '$' },
+      identChars: { first: '$', rest: '$' },
       positionalPlaceholders: true,
       lineCommentTypes: ['--', '#'],
       operators: MariaDbFormatter.operators,
