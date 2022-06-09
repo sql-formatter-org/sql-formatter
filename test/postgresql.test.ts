@@ -37,6 +37,14 @@ describe('PostgreSqlFormatter', () => {
   supportsReturning(format);
   supportsParams(format, { numbered: ['$'] });
 
+  it('allows $ character as part of identifiers', () => {
+    expect(format('SELECT foo$, some$$ident')).toBe(dedent`
+      SELECT
+        foo$,
+        some$$ident
+    `);
+  });
+
   // Postgres-specific string types
   it('supports bit strings', () => {
     expect(format(`SELECT B'0110010', B'1101000';`)).toBe(dedent`
