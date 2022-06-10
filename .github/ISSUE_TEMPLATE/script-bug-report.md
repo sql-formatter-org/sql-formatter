@@ -1,33 +1,22 @@
 ---
-name: Script Bug Report
-about: Raise an issue with the SCRIPT that occurred during runtime
-title: '[SCRIPT] Issue Title Here'
+name: Generic Bug Report
+about: Report any other problem with SQL formatter (crash, vulnerability, etc)
+title: 'Issue Title Here'
 labels: bug
 assignees: ''
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
-
-**To Reproduce**
-Steps to reproduce the behavior:
-
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+List steps needed to reproduce the problem.
 
 **Expected behavior**
-A clear and concise description of what you expected to happen.
+What did you expect to happen?
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Actual behavior**
+What happened instead?
 
 **Usage**
 
-- How are you calling / using the script? (Please provide a code snippet, if applicable)
+- How are you calling / using the library?
 - What SQL language(s) does this apply to?
 - Which SQL Formatter version are you using?
-
-**Additional context**
-Add any other context about the problem here.
