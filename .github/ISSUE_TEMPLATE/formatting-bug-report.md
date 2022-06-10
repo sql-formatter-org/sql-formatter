@@ -6,20 +6,23 @@ labels: bug
 assignees: ''
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Input data**
+Which SQL and options did you provide as input?
 
 **Expected Output**
-Please provide a code snippet of the expected SQL output.
+
+```sql
+-- ADD SQL HERE
+```
 
 **Actual Output**
-Please provide a code snippet of the SQL output produced by the tool.
+
+```sql
+-- ADD SQL HERE
+```
 
 **Usage**
 
-- How are you calling / using the script? (Please provide a code snippet, if applicable)
+- How are you calling / using the library?
 - What SQL language(s) does this apply to?
 - Which SQL Formatter version are you using?
-
-**Additional context**
-Add any other context about the problem here.
