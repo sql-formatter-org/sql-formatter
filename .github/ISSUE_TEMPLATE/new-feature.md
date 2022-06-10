@@ -16,7 +16,6 @@ Your reasoning behind suggesting this feature.
 
 - How would you be calling / using the script?
 - What SQL language(s) does this apply to?
-- What Node version? (If applicable)
 
 **Additional context**
 Add any other context about the feature here.

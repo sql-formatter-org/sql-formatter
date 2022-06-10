@@ -19,7 +19,7 @@ Please provide a code snippet of the SQL output produced by the tool.
 
 - How are you calling / using the script? (Please provide a code snippet, if applicable)
 - What SQL language(s) does this apply to?
-- What Node version? (If applicable)
+- Which SQL Formatter version are you using?
 
 **Additional context**
 Add any other context about the problem here.
