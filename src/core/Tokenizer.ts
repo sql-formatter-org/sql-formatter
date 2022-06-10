@@ -65,7 +65,7 @@ interface ParamPattern {
 
 /** Converts SQL language string into a token stream */
 export default class Tokenizer {
-  private REGEX_MAP: Record<TokenType, RegExp>;
+  private REGEX_MAP: Partial<Record<TokenType, RegExp>>;
   private quotedIdentRegex: RegExp;
   private paramPatterns: ParamPattern[];
 
@@ -281,7 +281,7 @@ export default class Tokenizer {
     return this.match({
       input,
       type: tokenType,
-      regex: this.REGEX_MAP[tokenType],
+      regex: this.REGEX_MAP[tokenType]!,
       transform: toCanonicalKeyword,
     });
   }
@@ -291,7 +291,7 @@ export default class Tokenizer {
     return this.match({
       input,
       type: tokenType,
-      regex: this.REGEX_MAP[tokenType],
+      regex: this.REGEX_MAP[tokenType]!,
       transform: id,
     });
   }

@@ -519,7 +519,7 @@ export default class N1qlFormatter extends Formatter {
       reservedBinaryCommands,
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-      reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
+      reservedKeywords: dedupe(reservedKeywords.concat(reservedFunctions)),
       // NOTE: single quotes are actually not supported in N1QL,
       // but we support them anyway as all other SQL dialects do,
       // which simplifies writing tests that are shared between all dialects.

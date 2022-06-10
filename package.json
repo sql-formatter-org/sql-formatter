@@ -94,7 +94,8 @@
     "url": "https://github.com/sql-formatter-org/sql-formatter/issues"
   },
   "dependencies": {
-    "argparse": "^2.0.1"
+    "argparse": "^2.0.1",
+    "moo": "^0.5.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.4",
@@ -105,6 +106,7 @@
     "@jest/globals": "^28.0.2",
     "@types/babel__core": "^7.1.15",
     "@types/jest": "^27.5.0",
+    "@types/moo": "^0.5.5",
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "@typescript-eslint/parser": "^5.21.0",
     "@zerollup/ts-transform-paths": "^1.7.18",
@@ -113,6 +115,7 @@
     "babel-loader": "^8.1.0",
     "babel-plugin-add-module-exports": "^1.0.2",
     "babel-plugin-module-resolver": "^4.1.0",
+    "babel-plugin-inline-import": "^3.0.0",
     "dedent-js": "^1.0.1",
     "eslint": "^8.14.0",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -128,7 +131,7 @@
     "ts-jest": "^28.0.0",
     "ts-loader": "^9.2.6",
     "ttypescript": "^1.5.13",
-    "typescript": "^4.3.5",
+    "typescript": "^4.7.2",
     "webpack": "^5.64.1",
     "webpack-cli": "^4.9.1",
     "webpack-merge": "^5.8.0"

@@ -1326,7 +1326,7 @@ export default class MySqlFormatter extends Formatter {
       reservedBinaryCommands,
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-      reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
+      reservedKeywords: dedupe(reservedKeywords.concat(reservedFunctions)),
       stringTypes: ['""', { quote: "''", prefixes: ['X'] }],
       identTypes: ['``'],
       identChars: { first: '$', rest: '$' },

@@ -11,6 +11,7 @@
           "src": "./src"
         }
       }
-    ]
+    ],
+    ["babel-plugin-inline-import", { "extensions": [".sql"] }]
   ]
 }

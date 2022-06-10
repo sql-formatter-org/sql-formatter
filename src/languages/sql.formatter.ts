@@ -8,7 +8,7 @@ import { dedupe } from 'src/utils';
  * any words that are in a higher priority are removed
  */
 // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#reserved-word
-const reservedKeywords = [
+export const reservedKeywords = [
   'ABS',
   'ALL',
   'ALLOCATE',
@@ -303,7 +303,7 @@ const reservedKeywords = [
  * keywords that begin a new statement
  * will begin new indented block
  */
-const reservedCommands = [
+export const reservedCommands = [
   'ADD',
   'ALTER COLUMN',
   'ALTER TABLE',
@@ -337,7 +337,7 @@ const reservedCommands = [
  * commands that operate on two tables or subqueries
  * two main categories: joins and boolean set operators
  */
-const reservedBinaryCommands = [
+export const reservedBinaryCommands = [
   // set booleans
   'INTERSECT',
   'INTERSECT ALL',
@@ -366,7 +366,7 @@ const reservedBinaryCommands = [
  * keywords that follow a previous Statement, must be attached to subsequent data
  * can be fully inline or on newline with optional indent
  */
-const reservedDependentClauses = ['WHEN', 'ELSE'];
+export const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class SqlFormatter extends Formatter {
   static operators = [];
