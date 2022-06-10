@@ -1,6 +1,5 @@
 import Formatter from 'src/core/Formatter';
 import Tokenizer from 'src/core/Tokenizer';
-import { type StringPatternType } from 'src/core/regexFactory';
 import { EOF_TOKEN, type Token } from 'src/core/token';
 import { dedupe } from 'src/utils';
 
@@ -825,7 +824,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
 export default class BigQueryFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = ['""', "''", '``']; // add: '''''', """""" ; prefixes: r, b
   static operators = ['>>', '<<', '||'];
   // TODO: handle trailing comma in select clause
 
@@ -838,10 +836,22 @@ export default class BigQueryFormatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
-      stringTypes: BigQueryFormatter.stringTypes,
-      indexedPlaceholderTypes: ['?'],
+      blockStart: ['(', '['],
+      blockEnd: [')', ']'],
+      stringTypes: [
+        // The triple-quoted strings are listed first, so they get matched first.
+        // Otherwise the first two quotes of """ will get matched as an empty "" string.
+        { quote: '""".."""', prefixes: ['R', 'B', 'RB', 'BR'] },
+        { quote: "'''..'''", prefixes: ['R', 'B', 'RB', 'BR'] },
+        { quote: '""', prefixes: ['R', 'B', 'RB', 'BR'] },
+        { quote: "''", prefixes: ['R', 'B', 'RB', 'BR'] },
+      ],
+      identTypes: ['``'],
+      identChars: { dashes: true },
+      positionalParams: true,
+      namedParamTypes: ['@'],
+      quotedParamTypes: ['@'],
       lineCommentTypes: ['--', '#'],
-      specialWordChars: { any: '_@$-' },
       operators: BigQueryFormatter.operators,
       preprocess,
     });

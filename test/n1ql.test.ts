@@ -11,8 +11,10 @@ import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsReturning from './features/returning';
 import supportsDeleteFrom from './features/deleteFrom';
-import supportsArray from './features/array';
+import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
+import supportsArrayLiterals from './features/arrayLiterals';
 import supportsComments from './features/comments';
+import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 
 describe('N1qlFormatter', () => {
@@ -22,27 +24,16 @@ describe('N1qlFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format, { hashComments: true });
   supportsDeleteFrom(format);
-  supportsStrings(format, N1qlFormatter.stringTypes);
+  supportsStrings(format, [`""`]);
+  supportsIdentifiers(format, ['``']);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, N1qlFormatter.operators, ['AND', 'OR', 'XOR']);
-  supportsArray(format);
+  supportsArrayAndMapAccessors(format);
+  supportsArrayLiterals(format);
   supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'] });
   supportsReturning(format);
-  supportsParams(format, { named: ['$'] });
-
-  it('formats SELECT query with primary key querying', () => {
-    const result = format("SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];");
-    expect(result).toBe(dedent`
-      SELECT
-        fname,
-        email
-      FROM
-        tutorial
-      USE KEYS
-        ['dave', 'ian'];
-    `);
-  });
+  supportsParams(format, { positional: true, numbered: ['$'], named: ['$'] });
 
   it('formats INSERT with {} object literal', () => {
     const result = format(

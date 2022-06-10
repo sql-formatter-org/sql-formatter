@@ -10,83 +10,103 @@ const toCanonicalKeyword = (text: string) => equalizeWhitespace(text.toUpperCase
 
 /** Struct that defines how a SQL language can be broken into tokens */
 interface TokenizerOptions {
-  reservedKeywords: string[];
+  // Main clauses that start new block, like: SELECT, FROM, WHERE, ORDER BY
   reservedCommands: string[];
+  // Logical operator keywords, defaults to: [AND, OR]
   reservedLogicalOperators?: string[];
+  // Keywords in CASE expressions that begin new line, like: WHEN, ELSE
   reservedDependentClauses: string[];
+  // Keywords that create newline but no indentaion of their body.
+  // These contain set operations like UNION and various joins like LEFT OUTER JOIN
   reservedBinaryCommands: string[];
+  // keywords used for JOIN conditions, defaults to: [ON, USING]
   reservedJoinConditions?: string[];
-  stringTypes: regexFactory.StringPatternType[];
+  // all other reserved words (not included to any of the above lists)
+  reservedKeywords: string[];
+  // Types of quotes to use for strings
+  stringTypes: regexFactory.QuoteType[];
+  // Types of quotes to use for quoted identifiers
+  identTypes: regexFactory.QuoteType[];
+  // Types of quotes to use for variables
+  variableTypes?: regexFactory.VariableType[];
+  // Open-parenthesis characters, like: (, [, {
   blockStart?: string[];
+  // Close-parenthesis characters, like: ), ], }
   blockEnd?: string[];
-  indexedPlaceholderTypes?: string[];
-  namedPlaceholderTypes?: string[];
+  // True to allow for positional "?" parameter placeholders
+  positionalParams?: boolean;
+  // Prefixes for numbered parameter placeholders to support, e.g. :1, :2, :3
+  numberedParamTypes?: ('?' | ':' | '$')[];
+  // Prefixes for named parameter placeholders to support, e.g. :name
+  namedParamTypes?: (':' | '@' | '$')[];
+  // Prefixes for quoted parameter placeholders to support, e.g. :"name"
+  // The type of quotes will depend on `identifierTypes` option.
+  quotedParamTypes?: (':' | '@' | '$')[];
+  // Line comment types to support, defaults to --
   lineCommentTypes?: string[];
-  specialWordChars?: { prefix?: string; any?: string; suffix?: string };
+  // Additional characters to support in identifiers
+  identChars?: regexFactory.IdentChars;
+  // Additional characters to support in named parameters
+  // Use this when parameters allow different characters from identifiers
+  // Defaults to `identChars`.
+  paramChars?: regexFactory.IdentChars;
+  // Additional multi-character operators to support, in addition to <=, >=, <>, !=
   operators?: string[];
+  // Allows custom modifications on the token array.
+  // Called after the whole input string has been split into tokens.
+  // The result of this will be the output of the tokenizer.
   preprocess?: (tokens: Token[]) => Token[];
+}
+
+interface ParamPattern {
+  regex: RegExp;
+  parseKey: (s: string) => string;
 }
 
 /** Converts SQL language string into a token stream */
 export default class Tokenizer {
-  REGEX_MAP: { [tokenType in TokenType]: RegExp };
-
-  INDEXED_PLACEHOLDER_REGEX?: RegExp;
-  IDENT_NAMED_PLACEHOLDER_REGEX?: RegExp;
-  STRING_NAMED_PLACEHOLDER_REGEX?: RegExp;
+  private REGEX_MAP: Record<TokenType, RegExp>;
+  private quotedIdentRegex: RegExp;
+  private paramPatterns: ParamPattern[];
 
   private preprocess = (tokens: Token[]) => tokens;
 
-  /**
-   * @param {TokenizerOptions} cfg
-   *  @param {string[]} cfg.reservedKeywords - Reserved words in SQL
-   *  @param {string[]} cfg.reservedDependentClauses - Words that following a specific Statement and must have data attached
-   *  @param {string[]} cfg.reservedLogicalOperators - Words that are set to newline
-   *  @param {string[]} cfg.reservedCommands - Words that are set to new line separately
-   *  @param {string[]} cfg.reservedBinaryCommands - Words that are top level but have no indentation
-   *  @param {string[]} cfg.reservedJoinConditions - ON and USING
-   *  @param {string[]} cfg.stringTypes - string types to enable - "", '', ``, [], N''
-   *  @param {string[]} cfg.blockStart - Opening parentheses to enable, like (, [
-   *  @param {string[]} cfg.blockEnd - Closing parentheses to enable, like ), ]
-   *  @param {string[]} cfg.indexedPlaceholderTypes - Prefixes for indexed placeholders, like ?
-   *  @param {string[]} cfg.namedPlaceholderTypes - Prefixes for named placeholders, like @ and :
-   *  @param {string[]} cfg.lineCommentTypes - Line comments to enable, like # and --
-   *  @param {string[]} cfg.specialWordChars - Special chars that can be found inside of words, like @ and #
-   *  @param {string[]} cfg.operators - Additional operators to recognize
-   *  @param {Function} cfg.preprocess - Optional function to process tokens before emitting
-   */
   constructor(cfg: TokenizerOptions) {
     if (cfg.preprocess) {
       this.preprocess = cfg.preprocess;
     }
 
-    const specialWordCharsAll = Object.values(cfg.specialWordChars ?? {}).join('');
+    this.quotedIdentRegex = regexFactory.createQuoteRegex(cfg.identTypes);
+
     this.REGEX_MAP = {
-      [TokenType.WORD]: regexFactory.createWordRegex(cfg.specialWordChars),
-      [TokenType.STRING]: regexFactory.createStringRegex(cfg.stringTypes),
+      [TokenType.IDENT]: regexFactory.createIdentRegex(cfg.identChars),
+      [TokenType.STRING]: regexFactory.createQuoteRegex(cfg.stringTypes),
+      [TokenType.VARIABLE]: cfg.variableTypes
+        ? regexFactory.createVariableRegex(cfg.variableTypes)
+        : NULL_REGEX,
       [TokenType.RESERVED_KEYWORD]: regexFactory.createReservedWordRegex(
         cfg.reservedKeywords,
-        specialWordCharsAll
+        cfg.identChars
       ),
       [TokenType.RESERVED_DEPENDENT_CLAUSE]: regexFactory.createReservedWordRegex(
         cfg.reservedDependentClauses ?? [],
-        specialWordCharsAll
+        cfg.identChars
       ),
       [TokenType.RESERVED_LOGICAL_OPERATOR]: regexFactory.createReservedWordRegex(
         cfg.reservedLogicalOperators ?? ['AND', 'OR'],
-        specialWordCharsAll
+        cfg.identChars
       ),
       [TokenType.RESERVED_COMMAND]: regexFactory.createReservedWordRegex(
         cfg.reservedCommands,
-        specialWordCharsAll
+        cfg.identChars
       ),
       [TokenType.RESERVED_BINARY_COMMAND]: regexFactory.createReservedWordRegex(
         cfg.reservedBinaryCommands,
-        specialWordCharsAll
+        cfg.identChars
       ),
       [TokenType.RESERVED_JOIN_CONDITION]: regexFactory.createReservedWordRegex(
         cfg.reservedJoinConditions ?? ['ON', 'USING'],
-        specialWordCharsAll
+        cfg.identChars
       ),
       [TokenType.OPERATOR]: regexFactory.createOperatorRegex('+-/*%&|^><=.,;[]{}`:$@', [
         '<>',
@@ -103,22 +123,45 @@ export default class Tokenizer {
       [TokenType.BLOCK_COMMENT]: /^(\/\*[^]*?(?:\*\/|$))/u,
       [TokenType.NUMBER]:
         /^(0x[0-9a-fA-F]+|0b[01]+|(-\s*)?[0-9]+(\.[0-9]*)?([eE][-+]?[0-9]+(\.[0-9]+)?)?)/u,
-      [TokenType.PLACEHOLDER]: NULL_REGEX, // matches nothing
+      [TokenType.PARAMETER]: NULL_REGEX, // matches nothing
       [TokenType.EOF]: NULL_REGEX, // matches nothing
     };
 
-    this.INDEXED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
-      cfg.indexedPlaceholderTypes ?? [],
-      '[0-9]*'
-    );
-    this.IDENT_NAMED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
-      cfg.namedPlaceholderTypes ?? [],
-      '[a-zA-Z0-9._$]+'
-    );
-    this.STRING_NAMED_PLACEHOLDER_REGEX = regexFactory.createPlaceholderRegex(
-      cfg.namedPlaceholderTypes ?? [],
-      regexFactory.createStringPattern(cfg.stringTypes)
-    );
+    this.paramPatterns = this.excludePatternsWithoutRegexes([
+      {
+        // :name placeholders
+        regex: regexFactory.createParameterRegex(
+          cfg.namedParamTypes ?? [],
+          regexFactory.createIdentPattern(cfg.paramChars || cfg.identChars)
+        ),
+        parseKey: v => v.slice(1),
+      },
+      {
+        // :"name" placeholders
+        regex: regexFactory.createParameterRegex(
+          cfg.quotedParamTypes ?? [],
+          regexFactory.createQuotePattern(cfg.identTypes)
+        ),
+        parseKey: v =>
+          this.getEscapedPlaceholderKey({ key: v.slice(2, -1), quoteChar: v.slice(-1) }),
+      },
+      {
+        // :1, :2, :3 placeholders
+        regex: regexFactory.createParameterRegex(cfg.numberedParamTypes ?? [], '[0-9]+'),
+        parseKey: v => v.slice(1),
+      },
+      {
+        // ? placeholders
+        regex: cfg.positionalParams ? /^(\?)/ : undefined,
+        parseKey: v => v.slice(1),
+      },
+    ]);
+  }
+
+  private excludePatternsWithoutRegexes(
+    patterns: { regex?: RegExp; parseKey: (s: string) => string }[]
+  ) {
+    return patterns.filter((p): p is ParamPattern => p.regex !== undefined);
   }
 
   /**
@@ -128,7 +171,7 @@ export default class Tokenizer {
    * @param {string} input - The SQL string
    * @returns {Token[]} output token stream
    */
-  tokenize(input: string): Token[] {
+  public tokenize(input: string): Token[] {
     const tokens: Token[] = [];
     let token: Token | undefined;
 
@@ -154,35 +197,26 @@ export default class Tokenizer {
   }
 
   /** Matches preceding whitespace if present */
-  getWhitespace(input: string): string {
+  private getWhitespace(input: string): string {
     const matches = input.match(WHITESPACE_REGEX);
     return matches ? matches[1] : '';
   }
 
-  /** Curried function of `getTokenOnFirstMatch` that allows token type to be passed first */
-  matchToken =
-    (tokenType: TokenType) =>
-    (input: string): Token | undefined =>
-      this.getTokenOnFirstMatch({
-        input,
-        type: tokenType,
-        regex: this.REGEX_MAP[tokenType],
-        transform: id,
-      });
-
   /** Attempts to match next token from input string, tests RegExp patterns in decreasing priority */
-  getNextToken(input: string, previousToken?: Token): Token | undefined {
+  private getNextToken(input: string, previousToken?: Token): Token | undefined {
     return (
-      this.matchToken(TokenType.LINE_COMMENT)(input) ||
-      this.matchToken(TokenType.BLOCK_COMMENT)(input) ||
-      this.matchToken(TokenType.STRING)(input) ||
-      this.matchToken(TokenType.BLOCK_START)(input) ||
-      this.matchToken(TokenType.BLOCK_END)(input) ||
-      this.getPlaceholderToken(input) ||
-      this.matchToken(TokenType.NUMBER)(input) ||
-      this.getReservedWordToken(input, previousToken) ||
-      this.matchToken(TokenType.WORD)(input) ||
-      this.matchToken(TokenType.OPERATOR)(input)
+      this.matchToken(TokenType.LINE_COMMENT, input) ||
+      this.matchToken(TokenType.BLOCK_COMMENT, input) ||
+      this.matchToken(TokenType.STRING, input) ||
+      this.matchQuotedIdentToken(input) ||
+      this.matchToken(TokenType.VARIABLE, input) ||
+      this.matchToken(TokenType.BLOCK_START, input) ||
+      this.matchToken(TokenType.BLOCK_END, input) ||
+      this.matchPlaceholderToken(input) ||
+      this.matchToken(TokenType.NUMBER, input) ||
+      this.matchReservedWordToken(input, previousToken) ||
+      this.matchToken(TokenType.IDENT, input) ||
+      this.matchToken(TokenType.OPERATOR, input)
     );
   }
 
@@ -190,46 +224,39 @@ export default class Tokenizer {
    * Attempts to match a placeholder token pattern
    * @return {Token | undefined} - The placeholder token if found, otherwise undefined
    */
-  getPlaceholderToken(input: string): Token | undefined {
-    const placeholderTokenRegexMap: { regex: RegExp; parseKey: (s: string) => string }[] = [
-      // pattern for placeholder with identifier name
-      {
-        regex: this.IDENT_NAMED_PLACEHOLDER_REGEX ?? NULL_REGEX,
-        parseKey: v => v.slice(1),
-      },
-      // pattern for placeholder with string name
-      {
-        regex: this.STRING_NAMED_PLACEHOLDER_REGEX ?? NULL_REGEX,
-        parseKey: v =>
-          this.getEscapedPlaceholderKey({ key: v.slice(2, -1), quoteChar: v.slice(-1) }),
-      },
-      // pattern for placeholder with numeric index
-      {
-        regex: this.INDEXED_PLACEHOLDER_REGEX ?? NULL_REGEX,
-        parseKey: v => v.slice(1),
-      },
-    ];
-
-    return placeholderTokenRegexMap.reduce((acc, { regex, parseKey }) => {
-      const token = this.getTokenOnFirstMatch({
+  private matchPlaceholderToken(input: string): Token | undefined {
+    for (const { regex, parseKey } of this.paramPatterns) {
+      const token = this.match({
         input,
         regex,
-        type: TokenType.PLACEHOLDER,
+        type: TokenType.PARAMETER,
         transform: id,
       });
-      return token ? { ...token, key: parseKey(token.value) } : acc;
-    }, undefined as Token | undefined);
+      if (token) {
+        return { ...token, key: parseKey(token.value) };
+      }
+    }
+    return undefined;
   }
 
-  getEscapedPlaceholderKey({ key, quoteChar }: { key: string; quoteChar: string }): string {
+  private getEscapedPlaceholderKey({ key, quoteChar }: { key: string; quoteChar: string }): string {
     return key.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar);
+  }
+
+  private matchQuotedIdentToken(input: string): Token | undefined {
+    return this.match({
+      input,
+      regex: this.quotedIdentRegex,
+      type: TokenType.IDENT,
+      transform: id,
+    });
   }
 
   /**
    * Attempts to match a Reserved word token pattern, avoiding edge cases of Reserved words within string tokens
    * @return {Token | undefined} - The Reserved word token if found, otherwise undefined
    */
-  getReservedWordToken(input: string, previousToken?: Token): Token | undefined {
+  private matchReservedWordToken(input: string, previousToken?: Token): Token | undefined {
     // A reserved word cannot be preceded by a '.'
     // this makes it so in "mytable.from", "from" is not considered a reserved word
     if (previousToken?.value === '.') {
@@ -237,28 +264,36 @@ export default class Tokenizer {
     }
 
     // prioritised list of Reserved token types
-    const reservedTokenList = [
-      TokenType.RESERVED_CASE_START,
-      TokenType.RESERVED_CASE_END,
-      TokenType.RESERVED_COMMAND,
-      TokenType.RESERVED_BINARY_COMMAND,
-      TokenType.RESERVED_DEPENDENT_CLAUSE,
-      TokenType.RESERVED_LOGICAL_OPERATOR,
-      TokenType.RESERVED_KEYWORD,
-      TokenType.RESERVED_JOIN_CONDITION,
-    ];
-
-    return reservedTokenList.reduce(
-      (matchedToken: Token | undefined, tokenType) =>
-        matchedToken ||
-        this.getTokenOnFirstMatch({
-          input,
-          type: tokenType,
-          regex: this.REGEX_MAP[tokenType],
-          transform: toCanonicalKeyword,
-        }),
-      undefined
+    return (
+      this.matchReservedToken(TokenType.RESERVED_CASE_START, input) ||
+      this.matchReservedToken(TokenType.RESERVED_CASE_END, input) ||
+      this.matchReservedToken(TokenType.RESERVED_COMMAND, input) ||
+      this.matchReservedToken(TokenType.RESERVED_BINARY_COMMAND, input) ||
+      this.matchReservedToken(TokenType.RESERVED_DEPENDENT_CLAUSE, input) ||
+      this.matchReservedToken(TokenType.RESERVED_LOGICAL_OPERATOR, input) ||
+      this.matchReservedToken(TokenType.RESERVED_KEYWORD, input) ||
+      this.matchReservedToken(TokenType.RESERVED_JOIN_CONDITION, input)
     );
+  }
+
+  // Helper for matching RESERVED_* tokens which need to be transformed to canonical form
+  private matchReservedToken(tokenType: TokenType, input: string): Token | undefined {
+    return this.match({
+      input,
+      type: tokenType,
+      regex: this.REGEX_MAP[tokenType],
+      transform: toCanonicalKeyword,
+    });
+  }
+
+  // Shorthand for `match` that looks up regex from REGEX_MAP
+  private matchToken(tokenType: TokenType, input: string): Token | undefined {
+    return this.match({
+      input,
+      type: tokenType,
+      regex: this.REGEX_MAP[tokenType],
+      transform: id,
+    });
   }
 
   /**
@@ -268,7 +303,7 @@ export default class Tokenizer {
    * @param {RegExp} _.regex - The regex to match
    * @return {Token | undefined} - The matched token if found, otherwise undefined
    */
-  getTokenOnFirstMatch({
+  private match({
     input,
     type,
     regex,

@@ -7,11 +7,13 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsCreateTable from './features/createTable';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
+import supportsArrayLiterals from './features/arrayLiterals';
 import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
+import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 
 describe('BigQueryFormatter', () => {
@@ -22,12 +24,14 @@ describe('BigQueryFormatter', () => {
   supportsComments(format, { hashComments: true, skipTrickyCommentsTest: true });
   supportsCreateTable(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, BigQueryFormatter.stringTypes);
+  supportsStrings(format, ['""', "''"]);
+  supportsIdentifiers(format, ['``']);
+  supportsArrayLiterals(format);
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format, { without: ['NATURAL JOIN'] });
   supportsOperators(format, BigQueryFormatter.operators);
-  supportsParams(format, { indexed: ['?'] });
+  supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
 
   it('supports # line comment', () => {
     const result = format('SELECT alpha # commment\nFROM beta');
@@ -44,13 +48,70 @@ describe('BigQueryFormatter', () => {
   // "my" <minus> "ident"
   // https://cloud.google.com/bigquery/docs/reference/standard-sql/lexical
   it('supports dashes inside identifiers', () => {
-    const result = format('SELECT alpha-foo, some-long-identifier\nFROM beta');
+    const result = format('SELECT alpha-foo, where-long-identifier\nFROM beta');
     expect(result).toBe(dedent`
       SELECT
         alpha-foo,
-        some-long-identifier
+        where-long-identifier
       FROM
         beta
+    `);
+  });
+
+  it('treats repeated dashes as comments', () => {
+    const result = format('SELECT alpha--foo, where-long-identifier\nFROM beta');
+    expect(result).toBe(dedent`
+      SELECT
+        alpha --foo, where-long-identifier
+      FROM
+        beta
+    `);
+  });
+
+  // BigQuery-specific string types
+  it('supports strings with r, b and rb prefixes', () => {
+    expect(format(`SELECT R'blah', B'sah', rb"huh", br'bulu bulu', r"haha", BR'la la' FROM foo`))
+      .toBe(dedent`
+      SELECT
+        R'blah',
+        B'sah',
+        rb"huh",
+        br'bulu bulu',
+        r"haha",
+        BR'la la'
+      FROM
+        foo
+    `);
+  });
+
+  it('supports triple-quoted strings', () => {
+    expect(
+      format(`SELECT '''hello 'my' world''', """hello "my" world""", """\\"quoted\\"""" FROM foo`)
+    ).toBe(dedent`
+      SELECT
+        '''hello 'my' world''',
+        """hello "my" world""",
+        """\\"quoted\\""""
+      FROM
+        foo
+    `);
+  });
+
+  it('supports strings with r, b and rb prefixes with triple-quoted strings', () => {
+    expect(
+      format(
+        `SELECT R'''blah''', B'''sah''', rb"""hu"h""", br'''bulu bulu''', r"""haha""", BR'''la' la''' FROM foo`
+      )
+    ).toBe(dedent`
+      SELECT
+        R'''blah''',
+        B'''sah''',
+        rb"""hu"h""",
+        br'''bulu bulu''',
+        r"""haha""",
+        BR'''la' la'''
+      FROM
+        foo
     `);
   });
 
@@ -68,11 +129,10 @@ describe('BigQueryFormatter', () => {
 
   it('supports parametric ARRAY and STRUCT', () => {
     const result = format('SELECT STRUCT<ARRAY<INT64>>([]), ARRAY<FLOAT>[1] FROM tbl');
-    // TODO, v6: ARRAY<FLOAT> [] should be ARRAY<FLOAT>[]
     expect(result).toBe(dedent`
       SELECT
         STRUCT<ARRAY<INT64>>([]),
-        ARRAY<FLOAT> [1]
+        ARRAY<FLOAT>[1]
       FROM
         tbl
     `);

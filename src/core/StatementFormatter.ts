@@ -52,40 +52,50 @@ export default class StatementFormatter {
         }
       }
 
-      if (token.type === TokenType.LINE_COMMENT) {
-        this.formatLineComment(token);
-      } else if (token.type === TokenType.BLOCK_COMMENT) {
-        this.formatBlockComment(token);
-      } else if (token.type === TokenType.RESERVED_COMMAND) {
-        this.currentNewline = this.checkNewline(token);
-        this.formatCommand(token);
-      } else if (token.type === TokenType.RESERVED_BINARY_COMMAND) {
-        this.formatBinaryCommand(token);
-      } else if (token.type === TokenType.RESERVED_DEPENDENT_CLAUSE) {
-        this.formatDependentClause(token);
-      } else if (token.type === TokenType.RESERVED_JOIN_CONDITION) {
-        this.formatJoinCondition(token);
-      } else if (token.type === TokenType.RESERVED_LOGICAL_OPERATOR) {
-        this.formatLogicalOperator(token);
-      } else if (token.type === TokenType.RESERVED_KEYWORD) {
-        this.formatKeyword(token);
-      } else if (token.type === TokenType.BLOCK_START) {
-        this.formatBlockStart(token);
-      } else if (token.type === TokenType.BLOCK_END) {
-        this.formatBlockEnd(token);
-      } else if (token.type === TokenType.RESERVED_CASE_START) {
-        this.formatCaseStart(token);
-      } else if (token.type === TokenType.RESERVED_CASE_END) {
-        this.formatCaseEnd(token);
-      } else if (token.type === TokenType.PLACEHOLDER) {
-        this.formatPlaceholder(token);
-      } else if (token.type === TokenType.OPERATOR) {
-        this.formatOperator(token);
-      } else {
-        this.formatWord(token);
-      }
+      this.formatToken(token);
     }
     return this.query.toString();
+  }
+
+  private formatToken(token: Token): void {
+    switch (token.type) {
+      case TokenType.LINE_COMMENT:
+        return this.formatLineComment(token);
+      case TokenType.BLOCK_COMMENT:
+        return this.formatBlockComment(token);
+      case TokenType.RESERVED_COMMAND:
+        this.currentNewline = this.checkNewline(token);
+        return this.formatCommand(token);
+      case TokenType.RESERVED_BINARY_COMMAND:
+        return this.formatBinaryCommand(token);
+      case TokenType.RESERVED_DEPENDENT_CLAUSE:
+        return this.formatDependentClause(token);
+      case TokenType.RESERVED_JOIN_CONDITION:
+        return this.formatJoinCondition(token);
+      case TokenType.RESERVED_LOGICAL_OPERATOR:
+        return this.formatLogicalOperator(token);
+      case TokenType.RESERVED_KEYWORD:
+        return this.formatKeyword(token);
+      case TokenType.BLOCK_START:
+        return this.formatBlockStart(token);
+      case TokenType.BLOCK_END:
+        return this.formatBlockEnd(token);
+      case TokenType.RESERVED_CASE_START:
+        return this.formatCaseStart(token);
+      case TokenType.RESERVED_CASE_END:
+        return this.formatCaseEnd(token);
+      case TokenType.PARAMETER:
+        return this.formatParameter(token);
+      case TokenType.OPERATOR:
+        return this.formatOperator(token);
+      case TokenType.IDENT:
+      case TokenType.STRING:
+      case TokenType.NUMBER:
+      case TokenType.VARIABLE:
+        return this.formatWord(token);
+      default:
+        throw new Error(`Unexpected token type: ${token.type}`);
+    }
   }
 
   /**
@@ -365,9 +375,9 @@ export default class StatementFormatter {
   }
 
   /**
-   * Formats a Placeholder item onto query, to be replaced with the value of the placeholder
+   * Formats a parameter placeholder item onto query, to be replaced with the value of the placeholder
    */
-  formatPlaceholder(token: Token) {
+  private formatParameter(token: Token) {
     this.query.add(this.params.get(token), WS.SPACE);
   }
 

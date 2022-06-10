@@ -16,6 +16,7 @@ import supportsReturning from './features/returning';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
+import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 
 describe('PlSqlFormatter', () => {
@@ -29,13 +30,14 @@ describe('PlSqlFormatter', () => {
   supportsAlterTable(format);
   supportsAlterTableModify(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, PlSqlFormatter.stringTypes);
+  supportsStrings(format, ["''", "N''"]);
+  supportsIdentifiers(format, [`""`]);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, PlSqlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsJoin(format);
   supportsReturning(format);
-  supportsParams(format, { indexed: ['?'], named: [':'] });
+  supportsParams(format, { numbered: [':'], named: [':'] });
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
@@ -61,6 +63,28 @@ describe('PlSqlFormatter', () => {
         user#
       FROM
         tbl;
+    `);
+  });
+
+  // Parameters don't allow the same characters as identifiers
+  it('does not support #, $ in named parameters', () => {
+    expect(format('SELECT :col$foo')).toBe(dedent`
+      SELECT
+        :col $foo
+    `);
+
+    expect(() => format('SELECT :col#foo')).toThrowError('Parse error: Unexpected "#foo"');
+  });
+
+  it('supports &name substitution variables', () => {
+    const result = format('SELECT &name, &some$Special#Chars_, &hah123 FROM &&tbl');
+    expect(result).toBe(dedent`
+      SELECT
+        &name,
+        &some$Special#Chars_,
+        &hah123
+      FROM
+        &&tbl
     `);
   });
 

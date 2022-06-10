@@ -17,7 +17,7 @@ The real world implementations have lots of variation:
   - `UX'..'` an UCS-2 graphic string (no escaping)
 - [Hive][]: `'..'`, `".."` (backslash `\` used for escaping)
 - [MariaDB][]:
-  - `'..'` (backslash `\`<sup>1</sup> or repeated single-quote `''` used for escaping)
+  - `'..'`, `".."`<sup>2</sup> (backslash `\`<sup>1</sup> or repeated single-quote `''` used for escaping)
   - `x'..'`, `X'..'` [hex string][mariadb-hex]
 - [MySQL][]:
   - `'..'`, `".."`<sup>2</sup> (backslash `\`<sup>1</sup> or repeated quote (`''` or `""`) used for escaping)

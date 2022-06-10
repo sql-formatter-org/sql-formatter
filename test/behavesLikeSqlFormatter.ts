@@ -331,7 +331,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     expect(result).toBe("((foo = 'bar'))");
   });
 
-  it('formats unicode correctly', () => {
+  it('supports unicode letters in identifiers', () => {
     const result = format('SELECT 结合使用, тест FROM töörõõm;');
     expect(result).toBe(dedent`
       SELECT
@@ -339,6 +339,28 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
         тест
       FROM
         töörõõm;
+    `);
+  });
+
+  // Using Myanmar and Tibetan digits 1, 2, 3
+  it('supports unicode numbers in identifiers', () => {
+    const result = format('SELECT my၁၂၃ FROM tbl༡༢༣;');
+    expect(result).toBe(dedent`
+      SELECT
+        my၁၂၃
+      FROM
+        tbl༡༢༣;
+    `);
+  });
+
+  it('supports unicode diacritical marks in identifiers', () => {
+    const COMBINING_TILDE = String.fromCodePoint(0x0303);
+    const result = format('SELECT o' + COMBINING_TILDE + ' FROM tbl;');
+    expect(result).toBe(dedent`
+      SELECT
+        õ
+      FROM
+        tbl;
     `);
   });
 
@@ -358,18 +380,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
         *
       FROM
         tbl2;
-    `);
-  });
-
-  it('handles array and map accessor', () => {
-    const result = format(`SELECT alpha[1], beta['gamma'], epsilon["zeta"] FROM eta;`);
-    expect(result).toBe(dedent`
-      SELECT
-        alpha[1],
-        beta['gamma'],
-        epsilon["zeta"]
-      FROM
-        eta;
     `);
   });
 }

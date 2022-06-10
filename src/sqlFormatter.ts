@@ -98,6 +98,18 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
     );
   }
 
+  if (cfg.language === 'hive' && cfg.params !== undefined) {
+    throw new ConfigError(
+      'Unexpected "params" option. Prepared statement placeholders not supported for Hive.'
+    );
+  }
+
+  if (cfg.language === 'spark' && cfg.params !== undefined) {
+    throw new ConfigError(
+      'Unexpected "params" option. Prepared statement placeholders not supported for Spark.'
+    );
+  }
+
   return cfg;
 }
 

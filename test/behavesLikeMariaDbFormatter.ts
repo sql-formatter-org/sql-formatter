@@ -10,6 +10,8 @@ import supportsJoin from './features/join';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
+import supportsStrings from './features/strings';
+import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 
 /**
@@ -18,6 +20,8 @@ import supportsParams from './options/param';
 export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   behavesLikeSqlFormatter(format);
   supportsComments(format, { hashComments: true });
+  supportsStrings(format, ["''", '""', "X''"]);
+  supportsIdentifiers(format, ['``']);
   supportsCreateTable(format);
   supportsConstraints(format);
   supportsAlterTable(format);
@@ -33,20 +37,46 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
       'NATURAL RIGHT OUTER JOIN',
     ],
   });
-  supportsParams(format, { indexed: ['?'] });
+  supportsParams(format, { positional: true });
+
+  it('allows $ character as part of identifiers', () => {
+    expect(format('SELECT $foo, some$$ident')).toBe(dedent`
+      SELECT
+        $foo,
+        some$$ident
+    `);
+  });
 
   it('supports @variables', () => {
-    expect(format('SELECT @foo, @bar')).toBe(dedent`
+    expect(format('SELECT @foo, @some_long.var$with$special.chars')).toBe(dedent`
       SELECT
         @foo,
-        @bar
+        @some_long.var$with$special.chars
     `);
   });
 
   it('supports setting variables: @var :=', () => {
-    expect(format('SET @foo := (SELECT * FROM tbl);')).toBe(dedent`
+    expect(format('SET @foo := 10;')).toBe(dedent`
       SET
-        @foo := (
+        @foo := 10;
+    `);
+  });
+
+  it('supports @"name", @\'name\', @`name` variables', () => {
+    expect(format(`SELECT @"foo fo", @'bar ar', @\`baz zaz\` FROM tbl;`)).toBe(dedent`
+      SELECT
+        @"foo fo",
+        @'bar ar',
+        @\`baz zaz\`
+      FROM
+        tbl;
+    `);
+  });
+
+  it('supports setting variables: @"var" :=', () => {
+    expect(format('SET @"foo" := (SELECT * FROM tbl);')).toBe(dedent`
+      SET
+        @"foo" := (
           SELECT
             *
           FROM

@@ -1,6 +1,5 @@
 import Formatter from 'src/core/Formatter';
 import Tokenizer from 'src/core/Tokenizer';
-import { type StringPatternType } from 'src/core/regexFactory';
 import { dedupe } from 'src/utils';
 
 /**
@@ -859,7 +858,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
 
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "''", '``', '[]', "x''"];
   static operators = ['**', '!>', '!<', '||'];
 
   tokenizer() {
@@ -871,10 +869,11 @@ export default class Db2Formatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
-      stringTypes: Db2Formatter.stringTypes,
-      indexedPlaceholderTypes: ['?'],
-      namedPlaceholderTypes: [':'],
-      specialWordChars: { any: '#@' },
+      stringTypes: [{ quote: "''", prefixes: ['X', 'G', 'N', 'GX', 'UX', 'U&'] }],
+      identTypes: [`""`],
+      positionalParams: true,
+      namedParamTypes: [':'],
+      paramChars: { first: '@#$', rest: '@#$' },
       operators: Db2Formatter.operators,
     });
   }

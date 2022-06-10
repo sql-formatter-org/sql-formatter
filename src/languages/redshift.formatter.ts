@@ -1,6 +1,5 @@
 import Formatter from 'src/core/Formatter';
 import Tokenizer from 'src/core/Tokenizer';
-import { type StringPatternType } from 'src/core/regexFactory';
 import { dedupe } from 'src/utils';
 
 /**
@@ -716,7 +715,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export default class RedshiftFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "''", '``'];
   static operators = ['|/', '||/', '<<', '>>', '||'];
 
   tokenizer() {
@@ -728,12 +726,9 @@ export default class RedshiftFormatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
-      stringTypes: RedshiftFormatter.stringTypes,
-      indexedPlaceholderTypes: ['?'],
-      // XXX: Seems like redshift only supports $1, $2, $3 parameters,
-      // but for some reason we list lots of types in here.
-      // https://docs.aws.amazon.com/redshift/latest/dg/r_PREPARE.html
-      namedPlaceholderTypes: ['@', '#', '$'],
+      stringTypes: ["''"],
+      identTypes: [`""`],
+      numberedParamTypes: ['$'],
       operators: RedshiftFormatter.operators,
     });
   }

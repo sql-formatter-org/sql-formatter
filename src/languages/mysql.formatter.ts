@@ -1,7 +1,6 @@
 import Formatter from 'src/core/Formatter';
 import Tokenizer from 'src/core/Tokenizer';
 import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/core/token';
-import { type StringPatternType } from 'src/core/regexFactory';
 import { dedupe } from 'src/utils';
 
 // TODO: split this into object with function categories
@@ -1319,7 +1318,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = ['``', "''", '""'];
   static operators = [':=', '<<', '>>', '<=>', '&&', '||', '->', '->>'];
 
   tokenizer() {
@@ -1329,10 +1327,17 @@ export default class MySqlFormatter extends Formatter {
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
-      stringTypes: MySqlFormatter.stringTypes,
-      indexedPlaceholderTypes: ['?'],
+      stringTypes: ['""', { quote: "''", prefixes: ['X'] }],
+      identTypes: ['``'],
+      identChars: { first: '$', rest: '$' },
+      variableTypes: [
+        { regex: '@[A-Za-z0-9_.$]+' },
+        { quote: '""', prefixes: ['@'], required: true },
+        { quote: "''", prefixes: ['@'], required: true },
+        { quote: '``', prefixes: ['@'], required: true },
+      ],
+      positionalParams: true,
       lineCommentTypes: ['--', '#'],
-      specialWordChars: { prefix: '@:' },
       operators: MySqlFormatter.operators,
       preprocess,
     });

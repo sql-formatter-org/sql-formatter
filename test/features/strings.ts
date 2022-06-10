@@ -3,7 +3,9 @@ import dedent from 'dedent-js';
 
 import { FormatFn } from 'src/sqlFormatter';
 
-export default function supportsStrings(format: FormatFn, stringTypes: string[]) {
+type StringType = '""' | "''" | 'U&""' | "U&''" | "N''" | "X''";
+
+export default function supportsStrings(format: FormatFn, stringTypes: StringType[]) {
   if (stringTypes.includes('""')) {
     it('supports double-quoted strings', () => {
       expect(format('"foo JOIN bar"')).toBe('"foo JOIN bar"');
@@ -14,6 +16,10 @@ export default function supportsStrings(format: FormatFn, stringTypes: string[])
         FROM
           "update"
       `);
+    });
+
+    it('supports escaping double-quote by doubling it', () => {
+      expect(format('"foo""bar"')).toBe('"foo""bar"');
     });
   }
 
@@ -28,18 +34,9 @@ export default function supportsStrings(format: FormatFn, stringTypes: string[])
           'update'
       `);
     });
-  }
 
-  if (stringTypes.includes('``')) {
-    it('supports backtick-quoted strings', () => {
-      expect(format('`foo JOIN bar`')).toBe('`foo JOIN bar`');
-      expect(format('`foo `` JOIN bar`')).toBe('`foo `` JOIN bar`');
-      expect(format('SELECT `where` FROM `update`')).toBe(dedent`
-        SELECT
-          \`where\`
-        FROM
-          \`update\`
-      `);
+    it('supports escaping single-quote by doubling it', () => {
+      expect(format("'foo''bar'")).toBe("'foo''bar'");
     });
   }
 
@@ -53,6 +50,10 @@ export default function supportsStrings(format: FormatFn, stringTypes: string[])
         FROM
           U&"update"
       `);
+    });
+
+    it("detects consecutive U&'' strings as separate ones", () => {
+      expect(format("U&'foo'U&'bar'")).toBe("U&'foo' U&'bar'");
     });
   }
 
@@ -69,36 +70,6 @@ export default function supportsStrings(format: FormatFn, stringTypes: string[])
     });
   }
 
-  if (stringTypes.includes('$$')) {
-    it('supports dollar-quoted strings', () => {
-      expect(format('$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$')).toBe(
-        '$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$'
-      );
-      expect(format('$$foo JOIN bar$$')).toBe('$$foo JOIN bar$$');
-      expect(format('$$foo $ JOIN bar$$')).toBe('$$foo $ JOIN bar$$');
-      expect(format('$$foo \n bar$$')).toBe('$$foo \n bar$$');
-      expect(format('SELECT $$where$$ FROM $$update$$')).toBe(dedent`
-        SELECT
-          $$where$$
-        FROM
-          $$update$$
-      `);
-    });
-  }
-
-  if (stringTypes.includes('[]')) {
-    it('supports [bracket-quoted identifiers]', () => {
-      expect(format('[foo JOIN bar]')).toBe('[foo JOIN bar]');
-      expect(format('[foo ]] JOIN bar]')).toBe('[foo ]] JOIN bar]');
-      expect(format('SELECT [where] FROM [update]')).toBe(dedent`
-        SELECT
-          [where]
-        FROM
-          [update]
-      `);
-    });
-  }
-
   if (stringTypes.includes("N''")) {
     it('supports T-SQL unicode strings', () => {
       expect(format("N'foo JOIN bar'")).toBe("N'foo JOIN bar'");
@@ -110,9 +81,13 @@ export default function supportsStrings(format: FormatFn, stringTypes: string[])
           N'update'
       `);
     });
+
+    it("detects consecutive N'' strings as separate ones", () => {
+      expect(format("N'foo'N'bar'")).toBe("N'foo' N'bar'");
+    });
   }
 
-  if (stringTypes.includes("x''")) {
+  if (stringTypes.includes("X''")) {
     it('supports hex byte sequences', () => {
       expect(format("x'0E'")).toBe("x'0E'");
       expect(format("X'1F0A89C3'")).toBe("X'1F0A89C3'");
@@ -123,18 +98,9 @@ export default function supportsStrings(format: FormatFn, stringTypes: string[])
           foo
       `);
     });
-  }
 
-  if (stringTypes.includes("E''")) {
-    it('supports strings with C-style escapes', () => {
-      expect(format("E'blah blah'")).toBe("E'blah blah'");
-      expect(format("E'some \\' FROM escapes'")).toBe("E'some \\' FROM escapes'");
-      expect(format("SELECT E'blah' FROM foo")).toBe(dedent`
-        SELECT
-          E'blah'
-        FROM
-          foo
-      `);
+    it("detects consecutive X'' strings as separate ones", () => {
+      expect(format("X'AE01'X'01F6'")).toBe("X'AE01' X'01F6'");
     });
   }
 }

@@ -1,6 +1,5 @@
 import Formatter from 'src/core/Formatter';
 import Tokenizer from 'src/core/Tokenizer';
-import { type StringPatternType } from 'src/core/regexFactory';
 import { dedupe } from 'src/utils';
 
 /**
@@ -370,7 +369,6 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class SqlFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "''", '``'];
   static operators = [];
 
   tokenizer() {
@@ -379,8 +377,9 @@ export default class SqlFormatter extends Formatter {
       reservedBinaryCommands,
       reservedDependentClauses,
       reservedKeywords: dedupe(reservedKeywords),
-      stringTypes: SqlFormatter.stringTypes,
-      indexedPlaceholderTypes: ['?'],
+      stringTypes: [{ quote: "''", prefixes: ['X'] }],
+      identTypes: [`""`, '``'],
+      positionalParams: true,
     });
   }
 }

@@ -1,6 +1,5 @@
 import Formatter from 'src/core/Formatter';
 import Tokenizer from 'src/core/Tokenizer';
-import { type StringPatternType } from 'src/core/regexFactory';
 import { dedupe } from 'src/utils';
 
 /**
@@ -1671,7 +1670,6 @@ const binaryOperators = [
 
 // https://www.postgresql.org/docs/14/index.html
 export default class PostgreSqlFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "''", "U&''", 'U&""', '$$', '``', "E''"];
   static operators = binaryOperators;
 
   tokenizer() {
@@ -1683,9 +1681,10 @@ export default class PostgreSqlFormatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...reservedKeywords,
       ]),
-      stringTypes: PostgreSqlFormatter.stringTypes,
-      indexedPlaceholderTypes: ['$'],
-      namedPlaceholderTypes: [':'],
+      stringTypes: [{ quote: "''", prefixes: ['U&', 'E', 'X', 'B'] }, '$$'],
+      identTypes: [{ quote: '""', prefixes: ['U&'] }],
+      identChars: { rest: '$' },
+      numberedParamTypes: ['$'],
       operators: PostgreSqlFormatter.operators,
     });
   }

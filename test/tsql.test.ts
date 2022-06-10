@@ -14,6 +14,7 @@ import supportsJoin from './features/join';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
+import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 
 describe('TSqlFormatter', () => {
@@ -26,12 +27,13 @@ describe('TSqlFormatter', () => {
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, TSqlFormatter.stringTypes);
+  supportsStrings(format, ["N''", "''"]);
+  supportsIdentifiers(format, [`""`, '[]']);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, TSqlFormatter.operators);
   supportsJoin(format, { without: ['NATURAL'] });
-  supportsParams(format, { named: ['@', '@""', '@[]'] });
+  supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });
 
   // TODO: The following are duplicated from StandardSQLFormatter test
 
@@ -56,6 +58,31 @@ describe('TSqlFormatter', () => {
       FROM
         t
         CROSS JOIN t2 on t.id = t2.id_t
+    `);
+  });
+
+  it('recognizes @, $, # as part of identifiers', () => {
+    const result = format('SELECT from@bar, where#to, join$me FROM tbl;');
+    expect(result).toBe(dedent`
+      SELECT
+        from@bar,
+        where#to,
+        join$me
+      FROM
+        tbl;
+    `);
+  });
+
+  it('allows @ and # at the start of identifiers', () => {
+    const result = format('SELECT @bar, #baz, @@some, ##flam FROM tbl;');
+    expect(result).toBe(dedent`
+      SELECT
+        @bar,
+        #baz,
+        @@some,
+        ##flam
+      FROM
+        tbl;
     `);
   });
 });

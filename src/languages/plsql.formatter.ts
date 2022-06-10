@@ -1,7 +1,6 @@
 import Formatter from 'src/core/Formatter';
 import Tokenizer from 'src/core/Tokenizer';
 import { EOF_TOKEN, isReserved, isToken, type Token, TokenType } from 'src/core/token';
-import { type StringPatternType } from 'src/core/regexFactory';
 import { dedupe } from 'src/utils';
 
 /**
@@ -443,7 +442,6 @@ const reservedBinaryCommands = [
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class PlSqlFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "N''", "''", '``'];
   static operators = [
     '||',
     '**',
@@ -463,10 +461,14 @@ export default class PlSqlFormatter extends Formatter {
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe(reservedKeywords),
-      stringTypes: PlSqlFormatter.stringTypes,
-      indexedPlaceholderTypes: ['?'],
-      namedPlaceholderTypes: [':'],
-      specialWordChars: { any: '_$#' },
+      // TODO: support custom-delimited strings: Q'{..}' q'<..>' etc
+      stringTypes: [{ quote: "''", prefixes: ['N'] }],
+      identTypes: [`""`],
+      identChars: { rest: '$#' },
+      variableTypes: [{ regex: '&{1,2}[A-Za-z][A-Za-z0-9_$#]*' }],
+      numberedParamTypes: [':'],
+      namedParamTypes: [':'],
+      paramChars: {}, // Empty object used on purpose to not allow $ and # chars as specified in identChars
       operators: PlSqlFormatter.operators,
       preprocess,
     });
@@ -476,16 +478,7 @@ export default class PlSqlFormatter extends Formatter {
 function preprocess(tokens: Token[]) {
   let previousReservedToken: Token = EOF_TOKEN;
 
-  return tokens.map((token, i) => {
-    const prevToken = tokens[i - 1] || EOF_TOKEN;
-    const nextToken = tokens[i + 1] || EOF_TOKEN;
-
-    // `table`[.]`column`
-    if (token.value === '.' && nextToken.value.startsWith('`') && prevToken.value.endsWith('`')) {
-      // This is an operator, do not insert spaces
-      return { ...token, type: TokenType.OPERATOR };
-    }
-
+  return tokens.map(token => {
     // BY [SET]
     if (isToken.SET(token) && isToken.BY(previousReservedToken)) {
       return { ...token, type: TokenType.RESERVED_KEYWORD };

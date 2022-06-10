@@ -1,7 +1,6 @@
 import Formatter from 'src/core/Formatter';
 import Tokenizer from 'src/core/Tokenizer';
 import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/core/token';
-import { type StringPatternType } from 'src/core/regexFactory';
 import { dedupe } from 'src/utils';
 
 /**
@@ -778,7 +777,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "''", '``', '{}'];
   static operators = ['<=>', '&&', '||', '==', '->'];
 
   tokenizer() {
@@ -791,9 +789,11 @@ export default class SparkFormatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...reservedKeywords,
       ]),
-      stringTypes: SparkFormatter.stringTypes,
-      indexedPlaceholderTypes: ['?'],
-      namedPlaceholderTypes: ['$'],
+      blockStart: ['(', '['],
+      blockEnd: [')', ']'],
+      stringTypes: [{ quote: "''", prefixes: ['X'] }],
+      identTypes: ['``'],
+      variableTypes: [{ quote: '{}', prefixes: ['$'], required: true }],
       operators: SparkFormatter.operators,
       preprocess,
     });
@@ -815,7 +815,7 @@ function preprocess(tokens: Token[]) {
     if (token.value === 'ITEMS' && token.type === TokenType.RESERVED_KEYWORD) {
       if (!(prevToken.value === 'COLLECTION' && nextToken.value === 'TERMINATED')) {
         // this is a word and not COLLECTION ITEMS
-        return { type: TokenType.WORD, text: token.text, value: token.text };
+        return { type: TokenType.IDENT, text: token.text, value: token.text };
       }
     }
 

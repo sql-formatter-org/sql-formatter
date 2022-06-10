@@ -50,12 +50,12 @@ export default function supportsKeywordCase(format: FormatFn) {
   });
 
   it('does not uppercase keywords inside strings', () => {
-    const result = format('select "distinct" as foo', {
+    const result = format(`select 'distinct' as foo`, {
       keywordCase: 'upper',
     });
     expect(result).toBe(dedent`
       SELECT
-        "distinct" AS foo
+        'distinct' AS foo
     `);
   });
 }

@@ -1,6 +1,5 @@
 import Formatter from 'src/core/Formatter';
 import Tokenizer from 'src/core/Tokenizer';
-import { type StringPatternType } from 'src/core/regexFactory';
 import { dedupe } from 'src/utils';
 
 /**
@@ -1232,7 +1231,6 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export default class TSqlFormatter extends Formatter {
-  static stringTypes: StringPatternType[] = [`""`, "N''", "''", '[]', '``'];
   static operators = ['!<', '!>', '+=', '-=', '*=', '/=', '%=', '|=', '&=', '^=', '::'];
 
   tokenizer() {
@@ -1244,9 +1242,11 @@ export default class TSqlFormatter extends Formatter {
         ...Object.values(reservedFunctions).reduce((acc, arr) => [...acc, ...arr], []),
         ...Object.values(reservedKeywords).reduce((acc, arr) => [...acc, ...arr], []),
       ]),
-      stringTypes: TSqlFormatter.stringTypes,
-      namedPlaceholderTypes: ['@'],
-      specialWordChars: { any: '#@' },
+      stringTypes: [{ quote: "''", prefixes: ['N'] }],
+      identTypes: [`""`, '[]'],
+      identChars: { first: '#@', rest: '#@$' },
+      namedParamTypes: ['@'],
+      quotedParamTypes: ['@'],
       operators: TSqlFormatter.operators,
       // TODO: Support for money constants
     });

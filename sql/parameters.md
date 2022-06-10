@@ -32,7 +32,7 @@ These come in the form of single question mark (`?`), supported by:
 - [N1QL][]: `$` followed by unquoted [identifier][]
 - [PL/SQL][]: colon (`:`) followed by name (`[a-zA-Z][a-zA-Z0-9_]*`)
 - [SQLite][]: `$`, `@` or `:` followed by unquoted [identifier][]
-- [Transact-SQL][]: `@` or `:`<sup>3</sup> followed by name (see also [identifier][] syntax)
+- [Transact-SQL][]: `@` or `:`<sup>3</sup> followed by [identifier][] (either quoted or unquoted)
 
 ### Notes:
 

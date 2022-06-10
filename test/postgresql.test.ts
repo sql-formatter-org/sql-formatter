@@ -1,7 +1,9 @@
+import dedent from 'dedent-js';
+
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
 import PostgreSqlFormatter from 'src/languages/postgresql.formatter';
-import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
+import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsCreateTable from './features/createTable';
@@ -13,6 +15,7 @@ import supportsReturning from './features/returning';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
+import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 
 describe('PostgreSqlFormatter', () => {
@@ -25,11 +28,55 @@ describe('PostgreSqlFormatter', () => {
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, PostgreSqlFormatter.stringTypes);
+  supportsStrings(format, ["''", "U&''", "X''"]);
+  supportsIdentifiers(format, [`""`, 'U&""']);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, PostgreSqlFormatter.operators);
   supportsJoin(format);
   supportsReturning(format);
-  supportsParams(format, { indexed: ['$'], named: [':'] });
+  supportsParams(format, { numbered: ['$'] });
+
+  it('allows $ character as part of identifiers', () => {
+    expect(format('SELECT foo$, some$$ident')).toBe(dedent`
+      SELECT
+        foo$,
+        some$$ident
+    `);
+  });
+
+  // Postgres-specific string types
+  it('supports bit strings', () => {
+    expect(format(`SELECT B'0110010', B'1101000';`)).toBe(dedent`
+      SELECT
+        B'0110010',
+        B'1101000';
+    `);
+  });
+
+  it("supports E'' strings with C-style escapes", () => {
+    expect(format("E'blah blah'")).toBe("E'blah blah'");
+    expect(format("E'some \\' FROM escapes'")).toBe("E'some \\' FROM escapes'");
+    expect(format("SELECT E'blah' FROM foo")).toBe(dedent`
+      SELECT
+        E'blah'
+      FROM
+        foo
+    `);
+  });
+
+  it('supports dollar-quoted strings', () => {
+    expect(format('$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$')).toBe(
+      '$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$'
+    );
+    expect(format('$$foo JOIN bar$$')).toBe('$$foo JOIN bar$$');
+    expect(format('$$foo $ JOIN bar$$')).toBe('$$foo $ JOIN bar$$');
+    expect(format('$$foo \n bar$$')).toBe('$$foo \n bar$$');
+    expect(format('SELECT $$where$$ FROM $$update$$')).toBe(dedent`
+      SELECT
+        $$where$$
+      FROM
+        $$update$$
+    `);
+  });
 });

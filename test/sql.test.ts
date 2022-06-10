@@ -14,6 +14,7 @@ import supportsOperators from './features/operators';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
+import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 
 describe('SqlFormatter', () => {
@@ -26,12 +27,13 @@ describe('SqlFormatter', () => {
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, SqlFormatter.stringTypes);
+  supportsStrings(format, ["''", "X''"]);
+  supportsIdentifiers(format, [`""`, '``']);
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format);
   supportsOperators(format, SqlFormatter.operators);
-  supportsParams(format, { indexed: ['?'] });
+  supportsParams(format, { positional: true });
 
   it('formats FETCH FIRST like LIMIT', () => {
     const result = format('SELECT * FETCH FIRST 2 ROWS ONLY;');

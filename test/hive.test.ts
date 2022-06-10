@@ -1,3 +1,5 @@
+import dedent from 'dedent-js';
+
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
 
 import HiveFormatter from 'src/languages/hive.formatter';
@@ -10,9 +12,9 @@ import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
-import supportsArray from './features/array';
+import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
-import supportsParams from './options/param';
+import supportsIdentifiers from './features/identifiers';
 
 describe('HiveFormatter', () => {
   const language = 'hive';
@@ -22,11 +24,34 @@ describe('HiveFormatter', () => {
   supportsComments(format);
   supportsCreateTable(format);
   supportsAlterTable(format);
-  supportsStrings(format, HiveFormatter.stringTypes);
+  supportsStrings(format, ['""', "''"]);
+  supportsIdentifiers(format, ['``']);
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format, { without: ['NATURAL JOIN'] });
   supportsOperators(format, HiveFormatter.operators);
-  supportsArray(format);
-  supportsParams(format, { indexed: ['?'] });
+  supportsArrayAndMapAccessors(format);
+
+  it('throws error when params option used', () => {
+    expect(() => format('SELECT *', { params: ['1', '2', '3'] })).toThrow(
+      'Unexpected "params" option. Prepared statement placeholders not supported for Hive.'
+    );
+  });
+
+  // eslint-disable-next-line no-template-curly-in-string
+  it('recognizes ${hivevar:name} substitution variables', () => {
+    const result = format(
+      // eslint-disable-next-line no-template-curly-in-string
+      "SELECT ${var1}, ${ var 2 } FROM ${hivevar:table_name} WHERE name = '${hivevar:name}';"
+    );
+    expect(result).toBe(dedent`
+      SELECT
+        \${var1},
+        \${ var 2 }
+      FROM
+        \${hivevar:table_name}
+      WHERE
+        name = '\${hivevar:name}';
+    `);
+  });
 });

@@ -14,6 +14,7 @@ import supportsStrings from './features/strings';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
+import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 
 describe('Db2Formatter', () => {
@@ -26,12 +27,13 @@ describe('Db2Formatter', () => {
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, Db2Formatter.stringTypes);
+  supportsStrings(format, ["''", "X''", "U&''", "N''"]);
+  supportsIdentifiers(format, [`""`]);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, Db2Formatter.operators);
   supportsJoin(format);
-  supportsParams(format, { indexed: ['?'], named: [':'] });
+  supportsParams(format, { positional: true, named: [':'] });
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
@@ -61,14 +63,27 @@ describe('Db2Formatter', () => {
     `);
   });
 
-  it('recognizes @ and # as part of identifiers', () => {
-    const result = format('SELECT col#1, @col2 FROM tbl');
-    expect(result).toBe(dedent`
+  // DB2-specific string types
+  it('supports strings with G, GX, UX prefixes', () => {
+    expect(format(`SELECT G'blah blah', GX'01AC', UX'CCF239' FROM foo`)).toBe(dedent`
       SELECT
-        col#1,
-        @col2
+        G'blah blah',
+        GX'01AC',
+        UX'CCF239'
       FROM
-        tbl
+        foo
+    `);
+  });
+
+  it('supports @, #, $ characters in named parameters', () => {
+    expect(format(`SELECT :foo@bar, :foo#bar, :foo$bar, :@zip, :#zap, :$zop`)).toBe(dedent`
+      SELECT
+        :foo@bar,
+        :foo#bar,
+        :foo$bar,
+        :@zip,
+        :#zap,
+        :$zop
     `);
   });
 });
