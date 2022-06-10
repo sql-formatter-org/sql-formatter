@@ -83,9 +83,8 @@
     "build:commonjs:babel": "babel src --out-dir lib --extensions .ts --source-maps",
     "build:commonjs:tsc": "ttsc --module commonjs --emitDeclarationOnly --isolatedModules",
     "build:commonjs": "npm-run-all --parallel build:commonjs:babel build:commonjs:tsc",
-    "build:umd": "webpack --config webpack.dev.js",
     "build:umd:min": "webpack --config webpack.prod.js",
-    "build": "npm-run-all --parallel build:commonjs build:umd build:umd:min",
+    "build": "npm-run-all --parallel build:commonjs build:umd:min",
     "release": "release-it"
   },
   "repository": {
