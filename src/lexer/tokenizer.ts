@@ -2,47 +2,63 @@ import * as moo from 'moo';
 
 import { Token, TokenType } from 'src/core/token';
 import * as regex from 'src/lexer/regexFactory';
+import * as regexTypes from 'src/lexer/regexTypes';
+import { NULL_REGEX } from './regexUtil';
 
 interface TokenizerOptions {
-  reservedKeywords: string[];
+  // Main clauses that start new block, like: SELECT, FROM, WHERE, ORDER BY
   reservedCommands: string[];
+  // Logical operator keywords, defaults to: [AND, OR]
   reservedLogicalOperators?: string[];
+  // Keywords in CASE expressions that begin new line, like: WHEN, ELSE
   reservedDependentClauses: string[];
+  // Keywords that create newline but no indentaion of their body.
+  // These contain set operations like UNION and various joins like LEFT OUTER JOIN
   reservedBinaryCommands: string[];
+  // keywords used for JOIN conditions, defaults to: [ON, USING]
   reservedJoinConditions?: string[];
-  stringTypes: regex.StringPatternType[];
+  // all other reserved words (not included to any of the above lists)
+  reservedKeywords: string[];
+  // Types of quotes to use for strings
+  stringTypes: regexTypes.QuoteType[];
+  // Types of quotes to use for quoted identifiers
+  identTypes: regexTypes.QuoteType[];
+  // Types of quotes to use for variables
+  variableTypes?: regexTypes.VariableType[];
+  // Open-parenthesis characters, like: (, [, {
   blockStart?: string[];
+  // Close-parenthesis characters, like: ), ], }
   blockEnd?: string[];
-  indexedPlaceholderTypes?: string[];
-  namedPlaceholderTypes?: string[];
+  // True to allow for positional "?" parameter placeholders
+  positionalParams?: boolean;
+  // Prefixes for numbered parameter placeholders to support, e.g. :1, :2, :3
+  numberedParamTypes?: ('?' | ':' | '$')[];
+  // Prefixes for named parameter placeholders to support, e.g. :name
+  namedParamTypes?: (':' | '@' | '$')[];
+  // Prefixes for quoted parameter placeholders to support, e.g. :"name"
+  // The type of quotes will depend on `identifierTypes` option.
+  quotedParamTypes?: (':' | '@' | '$')[];
+  // Line comment types to support, defaults to --
   lineCommentTypes?: string[];
-  specialWordChars?: { prefix?: string; any?: string; suffix?: string };
+  // Additional characters to support in identifiers
+  identChars?: regexTypes.IdentChars;
+  // Additional characters to support in named parameters
+  // Use this when parameters allow different characters from identifiers
+  // Defaults to `identChars`.
+  paramChars?: regexTypes.IdentChars;
+  // Additional multi-character operators to support, in addition to <=, >=, <>, !=
   operators?: string[];
+  // Allows custom modifications on the token array.
+  // Called after the whole input string has been split into tokens.
+  // The result of this will be the output of the tokenizer.
+  preprocess?: (tokens: Token[]) => Token[];
 }
 
 export default class Tokenizer {
   LEXER_OPTIONS: { [key: string]: moo.Rule };
   LEXER: moo.Lexer;
 
-  /**
-   * @param {TokenizerOptions} cfg
-   *  @param {String[]} cfg.reservedKeywords: Reserved words in SQL
-   *  @param {String[]} cfg.reservedDependentClauses: Words that following a specific Statement and must have data attached
-   *  @param {String[]} cfg.reservedLogicalOperators: Words that are set to newline
-   *  @param {String[]} cfg.reservedCommands: Words that are set to new line separately
-   *  @param {String[]} cfg.reservedBinaryCommands: Words that are top level but have no indentation
-   *  @param {String[]} cfg.stringTypes: String types to enable: "", '', ``, [], N''
-   *  @param {String[]} cfg.blockStart: Opening parentheses to enable, like (, [
-   *  @param {String[]} cfg.blockEnd: Closing parentheses to enable, like ), ]
-   *  @param {String[]} cfg.indexedPlaceholderTypes: Prefixes for indexed placeholders, like ?
-   *  @param {String[]} cfg.namedPlaceholderTypes: Prefixes for named placeholders, like @ and :
-   *  @param {String[]} cfg.lineCommentTypes: Line comments to enable, like # and --
-   *  @param {String[]} cfg.specialWordChars: Special chars that can be found inside of words, like @ and #
-   *  @param {String[]} cfg.operators: Additional operators to recognize
-   */
   constructor(cfg: TokenizerOptions) {
-    const specialWordCharsAll = Object.values(cfg.specialWordChars ?? {}).join('');
-
     this.LEXER_OPTIONS = {
       WS: { match: /[ \t]+/ },
       NL: { match: /\n/, lineBreaks: true },
@@ -69,44 +85,41 @@ export default class Tokenizer {
       [TokenType.RESERVED_CASE_START]: { match: /[Cc][Aa][Ss][Ee]/u },
       [TokenType.RESERVED_CASE_END]: { match: /[Ee][Nn][Dd]/u },
       [TokenType.RESERVED_COMMAND]: {
-        match: regex.reservedWord(cfg.reservedCommands, specialWordCharsAll),
+        match: regex.reservedWord(cfg.reservedCommands, cfg.identChars),
       },
       [TokenType.RESERVED_BINARY_COMMAND]: {
-        match: regex.reservedWord(cfg.reservedBinaryCommands, specialWordCharsAll),
+        match: regex.reservedWord(cfg.reservedBinaryCommands, cfg.identChars),
       },
       [TokenType.RESERVED_DEPENDENT_CLAUSE]: {
-        match: regex.reservedWord(cfg.reservedDependentClauses, specialWordCharsAll),
+        match: regex.reservedWord(cfg.reservedDependentClauses, cfg.identChars),
       },
       [TokenType.RESERVED_LOGICAL_OPERATOR]: {
-        match: regex.reservedWord(
-          cfg.reservedLogicalOperators ?? ['AND', 'OR'],
-          specialWordCharsAll
-        ),
+        match: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
       },
       [TokenType.RESERVED_JOIN_CONDITION]: {
-        match: regex.reservedWord(
-          cfg.reservedJoinConditions ?? ['ON', 'USING'],
-          specialWordCharsAll
-        ),
+        match: regex.reservedWord(cfg.reservedJoinConditions ?? ['ON', 'USING'], cfg.identChars),
       },
       [TokenType.RESERVED_KEYWORD]: {
-        match: regex.reservedWord(cfg.reservedKeywords, specialWordCharsAll),
+        match: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
       },
-      INDEXED_PLACEHOLDER: {
-        match: regex.placeholder(cfg.indexedPlaceholderTypes ?? [], '[0-9]*'),
+      // INDEXED_PLACEHOLDER: {
+      //   match: regex.parameter(cfg.indexedPlaceholderTypes ?? [], '[0-9]*'),
+      // },
+      // NAMED_PLACEHOLDER: {
+      //   match: regex.parameter(cfg.namedPlaceholderTypes ?? [], '[a-zA-Z0-9._$]+'),
+      // },
+      // STRING_PLACEHOLDER: {
+      //   match: regex.placeholder(
+      //     cfg.namedPlaceholderTypes ?? [],
+      //     regex.string({ stringTypes: cfg.stringTypes }).source
+      //   ),
+      // },
+      [TokenType.VARIABLE]: {
+        match: cfg.variableTypes ? regex.variable(cfg.variableTypes) : NULL_REGEX,
       },
-      NAMED_PLACEHOLDER: {
-        match: regex.placeholder(cfg.namedPlaceholderTypes ?? [], '[a-zA-Z0-9._$]+'),
-      },
-      STRING_PLACEHOLDER: {
-        match: regex.placeholder(
-          cfg.namedPlaceholderTypes ?? [],
-          regex.string({ stringTypes: cfg.stringTypes }).source
-        ),
-      },
-      [TokenType.STRING]: { match: regex.string({ stringTypes: cfg.stringTypes }) },
+      [TokenType.STRING]: { match: regex.string(cfg.stringTypes) },
       [TokenType.IDENT]: {
-        match: regex.word(cfg.specialWordChars),
+        match: regex.identifier(cfg.identChars),
         // type: moo.keywords({ [TokenType.RESERVED_COMMAND]: cfg.reservedCommands }), // case sensitivity currently broken, see moo#122
       },
     };

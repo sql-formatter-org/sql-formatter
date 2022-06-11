@@ -1,98 +1,140 @@
-import { escapeRegExp, sortByLengthDesc } from '../utils';
+import { sortByLengthDesc } from 'src/utils';
 
-export const NULL_REGEX = /(?!)/; // zero-width negative lookahead, matches nothing
+import type { IdentChars, QuoteType, VariableType } from './regexTypes';
+import {
+  escapeParen,
+  escapeRegExp,
+  patternToRegex,
+  prefixesPattern,
+  toCaseInsensitivePattern,
+  withDashes,
+} from './regexUtil';
 
+/**
+ * Builds a RegExp for valid line comments in a SQL dialect
+ * @param {string[]} lineCommentTypes - list of character strings that denote line comments
+ */
 export const lineComment = (lineCommentTypes: string[]) =>
   new RegExp(`(?:${lineCommentTypes.map(escapeRegExp).join('|')}.*?)(?:\r\n|\r|\n|$)`, 'u');
 
+/**
+ * Builds a RegExp for matching parenthesis patterns, escaping them with `escapeParen`
+ * @param {string[]} parens - list of strings that denote parenthesis patterns
+ */
+export const parenthesis = (parens: string[]): RegExp =>
+  patternToRegex(parens.map(escapeParen).join('|'));
+
+/**
+ * Builds a RegExp containing all operators for a SQL dialect
+ * @param {string} monadOperators - concatenated string of all 1-length operators
+ * @param {string[]} polyadOperators - list of strings of all >1-length operators
+ */
 export const operator = (monadOperators: string, polyadOperators: string[]) =>
-  new RegExp(
+  patternToRegex(
     `${sortByLengthDesc(polyadOperators).map(escapeRegExp).join('|')}|` +
-      `[${monadOperators.split('').map(escapeRegExp).join('')}]`,
-    'u'
+      `[${monadOperators.split('').map(escapeRegExp).join('')}]`
   );
 
-// This enables the following string patterns:
-// 1. backtick quoted string using `` to escape
-// 2. square bracket quoted string (SQL Server) using ]] to escape
-// 3. double quoted string using "" or \" to escape, with optional prefix for format-specific strings
-// 4. single quoted string using '' or \' to escape, with optional prefix for format-specific strings
-// 8. PostgreSQL dollar-quoted strings (does not check for matching tags due to moo not allowing capturing groups)
+// Negative lookahead to avoid matching a keyword that's actually part of identifier,
+// which can happen when identifier allows word-boundary characters inside it.
+//
+// For example "SELECT$ME" should be tokenized as:
+// - ["SELECT$ME"] when $ is allowed inside identifiers
+// - ["SELECT", "$", "ME"] when $ can't be part of identifiers.
+const rejectIdentCharsPattern = ({ rest, dashes }: IdentChars): string =>
+  rest || dashes ? `(?![${rest || ''}${dashes ? '-' : ''}])` : '';
 
-const stringPrefixList = ['[Nn]', '_utf8', 'U&', 'x', '[Rr]', '[Bb]', 'E'];
-const createStringPattern = (stringPrefixes: string) => ({
-  '``': '(?:`[^`]*(?:$|`))+',
-  '{}': '(?:\\{[^\\}]*(?:$|\\}))+',
-  '[]': '(?:\\[[^\\]]*(?:$|\\]))(\\][^\\]]*(?:$|\\]))*',
-  '""': `(?:${stringPrefixes}"[^"\\\\]*(?:\\\\.[^"\\\\]*)*(?:"|$))+`,
-  "''": `(?:${stringPrefixes}'[^'\\\\]*(?:\\\\.[^'\\\\]*)*(?:'|$))+`,
-  // '$$': '(?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$)', // does not work with moo
-  '$$': '(?:\\$\\w*\\$)[\\s\\S]*?(?:\\$\\w*\\$)',
-});
-export type StringPatternType = keyof ReturnType<typeof createStringPattern>;
-export type StringPatternPrefix = typeof stringPrefixList[number];
-
-export const string = ({
-  stringTypes,
-  stringPrefixes,
-}: {
-  stringTypes: StringPatternType[];
-  stringPrefixes?: StringPatternPrefix[];
-}) => {
-  const stringPrefix = stringPrefixes?.length ? `(?:${stringPrefixes.join('|')})?` : '';
-  const stringPatternMap = createStringPattern(stringPrefix);
-  const stringPattern = stringTypes.map(stringType => stringPatternMap[stringType]).join('|');
-  return new RegExp(`${stringPattern}`, 'u');
-};
-
-export const word = (specialChars: { any?: string; suffix?: string; prefix?: string } = {}) => {
-  // lookbehind for specialChars that only appear at start
-  const prefixLookBehind = specialChars.prefix?.length
-    ? `[${escapeRegExp(specialChars.prefix)}]*`
-    : '';
-  // lookahead for specialChars that only appear at end
-  const suffixLookAhead = specialChars.suffix?.length
-    ? `[${escapeRegExp(specialChars.suffix)}]*`
-    : '';
-
-  // unicode character categories + specialChars
-  const wordChar = [
-    '\\p{Alphabetic}',
-    '\\p{Mark}',
-    '\\p{Decimal_Number}',
-    '\\p{Connector_Punctuation}',
-    '\\p{Join_Control}',
-    ...(specialChars.any?.length ? [`[${escapeRegExp(specialChars.any)}]`] : []),
-  ].join('|');
-
-  return new RegExp(`${prefixLookBehind}(?:${wordChar})+${suffixLookAhead}`, 'iu');
-};
-
-export const reservedWord = (reservedKeywords: string[], specialWordChars: string) => {
+/**
+ * Builds a RegExp for all Reserved Keywords in a SQL dialect
+ */
+export const reservedWord = (reservedKeywords: string[], identChars: IdentChars = {}): RegExp => {
   if (reservedKeywords.length === 0) {
-    // return new RegExp(`^\b$`, 'u');
     return /^\b$/u;
   }
+
+  const avoidIdentChars = rejectIdentCharsPattern(identChars);
+
   const reservedKeywordsPattern = sortByLengthDesc(reservedKeywords)
-    .map(keyword =>
-      keyword
-        .split('')
-        .map(char => (/ /gu.test(char) ? '\\s+' : `[${char.toUpperCase()}${char.toLowerCase()}]`))
-        .join('')
-    )
+    .map(toCaseInsensitivePattern)
     .join('|')
     .replace(/ /gu, '\\s+');
 
-  const specialCharPattern = specialWordChars.length
-    ? `(?![${escapeRegExp(specialWordChars)}]+)`
-    : '';
-  return new RegExp(`${reservedKeywordsPattern}${specialCharPattern}`, 'iu');
+  return new RegExp(`(?:${reservedKeywordsPattern})${avoidIdentChars}\\b`, 'iu');
 };
 
-export const placeholder = (types: string[], pattern: string) => {
-  if (!types.length) {
+/**
+ * Builds a RegExp for parameter placeholder patterns
+ * @param {string[]} paramTypes - list of strings that denote placeholder types
+ * @param {string} pattern - string that denotes placeholder pattern
+ */
+export const parameter = (paramTypes: string[], pattern: string): RegExp | undefined => {
+  if (!paramTypes.length) {
     return undefined;
   }
-  const typesPattern = types.map(escapeRegExp).join('|');
-  return new RegExp(`${typesPattern}(?:${pattern})`, 'u');
+  const typesRegex = paramTypes.map(escapeRegExp).join('|');
+
+  return patternToRegex(`(?:${typesRegex})(?:${pattern})`);
+};
+
+// This enables the following quote styles:
+// 1. backtick quoted using `` to escape
+// 2. square bracket quoted (SQL Server) using ]] to escape
+// 3. double quoted using "" or \" to escape
+// 4. single quoted using '' or \' to escape
+// 5. PostgreSQL dollar-quoted
+// 6. BigQuery '''triple-quoted'''
+// 7. BigQuery """triple-quoted"""
+// 8. Hive and Spark variables: ${name}
+export const quotePatterns = {
+  '``': '(`[^`]*($|`))+',
+  '[]': '(\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*',
+  '""': '("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+',
+  "''": "('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
+  // '$$': '(?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$)',
+  "'''..'''": "'''[^\\\\]*?(?:\\\\.[^\\\\]*?)*?('''|$)",
+  '""".."""': '"""[^\\\\]*?(?:\\\\.[^\\\\]*?)*?("""|$)',
+  '{}': '(\\{[^\\}]*($|\\}))',
+};
+
+const singleQuotePattern = (quoteTypes: QuoteType): string => {
+  if (typeof quoteTypes === 'string') {
+    return quotePatterns[quoteTypes];
+  } else {
+    return prefixesPattern(quoteTypes) + quotePatterns[quoteTypes.quote];
+  }
+};
+
+/** Builds a RegExp for matching variables */
+export const variable = (varTypes: VariableType[]): RegExp =>
+  patternToRegex(
+    varTypes
+      .map(varType => ('regex' in varType ? varType.regex : singleQuotePattern(varType)))
+      .join('|')
+  );
+
+/** Builds a RegExp for matching quote-delimited patterns */
+export const string = (quoteTypes: QuoteType[]): RegExp =>
+  patternToRegex(quoteTypes.map(singleQuotePattern).join('|'));
+
+/**
+ * Builds a RegExp for valid identifiers in a SQL dialect
+ */
+export const identifier = (specialChars: IdentChars = {}): RegExp =>
+  patternToRegex(identifierPattern(specialChars));
+
+/**
+ * Builds a RegExp string for valid identifiers in a SQL dialect
+ */
+export const identifierPattern = ({ first, rest, dashes }: IdentChars = {}): string => {
+  // Unicode letters, diacritical marks and underscore
+  const letter = '\\p{Alphabetic}\\p{Mark}_';
+  // Numbers 0..9, plus various unicode numbers
+  const number = '\\p{Decimal_Number}';
+
+  const firstChars = escapeRegExp(first ?? '');
+  const restChars = escapeRegExp(rest ?? '');
+
+  const pattern = `[${letter}${firstChars}][${letter}${number}${restChars}]*`;
+
+  return dashes ? withDashes(pattern) : pattern;
 };
