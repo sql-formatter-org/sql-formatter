@@ -26,13 +26,24 @@ export default class Formatter {
     throw new Error('tokenizer() not implemented by subclass');
   }
 
+  // Cache the tokenizer for each class (each SQL dialect)
+  // So we wouldn't need to recreate the tokenizer, which is kinda expensive,
+  // for each call to format() function.
+  private cachedTokenizer(): Tokenizer {
+    const cls: Function & { cachedTokenizer?: Tokenizer } = this.constructor;
+    if (!cls.cachedTokenizer) {
+      cls.cachedTokenizer = this.tokenizer();
+    }
+    return cls.cachedTokenizer;
+  }
+
   /**
    * Formats an SQL query.
    * @param {string} query - The SQL query string to be formatted
    * @return {string} The formatter query
    */
   public format(query: string): string {
-    const tokens = this.tokenizer().tokenize(query);
+    const tokens = this.cachedTokenizer().tokenize(query);
     const ast = new Parser(tokens).parse();
     const formattedQuery = this.formatAst(ast, tokens);
     const finalQuery = this.postFormat(formattedQuery);
