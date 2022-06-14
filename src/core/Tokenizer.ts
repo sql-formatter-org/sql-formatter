@@ -3,8 +3,8 @@ import { equalizeWhitespace, escapeRegExp, id } from 'src/utils';
 import * as regexFactory from './regexFactory';
 import { type Token, TokenType } from './token';
 
-export const WHITESPACE_REGEX = /^(\s+)/u;
-const NULL_REGEX = /(?!)/; // zero-width negative lookahead, matches nothing
+const WHITESPACE_REGEX = /(\s+)/uy;
+const NULL_REGEX = /(?!)/uy; // zero-width negative lookahead, matches nothing
 
 const toCanonicalKeyword = (text: string) => equalizeWhitespace(text.toUpperCase());
 
@@ -117,12 +117,12 @@ export default class Tokenizer {
       ]),
       [TokenType.BLOCK_START]: regexFactory.createParenRegex(cfg.blockStart ?? ['(']),
       [TokenType.BLOCK_END]: regexFactory.createParenRegex(cfg.blockEnd ?? [')']),
-      [TokenType.RESERVED_CASE_START]: /^(CASE)\b/iu,
-      [TokenType.RESERVED_CASE_END]: /^(END)\b/iu,
+      [TokenType.RESERVED_CASE_START]: /(CASE)\b/iuy,
+      [TokenType.RESERVED_CASE_END]: /(END)\b/iuy,
       [TokenType.LINE_COMMENT]: regexFactory.createLineCommentRegex(cfg.lineCommentTypes ?? ['--']),
-      [TokenType.BLOCK_COMMENT]: /^(\/\*[^]*?(?:\*\/|$))/u,
+      [TokenType.BLOCK_COMMENT]: /(\/\*[^]*?(?:\*\/|$))/uy,
       [TokenType.NUMBER]:
-        /^(0x[0-9a-fA-F]+|0b[01]+|(-\s*)?[0-9]+(\.[0-9]*)?([eE][-+]?[0-9]+(\.[0-9]+)?)?)/u,
+        /(0x[0-9a-fA-F]+|0b[01]+|(-\s*)?[0-9]+(\.[0-9]*)?([eE][-+]?[0-9]+(\.[0-9]+)?)?)/uy,
       [TokenType.PARAMETER]: NULL_REGEX, // matches nothing
       [TokenType.EOF]: NULL_REGEX, // matches nothing
     };
@@ -152,7 +152,7 @@ export default class Tokenizer {
       },
       {
         // ? placeholders
-        regex: cfg.positionalParams ? /^(\?)/ : undefined,
+        regex: cfg.positionalParams ? /(\?)/uy : undefined,
         parseKey: v => v.slice(1),
       },
     ]);
@@ -198,6 +198,7 @@ export default class Tokenizer {
 
   /** Matches preceding whitespace if present */
   private getWhitespace(input: string): string {
+    WHITESPACE_REGEX.lastIndex = 0;
     const matches = input.match(WHITESPACE_REGEX);
     return matches ? matches[1] : '';
   }
@@ -314,6 +315,7 @@ export default class Tokenizer {
     regex: RegExp;
     transform: (s: string) => string;
   }): Token | undefined {
+    regex.lastIndex = 0;
     const matches = input.match(regex);
     if (matches) {
       return {

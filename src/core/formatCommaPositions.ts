@@ -1,7 +1,7 @@
 import type { CommaPosition } from 'src/types';
 import { maxLength } from 'src/utils';
 
-import { WHITESPACE_REGEX } from './Tokenizer';
+const WHITESPACE_REGEX = /^(\s+)/u;
 
 /**
  * Handles comma placement - either before, after or tabulated
