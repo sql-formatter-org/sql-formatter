@@ -68,6 +68,10 @@ export default class Tokenizer {
   private REGEX_MAP: Record<TokenType, RegExp>;
   private quotedIdentRegex: RegExp;
   private paramPatterns: ParamPattern[];
+  // The input SQL string to process
+  private input = '';
+  // Current position in string
+  private index = 0;
 
   private preprocess = (tokens: Token[]) => tokens;
 
@@ -172,23 +176,22 @@ export default class Tokenizer {
    * @returns {Token[]} output token stream
    */
   public tokenize(input: string): Token[] {
+    this.input = input;
+    this.index = 0;
     const tokens: Token[] = [];
     let token: Token | undefined;
 
-    // Keep processing the string until it is empty
-    while (input.length) {
+    // Keep processing the string until end is reached
+    while (this.index < this.input.length) {
       // grab any preceding whitespace
-      const whitespaceBefore = this.getWhitespace(input);
-      input = input.substring(whitespaceBefore.length);
+      const whitespaceBefore = this.getWhitespace();
 
-      if (input.length) {
+      if (this.index < this.input.length) {
         // Get the next token and the token type
-        token = this.getNextToken(input, token);
+        token = this.getNextToken(token);
         if (!token) {
-          throw new Error(`Parse error: Unexpected "${input.slice(0, 100)}"`);
+          throw new Error(`Parse error: Unexpected "${input.slice(this.index, 100)}"`);
         }
-        // Advance the string
-        input = input.substring(token.text.length);
 
         tokens.push({ ...token, whitespaceBefore });
       }
@@ -197,27 +200,33 @@ export default class Tokenizer {
   }
 
   /** Matches preceding whitespace if present */
-  private getWhitespace(input: string): string {
-    WHITESPACE_REGEX.lastIndex = 0;
-    const matches = input.match(WHITESPACE_REGEX);
-    return matches ? matches[1] : '';
+  private getWhitespace(): string {
+    WHITESPACE_REGEX.lastIndex = this.index;
+    const matches = this.input.match(WHITESPACE_REGEX);
+    if (matches) {
+      // Advance current position by matched whitespace length
+      this.index += matches[1].length;
+      return matches[1];
+    } else {
+      return '';
+    }
   }
 
   /** Attempts to match next token from input string, tests RegExp patterns in decreasing priority */
-  private getNextToken(input: string, previousToken?: Token): Token | undefined {
+  private getNextToken(previousToken?: Token): Token | undefined {
     return (
-      this.matchToken(TokenType.LINE_COMMENT, input) ||
-      this.matchToken(TokenType.BLOCK_COMMENT, input) ||
-      this.matchToken(TokenType.STRING, input) ||
-      this.matchQuotedIdentToken(input) ||
-      this.matchToken(TokenType.VARIABLE, input) ||
-      this.matchToken(TokenType.BLOCK_START, input) ||
-      this.matchToken(TokenType.BLOCK_END, input) ||
-      this.matchPlaceholderToken(input) ||
-      this.matchToken(TokenType.NUMBER, input) ||
-      this.matchReservedWordToken(input, previousToken) ||
-      this.matchToken(TokenType.IDENT, input) ||
-      this.matchToken(TokenType.OPERATOR, input)
+      this.matchToken(TokenType.LINE_COMMENT) ||
+      this.matchToken(TokenType.BLOCK_COMMENT) ||
+      this.matchToken(TokenType.STRING) ||
+      this.matchQuotedIdentToken() ||
+      this.matchToken(TokenType.VARIABLE) ||
+      this.matchToken(TokenType.BLOCK_START) ||
+      this.matchToken(TokenType.BLOCK_END) ||
+      this.matchPlaceholderToken() ||
+      this.matchToken(TokenType.NUMBER) ||
+      this.matchReservedWordToken(previousToken) ||
+      this.matchToken(TokenType.IDENT) ||
+      this.matchToken(TokenType.OPERATOR)
     );
   }
 
@@ -225,10 +234,9 @@ export default class Tokenizer {
    * Attempts to match a placeholder token pattern
    * @return {Token | undefined} - The placeholder token if found, otherwise undefined
    */
-  private matchPlaceholderToken(input: string): Token | undefined {
+  private matchPlaceholderToken(): Token | undefined {
     for (const { regex, parseKey } of this.paramPatterns) {
       const token = this.match({
-        input,
         regex,
         type: TokenType.PARAMETER,
         transform: id,
@@ -244,9 +252,8 @@ export default class Tokenizer {
     return key.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar);
   }
 
-  private matchQuotedIdentToken(input: string): Token | undefined {
+  private matchQuotedIdentToken(): Token | undefined {
     return this.match({
-      input,
       regex: this.quotedIdentRegex,
       type: TokenType.IDENT,
       transform: id,
@@ -257,7 +264,7 @@ export default class Tokenizer {
    * Attempts to match a Reserved word token pattern, avoiding edge cases of Reserved words within string tokens
    * @return {Token | undefined} - The Reserved word token if found, otherwise undefined
    */
-  private matchReservedWordToken(input: string, previousToken?: Token): Token | undefined {
+  private matchReservedWordToken(previousToken?: Token): Token | undefined {
     // A reserved word cannot be preceded by a '.'
     // this makes it so in "mytable.from", "from" is not considered a reserved word
     if (previousToken?.value === '.') {
@@ -266,21 +273,20 @@ export default class Tokenizer {
 
     // prioritised list of Reserved token types
     return (
-      this.matchReservedToken(TokenType.RESERVED_CASE_START, input) ||
-      this.matchReservedToken(TokenType.RESERVED_CASE_END, input) ||
-      this.matchReservedToken(TokenType.RESERVED_COMMAND, input) ||
-      this.matchReservedToken(TokenType.RESERVED_BINARY_COMMAND, input) ||
-      this.matchReservedToken(TokenType.RESERVED_DEPENDENT_CLAUSE, input) ||
-      this.matchReservedToken(TokenType.RESERVED_LOGICAL_OPERATOR, input) ||
-      this.matchReservedToken(TokenType.RESERVED_KEYWORD, input) ||
-      this.matchReservedToken(TokenType.RESERVED_JOIN_CONDITION, input)
+      this.matchReservedToken(TokenType.RESERVED_CASE_START) ||
+      this.matchReservedToken(TokenType.RESERVED_CASE_END) ||
+      this.matchReservedToken(TokenType.RESERVED_COMMAND) ||
+      this.matchReservedToken(TokenType.RESERVED_BINARY_COMMAND) ||
+      this.matchReservedToken(TokenType.RESERVED_DEPENDENT_CLAUSE) ||
+      this.matchReservedToken(TokenType.RESERVED_LOGICAL_OPERATOR) ||
+      this.matchReservedToken(TokenType.RESERVED_KEYWORD) ||
+      this.matchReservedToken(TokenType.RESERVED_JOIN_CONDITION)
     );
   }
 
   // Helper for matching RESERVED_* tokens which need to be transformed to canonical form
-  private matchReservedToken(tokenType: TokenType, input: string): Token | undefined {
+  private matchReservedToken(tokenType: TokenType): Token | undefined {
     return this.match({
-      input,
       type: tokenType,
       regex: this.REGEX_MAP[tokenType],
       transform: toCanonicalKeyword,
@@ -288,36 +294,29 @@ export default class Tokenizer {
   }
 
   // Shorthand for `match` that looks up regex from REGEX_MAP
-  private matchToken(tokenType: TokenType, input: string): Token | undefined {
+  private matchToken(tokenType: TokenType): Token | undefined {
     return this.match({
-      input,
       type: tokenType,
       regex: this.REGEX_MAP[tokenType],
       transform: id,
     });
   }
 
-  /**
-   * Attempts to match RegExp from head of input, returning undefined if not found
-   * @param {string} _.input - The string to match
-   * @param {TokenType} _.type - The type of token to match against
-   * @param {RegExp} _.regex - The regex to match
-   * @return {Token | undefined} - The matched token if found, otherwise undefined
-   */
+  // Attempts to match RegExp at current position in input
   private match({
-    input,
     type,
     regex,
     transform,
   }: {
-    input: string;
     type: TokenType;
     regex: RegExp;
     transform: (s: string) => string;
   }): Token | undefined {
-    regex.lastIndex = 0;
-    const matches = input.match(regex);
+    regex.lastIndex = this.index;
+    const matches = this.input.match(regex);
     if (matches) {
+      // Advance current position by matched token length
+      this.index += matches[1].length;
       return {
         type,
         text: matches[1],
