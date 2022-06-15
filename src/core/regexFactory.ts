@@ -63,8 +63,8 @@ export const createOperatorRegex = (monadOperators: string, polyadOperators: str
  */
 export const createLineCommentRegex = (lineCommentTypes: string[]): RegExp =>
   new RegExp(
-    `^((?:${lineCommentTypes.map(c => escapeRegExp(c)).join('|')}).*?)(?:\r\n|\r|\n|$)`,
-    'u'
+    `((?:${lineCommentTypes.map(c => escapeRegExp(c)).join('|')}).*?)(?:\r\n|\r|\n|$)`,
+    'uy'
   );
 
 /**
@@ -75,7 +75,7 @@ export const createReservedWordRegex = (
   identChars: IdentChars = {}
 ): RegExp => {
   if (reservedKeywords.length === 0) {
-    return /^\b$/u;
+    return /\b$/uy;
   }
 
   const avoidIdentChars = rejectIdentCharsPattern(identChars);
@@ -84,7 +84,7 @@ export const createReservedWordRegex = (
     .join('|')
     .replace(/ /gu, '\\s+');
 
-  return new RegExp(`^(${reservedKeywordsPattern})${avoidIdentChars}\\b`, 'iu');
+  return new RegExp(`(${reservedKeywordsPattern})${avoidIdentChars}\\b`, 'iuy');
 };
 
 // Negative lookahead to avoid matching a keyword that's actually part of identifier,
@@ -192,4 +192,4 @@ export const createParameterRegex = (types: string[], pattern: string): RegExp |
   return patternToRegex(`(?:${typesRegex})(?:${pattern})`);
 };
 
-const patternToRegex = (pattern: string): RegExp => new RegExp('^(' + pattern + ')', 'u');
+const patternToRegex = (pattern: string): RegExp => new RegExp('(' + pattern + ')', 'uy');
