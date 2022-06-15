@@ -3,6 +3,18 @@ import { equalizeWhitespace, escapeRegExp, id } from 'src/utils';
 import * as regexFactory from './regexFactory';
 import { type Token, TokenType } from './token';
 
+// A note about regular expressions
+//
+// We're using a sticky flag "y" in all tokenizing regexes.
+// This works a bit like ^, anchoring the regex to the start,
+// but when ^ anchores the regex to the start of string (or line),
+// the sticky flag anchors it to search start position, which we
+// can change by setting RegExp.lastIndex.
+//
+// This allows us to avoid slicing off tokens from the start of input string
+// (which we used in the past) and just move the match start position forward,
+// which is much more performant on long strings.
+
 const WHITESPACE_REGEX = /(\s+)/uy;
 const NULL_REGEX = /(?!)/uy; // zero-width negative lookahead, matches nothing
 
