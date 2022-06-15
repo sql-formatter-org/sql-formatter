@@ -199,7 +199,6 @@ export default class Tokenizer {
     return this.preprocess(tokens);
   }
 
-  /** Matches preceding whitespace if present */
   private getWhitespace(): string {
     WHITESPACE_REGEX.lastIndex = this.index;
     const matches = this.input.match(WHITESPACE_REGEX);
@@ -212,7 +211,6 @@ export default class Tokenizer {
     }
   }
 
-  /** Attempts to match next token from input string, tests RegExp patterns in decreasing priority */
   private getNextToken(previousToken?: Token): Token | undefined {
     return (
       this.matchToken(TokenType.LINE_COMMENT) ||
@@ -230,10 +228,6 @@ export default class Tokenizer {
     );
   }
 
-  /**
-   * Attempts to match a placeholder token pattern
-   * @return {Token | undefined} - The placeholder token if found, otherwise undefined
-   */
   private matchPlaceholderToken(): Token | undefined {
     for (const { regex, parseKey } of this.paramPatterns) {
       const token = this.match({
@@ -260,10 +254,6 @@ export default class Tokenizer {
     });
   }
 
-  /**
-   * Attempts to match a Reserved word token pattern, avoiding edge cases of Reserved words within string tokens
-   * @return {Token | undefined} - The Reserved word token if found, otherwise undefined
-   */
   private matchReservedWordToken(previousToken?: Token): Token | undefined {
     // A reserved word cannot be preceded by a '.'
     // this makes it so in "mytable.from", "from" is not considered a reserved word
