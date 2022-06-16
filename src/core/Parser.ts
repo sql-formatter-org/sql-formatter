@@ -42,7 +42,7 @@ export default class Parser {
     const tokens: TokenNode[] = [];
     while (true) {
       if (this.look().value === ';') {
-        tokens.push({ type: 'token', token: this.next() });
+        tokens.push(this.nextTokenNode());
         return { type: 'statement', children: tokens };
       } else if (this.look().type === TokenType.EOF) {
         if (tokens.length > 0) {
@@ -51,7 +51,7 @@ export default class Parser {
           return undefined;
         }
       } else {
-        tokens.push({ type: 'token', token: this.next() });
+        tokens.push(this.nextTokenNode());
       }
     }
   }
@@ -64,5 +64,9 @@ export default class Parser {
   // Returns current token and advances the pointer to next token
   private next(): Token {
     return this.tokens[this.index++] || EOF_TOKEN;
+  }
+
+  private nextTokenNode(): TokenNode {
+    return { type: 'token', token: this.next() };
   }
 }
