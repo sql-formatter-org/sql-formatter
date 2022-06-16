@@ -786,8 +786,8 @@ export default class SparkFormatter extends Formatter {
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe([...Object.values(reservedFunctions).flat(), ...reservedKeywords]),
-      blockStart: ['(', '['],
-      blockEnd: [')', ']'],
+      openParens: ['(', '['],
+      closeParens: [')', ']'],
       stringTypes: [{ quote: "''", prefixes: ['X'] }],
       identTypes: ['``'],
       variableTypes: [{ quote: '{}', prefixes: ['$'], required: true }],
@@ -803,7 +803,7 @@ function preprocess(tokens: Token[]) {
     const nextToken = tokens[i + 1] || EOF_TOKEN;
 
     // [WINDOW](...)
-    if (isToken.WINDOW(token) && nextToken.type === TokenType.BLOCK_START) {
+    if (isToken.WINDOW(token) && nextToken.type === TokenType.OPEN_PAREN) {
       // This is a function call, treat it as a reserved word
       return { ...token, type: TokenType.RESERVED_KEYWORD };
     }

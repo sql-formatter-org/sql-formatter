@@ -68,9 +68,9 @@ export default class InlineBlock {
         return false;
       }
 
-      if (token.type === TokenType.BLOCK_START) {
+      if (token.type === TokenType.OPEN_PAREN) {
         level++;
-      } else if (token.type === TokenType.BLOCK_END) {
+      } else if (token.type === TokenType.CLOSE_PAREN) {
         level--;
         if (level === 0) {
           return true;

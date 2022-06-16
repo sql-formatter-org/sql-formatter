@@ -76,10 +76,10 @@ export default class StatementFormatter {
         return this.formatLogicalOperator(token);
       case TokenType.RESERVED_KEYWORD:
         return this.formatKeyword(token);
-      case TokenType.BLOCK_START:
-        return this.formatBlockStart(token);
-      case TokenType.BLOCK_END:
-        return this.formatBlockEnd(token);
+      case TokenType.OPEN_PAREN:
+        return this.formatOpenParen(token);
+      case TokenType.CLOSE_PAREN:
+        return this.formatCloseParen(token);
       case TokenType.RESERVED_CASE_START:
         return this.formatCaseStart(token);
       case TokenType.RESERVED_CASE_END:
@@ -155,10 +155,10 @@ export default class StatementFormatter {
       if (value === ',' && openBlocks === 0) {
         count++;
       }
-      if (type === TokenType.BLOCK_START) {
+      if (type === TokenType.OPEN_PAREN) {
         openBlocks++;
       }
-      if (type === TokenType.BLOCK_END) {
+      if (type === TokenType.CLOSE_PAREN) {
         openBlocks--;
       }
     }
@@ -313,11 +313,11 @@ export default class StatementFormatter {
     }
   }
 
-  private formatBlockStart(token: Token) {
+  private formatOpenParen(token: Token) {
     // Take out the preceding space unless there was whitespace there in the original query
     // or another opening parens or line comment
     const preserveWhitespaceFor = [
-      TokenType.BLOCK_START,
+      TokenType.OPEN_PAREN,
       TokenType.LINE_COMMENT,
       TokenType.OPERATOR,
     ];
@@ -339,7 +339,7 @@ export default class StatementFormatter {
     }
   }
 
-  private formatBlockEnd(token: Token) {
+  private formatCloseParen(token: Token) {
     if (this.inlineBlock.isActive()) {
       this.inlineBlock.end();
       this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);

@@ -41,10 +41,10 @@ interface TokenizerOptions {
   identTypes: regexFactory.QuoteType[];
   // Types of quotes to use for variables
   variableTypes?: regexFactory.VariableType[];
-  // Open-parenthesis characters, like: (, [, {
-  blockStart?: string[];
-  // Close-parenthesis characters, like: ), ], }
-  blockEnd?: string[];
+  // Open-parenthesis characters
+  openParens?: ('(' | '[' | '{')[];
+  // Close-parenthesis characters
+  closeParens?: (')' | ']' | '}')[];
   // True to allow for positional "?" parameter placeholders
   positionalParams?: boolean;
   // Prefixes for numbered parameter placeholders to support, e.g. :1, :2, :3
@@ -131,8 +131,8 @@ export default class Tokenizer {
         '!=',
         ...(cfg.operators ?? []),
       ]),
-      [TokenType.BLOCK_START]: regexFactory.createParenRegex(cfg.blockStart ?? ['(']),
-      [TokenType.BLOCK_END]: regexFactory.createParenRegex(cfg.blockEnd ?? [')']),
+      [TokenType.OPEN_PAREN]: regexFactory.createParenRegex(cfg.openParens ?? ['(']),
+      [TokenType.CLOSE_PAREN]: regexFactory.createParenRegex(cfg.closeParens ?? [')']),
       [TokenType.RESERVED_CASE_START]: /(CASE)\b/iuy,
       [TokenType.RESERVED_CASE_END]: /(END)\b/iuy,
       [TokenType.LINE_COMMENT]: regexFactory.createLineCommentRegex(cfg.lineCommentTypes ?? ['--']),
@@ -230,8 +230,8 @@ export default class Tokenizer {
       this.matchToken(TokenType.STRING) ||
       this.matchQuotedIdentToken() ||
       this.matchToken(TokenType.VARIABLE) ||
-      this.matchToken(TokenType.BLOCK_START) ||
-      this.matchToken(TokenType.BLOCK_END) ||
+      this.matchToken(TokenType.OPEN_PAREN) ||
+      this.matchToken(TokenType.CLOSE_PAREN) ||
       this.matchPlaceholderToken() ||
       this.matchToken(TokenType.NUMBER) ||
       this.matchReservedWordToken(previousToken) ||
