@@ -6,7 +6,7 @@ import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { isReserved, isCommand, isToken, type Token, TokenType, EOF_TOKEN } from './token';
 import toTabularFormat from './tabularStyle';
-import { type Statement } from './Parser';
+import { TokenNode, type Statement } from './Parser';
 import { indentString, isTabularStyle } from './config';
 import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
 
@@ -21,7 +21,7 @@ export default class StatementFormatter {
   private currentNewline = true;
   private previousReservedToken: Token = EOF_TOKEN;
   private previousCommandToken: Token = EOF_TOKEN;
-  private tokens: Token[] = [];
+  private nodes: TokenNode[] = [];
   private index = -1;
 
   constructor(cfg: FormatOptions, params: Params) {
@@ -33,10 +33,10 @@ export default class StatementFormatter {
   }
 
   public format(statement: Statement): string {
-    this.tokens = statement.tokens;
+    this.nodes = statement.children;
 
-    for (this.index = 0; this.index < this.tokens.length; this.index++) {
-      const token = this.tokens[this.index];
+    for (this.index = 0; this.index < this.nodes.length; this.index++) {
+      const { token } = this.nodes[this.index];
 
       // if token is a Reserved Keyword, Command, Binary Command, Dependent Clause, Logical Operator, CASE, END
       if (isReserved(token)) {
@@ -103,10 +103,10 @@ export default class StatementFormatter {
    * Checks if a newline should currently be inserted
    */
   private checkNewline(token: Token): boolean {
-    const nextTokens = this.tokensUntilNextCommandOrQueryEnd();
+    const nextNodes = this.nodesUntilNextCommandOrQueryEnd();
 
     // auto break if SELECT includes CASE statements
-    if (this.isWithinSelect() && nextTokens.some(isToken.CASE)) {
+    if (this.isWithinSelect() && nextNodes.some(node => isToken.CASE(node.token))) {
       return true;
     }
 
@@ -116,17 +116,19 @@ export default class StatementFormatter {
       case 'avoid':
         return false;
       case 'expressionWidth':
-        return this.inlineWidth(token, nextTokens) > this.cfg.expressionWidth;
+        return this.inlineWidth(token, nextNodes) > this.cfg.expressionWidth;
       default: // multilineLists mode is a number
         return (
-          this.countClauses(nextTokens) > this.cfg.multilineLists ||
-          this.inlineWidth(token, nextTokens) > this.cfg.expressionWidth
+          this.countClauses(nextNodes) > this.cfg.multilineLists ||
+          this.inlineWidth(token, nextNodes) > this.cfg.expressionWidth
         );
     }
   }
 
-  private inlineWidth(token: Token, tokens: Token[]): number {
-    const tokensString = tokens.map(({ value }) => (value === ',' ? value + ' ' : value)).join('');
+  private inlineWidth(token: Token, nodes: TokenNode[]): number {
+    const tokensString = nodes
+      .map(node => (node.token.value === ',' ? node.token.value + ' ' : node.token.value))
+      .join('');
     return `${token.whitespaceBefore}${token.value} ${tokensString}`.length;
   }
 
@@ -134,17 +136,17 @@ export default class StatementFormatter {
    * Counts comma-separated clauses (doesn't count commas inside blocks)
    * Note: There's always at least one clause.
    */
-  private countClauses(tokens: Token[]): number {
+  private countClauses(nodes: TokenNode[]): number {
     let count = 1;
     let openBlocks = 0;
-    for (const { type, value } of tokens) {
-      if (value === ',' && openBlocks === 0) {
+    for (const { token } of nodes) {
+      if (token.value === ',' && openBlocks === 0) {
         count++;
       }
-      if (type === TokenType.OPEN_PAREN) {
+      if (token.type === TokenType.OPEN_PAREN) {
         openBlocks++;
       }
-      if (type === TokenType.CLOSE_PAREN) {
+      if (token.type === TokenType.CLOSE_PAREN) {
         openBlocks--;
       }
     }
@@ -152,11 +154,13 @@ export default class StatementFormatter {
   }
 
   /** get all tokens between current token and next Reserved Command or query end */
-  private tokensUntilNextCommandOrQueryEnd(): Token[] {
-    const tail = this.tokens.slice(this.index + 1);
+  private nodesUntilNextCommandOrQueryEnd(): TokenNode[] {
+    const tail = this.nodes.slice(this.index + 1);
     return tail.slice(
       0,
-      tail.length ? tail.findIndex(token => isCommand(token) || token.value === ';') : undefined
+      tail.length
+        ? tail.findIndex(node => isCommand(node.token) || node.token.value === ';')
+        : undefined
     );
   }
 
@@ -313,7 +317,7 @@ export default class StatementFormatter {
     } else {
       this.query.add(this.show(token));
     }
-    this.inlineBlock.beginIfPossible(this.tokens, this.index);
+    this.inlineBlock.beginIfPossible(this.nodes, this.index);
 
     if (!this.inlineBlock.isActive()) {
       this.indentation.increaseBlockLevel();
@@ -432,11 +436,11 @@ export default class StatementFormatter {
 
   /** Fetches nth previous token from the token stream */
   private tokenLookBehind(n = 1): Token {
-    return this.tokens[this.index - n] || EOF_TOKEN;
+    return this.nodes[this.index - n]?.token || EOF_TOKEN;
   }
 
   /** Fetches nth next token from the token stream */
   private tokenLookAhead(n = 1): Token {
-    return this.tokens[this.index + n] || EOF_TOKEN;
+    return this.nodes[this.index + n]?.token || EOF_TOKEN;
   }
 }

@@ -3,7 +3,13 @@ import { EOF_TOKEN, type Token, TokenType } from './token';
 
 export type Statement = {
   type: 'statement';
-  tokens: Token[];
+  children: TokenNode[];
+};
+
+// Wrapper for plain nodes inside AST
+export type TokenNode = {
+  type: 'token';
+  token: Token;
 };
 
 /**
@@ -24,19 +30,19 @@ export default class Parser {
   }
 
   private statement(): Statement | undefined {
-    const tokens: Token[] = [];
+    const tokens: TokenNode[] = [];
     while (true) {
       if (this.look().value === ';') {
-        tokens.push(this.next());
-        return { type: 'statement', tokens };
+        tokens.push({ type: 'token', token: this.next() });
+        return { type: 'statement', children: tokens };
       } else if (this.look().type === TokenType.EOF) {
         if (tokens.length > 0) {
-          return { type: 'statement', tokens };
+          return { type: 'statement', children: tokens };
         } else {
           return undefined;
         }
       } else {
-        tokens.push(this.next());
+        tokens.push({ type: 'token', token: this.next() });
       }
     }
   }

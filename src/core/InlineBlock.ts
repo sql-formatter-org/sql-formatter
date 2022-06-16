@@ -1,3 +1,4 @@
+import { TokenNode } from './Parser';
 import { isToken, type Token, TokenType } from './token';
 
 /**
@@ -19,11 +20,11 @@ export default class InlineBlock {
   /**
    * Begins inline block when lookahead through upcoming tokens determines
    * that the block would be smaller than INLINE_MAX_LENGTH.
-   * @param  {Token[]} tokens Array of all tokens
+   * @param  {TokenNode[]} nodes Array of all tokens
    * @param  {Number} index Current token position
    */
-  beginIfPossible(tokens: Token[], index: number) {
-    if (this.level === 0 && this.isInlineBlock(tokens, index)) {
+  beginIfPossible(nodes: TokenNode[], index: number) {
+    if (this.level === 0 && this.isInlineBlock(nodes, index)) {
       this.level = 1;
     } else if (this.level > 0) {
       this.level++;
@@ -51,12 +52,12 @@ export default class InlineBlock {
    * Check if this should be an inline parentheses block
    * Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
    */
-  isInlineBlock(tokens: Token[], index: number): boolean {
+  isInlineBlock(nodes: TokenNode[], index: number): boolean {
     let length = 0;
     let level = 0;
 
-    for (let i = index; i < tokens.length; i++) {
-      const token = tokens[i];
+    for (let i = index; i < nodes.length; i++) {
+      const { token } = nodes[i];
       length += token.value.length;
 
       if (this.isForbiddenToken(token)) {
