@@ -3,7 +3,7 @@ import { EOF_TOKEN, type Token, TokenType } from './token';
 
 export type Statement = {
   type: 'statement';
-  children: TokenNode[];
+  children: AstNode[];
 };
 
 // Wrapper for plain nodes inside AST
@@ -11,6 +11,15 @@ export type TokenNode = {
   type: 'token';
   token: Token;
 };
+
+export type ParenthesizedExpr = {
+  type: 'parenthesized_expr';
+  children: AstNode[];
+};
+
+export type AstNode = ParenthesizedExpr | TokenNode;
+
+export const isTokenNode = (node: AstNode): node is TokenNode => node.type === 'token';
 
 /**
  * A rudimentary parser that slices token stream into list of SQL statements.
