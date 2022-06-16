@@ -76,9 +76,9 @@ export default class StatementFormatter {
         return this.formatLogicalOperator(token);
       case TokenType.RESERVED_KEYWORD:
         return this.formatKeyword(token);
-      case TokenType.BLOCK_START:
+      case TokenType.OPEN_PAREN:
         return this.formatBlockStart(token);
-      case TokenType.BLOCK_END:
+      case TokenType.CLOSE_PAREN:
         return this.formatBlockEnd(token);
       case TokenType.RESERVED_CASE_START:
         return this.formatCaseStart(token);
@@ -155,10 +155,10 @@ export default class StatementFormatter {
       if (value === ',' && openBlocks === 0) {
         count++;
       }
-      if (type === TokenType.BLOCK_START) {
+      if (type === TokenType.OPEN_PAREN) {
         openBlocks++;
       }
-      if (type === TokenType.BLOCK_END) {
+      if (type === TokenType.CLOSE_PAREN) {
         openBlocks--;
       }
     }
@@ -317,7 +317,7 @@ export default class StatementFormatter {
     // Take out the preceding space unless there was whitespace there in the original query
     // or another opening parens or line comment
     const preserveWhitespaceFor = [
-      TokenType.BLOCK_START,
+      TokenType.OPEN_PAREN,
       TokenType.LINE_COMMENT,
       TokenType.OPERATOR,
     ];

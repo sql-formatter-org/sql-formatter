@@ -131,8 +131,8 @@ export default class Tokenizer {
         '!=',
         ...(cfg.operators ?? []),
       ]),
-      [TokenType.BLOCK_START]: regexFactory.createParenRegex(cfg.blockStart ?? ['(']),
-      [TokenType.BLOCK_END]: regexFactory.createParenRegex(cfg.blockEnd ?? [')']),
+      [TokenType.OPEN_PAREN]: regexFactory.createParenRegex(cfg.blockStart ?? ['(']),
+      [TokenType.CLOSE_PAREN]: regexFactory.createParenRegex(cfg.blockEnd ?? [')']),
       [TokenType.RESERVED_CASE_START]: /(CASE)\b/iuy,
       [TokenType.RESERVED_CASE_END]: /(END)\b/iuy,
       [TokenType.LINE_COMMENT]: regexFactory.createLineCommentRegex(cfg.lineCommentTypes ?? ['--']),
@@ -230,8 +230,8 @@ export default class Tokenizer {
       this.matchToken(TokenType.STRING) ||
       this.matchQuotedIdentToken() ||
       this.matchToken(TokenType.VARIABLE) ||
-      this.matchToken(TokenType.BLOCK_START) ||
-      this.matchToken(TokenType.BLOCK_END) ||
+      this.matchToken(TokenType.OPEN_PAREN) ||
+      this.matchToken(TokenType.CLOSE_PAREN) ||
       this.matchPlaceholderToken() ||
       this.matchToken(TokenType.NUMBER) ||
       this.matchReservedWordToken(previousToken) ||

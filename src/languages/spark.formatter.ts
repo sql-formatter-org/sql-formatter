@@ -803,7 +803,7 @@ function preprocess(tokens: Token[]) {
     const nextToken = tokens[i + 1] || EOF_TOKEN;
 
     // [WINDOW](...)
-    if (isToken.WINDOW(token) && nextToken.type === TokenType.BLOCK_START) {
+    if (isToken.WINDOW(token) && nextToken.type === TokenType.OPEN_PAREN) {
       // This is a function call, treat it as a reserved word
       return { ...token, type: TokenType.RESERVED_KEYWORD };
     }
