@@ -41,10 +41,10 @@ interface TokenizerOptions {
   identTypes: regexFactory.QuoteType[];
   // Types of quotes to use for variables
   variableTypes?: regexFactory.VariableType[];
-  // Open-parenthesis characters, like: (, [, {
-  openParens?: string[];
-  // Close-parenthesis characters, like: ), ], }
-  closeParens?: string[];
+  // Open-parenthesis characters
+  openParens?: ('(' | '[' | '{')[];
+  // Close-parenthesis characters
+  closeParens?: (')' | ']' | '}')[];
   // True to allow for positional "?" parameter placeholders
   positionalParams?: boolean;
   // Prefixes for numbered parameter placeholders to support, e.g. :1, :2, :3
