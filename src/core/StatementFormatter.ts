@@ -6,7 +6,7 @@ import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { isReserved, isCommand, isToken, type Token, TokenType, EOF_TOKEN } from './token';
 import toTabularFormat from './tabularStyle';
-import { AstNode, isTokenNode, type Statement } from './Parser';
+import { AstNode, isTokenNode, Parenthesis, type Statement } from './Parser';
 import { indentString, isTabularStyle } from './config';
 import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
 
@@ -19,13 +19,15 @@ export default class StatementFormatter {
   private query: WhitespaceBuilder;
 
   private currentNewline = true;
+  private inline = false;
   private previousReservedToken: Token = EOF_TOKEN;
   private previousCommandToken: Token = EOF_TOKEN;
   private nodes: AstNode[] = [];
   private index = -1;
 
-  constructor(cfg: FormatOptions, params: Params) {
+  constructor(cfg: FormatOptions, params: Params, { inline = false }: { inline?: boolean } = {}) {
     this.cfg = cfg;
+    this.inline = inline;
     this.indentation = new Indentation(indentString(cfg));
     this.inlineBlock = new InlineBlock(this.cfg.expressionWidth);
     this.params = params;
@@ -37,7 +39,6 @@ export default class StatementFormatter {
 
     for (this.index = 0; this.index < this.nodes.length; this.index++) {
       const node = this.nodes[this.index];
-      // TODO: don't ignore ParenthesizedExpr nodes
       if (isTokenNode(node)) {
         const { token } = node;
         // if token is a Reserved Keyword, Command, Binary Command, Dependent Clause, Logical Operator, CASE, END
@@ -49,6 +50,8 @@ export default class StatementFormatter {
         }
 
         this.formatToken(token);
+      } else {
+        this.formatParenthesis(node);
       }
     }
     return this.query.toString();
@@ -73,10 +76,6 @@ export default class StatementFormatter {
         return this.formatLogicalOperator(token);
       case TokenType.RESERVED_KEYWORD:
         return this.formatKeyword(token);
-      case TokenType.OPEN_PAREN:
-        return this.formatOpenParen(token);
-      case TokenType.CLOSE_PAREN:
-        return this.formatCloseParen(token);
       case TokenType.RESERVED_CASE_START:
         return this.formatCaseStart(token);
       case TokenType.RESERVED_CASE_END:
@@ -122,21 +121,29 @@ export default class StatementFormatter {
       case 'avoid':
         return false;
       case 'expressionWidth':
-        return this.inlineWidth(token, nextNodes) > this.cfg.expressionWidth;
+        return this.tokenWidth(token) + this.inlineWidth(nextNodes) > this.cfg.expressionWidth;
       default: // multilineLists mode is a number
         return (
           this.countClauses(nextNodes) > this.cfg.multilineLists ||
-          this.inlineWidth(token, nextNodes) > this.cfg.expressionWidth
+          this.tokenWidth(token) + this.inlineWidth(nextNodes) > this.cfg.expressionWidth
         );
     }
   }
 
-  private inlineWidth(token: Token, nodes: AstNode[]): number {
-    const tokensString = nodes
-      .filter(isTokenNode) //
-      .map(node => (node.token.value === ',' ? node.token.value + ' ' : node.token.value))
-      .join('');
-    return `${token.whitespaceBefore}${token.value} ${tokensString}`.length;
+  private inlineWidth(nodes: AstNode[]): number {
+    return nodes
+      .map(node => {
+        if (isTokenNode(node)) {
+          return node.token.value === ',' ? node.token.value.length + 1 : node.token.value.length;
+        } else {
+          return this.inlineWidth(node.children) + 2;
+        }
+      })
+      .reduce((a, b) => a + b);
+  }
+
+  private tokenWidth(token: Token): number {
+    return `${token.whitespaceBefore}${token.value} `.length;
   }
 
   /**
@@ -144,21 +151,7 @@ export default class StatementFormatter {
    * Note: There's always at least one clause.
    */
   private countClauses(nodes: AstNode[]): number {
-    let count = 1;
-    let openBlocks = 0;
-    // TODO: don't ignore ParenthesizedExpr nodes
-    for (const { token } of nodes.filter(isTokenNode)) {
-      if (token.value === ',' && openBlocks === 0) {
-        count++;
-      }
-      if (token.type === TokenType.OPEN_PAREN) {
-        openBlocks++;
-      }
-      if (token.type === TokenType.CLOSE_PAREN) {
-        openBlocks--;
-      }
-    }
-    return count;
+    return 1 + nodes.filter(node => isTokenNode(node) && node.token.value === ',').length;
   }
 
   /** get all tokens between current token and next Reserved Command or query end */
@@ -309,39 +302,56 @@ export default class StatementFormatter {
     }
   }
 
-  private formatOpenParen(token: Token) {
+  private formatParenthesis(node: Parenthesis) {
+    const inline = this.inlineBlock.isInlineBlock(node);
+
+    const formattedSql = new StatementFormatter(this.cfg, this.params, {
+      inline,
+    })
+      .format({
+        type: 'statement',
+        children: node.children,
+      })
+      .trimEnd();
+
     // Take out the preceding space unless there was whitespace there in the original query
-    // or another opening parens or line comment
-    const preserveWhitespaceFor = [
-      TokenType.OPEN_PAREN,
-      TokenType.LINE_COMMENT,
-      TokenType.OPERATOR,
-    ];
-    if (
-      token.whitespaceBefore?.length === 0 &&
-      !preserveWhitespaceFor.includes(this.tokenLookBehind().type)
-    ) {
-      this.query.add(WS.NO_SPACE, this.show(token));
-    } else if (!this.cfg.newlineBeforeOpenParen) {
-      this.query.add(WS.NO_NEWLINE, WS.SPACE, this.show(token));
-    } else {
-      this.query.add(this.show(token));
-    }
-    // TODO: don't ignore ParenthesizedExpr nodes
-    this.inlineBlock.beginIfPossible(this.nodes.filter(isTokenNode), this.index);
+    // or line comment
+    const preserveWhitespaceFor = [TokenType.LINE_COMMENT, TokenType.OPERATOR];
 
-    if (!this.inlineBlock.isActive()) {
-      this.indentation.increaseBlockLevel();
-      this.query.add(WS.NEWLINE, WS.INDENT);
-    }
-  }
-
-  private formatCloseParen(token: Token) {
-    if (this.inlineBlock.isActive()) {
-      this.inlineBlock.end();
-      this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);
+    if (inline) {
+      if (
+        !node.hasWhitespaceBefore &&
+        !preserveWhitespaceFor.includes(this.tokenLookBehind().type)
+      ) {
+        this.query.add(WS.NO_SPACE, node.openParen, formattedSql, node.closeParen, WS.SPACE);
+      } else {
+        this.query.add(node.openParen, formattedSql, node.closeParen, WS.SPACE);
+      }
     } else {
-      this.formatMultilineBlockEnd(token);
+      if (
+        !node.hasWhitespaceBefore &&
+        !preserveWhitespaceFor.includes(this.tokenLookBehind().type)
+      ) {
+        this.query.add(WS.NO_SPACE, node.openParen);
+      } else if (!this.cfg.newlineBeforeOpenParen) {
+        this.query.add(WS.NO_NEWLINE, WS.SPACE, node.openParen);
+      } else {
+        this.query.add(node.openParen);
+      }
+
+      formattedSql.split(/\n/).forEach(line => {
+        if (isTabularStyle(this.cfg)) {
+          this.query.add(WS.NEWLINE, WS.INDENT, line);
+        } else {
+          this.query.add(WS.NEWLINE, WS.INDENT, WS.SINGLE_INDENT, line);
+        }
+      });
+
+      if (this.cfg.newlineBeforeCloseParen) {
+        this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
+      } else {
+        this.query.add(WS.NO_NEWLINE, WS.SPACE, node.closeParen, WS.SPACE);
+      }
     }
   }
 
@@ -382,11 +392,7 @@ export default class StatementFormatter {
    * Formats a comma Operator onto query, ending line unless in an Inline Block
    */
   private formatComma(token: Token) {
-    if (
-      !this.inlineBlock.isActive() &&
-      !isToken.LIMIT(this.getPreviousReservedToken()) &&
-      this.currentNewline
-    ) {
+    if (!this.inline && !isToken.LIMIT(this.getPreviousReservedToken()) && this.currentNewline) {
       this.query.add(WS.NO_SPACE, this.show(token), WS.NEWLINE, WS.INDENT);
     } else {
       this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);

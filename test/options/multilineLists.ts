@@ -137,14 +137,12 @@ export default function supportsMultilineLists(format: FormatFn) {
       `);
     });
 
-    // TODO: the placement of closing paren is wrong
     it('ignores commas inside nested parenthesis', () => {
-      const result = format('SELECT foo, func1(func2(a), b, c, d)) AS bar FROM table1;', {
+      const result = format('SELECT foo, func1(func2(a), b, c, d) AS bar FROM table1;', {
         multilineLists: 3,
       });
       expect(result).toBe(dedent`
-        SELECT foo, func1(func2(a), b, c, d)
-        ) AS bar
+        SELECT foo, func1(func2(a), b, c, d) AS bar
         FROM table1;
       `);
     });
