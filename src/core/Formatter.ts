@@ -3,11 +3,10 @@ import Params from './Params';
 import Tokenizer from './Tokenizer';
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
-import AsTokenFactory from './AsTokenFactory';
 import Parser, { type Statement } from './Parser';
 import StatementFormatter from './StatementFormatter';
-import { type Token } from './token';
 import { indentString } from './config';
+import AliasAs from './AliasAs';
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {
@@ -44,18 +43,17 @@ export default class Formatter {
    */
   public format(query: string): string {
     const tokens = this.cachedTokenizer().tokenize(query);
-    const ast = new Parser(tokens).parse();
-    const formattedQuery = this.formatAst(ast, tokens);
+    const processedTokens = new AliasAs(this.cfg, tokens).process();
+    const ast = new Parser(processedTokens).parse();
+    const formattedQuery = this.formatAst(ast);
     const finalQuery = this.postFormat(formattedQuery);
 
     return finalQuery.trimEnd();
   }
 
-  private formatAst(statements: Statement[], tokens: Token[]): string {
-    const asTokenFactory = new AsTokenFactory(this.cfg.keywordCase, tokens);
-
+  private formatAst(statements: Statement[]): string {
     return statements
-      .map(stat => new StatementFormatter(this.cfg, this.params, asTokenFactory).format(stat))
+      .map(stat => new StatementFormatter(this.cfg, this.params).format(stat))
       .join('\n'.repeat(this.cfg.linesBetweenQueries + 1));
   }
 
