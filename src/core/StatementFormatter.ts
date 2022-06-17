@@ -421,22 +421,22 @@ export default class StatementFormatter {
   }
 
   /** Returns the latest encountered reserved keyword token */
-  public getPreviousReservedToken(): Token {
+  private getPreviousReservedToken(): Token {
     return this.previousReservedToken;
   }
 
   /** True when currently within SELECT command */
-  public isWithinSelect(): boolean {
+  private isWithinSelect(): boolean {
     return isToken.SELECT(this.previousCommandToken);
   }
 
   /** Fetches nth previous token from the token stream */
-  public tokenLookBehind(n = 1): Token {
+  private tokenLookBehind(n = 1): Token {
     return this.tokens[this.index - n] || EOF_TOKEN;
   }
 
   /** Fetches nth next token from the token stream */
-  public tokenLookAhead(n = 1): Token {
+  private tokenLookAhead(n = 1): Token {
     return this.tokens[this.index + n] || EOF_TOKEN;
   }
 }
