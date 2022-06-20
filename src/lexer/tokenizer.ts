@@ -3,7 +3,7 @@ import * as moo from 'moo';
 import { Token, TokenType } from 'src/core/token';
 import * as regex from 'src/lexer/regexFactory';
 import * as regexTypes from 'src/lexer/regexTypes';
-import { NULL_REGEX } from './regexUtil';
+import { NULL_REGEX, escapeRegExp } from './regexUtil';
 
 interface TokenizerOptions {
   // Main clauses that start new block, like: SELECT, FROM, WHERE, ORDER BY
@@ -55,6 +55,7 @@ interface TokenizerOptions {
 }
 
 export default class Tokenizer {
+  // LEXER_OPTIONS: Record<keyof typeof TokenType | 'WS' | 'NL', moo.Rule>;
   LEXER_OPTIONS: { [key: string]: moo.Rule };
   LEXER: moo.Lexer;
 
@@ -102,18 +103,30 @@ export default class Tokenizer {
       [TokenType.RESERVED_KEYWORD]: {
         match: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
       },
-      // INDEXED_PLACEHOLDER: {
-      //   match: regex.parameter(cfg.indexedPlaceholderTypes ?? [], '[0-9]*'),
-      // },
-      // NAMED_PLACEHOLDER: {
-      //   match: regex.parameter(cfg.namedPlaceholderTypes ?? [], '[a-zA-Z0-9._$]+'),
-      // },
-      // STRING_PLACEHOLDER: {
-      //   match: regex.placeholder(
-      //     cfg.namedPlaceholderTypes ?? [],
-      //     regex.string({ stringTypes: cfg.stringTypes }).source
-      //   ),
-      // },
+      NAMED_PLACEHOLDER: {
+        match: regex.parameter(
+          cfg.namedParamTypes ?? [],
+          regex.identifierPattern(cfg.paramChars || cfg.identChars)
+        ),
+        value: v => v.slice(1),
+      },
+      QUOTED_PLACEHOLDER: {
+        match: regex.parameter(cfg.quotedParamTypes ?? [], regex.stringPattern(cfg.identTypes)),
+        value: v =>
+          (({ key, quoteChar }) =>
+            key.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar))({
+            key: v.slice(2, -1),
+            quoteChar: v.slice(-1),
+          }),
+      },
+      INDEXED_PLACEHOLDER: {
+        match: regex.parameter(cfg.numberedParamTypes ?? [], '[0-9]+'),
+        value: v => v.slice(1),
+      },
+      POSITIONAL_PLACEHOLDER: {
+        match: cfg.positionalParams ? /[?]/ : undefined,
+        value: v => v.slice(1),
+      },
       [TokenType.VARIABLE]: {
         match: cfg.variableTypes ? regex.variable(cfg.variableTypes) : NULL_REGEX,
       },

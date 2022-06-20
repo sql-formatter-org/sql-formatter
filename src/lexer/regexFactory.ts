@@ -86,14 +86,14 @@ export const parameter = (paramTypes: string[], pattern: string): RegExp | undef
 // 7. BigQuery """triple-quoted"""
 // 8. Hive and Spark variables: ${name}
 export const quotePatterns = {
-  '``': '(`[^`]*($|`))+',
-  '[]': '(\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*',
-  '""': '("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+',
-  "''": "('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+",
+  '``': '(?:`[^`]*(?:$|`))+',
+  '[]': '(?:\\[[^\\]]*(?:$|\\]))(?:\\][^\\]]*(?:$|\\]))*',
+  '""': '(?:"[^"\\\\]*(?:\\\\.[^"\\\\]*)*(?:"|$))+',
+  "''": "(?:'[^'\\\\]*(?:\\\\.[^'\\\\]*)*(?:'|$))+",
   // '$$': '(?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$)',
-  "'''..'''": "'''[^\\\\]*?(?:\\\\.[^\\\\]*?)*?('''|$)",
-  '""".."""': '"""[^\\\\]*?(?:\\\\.[^\\\\]*?)*?("""|$)',
-  '{}': '(\\{[^\\}]*($|\\}))',
+  "'''..'''": "'''[^\\\\]*?(?:\\\\.[^\\\\]*?)*?(?:'''|$)",
+  '""".."""': '"""[^\\\\]*?(?:\\\\.[^\\\\]*?)*?(?:"""|$)',
+  '{}': '(?:\\{[^\\}]*(?:$|\\}))',
 };
 
 const singleQuotePattern = (quoteTypes: QuoteType): string => {
@@ -112,9 +112,13 @@ export const variable = (varTypes: VariableType[]): RegExp =>
       .join('|')
   );
 
+/** Builds a quote-delimited pattern for matching all given quote types */
+export const stringPattern = (quoteTypes: QuoteType[]): string =>
+  quoteTypes.map(singleQuotePattern).join('|');
+
 /** Builds a RegExp for matching quote-delimited patterns */
 export const string = (quoteTypes: QuoteType[]): RegExp =>
-  patternToRegex(quoteTypes.map(singleQuotePattern).join('|'));
+  patternToRegex(stringPattern(quoteTypes));
 
 /**
  * Builds a RegExp for valid identifiers in a SQL dialect
