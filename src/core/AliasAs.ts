@@ -1,20 +1,66 @@
-import type { AliasMode } from 'src/types';
+import type { AliasMode, FormatOptions } from 'src/types';
+import AsTokenFactory from './AsTokenFactory';
 
-import { isCommand, isToken, type Token, TokenType } from './token';
+import { isCommand, isToken, type Token, TokenType, EOF_TOKEN, isReserved } from './token';
 
-export interface TokenStream {
-  isWithinSelect(): boolean;
-  getPreviousReservedToken(): Token;
-  tokenLookBehind(n?: number): Token;
-  tokenLookAhead(n?: number): Token;
-}
-
-/** Decides addition and removal of AS tokens */
+/** Adds and removes AS tokens as configured by aliasAs option */
 export default class AliasAs {
-  constructor(private aliasAs: AliasMode, private formatter: TokenStream) {}
+  private index = 0;
+  private tokens: Token[] = [];
+  private previousReservedToken: Token = EOF_TOKEN;
+  private previousCommandToken: Token = EOF_TOKEN;
+  private asTokenFactory: AsTokenFactory;
+  private aliasAs: AliasMode;
+
+  constructor(cfg: FormatOptions, tokens: Token[]) {
+    this.aliasAs = cfg.aliasAs;
+    this.asTokenFactory = new AsTokenFactory(cfg.keywordCase, tokens);
+    this.tokens = tokens;
+  }
+
+  /** Returns tokens with AS tokens added/removed as needed */
+  public process(): Token[] {
+    const processedTokens: Token[] = [];
+
+    for (this.index = 0; this.index < this.tokens.length; this.index++) {
+      const token = this.tokens[this.index];
+
+      if (isReserved(token)) {
+        this.previousReservedToken = token;
+        if (token.type === TokenType.RESERVED_COMMAND) {
+          this.previousCommandToken = token;
+        }
+      }
+
+      if (isToken.AS(token)) {
+        if (!this.shouldRemove()) {
+          processedTokens.push(token);
+        }
+      } else if (
+        token.type === TokenType.IDENT ||
+        token.type === TokenType.NUMBER ||
+        token.type === TokenType.STRING ||
+        token.type === TokenType.VARIABLE
+      ) {
+        if (this.shouldAddBefore(token)) {
+          processedTokens.push(this.asTokenFactory.token());
+        }
+
+        processedTokens.push(token);
+
+        if (this.shouldAddAfter()) {
+          processedTokens.push(this.asTokenFactory.token());
+        }
+      } else {
+        processedTokens.push(token);
+      }
+    }
+
+    return processedTokens;
+  }
 
   /** True when AS keyword should be added *before* current token */
-  public shouldAddBefore(token: Token): boolean {
+  private shouldAddBefore(token: Token): boolean {
     return this.isMissingTableAlias(token) || this.isMissingSelectColumnAlias(token);
   }
 
@@ -31,7 +77,7 @@ export default class AliasAs {
     const nextToken = this.lookAhead();
     return (
       (this.aliasAs === 'always' || this.aliasAs === 'select') &&
-      this.formatter.isWithinSelect() &&
+      this.isWithinSelect() &&
       token.type === TokenType.IDENT &&
       (isToken.END(prevToken) ||
         ((prevToken.type === TokenType.IDENT || prevToken.type === TokenType.NUMBER) &&
@@ -40,7 +86,7 @@ export default class AliasAs {
   }
 
   /** True when AS keyword should be added *after* current token */
-  public shouldAddAfter(): boolean {
+  private shouldAddAfter(): boolean {
     return this.isEdgeCaseCTE() || this.isEdgeCaseCreateTable() || this.isMissingTypeCastAs();
   }
 
@@ -48,8 +94,8 @@ export default class AliasAs {
   private isMissingTypeCastAs(): boolean {
     return (
       this.aliasAs === 'never' &&
-      this.formatter.isWithinSelect() &&
-      isToken.CAST(this.formatter.getPreviousReservedToken()) &&
+      this.isWithinSelect() &&
+      isToken.CAST(this.getPreviousReservedToken()) &&
       isToken.AS(this.lookAhead()) &&
       (this.lookAhead(2).type === TokenType.IDENT ||
         this.lookAhead(2).type === TokenType.RESERVED_KEYWORD) &&
@@ -79,23 +125,31 @@ export default class AliasAs {
   }
 
   /* True when the current AS token should be discarded */
-  public shouldRemove(): boolean {
+  private shouldRemove(): boolean {
     return this.aliasAs === 'never' || (this.aliasAs === 'select' && this.isRemovableNonSelectAs());
   }
 
   private isRemovableNonSelectAs(): boolean {
     return (
       this.lookBehind().value === ')' && // ) [AS] alias but not SELECT (a) [AS] alpha
-      !this.formatter.isWithinSelect() &&
+      !this.isWithinSelect() &&
       this.lookAhead().value !== '(' // skip WITH foo [AS] ( ...
     );
   }
 
-  private lookBehind(n?: number): Token {
-    return this.formatter.tokenLookBehind(n);
+  public getPreviousReservedToken(): Token {
+    return this.previousReservedToken;
   }
 
-  private lookAhead(n?: number): Token {
-    return this.formatter.tokenLookAhead(n);
+  public isWithinSelect(): boolean {
+    return isToken.SELECT(this.previousCommandToken);
+  }
+
+  private lookBehind(n = 1): Token {
+    return this.lookAhead(-n);
+  }
+
+  private lookAhead(n = 1): Token {
+    return this.tokens[this.index + n] || EOF_TOKEN;
   }
 }
