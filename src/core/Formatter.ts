@@ -4,7 +4,7 @@ import Tokenizer from './Tokenizer';
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
 import Parser, { type Statement } from './Parser';
-import StatementFormatter from './StatementFormatter';
+import ExpressionFormatter from './ExpressionFormatter';
 import { indentString } from './config';
 import AliasAs from './AliasAs';
 
@@ -53,7 +53,7 @@ export default class Formatter {
 
   private formatAst(statements: Statement[]): string {
     return statements
-      .map(stat => new StatementFormatter(this.cfg, this.params).format(stat))
+      .map(stat => new ExpressionFormatter(this.cfg, this.params).format(stat))
       .join('\n'.repeat(this.cfg.linesBetweenQueries + 1));
   }
 
