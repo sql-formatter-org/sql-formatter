@@ -53,7 +53,7 @@ export default class Formatter {
 
   private formatAst(statements: Statement[]): string {
     return statements
-      .map(stat => new ExpressionFormatter(this.cfg, this.params).format(stat))
+      .map(stat => new ExpressionFormatter(this.cfg, this.params).format(stat.children))
       .join('\n'.repeat(this.cfg.linesBetweenQueries + 1));
   }
 
