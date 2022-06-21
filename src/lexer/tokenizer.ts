@@ -68,10 +68,11 @@ export default class Tokenizer {
         match: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
       },
       [TokenType.COMMA]: { match: /[,]/ },
-      [TokenType.BLOCK_START]: { match: /[([]/ }, // add params later
-      [TokenType.BLOCK_END]: { match: /[)\]]/ }, // add params later
+      [TokenType.BLOCK_START]: { match: regex.parenthesis(cfg.blockStart ?? ['(']) },
+      [TokenType.BLOCK_END]: { match: regex.parenthesis(cfg.blockEnd ?? [')']) },
+      QUOTED_IDENTIFIER: { match: regex.string(cfg.identTypes) },
       [TokenType.OPERATOR]: {
-        match: regex.operator('+-/*%&|^><=.;{}`:$', [
+        match: regex.operator('+-/*%&|^><=.;[]{}`:$@', [
           '<>',
           '<=',
           '>=',
