@@ -11,7 +11,7 @@ import { indentString, isTabularStyle } from './config';
 import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
 
 /** Formats single SQL statement */
-export default class StatementFormatter {
+export default class ExpressionFormatter {
   private cfg: FormatOptions;
   private indentation: Indentation;
   private inlineBlock: InlineBlock;
@@ -305,7 +305,7 @@ export default class StatementFormatter {
   private formatParenthesis(node: Parenthesis) {
     const inline = this.inlineBlock.isInlineBlock(node);
 
-    const formattedSql = new StatementFormatter(this.cfg, this.params, {
+    const formattedSql = new ExpressionFormatter(this.cfg, this.params, {
       inline,
     })
       .format({
