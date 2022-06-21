@@ -6,11 +6,11 @@ import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { isReserved, isCommand, isToken, type Token, TokenType, EOF_TOKEN } from './token';
 import toTabularFormat from './tabularStyle';
-import { AstNode, isTokenNode, Parenthesis, type Statement } from './Parser';
+import { AstNode, isTokenNode, Parenthesis } from './Parser';
 import { indentString, isTabularStyle } from './config';
 import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
 
-/** Formats single SQL statement */
+/** Formats a generic SQL expression */
 export default class ExpressionFormatter {
   private cfg: FormatOptions;
   private indentation: Indentation;
@@ -34,8 +34,8 @@ export default class ExpressionFormatter {
     this.query = new WhitespaceBuilder(this.indentation);
   }
 
-  public format(statement: Statement): string {
-    this.nodes = statement.children;
+  public format(nodes: AstNode[]): string {
+    this.nodes = nodes;
 
     for (this.index = 0; this.index < this.nodes.length; this.index++) {
       const node = this.nodes[this.index];
@@ -308,10 +308,7 @@ export default class ExpressionFormatter {
     const formattedSql = new ExpressionFormatter(this.cfg, this.params, {
       inline,
     })
-      .format({
-        type: 'statement',
-        children: node.children,
-      })
+      .format(node.children)
       .trimEnd();
 
     // Take out the preceding space unless there was whitespace there in the original query
