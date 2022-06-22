@@ -1,5 +1,13 @@
 /* eslint-disable no-cond-assign */
-import { AstNode, BetweenPredicate, LimitClause, Parenthesis, Statement, TokenNode } from './ast';
+import {
+  AllColumnsAsterisk,
+  AstNode,
+  BetweenPredicate,
+  LimitClause,
+  Parenthesis,
+  Statement,
+  TokenNode,
+} from './ast';
 import { EOF_TOKEN, type Token, TokenType, isToken } from './token';
 
 /**
@@ -40,7 +48,11 @@ export default class Parser {
 
   private expression(): AstNode {
     return (
-      this.parenthesis() || this.betweenPredicate() || this.limitClause() || this.nextTokenNode()
+      this.parenthesis() ||
+      this.betweenPredicate() ||
+      this.limitClause() ||
+      this.allColumnsAsterisk() ||
+      this.nextTokenNode()
     );
   }
 
@@ -90,6 +102,14 @@ export default class Parser {
         limitToken: this.next(),
         countToken: this.next(),
       };
+    }
+    return undefined;
+  }
+
+  private allColumnsAsterisk(): AllColumnsAsterisk | undefined {
+    if (this.look().value === '*' && isToken.SELECT(this.look(-1))) {
+      this.next();
+      return { type: 'all_columns_asterisk' };
     }
     return undefined;
   }

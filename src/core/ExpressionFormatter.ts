@@ -5,7 +5,14 @@ import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { isReserved, type Token, TokenType, EOF_TOKEN } from './token';
-import { AstNode, BetweenPredicate, isTokenNode, LimitClause, Parenthesis } from './ast';
+import {
+  AllColumnsAsterisk,
+  AstNode,
+  BetweenPredicate,
+  isTokenNode,
+  LimitClause,
+  Parenthesis,
+} from './ast';
 import { indentString } from './config';
 import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
 
@@ -44,6 +51,9 @@ export default class ExpressionFormatter {
           break;
         case 'limit_clause':
           this.formatLimitClause(node);
+          break;
+        case 'all_columns_asterisk':
+          this.formatAllColumnsAsterisk(node);
           break;
         case 'token':
           this.formatToken(node.token);
@@ -117,6 +127,11 @@ export default class ExpressionFormatter {
     } else {
       this.query.add(this.show(node.countToken), WS.SPACE);
     }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private formatAllColumnsAsterisk(node: AllColumnsAsterisk) {
+    this.query.add('*', WS.SPACE);
   }
 
   private formatToken(token: Token): void {
@@ -248,8 +263,7 @@ export default class ExpressionFormatter {
     }
 
     // other operators
-    // in dense operators mode do not trim whitespace if SELECT *
-    if (this.cfg.denseOperators && this.tokenLookBehind().type !== TokenType.RESERVED_COMMAND) {
+    if (this.cfg.denseOperators) {
       this.query.add(WS.NO_SPACE, this.show(token));
     } else {
       this.query.add(this.show(token), WS.SPACE);
