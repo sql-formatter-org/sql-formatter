@@ -22,7 +22,6 @@ export default class Parser {
 
   private statement(): Statement | undefined {
     const children: AstNode[] = [];
-    let expr: Parenthesis | BetweenPredicate | undefined;
     while (true) {
       if (this.look().value === ';') {
         children.push(this.nextTokenNode());
@@ -33,12 +32,14 @@ export default class Parser {
         } else {
           return undefined;
         }
-      } else if ((expr = this.parenthesis() || this.betweenPredicate())) {
-        children.push(expr);
       } else {
-        children.push(this.nextTokenNode());
+        children.push(this.expression());
       }
     }
+  }
+
+  private expression(): AstNode {
+    return this.parenthesis() || this.betweenPredicate() || this.nextTokenNode();
   }
 
   private parenthesis(): Parenthesis | undefined {
@@ -49,7 +50,7 @@ export default class Parser {
       const hasWhitespaceBefore = Boolean(token.whitespaceBefore);
       let closeParen = '';
       while (this.look().type !== TokenType.CLOSE_PAREN && this.look().type !== TokenType.EOF) {
-        children.push(this.parenthesis() || this.betweenPredicate() || this.nextTokenNode());
+        children.push(this.expression());
       }
       if (this.look().type === TokenType.CLOSE_PAREN) {
         closeParen = this.next().value;
