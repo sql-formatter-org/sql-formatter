@@ -251,9 +251,6 @@ export default class ExpressionFormatter {
     } else if (token.value === ';') {
       this.formatQuerySeparator(token);
       return;
-    } else if (['$'].includes(token.value)) {
-      this.query.add(this.show(token));
-      return;
     } else if ([':'].includes(token.value)) {
       this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);
       return;
