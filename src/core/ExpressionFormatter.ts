@@ -254,7 +254,7 @@ export default class ExpressionFormatter {
     } else if ([':'].includes(token.value)) {
       this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);
       return;
-    } else if (['.', '`'].includes(token.value)) {
+    } else if (['.'].includes(token.value)) {
       this.query.add(WS.NO_SPACE, this.show(token));
       return;
     }
