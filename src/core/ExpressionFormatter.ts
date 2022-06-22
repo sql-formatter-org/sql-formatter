@@ -214,28 +214,16 @@ export default class ExpressionFormatter {
       .format(node.children)
       .trimEnd();
 
-    // Take out the preceding space unless there was whitespace there in the original query
-    // or line comment
-    const preserveWhitespaceFor = [TokenType.LINE_COMMENT, TokenType.OPERATOR];
-
     if (inline) {
-      if (
-        !node.hasWhitespaceBefore &&
-        !preserveWhitespaceFor.includes(this.tokenLookBehind().type)
-      ) {
-        this.query.add(WS.NO_SPACE, node.openParen, formattedSql, node.closeParen, WS.SPACE);
-      } else {
-        this.query.add(node.openParen, formattedSql, node.closeParen, WS.SPACE);
+      if (!this.isSpaceBeforeParenthesis(node)) {
+        this.query.add(WS.NO_SPACE);
       }
+      this.query.add(node.openParen, formattedSql, node.closeParen, WS.SPACE);
     } else {
-      if (
-        !node.hasWhitespaceBefore &&
-        !preserveWhitespaceFor.includes(this.tokenLookBehind().type)
-      ) {
-        this.query.add(WS.NO_SPACE, node.openParen);
-      } else {
-        this.query.add(node.openParen);
+      if (!this.isSpaceBeforeParenthesis(node)) {
+        this.query.add(WS.NO_SPACE);
       }
+      this.query.add(node.openParen);
 
       formattedSql.split(/\n/).forEach(line => {
         this.query.add(WS.NEWLINE, WS.INDENT, WS.SINGLE_INDENT, line);
@@ -243,6 +231,16 @@ export default class ExpressionFormatter {
 
       this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
     }
+  }
+
+  // We add space before parenthesis when:
+  // - there's space in original SQL or
+  // - there's operator or line comment before the parenthesis
+  private isSpaceBeforeParenthesis(node: Parenthesis): boolean {
+    return (
+      node.hasWhitespaceBefore ||
+      [TokenType.LINE_COMMENT, TokenType.OPERATOR].includes(this.tokenLookBehind().type)
+    );
   }
 
   private formatCaseStart(token: Token) {
