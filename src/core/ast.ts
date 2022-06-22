@@ -37,6 +37,11 @@ export type LimitClause = {
   offsetToken?: Token;
 };
 
-export type AstNode = Parenthesis | BetweenPredicate | LimitClause | TokenNode;
+// The "*" operator used in SELECT *
+export type AllColumnsAsterisk = {
+  type: 'all_columns_asterisk';
+};
+
+export type AstNode = Parenthesis | BetweenPredicate | LimitClause | AllColumnsAsterisk | TokenNode;
 
 export const isTokenNode = (node: AstNode): node is TokenNode => node.type === 'token';
