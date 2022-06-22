@@ -330,8 +330,6 @@ export default class ExpressionFormatter {
         !preserveWhitespaceFor.includes(this.tokenLookBehind().type)
       ) {
         this.query.add(WS.NO_SPACE, node.openParen);
-      } else if (!this.cfg.newlineBeforeOpenParen) {
-        this.query.add(WS.NO_NEWLINE, WS.SPACE, node.openParen);
       } else {
         this.query.add(node.openParen);
       }
@@ -344,11 +342,7 @@ export default class ExpressionFormatter {
         }
       });
 
-      if (this.cfg.newlineBeforeCloseParen) {
-        this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
-      } else {
-        this.query.add(WS.NO_NEWLINE, WS.SPACE, node.closeParen, WS.SPACE);
-      }
+      this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
     }
   }
 
@@ -371,10 +365,8 @@ export default class ExpressionFormatter {
     if (isTabularStyle(this.cfg)) {
       // +1 extra indentation step for the closing paren
       this.query.add(WS.NEWLINE, WS.INDENT, WS.SINGLE_INDENT, this.show(token), WS.SPACE);
-    } else if (this.cfg.newlineBeforeCloseParen) {
-      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
     } else {
-      this.query.add(WS.NO_NEWLINE, WS.SPACE, this.show(token), WS.SPACE);
+      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
     }
   }
 
