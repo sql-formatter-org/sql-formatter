@@ -144,4 +144,70 @@ describe('Parser', () => {
       ]
     `);
   });
+
+  it('parses BETWEEN expression', () => {
+    expect(parse('WHERE age BETWEEN 10 and 15;')).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "token": Object {
+                "text": "WHERE",
+                "type": "RESERVED_COMMAND",
+                "value": "WHERE",
+                "whitespaceBefore": "",
+              },
+              "type": "token",
+            },
+            Object {
+              "token": Object {
+                "text": "age",
+                "type": "IDENT",
+                "value": "age",
+                "whitespaceBefore": " ",
+              },
+              "type": "token",
+            },
+            Object {
+              "andToken": Object {
+                "text": "and",
+                "type": "RESERVED_LOGICAL_OPERATOR",
+                "value": "AND",
+                "whitespaceBefore": " ",
+              },
+              "betweenToken": Object {
+                "text": "BETWEEN",
+                "type": "RESERVED_KEYWORD",
+                "value": "BETWEEN",
+                "whitespaceBefore": " ",
+              },
+              "expr1": Object {
+                "text": "10",
+                "type": "NUMBER",
+                "value": "10",
+                "whitespaceBefore": " ",
+              },
+              "expr2": Object {
+                "text": "15",
+                "type": "NUMBER",
+                "value": "15",
+                "whitespaceBefore": " ",
+              },
+              "type": "between_predicate",
+            },
+            Object {
+              "token": Object {
+                "text": ";",
+                "type": "OPERATOR",
+                "value": ";",
+                "whitespaceBefore": "",
+              },
+              "type": "token",
+            },
+          ],
+          "type": "statement",
+        },
+      ]
+    `);
+  });
 });
