@@ -4,8 +4,8 @@ import { equalizeWhitespace } from 'src/utils';
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
-import { isReserved, isToken, type Token, TokenType, EOF_TOKEN } from './token';
-import { AstNode, BetweenPredicate, isTokenNode, Parenthesis } from './ast';
+import { isReserved, type Token, TokenType, EOF_TOKEN } from './token';
+import { AstNode, BetweenPredicate, isTokenNode, LimitClause, Parenthesis } from './ast';
 import { indentString } from './config';
 import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
 
@@ -18,7 +18,6 @@ export default class ExpressionFormatter {
   private query: WhitespaceBuilder;
 
   private inline = false;
-  private previousReservedToken: Token = EOF_TOKEN;
   private nodes: AstNode[] = [];
   private index = -1;
 
@@ -43,10 +42,10 @@ export default class ExpressionFormatter {
         case 'between_predicate':
           this.formatBetweenPredicate(node);
           break;
+        case 'limit_clause':
+          this.formatLimitClause(node);
+          break;
         case 'token':
-          if (isReserved(node.token)) {
-            this.previousReservedToken = node.token;
-          }
           this.formatToken(node.token);
           break;
       }
@@ -123,6 +122,21 @@ export default class ExpressionFormatter {
     this.indentation.increaseTopLevel();
 
     this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
+  }
+
+  private formatLimitClause(node: LimitClause) {
+    this.formatCommand(node.limitToken);
+    if (node.offsetToken) {
+      this.query.add(
+        this.show(node.offsetToken),
+        ',',
+        WS.SPACE,
+        this.show(node.countToken),
+        WS.SPACE
+      );
+    } else {
+      this.query.add(this.show(node.countToken), WS.SPACE);
+    }
   }
 
   /**
@@ -279,7 +293,7 @@ export default class ExpressionFormatter {
    * Formats a comma Operator onto query, ending line unless in an Inline Block
    */
   private formatComma(token: Token) {
-    if (!this.inline && !isToken.LIMIT(this.getPreviousReservedToken())) {
+    if (!this.inline) {
       this.query.add(WS.NO_SPACE, this.show(token), WS.NEWLINE, WS.INDENT);
     } else {
       this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);
@@ -312,11 +326,6 @@ export default class ExpressionFormatter {
     } else {
       return token.value;
     }
-  }
-
-  /** Returns the latest encountered reserved keyword token */
-  private getPreviousReservedToken(): Token {
-    return this.previousReservedToken;
   }
 
   /** Fetches nth previous token from the token stream */

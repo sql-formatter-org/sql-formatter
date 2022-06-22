@@ -30,6 +30,8 @@ export default class InlineBlock {
         case 'between_predicate':
           length += this.betweenWidth(node);
           break;
+        case 'limit_clause':
+          return Infinity;
         case 'token':
           length += node.token.value.length;
           if (this.isForbiddenToken(node.token)) {
