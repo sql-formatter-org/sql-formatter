@@ -6,7 +6,7 @@ import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { isReserved, isCommand, isToken, type Token, TokenType, EOF_TOKEN } from './token';
 import toTabularFormat from './tabularStyle';
-import { AstNode, isTokenNode, Parenthesis } from './Parser';
+import { AstNode, isTokenNode, Parenthesis } from './ast';
 import { indentString, isTabularStyle } from './config';
 import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
 
