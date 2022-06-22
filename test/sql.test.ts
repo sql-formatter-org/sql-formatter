@@ -56,7 +56,7 @@ describe('SqlFormatter', () => {
         @ name,
       : bar
       FROM
-      {foo};
+        { foo };
     `);
   });
 });
