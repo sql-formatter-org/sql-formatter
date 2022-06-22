@@ -7,7 +7,6 @@ import supportsNumbers from './features/numbers';
 import supportsTabWidth from './options/tabWidth';
 import supportsUseTabs from './options/useTabs';
 import supportsAliasAs from './options/aliasAs';
-import supportsMultilineLists from './options/multilineLists';
 import supportsExpressionWidth from './options/expressionWidth';
 import supportsKeywordCase from './options/keywordCase';
 import supportsCommaPosition from './options/commaPosition';
@@ -30,7 +29,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsKeywordCase(format);
   // supportsIndentStyle(format); // XXX: Feature is disabled for now
   supportsLinesBetweenQueries(format);
-  supportsMultilineLists(format);
+  // supportsMultilineLists(format); // XXX: Feature is disabled for now
   supportsExpressionWidth(format);
   // supportsNewlineBeforeParen(format); // XXX: Feature is disabled for now
   supportsNewlineBeforeSemicolon(format);
