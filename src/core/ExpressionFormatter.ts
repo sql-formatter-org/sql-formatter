@@ -5,9 +5,8 @@ import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { isReserved, isCommand, isToken, type Token, TokenType, EOF_TOKEN } from './token';
-import toTabularFormat from './tabularStyle';
 import { AstNode, isTokenNode, Parenthesis } from './ast';
-import { indentString, isTabularStyle } from './config';
+import { indentString } from './config';
 import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
 
 /** Formats a generic SQL expression */
@@ -190,16 +189,9 @@ export default class ExpressionFormatter {
 
     this.query.add(WS.NEWLINE, WS.INDENT);
 
-    // indent tabular formats, except when preceding a (
-    if (isTabularStyle(this.cfg)) {
-      if (this.tokenLookAhead().value !== '(') {
-        this.indentation.increaseTopLevel();
-      }
-    } else {
-      this.indentation.increaseTopLevel();
-    }
+    this.indentation.increaseTopLevel();
 
-    if (this.currentNewline && !isTabularStyle(this.cfg)) {
+    if (this.currentNewline) {
       this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
     } else {
       this.query.add(this.show(token), WS.SPACE);
@@ -211,8 +203,8 @@ export default class ExpressionFormatter {
    */
   private formatBinaryCommand(token: Token) {
     const isJoin = /JOIN/i.test(token.value); // check if token contains JOIN
-    if (!isJoin || isTabularStyle(this.cfg)) {
-      // decrease for boolean set operators or in tabular mode
+    if (!isJoin) {
+      // decrease for boolean set operators
       this.indentation.decreaseTopLevel();
     }
     if (isJoin) {
@@ -282,10 +274,6 @@ export default class ExpressionFormatter {
       return;
     }
 
-    if (isTabularStyle(this.cfg)) {
-      this.indentation.decreaseTopLevel();
-    }
-
     if (this.cfg.logicalOperatorNewline === 'before') {
       if (this.currentNewline) {
         this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
@@ -335,11 +323,7 @@ export default class ExpressionFormatter {
       }
 
       formattedSql.split(/\n/).forEach(line => {
-        if (isTabularStyle(this.cfg)) {
-          this.query.add(WS.NEWLINE, WS.INDENT, line);
-        } else {
-          this.query.add(WS.NEWLINE, WS.INDENT, WS.SINGLE_INDENT, line);
-        }
+        this.query.add(WS.NEWLINE, WS.INDENT, WS.SINGLE_INDENT, line);
       });
 
       this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
@@ -362,12 +346,7 @@ export default class ExpressionFormatter {
   private formatMultilineBlockEnd(token: Token) {
     this.indentation.decreaseBlockLevel();
 
-    if (isTabularStyle(this.cfg)) {
-      // +1 extra indentation step for the closing paren
-      this.query.add(WS.NEWLINE, WS.INDENT, WS.SINGLE_INDENT, this.show(token), WS.SPACE);
-    } else {
-      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
-    }
+    this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
   }
 
   /**
@@ -397,21 +376,7 @@ export default class ExpressionFormatter {
   }
 
   private show(token: Token): string {
-    if (this.isTabularToken(token)) {
-      return toTabularFormat(this.showToken(token), this.cfg.indentStyle);
-    } else {
-      return this.showToken(token);
-    }
-  }
-
-  // These token types can be formatted in tabular style
-  private isTabularToken(token: Token): boolean {
-    return (
-      token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
-      token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
-      token.type === TokenType.RESERVED_COMMAND ||
-      token.type === TokenType.RESERVED_BINARY_COMMAND
-    );
+    return this.showToken(token);
   }
 
   // don't call this directly, always use show() instead.
