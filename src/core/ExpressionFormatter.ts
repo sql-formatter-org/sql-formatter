@@ -5,7 +5,7 @@ import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { isReserved, isToken, type Token, TokenType, EOF_TOKEN } from './token';
-import { AstNode, isTokenNode, Parenthesis } from './ast';
+import { AstNode, BetweenPredicate, isTokenNode, Parenthesis } from './ast';
 import { indentString } from './config';
 import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
 
@@ -36,16 +36,19 @@ export default class ExpressionFormatter {
 
     for (this.index = 0; this.index < this.nodes.length; this.index++) {
       const node = this.nodes[this.index];
-      if (isTokenNode(node)) {
-        const { token } = node;
-        // if token is a Reserved Keyword, Command, Binary Command, Dependent Clause, Logical Operator, CASE, END
-        if (isReserved(token)) {
-          this.previousReservedToken = token;
-        }
-
-        this.formatToken(token);
-      } else {
-        this.formatParenthesis(node);
+      switch (node.type) {
+        case 'parenthesis':
+          this.formatParenthesis(node);
+          break;
+        case 'between_predicate':
+          this.formatBetweenPredicate(node);
+          break;
+        case 'token':
+          if (isReserved(node.token)) {
+            this.previousReservedToken = node.token;
+          }
+          this.formatToken(node.token);
+          break;
       }
     }
     return this.query.toString();
@@ -188,16 +191,23 @@ export default class ExpressionFormatter {
     }
   }
 
+  private formatBetweenPredicate(node: BetweenPredicate) {
+    this.query.add(
+      this.show(node.betweenToken),
+      WS.SPACE,
+      this.show(node.expr1),
+      WS.SPACE,
+      this.show(node.andToken),
+      WS.SPACE,
+      this.show(node.expr2),
+      WS.SPACE
+    );
+  }
+
   /**
    * Formats a Logical Operator onto query, joining boolean conditions
    */
   private formatLogicalOperator(token: Token) {
-    // ignore AND when BETWEEN x [AND] y
-    if (isToken.AND(token) && isToken.BETWEEN(this.tokenLookBehind(2))) {
-      this.query.add(this.show(token), WS.SPACE);
-      return;
-    }
-
     if (this.cfg.logicalOperatorNewline === 'before') {
       this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
     } else {
