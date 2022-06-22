@@ -4,7 +4,7 @@ import Tokenizer from 'src/core/Tokenizer';
 describe('Parser', () => {
   const parse = (sql: string) => {
     const tokens = new Tokenizer({
-      reservedCommands: ['SELECT', 'FROM', 'WHERE', 'CREATE TABLE'],
+      reservedCommands: ['SELECT', 'FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedBinaryCommands: ['UNION', 'JOIN'],
       reservedJoinConditions: ['ON', 'USING'],
@@ -203,6 +203,66 @@ describe('Parser', () => {
                 "whitespaceBefore": "",
               },
               "type": "token",
+            },
+          ],
+          "type": "statement",
+        },
+      ]
+    `);
+  });
+
+  it('parses LIMIT clause', () => {
+    expect(parse('LIMIT 10')).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "countToken": Object {
+                "text": "10",
+                "type": "NUMBER",
+                "value": "10",
+                "whitespaceBefore": " ",
+              },
+              "limitToken": Object {
+                "text": "LIMIT",
+                "type": "RESERVED_COMMAND",
+                "value": "LIMIT",
+                "whitespaceBefore": "",
+              },
+              "type": "limit_clause",
+            },
+          ],
+          "type": "statement",
+        },
+      ]
+    `);
+  });
+
+  it('parses LIMIT clause with offset', () => {
+    expect(parse('LIMIT 200, 10')).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "countToken": Object {
+                "text": "10",
+                "type": "NUMBER",
+                "value": "10",
+                "whitespaceBefore": " ",
+              },
+              "limitToken": Object {
+                "text": "LIMIT",
+                "type": "RESERVED_COMMAND",
+                "value": "LIMIT",
+                "whitespaceBefore": "",
+              },
+              "offsetToken": Object {
+                "text": "200",
+                "type": "NUMBER",
+                "value": "200",
+                "whitespaceBefore": " ",
+              },
+              "type": "limit_clause",
             },
           ],
           "type": "statement",

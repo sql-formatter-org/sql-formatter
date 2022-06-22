@@ -19,6 +19,7 @@ export type Parenthesis = {
   hasWhitespaceBefore: boolean;
 };
 
+// BETWEEN <expr1> AND <expr2>
 export type BetweenPredicate = {
   type: 'between_predicate';
   betweenToken: Token;
@@ -27,6 +28,15 @@ export type BetweenPredicate = {
   expr2: Token;
 };
 
-export type AstNode = Parenthesis | BetweenPredicate | TokenNode;
+// LIMIT <count>
+// LIMIT <offset>, <count>
+export type LimitClause = {
+  type: 'limit_clause';
+  limitToken: Token;
+  countToken: Token;
+  offsetToken?: Token;
+};
+
+export type AstNode = Parenthesis | BetweenPredicate | LimitClause | TokenNode;
 
 export const isTokenNode = (node: AstNode): node is TokenNode => node.type === 'token';
