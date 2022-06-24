@@ -4,12 +4,12 @@ import { equalizeWhitespace } from 'src/utils';
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
-import { isReserved, type Token, TokenType, EOF_TOKEN } from './token';
+import { isReserved, type Token, TokenType } from './token';
 import {
   AllColumnsAsterisk,
   AstNode,
   BetweenPredicate,
-  isTokenNode,
+  FunctionCall,
   LimitClause,
   Parenthesis,
 } from './ast';
@@ -43,6 +43,9 @@ export default class ExpressionFormatter {
     for (this.index = 0; this.index < this.nodes.length; this.index++) {
       const node = this.nodes[this.index];
       switch (node.type) {
+        case 'function_call':
+          this.formatFunctionCall(node);
+          break;
         case 'parenthesis':
           this.formatParenthesis(node);
           break;
@@ -63,6 +66,11 @@ export default class ExpressionFormatter {
     return this.query.toString();
   }
 
+  private formatFunctionCall(node: FunctionCall) {
+    this.query.add(this.show(node.nameToken));
+    this.formatParenthesis(node.parenthesis);
+  }
+
   private formatParenthesis(node: Parenthesis) {
     const inline = this.inlineBlock.isInlineBlock(node);
 
@@ -73,14 +81,8 @@ export default class ExpressionFormatter {
       .trimEnd();
 
     if (inline) {
-      if (!this.isSpaceBeforeParenthesis(node)) {
-        this.query.add(WS.NO_SPACE);
-      }
       this.query.add(node.openParen, formattedSql, node.closeParen, WS.SPACE);
     } else {
-      if (!this.isSpaceBeforeParenthesis(node)) {
-        this.query.add(WS.NO_SPACE);
-      }
       this.query.add(node.openParen);
 
       formattedSql.split(/\n/).forEach(line => {
@@ -89,16 +91,6 @@ export default class ExpressionFormatter {
 
       this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
     }
-  }
-
-  // We add space before parenthesis when:
-  // - there's space in original SQL or
-  // - there's operator or line comment before the parenthesis
-  private isSpaceBeforeParenthesis(node: Parenthesis): boolean {
-    return (
-      node.hasWhitespaceBefore ||
-      [TokenType.LINE_COMMENT, TokenType.OPERATOR].includes(this.tokenLookBehind().type)
-    );
   }
 
   private formatBetweenPredicate(node: BetweenPredicate) {
@@ -336,21 +328,6 @@ export default class ExpressionFormatter {
       }
     } else {
       return token.value;
-    }
-  }
-
-  /** Fetches nth previous token from the token stream */
-  private tokenLookBehind(n = 1): Token {
-    return this.tokenLookAhead(-n);
-  }
-
-  /** Fetches nth next token from the token stream */
-  private tokenLookAhead(n = 1): Token {
-    const node: AstNode | undefined = this.nodes[this.index + n];
-    if (node && isTokenNode(node)) {
-      return node.token;
-    } else {
-      return EOF_TOKEN;
     }
   }
 }
