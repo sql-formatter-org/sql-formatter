@@ -46,6 +46,7 @@ export const testToken =
 export const isToken = {
   AS: testToken({ value: 'AS', type: TokenType.RESERVED_KEYWORD }),
   AND: testToken({ value: 'AND', type: TokenType.RESERVED_LOGICAL_OPERATOR }),
+  ARRAY: testToken({ value: 'ARRAY', type: TokenType.RESERVED_KEYWORD }),
   BETWEEN: testToken({ value: 'BETWEEN', type: TokenType.RESERVED_KEYWORD }),
   CASE: testToken({ value: 'CASE', type: TokenType.RESERVED_CASE_START }),
   CAST: testToken({ value: 'CAST', type: TokenType.RESERVED_KEYWORD }),
@@ -55,6 +56,7 @@ export const isToken = {
   LIMIT: testToken({ value: 'LIMIT', type: TokenType.RESERVED_COMMAND }),
   SELECT: testToken({ value: 'SELECT', type: TokenType.RESERVED_COMMAND }),
   SET: testToken({ value: 'SET', type: TokenType.RESERVED_COMMAND }),
+  STRUCT: testToken({ value: 'STRUCT', type: TokenType.RESERVED_KEYWORD }),
   TABLE: testToken({ value: 'TABLE', type: TokenType.RESERVED_KEYWORD }),
   WINDOW: testToken({ value: 'WINDOW', type: TokenType.RESERVED_COMMAND }),
   WITH: testToken({ value: 'WITH', type: TokenType.RESERVED_COMMAND }),
