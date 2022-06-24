@@ -9,6 +9,8 @@ describe('Parser', () => {
       reservedBinaryCommands: ['UNION', 'JOIN'],
       reservedJoinConditions: ['ON', 'USING'],
       reservedKeywords: ['BETWEEN', 'LIKE', 'SQRT'],
+      openParens: ['(', '['],
+      closeParens: [')', ']'],
       stringTypes: ["''"],
       identTypes: ['""'],
     }).tokenize(sql);
@@ -101,6 +103,68 @@ describe('Parser', () => {
                 "type": "parenthesis",
               },
               "type": "function_call",
+            },
+          ],
+          "type": "statement",
+        },
+      ]
+    `);
+  });
+
+  it('parses array subscript', () => {
+    expect(parse('SELECT my_array[OFFSET(5)]')).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "token": Object {
+                "text": "SELECT",
+                "type": "RESERVED_COMMAND",
+                "value": "SELECT",
+                "whitespaceBefore": "",
+              },
+              "type": "token",
+            },
+            Object {
+              "arrayToken": Object {
+                "text": "my_array",
+                "type": "IDENT",
+                "value": "my_array",
+                "whitespaceBefore": " ",
+              },
+              "parenthesis": Object {
+                "children": Array [
+                  Object {
+                    "nameToken": Object {
+                      "text": "OFFSET",
+                      "type": "IDENT",
+                      "value": "OFFSET",
+                      "whitespaceBefore": "",
+                    },
+                    "parenthesis": Object {
+                      "children": Array [
+                        Object {
+                          "token": Object {
+                            "text": "5",
+                            "type": "NUMBER",
+                            "value": "5",
+                            "whitespaceBefore": "",
+                          },
+                          "type": "token",
+                        },
+                      ],
+                      "closeParen": ")",
+                      "openParen": "(",
+                      "type": "parenthesis",
+                    },
+                    "type": "function_call",
+                  },
+                ],
+                "closeParen": "]",
+                "openParen": "[",
+                "type": "parenthesis",
+              },
+              "type": "array_subscript",
             },
           ],
           "type": "statement",
