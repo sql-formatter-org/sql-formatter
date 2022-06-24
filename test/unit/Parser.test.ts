@@ -8,7 +8,7 @@ describe('Parser', () => {
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedBinaryCommands: ['UNION', 'JOIN'],
       reservedJoinConditions: ['ON', 'USING'],
-      reservedKeywords: ['BETWEEN', 'LIKE'],
+      reservedKeywords: ['BETWEEN', 'LIKE', 'SQRT'],
       stringTypes: ["''"],
       identTypes: ['""'],
     }).tokenize(sql);
@@ -63,8 +63,8 @@ describe('Parser', () => {
     `);
   });
 
-  it('parses parenthesized expressions', () => {
-    expect(parse('SELECT abs(birth_year - year(CURRENT_DATE))')).toMatchInlineSnapshot(`
+  it('parses function call', () => {
+    expect(parse('SELECT SQRT(2)')).toMatchInlineSnapshot(`
       Array [
         Object {
           "children": Array [
@@ -78,11 +78,48 @@ describe('Parser', () => {
               "type": "token",
             },
             Object {
-              "token": Object {
-                "text": "abs",
-                "type": "IDENT",
-                "value": "abs",
+              "nameToken": Object {
+                "text": "SQRT",
+                "type": "RESERVED_KEYWORD",
+                "value": "SQRT",
                 "whitespaceBefore": " ",
+              },
+              "parenthesis": Object {
+                "children": Array [
+                  Object {
+                    "token": Object {
+                      "text": "2",
+                      "type": "NUMBER",
+                      "value": "2",
+                      "whitespaceBefore": "",
+                    },
+                    "type": "token",
+                  },
+                ],
+                "closeParen": ")",
+                "openParen": "(",
+                "type": "parenthesis",
+              },
+              "type": "function_call",
+            },
+          ],
+          "type": "statement",
+        },
+      ]
+    `);
+  });
+
+  it('parses parenthesized expressions', () => {
+    expect(parse('SELECT (birth_year - (CURRENT_DATE + 1))')).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "token": Object {
+                "text": "SELECT",
+                "type": "RESERVED_COMMAND",
+                "value": "SELECT",
+                "whitespaceBefore": "",
               },
               "type": "token",
             },
@@ -107,15 +144,6 @@ describe('Parser', () => {
                   "type": "token",
                 },
                 Object {
-                  "token": Object {
-                    "text": "year",
-                    "type": "IDENT",
-                    "value": "year",
-                    "whitespaceBefore": " ",
-                  },
-                  "type": "token",
-                },
-                Object {
                   "children": Array [
                     Object {
                       "token": Object {
@@ -126,15 +154,31 @@ describe('Parser', () => {
                       },
                       "type": "token",
                     },
+                    Object {
+                      "token": Object {
+                        "text": "+",
+                        "type": "OPERATOR",
+                        "value": "+",
+                        "whitespaceBefore": " ",
+                      },
+                      "type": "token",
+                    },
+                    Object {
+                      "token": Object {
+                        "text": "1",
+                        "type": "NUMBER",
+                        "value": "1",
+                        "whitespaceBefore": " ",
+                      },
+                      "type": "token",
+                    },
                   ],
                   "closeParen": ")",
-                  "hasWhitespaceBefore": false,
                   "openParen": "(",
                   "type": "parenthesis",
                 },
               ],
               "closeParen": ")",
-              "hasWhitespaceBefore": false,
               "openParen": "(",
               "type": "parenthesis",
             },
