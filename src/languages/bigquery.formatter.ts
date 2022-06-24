@@ -1,6 +1,6 @@
 import Formatter from 'src/core/Formatter';
 import Tokenizer from 'src/core/Tokenizer';
-import { EOF_TOKEN, TokenType, type Token } from 'src/core/token';
+import { EOF_TOKEN, isToken, TokenType, type Token } from 'src/core/token';
 import { dedupe } from 'src/utils';
 
 /**
@@ -884,7 +884,7 @@ function combineParameterizedTypes(tokens: Token[]) {
     const token = tokens[i];
     const nextToken = tokens[i + 1] || EOF_TOKEN;
 
-    if ((token.value === 'ARRAY' || token.value === 'STRUCT') && nextToken.value === '<') {
+    if ((isToken.ARRAY(token) || isToken.STRUCT(token)) && nextToken.value === '<') {
       const endIndex = findClosingAngleBracketIndex(tokens, i + 1);
       const typeDefTokens = tokens.slice(i, endIndex + 1);
       processed.push({
