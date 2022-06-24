@@ -76,7 +76,10 @@ export default class Parser {
   }
 
   private arraySubscript(): ArraySubscript | undefined {
-    if (this.look().type === TokenType.IDENT && this.look(1).value === '[') {
+    if (
+      (this.look().type === TokenType.RESERVED_KEYWORD || this.look().type === TokenType.IDENT) &&
+      this.look(1).value === '['
+    ) {
       return {
         type: 'array_subscript',
         arrayToken: this.next(),
