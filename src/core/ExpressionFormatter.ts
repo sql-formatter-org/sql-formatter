@@ -10,6 +10,7 @@ import {
   ArraySubscript,
   AstNode,
   BetweenPredicate,
+  BinaryClause,
   Clause,
   FunctionCall,
   LimitClause,
@@ -59,6 +60,9 @@ export default class ExpressionFormatter {
           break;
         case 'clause':
           this.formatClause(node);
+          break;
+        case 'binary_clause':
+          this.formatBinaryClause(node);
           break;
         case 'limit_clause':
           this.formatLimitClause(node);
@@ -137,6 +141,23 @@ export default class ExpressionFormatter {
     this.query.add(WS.SPACE);
   }
 
+  private formatBinaryClause(node: BinaryClause) {
+    const formattedSql = new ExpressionFormatter(this.cfg, this.params, { inline: this.inline })
+      .format(node.children)
+      .trimEnd();
+
+    this.indentation.decreaseTopLevel();
+    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken));
+
+    if (formattedSql.length > 0) {
+      formattedSql.split(/\n/).forEach(line => {
+        this.query.add(WS.NEWLINE, WS.INDENT, line);
+      });
+    }
+
+    this.query.add(WS.NEWLINE, WS.INDENT);
+  }
+
   private formatLimitClause(node: LimitClause) {
     this.indentation.decreaseTopLevel();
     this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.limitToken));
@@ -168,8 +189,6 @@ export default class ExpressionFormatter {
         return this.formatLineComment(token);
       case TokenType.BLOCK_COMMENT:
         return this.formatBlockComment(token);
-      case TokenType.RESERVED_BINARY_COMMAND:
-        return this.formatBinaryCommand(token);
       case TokenType.RESERVED_JOIN:
         return this.formatJoin(token);
       case TokenType.RESERVED_DEPENDENT_CLAUSE:
@@ -218,11 +237,6 @@ export default class ExpressionFormatter {
   /** Aligns comment to current indentation level */
   private indentComment(comment: string): string {
     return comment.replace(/\n[ \t]*/gu, '\n' + this.indentation.getIndent() + ' ');
-  }
-
-  private formatBinaryCommand(token: Token) {
-    this.indentation.decreaseTopLevel();
-    this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.NEWLINE, WS.INDENT);
   }
 
   private formatJoin(token: Token) {

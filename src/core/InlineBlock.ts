@@ -38,6 +38,7 @@ export default class InlineBlock {
           break;
         case 'clause':
         case 'limit_clause':
+        case 'binary_clause':
           return Infinity;
         case 'all_columns_asterisk':
           length += 1;
