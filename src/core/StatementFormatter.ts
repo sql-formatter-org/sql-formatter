@@ -84,11 +84,17 @@ export default class StatementFormatter {
         return this.formatCaseStart(token);
       case TokenType.RESERVED_CASE_END:
         return this.formatCaseEnd(token);
+      case TokenType.NAMED_PARAMETER:
+      case TokenType.QUOTED_PARAMETER:
+      case TokenType.INDEXED_PARAMETER:
+      case TokenType.POSITIONAL_PARAMETER:
       case TokenType.PARAMETER:
         return this.formatParameter(token);
+      case TokenType.COMMA:
       case TokenType.OPERATOR:
         return this.formatOperator(token);
       case TokenType.IDENTIFIER:
+      case TokenType.QUOTED_IDENTIFIER:
       case TokenType.STRING:
       case TokenType.NUMBER:
       case TokenType.VARIABLE:
