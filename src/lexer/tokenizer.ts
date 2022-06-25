@@ -72,6 +72,10 @@ export default class Tokenizer {
       [TokenType.BLOCK_START]: { match: regex.parenthesis(cfg.blockStart ?? ['(']) },
       [TokenType.BLOCK_END]: { match: regex.parenthesis(cfg.blockEnd ?? [')']) },
       [TokenType.QUOTED_IDENTIFIER]: { match: regex.string(cfg.identTypes) },
+      [TokenType.NUMBER]: {
+        match:
+          /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)/,
+      },
       [TokenType.OPERATOR]: {
         match: regex.operator('+-/*%&|^><=.;[]{}`:$@', [
           '<>',
@@ -80,10 +84,6 @@ export default class Tokenizer {
           '!=',
           ...(cfg.operators ?? []),
         ]),
-      },
-      [TokenType.NUMBER]: {
-        match:
-          /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)/,
       },
       [TokenType.RESERVED_CASE_START]: {
         match: /[Cc][Aa][Ss][Ee]\b/u,
