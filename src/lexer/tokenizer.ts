@@ -86,10 +86,10 @@ export default class Tokenizer {
           /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)/,
       },
       [TokenType.RESERVED_CASE_START]: {
-        match: /[Cc][Aa][Ss][Ee]/u,
+        match: /[Cc][Aa][Ss][Ee]\b/u,
         value: v => v.toUpperCase(),
       },
-      [TokenType.RESERVED_CASE_END]: { match: /[Ee][Nn][Dd]/u, value: v => v.toUpperCase() },
+      [TokenType.RESERVED_CASE_END]: { match: /[Ee][Nn][Dd]\b/u, value: v => v.toUpperCase() },
       [TokenType.RESERVED_COMMAND]: {
         match: regex.reservedWord(cfg.reservedCommands, cfg.identChars),
         value: v => v.toUpperCase(),
