@@ -17,7 +17,7 @@ import {
   Parenthesis,
 } from './ast';
 import { indentString } from './config';
-import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
+import WhitespaceBuilder, { LayoutItem, WS } from './WhitespaceBuilder';
 
 /** Formats a generic SQL expression */
 export default class ExpressionFormatter {
@@ -91,11 +91,7 @@ export default class ExpressionFormatter {
   private formatParenthesis(node: Parenthesis) {
     const inline = this.inlineBlock.isInlineBlock(node);
 
-    const subLayout = new ExpressionFormatter(this.cfg, this.params, {
-      inline,
-    })
-      .format(node.children)
-      .toLayout();
+    const subLayout = this.formatSubExpression(node.children, inline);
 
     if (inline) {
       this.query.add(node.openParen, ...subLayout, WS.NO_SPACE, node.closeParen, WS.SPACE);
@@ -124,9 +120,7 @@ export default class ExpressionFormatter {
   }
 
   private formatClause(node: Clause) {
-    const subLayout = new ExpressionFormatter(this.cfg, this.params, { inline: this.inline })
-      .format(node.children)
-      .toLayout();
+    const subLayout = this.formatSubExpression(node.children);
 
     this.indentation.decreaseTopLevel();
     this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
@@ -136,9 +130,7 @@ export default class ExpressionFormatter {
   }
 
   private formatBinaryClause(node: BinaryClause) {
-    const subLayout = new ExpressionFormatter(this.cfg, this.params, { inline: this.inline })
-      .format(node.children)
-      .toLayout();
+    const subLayout = this.formatSubExpression(node.children);
 
     this.indentation.decreaseTopLevel();
     this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
@@ -169,6 +161,10 @@ export default class ExpressionFormatter {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private formatAllColumnsAsterisk(node: AllColumnsAsterisk) {
     this.query.add('*', WS.SPACE);
+  }
+
+  private formatSubExpression(nodes: AstNode[], inline = this.inline): LayoutItem[] {
+    return new ExpressionFormatter(this.cfg, this.params, { inline }).format(nodes).toLayout();
   }
 
   private formatToken(token: Token): void {
