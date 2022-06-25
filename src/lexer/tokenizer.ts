@@ -71,7 +71,7 @@ export default class Tokenizer {
       [TokenType.COMMA]: { match: /[,]/ },
       [TokenType.BLOCK_START]: { match: regex.parenthesis(cfg.blockStart ?? ['(']) },
       [TokenType.BLOCK_END]: { match: regex.parenthesis(cfg.blockEnd ?? [')']) },
-      QUOTED_IDENTIFIER: { match: regex.string(cfg.identTypes) },
+      [TokenType.QUOTED_IDENTIFIER]: { match: regex.string(cfg.identTypes) },
       [TokenType.OPERATOR]: {
         match: regex.operator('+-/*%&|^><=.;[]{}`:$@', [
           '<>',
@@ -105,14 +105,14 @@ export default class Tokenizer {
       [TokenType.RESERVED_KEYWORD]: {
         match: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
       },
-      NAMED_PLACEHOLDER: {
+      [TokenType.NAMED_PARAMETER]: {
         match: regex.parameter(
           cfg.namedParamTypes ?? [],
           regex.identifierPattern(cfg.paramChars || cfg.identChars)
         ),
         value: v => v.slice(1),
       },
-      QUOTED_PLACEHOLDER: {
+      [TokenType.QUOTED_PARAMETER]: {
         match: regex.parameter(cfg.quotedParamTypes ?? [], regex.stringPattern(cfg.identTypes)),
         value: v =>
           (({ key, quoteChar }) =>
@@ -121,11 +121,11 @@ export default class Tokenizer {
             quoteChar: v.slice(-1),
           }),
       },
-      INDEXED_PLACEHOLDER: {
+      [TokenType.INDEXED_PARAMETER]: {
         match: regex.parameter(cfg.numberedParamTypes ?? [], '[0-9]+'),
         value: v => v.slice(1),
       },
-      POSITIONAL_PLACEHOLDER: {
+      [TokenType.POSITIONAL_PARAMETER]: {
         match: cfg.positionalParams ? /[?]/ : undefined,
         value: v => v.slice(1),
       },
