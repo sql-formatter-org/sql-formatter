@@ -12,6 +12,8 @@ export enum WS {
   SINGLE_INDENT = 6, // Adds whitespace for single indentation step
 }
 
+export type LayoutItem = WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | string;
+
 /**
  * API for constructing SQL string (especially the whitespace part).
  *
@@ -20,7 +22,7 @@ export enum WS {
  * Now it's storing items to array and builds the string only in the end.
  */
 export default class WhitespaceBuilder {
-  private layout: (WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | string)[] = [];
+  private layout: LayoutItem[] = [];
 
   constructor(private indentation: Indentation) {}
 
@@ -82,7 +84,7 @@ export default class WhitespaceBuilder {
     return this.layout.map(item => this.itemToString(item)).join('');
   }
 
-  private itemToString(item: WS | string) {
+  private itemToString(item: LayoutItem): string {
     switch (item) {
       case WS.SPACE:
         return ' ';
