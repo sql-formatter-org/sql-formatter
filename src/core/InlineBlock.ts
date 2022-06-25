@@ -36,6 +36,7 @@ export default class InlineBlock {
         case 'between_predicate':
           length += this.betweenWidth(node);
           break;
+        case 'clause':
         case 'limit_clause':
           return Infinity;
         case 'all_columns_asterisk':
@@ -67,7 +68,6 @@ export default class InlineBlock {
   // are not allowed inside inline parentheses block
   private isForbiddenToken(token: Token) {
     return (
-      token.type === TokenType.RESERVED_COMMAND ||
       token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
       token.type === TokenType.LINE_COMMENT ||
       token.type === TokenType.BLOCK_COMMENT ||

@@ -71,38 +71,40 @@ describe('Parser', () => {
         Object {
           "children": Array [
             Object {
-              "token": Object {
+              "children": Array [
+                Object {
+                  "nameToken": Object {
+                    "text": "SQRT",
+                    "type": "RESERVED_KEYWORD",
+                    "value": "SQRT",
+                    "whitespaceBefore": " ",
+                  },
+                  "parenthesis": Object {
+                    "children": Array [
+                      Object {
+                        "token": Object {
+                          "text": "2",
+                          "type": "NUMBER",
+                          "value": "2",
+                          "whitespaceBefore": "",
+                        },
+                        "type": "token",
+                      },
+                    ],
+                    "closeParen": ")",
+                    "openParen": "(",
+                    "type": "parenthesis",
+                  },
+                  "type": "function_call",
+                },
+              ],
+              "nameToken": Object {
                 "text": "SELECT",
                 "type": "RESERVED_COMMAND",
                 "value": "SELECT",
                 "whitespaceBefore": "",
               },
-              "type": "token",
-            },
-            Object {
-              "nameToken": Object {
-                "text": "SQRT",
-                "type": "RESERVED_KEYWORD",
-                "value": "SQRT",
-                "whitespaceBefore": " ",
-              },
-              "parenthesis": Object {
-                "children": Array [
-                  Object {
-                    "token": Object {
-                      "text": "2",
-                      "type": "NUMBER",
-                      "value": "2",
-                      "whitespaceBefore": "",
-                    },
-                    "type": "token",
-                  },
-                ],
-                "closeParen": ")",
-                "openParen": "(",
-                "type": "parenthesis",
-              },
-              "type": "function_call",
+              "type": "clause",
             },
           ],
           "type": "statement",
@@ -117,54 +119,56 @@ describe('Parser', () => {
         Object {
           "children": Array [
             Object {
-              "token": Object {
+              "children": Array [
+                Object {
+                  "arrayToken": Object {
+                    "text": "my_array",
+                    "type": "IDENT",
+                    "value": "my_array",
+                    "whitespaceBefore": " ",
+                  },
+                  "parenthesis": Object {
+                    "children": Array [
+                      Object {
+                        "nameToken": Object {
+                          "text": "OFFSET",
+                          "type": "IDENT",
+                          "value": "OFFSET",
+                          "whitespaceBefore": "",
+                        },
+                        "parenthesis": Object {
+                          "children": Array [
+                            Object {
+                              "token": Object {
+                                "text": "5",
+                                "type": "NUMBER",
+                                "value": "5",
+                                "whitespaceBefore": "",
+                              },
+                              "type": "token",
+                            },
+                          ],
+                          "closeParen": ")",
+                          "openParen": "(",
+                          "type": "parenthesis",
+                        },
+                        "type": "function_call",
+                      },
+                    ],
+                    "closeParen": "]",
+                    "openParen": "[",
+                    "type": "parenthesis",
+                  },
+                  "type": "array_subscript",
+                },
+              ],
+              "nameToken": Object {
                 "text": "SELECT",
                 "type": "RESERVED_COMMAND",
                 "value": "SELECT",
                 "whitespaceBefore": "",
               },
-              "type": "token",
-            },
-            Object {
-              "arrayToken": Object {
-                "text": "my_array",
-                "type": "IDENT",
-                "value": "my_array",
-                "whitespaceBefore": " ",
-              },
-              "parenthesis": Object {
-                "children": Array [
-                  Object {
-                    "nameToken": Object {
-                      "text": "OFFSET",
-                      "type": "IDENT",
-                      "value": "OFFSET",
-                      "whitespaceBefore": "",
-                    },
-                    "parenthesis": Object {
-                      "children": Array [
-                        Object {
-                          "token": Object {
-                            "text": "5",
-                            "type": "NUMBER",
-                            "value": "5",
-                            "whitespaceBefore": "",
-                          },
-                          "type": "token",
-                        },
-                      ],
-                      "closeParen": ")",
-                      "openParen": "(",
-                      "type": "parenthesis",
-                    },
-                    "type": "function_call",
-                  },
-                ],
-                "closeParen": "]",
-                "openParen": "[",
-                "type": "parenthesis",
-              },
-              "type": "array_subscript",
+              "type": "clause",
             },
           ],
           "type": "statement",
@@ -179,62 +183,60 @@ describe('Parser', () => {
         Object {
           "children": Array [
             Object {
-              "token": Object {
-                "text": "SELECT",
-                "type": "RESERVED_COMMAND",
-                "value": "SELECT",
-                "whitespaceBefore": "",
-              },
-              "type": "token",
-            },
-            Object {
               "children": Array [
-                Object {
-                  "token": Object {
-                    "text": "birth_year",
-                    "type": "IDENT",
-                    "value": "birth_year",
-                    "whitespaceBefore": "",
-                  },
-                  "type": "token",
-                },
-                Object {
-                  "token": Object {
-                    "text": "-",
-                    "type": "OPERATOR",
-                    "value": "-",
-                    "whitespaceBefore": " ",
-                  },
-                  "type": "token",
-                },
                 Object {
                   "children": Array [
                     Object {
                       "token": Object {
-                        "text": "CURRENT_DATE",
+                        "text": "birth_year",
                         "type": "IDENT",
-                        "value": "CURRENT_DATE",
+                        "value": "birth_year",
                         "whitespaceBefore": "",
                       },
                       "type": "token",
                     },
                     Object {
                       "token": Object {
-                        "text": "+",
+                        "text": "-",
                         "type": "OPERATOR",
-                        "value": "+",
+                        "value": "-",
                         "whitespaceBefore": " ",
                       },
                       "type": "token",
                     },
                     Object {
-                      "token": Object {
-                        "text": "1",
-                        "type": "NUMBER",
-                        "value": "1",
-                        "whitespaceBefore": " ",
-                      },
-                      "type": "token",
+                      "children": Array [
+                        Object {
+                          "token": Object {
+                            "text": "CURRENT_DATE",
+                            "type": "IDENT",
+                            "value": "CURRENT_DATE",
+                            "whitespaceBefore": "",
+                          },
+                          "type": "token",
+                        },
+                        Object {
+                          "token": Object {
+                            "text": "+",
+                            "type": "OPERATOR",
+                            "value": "+",
+                            "whitespaceBefore": " ",
+                          },
+                          "type": "token",
+                        },
+                        Object {
+                          "token": Object {
+                            "text": "1",
+                            "type": "NUMBER",
+                            "value": "1",
+                            "whitespaceBefore": " ",
+                          },
+                          "type": "token",
+                        },
+                      ],
+                      "closeParen": ")",
+                      "openParen": "(",
+                      "type": "parenthesis",
                     },
                   ],
                   "closeParen": ")",
@@ -242,9 +244,13 @@ describe('Parser', () => {
                   "type": "parenthesis",
                 },
               ],
-              "closeParen": ")",
-              "openParen": "(",
-              "type": "parenthesis",
+              "nameToken": Object {
+                "text": "SELECT",
+                "type": "RESERVED_COMMAND",
+                "value": "SELECT",
+                "whitespaceBefore": "",
+              },
+              "type": "clause",
             },
           ],
           "type": "statement",
@@ -259,49 +265,51 @@ describe('Parser', () => {
         Object {
           "children": Array [
             Object {
-              "token": Object {
+              "children": Array [
+                Object {
+                  "token": Object {
+                    "text": "age",
+                    "type": "IDENT",
+                    "value": "age",
+                    "whitespaceBefore": " ",
+                  },
+                  "type": "token",
+                },
+                Object {
+                  "andToken": Object {
+                    "text": "and",
+                    "type": "RESERVED_LOGICAL_OPERATOR",
+                    "value": "AND",
+                    "whitespaceBefore": " ",
+                  },
+                  "betweenToken": Object {
+                    "text": "BETWEEN",
+                    "type": "RESERVED_KEYWORD",
+                    "value": "BETWEEN",
+                    "whitespaceBefore": " ",
+                  },
+                  "expr1": Object {
+                    "text": "10",
+                    "type": "NUMBER",
+                    "value": "10",
+                    "whitespaceBefore": " ",
+                  },
+                  "expr2": Object {
+                    "text": "15",
+                    "type": "NUMBER",
+                    "value": "15",
+                    "whitespaceBefore": " ",
+                  },
+                  "type": "between_predicate",
+                },
+              ],
+              "nameToken": Object {
                 "text": "WHERE",
                 "type": "RESERVED_COMMAND",
                 "value": "WHERE",
                 "whitespaceBefore": "",
               },
-              "type": "token",
-            },
-            Object {
-              "token": Object {
-                "text": "age",
-                "type": "IDENT",
-                "value": "age",
-                "whitespaceBefore": " ",
-              },
-              "type": "token",
-            },
-            Object {
-              "andToken": Object {
-                "text": "and",
-                "type": "RESERVED_LOGICAL_OPERATOR",
-                "value": "AND",
-                "whitespaceBefore": " ",
-              },
-              "betweenToken": Object {
-                "text": "BETWEEN",
-                "type": "RESERVED_KEYWORD",
-                "value": "BETWEEN",
-                "whitespaceBefore": " ",
-              },
-              "expr1": Object {
-                "text": "10",
-                "type": "NUMBER",
-                "value": "10",
-                "whitespaceBefore": " ",
-              },
-              "expr2": Object {
-                "text": "15",
-                "type": "NUMBER",
-                "value": "15",
-                "whitespaceBefore": " ",
-              },
-              "type": "between_predicate",
+              "type": "clause",
             },
             Object {
               "token": Object {
@@ -385,16 +393,18 @@ describe('Parser', () => {
         Object {
           "children": Array [
             Object {
-              "token": Object {
+              "children": Array [
+                Object {
+                  "type": "all_columns_asterisk",
+                },
+              ],
+              "nameToken": Object {
                 "text": "SELECT",
                 "type": "RESERVED_COMMAND",
                 "value": "SELECT",
                 "whitespaceBefore": "",
               },
-              "type": "token",
-            },
-            Object {
-              "type": "all_columns_asterisk",
+              "type": "clause",
             },
           ],
           "type": "statement",

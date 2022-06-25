@@ -81,7 +81,7 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     ).toBe(dedent`
       SELECT
         a --comment
-      ,
+        ,
         b
     `);
   });

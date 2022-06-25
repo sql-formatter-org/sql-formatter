@@ -10,6 +10,7 @@ import {
   ArraySubscript,
   AstNode,
   BetweenPredicate,
+  Clause,
   FunctionCall,
   LimitClause,
   Parenthesis,
@@ -55,6 +56,9 @@ export default class ExpressionFormatter {
           break;
         case 'between_predicate':
           this.formatBetweenPredicate(node);
+          break;
+        case 'clause':
+          this.formatClause(node);
           break;
         case 'limit_clause':
           this.formatLimitClause(node);
@@ -115,10 +119,33 @@ export default class ExpressionFormatter {
     );
   }
 
+  private formatClause(node: Clause) {
+    const formattedSql = new ExpressionFormatter(this.cfg, this.params, { inline: this.inline })
+      .format(node.children)
+      .trimEnd();
+
+    this.indentation.decreaseTopLevel();
+    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken));
+    this.indentation.increaseTopLevel();
+
+    if (formattedSql.length > 0) {
+      formattedSql.split(/\n/).forEach(line => {
+        this.query.add(WS.NEWLINE, WS.INDENT, line);
+      });
+    }
+
+    this.query.add(WS.SPACE);
+  }
+
   private formatLimitClause(node: LimitClause) {
-    this.formatCommand(node.limitToken);
+    this.indentation.decreaseTopLevel();
+    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.limitToken));
+    this.indentation.increaseTopLevel();
+
     if (node.offsetToken) {
       this.query.add(
+        WS.NEWLINE,
+        WS.INDENT,
         this.show(node.offsetToken),
         ',',
         WS.SPACE,
@@ -126,7 +153,7 @@ export default class ExpressionFormatter {
         WS.SPACE
       );
     } else {
-      this.query.add(this.show(node.countToken), WS.SPACE);
+      this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.countToken), WS.SPACE);
     }
   }
 
@@ -141,8 +168,6 @@ export default class ExpressionFormatter {
         return this.formatLineComment(token);
       case TokenType.BLOCK_COMMENT:
         return this.formatBlockComment(token);
-      case TokenType.RESERVED_COMMAND:
-        return this.formatCommand(token);
       case TokenType.RESERVED_BINARY_COMMAND:
         return this.formatBinaryCommand(token);
       case TokenType.RESERVED_DEPENDENT_CLAUSE:
@@ -191,19 +216,6 @@ export default class ExpressionFormatter {
   /** Aligns comment to current indentation level */
   private indentComment(comment: string): string {
     return comment.replace(/\n[ \t]*/gu, '\n' + this.indentation.getIndent() + ' ');
-  }
-
-  /**
-   * Formats a Reserved Command onto query, increasing indentation level where necessary
-   */
-  private formatCommand(token: Token) {
-    this.indentation.decreaseTopLevel();
-
-    this.query.add(WS.NEWLINE, WS.INDENT);
-
-    this.indentation.increaseTopLevel();
-
-    this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
   }
 
   /**
