@@ -20,7 +20,7 @@ export enum WS {
  * Now it's storing items to array and builds the string only in the end.
  */
 export default class WhitespaceBuilder {
-  private query: (WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | string)[] = [];
+  private layout: (WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | string)[] = [];
 
   constructor(private indentation: Indentation) {}
 
@@ -31,7 +31,7 @@ export default class WhitespaceBuilder {
     for (const item of items) {
       switch (item) {
         case WS.SPACE:
-          this.query.push(WS.SPACE);
+          this.layout.push(WS.SPACE);
           break;
         case WS.NO_SPACE:
           this.trimHorizontalWhitespace();
@@ -45,33 +45,33 @@ export default class WhitespaceBuilder {
           break;
         case WS.INDENT:
           for (let i = 0; i < this.indentation.getLevel(); i++) {
-            this.query.push(WS.SINGLE_INDENT);
+            this.layout.push(WS.SINGLE_INDENT);
           }
           break;
         case WS.SINGLE_INDENT:
-          this.query.push(WS.SINGLE_INDENT);
+          this.layout.push(WS.SINGLE_INDENT);
           break;
         default:
-          this.query.push(item);
+          this.layout.push(item);
       }
     }
   }
 
   private trimHorizontalWhitespace() {
-    while (isHorizontalWhitespace(last(this.query))) {
-      this.query.pop();
+    while (isHorizontalWhitespace(last(this.layout))) {
+      this.layout.pop();
     }
   }
 
   private trimAllWhitespace() {
-    while (isWhitespace(last(this.query))) {
-      this.query.pop();
+    while (isWhitespace(last(this.layout))) {
+      this.layout.pop();
     }
   }
 
   private addNewline() {
-    if (this.query.length > 0 && last(this.query) !== WS.NEWLINE) {
-      this.query.push(WS.NEWLINE);
+    if (this.layout.length > 0 && last(this.layout) !== WS.NEWLINE) {
+      this.layout.push(WS.NEWLINE);
     }
   }
 
@@ -79,7 +79,7 @@ export default class WhitespaceBuilder {
    * Returns the final SQL string.
    */
   public toString(): string {
-    return this.query.map(item => this.itemToString(item)).join('');
+    return this.layout.map(item => this.itemToString(item)).join('');
   }
 
   private itemToString(item: WS | string) {
