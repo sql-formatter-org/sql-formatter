@@ -85,25 +85,34 @@ export default class Tokenizer {
         match:
           /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)/,
       },
-      [TokenType.RESERVED_CASE_START]: { match: /[Cc][Aa][Ss][Ee]/u },
-      [TokenType.RESERVED_CASE_END]: { match: /[Ee][Nn][Dd]/u },
+      [TokenType.RESERVED_CASE_START]: {
+        match: /[Cc][Aa][Ss][Ee]/u,
+        value: v => v.toUpperCase(),
+      },
+      [TokenType.RESERVED_CASE_END]: { match: /[Ee][Nn][Dd]/u, value: v => v.toUpperCase() },
       [TokenType.RESERVED_COMMAND]: {
         match: regex.reservedWord(cfg.reservedCommands, cfg.identChars),
+        value: v => v.toUpperCase(),
       },
       [TokenType.RESERVED_BINARY_COMMAND]: {
         match: regex.reservedWord(cfg.reservedBinaryCommands, cfg.identChars),
+        value: v => v.toUpperCase(),
       },
       [TokenType.RESERVED_DEPENDENT_CLAUSE]: {
         match: regex.reservedWord(cfg.reservedDependentClauses, cfg.identChars),
-      },
-      [TokenType.RESERVED_LOGICAL_OPERATOR]: {
-        match: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
-      },
-      [TokenType.RESERVED_JOIN_CONDITION]: {
-        match: regex.reservedWord(cfg.reservedJoinConditions ?? ['ON', 'USING'], cfg.identChars),
+        value: v => v.toUpperCase(),
       },
       [TokenType.RESERVED_KEYWORD]: {
         match: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
+        value: v => v.toUpperCase(),
+      },
+      [TokenType.RESERVED_LOGICAL_OPERATOR]: {
+        match: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
+        value: v => v.toUpperCase(),
+      },
+      [TokenType.RESERVED_JOIN_CONDITION]: {
+        match: regex.reservedWord(cfg.reservedJoinConditions ?? ['ON', 'USING'], cfg.identChars),
+        value: v => v.toUpperCase(),
       },
       [TokenType.NAMED_PARAMETER]: {
         match: regex.parameter(
