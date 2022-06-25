@@ -125,22 +125,17 @@ export default class ExpressionFormatter {
   }
 
   private formatClause(node: Clause) {
-    const formattedSql = new ExpressionFormatter(this.cfg, this.params, { inline: this.inline })
+    const subLayout = new ExpressionFormatter(this.cfg, this.params, { inline: this.inline })
       .format(node.children)
-      .toString()
-      .trimEnd();
+      .toLayout();
 
     this.indentation.decreaseTopLevel();
-    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken));
+    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
     this.indentation.increaseTopLevel();
 
-    if (formattedSql.length > 0) {
-      formattedSql.split(/\n/).forEach(line => {
-        this.query.add(WS.NEWLINE, WS.INDENT, line);
-      });
+    if (subLayout.length > 0) {
+      this.query.addLayout(subLayout);
     }
-
-    this.query.add(WS.SPACE);
   }
 
   private formatBinaryClause(node: BinaryClause) {
