@@ -270,9 +270,6 @@ export default class ExpressionFormatter {
     if (token.value === ',') {
       this.formatComma(token);
       return;
-    } else if (token.value === ';') {
-      this.formatQuerySeparator(token);
-      return;
     } else if (token.value === ':') {
       this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);
       return;
@@ -330,14 +327,6 @@ export default class ExpressionFormatter {
       this.query.add(WS.NO_SPACE, this.show(token), WS.NEWLINE, WS.INDENT);
     } else {
       this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);
-    }
-  }
-
-  private formatQuerySeparator(token: Token) {
-    if (this.cfg.newlineBeforeSemicolon) {
-      this.query.add(WS.NEWLINE, this.show(token));
-    } else {
-      this.query.add(WS.NO_SPACE, this.show(token));
     }
   }
 
