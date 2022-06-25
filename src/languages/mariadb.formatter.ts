@@ -1,5 +1,6 @@
 import Formatter from 'src/core/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+// import Tokenizer from 'src/core/Tokenizer';
+import Tokenizer from 'src/lexer/tokenizer';
 import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/core/token';
 import { dedupe } from 'src/utils';
 
@@ -1169,19 +1170,19 @@ export default class MariaDbFormatter extends Formatter {
       identChars: { first: '$', rest: '$' },
       variableTypes: [
         { regex: '@[A-Za-z0-9_.$]+' },
-        { quote: '""', prefixes: ['@'], required: true },
-        { quote: "''", prefixes: ['@'], required: true },
-        { quote: '``', prefixes: ['@'], required: true },
+        { quote: '""', prefixes: ['@'], requirePrefix: true },
+        { quote: "''", prefixes: ['@'], requirePrefix: true },
+        { quote: '``', prefixes: ['@'], requirePrefix: true },
       ],
       positionalParams: true,
       lineCommentTypes: ['--', '#'],
       operators: MariaDbFormatter.operators,
-      preprocess,
+      postProcess,
     });
   }
 }
 
-function preprocess(tokens: Token[]) {
+function postProcess(tokens: Token[]) {
   return tokens.map((token, i) => {
     const nextToken = tokens[i + 1] || EOF_TOKEN;
     if (isToken.SET(token) && nextToken.value === '(') {

@@ -1,5 +1,6 @@
 import Formatter from 'src/core/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+// import Tokenizer from 'src/core/Tokenizer';
+import Tokenizer from 'src/lexer/tokenizer';
 import { EOF_TOKEN, type Token } from 'src/core/token';
 import { dedupe } from 'src/utils';
 
@@ -853,12 +854,12 @@ export default class BigQueryFormatter extends Formatter {
       quotedParamTypes: ['@'],
       lineCommentTypes: ['--', '#'],
       operators: BigQueryFormatter.operators,
-      preprocess,
+      postProcess,
     });
   }
 }
 
-function preprocess(tokens: Token[]) {
+function postProcess(tokens: Token[]) {
   const processed: Token[] = [];
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];

@@ -51,13 +51,14 @@ interface TokenizerOptions {
   // Allows custom modifications on the token array.
   // Called after the whole input string has been split into tokens.
   // The result of this will be the output of the tokenizer.
-  preprocess?: (tokens: Token[]) => Token[];
+  postProcess?: (tokens: Token[]) => Token[];
 }
 
 export default class Tokenizer {
   // LEXER_OPTIONS: Record<keyof typeof TokenType | 'WS' | 'NL', moo.Rule>;
   LEXER_OPTIONS: { [key: string]: moo.Rule };
   LEXER: moo.Lexer;
+  postProcessor?: (tokens: Token[]) => Token[];
 
   constructor(cfg: TokenizerOptions) {
     this.LEXER_OPTIONS = {
@@ -158,11 +159,19 @@ export default class Tokenizer {
     );
 
     this.LEXER = moo.compile(this.LEXER_OPTIONS);
+
+    this.postProcessor = cfg.postProcess;
   }
 
   tokenize(input: string): moo.Token[] {
     this.LEXER.reset(input);
     return Array.from(this.LEXER);
+  }
+
+  tempTokenize(input: string) {
+    const mooTokens = this.tokenize(input);
+    const oldTokens = tokenConverter(mooTokens);
+    return this.postProcessor ? this.postProcessor(oldTokens) : oldTokens;
   }
 }
 

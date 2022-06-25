@@ -1,5 +1,6 @@
 import Formatter from 'src/core/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+// import Tokenizer from 'src/core/Tokenizer';
+import Tokenizer from 'src/lexer/tokenizer';
 import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/core/token';
 import { dedupe } from 'src/utils';
 
@@ -793,14 +794,14 @@ export default class SparkFormatter extends Formatter {
       blockEnd: [')', ']'],
       stringTypes: [{ quote: "''", prefixes: ['X'] }],
       identTypes: ['``'],
-      variableTypes: [{ quote: '{}', prefixes: ['$'], required: true }],
+      variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
       operators: SparkFormatter.operators,
-      preprocess,
+      postProcess,
     });
   }
 }
 
-function preprocess(tokens: Token[]) {
+function postProcess(tokens: Token[]) {
   return tokens.map((token, i) => {
     const prevToken = tokens[i - 1] || EOF_TOKEN;
     const nextToken = tokens[i + 1] || EOF_TOKEN;

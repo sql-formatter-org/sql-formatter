@@ -1,6 +1,7 @@
 import type { FormatOptions } from 'src/types';
+import Tokenizer from 'src/lexer/tokenizer';
 import Params from './Params';
-import Tokenizer from './Tokenizer';
+// import Tokenizer from './Tokenizer';
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
 import AsTokenFactory from './AsTokenFactory';
@@ -32,7 +33,8 @@ export default class Formatter {
    * @return {string} The formatter query
    */
   public format(query: string): string {
-    const tokens = this.tokenizer().tokenize(query);
+    // const tokens = this.tokenizer().tokenize(query);
+    const tokens = this.tokenizer().tempTokenize(query);
     const ast = new Parser(tokens).parse();
     const formattedQuery = this.formatAst(ast, tokens);
     const finalQuery = this.postFormat(formattedQuery);

@@ -1,5 +1,6 @@
 import Formatter from 'src/core/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+// import Tokenizer from 'src/core/Tokenizer';
+import Tokenizer from 'src/lexer/tokenizer';
 import { dedupe } from 'src/utils';
 
 /**
@@ -628,7 +629,7 @@ export default class HiveFormatter extends Formatter {
       blockEnd: [')', ']'],
       stringTypes: ['""', "''"],
       identTypes: ['``'],
-      variableTypes: [{ quote: '{}', prefixes: ['$'], required: true }],
+      variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
       operators: HiveFormatter.operators,
     });
   }
