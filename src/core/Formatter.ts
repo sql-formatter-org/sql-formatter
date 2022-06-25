@@ -54,8 +54,21 @@ export default class Formatter {
 
   private formatAst(statements: Statement[]): string {
     return statements
-      .map(stat => new ExpressionFormatter(this.cfg, this.params).format(stat.children))
+      .map(stat => this.formatStatement(stat))
       .join('\n'.repeat(this.cfg.linesBetweenQueries + 1));
+  }
+
+  private formatStatement(statement: Statement): string {
+    const sql = new ExpressionFormatter(this.cfg, this.params).format(statement.children);
+    if (!statement.hasSemicolon) {
+      return sql;
+    } else if (sql.trimEnd() === '') {
+      return ';';
+    } else if (this.cfg.newlineBeforeSemicolon) {
+      return sql.trimEnd() + '\n;';
+    } else {
+      return sql.trimEnd() + ';';
+    }
   }
 
   private postFormat(query: string): string {

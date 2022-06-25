@@ -15,8 +15,7 @@ import {
 import { EOF_TOKEN, type Token, TokenType, isToken } from './token';
 
 /**
- * A rudimentary parser that slices token stream into list of SQL statements
- * and groups of parenthesis.
+ * A simple parser that creates a very rudimentary syntax tree.
  */
 export default class Parser {
   private index = 0;
@@ -36,11 +35,11 @@ export default class Parser {
     const children: AstNode[] = [];
     while (true) {
       if (this.look().value === ';') {
-        children.push(this.nextTokenNode());
-        return { type: 'statement', children };
+        this.next();
+        return { type: 'statement', children, hasSemicolon: true };
       } else if (this.look().type === TokenType.EOF) {
         if (children.length > 0) {
-          return { type: 'statement', children };
+          return { type: 'statement', children, hasSemicolon: false };
         } else {
           return undefined;
         }
