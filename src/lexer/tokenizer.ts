@@ -63,8 +63,8 @@ export default class Tokenizer {
   constructor(cfg: TokenizerOptions) {
     this.LEXER_OPTIONS = {
       WS: { match: /[ \t]+/ },
-      NL: { match: /\n/, lineBreaks: true },
-      [TokenType.BLOCK_COMMENT]: { match: /(?:\/\*[^]*?(?:\*\/|$))/, lineBreaks: true },
+      NL: { match: /\n|(?:\r\n)/, lineBreaks: true },
+      [TokenType.BLOCK_COMMENT]: { match: /(?:\/\*[^]*?\*\/)|(?:\/\*[^]*$)/, lineBreaks: true },
       [TokenType.LINE_COMMENT]: {
         match: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
       },
