@@ -1,6 +1,6 @@
 /** Token type enum for all possible Token categories */
 export enum TokenType {
-  IDENT = 'IDENT',
+  IDENTIFIER = 'IDENTIFIER',
   STRING = 'STRING',
   VARIABLE = 'VARIABLE',
   RESERVED_KEYWORD = 'RESERVED_KEYWORD',

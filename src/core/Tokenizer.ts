@@ -79,7 +79,7 @@ export default class Tokenizer {
     this.quotedIdentRegex = regexFactory.createQuoteRegex(cfg.identTypes);
 
     this.REGEX_MAP = {
-      [TokenType.IDENT]: regexFactory.createIdentRegex(cfg.identChars),
+      [TokenType.IDENTIFIER]: regexFactory.createIdentRegex(cfg.identChars),
       [TokenType.STRING]: regexFactory.createQuoteRegex(cfg.stringTypes),
       [TokenType.VARIABLE]: cfg.variableTypes
         ? regexFactory.createVariableRegex(cfg.variableTypes)
@@ -215,7 +215,7 @@ export default class Tokenizer {
       this.matchPlaceholderToken(input) ||
       this.matchToken(TokenType.NUMBER, input) ||
       this.matchReservedWordToken(input, previousToken) ||
-      this.matchToken(TokenType.IDENT, input) ||
+      this.matchToken(TokenType.IDENTIFIER, input) ||
       this.matchToken(TokenType.OPERATOR, input)
     );
   }
@@ -247,7 +247,7 @@ export default class Tokenizer {
     return this.match({
       input,
       regex: this.quotedIdentRegex,
-      type: TokenType.IDENT,
+      type: TokenType.IDENTIFIER,
       transform: id,
     });
   }

@@ -133,7 +133,7 @@ export default class Tokenizer {
         match: cfg.variableTypes ? regex.variable(cfg.variableTypes) : NULL_REGEX,
       },
       [TokenType.STRING]: { match: regex.string(cfg.stringTypes) },
-      [TokenType.IDENT]: {
+      [TokenType.IDENTIFIER]: {
         match: regex.identifier(cfg.identChars),
         // type: moo.keywords({ [TokenType.RESERVED_COMMAND]: cfg.reservedCommands }), // case sensitivity currently broken, see moo#122
       },

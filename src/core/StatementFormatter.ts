@@ -88,7 +88,7 @@ export default class StatementFormatter {
         return this.formatParameter(token);
       case TokenType.OPERATOR:
         return this.formatOperator(token);
-      case TokenType.IDENT:
+      case TokenType.IDENTIFIER:
       case TokenType.STRING:
       case TokenType.NUMBER:
       case TokenType.VARIABLE:
