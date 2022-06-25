@@ -40,7 +40,7 @@ export default class ExpressionFormatter {
     this.query = new WhitespaceBuilder(this.indentation);
   }
 
-  public format(nodes: AstNode[]): string {
+  public format(nodes: AstNode[]): WhitespaceBuilder {
     this.nodes = nodes;
 
     for (this.index = 0; this.index < this.nodes.length; this.index++) {
@@ -75,7 +75,7 @@ export default class ExpressionFormatter {
           break;
       }
     }
-    return this.query.toString();
+    return this.query;
   }
 
   private formatFunctionCall(node: FunctionCall) {
@@ -95,6 +95,7 @@ export default class ExpressionFormatter {
       inline,
     })
       .format(node.children)
+      .toString()
       .trimEnd();
 
     if (inline) {
@@ -126,6 +127,7 @@ export default class ExpressionFormatter {
   private formatClause(node: Clause) {
     const formattedSql = new ExpressionFormatter(this.cfg, this.params, { inline: this.inline })
       .format(node.children)
+      .toString()
       .trimEnd();
 
     this.indentation.decreaseTopLevel();
@@ -144,6 +146,7 @@ export default class ExpressionFormatter {
   private formatBinaryClause(node: BinaryClause) {
     const formattedSql = new ExpressionFormatter(this.cfg, this.params, { inline: this.inline })
       .format(node.children)
+      .toString()
       .trimEnd();
 
     this.indentation.decreaseTopLevel();
