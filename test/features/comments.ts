@@ -56,8 +56,7 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     `);
   });
 
-  // XXX: Temporarily disabled. Fix this!
-  it.skip('formats line comments followed by semicolon', () => {
+  it('formats line comments followed by semicolon', () => {
     expect(
       format(`
       SELECT a FROM b
