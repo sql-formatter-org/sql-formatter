@@ -59,7 +59,9 @@ export default class Formatter {
   }
 
   private formatStatement(statement: Statement): string {
-    const sql = new ExpressionFormatter(this.cfg, this.params).format(statement.children);
+    const sql = new ExpressionFormatter(this.cfg, this.params)
+      .format(statement.children)
+      .toString();
     if (!statement.hasSemicolon) {
       return sql;
     } else if (sql.trimEnd() === '') {
