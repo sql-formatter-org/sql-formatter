@@ -170,6 +170,8 @@ export default class ExpressionFormatter {
         return this.formatBlockComment(token);
       case TokenType.RESERVED_BINARY_COMMAND:
         return this.formatBinaryCommand(token);
+      case TokenType.RESERVED_JOIN:
+        return this.formatJoin(token);
       case TokenType.RESERVED_DEPENDENT_CLAUSE:
         return this.formatDependentClause(token);
       case TokenType.RESERVED_JOIN_CONDITION:
@@ -218,20 +220,13 @@ export default class ExpressionFormatter {
     return comment.replace(/\n[ \t]*/gu, '\n' + this.indentation.getIndent() + ' ');
   }
 
-  /**
-   * Formats a Reserved Binary Command onto query, joining neighbouring tokens
-   */
   private formatBinaryCommand(token: Token) {
-    const isJoin = /JOIN/i.test(token.value); // check if token contains JOIN
-    if (!isJoin) {
-      // decrease for boolean set operators
-      this.indentation.decreaseTopLevel();
-    }
-    if (isJoin) {
-      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
-    } else {
-      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.NEWLINE, WS.INDENT);
-    }
+    this.indentation.decreaseTopLevel();
+    this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.NEWLINE, WS.INDENT);
+  }
+
+  private formatJoin(token: Token) {
+    this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
   }
 
   /**
