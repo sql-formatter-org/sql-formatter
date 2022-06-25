@@ -229,12 +229,20 @@ export default class ExpressionFormatter {
 
   /** Formats a block comment onto query */
   private formatBlockComment(token: Token) {
-    this.query.add(WS.NEWLINE, WS.INDENT, this.indentComment(token.value), WS.NEWLINE, WS.INDENT);
+    this.splitBlockComment(token.value).forEach(line => {
+      this.query.add(WS.NEWLINE, WS.INDENT, line);
+    });
+    this.query.add(WS.NEWLINE, WS.INDENT);
   }
 
-  /** Aligns comment to current indentation level */
-  private indentComment(comment: string): string {
-    return comment.replace(/\n[ \t]*/gu, '\n' + this.indentation.getIndent() + ' ');
+  private splitBlockComment(comment: string): string[] {
+    return comment.split(/\n/).map(line => {
+      if (/^\s*\*/.test(line)) {
+        return ' ' + line.replace(/^\s*/, '');
+      } else {
+        return line.replace(/^\s*/, '');
+      }
+    });
   }
 
   private formatJoin(token: Token) {
