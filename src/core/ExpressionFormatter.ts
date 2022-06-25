@@ -91,21 +91,20 @@ export default class ExpressionFormatter {
   private formatParenthesis(node: Parenthesis) {
     const inline = this.inlineBlock.isInlineBlock(node);
 
-    const formattedSql = new ExpressionFormatter(this.cfg, this.params, {
+    const subLayout = new ExpressionFormatter(this.cfg, this.params, {
       inline,
     })
       .format(node.children)
-      .toString()
-      .trimEnd();
+      .toLayout();
 
     if (inline) {
-      this.query.add(node.openParen, formattedSql, node.closeParen, WS.SPACE);
+      this.query.add(node.openParen, ...subLayout, WS.NO_SPACE, node.closeParen, WS.SPACE);
     } else {
-      this.query.add(node.openParen);
+      this.query.add(node.openParen, WS.NEWLINE);
 
-      formattedSql.split(/\n/).forEach(line => {
-        this.query.add(WS.NEWLINE, WS.INDENT, WS.SINGLE_INDENT, line);
-      });
+      this.indentation.increaseBlockLevel();
+      this.query.addLayout(subLayout);
+      this.indentation.decreaseBlockLevel();
 
       this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
     }
