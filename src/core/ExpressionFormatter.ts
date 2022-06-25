@@ -133,9 +133,7 @@ export default class ExpressionFormatter {
     this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
     this.indentation.increaseTopLevel();
 
-    if (subLayout.length > 0) {
-      this.query.addLayout(subLayout);
-    }
+    this.query.addLayout(subLayout);
   }
 
   private formatBinaryClause(node: BinaryClause) {
@@ -146,11 +144,7 @@ export default class ExpressionFormatter {
     this.indentation.decreaseTopLevel();
     this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
 
-    if (subLayout.length > 0) {
-      this.query.addLayout(subLayout);
-    }
-
-    this.query.add(WS.NEWLINE, WS.INDENT);
+    this.query.addLayout(subLayout);
   }
 
   private formatLimitClause(node: LimitClause) {
