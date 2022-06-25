@@ -8,6 +8,7 @@ import ExpressionFormatter from './ExpressionFormatter';
 import { indentString } from './config';
 import AliasAs from './AliasAs';
 import { Statement } from './ast';
+import { WS } from './WhitespaceBuilder';
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {
@@ -59,18 +60,15 @@ export default class Formatter {
   }
 
   private formatStatement(statement: Statement): string {
-    const sql = new ExpressionFormatter(this.cfg, this.params)
-      .format(statement.children)
-      .toString();
+    const wsBuilder = new ExpressionFormatter(this.cfg, this.params).format(statement.children);
     if (!statement.hasSemicolon) {
-      return sql;
-    } else if (sql.trimEnd() === '') {
-      return ';';
+      // do nothing
     } else if (this.cfg.newlineBeforeSemicolon) {
-      return sql.trimEnd() + '\n;';
+      wsBuilder.add(WS.NEWLINE, ';');
     } else {
-      return sql.trimEnd() + ';';
+      wsBuilder.add(WS.NO_SPACE, ';');
     }
+    return wsBuilder.toString();
   }
 
   private postFormat(query: string): string {
