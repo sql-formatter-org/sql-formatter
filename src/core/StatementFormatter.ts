@@ -326,6 +326,7 @@ export default class StatementFormatter {
       TokenType.BLOCK_START,
       TokenType.LINE_COMMENT,
       TokenType.OPERATOR,
+      TokenType.COMMA,
     ];
     if (
       token.whitespaceBefore?.length === 0 &&
