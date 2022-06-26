@@ -10,7 +10,7 @@ describe('sqlFormatter', () => {
   it('throws error when encountering unsupported characters', () => {
     expect(() => {
       format('SELECT «weird-stuff»');
-    }).toThrow('Parse error: Unexpected "«weird-stuff»"');
+    }).toThrow();
   });
 
   it('does nothing with empty input', () => {
