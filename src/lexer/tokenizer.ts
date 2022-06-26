@@ -76,15 +76,6 @@ export default class Tokenizer {
         match:
           /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)/,
       },
-      [TokenType.OPERATOR]: {
-        match: regex.operator('+-/*%&|^><=.;[]{}`:$@', [
-          '<>',
-          '<=',
-          '>=',
-          '!=',
-          ...(cfg.operators ?? []),
-        ]),
-      },
       [TokenType.RESERVED_CASE_START]: {
         match: /[Cc][Aa][Ss][Ee]\b/u,
         value: v => v.toUpperCase(),
@@ -139,6 +130,15 @@ export default class Tokenizer {
       },
       [TokenType.VARIABLE]: {
         match: cfg.variableTypes ? regex.variable(cfg.variableTypes) : NULL_REGEX,
+      },
+      [TokenType.OPERATOR]: {
+        match: regex.operator('+-/*%&|^><=.;[]{}`:$@', [
+          '<>',
+          '<=',
+          '>=',
+          '!=',
+          ...(cfg.operators ?? []),
+        ]),
       },
       [TokenType.STRING]: { match: regex.string(cfg.stringTypes) },
       [TokenType.IDENTIFIER]: {
