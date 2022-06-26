@@ -25,3 +25,9 @@ export const equalizeWhitespace = (s: string) => s.replace(/\s+/gu, ' ');
 
 // identity function
 export const id = <T>(x: T) => x;
+
+// object deep comparison
+export const objectEquals = (x: any, y: any): boolean =>
+  x && y && typeof x === 'object' && typeof x === 'object' && typeof x === typeof y
+    ? Object.keys(x).every(k => objectEquals(x[k], y[k]))
+    : x === y;
