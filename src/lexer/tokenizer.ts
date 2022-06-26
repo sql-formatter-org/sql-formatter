@@ -196,7 +196,19 @@ export const tokenConverter = (tokens: moo.Token[]): Token[] => {
         break;
       }
     }
+
+    // skip trailing whitespace
+    if (i >= tokens.length) {
+      break;
+    }
+
     const token = tokens[i];
+
+    // lookbehind logic from old Tokenizer for tbl.col syntax
+    if (token.type?.startsWith('RESERVED') && tokens[i - 1]?.value === '.') {
+      token.type = TokenType.IDENTIFIER;
+      token.value = token.text;
+    }
 
     outTokens.push({
       type: token.type as TokenType,
