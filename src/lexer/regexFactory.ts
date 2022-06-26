@@ -15,7 +15,7 @@ import {
  * @param {string[]} lineCommentTypes - list of character strings that denote line comments
  */
 export const lineComment = (lineCommentTypes: string[]) =>
-  new RegExp(`(?:${lineCommentTypes.map(escapeRegExp).join('|')}.*?)(?=\r\n|\r|\n|$)`, 'u');
+  new RegExp(`(?:${lineCommentTypes.map(escapeRegExp).join('|')}).*?(?=\r\n|\r|\n|$)`, 'u');
 
 /**
  * Builds a RegExp for matching parenthesis patterns, escaping them with `escapeParen`
