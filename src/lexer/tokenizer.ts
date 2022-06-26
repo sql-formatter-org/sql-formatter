@@ -136,7 +136,6 @@ export default class Tokenizer {
       },
       [TokenType.POSITIONAL_PARAMETER]: {
         match: cfg.positionalParams ? /[?]/ : undefined,
-        value: v => v.slice(1),
       },
       [TokenType.VARIABLE]: {
         match: cfg.variableTypes ? regex.variable(cfg.variableTypes) : NULL_REGEX,
