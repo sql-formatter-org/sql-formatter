@@ -55,8 +55,15 @@ interface TokenizerOptions {
 }
 
 export default class Tokenizer {
-  // LEXER_OPTIONS: Record<keyof typeof TokenType | 'WS' | 'NL', moo.Rule>;
-  LEXER_OPTIONS: { [key: string]: moo.Rule };
+  LEXER_OPTIONS: Record<
+    | Exclude<
+        keyof typeof TokenType,
+        typeof TokenType.PARAMETER | typeof TokenType.EOF | 'PARAMETER' | 'EOF'
+      >
+    | 'WS'
+    | 'NL',
+    moo.Rule
+  >;
   LEXER: moo.Lexer;
   postProcessor?: (tokens: Token[]) => Token[];
 
@@ -163,7 +170,7 @@ export default class Tokenizer {
               },
             }
           : rules,
-      {} as { [key: string]: moo.Rule }
+      {} as typeof this.LEXER_OPTIONS
     );
 
     this.LEXER = moo.compile(this.LEXER_OPTIONS);
@@ -179,6 +186,7 @@ export default class Tokenizer {
   tempTokenize(input: string) {
     const mooTokens = this.tokenize(input);
     const oldTokens = tokenConverter(mooTokens);
+
     return this.postProcessor ? this.postProcessor(oldTokens) : oldTokens;
   }
 }
