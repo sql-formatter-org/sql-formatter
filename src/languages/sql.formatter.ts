@@ -1,5 +1,4 @@
 import Formatter from 'src/core/Formatter';
-// import Tokenizer from 'src/core/Tokenizer';
 import Tokenizer from 'src/lexer/tokenizer';
 import { dedupe } from 'src/utils';
 
