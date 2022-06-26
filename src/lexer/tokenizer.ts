@@ -209,11 +209,18 @@ export const tokenConverter = (tokens: moo.Token[]): Token[] => {
       token.value = token.text;
     }
 
+    let outKey; // add key to token instead of value
+    if (token.type?.includes('PARAMETER') && token.type !== TokenType.POSITIONAL_PARAMETER) {
+      outKey = token.value;
+      token.value = token.text;
+    }
+
     outTokens.push({
       type: token.type as TokenType,
       text: token.text,
       value: token.value,
       whitespaceBefore: whitespace,
+      key: outKey,
     });
   }
   return outTokens;
