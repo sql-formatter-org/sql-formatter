@@ -28,6 +28,6 @@ export const id = <T>(x: T) => x;
 
 // object deep comparison
 export const objectEquals = (x: any, y: any): boolean =>
-  x && y && typeof x === 'object' && typeof x === 'object' && typeof x === typeof y
+  x && y && typeof x === 'object' && typeof y === 'object' && typeof x === typeof y
     ? Object.keys(x).every(k => objectEquals(x[k], y[k]))
     : x === y;
