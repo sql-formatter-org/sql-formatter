@@ -1,6 +1,6 @@
 import Formatter from 'src/core/Formatter';
-import Tokenizer from 'src/lexer/tokenizer';
-import { EOF_TOKEN, type Token } from 'src/core/token';
+import Tokenizer from 'src/lexer/Tokenizer';
+import { EOF_TOKEN, TokenType, type Token } from 'src/core/token';
 import { dedupe } from 'src/utils';
 
 /**
@@ -832,10 +832,9 @@ export default class BigQueryFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedDependentClauses,
-      reservedKeywords: dedupe([
-        ...Object.values(reservedFunctions).reduce((acc, arr) => acc.concat(arr), []),
-        ...Object.values(reservedKeywords).reduce((acc, arr) => acc.concat(arr), []),
-      ]),
+      reservedKeywords: dedupe(
+        Object.values(reservedFunctions).flat().concat(Object.values(reservedKeywords).flat())
+      ),
       blockStart: ['(', '['],
       blockEnd: [')', ']'],
       stringTypes: [
@@ -858,7 +857,27 @@ export default class BigQueryFormatter extends Formatter {
   }
 }
 
-function postProcess(tokens: Token[]) {
+function postProcess(tokens: Token[]): Token[] {
+  return detectArraySubscripts(combineParameterizedTypes(tokens));
+}
+
+// Converts OFFSET token inside array from RESERVED_COMMAND to RESERVED_KEYWORD
+// See: https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators#array_subscript_operator
+function detectArraySubscripts(tokens: Token[]) {
+  let prevToken = EOF_TOKEN;
+  return tokens.map(token => {
+    if (token.value === 'OFFSET' && prevToken.value === '[') {
+      prevToken = token;
+      return { ...token, type: TokenType.RESERVED_KEYWORD };
+    } else {
+      prevToken = token;
+      return token;
+    }
+  });
+}
+
+// Combines multiple tokens forming a parameterized type like STRUCT<ARRAY<INT64>> into a single token
+function combineParameterizedTypes(tokens: Token[]) {
   const processed: Token[] = [];
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];

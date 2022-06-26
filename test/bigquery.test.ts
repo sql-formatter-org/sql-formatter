@@ -21,7 +21,7 @@ describe('BigQueryFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
-  supportsComments(format, { hashComments: true, skipTrickyCommentsTest: true });
+  supportsComments(format, { hashComments: true });
   supportsCreateTable(format);
   supportsDeleteFrom(format);
   supportsStrings(format, ['""', "''"]);
@@ -33,16 +33,6 @@ describe('BigQueryFormatter', () => {
   supportsOperators(format, BigQueryFormatter.operators);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
 
-  it('supports # line comment', () => {
-    const result = format('SELECT alpha # commment\nFROM beta');
-    expect(result).toBe(dedent`
-      SELECT
-        alpha # commment
-      FROM
-        beta
-    `);
-  });
-
   // Note: BigQuery supports single dashes inside identifiers, so my-ident would be
   // detected as identifier, while other SQL dialects would detect it as
   // "my" <minus> "ident"
@@ -53,16 +43,6 @@ describe('BigQueryFormatter', () => {
       SELECT
         alpha-foo,
         where-long-identifier
-      FROM
-        beta
-    `);
-  });
-
-  it('treats repeated dashes as comments', () => {
-    const result = format('SELECT alpha--foo, where-long-identifier\nFROM beta');
-    expect(result).toBe(dedent`
-      SELECT
-        alpha --foo, where-long-identifier
       FROM
         beta
     `);
@@ -163,6 +143,27 @@ describe('BigQueryFormatter', () => {
         varBignumeric BIGNUMERIC(1, 1);
       DECLARE
         varBigdecimal BIGDECIMAL(1, 1);
+    `);
+  });
+
+  // Regression test for issue #243
+  it('supports array subscript operator', () => {
+    expect(
+      format(`
+      SELECT item_array[OFFSET(1)] AS item_offset,
+      item_array[ORDINAL(1)] AS item_ordinal,
+      item_array[SAFE_OFFSET(6)] AS item_safe_offset,
+      item_array[SAFE_ORDINAL(6)] AS item_safe_ordinal
+      FROM Items;
+    `)
+    ).toBe(dedent`
+      SELECT
+        item_array[OFFSET(1)] AS item_offset,
+        item_array[ORDINAL(1)] AS item_ordinal,
+        item_array[SAFE_OFFSET(6)] AS item_safe_offset,
+        item_array[SAFE_ORDINAL(6)] AS item_safe_ordinal
+      FROM
+        Items;
     `);
   });
 });

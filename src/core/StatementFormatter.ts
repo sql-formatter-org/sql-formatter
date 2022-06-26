@@ -6,8 +6,6 @@ import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { isReserved, isCommand, isToken, type Token, TokenType, EOF_TOKEN } from './token';
 import toTabularFormat from './tabularStyle';
-import AliasAs from './AliasAs';
-import AsTokenFactory from './AsTokenFactory';
 import { type Statement } from './Parser';
 import { indentString, isTabularStyle } from './config';
 import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
@@ -17,9 +15,7 @@ export default class StatementFormatter {
   private cfg: FormatOptions;
   private indentation: Indentation;
   private inlineBlock: InlineBlock;
-  private aliasAs: AliasAs;
   private params: Params;
-  private asTokenFactory: AsTokenFactory;
   private query: WhitespaceBuilder;
 
   private currentNewline = true;
@@ -28,13 +24,11 @@ export default class StatementFormatter {
   private tokens: Token[] = [];
   private index = -1;
 
-  constructor(cfg: FormatOptions, params: Params, asTokenFactory: AsTokenFactory) {
+  constructor(cfg: FormatOptions, params: Params) {
     this.cfg = cfg;
     this.indentation = new Indentation(indentString(cfg));
     this.inlineBlock = new InlineBlock(this.cfg.expressionWidth);
-    this.aliasAs = new AliasAs(this.cfg.aliasAs, this);
     this.params = params;
-    this.asTokenFactory = asTokenFactory;
     this.query = new WhitespaceBuilder(this.indentation);
   }
 
@@ -77,9 +71,9 @@ export default class StatementFormatter {
       case TokenType.RESERVED_KEYWORD:
         return this.formatKeyword(token);
       case TokenType.BLOCK_START:
-        return this.formatBlockStart(token);
+        return this.formatOpenParen(token);
       case TokenType.BLOCK_END:
-        return this.formatBlockEnd(token);
+        return this.formatCloseParen(token);
       case TokenType.RESERVED_CASE_START:
         return this.formatCaseStart(token);
       case TokenType.RESERVED_CASE_END:
@@ -105,18 +99,10 @@ export default class StatementFormatter {
   }
 
   /**
-   * Formats word tokens + any potential AS tokens for aliases
+   * Formats ident/string/number/variable tokens
    */
   private formatWord(token: Token) {
-    if (this.aliasAs.shouldAddBefore(token)) {
-      this.query.add(this.show(this.asTokenFactory.token()), WS.SPACE);
-    }
-
     this.query.add(this.show(token), WS.SPACE);
-
-    if (this.aliasAs.shouldAddAfter()) {
-      this.query.add(this.show(this.asTokenFactory.token()), WS.SPACE);
-    }
   }
 
   /**
@@ -236,13 +222,9 @@ export default class StatementFormatter {
   }
 
   /**
-   * Formats a Reserved Keyword onto query, skipping AS if disabled
+   * Formats a Reserved Keyword onto query
    */
   private formatKeyword(token: Token) {
-    if (isToken.AS(token) && this.aliasAs.shouldRemove()) {
-      return;
-    }
-
     this.query.add(this.show(token), WS.SPACE);
   }
 
@@ -319,7 +301,7 @@ export default class StatementFormatter {
     }
   }
 
-  private formatBlockStart(token: Token) {
+  private formatOpenParen(token: Token) {
     // Take out the preceding space unless there was whitespace there in the original query
     // or another opening parens or line comment
     const preserveWhitespaceFor = [
@@ -346,7 +328,7 @@ export default class StatementFormatter {
     }
   }
 
-  private formatBlockEnd(token: Token) {
+  private formatCloseParen(token: Token) {
     if (this.inlineBlock.isActive()) {
       this.inlineBlock.end();
       this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);
@@ -446,22 +428,22 @@ export default class StatementFormatter {
   }
 
   /** Returns the latest encountered reserved keyword token */
-  public getPreviousReservedToken(): Token {
+  private getPreviousReservedToken(): Token {
     return this.previousReservedToken;
   }
 
   /** True when currently within SELECT command */
-  public isWithinSelect(): boolean {
+  private isWithinSelect(): boolean {
     return isToken.SELECT(this.previousCommandToken);
   }
 
   /** Fetches nth previous token from the token stream */
-  public tokenLookBehind(n = 1): Token {
+  private tokenLookBehind(n = 1): Token {
     return this.tokens[this.index - n] || EOF_TOKEN;
   }
 
   /** Fetches nth next token from the token stream */
-  public tokenLookAhead(n = 1): Token {
+  private tokenLookAhead(n = 1): Token {
     return this.tokens[this.index + n] || EOF_TOKEN;
   }
 }
