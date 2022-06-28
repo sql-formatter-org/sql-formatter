@@ -24,7 +24,7 @@ export type LayoutItem = WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | string;
 export default class WhitespaceBuilder {
   private layout: LayoutItem[] = [];
 
-  constructor(private indentation: Indentation) {}
+  constructor(public indentation: Indentation) {}
 
   /**
    * Appands an already constructed sub-layout

@@ -29,7 +29,6 @@ interface ExpressionFormatterParams {
 /** Formats a generic SQL expression */
 export default class ExpressionFormatter {
   private cfg: FormatOptions;
-  private indentation: Indentation;
   private inlineBlock: InlineBlock;
   private params: Params;
   private query: WhitespaceBuilder;
@@ -41,10 +40,9 @@ export default class ExpressionFormatter {
   constructor({ cfg, params, inline = false }: ExpressionFormatterParams) {
     this.cfg = cfg;
     this.inline = inline;
-    this.indentation = new Indentation(indentString(cfg));
     this.inlineBlock = new InlineBlock(this.cfg.expressionWidth);
     this.params = params;
-    this.query = new WhitespaceBuilder(this.indentation);
+    this.query = new WhitespaceBuilder(new Indentation(indentString(cfg)));
   }
 
   public format(nodes: AstNode[]): WhitespaceBuilder {
@@ -109,10 +107,10 @@ export default class ExpressionFormatter {
         this.query.add(WS.INDENT);
         this.query.addLayout(subLayout);
       } else {
-        this.indentation.increaseBlockLevel();
+        this.query.indentation.increaseBlockLevel();
         this.query.add(WS.INDENT);
         this.query.addLayout(subLayout);
-        this.indentation.decreaseBlockLevel();
+        this.query.indentation.decreaseBlockLevel();
       }
 
       this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
@@ -135,13 +133,13 @@ export default class ExpressionFormatter {
   private formatClause(node: Clause) {
     const subLayout = this.formatSubExpression(node.children);
 
-    this.indentation.decreaseTopLevel();
+    this.query.indentation.decreaseTopLevel();
     if (isTabularStyle(this.cfg)) {
       this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.SPACE);
     } else {
       this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
     }
-    this.indentation.increaseTopLevel();
+    this.query.indentation.increaseTopLevel();
 
     if (!isTabularStyle(this.cfg)) {
       this.query.add(WS.INDENT);
@@ -152,7 +150,7 @@ export default class ExpressionFormatter {
   private formatBinaryClause(node: BinaryClause) {
     const subLayout = this.formatSubExpression(node.children);
 
-    this.indentation.decreaseTopLevel();
+    this.query.indentation.decreaseTopLevel();
     this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
 
     this.query.add(WS.INDENT);
@@ -160,9 +158,9 @@ export default class ExpressionFormatter {
   }
 
   private formatLimitClause(node: LimitClause) {
-    this.indentation.decreaseTopLevel();
+    this.query.indentation.decreaseTopLevel();
     this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.limitToken));
-    this.indentation.increaseTopLevel();
+    this.query.indentation.increaseTopLevel();
 
     if (node.offsetToken) {
       this.query.add(
@@ -313,7 +311,7 @@ export default class ExpressionFormatter {
   }
 
   private formatCaseStart(token: Token) {
-    this.indentation.increaseBlockLevel();
+    this.query.indentation.increaseBlockLevel();
     this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
   }
 
@@ -322,7 +320,7 @@ export default class ExpressionFormatter {
   }
 
   private formatMultilineBlockEnd(token: Token) {
-    this.indentation.decreaseBlockLevel();
+    this.query.indentation.decreaseBlockLevel();
 
     this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
   }
