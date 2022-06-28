@@ -1,28 +1,6 @@
-import { EOF_TOKEN, type Token, TokenType } from './token';
 /* eslint-disable no-cond-assign */
-
-export type Statement = {
-  type: 'statement';
-  children: AstNode[];
-};
-
-// Wrapper for plain nodes inside AST
-export type TokenNode = {
-  type: 'token';
-  token: Token;
-};
-
-export type Parenthesis = {
-  type: 'parenthesis';
-  children: AstNode[];
-  openParen: string;
-  closeParen: string;
-  hasWhitespaceBefore: boolean;
-};
-
-export type AstNode = Parenthesis | TokenNode;
-
-export const isTokenNode = (node: AstNode): node is TokenNode => node.type === 'token';
+import { AstNode, Parenthesis, Statement, TokenNode } from './ast';
+import { EOF_TOKEN, type Token, TokenType } from './token';
 
 /**
  * A rudimentary parser that slices token stream into list of SQL statements

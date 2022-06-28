@@ -1,4 +1,4 @@
-import { isTokenNode, Parenthesis } from './Parser';
+import { isTokenNode, Parenthesis } from './ast';
 import { isToken, type Token, TokenType } from './token';
 
 /**
