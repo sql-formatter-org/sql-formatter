@@ -29,9 +29,9 @@ export default class WhitespaceBuilder {
   /**
    * Appands an already constructed sub-layout
    * and indents each line in it by current level of indentation
+   * (except for the first line)
    */
   public addLayout(layout: LayoutItem[]) {
-    this.addIndentation();
     layout.forEach((item, i) => {
       this.layout.push(item);
       if (item === WS.NEWLINE && i < layout.length - 1) {

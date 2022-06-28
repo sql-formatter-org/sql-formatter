@@ -99,6 +99,7 @@ export default class ExpressionFormatter {
       this.query.add(node.openParen, WS.NEWLINE);
 
       this.indentation.increaseBlockLevel();
+      this.query.add(WS.INDENT);
       this.query.addLayout(subLayout);
       this.indentation.decreaseBlockLevel();
 
@@ -126,6 +127,7 @@ export default class ExpressionFormatter {
     this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
     this.indentation.increaseTopLevel();
 
+    this.query.add(WS.INDENT);
     this.query.addLayout(subLayout);
   }
 
@@ -135,6 +137,7 @@ export default class ExpressionFormatter {
     this.indentation.decreaseTopLevel();
     this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
 
+    this.query.add(WS.INDENT);
     this.query.addLayout(subLayout);
   }
 
