@@ -4,10 +4,9 @@ import { equalizeWhitespace } from 'src/utils';
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
-import { isReserved, isCommand, isToken, type Token, TokenType, EOF_TOKEN } from './token';
-import toTabularFormat from './tabularStyle';
+import { isReserved, isToken, type Token, TokenType, EOF_TOKEN } from './token';
 import { AstNode, isTokenNode, Parenthesis } from './ast';
-import { indentString, isTabularStyle } from './config';
+import { indentString } from './config';
 import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
 
 /** Formats a generic SQL expression */
@@ -18,10 +17,8 @@ export default class ExpressionFormatter {
   private params: Params;
   private query: WhitespaceBuilder;
 
-  private currentNewline = true;
   private inline = false;
   private previousReservedToken: Token = EOF_TOKEN;
-  private previousCommandToken: Token = EOF_TOKEN;
   private nodes: AstNode[] = [];
   private index = -1;
 
@@ -44,9 +41,6 @@ export default class ExpressionFormatter {
         // if token is a Reserved Keyword, Command, Binary Command, Dependent Clause, Logical Operator, CASE, END
         if (isReserved(token)) {
           this.previousReservedToken = token;
-          if (token.type === TokenType.RESERVED_COMMAND) {
-            this.previousCommandToken = token;
-          }
         }
 
         this.formatToken(token);
@@ -64,7 +58,6 @@ export default class ExpressionFormatter {
       case TokenType.BLOCK_COMMENT:
         return this.formatBlockComment(token);
       case TokenType.RESERVED_COMMAND:
-        this.currentNewline = this.checkNewline(token);
         return this.formatCommand(token);
       case TokenType.RESERVED_BINARY_COMMAND:
         return this.formatBinaryCommand(token);
@@ -101,72 +94,6 @@ export default class ExpressionFormatter {
     this.query.add(this.show(token), WS.SPACE);
   }
 
-  /**
-   * Checks if a newline should currently be inserted
-   */
-  private checkNewline(token: Token): boolean {
-    const nextNodes = this.nodesUntilNextCommandOrQueryEnd();
-
-    // auto break if SELECT includes CASE statements
-    if (
-      this.isWithinSelect() &&
-      nextNodes.some(node => isTokenNode(node) && isToken.CASE(node.token))
-    ) {
-      return true;
-    }
-
-    switch (this.cfg.multilineLists) {
-      case 'always':
-        return true;
-      case 'avoid':
-        return false;
-      case 'expressionWidth':
-        return this.tokenWidth(token) + this.inlineWidth(nextNodes) > this.cfg.expressionWidth;
-      default: // multilineLists mode is a number
-        return (
-          this.countClauses(nextNodes) > this.cfg.multilineLists ||
-          this.tokenWidth(token) + this.inlineWidth(nextNodes) > this.cfg.expressionWidth
-        );
-    }
-  }
-
-  private inlineWidth(nodes: AstNode[]): number {
-    return nodes
-      .map(node => {
-        if (isTokenNode(node)) {
-          return node.token.value === ',' ? node.token.value.length + 1 : node.token.value.length;
-        } else {
-          return this.inlineWidth(node.children) + 2;
-        }
-      })
-      .reduce((a, b) => a + b);
-  }
-
-  private tokenWidth(token: Token): number {
-    return `${token.whitespaceBefore}${token.value} `.length;
-  }
-
-  /**
-   * Counts comma-separated clauses (doesn't count commas inside blocks)
-   * Note: There's always at least one clause.
-   */
-  private countClauses(nodes: AstNode[]): number {
-    return 1 + nodes.filter(node => isTokenNode(node) && node.token.value === ',').length;
-  }
-
-  /** get all tokens between current token and next Reserved Command or query end */
-  private nodesUntilNextCommandOrQueryEnd(): AstNode[] {
-    const tail = this.nodes.slice(this.index + 1);
-    return tail.slice(
-      0,
-      tail.length
-        ? tail.findIndex(
-            node => isTokenNode(node) && (isCommand(node.token) || node.token.value === ';')
-          )
-        : undefined
-    );
-  }
-
   /** Formats a line comment onto query */
   private formatLineComment(token: Token) {
     this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
@@ -190,20 +117,9 @@ export default class ExpressionFormatter {
 
     this.query.add(WS.NEWLINE, WS.INDENT);
 
-    // indent tabular formats, except when preceding a (
-    if (isTabularStyle(this.cfg)) {
-      if (this.tokenLookAhead().value !== '(') {
-        this.indentation.increaseTopLevel();
-      }
-    } else {
-      this.indentation.increaseTopLevel();
-    }
+    this.indentation.increaseTopLevel();
 
-    if (this.currentNewline && !isTabularStyle(this.cfg)) {
-      this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
-    } else {
-      this.query.add(this.show(token), WS.SPACE);
-    }
+    this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
   }
 
   /**
@@ -211,8 +127,8 @@ export default class ExpressionFormatter {
    */
   private formatBinaryCommand(token: Token) {
     const isJoin = /JOIN/i.test(token.value); // check if token contains JOIN
-    if (!isJoin || isTabularStyle(this.cfg)) {
-      // decrease for boolean set operators or in tabular mode
+    if (!isJoin) {
+      // decrease for boolean set operators
       this.indentation.decreaseTopLevel();
     }
     if (isJoin) {
@@ -282,23 +198,10 @@ export default class ExpressionFormatter {
       return;
     }
 
-    if (isTabularStyle(this.cfg)) {
-      this.indentation.decreaseTopLevel();
-    }
-
     if (this.cfg.logicalOperatorNewline === 'before') {
-      if (this.currentNewline) {
-        this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
-      } else {
-        this.query.add(this.show(token), WS.SPACE);
-      }
+      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
     } else {
-      // eslint-disable-next-line no-lonely-if
-      if (this.currentNewline) {
-        this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
-      } else {
-        this.query.add(this.show(token));
-      }
+      this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
     }
   }
 
@@ -330,35 +233,21 @@ export default class ExpressionFormatter {
         !preserveWhitespaceFor.includes(this.tokenLookBehind().type)
       ) {
         this.query.add(WS.NO_SPACE, node.openParen);
-      } else if (!this.cfg.newlineBeforeOpenParen) {
-        this.query.add(WS.NO_NEWLINE, WS.SPACE, node.openParen);
       } else {
         this.query.add(node.openParen);
       }
 
       formattedSql.split(/\n/).forEach(line => {
-        if (isTabularStyle(this.cfg)) {
-          this.query.add(WS.NEWLINE, WS.INDENT, line);
-        } else {
-          this.query.add(WS.NEWLINE, WS.INDENT, WS.SINGLE_INDENT, line);
-        }
+        this.query.add(WS.NEWLINE, WS.INDENT, WS.SINGLE_INDENT, line);
       });
 
-      if (this.cfg.newlineBeforeCloseParen) {
-        this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
-      } else {
-        this.query.add(WS.NO_NEWLINE, WS.SPACE, node.closeParen, WS.SPACE);
-      }
+      this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
     }
   }
 
   private formatCaseStart(token: Token) {
     this.indentation.increaseBlockLevel();
-    if (this.cfg.multilineLists === 'always') {
-      this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
-    } else {
-      this.query.add(this.show(token), WS.SPACE);
-    }
+    this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
   }
 
   private formatCaseEnd(token: Token) {
@@ -368,14 +257,7 @@ export default class ExpressionFormatter {
   private formatMultilineBlockEnd(token: Token) {
     this.indentation.decreaseBlockLevel();
 
-    if (isTabularStyle(this.cfg)) {
-      // +1 extra indentation step for the closing paren
-      this.query.add(WS.NEWLINE, WS.INDENT, WS.SINGLE_INDENT, this.show(token), WS.SPACE);
-    } else if (this.cfg.newlineBeforeCloseParen) {
-      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
-    } else {
-      this.query.add(WS.NO_NEWLINE, WS.SPACE, this.show(token), WS.SPACE);
-    }
+    this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
   }
 
   /**
@@ -389,7 +271,7 @@ export default class ExpressionFormatter {
    * Formats a comma Operator onto query, ending line unless in an Inline Block
    */
   private formatComma(token: Token) {
-    if (!this.inline && !isToken.LIMIT(this.getPreviousReservedToken()) && this.currentNewline) {
+    if (!this.inline && !isToken.LIMIT(this.getPreviousReservedToken())) {
       this.query.add(WS.NO_SPACE, this.show(token), WS.NEWLINE, WS.INDENT);
     } else {
       this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);
@@ -405,21 +287,7 @@ export default class ExpressionFormatter {
   }
 
   private show(token: Token): string {
-    if (this.isTabularToken(token)) {
-      return toTabularFormat(this.showToken(token), this.cfg.indentStyle);
-    } else {
-      return this.showToken(token);
-    }
-  }
-
-  // These token types can be formatted in tabular style
-  private isTabularToken(token: Token): boolean {
-    return (
-      token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
-      token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
-      token.type === TokenType.RESERVED_COMMAND ||
-      token.type === TokenType.RESERVED_BINARY_COMMAND
-    );
+    return this.showToken(token);
   }
 
   // don't call this directly, always use show() instead.
@@ -441,11 +309,6 @@ export default class ExpressionFormatter {
   /** Returns the latest encountered reserved keyword token */
   private getPreviousReservedToken(): Token {
     return this.previousReservedToken;
-  }
-
-  /** True when currently within SELECT command */
-  private isWithinSelect(): boolean {
-    return isToken.SELECT(this.previousCommandToken);
   }
 
   /** Fetches nth previous token from the token stream */
