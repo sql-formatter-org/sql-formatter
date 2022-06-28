@@ -3,6 +3,7 @@ import { Token } from './token';
 export type Statement = {
   type: 'statement';
   children: AstNode[];
+  hasSemicolon: boolean;
 };
 
 export type Clause = {

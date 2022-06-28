@@ -36,16 +36,8 @@ describe('Parser', () => {
               },
               "type": "token",
             },
-            Object {
-              "token": Object {
-                "text": ";",
-                "type": "OPERATOR",
-                "value": ";",
-                "whitespaceBefore": "",
-              },
-              "type": "token",
-            },
           ],
+          "hasSemicolon": true,
           "type": "statement",
         },
         Object {
@@ -60,6 +52,7 @@ describe('Parser', () => {
               "type": "token",
             },
           ],
+          "hasSemicolon": false,
           "type": "statement",
         },
       ]
@@ -108,6 +101,7 @@ describe('Parser', () => {
               "type": "clause",
             },
           ],
+          "hasSemicolon": false,
           "type": "statement",
         },
       ]
@@ -172,6 +166,7 @@ describe('Parser', () => {
               "type": "clause",
             },
           ],
+          "hasSemicolon": false,
           "type": "statement",
         },
       ]
@@ -254,6 +249,7 @@ describe('Parser', () => {
               "type": "clause",
             },
           ],
+          "hasSemicolon": false,
           "type": "statement",
         },
       ]
@@ -312,16 +308,8 @@ describe('Parser', () => {
               },
               "type": "clause",
             },
-            Object {
-              "token": Object {
-                "text": ";",
-                "type": "OPERATOR",
-                "value": ";",
-                "whitespaceBefore": "",
-              },
-              "type": "token",
-            },
           ],
+          "hasSemicolon": true,
           "type": "statement",
         },
       ]
@@ -349,6 +337,7 @@ describe('Parser', () => {
               "type": "limit_clause",
             },
           ],
+          "hasSemicolon": false,
           "type": "statement",
         },
       ]
@@ -382,6 +371,7 @@ describe('Parser', () => {
               "type": "limit_clause",
             },
           ],
+          "hasSemicolon": false,
           "type": "statement",
         },
       ]
@@ -408,6 +398,7 @@ describe('Parser', () => {
               "type": "clause",
             },
           ],
+          "hasSemicolon": false,
           "type": "statement",
         },
       ]

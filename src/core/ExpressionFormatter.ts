@@ -17,7 +17,7 @@ import {
   Parenthesis,
 } from './ast';
 import { indentString } from './config';
-import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
+import WhitespaceBuilder, { LayoutItem, WS } from './WhitespaceBuilder';
 
 /** Formats a generic SQL expression */
 export default class ExpressionFormatter {
@@ -40,7 +40,7 @@ export default class ExpressionFormatter {
     this.query = new WhitespaceBuilder(this.indentation);
   }
 
-  public format(nodes: AstNode[]): string {
+  public format(nodes: AstNode[]): WhitespaceBuilder {
     this.nodes = nodes;
 
     for (this.index = 0; this.index < this.nodes.length; this.index++) {
@@ -75,7 +75,7 @@ export default class ExpressionFormatter {
           break;
       }
     }
-    return this.query.toString();
+    return this.query;
   }
 
   private formatFunctionCall(node: FunctionCall) {
@@ -91,20 +91,16 @@ export default class ExpressionFormatter {
   private formatParenthesis(node: Parenthesis) {
     const inline = this.inlineBlock.isInlineBlock(node);
 
-    const formattedSql = new ExpressionFormatter(this.cfg, this.params, {
-      inline,
-    })
-      .format(node.children)
-      .trimEnd();
+    const subLayout = this.formatSubExpression(node.children, inline);
 
     if (inline) {
-      this.query.add(node.openParen, formattedSql, node.closeParen, WS.SPACE);
+      this.query.add(node.openParen, ...subLayout, WS.NO_SPACE, node.closeParen, WS.SPACE);
     } else {
-      this.query.add(node.openParen);
+      this.query.add(node.openParen, WS.NEWLINE);
 
-      formattedSql.split(/\n/).forEach(line => {
-        this.query.add(WS.NEWLINE, WS.INDENT, WS.SINGLE_INDENT, line);
-      });
+      this.indentation.increaseBlockLevel();
+      this.query.addLayout(subLayout);
+      this.indentation.decreaseBlockLevel();
 
       this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
     }
@@ -124,38 +120,22 @@ export default class ExpressionFormatter {
   }
 
   private formatClause(node: Clause) {
-    const formattedSql = new ExpressionFormatter(this.cfg, this.params, { inline: this.inline })
-      .format(node.children)
-      .trimEnd();
+    const subLayout = this.formatSubExpression(node.children);
 
     this.indentation.decreaseTopLevel();
-    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken));
+    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
     this.indentation.increaseTopLevel();
 
-    if (formattedSql.length > 0) {
-      formattedSql.split(/\n/).forEach(line => {
-        this.query.add(WS.NEWLINE, WS.INDENT, line);
-      });
-    }
-
-    this.query.add(WS.SPACE);
+    this.query.addLayout(subLayout);
   }
 
   private formatBinaryClause(node: BinaryClause) {
-    const formattedSql = new ExpressionFormatter(this.cfg, this.params, { inline: this.inline })
-      .format(node.children)
-      .trimEnd();
+    const subLayout = this.formatSubExpression(node.children);
 
     this.indentation.decreaseTopLevel();
-    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken));
+    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
 
-    if (formattedSql.length > 0) {
-      formattedSql.split(/\n/).forEach(line => {
-        this.query.add(WS.NEWLINE, WS.INDENT, line);
-      });
-    }
-
-    this.query.add(WS.NEWLINE, WS.INDENT);
+    this.query.addLayout(subLayout);
   }
 
   private formatLimitClause(node: LimitClause) {
@@ -181,6 +161,10 @@ export default class ExpressionFormatter {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private formatAllColumnsAsterisk(node: AllColumnsAsterisk) {
     this.query.add('*', WS.SPACE);
+  }
+
+  private formatSubExpression(nodes: AstNode[], inline = this.inline): LayoutItem[] {
+    return new ExpressionFormatter(this.cfg, this.params, { inline }).format(nodes).toLayout();
   }
 
   private formatToken(token: Token): void {
@@ -231,12 +215,20 @@ export default class ExpressionFormatter {
 
   /** Formats a block comment onto query */
   private formatBlockComment(token: Token) {
-    this.query.add(WS.NEWLINE, WS.INDENT, this.indentComment(token.value), WS.NEWLINE, WS.INDENT);
+    this.splitBlockComment(token.value).forEach(line => {
+      this.query.add(WS.NEWLINE, WS.INDENT, line);
+    });
+    this.query.add(WS.NEWLINE, WS.INDENT);
   }
 
-  /** Aligns comment to current indentation level */
-  private indentComment(comment: string): string {
-    return comment.replace(/\n[ \t]*/gu, '\n' + this.indentation.getIndent() + ' ');
+  private splitBlockComment(comment: string): string[] {
+    return comment.split(/\n/).map(line => {
+      if (/^\s*\*/.test(line)) {
+        return ' ' + line.replace(/^\s*/, '');
+      } else {
+        return line.replace(/^\s*/, '');
+      }
+    });
   }
 
   private formatJoin(token: Token) {
@@ -269,9 +261,6 @@ export default class ExpressionFormatter {
     // special operator
     if (token.value === ',') {
       this.formatComma(token);
-      return;
-    } else if (token.value === ';') {
-      this.formatQuerySeparator(token);
       return;
     } else if (token.value === ':') {
       this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);
@@ -330,14 +319,6 @@ export default class ExpressionFormatter {
       this.query.add(WS.NO_SPACE, this.show(token), WS.NEWLINE, WS.INDENT);
     } else {
       this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);
-    }
-  }
-
-  private formatQuerySeparator(token: Token) {
-    if (this.cfg.newlineBeforeSemicolon) {
-      this.query.add(WS.NEWLINE, this.show(token));
-    } else {
-      this.query.add(WS.NO_SPACE, this.show(token));
     }
   }
 
