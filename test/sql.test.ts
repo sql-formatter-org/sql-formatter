@@ -54,7 +54,7 @@ describe('SqlFormatter', () => {
     ).toBe(dedent`
       SELECT
         @ name,
-        : bar
+      : bar
       FROM
         { foo };
     `);

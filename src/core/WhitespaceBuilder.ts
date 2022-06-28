@@ -27,20 +27,6 @@ export default class WhitespaceBuilder {
   constructor(public indentation: Indentation) {}
 
   /**
-   * Appands an already constructed sub-layout
-   * and indents each line in it by current level of indentation
-   * (except for the first line)
-   */
-  public addLayout(layout: LayoutItem[]) {
-    layout.forEach((item, i) => {
-      this.layout.push(item);
-      if (item === WS.NEWLINE && i < layout.length - 1) {
-        this.addIndentation();
-      }
-    });
-  }
-
-  /**
    * Appends token strings and whitespace modifications to SQL string.
    */
   public add(...items: (WS | string)[]) {
@@ -100,13 +86,6 @@ export default class WhitespaceBuilder {
    */
   public toString(): string {
     return this.layout.map(item => this.itemToString(item)).join('');
-  }
-
-  /**
-   * Returns the constructed whitespace layout structure.
-   */
-  public toLayout(): LayoutItem[] {
-    return this.layout;
   }
 
   private itemToString(item: LayoutItem): string {

@@ -1,7 +1,6 @@
 import type { FormatOptions } from 'src/types';
 import { equalizeWhitespace } from 'src/utils';
 
-import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { isReserved, type Token, TokenType } from './token';
@@ -16,13 +15,14 @@ import {
   LimitClause,
   Parenthesis,
 } from './ast';
-import { indentString, isTabularStyle } from './config';
-import WhitespaceBuilder, { LayoutItem, WS } from './WhitespaceBuilder';
+import { isTabularStyle } from './config';
+import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
 import toTabularFormat, { isTabularToken } from './tabularStyle';
 
 interface ExpressionFormatterParams {
   cfg: FormatOptions;
   params: Params;
+  query: WhitespaceBuilder;
   inline?: boolean;
 }
 
@@ -37,12 +37,12 @@ export default class ExpressionFormatter {
   private nodes: AstNode[] = [];
   private index = -1;
 
-  constructor({ cfg, params, inline = false }: ExpressionFormatterParams) {
+  constructor({ cfg, params, query, inline = false }: ExpressionFormatterParams) {
     this.cfg = cfg;
     this.inline = inline;
     this.inlineBlock = new InlineBlock(this.cfg.expressionWidth);
     this.params = params;
-    this.query = new WhitespaceBuilder(new Indentation(indentString(cfg)));
+    this.query = query;
   }
 
   public format(nodes: AstNode[]): WhitespaceBuilder {
@@ -96,20 +96,20 @@ export default class ExpressionFormatter {
   private formatParenthesis(node: Parenthesis) {
     const inline = this.inlineBlock.isInlineBlock(node);
 
-    const subLayout = this.formatSubExpression(node.children, inline);
-
     if (inline) {
-      this.query.add(node.openParen, ...subLayout, WS.NO_SPACE, node.closeParen, WS.SPACE);
+      this.query.add(node.openParen);
+      this.query = this.formatSubExpression(node.children, inline);
+      this.query.add(WS.NO_SPACE, node.closeParen, WS.SPACE);
     } else {
       this.query.add(node.openParen, WS.NEWLINE);
 
       if (isTabularStyle(this.cfg)) {
         this.query.add(WS.INDENT);
-        this.query.addLayout(subLayout);
+        this.query = this.formatSubExpression(node.children, inline);
       } else {
         this.query.indentation.increaseBlockLevel();
         this.query.add(WS.INDENT);
-        this.query.addLayout(subLayout);
+        this.query = this.formatSubExpression(node.children, inline);
         this.query.indentation.decreaseBlockLevel();
       }
 
@@ -131,9 +131,6 @@ export default class ExpressionFormatter {
   }
 
   private formatClause(node: Clause) {
-    const subLayout = this.formatSubExpression(node.children);
-
-    this.query.indentation.decreaseTopLevel();
     if (isTabularStyle(this.cfg)) {
       this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.SPACE);
     } else {
@@ -144,21 +141,20 @@ export default class ExpressionFormatter {
     if (!isTabularStyle(this.cfg)) {
       this.query.add(WS.INDENT);
     }
-    this.query.addLayout(subLayout);
+    this.query = this.formatSubExpression(node.children);
+
+    this.query.indentation.decreaseTopLevel();
   }
 
   private formatBinaryClause(node: BinaryClause) {
-    const subLayout = this.formatSubExpression(node.children);
-
     this.query.indentation.decreaseTopLevel();
     this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
 
     this.query.add(WS.INDENT);
-    this.query.addLayout(subLayout);
+    this.query = this.formatSubExpression(node.children);
   }
 
   private formatLimitClause(node: LimitClause) {
-    this.query.indentation.decreaseTopLevel();
     this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.limitToken));
     this.query.indentation.increaseTopLevel();
 
@@ -175,6 +171,7 @@ export default class ExpressionFormatter {
     } else {
       this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.countToken), WS.SPACE);
     }
+    this.query.indentation.decreaseTopLevel();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -182,10 +179,13 @@ export default class ExpressionFormatter {
     this.query.add('*', WS.SPACE);
   }
 
-  private formatSubExpression(nodes: AstNode[], inline = this.inline): LayoutItem[] {
-    return new ExpressionFormatter({ cfg: this.cfg, params: this.params, inline })
-      .format(nodes)
-      .toLayout();
+  private formatSubExpression(nodes: AstNode[], inline = this.inline): WhitespaceBuilder {
+    return new ExpressionFormatter({
+      cfg: this.cfg,
+      params: this.params,
+      query: this.query,
+      inline,
+    }).format(nodes);
   }
 
   private formatToken(token: Token): void {
