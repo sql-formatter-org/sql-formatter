@@ -253,7 +253,14 @@ export default class ExpressionFormatter {
   }
 
   private formatJoin(token: Token) {
-    this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+    if (isTabularStyle(this.cfg)) {
+      // in tabular style JOINs are at the same level as clauses
+      this.query.indentation.decreaseTopLevel();
+      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+      this.query.indentation.increaseTopLevel();
+    } else {
+      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+    }
   }
 
   /**
@@ -304,7 +311,14 @@ export default class ExpressionFormatter {
    */
   private formatLogicalOperator(token: Token) {
     if (this.cfg.logicalOperatorNewline === 'before') {
-      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+      if (isTabularStyle(this.cfg)) {
+        // In tabular style AND/OR is placed on the same level as clauses
+        this.query.indentation.decreaseTopLevel();
+        this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+        this.query.indentation.increaseTopLevel();
+      } else {
+        this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+      }
     } else {
       this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
     }
