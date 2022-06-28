@@ -17,6 +17,13 @@ export type FunctionCall = {
   parenthesis: Parenthesis;
 };
 
+// <ident>[<expr>]
+export type ArraySubscript = {
+  type: 'array_subscript';
+  arrayToken: Token;
+  parenthesis: Parenthesis;
+};
+
 export type Parenthesis = {
   type: 'parenthesis';
   children: AstNode[];
@@ -49,6 +56,7 @@ export type AllColumnsAsterisk = {
 
 export type AstNode =
   | FunctionCall
+  | ArraySubscript
   | Parenthesis
   | BetweenPredicate
   | LimitClause

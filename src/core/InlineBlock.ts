@@ -24,6 +24,12 @@ export default class InlineBlock {
 
     for (const node of parenthesis.children) {
       switch (node.type) {
+        case 'function_call':
+          length += node.nameToken.value.length + this.inlineWidth(node.parenthesis);
+          break;
+        case 'array_subscript':
+          length += node.arrayToken.value.length + this.inlineWidth(node.parenthesis);
+          break;
         case 'parenthesis':
           length += this.inlineWidth(node);
           break;
@@ -32,6 +38,9 @@ export default class InlineBlock {
           break;
         case 'limit_clause':
           return Infinity;
+        case 'all_columns_asterisk':
+          length += 1;
+          break;
         case 'token':
           length += node.token.value.length;
           if (this.isForbiddenToken(node.token)) {

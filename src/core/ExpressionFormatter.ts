@@ -7,6 +7,7 @@ import Params from './Params';
 import { isReserved, type Token, TokenType } from './token';
 import {
   AllColumnsAsterisk,
+  ArraySubscript,
   AstNode,
   BetweenPredicate,
   FunctionCall,
@@ -46,6 +47,9 @@ export default class ExpressionFormatter {
         case 'function_call':
           this.formatFunctionCall(node);
           break;
+        case 'array_subscript':
+          this.formatArraySubscript(node);
+          break;
         case 'parenthesis':
           this.formatParenthesis(node);
           break;
@@ -68,6 +72,11 @@ export default class ExpressionFormatter {
 
   private formatFunctionCall(node: FunctionCall) {
     this.query.add(this.show(node.nameToken));
+    this.formatParenthesis(node.parenthesis);
+  }
+
+  private formatArraySubscript(node: ArraySubscript) {
+    this.query.add(this.show(node.arrayToken));
     this.formatParenthesis(node.parenthesis);
   }
 

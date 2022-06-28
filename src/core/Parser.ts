@@ -1,6 +1,7 @@
 /* eslint-disable no-cond-assign */
 import {
   AllColumnsAsterisk,
+  ArraySubscript,
   AstNode,
   BetweenPredicate,
   FunctionCall,
@@ -50,6 +51,7 @@ export default class Parser {
   private expression(): AstNode {
     return (
       this.functionCall() ||
+      this.arraySubscript() ||
       this.parenthesis() ||
       this.betweenPredicate() ||
       this.limitClause() ||
@@ -67,6 +69,20 @@ export default class Parser {
       return {
         type: 'function_call',
         nameToken: this.next(),
+        parenthesis: this.parenthesis() as Parenthesis,
+      };
+    }
+    return undefined;
+  }
+
+  private arraySubscript(): ArraySubscript | undefined {
+    if (
+      (this.look().type === TokenType.RESERVED_KEYWORD || this.look().type === TokenType.IDENT) &&
+      this.look(1).value === '['
+    ) {
+      return {
+        type: 'array_subscript',
+        arrayToken: this.next(),
         parenthesis: this.parenthesis() as Parenthesis,
       };
     }
