@@ -20,6 +20,12 @@ import { indentString, isTabularStyle } from './config';
 import WhitespaceBuilder, { LayoutItem, WS } from './WhitespaceBuilder';
 import toTabularFormat, { isTabularToken } from './tabularStyle';
 
+interface ExpressionFormatterParams {
+  cfg: FormatOptions;
+  params: Params;
+  inline?: boolean;
+}
+
 /** Formats a generic SQL expression */
 export default class ExpressionFormatter {
   private cfg: FormatOptions;
@@ -32,7 +38,7 @@ export default class ExpressionFormatter {
   private nodes: AstNode[] = [];
   private index = -1;
 
-  constructor(cfg: FormatOptions, params: Params, { inline = false }: { inline?: boolean } = {}) {
+  constructor({ cfg, params, inline = false }: ExpressionFormatterParams) {
     this.cfg = cfg;
     this.inline = inline;
     this.indentation = new Indentation(indentString(cfg));
@@ -179,7 +185,9 @@ export default class ExpressionFormatter {
   }
 
   private formatSubExpression(nodes: AstNode[], inline = this.inline): LayoutItem[] {
-    return new ExpressionFormatter(this.cfg, this.params, { inline }).format(nodes).toLayout();
+    return new ExpressionFormatter({ cfg: this.cfg, params: this.params, inline })
+      .format(nodes)
+      .toLayout();
   }
 
   private formatToken(token: Token): void {

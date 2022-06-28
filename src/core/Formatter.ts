@@ -60,7 +60,9 @@ export default class Formatter {
   }
 
   private formatStatement(statement: Statement): string {
-    const wsBuilder = new ExpressionFormatter(this.cfg, this.params).format(statement.children);
+    const wsBuilder = new ExpressionFormatter({ cfg: this.cfg, params: this.params }).format(
+      statement.children
+    );
     if (!statement.hasSemicolon) {
       // do nothing
     } else if (this.cfg.newlineBeforeSemicolon) {
