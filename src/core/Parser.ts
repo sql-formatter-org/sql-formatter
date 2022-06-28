@@ -1,5 +1,5 @@
 /* eslint-disable no-cond-assign */
-import { AstNode, BetweenPredicate, Parenthesis, Statement, TokenNode } from './ast';
+import { AstNode, BetweenPredicate, LimitClause, Parenthesis, Statement, TokenNode } from './ast';
 import { EOF_TOKEN, type Token, TokenType, isToken } from './token';
 
 /**
@@ -22,7 +22,6 @@ export default class Parser {
 
   private statement(): Statement | undefined {
     const children: AstNode[] = [];
-    let expr: Parenthesis | BetweenPredicate | undefined;
     while (true) {
       if (this.look().value === ';') {
         children.push(this.nextTokenNode());
@@ -33,12 +32,16 @@ export default class Parser {
         } else {
           return undefined;
         }
-      } else if ((expr = this.parenthesis() || this.betweenPredicate())) {
-        children.push(expr);
       } else {
-        children.push(this.nextTokenNode());
+        children.push(this.expression());
       }
     }
+  }
+
+  private expression(): AstNode {
+    return (
+      this.parenthesis() || this.betweenPredicate() || this.limitClause() || this.nextTokenNode()
+    );
   }
 
   private parenthesis(): Parenthesis | undefined {
@@ -49,7 +52,7 @@ export default class Parser {
       const hasWhitespaceBefore = Boolean(token.whitespaceBefore);
       let closeParen = '';
       while (this.look().type !== TokenType.CLOSE_PAREN && this.look().type !== TokenType.EOF) {
-        children.push(this.parenthesis() || this.betweenPredicate() || this.nextTokenNode());
+        children.push(this.expression());
       }
       if (this.look().type === TokenType.CLOSE_PAREN) {
         closeParen = this.next().value;
@@ -67,6 +70,25 @@ export default class Parser {
         expr1: this.next(),
         andToken: this.next(),
         expr2: this.next(),
+      };
+    }
+    return undefined;
+  }
+
+  private limitClause(): LimitClause | undefined {
+    if (isToken.LIMIT(this.look()) && this.look(2).value === ',') {
+      return {
+        type: 'limit_clause',
+        limitToken: this.next(),
+        offsetToken: this.next(),
+        countToken: this.next() && this.next(), // Discard comma token
+      };
+    }
+    if (isToken.LIMIT(this.look())) {
+      return {
+        type: 'limit_clause',
+        limitToken: this.next(),
+        countToken: this.next(),
       };
     }
     return undefined;
