@@ -270,4 +270,28 @@ describe('Parser', () => {
       ]
     `);
   });
+
+  it('parses SELECT *', () => {
+    expect(parse('SELECT *')).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "token": Object {
+                "text": "SELECT",
+                "type": "RESERVED_COMMAND",
+                "value": "SELECT",
+                "whitespaceBefore": "",
+              },
+              "type": "token",
+            },
+            Object {
+              "type": "all_columns_asterisk",
+            },
+          ],
+          "type": "statement",
+        },
+      ]
+    `);
+  });
 });

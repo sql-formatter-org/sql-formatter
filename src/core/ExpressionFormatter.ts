@@ -5,7 +5,14 @@ import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { isReserved, type Token, TokenType, EOF_TOKEN } from './token';
-import { AstNode, BetweenPredicate, isTokenNode, LimitClause, Parenthesis } from './ast';
+import {
+  AllColumnsAsterisk,
+  AstNode,
+  BetweenPredicate,
+  isTokenNode,
+  LimitClause,
+  Parenthesis,
+} from './ast';
 import { indentString } from './config';
 import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
 
@@ -45,12 +52,86 @@ export default class ExpressionFormatter {
         case 'limit_clause':
           this.formatLimitClause(node);
           break;
+        case 'all_columns_asterisk':
+          this.formatAllColumnsAsterisk(node);
+          break;
         case 'token':
           this.formatToken(node.token);
           break;
       }
     }
     return this.query.toString();
+  }
+
+  private formatParenthesis(node: Parenthesis) {
+    const inline = this.inlineBlock.isInlineBlock(node);
+
+    const formattedSql = new ExpressionFormatter(this.cfg, this.params, {
+      inline,
+    })
+      .format(node.children)
+      .trimEnd();
+
+    if (inline) {
+      if (!this.isSpaceBeforeParenthesis(node)) {
+        this.query.add(WS.NO_SPACE);
+      }
+      this.query.add(node.openParen, formattedSql, node.closeParen, WS.SPACE);
+    } else {
+      if (!this.isSpaceBeforeParenthesis(node)) {
+        this.query.add(WS.NO_SPACE);
+      }
+      this.query.add(node.openParen);
+
+      formattedSql.split(/\n/).forEach(line => {
+        this.query.add(WS.NEWLINE, WS.INDENT, WS.SINGLE_INDENT, line);
+      });
+
+      this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
+    }
+  }
+
+  // We add space before parenthesis when:
+  // - there's space in original SQL or
+  // - there's operator or line comment before the parenthesis
+  private isSpaceBeforeParenthesis(node: Parenthesis): boolean {
+    return (
+      node.hasWhitespaceBefore ||
+      [TokenType.LINE_COMMENT, TokenType.OPERATOR].includes(this.tokenLookBehind().type)
+    );
+  }
+
+  private formatBetweenPredicate(node: BetweenPredicate) {
+    this.query.add(
+      this.show(node.betweenToken),
+      WS.SPACE,
+      this.show(node.expr1),
+      WS.SPACE,
+      this.show(node.andToken),
+      WS.SPACE,
+      this.show(node.expr2),
+      WS.SPACE
+    );
+  }
+
+  private formatLimitClause(node: LimitClause) {
+    this.formatCommand(node.limitToken);
+    if (node.offsetToken) {
+      this.query.add(
+        this.show(node.offsetToken),
+        ',',
+        WS.SPACE,
+        this.show(node.countToken),
+        WS.SPACE
+      );
+    } else {
+      this.query.add(this.show(node.countToken), WS.SPACE);
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private formatAllColumnsAsterisk(node: AllColumnsAsterisk) {
+    this.query.add('*', WS.SPACE);
   }
 
   private formatToken(token: Token): void {
@@ -124,21 +205,6 @@ export default class ExpressionFormatter {
     this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
   }
 
-  private formatLimitClause(node: LimitClause) {
-    this.formatCommand(node.limitToken);
-    if (node.offsetToken) {
-      this.query.add(
-        this.show(node.offsetToken),
-        ',',
-        WS.SPACE,
-        this.show(node.countToken),
-        WS.SPACE
-      );
-    } else {
-      this.query.add(this.show(node.countToken), WS.SPACE);
-    }
-  }
-
   /**
    * Formats a Reserved Binary Command onto query, joining neighbouring tokens
    */
@@ -197,25 +263,11 @@ export default class ExpressionFormatter {
     }
 
     // other operators
-    // in dense operators mode do not trim whitespace if SELECT *
-    if (this.cfg.denseOperators && this.tokenLookBehind().type !== TokenType.RESERVED_COMMAND) {
+    if (this.cfg.denseOperators) {
       this.query.add(WS.NO_SPACE, this.show(token));
     } else {
       this.query.add(this.show(token), WS.SPACE);
     }
-  }
-
-  private formatBetweenPredicate(node: BetweenPredicate) {
-    this.query.add(
-      this.show(node.betweenToken),
-      WS.SPACE,
-      this.show(node.expr1),
-      WS.SPACE,
-      this.show(node.andToken),
-      WS.SPACE,
-      this.show(node.expr2),
-      WS.SPACE
-    );
   }
 
   /**
@@ -227,44 +279,6 @@ export default class ExpressionFormatter {
     } else {
       this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
     }
-  }
-
-  private formatParenthesis(node: Parenthesis) {
-    const inline = this.inlineBlock.isInlineBlock(node);
-
-    const formattedSql = new ExpressionFormatter(this.cfg, this.params, {
-      inline,
-    })
-      .format(node.children)
-      .trimEnd();
-
-    if (inline) {
-      if (!this.isSpaceBeforeParenthesis(node)) {
-        this.query.add(WS.NO_SPACE);
-      }
-      this.query.add(node.openParen, formattedSql, node.closeParen, WS.SPACE);
-    } else {
-      if (!this.isSpaceBeforeParenthesis(node)) {
-        this.query.add(WS.NO_SPACE);
-      }
-      this.query.add(node.openParen);
-
-      formattedSql.split(/\n/).forEach(line => {
-        this.query.add(WS.NEWLINE, WS.INDENT, WS.SINGLE_INDENT, line);
-      });
-
-      this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
-    }
-  }
-
-  // We add space before parenthesis when:
-  // - there's space in original SQL or
-  // - there's operator or line comment before the parenthesis
-  private isSpaceBeforeParenthesis(node: Parenthesis): boolean {
-    return (
-      node.hasWhitespaceBefore ||
-      [TokenType.LINE_COMMENT, TokenType.OPERATOR].includes(this.tokenLookBehind().type)
-    );
   }
 
   private formatCaseStart(token: Token) {
