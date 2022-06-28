@@ -92,8 +92,8 @@ export default function supportsNewlineBeforeParen(format: FormatFn) {
     `);
   });
 
-  // TODO: I think this is not as intended.
-  it('has no effect when used together with indentStyle:tabularLeft', () => {
+  // TODO: Probably not quite as intended.
+  it('changes only close-paren position when used together with indentStyle:tabularLeft', () => {
     const withNewlineOn = format('SELECT a FROM ( SELECT b FROM c );', {
       newlineBeforeOpenParen: true,
       newlineBeforeCloseParen: true,
@@ -105,13 +105,18 @@ export default function supportsNewlineBeforeParen(format: FormatFn) {
       indentStyle: 'tabularLeft',
     });
 
-    expect(withNewlineOn).toBe(withNewlineOff);
     expect(withNewlineOn).toBe(dedent`
     SELECT    a
     FROM      (
               SELECT    b
               FROM      c
               );
+    `);
+    expect(withNewlineOff).toBe(dedent`
+    SELECT    a
+    FROM      (
+              SELECT    b
+              FROM      c );
     `);
   });
 }

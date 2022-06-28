@@ -89,8 +89,9 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
   it('formats line comments followed by close-paren', () => {
     expect(format('SELECT ( a --comment\n )')).toBe(dedent`
       SELECT
-        (a --comment
-      )
+        (
+          a --comment
+        )
     `);
   });
 
