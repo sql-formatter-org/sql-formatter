@@ -16,8 +16,9 @@ import {
   LimitClause,
   Parenthesis,
 } from './ast';
-import { indentString } from './config';
+import { indentString, isTabularStyle } from './config';
 import WhitespaceBuilder, { LayoutItem, WS } from './WhitespaceBuilder';
+import toTabularFormat, { isTabularToken } from './tabularStyle';
 
 /** Formats a generic SQL expression */
 export default class ExpressionFormatter {
@@ -98,10 +99,15 @@ export default class ExpressionFormatter {
     } else {
       this.query.add(node.openParen, WS.NEWLINE);
 
-      this.indentation.increaseBlockLevel();
-      this.query.add(WS.INDENT);
-      this.query.addLayout(subLayout);
-      this.indentation.decreaseBlockLevel();
+      if (isTabularStyle(this.cfg)) {
+        this.query.add(WS.INDENT);
+        this.query.addLayout(subLayout);
+      } else {
+        this.indentation.increaseBlockLevel();
+        this.query.add(WS.INDENT);
+        this.query.addLayout(subLayout);
+        this.indentation.decreaseBlockLevel();
+      }
 
       this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
     }
@@ -124,10 +130,16 @@ export default class ExpressionFormatter {
     const subLayout = this.formatSubExpression(node.children);
 
     this.indentation.decreaseTopLevel();
-    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
+    if (isTabularStyle(this.cfg)) {
+      this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.SPACE);
+    } else {
+      this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
+    }
     this.indentation.increaseTopLevel();
 
-    this.query.add(WS.INDENT);
+    if (!isTabularStyle(this.cfg)) {
+      this.query.add(WS.INDENT);
+    }
     this.query.addLayout(subLayout);
   }
 
@@ -326,7 +338,11 @@ export default class ExpressionFormatter {
   }
 
   private show(token: Token): string {
-    return this.showToken(token);
+    if (isTabularToken(token)) {
+      return toTabularFormat(this.showToken(token), this.cfg.indentStyle);
+    } else {
+      return this.showToken(token);
+    }
   }
 
   // don't call this directly, always use show() instead.

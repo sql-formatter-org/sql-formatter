@@ -47,9 +47,9 @@ export default function supportsIndentStyle(format: FormatFn) {
                             column5
                   FROM      table1
                   ) a
-        JOIN      table2 b ON a.column5 = b.column5
+                  JOIN      table2 b ON a.column5 = b.column5
         WHERE     column6
-        AND       column7
+                  AND       column7
         GROUP BY  column4;
       `);
     });
@@ -73,12 +73,12 @@ export default function supportsIndentStyle(format: FormatFn) {
         UNION     DISTINCT
         SELECT    *
         FROM      b
-        LEFT      OUTER JOIN c;
+                  LEFT      OUTER JOIN c;
       `);
     });
 
-    // TODO: Disabled temporarily
-    it.skip('handles multiple levels of nested queries', () => {
+    // TODO: This looks pretty bad at the moment
+    it('handles multiple levels of nested queries', () => {
       expect(
         format(
           'SELECT age FROM (SELECT fname, lname, age FROM (SELECT fname, lname FROM persons) JOIN (SELECT age FROM ages)) as mytable;',
@@ -97,7 +97,7 @@ export default function supportsIndentStyle(format: FormatFn) {
                                       lname
                             FROM      persons
                             )
-                  JOIN      (
+                            JOIN      (
                             SELECT    age
                             FROM      ages
                             )
@@ -134,9 +134,9 @@ export default function supportsIndentStyle(format: FormatFn) {
           '                    column5',
           '               FROM table1',
           '          ) a',
-          '     JOIN table2 b ON a.column5 = b.column5',
+          '               JOIN table2 b ON a.column5 = b.column5',
           '    WHERE column6',
-          '      AND column7',
+          '                AND column7',
           ' GROUP BY column4;',
         ].join('\n')
       );
@@ -162,7 +162,7 @@ export default function supportsIndentStyle(format: FormatFn) {
           '    UNION DISTINCT',
           '   SELECT *',
           '     FROM b',
-          '     LEFT OUTER JOIN c;',
+          '               LEFT OUTER JOIN c;',
         ].join('\n')
       );
     });

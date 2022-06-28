@@ -1,4 +1,5 @@
 import type { IndentStyle } from 'src/types';
+import { Token, TokenType } from './token';
 
 /**
  * When tabular style enabled,
@@ -22,4 +23,17 @@ export default function toTabularFormat(tokenText: string, indentStyle: IndentSt
   }
 
   return tokenText + ['', ...tail].join(' ');
+}
+
+/**
+ * True when the token can be formatted in tabular style
+ */
+export function isTabularToken(token: Token): boolean {
+  return (
+    token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
+    token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
+    token.type === TokenType.RESERVED_COMMAND ||
+    token.type === TokenType.RESERVED_BINARY_COMMAND ||
+    token.type === TokenType.RESERVED_JOIN
+  );
 }
