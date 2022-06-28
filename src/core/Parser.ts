@@ -3,6 +3,7 @@ import {
   AllColumnsAsterisk,
   AstNode,
   BetweenPredicate,
+  FunctionCall,
   LimitClause,
   Parenthesis,
   Statement,
@@ -48,6 +49,7 @@ export default class Parser {
 
   private expression(): AstNode {
     return (
+      this.functionCall() ||
       this.parenthesis() ||
       this.betweenPredicate() ||
       this.limitClause() ||
@@ -56,12 +58,26 @@ export default class Parser {
     );
   }
 
+  private functionCall(): FunctionCall | undefined {
+    if (
+      (this.look().type === TokenType.RESERVED_KEYWORD || this.look().type === TokenType.IDENT) &&
+      this.look(1).value === '(' &&
+      !this.look(1).whitespaceBefore
+    ) {
+      return {
+        type: 'function_call',
+        nameToken: this.next(),
+        parenthesis: this.parenthesis() as Parenthesis,
+      };
+    }
+    return undefined;
+  }
+
   private parenthesis(): Parenthesis | undefined {
     if (this.look().type === TokenType.OPEN_PAREN) {
       const children: AstNode[] = [];
       const token = this.next();
       const openParen = token.value;
-      const hasWhitespaceBefore = Boolean(token.whitespaceBefore);
       let closeParen = '';
       while (this.look().type !== TokenType.CLOSE_PAREN && this.look().type !== TokenType.EOF) {
         children.push(this.expression());
@@ -69,7 +85,7 @@ export default class Parser {
       if (this.look().type === TokenType.CLOSE_PAREN) {
         closeParen = this.next().value;
       }
-      return { type: 'parenthesis', children, openParen, closeParen, hasWhitespaceBefore };
+      return { type: 'parenthesis', children, openParen, closeParen };
     }
     return undefined;
   }

@@ -30,16 +30,6 @@ export default function supportsOperators(
     });
   });
 
-  it('supports braces', () => {
-    const result = format(`SELECT $\{a} FROM $\{b};`);
-    expect(result).toBe(dedent`
-      SELECT
-        $\{a}
-      FROM
-        $\{b};
-    `);
-  });
-
   it('supports set operators', () => {
     expect(format('foo ALL bar')).toBe('foo ALL bar');
     expect(format('foo = ANY (1, 2, 3)')).toBe('foo = ANY (1, 2, 3)');
