@@ -77,8 +77,7 @@ export default function supportsIndentStyle(format: FormatFn) {
       `);
     });
 
-    // TODO: Disabled temporarily
-    it.skip('handles multiple levels of nested queries', () => {
+    it('handles multiple levels of nested queries', () => {
       expect(
         format(
           'SELECT age FROM (SELECT fname, lname, age FROM (SELECT fname, lname FROM persons) JOIN (SELECT age FROM ages)) as mytable;',

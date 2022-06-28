@@ -8,7 +8,8 @@ import ExpressionFormatter from './ExpressionFormatter';
 import { indentString } from './config';
 import AliasAs from './AliasAs';
 import { Statement } from './ast';
-import { WS } from './WhitespaceBuilder';
+import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
+import Indentation from './Indentation';
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {
@@ -60,7 +61,12 @@ export default class Formatter {
   }
 
   private formatStatement(statement: Statement): string {
-    const wsBuilder = new ExpressionFormatter(this.cfg, this.params).format(statement.children);
+    const wsBuilder = new ExpressionFormatter({
+      cfg: this.cfg,
+      params: this.params,
+      query: new WhitespaceBuilder(new Indentation(indentString(this.cfg))),
+    }).format(statement.children);
+
     if (!statement.hasSemicolon) {
       // do nothing
     } else if (this.cfg.newlineBeforeSemicolon) {

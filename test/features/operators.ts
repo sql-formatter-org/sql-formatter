@@ -20,7 +20,7 @@ export default function supportsOperators(
   });
 
   logicalOperators.forEach(op => {
-    describe(`supports ${op} operator`, () => {
+    it(`supports ${op} operator`, () => {
       const result = format(`SELECT true ${op} false AS foo;`);
       expect(result).toBe(dedent`
         SELECT

@@ -110,7 +110,7 @@ export default function supportsTabulateAlias(format: FormatFn) {
     `);
   });
 
-  it.skip('works together with indentStyle:tabularLeft', () => {
+  it('works together with indentStyle:tabularLeft', () => {
     const result = format(
       dedent`SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );`,
       { indentStyle: 'tabularLeft', tabulateAlias: true }
@@ -128,7 +128,7 @@ export default function supportsTabulateAlias(format: FormatFn) {
     `);
   });
 
-  it.skip('works together with indentStyle:tabularRight', () => {
+  it('works together with indentStyle:tabularRight', () => {
     const result = format(
       dedent`SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );`,
       { indentStyle: 'tabularRight', tabulateAlias: true }

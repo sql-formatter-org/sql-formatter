@@ -1,7 +1,6 @@
 import type { FormatOptions } from 'src/types';
 import { equalizeWhitespace } from 'src/utils';
 
-import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 import { isReserved, type Token, TokenType } from './token';
@@ -16,13 +15,20 @@ import {
   LimitClause,
   Parenthesis,
 } from './ast';
-import { indentString } from './config';
-import WhitespaceBuilder, { LayoutItem, WS } from './WhitespaceBuilder';
+import { isTabularStyle } from './config';
+import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
+import toTabularFormat, { isTabularToken } from './tabularStyle';
+
+interface ExpressionFormatterParams {
+  cfg: FormatOptions;
+  params: Params;
+  query: WhitespaceBuilder;
+  inline?: boolean;
+}
 
 /** Formats a generic SQL expression */
 export default class ExpressionFormatter {
   private cfg: FormatOptions;
-  private indentation: Indentation;
   private inlineBlock: InlineBlock;
   private params: Params;
   private query: WhitespaceBuilder;
@@ -31,13 +37,12 @@ export default class ExpressionFormatter {
   private nodes: AstNode[] = [];
   private index = -1;
 
-  constructor(cfg: FormatOptions, params: Params, { inline = false }: { inline?: boolean } = {}) {
+  constructor({ cfg, params, query, inline = false }: ExpressionFormatterParams) {
     this.cfg = cfg;
     this.inline = inline;
-    this.indentation = new Indentation(indentString(cfg));
     this.inlineBlock = new InlineBlock(this.cfg.expressionWidth);
     this.params = params;
-    this.query = new WhitespaceBuilder(this.indentation);
+    this.query = query;
   }
 
   public format(nodes: AstNode[]): WhitespaceBuilder {
@@ -91,16 +96,22 @@ export default class ExpressionFormatter {
   private formatParenthesis(node: Parenthesis) {
     const inline = this.inlineBlock.isInlineBlock(node);
 
-    const subLayout = this.formatSubExpression(node.children, inline);
-
     if (inline) {
-      this.query.add(node.openParen, ...subLayout, WS.NO_SPACE, node.closeParen, WS.SPACE);
+      this.query.add(node.openParen);
+      this.query = this.formatSubExpression(node.children, inline);
+      this.query.add(WS.NO_SPACE, node.closeParen, WS.SPACE);
     } else {
       this.query.add(node.openParen, WS.NEWLINE);
 
-      this.indentation.increaseBlockLevel();
-      this.query.addLayout(subLayout);
-      this.indentation.decreaseBlockLevel();
+      if (isTabularStyle(this.cfg)) {
+        this.query.add(WS.INDENT);
+        this.query = this.formatSubExpression(node.children, inline);
+      } else {
+        this.query.indentation.increaseBlockLevel();
+        this.query.add(WS.INDENT);
+        this.query = this.formatSubExpression(node.children, inline);
+        this.query.indentation.decreaseBlockLevel();
+      }
 
       this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
     }
@@ -120,28 +131,32 @@ export default class ExpressionFormatter {
   }
 
   private formatClause(node: Clause) {
-    const subLayout = this.formatSubExpression(node.children);
+    if (isTabularStyle(this.cfg)) {
+      this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.SPACE);
+    } else {
+      this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
+    }
+    this.query.indentation.increaseTopLevel();
 
-    this.indentation.decreaseTopLevel();
-    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
-    this.indentation.increaseTopLevel();
+    if (!isTabularStyle(this.cfg)) {
+      this.query.add(WS.INDENT);
+    }
+    this.query = this.formatSubExpression(node.children);
 
-    this.query.addLayout(subLayout);
+    this.query.indentation.decreaseTopLevel();
   }
 
   private formatBinaryClause(node: BinaryClause) {
-    const subLayout = this.formatSubExpression(node.children);
-
-    this.indentation.decreaseTopLevel();
+    this.query.indentation.decreaseTopLevel();
     this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
 
-    this.query.addLayout(subLayout);
+    this.query.add(WS.INDENT);
+    this.query = this.formatSubExpression(node.children);
   }
 
   private formatLimitClause(node: LimitClause) {
-    this.indentation.decreaseTopLevel();
     this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.limitToken));
-    this.indentation.increaseTopLevel();
+    this.query.indentation.increaseTopLevel();
 
     if (node.offsetToken) {
       this.query.add(
@@ -156,6 +171,7 @@ export default class ExpressionFormatter {
     } else {
       this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.countToken), WS.SPACE);
     }
+    this.query.indentation.decreaseTopLevel();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -163,8 +179,13 @@ export default class ExpressionFormatter {
     this.query.add('*', WS.SPACE);
   }
 
-  private formatSubExpression(nodes: AstNode[], inline = this.inline): LayoutItem[] {
-    return new ExpressionFormatter(this.cfg, this.params, { inline }).format(nodes).toLayout();
+  private formatSubExpression(nodes: AstNode[], inline = this.inline): WhitespaceBuilder {
+    return new ExpressionFormatter({
+      cfg: this.cfg,
+      params: this.params,
+      query: this.query,
+      inline,
+    }).format(nodes);
   }
 
   private formatToken(token: Token): void {
@@ -232,7 +253,14 @@ export default class ExpressionFormatter {
   }
 
   private formatJoin(token: Token) {
-    this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+    if (isTabularStyle(this.cfg)) {
+      // in tabular style JOINs are at the same level as clauses
+      this.query.indentation.decreaseTopLevel();
+      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+      this.query.indentation.increaseTopLevel();
+    } else {
+      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+    }
   }
 
   /**
@@ -283,14 +311,21 @@ export default class ExpressionFormatter {
    */
   private formatLogicalOperator(token: Token) {
     if (this.cfg.logicalOperatorNewline === 'before') {
-      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+      if (isTabularStyle(this.cfg)) {
+        // In tabular style AND/OR is placed on the same level as clauses
+        this.query.indentation.decreaseTopLevel();
+        this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+        this.query.indentation.increaseTopLevel();
+      } else {
+        this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+      }
     } else {
       this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
     }
   }
 
   private formatCaseStart(token: Token) {
-    this.indentation.increaseBlockLevel();
+    this.query.indentation.increaseBlockLevel();
     this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
   }
 
@@ -299,7 +334,7 @@ export default class ExpressionFormatter {
   }
 
   private formatMultilineBlockEnd(token: Token) {
-    this.indentation.decreaseBlockLevel();
+    this.query.indentation.decreaseBlockLevel();
 
     this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
   }
@@ -323,7 +358,11 @@ export default class ExpressionFormatter {
   }
 
   private show(token: Token): string {
-    return this.showToken(token);
+    if (isTabularToken(token)) {
+      return toTabularFormat(this.showToken(token), this.cfg.indentStyle);
+    } else {
+      return this.showToken(token);
+    }
   }
 
   // don't call this directly, always use show() instead.
