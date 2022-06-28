@@ -4,6 +4,8 @@ import {
   ArraySubscript,
   AstNode,
   BetweenPredicate,
+  BinaryClause,
+  Clause,
   FunctionCall,
   LimitClause,
   Parenthesis,
@@ -50,14 +52,52 @@ export default class Parser {
 
   private expression(): AstNode {
     return (
+      this.limitClause() ||
+      this.clause() ||
+      this.binaryClause() ||
       this.functionCall() ||
       this.arraySubscript() ||
       this.parenthesis() ||
       this.betweenPredicate() ||
-      this.limitClause() ||
       this.allColumnsAsterisk() ||
       this.nextTokenNode()
     );
+  }
+
+  private clause(): Clause | undefined {
+    if (this.look().type === TokenType.RESERVED_COMMAND) {
+      const name = this.next();
+      const children: AstNode[] = [];
+      while (
+        this.look().type !== TokenType.RESERVED_COMMAND &&
+        this.look().type !== TokenType.RESERVED_BINARY_COMMAND &&
+        this.look().type !== TokenType.EOF &&
+        this.look().type !== TokenType.CLOSE_PAREN &&
+        this.look().value !== ';'
+      ) {
+        children.push(this.expression());
+      }
+      return { type: 'clause', nameToken: name, children };
+    }
+    return undefined;
+  }
+
+  private binaryClause(): BinaryClause | undefined {
+    if (this.look().type === TokenType.RESERVED_BINARY_COMMAND) {
+      const name = this.next();
+      const children: AstNode[] = [];
+      while (
+        this.look().type !== TokenType.RESERVED_COMMAND &&
+        this.look().type !== TokenType.RESERVED_BINARY_COMMAND &&
+        this.look().type !== TokenType.EOF &&
+        this.look().type !== TokenType.CLOSE_PAREN &&
+        this.look().value !== ';'
+      ) {
+        children.push(this.expression());
+      }
+      return { type: 'binary_clause', nameToken: name, children };
+    }
+    return undefined;
   }
 
   private functionCall(): FunctionCall | undefined {

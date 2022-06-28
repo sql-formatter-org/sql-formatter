@@ -5,6 +5,18 @@ export type Statement = {
   children: AstNode[];
 };
 
+export type Clause = {
+  type: 'clause';
+  nameToken: Token;
+  children: AstNode[];
+};
+
+export type BinaryClause = {
+  type: 'binary_clause';
+  nameToken: Token;
+  children: AstNode[];
+};
+
 // Wrapper for plain nodes inside AST
 export type TokenNode = {
   type: 'token';
@@ -55,6 +67,8 @@ export type AllColumnsAsterisk = {
 };
 
 export type AstNode =
+  | Clause
+  | BinaryClause
   | FunctionCall
   | ArraySubscript
   | Parenthesis

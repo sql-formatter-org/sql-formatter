@@ -29,8 +29,10 @@ interface TokenizerOptions {
   // Keywords in CASE expressions that begin new line, like: WHEN, ELSE
   reservedDependentClauses: string[];
   // Keywords that create newline but no indentaion of their body.
-  // These contain set operations like UNION and various joins like LEFT OUTER JOIN
+  // These contain set operations like UNION and INTERSECT
   reservedBinaryCommands: string[];
+  // Various joins like LEFT OUTER JOIN
+  reservedJoins: string[];
   // keywords used for JOIN conditions, defaults to: [ON, USING]
   reservedJoinConditions?: string[];
   // all other reserved words (not included to any of the above lists)
@@ -118,6 +120,10 @@ export default class Tokenizer {
       ),
       [TokenType.RESERVED_BINARY_COMMAND]: regexFactory.createReservedWordRegex(
         cfg.reservedBinaryCommands,
+        cfg.identChars
+      ),
+      [TokenType.RESERVED_JOIN]: regexFactory.createReservedWordRegex(
+        cfg.reservedJoins,
         cfg.identChars
       ),
       [TokenType.RESERVED_JOIN_CONDITION]: regexFactory.createReservedWordRegex(
@@ -279,6 +285,7 @@ export default class Tokenizer {
       this.matchReservedToken(TokenType.RESERVED_CASE_END) ||
       this.matchReservedToken(TokenType.RESERVED_COMMAND) ||
       this.matchReservedToken(TokenType.RESERVED_BINARY_COMMAND) ||
+      this.matchReservedToken(TokenType.RESERVED_JOIN) ||
       this.matchReservedToken(TokenType.RESERVED_DEPENDENT_CLAUSE) ||
       this.matchReservedToken(TokenType.RESERVED_LOGICAL_OPERATOR) ||
       this.matchReservedToken(TokenType.RESERVED_KEYWORD) ||

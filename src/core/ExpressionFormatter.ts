@@ -10,6 +10,8 @@ import {
   ArraySubscript,
   AstNode,
   BetweenPredicate,
+  BinaryClause,
+  Clause,
   FunctionCall,
   LimitClause,
   Parenthesis,
@@ -55,6 +57,12 @@ export default class ExpressionFormatter {
           break;
         case 'between_predicate':
           this.formatBetweenPredicate(node);
+          break;
+        case 'clause':
+          this.formatClause(node);
+          break;
+        case 'binary_clause':
+          this.formatBinaryClause(node);
           break;
         case 'limit_clause':
           this.formatLimitClause(node);
@@ -115,10 +123,50 @@ export default class ExpressionFormatter {
     );
   }
 
+  private formatClause(node: Clause) {
+    const formattedSql = new ExpressionFormatter(this.cfg, this.params, { inline: this.inline })
+      .format(node.children)
+      .trimEnd();
+
+    this.indentation.decreaseTopLevel();
+    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken));
+    this.indentation.increaseTopLevel();
+
+    if (formattedSql.length > 0) {
+      formattedSql.split(/\n/).forEach(line => {
+        this.query.add(WS.NEWLINE, WS.INDENT, line);
+      });
+    }
+
+    this.query.add(WS.SPACE);
+  }
+
+  private formatBinaryClause(node: BinaryClause) {
+    const formattedSql = new ExpressionFormatter(this.cfg, this.params, { inline: this.inline })
+      .format(node.children)
+      .trimEnd();
+
+    this.indentation.decreaseTopLevel();
+    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken));
+
+    if (formattedSql.length > 0) {
+      formattedSql.split(/\n/).forEach(line => {
+        this.query.add(WS.NEWLINE, WS.INDENT, line);
+      });
+    }
+
+    this.query.add(WS.NEWLINE, WS.INDENT);
+  }
+
   private formatLimitClause(node: LimitClause) {
-    this.formatCommand(node.limitToken);
+    this.indentation.decreaseTopLevel();
+    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.limitToken));
+    this.indentation.increaseTopLevel();
+
     if (node.offsetToken) {
       this.query.add(
+        WS.NEWLINE,
+        WS.INDENT,
         this.show(node.offsetToken),
         ',',
         WS.SPACE,
@@ -126,7 +174,7 @@ export default class ExpressionFormatter {
         WS.SPACE
       );
     } else {
-      this.query.add(this.show(node.countToken), WS.SPACE);
+      this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.countToken), WS.SPACE);
     }
   }
 
@@ -141,10 +189,8 @@ export default class ExpressionFormatter {
         return this.formatLineComment(token);
       case TokenType.BLOCK_COMMENT:
         return this.formatBlockComment(token);
-      case TokenType.RESERVED_COMMAND:
-        return this.formatCommand(token);
-      case TokenType.RESERVED_BINARY_COMMAND:
-        return this.formatBinaryCommand(token);
+      case TokenType.RESERVED_JOIN:
+        return this.formatJoin(token);
       case TokenType.RESERVED_DEPENDENT_CLAUSE:
         return this.formatDependentClause(token);
       case TokenType.RESERVED_JOIN_CONDITION:
@@ -193,33 +239,8 @@ export default class ExpressionFormatter {
     return comment.replace(/\n[ \t]*/gu, '\n' + this.indentation.getIndent() + ' ');
   }
 
-  /**
-   * Formats a Reserved Command onto query, increasing indentation level where necessary
-   */
-  private formatCommand(token: Token) {
-    this.indentation.decreaseTopLevel();
-
-    this.query.add(WS.NEWLINE, WS.INDENT);
-
-    this.indentation.increaseTopLevel();
-
-    this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
-  }
-
-  /**
-   * Formats a Reserved Binary Command onto query, joining neighbouring tokens
-   */
-  private formatBinaryCommand(token: Token) {
-    const isJoin = /JOIN/i.test(token.value); // check if token contains JOIN
-    if (!isJoin) {
-      // decrease for boolean set operators
-      this.indentation.decreaseTopLevel();
-    }
-    if (isJoin) {
-      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
-    } else {
-      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.NEWLINE, WS.INDENT);
-    }
+  private formatJoin(token: Token) {
+    this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
   }
 
   /**
