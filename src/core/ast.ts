@@ -19,6 +19,14 @@ export type Parenthesis = {
   hasWhitespaceBefore: boolean;
 };
 
-export type AstNode = Parenthesis | TokenNode;
+export type BetweenPredicate = {
+  type: 'between_predicate';
+  betweenToken: Token;
+  expr1: Token;
+  andToken: Token;
+  expr2: Token;
+};
+
+export type AstNode = Parenthesis | BetweenPredicate | TokenNode;
 
 export const isTokenNode = (node: AstNode): node is TokenNode => node.type === 'token';

@@ -1,4 +1,4 @@
-import { isTokenNode, Parenthesis } from './ast';
+import { BetweenPredicate, Parenthesis } from './ast';
 import { isToken, type Token, TokenType } from './token';
 
 /**
@@ -23,14 +23,19 @@ export default class InlineBlock {
     let length = 2; // two parenthesis
 
     for (const node of parenthesis.children) {
-      if (isTokenNode(node)) {
-        length += node.token.value.length;
-
-        if (this.isForbiddenToken(node.token)) {
-          return Infinity;
-        }
-      } else {
-        length += this.inlineWidth(node);
+      switch (node.type) {
+        case 'parenthesis':
+          length += this.inlineWidth(node);
+          break;
+        case 'between_predicate':
+          length += this.betweenWidth(node);
+          break;
+        case 'token':
+          length += node.token.value.length;
+          if (this.isForbiddenToken(node.token)) {
+            return Infinity;
+          }
+          break;
       }
 
       // Overran max length
@@ -39,6 +44,12 @@ export default class InlineBlock {
       }
     }
     return length;
+  }
+
+  private betweenWidth(node: BetweenPredicate): number {
+    return [node.betweenToken, node.expr1, node.andToken, node.expr2]
+      .map(token => token.value.length)
+      .reduce((a, b) => a + b);
   }
 
   // Reserved words that cause newlines, comments and semicolons

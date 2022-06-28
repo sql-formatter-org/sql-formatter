@@ -1,6 +1,6 @@
 /* eslint-disable no-cond-assign */
-import { AstNode, Parenthesis, Statement, TokenNode } from './ast';
-import { EOF_TOKEN, type Token, TokenType } from './token';
+import { AstNode, BetweenPredicate, Parenthesis, Statement, TokenNode } from './ast';
+import { EOF_TOKEN, type Token, TokenType, isToken } from './token';
 
 /**
  * A rudimentary parser that slices token stream into list of SQL statements
@@ -22,7 +22,7 @@ export default class Parser {
 
   private statement(): Statement | undefined {
     const children: AstNode[] = [];
-    let expr: Parenthesis | undefined;
+    let expr: Parenthesis | BetweenPredicate | undefined;
     while (true) {
       if (this.look().value === ';') {
         children.push(this.nextTokenNode());
@@ -33,7 +33,7 @@ export default class Parser {
         } else {
           return undefined;
         }
-      } else if ((expr = this.parenthesis())) {
+      } else if ((expr = this.parenthesis() || this.betweenPredicate())) {
         children.push(expr);
       } else {
         children.push(this.nextTokenNode());
@@ -49,7 +49,7 @@ export default class Parser {
       const hasWhitespaceBefore = Boolean(token.whitespaceBefore);
       let closeParen = '';
       while (this.look().type !== TokenType.CLOSE_PAREN && this.look().type !== TokenType.EOF) {
-        children.push(this.parenthesis() || this.nextTokenNode());
+        children.push(this.parenthesis() || this.betweenPredicate() || this.nextTokenNode());
       }
       if (this.look().type === TokenType.CLOSE_PAREN) {
         closeParen = this.next().value;
@@ -59,9 +59,22 @@ export default class Parser {
     return undefined;
   }
 
+  private betweenPredicate(): BetweenPredicate | undefined {
+    if (isToken.BETWEEN(this.look()) && isToken.AND(this.look(2))) {
+      return {
+        type: 'between_predicate',
+        betweenToken: this.next(),
+        expr1: this.next(),
+        andToken: this.next(),
+        expr2: this.next(),
+      };
+    }
+    return undefined;
+  }
+
   // Returns current token without advancing the pointer
-  private look(): Token {
-    return this.tokens[this.index] || EOF_TOKEN;
+  private look(ahead = 0): Token {
+    return this.tokens[this.index + ahead] || EOF_TOKEN;
   }
 
   // Returns current token and advances the pointer to next token
