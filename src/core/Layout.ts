@@ -7,9 +7,8 @@ export enum WS {
   SPACE = 1, // Adds single space
   NO_SPACE = 2, // Removes preceding horizontal whitespace (if any)
   NEWLINE = 3, // Adds single newline (and removes any preceding whitespace)
-  NO_NEWLINE = 4, // Removes all preceding whitespace (including newlines)
-  INDENT = 5, // Adds indentation (as much as needed for current indentation level)
-  SINGLE_INDENT = 6, // Adds whitespace for single indentation step
+  INDENT = 4, // Adds indentation (as much as needed for current indentation level)
+  SINGLE_INDENT = 5, // Adds whitespace for single indentation step
 }
 
 export type LayoutItem = WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | string;
@@ -42,9 +41,6 @@ export default class Layout {
           this.trimHorizontalWhitespace();
           this.addNewline();
           break;
-        case WS.NO_NEWLINE:
-          this.trimAllWhitespace();
-          break;
         case WS.INDENT:
           this.addIndentation();
           break;
@@ -59,12 +55,6 @@ export default class Layout {
 
   private trimHorizontalWhitespace() {
     while (isHorizontalWhitespace(last(this.items))) {
-      this.items.pop();
-    }
-  }
-
-  private trimAllWhitespace() {
-    while (isWhitespace(last(this.items))) {
       this.items.pop();
     }
   }
@@ -104,6 +94,3 @@ export default class Layout {
 
 const isHorizontalWhitespace = (item: WS | string | undefined) =>
   item === WS.SPACE || item === WS.SINGLE_INDENT;
-
-const isWhitespace = (item: WS | string | undefined) =>
-  item === WS.SPACE || item === WS.SINGLE_INDENT || item === WS.NEWLINE;
