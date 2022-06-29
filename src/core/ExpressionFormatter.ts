@@ -16,13 +16,13 @@ import {
   Parenthesis,
 } from './ast';
 import { isTabularStyle } from './config';
-import WhitespaceBuilder, { WS } from './WhitespaceBuilder';
+import Layout, { WS } from './Layout';
 import toTabularFormat, { isTabularToken } from './tabularStyle';
 
 interface ExpressionFormatterParams {
   cfg: FormatOptions;
   params: Params;
-  query: WhitespaceBuilder;
+  query: Layout;
   inline?: boolean;
 }
 
@@ -31,7 +31,7 @@ export default class ExpressionFormatter {
   private cfg: FormatOptions;
   private inlineBlock: InlineBlock;
   private params: Params;
-  private query: WhitespaceBuilder;
+  private query: Layout;
 
   private inline = false;
   private nodes: AstNode[] = [];
@@ -45,7 +45,7 @@ export default class ExpressionFormatter {
     this.query = query;
   }
 
-  public format(nodes: AstNode[]): WhitespaceBuilder {
+  public format(nodes: AstNode[]): Layout {
     this.nodes = nodes;
 
     for (this.index = 0; this.index < this.nodes.length; this.index++) {
@@ -179,7 +179,7 @@ export default class ExpressionFormatter {
     this.query.add('*', WS.SPACE);
   }
 
-  private formatSubExpression(nodes: AstNode[], inline = this.inline): WhitespaceBuilder {
+  private formatSubExpression(nodes: AstNode[], inline = this.inline): Layout {
     return new ExpressionFormatter({
       cfg: this.cfg,
       params: this.params,

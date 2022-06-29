@@ -21,7 +21,7 @@ export type LayoutItem = WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | string;
  * Originally it used plain string concatenation, which was expensive.
  * Now it's storing items to array and builds the string only in the end.
  */
-export default class WhitespaceBuilder {
+export default class Layout {
   private layout: LayoutItem[] = [];
 
   constructor(public indentation: Indentation) {}
