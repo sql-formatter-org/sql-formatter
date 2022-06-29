@@ -1,4 +1,4 @@
-# multilineLists
+# multilineLists (DEPRECATED)
 
 Determines when to break lists of items (e.g. columns in `SELECT` clause) to multiple lines.
 

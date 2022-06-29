@@ -1,4 +1,4 @@
-# newlineBeforeOpenParen
+# newlineBeforeOpenParen (DEPRECATED)
 
 Decides whether to place open-parenthesis `(` of sub-queries on a separate line.
 

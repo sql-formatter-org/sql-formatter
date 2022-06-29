@@ -1,4 +1,4 @@
-# newlineBeforeCloseParen
+# newlineBeforeCloseParen (DEPRECATED)
 
 Decides whether to place close-parenthesis `)` of sub-queries on a separate line.
 
