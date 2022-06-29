@@ -6,7 +6,7 @@ This option is designed to be used through API (though nothing really prevents u
 
 ## Option value
 
-- `Array` of strings and/or numbers for position placeholders.
+- `Array` of strings for position placeholders.
 - `Object` of name-value pairs for named (and indexed) placeholders.
 
 Note: The escaping of values must be handled by user of the API.
