@@ -22,7 +22,7 @@ import toTabularFormat, { isTabularToken } from './tabularStyle';
 interface ExpressionFormatterParams {
   cfg: FormatOptions;
   params: Params;
-  query: Layout;
+  layout: Layout;
   inline?: boolean;
 }
 
@@ -31,18 +31,18 @@ export default class ExpressionFormatter {
   private cfg: FormatOptions;
   private inlineBlock: InlineBlock;
   private params: Params;
-  private query: Layout;
+  private layout: Layout;
 
   private inline = false;
   private nodes: AstNode[] = [];
   private index = -1;
 
-  constructor({ cfg, params, query, inline = false }: ExpressionFormatterParams) {
+  constructor({ cfg, params, layout, inline = false }: ExpressionFormatterParams) {
     this.cfg = cfg;
     this.inline = inline;
     this.inlineBlock = new InlineBlock(this.cfg.expressionWidth);
     this.params = params;
-    this.query = query;
+    this.layout = layout;
   }
 
   public format(nodes: AstNode[]): Layout {
@@ -80,16 +80,16 @@ export default class ExpressionFormatter {
           break;
       }
     }
-    return this.query;
+    return this.layout;
   }
 
   private formatFunctionCall(node: FunctionCall) {
-    this.query.add(this.show(node.nameToken));
+    this.layout.add(this.show(node.nameToken));
     this.formatParenthesis(node.parenthesis);
   }
 
   private formatArraySubscript(node: ArraySubscript) {
-    this.query.add(this.show(node.arrayToken));
+    this.layout.add(this.show(node.arrayToken));
     this.formatParenthesis(node.parenthesis);
   }
 
@@ -97,28 +97,28 @@ export default class ExpressionFormatter {
     const inline = this.inlineBlock.isInlineBlock(node);
 
     if (inline) {
-      this.query.add(node.openParen);
-      this.query = this.formatSubExpression(node.children, inline);
-      this.query.add(WS.NO_SPACE, node.closeParen, WS.SPACE);
+      this.layout.add(node.openParen);
+      this.layout = this.formatSubExpression(node.children, inline);
+      this.layout.add(WS.NO_SPACE, node.closeParen, WS.SPACE);
     } else {
-      this.query.add(node.openParen, WS.NEWLINE);
+      this.layout.add(node.openParen, WS.NEWLINE);
 
       if (isTabularStyle(this.cfg)) {
-        this.query.add(WS.INDENT);
-        this.query = this.formatSubExpression(node.children, inline);
+        this.layout.add(WS.INDENT);
+        this.layout = this.formatSubExpression(node.children, inline);
       } else {
-        this.query.indentation.increaseBlockLevel();
-        this.query.add(WS.INDENT);
-        this.query = this.formatSubExpression(node.children, inline);
-        this.query.indentation.decreaseBlockLevel();
+        this.layout.indentation.increaseBlockLevel();
+        this.layout.add(WS.INDENT);
+        this.layout = this.formatSubExpression(node.children, inline);
+        this.layout.indentation.decreaseBlockLevel();
       }
 
-      this.query.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
+      this.layout.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
     }
   }
 
   private formatBetweenPredicate(node: BetweenPredicate) {
-    this.query.add(
+    this.layout.add(
       this.show(node.betweenToken),
       WS.SPACE,
       this.show(node.expr1),
@@ -132,34 +132,34 @@ export default class ExpressionFormatter {
 
   private formatClause(node: Clause) {
     if (isTabularStyle(this.cfg)) {
-      this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.SPACE);
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.SPACE);
     } else {
-      this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
     }
-    this.query.indentation.increaseTopLevel();
+    this.layout.indentation.increaseTopLevel();
 
     if (!isTabularStyle(this.cfg)) {
-      this.query.add(WS.INDENT);
+      this.layout.add(WS.INDENT);
     }
-    this.query = this.formatSubExpression(node.children);
+    this.layout = this.formatSubExpression(node.children);
 
-    this.query.indentation.decreaseTopLevel();
+    this.layout.indentation.decreaseTopLevel();
   }
 
   private formatBinaryClause(node: BinaryClause) {
-    this.query.indentation.decreaseTopLevel();
-    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
+    this.layout.indentation.decreaseTopLevel();
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
 
-    this.query.add(WS.INDENT);
-    this.query = this.formatSubExpression(node.children);
+    this.layout.add(WS.INDENT);
+    this.layout = this.formatSubExpression(node.children);
   }
 
   private formatLimitClause(node: LimitClause) {
-    this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.limitToken));
-    this.query.indentation.increaseTopLevel();
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.limitToken));
+    this.layout.indentation.increaseTopLevel();
 
     if (node.offsetToken) {
-      this.query.add(
+      this.layout.add(
         WS.NEWLINE,
         WS.INDENT,
         this.show(node.offsetToken),
@@ -169,21 +169,21 @@ export default class ExpressionFormatter {
         WS.SPACE
       );
     } else {
-      this.query.add(WS.NEWLINE, WS.INDENT, this.show(node.countToken), WS.SPACE);
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.countToken), WS.SPACE);
     }
-    this.query.indentation.decreaseTopLevel();
+    this.layout.indentation.decreaseTopLevel();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private formatAllColumnsAsterisk(node: AllColumnsAsterisk) {
-    this.query.add('*', WS.SPACE);
+    this.layout.add('*', WS.SPACE);
   }
 
   private formatSubExpression(nodes: AstNode[], inline = this.inline): Layout {
     return new ExpressionFormatter({
       cfg: this.cfg,
       params: this.params,
-      query: this.query,
+      layout: this.layout,
       inline,
     }).format(nodes);
   }
@@ -226,20 +226,20 @@ export default class ExpressionFormatter {
    * Formats ident/string/number/variable tokens
    */
   private formatWord(token: Token) {
-    this.query.add(this.show(token), WS.SPACE);
+    this.layout.add(this.show(token), WS.SPACE);
   }
 
   /** Formats a line comment onto query */
   private formatLineComment(token: Token) {
-    this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
+    this.layout.add(this.show(token), WS.NEWLINE, WS.INDENT);
   }
 
   /** Formats a block comment onto query */
   private formatBlockComment(token: Token) {
     this.splitBlockComment(token.value).forEach(line => {
-      this.query.add(WS.NEWLINE, WS.INDENT, line);
+      this.layout.add(WS.NEWLINE, WS.INDENT, line);
     });
-    this.query.add(WS.NEWLINE, WS.INDENT);
+    this.layout.add(WS.NEWLINE, WS.INDENT);
   }
 
   private splitBlockComment(comment: string): string[] {
@@ -255,11 +255,11 @@ export default class ExpressionFormatter {
   private formatJoin(token: Token) {
     if (isTabularStyle(this.cfg)) {
       // in tabular style JOINs are at the same level as clauses
-      this.query.indentation.decreaseTopLevel();
-      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
-      this.query.indentation.increaseTopLevel();
+      this.layout.indentation.decreaseTopLevel();
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+      this.layout.indentation.increaseTopLevel();
     } else {
-      this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
     }
   }
 
@@ -267,19 +267,19 @@ export default class ExpressionFormatter {
    * Formats a Reserved Keyword onto query
    */
   private formatKeyword(token: Token) {
-    this.query.add(this.show(token), WS.SPACE);
+    this.layout.add(this.show(token), WS.SPACE);
   }
 
   /**
    * Formats a Reserved Dependent Clause token onto query, supporting the keyword that precedes it
    */
   private formatDependentClause(token: Token) {
-    this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
   }
 
   // Formats ON and USING keywords
   private formatJoinCondition(token: Token) {
-    this.query.add(this.show(token), WS.SPACE);
+    this.layout.add(this.show(token), WS.SPACE);
   }
 
   /**
@@ -291,18 +291,18 @@ export default class ExpressionFormatter {
       this.formatComma(token);
       return;
     } else if (token.value === ':') {
-      this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);
+      this.layout.add(WS.NO_SPACE, this.show(token), WS.SPACE);
       return;
     } else if (token.value === '.') {
-      this.query.add(WS.NO_SPACE, this.show(token));
+      this.layout.add(WS.NO_SPACE, this.show(token));
       return;
     }
 
     // other operators
     if (this.cfg.denseOperators) {
-      this.query.add(WS.NO_SPACE, this.show(token));
+      this.layout.add(WS.NO_SPACE, this.show(token));
     } else {
-      this.query.add(this.show(token), WS.SPACE);
+      this.layout.add(this.show(token), WS.SPACE);
     }
   }
 
@@ -313,20 +313,20 @@ export default class ExpressionFormatter {
     if (this.cfg.logicalOperatorNewline === 'before') {
       if (isTabularStyle(this.cfg)) {
         // In tabular style AND/OR is placed on the same level as clauses
-        this.query.indentation.decreaseTopLevel();
-        this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
-        this.query.indentation.increaseTopLevel();
+        this.layout.indentation.decreaseTopLevel();
+        this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+        this.layout.indentation.increaseTopLevel();
       } else {
-        this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+        this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
       }
     } else {
-      this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
+      this.layout.add(this.show(token), WS.NEWLINE, WS.INDENT);
     }
   }
 
   private formatCaseStart(token: Token) {
-    this.query.indentation.increaseBlockLevel();
-    this.query.add(this.show(token), WS.NEWLINE, WS.INDENT);
+    this.layout.indentation.increaseBlockLevel();
+    this.layout.add(this.show(token), WS.NEWLINE, WS.INDENT);
   }
 
   private formatCaseEnd(token: Token) {
@@ -334,16 +334,16 @@ export default class ExpressionFormatter {
   }
 
   private formatMultilineBlockEnd(token: Token) {
-    this.query.indentation.decreaseBlockLevel();
+    this.layout.indentation.decreaseBlockLevel();
 
-    this.query.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
   }
 
   /**
    * Formats a parameter placeholder item onto query, to be replaced with the value of the placeholder
    */
   private formatParameter(token: Token) {
-    this.query.add(this.params.get(token), WS.SPACE);
+    this.layout.add(this.params.get(token), WS.SPACE);
   }
 
   /**
@@ -351,9 +351,9 @@ export default class ExpressionFormatter {
    */
   private formatComma(token: Token) {
     if (!this.inline) {
-      this.query.add(WS.NO_SPACE, this.show(token), WS.NEWLINE, WS.INDENT);
+      this.layout.add(WS.NO_SPACE, this.show(token), WS.NEWLINE, WS.INDENT);
     } else {
-      this.query.add(WS.NO_SPACE, this.show(token), WS.SPACE);
+      this.layout.add(WS.NO_SPACE, this.show(token), WS.SPACE);
     }
   }
 
