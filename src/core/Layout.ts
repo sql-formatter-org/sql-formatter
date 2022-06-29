@@ -5,8 +5,8 @@ import Indentation from './Indentation';
 /** Whitespace modifiers to be used with add() method */
 export enum WS {
   SPACE = 1, // Adds single space
-  NO_SPACE = 2, // Removes preceding spaces (if any)
-  NEWLINE = 3, // Adds single newline
+  NO_SPACE = 2, // Removes preceding horizontal whitespace (if any)
+  NEWLINE = 3, // Adds single newline (and removes any preceding whitespace)
   NO_NEWLINE = 4, // Removes all preceding whitespace (including newlines)
   INDENT = 5, // Adds indentation (as much as needed for current indentation level)
   SINGLE_INDENT = 6, // Adds whitespace for single indentation step
