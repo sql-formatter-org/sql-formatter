@@ -166,4 +166,128 @@ describe('BigQueryFormatter', () => {
         Items;
     `);
   });
+
+  it('supports create view optional arguments', () => {
+    expect(
+      format(`
+      CREATE OR REPLACE VIEW my_dataset.my_view AS (
+        SELECT t1.col1, t1.col2 FROM my_dataset.my_table)`)
+    ).toBe(dedent`
+      CREATE OR REPLACE VIEW
+        my_dataset.my_view AS (
+          SELECT
+            t1.col1,
+            t1.col2
+          FROM
+            my_dataset.my_table
+        )
+    `);
+
+    expect(
+      format(`
+      CREATE VIEW IF NOT EXISTS my_dataset.my_view AS (
+        SELECT t1.col1, t1.col2 FROM my_dataset.my_table)`)
+    ).toBe(dedent`
+      CREATE VIEW IF NOT EXISTS
+        my_dataset.my_view AS (
+          SELECT
+            t1.col1,
+            t1.col2
+          FROM
+            my_dataset.my_table
+        )
+    `);
+  });
+
+  it('supports create table optional arguments', () => {
+    expect(
+      format(`
+      CREATE TABLE mydataset.newtable (
+        a INT64 NOT NULL
+      )`)
+    ).toBe(dedent`
+      CREATE TABLE
+        mydataset.newtable (a INT64 NOT NULL)
+    `);
+
+    expect(
+      format(`
+      CREATE TABLE IF NOT EXISTS mydataset.newtable (
+        a INT64 NOT NULL
+      )`)
+    ).toBe(dedent`
+      CREATE TABLE IF NOT EXISTS
+        mydataset.newtable (a INT64 NOT NULL)
+    `);
+
+    expect(
+      format(`
+      CREATE TEMP TABLE mydataset.newtable (
+        a INT64 NOT NULL
+      )`)
+    ).toBe(dedent`
+      CREATE TEMP TABLE
+        mydataset.newtable (a INT64 NOT NULL)
+    `);
+
+    expect(
+      format(`
+      CREATE TEMP TABLE IF NOT EXISTS mydataset.newtable (
+        a INT64 NOT NULL
+      )`)
+    ).toBe(dedent`
+      CREATE TEMP TABLE IF NOT EXISTS
+        mydataset.newtable (a INT64 NOT NULL)
+    `);
+
+    expect(
+      format(`
+      CREATE TEMPORARY TABLE mydataset.newtable (
+        a INT64 NOT NULL
+      )`)
+    ).toBe(dedent`
+      CREATE TEMPORARY TABLE
+        mydataset.newtable (a INT64 NOT NULL)
+    `);
+
+    expect(
+      format(`
+      CREATE TEMPORARY TABLE IF NOT EXISTS mydataset.newtable (
+        a INT64 NOT NULL
+      )`)
+    ).toBe(dedent`
+      CREATE TEMPORARY TABLE IF NOT EXISTS
+        mydataset.newtable (a INT64 NOT NULL)
+    `);
+
+    expect(
+      format(`
+      CREATE OR REPLACE TABLE mydataset.newtable (
+        a INT64 NOT NULL
+      )`)
+    ).toBe(dedent`
+      CREATE OR REPLACE TABLE
+        mydataset.newtable (a INT64 NOT NULL)
+    `);
+
+    expect(
+      format(`
+      CREATE OR REPLACE TEMP TABLE mydataset.newtable (
+        a INT64 NOT NULL
+      )`)
+    ).toBe(dedent`
+      CREATE OR REPLACE TEMP TABLE
+        mydataset.newtable (a INT64 NOT NULL)
+    `);
+
+    expect(
+      format(`
+      CREATE OR REPLACE TEMPORARY TABLE mydataset.newtable (
+        a INT64 NOT NULL
+      )`)
+    ).toBe(dedent`
+      CREATE OR REPLACE TEMPORARY TABLE
+        mydataset.newtable (a INT64 NOT NULL)
+    `);
+  });
 });
