@@ -1671,13 +1671,6 @@ prelude-ls@^1.2.1:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
-prettier-sql@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/prettier-sql/-/prettier-sql-5.1.0.tgz#cb5dcea3904ff628abf7ebf1ca61a4c1eb7779d3"
-  integrity sha512-85IvpNNDhECsIjb7rImLo5JIIcwssgx63NPbnlEUtsjHMN28Aik8xmFYLXesq09oGS3KX7COfINmKttVPvRrCw==
-  dependencies:
-    argparse "^2.0.1"
-
 process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
