@@ -168,126 +168,53 @@ describe('BigQueryFormatter', () => {
   });
 
   it('supports create view optional arguments', () => {
-    expect(
-      format(`
-      CREATE OR REPLACE VIEW my_dataset.my_view AS (
-        SELECT t1.col1, t1.col2 FROM my_dataset.my_table)`)
-    ).toBe(dedent`
-      CREATE OR REPLACE VIEW
-        my_dataset.my_view AS (
-          SELECT
-            t1.col1,
-            t1.col2
-          FROM
-            my_dataset.my_table
-        )
-    `);
+    const createViewVariations = [
+      'CREATE VIEW',
+      'CREATE OR REPLACE VIEW',
+      'CREATE VIEW IF NOT EXISTS',
+    ];
 
-    expect(
-      format(`
-      CREATE VIEW IF NOT EXISTS my_dataset.my_view AS (
-        SELECT t1.col1, t1.col2 FROM my_dataset.my_table)`)
-    ).toBe(dedent`
-      CREATE VIEW IF NOT EXISTS
-        my_dataset.my_view AS (
-          SELECT
-            t1.col1,
-            t1.col2
-          FROM
-            my_dataset.my_table
-        )
-    `);
+    createViewVariations.forEach((createViewVariation: string) => {
+      expect(
+        format(`
+        ${createViewVariation} my_dataset.my_view AS (
+          SELECT t1.col1, t1.col2 FROM my_dataset.my_table)`)
+      ).toBe(dedent`
+        ${createViewVariation}
+          my_dataset.my_view AS (
+            SELECT
+              t1.col1,
+              t1.col2
+            FROM
+              my_dataset.my_table
+          )
+      `);
+    });
   });
 
   it('supports create table optional arguments', () => {
-    expect(
-      format(`
-      CREATE TABLE mydataset.newtable (
-        a INT64 NOT NULL
-      )`)
-    ).toBe(dedent`
-      CREATE TABLE
-        mydataset.newtable (a INT64 NOT NULL)
-    `);
+    const createTableVariations = [
+      'CREATE TABLE',
+      'CREATE TABLE IF NOT EXISTS',
+      'CREATE TEMP TABLE',
+      'CREATE TEMP TABLE IF NOT EXISTS',
+      'CREATE TEMPORARY TABLE',
+      'CREATE TEMPORARY TABLE IF NOT EXISTS',
+      'CREATE OR REPLACE TABLE',
+      'CREATE OR REPLACE TEMP TABLE',
+      'CREATE OR REPLACE TEMPORARY TABLE',
+    ];
 
-    expect(
-      format(`
-      CREATE TABLE IF NOT EXISTS mydataset.newtable (
-        a INT64 NOT NULL
-      )`)
-    ).toBe(dedent`
-      CREATE TABLE IF NOT EXISTS
-        mydataset.newtable (a INT64 NOT NULL)
-    `);
-
-    expect(
-      format(`
-      CREATE TEMP TABLE mydataset.newtable (
-        a INT64 NOT NULL
-      )`)
-    ).toBe(dedent`
-      CREATE TEMP TABLE
-        mydataset.newtable (a INT64 NOT NULL)
-    `);
-
-    expect(
-      format(`
-      CREATE TEMP TABLE IF NOT EXISTS mydataset.newtable (
-        a INT64 NOT NULL
-      )`)
-    ).toBe(dedent`
-      CREATE TEMP TABLE IF NOT EXISTS
-        mydataset.newtable (a INT64 NOT NULL)
-    `);
-
-    expect(
-      format(`
-      CREATE TEMPORARY TABLE mydataset.newtable (
-        a INT64 NOT NULL
-      )`)
-    ).toBe(dedent`
-      CREATE TEMPORARY TABLE
-        mydataset.newtable (a INT64 NOT NULL)
-    `);
-
-    expect(
-      format(`
-      CREATE TEMPORARY TABLE IF NOT EXISTS mydataset.newtable (
-        a INT64 NOT NULL
-      )`)
-    ).toBe(dedent`
-      CREATE TEMPORARY TABLE IF NOT EXISTS
-        mydataset.newtable (a INT64 NOT NULL)
-    `);
-
-    expect(
-      format(`
-      CREATE OR REPLACE TABLE mydataset.newtable (
-        a INT64 NOT NULL
-      )`)
-    ).toBe(dedent`
-      CREATE OR REPLACE TABLE
-        mydataset.newtable (a INT64 NOT NULL)
-    `);
-
-    expect(
-      format(`
-      CREATE OR REPLACE TEMP TABLE mydataset.newtable (
-        a INT64 NOT NULL
-      )`)
-    ).toBe(dedent`
-      CREATE OR REPLACE TEMP TABLE
-        mydataset.newtable (a INT64 NOT NULL)
-    `);
-
-    expect(
-      format(`
-      CREATE OR REPLACE TEMPORARY TABLE mydataset.newtable (
-        a INT64 NOT NULL
-      )`)
-    ).toBe(dedent`
-      CREATE OR REPLACE TEMPORARY TABLE
-        mydataset.newtable (a INT64 NOT NULL)
-    `);
+    createTableVariations.forEach((createTableVariation: string) => {
+      expect(
+        format(`
+        ${createTableVariation} mydataset.newtable (
+          a INT64 NOT NULL
+        )`)
+      ).toBe(dedent`
+        ${createTableVariation}
+          mydataset.newtable (a INT64 NOT NULL)
+      `);
+    });
   });
 });
