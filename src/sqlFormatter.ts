@@ -13,7 +13,6 @@ import SqlFormatter from 'src/languages/sql.formatter';
 import TSqlFormatter from 'src/languages/tsql.formatter';
 
 import type { FormatOptions } from './types';
-import { isNumber } from './utils';
 import { ParamItems } from './core/Params';
 
 export const formatters = {
@@ -42,7 +41,6 @@ const defaultOptions: FormatFnOptions = {
   useTabs: false,
   keywordCase: 'preserve',
   indentStyle: 'standard',
-  multilineLists: 'always',
   logicalOperatorNewline: 'before',
   aliasAs: 'preserve',
   tabulateAlias: false,
@@ -83,8 +81,8 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
     throw new ConfigError(`Unsupported SQL dialect: ${cfg.language}`);
   }
 
-  if (isNumber(cfg.multilineLists) && cfg.multilineLists <= 0) {
-    throw new ConfigError('multilineLists config must be a positive number.');
+  if ('multilineLists' in cfg) {
+    throw new ConfigError('multilineLists config is no more supported.');
   }
 
   if (cfg.expressionWidth <= 0) {

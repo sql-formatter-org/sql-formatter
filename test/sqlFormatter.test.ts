@@ -24,4 +24,10 @@ describe('sqlFormatter', () => {
       'Invalid query argument. Expected string, instead got undefined'
     );
   });
+
+  it('throws error when multilineLists config option used', () => {
+    expect(() => {
+      format('SELECT *', { multilineLists: 'always' } as any);
+    }).toThrow('multilineLists config is no more supported.');
+  });
 });

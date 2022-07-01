@@ -149,7 +149,6 @@ All fields are optional and all fields that are not specified will be filled wit
 - [**`useTabs`**](docs/useTabs.md) to use tabs for indentation.
 - [**`keywordCase`**](docs/keywordCase.md) uppercases or lowercases keywords.
 - [**`indentStyle`**](docs/indentStyle.md) defines overall indentation style.
-- [**`multilineLists`**](docs/multilineLists.md) **(DEPRECATED)** determines when to break lists of items to multiple lines.
 - [**`logicalOperatorNewline`**](docs/logicalOperatorNewline.md) newline before or after boolean operator (AND, OR, XOR).
 - [**`aliasAs`**](docs/aliasAs.md) enforces or forbids use of AS keyword for aliases.
 - [**`tabulateAlias`**](docs/tabulateAlias.md) aligns column aliases vertically.
