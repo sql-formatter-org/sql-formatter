@@ -30,9 +30,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsKeywordCase(format);
   supportsIndentStyle(format);
   supportsLinesBetweenQueries(format);
-  // supportsMultilineLists(format); // XXX: Feature is disabled for now
   supportsExpressionWidth(format);
-  // supportsNewlineBeforeParen(format); // XXX: Feature is disabled for now
   supportsNewlineBeforeSemicolon(format);
   supportsCommaPosition(format);
   supportsLogicalOperatorNewline(format);

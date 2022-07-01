@@ -8,10 +8,6 @@ Does not effect table name aliases.
 - `false` (default) does nothing.
 - `true` aligns column aliases into single column.
 
-Caveats:
-
-Does not work when option `multilineLists: "avoid"` is used.
-
 ### tabulateAlias: false
 
 ```

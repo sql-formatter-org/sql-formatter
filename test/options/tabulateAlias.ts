@@ -95,21 +95,6 @@ export default function supportsTabulateAlias(format: FormatFn) {
     `);
   });
 
-  it.skip('does not tabulate aliases when multilineLists:avoid used', () => {
-    const result = format(
-      'SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );',
-      { multilineLists: 'avoid', tabulateAlias: true }
-    );
-
-    expect(result).toBe(dedent`
-      SELECT alpha AS alp, MAX(beta), epsilon AS E
-      FROM (
-          SELECT mu AS m, iota AS io
-          FROM gamma
-        );
-    `);
-  });
-
   it('works together with indentStyle:tabularLeft', () => {
     const result = format(
       dedent`SELECT alpha AS alp, MAX(beta), epsilon AS E FROM ( SELECT mu AS m, iota AS io FROM gamma );`,

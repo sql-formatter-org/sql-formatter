@@ -109,21 +109,4 @@ export default function supportsCase(format: FormatFn) {
         quaz
     `);
   });
-
-  it.skip('breaks SELECT with CASE to multiple lines even when multilineLists:avoid is used', () => {
-    const result = format("SELECT foo, bar, CASE baz WHEN 'one' THEN 1 ELSE 2 END FROM tbl;", {
-      multilineLists: 'avoid',
-    });
-
-    expect(result).toBe(dedent`
-      SELECT
-        foo,
-        bar,
-        CASE baz
-          WHEN 'one' THEN 1
-          ELSE 2
-        END
-      FROM tbl;
-    `);
-  });
 }
