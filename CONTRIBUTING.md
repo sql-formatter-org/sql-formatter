@@ -37,6 +37,7 @@ For those who have admin access on the repo, the new release publish flow is as 
 ## Contributors
 
 - Adrien Pyke <adpyke@gmail.com>
+- Ahmad Khan <ahmad.khan@educative.io>
 - Alexandr Kozhevnikov <aedkozhevnikov@sberbank.ru>
 - Andrew
 - Benjamin Bellamy
