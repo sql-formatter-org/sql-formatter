@@ -149,13 +149,13 @@ All fields are optional and all fields that are not specified will be filled wit
 - [**`useTabs`**](docs/useTabs.md) to use tabs for indentation.
 - [**`keywordCase`**](docs/keywordCase.md) uppercases or lowercases keywords.
 - [**`indentStyle`**](docs/indentStyle.md) defines overall indentation style.
-- [**`multilineLists`**](docs/multilineLists.md) determines when to break lists of items to multiple lines.
+- [**`multilineLists`**](docs/multilineLists.md) **(DEPRECATED)** determines when to break lists of items to multiple lines.
 - [**`logicalOperatorNewline`**](docs/logicalOperatorNewline.md) newline before or after boolean operator (AND, OR, XOR).
 - [**`aliasAs`**](docs/aliasAs.md) enforces or forbids use of AS keyword for aliases.
 - [**`tabulateAlias`**](docs/tabulateAlias.md) aligns column aliases vertically.
 - [**`commaPosition`**](docs/commaPosition.md) where to place the comma in column lists.
-- [**`newlineBeforeOpenParen`**](docs/newlineBeforeOpenParen.md) placement of opening parenthesis.
-- [**`newlineBeforeCloseParen`**](docs/newlineBeforeCloseParen.md) placement of closing parenthesis.
+- [**`newlineBeforeOpenParen`**](docs/newlineBeforeOpenParen.md) **(DEPRECATED)** placement of opening parenthesis.
+- [**`newlineBeforeCloseParen`**](docs/newlineBeforeCloseParen.md) **(DEPRECATED)** placement of closing parenthesis.
 - [**`expressionWidth`**](docs/expressionWidth.md) maximum number of characters in parenthesized expressions to be kept on single line.
 - [**`linesBetweenQueries`**](docs/linesBetweenQueries.md) how many newlines to insert between queries.
 - [**`denseOperators`**](docs/denseOperators.md) packs operators densely without spaces.
