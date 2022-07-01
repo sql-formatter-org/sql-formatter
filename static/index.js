@@ -10,12 +10,8 @@ const attachFormat = () => {
   const indentStyle = document.getElementById('indentStyle');
   const logicalOperatorNewline = document.getElementById('logicalOperatorNewline');
   const aliasAs = document.getElementById('aliasAs');
-  const multilineLists = document.getElementById('multilineLists');
-  const itemCount = document.getElementById('multilineLists-itemCount');
   const tabulateAlias = document.getElementById('tabulateAlias');
   const commaPosition = document.getElementById('commaPosition');
-  const newlineBeforeOpenParen = document.getElementById('newlineBeforeOpenParen');
-  const newlineBeforeCloseParen = document.getElementById('newlineBeforeCloseParen');
   const expressionWidth = document.getElementById('expressionWidth');
   const lineBetweenQueries = document.getElementById('lineBetweenQueries');
   const denseOperators = document.getElementById('denseOperators');
@@ -34,12 +30,6 @@ const attachFormat = () => {
   }
 
   function format() {
-    if (multilineLists.options[multilineLists.selectedIndex].value === 'itemCount') {
-      itemCount.style.display = 'inline';
-    } else {
-      itemCount.style.display = 'none';
-    }
-
     try {
       const config = {
         language: language.options[language.selectedIndex].value,
@@ -50,14 +40,8 @@ const attachFormat = () => {
         logicalOperatorNewline:
           logicalOperatorNewline.options[logicalOperatorNewline.selectedIndex].value,
         aliasAs: aliasAs.options[aliasAs.selectedIndex].value,
-        multilineLists:
-          multilineLists.options[multilineLists.selectedIndex].value === 'itemCount'
-            ? itemCount.value
-            : multilineLists.options[multilineLists.selectedIndex].value,
         tabulateAlias: tabulateAlias.checked,
         commaPosition: commaPosition.options[commaPosition.selectedIndex].value,
-        newlineBeforeOpenParen: newlineBeforeOpenParen.checked,
-        newlineBeforeCloseParen: newlineBeforeCloseParen.checked,
         expressionWidth: expressionWidth.value,
         lineBetweenQueries: lineBetweenQueries.value,
         denseOperators: denseOperators.checked,
@@ -91,14 +75,10 @@ const attachFormat = () => {
     useTabs,
     keywordCase,
     indentStyle,
-    multilineLists,
-    itemCount,
     logicalOperatorNewline,
     aliasAs,
     tabulateAlias,
     commaPosition,
-    newlineBeforeOpenParen,
-    newlineBeforeCloseParen,
     expressionWidth,
     lineBetweenQueries,
     denseOperators,
