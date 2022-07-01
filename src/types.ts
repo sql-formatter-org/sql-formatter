@@ -19,8 +19,6 @@ export interface FormatOptions {
   aliasAs: AliasMode;
   tabulateAlias: boolean;
   commaPosition: CommaPosition;
-  newlineBeforeOpenParen: boolean;
-  newlineBeforeCloseParen: boolean;
   expressionWidth: number;
   linesBetweenQueries: number;
   denseOperators: boolean;

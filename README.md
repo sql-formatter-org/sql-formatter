@@ -153,8 +153,6 @@ All fields are optional and all fields that are not specified will be filled wit
 - [**`aliasAs`**](docs/aliasAs.md) enforces or forbids use of AS keyword for aliases.
 - [**`tabulateAlias`**](docs/tabulateAlias.md) aligns column aliases vertically.
 - [**`commaPosition`**](docs/commaPosition.md) where to place the comma in column lists.
-- [**`newlineBeforeOpenParen`**](docs/newlineBeforeOpenParen.md) **(DEPRECATED)** placement of opening parenthesis.
-- [**`newlineBeforeCloseParen`**](docs/newlineBeforeCloseParen.md) **(DEPRECATED)** placement of closing parenthesis.
 - [**`expressionWidth`**](docs/expressionWidth.md) maximum number of characters in parenthesized expressions to be kept on single line.
 - [**`linesBetweenQueries`**](docs/linesBetweenQueries.md) how many newlines to insert between queries.
 - [**`denseOperators`**](docs/denseOperators.md) packs operators densely without spaces.

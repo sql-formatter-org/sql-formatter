@@ -45,8 +45,6 @@ const defaultOptions: FormatFnOptions = {
   aliasAs: 'preserve',
   tabulateAlias: false,
   commaPosition: 'after',
-  newlineBeforeOpenParen: true,
-  newlineBeforeCloseParen: true,
   expressionWidth: 50,
   linesBetweenQueries: 1,
   denseOperators: false,
@@ -83,6 +81,12 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
 
   if ('multilineLists' in cfg) {
     throw new ConfigError('multilineLists config is no more supported.');
+  }
+  if ('newlineBeforeOpenParen' in cfg) {
+    throw new ConfigError('newlineBeforeOpenParen config is no more supported.');
+  }
+  if ('newlineBeforeCloseParen' in cfg) {
+    throw new ConfigError('newlineBeforeCloseParen config is no more supported.');
   }
 
   if (cfg.expressionWidth <= 0) {
