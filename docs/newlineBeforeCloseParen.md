@@ -1,4 +1,4 @@
-# newlineBeforeCloseParen
+# newlineBeforeCloseParen (DEPRECATED)
 
 Decides whether to place close-parenthesis `)` of sub-queries on a separate line.
 
@@ -6,10 +6,6 @@ Decides whether to place close-parenthesis `)` of sub-queries on a separate line
 
 - `true` (default) adds newline before close-parenthesis.
 - `false` no newline.
-
-Caveats:
-
-This option is ignored when `indentStyle: "tabularLeft"` or `"tabularRight"` is used.
 
 ### newlineBeforeCloseParen: true
 
@@ -37,3 +33,8 @@ FROM
     FROM
       my_table );
 ```
+
+## Caveats
+
+- This option is ignored when `indentStyle: "tabularLeft"` or `"tabularRight"` is used.
+- This option is ignored when the parenthized content is smaller than `expressionWidth`.

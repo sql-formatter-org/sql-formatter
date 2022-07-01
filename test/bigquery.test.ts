@@ -169,4 +169,55 @@ describe('BigQueryFormatter', () => {
         Items;
     `);
   });
+
+  it('supports create view optional arguments', () => {
+    const createViewVariations = [
+      'CREATE VIEW',
+      'CREATE OR REPLACE VIEW',
+      'CREATE VIEW IF NOT EXISTS',
+    ];
+
+    createViewVariations.forEach((createViewVariation: string) => {
+      expect(
+        format(`
+        ${createViewVariation} my_dataset.my_view AS (
+          SELECT t1.col1, t1.col2 FROM my_dataset.my_table)`)
+      ).toBe(dedent`
+        ${createViewVariation}
+          my_dataset.my_view AS (
+            SELECT
+              t1.col1,
+              t1.col2
+            FROM
+              my_dataset.my_table
+          )
+      `);
+    });
+  });
+
+  it('supports create table optional arguments', () => {
+    const createTableVariations = [
+      'CREATE TABLE',
+      'CREATE TABLE IF NOT EXISTS',
+      'CREATE TEMP TABLE',
+      'CREATE TEMP TABLE IF NOT EXISTS',
+      'CREATE TEMPORARY TABLE',
+      'CREATE TEMPORARY TABLE IF NOT EXISTS',
+      'CREATE OR REPLACE TABLE',
+      'CREATE OR REPLACE TEMP TABLE',
+      'CREATE OR REPLACE TEMPORARY TABLE',
+    ];
+
+    createTableVariations.forEach((createTableVariation: string) => {
+      expect(
+        format(`
+        ${createTableVariation} mydataset.newtable (
+          a INT64 NOT NULL
+        )`)
+      ).toBe(dedent`
+        ${createTableVariation}
+          mydataset.newtable (a INT64 NOT NULL)
+      `);
+    });
+  });
 });

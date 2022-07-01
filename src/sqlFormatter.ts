@@ -14,6 +14,7 @@ import TSqlFormatter from 'src/languages/tsql.formatter';
 
 import type { FormatOptions } from './types';
 import { isNumber } from './utils';
+import { ParamItems } from './core/Params';
 
 export const formatters = {
   bigquery: BigQueryFormatter,
@@ -110,7 +111,17 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
     );
   }
 
+  if (cfg.params && !validateParams(cfg.params)) {
+    // eslint-disable-next-line no-console
+    console.warn('WARNING: All "params" option values should be strings.');
+  }
+
   return cfg;
+}
+
+function validateParams(params: ParamItems | string[]): boolean {
+  const paramValues = params instanceof Array ? params : Object.values(params);
+  return paramValues.every(p => typeof p === 'string');
 }
 
 export type FormatFn = typeof format;

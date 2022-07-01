@@ -1,4 +1,4 @@
-# multilineLists
+# multilineLists (DEPRECATED)
 
 Determines when to break lists of items (e.g. columns in `SELECT` clause) to multiple lines.
 
@@ -116,3 +116,37 @@ SELECT first_name, last_name, occupation, age
 FROM persons
 GROUP BY age, occupation
 ```
+
+## Caveats
+
+This option has problematic behavior when dealing with comma-separated items within parenthesis.
+
+For example, with `multilineLists: "always"` you'd get this result:
+
+```
+INSERT INTO
+  records (25, 'John', 'Lennon', 1971, 'Imagine');
+
+INSERT INTO
+  records (
+    26,
+    'Michael',
+    'Jackson',
+    1997,
+    'Blood on the Dance Floor'
+  );
+```
+
+Which is not really always.
+
+And with `multilineLists: "avoid"` you'd get:
+
+```
+INSERT INTO records (25, 'John', 'Lennon', 1971, 'Imagine');
+
+INSERT INTO records (
+    26, 'Michael', 'Jackson', 1997, 'Blood on the Dance Floor'
+  );
+```
+
+Which still breaks things to multiple lines, but with incorrect indentation.
