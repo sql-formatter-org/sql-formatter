@@ -9,3 +9,4 @@ Reference of SQL syntax variations.
 - [Arrays and Maps](./arrays-and-maps.md)
 - [SELECT](./select.md)
 - [CREATE TABLE](./create-table.md)
+- [CREATE VIEW](./create-view.md)
