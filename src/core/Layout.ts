@@ -4,11 +4,11 @@ import Indentation from './Indentation';
 
 /** Whitespace modifiers to be used with add() method */
 export enum WS {
-  SPACE = 1, // Adds single space
-  NO_SPACE = 2, // Removes preceding horizontal whitespace (if any)
-  NEWLINE = 3, // Adds single newline (and removes any preceding whitespace)
-  INDENT = 4, // Adds indentation (as much as needed for current indentation level)
-  SINGLE_INDENT = 5, // Adds whitespace for single indentation step
+  SPACE, // Adds single space
+  NO_SPACE, // Removes preceding horizontal whitespace (if any)
+  NEWLINE, // Adds single newline (and removes any preceding whitespace)
+  INDENT, // Adds indentation (as much as needed for current indentation level)
+  SINGLE_INDENT, // Adds whitespace for single indentation step
 }
 
 export type LayoutItem = WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | string;

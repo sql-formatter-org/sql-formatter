@@ -1,4 +1,5 @@
-import { BetweenPredicate, Parenthesis } from './ast';
+import { sum } from 'src/utils';
+import { BetweenPredicate, NodeType, Parenthesis } from './ast';
 import { isToken, type Token, TokenType } from './token';
 
 /**
@@ -24,26 +25,26 @@ export default class InlineBlock {
 
     for (const node of parenthesis.children) {
       switch (node.type) {
-        case 'function_call':
+        case NodeType.function_call:
           length += node.nameToken.value.length + this.inlineWidth(node.parenthesis);
           break;
-        case 'array_subscript':
+        case NodeType.array_subscript:
           length += node.arrayToken.value.length + this.inlineWidth(node.parenthesis);
           break;
-        case 'parenthesis':
+        case NodeType.parenthesis:
           length += this.inlineWidth(node);
           break;
-        case 'between_predicate':
+        case NodeType.between_predicate:
           length += this.betweenWidth(node);
           break;
-        case 'clause':
-        case 'limit_clause':
-        case 'binary_clause':
+        case NodeType.clause:
+        case NodeType.limit_clause:
+        case NodeType.binary_clause:
           return Infinity;
-        case 'all_columns_asterisk':
+        case NodeType.all_columns_asterisk:
           length += 1;
           break;
-        case 'token':
+        case NodeType.token:
           length += node.token.value.length;
           if (this.isForbiddenToken(node.token)) {
             return Infinity;
@@ -60,9 +61,9 @@ export default class InlineBlock {
   }
 
   private betweenWidth(node: BetweenPredicate): number {
-    return [node.betweenToken, node.expr1, node.andToken, node.expr2]
-      .map(token => token.value.length)
-      .reduce((a, b) => a + b);
+    return sum(
+      [node.betweenToken, node.expr1, node.andToken, node.expr2].map(token => token.value.length)
+    );
   }
 
   // Reserved words that cause newlines, comments and semicolons

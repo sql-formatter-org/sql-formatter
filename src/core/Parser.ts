@@ -8,6 +8,7 @@ import {
   Clause,
   FunctionCall,
   LimitClause,
+  NodeType,
   Parenthesis,
   Statement,
   TokenNode,
@@ -36,10 +37,10 @@ export default class Parser {
     while (true) {
       if (this.look().value === ';') {
         this.next();
-        return { type: 'statement', children, hasSemicolon: true };
+        return { type: NodeType.statement, children, hasSemicolon: true };
       } else if (this.look().type === TokenType.EOF) {
         if (children.length > 0) {
-          return { type: 'statement', children, hasSemicolon: false };
+          return { type: NodeType.statement, children, hasSemicolon: false };
         } else {
           return undefined;
         }
@@ -76,7 +77,7 @@ export default class Parser {
       ) {
         children.push(this.expression());
       }
-      return { type: 'clause', nameToken: name, children };
+      return { type: NodeType.clause, nameToken: name, children };
     }
     return undefined;
   }
@@ -94,7 +95,7 @@ export default class Parser {
       ) {
         children.push(this.expression());
       }
-      return { type: 'binary_clause', nameToken: name, children };
+      return { type: NodeType.binary_clause, nameToken: name, children };
     }
     return undefined;
   }
@@ -106,7 +107,7 @@ export default class Parser {
       !this.look(1).whitespaceBefore
     ) {
       return {
-        type: 'function_call',
+        type: NodeType.function_call,
         nameToken: this.next(),
         parenthesis: this.parenthesis() as Parenthesis,
       };
@@ -120,7 +121,7 @@ export default class Parser {
       this.look(1).value === '['
     ) {
       return {
-        type: 'array_subscript',
+        type: NodeType.array_subscript,
         arrayToken: this.next(),
         parenthesis: this.parenthesis() as Parenthesis,
       };
@@ -140,7 +141,7 @@ export default class Parser {
       if (this.look().type === TokenType.CLOSE_PAREN) {
         closeParen = this.next().value;
       }
-      return { type: 'parenthesis', children, openParen, closeParen };
+      return { type: NodeType.parenthesis, children, openParen, closeParen };
     }
     return undefined;
   }
@@ -148,7 +149,7 @@ export default class Parser {
   private betweenPredicate(): BetweenPredicate | undefined {
     if (isToken.BETWEEN(this.look()) && isToken.AND(this.look(2))) {
       return {
-        type: 'between_predicate',
+        type: NodeType.between_predicate,
         betweenToken: this.next(),
         expr1: this.next(),
         andToken: this.next(),
@@ -161,7 +162,7 @@ export default class Parser {
   private limitClause(): LimitClause | undefined {
     if (isToken.LIMIT(this.look()) && this.look(2).value === ',') {
       return {
-        type: 'limit_clause',
+        type: NodeType.limit_clause,
         limitToken: this.next(),
         offsetToken: this.next(),
         countToken: this.next() && this.next(), // Discard comma token
@@ -169,7 +170,7 @@ export default class Parser {
     }
     if (isToken.LIMIT(this.look())) {
       return {
-        type: 'limit_clause',
+        type: NodeType.limit_clause,
         limitToken: this.next(),
         countToken: this.next(),
       };
@@ -180,7 +181,7 @@ export default class Parser {
   private allColumnsAsterisk(): AllColumnsAsterisk | undefined {
     if (this.look().value === '*' && isToken.SELECT(this.look(-1))) {
       this.next();
-      return { type: 'all_columns_asterisk' };
+      return { type: NodeType.all_columns_asterisk };
     }
     return undefined;
   }
@@ -196,6 +197,6 @@ export default class Parser {
   }
 
   private nextTokenNode(): TokenNode {
-    return { type: 'token', token: this.next() };
+    return { type: NodeType.token, token: this.next() };
   }
 }
