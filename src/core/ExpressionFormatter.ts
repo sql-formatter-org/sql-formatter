@@ -13,6 +13,7 @@ import {
   Clause,
   FunctionCall,
   LimitClause,
+  NodeType,
   Parenthesis,
 } from './ast';
 import { isTabularStyle } from './config';
@@ -51,31 +52,31 @@ export default class ExpressionFormatter {
     for (this.index = 0; this.index < this.nodes.length; this.index++) {
       const node = this.nodes[this.index];
       switch (node.type) {
-        case 'function_call':
+        case NodeType.function_call:
           this.formatFunctionCall(node);
           break;
-        case 'array_subscript':
+        case NodeType.array_subscript:
           this.formatArraySubscript(node);
           break;
-        case 'parenthesis':
+        case NodeType.parenthesis:
           this.formatParenthesis(node);
           break;
-        case 'between_predicate':
+        case NodeType.between_predicate:
           this.formatBetweenPredicate(node);
           break;
-        case 'clause':
+        case NodeType.clause:
           this.formatClause(node);
           break;
-        case 'binary_clause':
+        case NodeType.binary_clause:
           this.formatBinaryClause(node);
           break;
-        case 'limit_clause':
+        case NodeType.limit_clause:
           this.formatLimitClause(node);
           break;
-        case 'all_columns_asterisk':
+        case NodeType.all_columns_asterisk:
           this.formatAllColumnsAsterisk(node);
           break;
-        case 'token':
+        case NodeType.token:
           this.formatToken(node.token);
           break;
       }

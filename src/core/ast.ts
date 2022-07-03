@@ -1,44 +1,57 @@
 import { Token } from './token';
 
+export enum NodeType {
+  statement = 'statement',
+  clause = 'clause',
+  binary_clause = 'binary_clause',
+  function_call = 'function_call',
+  array_subscript = 'array_subscript',
+  parenthesis = 'parenthesis',
+  between_predicate = 'between_predicate',
+  limit_clause = 'limit_clause',
+  all_columns_asterisk = 'all_columns_asterisk',
+  token = 'token',
+}
+
 export type Statement = {
-  type: 'statement';
+  type: NodeType.statement;
   children: AstNode[];
   hasSemicolon: boolean;
 };
 
 export type Clause = {
-  type: 'clause';
+  type: NodeType.clause;
   nameToken: Token;
   children: AstNode[];
 };
 
 export type BinaryClause = {
-  type: 'binary_clause';
+  type: NodeType.binary_clause;
   nameToken: Token;
   children: AstNode[];
 };
 
 // Wrapper for plain nodes inside AST
 export type TokenNode = {
-  type: 'token';
+  type: NodeType.token;
   token: Token;
 };
 
 export type FunctionCall = {
-  type: 'function_call';
+  type: NodeType.function_call;
   nameToken: Token;
   parenthesis: Parenthesis;
 };
 
 // <ident>[<expr>]
 export type ArraySubscript = {
-  type: 'array_subscript';
+  type: NodeType.array_subscript;
   arrayToken: Token;
   parenthesis: Parenthesis;
 };
 
 export type Parenthesis = {
-  type: 'parenthesis';
+  type: NodeType.parenthesis;
   children: AstNode[];
   openParen: string;
   closeParen: string;
@@ -46,7 +59,7 @@ export type Parenthesis = {
 
 // BETWEEN <expr1> AND <expr2>
 export type BetweenPredicate = {
-  type: 'between_predicate';
+  type: NodeType.between_predicate;
   betweenToken: Token;
   expr1: Token;
   andToken: Token;
@@ -56,7 +69,7 @@ export type BetweenPredicate = {
 // LIMIT <count>
 // LIMIT <offset>, <count>
 export type LimitClause = {
-  type: 'limit_clause';
+  type: NodeType.limit_clause;
   limitToken: Token;
   countToken: Token;
   offsetToken?: Token;
@@ -64,7 +77,7 @@ export type LimitClause = {
 
 // The "*" operator used in SELECT *
 export type AllColumnsAsterisk = {
-  type: 'all_columns_asterisk';
+  type: NodeType.all_columns_asterisk;
 };
 
 export type AstNode =
