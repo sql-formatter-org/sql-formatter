@@ -25,3 +25,12 @@ export const equalizeWhitespace = (s: string) => s.replace(/\s+/gu, ' ');
 
 // identity function
 export const id = <T>(x: T) => x;
+
+// Adds up all values in array
+export const sum = (arr: number[]): number => {
+  let total = 0;
+  for (const x of arr) {
+    total += x;
+  }
+  return total;
+};

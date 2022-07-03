@@ -1,3 +1,4 @@
+import { sum } from 'src/utils';
 import { BetweenPredicate, Parenthesis } from './ast';
 import { isToken, type Token, TokenType } from './token';
 
@@ -60,9 +61,9 @@ export default class InlineBlock {
   }
 
   private betweenWidth(node: BetweenPredicate): number {
-    return [node.betweenToken, node.expr1, node.andToken, node.expr2]
-      .map(token => token.value.length)
-      .reduce((a, b) => a + b);
+    return sum(
+      [node.betweenToken, node.expr1, node.andToken, node.expr2].map(token => token.value.length)
+    );
   }
 
   // Reserved words that cause newlines, comments and semicolons
