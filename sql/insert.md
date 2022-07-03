@@ -69,7 +69,7 @@ All dialects (except Hive) suppurt this syntax, plus a bunch of extra stuff:
 [n1ql]: https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/insert.html
 [pl/sql]: https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/INSERT.html
 [postgresql]: https://www.postgresql.org/docs/current/sql-insert.html
-[redshift]: https://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_TABLE_NEW.html
+[redshift]: https://docs.aws.amazon.com/redshift/latest/dg/r_INSERT_30.html
 [spark]: https://spark.apache.org/docs/latest/sql-ref-syntax-dml-insert-table.html
 [sqlite]: https://www.sqlite.org/lang_insert.html
 [transact-sql]: https://docs.microsoft.com/en-us/sql/t-sql/statements/insert-transact-sql?view=sql-server-ver16
