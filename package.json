@@ -95,7 +95,8 @@
     "url": "https://github.com/sql-formatter-org/sql-formatter/issues"
   },
   "dependencies": {
-    "argparse": "^2.0.1"
+    "argparse": "^2.0.1",
+    "nearley": "^2.20.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.4",
