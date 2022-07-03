@@ -2,7 +2,7 @@
 
 [SQL standard][] specifies the following UPDATE syntax:
 
-    UPDATE table_name [[AS] alias]
+    UPDATE { table_name | ONLY "(" table_name ")" } [[AS] alias]
       SET set_clause_list
       [WHERE condition | WHERE CURRENT OF cursor_name]
 
