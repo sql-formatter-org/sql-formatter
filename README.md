@@ -177,8 +177,6 @@ This makes SQL Formatter available as a global variable `window.sqlFormatter`.
 
 Please see [CONTRIBUTING.md](CONTRIBUTING.md)
 
-You can read more about how the library works in [DOC.md](DOC.md)
-
 ## License
 
 [MIT](LICENSE)
