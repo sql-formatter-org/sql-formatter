@@ -81,6 +81,7 @@
     "check": "yarn ts:check && yarn pretty:check && yarn lint && yarn test",
     "prepare": "yarn clean && yarn fix && yarn check && yarn build",
     "pre-commit": "npm-run-all --parallel ts:changes lint:changes",
+    "compile:grammar": "nearleyc src/grammar/grammar.ne -o src/grammar/grammar.ts",
     "build:babel": "babel src --out-dir lib --extensions .ts --source-maps",
     "build:types": "ttsc --module commonjs --emitDeclarationOnly --isolatedModules",
     "build:minified": "webpack --config webpack.prod.js",
