@@ -1724,6 +1724,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/nearley@^2.11.2":
+  version "2.11.2"
+  resolved "https://registry.yarnpkg.com/@types/nearley/-/nearley-2.11.2.tgz#ddd716fa4b9ab15acec51d39b7524709d4dd5cc8"
+  integrity sha512-jeyIDNBxxyWyEk6HemDC+t32b4fxthVsgWDxf88qD2WpX0QpOyY8JvA80AElPTBGRUsO0EKnr6OeVOjK3ZDdnA==
+
 "@types/node@*":
   version "18.0.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.0.0.tgz#67c7b724e1bcdd7a8821ce0d5ee184d3b4dd525a"

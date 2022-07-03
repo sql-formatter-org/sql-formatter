@@ -108,6 +108,7 @@
     "@jest/globals": "^28.1.2",
     "@types/babel__core": "^7.1.15",
     "@types/jest": "^28.1.4",
+    "@types/nearley": "^2.11.2",
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "@typescript-eslint/parser": "^5.21.0",
     "@zerollup/ts-transform-paths": "^1.7.18",
