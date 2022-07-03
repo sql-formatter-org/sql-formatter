@@ -174,8 +174,7 @@ export default class ExpressionFormatter {
     this.layout.indentation.decreaseTopLevel();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private formatAllColumnsAsterisk(node: AllColumnsAsterisk) {
+  private formatAllColumnsAsterisk(_node: AllColumnsAsterisk) {
     this.layout.add('*', WS.SPACE);
   }
 
