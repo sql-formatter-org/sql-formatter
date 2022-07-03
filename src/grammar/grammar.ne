@@ -1,23 +1,13 @@
 @preprocessor typescript
 @{%
 import LexerAdapter from 'src/grammar/LexerAdapter';
-import Tokenizer from 'src/core/Tokenizer';
+
+// The lexer here is only to provide the has() method,
+// that's used inside the generated grammar definition.
+// A proper lexer gets passed to Nearley Parser constructor.
+const lexer = new LexerAdapter(chunk => []);
 
 const flatten = (arr: any[]) => arr.flat(Infinity);
-
-const tokenizer = new Tokenizer({
-  reservedCommands: ['SELECT', 'FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
-  reservedDependentClauses: ['WHEN', 'ELSE'],
-  reservedBinaryCommands: ['UNION'],
-  reservedJoins: ['JOIN'],
-  reservedJoinConditions: ['ON', 'USING'],
-  reservedKeywords: ['BETWEEN', 'LIKE', 'SQRT'],
-  openParens: ['(', '['],
-  closeParens: [')', ']'],
-  stringTypes: ["''"],
-  identTypes: ['""'],
-});
-const lexer = new LexerAdapter(chunk => tokenizer.tokenize(chunk));
 %}
 @lexer lexer
 
