@@ -18,7 +18,8 @@ This base syntax is pretty well supported (except in Spark):
 [DB2][]:
 
     UPDATE { table_name | ONLY "(" table_name ")" | "(" fullselect ")" }
-      [correlation_clause] [include_columns]
+      [[AS] correlation_clause]
+      [INCLUDE include_columns]
       SET set_clause_list
       [WHERE condition | WHERE CURRENT OF cursor_name]
       [WITH {RR | RS | CS | UR}]

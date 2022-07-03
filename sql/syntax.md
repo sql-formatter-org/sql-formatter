@@ -10,5 +10,6 @@ Reference of SQL syntax variations.
 - [SELECT](./select.md)
 - [INSERT](./insert.md)
 - [UPDATE](./update.md)
+- [DELETE](./delete.md)
 - [CREATE TABLE](./create-table.md)
 - [CREATE VIEW](./create-view.md)
