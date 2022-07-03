@@ -242,6 +242,21 @@ export default class ExpressionFormatter {
     this.layout.add(WS.NEWLINE, WS.INDENT);
   }
 
+  // Breaks up block comment to multiple lines.
+  // For example this comment (dots representing leading whitespace):
+  //
+  //   ..../**
+  //   .....* Some description here
+  //   .....* and here too
+  //   .....*/
+  //
+  // gets broken to this array (note the leading single spaces):
+  //
+  //   [ '/**',
+  //     '.* Some description here',
+  //     '.* and here too',
+  //     '.*/' ]
+  //
   private splitBlockComment(comment: string): string[] {
     return comment.split(/\n/).map(line => {
       if (/^\s*\*/.test(line)) {
