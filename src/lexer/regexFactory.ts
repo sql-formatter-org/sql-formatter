@@ -15,7 +15,7 @@ import {
  * @param {string[]} lineCommentTypes - list of character strings that denote line comments
  */
 export const lineComment = (lineCommentTypes: string[]) =>
-  new RegExp(`(?:${lineCommentTypes.map(escapeRegExp).join('|')}).*?(?=\r\n|\r|\n|$)`, 'u');
+  new RegExp(`(?:${lineCommentTypes.map(escapeRegExp).join('|')}).*?(?=\r\n|\r|\n|$)`, 'uy');
 
 /**
  * Builds a RegExp for matching parenthesis patterns, escaping them with `escapeParen`
@@ -59,7 +59,7 @@ export const reservedWord = (reservedKeywords: string[], identChars: IdentChars 
     .join('|')
     .replace(/ /gu, '\\s+');
 
-  return new RegExp(`(?:${reservedKeywordsPattern})${avoidIdentChars}\\b`, 'iu');
+  return new RegExp(`(?:${reservedKeywordsPattern})${avoidIdentChars}\\b`, 'iuy');
 };
 
 /**

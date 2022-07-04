@@ -5,9 +5,9 @@ export const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\
 
 export const NULL_REGEX = /^(?!)/; // zero-width negative lookahead, matches nothing
 
-export const WHITESPACE_REGEX = /^(\s+)/u;
+export const WHITESPACE_REGEX = /(\s+)/uy;
 
-export const patternToRegex = (pattern: string): RegExp => new RegExp(`(?:${pattern})`, 'u');
+export const patternToRegex = (pattern: string): RegExp => new RegExp(`(?:${pattern})`, 'uy');
 
 // Converts "ab" to "[Aa][Bb]"
 export const toCaseInsensitivePattern = (prefix: string): string =>

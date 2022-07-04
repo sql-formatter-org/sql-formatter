@@ -66,11 +66,11 @@ export default class Tokenizer {
       Object.entries({
         // WS: { regex: /[ \t]+/ },
         // NL: { regex: /\n|(?:\r\n)/, lineBreaks: true },
-        [TokenType.BLOCK_COMMENT]: { regex: /(?:\/\*[^]*?\*\/)|(?:\/\*[^]*$)/uy, lineBreaks: true },
+        [TokenType.BLOCK_COMMENT]: { regex: /(\/\*[^]*?(?:\*\/|$))/uy },
         [TokenType.LINE_COMMENT]: {
           regex: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
         },
-        [TokenType.COMMA]: { regex: /[,]/ },
+        [TokenType.COMMA]: { regex: /[,]/y },
         [TokenType.OPEN_PAREN]: { regex: regex.parenthesis(cfg.openParens ?? ['(']) },
         [TokenType.CLOSE_PAREN]: { regex: regex.parenthesis(cfg.closeParens ?? [')']) },
         [TokenType.QUOTED_IDENTIFIER]: { regex: regex.string(cfg.identTypes) },
@@ -132,7 +132,7 @@ export default class Tokenizer {
           key: v => v.slice(1),
         },
         [TokenType.POSITIONAL_PARAMETER]: {
-          regex: cfg.positionalParams ? /[?]/ : undefined,
+          regex: cfg.positionalParams ? /[?]/y : undefined,
         },
         [TokenType.VARIABLE]: {
           regex: cfg.variableTypes ? regex.variable(cfg.variableTypes) : NULL_REGEX,
