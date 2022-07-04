@@ -14,7 +14,7 @@ describe('Parser', () => {
       closeParens: [')', ']'],
       stringTypes: ["''"],
       identTypes: ['""'],
-    }).tempTokenize(sql);
+    }).tokenize(sql);
     return new Parser(tokens).parse();
   };
 

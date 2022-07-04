@@ -1,9 +1,9 @@
-import * as moo from 'moo';
-
 import { Token, TokenType } from 'src/core/token';
 import * as regex from 'src/lexer/regexFactory';
 import * as regexTypes from 'src/lexer/regexTypes';
+
 import { NULL_REGEX, escapeRegExp } from './regexUtil';
+import TokenizerEngine, { type TokenRule } from './tokenizerEngine';
 
 interface TokenizerOptions {
   // Main clauses that start new block, like: SELECT, FROM, WHERE, ORDER BY
@@ -27,10 +27,10 @@ interface TokenizerOptions {
   identTypes: regexTypes.QuoteType[];
   // Types of quotes to use for variables
   variableTypes?: regexTypes.VariableType[];
-  // Open-parenthesis characters, like: (, [, {
-  openParens?: string[];
-  // Close-parenthesis characters, like: ), ], }
-  closeParens?: string[];
+  // Open-parenthesis characters
+  openParens?: ('(' | '[' | '{')[];
+  // Close-parenthesis characters
+  closeParens?: (')' | ']' | '}')[];
   // True to allow for positional "?" parameter placeholders
   positionalParams?: boolean;
   // Prefixes for numbered parameter placeholders to support, e.g. :1, :2, :3
@@ -57,185 +57,109 @@ interface TokenizerOptions {
 }
 
 export default class Tokenizer {
-  LEXER_OPTIONS: Record<
-    | Exclude<
-        keyof typeof TokenType,
-        typeof TokenType.PARAMETER | typeof TokenType.EOF | 'PARAMETER' | 'EOF'
-      >
-    | 'WS'
-    | 'NL',
-    moo.Rule
-  >;
-  LEXER: moo.Lexer;
-  postProcessor?: (tokens: Token[]) => Token[];
+  TOKENIZER_OPTIONS: Partial<Record<TokenType, TokenRule>>;
+  engine: TokenizerEngine;
+  postProcess?: (tokens: Token[]) => Token[];
 
   constructor(cfg: TokenizerOptions) {
-    this.LEXER_OPTIONS = {
-      WS: { match: /[ \t]+/ },
-      NL: { match: /\n|(?:\r\n)/, lineBreaks: true },
-      [TokenType.BLOCK_COMMENT]: { match: /(?:\/\*[^]*?\*\/)|(?:\/\*[^]*$)/, lineBreaks: true },
-      [TokenType.LINE_COMMENT]: {
-        match: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
-      },
-      [TokenType.COMMA]: { match: /[,]/ },
-      [TokenType.OPEN_PAREN]: { match: regex.parenthesis(cfg.openParens ?? ['(']) },
-      [TokenType.CLOSE_PAREN]: { match: regex.parenthesis(cfg.closeParens ?? [')']) },
-      [TokenType.QUOTED_IDENTIFIER]: { match: regex.string(cfg.identTypes) },
-      [TokenType.NUMBER]: {
-        match:
-          /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)/,
-      },
-      [TokenType.RESERVED_CASE_START]: {
-        match: /[Cc][Aa][Ss][Ee]\b/u,
-        value: v => v.toUpperCase(),
-      },
-      [TokenType.RESERVED_CASE_END]: { match: /[Ee][Nn][Dd]\b/u, value: v => v.toUpperCase() },
-      [TokenType.RESERVED_COMMAND]: {
-        match: regex.reservedWord(cfg.reservedCommands, cfg.identChars),
-        value: v => v.toUpperCase(),
-      },
-      [TokenType.RESERVED_BINARY_COMMAND]: {
-        match: regex.reservedWord(cfg.reservedBinaryCommands, cfg.identChars),
-        value: v => v.toUpperCase(),
-      },
-      [TokenType.RESERVED_DEPENDENT_CLAUSE]: {
-        match: regex.reservedWord(cfg.reservedDependentClauses, cfg.identChars),
-        value: v => v.toUpperCase(),
-      },
-      [TokenType.RESERVED_KEYWORD]: {
-        match: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
-        value: v => v.toUpperCase(),
-      },
-      [TokenType.RESERVED_LOGICAL_OPERATOR]: {
-        match: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
-        value: v => v.toUpperCase(),
-      },
-      [TokenType.RESERVED_JOIN]: {
-        match: regex.reservedWord(cfg.reservedJoins ?? ['AND', 'OR'], cfg.identChars),
-        value: v => v.toUpperCase(),
-      },
-      [TokenType.RESERVED_JOIN_CONDITION]: {
-        match: regex.reservedWord(cfg.reservedJoinConditions ?? ['ON', 'USING'], cfg.identChars),
-        value: v => v.toUpperCase(),
-      },
-      [TokenType.NAMED_PARAMETER]: {
-        match: regex.parameter(
-          cfg.namedParamTypes ?? [],
-          regex.identifierPattern(cfg.paramChars || cfg.identChars)
-        ),
-        value: v => v.slice(1),
-      },
-      [TokenType.QUOTED_PARAMETER]: {
-        match: regex.parameter(cfg.quotedParamTypes ?? [], regex.stringPattern(cfg.identTypes)),
-        value: v =>
-          (({ key, quoteChar }) =>
-            key.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar))({
-            key: v.slice(2, -1),
-            quoteChar: v.slice(-1),
-          }),
-      },
-      [TokenType.INDEXED_PARAMETER]: {
-        match: regex.parameter(cfg.numberedParamTypes ?? [], '[0-9]+'),
-        value: v => v.slice(1),
-      },
-      [TokenType.POSITIONAL_PARAMETER]: {
-        match: cfg.positionalParams ? /[?]/ : undefined,
-      },
-      [TokenType.VARIABLE]: {
-        match: cfg.variableTypes ? regex.variable(cfg.variableTypes) : NULL_REGEX,
-      },
-      [TokenType.OPERATOR]: {
-        match: regex.operator('+-/*%&|^><=.;[]{}`:$@', [
-          '<>',
-          '<=',
-          '>=',
-          '!=',
-          ...(cfg.operators ?? []),
-        ]),
-      },
-      [TokenType.STRING]: { match: regex.string(cfg.stringTypes) },
-      [TokenType.IDENTIFIER]: {
-        match: regex.identifier(cfg.identChars),
-        // type: moo.keywords({ [TokenType.RESERVED_COMMAND]: cfg.reservedCommands }), // case sensitivity currently broken, see moo#122
-      },
-    };
-
-    this.LEXER_OPTIONS = Object.entries(this.LEXER_OPTIONS).reduce(
-      (rules, [name, rule]) =>
-        rule.match
-          ? {
-              ...rules,
-              [name]: {
-                ...rule,
-                match: new RegExp(
-                  rule.match as string | RegExp,
-                  [...(rule.match instanceof RegExp ? rule.match.flags.split('') : [])]
-                    .filter(flag => !'iumgy'.includes(flag)) // disallowed flags
-                    .join('') + 'u'
-                ),
-              },
-            }
-          : rules,
-      {} as typeof this.LEXER_OPTIONS
+    this.TOKENIZER_OPTIONS = Object.fromEntries(
+      Object.entries({
+        // WS: { regex: /[ \t]+/ },
+        // NL: { regex: /\n|(?:\r\n)/, lineBreaks: true },
+        [TokenType.BLOCK_COMMENT]: { regex: /(?:\/\*[^]*?\*\/)|(?:\/\*[^]*$)/uy, lineBreaks: true },
+        [TokenType.LINE_COMMENT]: {
+          regex: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
+        },
+        [TokenType.COMMA]: { regex: /[,]/ },
+        [TokenType.OPEN_PAREN]: { regex: regex.parenthesis(cfg.openParens ?? ['(']) },
+        [TokenType.CLOSE_PAREN]: { regex: regex.parenthesis(cfg.closeParens ?? [')']) },
+        [TokenType.QUOTED_IDENTIFIER]: { regex: regex.string(cfg.identTypes) },
+        [TokenType.NUMBER]: {
+          regex:
+            /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)/uy,
+        },
+        [TokenType.RESERVED_CASE_START]: {
+          regex: /[Cc][Aa][Ss][Ee]\b/uy,
+          value: v => v.toUpperCase(),
+        },
+        [TokenType.RESERVED_CASE_END]: { regex: /[Ee][Nn][Dd]\b/uy, value: v => v.toUpperCase() },
+        [TokenType.RESERVED_COMMAND]: {
+          regex: regex.reservedWord(cfg.reservedCommands, cfg.identChars),
+          value: v => v.toUpperCase(),
+        },
+        [TokenType.RESERVED_BINARY_COMMAND]: {
+          regex: regex.reservedWord(cfg.reservedBinaryCommands, cfg.identChars),
+          value: v => v.toUpperCase(),
+        },
+        [TokenType.RESERVED_DEPENDENT_CLAUSE]: {
+          regex: regex.reservedWord(cfg.reservedDependentClauses, cfg.identChars),
+          value: v => v.toUpperCase(),
+        },
+        [TokenType.RESERVED_KEYWORD]: {
+          regex: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
+          value: v => v.toUpperCase(),
+        },
+        [TokenType.RESERVED_LOGICAL_OPERATOR]: {
+          regex: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
+          value: v => v.toUpperCase(),
+        },
+        [TokenType.RESERVED_JOIN]: {
+          regex: regex.reservedWord(cfg.reservedJoins ?? ['AND', 'OR'], cfg.identChars),
+          value: v => v.toUpperCase(),
+        },
+        [TokenType.RESERVED_JOIN_CONDITION]: {
+          regex: regex.reservedWord(cfg.reservedJoinConditions ?? ['ON', 'USING'], cfg.identChars),
+          value: v => v.toUpperCase(),
+        },
+        [TokenType.NAMED_PARAMETER]: {
+          regex: regex.parameter(
+            cfg.namedParamTypes ?? [],
+            regex.identifierPattern(cfg.paramChars || cfg.identChars)
+          ),
+          key: v => v.slice(1),
+        },
+        [TokenType.QUOTED_PARAMETER]: {
+          regex: regex.parameter(cfg.quotedParamTypes ?? [], regex.stringPattern(cfg.identTypes)),
+          key: v =>
+            (({ tokenKey, quoteChar }) =>
+              tokenKey.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar))({
+              tokenKey: v.slice(2, -1),
+              quoteChar: v.slice(-1),
+            }),
+        },
+        [TokenType.INDEXED_PARAMETER]: {
+          regex: regex.parameter(cfg.numberedParamTypes ?? [], '[0-9]+'),
+          key: v => v.slice(1),
+        },
+        [TokenType.POSITIONAL_PARAMETER]: {
+          regex: cfg.positionalParams ? /[?]/ : undefined,
+        },
+        [TokenType.VARIABLE]: {
+          regex: cfg.variableTypes ? regex.variable(cfg.variableTypes) : NULL_REGEX,
+        },
+        [TokenType.OPERATOR]: {
+          regex: regex.operator('+-/*%&|^><=.;[]{}`:$@', [
+            '<>',
+            '<=',
+            '>=',
+            '!=',
+            ...(cfg.operators ?? []),
+          ]),
+        },
+        [TokenType.STRING]: { regex: regex.string(cfg.stringTypes) },
+        [TokenType.IDENTIFIER]: {
+          regex: regex.identifier(cfg.identChars),
+        },
+      } as Partial<Record<TokenType, TokenRule>>).filter(([_, rule]) => rule.regex)
     );
 
-    this.LEXER = moo.compile(this.LEXER_OPTIONS);
+    this.engine = new TokenizerEngine(this.TOKENIZER_OPTIONS);
 
-    this.postProcessor = cfg.postProcess;
+    this.postProcess = cfg.postProcess;
   }
 
-  tokenize(input: string): moo.Token[] {
-    this.LEXER.reset(input);
-    return Array.from(this.LEXER);
-  }
-
-  tempTokenize(input: string) {
-    const mooTokens = this.tokenize(input);
-    const oldTokens = tokenConverter(mooTokens);
-
-    return this.postProcessor ? this.postProcessor(oldTokens) : oldTokens;
+  tokenize(input: string): Token[] {
+    const tokens = this.engine.tokenize(input);
+    return this.postProcess ? this.postProcess(tokens) : tokens;
   }
 }
-
-// temporary converter for moo.Token to Token
-export const tokenConverter = (tokens: moo.Token[]): Token[] => {
-  const outTokens = [] as Token[];
-  for (let i = 0; i < tokens.length; i++) {
-    // collect whitespaceBefore
-    let whitespace = '';
-    while (tokens[i].type === 'WS' || tokens[i].type === 'NL') {
-      whitespace += tokens[i].value;
-      if (!tokens[++i]) {
-        break;
-      }
-    }
-
-    // skip trailing whitespace
-    if (i >= tokens.length) {
-      break;
-    }
-
-    const token = tokens[i];
-
-    // lookbehind logic from old Tokenizer for tbl.col syntax
-    if (token.type?.startsWith('RESERVED') && tokens[i - 1]?.value === '.') {
-      token.type = TokenType.IDENTIFIER;
-      token.value = token.text;
-    }
-
-    let outKey; // add key to token instead of value
-    if (token.type?.includes('PARAMETER') && token.type !== TokenType.POSITIONAL_PARAMETER) {
-      outKey = token.value;
-      token.value = token.text;
-    }
-
-    outTokens.push({
-      type: token.type as TokenType,
-      text: token.text,
-      value: token.value,
-      whitespaceBefore: whitespace,
-      key: outKey,
-    });
-  }
-  return outTokens;
-};
