@@ -28,10 +28,10 @@ main -> statement (";" statement):* {% (items) => {
     .filter(({children, hasSemicolon}) => hasSemicolon || children.length > 0);
 } %}
 
-statement -> statement_token:* {% (tokens) => ({ type: NodeType.statement, children: flatten(tokens) }) %}
+statement -> plain_token:* {% (tokens) => ({ type: NodeType.statement, children: flatten(tokens) }) %}
 
-statement_token ->
-    %IDENT
+plain_token ->
+  ( %IDENT
   | %STRING
   | %VARIABLE
   | %RESERVED_KEYWORD
@@ -49,6 +49,6 @@ statement_token ->
   | %BLOCK_COMMENT
   | %NUMBER
   | %PARAMETER
-  | not_semicolon_op
+  | not_semicolon_op ) {% ([[token]]) => ({ type: NodeType.token, token }) %}
 
 not_semicolon_op -> %OPERATOR {% ([token], loc, reject) => token.value === ';' ? reject : token %}

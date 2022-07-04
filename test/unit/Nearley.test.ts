@@ -40,10 +40,13 @@ describe('Nearley integration', () => {
         Object {
           "children": Array [
             Object {
-              "text": "foo",
-              "type": "IDENT",
-              "value": "foo",
-              "whitespaceBefore": "",
+              "token": Object {
+                "text": "foo",
+                "type": "IDENT",
+                "value": "foo",
+                "whitespaceBefore": "",
+              },
+              "type": "token",
             },
           ],
           "hasSemicolon": true,
@@ -52,10 +55,13 @@ describe('Nearley integration', () => {
         Object {
           "children": Array [
             Object {
-              "text": "bar",
-              "type": "IDENT",
-              "value": "bar",
-              "whitespaceBefore": " ",
+              "token": Object {
+                "text": "bar",
+                "type": "IDENT",
+                "value": "bar",
+                "whitespaceBefore": " ",
+              },
+              "type": "token",
             },
           ],
           "hasSemicolon": false,
