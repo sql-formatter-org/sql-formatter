@@ -47,8 +47,8 @@ clause -> %RESERVED_COMMAND expression:* {%
 
 expression -> array_subscript | parenthesis | plain_token
 
-array_subscript -> %IDENT "[" expression:* "]" {%
-  ([arrayToken, open, children, close]) => ({
+array_subscript -> (%IDENT | %RESERVED_KEYWORD) "[" expression:* "]" {%
+  ([[arrayToken], open, children, close]) => ({
     type: NodeType.array_subscript,
     arrayToken,
     parenthesis: {
