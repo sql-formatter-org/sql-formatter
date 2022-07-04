@@ -214,6 +214,7 @@ export default class ExpressionFormatter {
       case TokenType.POSITIONAL_PARAMETER:
         return this.formatParameter(token);
       case TokenType.COMMA:
+        return this.formatComma(token);
       case TokenType.OPERATOR:
         return this.formatOperator(token);
       case TokenType.IDENTIFIER:
@@ -307,10 +308,7 @@ export default class ExpressionFormatter {
    */
   private formatOperator(token: Token) {
     // special operator
-    if (token.value === ',') {
-      this.formatComma(token);
-      return;
-    } else if (token.value === ':') {
+    if (token.value === ':') {
       this.layout.add(WS.NO_SPACE, this.show(token), WS.SPACE);
       return;
     } else if (token.value === '.') {
