@@ -1,7 +1,6 @@
 @preprocessor typescript
 @{%
 import LexerAdapter from 'src/grammar/LexerAdapter';
-import { Token } from 'src/core/token';
 
 // The lexer here is only to provide the has() method,
 // that's used inside the generated grammar definition.
@@ -12,7 +11,21 @@ const flatten = (arr: any[]) => arr.flat(Infinity);
 %}
 @lexer lexer
 
-main -> statement (";" statement):* {% flatten %}
+main -> statement (";" statement):* {% (items) => {
+  return flatten(items)
+    // skip semicolons
+    .filter(item => item.type === 'statement')
+    // mark all statements except the last as having a semicolon
+    .map((statement, i, allStatements) => {
+      if (i === allStatements.length - 1) {
+        return { ...statement, hasSemicolon: false };
+      } else {
+        return { ...statement, hasSemicolon: true };
+      }
+    })
+    // throw away last statement if it's empty
+    .filter(({children, hasSemicolon}) => hasSemicolon || children.length > 0);
+} %}
 
 statement -> statement_token:* {% (tokens) => ({ type: 'statement', children: flatten(tokens) }) %}
 

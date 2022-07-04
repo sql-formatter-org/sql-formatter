@@ -30,46 +30,27 @@ describe('Nearley integration', () => {
     }
   };
 
+  it('parses empty list of tokens', () => {
+    expect(parse('')).toEqual([]);
+  });
+
   it('parses list of statements', () => {
-    expect(parse('SELECT foo; DROP TABLE bar;')).toMatchInlineSnapshot(`
+    expect(parse('foo; bar')).toMatchInlineSnapshot(`
       Array [
         Object {
           "children": Array [
             Object {
-              "text": "SELECT",
-              "type": "RESERVED_COMMAND",
-              "value": "SELECT",
-              "whitespaceBefore": "",
-            },
-            Object {
               "text": "foo",
               "type": "IDENT",
               "value": "foo",
-              "whitespaceBefore": " ",
+              "whitespaceBefore": "",
             },
           ],
+          "hasSemicolon": true,
           "type": "statement",
         },
         Object {
-          "text": ";",
-          "type": "OPERATOR",
-          "value": ";",
-          "whitespaceBefore": "",
-        },
-        Object {
           "children": Array [
-            Object {
-              "text": "DROP",
-              "type": "IDENT",
-              "value": "DROP",
-              "whitespaceBefore": " ",
-            },
-            Object {
-              "text": "TABLE",
-              "type": "IDENT",
-              "value": "TABLE",
-              "whitespaceBefore": " ",
-            },
             Object {
               "text": "bar",
               "type": "IDENT",
@@ -77,16 +58,7 @@ describe('Nearley integration', () => {
               "whitespaceBefore": " ",
             },
           ],
-          "type": "statement",
-        },
-        Object {
-          "text": ";",
-          "type": "OPERATOR",
-          "value": ";",
-          "whitespaceBefore": "",
-        },
-        Object {
-          "children": Array [],
+          "hasSemicolon": false,
           "type": "statement",
         },
       ]
