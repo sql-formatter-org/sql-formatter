@@ -77,9 +77,9 @@ export default class TokenizerEngine {
       this.matchPlaceholderToken(TokenType.INDEXED_PARAMETER) ||
       this.matchPlaceholderToken(TokenType.POSITIONAL_PARAMETER) ||
       this.matchToken(TokenType.VARIABLE) ||
-      this.matchToken(TokenType.OPERATOR) ||
       this.matchToken(TokenType.STRING) ||
-      this.matchToken(TokenType.IDENTIFIER)
+      this.matchToken(TokenType.IDENTIFIER) ||
+      this.matchToken(TokenType.OPERATOR)
     );
   }
 

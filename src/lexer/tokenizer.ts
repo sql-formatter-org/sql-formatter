@@ -137,6 +137,10 @@ export default class Tokenizer {
         [TokenType.VARIABLE]: {
           regex: cfg.variableTypes ? regex.variable(cfg.variableTypes) : NULL_REGEX,
         },
+        [TokenType.STRING]: { regex: regex.string(cfg.stringTypes) },
+        [TokenType.IDENTIFIER]: {
+          regex: regex.identifier(cfg.identChars),
+        },
         [TokenType.OPERATOR]: {
           regex: regex.operator('+-/*%&|^><=.;[]{}`:$@', [
             '<>',
@@ -145,10 +149,6 @@ export default class Tokenizer {
             '!=',
             ...(cfg.operators ?? []),
           ]),
-        },
-        [TokenType.STRING]: { regex: regex.string(cfg.stringTypes) },
-        [TokenType.IDENTIFIER]: {
-          regex: regex.identifier(cfg.identChars),
         },
       } as Partial<Record<TokenType, TokenRule>>).filter(([_, rule]) => rule.regex)
     );
