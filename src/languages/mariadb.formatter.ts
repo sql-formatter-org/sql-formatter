@@ -1110,13 +1110,7 @@ const reservedCommands = [
   'WHERE',
 ];
 
-/**
- * Priority 2
- * commands that operate on two tables or subqueries
- * two main categories: joins and boolean set operators
- */
 const reservedBinaryCommands = [
-  // set booleans
   'INTERSECT',
   'INTERSECT ALL',
   'INTERSECT DISTINCT',
@@ -1129,7 +1123,9 @@ const reservedBinaryCommands = [
   'MINUS',
   'MINUS ALL',
   'MINUS DISTINCT',
-  // joins
+];
+
+const reservedJoins = [
   'JOIN',
   'INNER JOIN',
   'LEFT JOIN',
@@ -1161,6 +1157,7 @@ export default class MariaDbFormatter extends Formatter {
     return new Tokenizer({
       reservedCommands,
       reservedBinaryCommands,
+      reservedJoins,
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe(reservedKeywords.concat(reservedFunctions)),

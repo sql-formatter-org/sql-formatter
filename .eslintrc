@@ -37,7 +37,7 @@
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/lines-between-class-members": "off",
     "@typescript-eslint/naming-convention": "error",
-    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/quotes": [
       "error",
       "single",

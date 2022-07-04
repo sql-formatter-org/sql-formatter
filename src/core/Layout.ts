@@ -4,13 +4,14 @@ import Indentation from './Indentation';
 
 /** Whitespace modifiers to be used with add() method */
 export enum WS {
-  SPACE = 1, // Adds single space
-  NO_SPACE = 2, // Removes preceding spaces (if any)
-  NEWLINE = 3, // Adds single newline
-  NO_NEWLINE = 4, // Removes all preceding whitespace (including newlines)
-  INDENT = 5, // Adds indentation (as much as needed for current indentation level)
-  SINGLE_INDENT = 6, // Adds whitespace for single indentation step
+  SPACE, // Adds single space
+  NO_SPACE, // Removes preceding horizontal whitespace (if any)
+  NEWLINE, // Adds single newline (and removes any preceding whitespace)
+  INDENT, // Adds indentation (as much as needed for current indentation level)
+  SINGLE_INDENT, // Adds whitespace for single indentation step
 }
+
+export type LayoutItem = WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | string;
 
 /**
  * API for constructing SQL string (especially the whitespace part).
@@ -19,10 +20,10 @@ export enum WS {
  * Originally it used plain string concatenation, which was expensive.
  * Now it's storing items to array and builds the string only in the end.
  */
-export default class WhitespaceBuilder {
-  private query: (WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | string)[] = [];
+export default class Layout {
+  private items: LayoutItem[] = [];
 
-  constructor(private indentation: Indentation) {}
+  constructor(public indentation: Indentation) {}
 
   /**
    * Appends token strings and whitespace modifications to SQL string.
@@ -31,7 +32,7 @@ export default class WhitespaceBuilder {
     for (const item of items) {
       switch (item) {
         case WS.SPACE:
-          this.query.push(WS.SPACE);
+          this.items.push(WS.SPACE);
           break;
         case WS.NO_SPACE:
           this.trimHorizontalWhitespace();
@@ -40,38 +41,33 @@ export default class WhitespaceBuilder {
           this.trimHorizontalWhitespace();
           this.addNewline();
           break;
-        case WS.NO_NEWLINE:
-          this.trimAllWhitespace();
-          break;
         case WS.INDENT:
-          for (let i = 0; i < this.indentation.getLevel(); i++) {
-            this.query.push(WS.SINGLE_INDENT);
-          }
+          this.addIndentation();
           break;
         case WS.SINGLE_INDENT:
-          this.query.push(WS.SINGLE_INDENT);
+          this.items.push(WS.SINGLE_INDENT);
           break;
         default:
-          this.query.push(item);
+          this.items.push(item);
       }
     }
   }
 
   private trimHorizontalWhitespace() {
-    while (isHorizontalWhitespace(last(this.query))) {
-      this.query.pop();
-    }
-  }
-
-  private trimAllWhitespace() {
-    while (isWhitespace(last(this.query))) {
-      this.query.pop();
+    while (isHorizontalWhitespace(last(this.items))) {
+      this.items.pop();
     }
   }
 
   private addNewline() {
-    if (this.query.length > 0 && last(this.query) !== WS.NEWLINE) {
-      this.query.push(WS.NEWLINE);
+    if (this.items.length > 0 && last(this.items) !== WS.NEWLINE) {
+      this.items.push(WS.NEWLINE);
+    }
+  }
+
+  private addIndentation() {
+    for (let i = 0; i < this.indentation.getLevel(); i++) {
+      this.items.push(WS.SINGLE_INDENT);
     }
   }
 
@@ -79,10 +75,10 @@ export default class WhitespaceBuilder {
    * Returns the final SQL string.
    */
   public toString(): string {
-    return this.query.map(item => this.itemToString(item)).join('');
+    return this.items.map(item => this.itemToString(item)).join('');
   }
 
-  private itemToString(item: WS | string) {
+  private itemToString(item: LayoutItem): string {
     switch (item) {
       case WS.SPACE:
         return ' ';
@@ -98,6 +94,3 @@ export default class WhitespaceBuilder {
 
 const isHorizontalWhitespace = (item: WS | string | undefined) =>
   item === WS.SPACE || item === WS.SINGLE_INDENT;
-
-const isWhitespace = (item: WS | string | undefined) =>
-  item === WS.SPACE || item === WS.SINGLE_INDENT || item === WS.NEWLINE;

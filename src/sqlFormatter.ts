@@ -13,7 +13,7 @@ import SqlFormatter from 'src/languages/sql.formatter';
 import TSqlFormatter from 'src/languages/tsql.formatter';
 
 import type { FormatOptions } from './types';
-import { isNumber } from './utils';
+import { ParamItems } from './core/Params';
 
 export const formatters = {
   bigquery: BigQueryFormatter,
@@ -41,13 +41,10 @@ const defaultOptions: FormatFnOptions = {
   useTabs: false,
   keywordCase: 'preserve',
   indentStyle: 'standard',
-  multilineLists: 'always',
   logicalOperatorNewline: 'before',
   aliasAs: 'preserve',
   tabulateAlias: false,
   commaPosition: 'after',
-  newlineBeforeOpenParen: true,
-  newlineBeforeCloseParen: true,
   expressionWidth: 50,
   linesBetweenQueries: 1,
   denseOperators: false,
@@ -82,8 +79,14 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
     throw new ConfigError(`Unsupported SQL dialect: ${cfg.language}`);
   }
 
-  if (isNumber(cfg.multilineLists) && cfg.multilineLists <= 0) {
-    throw new ConfigError('multilineLists config must be a positive number.');
+  if ('multilineLists' in cfg) {
+    throw new ConfigError('multilineLists config is no more supported.');
+  }
+  if ('newlineBeforeOpenParen' in cfg) {
+    throw new ConfigError('newlineBeforeOpenParen config is no more supported.');
+  }
+  if ('newlineBeforeCloseParen' in cfg) {
+    throw new ConfigError('newlineBeforeCloseParen config is no more supported.');
   }
 
   if (cfg.expressionWidth <= 0) {
@@ -110,7 +113,17 @@ function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
     );
   }
 
+  if (cfg.params && !validateParams(cfg.params)) {
+    // eslint-disable-next-line no-console
+    console.warn('WARNING: All "params" option values should be strings.');
+  }
+
   return cfg;
+}
+
+function validateParams(params: ParamItems | string[]): boolean {
+  const paramValues = params instanceof Array ? params : Object.values(params);
+  return paramValues.every(p => typeof p === 'string');
 }
 
 export type FormatFn = typeof format;

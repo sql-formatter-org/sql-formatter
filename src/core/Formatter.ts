@@ -3,10 +3,13 @@ import Tokenizer from 'src/lexer/tokenizer';
 import Params from './Params';
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
-import Parser, { type Statement } from './Parser';
-import StatementFormatter from './StatementFormatter';
+import Parser from './Parser';
+import ExpressionFormatter from './ExpressionFormatter';
 import { indentString } from './config';
 import AliasAs from './AliasAs';
+import { Statement } from './ast';
+import Layout, { WS } from './Layout';
+import Indentation from './Indentation';
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {
@@ -53,8 +56,25 @@ export default class Formatter {
 
   private formatAst(statements: Statement[]): string {
     return statements
-      .map(stat => new StatementFormatter(this.cfg, this.params).format(stat))
+      .map(stat => this.formatStatement(stat))
       .join('\n'.repeat(this.cfg.linesBetweenQueries + 1));
+  }
+
+  private formatStatement(statement: Statement): string {
+    const layout = new ExpressionFormatter({
+      cfg: this.cfg,
+      params: this.params,
+      layout: new Layout(new Indentation(indentString(this.cfg))),
+    }).format(statement.children);
+
+    if (!statement.hasSemicolon) {
+      // do nothing
+    } else if (this.cfg.newlineBeforeSemicolon) {
+      layout.add(WS.NEWLINE, ';');
+    } else {
+      layout.add(WS.NO_SPACE, ';');
+    }
+    return layout.toString();
   }
 
   private postFormat(query: string): string {

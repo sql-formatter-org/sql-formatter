@@ -11,8 +11,6 @@ Switches between different indentation styles.
 Caveats of using `"tabularLeft"` and `"tabularRight"`:
 
 - `tabWidth` option is ignored. Indentation will always be 10 spaces, regardless of what is specified by `tabWidth`.
-- `newlineBeforeOpenParen` option is ignored.
-- `newlineBeforeCloseParen` option is ignored.
 
 ### standard
 

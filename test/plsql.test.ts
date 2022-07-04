@@ -70,7 +70,7 @@ describe('PlSqlFormatter', () => {
   it('does not support #, $ in named parameters', () => {
     expect(format('SELECT :col$foo')).toBe(dedent`
       SELECT
-        :col $foo
+        :col $ foo
     `);
 
     expect(() => format('SELECT :col#foo')).toThrowError();

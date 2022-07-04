@@ -107,14 +107,17 @@ describe('BigQueryFormatter', () => {
     `);
   });
 
-  it('supports parametric ARRAY and STRUCT', () => {
-    const result = format('SELECT STRUCT<ARRAY<INT64>>([]), ARRAY<FLOAT>[1] FROM tbl');
-    expect(result).toBe(dedent`
+  it('supports parametric ARRAY', () => {
+    expect(format('SELECT ARRAY<FLOAT>[1]')).toBe(dedent`
       SELECT
-        STRUCT<ARRAY<INT64>>([]),
         ARRAY<FLOAT>[1]
-      FROM
-        tbl
+    `);
+  });
+
+  it('supports parametric STRUCT', () => {
+    expect(format('SELECT STRUCT<ARRAY<INT64>>([])')).toBe(dedent`
+      SELECT
+        STRUCT<ARRAY<INT64>>([])
     `);
   });
 
@@ -165,5 +168,56 @@ describe('BigQueryFormatter', () => {
       FROM
         Items;
     `);
+  });
+
+  it('supports create view optional arguments', () => {
+    const createViewVariations = [
+      'CREATE VIEW',
+      'CREATE OR REPLACE VIEW',
+      'CREATE VIEW IF NOT EXISTS',
+    ];
+
+    createViewVariations.forEach((createViewVariation: string) => {
+      expect(
+        format(`
+        ${createViewVariation} my_dataset.my_view AS (
+          SELECT t1.col1, t1.col2 FROM my_dataset.my_table)`)
+      ).toBe(dedent`
+        ${createViewVariation}
+          my_dataset.my_view AS (
+            SELECT
+              t1.col1,
+              t1.col2
+            FROM
+              my_dataset.my_table
+          )
+      `);
+    });
+  });
+
+  it('supports create table optional arguments', () => {
+    const createTableVariations = [
+      'CREATE TABLE',
+      'CREATE TABLE IF NOT EXISTS',
+      'CREATE TEMP TABLE',
+      'CREATE TEMP TABLE IF NOT EXISTS',
+      'CREATE TEMPORARY TABLE',
+      'CREATE TEMPORARY TABLE IF NOT EXISTS',
+      'CREATE OR REPLACE TABLE',
+      'CREATE OR REPLACE TEMP TABLE',
+      'CREATE OR REPLACE TEMPORARY TABLE',
+    ];
+
+    createTableVariations.forEach((createTableVariation: string) => {
+      expect(
+        format(`
+        ${createTableVariation} mydataset.newtable (
+          a INT64 NOT NULL
+        )`)
+      ).toBe(dedent`
+        ${createTableVariation}
+          mydataset.newtable (a INT64 NOT NULL)
+      `);
+    });
   });
 });

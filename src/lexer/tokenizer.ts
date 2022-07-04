@@ -15,6 +15,8 @@ interface TokenizerOptions {
   // Keywords that create newline but no indentaion of their body.
   // These contain set operations like UNION and various joins like LEFT OUTER JOIN
   reservedBinaryCommands: string[];
+  // Various joins like LEFT OUTER JOIN
+  reservedJoins: string[];
   // keywords used for JOIN conditions, defaults to: [ON, USING]
   reservedJoinConditions?: string[];
   // all other reserved words (not included to any of the above lists)
@@ -26,9 +28,9 @@ interface TokenizerOptions {
   // Types of quotes to use for variables
   variableTypes?: regexTypes.VariableType[];
   // Open-parenthesis characters, like: (, [, {
-  blockStart?: string[];
+  openParens?: string[];
   // Close-parenthesis characters, like: ), ], }
-  blockEnd?: string[];
+  closeParens?: string[];
   // True to allow for positional "?" parameter placeholders
   positionalParams?: boolean;
   // Prefixes for numbered parameter placeholders to support, e.g. :1, :2, :3
@@ -76,8 +78,8 @@ export default class Tokenizer {
         match: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
       },
       [TokenType.COMMA]: { match: /[,]/ },
-      [TokenType.BLOCK_START]: { match: regex.parenthesis(cfg.blockStart ?? ['(']) },
-      [TokenType.BLOCK_END]: { match: regex.parenthesis(cfg.blockEnd ?? [')']) },
+      [TokenType.OPEN_PAREN]: { match: regex.parenthesis(cfg.openParens ?? ['(']) },
+      [TokenType.CLOSE_PAREN]: { match: regex.parenthesis(cfg.closeParens ?? [')']) },
       [TokenType.QUOTED_IDENTIFIER]: { match: regex.string(cfg.identTypes) },
       [TokenType.NUMBER]: {
         match:
@@ -106,6 +108,10 @@ export default class Tokenizer {
       },
       [TokenType.RESERVED_LOGICAL_OPERATOR]: {
         match: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
+        value: v => v.toUpperCase(),
+      },
+      [TokenType.RESERVED_JOIN]: {
+        match: regex.reservedWord(cfg.reservedJoins ?? ['AND', 'OR'], cfg.identChars),
         value: v => v.toUpperCase(),
       },
       [TokenType.RESERVED_JOIN_CONDITION]: {

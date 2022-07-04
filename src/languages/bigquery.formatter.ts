@@ -1,6 +1,6 @@
 import Formatter from 'src/core/Formatter';
 import Tokenizer from 'src/lexer/tokenizer';
-import { EOF_TOKEN, TokenType, type Token } from 'src/core/token';
+import { EOF_TOKEN, isToken, TokenType, type Token } from 'src/core/token';
 import { dedupe } from 'src/utils';
 
 /**
@@ -718,11 +718,21 @@ const reservedCommands = [
   'SET SCHEMA', // added
   'CREATE SCHEMA',
   'CREATE TABLE',
+  'CREATE TABLE IF NOT EXISTS',
+  'CREATE TEMP TABLE',
+  'CREATE TEMP TABLE IF NOT EXISTS',
+  'CREATE TEMPORARY TABLE',
+  'CREATE TEMPORARY TABLE IF NOT EXISTS',
+  'CREATE OR REPLACE TABLE',
+  'CREATE OR REPLACE TEMP TABLE',
+  'CREATE OR REPLACE TEMPORARY TABLE',
   'CREATE TABLE LIKE',
   'CREATE TABLE COPY',
   'CREATE SNAPSHOT TABLE',
   'CREATE TABLE CLONE',
   'CREATE VIEW',
+  'CREATE VIEW IF NOT EXISTS',
+  'CREATE OR REPLACE VIEW',
   'CREATE MATERIALIZED VIEW',
   'CREATE EXTERNAL TABLE',
   'CREATE FUNCTION',
@@ -787,13 +797,7 @@ const reservedCommands = [
   'EXPORT DATA',
 ];
 
-/**
- * Priority 2
- * commands that operate on two tables or subqueries
- * two main categories: joins and boolean set operators
- */
 const reservedBinaryCommands = [
-  // set booleans
   'INTERSECT',
   'INTERSECT ALL',
   'INTERSECT DISTINCT',
@@ -803,7 +807,9 @@ const reservedBinaryCommands = [
   'EXCEPT',
   'EXCEPT ALL',
   'EXCEPT DISTINCT',
-  // joins
+];
+
+const reservedJoins = [
   'JOIN',
   'INNER JOIN',
   'LEFT JOIN',
@@ -831,12 +837,13 @@ export default class BigQueryFormatter extends Formatter {
     return new Tokenizer({
       reservedCommands,
       reservedBinaryCommands,
+      reservedJoins,
       reservedDependentClauses,
       reservedKeywords: dedupe(
         Object.values(reservedFunctions).flat().concat(Object.values(reservedKeywords).flat())
       ),
-      blockStart: ['(', '['],
-      blockEnd: [')', ']'],
+      openParens: ['(', '['],
+      closeParens: [')', ']'],
       stringTypes: [
         // The triple-quoted strings are listed first, so they get matched first.
         // Otherwise the first two quotes of """ will get matched as an empty "" string.
@@ -883,7 +890,7 @@ function combineParameterizedTypes(tokens: Token[]) {
     const token = tokens[i];
     const nextToken = tokens[i + 1] || EOF_TOKEN;
 
-    if ((token.value === 'ARRAY' || token.value === 'STRUCT') && nextToken.value === '<') {
+    if ((isToken.ARRAY(token) || isToken.STRUCT(token)) && nextToken.value === '<') {
       const endIndex = findClosingAngleBracketIndex(tokens, i + 1);
       const typeDefTokens = tokens.slice(i, endIndex + 1);
       processed.push({

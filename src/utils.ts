@@ -31,3 +31,12 @@ export const objectEquals = (x: any, y: any): boolean =>
   x && y && typeof x === 'object' && typeof y === 'object' && typeof x === typeof y
     ? Object.keys(x).every(k => objectEquals(x[k], y[k]))
     : x === y;
+
+// Adds up all values in array
+export const sum = (arr: number[]): number => {
+  let total = 0;
+  for (const x of arr) {
+    total += x;
+  }
+  return total;
+};

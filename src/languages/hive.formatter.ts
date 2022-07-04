@@ -579,20 +579,16 @@ const reservedCommands = [
   'ROW FORMAT',
 ];
 
-/**
- * Priority 2
- * commands that operate on two tables or subqueries
- * two main categories: joins and boolean set operators
- */
 const reservedBinaryCommands = [
-  // set booleans
   'INTERSECT',
   'INTERSECT ALL',
   'INTERSECT DISTINCT',
   'UNION',
   'UNION ALL',
   'UNION DISTINCT',
-  // joins
+];
+
+const reservedJoins = [
   'JOIN',
   'INNER JOIN',
   'LEFT JOIN',
@@ -619,12 +615,13 @@ export default class HiveFormatter extends Formatter {
     return new Tokenizer({
       reservedCommands,
       reservedBinaryCommands,
+      reservedJoins,
       reservedDependentClauses,
       reservedKeywords: dedupe(
         Object.values(reservedFunctions).flat().concat(Object.values(reservedKeywords).flat())
       ),
-      blockStart: ['(', '['],
-      blockEnd: [')', ']'],
+      openParens: ['(', '['],
+      closeParens: [')', ']'],
       stringTypes: ['""', "''"],
       identTypes: ['``'],
       variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
