@@ -12,21 +12,23 @@ const flatten = (arr: any[]) => arr.flat(Infinity);
 %}
 @lexer lexer
 
-main -> statement (";" statement):* {% (items) => {
-  return flatten(items)
-    // skip semicolons
-    .filter(item => item.type === NodeType.statement)
-    // mark all statements except the last as having a semicolon
-    .map((statement, i, allStatements) => {
-      if (i === allStatements.length - 1) {
-        return { ...statement, hasSemicolon: false };
-      } else {
-        return { ...statement, hasSemicolon: true };
-      }
-    })
-    // throw away last statement if it's empty
-    .filter(({children, hasSemicolon}) => hasSemicolon || children.length > 0);
-} %}
+main -> statement (";" statement):* {%
+  (items) => {
+    return flatten(items)
+      // skip semicolons
+      .filter(item => item.type === NodeType.statement)
+      // mark all statements except the last as having a semicolon
+      .map((statement, i, allStatements) => {
+        if (i === allStatements.length - 1) {
+          return { ...statement, hasSemicolon: false };
+        } else {
+          return { ...statement, hasSemicolon: true };
+        }
+      })
+      // throw away last statement if it's empty
+      .filter(({children, hasSemicolon}) => hasSemicolon || children.length > 0);
+  }
+%}
 
 statement -> expressions_or_clauses {%
   (children) => ({
@@ -85,6 +87,10 @@ plain_token ->
   | %BLOCK_COMMENT
   | %NUMBER
   | %PARAMETER
-  | not_semicolon_op ) {% ([[token]]) => ({ type: NodeType.token, token }) %}
+  | not_semicolon_op ) {%
+  ([[token]]) => ({ type: NodeType.token, token })
+%}
 
-not_semicolon_op -> %OPERATOR {% ([token], loc, reject) => token.value === ';' ? reject : token %}
+not_semicolon_op -> %OPERATOR {%
+  ([token], loc, reject) => token.value === ';' ? reject : token
+%}
