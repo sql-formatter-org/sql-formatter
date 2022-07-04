@@ -12,6 +12,10 @@ const flatten = (arr: any[]) => arr.flat(Infinity);
 %}
 @lexer lexer
 
+# This postprocessor is quite complex.
+# Might be better to eliminate hasSemicolon field
+# and allow for empty statement in the end,
+# so semicolons could then be placed between each statement.
 main -> statement (";" statement):* {%
   (items) => {
     return flatten(items)
@@ -37,6 +41,7 @@ statement -> expressions_or_clauses {%
   })
 %}
 
+# To avoid ambiguity, plain expressions can only come before clauses
 expressions_or_clauses -> expression:* clause:*
 
 clause -> %RESERVED_COMMAND expression:* {%
@@ -91,6 +96,7 @@ plain_token ->
   ([[token]]) => ({ type: NodeType.token, token })
 %}
 
+# TODO: Eliminate use of `reject` by having separate token type for semicolon
 not_semicolon_op -> %OPERATOR {%
   ([token], loc, reject) => token.value === ';' ? reject : token
 %}
