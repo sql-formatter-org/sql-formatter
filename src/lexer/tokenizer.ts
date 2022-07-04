@@ -64,8 +64,6 @@ export default class Tokenizer {
   constructor(cfg: TokenizerOptions) {
     this.TOKENIZER_OPTIONS = Object.fromEntries(
       Object.entries({
-        // WS: { regex: /[ \t]+/ },
-        // NL: { regex: /\n|(?:\r\n)/, lineBreaks: true },
         [TokenType.BLOCK_COMMENT]: { regex: /(\/\*[^]*?(?:\*\/|$))/uy },
         [TokenType.LINE_COMMENT]: {
           regex: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
