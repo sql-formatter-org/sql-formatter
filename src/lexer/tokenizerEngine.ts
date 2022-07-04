@@ -86,8 +86,12 @@ export default class TokenizerEngine {
   private matchPlaceholderToken(tokenType: TokenType): Token | undefined {
     if (tokenType in this.REGEX_MAP) {
       const token = this.matchToken(tokenType);
+      const tokenRule = this.REGEX_MAP[tokenType]!;
       if (token) {
-        return { ...token, key: this.REGEX_MAP[tokenType]!.key!(token.value) };
+        if (tokenRule.key) {
+          return { ...token, key: tokenRule.key(token.value) };
+        }
+        return token; // POSITIONAL_PARAMETER does not have a key transform function
       }
     }
     return undefined;
