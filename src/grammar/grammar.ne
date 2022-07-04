@@ -28,7 +28,18 @@ main -> statement (";" statement):* {% (items) => {
     .filter(({children, hasSemicolon}) => hasSemicolon || children.length > 0);
 } %}
 
-statement -> plain_token:* {% (tokens) => ({ type: NodeType.statement, children: flatten(tokens) }) %}
+statement -> expression:* {% (children) => ({ type: NodeType.statement, children: flatten(children) }) %}
+
+expression -> parenthesis | plain_token
+
+parenthesis -> %OPEN_PAREN expression:* %CLOSE_PAREN {%
+  ([open, children, close]) => ({
+    type: NodeType.parenthesis,
+    children: flatten(children),
+    openParen: open.value,
+    closeParen: close.value,
+  })
+%}
 
 plain_token ->
   ( %IDENT
@@ -43,8 +54,6 @@ plain_token ->
   | %RESERVED_JOIN_CONDITION
   | %RESERVED_CASE_START
   | %RESERVED_CASE_END
-  | %OPEN_PAREN
-  | %CLOSE_PAREN
   | %LINE_COMMENT
   | %BLOCK_COMMENT
   | %NUMBER
