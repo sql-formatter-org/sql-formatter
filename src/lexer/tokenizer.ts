@@ -57,101 +57,103 @@ interface TokenizerOptions {
 }
 
 export default class Tokenizer {
-  TOKENIZER_OPTIONS: Partial<Record<TokenType, TokenRule>>;
+  TOKENIZER_OPTIONS: Partial<Record<TokenType, TokenRule | { regex: undefined }>>;
   engine: TokenizerEngine;
   postProcess?: (tokens: Token[]) => Token[];
 
   constructor(cfg: TokenizerOptions) {
-    this.TOKENIZER_OPTIONS = Object.fromEntries(
-      Object.entries({
-        [TokenType.BLOCK_COMMENT]: { regex: /(\/\*[^]*?(?:\*\/|$))/uy },
-        [TokenType.LINE_COMMENT]: {
-          regex: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
-        },
-        [TokenType.COMMA]: { regex: /[,]/y },
-        [TokenType.OPEN_PAREN]: { regex: regex.parenthesis(cfg.openParens ?? ['(']) },
-        [TokenType.CLOSE_PAREN]: { regex: regex.parenthesis(cfg.closeParens ?? [')']) },
-        [TokenType.QUOTED_IDENTIFIER]: { regex: regex.string(cfg.identTypes) },
-        [TokenType.NUMBER]: {
-          regex:
-            /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)/uy,
-        },
-        [TokenType.RESERVED_CASE_START]: {
-          regex: /[Cc][Aa][Ss][Ee]\b/uy,
-          value: v => v.toUpperCase(),
-        },
-        [TokenType.RESERVED_CASE_END]: { regex: /[Ee][Nn][Dd]\b/uy, value: v => v.toUpperCase() },
-        [TokenType.RESERVED_COMMAND]: {
-          regex: regex.reservedWord(cfg.reservedCommands, cfg.identChars),
-          value: v => v.toUpperCase(),
-        },
-        [TokenType.RESERVED_BINARY_COMMAND]: {
-          regex: regex.reservedWord(cfg.reservedBinaryCommands, cfg.identChars),
-          value: v => v.toUpperCase(),
-        },
-        [TokenType.RESERVED_DEPENDENT_CLAUSE]: {
-          regex: regex.reservedWord(cfg.reservedDependentClauses, cfg.identChars),
-          value: v => v.toUpperCase(),
-        },
-        [TokenType.RESERVED_JOIN]: {
-          regex: regex.reservedWord(cfg.reservedJoins, cfg.identChars),
-          value: v => v.toUpperCase(),
-        },
-        [TokenType.RESERVED_KEYWORD]: {
-          regex: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
-          value: v => v.toUpperCase(),
-        },
-        [TokenType.RESERVED_LOGICAL_OPERATOR]: {
-          regex: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
-          value: v => v.toUpperCase(),
-        },
-        [TokenType.RESERVED_JOIN_CONDITION]: {
-          regex: regex.reservedWord(cfg.reservedJoinConditions ?? ['ON', 'USING'], cfg.identChars),
-          value: v => v.toUpperCase(),
-        },
-        [TokenType.NAMED_PARAMETER]: {
-          regex: regex.parameter(
-            cfg.namedParamTypes ?? [],
-            regex.identifierPattern(cfg.paramChars || cfg.identChars)
-          ),
-          key: v => v.slice(1),
-        },
-        [TokenType.QUOTED_PARAMETER]: {
-          regex: regex.parameter(cfg.quotedParamTypes ?? [], regex.stringPattern(cfg.identTypes)),
-          key: v =>
-            (({ tokenKey, quoteChar }) =>
-              tokenKey.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar))({
-              tokenKey: v.slice(2, -1),
-              quoteChar: v.slice(-1),
-            }),
-        },
-        [TokenType.INDEXED_PARAMETER]: {
-          regex: regex.parameter(cfg.numberedParamTypes ?? [], '[0-9]+'),
-          key: v => v.slice(1),
-        },
-        [TokenType.POSITIONAL_PARAMETER]: {
-          regex: cfg.positionalParams ? /[?]/y : undefined,
-        },
-        [TokenType.VARIABLE]: {
-          regex: cfg.variableTypes ? regex.variable(cfg.variableTypes) : NULL_REGEX,
-        },
-        [TokenType.STRING]: { regex: regex.string(cfg.stringTypes) },
-        [TokenType.IDENTIFIER]: {
-          regex: regex.identifier(cfg.identChars),
-        },
-        [TokenType.OPERATOR]: {
-          regex: regex.operator('+-/*%&|^><=.;[]{}`:$@', [
-            '<>',
-            '<=',
-            '>=',
-            '!=',
-            ...(cfg.operators ?? []),
-          ]),
-        },
-      } as Partial<Record<TokenType, TokenRule>>).filter(([_, rule]) => rule.regex)
-    );
+    this.TOKENIZER_OPTIONS = {
+      [TokenType.BLOCK_COMMENT]: { regex: /(\/\*[^]*?(?:\*\/|$))/uy },
+      [TokenType.LINE_COMMENT]: {
+        regex: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
+      },
+      [TokenType.COMMA]: { regex: /[,]/y },
+      [TokenType.OPEN_PAREN]: { regex: regex.parenthesis(cfg.openParens ?? ['(']) },
+      [TokenType.CLOSE_PAREN]: { regex: regex.parenthesis(cfg.closeParens ?? [')']) },
+      [TokenType.QUOTED_IDENTIFIER]: { regex: regex.string(cfg.identTypes) },
+      [TokenType.NUMBER]: {
+        regex:
+          /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)/uy,
+      },
+      [TokenType.RESERVED_CASE_START]: {
+        regex: /[Cc][Aa][Ss][Ee]\b/uy,
+        value: v => v.toUpperCase(),
+      },
+      [TokenType.RESERVED_CASE_END]: { regex: /[Ee][Nn][Dd]\b/uy, value: v => v.toUpperCase() },
+      [TokenType.RESERVED_COMMAND]: {
+        regex: regex.reservedWord(cfg.reservedCommands, cfg.identChars),
+        value: v => v.toUpperCase(),
+      },
+      [TokenType.RESERVED_BINARY_COMMAND]: {
+        regex: regex.reservedWord(cfg.reservedBinaryCommands, cfg.identChars),
+        value: v => v.toUpperCase(),
+      },
+      [TokenType.RESERVED_DEPENDENT_CLAUSE]: {
+        regex: regex.reservedWord(cfg.reservedDependentClauses, cfg.identChars),
+        value: v => v.toUpperCase(),
+      },
+      [TokenType.RESERVED_JOIN]: {
+        regex: regex.reservedWord(cfg.reservedJoins, cfg.identChars),
+        value: v => v.toUpperCase(),
+      },
+      [TokenType.RESERVED_KEYWORD]: {
+        regex: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
+        value: v => v.toUpperCase(),
+      },
+      [TokenType.RESERVED_LOGICAL_OPERATOR]: {
+        regex: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
+        value: v => v.toUpperCase(),
+      },
+      [TokenType.RESERVED_JOIN_CONDITION]: {
+        regex: regex.reservedWord(cfg.reservedJoinConditions ?? ['ON', 'USING'], cfg.identChars),
+        value: v => v.toUpperCase(),
+      },
+      [TokenType.NAMED_PARAMETER]: {
+        regex: regex.parameter(
+          cfg.namedParamTypes ?? [],
+          regex.identifierPattern(cfg.paramChars || cfg.identChars)
+        ),
+        key: v => v.slice(1),
+      },
+      [TokenType.QUOTED_PARAMETER]: {
+        regex: regex.parameter(cfg.quotedParamTypes ?? [], regex.stringPattern(cfg.identTypes)),
+        key: v =>
+          (({ tokenKey, quoteChar }) =>
+            tokenKey.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar))({
+            tokenKey: v.slice(2, -1),
+            quoteChar: v.slice(-1),
+          }),
+      },
+      [TokenType.INDEXED_PARAMETER]: {
+        regex: regex.parameter(cfg.numberedParamTypes ?? [], '[0-9]+'),
+        key: v => v.slice(1),
+      },
+      [TokenType.POSITIONAL_PARAMETER]: {
+        regex: cfg.positionalParams ? /[?]/y : undefined,
+      },
+      [TokenType.VARIABLE]: {
+        regex: cfg.variableTypes ? regex.variable(cfg.variableTypes) : NULL_REGEX,
+      },
+      [TokenType.STRING]: { regex: regex.string(cfg.stringTypes) },
+      [TokenType.IDENTIFIER]: {
+        regex: regex.identifier(cfg.identChars),
+      },
+      [TokenType.OPERATOR]: {
+        regex: regex.operator('+-/*%&|^><=.;[]{}`:$@', [
+          '<>',
+          '<=',
+          '>=',
+          '!=',
+          ...(cfg.operators ?? []),
+        ]),
+      },
+    };
 
-    this.engine = new TokenizerEngine(this.TOKENIZER_OPTIONS);
+    // filter out unsupported parameter types whose regex resolve to undefined
+    const withoutUnsupportedParameters = Object.fromEntries(
+      Object.entries(this.TOKENIZER_OPTIONS).filter(([_, rule]) => rule.regex)
+    );
+    this.engine = new TokenizerEngine(withoutUnsupportedParameters);
 
     this.postProcess = cfg.postProcess;
   }
