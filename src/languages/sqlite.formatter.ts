@@ -237,7 +237,6 @@ const reservedCommands = [
 ];
 
 const reservedBinaryCommands = [
-  // set booleans
   'INTERSECT',
   'INTERSECT ALL',
   'INTERSECT DISTINCT',
@@ -247,7 +246,10 @@ const reservedBinaryCommands = [
   'EXCEPT',
   'EXCEPT ALL',
   'EXCEPT DISTINCT',
-  // joins - https://www.sqlite.org/syntax/join-operator.html
+];
+
+// joins - https://www.sqlite.org/syntax/join-operator.html
+const reservedJoins = [
   'JOIN',
   'LEFT JOIN',
   'LEFT OUTER JOIN',
@@ -270,6 +272,7 @@ export default class SqliteFormatter extends Formatter {
     return new Tokenizer({
       reservedCommands,
       reservedBinaryCommands,
+      reservedJoins,
       reservedDependentClauses,
       reservedKeywords: dedupe([...reservedKeywords, ...Object.values(reservedFunctions).flat()]),
       stringTypes: [{ quote: "''", prefixes: ['X'] }],

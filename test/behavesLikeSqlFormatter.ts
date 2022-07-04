@@ -7,11 +7,9 @@ import supportsNumbers from './features/numbers';
 import supportsTabWidth from './options/tabWidth';
 import supportsUseTabs from './options/useTabs';
 import supportsAliasAs from './options/aliasAs';
-import supportsMultilineLists from './options/multilineLists';
 import supportsExpressionWidth from './options/expressionWidth';
 import supportsKeywordCase from './options/keywordCase';
 import supportsIndentStyle from './options/indentStyle';
-import supportsNewlineBeforeParen from './options/newlineBeforeParen';
 import supportsCommaPosition from './options/commaPosition';
 import supportsLinesBetweenQueries from './options/linesBetweenQueries';
 import supportsNewlineBeforeSemicolon from './options/newlineBeforeSemicolon';
@@ -32,9 +30,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsKeywordCase(format);
   supportsIndentStyle(format);
   supportsLinesBetweenQueries(format);
-  supportsMultilineLists(format);
   supportsExpressionWidth(format);
-  supportsNewlineBeforeParen(format);
   supportsNewlineBeforeSemicolon(format);
   supportsCommaPosition(format);
   supportsLogicalOperatorNewline(format);
@@ -52,11 +48,11 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
 
   it('formats complex SELECT', () => {
     const result = format(
-      "SELECT DISTINCT [name], ROUND(age/7) field1, 18 + 20 AS field2, 'some string' FROM foo;"
+      "SELECT DISTINCT name, ROUND(age/7) field1, 18 + 20 AS field2, 'some string' FROM foo;"
     );
     expect(result).toBe(dedent`
       SELECT
-        DISTINCT [name],
+        DISTINCT name,
         ROUND(age / 7) field1,
         18 + 20 AS field2,
         'some string'

@@ -24,4 +24,22 @@ describe('sqlFormatter', () => {
       'Invalid query argument. Expected string, instead got undefined'
     );
   });
+
+  it('throws error when multilineLists config option used', () => {
+    expect(() => {
+      format('SELECT *', { multilineLists: 'always' } as any);
+    }).toThrow('multilineLists config is no more supported.');
+  });
+
+  it('throws error when newlineBeforeOpenParen config option used', () => {
+    expect(() => {
+      format('SELECT *', { newlineBeforeOpenParen: true } as any);
+    }).toThrow('newlineBeforeOpenParen config is no more supported.');
+  });
+
+  it('throws error when newlineBeforeCloseParen config option used', () => {
+    expect(() => {
+      format('SELECT *', { newlineBeforeCloseParen: true } as any);
+    }).toThrow('newlineBeforeCloseParen config is no more supported.');
+  });
 });

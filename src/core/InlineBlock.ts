@@ -1,3 +1,5 @@
+import { sum } from 'src/utils';
+import { BetweenPredicate, NodeType, Parenthesis } from './ast';
 import { isToken, type Token, TokenType } from './token';
 
 /**
@@ -8,85 +10,68 @@ import { isToken, type Token, TokenType } from './token';
  * expressions where open-parenthesis causes newline and increase of indentation.
  */
 export default class InlineBlock {
-  level: number;
-  expressionWidth: number;
-
-  constructor(expressionWidth: number) {
-    this.level = 0;
-    this.expressionWidth = expressionWidth;
-  }
-
-  /**
-   * Begins inline block when lookahead through upcoming tokens determines
-   * that the block would be smaller than INLINE_MAX_LENGTH.
-   * @param  {Token[]} tokens Array of all tokens
-   * @param  {Number} index Current token position
-   */
-  beginIfPossible(tokens: Token[], index: number) {
-    if (this.level === 0 && this.isInlineBlock(tokens, index)) {
-      this.level = 1;
-    } else if (this.level > 0) {
-      this.level++;
-    } else {
-      this.level = 0;
-    }
-  }
-
-  /**
-   * Finishes current inline block.
-   * There might be several nested ones.
-   */
-  end() {
-    this.level--;
-  }
-
-  /**
-   * True when inside an inline block
-   */
-  isActive(): boolean {
-    return this.level > 0;
-  }
+  constructor(private expressionWidth: number) {}
 
   /**
    * Check if this should be an inline parentheses block
    * Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
    */
-  isInlineBlock(tokens: Token[], index: number): boolean {
-    let length = 0;
-    let level = 0;
+  public isInlineBlock(parenthesis: Parenthesis): boolean {
+    return this.inlineWidth(parenthesis) <= this.expressionWidth;
+  }
 
-    for (let i = index; i < tokens.length; i++) {
-      const token = tokens[i];
-      length += token.value.length;
+  private inlineWidth(parenthesis: Parenthesis): number {
+    let length = 2; // two parenthesis
 
-      if (this.isForbiddenToken(token)) {
-        return false;
+    for (const node of parenthesis.children) {
+      switch (node.type) {
+        case NodeType.function_call:
+          length += node.nameToken.value.length + this.inlineWidth(node.parenthesis);
+          break;
+        case NodeType.array_subscript:
+          length += node.arrayToken.value.length + this.inlineWidth(node.parenthesis);
+          break;
+        case NodeType.parenthesis:
+          length += this.inlineWidth(node);
+          break;
+        case NodeType.between_predicate:
+          length += this.betweenWidth(node);
+          break;
+        case NodeType.clause:
+        case NodeType.limit_clause:
+        case NodeType.binary_clause:
+          return Infinity;
+        case NodeType.all_columns_asterisk:
+          length += 1;
+          break;
+        case NodeType.token:
+          length += node.token.value.length;
+          if (this.isForbiddenToken(node.token)) {
+            return Infinity;
+          }
+          break;
       }
 
       // Overran max length
       if (length > this.expressionWidth) {
-        return false;
-      }
-
-      if (token.type === TokenType.OPEN_PAREN) {
-        level++;
-      } else if (token.type === TokenType.CLOSE_PAREN) {
-        level--;
-        if (level === 0) {
-          return true;
-        }
+        return length;
       }
     }
-    return false;
+    return length;
+  }
+
+  private betweenWidth(node: BetweenPredicate): number {
+    return sum(
+      [node.betweenToken, node.expr1, node.andToken, node.expr2].map(token => token.value.length)
+    );
   }
 
   // Reserved words that cause newlines, comments and semicolons
   // are not allowed inside inline parentheses block
-  isForbiddenToken(token: Token) {
+  private isForbiddenToken(token: Token) {
     return (
-      token.type === TokenType.RESERVED_COMMAND ||
       token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
-      // token.type === TokenType.LINE_COMMENT ||
+      token.type === TokenType.LINE_COMMENT ||
       token.type === TokenType.BLOCK_COMMENT ||
       token.value === ';' ||
       isToken.CASE(token) // CASE cannot have inline blocks

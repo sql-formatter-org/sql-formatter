@@ -107,14 +107,17 @@ describe('BigQueryFormatter', () => {
     `);
   });
 
-  it('supports parametric ARRAY and STRUCT', () => {
-    const result = format('SELECT STRUCT<ARRAY<INT64>>([]), ARRAY<FLOAT>[1] FROM tbl');
-    expect(result).toBe(dedent`
+  it('supports parametric ARRAY', () => {
+    expect(format('SELECT ARRAY<FLOAT>[1]')).toBe(dedent`
       SELECT
-        STRUCT<ARRAY<INT64>>([]),
         ARRAY<FLOAT>[1]
-      FROM
-        tbl
+    `);
+  });
+
+  it('supports parametric STRUCT', () => {
+    expect(format('SELECT STRUCT<ARRAY<INT64>>([])')).toBe(dedent`
+      SELECT
+        STRUCT<ARRAY<INT64>>([])
     `);
   });
 

@@ -20,7 +20,7 @@ export default function supportsOperators(
   });
 
   logicalOperators.forEach(op => {
-    describe(`supports ${op} operator`, () => {
+    it(`supports ${op} operator`, () => {
       const result = format(`SELECT true ${op} false AS foo;`);
       expect(result).toBe(dedent`
         SELECT
@@ -28,16 +28,6 @@ export default function supportsOperators(
           ${op} false AS foo;
       `);
     });
-  });
-
-  it('supports braces', () => {
-    const result = format(`SELECT $\{a} FROM $\{b};`);
-    expect(result).toBe(dedent`
-      SELECT
-        $\{a}
-      FROM
-        $\{b};
-    `);
   });
 
   it('supports set operators', () => {

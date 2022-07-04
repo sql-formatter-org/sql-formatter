@@ -714,11 +714,6 @@ const reservedCommands = [
   'WINDOW', // verify
 ];
 
-/**
- * Priority 2
- * commands that operate on two tables or subqueries
- * two main categories: joins and boolean set operators
- */
 const reservedBinaryCommands = [
   // set booleans
   'INTERSECT',
@@ -733,7 +728,12 @@ const reservedBinaryCommands = [
   'MINUS',
   'MINUS ALL',
   'MINUS DISTINCT',
-  // joins
+  // apply
+  'CROSS APPLY',
+  'OUTER APPLY',
+];
+
+const reservedJoins = [
   'JOIN',
   'INNER JOIN',
   'LEFT JOIN',
@@ -744,9 +744,6 @@ const reservedBinaryCommands = [
   'FULL OUTER JOIN',
   'CROSS JOIN',
   'NATURAL JOIN',
-  // apply
-  'CROSS APPLY',
-  'OUTER APPLY',
   // non-standard-joins
   'ANTI JOIN',
   'SEMI JOIN',
@@ -764,8 +761,6 @@ const reservedBinaryCommands = [
   'NATURAL RIGHT OUTER JOIN',
   'NATURAL RIGHT SEMI JOIN',
   'NATURAL SEMI JOIN',
-  'CROSS APPLY',
-  'OUTER APPLY',
 ];
 
 /**
@@ -783,6 +778,7 @@ export default class SparkFormatter extends Formatter {
     return new Tokenizer({
       reservedCommands,
       reservedBinaryCommands,
+      reservedJoins,
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: dedupe([...Object.values(reservedFunctions).flat(), ...reservedKeywords]),
