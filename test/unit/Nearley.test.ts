@@ -30,37 +30,66 @@ describe('Nearley integration', () => {
     }
   };
 
-  it('parses something', () => {
-    expect(parse('SELECT foo, bar')).toMatchInlineSnapshot(`
-      Object {
-        "children": Array [
-          Object {
-            "text": "foo",
-            "type": "IDENT",
-            "value": "foo",
-            "whitespaceBefore": " ",
-          },
-          Object {
-            "text": ",",
-            "type": "OPERATOR",
-            "value": ",",
-            "whitespaceBefore": "",
-          },
-          Object {
-            "text": "bar",
-            "type": "IDENT",
-            "value": "bar",
-            "whitespaceBefore": " ",
-          },
-        ],
-        "nameToken": Object {
-          "text": "SELECT",
-          "type": "RESERVED_COMMAND",
-          "value": "SELECT",
+  it('parses list of statements', () => {
+    expect(parse('SELECT foo; DROP TABLE bar;')).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "text": "SELECT",
+              "type": "RESERVED_COMMAND",
+              "value": "SELECT",
+              "whitespaceBefore": "",
+            },
+            Object {
+              "text": "foo",
+              "type": "IDENT",
+              "value": "foo",
+              "whitespaceBefore": " ",
+            },
+          ],
+          "type": "statement",
+        },
+        Object {
+          "text": ";",
+          "type": "OPERATOR",
+          "value": ";",
           "whitespaceBefore": "",
         },
-        "type": "clause",
-      }
+        Object {
+          "children": Array [
+            Object {
+              "text": "DROP",
+              "type": "IDENT",
+              "value": "DROP",
+              "whitespaceBefore": " ",
+            },
+            Object {
+              "text": "TABLE",
+              "type": "IDENT",
+              "value": "TABLE",
+              "whitespaceBefore": " ",
+            },
+            Object {
+              "text": "bar",
+              "type": "IDENT",
+              "value": "bar",
+              "whitespaceBefore": " ",
+            },
+          ],
+          "type": "statement",
+        },
+        Object {
+          "text": ";",
+          "type": "OPERATOR",
+          "value": ";",
+          "whitespaceBefore": "",
+        },
+        Object {
+          "children": Array [],
+          "type": "statement",
+        },
+      ]
     `);
   });
 });
