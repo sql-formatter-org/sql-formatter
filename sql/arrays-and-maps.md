@@ -29,6 +29,11 @@ Supported by:
 - [N1QL][]
 - [PostgreSQL][]
 
+Array subscript operator `arr[OFFSET(5)]`. Supported by:
+
+- [BigQuery][]
+
+[bigquery]: https://cloud.google.com/bigquery/docs/reference/standard-sql/operators#array_subscript_operator
 [hive]: https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF#LanguageManualUDF-OperatorsonComplexTypes
 [spark]: https://stackoverflow.com/questions/34916038/sparksql-sql-syntax-for-nth-item-in-array
 [n1ql-literals]: https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/datatypes.html#arrays
