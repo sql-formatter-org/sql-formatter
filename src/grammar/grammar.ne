@@ -30,14 +30,27 @@ main -> statement (";" statement):* {% (items) => {
 
 statement -> expression:* {% (children) => ({ type: NodeType.statement, children: flatten(children) }) %}
 
-expression -> parenthesis | plain_token
+expression -> array_subscript | parenthesis | plain_token
 
-parenthesis -> %OPEN_PAREN expression:* %CLOSE_PAREN {%
+array_subscript -> %IDENT "[" expression:* "]" {%
+  ([arrayToken, open, children, close]) => ({
+    type: NodeType.array_subscript,
+    arrayToken,
+    parenthesis: {
+      type: NodeType.parenthesis,
+      children: flatten(children),
+      openParen: "[",
+      closeParen: "]",
+    },
+  })
+%}
+
+parenthesis -> "(" expression:* ")" {%
   ([open, children, close]) => ({
     type: NodeType.parenthesis,
     children: flatten(children),
-    openParen: open.value,
-    closeParen: close.value,
+    openParen: "(",
+    closeParen: ")",
   })
 %}
 

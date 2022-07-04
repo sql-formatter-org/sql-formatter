@@ -71,6 +71,53 @@ describe('Nearley integration', () => {
     `);
   });
 
+  it('parses array subscript', () => {
+    expect(parse('SELECT my_array[5]')).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "token": Object {
+                "text": "SELECT",
+                "type": "RESERVED_COMMAND",
+                "value": "SELECT",
+                "whitespaceBefore": "",
+              },
+              "type": "token",
+            },
+            Object {
+              "arrayToken": Object {
+                "text": "my_array",
+                "type": "IDENT",
+                "value": "my_array",
+                "whitespaceBefore": " ",
+              },
+              "parenthesis": Object {
+                "children": Array [
+                  Object {
+                    "token": Object {
+                      "text": "5",
+                      "type": "NUMBER",
+                      "value": "5",
+                      "whitespaceBefore": "",
+                    },
+                    "type": "token",
+                  },
+                ],
+                "closeParen": "]",
+                "openParen": "[",
+                "type": "parenthesis",
+              },
+              "type": "array_subscript",
+            },
+          ],
+          "hasSemicolon": false,
+          "type": "statement",
+        },
+      ]
+    `);
+  });
+
   it('parses parenthesized expressions', () => {
     expect(parse('SELECT (birth_year - (CURRENT_DATE + 1))')).toMatchInlineSnapshot(`
       Array [
