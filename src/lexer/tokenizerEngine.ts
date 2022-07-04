@@ -52,11 +52,11 @@ export default class TokenizerEngine {
 
   private getWhitespace(): string {
     WHITESPACE_REGEX.lastIndex = this.index;
-    const matches = this.input.match(WHITESPACE_REGEX);
+    const matches = WHITESPACE_REGEX.exec(this.input);
     if (matches) {
       // Advance current position by matched whitespace length
-      this.index += matches[1].length;
-      return matches[1];
+      this.index += matches[0].length;
+      return matches[0];
     } else {
       return '';
     }
@@ -138,14 +138,16 @@ export default class TokenizerEngine {
     transform?: (s: string) => string;
   }): Token | undefined {
     regex.lastIndex = this.index;
-    const matches = this.input.match(regex);
+    const matches = regex.exec(this.input);
     if (matches) {
+      const matchedToken = matches[0];
+
       // Advance current position by matched token length
-      this.index += matches[1].length;
+      this.index += matchedToken.length;
       return {
         type,
-        text: matches[1],
-        value: transform ? transform(matches[1]) : matches[1],
+        text: matchedToken,
+        value: transform ? transform(matchedToken) : matchedToken,
       };
     }
     return undefined;
