@@ -77,38 +77,40 @@ describe('Nearley integration', () => {
         Object {
           "children": Array [
             Object {
-              "token": Object {
+              "children": Array [
+                Object {
+                  "arrayToken": Object {
+                    "text": "my_array",
+                    "type": "IDENT",
+                    "value": "my_array",
+                    "whitespaceBefore": " ",
+                  },
+                  "parenthesis": Object {
+                    "children": Array [
+                      Object {
+                        "token": Object {
+                          "text": "5",
+                          "type": "NUMBER",
+                          "value": "5",
+                          "whitespaceBefore": "",
+                        },
+                        "type": "token",
+                      },
+                    ],
+                    "closeParen": "]",
+                    "openParen": "[",
+                    "type": "parenthesis",
+                  },
+                  "type": "array_subscript",
+                },
+              ],
+              "nameToken": Object {
                 "text": "SELECT",
                 "type": "RESERVED_COMMAND",
                 "value": "SELECT",
                 "whitespaceBefore": "",
               },
-              "type": "token",
-            },
-            Object {
-              "arrayToken": Object {
-                "text": "my_array",
-                "type": "IDENT",
-                "value": "my_array",
-                "whitespaceBefore": " ",
-              },
-              "parenthesis": Object {
-                "children": Array [
-                  Object {
-                    "token": Object {
-                      "text": "5",
-                      "type": "NUMBER",
-                      "value": "5",
-                      "whitespaceBefore": "",
-                    },
-                    "type": "token",
-                  },
-                ],
-                "closeParen": "]",
-                "openParen": "[",
-                "type": "parenthesis",
-              },
-              "type": "array_subscript",
+              "type": "clause",
             },
           ],
           "hasSemicolon": false,
@@ -124,62 +126,60 @@ describe('Nearley integration', () => {
         Object {
           "children": Array [
             Object {
-              "token": Object {
-                "text": "SELECT",
-                "type": "RESERVED_COMMAND",
-                "value": "SELECT",
-                "whitespaceBefore": "",
-              },
-              "type": "token",
-            },
-            Object {
               "children": Array [
-                Object {
-                  "token": Object {
-                    "text": "birth_year",
-                    "type": "IDENT",
-                    "value": "birth_year",
-                    "whitespaceBefore": "",
-                  },
-                  "type": "token",
-                },
-                Object {
-                  "token": Object {
-                    "text": "-",
-                    "type": "OPERATOR",
-                    "value": "-",
-                    "whitespaceBefore": " ",
-                  },
-                  "type": "token",
-                },
                 Object {
                   "children": Array [
                     Object {
                       "token": Object {
-                        "text": "CURRENT_DATE",
+                        "text": "birth_year",
                         "type": "IDENT",
-                        "value": "CURRENT_DATE",
+                        "value": "birth_year",
                         "whitespaceBefore": "",
                       },
                       "type": "token",
                     },
                     Object {
                       "token": Object {
-                        "text": "+",
+                        "text": "-",
                         "type": "OPERATOR",
-                        "value": "+",
+                        "value": "-",
                         "whitespaceBefore": " ",
                       },
                       "type": "token",
                     },
                     Object {
-                      "token": Object {
-                        "text": "1",
-                        "type": "NUMBER",
-                        "value": "1",
-                        "whitespaceBefore": " ",
-                      },
-                      "type": "token",
+                      "children": Array [
+                        Object {
+                          "token": Object {
+                            "text": "CURRENT_DATE",
+                            "type": "IDENT",
+                            "value": "CURRENT_DATE",
+                            "whitespaceBefore": "",
+                          },
+                          "type": "token",
+                        },
+                        Object {
+                          "token": Object {
+                            "text": "+",
+                            "type": "OPERATOR",
+                            "value": "+",
+                            "whitespaceBefore": " ",
+                          },
+                          "type": "token",
+                        },
+                        Object {
+                          "token": Object {
+                            "text": "1",
+                            "type": "NUMBER",
+                            "value": "1",
+                            "whitespaceBefore": " ",
+                          },
+                          "type": "token",
+                        },
+                      ],
+                      "closeParen": ")",
+                      "openParen": "(",
+                      "type": "parenthesis",
                     },
                   ],
                   "closeParen": ")",
@@ -187,9 +187,13 @@ describe('Nearley integration', () => {
                   "type": "parenthesis",
                 },
               ],
-              "closeParen": ")",
-              "openParen": "(",
-              "type": "parenthesis",
+              "nameToken": Object {
+                "text": "SELECT",
+                "type": "RESERVED_COMMAND",
+                "value": "SELECT",
+                "whitespaceBefore": "",
+              },
+              "type": "clause",
             },
           ],
           "hasSemicolon": false,

@@ -28,7 +28,22 @@ main -> statement (";" statement):* {% (items) => {
     .filter(({children, hasSemicolon}) => hasSemicolon || children.length > 0);
 } %}
 
-statement -> expression:* {% (children) => ({ type: NodeType.statement, children: flatten(children) }) %}
+statement -> expressions_or_clauses {%
+  (children) => ({
+    type: NodeType.statement,
+    children: flatten(children),
+  })
+%}
+
+expressions_or_clauses -> expression:* clause:*
+
+clause -> %RESERVED_COMMAND expression:* {%
+  ([nameToken, children]) => ({
+    type: NodeType.clause,
+    nameToken,
+    children: flatten(children),
+  })
+%}
 
 expression -> array_subscript | parenthesis | plain_token
 
@@ -45,7 +60,7 @@ array_subscript -> %IDENT "[" expression:* "]" {%
   })
 %}
 
-parenthesis -> "(" expression:* ")" {%
+parenthesis -> "(" expressions_or_clauses ")" {%
   ([open, children, close]) => ({
     type: NodeType.parenthesis,
     children: flatten(children),
@@ -62,7 +77,6 @@ plain_token ->
   | %RESERVED_LOGICAL_OPERATOR
   | %RESERVED_DEPENDENT_CLAUSE
   | %RESERVED_BINARY_COMMAND
-  | %RESERVED_COMMAND
   | %RESERVED_JOIN
   | %RESERVED_JOIN_CONDITION
   | %RESERVED_CASE_START
