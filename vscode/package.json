@@ -65,7 +65,7 @@
     "vsce": "vsce"
   },
   "dependencies": {
-    "sql-formatter": "^6.1.2"
+    "sql-formatter": "^8.0.1"
   },
   "devDependencies": {
     "@types/glob": "^7.1.4",
