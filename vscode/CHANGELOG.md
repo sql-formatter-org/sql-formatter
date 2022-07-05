@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [1.1.1] - 2022-07-05
+
+- updated package metadata to point at `sql-formatter` instead of `prettier-sql`
+
 ## [1.1.0] - 2022-07-05
 
 - updated `sql-formatter` to v8.x
