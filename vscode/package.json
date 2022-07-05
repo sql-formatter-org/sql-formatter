@@ -42,6 +42,7 @@
     "spark",
     "sparksql",
     "sql",
+    "sqlite",
     "sql server",
     "tsql"
   ],

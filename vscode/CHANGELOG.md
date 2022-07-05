@@ -1,5 +1,34 @@
 # CHANGELOG
 
+## [1.1.0] - 2022-07-05
+
+- updated `sql-formatter` to v8.x
+- removed `newlineBeforeCloseParen`
+- removed `newlineBeforeOpenParen`
+
+## [1.0.0] - 2022-06-02
+
+- switched from `prettier-sql` to `sql-formatter` as base library
+- renamed `uppercaseKeywords` to `keywordCase`, changed from boolean to enum
+- renamed `keywordPosition` to `indentStyle`
+- renamed `breakBeforeBooleanOperator` to `logicalOperatorNewline`
+- renamed `closeParenNewline` to `newlineBeforeCloseParen`
+- renamed `openParenNewline` to `newlineBeforeOpenParen`
+- renamed `lineWidth` to `expressionWidth`
+- renamed `semicolonNewline` to `newlineBeforeSemicolon`
+- added `'preserve'` option for `aliasAS`
+- removed `keywordNewline`
+- removed `itemCount`
+- added formatProvider support on new languages:
+  - sqlite
+
+## [0.3.0] - 2022-04-09
+
+- updated dependencies
+- update build and publish flow
+- renamed `keywordNewline` to `keywordNewline.newlineMode`, remove integer option
+- restored deleted `itemCount` as `keywordNewline.itemCount`
+
 ## [0.2.0] - 2021-12-21
 
 - added command `prettier-sql-vscode.format-selection`
