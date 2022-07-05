@@ -1,5 +1,5 @@
 import type { IndentStyle } from 'src/types';
-import { Token, TokenType } from './token';
+import { Token, TokenType } from 'src/core/token';
 
 /**
  * When tabular style enabled,

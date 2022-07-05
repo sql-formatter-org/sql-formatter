@@ -1,9 +1,9 @@
 import type { FormatOptions } from 'src/types';
 import { equalizeWhitespace } from 'src/utils';
 
-import InlineBlock from './InlineBlock';
-import Params from './Params';
-import { isReserved, type Token, TokenType } from './token';
+import Params from 'src/core/Params';
+import { isTabularStyle } from 'src/core/config';
+import { isReserved, type Token, TokenType } from 'src/core/token';
 import {
   AllColumnsAsterisk,
   ArraySubscript,
@@ -15,8 +15,9 @@ import {
   LimitClause,
   NodeType,
   Parenthesis,
-} from '../parser/ast';
-import { isTabularStyle } from './config';
+} from 'src/parser/ast';
+
+import InlineBlock from './InlineBlock';
 import Layout, { WS } from './Layout';
 import toTabularFormat, { isTabularToken } from './tabularStyle';
 
