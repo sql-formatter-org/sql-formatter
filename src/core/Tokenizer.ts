@@ -146,6 +146,7 @@ export default class Tokenizer {
       [TokenType.NUMBER]:
         /(0x[0-9a-fA-F]+|0b[01]+|(-\s*)?[0-9]+(\.[0-9]*)?([eE][-+]?[0-9]+(\.[0-9]+)?)?)/uy,
       [TokenType.PARAMETER]: NULL_REGEX, // matches nothing
+      [TokenType.DELIMITER]: /(;)/uy,
       [TokenType.EOF]: NULL_REGEX, // matches nothing
     };
 
@@ -242,6 +243,7 @@ export default class Tokenizer {
       this.matchToken(TokenType.NUMBER) ||
       this.matchReservedWordToken(previousToken) ||
       this.matchToken(TokenType.IDENT) ||
+      this.matchToken(TokenType.DELIMITER) ||
       this.matchToken(TokenType.OPERATOR)
     );
   }

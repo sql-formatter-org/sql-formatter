@@ -35,7 +35,7 @@ export default class Parser {
   private statement(): Statement | undefined {
     const children: AstNode[] = [];
     while (true) {
-      if (this.look().value === ';') {
+      if (this.look().type === TokenType.DELIMITER) {
         this.next();
         return { type: NodeType.statement, children, hasSemicolon: true };
       } else if (this.look().type === TokenType.EOF) {
@@ -73,7 +73,7 @@ export default class Parser {
         this.look().type !== TokenType.RESERVED_BINARY_COMMAND &&
         this.look().type !== TokenType.EOF &&
         this.look().type !== TokenType.CLOSE_PAREN &&
-        this.look().value !== ';'
+        this.look().type !== TokenType.DELIMITER
       ) {
         children.push(this.expression());
       }
@@ -91,7 +91,7 @@ export default class Parser {
         this.look().type !== TokenType.RESERVED_BINARY_COMMAND &&
         this.look().type !== TokenType.EOF &&
         this.look().type !== TokenType.CLOSE_PAREN &&
-        this.look().value !== ';'
+        this.look().value !== TokenType.DELIMITER
       ) {
         children.push(this.expression());
       }
