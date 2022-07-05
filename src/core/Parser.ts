@@ -162,7 +162,7 @@ export default class Parser {
   }
 
   private limitClause(): LimitClause | undefined {
-    if (isToken.LIMIT(this.look()) && this.look(2).value === ',') {
+    if (isToken.LIMIT(this.look()) && this.look(2).type === TokenType.COMMA) {
       return {
         type: NodeType.limit_clause,
         limitToken: this.next(),

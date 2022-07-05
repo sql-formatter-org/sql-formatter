@@ -906,7 +906,7 @@ function combineParameterizedTypes(tokens: Token[]) {
 const formatTypeDefToken =
   (key: 'text' | 'value') =>
   (token: Token): string => {
-    if (token.type === TokenType.IDENTIFIER || token.value === ',') {
+    if (token.type === TokenType.IDENTIFIER || token.type === TokenType.COMMA) {
       return token[key] + ' ';
     } else {
       return token[key];

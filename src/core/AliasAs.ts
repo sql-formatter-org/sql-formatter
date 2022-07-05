@@ -83,7 +83,7 @@ export default class AliasAs {
       token.type === TokenType.IDENTIFIER &&
       (isToken.END(prevToken) ||
         ((prevToken.type === TokenType.IDENTIFIER || prevToken.type === TokenType.NUMBER) &&
-          (nextToken.value === ',' || isCommand(nextToken))))
+          (nextToken.type === TokenType.COMMA || isCommand(nextToken))))
     );
   }
 
