@@ -138,8 +138,9 @@ export default class Tokenizer {
       [TokenType.IDENTIFIER]: {
         regex: regex.identifier(cfg.identChars),
       },
+      [TokenType.DELIMITER]: { regex: /[;]/uy },
       [TokenType.OPERATOR]: {
-        regex: regex.operator('+-/*%&|^><=.;[]{}`:$@', [
+        regex: regex.operator('+-/*%&|^><=.[]{}`:$@', [
           '<>',
           '<=',
           '>=',
