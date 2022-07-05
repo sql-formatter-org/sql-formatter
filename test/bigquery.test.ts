@@ -220,4 +220,53 @@ describe('BigQueryFormatter', () => {
       `);
     });
   });
+
+  // Issue #279
+  describe('supports FROM clause operators:', () => {
+    it('UNNEST operator', () => {
+      expect(format('SELECT * FROM UNNEST ([1, 2, 3]);')).toBe(dedent`
+        SELECT
+          *
+        FROM
+          UNNEST ([1, 2, 3]);
+      `);
+    });
+
+    it('PIVOT operator', () => {
+      expect(format(`SELECT * FROM Produce PIVOT(sales FOR quarter IN (Q1, Q2, Q3, Q4));`))
+        .toBe(dedent`
+        SELECT
+          *
+        FROM
+          Produce PIVOT(
+            sales
+            FOR
+              quarter IN (Q1, Q2, Q3, Q4)
+          );
+      `);
+    });
+
+    it('UNPIVOT operator', () => {
+      expect(format(`SELECT * FROM Produce UNPIVOT(sales FOR quarter IN (Q1, Q2, Q3, Q4));`))
+        .toBe(dedent`
+        SELECT
+          *
+        FROM
+          Produce UNPIVOT(
+            sales
+            FOR
+              quarter IN (Q1, Q2, Q3, Q4)
+          );
+      `);
+    });
+
+    it('TABLESAMPLE SYSTEM operator', () => {
+      expect(format(`SELECT * FROM dataset.my_table TABLESAMPLE SYSTEM (10 PERCENT);`)).toBe(dedent`
+        SELECT
+          *
+        FROM
+          dataset.my_table TABLESAMPLE SYSTEM (10 PERCENT);
+      `);
+    });
+  });
 });
