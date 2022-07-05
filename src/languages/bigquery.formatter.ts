@@ -895,9 +895,9 @@ function combineParameterizedTypes(tokens: Token[]) {
       const endIndex = findClosingAngleBracketIndex(tokens, i + 1);
       const typeDefTokens = tokens.slice(i, endIndex + 1);
       processed.push({
-        ...token,
-        value: typeDefTokens.map(formatTypeDefToken).join(''),
-        text: typeDefTokens.map(formatTypeDefToken).join(''),
+        type: TokenType.IDENT,
+        value: typeDefTokens.map(formatTypeDefToken('value')).join(''),
+        text: typeDefTokens.map(formatTypeDefToken('text')).join(''),
       });
       i = endIndex;
     } else {
@@ -907,13 +907,15 @@ function combineParameterizedTypes(tokens: Token[]) {
   return processed;
 }
 
-function formatTypeDefToken({ type, value, text }: Token): string {
-  if (type === TokenType.IDENT || value === ',') {
-    return text + ' ';
-  } else {
-    return text;
-  }
-}
+const formatTypeDefToken =
+  (key: 'text' | 'value') =>
+  (token: Token): string => {
+    if (token.type === TokenType.IDENT || token.value === ',') {
+      return token[key] + ' ';
+    } else {
+      return token[key];
+    }
+  };
 
 function findClosingAngleBracketIndex(tokens: Token[], startIndex: number): number {
   let level = 0;
