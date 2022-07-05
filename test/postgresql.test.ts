@@ -65,8 +65,7 @@ describe('PostgreSqlFormatter', () => {
     `);
   });
 
-  // tagged dollar strings are not supported by moo
-  it.skip('supports dollar-quoted strings', () => {
+  it('supports dollar-quoted strings', () => {
     expect(format('$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$')).toBe(
       '$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$'
     );
