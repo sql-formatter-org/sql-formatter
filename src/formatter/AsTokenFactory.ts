@@ -1,6 +1,6 @@
 import type { KeywordCase } from 'src/types';
 
-import { isToken, type Token, TokenType } from './token';
+import { isToken, type Token, TokenType } from 'src/core/token';
 
 export default class AsTokenFactory {
   private detectedCase: KeywordCase;

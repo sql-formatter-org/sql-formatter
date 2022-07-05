@@ -14,11 +14,12 @@ import {
   Parenthesis,
 } from 'src/parser/ast';
 
-import InlineBlock from './InlineBlock';
-import Params from './Params';
-import { isReserved, type Token, TokenType } from './token';
-import { isTabularStyle } from './config';
-import Layout, { WS } from './Layout';
+import Params from 'src/core/Params';
+import { isReserved, type Token, TokenType } from 'src/core/token';
+import { isTabularStyle } from 'src/core/config';
+
+import Layout, { WS } from './layout';
+import InlineBlock from './inlineBlock';
 import toTabularFormat, { isTabularToken } from './tabularStyle';
 
 interface ExpressionFormatterParams {

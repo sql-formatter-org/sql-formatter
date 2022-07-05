@@ -3,15 +3,16 @@ import type { FormatOptions } from 'src/types';
 import Parser from 'src/parser/parser';
 import { Statement } from 'src/parser/ast';
 
+import formatCommaPositions from 'src/formatter/formatCommaPositions';
+import formatAliasPositions from 'src/formatter/formatAliasPositions';
+import ExpressionFormatter from 'src/formatter/expressionFormatter';
+import AliasAs from 'src/formatter/aliasAs';
+import Layout, { WS } from 'src/formatter/layout';
+import Indentation from 'src/formatter/indentation';
+
 import Params from './Params';
 import Tokenizer from './Tokenizer';
-import formatCommaPositions from './formatCommaPositions';
-import formatAliasPositions from './formatAliasPositions';
-import ExpressionFormatter from './ExpressionFormatter';
 import { indentString } from './config';
-import AliasAs from './AliasAs';
-import Layout, { WS } from './Layout';
-import Indentation from './Indentation';
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {

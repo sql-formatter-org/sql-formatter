@@ -1,6 +1,6 @@
 import { last } from 'src/utils';
 
-import Indentation from './Indentation';
+import Indentation from './indentation';
 
 /** Whitespace modifiers to be used with add() method */
 export enum WS {
