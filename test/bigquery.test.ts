@@ -121,6 +121,35 @@ describe('BigQueryFormatter', () => {
     `);
   });
 
+  // Issue #279
+  it('supports parametric STRUCT with named fields', () => {
+    expect(format('SELECT STRUCT<y INT64, z STRING>(1,"foo"), STRUCT<arr ARRAY<INT64>>([1,2,3]);'))
+      .toBe(dedent`
+      SELECT
+        STRUCT<y INT64, z STRING>(1, "foo"),
+        STRUCT<arr ARRAY<INT64>>([1, 2, 3]);
+    `);
+  });
+
+  it('supports uppercasing of STRUCT', () => {
+    expect(format('select struct<Nr int64, myName string>(1,"foo");', { keywordCase: 'upper' }))
+      .toBe(dedent`
+      SELECT
+        STRUCT<Nr INT64, myName STRING>(1, "foo");
+    `);
+  });
+
+  // XXX: This is hard to achieve with our current type-parameter processing hack.
+  // At least we're preserving the case of identifier names here,
+  // and lowercasing is luckily less used than uppercasing.
+  it('does not support lowercasing of STRUCT', () => {
+    expect(format('SELECT STRUCT<Nr INT64, myName STRING>(1,"foo");', { keywordCase: 'lower' }))
+      .toBe(dedent`
+      select
+        STRUCT<Nr INT64, myName STRING>(1, "foo");
+    `);
+  });
+
   it('supports parameterised types', () => {
     const result = format(
       `
@@ -217,6 +246,55 @@ describe('BigQueryFormatter', () => {
       ).toBe(dedent`
         ${createTableVariation}
           mydataset.newtable (a INT64 NOT NULL)
+      `);
+    });
+  });
+
+  // Issue #279
+  describe('supports FROM clause operators:', () => {
+    it('UNNEST operator', () => {
+      expect(format('SELECT * FROM UNNEST ([1, 2, 3]);')).toBe(dedent`
+        SELECT
+          *
+        FROM
+          UNNEST ([1, 2, 3]);
+      `);
+    });
+
+    it('PIVOT operator', () => {
+      expect(format(`SELECT * FROM Produce PIVOT(sales FOR quarter IN (Q1, Q2, Q3, Q4));`))
+        .toBe(dedent`
+        SELECT
+          *
+        FROM
+          Produce PIVOT(
+            sales
+            FOR
+              quarter IN (Q1, Q2, Q3, Q4)
+          );
+      `);
+    });
+
+    it('UNPIVOT operator', () => {
+      expect(format(`SELECT * FROM Produce UNPIVOT(sales FOR quarter IN (Q1, Q2, Q3, Q4));`))
+        .toBe(dedent`
+        SELECT
+          *
+        FROM
+          Produce UNPIVOT(
+            sales
+            FOR
+              quarter IN (Q1, Q2, Q3, Q4)
+          );
+      `);
+    });
+
+    it('TABLESAMPLE SYSTEM operator', () => {
+      expect(format(`SELECT * FROM dataset.my_table TABLESAMPLE SYSTEM (10 PERCENT);`)).toBe(dedent`
+        SELECT
+          *
+        FROM
+          dataset.my_table TABLESAMPLE SYSTEM (10 PERCENT);
       `);
     });
   });

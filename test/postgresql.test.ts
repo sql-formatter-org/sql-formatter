@@ -17,6 +17,7 @@ import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -26,6 +27,7 @@ describe('PostgreSqlFormatter', () => {
   supportsComments(format);
   supportsCreateTable(format);
   supportsConstraints(format);
+  supportsArrayAndMapAccessors(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
   supportsStrings(format, ["''", "U&''", "X''"]);
@@ -77,6 +79,13 @@ describe('PostgreSqlFormatter', () => {
         $$where$$
       FROM
         $$update$$
+    `);
+  });
+
+  it('supports ARRAY literals', () => {
+    expect(format('SELECT ARRAY[1, 2, 3]')).toBe(dedent`
+      SELECT
+        ARRAY[1, 2, 3]
     `);
   });
 });

@@ -544,6 +544,7 @@ const reservedFunctions = {
     'TO_BASE64',
   ],
   other: ['BQ.JOBS.CANCEL', 'BQ.REFRESH_MATERIALIZED_VIEW'],
+  pivot: ['PIVOT', 'UNPIVOT'],
 };
 
 /**
@@ -635,14 +636,14 @@ const reservedKeywords = {
     'SOME',
     // 'STRUCT',
     'TABLE',
-    // 'TABLESAMPLE',
+    'TABLESAMPLE SYSTEM',
     'THEN',
     'TO',
     'TREAT',
     'TRUE',
     'UNBOUNDED',
     // 'UNION',
-    // 'UNNEST',
+    'UNNEST',
     // 'USING',
     // 'WHEN',
     // 'WHERE',
@@ -689,10 +690,6 @@ const reservedCommands = [
   // DQL, https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax
   'SELECT',
   'FROM',
-  'UNNEST',
-  'PIVOT',
-  'UNPIVOT',
-  'TABLESAMPLE SYSTEM',
   'WHERE',
   'GROUP BY',
   'HAVING',
@@ -894,9 +891,9 @@ function combineParameterizedTypes(tokens: Token[]) {
       const endIndex = findClosingAngleBracketIndex(tokens, i + 1);
       const typeDefTokens = tokens.slice(i, endIndex + 1);
       processed.push({
-        ...token,
-        value: typeDefTokens.map(t => t.value).join(''),
-        text: typeDefTokens.map(t => t.text).join(''),
+        type: TokenType.IDENTIFIER,
+        value: typeDefTokens.map(formatTypeDefToken('value')).join(''),
+        text: typeDefTokens.map(formatTypeDefToken('text')).join(''),
       });
       i = endIndex;
     } else {
@@ -905,6 +902,16 @@ function combineParameterizedTypes(tokens: Token[]) {
   }
   return processed;
 }
+
+const formatTypeDefToken =
+  (key: 'text' | 'value') =>
+  (token: Token): string => {
+    if (token.type === TokenType.IDENTIFIER || token.value === ',') {
+      return token[key] + ' ';
+    } else {
+      return token[key];
+    }
+  };
 
 function findClosingAngleBracketIndex(tokens: Token[], startIndex: number): number {
   let level = 0;
