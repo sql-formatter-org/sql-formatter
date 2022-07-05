@@ -14,10 +14,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/inferrinizzard/prettier-sql"
+    "url": "https://github.com/sql-formatter-org/sql-formatter"
   },
   "bugs": {
-    "url": "https://github.com/inferrinizzard/prettier-sql/issues"
+    "url": "https://github.com/sql-formatter-org/sql-formatter/issues"
   },
   "categories": [
     "Formatters",

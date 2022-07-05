@@ -1,10 +1,10 @@
 # Prettier SQL
 
-Formats SQL files using the [`prettier-sql`](https://github.com/inferrinizzard/prettier-sql) library
+Formats SQL files using the [`sql-formatter`](https://github.com/sql-formatter-org/sql-formatter) library
 
 ## Issues
 
-Please report issues here: https://github.com/inferrinizzard/prettier-sql/issues
+Please report issues here: https://github.com/sql-formatter-org/sql-formatter/issues
 
 Use the FORMATTING template if it is an issue related the formatting of the SQL, otherwise, please use the VSCODE template for issues with running the VSCode Extension
 
