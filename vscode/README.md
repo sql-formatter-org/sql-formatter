@@ -30,12 +30,6 @@ Use the FORMATTING template if it is an issue related the formatting of the SQL,
 
 `Prettier-SQL.commaPosition`: Where to place commas for SELECT and GROUP BY clauses
 
-`Prettier-SQL.keywordNewline`: Rule for when to break keyword clauses onto a newline
-
-`Prettier-SQL.openParenNewline`: Whether to place (, Open Paren, CASE on newline when creating a new block
-
-`Prettier-SQL.closeParenNewline`: Whether to place ), Close Paren, END on newline when closing a block
-
 `Prettier-SQL.lineWidth`: Number of characters allowed in each line before breaking
 
 `Prettier-SQL.linesBetweenQueries`: How many newlines to place between each query / statement
