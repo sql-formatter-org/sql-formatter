@@ -36,8 +36,6 @@ const getConfigs = (
     aliasAs: settings.get<AliasMode>('aliasAS'),
     tabulateAlias: settings.get<boolean>('tabulateAlias'),
     commaPosition: settings.get<CommaPosition>('commaPosition'),
-    newlineBeforeOpenParen: settings.get<boolean>('newlineBeforeOpenParen'),
-    newlineBeforeCloseParen: settings.get<boolean>('newlineBeforeCloseParen'),
     expressionWidth: settings.get<number>('expressionWidth'),
     linesBetweenQueries: settings.get<number>('linesBetweenQueries'),
     denseOperators: settings.get<boolean>('denseOperators'),
