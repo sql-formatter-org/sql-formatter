@@ -213,16 +213,6 @@
           "default": "after",
           "markdownDescription": "Where to place commas for SELECT and GROUP BY clauses"
         },
-        "Prettier-SQL.parenOptions.newlineBeforeOpenParen": {
-          "type": "boolean",
-          "default": false,
-          "markdownDescription": "Place (, Open Paren, CASE on newline when creating a new block"
-        },
-        "Prettier-SQL.parenOptions.newlineBeforeCloseParen": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "Place ), Close Paren, END on newline when closing a block"
-        },
         "Prettier-SQL.expressionWidth": {
           "type": "integer",
           "default": 50,
