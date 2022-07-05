@@ -544,6 +544,7 @@ const reservedFunctions = {
     'TO_BASE64',
   ],
   other: ['BQ.JOBS.CANCEL', 'BQ.REFRESH_MATERIALIZED_VIEW'],
+  pivot: ['PIVOT', 'UNPIVOT'],
 };
 
 /**
@@ -635,14 +636,14 @@ const reservedKeywords = {
     'SOME',
     // 'STRUCT',
     'TABLE',
-    // 'TABLESAMPLE',
+    'TABLESAMPLE SYSTEM',
     'THEN',
     'TO',
     'TREAT',
     'TRUE',
     'UNBOUNDED',
     // 'UNION',
-    // 'UNNEST',
+    'UNNEST',
     // 'USING',
     // 'WHEN',
     // 'WHERE',
@@ -689,10 +690,6 @@ const reservedCommands = [
   // DQL, https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax
   'SELECT',
   'FROM',
-  'UNNEST',
-  'PIVOT',
-  'UNPIVOT',
-  'TABLESAMPLE SYSTEM',
   'WHERE',
   'GROUP BY',
   'HAVING',
