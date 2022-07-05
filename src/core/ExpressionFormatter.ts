@@ -15,7 +15,7 @@ import {
   LimitClause,
   NodeType,
   Parenthesis,
-} from './ast';
+} from '../parser/ast';
 import { isTabularStyle } from './config';
 import Layout, { WS } from './Layout';
 import toTabularFormat, { isTabularToken } from './tabularStyle';

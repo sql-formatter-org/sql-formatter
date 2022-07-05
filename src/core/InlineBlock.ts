@@ -1,5 +1,5 @@
 import { sum } from 'src/utils';
-import { BetweenPredicate, NodeType, Parenthesis } from './ast';
+import { BetweenPredicate, NodeType, Parenthesis } from '../parser/ast';
 import { isToken, type Token, TokenType } from './token';
 
 /**
