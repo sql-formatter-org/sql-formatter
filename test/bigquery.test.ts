@@ -121,6 +121,16 @@ describe('BigQueryFormatter', () => {
     `);
   });
 
+  // Issue #279
+  it('supports parametric STRUCT with named fields', () => {
+    expect(format('SELECT STRUCT<y INT64, z STRING>(1,"foo"), STRUCT<arr ARRAY<INT64>>([1,2,3]);'))
+      .toBe(dedent`
+      SELECT
+        STRUCT<y INT64, z STRING>(1, "foo"),
+        STRUCT<arr ARRAY<INT64>>([1, 2, 3]);
+    `);
+  });
+
   it('supports parameterised types', () => {
     const result = format(
       `

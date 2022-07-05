@@ -896,8 +896,8 @@ function combineParameterizedTypes(tokens: Token[]) {
       const typeDefTokens = tokens.slice(i, endIndex + 1);
       processed.push({
         ...token,
-        value: typeDefTokens.map(t => t.value).join(''),
-        text: typeDefTokens.map(t => t.text).join(''),
+        value: typeDefTokens.map(formatTypeDefToken).join(''),
+        text: typeDefTokens.map(formatTypeDefToken).join(''),
       });
       i = endIndex;
     } else {
@@ -905,6 +905,14 @@ function combineParameterizedTypes(tokens: Token[]) {
     }
   }
   return processed;
+}
+
+function formatTypeDefToken({ type, value, text }: Token): string {
+  if (type === TokenType.IDENT || value === ',') {
+    return text + ' ';
+  } else {
+    return text;
+  }
 }
 
 function findClosingAngleBracketIndex(tokens: Token[], startIndex: number): number {
