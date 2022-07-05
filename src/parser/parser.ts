@@ -1,5 +1,5 @@
-import { EOF_TOKEN, type Token, TokenType, isToken } from 'src/core/token';
 /* eslint-disable no-cond-assign */
+import { EOF_TOKEN, type Token, TokenType, isToken } from 'src/core/token';
 import {
   AllColumnsAsterisk,
   ArraySubscript,

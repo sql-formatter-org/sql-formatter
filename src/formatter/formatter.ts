@@ -1,11 +1,11 @@
 import type { FormatOptions } from 'src/types';
 
-import Parser from 'src/parser/parser';
-import { Statement } from 'src/parser/ast';
-
 import Params from 'src/core/Params';
 import Tokenizer from 'src/core/Tokenizer';
 import { indentString } from 'src/core/config';
+
+import Parser from 'src/parser/parser';
+import { Statement } from 'src/parser/ast';
 
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';

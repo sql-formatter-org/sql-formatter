@@ -1,6 +1,6 @@
 import { sum } from 'src/utils';
-import { BetweenPredicate, NodeType, Parenthesis } from 'src/parser/ast';
 import { isToken, type Token, TokenType } from 'src/core/token';
+import { BetweenPredicate, NodeType, Parenthesis } from 'src/parser/ast';
 
 /**
  * Bookkeeper for inline blocks.
