@@ -1,4 +1,4 @@
-import Formatter from 'src/core/Formatter';
+import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/core/Tokenizer';
 import { dedupe } from 'src/utils';
 
