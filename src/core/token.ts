@@ -19,6 +19,7 @@ export enum TokenType {
   BLOCK_COMMENT = 'BLOCK_COMMENT',
   NUMBER = 'NUMBER',
   PARAMETER = 'PARAMETER',
+  DELIMITER = 'DELIMITER',
   EOF = 'EOF',
 }
 
