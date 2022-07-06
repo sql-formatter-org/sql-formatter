@@ -57,12 +57,12 @@ interface TokenizerOptions {
 }
 
 export default class Tokenizer {
-  TOKENIZER_OPTIONS: Partial<Record<TokenType, TokenRule | { regex: undefined }>>;
+  private TOKENIZER_RULES: Partial<Record<TokenType, TokenRule | { regex: undefined }>>;
   engine: TokenizerEngine;
-  postProcess?: (tokens: Token[]) => Token[];
+  private postProcess?: (tokens: Token[]) => Token[];
 
   constructor(cfg: TokenizerOptions) {
-    this.TOKENIZER_OPTIONS = {
+    this.TOKENIZER_RULES = {
       [TokenType.BLOCK_COMMENT]: { regex: /(\/\*[^]*?(?:\*\/|$))/uy },
       [TokenType.LINE_COMMENT]: {
         regex: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
@@ -152,7 +152,7 @@ export default class Tokenizer {
 
     // filter out unsupported parameter types whose regex resolve to undefined
     const withoutUnsupportedParameters = Object.fromEntries(
-      Object.entries(this.TOKENIZER_OPTIONS).filter(([_, rule]) => rule.regex)
+      Object.entries(this.TOKENIZER_RULES).filter(([_, rule]) => rule.regex)
     );
     this.engine = new TokenizerEngine(withoutUnsupportedParameters);
 
