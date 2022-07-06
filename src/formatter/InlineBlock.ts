@@ -73,7 +73,6 @@ export default class InlineBlock {
       token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
       token.type === TokenType.LINE_COMMENT ||
       token.type === TokenType.BLOCK_COMMENT ||
-      token.value === ';' ||
       isToken.CASE(token) // CASE cannot have inline blocks
     );
   }
