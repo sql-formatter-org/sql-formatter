@@ -216,7 +216,6 @@ export default class ExpressionFormatter {
         return this.formatParameter(token);
       case TokenType.COMMA:
         return this.formatComma(token);
-      case TokenType.DELIMITER:
       case TokenType.OPERATOR:
         return this.formatOperator(token);
       case TokenType.IDENTIFIER:
