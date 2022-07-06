@@ -3,7 +3,7 @@ import * as regex from 'src/lexer/regexFactory';
 import * as regexTypes from 'src/lexer/regexTypes';
 
 import { NULL_REGEX, escapeRegExp } from './regexUtil';
-import TokenizerEngine, { type TokenRule } from './tokenizerEngine';
+import TokenizerEngine, { type TokenRule } from './TokenizerEngine';
 
 interface TokenizerOptions {
   // Main clauses that start new block, like: SELECT, FROM, WHERE, ORDER BY
