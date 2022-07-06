@@ -1,7 +1,6 @@
 import type { AliasMode, FormatOptions } from 'src/types';
+import { isCommand, isToken, type Token, TokenType, EOF_TOKEN, isReserved } from 'src/core/token';
 import AsTokenFactory from './AsTokenFactory';
-
-import { isCommand, isToken, type Token, TokenType, EOF_TOKEN, isReserved } from './token';
 
 /** Adds and removes AS tokens as configured by aliasAs option */
 export default class AliasAs {

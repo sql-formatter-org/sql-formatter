@@ -1,4 +1,4 @@
-import { Token } from './token';
+import { Token } from 'src/core/token';
 
 export enum NodeType {
   statement = 'statement',

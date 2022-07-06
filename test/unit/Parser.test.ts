@@ -1,5 +1,5 @@
-import Parser from 'src/core/Parser';
-import Tokenizer from 'src/lexer/tokenizer';
+import Parser from 'src/parser/Parser';
+import Tokenizer from 'src/lexer/Tokenizer';
 
 describe('Parser', () => {
   const parse = (sql: string) => {
