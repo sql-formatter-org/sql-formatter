@@ -1,4 +1,4 @@
-import Parser from 'src/core/Parser';
+import Parser from 'src/parser/Parser';
 import Tokenizer from 'src/core/Tokenizer';
 
 describe('Parser', () => {
