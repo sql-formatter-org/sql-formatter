@@ -1,7 +1,7 @@
 import type { CommaPosition } from 'src/types';
 import { maxLength } from 'src/utils';
 
-import { WHITESPACE_REGEX } from 'src/lexer/regexUtil';
+const PRECEDING_WHITESPACE_REGEX = /^\s+/u;
 
 /**
  * Handles comma placement - either before, after or tabulated
@@ -77,7 +77,7 @@ function formatBefore(commaLines: string[], indent: string): string[] {
     if (i === 0) {
       return line; // do not add comma for first item
     }
-    const [whitespace] = line.match(WHITESPACE_REGEX) || [''];
+    const [whitespace] = line.match(PRECEDING_WHITESPACE_REGEX) || [''];
     return (
       removeLastIndent(whitespace, indent) +
       indent.replace(/ {2}$/, ', ') + // add comma to the end of last indent
