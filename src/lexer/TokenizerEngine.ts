@@ -15,8 +15,8 @@ export default class TokenizerEngine {
   // Current position in string
   private index = 0;
 
-  constructor(tokenizerOptions: Partial<Record<TokenType, TokenRule>>) {
-    this.REGEX_MAP = tokenizerOptions;
+  constructor(tokenizerRules: Partial<Record<TokenType, TokenRule>>) {
+    this.REGEX_MAP = tokenizerRules;
   }
 
   /**
