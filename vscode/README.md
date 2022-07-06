@@ -1,10 +1,10 @@
 # Prettier SQL
 
-Formats SQL files using the [`prettier-sql`](https://github.com/inferrinizzard/prettier-sql) library
+Formats SQL files using the [`sql-formatter`](https://github.com/sql-formatter-org/sql-formatter) library
 
 ## Issues
 
-Please report issues here: https://github.com/inferrinizzard/prettier-sql/issues
+Please report issues here: https://github.com/sql-formatter-org/sql-formatter/issues
 
 Use the FORMATTING template if it is an issue related the formatting of the SQL, otherwise, please use the VSCODE template for issues with running the VSCode Extension
 
@@ -18,11 +18,11 @@ Use the FORMATTING template if it is an issue related the formatting of the SQL,
 
 `Prettier-SQL.insertSpacesOverride`: Overrides `insertSpaces` if `Prettier-SQL.ignoreTabSettings` is enabled
 
-`Prettier-SQL.uppercaseKeywords`: Whether to print keywords in ALL CAPS or lowercase
+`Prettier-SQL.keywordCase`: Whether to print keywords in ALL CAPS or lowercase
 
-`Prettier-SQL.keywordPosition`: Switched between standard keyword positioning vs maintaining a central space column
+`Prettier-SQL.indentStyle`: Switched between standard keyword positioning vs maintaining a central space column
 
-`Prettier-SQL.breakBeforeBooleanOperator`: Whether to break before or after AND and OR
+`Prettier-SQL.logicalOperatorNewline`: Whether to break before or after AND and OR
 
 `Prettier-SQL.aliasAS`: Where to use AS in column or table aliases
 
@@ -30,13 +30,7 @@ Use the FORMATTING template if it is an issue related the formatting of the SQL,
 
 `Prettier-SQL.commaPosition`: Where to place commas for SELECT and GROUP BY clauses
 
-`Prettier-SQL.keywordNewline`: Rule for when to break keyword clauses onto a newline
-
-`Prettier-SQL.openParenNewline`: Whether to place (, Open Paren, CASE on newline when creating a new block
-
-`Prettier-SQL.closeParenNewline`: Whether to place ), Close Paren, END on newline when closing a block
-
-`Prettier-SQL.lineWidth`: Number of characters allowed in each line before breaking
+`Prettier-SQL.expressionWidth`: Number of characters allowed in each line before breaking
 
 `Prettier-SQL.linesBetweenQueries`: How many newlines to place between each query / statement
 
