@@ -1,5 +1,5 @@
 import Formatter from 'src/formatter/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+import Tokenizer from 'src/lexer/Tokenizer';
 import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/core/token';
 import { dedupe } from 'src/utils';
 
@@ -364,7 +364,7 @@ const reservedKeywords = [
   'ALL',
   'ALTER',
   'ANALYZE',
-  'AND',
+  // 'AND',
   'ANTI',
   'ANY',
   'ARCHIVE',
@@ -500,7 +500,7 @@ const reservedKeywords = [
   'ONLY',
   'OPTION',
   'OPTIONS',
-  'OR',
+  // 'OR',
   'ORDER',
   'OUT',
   'OUTER',
@@ -781,19 +781,19 @@ export default class SparkFormatter extends Formatter {
       reservedJoins,
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-      reservedKeywords: dedupe([...Object.values(reservedFunctions).flat(), ...reservedKeywords]),
+      reservedKeywords: dedupe([...reservedKeywords, ...Object.values(reservedFunctions).flat()]),
       openParens: ['(', '['],
       closeParens: [')', ']'],
       stringTypes: [{ quote: "''", prefixes: ['X'] }],
       identTypes: ['``'],
-      variableTypes: [{ quote: '{}', prefixes: ['$'], required: true }],
+      variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
       operators: SparkFormatter.operators,
-      preprocess,
+      postProcess,
     });
   }
 }
 
-function preprocess(tokens: Token[]) {
+function postProcess(tokens: Token[]) {
   return tokens.map((token, i) => {
     const prevToken = tokens[i - 1] || EOF_TOKEN;
     const nextToken = tokens[i + 1] || EOF_TOKEN;
@@ -808,7 +808,7 @@ function preprocess(tokens: Token[]) {
     if (token.value === 'ITEMS' && token.type === TokenType.RESERVED_KEYWORD) {
       if (!(prevToken.value === 'COLLECTION' && nextToken.value === 'TERMINATED')) {
         // this is a word and not COLLECTION ITEMS
-        return { type: TokenType.IDENT, text: token.text, value: token.text };
+        return { type: TokenType.IDENTIFIER, text: token.text, value: token.text };
       }
     }
 

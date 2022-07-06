@@ -1,5 +1,5 @@
 import Formatter from 'src/formatter/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+import Tokenizer from 'src/lexer/Tokenizer';
 import { dedupe } from 'src/utils';
 
 /**
@@ -1674,7 +1674,7 @@ export default class PostgreSqlFormatter extends Formatter {
       reservedBinaryCommands,
       reservedJoins,
       reservedDependentClauses,
-      reservedKeywords: dedupe([...Object.values(reservedFunctions).flat(), ...reservedKeywords]),
+      reservedKeywords: dedupe([...reservedKeywords, ...Object.values(reservedFunctions).flat()]),
       openParens: ['(', '['],
       closeParens: [')', ']'],
       stringTypes: [{ quote: "''", prefixes: ['U&', 'E', 'X', 'B'] }, '$$'],

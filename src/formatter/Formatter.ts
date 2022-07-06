@@ -1,7 +1,7 @@
 import type { FormatOptions } from 'src/types';
 import { indentString } from 'src/core/config';
 import Params from 'src/core/Params';
-import Tokenizer from 'src/core/Tokenizer';
+import Tokenizer from 'src/lexer/Tokenizer';
 
 import Parser from 'src/parser/Parser';
 import { Statement } from 'src/parser/ast';

@@ -1,5 +1,5 @@
 import Formatter from 'src/formatter/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+import Tokenizer from 'src/lexer/Tokenizer';
 import { dedupe } from 'src/utils';
 
 /**
@@ -319,7 +319,7 @@ const reservedKeywords = {
     'ADD',
     'ALL',
     'ALTER',
-    'AND',
+    // 'AND',
     'ANY',
     'AS',
     'ASC',
@@ -426,7 +426,7 @@ const reservedKeywords = {
     'OPENROWSET',
     'OPENXML',
     'OPTION',
-    'OR',
+    // 'OR',
     'ORDER',
     'OUTER',
     'OVER',
@@ -506,7 +506,7 @@ const reservedKeywords = {
     'ALL',
     'ALLOCATE',
     'ALTER',
-    'AND',
+    // 'AND',
     'ANY',
     'ARE',
     'AS',
@@ -647,7 +647,7 @@ const reservedKeywords = {
     'ONLY',
     'OPEN',
     'OPTION',
-    'OR',
+    // 'OR',
     'ORDER',
     'OUTER',
     'OUTPUT',
@@ -1236,8 +1236,8 @@ export default class TSqlFormatter extends Formatter {
       reservedJoins,
       reservedDependentClauses,
       reservedKeywords: dedupe([
-        ...Object.values(reservedFunctions).flat(),
         ...Object.values(reservedKeywords).flat(),
+        ...Object.values(reservedFunctions).flat(),
       ]),
       stringTypes: [{ quote: "''", prefixes: ['N'] }],
       identTypes: [`""`, '[]'],

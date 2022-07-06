@@ -1,5 +1,5 @@
 import Formatter from 'src/formatter/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+import Tokenizer from 'src/lexer/Tokenizer';
 import { EOF_TOKEN, isReserved, isToken, type Token, TokenType } from 'src/core/token';
 import { dedupe } from 'src/utils';
 
@@ -701,12 +701,12 @@ export default class PlSqlFormatter extends Formatter {
       namedParamTypes: [':'],
       paramChars: {}, // Empty object used on purpose to not allow $ and # chars as specified in identChars
       operators: PlSqlFormatter.operators,
-      preprocess,
+      postProcess,
     });
   }
 }
 
-function preprocess(tokens: Token[]) {
+function postProcess(tokens: Token[]) {
   let previousReservedToken: Token = EOF_TOKEN;
 
   return tokens.map(token => {

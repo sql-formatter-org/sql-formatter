@@ -1,5 +1,5 @@
 import Formatter from 'src/formatter/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+import Tokenizer from 'src/lexer/Tokenizer';
 import { dedupe } from 'src/utils';
 
 /**
@@ -720,8 +720,8 @@ export default class RedshiftFormatter extends Formatter {
       reservedJoins,
       reservedDependentClauses,
       reservedKeywords: dedupe([
-        ...Object.values(reservedFunctions).flat(),
         ...Object.values(reservedKeywords).flat(),
+        ...Object.values(reservedFunctions).flat(),
       ]),
       stringTypes: ["''"],
       identTypes: [`""`],

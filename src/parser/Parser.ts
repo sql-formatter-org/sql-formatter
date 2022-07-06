@@ -102,7 +102,8 @@ export default class Parser {
 
   private functionCall(): FunctionCall | undefined {
     if (
-      (this.look().type === TokenType.RESERVED_KEYWORD || this.look().type === TokenType.IDENT) &&
+      (this.look().type === TokenType.RESERVED_KEYWORD ||
+        this.look().type === TokenType.IDENTIFIER) &&
       this.look(1).value === '(' &&
       !this.look(1).whitespaceBefore
     ) {
@@ -117,7 +118,8 @@ export default class Parser {
 
   private arraySubscript(): ArraySubscript | undefined {
     if (
-      (this.look().type === TokenType.RESERVED_KEYWORD || this.look().type === TokenType.IDENT) &&
+      (this.look().type === TokenType.RESERVED_KEYWORD ||
+        this.look().type === TokenType.IDENTIFIER) &&
       this.look(1).value === '['
     ) {
       return {
@@ -160,7 +162,7 @@ export default class Parser {
   }
 
   private limitClause(): LimitClause | undefined {
-    if (isToken.LIMIT(this.look()) && this.look(2).value === ',') {
+    if (isToken.LIMIT(this.look()) && this.look(2).type === TokenType.COMMA) {
       return {
         type: NodeType.limit_clause,
         limitToken: this.next(),

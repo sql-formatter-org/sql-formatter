@@ -1,5 +1,5 @@
 import Formatter from 'src/formatter/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+import Tokenizer from 'src/lexer/Tokenizer';
 import { EOF_TOKEN, isToken, TokenType, type Token } from 'src/core/token';
 import { dedupe } from 'src/utils';
 
@@ -857,12 +857,12 @@ export default class BigQueryFormatter extends Formatter {
       quotedParamTypes: ['@'],
       lineCommentTypes: ['--', '#'],
       operators: BigQueryFormatter.operators,
-      preprocess,
+      postProcess,
     });
   }
 }
 
-function preprocess(tokens: Token[]): Token[] {
+function postProcess(tokens: Token[]): Token[] {
   return detectArraySubscripts(combineParameterizedTypes(tokens));
 }
 
@@ -892,7 +892,7 @@ function combineParameterizedTypes(tokens: Token[]) {
       const endIndex = findClosingAngleBracketIndex(tokens, i + 1);
       const typeDefTokens = tokens.slice(i, endIndex + 1);
       processed.push({
-        type: TokenType.IDENT,
+        type: TokenType.IDENTIFIER,
         value: typeDefTokens.map(formatTypeDefToken('value')).join(''),
         text: typeDefTokens.map(formatTypeDefToken('text')).join(''),
       });
@@ -907,7 +907,7 @@ function combineParameterizedTypes(tokens: Token[]) {
 const formatTypeDefToken =
   (key: 'text' | 'value') =>
   (token: Token): string => {
-    if (token.type === TokenType.IDENT || token.value === ',') {
+    if (token.type === TokenType.IDENTIFIER || token.type === TokenType.COMMA) {
       return token[key] + ' ';
     } else {
       return token[key];

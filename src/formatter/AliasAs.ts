@@ -36,7 +36,7 @@ export default class AliasAs {
           processedTokens.push(token);
         }
       } else if (
-        token.type === TokenType.IDENT ||
+        token.type === TokenType.IDENTIFIER ||
         token.type === TokenType.NUMBER ||
         token.type === TokenType.STRING ||
         token.type === TokenType.VARIABLE
@@ -66,7 +66,9 @@ export default class AliasAs {
   // if table alias is missing and should be added
   private isMissingTableAlias(token: Token): boolean {
     return (
-      this.aliasAs === 'always' && token.type === TokenType.IDENT && this.lookBehind().value === ')'
+      this.aliasAs === 'always' &&
+      token.type === TokenType.IDENTIFIER &&
+      this.lookBehind().value === ')'
     );
   }
 
@@ -77,10 +79,10 @@ export default class AliasAs {
     return (
       (this.aliasAs === 'always' || this.aliasAs === 'select') &&
       this.isWithinSelect() &&
-      token.type === TokenType.IDENT &&
+      token.type === TokenType.IDENTIFIER &&
       (isToken.END(prevToken) ||
-        ((prevToken.type === TokenType.IDENT || prevToken.type === TokenType.NUMBER) &&
-          (nextToken.value === ',' || isCommand(nextToken))))
+        ((prevToken.type === TokenType.IDENTIFIER || prevToken.type === TokenType.NUMBER) &&
+          (nextToken.type === TokenType.COMMA || isCommand(nextToken))))
     );
   }
 
@@ -96,7 +98,7 @@ export default class AliasAs {
       this.isWithinSelect() &&
       isToken.CAST(this.getPreviousReservedToken()) &&
       isToken.AS(this.lookAhead()) &&
-      (this.lookAhead(2).type === TokenType.IDENT ||
+      (this.lookAhead(2).type === TokenType.IDENTIFIER ||
         this.lookAhead(2).type === TokenType.RESERVED_KEYWORD) &&
       this.lookAhead(3).value === ')'
     );

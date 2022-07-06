@@ -1,5 +1,5 @@
 import Formatter from 'src/formatter/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+import Tokenizer from 'src/lexer/Tokenizer';
 import { dedupe } from 'src/utils';
 
 const reservedFunctions = {
@@ -62,9 +62,12 @@ const reservedKeywords = [
   'AFTER',
   'ALL',
   'ALTER',
+  // 'AND',
+  'ANY',
+  'ARE',
+  'ARRAY',
   'ALWAYS',
   'ANALYZE',
-  'AND',
   'AS',
   'ASC',
   'ATTACH',
@@ -151,9 +154,11 @@ const reservedKeywords = [
   'NULLS',
   'OF',
   'OFFSET',
-  'ON UPDATE',
   'ON DELETE',
-  'OR',
+  'ON UPDATE',
+  'ONLY',
+  'OPEN',
+  // 'OR',
   'ORDER',
   'OTHERS',
   'OUTER',
