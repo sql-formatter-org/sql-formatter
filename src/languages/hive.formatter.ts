@@ -617,9 +617,10 @@ export default class HiveFormatter extends Formatter {
       reservedBinaryCommands,
       reservedJoins,
       reservedDependentClauses,
-      reservedKeywords: dedupe(
-        Object.values(reservedFunctions).flat().concat(Object.values(reservedKeywords).flat())
-      ),
+      reservedKeywords: dedupe([
+        ...Object.values(reservedFunctions).flat(),
+        ...Object.values(reservedKeywords).flat(),
+      ]),
       openParens: ['(', '['],
       closeParens: [')', ']'],
       stringTypes: ['""', "''"],

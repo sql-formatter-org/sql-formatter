@@ -781,7 +781,7 @@ export default class SparkFormatter extends Formatter {
       reservedJoins,
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-      reservedKeywords: dedupe(Object.values(reservedFunctions).flat().concat(reservedKeywords)),
+      reservedKeywords: dedupe([...reservedKeywords, ...Object.values(reservedFunctions).flat()]),
       openParens: ['(', '['],
       closeParens: [')', ']'],
       stringTypes: [{ quote: "''", prefixes: ['X'] }],

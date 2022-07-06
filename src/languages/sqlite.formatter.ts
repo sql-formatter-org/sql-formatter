@@ -279,7 +279,7 @@ export default class SqliteFormatter extends Formatter {
       reservedBinaryCommands,
       reservedJoins,
       reservedDependentClauses,
-      reservedKeywords: dedupe(reservedKeywords.concat(Object.values(reservedFunctions).flat())),
+      reservedKeywords: dedupe([...reservedKeywords, ...Object.values(reservedFunctions).flat()]),
       stringTypes: [{ quote: "''", prefixes: ['X'] }],
       identTypes: [`""`, '``', '[]'],
       // https://www.sqlite.org/lang_expr.html#parameters

@@ -1235,9 +1235,10 @@ export default class TSqlFormatter extends Formatter {
       reservedBinaryCommands,
       reservedJoins,
       reservedDependentClauses,
-      reservedKeywords: dedupe(
-        Object.values(reservedFunctions).flat().concat(Object.values(reservedKeywords).flat())
-      ),
+      reservedKeywords: dedupe([
+        ...Object.values(reservedKeywords).flat(),
+        ...Object.values(reservedFunctions).flat(),
+      ]),
       stringTypes: [{ quote: "''", prefixes: ['N'] }],
       identTypes: [`""`, '[]'],
       identChars: { first: '#@', rest: '#@$' },

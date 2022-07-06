@@ -862,9 +862,10 @@ export default class Db2Formatter extends Formatter {
       reservedBinaryCommands,
       reservedJoins,
       reservedDependentClauses,
-      reservedKeywords: dedupe(
-        Object.values(reservedFunctions).flat().concat(Object.values(reservedKeywords).flat())
-      ),
+      reservedKeywords: dedupe([
+        ...Object.values(reservedFunctions).flat(),
+        ...Object.values(reservedKeywords).flat(),
+      ]),
       stringTypes: [{ quote: "''", prefixes: ['X', 'G', 'N', 'GX', 'UX', 'U&'] }],
       identTypes: [`""`],
       positionalParams: true,

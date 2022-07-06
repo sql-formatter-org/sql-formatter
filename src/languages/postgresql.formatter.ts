@@ -1674,7 +1674,7 @@ export default class PostgreSqlFormatter extends Formatter {
       reservedBinaryCommands,
       reservedJoins,
       reservedDependentClauses,
-      reservedKeywords: dedupe(Object.values(reservedFunctions).flat().concat(reservedKeywords)),
+      reservedKeywords: dedupe([...reservedKeywords, ...Object.values(reservedFunctions).flat()]),
       openParens: ['(', '['],
       closeParens: [')', ']'],
       stringTypes: [{ quote: "''", prefixes: ['U&', 'E', 'X', 'B'] }, '$$'],
