@@ -47,7 +47,7 @@ export default class Formatter {
    * @return {string} The formatter query
    */
   public format(query: string): string {
-    const tokens = this.tokenizer().tokenize(query);
+    const tokens = this.cachedTokenizer().tokenize(query);
     const processedTokens = new AliasAs(this.cfg, tokens).process();
     const ast = new Parser(processedTokens).parse();
     const formattedQuery = this.formatAst(ast);
