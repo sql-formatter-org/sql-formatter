@@ -1,6 +1,5 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
-r;
 import { dedupe } from 'src/utils';
 
 const reservedFunctions = {
