@@ -98,10 +98,6 @@ export default class TokenizerEngine {
     return undefined;
   }
 
-  // private getEscapedPlaceholderKey({ key, quoteChar }: { key: string; quoteChar: string }): string {
-  //   return key.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar);
-  // }
-
   private matchReservedWordToken(previousToken?: Token): Token | undefined {
     // A reserved word cannot be preceded by a '.'
     // this makes it so in "mytable.from", "from" is not considered a reserved word
