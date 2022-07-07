@@ -1,4 +1,4 @@
-import { Token } from 'src/core/token';
+import { Token } from 'src/lexer/token';
 
 export enum NodeType {
   statement = 'statement',

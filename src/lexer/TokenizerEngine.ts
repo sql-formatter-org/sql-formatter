@@ -1,4 +1,4 @@
-import { Token, TokenType } from 'src/core/token';
+import { Token, TokenType } from 'src/lexer/token';
 import { WHITESPACE_REGEX } from './regexUtil';
 
 export interface TokenRule {

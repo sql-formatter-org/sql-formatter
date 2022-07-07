@@ -1,5 +1,5 @@
 import type { KeywordCase } from 'src/types';
-import { isToken, type Token, TokenType } from 'src/core/token';
+import { isToken, type Token, TokenType } from 'src/lexer/token';
 
 export default class AsTokenFactory {
   private detectedCase: KeywordCase;
