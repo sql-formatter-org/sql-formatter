@@ -9,9 +9,7 @@ list_of_statements: statement (another_statement)* {$$ = [$1, ...$2]};
 
 another_statement: ';' statement {$$ = $2};
 
-statement: select_statement | plain_statement;
-
-select_statement: SELECT (expr)* {$$ = {type: 'select_statement', children: $2}};
+statement: plain_statement;
 
 plain_statement: (expr)* {$$ = {type: 'statement', children: $1}};
 

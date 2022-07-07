@@ -40,8 +40,9 @@ describe('Jison Parser', () => {
   it('parses statements', () => {
     expect(parse('SELECT * FROM my_table ; CREATE TABLE foo')).toEqual([
       {
-        type: 'select_statement',
+        type: 'statement',
         children: [
+          { type: 'keyword', value: 'SELECT' },
           { type: 'star' },
           { type: 'keyword', value: 'FROM' },
           { type: 'identifier', value: 'my_table' },
