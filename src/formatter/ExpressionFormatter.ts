@@ -2,7 +2,7 @@ import type { FormatOptions } from 'src/types';
 import { equalizeWhitespace } from 'src/utils';
 
 import Params from 'src/formatter/Params';
-import { isTabularStyle } from 'src/core/config';
+import { isTabularStyle } from 'src/formatter/config';
 import { isReserved, type Token, TokenType } from 'src/lexer/token';
 import {
   AllColumnsAsterisk,
