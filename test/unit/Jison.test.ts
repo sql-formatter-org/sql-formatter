@@ -24,11 +24,8 @@ describe('Jison Parser', () => {
         if (/^\w+$/.test(this.yytext)) {
           return 'IDENTIFIER';
         }
-        if (this.yytext === '*') {
-          return '*';
-        }
-        if (this.yytext === ';') {
-          return ';';
+        if (['*', ';', '(', ')'].includes(this.yytext)) {
+          return this.yytext;
         }
         return 'INVALID';
       },
@@ -38,12 +35,12 @@ describe('Jison Parser', () => {
   };
 
   it('parses statements', () => {
-    expect(parse('SELECT * FROM my_table ; CREATE TABLE foo')).toEqual([
+    expect(parse('SELECT ( * ) FROM my_table ; CREATE TABLE foo')).toEqual([
       {
         type: 'statement',
         children: [
           { type: 'keyword', value: 'SELECT' },
-          { type: 'star' },
+          { type: 'parenthesis', children: [{ type: 'star' }] },
           { type: 'keyword', value: 'FROM' },
           { type: 'identifier', value: 'my_table' },
         ],

@@ -14,6 +14,10 @@ statement: plain_statement;
 plain_statement: (expr)* {$$ = {type: 'statement', children: $1}};
 
 expr
+  : '(' (expr)* ')' {$$ = {type: 'parenthesis', children: $2}}
+  | term;
+
+term
     : '*' {$$ = {type: 'star'}}
     | NUMBER {$$ = {type: 'number', value: yytext}}
     | IDENTIFIER {$$ = {type: 'identifier', value: yytext}}
