@@ -1,4 +1,4 @@
-import { type Token } from './token';
+import { type Token } from '../core/token';
 
 export type ParamItems = { [k: string]: string };
 

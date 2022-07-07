@@ -1,6 +1,6 @@
 import type { FormatOptions } from 'src/types';
 import { indentString } from 'src/core/config';
-import Params from 'src/core/Params';
+import Params from 'src/formatter/Params';
 import Tokenizer from 'src/lexer/Tokenizer';
 
 import Parser from 'src/parser/Parser';

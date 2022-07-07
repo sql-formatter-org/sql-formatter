@@ -13,7 +13,7 @@ import SqlFormatter from 'src/languages/sql.formatter';
 import TSqlFormatter from 'src/languages/tsql.formatter';
 
 import type { FormatOptions } from './types';
-import { ParamItems } from './core/Params';
+import { ParamItems } from './formatter/Params';
 
 export const formatters = {
   bigquery: BigQueryFormatter,
