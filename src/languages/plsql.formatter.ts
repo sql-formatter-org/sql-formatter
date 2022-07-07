@@ -1,6 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
-import { EOF_TOKEN, isReserved, isToken, type Token, TokenType } from 'src/core/token';
+import { EOF_TOKEN, isReserved, isToken, type Token, TokenType } from 'src/lexer/token';
 import { dedupe } from 'src/utils';
 
 // https://docs.oracle.com/cd/B19306_01/server.102/b14200/functions001.htm

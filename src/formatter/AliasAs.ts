@@ -1,5 +1,5 @@
 import type { AliasMode, FormatOptions } from 'src/types';
-import { isCommand, isToken, type Token, TokenType, EOF_TOKEN, isReserved } from 'src/core/token';
+import { isCommand, isToken, type Token, TokenType, EOF_TOKEN, isReserved } from 'src/lexer/token';
 import AsTokenFactory from './AsTokenFactory';
 
 /** Adds and removes AS tokens as configured by aliasAs option */

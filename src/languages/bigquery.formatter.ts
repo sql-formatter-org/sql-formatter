@@ -1,6 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
-import { EOF_TOKEN, isToken, TokenType, type Token } from 'src/core/token';
+import { EOF_TOKEN, isToken, TokenType, type Token } from 'src/lexer/token';
 import { dedupe } from 'src/utils';
 
 /**

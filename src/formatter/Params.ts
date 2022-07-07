@@ -1,4 +1,4 @@
-import { type Token } from '../core/token';
+import { type Token } from '../lexer/token';
 
 export type ParamItems = { [k: string]: string };
 
