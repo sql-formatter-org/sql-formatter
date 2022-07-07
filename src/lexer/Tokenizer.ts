@@ -57,12 +57,11 @@ interface TokenizerOptions {
 }
 
 export default class Tokenizer {
-  private TOKENIZER_RULES: Partial<Record<TokenType, TokenRule | { regex: undefined }>>;
-  engine: TokenizerEngine;
+  private engine: TokenizerEngine;
   private postProcess?: (tokens: Token[]) => Token[];
 
   constructor(cfg: TokenizerOptions) {
-    this.TOKENIZER_RULES = {
+    const rules = this.validRules({
       [TokenType.BLOCK_COMMENT]: { regex: /(\/\*[^]*?(?:\*\/|$))/uy },
       [TokenType.LINE_COMMENT]: {
         regex: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
@@ -148,18 +147,21 @@ export default class Tokenizer {
           ...(cfg.operators ?? []),
         ]),
       },
-    };
+    });
 
-    // filter out unsupported parameter types whose regex resolve to undefined
-    const withoutUnsupportedParameters = Object.fromEntries(
-      Object.entries(this.TOKENIZER_RULES).filter(([_, rule]) => rule.regex)
-    );
-    this.engine = new TokenizerEngine(withoutUnsupportedParameters);
+    this.engine = new TokenizerEngine(rules);
 
     this.postProcess = cfg.postProcess;
   }
 
-  tokenize(input: string): Token[] {
+  // filters out unsupported *_PARAMETER types whose regex is undefined
+  private validRules(
+    rules: Partial<Record<TokenType, TokenRule | { regex: undefined }>>
+  ): Partial<Record<TokenType, TokenRule>> {
+    return Object.fromEntries(Object.entries(rules).filter(([_, rule]) => rule.regex));
+  }
+
+  public tokenize(input: string): Token[] {
     const tokens = this.engine.tokenize(input);
     return this.postProcess ? this.postProcess(tokens) : tokens;
   }

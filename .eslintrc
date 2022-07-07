@@ -42,7 +42,8 @@
       "single",
       { "avoidEscape": true, "allowTemplateLiterals": true }
     ],
-    "@typescript-eslint/semi": "error"
+    "@typescript-eslint/semi": "error",
+    "@typescript-eslint/no-non-null-assertion": "error"
   },
   "settings": {
     "import/resolver": {

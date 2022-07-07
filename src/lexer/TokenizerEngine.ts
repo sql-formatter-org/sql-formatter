@@ -8,15 +8,15 @@ export interface TokenRule {
 }
 
 export default class TokenizerEngine {
-  private REGEX_MAP: Partial<Record<TokenType, TokenRule>>;
+  private rules: Partial<Record<TokenType, TokenRule>>;
 
   // The input SQL string to process
   private input = '';
   // Current position in string
   private index = 0;
 
-  constructor(tokenizerRules: Partial<Record<TokenType, TokenRule>>) {
-    this.REGEX_MAP = tokenizerRules;
+  constructor(rules: Partial<Record<TokenType, TokenRule>>) {
+    this.rules = rules;
   }
 
   /**
@@ -85,9 +85,9 @@ export default class TokenizerEngine {
   }
 
   private matchPlaceholderToken(tokenType: TokenType): Token | undefined {
-    if (tokenType in this.REGEX_MAP) {
+    if (tokenType in this.rules) {
       const token = this.matchToken(tokenType);
-      const tokenRule = this.REGEX_MAP[tokenType];
+      const tokenRule = this.rules[tokenType];
       if (token) {
         if (tokenRule?.key) {
           return { ...token, key: tokenRule.key(token.value) };
@@ -119,15 +119,16 @@ export default class TokenizerEngine {
     );
   }
 
-  // Shorthand for `match` that looks up regex from REGEX_MAP
+  // Shorthand for `match` that looks up regex from rules
   private matchToken(tokenType: TokenType): Token | undefined {
-    if (!(tokenType in this.REGEX_MAP)) {
+    const rule = this.rules[tokenType];
+    if (!rule) {
       throw Error(`Unknown token type found: ${tokenType}`);
     }
     return this.match({
       type: tokenType,
-      regex: this.REGEX_MAP[tokenType]!.regex,
-      transform: this.REGEX_MAP[tokenType]!.value,
+      regex: rule.regex,
+      transform: rule.value,
     });
   }
 
