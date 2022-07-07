@@ -14,8 +14,13 @@ statement: plain_statement;
 plain_statement: (expr)* {$$ = {type: 'statement', children: $1}};
 
 expr
-  : '(' (expr)* ')' {$$ = {type: 'parenthesis', children: $2}}
+  : function_call
+  | parenthesis
   | term;
+
+function_call: IDENTIFIER parenthesis {$$ = {type: 'function_call', name: $1, children: $2.children}};
+
+parenthesis: '(' (expr)* ')' {$$ = {type: 'parenthesis', children: $2}};
 
 term
     : '*' {$$ = {type: 'star'}}

@@ -35,12 +35,12 @@ describe('Jison Parser', () => {
   };
 
   it('parses statements', () => {
-    expect(parse('SELECT ( * ) FROM my_table ; CREATE TABLE foo')).toEqual([
+    expect(parse('SELECT count ( * ) FROM my_table ; CREATE TABLE foo')).toEqual([
       {
         type: 'statement',
         children: [
           { type: 'keyword', value: 'SELECT' },
-          { type: 'parenthesis', children: [{ type: 'star' }] },
+          { type: 'function_call', name: 'count', children: [{ type: 'star' }] },
           { type: 'keyword', value: 'FROM' },
           { type: 'identifier', value: 'my_table' },
         ],
