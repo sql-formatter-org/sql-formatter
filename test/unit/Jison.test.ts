@@ -4,6 +4,10 @@ describe('Jison Parser', () => {
   const parse = (sql: string) => parser.parse(sql);
 
   it('parses something', () => {
-    expect(parse('(1 + 2) * 3')).toEqual(9);
+    expect(parse('SELECT * FROM my_table')).toEqual({
+      type: 'select',
+      cols: { type: 'star' },
+      from: { type: 'identifier', value: 'my_table' },
+    });
   });
 });
