@@ -57,7 +57,7 @@ interface TokenizerOptions {
 }
 
 export default class Tokenizer {
-  engine: TokenizerEngine;
+  private engine: TokenizerEngine;
   private postProcess?: (tokens: Token[]) => Token[];
 
   constructor(cfg: TokenizerOptions) {
@@ -158,7 +158,7 @@ export default class Tokenizer {
     this.postProcess = cfg.postProcess;
   }
 
-  tokenize(input: string): Token[] {
+  public tokenize(input: string): Token[] {
     const tokens = this.engine.tokenize(input);
     return this.postProcess ? this.postProcess(tokens) : tokens;
   }
