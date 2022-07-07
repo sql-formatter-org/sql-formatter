@@ -3,7 +3,11 @@
 
 %% /* language grammar */
 
-main: statement EOF {return $1;};
+main: list_of_statements EOF {return $1;};
+
+list_of_statements: statement (another_statement)* {$$ = [$1, ...$2]};
+
+another_statement: ';' statement {$$ = $2};
 
 statement: (expr)* {$$ = {type: 'statement', children: $1}};
 

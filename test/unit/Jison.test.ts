@@ -27,6 +27,9 @@ describe('Jison Parser', () => {
         if (this.yytext === '*') {
           return '*';
         }
+        if (this.yytext === ';') {
+          return ';';
+        }
         return 'INVALID';
       },
     };
@@ -35,14 +38,23 @@ describe('Jison Parser', () => {
   };
 
   it('parses something', () => {
-    expect(parse('SELECT * FROM my_table')).toEqual({
-      type: 'statement',
-      children: [
-        { type: 'keyword', value: 'SELECT' },
-        { type: 'star' },
-        { type: 'keyword', value: 'FROM' },
-        { type: 'identifier', value: 'my_table' },
-      ],
-    });
+    expect(parse('SELECT * FROM my_table ; SELECT 42')).toEqual([
+      {
+        type: 'statement',
+        children: [
+          { type: 'keyword', value: 'SELECT' },
+          { type: 'star' },
+          { type: 'keyword', value: 'FROM' },
+          { type: 'identifier', value: 'my_table' },
+        ],
+      },
+      {
+        type: 'statement',
+        children: [
+          { type: 'keyword', value: 'SELECT' },
+          { type: 'number', value: '42' },
+        ],
+      },
+    ]);
   });
 });
