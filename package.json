@@ -76,7 +76,7 @@
     "pretty": "prettier --write .",
     "pretty:check": "prettier --check .",
     "fix": "yarn pretty && eslint --fix .",
-    "test": "jest",
+    "test": "yarn grammar && jest",
     "test:watch": "yarn test -- --watch",
     "check": "yarn ts:check && yarn pretty:check && yarn lint && yarn test",
     "prepare": "yarn clean && yarn fix && yarn check && yarn build",
