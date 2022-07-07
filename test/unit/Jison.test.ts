@@ -36,9 +36,13 @@ describe('Jison Parser', () => {
 
   it('parses something', () => {
     expect(parse('SELECT * FROM my_table')).toEqual({
-      type: 'select',
-      cols: { type: 'star' },
-      from: { type: 'identifier', value: 'my_table' },
+      type: 'statement',
+      children: [
+        { type: 'keyword', value: 'SELECT' },
+        { type: 'star' },
+        { type: 'keyword', value: 'FROM' },
+        { type: 'identifier', value: 'my_table' },
+      ],
     });
   });
 });

@@ -1,12 +1,15 @@
 %start main
+%ebnf
 
 %% /* language grammar */
 
-main: select EOF {return $1;};
+main: statement EOF {return $1;};
 
-select: 'SELECT' expr 'FROM' expr {$$ = {type: 'select', cols: $2, from: $4};};
+statement: (expr)* {$$ = {type: 'statement', children: $1}};
 
 expr
     : '*' {$$ = {type: 'star'};}
     | NUMBER {$$ = {type: 'number', value: yytext}}
-    | IDENTIFIER {$$ = {type: 'identifier', value: yytext}};
+    | IDENTIFIER {$$ = {type: 'identifier', value: yytext}}
+    | SELECT {$$ = {type: 'keyword', value: yytext}}
+    | FROM {$$ = {type: 'keyword', value: yytext}};
