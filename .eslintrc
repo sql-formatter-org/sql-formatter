@@ -28,7 +28,6 @@
     "no-useless-concat": "off",
     "no-restricted-syntax": "off",
     "no-constant-condition": "off",
-    "no-unused-expressions": "warn",
     "prefer-template": "off",
     "default-case": "off",
     "prettier/prettier": ["error"],
