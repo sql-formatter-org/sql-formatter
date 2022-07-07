@@ -121,13 +121,14 @@ export default class TokenizerEngine {
 
   // Shorthand for `match` that looks up regex from REGEX_MAP
   private matchToken(tokenType: TokenType): Token | undefined {
-    if (!(tokenType in this.REGEX_MAP)) {
+    const rule = this.REGEX_MAP[tokenType];
+    if (!rule) {
       throw Error(`Unknown token type found: ${tokenType}`);
     }
     return this.match({
       type: tokenType,
-      regex: this.REGEX_MAP[tokenType]!.regex,
-      transform: this.REGEX_MAP[tokenType]!.value,
+      regex: rule.regex,
+      transform: rule.value,
     });
   }
 
