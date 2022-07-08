@@ -34,7 +34,10 @@ describe('PostgreSqlFormatter', () => {
   supportsIdentifiers(format, [`""`, 'U&""']);
   supportsBetween(format);
   supportsSchema(format);
-  supportsOperators(format, PostgreSqlFormatter.operators);
+  supportsOperators(
+    format,
+    PostgreSqlFormatter.operators.filter(op => op !== '::')
+  );
   supportsJoin(format);
   supportsReturning(format);
   supportsParams(format, { numbered: ['$'] });

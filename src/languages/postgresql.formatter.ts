@@ -1618,28 +1618,38 @@ const reservedJoins = [
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 const binaryOperators = [
+  // Math Operators
   '<<',
   '>>',
-  '||/',
   '|/',
-  '::',
-  ':=',
-  '->>',
-  '->',
-  '#>>',
-  '#>',
-  '=>',
-  '~~*',
-  '~~',
-  '!~~*',
-  '!~~',
-  '~*',
-  '!~*',
-  '!~',
+  '||/',
   '!!',
+  // String Operators
   '||',
+  // Pattern Matching Operators
+  '~~',
+  '~~*',
+  '!~~',
+  '!~~*',
+  // POSIX RegExp operators
+  '~',
+  '~*',
+  '!~',
+  '!~*',
+  // Similarity Operators
+  '<%',
+  '<<%',
+  '%>',
+  '%>>',
+  // Byte Comparison Operators
+  '~>~',
+  '~<~',
+  '~>=~',
+  '~<=~',
+  // Geometric operators
   '@-@',
   '@@',
+  '#',
   '##',
   '<->',
   '&&',
@@ -1659,9 +1669,25 @@ const binaryOperators = [
   '@>',
   '<@',
   '~=',
+  // Network Address operators
   '>>=',
   '<<=',
+  // Text Search Operators
   '@@@',
+  // JSON Operators
+  '?',
+  '@?',
+  '?&',
+  '->',
+  '->>',
+  '#>',
+  '#>>',
+  '#-',
+  // Other Operators
+  ':=',
+  '::',
+  '=>',
+  '-|-',
 ];
 
 // https://www.postgresql.org/docs/14/index.html
