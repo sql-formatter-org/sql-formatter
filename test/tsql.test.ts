@@ -31,7 +31,10 @@ describe('TSqlFormatter', () => {
   supportsIdentifiers(format, [`""`, '[]']);
   supportsBetween(format);
   supportsSchema(format);
-  supportsOperators(format, TSqlFormatter.operators);
+  supportsOperators(
+    format,
+    TSqlFormatter.operators.filter(op => op !== '::')
+  );
   supportsJoin(format, { without: ['NATURAL'] });
   supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });
 
