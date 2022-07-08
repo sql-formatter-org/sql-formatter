@@ -16,7 +16,7 @@ Reference of SQL syntax variations.
 - WHERE
 - GROUP BY & HAVING
 - WINDOW
-- ORDER BY
+- [ORDER BY](./order-by.md)
 - [LIMIT & OFFSET](./limit.md)
 
 ## Statements
