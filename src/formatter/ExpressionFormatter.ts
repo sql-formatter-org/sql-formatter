@@ -312,7 +312,7 @@ export default class ExpressionFormatter {
     if (token.value === ':') {
       this.layout.add(WS.NO_SPACE, this.show(token), WS.SPACE);
       return;
-    } else if (token.value === '.') {
+    } else if (token.value === '.' || token.value === '::') {
       this.layout.add(WS.NO_SPACE, this.show(token));
       return;
     }
