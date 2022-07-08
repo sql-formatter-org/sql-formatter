@@ -711,7 +711,7 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export default class RedshiftFormatter extends Formatter {
-  static operators = ['|/', '||/', '<<', '>>', '||'];
+  static operators = ['~', '|/', '||/', '<<', '>>', '||'];
 
   tokenizer() {
     return new Tokenizer({
