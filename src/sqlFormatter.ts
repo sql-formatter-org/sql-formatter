@@ -10,6 +10,7 @@ import RedshiftFormatter from 'src/languages/redshift.formatter';
 import SparkFormatter from 'src/languages/spark.formatter';
 import SqliteFormatter from 'src/languages/sqlite.formatter';
 import SqlFormatter from 'src/languages/sql.formatter';
+import TrinoFormatter from 'src/languages/trino.formatter';
 import TSqlFormatter from 'src/languages/tsql.formatter';
 
 import type { FormatOptions } from './types';
@@ -28,6 +29,7 @@ export const formatters = {
   spark: SparkFormatter,
   sql: SqlFormatter,
   sqlite: SqliteFormatter,
+  trino: TrinoFormatter,
   tsql: TSqlFormatter,
 };
 export type SqlLanguage = keyof typeof formatters;
