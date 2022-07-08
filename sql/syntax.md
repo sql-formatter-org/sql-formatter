@@ -14,7 +14,8 @@ Reference of SQL syntax variations.
 - [SELECT](./select.md)
 - FROM
 - WHERE
-- GROUP BY & HAVING
+- [GROUP BY](./group-by.md)
+- [HAVING](./having.md)
 - WINDOW
 - [ORDER BY](./order-by.md)
 - [LIMIT & OFFSET](./limit.md)
