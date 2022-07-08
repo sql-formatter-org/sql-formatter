@@ -13,7 +13,7 @@ Reference of SQL syntax variations.
 - WITH
 - [SELECT](./select.md)
 - FROM
-- WHERE
+- [WHERE](./where.md)
 - [GROUP BY](./group-by.md)
 - [HAVING](./having.md)
 - WINDOW
