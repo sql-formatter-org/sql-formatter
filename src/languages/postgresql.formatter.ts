@@ -1649,6 +1649,7 @@ const binaryOperators = [
   // Geometric operators
   '@-@',
   '@@',
+  '#',
   '##',
   '<->',
   '&&',
@@ -1674,6 +1675,7 @@ const binaryOperators = [
   // Text Search Operators
   '@@@',
   // JSON Operators
+  '?',
   '@?',
   '?&',
   '->',
@@ -1683,10 +1685,9 @@ const binaryOperators = [
   '#-',
   // Other Operators
   ':=',
-  // Unknown
   '::',
   '=>',
-  '=#',
+  '-|-',
 ];
 
 // https://www.postgresql.org/docs/14/index.html
