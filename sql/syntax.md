@@ -12,7 +12,7 @@ Reference of SQL syntax variations.
 
 - [WITH](./with.md)
 - [SELECT](./select.md)
-- FROM
+- [FROM](./from.md)
 - [WHERE](./where.md)
 - [GROUP BY](./group-by.md)
 - [HAVING](./having.md)
