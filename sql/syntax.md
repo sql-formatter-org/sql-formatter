@@ -7,7 +7,21 @@ Reference of SQL syntax variations.
 - [Variables](./variables.md)
 - [Strings](./strings.md)
 - [Arrays and Maps](./arrays-and-maps.md)
+
+## Queries
+
+- [WITH](./with.md)
 - [SELECT](./select.md)
+- [FROM](./from.md)
+- [WHERE](./where.md)
+- [GROUP BY](./group-by.md)
+- [HAVING](./having.md)
+- [WINDOW](./window.md)
+- [ORDER BY](./order-by.md)
+- [LIMIT & OFFSET](./limit.md)
+
+## Statements
+
 - [INSERT](./insert.md)
 - [UPDATE](./update.md)
 - [DELETE](./delete.md)
