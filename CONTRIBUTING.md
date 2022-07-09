@@ -4,11 +4,7 @@
 
 Run `yarn` after checkout to install all dependencies.
 
-## Branch Guidelines
-
-New branches: Please branch off of the `develop` branch.
-
-### Naming
+## Branch Naming
 
 Please use one of the following prefixes: (ie. feature/new-feature)
 
