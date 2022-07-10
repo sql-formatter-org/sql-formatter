@@ -120,6 +120,21 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     `);
   });
 
+  it('formats ORDER BY', () => {
+    const result = format(`
+      SELECT * FROM foo ORDER BY col1 ASC, col2 DESC;
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        *
+      FROM
+        foo
+      ORDER BY
+        col1 ASC,
+        col2 DESC;
+    `);
+  });
+
   it('formats LIMIT with two comma-separated values on single line', () => {
     const result = format('LIMIT 5, 10;');
     expect(result).toBe(dedent`
