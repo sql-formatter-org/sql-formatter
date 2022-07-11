@@ -91,7 +91,7 @@ export default class Parser {
         this.look().type !== TokenType.RESERVED_BINARY_COMMAND &&
         this.look().type !== TokenType.EOF &&
         this.look().type !== TokenType.CLOSE_PAREN &&
-        this.look().value !== TokenType.DELIMITER
+        this.look().type !== TokenType.DELIMITER
       ) {
         children.push(this.expression());
       }
