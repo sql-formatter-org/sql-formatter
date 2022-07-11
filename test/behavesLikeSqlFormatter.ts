@@ -165,11 +165,23 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     `);
   });
 
+  // Regression test for #303
   it('formats LIMIT with complex expressions', () => {
     const result = format('LIMIT abs(-5) - 1, (2 + 3) * 5;');
     expect(result).toBe(dedent`
       LIMIT
         abs(-5) - 1, (2 + 3) * 5;
+    `);
+  });
+
+  // Regression test for #301
+  it('formats LIMIT with comments', () => {
+    const result = format('LIMIT --comment\n 5,--comment\n6;');
+    expect(result).toBe(dedent`
+      LIMIT
+        --comment
+        5, --comment
+        6;
     `);
   });
 
