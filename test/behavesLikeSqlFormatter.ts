@@ -165,11 +165,11 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     `);
   });
 
-  it('formats LIMIT with function calls', () => {
-    const result = format('LIMIT abs(-5), sqrt(2);');
+  it('formats LIMIT with complex expressions', () => {
+    const result = format('LIMIT abs(-5) - 1, (2 + 3) * 5;');
     expect(result).toBe(dedent`
       LIMIT
-        abs(-5), sqrt(2);
+        abs(-5) - 1, (2 + 3) * 5;
     `);
   });
 

@@ -164,10 +164,10 @@ export default class Parser {
   private limitClause(): LimitClause | undefined {
     if (isToken.LIMIT(this.look())) {
       const limitToken = this.next();
-      const expr1 = [this.expression()];
+      const expr1 = this.expressionsUntilCommaOrClauseEnd();
       if (this.look().type === TokenType.COMMA) {
         this.next(); // Discard comma token
-        const expr2 = [this.expression()];
+        const expr2 = this.expressionsUntilClauseEnd();
         return {
           type: NodeType.limit_clause,
           limitToken,
@@ -183,6 +183,35 @@ export default class Parser {
       }
     }
     return undefined;
+  }
+
+  private expressionsUntilCommaOrClauseEnd(): AstNode[] {
+    const children: AstNode[] = [];
+    while (
+      this.look().type !== TokenType.RESERVED_COMMAND &&
+      this.look().type !== TokenType.RESERVED_BINARY_COMMAND &&
+      this.look().type !== TokenType.EOF &&
+      this.look().type !== TokenType.CLOSE_PAREN &&
+      this.look().type !== TokenType.DELIMITER &&
+      this.look().type !== TokenType.COMMA
+    ) {
+      children.push(this.expression());
+    }
+    return children;
+  }
+
+  private expressionsUntilClauseEnd(): AstNode[] {
+    const children: AstNode[] = [];
+    while (
+      this.look().type !== TokenType.RESERVED_COMMAND &&
+      this.look().type !== TokenType.RESERVED_BINARY_COMMAND &&
+      this.look().type !== TokenType.EOF &&
+      this.look().type !== TokenType.CLOSE_PAREN &&
+      this.look().type !== TokenType.DELIMITER
+    ) {
+      children.push(this.expression());
+    }
+    return children;
   }
 
   private allColumnsAsterisk(): AllColumnsAsterisk | undefined {
