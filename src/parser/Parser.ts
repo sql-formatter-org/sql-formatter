@@ -162,20 +162,25 @@ export default class Parser {
   }
 
   private limitClause(): LimitClause | undefined {
-    if (isToken.LIMIT(this.look()) && this.look(2).type === TokenType.COMMA) {
-      return {
-        type: NodeType.limit_clause,
-        limitToken: this.next(),
-        offset: [this.nextTokenNode()],
-        count: this.next() && [this.nextTokenNode()], // Discard comma token
-      };
-    }
     if (isToken.LIMIT(this.look())) {
-      return {
-        type: NodeType.limit_clause,
-        limitToken: this.next(),
-        count: [this.nextTokenNode()],
-      };
+      const limitToken = this.next();
+      const expr1 = [this.expression()];
+      if (this.look().type === TokenType.COMMA) {
+        this.next(); // Discard comma token
+        const expr2 = [this.expression()];
+        return {
+          type: NodeType.limit_clause,
+          limitToken,
+          offset: expr1,
+          count: expr2,
+        };
+      } else {
+        return {
+          type: NodeType.limit_clause,
+          limitToken,
+          count: expr1,
+        };
+      }
     }
     return undefined;
   }

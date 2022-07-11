@@ -165,6 +165,14 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     `);
   });
 
+  it('formats LIMIT with function calls', () => {
+    const result = format('LIMIT abs(-5), sqrt(2);');
+    expect(result).toBe(dedent`
+      LIMIT
+        abs(-5), sqrt(2);
+    `);
+  });
+
   it('formats SELECT query with SELECT query inside it', () => {
     const result = format(
       'SELECT *, SUM(*) AS total FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b'
