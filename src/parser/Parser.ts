@@ -166,15 +166,15 @@ export default class Parser {
       return {
         type: NodeType.limit_clause,
         limitToken: this.next(),
-        offsetToken: this.next(),
-        countToken: this.next() && this.next(), // Discard comma token
+        offset: [this.nextTokenNode()],
+        count: this.next() && [this.nextTokenNode()], // Discard comma token
       };
     }
     if (isToken.LIMIT(this.look())) {
       return {
         type: NodeType.limit_clause,
         limitToken: this.next(),
-        countToken: this.next(),
+        count: [this.nextTokenNode()],
       };
     }
     return undefined;

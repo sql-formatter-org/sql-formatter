@@ -322,12 +322,17 @@ describe('Parser', () => {
         Object {
           "children": Array [
             Object {
-              "countToken": Object {
-                "text": "10",
-                "type": "NUMBER",
-                "value": "10",
-                "whitespaceBefore": " ",
-              },
+              "count": Array [
+                Object {
+                  "token": Object {
+                    "text": "10",
+                    "type": "NUMBER",
+                    "value": "10",
+                    "whitespaceBefore": " ",
+                  },
+                  "type": "token",
+                },
+              ],
               "limitToken": Object {
                 "text": "LIMIT",
                 "type": "RESERVED_COMMAND",
@@ -350,24 +355,34 @@ describe('Parser', () => {
         Object {
           "children": Array [
             Object {
-              "countToken": Object {
-                "text": "10",
-                "type": "NUMBER",
-                "value": "10",
-                "whitespaceBefore": " ",
-              },
+              "count": Array [
+                Object {
+                  "token": Object {
+                    "text": "10",
+                    "type": "NUMBER",
+                    "value": "10",
+                    "whitespaceBefore": " ",
+                  },
+                  "type": "token",
+                },
+              ],
               "limitToken": Object {
                 "text": "LIMIT",
                 "type": "RESERVED_COMMAND",
                 "value": "LIMIT",
                 "whitespaceBefore": "",
               },
-              "offsetToken": Object {
-                "text": "200",
-                "type": "NUMBER",
-                "value": "200",
-                "whitespaceBefore": " ",
-              },
+              "offset": Array [
+                Object {
+                  "token": Object {
+                    "text": "200",
+                    "type": "NUMBER",
+                    "value": "200",
+                    "whitespaceBefore": " ",
+                  },
+                  "type": "token",
+                },
+              ],
               "type": "limit_clause",
             },
           ],
