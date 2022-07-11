@@ -146,7 +146,7 @@ export default class Parser {
   private limitClause(): LimitClause | undefined {
     if (isToken.LIMIT(this.look())) {
       const limitToken = this.next();
-      const expr1 = this.expressionsUntilCommaOrClauseEnd();
+      const expr1 = this.expressionsUntilClauseEnd(t => t.type === TokenType.COMMA);
       if (this.look().type === TokenType.COMMA) {
         this.next(); // Discard comma token
         const expr2 = this.expressionsUntilClauseEnd();
@@ -167,7 +167,17 @@ export default class Parser {
     return undefined;
   }
 
-  private expressionsUntilCommaOrClauseEnd(): AstNode[] {
+  private allColumnsAsterisk(): AllColumnsAsterisk | undefined {
+    if (this.look().value === '*' && isToken.SELECT(this.look(-1))) {
+      this.next();
+      return { type: NodeType.all_columns_asterisk };
+    }
+    return undefined;
+  }
+
+  private expressionsUntilClauseEnd(
+    extraPredicate: (token: Token) => boolean = () => false
+  ): AstNode[] {
     const children: AstNode[] = [];
     while (
       this.look().type !== TokenType.RESERVED_COMMAND &&
@@ -175,33 +185,11 @@ export default class Parser {
       this.look().type !== TokenType.EOF &&
       this.look().type !== TokenType.CLOSE_PAREN &&
       this.look().type !== TokenType.DELIMITER &&
-      this.look().type !== TokenType.COMMA
+      !extraPredicate(this.look())
     ) {
       children.push(this.expression());
     }
     return children;
-  }
-
-  private expressionsUntilClauseEnd(): AstNode[] {
-    const children: AstNode[] = [];
-    while (
-      this.look().type !== TokenType.RESERVED_COMMAND &&
-      this.look().type !== TokenType.RESERVED_BINARY_COMMAND &&
-      this.look().type !== TokenType.EOF &&
-      this.look().type !== TokenType.CLOSE_PAREN &&
-      this.look().type !== TokenType.DELIMITER
-    ) {
-      children.push(this.expression());
-    }
-    return children;
-  }
-
-  private allColumnsAsterisk(): AllColumnsAsterisk | undefined {
-    if (this.look().value === '*' && isToken.SELECT(this.look(-1))) {
-      this.next();
-      return { type: NodeType.all_columns_asterisk };
-    }
-    return undefined;
   }
 
   // Returns current token without advancing the pointer
