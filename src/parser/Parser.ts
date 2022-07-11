@@ -67,16 +67,7 @@ export default class Parser {
   private clause(): Clause | undefined {
     if (this.look().type === TokenType.RESERVED_COMMAND) {
       const name = this.next();
-      const children: AstNode[] = [];
-      while (
-        this.look().type !== TokenType.RESERVED_COMMAND &&
-        this.look().type !== TokenType.RESERVED_BINARY_COMMAND &&
-        this.look().type !== TokenType.EOF &&
-        this.look().type !== TokenType.CLOSE_PAREN &&
-        this.look().type !== TokenType.DELIMITER
-      ) {
-        children.push(this.expression());
-      }
+      const children = this.expressionsUntilClauseEnd();
       return { type: NodeType.clause, nameToken: name, children };
     }
     return undefined;
@@ -85,16 +76,7 @@ export default class Parser {
   private binaryClause(): BinaryClause | undefined {
     if (this.look().type === TokenType.RESERVED_BINARY_COMMAND) {
       const name = this.next();
-      const children: AstNode[] = [];
-      while (
-        this.look().type !== TokenType.RESERVED_COMMAND &&
-        this.look().type !== TokenType.RESERVED_BINARY_COMMAND &&
-        this.look().type !== TokenType.EOF &&
-        this.look().type !== TokenType.CLOSE_PAREN &&
-        this.look().type !== TokenType.DELIMITER
-      ) {
-        children.push(this.expression());
-      }
+      const children = this.expressionsUntilClauseEnd();
       return { type: NodeType.binary_clause, nameToken: name, children };
     }
     return undefined;
