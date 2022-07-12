@@ -89,6 +89,37 @@ const reservedFunctions = {
   caseAbbrev: ['COALESCE', 'NULLIF'],
   // Non-standard functions that have widespread support
   nonStandard: ['ROUND', 'SIN', 'COS', 'TAN', 'ASIN', 'ACOS', 'ATAN'],
+  // Data types with parameters like VARCHAR(100)
+  // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#predefined-type
+  dataTypes: [
+    'CHARACTER',
+    'CHAR',
+    'CHARACTER VARYING',
+    'CHAR VARYING',
+    'VARCHAR',
+    'CHARACTER LARGE OBJECT',
+    'CHAR LARGE OBJECT',
+    'CLOB',
+    'NATIONAL CHARACTER',
+    'NATIONAL CHAR',
+    'NCHAR',
+    'NATIONAL CHARACTER VARYING',
+    'NATIONAL CHAR VARYING',
+    'NCHAR VARYING',
+    'NATIONAL CHARACTER LARGE OBJECT',
+    'NCHAR LARGE OBJECT',
+    'NCLOB',
+    'BINARY',
+    'BINARY VARYING',
+    'VARBINARY',
+    'BINARY LARGE OBJECT',
+    'BLOB',
+    'NUMERIC',
+    'DECIMAL',
+    'DEC',
+    'TIME',
+    'TIMESTAMP',
+  ],
 };
 
 /**
