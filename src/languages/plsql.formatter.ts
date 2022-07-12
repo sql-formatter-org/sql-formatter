@@ -234,6 +234,36 @@ const reservedFunctions = {
   window: ['FIRST_VALUE', 'LAG', 'LAST_VALUE', 'LEAD', 'NTILE', 'RATIO_TO_REPORT', 'ROW_NUMBER'],
   objectReference: ['DEREF', 'MAKE_REF', 'REF', 'REFTOHEX', 'VALUE'],
   model: ['CV', 'ITERATION_NUMBER', 'PRESENTNNV', 'PRESENTV', 'PREVIOUS'],
+  // Parameterized data types
+  // https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/Data-Types.html
+  dataTypes: [
+    // Oracle builtin data types
+    'VARCHAR2',
+    'NVARCHAR2',
+    'NUMBER',
+    'FLOAT',
+    'TIMESTAMP',
+    'INTERVAL YEAR',
+    'INTERVAL DAY',
+    'RAW',
+    'UROWID',
+    'NCHAR',
+    // ANSI Data Types
+    'CHARACTER',
+    'CHAR',
+    'CHARACTER VARYING',
+    'CHAR VARYING',
+    'NATIONAL CHARACTER',
+    'NATIONAL CHAR',
+    'NATIONAL CHARACTER VARYING',
+    'NATIONAL CHAR VARYING',
+    'NCHAR VARYING',
+    'NUMERIC',
+    'DECIMAL',
+    'FLOAT',
+    // SQL/DS and DB2 Data Types
+    'VARCHAR',
+  ],
 };
 
 /**
@@ -691,7 +721,8 @@ export default class PlSqlFormatter extends Formatter {
       reservedJoins,
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-      reservedKeywords: dedupe([...reservedKeywords, ...Object.values(reservedFunctions).flat()]),
+      reservedKeywords: dedupe(reservedKeywords),
+      reservedFunctionNames: dedupe(Object.values(reservedFunctions).flat()),
       // TODO: support custom-delimited strings: Q'{..}' q'<..>' etc
       stringTypes: [{ quote: "''", prefixes: ['N'] }],
       identTypes: [`""`],

@@ -103,6 +103,7 @@ describe('PlSqlFormatter', () => {
     `);
   });
 
+  // TODO: improve formatting of custom functions
   it('formats SELECT query with CROSS APPLY', () => {
     const result = format('SELECT a, b FROM t CROSS APPLY fn(t.id)');
     expect(result).toBe(dedent`
@@ -112,7 +113,7 @@ describe('PlSqlFormatter', () => {
       FROM
         t
       CROSS APPLY
-      fn(t.id)
+      fn (t.id)
     `);
   });
 
@@ -133,7 +134,7 @@ describe('PlSqlFormatter', () => {
       FROM
         t
       OUTER APPLY
-      fn(t.id)
+      fn (t.id)
     `);
   });
 
@@ -164,7 +165,7 @@ describe('PlSqlFormatter', () => {
     `);
     expect(result).toBe(dedent`
       WITH
-        t1(id, parent_id) AS (
+        t1 (id, parent_id) AS (
           -- Anchor member.
           SELECT
             id,
@@ -227,7 +228,7 @@ describe('PlSqlFormatter', () => {
     `);
     expect(result).toBe(dedent/* sql */ `
       WITH
-        t1(id, parent_id) AS (
+        t1 (id, parent_id) AS (
           -- Anchor member.
           SELECT
             id,
