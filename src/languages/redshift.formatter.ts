@@ -359,6 +359,17 @@ const reservedFunctions = {
     'USER',
     'VERSION',
   ],
+  dataTypes: [
+    'DECIMAL',
+    'NUMERIC',
+    'CHAR',
+    'CHARACTER',
+    'VARCHAR',
+    'CHARACTER VARYING',
+    'NCHAR',
+    'NVARCHAR',
+    'VARBYTE',
+  ],
 };
 
 /**
@@ -719,10 +730,8 @@ export default class RedshiftFormatter extends Formatter {
       reservedBinaryCommands,
       reservedJoins,
       reservedDependentClauses,
-      reservedKeywords: dedupe([
-        ...Object.values(reservedKeywords).flat(),
-        ...Object.values(reservedFunctions).flat(),
-      ]),
+      reservedKeywords: dedupe(Object.values(reservedKeywords).flat()),
+      reservedFunctionNames: dedupe(Object.values(reservedFunctions).flat()),
       stringTypes: ["''"],
       identTypes: [`""`],
       numberedParamTypes: ['$'],
