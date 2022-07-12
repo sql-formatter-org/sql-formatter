@@ -69,7 +69,7 @@ const reservedFunctions = {
   ],
   // https://cloud.google.com/bigquery/docs/reference/standard-sql/array_functions
   array: [
-    'ARRAY',
+    // 'ARRAY',
     'ARRAY_CONCAT',
     'ARRAY_LENGTH',
     'ARRAY_TO_STRING',
@@ -545,6 +545,9 @@ const reservedFunctions = {
   ],
   other: ['BQ.JOBS.CANCEL', 'BQ.REFRESH_MATERIALIZED_VIEW'],
   pivot: ['PIVOT', 'UNPIVOT'],
+  // Data types with parameters like VARCHAR(100)
+  // https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#parameterized_data_types
+  dataTypes: ['BYTES', 'NUMERIC', 'DECIMAL', 'BIGNUMERIC', 'BIGDECIMAL', 'STRING'],
 };
 
 /**
@@ -836,10 +839,8 @@ export default class BigQueryFormatter extends Formatter {
       reservedBinaryCommands,
       reservedJoins,
       reservedDependentClauses,
-      reservedKeywords: dedupe([
-        ...Object.values(reservedFunctions).flat(),
-        ...Object.values(reservedKeywords).flat(),
-      ]),
+      reservedKeywords: dedupe(Object.values(reservedKeywords).flat()),
+      reservedFunctionNames: dedupe(Object.values(reservedFunctions).flat()),
       openParens: ['(', '['],
       closeParens: [')', ']'],
       stringTypes: [
