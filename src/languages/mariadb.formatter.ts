@@ -180,7 +180,6 @@ const reservedFunctions = [
   'NAME_CONST',
   'NVL',
   'NVL2',
-  'NULLIF',
   'OCT',
   'OCTET_LENGTH',
   'ORD',
@@ -244,6 +243,41 @@ const reservedFunctions = [
   'WSREP_LAST_SEEN_GTID',
   'WSREP_SYNC_WAIT_UPTO_GTID',
   'YEARWEEK',
+  // CASE expression shorthands
+  'COALESCE',
+  'NULLIF',
+  // Data types with parameters
+  // https://mariadb.com/kb/en/data-types/
+  'TINYINT',
+  'SMALLINT',
+  'MEDIUMINT',
+  'INT',
+  'INTEGER',
+  'BIGINT',
+  'DECIMAL',
+  'DEC',
+  'NUMERIC',
+  'FIXED',
+  // 'NUMBER', // ?? In oracle mode only
+  'FLOAT',
+  'DOUBLE',
+  'DOUBLE PRECISION',
+  'REAL',
+  'BIT',
+  'BINARY',
+  'BLOB',
+  'CHAR',
+  'NATIONAL CHAR',
+  'CHAR BYTE',
+  'ENUM',
+  'VARBINARY',
+  'VARCHAR',
+  'NATIONAL VARCHAR',
+  // 'SET' // handled as special-case in postProcess
+  'TIME',
+  'DATETIME',
+  'TIMESTAMP',
+  'YEAR',
 ];
 
 /**
@@ -1160,7 +1194,8 @@ export default class MariaDbFormatter extends Formatter {
       reservedJoins,
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-      reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
+      reservedKeywords: dedupe(reservedKeywords),
+      reservedFunctionNames: dedupe(reservedFunctions),
       stringTypes: ['""', { quote: "''", prefixes: ['X'] }],
       identTypes: ['``'],
       identChars: { first: '$', rest: '$' },
@@ -1183,7 +1218,7 @@ function postProcess(tokens: Token[]) {
     const nextToken = tokens[i + 1] || EOF_TOKEN;
     if (isToken.SET(token) && nextToken.value === '(') {
       // This is SET datatype, not SET statement
-      return { ...token, type: TokenType.RESERVED_KEYWORD };
+      return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
     }
     return token;
   });
