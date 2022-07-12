@@ -190,6 +190,11 @@ const reservedFunctions = {
     'VARIANCE',
   ],
   table: ['EXPLODE', 'INLINE', 'JSON_TUPLE', 'PARSE_URL_TUPLE', 'POSEXPLODE', 'STACK'],
+  // Parameterized data types
+  // https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=82706456
+  // Though in reality Hive only supports parameters for DECIMAL(),
+  // it doesn't hurt to allow others in here as well.
+  dataTypes: ['DECIMAL', 'NUMERIC', 'VARCHAR', 'CHAR'],
 };
 
 /**
@@ -617,10 +622,8 @@ export default class HiveFormatter extends Formatter {
       reservedBinaryCommands,
       reservedJoins,
       reservedDependentClauses,
-      reservedKeywords: dedupe([
-        ...Object.values(reservedFunctions).flat(),
-        ...Object.values(reservedKeywords).flat(),
-      ]),
+      reservedKeywords: dedupe(Object.values(reservedKeywords).flat()),
+      reservedFunctionNames: dedupe(Object.values(reservedFunctions).flat()),
       openParens: ['(', '['],
       closeParens: [')', ']'],
       stringTypes: ['""', "''"],
