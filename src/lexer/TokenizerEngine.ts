@@ -34,8 +34,8 @@ export default class TokenizerEngine {
 
     // Keep processing the string until end is reached
     while (this.index < this.input.length) {
-      // grab any preceding whitespace
-      const whitespaceBefore = this.getWhitespace();
+      // skip any preceding whitespace
+      this.getWhitespace();
 
       if (this.index < this.input.length) {
         // Get the next token and the token type
@@ -44,7 +44,7 @@ export default class TokenizerEngine {
           throw new Error(`Parse error: Unexpected "${input.slice(this.index, 100)}"`);
         }
 
-        tokens.push({ ...token, whitespaceBefore });
+        tokens.push(token);
       }
     }
     return tokens;

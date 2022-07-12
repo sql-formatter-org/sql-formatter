@@ -35,7 +35,6 @@ export interface Token {
   text: string; // The raw original text that was matched
   value: string; // Cleaned up `text` e.g. keyword converted to uppercase and extra spaces removed
   key?: string;
-  whitespaceBefore?: string;
 }
 
 /**
