@@ -35,7 +35,7 @@ export default class TokenizerEngine {
     // Keep processing the string until end is reached
     while (this.index < this.input.length) {
       // skip any preceding whitespace
-      this.getWhitespace();
+      this.skipWhitespace();
 
       if (this.index < this.input.length) {
         // Get the next token and the token type
@@ -50,15 +50,12 @@ export default class TokenizerEngine {
     return tokens;
   }
 
-  private getWhitespace(): string {
+  private skipWhitespace(): void {
     WHITESPACE_REGEX.lastIndex = this.index;
     const matches = WHITESPACE_REGEX.exec(this.input);
     if (matches) {
       // Advance current position by matched whitespace length
       this.index += matches[0].length;
-      return matches[0];
-    } else {
-      return '';
     }
   }
 
