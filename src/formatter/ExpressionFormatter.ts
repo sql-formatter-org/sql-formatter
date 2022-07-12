@@ -200,6 +200,7 @@ export default class ExpressionFormatter {
       case TokenType.RESERVED_LOGICAL_OPERATOR:
         return this.formatLogicalOperator(token);
       case TokenType.RESERVED_KEYWORD:
+      case TokenType.RESERVED_FUNCTION_NAME:
         return this.formatKeyword(token);
       case TokenType.RESERVED_CASE_START:
         return this.formatCaseStart(token);

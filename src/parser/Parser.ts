@@ -83,12 +83,7 @@ export default class Parser {
   }
 
   private functionCall(): FunctionCall | undefined {
-    if (
-      (this.look().type === TokenType.RESERVED_KEYWORD ||
-        this.look().type === TokenType.IDENTIFIER) &&
-      this.look(1).value === '(' &&
-      !this.look(1).whitespaceBefore
-    ) {
+    if (this.look().type === TokenType.RESERVED_FUNCTION_NAME && this.look(1).value === '(') {
       return {
         type: NodeType.function_call,
         nameToken: this.next(),

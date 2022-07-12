@@ -113,6 +113,7 @@ export default class TokenizerEngine {
       this.matchToken(TokenType.RESERVED_BINARY_COMMAND) ||
       this.matchToken(TokenType.RESERVED_DEPENDENT_CLAUSE) ||
       this.matchToken(TokenType.RESERVED_JOIN) ||
+      this.matchToken(TokenType.RESERVED_FUNCTION_NAME) ||
       this.matchToken(TokenType.RESERVED_KEYWORD) ||
       this.matchToken(TokenType.RESERVED_LOGICAL_OPERATOR) ||
       this.matchToken(TokenType.RESERVED_JOIN_CONDITION)

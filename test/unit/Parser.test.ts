@@ -9,7 +9,8 @@ describe('Parser', () => {
       reservedBinaryCommands: ['UNION'],
       reservedJoins: ['JOIN'],
       reservedJoinConditions: ['ON', 'USING'],
-      reservedKeywords: ['BETWEEN', 'LIKE', 'SQRT'],
+      reservedKeywords: ['BETWEEN', 'LIKE'],
+      reservedFunctionNames: ['SQRT', 'OFFSET'],
       openParens: ['(', '['],
       closeParens: [')', ']'],
       stringTypes: ["''"],
@@ -69,7 +70,7 @@ describe('Parser', () => {
                 Object {
                   "nameToken": Object {
                     "text": "SQRT",
-                    "type": "RESERVED_KEYWORD",
+                    "type": "RESERVED_FUNCTION_NAME",
                     "value": "SQRT",
                     "whitespaceBefore": " ",
                   },
@@ -127,7 +128,7 @@ describe('Parser', () => {
                       Object {
                         "nameToken": Object {
                           "text": "OFFSET",
-                          "type": "IDENTIFIER",
+                          "type": "RESERVED_FUNCTION_NAME",
                           "value": "OFFSET",
                           "whitespaceBefore": "",
                         },

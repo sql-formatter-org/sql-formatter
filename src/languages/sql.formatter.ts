@@ -84,7 +84,11 @@ const reservedFunctions = {
   // - CAST(...) WITH ...
   // - CAST FROM int
   // - CREATE CAST(mycol AS int) WITH ...
-  // cast: ['CAST'], (disabled for now)
+  cast: ['CAST'],
+  // Shorthand functions to use in place of CASE expression
+  caseAbbrev: ['COALESCE', 'NULLIF'],
+  // Non-standard functions that have widespread support
+  nonStandard: ['ROUND', 'SIN', 'COS', 'TAN', 'ASIN', 'ACOS', 'ATAN'],
 };
 
 /**
@@ -117,13 +121,13 @@ const reservedKeywords = [
   'CALL',
   'CALLED',
   'CASCADED',
-  'CAST',
+  // 'CAST',
   'CHAR',
   'CHARACTER',
   'CHECK',
   'CLOB',
   'CLOSE',
-  'COALESCE',
+  // 'COALESCE',
   'COLLATE',
   'COLUMN',
   'COMMIT',
@@ -225,7 +229,7 @@ const reservedKeywords = [
   'NONE',
   'NOT',
   'NULL',
-  'NULLIF',
+  // 'NULLIF',
   'NUMERIC',
   'OF',
   'OLD',
@@ -390,7 +394,8 @@ export default class SqlFormatter extends Formatter {
       reservedBinaryCommands,
       reservedJoins,
       reservedDependentClauses,
-      reservedKeywords: dedupe([...reservedKeywords, ...Object.values(reservedFunctions).flat()]),
+      reservedKeywords: dedupe(reservedKeywords),
+      reservedFunctionNames: Object.values(reservedFunctions).flat(),
       stringTypes: [{ quote: "''", prefixes: ['X'] }],
       identTypes: [`""`, '``'],
       positionalParams: true,
