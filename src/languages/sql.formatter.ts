@@ -429,7 +429,7 @@ export default class SqlFormatter extends Formatter {
       reservedJoins,
       reservedDependentClauses,
       reservedKeywords: dedupe(reservedKeywords),
-      reservedFunctionNames: Object.values(reservedFunctions).flat(),
+      reservedFunctionNames: dedupe(Object.values(reservedFunctions).flat()),
       stringTypes: [{ quote: "''", prefixes: ['X'] }],
       identTypes: [`""`, '``'],
       positionalParams: true,
