@@ -180,7 +180,6 @@ describe('BigQueryFormatter', () => {
   });
 
   // Regression test for issue #243
-  // TODO: Incorrect formatting of OFFSET()
   it('supports array subscript operator', () => {
     expect(
       format(`
@@ -192,7 +191,7 @@ describe('BigQueryFormatter', () => {
     `)
     ).toBe(dedent`
       SELECT
-        item_array[OFFSET (1)] AS item_offset,
+        item_array[OFFSET(1)] AS item_offset,
         item_array[ORDINAL(1)] AS item_ordinal,
         item_array[SAFE_OFFSET(6)] AS item_safe_offset,
         item_array[SAFE_ORDINAL(6)] AS item_safe_ordinal
