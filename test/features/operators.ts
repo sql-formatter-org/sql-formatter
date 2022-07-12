@@ -32,7 +32,7 @@ export default function supportsOperators(
 
   it('supports set operators', () => {
     expect(format('foo ALL bar')).toBe('foo ALL bar');
-    expect(format('foo = ANY (1, 2, 3)')).toBe('foo = ANY(1, 2, 3)'); // TODO: should not format as function
+    expect(format('foo = ANY (1, 2, 3)')).toBe('foo = ANY (1, 2, 3)');
     expect(format('EXISTS bar')).toBe('EXISTS bar');
     expect(format('foo IN (1, 2, 3)')).toBe('foo IN (1, 2, 3)');
     expect(format("foo LIKE 'hello%'")).toBe("foo LIKE 'hello%'");

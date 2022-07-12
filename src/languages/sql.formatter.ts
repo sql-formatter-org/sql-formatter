@@ -54,9 +54,9 @@ const reservedFunctions = {
     'MAX',
     'MIN',
     'SUM',
-    'EVERY',
-    'ANY',
-    'SOME',
+    // 'EVERY',
+    // 'ANY',
+    // 'SOME',
     'STDDEV_POP',
     'STDDEV_SAMP',
     'VAR_SAMP',
@@ -133,6 +133,7 @@ const reservedKeywords = [
   'ALL',
   'ALLOCATE',
   'ALTER',
+  'ANY', // <- moved over from functions
   'ARE',
   'ARRAY',
   'AS',
@@ -199,6 +200,7 @@ const reservedKeywords = [
   'ELEMENT',
   'END-EXEC',
   'ESCAPE',
+  'EVERY', // <- moved over from functions
   'EXCEPT',
   'EXEC',
   'EXECUTE',
@@ -307,6 +309,7 @@ const reservedKeywords = [
   'SET',
   'SIMILAR',
   'SMALLINT',
+  'SOME', // <- moved over from functions
   'SPECIFIC',
   'SQL',
   'SQLEXCEPTION',
