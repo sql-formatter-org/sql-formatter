@@ -160,18 +160,14 @@ export default class ExpressionFormatter {
     this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.limitToken));
     this.layout.indentation.increaseTopLevel();
 
-    if (node.offsetToken) {
-      this.layout.add(
-        WS.NEWLINE,
-        WS.INDENT,
-        this.show(node.offsetToken),
-        ',',
-        WS.SPACE,
-        this.show(node.countToken),
-        WS.SPACE
-      );
+    if (node.offset) {
+      this.layout.add(WS.NEWLINE, WS.INDENT);
+      this.layout = this.formatSubExpression(node.offset);
+      this.layout.add(WS.NO_SPACE, ',', WS.SPACE);
+      this.layout = this.formatSubExpression(node.count);
     } else {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.countToken), WS.SPACE);
+      this.layout.add(WS.NEWLINE, WS.INDENT);
+      this.layout = this.formatSubExpression(node.count);
     }
     this.layout.indentation.decreaseTopLevel();
   }

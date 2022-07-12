@@ -67,16 +67,7 @@ export default class Parser {
   private clause(): Clause | undefined {
     if (this.look().type === TokenType.RESERVED_COMMAND) {
       const name = this.next();
-      const children: AstNode[] = [];
-      while (
-        this.look().type !== TokenType.RESERVED_COMMAND &&
-        this.look().type !== TokenType.RESERVED_BINARY_COMMAND &&
-        this.look().type !== TokenType.EOF &&
-        this.look().type !== TokenType.CLOSE_PAREN &&
-        this.look().type !== TokenType.DELIMITER
-      ) {
-        children.push(this.expression());
-      }
+      const children = this.expressionsUntilClauseEnd();
       return { type: NodeType.clause, nameToken: name, children };
     }
     return undefined;
@@ -85,16 +76,7 @@ export default class Parser {
   private binaryClause(): BinaryClause | undefined {
     if (this.look().type === TokenType.RESERVED_BINARY_COMMAND) {
       const name = this.next();
-      const children: AstNode[] = [];
-      while (
-        this.look().type !== TokenType.RESERVED_COMMAND &&
-        this.look().type !== TokenType.RESERVED_BINARY_COMMAND &&
-        this.look().type !== TokenType.EOF &&
-        this.look().type !== TokenType.CLOSE_PAREN &&
-        this.look().value !== TokenType.DELIMITER
-      ) {
-        children.push(this.expression());
-      }
+      const children = this.expressionsUntilClauseEnd();
       return { type: NodeType.binary_clause, nameToken: name, children };
     }
     return undefined;
@@ -162,20 +144,25 @@ export default class Parser {
   }
 
   private limitClause(): LimitClause | undefined {
-    if (isToken.LIMIT(this.look()) && this.look(2).type === TokenType.COMMA) {
-      return {
-        type: NodeType.limit_clause,
-        limitToken: this.next(),
-        offsetToken: this.next(),
-        countToken: this.next() && this.next(), // Discard comma token
-      };
-    }
     if (isToken.LIMIT(this.look())) {
-      return {
-        type: NodeType.limit_clause,
-        limitToken: this.next(),
-        countToken: this.next(),
-      };
+      const limitToken = this.next();
+      const expr1 = this.expressionsUntilClauseEnd(t => t.type === TokenType.COMMA);
+      if (this.look().type === TokenType.COMMA) {
+        this.next(); // Discard comma token
+        const expr2 = this.expressionsUntilClauseEnd();
+        return {
+          type: NodeType.limit_clause,
+          limitToken,
+          offset: expr1,
+          count: expr2,
+        };
+      } else {
+        return {
+          type: NodeType.limit_clause,
+          limitToken,
+          count: expr1,
+        };
+      }
     }
     return undefined;
   }
@@ -186,6 +173,23 @@ export default class Parser {
       return { type: NodeType.all_columns_asterisk };
     }
     return undefined;
+  }
+
+  private expressionsUntilClauseEnd(
+    extraPredicate: (token: Token) => boolean = () => false
+  ): AstNode[] {
+    const children: AstNode[] = [];
+    while (
+      this.look().type !== TokenType.RESERVED_COMMAND &&
+      this.look().type !== TokenType.RESERVED_BINARY_COMMAND &&
+      this.look().type !== TokenType.EOF &&
+      this.look().type !== TokenType.CLOSE_PAREN &&
+      this.look().type !== TokenType.DELIMITER &&
+      !extraPredicate(this.look())
+    ) {
+      children.push(this.expression());
+    }
+    return children;
   }
 
   // Returns current token without advancing the pointer

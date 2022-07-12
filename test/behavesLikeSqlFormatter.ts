@@ -15,6 +15,7 @@ import supportsLinesBetweenQueries from './options/linesBetweenQueries';
 import supportsNewlineBeforeSemicolon from './options/newlineBeforeSemicolon';
 import supportsLogicalOperatorNewline from './options/logicalOperatorNewline';
 import supportsTabulateAlias from './options/tabulateAlias';
+import supportsLimit from './features/limit';
 
 /**
  * Core tests for all SQL formatters
@@ -34,6 +35,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsNewlineBeforeSemicolon(format);
   supportsCommaPosition(format);
   supportsLogicalOperatorNewline(format);
+  supportsLimit(format);
 
   it('formats simple SELECT query', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;');
@@ -132,36 +134,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
       ORDER BY
         col1 ASC,
         col2 DESC;
-    `);
-  });
-
-  it('formats LIMIT with two comma-separated values on single line', () => {
-    const result = format('LIMIT 5, 10;');
-    expect(result).toBe(dedent`
-      LIMIT
-        5, 10;
-    `);
-  });
-
-  it('formats LIMIT of single value followed by another SELECT using commas', () => {
-    const result = format('LIMIT 5; SELECT foo, bar;');
-    expect(result).toBe(dedent`
-      LIMIT
-        5;
-
-      SELECT
-        foo,
-        bar;
-    `);
-  });
-
-  it('formats LIMIT of single value and OFFSET', () => {
-    const result = format('LIMIT 5 OFFSET 8;');
-    expect(result).toBe(dedent`
-      LIMIT
-        5
-      OFFSET
-        8;
     `);
   });
 
