@@ -115,7 +115,7 @@ const reservedFunctions = [
   'ICU_VERSION',
   'IF',
   'IFNULL',
-  'IN',
+  // 'IN',
   'INET_ATON',
   'INET_NTOA',
   'INET6_ATON',
@@ -432,6 +432,37 @@ const reservedFunctions = [
   // 'XOR',
   'YEAR',
   'YEARWEEK',
+  // Data types with parameters
+  // https://dev.mysql.com/doc/refman/8.0/en/data-types.html
+  'BIT',
+  'TINYINT',
+  'SMALLINT',
+  'MEDIUMINT',
+  'INT',
+  'INTEGER',
+  'BIGINT',
+  'DECIMAL',
+  'DEC',
+  'NUMERIC',
+  'FIXED',
+  'FLOAT',
+  'DOUBLE',
+  'DOUBLE PRECISION',
+  'REAL',
+  'DATETIME',
+  'TIMESTAMP',
+  'TIME',
+  'YEAR',
+  'CHAR',
+  'NATIONAL CHAR',
+  'VARCHAR',
+  'NATIONAL VARCHAR',
+  'BINARY',
+  'VARBINARY',
+  'BLOB',
+  'TEXT',
+  'ENUM',
+  // 'SET' // handled as special-case in postProcess
 ];
 
 /**
@@ -656,6 +687,7 @@ const reservedKeywords = [
   'INSERT_METHOD',
   'INSTALL',
   'INSTANCE',
+  'IN', // <-- moved over from functions
   'INT',
   'INT1',
   'INT2',
@@ -1323,7 +1355,8 @@ export default class MySqlFormatter extends Formatter {
       reservedJoins,
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-      reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
+      reservedKeywords: dedupe(reservedKeywords),
+      reservedFunctionNames: dedupe(reservedFunctions),
       stringTypes: ['""', { quote: "''", prefixes: ['X'] }],
       identTypes: ['``'],
       identChars: { first: '$', rest: '$' },
@@ -1346,7 +1379,7 @@ function postProcess(tokens: Token[]) {
     const nextToken = tokens[i + 1] || EOF_TOKEN;
     if (isToken.SET(token) && nextToken.value === '(') {
       // This is SET datatype, not SET statement
-      return { ...token, type: TokenType.RESERVED_KEYWORD };
+      return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
     }
     return token;
   });
