@@ -1,6 +1,5 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
-import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/core/token';
 import { dedupe } from 'src/utils';
 
 /**
@@ -782,7 +781,7 @@ const reservedCommands = [
 
   'REFRESH MATERIALIZED VIEW',
   'RESET SESSION',
-  'SET', // TODO
+  // 'SET SESSION', // TODO
 
   'SHOW GRANTS',
   'SHOW CREATE TABLE',
@@ -861,27 +860,13 @@ export default class TrinoFormatter extends Formatter {
       reservedBinaryCommands,
       reservedJoins,
       reservedDependentClauses,
-      reservedKeywords: dedupe([...reservedKeywords, reservedFunctions]),
+      reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
       openParens: ['(', '['],
       closeParens: [')', ']'],
-      stringTypes: [{ quote: "''", prefixes: ['U&'] }],
-      identTypes: ['""'],
+      stringTypes: [{ quote: "''", prefixes: ['U&', 'X'] }],
+      identTypes: ['""', '``'],
+      positionalParams: true,
       operators: TrinoFormatter.operators,
-      postProcess,
     });
   }
-}
-
-function postProcess(tokens: Token[]) {
-  return tokens.map((token, i) => {
-    const nextToken = tokens[i + 1] || EOF_TOKEN;
-
-    // [WINDOW](...)
-    if (isToken.WINDOW(token) && nextToken.type === TokenType.OPEN_PAREN) {
-      // This is a function call, treat it as a reserved word
-      return { ...token, type: TokenType.RESERVED_KEYWORD };
-    }
-
-    return token;
-  });
 }
