@@ -14,7 +14,6 @@ import supportsStrings from './features/strings';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
-import supportsWindow from './features/window';
 
 describe('SparkFormatter', () => {
   const language = 'spark';
@@ -50,7 +49,22 @@ describe('SparkFormatter', () => {
       'NATURAL SEMI JOIN',
     ],
   });
-  supportsWindow(format);
+
+  it('formats basic WINDOW clause', () => {
+    const result = format(`SELECT * FROM tbl WINDOW win1, WINDOW win2, WINDOW win3;`);
+    expect(result).toBe(dedent`
+      SELECT
+        *
+      FROM
+        tbl
+      WINDOW
+        win1,
+      WINDOW
+        win2,
+      WINDOW
+        win3;
+    `);
+  });
 
   it('formats window function and end as inline', () => {
     const result = format(
