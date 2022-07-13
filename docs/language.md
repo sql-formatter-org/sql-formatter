@@ -16,6 +16,7 @@ Specifies the SQL dialect to use.
 - `"redshift"` - [Amazon Redshift][]
 - `"spark"` - [Spark][]
 - `"sqlite"` - [SQLite][sqlite]
+- `"trino"` - [Trino][] / [Presto][]
 - `"tsql"` - [SQL Server Transact-SQL][tsql]
 
 The default `"sql"` dialect is meant for cases where you don't know which dialect of SQL you're about to format.
@@ -32,7 +33,9 @@ Better to always pick something more specific if possible.
 [couchbase n1ql]: http://www.couchbase.com/n1ql
 [oracle pl/sql]: http://www.oracle.com/technetwork/database/features/plsql/index.html
 [postgresql]: https://www.postgresql.org/
+[presto]: https://prestodb.io/docs/current/
 [amazon redshift]: https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 [spark]: https://spark.apache.org/docs/latest/api/sql/index.html
 [sqlite]: https://sqlite.org/index.html
+[trino]: https://trino.io/docs/current/
 [tsql]: https://docs.microsoft.com/en-us/sql/sql-server/

@@ -22,7 +22,10 @@
     "pl/sql",
     "transact-sql",
     "db2",
-    "sqlite"
+    "sqlite",
+    "trino",
+    "presto",
+    "prestosql"
   ],
   "contributors": [
     "Adrien Pyke <adpyke@gmail.com>",

@@ -96,6 +96,10 @@ _No support for DELETE_
       [WHERE condition | WHERE CURRENT OF [GLOBAL] cursor_name]
       [OPTION query_hints]
 
+[Trino][]:
+
+    DELETE FROM table_name [WHERE condition]
+
 [sql standard]: https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#_14_8_delete_statement_searched
 [bigquery]: https://cloud.google.com/bigquery/docs/reference/standard-sql/dml-syntax#delete_statement
 [db2]: https://www.ibm.com/docs/en/db2/9.7?topic=statements-delete
@@ -109,3 +113,4 @@ _No support for DELETE_
 [spark]: https://spark.apache.org/docs/latest/sql-ref-syntax.html#dml-statements
 [sqlite]: https://www.sqlite.org/lang_delete.html
 [transact-sql]: https://docs.microsoft.com/en-us/sql/t-sql/statements/delete-transact-sql?view=sql-server-ver16
+[trino]: https://trino.io/docs/current/sql/delete.html
