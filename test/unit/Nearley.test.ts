@@ -1,4 +1,4 @@
-import Tokenizer from 'src/core/Tokenizer';
+import Tokenizer from 'src/lexer/Tokenizer';
 import { Parser, Grammar } from 'nearley';
 
 import grammar from 'src/grammar/grammar';
@@ -42,7 +42,7 @@ describe('Nearley integration', () => {
             Object {
               "token": Object {
                 "text": "foo",
-                "type": "IDENT",
+                "type": "IDENTIFIER",
                 "value": "foo",
                 "whitespaceBefore": "",
               },
@@ -57,7 +57,7 @@ describe('Nearley integration', () => {
             Object {
               "token": Object {
                 "text": "bar",
-                "type": "IDENT",
+                "type": "IDENTIFIER",
                 "value": "bar",
                 "whitespaceBefore": " ",
               },
@@ -81,7 +81,7 @@ describe('Nearley integration', () => {
                 Object {
                   "arrayToken": Object {
                     "text": "my_array",
-                    "type": "IDENT",
+                    "type": "IDENTIFIER",
                     "value": "my_array",
                     "whitespaceBefore": " ",
                   },
@@ -132,7 +132,7 @@ describe('Nearley integration', () => {
                     Object {
                       "token": Object {
                         "text": "birth_year",
-                        "type": "IDENT",
+                        "type": "IDENTIFIER",
                         "value": "birth_year",
                         "whitespaceBefore": "",
                       },
@@ -152,7 +152,7 @@ describe('Nearley integration', () => {
                         Object {
                           "token": Object {
                             "text": "CURRENT_DATE",
-                            "type": "IDENT",
+                            "type": "IDENTIFIER",
                             "value": "CURRENT_DATE",
                             "whitespaceBefore": "",
                           },

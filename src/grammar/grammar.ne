@@ -1,7 +1,7 @@
 @preprocessor typescript
 @{%
 import LexerAdapter from 'src/grammar/LexerAdapter';
-import { NodeType } from 'src/core/ast';
+import { NodeType } from 'src/parser/ast';
 
 // The lexer here is only to provide the has() method,
 // that's used inside the generated grammar definition.
@@ -54,7 +54,7 @@ clause -> %RESERVED_COMMAND expression:* {%
 
 expression -> array_subscript | parenthesis | plain_token
 
-array_subscript -> (%IDENT | %RESERVED_KEYWORD) "[" expression:* "]" {%
+array_subscript -> (%IDENTIFIER | %RESERVED_KEYWORD) "[" expression:* "]" {%
   ([[arrayToken], open, children, close]) => ({
     type: NodeType.array_subscript,
     arrayToken,
@@ -77,7 +77,8 @@ parenthesis -> "(" expressions_or_clauses ")" {%
 %}
 
 plain_token ->
-  ( %IDENT
+  ( %IDENTIFIER
+  | %QUOTED_IDENTIFIER
   | %STRING
   | %VARIABLE
   | %RESERVED_KEYWORD
@@ -91,7 +92,11 @@ plain_token ->
   | %LINE_COMMENT
   | %BLOCK_COMMENT
   | %NUMBER
-  | %PARAMETER
+  | %NAMED_PARAMETER
+  | %QUOTED_PARAMETER
+  | %INDEXED_PARAMETER
+  | %POSITIONAL_PARAMETER
+  | %COMMA
   | not_semicolon_op ) {%
   ([[token]]) => ({ type: NodeType.token, token })
 %}

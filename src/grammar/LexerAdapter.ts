@@ -1,4 +1,4 @@
-import { Token, TokenType } from 'src/core/token';
+import { Token, TokenType } from 'src/lexer/token';
 
 export default class LexerAdapter {
   private index = 0;
