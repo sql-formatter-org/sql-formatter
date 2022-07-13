@@ -14,6 +14,7 @@ import supportsStrings from './features/strings';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
+import supportsWindow from './features/window';
 
 describe('SparkFormatter', () => {
   const language = 'spark';
@@ -49,26 +50,7 @@ describe('SparkFormatter', () => {
       'NATURAL SEMI JOIN',
     ],
   });
-
-  it('formats WINDOW specification as top level', () => {
-    const result = format(
-      'SELECT *, LAG(value) OVER wnd AS next_value FROM tbl WINDOW wnd as (PARTITION BY id ORDER BY time);'
-    );
-    expect(result).toBe(dedent`
-      SELECT
-        *,
-        LAG(value) OVER wnd AS next_value
-      FROM
-        tbl
-      WINDOW
-        wnd as (
-          PARTITION BY
-            id
-          ORDER BY
-            time
-        );
-    `);
-  });
+  supportsWindow(format);
 
   it('formats window function and end as inline', () => {
     const result = format(

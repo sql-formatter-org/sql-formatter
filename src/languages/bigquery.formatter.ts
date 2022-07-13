@@ -696,6 +696,7 @@ const reservedCommands = [
   'ORDER BY',
   'QUALIFY',
   'WINDOW',
+  'PARTITION BY',
   'LIMIT',
   'OFFSET',
   'WITH',
