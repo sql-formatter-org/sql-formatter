@@ -1,5 +1,5 @@
-import Formatter from 'src/core/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+import Formatter from 'src/formatter/Formatter';
+import Tokenizer from 'src/lexer/Tokenizer';
 import { dedupe } from 'src/utils';
 
 /**
@@ -572,6 +572,8 @@ const reservedCommands = [
   'VALUES',
   'WHERE',
   'WITH',
+  'WINDOW',
+  'PARTITION BY',
 
   // newline keywords
   'STORED AS',
@@ -625,7 +627,7 @@ export default class HiveFormatter extends Formatter {
       closeParens: [')', ']'],
       stringTypes: ['""', "''"],
       identTypes: ['``'],
-      variableTypes: [{ quote: '{}', prefixes: ['$'], required: true }],
+      variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
       operators: HiveFormatter.operators,
     });
   }

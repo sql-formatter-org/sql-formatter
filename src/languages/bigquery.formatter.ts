@@ -1,6 +1,6 @@
-import Formatter from 'src/core/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
-import { EOF_TOKEN, isToken, TokenType, type Token } from 'src/core/token';
+import Formatter from 'src/formatter/Formatter';
+import Tokenizer from 'src/lexer/Tokenizer';
+import { EOF_TOKEN, isToken, TokenType, type Token } from 'src/lexer/token';
 import { dedupe } from 'src/utils';
 
 /**
@@ -544,6 +544,7 @@ const reservedFunctions = {
     'TO_BASE64',
   ],
   other: ['BQ.JOBS.CANCEL', 'BQ.REFRESH_MATERIALIZED_VIEW'],
+  pivot: ['PIVOT', 'UNPIVOT'],
 };
 
 /**
@@ -635,14 +636,14 @@ const reservedKeywords = {
     'SOME',
     // 'STRUCT',
     'TABLE',
-    // 'TABLESAMPLE',
+    'TABLESAMPLE SYSTEM',
     'THEN',
     'TO',
     'TREAT',
     'TRUE',
     'UNBOUNDED',
     // 'UNION',
-    // 'UNNEST',
+    'UNNEST',
     // 'USING',
     // 'WHEN',
     // 'WHERE',
@@ -689,16 +690,13 @@ const reservedCommands = [
   // DQL, https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax
   'SELECT',
   'FROM',
-  'UNNEST',
-  'PIVOT',
-  'UNPIVOT',
-  'TABLESAMPLE SYSTEM',
   'WHERE',
   'GROUP BY',
   'HAVING',
   'ORDER BY',
   'QUALIFY',
   'WINDOW',
+  'PARTITION BY',
   'LIMIT',
   'OFFSET',
   'WITH',
@@ -830,7 +828,7 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
 export default class BigQueryFormatter extends Formatter {
-  static operators = ['>>', '<<', '||'];
+  static operators = ['~', '>>', '<<', '||'];
   // TODO: handle trailing comma in select clause
 
   tokenizer() {
@@ -860,12 +858,12 @@ export default class BigQueryFormatter extends Formatter {
       quotedParamTypes: ['@'],
       lineCommentTypes: ['--', '#'],
       operators: BigQueryFormatter.operators,
-      preprocess,
+      postProcess,
     });
   }
 }
 
-function preprocess(tokens: Token[]): Token[] {
+function postProcess(tokens: Token[]): Token[] {
   return detectArraySubscripts(combineParameterizedTypes(tokens));
 }
 
@@ -895,9 +893,9 @@ function combineParameterizedTypes(tokens: Token[]) {
       const endIndex = findClosingAngleBracketIndex(tokens, i + 1);
       const typeDefTokens = tokens.slice(i, endIndex + 1);
       processed.push({
-        ...token,
-        value: typeDefTokens.map(t => t.value).join(''),
-        text: typeDefTokens.map(t => t.text).join(''),
+        type: TokenType.IDENTIFIER,
+        value: typeDefTokens.map(formatTypeDefToken('value')).join(''),
+        text: typeDefTokens.map(formatTypeDefToken('text')).join(''),
       });
       i = endIndex;
     } else {
@@ -906,6 +904,16 @@ function combineParameterizedTypes(tokens: Token[]) {
   }
   return processed;
 }
+
+const formatTypeDefToken =
+  (key: 'text' | 'value') =>
+  (token: Token): string => {
+    if (token.type === TokenType.IDENTIFIER || token.type === TokenType.COMMA) {
+      return token[key] + ' ';
+    } else {
+      return token[key];
+    }
+  };
 
 function findClosingAngleBracketIndex(tokens: Token[], startIndex: number): number {
   let level = 0;

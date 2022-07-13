@@ -16,6 +16,7 @@ import supportsArrayLiterals from './features/arrayLiterals';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsWindow from './features/window';
 
 describe('N1qlFormatter', () => {
   const language = 'n1ql';
@@ -34,6 +35,7 @@ describe('N1qlFormatter', () => {
   supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'] });
   supportsReturning(format);
   supportsParams(format, { positional: true, numbered: ['$'], named: ['$'] });
+  supportsWindow(format);
 
   it('formats INSERT with {} object literal', () => {
     const result = format(

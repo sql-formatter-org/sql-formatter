@@ -1,5 +1,5 @@
-import Formatter from 'src/core/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+import Formatter from 'src/formatter/Formatter';
+import Tokenizer from 'src/lexer/Tokenizer';
 import { dedupe } from 'src/utils';
 
 // TODO: split this into object with function categories
@@ -472,6 +472,8 @@ const reservedCommands = [
   'VALUES',
   'WHERE',
   'WITH',
+  'WINDOW',
+  'PARTITION BY',
 ];
 
 const reservedBinaryCommands = [
@@ -507,7 +509,7 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html
 export default class N1qlFormatter extends Formatter {
-  static operators = ['=='];
+  static operators = ['==', '||'];
 
   tokenizer() {
     return new Tokenizer({

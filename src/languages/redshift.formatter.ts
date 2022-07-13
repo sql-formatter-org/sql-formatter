@@ -1,5 +1,5 @@
-import Formatter from 'src/core/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+import Formatter from 'src/formatter/Formatter';
+import Tokenizer from 'src/lexer/Tokenizer';
 import { dedupe } from 'src/utils';
 
 /**
@@ -711,7 +711,7 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export default class RedshiftFormatter extends Formatter {
-  static operators = ['|/', '||/', '<<', '>>', '||'];
+  static operators = ['~', '|/', '||/', '<<', '>>', '||'];
 
   tokenizer() {
     return new Tokenizer({
@@ -720,8 +720,8 @@ export default class RedshiftFormatter extends Formatter {
       reservedJoins,
       reservedDependentClauses,
       reservedKeywords: dedupe([
-        ...Object.values(reservedFunctions).flat(),
         ...Object.values(reservedKeywords).flat(),
+        ...Object.values(reservedFunctions).flat(),
       ]),
       stringTypes: ["''"],
       identTypes: [`""`],

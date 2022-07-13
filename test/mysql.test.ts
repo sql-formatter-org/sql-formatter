@@ -5,6 +5,7 @@ import MySqlFormatter from 'src/languages/mysql.formatter';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
 import supportsOperators from './features/operators';
+import supportsWindow from './features/window';
 
 describe('MySqlFormatter', () => {
   const language = 'mysql';
@@ -13,6 +14,7 @@ describe('MySqlFormatter', () => {
   behavesLikeMariaDbFormatter(format);
 
   supportsOperators(format, MySqlFormatter.operators, ['AND', 'OR', 'XOR']);
+  supportsWindow(format);
 
   // TODO: disabled for now
   it.skip('supports @@ system variables', () => {

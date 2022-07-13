@@ -1,6 +1,6 @@
-import Formatter from 'src/core/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
-import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/core/token';
+import Formatter from 'src/formatter/Formatter';
+import Tokenizer from 'src/lexer/Tokenizer';
+import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
 import { dedupe } from 'src/utils';
 
 /**
@@ -375,6 +375,7 @@ const reservedKeywords = [
   'DELAY_KEY_WRITE',
   'DELETE_DOMAIN_ID',
   'DES_KEY_FILE',
+  'DESC',
   'DETERMINISTIC',
   'DIAGNOSTICS',
   'DIRECTORY',
@@ -936,7 +937,6 @@ const reservedCommands = [
   'DEALLOCATE PREPARE',
   'DELETE',
   'DELETE FROM',
-  'DESC',
   'DESCRIBE',
   'DO',
   'DROP DATABASE',
@@ -1166,19 +1166,19 @@ export default class MariaDbFormatter extends Formatter {
       identChars: { first: '$', rest: '$' },
       variableTypes: [
         { regex: '@[A-Za-z0-9_.$]+' },
-        { quote: '""', prefixes: ['@'], required: true },
-        { quote: "''", prefixes: ['@'], required: true },
-        { quote: '``', prefixes: ['@'], required: true },
+        { quote: '""', prefixes: ['@'], requirePrefix: true },
+        { quote: "''", prefixes: ['@'], requirePrefix: true },
+        { quote: '``', prefixes: ['@'], requirePrefix: true },
       ],
       positionalParams: true,
       lineCommentTypes: ['--', '#'],
       operators: MariaDbFormatter.operators,
-      preprocess,
+      postProcess,
     });
   }
 }
 
-function preprocess(tokens: Token[]) {
+function postProcess(tokens: Token[]) {
   return tokens.map((token, i) => {
     const nextToken = tokens[i + 1] || EOF_TOKEN;
     if (isToken.SET(token) && nextToken.value === '(') {

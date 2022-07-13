@@ -1,4 +1,4 @@
-import { Token } from './token';
+import { Token } from 'src/lexer/token';
 
 export enum NodeType {
   statement = 'statement',
@@ -71,8 +71,8 @@ export type BetweenPredicate = {
 export type LimitClause = {
   type: NodeType.limit_clause;
   limitToken: Token;
-  countToken: Token;
-  offsetToken?: Token;
+  count: AstNode[];
+  offset?: AstNode[];
 };
 
 // The "*" operator used in SELECT *

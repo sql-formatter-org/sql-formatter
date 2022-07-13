@@ -1,6 +1,6 @@
 {
   "name": "sql-formatter",
-  "version": "8.0.1",
+  "version": "8.2.0",
   "description": "Format whitespace in a SQL query to make it more readable",
   "license": "MIT",
   "main": "lib/index.js",
@@ -116,6 +116,7 @@
     "babel-jest": "^28.1.2",
     "babel-loader": "^8.1.0",
     "babel-plugin-add-module-exports": "^1.0.2",
+    "babel-plugin-inline-import": "^3.0.0",
     "babel-plugin-module-resolver": "^4.1.0",
     "dedent-js": "^1.0.1",
     "eslint": "^8.14.0",

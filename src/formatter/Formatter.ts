@@ -1,13 +1,15 @@
 import type { FormatOptions } from 'src/types';
-import Params from './Params';
-import Tokenizer from './Tokenizer';
+import { indentString } from 'src/formatter/config';
+import Params from 'src/formatter/Params';
+import Tokenizer from 'src/lexer/Tokenizer';
+
+import Parser from 'src/parser/Parser';
+import { Statement } from 'src/parser/ast';
+
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
-import Parser from './Parser';
 import ExpressionFormatter from './ExpressionFormatter';
-import { indentString } from './config';
 import AliasAs from './AliasAs';
-import { Statement } from './ast';
 import Layout, { WS } from './Layout';
 import Indentation from './Indentation';
 

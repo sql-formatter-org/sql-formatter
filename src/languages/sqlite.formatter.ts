@@ -1,5 +1,5 @@
-import Formatter from 'src/core/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+import Formatter from 'src/formatter/Formatter';
+import Tokenizer from 'src/lexer/Tokenizer';
 import { dedupe } from 'src/utils';
 
 const reservedFunctions = {
@@ -62,9 +62,12 @@ const reservedKeywords = [
   'AFTER',
   'ALL',
   'ALTER',
+  // 'AND',
+  'ANY',
+  'ARE',
+  'ARRAY',
   'ALWAYS',
   'ANALYZE',
-  'AND',
   'AS',
   'ASC',
   'ATTACH',
@@ -151,9 +154,11 @@ const reservedKeywords = [
   'NULLS',
   'OF',
   'OFFSET',
-  'ON UPDATE',
   'ON DELETE',
-  'OR',
+  'ON UPDATE',
+  'ONLY',
+  'OPEN',
+  // 'OR',
   'ORDER',
   'OTHERS',
   'OUTER',
@@ -234,6 +239,8 @@ const reservedCommands = [
   'VALUES',
   'WHERE',
   'WITH',
+  'WINDOW',
+  'PARTITION BY',
 ];
 
 const reservedBinaryCommands = [
@@ -266,7 +273,7 @@ const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class SqliteFormatter extends Formatter {
   // https://www.sqlite.org/lang_expr.html
-  static operators = ['||', '<<', '>>', '==', '!='];
+  static operators = ['~', '->', '->>', '||', '<<', '>>', '=='];
 
   tokenizer() {
     return new Tokenizer({

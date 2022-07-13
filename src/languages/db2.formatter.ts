@@ -1,5 +1,5 @@
-import Formatter from 'src/core/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
+import Formatter from 'src/formatter/Formatter';
+import Tokenizer from 'src/lexer/Tokenizer';
 import { dedupe } from 'src/utils';
 
 /**
@@ -854,7 +854,7 @@ const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
 
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
-  static operators = ['**', '!>', '!<', '||'];
+  static operators = ['**', '¬=', '¬>', '¬<', '!>', '!<', '||'];
 
   tokenizer() {
     return new Tokenizer({

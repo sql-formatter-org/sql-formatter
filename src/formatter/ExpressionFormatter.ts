@@ -1,9 +1,9 @@
 import type { FormatOptions } from 'src/types';
 import { equalizeWhitespace } from 'src/utils';
 
-import InlineBlock from './InlineBlock';
-import Params from './Params';
-import { isReserved, type Token, TokenType } from './token';
+import Params from 'src/formatter/Params';
+import { isTabularStyle } from 'src/formatter/config';
+import { isReserved, type Token, TokenType } from 'src/lexer/token';
 import {
   AllColumnsAsterisk,
   ArraySubscript,
@@ -15,8 +15,9 @@ import {
   LimitClause,
   NodeType,
   Parenthesis,
-} from './ast';
-import { isTabularStyle } from './config';
+} from 'src/parser/ast';
+
+import InlineBlock from './InlineBlock';
 import Layout, { WS } from './Layout';
 import toTabularFormat, { isTabularToken } from './tabularStyle';
 
@@ -159,18 +160,14 @@ export default class ExpressionFormatter {
     this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.limitToken));
     this.layout.indentation.increaseTopLevel();
 
-    if (node.offsetToken) {
-      this.layout.add(
-        WS.NEWLINE,
-        WS.INDENT,
-        this.show(node.offsetToken),
-        ',',
-        WS.SPACE,
-        this.show(node.countToken),
-        WS.SPACE
-      );
+    if (node.offset) {
+      this.layout.add(WS.NEWLINE, WS.INDENT);
+      this.layout = this.formatSubExpression(node.offset);
+      this.layout.add(WS.NO_SPACE, ',', WS.SPACE);
+      this.layout = this.formatSubExpression(node.count);
     } else {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.countToken), WS.SPACE);
+      this.layout.add(WS.NEWLINE, WS.INDENT);
+      this.layout = this.formatSubExpression(node.count);
     }
     this.layout.indentation.decreaseTopLevel();
   }
@@ -208,11 +205,17 @@ export default class ExpressionFormatter {
         return this.formatCaseStart(token);
       case TokenType.RESERVED_CASE_END:
         return this.formatCaseEnd(token);
-      case TokenType.PARAMETER:
+      case TokenType.NAMED_PARAMETER:
+      case TokenType.QUOTED_PARAMETER:
+      case TokenType.INDEXED_PARAMETER:
+      case TokenType.POSITIONAL_PARAMETER:
         return this.formatParameter(token);
+      case TokenType.COMMA:
+        return this.formatComma(token);
       case TokenType.OPERATOR:
         return this.formatOperator(token);
-      case TokenType.IDENT:
+      case TokenType.IDENTIFIER:
+      case TokenType.QUOTED_IDENTIFIER:
       case TokenType.STRING:
       case TokenType.NUMBER:
       case TokenType.VARIABLE:
@@ -302,13 +305,10 @@ export default class ExpressionFormatter {
    */
   private formatOperator(token: Token) {
     // special operator
-    if (token.value === ',') {
-      this.formatComma(token);
-      return;
-    } else if (token.value === ':') {
+    if (token.value === ':') {
       this.layout.add(WS.NO_SPACE, this.show(token), WS.SPACE);
       return;
-    } else if (token.value === '.') {
+    } else if (token.value === '.' || token.value === '::') {
       this.layout.add(WS.NO_SPACE, this.show(token));
       return;
     }

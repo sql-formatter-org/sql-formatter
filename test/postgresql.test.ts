@@ -18,6 +18,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
+import supportsWindow from './features/window';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -34,10 +35,14 @@ describe('PostgreSqlFormatter', () => {
   supportsIdentifiers(format, [`""`, 'U&""']);
   supportsBetween(format);
   supportsSchema(format);
-  supportsOperators(format, PostgreSqlFormatter.operators);
+  supportsOperators(
+    format,
+    PostgreSqlFormatter.operators.filter(op => op !== '::')
+  );
   supportsJoin(format);
   supportsReturning(format);
   supportsParams(format, { numbered: ['$'] });
+  supportsWindow(format);
 
   it('allows $ character as part of identifiers', () => {
     expect(format('SELECT foo$, some$$ident')).toBe(dedent`

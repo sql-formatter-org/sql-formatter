@@ -1,6 +1,6 @@
-import Formatter from 'src/core/Formatter';
-import Tokenizer from 'src/core/Tokenizer';
-import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/core/token';
+import Formatter from 'src/formatter/Formatter';
+import Tokenizer from 'src/lexer/Tokenizer';
+import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
 import { dedupe } from 'src/utils';
 
 // TODO: split this into object with function categories
@@ -17,7 +17,7 @@ const reservedFunctions = [
   'ADDTIME',
   'AES_DECRYPT',
   'AES_ENCRYPT',
-  'AND',
+  // 'AND',
   'ANY_VALUE',
   'ASCII',
   'ASIN',
@@ -247,7 +247,7 @@ const reservedFunctions = [
   'NULLIF',
   'OCT',
   'OCTET_LENGTH',
-  'OR',
+  // 'OR',
   'ORD',
   'PERCENT_RANK',
   'PERIOD_ADD',
@@ -429,7 +429,7 @@ const reservedFunctions = [
   'WEEKDAY',
   'WEEKOFYEAR',
   'WEIGHT_STRING',
-  'XOR',
+  // 'XOR',
   'YEAR',
   'YEARWEEK',
 ];
@@ -1274,6 +1274,8 @@ const reservedCommands = [
   'OFFSET',
   'ORDER BY',
   'WHERE',
+  'WINDOW',
+  'PARTITION BY',
 ];
 
 const reservedBinaryCommands = [
@@ -1314,7 +1316,7 @@ const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
-  static operators = [':=', '<<', '>>', '<=>', '&&', '||', '->', '->>'];
+  static operators = ['~', ':=', '<<', '>>', '<=>', '&&', '||', '->', '->>'];
 
   tokenizer() {
     return new Tokenizer({
@@ -1329,19 +1331,19 @@ export default class MySqlFormatter extends Formatter {
       identChars: { first: '$', rest: '$' },
       variableTypes: [
         { regex: '@[A-Za-z0-9_.$]+' },
-        { quote: '""', prefixes: ['@'], required: true },
-        { quote: "''", prefixes: ['@'], required: true },
-        { quote: '``', prefixes: ['@'], required: true },
+        { quote: '""', prefixes: ['@'], requirePrefix: true },
+        { quote: "''", prefixes: ['@'], requirePrefix: true },
+        { quote: '``', prefixes: ['@'], requirePrefix: true },
       ],
       positionalParams: true,
       lineCommentTypes: ['--', '#'],
       operators: MySqlFormatter.operators,
-      preprocess,
+      postProcess,
     });
   }
 }
 
-function preprocess(tokens: Token[]) {
+function postProcess(tokens: Token[]) {
   return tokens.map((token, i) => {
     const nextToken = tokens[i + 1] || EOF_TOKEN;
     if (isToken.SET(token) && nextToken.value === '(') {

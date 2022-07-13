@@ -1,5 +1,5 @@
-import Parser from 'src/core/Parser';
-import Tokenizer from 'src/core/Tokenizer';
+import Parser from 'src/parser/Parser';
+import Tokenizer from 'src/lexer/Tokenizer';
 
 describe('Parser', () => {
   const parse = (sql: string) => {
@@ -30,7 +30,7 @@ describe('Parser', () => {
             Object {
               "token": Object {
                 "text": "foo",
-                "type": "IDENT",
+                "type": "IDENTIFIER",
                 "value": "foo",
                 "whitespaceBefore": "",
               },
@@ -45,7 +45,7 @@ describe('Parser', () => {
             Object {
               "token": Object {
                 "text": "bar",
-                "type": "IDENT",
+                "type": "IDENTIFIER",
                 "value": "bar",
                 "whitespaceBefore": " ",
               },
@@ -118,7 +118,7 @@ describe('Parser', () => {
                 Object {
                   "arrayToken": Object {
                     "text": "my_array",
-                    "type": "IDENT",
+                    "type": "IDENTIFIER",
                     "value": "my_array",
                     "whitespaceBefore": " ",
                   },
@@ -127,7 +127,7 @@ describe('Parser', () => {
                       Object {
                         "nameToken": Object {
                           "text": "OFFSET",
-                          "type": "IDENT",
+                          "type": "IDENTIFIER",
                           "value": "OFFSET",
                           "whitespaceBefore": "",
                         },
@@ -185,7 +185,7 @@ describe('Parser', () => {
                     Object {
                       "token": Object {
                         "text": "birth_year",
-                        "type": "IDENT",
+                        "type": "IDENTIFIER",
                         "value": "birth_year",
                         "whitespaceBefore": "",
                       },
@@ -205,7 +205,7 @@ describe('Parser', () => {
                         Object {
                           "token": Object {
                             "text": "CURRENT_DATE",
-                            "type": "IDENT",
+                            "type": "IDENTIFIER",
                             "value": "CURRENT_DATE",
                             "whitespaceBefore": "",
                           },
@@ -266,7 +266,7 @@ describe('Parser', () => {
                 Object {
                   "token": Object {
                     "text": "age",
-                    "type": "IDENT",
+                    "type": "IDENTIFIER",
                     "value": "age",
                     "whitespaceBefore": " ",
                   },
@@ -322,12 +322,17 @@ describe('Parser', () => {
         Object {
           "children": Array [
             Object {
-              "countToken": Object {
-                "text": "10",
-                "type": "NUMBER",
-                "value": "10",
-                "whitespaceBefore": " ",
-              },
+              "count": Array [
+                Object {
+                  "token": Object {
+                    "text": "10",
+                    "type": "NUMBER",
+                    "value": "10",
+                    "whitespaceBefore": " ",
+                  },
+                  "type": "token",
+                },
+              ],
               "limitToken": Object {
                 "text": "LIMIT",
                 "type": "RESERVED_COMMAND",
@@ -350,24 +355,34 @@ describe('Parser', () => {
         Object {
           "children": Array [
             Object {
-              "countToken": Object {
-                "text": "10",
-                "type": "NUMBER",
-                "value": "10",
-                "whitespaceBefore": " ",
-              },
+              "count": Array [
+                Object {
+                  "token": Object {
+                    "text": "10",
+                    "type": "NUMBER",
+                    "value": "10",
+                    "whitespaceBefore": " ",
+                  },
+                  "type": "token",
+                },
+              ],
               "limitToken": Object {
                 "text": "LIMIT",
                 "type": "RESERVED_COMMAND",
                 "value": "LIMIT",
                 "whitespaceBefore": "",
               },
-              "offsetToken": Object {
-                "text": "200",
-                "type": "NUMBER",
-                "value": "200",
-                "whitespaceBefore": " ",
-              },
+              "offset": Array [
+                Object {
+                  "token": Object {
+                    "text": "200",
+                    "type": "NUMBER",
+                    "value": "200",
+                    "whitespaceBefore": " ",
+                  },
+                  "type": "token",
+                },
+              ],
               "type": "limit_clause",
             },
           ],
