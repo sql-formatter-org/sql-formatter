@@ -16,7 +16,7 @@ const flatten = (arr: any[]) => arr.flat(Infinity);
 # Might be better to eliminate hasSemicolon field
 # and allow for empty statement in the end,
 # so semicolons could then be placed between each statement.
-main -> statement (";" statement):* {%
+main -> statement (%DELIMITER statement):* {%
   (items) => {
     return flatten(items)
       // skip semicolons
@@ -97,11 +97,6 @@ plain_token ->
   | %INDEXED_PARAMETER
   | %POSITIONAL_PARAMETER
   | %COMMA
-  | not_semicolon_op ) {%
+  | %OPERATOR ) {%
   ([[token]]) => ({ type: NodeType.token, token })
-%}
-
-# TODO: Eliminate use of `reject` by having separate token type for semicolon
-not_semicolon_op -> %OPERATOR {%
-  ([token], loc, reject) => token.value === ';' ? reject : token
 %}
