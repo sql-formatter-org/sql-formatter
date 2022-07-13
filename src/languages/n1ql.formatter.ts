@@ -472,6 +472,8 @@ const reservedCommands = [
   'VALUES',
   'WHERE',
   'WITH',
+  'WINDOW',
+  'PARTITION BY',
 ];
 
 const reservedBinaryCommands = [
