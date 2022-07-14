@@ -298,4 +298,25 @@ describe('BigQueryFormatter', () => {
       `);
     });
   });
+
+  describe('BigQuery DDL', () => {
+    const createSchemaVariants = ['CREATE SCHEMA', 'CREATE SCHEMA IF NOT EXISTS'];
+    createSchemaVariants.forEach(createSchema => {
+      it(createSchema, () => {
+        const input = `
+          ${createSchema} mydataset
+            default collate 'und:ci' options(
+            location="us", labels=[("label1","value1"),("label2","value2")]
+          )`;
+        const expected = dedent`
+          ${createSchema}
+            mydataset DEFAULT COLLATE 'und:ci' OPTIONS(
+              location = "us",
+              labels = [("label1", "value1"), ("label2", "value2")]
+            )
+        `;
+        expect(format(input, { keywordCase: 'upper' })).toBe(expected);
+      });
+    });
+  });
 });
