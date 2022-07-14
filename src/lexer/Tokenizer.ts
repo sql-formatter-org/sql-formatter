@@ -2,7 +2,7 @@ import { Token, TokenType } from 'src/lexer/token';
 import * as regex from 'src/lexer/regexFactory';
 import * as regexTypes from 'src/lexer/regexTypes';
 
-import { NULL_REGEX, escapeRegExp } from './regexUtil';
+import { escapeRegExp } from './regexUtil';
 import TokenizerEngine, { type TokenRule } from './TokenizerEngine';
 
 interface TokenizerOptions {
@@ -137,7 +137,7 @@ export default class Tokenizer {
         regex: cfg.positionalParams ? /[?]/y : undefined,
       },
       [TokenType.VARIABLE]: {
-        regex: cfg.variableTypes ? regex.variable(cfg.variableTypes) : NULL_REGEX,
+        regex: cfg.variableTypes ? regex.variable(cfg.variableTypes) : undefined,
       },
       [TokenType.STRING]: { regex: regex.string(cfg.stringTypes) },
       [TokenType.IDENTIFIER]: {

@@ -121,7 +121,7 @@ export default class TokenizerEngine {
   private matchToken(tokenType: TokenType): Token | undefined {
     const rule = this.rules[tokenType];
     if (!rule) {
-      throw Error(`Unknown token type found: ${tokenType}`);
+      return undefined;
     }
     return this.match({
       type: tokenType,
