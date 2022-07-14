@@ -137,8 +137,6 @@ const reservedJoins = [
   'CROSS JOIN',
 ];
 
-const reservedDependentClauses = ['WHEN', 'ELSE'];
-
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
 export default class BigQueryFormatter extends Formatter {
   static operators = ['~', '>>', '<<', '||'];
@@ -149,7 +147,7 @@ export default class BigQueryFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedJoins,
-      reservedDependentClauses,
+      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       openParens: ['(', '['],

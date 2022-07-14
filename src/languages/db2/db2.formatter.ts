@@ -165,8 +165,6 @@ const reservedJoins = [
   'NATURAL JOIN',
 ];
 
-const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
-
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
   static operators = ['**', '¬=', '¬>', '¬<', '!>', '!<', '||'];
@@ -176,7 +174,7 @@ export default class Db2Formatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedJoins,
-      reservedDependentClauses,
+      reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       stringTypes: [{ quote: "''", prefixes: ['X', 'G', 'N', 'GX', 'UX', 'U&'] }],

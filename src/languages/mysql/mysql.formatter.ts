@@ -225,8 +225,6 @@ const reservedJoins = [
   'NATURAL RIGHT OUTER JOIN',
 ];
 
-const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
-
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
   static operators = ['~', ':=', '<<', '>>', '<=>', '&&', '||', '->', '->>'];
@@ -236,7 +234,7 @@ export default class MySqlFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedJoins,
-      reservedDependentClauses,
+      reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF'],
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,

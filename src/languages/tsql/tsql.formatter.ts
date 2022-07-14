@@ -215,8 +215,6 @@ const reservedJoins = [
   'CROSS JOIN',
 ];
 
-const reservedDependentClauses = ['WHEN', 'ELSE'];
-
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export default class TSqlFormatter extends Formatter {
   static operators = ['~', '!<', '!>', '+=', '-=', '*=', '/=', '%=', '|=', '&=', '^=', '::'];
@@ -226,7 +224,7 @@ export default class TSqlFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedJoins,
-      reservedDependentClauses,
+      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       stringTypes: [{ quote: "''", prefixes: ['N'] }],

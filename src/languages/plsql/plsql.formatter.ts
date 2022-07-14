@@ -72,8 +72,6 @@ const reservedJoins = [
   'NATURAL JOIN',
 ];
 
-const reservedDependentClauses = ['WHEN', 'ELSE'];
-
 export default class PlSqlFormatter extends Formatter {
   static operators = [
     '||',
@@ -92,7 +90,7 @@ export default class PlSqlFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedJoins,
-      reservedDependentClauses,
+      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,

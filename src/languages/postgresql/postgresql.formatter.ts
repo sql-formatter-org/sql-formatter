@@ -234,8 +234,6 @@ const reservedJoins = [
   'NATURAL JOIN',
 ];
 
-const reservedDependentClauses = ['WHEN', 'ELSE'];
-
 const binaryOperators = [
   // Math Operators
   '<<',
@@ -318,7 +316,7 @@ export default class PostgreSqlFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedJoins,
-      reservedDependentClauses,
+      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       openParens: ['(', '['],

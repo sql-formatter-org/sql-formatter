@@ -61,8 +61,6 @@ const reservedJoins = [
   'NATURAL CROSS JOIN',
 ];
 
-const reservedDependentClauses = ['WHEN', 'ELSE'];
-
 export default class SqliteFormatter extends Formatter {
   // https://www.sqlite.org/lang_expr.html
   static operators = ['~', '->', '->>', '||', '<<', '>>', '=='];
@@ -72,7 +70,7 @@ export default class SqliteFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedJoins,
-      reservedDependentClauses,
+      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       stringTypes: [{ quote: "''", prefixes: ['X'] }],

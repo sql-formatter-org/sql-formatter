@@ -130,8 +130,6 @@ const reservedJoins = [
   'NATURAL JOIN',
 ];
 
-const reservedDependentClauses = ['WHEN', 'ELSE'];
-
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export default class RedshiftFormatter extends Formatter {
   static operators = ['~', '|/', '||/', '<<', '>>', '||'];
@@ -141,7 +139,7 @@ export default class RedshiftFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedJoins,
-      reservedDependentClauses,
+      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       stringTypes: ["''"],

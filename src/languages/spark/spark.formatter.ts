@@ -129,8 +129,6 @@ const reservedJoins = [
   'NATURAL SEMI JOIN',
 ];
 
-const reservedDependentClauses = ['WHEN', 'ELSE'];
-
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkFormatter extends Formatter {
   static operators = ['~', '<=>', '&&', '||', '==', '->'];
@@ -140,7 +138,7 @@ export default class SparkFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedJoins,
-      reservedDependentClauses,
+      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,

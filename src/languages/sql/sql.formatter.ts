@@ -59,8 +59,6 @@ const reservedJoins = [
   'NATURAL JOIN',
 ];
 
-const reservedDependentClauses = ['WHEN', 'ELSE'];
-
 export default class SqlFormatter extends Formatter {
   static operators = [];
 
@@ -69,7 +67,7 @@ export default class SqlFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedJoins,
-      reservedDependentClauses,
+      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       stringTypes: [{ quote: "''", prefixes: ['X'] }],

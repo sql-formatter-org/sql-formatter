@@ -63,8 +63,6 @@ const reservedJoins = [
   'CROSS JOIN',
 ];
 
-const reservedDependentClauses = ['WHEN', 'ELSE'];
-
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export default class HiveFormatter extends Formatter {
   static operators = ['<=>', '==', '||'];
@@ -74,7 +72,7 @@ export default class HiveFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedJoins,
-      reservedDependentClauses,
+      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       openParens: ['(', '['],

@@ -255,8 +255,6 @@ const reservedJoins = [
   'NATURAL RIGHT OUTER JOIN',
 ];
 
-const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF', 'ELSIF'];
-
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {
   static operators = [':=', '<<', '>>', '<=>', '&&', '||'];
@@ -266,7 +264,7 @@ export default class MariaDbFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedJoins,
-      reservedDependentClauses,
+      reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF', 'ELSIF'],
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
