@@ -27,3 +27,4 @@ Reference of SQL syntax variations.
 - [DELETE](./delete.md)
 - [CREATE TABLE](./create-table.md)
 - [CREATE VIEW](./create-view.md)
+- [ALTER TABLE](./alter-table.md)
