@@ -199,31 +199,6 @@ describe('BigQueryFormatter', () => {
     `);
   });
 
-  it('supports create view optional arguments', () => {
-    const createViewVariations = [
-      'CREATE VIEW',
-      'CREATE OR REPLACE VIEW',
-      'CREATE VIEW IF NOT EXISTS',
-    ];
-
-    createViewVariations.forEach((createViewVariation: string) => {
-      expect(
-        format(`
-        ${createViewVariation} my_dataset.my_view AS (
-          SELECT t1.col1, t1.col2 FROM my_dataset.my_table)`)
-      ).toBe(dedent`
-        ${createViewVariation}
-          my_dataset.my_view AS (
-            SELECT
-              t1.col1,
-              t1.col2
-            FROM
-              my_dataset.my_table
-          )
-      `);
-    });
-  });
-
   // Issue #279
   describe('supports FROM clause operators:', () => {
     it('UNNEST operator', () => {
@@ -407,6 +382,163 @@ describe('BigQueryFormatter', () => {
 
         expect(format(input)).toBe(expected);
       });
+    });
+
+    const createViewVariations = [
+      'CREATE VIEW',
+      'CREATE OR REPLACE VIEW',
+      'CREATE VIEW IF NOT EXISTS',
+    ];
+    const createMaterializedView = [
+      'CREATE MATERIALIZED VIEW',
+      'CREATE OR REPLACE MATERIALIZED VIEW',
+      'CREATE MATERIALIZED VIEW IF NOT EXISTS',
+    ];
+
+    createViewVariations.concat(createMaterializedView).forEach(createView => {
+      it(`Supports ${createView}`, () => {
+        const input = `
+          ${createView} my_dataset.my_view AS (
+          SELECT t1.col1, t1.col2 FROM my_dataset.my_table)`;
+        const expected = dedent`
+          ${createView}
+            my_dataset.my_view AS (
+              SELECT
+                t1.col1,
+                t1.col2
+              FROM
+                my_dataset.my_table
+            )`;
+        expect(format(input)).toBe(expected);
+      });
+    });
+
+    const createExternalTableVariations = [
+      'CREATE EXTERNAL TABLE',
+      'CREATE OR REPLACE EXTERNAL TABLE',
+      'CREATE EXTERNAL TABLE IF NOT EXISTS',
+    ];
+    createExternalTableVariations.forEach(createTable => {
+      it(`Supports ${createTable}`, () => {
+        const input = `
+          ${createTable} dataset.CsvTable
+          WITH PARTITION COLUMNS (
+            field_1 STRING,
+            field_2 INT64
+          )
+          OPTIONS(
+            format = 'CSV',
+            uris = ['gs://bucket/path1.csv']
+          )`;
+        const expected = dedent`
+          ${createTable}
+            dataset.CsvTable
+          WITH PARTITION COLUMNS
+            (field_1 STRING, field_2 INT64) OPTIONS(format = 'CSV', uris = ['gs://bucket/path1.csv'])`;
+        expect(format(input)).toBe(expected);
+      });
+    });
+
+    const createTableFuncVariations = [
+      'CREATE TABLE FUNCTION',
+      'CREATE OR REPLACE TABLE FUNCTION',
+      'CREATE TABLE FUNCTION IF NOT EXISTS',
+    ];
+    createTableFuncVariations.forEach(createTableFunc => {
+      it(`Supports ${createTableFunc}`, () => {
+        const input = `
+          ${createTableFunc} mydataset.names_by_year(y INT64)
+          RETURNS TABLE<name STRING, year INT64>
+          AS (
+            SELECT year, name
+            FROM mydataset.mytable
+            WHERE year = y
+          )`;
+        const expected = dedent`
+          ${createTableFunc}
+            mydataset.names_by_year(y INT64)
+          RETURNS TABLE
+            < name STRING,
+            year INT64 > AS (
+              SELECT
+                year,
+                name
+              FROM
+                mydataset.mytable
+              WHERE
+                year = y
+            )`;
+        expect(format(input)).toBe(expected);
+      });
+    });
+
+    // not correctly supported yet
+    const createProcedureVariations = [
+      'CREATE PROCEDURE',
+      'CREATE OR REPLACE PROCEDURE',
+      'CREATE PROCEDURE IF NOT EXISTS',
+    ];
+    createProcedureVariations.forEach(createProcedure => {
+      it(`Supports ${createProcedure}`, () => {
+        const input = `
+          ${createProcedure} myDataset.QueryTable()
+          BEGIN
+            SELECT * FROM anotherDataset.myTable;
+          END;`;
+        const expected = dedent`
+          ${createProcedure}
+            myDataset.QueryTable()
+          BEGIN
+          SELECT
+            *
+          FROM
+            anotherDataset.myTable;
+
+          END;`;
+        expect(format(input)).toBe(expected);
+      });
+    });
+
+    const createRowAccessPolicies = [
+      'CREATE ROW ACCESS POLICY',
+      'CREATE ROW ACCESS POLICY IF NOT EXISTS',
+      'CREATE OR REPLACE ROW ACCESS POLICY',
+    ];
+    createRowAccessPolicies.forEach(createRowAccessPolicy => {
+      it(`Supports ${createRowAccessPolicy}`, () => {
+        const input = `
+          ${createRowAccessPolicy} us_filter
+          ON mydataset.table1
+          GRANT TO ("group:abc@example.com", "user:hello@example.com")
+          FILTER USING (Region="US")`;
+        const expected = dedent`
+          ${createRowAccessPolicy}
+            us_filter ON mydataset.table1
+          GRANT TO
+            ("group:abc@example.com", "user:hello@example.com")
+          FILTER USING
+            (Region = "US")`;
+        expect(format(input)).toBe(expected);
+      });
+    });
+
+    // it shouldn't format json here
+    it(`Supports CREATE CAPACITY`, () => {
+      const input = `
+        CREATE CAPACITY admin_project.region-us.my-commitment
+        AS JSON """{
+        "slot_count": 100,
+        "plan": "FLEX"
+        }"""`;
+      const expected = dedent`
+        CREATE CAPACITY
+          admin_project.region-us.my-commitment
+        AS JSON
+          """{
+                "slot_count": 100,
+                "plan": "FLEX"
+                }"""`;
+      expect(format(input)).toBe(expected);
     });
   });
 });
