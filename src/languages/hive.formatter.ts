@@ -190,6 +190,19 @@ const reservedFunctions = {
     'VARIANCE',
   ],
   table: ['EXPLODE', 'INLINE', 'JSON_TUPLE', 'PARSE_URL_TUPLE', 'POSEXPLODE', 'STACK'],
+  // https://cwiki.apache.org/confluence/display/Hive/LanguageManual+WindowingAndAnalytics
+  window: [
+    'LEAD',
+    'LAG',
+    'FIRST_VALUE',
+    'LAST_VALUE',
+    'RANK',
+    'ROW_NUMBER',
+    'DENSE_RANK',
+    'CUME_DIST',
+    'PERCENT_RANK',
+    'NTILE',
+  ],
   // Parameterized data types
   // https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=82706456
   // Though in reality Hive only supports parameters for DECIMAL(),
