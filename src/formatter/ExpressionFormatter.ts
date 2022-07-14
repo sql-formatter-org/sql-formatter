@@ -219,16 +219,14 @@ export default class ExpressionFormatter {
       case TokenType.QUOTED_PARAMETER:
       case TokenType.INDEXED_PARAMETER:
       case TokenType.POSITIONAL_PARAMETER:
-        return this.formatWord(token);
+        return this.formatLiteral(token);
       default:
         throw new Error(`Unexpected token type: ${token.type}`);
     }
   }
 
-  /**
-   * Formats ident/string/number/variable tokens
-   */
-  private formatWord(token: Token) {
+  /** Default formatting for most token types */
+  private formatLiteral(token: Token) {
     this.layout.add(this.show(token), WS.SPACE);
   }
 
