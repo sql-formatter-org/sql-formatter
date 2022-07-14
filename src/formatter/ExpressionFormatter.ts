@@ -206,11 +206,6 @@ export default class ExpressionFormatter {
         return this.formatCaseStart(token);
       case TokenType.RESERVED_CASE_END:
         return this.formatCaseEnd(token);
-      case TokenType.NAMED_PARAMETER:
-      case TokenType.QUOTED_PARAMETER:
-      case TokenType.INDEXED_PARAMETER:
-      case TokenType.POSITIONAL_PARAMETER:
-        return this.formatParameter(token);
       case TokenType.COMMA:
         return this.formatComma(token);
       case TokenType.OPERATOR:
@@ -220,6 +215,10 @@ export default class ExpressionFormatter {
       case TokenType.STRING:
       case TokenType.NUMBER:
       case TokenType.VARIABLE:
+      case TokenType.NAMED_PARAMETER:
+      case TokenType.QUOTED_PARAMETER:
+      case TokenType.INDEXED_PARAMETER:
+      case TokenType.POSITIONAL_PARAMETER:
         return this.formatWord(token);
       default:
         throw new Error(`Unexpected token type: ${token.type}`);
@@ -353,13 +352,6 @@ export default class ExpressionFormatter {
     this.layout.indentation.decreaseBlockLevel();
 
     this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
-  }
-
-  /**
-   * Formats a parameter placeholder item onto query, to be replaced with the value of the placeholder
-   */
-  private formatParameter(token: Token) {
-    this.layout.add(this.params.get(token), WS.SPACE);
   }
 
   /**
