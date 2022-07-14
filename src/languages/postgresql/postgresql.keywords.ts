@@ -373,9 +373,6 @@ export const keywords = flatKeywordList({
     'OLD',
     'OMIT',
     'ON',
-    'ON COMMIT',
-    'ON DELETE',
-    'ON UPDATE',
     'ONE',
     'ONLY',
     'OPEN',
@@ -654,4 +651,5 @@ export const keywords = flatKeywordList({
     'YES',
     'ZONE',
   ],
+  constraints: ['ON DELETE', 'ON UPDATE', 'ON COMMIT'],
 });

@@ -139,8 +139,6 @@ export const keywords = flatKeywordList({
     'OF',
     'OLD',
     'ON',
-    'ON DELETE',
-    'ON UPDATE',
     'OPTIMIZATION',
     'OPTIMIZE',
     'ORDER',
@@ -361,4 +359,5 @@ export const keywords = flatKeywordList({
     'TERM UTILITY',
     'TRACE CT',
   ],
+  constraints: ['ON DELETE', 'ON UPDATE'],
 });

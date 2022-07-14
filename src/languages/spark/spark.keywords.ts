@@ -264,8 +264,6 @@ export const keywords = flatKeywordList({
     'NULLIF',
     'OFFSET',
     'ON',
-    'ON DELETE',
-    'ON UPDATE',
     'OPTIMIZE',
     'REGEXP',
     'SEPARATOR',
@@ -277,4 +275,5 @@ export const keywords = flatKeywordList({
     'VARIABLES',
     'YEAR_MONTH',
   ],
+  constraints: ['ON DELETE', 'ON UPDATE'],
 });
