@@ -105,6 +105,7 @@ export const keywords = flatKeywordList({
     'OF',
     'OFF',
     'OFFSETS',
+    'ON',
     'ON DELETE',
     'ON UPDATE',
     'OPEN',

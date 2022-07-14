@@ -195,8 +195,6 @@ export default class ExpressionFormatter {
         return this.formatJoin(token);
       case TokenType.RESERVED_DEPENDENT_CLAUSE:
         return this.formatDependentClause(token);
-      case TokenType.RESERVED_JOIN_CONDITION:
-        return this.formatJoinCondition(token);
       case TokenType.RESERVED_LOGICAL_OPERATOR:
         return this.formatLogicalOperator(token);
       case TokenType.RESERVED_KEYWORD:
@@ -294,11 +292,6 @@ export default class ExpressionFormatter {
    */
   private formatDependentClause(token: Token) {
     this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
-  }
-
-  // Formats ON and USING keywords
-  private formatJoinCondition(token: Token) {
-    this.layout.add(this.show(token), WS.SPACE);
   }
 
   /**

@@ -17,8 +17,6 @@ interface TokenizerOptions {
   reservedBinaryCommands: string[];
   // Various joins like LEFT OUTER JOIN
   reservedJoins: string[];
-  // keywords used for JOIN conditions, defaults to: [ON, USING]
-  reservedJoinConditions?: string[];
   // built in function names
   reservedFunctionNames: string[];
   // all other reserved words (not included to any of the above lists)
@@ -107,10 +105,6 @@ export default class Tokenizer {
       },
       [TokenType.RESERVED_LOGICAL_OPERATOR]: {
         regex: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
-        value: v => v.toUpperCase(),
-      },
-      [TokenType.RESERVED_JOIN_CONDITION]: {
-        regex: regex.reservedWord(cfg.reservedJoinConditions ?? ['ON', 'USING'], cfg.identChars),
         value: v => v.toUpperCase(),
       },
       [TokenType.NAMED_PARAMETER]: {
