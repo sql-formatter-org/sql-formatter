@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import BigQueryFormatter from 'src/languages/bigquery.formatter';
+import BigQueryFormatter from 'src/languages/bigquery/bigquery.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';

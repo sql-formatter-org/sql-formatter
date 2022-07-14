@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import N1qlFormatter from 'src/languages/n1ql.formatter';
+import N1qlFormatter from 'src/languages/n1ql/n1ql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsBetween from './features/between';

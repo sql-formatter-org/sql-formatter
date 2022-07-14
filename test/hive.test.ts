@@ -2,7 +2,7 @@ import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
 
-import HiveFormatter from 'src/languages/hive.formatter';
+import HiveFormatter from 'src/languages/hive/hive.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';

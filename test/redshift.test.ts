@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import RedshiftFormatter from 'src/languages/redshift.formatter';
+import RedshiftFormatter from 'src/languages/redshift/redshift.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';

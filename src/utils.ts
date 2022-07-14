@@ -23,3 +23,7 @@ export const sum = (arr: number[]): number => {
   }
   return total;
 };
+
+// Used for flattening keyword lists
+export const flatKeywordList = (obj: Record<string, string[]>): string[] =>
+  dedupe(Object.values(obj).flat());
