@@ -577,6 +577,8 @@ const reservedCommands = [
   'VALUES',
   'WHERE',
   'WITH',
+  'WINDOW',
+  'PARTITION BY',
 
   // newline keywords
   'STORED AS',

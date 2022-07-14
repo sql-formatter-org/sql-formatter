@@ -50,23 +50,19 @@ describe('SparkFormatter', () => {
     ],
   });
 
-  it('formats WINDOW specification as top level', () => {
-    const result = format(
-      'SELECT *, LAG(value) OVER wnd AS next_value FROM tbl WINDOW wnd as (PARTITION BY id ORDER BY time);'
-    );
+  it('formats basic WINDOW clause', () => {
+    const result = format(`SELECT * FROM tbl WINDOW win1, WINDOW win2, WINDOW win3;`);
     expect(result).toBe(dedent`
       SELECT
-        *,
-        LAG(value) OVER wnd AS next_value
+        *
       FROM
         tbl
       WINDOW
-        wnd as (
-          PARTITION BY
-            id
-          ORDER BY
-            time
-        );
+        win1,
+      WINDOW
+        win2,
+      WINDOW
+        win3;
     `);
   });
 

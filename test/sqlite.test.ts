@@ -16,6 +16,7 @@ import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsWindow from './features/window';
 
 describe('SqliteFormatter', () => {
   const language = 'sqlite';
@@ -37,6 +38,7 @@ describe('SqliteFormatter', () => {
   });
   supportsOperators(format, SqliteFormatter.operators);
   supportsParams(format, { positional: true, numbered: ['?'], named: [':', '$', '@'] });
+  supportsWindow(format);
 
   it('formats FETCH FIRST like LIMIT', () => {
     const result = format('SELECT * FETCH FIRST 2 ROWS ONLY;');

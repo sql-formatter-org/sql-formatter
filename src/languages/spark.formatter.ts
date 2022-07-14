@@ -677,7 +677,6 @@ const reservedCommands = [
   'WITH',
   'CLUSTER BY',
   'DISTRIBUTE BY',
-  'PARTITION BY', // verify
   'GROUP BY',
   'HAVING',
   'VALUES',
@@ -723,7 +722,7 @@ const reservedCommands = [
   'INSERT',
   'LATERAL VIEW',
   'UPDATE',
-  'WINDOW', // verify
+  'WINDOW',
 ];
 
 const reservedBinaryCommands = [

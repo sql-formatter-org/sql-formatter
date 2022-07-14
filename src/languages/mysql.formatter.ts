@@ -1306,6 +1306,8 @@ const reservedCommands = [
   'OFFSET',
   'ORDER BY',
   'WHERE',
+  'WINDOW',
+  'PARTITION BY',
 ];
 
 const reservedBinaryCommands = [

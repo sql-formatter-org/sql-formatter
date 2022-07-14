@@ -1598,6 +1598,8 @@ const reservedCommands = [
   'ORDER BY',
   'WHERE',
   'WITH',
+  'WINDOW',
+  'PARTITION BY',
 ];
 
 const reservedBinaryCommands = [

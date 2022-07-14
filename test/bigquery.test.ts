@@ -15,6 +15,7 @@ import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsWindow from './features/window';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';
@@ -32,6 +33,7 @@ describe('BigQueryFormatter', () => {
   supportsJoin(format, { without: ['NATURAL JOIN'] });
   supportsOperators(format, BigQueryFormatter.operators);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
+  supportsWindow(format);
 
   // Note: BigQuery supports single dashes inside identifiers, so my-ident would be
   // detected as identifier, while other SQL dialects would detect it as
