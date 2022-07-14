@@ -831,6 +831,8 @@ const reservedCommands = [
   'DROP ASSIGNMENT IF EXISTS',
   'DROP SEARCH INDEX',
   'DROP SEARCH INDEX IF EXISTS',
+  'DROP',
+  'DROP IF EXISTS',
   // DCL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-control-language
   'GRANT',
   'REVOKE',

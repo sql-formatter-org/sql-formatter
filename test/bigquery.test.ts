@@ -743,5 +743,138 @@ describe('BigQueryFormatter', () => {
         });
       });
     });
+
+    const alterViews = ['ALTER VIEW', 'ALTER VIEW IF EXISTS'];
+    const alterMaterializedViews = ['ALTER MATERIALIZED VIEW', 'ALTER MATERIALIZED VIEW IF EXISTS'];
+    alterViews.concat(alterMaterializedViews).forEach(alterView => {
+      it(`Supports ${alterView} - SET OPTIONS`, () => {
+        const input = `
+          ${alterView} mydataset.myview
+          SET OPTIONS (
+            expiration_timestamp=TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+          )`;
+        const expected = dedent`
+          ${alterView}
+            mydataset.myview
+          SET OPTIONS
+            (
+              expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+            )`;
+        expect(format(input)).toBe(expected);
+      });
+    });
+
+    it(`Supports ALTER BI_CAPACITY - SET OPTIONS`, () => {
+      const input = `
+        ALTER BI_CAPACITY my-project.region-us.default
+        SET OPTIONS(
+          size_gb = 250
+        )`;
+      const expected = dedent`
+        ALTER BI_CAPACITY
+          my-project.region-us.default
+        SET OPTIONS
+          (size_gb = 250)`;
+      expect(format(input)).toBe(expected);
+    });
+  });
+
+  describe('BigQuery DDL Drop Statements', () => {
+    const dropSchemas = ['DROP SCHEMA', 'DROP SCHEMA IF EXISTS'];
+    dropSchemas.forEach(dropSchema => {
+      it(`Supports ${dropSchema}`, () => {
+        const testSqls = [
+          {
+            input: `${dropSchema} mydataset`,
+            expected: dedent`
+              ${dropSchema}
+                mydataset`,
+          },
+          {
+            input: `${dropSchema} mydataset CASCADE`,
+            expected: dedent`
+              ${dropSchema}
+                mydataset CASCADE`,
+          },
+          {
+            input: `${dropSchema} mydataset RESTRICT`,
+            expected: dedent`
+              ${dropSchema}
+                mydataset RESTRICT`,
+          },
+        ];
+
+        testSqls.forEach(testSql => expect(format(testSql.input)).toBe(testSql.expected));
+      });
+    });
+
+    const dropTables = ['DROP TABLE', 'DROP TABLE IF EXISTS'];
+    const dropSnapTables = ['DROP SNAPSHOT TABLE', 'DROP SNAPSHOT TABLE IF EXISTS'];
+    const dropExternalTables = ['DROP EXTERNAL TABLE', 'DROP EXTERNAL TABLE IF EXISTS'];
+    const dropViews = ['DROP VIEW', 'DROP VIEW IF EXISTS'];
+    const dropMaterializedViews = ['DROP MATERIALIZED VIEW', 'DROP MATERIALIZED VIEW IF EXISTS'];
+    const dropFuncs = ['DROP FUNCTION', 'DROP FUNCTION IF EXISTS'];
+    const dropTableFuncs = ['DROP TABLE FUNCTION', 'DROP TABLE FUNCTION IF EXISTS'];
+    const dropProcedures = ['DROP PROCEDURE', 'DROP PROCEDURE IF EXISTS'];
+    const dropReservation = ['DROP RESERVATION', 'DROP RESERVATION IF EXISTS'];
+    const dropAssignment = ['DROP ASSIGNMENT', 'DROP ASSIGNMENT IF EXISTS'];
+
+    dropTables
+      .concat(dropSnapTables)
+      .concat(dropExternalTables)
+      .concat(dropViews)
+      .concat(dropMaterializedViews)
+      .concat(dropFuncs)
+      .concat(dropTableFuncs)
+      .concat(dropProcedures)
+      .concat(dropReservation)
+      .concat(dropAssignment)
+      .forEach(drop => {
+        it(`Supports ${drop}`, () => {
+          const input = `
+            ${drop} mydataset.name`;
+          const expected = dedent`
+            ${drop}
+              mydataset.name`;
+          expect(format(input)).toBe(expected);
+        });
+      });
+
+    const dropSearchIndices = ['DROP SEARCH INDEX', 'DROP SEARCH INDEX IF EXISTS'];
+    dropSearchIndices.forEach(drop => {
+      it(`Supports ${drop}`, () => {
+        const input = `
+          ${drop} index2 ON mydataset.mytable`;
+        const expected = dedent`
+          ${drop}
+            index2 ON mydataset.mytable`;
+        expect(format(input)).toBe(expected);
+      });
+    });
+
+    it(`Supports DROP ROW ACCESS POLICY`, () => {
+      const testSqls = [
+        {
+          input: `DROP mypolicy ON mydataset.mytable`,
+          expected: dedent`
+            DROP
+              mypolicy ON mydataset.mytable`,
+        },
+        {
+          input: `DROP IF EXISTS mypolicy ON mydataset.mytable`,
+          expected: dedent`
+            DROP IF EXISTS
+              mypolicy ON mydataset.mytable`,
+        },
+        {
+          input: `DROP ALL ROW ACCESS POLICIES ON table_name`,
+          expected: dedent`
+            DROP ALL ROW ACCESS POLICIES
+              ON table_name`,
+        },
+      ];
+
+      testSqls.forEach(testSql => expect(format(testSql.input)).toBe(testSql.expected));
+    });
   });
 });
