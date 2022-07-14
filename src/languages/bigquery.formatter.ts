@@ -652,10 +652,6 @@ const reservedKeywords = {
     // 'WITH',
     'WITHIN',
     // DDL keywords https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
-    // 'LIKE', // CREATE TABLE LIKE
-    'COPY', // CREATE TABLE COPY
-    'CLONE', // CREATE TABLE CLONE
-    'FOR SYSTEM_TIME AS OF', // CREATE SNAPSHOT TABLE
     'PARTITION BY',
     'CLUSTER BY',
     'WITH CONNECTION',
@@ -752,6 +748,10 @@ const reservedCommands = [
   'CREATE OR REPLACE TABLE',
   'CREATE OR REPLACE TEMP TABLE',
   'CREATE OR REPLACE TEMPORARY TABLE',
+  // 'LIKE', // CREATE TABLE LIKE
+  'COPY', // CREATE TABLE COPY
+  'CLONE', // CREATE TABLE CLONE
+  'FOR SYSTEM_TIME AS OF', // CREATE SNAPSHOT TABLE
   'CREATE SNAPSHOT TABLE',
   'CREATE SNAPSHOT TABLE IF NOT EXISTS',
   'CREATE VIEW',

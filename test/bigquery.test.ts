@@ -298,15 +298,18 @@ describe('BigQueryFormatter', () => {
     const createTableVariations = [
       'CREATE TABLE',
       'CREATE TABLE IF NOT EXISTS',
+      'CREATE OR REPLACE TABLE',
+    ];
+    const createTempTableVariations = [
       'CREATE TEMP TABLE',
       'CREATE TEMP TABLE IF NOT EXISTS',
       'CREATE TEMPORARY TABLE',
       'CREATE TEMPORARY TABLE IF NOT EXISTS',
-      'CREATE OR REPLACE TABLE',
       'CREATE OR REPLACE TEMP TABLE',
       'CREATE OR REPLACE TEMPORARY TABLE',
     ];
-    createTableVariations.forEach((createTable: string) => {
+
+    createTableVariations.concat(createTempTableVariations).forEach((createTable: string) => {
       it(`Supports ${createTable}`, () => {
         const input = `
           ${createTable} mydataset.newtable
@@ -333,6 +336,74 @@ describe('BigQueryFormatter', () => {
               expiration_timestamp = TIMESTAMP "2025-01-01 00:00:00 UTC",
               partition_expiration_days = 1
             )`;
+
+        expect(format(input)).toBe(expected);
+      });
+    });
+
+    createTableVariations.forEach(createTable => {
+      it(`Supports ${createTable} LIKE`, () => {
+        const input = `
+          ${createTable} mydataset.newtable
+          LIKE mydataset.sourcetable
+          AS (SELECT * FROM mydataset.myothertable)`;
+        const expected = dedent`
+          ${createTable}
+            mydataset.newtable LIKE mydataset.sourcetable AS (
+              SELECT
+                *
+              FROM
+                mydataset.myothertable
+            )`;
+
+        expect(format(input)).toBe(expected);
+      });
+    });
+
+    createTableVariations.forEach(createTable => {
+      it(`Supports ${createTable} COPY`, () => {
+        const input = `
+          ${createTable} mydataset.newtable
+          COPY mydataset.sourcetable`;
+        const expected = dedent`
+          ${createTable}
+            mydataset.newtable
+          COPY
+            mydataset.sourcetable`;
+
+        expect(format(input)).toBe(expected);
+      });
+    });
+
+    createTableVariations.forEach(createTable => {
+      it(`Supports ${createTable} CLONE`, () => {
+        const input = `
+          ${createTable} mydataset.newtable
+          CLONE mydataset.sourcetable`;
+        const expected = dedent`
+          ${createTable}
+            mydataset.newtable
+          CLONE
+            mydataset.sourcetable`;
+
+        expect(format(input)).toBe(expected);
+      });
+    });
+
+    const createSnapTableVariations = [
+      'CREATE SNAPSHOT TABLE',
+      'CREATE SNAPSHOT TABLE IF NOT EXISTS',
+    ];
+    createSnapTableVariations.forEach(createSnap => {
+      it(`Supports ${createSnap}`, () => {
+        const input = `
+          ${createSnap} mydataset.mytablesnapshot
+          CLONE mydataset.mytable`;
+        const expected = dedent`
+          ${createSnap}
+            mydataset.mytablesnapshot
+          CLONE
+            mydataset.mytable`;
 
         expect(format(input)).toBe(expected);
       });
