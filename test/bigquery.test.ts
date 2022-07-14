@@ -224,32 +224,6 @@ describe('BigQueryFormatter', () => {
     });
   });
 
-  it('supports create table optional arguments', () => {
-    const createTableVariations = [
-      'CREATE TABLE',
-      'CREATE TABLE IF NOT EXISTS',
-      'CREATE TEMP TABLE',
-      'CREATE TEMP TABLE IF NOT EXISTS',
-      'CREATE TEMPORARY TABLE',
-      'CREATE TEMPORARY TABLE IF NOT EXISTS',
-      'CREATE OR REPLACE TABLE',
-      'CREATE OR REPLACE TEMP TABLE',
-      'CREATE OR REPLACE TEMPORARY TABLE',
-    ];
-
-    createTableVariations.forEach((createTableVariation: string) => {
-      expect(
-        format(`
-        ${createTableVariation} mydataset.newtable (
-          a INT64 NOT NULL
-        )`)
-      ).toBe(dedent`
-        ${createTableVariation}
-          mydataset.newtable (a INT64 NOT NULL)
-      `);
-    });
-  });
-
   // Issue #279
   describe('supports FROM clause operators:', () => {
     it('UNNEST operator', () => {
@@ -302,20 +276,65 @@ describe('BigQueryFormatter', () => {
   describe('BigQuery DDL', () => {
     const createSchemaVariants = ['CREATE SCHEMA', 'CREATE SCHEMA IF NOT EXISTS'];
     createSchemaVariants.forEach(createSchema => {
-      it(createSchema, () => {
+      it(`Supports ${createSchema}`, () => {
         const input = `
           ${createSchema} mydataset
-            default collate 'und:ci' options(
-            location="us", labels=[("label1","value1"),("label2","value2")]
-          )`;
+            DEFAULT COLLATE 'und:ci'
+            OPTIONS(
+              location="us", labels=[("label1","value1"),("label2","value2")])`;
         const expected = dedent`
           ${createSchema}
-            mydataset DEFAULT COLLATE 'und:ci' OPTIONS(
+            mydataset
+          DEFAULT COLLATE
+            'und:ci' OPTIONS(
               location = "us",
               labels = [("label1", "value1"), ("label2", "value2")]
             )
         `;
         expect(format(input, { keywordCase: 'upper' })).toBe(expected);
+      });
+    });
+
+    const createTableVariations = [
+      'CREATE TABLE',
+      'CREATE TABLE IF NOT EXISTS',
+      'CREATE TEMP TABLE',
+      'CREATE TEMP TABLE IF NOT EXISTS',
+      'CREATE TEMPORARY TABLE',
+      'CREATE TEMPORARY TABLE IF NOT EXISTS',
+      'CREATE OR REPLACE TABLE',
+      'CREATE OR REPLACE TEMP TABLE',
+      'CREATE OR REPLACE TEMPORARY TABLE',
+    ];
+    createTableVariations.forEach((createTable: string) => {
+      it(`Supports ${createTable}`, () => {
+        const input = `
+          ${createTable} mydataset.newtable
+          (
+            x INT64 OPTIONS(description="desc1"),
+            y STRUCT<
+              a ARRAY<STRING> OPTIONS(description="desc2"),
+              b BOOL
+            >
+          )
+          PARTITION BY _PARTITIONDATE
+          OPTIONS(
+            expiration_timestamp=TIMESTAMP "2025-01-01 00:00:00 UTC",
+            partition_expiration_days=1
+          )`;
+
+        // need to fix the formatting of y STRUCT<a ARRAY<STRING>OPTIONS(description ="desc2"), b BOOL>
+        const expected = dedent`
+          ${createTable}
+            mydataset.newtable (
+              x INT64 OPTIONS(description = "desc1"),
+              y STRUCT<a ARRAY<STRING>OPTIONS(description ="desc2"), b BOOL>
+            ) PARTITION BY _PARTITIONDATE OPTIONS(
+              expiration_timestamp = TIMESTAMP "2025-01-01 00:00:00 UTC",
+              partition_expiration_days = 1
+            )`;
+
+        expect(format(input)).toBe(expected);
       });
     });
   });

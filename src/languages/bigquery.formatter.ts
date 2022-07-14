@@ -544,6 +544,7 @@ const reservedFunctions = {
     'TO_BASE64',
   ],
   other: ['BQ.JOBS.CANCEL', 'BQ.REFRESH_MATERIALIZED_VIEW'],
+  ddl: ['OPTIONS'],
   pivot: ['PIVOT', 'UNPIVOT'],
 };
 
@@ -651,8 +652,6 @@ const reservedKeywords = {
     // 'WITH',
     'WITHIN',
     // DDL keywords https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
-    'DEFAULT COLLATE',
-    'OPTIONS',
     // 'LIKE', // CREATE TABLE LIKE
     'COPY', // CREATE TABLE COPY
     'CLONE', // CREATE TABLE CLONE
@@ -743,6 +742,7 @@ const reservedCommands = [
   'SET SCHEMA', // added
   'CREATE SCHEMA',
   'CREATE SCHEMA IF NOT EXISTS',
+  'DEFAULT COLLATE',
   'CREATE TABLE',
   'CREATE TABLE IF NOT EXISTS',
   'CREATE TEMP TABLE',
