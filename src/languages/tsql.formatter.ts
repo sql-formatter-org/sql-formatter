@@ -305,6 +305,25 @@ const reservedFunctions = {
     'TEXTVALID',
   ],
   trigger: ['COLUMNS_UPDATED', 'EVENTDATA', 'TRIGGER_NESTLEVEL', 'UPDATE'],
+  // Shorthand functions to use in place of CASE expression
+  caseAbbrev: ['COALESCE', 'NULLIF'],
+  // Parameterized types
+  // https://docs.microsoft.com/en-us/sql/t-sql/data-types/data-types-transact-sql?view=sql-server-ver15
+  dataTypes: [
+    'DECIMAL',
+    'NUMERIC',
+    'FLOAT',
+    'REAL',
+    'DATETIME2',
+    'DATETIMEOFFSET',
+    'TIME',
+    'CHAR',
+    'VARCHAR',
+    'NCHAR',
+    'NVARCHAR',
+    'BINARY',
+    'VARBINARY',
+  ],
 };
 
 // TODO: dedupe these reserved word lists
@@ -1237,10 +1256,8 @@ export default class TSqlFormatter extends Formatter {
       reservedBinaryCommands,
       reservedJoins,
       reservedDependentClauses,
-      reservedKeywords: dedupe([
-        ...Object.values(reservedKeywords).flat(),
-        ...Object.values(reservedFunctions).flat(),
-      ]),
+      reservedKeywords: dedupe(Object.values(reservedKeywords).flat()),
+      reservedFunctionNames: dedupe(Object.values(reservedFunctions).flat()),
       stringTypes: [{ quote: "''", prefixes: ['N'] }],
       identTypes: [`""`, '[]'],
       identChars: { first: '#@', rest: '#@$' },

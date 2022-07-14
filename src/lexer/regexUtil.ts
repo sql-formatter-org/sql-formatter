@@ -5,7 +5,7 @@ export const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\
 
 export const NULL_REGEX = /^(?!)/; // zero-width negative lookahead, matches nothing
 
-export const WHITESPACE_REGEX = /(\s+)/uy;
+export const WHITESPACE_REGEX = /\s+/uy;
 
 export const patternToRegex = (pattern: string): RegExp => new RegExp(`(?:${pattern})`, 'uy');
 

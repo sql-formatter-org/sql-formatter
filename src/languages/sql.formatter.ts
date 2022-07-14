@@ -54,9 +54,9 @@ const reservedFunctions = {
     'MAX',
     'MIN',
     'SUM',
-    'EVERY',
-    'ANY',
-    'SOME',
+    // 'EVERY',
+    // 'ANY',
+    // 'SOME',
     'STDDEV_POP',
     'STDDEV_SAMP',
     'VAR_SAMP',
@@ -84,7 +84,42 @@ const reservedFunctions = {
   // - CAST(...) WITH ...
   // - CAST FROM int
   // - CREATE CAST(mycol AS int) WITH ...
-  // cast: ['CAST'], (disabled for now)
+  cast: ['CAST'],
+  // Shorthand functions to use in place of CASE expression
+  caseAbbrev: ['COALESCE', 'NULLIF'],
+  // Non-standard functions that have widespread support
+  nonStandard: ['ROUND', 'SIN', 'COS', 'TAN', 'ASIN', 'ACOS', 'ATAN'],
+  // Data types with parameters like VARCHAR(100)
+  // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#predefined-type
+  dataTypes: [
+    'CHARACTER',
+    'CHAR',
+    'CHARACTER VARYING',
+    'CHAR VARYING',
+    'VARCHAR',
+    'CHARACTER LARGE OBJECT',
+    'CHAR LARGE OBJECT',
+    'CLOB',
+    'NATIONAL CHARACTER',
+    'NATIONAL CHAR',
+    'NCHAR',
+    'NATIONAL CHARACTER VARYING',
+    'NATIONAL CHAR VARYING',
+    'NCHAR VARYING',
+    'NATIONAL CHARACTER LARGE OBJECT',
+    'NCHAR LARGE OBJECT',
+    'NCLOB',
+    'BINARY',
+    'BINARY VARYING',
+    'VARBINARY',
+    'BINARY LARGE OBJECT',
+    'BLOB',
+    'NUMERIC',
+    'DECIMAL',
+    'DEC',
+    'TIME',
+    'TIMESTAMP',
+  ],
 };
 
 /**
@@ -98,6 +133,7 @@ const reservedKeywords = [
   'ALL',
   'ALLOCATE',
   'ALTER',
+  'ANY', // <- moved over from functions
   'ARE',
   'ARRAY',
   'AS',
@@ -117,13 +153,13 @@ const reservedKeywords = [
   'CALL',
   'CALLED',
   'CASCADED',
-  'CAST',
+  // 'CAST',
   'CHAR',
   'CHARACTER',
   'CHECK',
   'CLOB',
   'CLOSE',
-  'COALESCE',
+  // 'COALESCE',
   'COLLATE',
   'COLUMN',
   'COMMIT',
@@ -164,6 +200,7 @@ const reservedKeywords = [
   'ELEMENT',
   'END-EXEC',
   'ESCAPE',
+  'EVERY', // <- moved over from functions
   'EXCEPT',
   'EXEC',
   'EXECUTE',
@@ -225,7 +262,7 @@ const reservedKeywords = [
   'NONE',
   'NOT',
   'NULL',
-  'NULLIF',
+  // 'NULLIF',
   'NUMERIC',
   'OF',
   'OLD',
@@ -272,6 +309,7 @@ const reservedKeywords = [
   'SET',
   'SIMILAR',
   'SMALLINT',
+  'SOME', // <- moved over from functions
   'SPECIFIC',
   'SQL',
   'SQLEXCEPTION',
@@ -392,7 +430,8 @@ export default class SqlFormatter extends Formatter {
       reservedBinaryCommands,
       reservedJoins,
       reservedDependentClauses,
-      reservedKeywords: dedupe([...reservedKeywords, ...Object.values(reservedFunctions).flat()]),
+      reservedKeywords: dedupe(reservedKeywords),
+      reservedFunctionNames: dedupe(Object.values(reservedFunctions).flat()),
       stringTypes: [{ quote: "''", prefixes: ['X'] }],
       identTypes: [`""`, '``'],
       positionalParams: true,

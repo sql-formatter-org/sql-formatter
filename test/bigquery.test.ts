@@ -103,7 +103,7 @@ describe('BigQueryFormatter', () => {
     );
     expect(result).toBe(dedent`
       SELECT
-        STRUCT("Alpha" as name, [23.4, 26.3, 26.4, 26.1] as splits)
+        STRUCT ("Alpha" as name, [23.4, 26.3, 26.4, 26.1] as splits)
       FROM
         beta
     `);
@@ -116,10 +116,11 @@ describe('BigQueryFormatter', () => {
     `);
   });
 
+  // TODO: Possibly incorrect formatting of STRUCT<>() and ARRAY<>()
   it('supports parametric STRUCT', () => {
     expect(format('SELECT STRUCT<ARRAY<INT64>>([])')).toBe(dedent`
       SELECT
-        STRUCT<ARRAY<INT64>>([])
+        STRUCT<ARRAY<INT64>> ([])
     `);
   });
 
@@ -128,8 +129,8 @@ describe('BigQueryFormatter', () => {
     expect(format('SELECT STRUCT<y INT64, z STRING>(1,"foo"), STRUCT<arr ARRAY<INT64>>([1,2,3]);'))
       .toBe(dedent`
       SELECT
-        STRUCT<y INT64, z STRING>(1, "foo"),
-        STRUCT<arr ARRAY<INT64>>([1, 2, 3]);
+        STRUCT<y INT64, z STRING> (1, "foo"),
+        STRUCT<arr ARRAY<INT64>> ([1, 2, 3]);
     `);
   });
 
@@ -137,7 +138,7 @@ describe('BigQueryFormatter', () => {
     expect(format('select struct<Nr int64, myName string>(1,"foo");', { keywordCase: 'upper' }))
       .toBe(dedent`
       SELECT
-        STRUCT<Nr INT64, myName STRING>(1, "foo");
+        STRUCT<Nr INT64, myName STRING> (1, "foo");
     `);
   });
 
@@ -148,7 +149,7 @@ describe('BigQueryFormatter', () => {
     expect(format('SELECT STRUCT<Nr INT64, myName STRING>(1,"foo");', { keywordCase: 'lower' }))
       .toBe(dedent`
       select
-        STRUCT<Nr INT64, myName STRING>(1, "foo");
+        STRUCT<Nr INT64, myName STRING> (1, "foo");
     `);
   });
 

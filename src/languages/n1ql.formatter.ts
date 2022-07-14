@@ -234,6 +234,10 @@ const reservedFunctions = [
   'VAR_SAMP',
   'WEEKDAY_MILLIS',
   'WEEKDAY_STR',
+  // type casting
+  // not implemented in N1QL, but added here now for the sake of tests
+  // https://docs.couchbase.com/server/current/analytics/3_query.html#Vs_SQL-92
+  'CAST',
 ];
 
 /**
@@ -518,7 +522,8 @@ export default class N1qlFormatter extends Formatter {
       reservedJoins,
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-      reservedKeywords: dedupe([...reservedKeywords, ...reservedFunctions]),
+      reservedKeywords: dedupe(reservedKeywords),
+      reservedFunctionNames: dedupe(reservedFunctions),
       // NOTE: single quotes are actually not supported in N1QL,
       // but we support them anyway as all other SQL dialects do,
       // which simplifies writing tests that are shared between all dialects.

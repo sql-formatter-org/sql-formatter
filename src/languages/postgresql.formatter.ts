@@ -417,7 +417,7 @@ const reservedFunctions = {
   ],
   // https://www.postgresql.org/docs/14/functions-aggregate.html
   aggregate: [
-    'ANY',
+    // 'ANY',
     'ARRAY_AGG',
     'AVG',
     'BIT_AND',
@@ -456,7 +456,7 @@ const reservedFunctions = {
     'REGR_SXX',
     'REGR_SXY',
     'REGR_SYY',
-    'SOME',
+    // 'SOME',
     'STDDEV',
     'STDDEV_POP',
     'STDDEV_SAMP',
@@ -719,6 +719,22 @@ const reservedFunctions = {
   ],
   // https://www.postgresql.org/docs/14/functions-statistics.html
   stats: ['PG_MCV_LIST_ITEMS'],
+  cast: ['CAST'],
+  // Parameterized data types
+  // https://www.postgresql.org/docs/current/datatype.html
+  dataTypes: [
+    'BIT',
+    'BIT VARYING',
+    'CHARACTER',
+    'CHARACTER VARYING',
+    'VARCHAR',
+    'CHAR',
+    'DECIMAL',
+    'NUMERIC',
+    'TIME',
+    'TIMESTAMP',
+    'ENUM',
+  ],
 };
 
 /**
@@ -742,6 +758,7 @@ const reservedKeywords = [
   'ALTER',
   'ALWAYS',
   'ANALYSE',
+  'ANY', // <-- moved over from functions
   'ARE',
   'ARRAY',
   'ARRAY_MAX_CARDINALITY',
@@ -1241,6 +1258,7 @@ const reservedKeywords = [
   'SKIP',
   'SMALLINT',
   'SNAPSHOT',
+  'SOME', // <-- moved over from functions
   'SOURCE',
   'SPACE',
   'SPECIFIC',
@@ -1702,7 +1720,8 @@ export default class PostgreSqlFormatter extends Formatter {
       reservedBinaryCommands,
       reservedJoins,
       reservedDependentClauses,
-      reservedKeywords: dedupe([...reservedKeywords, ...Object.values(reservedFunctions).flat()]),
+      reservedKeywords: dedupe(reservedKeywords),
+      reservedFunctionNames: dedupe(Object.values(reservedFunctions).flat()),
       openParens: ['(', '['],
       closeParens: [')', ']'],
       stringTypes: [{ quote: "''", prefixes: ['U&', 'E', 'X', 'B'] }, '$$'],

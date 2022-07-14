@@ -310,6 +310,8 @@ const reservedFunctions = {
   row: ['UNPACK'],
   // https://www.ibm.com/docs/en/db2-for-zos/12?topic=expressions-olap-specification
   olap: ['FIRST_VALUE', 'LAG', 'LAST_VALUE', 'LEAD', 'NTH_VALUE', 'NTILE', 'RATIO_TO_REPORT'],
+  // Type casting
+  cast: ['CAST'],
 };
 
 /**
@@ -342,7 +344,7 @@ const reservedKeywords = {
     'BY',
     'CAPTURE',
     'CASCADED',
-    'CAST',
+    // 'CAST',
     'CCSID',
     'CHARACTER',
     'CHECK',
@@ -862,10 +864,8 @@ export default class Db2Formatter extends Formatter {
       reservedBinaryCommands,
       reservedJoins,
       reservedDependentClauses,
-      reservedKeywords: dedupe([
-        ...Object.values(reservedFunctions).flat(),
-        ...Object.values(reservedKeywords).flat(),
-      ]),
+      reservedKeywords: dedupe(Object.values(reservedKeywords).flat()),
+      reservedFunctionNames: dedupe(Object.values(reservedFunctions).flat()),
       stringTypes: [{ quote: "''", prefixes: ['X', 'G', 'N', 'GX', 'UX', 'U&'] }],
       identTypes: [`""`],
       positionalParams: true,

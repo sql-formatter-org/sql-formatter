@@ -12,7 +12,7 @@ import { dedupe } from 'src/utils';
 const reservedFunctions = {
   // http://spark.apache.org/docs/latest/sql-ref-functions-builtin.html#aggregate-functions
   aggregate: [
-    'ANY',
+    // 'ANY',
     'APPROX_COUNT_DISTINCT',
     'APPROX_PERCENTILE',
     'AVG',
@@ -48,7 +48,7 @@ const reservedFunctions = {
     'PERCENTILE',
     'PERCENTILE_APPROX',
     'SKEWNESS',
-    'SOME',
+    // 'SOME',
     'STD',
     'STDDEV',
     'STDDEV_POP',
@@ -349,6 +349,18 @@ const reservedFunctions = {
     'XPATH_STRING',
     'XXHASH64',
     'ZIP_WITH',
+  ],
+  cast: ['CAST'],
+  // Shorthand functions to use in place of CASE expression
+  caseAbbrev: ['COALESCE', 'NULLIF'],
+  // Parameterized data types
+  // https://spark.apache.org/docs/latest/sql-ref-datatypes.html
+  dataTypes: [
+    'DECIMAL',
+    'DEC',
+    'NUMERIC',
+    // No varchar type in Spark, only STRING. Added for the sake of tests
+    'VARCHAR',
   ],
 };
 
@@ -780,7 +792,8 @@ export default class SparkFormatter extends Formatter {
       reservedJoins,
       reservedDependentClauses,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
-      reservedKeywords: dedupe([...reservedKeywords, ...Object.values(reservedFunctions).flat()]),
+      reservedKeywords: dedupe(reservedKeywords),
+      reservedFunctionNames: dedupe(Object.values(reservedFunctions).flat()),
       openParens: ['(', '['],
       closeParens: [')', ']'],
       stringTypes: [{ quote: "''", prefixes: ['X'] }],
@@ -799,8 +812,8 @@ function postProcess(tokens: Token[]) {
 
     // [WINDOW](...)
     if (isToken.WINDOW(token) && nextToken.type === TokenType.OPEN_PAREN) {
-      // This is a function call, treat it as a reserved word
-      return { ...token, type: TokenType.RESERVED_KEYWORD };
+      // This is a function call, treat it as a reserved function name
+      return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
     }
 
     // TODO: deprecate this once ITEMS is merged with COLLECTION
