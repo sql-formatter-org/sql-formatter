@@ -3,11 +3,6 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './redshift.functions';
 import { keywords } from './redshift.keywords';
 
-/**
- * Priority 1 (first)
- * keywords that begin a new statement
- * will begin new indented block
- */
 // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
 const reservedCommands = [
   'ABORT',
@@ -135,11 +130,6 @@ const reservedJoins = [
   'NATURAL JOIN',
 ];
 
-/**
- * Priority 3
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html

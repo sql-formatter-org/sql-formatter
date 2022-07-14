@@ -4,11 +4,6 @@ import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
 import { keywords } from './spark.keywords';
 import { functions } from './spark.functions';
 
-/**
- * Priority 1 (first)
- * keywords that begin a new statement
- * will begin new indented block
- */
 // http://spark.apache.org/docs/latest/sql-ref-syntax.html
 const reservedCommands = [
   // DDL
@@ -134,11 +129,6 @@ const reservedJoins = [
   'NATURAL SEMI JOIN',
 ];
 
-/**
- * Priority 3
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html

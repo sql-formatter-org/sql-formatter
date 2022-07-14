@@ -3,11 +3,6 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './db2.functions';
 import { keywords } from './db2.keywords';
 
-/**
- * Priority 1 (first)
- * keywords that begin a new statement
- * will begin new indented block
- */
 // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
 const reservedCommands = [
   'ALLOCATE CURSOR',
@@ -170,11 +165,6 @@ const reservedJoins = [
   'NATURAL JOIN',
 ];
 
-/**
- * Priority 3
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
 const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF'];
 
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm

@@ -4,11 +4,6 @@ import { EOF_TOKEN, isToken, TokenType, type Token } from 'src/lexer/token';
 import { keywords } from './bigquery.keywords';
 import { functions } from './bigquery.functions';
 
-/**
- * Priority 1 (first)
- * keywords that begin a new statement
- * will begin new indented block
- */
 const reservedCommands = [
   // DQL, https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax
   'SELECT',
@@ -142,11 +137,6 @@ const reservedJoins = [
   'CROSS JOIN',
 ];
 
-/**
- * Priority 3
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference

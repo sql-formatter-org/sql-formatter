@@ -3,11 +3,6 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './tsql.functions';
 import { keywords } from './tsql.keywords';
 
-/**
- * Priority 1 (first)
- * keywords that begin a new statement
- * will begin new indented block
- */
 // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
 const reservedCommands = [
   'ADD SENSITIVITY CLASSIFICATION',
@@ -220,11 +215,6 @@ const reservedJoins = [
   'CROSS JOIN',
 ];
 
-/**
- * Priority 3
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15

@@ -3,11 +3,6 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './hive.functions';
 import { keywords } from './hive.keywords';
 
-/**
- * Priority 1 (first)
- * keywords that begin a new statement
- * will begin new indented block
- */
 const reservedCommands = [
   // commands
   'ALTER',
@@ -68,11 +63,6 @@ const reservedJoins = [
   'CROSS JOIN',
 ];
 
-/**
- * Priority 3
- * keywords that follow a previous 'Statement', must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual

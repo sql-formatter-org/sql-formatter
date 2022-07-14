@@ -3,11 +3,6 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './n1ql.functions';
 import { keywords } from './n1ql.keywords';
 
-/**
- * Priority 1 (first)
- * keywords that begin a new statement
- * will begin new indented block
- */
 // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html
 const reservedCommands = [
   'ADVISE',
@@ -93,11 +88,6 @@ const reservedJoins = [
   'RIGHT OUTER JOIN',
 ];
 
-/**
- * Priority 3
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html

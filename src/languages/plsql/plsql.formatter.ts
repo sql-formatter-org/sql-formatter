@@ -4,11 +4,6 @@ import { EOF_TOKEN, isReserved, isToken, type Token, TokenType } from 'src/lexer
 import { keywords } from './plsql.keywords';
 import { functions } from './plsql.functions';
 
-/**
- * Priority 1 (first)
- * keywords that begin a new statement
- * will begin new indented block
- */
 const reservedCommands = [
   'ADD',
   'ALTER COLUMN',
@@ -77,11 +72,6 @@ const reservedJoins = [
   'NATURAL JOIN',
 ];
 
-/**
- * Priority 3
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
 const reservedDependentClauses = ['WHEN', 'ELSE'];
 
 export default class PlSqlFormatter extends Formatter {

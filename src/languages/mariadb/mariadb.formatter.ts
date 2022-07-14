@@ -4,11 +4,6 @@ import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
 import { keywords } from './mariadb.keywords';
 import { functions } from './mariadb.functions';
 
-/**
- * Priority 1 (first)
- * keywords that begin a new statement
- * will begin new indented block
- */
 // https://mariadb.com/docs/reference/mdb/sql-statements/
 const reservedCommands = [
   'ALTER DATABASE',
@@ -260,11 +255,6 @@ const reservedJoins = [
   'NATURAL RIGHT OUTER JOIN',
 ];
 
-/**
- * Priority 3
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
 const reservedDependentClauses = ['WHEN', 'ELSE', 'ELSEIF', 'ELSIF'];
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
