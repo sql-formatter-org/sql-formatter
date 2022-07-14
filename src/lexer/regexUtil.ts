@@ -3,8 +3,6 @@ import type { PrefixedQuoteType } from './regexTypes';
 // Escapes regex special chars
 export const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
 
-export const NULL_REGEX = /^(?!)/; // zero-width negative lookahead, matches nothing
-
 export const WHITESPACE_REGEX = /\s+/uy;
 
 export const patternToRegex = (pattern: string): RegExp => new RegExp(`(?:${pattern})`, 'uy');
