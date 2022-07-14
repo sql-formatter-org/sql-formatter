@@ -3,7 +3,7 @@ import { equalizeWhitespace } from 'src/utils';
 
 import Params from 'src/formatter/Params';
 import { isTabularStyle } from 'src/formatter/config';
-import { isReserved, type Token, TokenType } from 'src/lexer/token';
+import { isReserved, type Token, TokenType, isParameter } from 'src/lexer/token';
 import {
   AllColumnsAsterisk,
   ArraySubscript,
@@ -392,6 +392,8 @@ export default class ExpressionFormatter {
         case 'lower':
           return token.value.toLowerCase();
       }
+    } else if (isParameter(token)) {
+      return this.params.get(token);
     } else {
       return token.value;
     }
