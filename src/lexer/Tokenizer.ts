@@ -20,7 +20,7 @@ interface TokenizerOptions {
   // keywords used for JOIN conditions, defaults to: [ON, USING]
   reservedJoinConditions?: string[];
   // built in function names
-  reservedFunctionNames?: string[];
+  reservedFunctionNames: string[];
   // all other reserved words (not included to any of the above lists)
   reservedKeywords: string[];
   // Types of quotes to use for strings
@@ -102,7 +102,7 @@ export default class Tokenizer {
         value: v => v.toUpperCase(),
       },
       [TokenType.RESERVED_FUNCTION_NAME]: {
-        regex: regex.reservedWord(cfg.reservedFunctionNames ?? [], cfg.identChars),
+        regex: regex.reservedWord(cfg.reservedFunctionNames, cfg.identChars),
         value: v => v.toUpperCase(),
       },
       [TokenType.RESERVED_LOGICAL_OPERATOR]: {
