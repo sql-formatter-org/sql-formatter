@@ -248,7 +248,7 @@ describe('BigQueryFormatter', () => {
     });
   });
 
-  describe('BigQuery DDL', () => {
+  describe('BigQuery DDL Create Statements', () => {
     const createSchemaVariants = ['CREATE SCHEMA', 'CREATE SCHEMA IF NOT EXISTS'];
     createSchemaVariants.forEach(createSchema => {
       it(`Supports ${createSchema}`, () => {
@@ -539,6 +539,160 @@ describe('BigQueryFormatter', () => {
                 "plan": "FLEX"
                 }"""`;
       expect(format(input)).toBe(expected);
+    });
+
+    // it shouldn't format json here
+    it(`Supports CREATE RESERVATION`, () => {
+      const input = `
+        CREATE RESERVATION admin_project.region-us.prod
+        AS JSON """{
+        "slot_capacity": 100
+        }"""`;
+      const expected = dedent`
+        CREATE RESERVATION
+          admin_project.region-us.prod
+        AS JSON
+          """{
+                "slot_capacity": 100
+                }"""`;
+      expect(format(input)).toBe(expected);
+    });
+
+    // it shouldn't format json here
+    it(`Supports CREATE ASSIGNMENT`, () => {
+      const input = `
+        CREATE ASSIGNMENT admin_project.region-us.prod.my_assignment
+        AS JSON """{
+        "assignee": "projects/my_project",
+        "job_type": "QUERY"
+        }"""`;
+      const expected = dedent`
+        CREATE ASSIGNMENT
+          admin_project.region-us.prod.my_assignment
+        AS JSON
+          """{
+                "assignee": "projects/my_project",
+                "job_type": "QUERY"
+                }"""`;
+      expect(format(input)).toBe(expected);
+    });
+
+    const createSearchIndices = ['CREATE SEARCH INDEX', 'CREATE SEARCH INDEX IF NOT EXISTS'];
+    createSearchIndices.forEach(createSearchIndex => {
+      it(`Supports ${createSearchIndex}`, () => {
+        const input = `
+          ${createSearchIndex} my_index
+          ON dataset.my_table(ALL COLUMNS);`;
+        const expected = dedent`
+          ${createSearchIndex}
+            my_index ON dataset.my_table(ALL COLUMNS);`;
+        expect(format(input)).toBe(expected);
+      });
+    });
+  });
+
+  describe('BigQuery DDL Alter Statements', () => {
+    const alterSchemas = ['ALTER SCHEMA', 'ALTER SCHEMA IF EXISTS'];
+    alterSchemas.forEach(alterSchema => {
+      it(`Supports ${alterSchema} - SET DEFAULT COLLATE`, () => {
+        const input = `
+          ${alterSchema} mydataset
+          SET DEFAULT COLLATE 'und:ci'`;
+        const expected = dedent`
+          ${alterSchema}
+            mydataset
+          SET DEFAULT COLLATE
+            'und:ci'`;
+        expect(format(input)).toBe(expected);
+      });
+    });
+
+    alterSchemas.forEach(alterSchema => {
+      it(`Supports ${alterSchema} - SET OPTIONS`, () => {
+        const input = `
+          ${alterSchema} mydataset
+          SET OPTIONS(
+            default_table_expiration_days=3.75
+            )`;
+        const expected = dedent`
+          ${alterSchema}
+            mydataset
+          SET OPTIONS
+            (default_table_expiration_days = 3.75)`;
+        expect(format(input)).toBe(expected);
+      });
+    });
+
+    const alterTables = ['ALTER TABLE', 'ALTER TABLE IF EXISTS'];
+    alterTables.forEach(alterTable => {
+      it(`Supports ${alterTable} - SET OPTIONS`, () => {
+        const input = `
+          ${alterTable} mydataset.mytable
+          SET OPTIONS(
+            expiration_timestamp=TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+          )`;
+        const expected = dedent`
+          ${alterTable}
+            mydataset.mytable
+          SET OPTIONS
+            (
+              expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+            )`;
+        expect(format(input)).toBe(expected);
+      });
+
+      it(`Supports ${alterTable} - ADD COLUMN`, () => {
+        const input = `
+          ${alterTable} mydataset.mytable
+          ADD COLUMN col1 STRING,
+          ADD COLUMN IF NOT EXISTS col2 GEOGRAPHY`;
+        const expected = dedent`
+          ${alterTable}
+            mydataset.mytable
+          ADD COLUMN
+            col1 STRING,
+          ADD COLUMN IF NOT EXISTS
+            col2 GEOGRAPHY`;
+        expect(format(input)).toBe(expected);
+      });
+
+      it(`Supports ${alterTable} - RENAME TO`, () => {
+        const input = `
+          ${alterTable} mydataset.mytable RENAME TO mynewtable`;
+        const expected = dedent`
+          ${alterTable}
+            mydataset.mytable
+          RENAME TO
+            mynewtable`;
+        expect(format(input)).toBe(expected);
+      });
+
+      it(`Supports ${alterTable} - DROP COLUMN`, () => {
+        const input = `
+          ${alterTable} mydataset.mytable
+          DROP COLUMN col1,
+          DROP COLUMN IF EXISTS col2`;
+        const expected = dedent`
+          ${alterTable}
+            mydataset.mytable
+          DROP COLUMN
+            col1,
+          DROP COLUMN IF EXISTS
+            col2`;
+        expect(format(input)).toBe(expected);
+      });
+
+      it(`Supports ${alterTable} - SET DEFAULT COLLATE`, () => {
+        const input = `
+          ${alterTable} mydataset.mytable
+          SET DEFAULT COLLATE 'und:ci'`;
+        const expected = dedent`
+          ${alterTable}
+            mydataset.mytable
+          SET DEFAULT COLLATE
+            'und:ci'`;
+        expect(format(input)).toBe(expected);
+      });
     });
   });
 });
