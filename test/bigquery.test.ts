@@ -624,6 +624,7 @@ describe('BigQueryFormatter', () => {
     });
 
     const alterTables = ['ALTER TABLE', 'ALTER TABLE IF EXISTS'];
+    const alterColumns = ['ALTER COLUMN', 'ALTER COLUMN IF EXISTS'];
     alterTables.forEach(alterTable => {
       it(`Supports ${alterTable} - SET OPTIONS`, () => {
         const input = `
@@ -692,6 +693,54 @@ describe('BigQueryFormatter', () => {
           SET DEFAULT COLLATE
             'und:ci'`;
         expect(format(input)).toBe(expected);
+      });
+
+      alterColumns.forEach(alterColumn => {
+        it(`Supports ${alterTable} - ${alterColumn} - SET OPTIONS`, () => {
+          const input = `
+            ${alterTable} mydataset.mytable
+            ${alterColumn} price
+            SET OPTIONS (
+              description="Price per unit"
+            )`;
+          const expected = dedent`
+            ${alterTable}
+              mydataset.mytable
+            ${alterColumn}
+              price
+            SET OPTIONS
+              (description = "Price per unit")`;
+          expect(format(input)).toBe(expected);
+        });
+
+        it(`Supports ${alterTable} - ${alterColumn} - DROP NOT NULL`, () => {
+          const input = `
+            ${alterTable} mydataset.mytable
+            ${alterColumn} price
+            DROP NOT NULL`;
+          const expected = dedent`
+            ${alterTable}
+              mydataset.mytable
+            ${alterColumn}
+              price
+            DROP NOT NULL`;
+          expect(format(input)).toBe(expected);
+        });
+
+        it(`Supports ${alterTable} - ${alterColumn} - SET DATA TYPE`, () => {
+          const input = `
+            ${alterTable} mydataset.mytable
+            ${alterColumn} price
+            SET DATA TYPE NUMERIC`;
+          const expected = dedent`
+            ${alterTable}
+              mydataset.mytable
+            ${alterColumn}
+              price
+            SET DATA TYPE
+              NUMERIC`;
+          expect(format(input)).toBe(expected);
+        });
       });
     });
   });
