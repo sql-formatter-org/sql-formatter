@@ -85,3 +85,10 @@ export const isReserved = (token: Token): boolean =>
   token.type === TokenType.RESERVED_JOIN ||
   token.type === TokenType.RESERVED_CASE_START ||
   token.type === TokenType.RESERVED_CASE_END;
+
+/** checks if token is one of the parameter tokens */
+export const isParameter = (token: Token): boolean =>
+  token.type === TokenType.INDEXED_PARAMETER ||
+  token.type === TokenType.NAMED_PARAMETER ||
+  token.type === TokenType.POSITIONAL_PARAMETER ||
+  token.type === TokenType.QUOTED_PARAMETER;

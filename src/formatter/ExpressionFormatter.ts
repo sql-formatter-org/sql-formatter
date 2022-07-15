@@ -3,7 +3,7 @@ import { equalizeWhitespace } from 'src/utils';
 
 import Params from 'src/formatter/Params';
 import { isTabularStyle } from 'src/formatter/config';
-import { isReserved, type Token, TokenType } from 'src/lexer/token';
+import { isReserved, type Token, TokenType, isParameter } from 'src/lexer/token';
 import {
   AllColumnsAsterisk,
   ArraySubscript,
@@ -206,11 +206,6 @@ export default class ExpressionFormatter {
         return this.formatCaseStart(token);
       case TokenType.RESERVED_CASE_END:
         return this.formatCaseEnd(token);
-      case TokenType.NAMED_PARAMETER:
-      case TokenType.QUOTED_PARAMETER:
-      case TokenType.INDEXED_PARAMETER:
-      case TokenType.POSITIONAL_PARAMETER:
-        return this.formatParameter(token);
       case TokenType.COMMA:
         return this.formatComma(token);
       case TokenType.OPERATOR:
@@ -220,16 +215,18 @@ export default class ExpressionFormatter {
       case TokenType.STRING:
       case TokenType.NUMBER:
       case TokenType.VARIABLE:
-        return this.formatWord(token);
+      case TokenType.NAMED_PARAMETER:
+      case TokenType.QUOTED_PARAMETER:
+      case TokenType.INDEXED_PARAMETER:
+      case TokenType.POSITIONAL_PARAMETER:
+        return this.formatLiteral(token);
       default:
         throw new Error(`Unexpected token type: ${token.type}`);
     }
   }
 
-  /**
-   * Formats ident/string/number/variable tokens
-   */
-  private formatWord(token: Token) {
+  /** Default formatting for most token types */
+  private formatLiteral(token: Token) {
     this.layout.add(this.show(token), WS.SPACE);
   }
 
@@ -356,13 +353,6 @@ export default class ExpressionFormatter {
   }
 
   /**
-   * Formats a parameter placeholder item onto query, to be replaced with the value of the placeholder
-   */
-  private formatParameter(token: Token) {
-    this.layout.add(this.params.get(token), WS.SPACE);
-  }
-
-  /**
    * Formats a comma Operator onto query, ending line unless in an Inline Block
    */
   private formatComma(token: Token) {
@@ -392,6 +382,8 @@ export default class ExpressionFormatter {
         case 'lower':
           return token.value.toLowerCase();
       }
+    } else if (isParameter(token)) {
+      return this.params.get(token);
     } else {
       return token.value;
     }
