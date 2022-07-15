@@ -310,7 +310,9 @@ describe('BigQueryFormatter', () => {
             mydataset.newtable (
               x INT64 OPTIONS(description = "desc1"),
               y STRUCT<a ARRAY<STRING>OPTIONS(description ="desc2"), b BOOL>
-            ) PARTITION BY _PARTITIONDATE OPTIONS(
+            )
+          PARTITION BY
+            _PARTITIONDATE OPTIONS(
               expiration_timestamp = TIMESTAMP "2025-01-01 00:00:00 UTC",
               partition_expiration_days = 1
             )`;
@@ -464,7 +466,7 @@ describe('BigQueryFormatter', () => {
           AS (x * y);`;
         const expected = dedent`
           ${createFunction}
-            mydataset.myFunc(x FLOAT64, y FLOAT64) RETURNS FLOAT64 AS (x * y);`;
+            mydataset.myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 AS (x * y);`;
         expect(format(input)).toBe(expected);
         expect(format(input, { aliasAs: 'always' })).toBe(expected);
       });
@@ -480,7 +482,7 @@ describe('BigQueryFormatter', () => {
           """;`;
         const expected = dedent`
           ${createFunction}
-            myFunc(x FLOAT64, y FLOAT64) RETURNS FLOAT64 LANGUAGE js AS r"""
+            myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 LANGUAGE js AS r"""
                       return x*y;
                     """;`;
         expect(format(input)).toBe(expected);
@@ -504,7 +506,7 @@ describe('BigQueryFormatter', () => {
           )`;
         const expected = dedent`
           ${createTableFunc}
-            mydataset.names_by_year(y INT64)
+            mydataset.names_by_year (y INT64)
           RETURNS TABLE
             < name STRING,
             year INT64 > AS (
@@ -535,7 +537,7 @@ describe('BigQueryFormatter', () => {
           END;`;
         const expected = dedent`
           ${createProcedure}
-            myDataset.QueryTable()
+            myDataset.QueryTable ()
           BEGIN
           SELECT
             *
@@ -633,7 +635,7 @@ describe('BigQueryFormatter', () => {
           ON dataset.my_table(ALL COLUMNS);`;
         const expected = dedent`
           ${createSearchIndex}
-            my_index ON dataset.my_table(ALL COLUMNS);`;
+            my_index ON dataset.my_table (ALL COLUMNS);`;
         expect(format(input)).toBe(expected);
       });
     });
