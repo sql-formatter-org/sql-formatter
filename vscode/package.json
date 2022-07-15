@@ -63,7 +63,8 @@
     "lint": "eslint src --ext ts",
     "pretest": "yarn run compile && yarn run lint",
     "test": "node ./out/test/runTest.js",
-    "vsce": "vsce"
+    "vsce:package": "vsce package",
+    "vsce:publish": "vsce publish"
   },
   "dependencies": {
     "sql-formatter": "^8.2.0"
