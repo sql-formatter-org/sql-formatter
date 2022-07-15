@@ -30,6 +30,7 @@
     "no-constant-condition": "off",
     "prefer-template": "off",
     "default-case": "off",
+    "import/prefer-default-export": "off",
     "prettier/prettier": ["error"],
     "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/comma-dangle": "off",

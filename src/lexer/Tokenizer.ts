@@ -2,7 +2,7 @@ import { Token, TokenType } from 'src/lexer/token';
 import * as regex from 'src/lexer/regexFactory';
 import * as regexTypes from 'src/lexer/regexTypes';
 
-import { NULL_REGEX, escapeRegExp } from './regexUtil';
+import { escapeRegExp } from './regexUtil';
 import TokenizerEngine, { type TokenRule } from './TokenizerEngine';
 
 interface TokenizerOptions {
@@ -19,6 +19,8 @@ interface TokenizerOptions {
   reservedJoins: string[];
   // keywords used for JOIN conditions, defaults to: [ON, USING]
   reservedJoinConditions?: string[];
+  // built in function names
+  reservedFunctionNames: string[];
   // all other reserved words (not included to any of the above lists)
   reservedKeywords: string[];
   // Types of quotes to use for strings
@@ -99,6 +101,10 @@ export default class Tokenizer {
         regex: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
         value: v => v.toUpperCase(),
       },
+      [TokenType.RESERVED_FUNCTION_NAME]: {
+        regex: regex.reservedWord(cfg.reservedFunctionNames, cfg.identChars),
+        value: v => v.toUpperCase(),
+      },
       [TokenType.RESERVED_LOGICAL_OPERATOR]: {
         regex: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
         value: v => v.toUpperCase(),
@@ -131,7 +137,7 @@ export default class Tokenizer {
         regex: cfg.positionalParams ? /[?]/y : undefined,
       },
       [TokenType.VARIABLE]: {
-        regex: cfg.variableTypes ? regex.variable(cfg.variableTypes) : NULL_REGEX,
+        regex: cfg.variableTypes ? regex.variable(cfg.variableTypes) : undefined,
       },
       [TokenType.STRING]: { regex: regex.string(cfg.stringTypes) },
       [TokenType.IDENTIFIER]: {

@@ -33,6 +33,19 @@ export default function supportsParams(format: FormatFn, params: ParamsTypes) {
             third;
         `);
       });
+
+      // Regression test for issue #316
+      it('replaces ? positional placeholders inside BETWEEN expression', () => {
+        const result = format('SELECT name WHERE age BETWEEN ? AND ?;', {
+          params: ['5', '10'],
+        });
+        expect(result).toBe(dedent`
+          SELECT
+            name
+          WHERE
+            age BETWEEN 5 AND 10;
+        `);
+      });
     }
 
     if (params.numbered?.includes('?')) {
