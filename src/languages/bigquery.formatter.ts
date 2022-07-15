@@ -664,6 +664,7 @@ const reservedKeywords = {
     'ALL COLUMNS',
     'CASCADE',
     'RESTRICT',
+    'DETERMINISTIC',
   ],
   datatypes: [
     'ARRAY', // parametric, ARRAY<T>

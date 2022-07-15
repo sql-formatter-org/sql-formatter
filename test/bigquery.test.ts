@@ -439,6 +439,51 @@ describe('BigQueryFormatter', () => {
       });
     });
 
+    const createFunctions = [
+      'CREATE FUNCTION',
+      'CREATE OR REPLACE FUNCTION',
+      'CREATE FUNCTION IF NOT EXISTS',
+    ];
+    const createTempFunctions = [
+      'CREATE TEMP FUNCTION',
+      'CREATE OR REPLACE TEMP FUNCTION',
+      'CREATE TEMP FUNCTION IF NOT EXISTS',
+      'CREATE TEMPORARY FUNCTION',
+      'CREATE OR REPLACE TEMPORARY FUNCTION',
+      'CREATE TEMPORARY FUNCTION IF NOT EXISTS',
+    ];
+
+    createFunctions.concat(createTempFunctions).forEach(createFunction => {
+      it(`Supports ${createFunction}`, () => {
+        const input = `
+          ${createFunction} mydataset.myFunc(x FLOAT64, y FLOAT64)
+          RETURNS FLOAT64
+          AS (x * y);`;
+        const expected = dedent`
+          ${createFunction}
+            mydataset.myFunc(x FLOAT64, y FLOAT64) RETURNS FLOAT64 AS (x * y);`;
+        expect(format(input)).toBe(expected);
+        expect(format(input, { aliasAs: 'always' })).toBe(expected);
+      });
+
+      // it shouldn't format the js code
+      it(`Supports ${createFunction} - js`, () => {
+        const input = `
+          ${createFunction} myFunc(x FLOAT64, y FLOAT64)
+          RETURNS FLOAT64
+          LANGUAGE js
+          AS r"""
+            return x*y;
+          """;`;
+        const expected = dedent`
+          ${createFunction}
+            myFunc(x FLOAT64, y FLOAT64) RETURNS FLOAT64 LANGUAGE js AS r"""
+                      return x*y;
+                    """;`;
+        expect(format(input)).toBe(expected);
+      });
+    });
+
     const createTableFuncVariations = [
       'CREATE TABLE FUNCTION',
       'CREATE OR REPLACE TABLE FUNCTION',
