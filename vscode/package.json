@@ -191,7 +191,7 @@
             "Use AS only in SELECT clauses",
             "Do not use AS for aliases"
           ],
-          "default": "select",
+          "default": "preserve",
           "markdownDescription": "Where to use AS in column or table aliases"
         },
         "Prettier-SQL.tabulateAlias": {
