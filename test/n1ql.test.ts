@@ -32,7 +32,7 @@ describe('N1qlFormatter', () => {
   supportsOperators(format, N1qlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsArrayAndMapAccessors(format);
   supportsArrayLiterals(format);
-  supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'] });
+  supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'], supportsUsing: false });
   supportsReturning(format);
   supportsParams(format, { positional: true, numbered: ['$'], named: ['$'] });
   supportsWindow(format);

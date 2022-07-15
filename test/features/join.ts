@@ -2,9 +2,16 @@ import dedent from 'dedent-js';
 
 import { FormatFn } from 'src/sqlFormatter';
 
-type Options = { without?: string[]; additionally?: string[] };
+type Options = {
+  without?: string[];
+  additionally?: string[];
+  supportsUsing?: boolean;
+};
 
-export default function supportsJoin(format: FormatFn, { without, additionally }: Options = {}) {
+export default function supportsJoin(
+  format: FormatFn,
+  { without, additionally, supportsUsing = true }: Options = {}
+) {
   const unsupportedJoinRegex = without ? new RegExp(without.join('|'), 'u') : /^whateve_!%&$/u;
   const isSupportedJoin = (join: string) => !unsupportedJoinRegex.test(join);
 
@@ -44,7 +51,7 @@ export default function supportsJoin(format: FormatFn, { without, additionally }
         const result = format(`
           SELECT * FROM customers
           ${join} orders ON customers.customer_id = orders.customer_id
-          ${join} items USING (item_id, name);
+          ${join} items ON items.id = orders.id;
         `);
         expect(result).toBe(dedent`
           SELECT
@@ -52,23 +59,36 @@ export default function supportsJoin(format: FormatFn, { without, additionally }
           FROM
             customers
             ${join} orders ON customers.customer_id = orders.customer_id
-            ${join} items USING (item_id, name);
+            ${join} items ON items.id = orders.id;
         `);
       });
     });
 
-  it('properly uppercases JOIN, ON and USING', () => {
-    const result = format(
-      `select * from customers join foo on foo.id = customers.id join bar using (id);`,
-      { keywordCase: 'upper' }
-    );
+  it('properly uppercases JOIN ... ON', () => {
+    const result = format(`select * from customers join foo on foo.id = customers.id;`, {
+      keywordCase: 'upper',
+    });
     expect(result).toBe(dedent`
       SELECT
         *
       FROM
         customers
-        JOIN foo ON foo.id = customers.id
-        JOIN bar USING (id);
+        JOIN foo ON foo.id = customers.id;
     `);
   });
+
+  if (supportsUsing) {
+    it('properly uppercases JOIN ... USING', () => {
+      const result = format(`select * from customers join bar using (id);`, {
+        keywordCase: 'upper',
+      });
+      expect(result).toBe(dedent`
+        SELECT
+          *
+        FROM
+          customers
+          JOIN bar USING (id);
+      `);
+    });
+  }
 }
