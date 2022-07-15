@@ -90,7 +90,7 @@ Supports the full standard.
 
 [Transact-SQL][]:
 
-Does not support `NATURAL JOIN`.
+Does not support `NATURAL JOIN` and `USING` specification.
 
 Additionally supports apply-joins:
 
