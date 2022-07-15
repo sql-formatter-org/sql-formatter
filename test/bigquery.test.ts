@@ -21,7 +21,7 @@ describe('BigQueryFormatter', () => {
   const language = 'bigquery';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
-  behavesLikeSqlFormatter(format, language);
+  behavesLikeSqlFormatter(format);
   supportsComments(format, { hashComments: true });
   supportsCreateTable(format);
   supportsDeleteFrom(format);
@@ -252,8 +252,57 @@ describe('BigQueryFormatter', () => {
   });
 
   describe('BigQuery DDL Create Statements', () => {
-    const createSchemaVariants = ['CREATE SCHEMA', 'CREATE SCHEMA IF NOT EXISTS'];
-    createSchemaVariants.forEach(createSchema => {
+    const createCmds = {
+      schema: ['CREATE SCHEMA', 'CREATE SCHEMA IF NOT EXISTS'],
+      table: ['CREATE TABLE', 'CREATE TABLE IF NOT EXISTS', 'CREATE OR REPLACE TABLE'],
+      tempTable: [
+        'CREATE TEMP TABLE',
+        'CREATE TEMP TABLE IF NOT EXISTS',
+        'CREATE TEMPORARY TABLE',
+        'CREATE TEMPORARY TABLE IF NOT EXISTS',
+        'CREATE OR REPLACE TEMP TABLE',
+        'CREATE OR REPLACE TEMPORARY TABLE',
+      ],
+      snapshotTable: ['CREATE SNAPSHOT TABLE', 'CREATE SNAPSHOT TABLE IF NOT EXISTS'],
+      view: ['CREATE VIEW', 'CREATE OR REPLACE VIEW', 'CREATE VIEW IF NOT EXISTS'],
+      materializedView: [
+        'CREATE MATERIALIZED VIEW',
+        'CREATE OR REPLACE MATERIALIZED VIEW',
+        'CREATE MATERIALIZED VIEW IF NOT EXISTS',
+      ],
+      externalTable: [
+        'CREATE EXTERNAL TABLE',
+        'CREATE OR REPLACE EXTERNAL TABLE',
+        'CREATE EXTERNAL TABLE IF NOT EXISTS',
+      ],
+      function: ['CREATE FUNCTION', 'CREATE OR REPLACE FUNCTION', 'CREATE FUNCTION IF NOT EXISTS'],
+      tempFunction: [
+        'CREATE TEMP FUNCTION',
+        'CREATE OR REPLACE TEMP FUNCTION',
+        'CREATE TEMP FUNCTION IF NOT EXISTS',
+        'CREATE TEMPORARY FUNCTION',
+        'CREATE OR REPLACE TEMPORARY FUNCTION',
+        'CREATE TEMPORARY FUNCTION IF NOT EXISTS',
+      ],
+      tableFunction: [
+        'CREATE TABLE FUNCTION',
+        'CREATE OR REPLACE TABLE FUNCTION',
+        'CREATE TABLE FUNCTION IF NOT EXISTS',
+      ],
+      procedure: [
+        'CREATE PROCEDURE',
+        'CREATE OR REPLACE PROCEDURE',
+        'CREATE PROCEDURE IF NOT EXISTS',
+      ],
+      rowAccessPolicy: [
+        'CREATE ROW ACCESS POLICY',
+        'CREATE ROW ACCESS POLICY IF NOT EXISTS',
+        'CREATE OR REPLACE ROW ACCESS POLICY',
+      ],
+      searchIndex: ['CREATE SEARCH INDEX', 'CREATE SEARCH INDEX IF NOT EXISTS'],
+    };
+
+    createCmds.schema.forEach(createSchema => {
       it(`Supports ${createSchema}`, () => {
         const input = `
           ${createSchema} mydataset
@@ -273,21 +322,7 @@ describe('BigQueryFormatter', () => {
       });
     });
 
-    const createTableVariations = [
-      'CREATE TABLE',
-      'CREATE TABLE IF NOT EXISTS',
-      'CREATE OR REPLACE TABLE',
-    ];
-    const createTempTableVariations = [
-      'CREATE TEMP TABLE',
-      'CREATE TEMP TABLE IF NOT EXISTS',
-      'CREATE TEMPORARY TABLE',
-      'CREATE TEMPORARY TABLE IF NOT EXISTS',
-      'CREATE OR REPLACE TEMP TABLE',
-      'CREATE OR REPLACE TEMPORARY TABLE',
-    ];
-
-    createTableVariations.concat(createTempTableVariations).forEach((createTable: string) => {
+    createCmds.table.concat(createCmds.tempTable).forEach((createTable: string) => {
       it(`Supports ${createTable}`, () => {
         const input = `
           ${createTable} mydataset.newtable
@@ -321,66 +356,56 @@ describe('BigQueryFormatter', () => {
       });
     });
 
-    createTableVariations.forEach(createTable => {
-      it(`Supports ${createTable} LIKE`, () => {
-        const input = `
-          ${createTable} mydataset.newtable
-          LIKE mydataset.sourcetable
-          AS (SELECT * FROM mydataset.myothertable)`;
-        const expected = dedent`
-          ${createTable}
-            mydataset.newtable LIKE mydataset.sourcetable AS (
-              SELECT
-                *
-              FROM
-                mydataset.myothertable
-            )`;
+    it(`Supports CREATE TABLE LIKE`, () => {
+      const input = `
+        CREATE TABLE mydataset.newtable
+        LIKE mydataset.sourcetable
+        AS (SELECT * FROM mydataset.myothertable)`;
+      const expected = dedent`
+        CREATE TABLE
+          mydataset.newtable LIKE mydataset.sourcetable AS (
+            SELECT
+              *
+            FROM
+              mydataset.myothertable
+          )`;
 
-        expect(format(input)).toBe(expected);
-      });
+      expect(format(input)).toBe(expected);
     });
 
-    createTableVariations.forEach(createTable => {
-      it(`Supports ${createTable} COPY`, () => {
-        const input = `
-          ${createTable} mydataset.newtable
-          COPY mydataset.sourcetable`;
-        const expected = dedent`
-          ${createTable}
-            mydataset.newtable
-          COPY
-            mydataset.sourcetable`;
+    it(`Supports CREATE TABLE COPY`, () => {
+      const input = `
+        CREATE TABLE mydataset.newtable
+        COPY mydataset.sourcetable`;
+      const expected = dedent`
+        CREATE TABLE
+          mydataset.newtable
+        COPY
+          mydataset.sourcetable`;
 
-        expect(format(input)).toBe(expected);
-      });
+      expect(format(input)).toBe(expected);
     });
 
-    createTableVariations.forEach(createTable => {
-      it(`Supports ${createTable} CLONE`, () => {
-        const input = `
-          ${createTable} mydataset.newtable
-          CLONE mydataset.sourcetable`;
-        const expected = dedent`
-          ${createTable}
-            mydataset.newtable
-          CLONE
-            mydataset.sourcetable`;
+    it(`Supports CREATE TABLE CLONE`, () => {
+      const input = `
+        CREATE TABLE mydataset.newtable
+        CLONE mydataset.sourcetable`;
+      const expected = dedent`
+        CREATE TABLE
+          mydataset.newtable
+        CLONE
+          mydataset.sourcetable`;
 
-        expect(format(input)).toBe(expected);
-      });
+      expect(format(input)).toBe(expected);
     });
 
-    const createSnapTableVariations = [
-      'CREATE SNAPSHOT TABLE',
-      'CREATE SNAPSHOT TABLE IF NOT EXISTS',
-    ];
-    createSnapTableVariations.forEach(createSnap => {
-      it(`Supports ${createSnap}`, () => {
+    createCmds.snapshotTable.forEach(createSnapshotTable => {
+      it(`Supports ${createSnapshotTable}`, () => {
         const input = `
-          ${createSnap} mydataset.mytablesnapshot
+          ${createSnapshotTable} mydataset.mytablesnapshot
           CLONE mydataset.mytable`;
         const expected = dedent`
-          ${createSnap}
+          ${createSnapshotTable}
             mydataset.mytablesnapshot
           CLONE
             mydataset.mytable`;
@@ -389,18 +414,7 @@ describe('BigQueryFormatter', () => {
       });
     });
 
-    const createViewVariations = [
-      'CREATE VIEW',
-      'CREATE OR REPLACE VIEW',
-      'CREATE VIEW IF NOT EXISTS',
-    ];
-    const createMaterializedView = [
-      'CREATE MATERIALIZED VIEW',
-      'CREATE OR REPLACE MATERIALIZED VIEW',
-      'CREATE MATERIALIZED VIEW IF NOT EXISTS',
-    ];
-
-    createViewVariations.concat(createMaterializedView).forEach(createView => {
+    createCmds.view.concat(createCmds.materializedView).forEach(createView => {
       it(`Supports ${createView}`, () => {
         const input = `
           ${createView} my_dataset.my_view AS (
@@ -418,15 +432,10 @@ describe('BigQueryFormatter', () => {
       });
     });
 
-    const createExternalTableVariations = [
-      'CREATE EXTERNAL TABLE',
-      'CREATE OR REPLACE EXTERNAL TABLE',
-      'CREATE EXTERNAL TABLE IF NOT EXISTS',
-    ];
-    createExternalTableVariations.forEach(createTable => {
-      it(`Supports ${createTable}`, () => {
+    createCmds.externalTable.forEach(createExternalTable => {
+      it(`Supports ${createExternalTable}`, () => {
         const input = `
-          ${createTable} dataset.CsvTable
+          ${createExternalTable} dataset.CsvTable
           WITH PARTITION COLUMNS (
             field_1 STRING,
             field_2 INT64
@@ -436,7 +445,7 @@ describe('BigQueryFormatter', () => {
             uris = ['gs://bucket/path1.csv']
           )`;
         const expected = dedent`
-          ${createTable}
+          ${createExternalTable}
             dataset.CsvTable
           WITH PARTITION COLUMNS
             (field_1 STRING, field_2 INT64) OPTIONS(format = 'CSV', uris = ['gs://bucket/path1.csv'])`;
@@ -444,21 +453,7 @@ describe('BigQueryFormatter', () => {
       });
     });
 
-    const createFunctions = [
-      'CREATE FUNCTION',
-      'CREATE OR REPLACE FUNCTION',
-      'CREATE FUNCTION IF NOT EXISTS',
-    ];
-    const createTempFunctions = [
-      'CREATE TEMP FUNCTION',
-      'CREATE OR REPLACE TEMP FUNCTION',
-      'CREATE TEMP FUNCTION IF NOT EXISTS',
-      'CREATE TEMPORARY FUNCTION',
-      'CREATE OR REPLACE TEMPORARY FUNCTION',
-      'CREATE TEMPORARY FUNCTION IF NOT EXISTS',
-    ];
-
-    createFunctions.concat(createTempFunctions).forEach(createFunction => {
+    createCmds.function.concat(createCmds.tempFunction).forEach(createFunction => {
       it(`Supports ${createFunction}`, () => {
         const input = `
           ${createFunction} mydataset.myFunc(x FLOAT64, y FLOAT64)
@@ -470,30 +465,25 @@ describe('BigQueryFormatter', () => {
         expect(format(input)).toBe(expected);
         expect(format(input, { aliasAs: 'always' })).toBe(expected);
       });
-
-      it(`Supports ${createFunction} - js`, () => {
-        const input = dedent`
-          ${createFunction} myFunc(x FLOAT64, y FLOAT64)
-          RETURNS FLOAT64
-          LANGUAGE js
-          AS r"""
-              return x*y;
-            """;`;
-        const expected = dedent`
-          ${createFunction}
-            myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 LANGUAGE js AS r"""
-              return x*y;
-            """;`;
-        expect(format(input)).toBe(expected);
-      });
     });
 
-    const createTableFuncVariations = [
-      'CREATE TABLE FUNCTION',
-      'CREATE OR REPLACE TABLE FUNCTION',
-      'CREATE TABLE FUNCTION IF NOT EXISTS',
-    ];
-    createTableFuncVariations.forEach(createTableFunc => {
+    it(`Supports CREATE FUNCTION - LANGUAGE js`, () => {
+      const input = dedent`
+        CREATE FUNCTION myFunc(x FLOAT64, y FLOAT64)
+        RETURNS FLOAT64
+        LANGUAGE js
+        AS r"""
+            return x*y;
+          """;`;
+      const expected = dedent`
+        CREATE FUNCTION
+          myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 LANGUAGE js AS r"""
+            return x*y;
+          """;`;
+      expect(format(input)).toBe(expected);
+    });
+
+    createCmds.tableFunction.forEach(createTableFunc => {
       it(`Supports ${createTableFunc}`, () => {
         const input = `
           ${createTableFunc} mydataset.names_by_year(y INT64)
@@ -522,12 +512,7 @@ describe('BigQueryFormatter', () => {
     });
 
     // not correctly supported yet
-    const createProcedureVariations = [
-      'CREATE PROCEDURE',
-      'CREATE OR REPLACE PROCEDURE',
-      'CREATE PROCEDURE IF NOT EXISTS',
-    ];
-    createProcedureVariations.forEach(createProcedure => {
+    createCmds.procedure.forEach(createProcedure => {
       it(`Supports ${createProcedure}`, () => {
         const input = `
           ${createProcedure} myDataset.QueryTable()
@@ -548,12 +533,7 @@ describe('BigQueryFormatter', () => {
       });
     });
 
-    const createRowAccessPolicies = [
-      'CREATE ROW ACCESS POLICY',
-      'CREATE ROW ACCESS POLICY IF NOT EXISTS',
-      'CREATE OR REPLACE ROW ACCESS POLICY',
-    ];
-    createRowAccessPolicies.forEach(createRowAccessPolicy => {
+    createCmds.rowAccessPolicy.forEach(createRowAccessPolicy => {
       it(`Supports ${createRowAccessPolicy}`, () => {
         const input = `
           ${createRowAccessPolicy} us_filter
@@ -623,8 +603,7 @@ describe('BigQueryFormatter', () => {
       expect(format(input)).toBe(expected);
     });
 
-    const createSearchIndices = ['CREATE SEARCH INDEX', 'CREATE SEARCH INDEX IF NOT EXISTS'];
-    createSearchIndices.forEach(createSearchIndex => {
+    createCmds.searchIndex.forEach(createSearchIndex => {
       it(`Supports ${createSearchIndex}`, () => {
         const input = `
           ${createSearchIndex} my_index
