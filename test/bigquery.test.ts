@@ -2,6 +2,7 @@ import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
 import BigQueryFormatter from 'src/languages/bigquery/bigquery.formatter';
+import { flatKeywordList } from 'src/utils';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
@@ -463,6 +464,8 @@ describe('BigQueryFormatter', () => {
           ${createFunction}
             mydataset.myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 AS (x * y);`;
         expect(format(input)).toBe(expected);
+
+        // Regression test for issue #309
         expect(format(input, { aliasAs: 'always' })).toBe(expected);
       });
     });
@@ -806,101 +809,86 @@ describe('BigQueryFormatter', () => {
   });
 
   describe('BigQuery DDL Drop Statements', () => {
-    const dropSchemas = ['DROP SCHEMA', 'DROP SCHEMA IF EXISTS'];
-    dropSchemas.forEach(dropSchema => {
-      it(`Supports ${dropSchema}`, () => {
-        const testSqls = [
-          {
-            input: `${dropSchema} mydataset`,
-            expected: dedent`
-              ${dropSchema}
-                mydataset`,
-          },
-          {
-            input: `${dropSchema} mydataset CASCADE`,
-            expected: dedent`
-              ${dropSchema}
-                mydataset CASCADE`,
-          },
-          {
-            input: `${dropSchema} mydataset RESTRICT`,
-            expected: dedent`
-              ${dropSchema}
-                mydataset RESTRICT`,
-          },
-        ];
+    const dropCmds = {
+      schema: ['DROP SCHEMA', 'DROP SCHEMA IF EXISTS'],
+      table: ['DROP TABLE', 'DROP TABLE IF EXISTS'],
+      snapshotTable: ['DROP SNAPSHOT TABLE', 'DROP SNAPSHOT TABLE IF EXISTS'],
+      externalTable: ['DROP EXTERNAL TABLE', 'DROP EXTERNAL TABLE IF EXISTS'],
+      view: ['DROP VIEW', 'DROP VIEW IF EXISTS'],
+      materializedViews: ['DROP MATERIALIZED VIEW', 'DROP MATERIALIZED VIEW IF EXISTS'],
+      function: ['DROP FUNCTION', 'DROP FUNCTION IF EXISTS'],
+      tableFunction: ['DROP TABLE FUNCTION', 'DROP TABLE FUNCTION IF EXISTS'],
+      procedure: ['DROP PROCEDURE', 'DROP PROCEDURE IF EXISTS'],
+      reservation: ['DROP RESERVATION', 'DROP RESERVATION IF EXISTS'],
+      assignment: ['DROP ASSIGNMENT', 'DROP ASSIGNMENT IF EXISTS'],
+    };
 
-        testSqls.forEach(testSql => expect(format(testSql.input)).toBe(testSql.expected));
+    flatKeywordList(dropCmds).forEach(drop => {
+      it(`Supports ${drop}`, () => {
+        const input = `
+          ${drop} mydataset.name`;
+        const expected = dedent`
+          ${drop}
+            mydataset.name`;
+        expect(format(input)).toBe(expected);
       });
     });
 
-    const dropTables = ['DROP TABLE', 'DROP TABLE IF EXISTS'];
-    const dropSnapTables = ['DROP SNAPSHOT TABLE', 'DROP SNAPSHOT TABLE IF EXISTS'];
-    const dropExternalTables = ['DROP EXTERNAL TABLE', 'DROP EXTERNAL TABLE IF EXISTS'];
-    const dropViews = ['DROP VIEW', 'DROP VIEW IF EXISTS'];
-    const dropMaterializedViews = ['DROP MATERIALIZED VIEW', 'DROP MATERIALIZED VIEW IF EXISTS'];
-    const dropFuncs = ['DROP FUNCTION', 'DROP FUNCTION IF EXISTS'];
-    const dropTableFuncs = ['DROP TABLE FUNCTION', 'DROP TABLE FUNCTION IF EXISTS'];
-    const dropProcedures = ['DROP PROCEDURE', 'DROP PROCEDURE IF EXISTS'];
-    const dropReservation = ['DROP RESERVATION', 'DROP RESERVATION IF EXISTS'];
-    const dropAssignment = ['DROP ASSIGNMENT', 'DROP ASSIGNMENT IF EXISTS'];
+    it(`Supports DROP SCHEMA - CASCADE`, () => {
+      const input = `
+        DROP SCHEMA mydataset CASCADE`;
+      const expected = dedent`
+        DROP SCHEMA
+          mydataset CASCADE`;
+      expect(format(input)).toBe(expected);
+    });
 
-    dropTables
-      .concat(dropSnapTables)
-      .concat(dropExternalTables)
-      .concat(dropViews)
-      .concat(dropMaterializedViews)
-      .concat(dropFuncs)
-      .concat(dropTableFuncs)
-      .concat(dropProcedures)
-      .concat(dropReservation)
-      .concat(dropAssignment)
-      .forEach(drop => {
-        it(`Supports ${drop}`, () => {
-          const input = `
-            ${drop} mydataset.name`;
-          const expected = dedent`
-            ${drop}
-              mydataset.name`;
-          expect(format(input)).toBe(expected);
-        });
-      });
+    it(`Supports DROP SCHEMA - RESTRICT`, () => {
+      const input = `
+        DROP SCHEMA mydataset RESTRICT`;
+      const expected = dedent`
+        DROP SCHEMA
+          mydataset RESTRICT`;
+      expect(format(input)).toBe(expected);
+    });
 
     const dropSearchIndices = ['DROP SEARCH INDEX', 'DROP SEARCH INDEX IF EXISTS'];
-    dropSearchIndices.forEach(drop => {
-      it(`Supports ${drop}`, () => {
+    dropSearchIndices.forEach(dropSearchIndex => {
+      it(`Supports ${dropSearchIndex}`, () => {
         const input = `
-          ${drop} index2 ON mydataset.mytable`;
+          ${dropSearchIndex} index2 ON mydataset.mytable`;
         const expected = dedent`
-          ${drop}
+          ${dropSearchIndex}
             index2 ON mydataset.mytable`;
         expect(format(input)).toBe(expected);
       });
     });
 
     it(`Supports DROP ROW ACCESS POLICY`, () => {
-      const testSqls = [
-        {
-          input: `DROP mypolicy ON mydataset.mytable`,
-          expected: dedent`
-            DROP
-              mypolicy ON mydataset.mytable`,
-        },
-        {
-          input: `DROP IF EXISTS mypolicy ON mydataset.mytable`,
-          expected: dedent`
-            DROP IF EXISTS
-              mypolicy ON mydataset.mytable`,
-        },
-        {
-          input: `DROP ALL ROW ACCESS POLICIES ON table_name`,
-          expected: dedent`
-            DROP ALL ROW ACCESS POLICIES
-              ON table_name`,
-        },
-      ];
+      const input = `
+        DROP mypolicy ON mydataset.mytable`;
+      const expected = dedent`
+        DROP
+          mypolicy ON mydataset.mytable`;
+      expect(format(input)).toBe(expected);
+    });
 
-      testSqls.forEach(testSql => expect(format(testSql.input)).toBe(testSql.expected));
+    it(`Supports DROP ROW ACCESS POLICY IF EXISTS`, () => {
+      const input = `
+        DROP IF EXISTS mypolicy ON mydataset.mytable`;
+      const expected = dedent`
+        DROP IF EXISTS
+          mypolicy ON mydataset.mytable`;
+      expect(format(input)).toBe(expected);
+    });
+
+    it(`Supports DROP ALL ROW ACCESS POLICIES`, () => {
+      const input = `
+        DROP ALL ROW ACCESS POLICIES ON table_name`;
+      const expected = dedent`
+        DROP ALL ROW ACCESS POLICIES
+          ON table_name`;
+      expect(format(input)).toBe(expected);
     });
   });
 });
