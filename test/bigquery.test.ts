@@ -617,8 +617,15 @@ describe('BigQueryFormatter', () => {
   });
 
   describe('BigQuery DDL Alter Statements', () => {
-    const alterSchemas = ['ALTER SCHEMA', 'ALTER SCHEMA IF EXISTS'];
-    alterSchemas.forEach(alterSchema => {
+    const alterCmds = {
+      schema: ['ALTER SCHEMA', 'ALTER SCHEMA IF EXISTS'],
+      table: ['ALTER TABLE', 'ALTER TABLE IF EXISTS'],
+      column: ['ALTER COLUMN', 'ALTER COLUMN IF EXISTS'],
+      view: ['ALTER VIEW', 'ALTER VIEW IF EXISTS'],
+      materializedView: ['ALTER MATERIALIZED VIEW', 'ALTER MATERIALIZED VIEW IF EXISTS'],
+    };
+
+    alterCmds.schema.forEach(alterSchema => {
       it(`Supports ${alterSchema} - SET DEFAULT COLLATE`, () => {
         const input = `
           ${alterSchema} mydataset
@@ -632,25 +639,21 @@ describe('BigQueryFormatter', () => {
       });
     });
 
-    alterSchemas.forEach(alterSchema => {
-      it(`Supports ${alterSchema} - SET OPTIONS`, () => {
-        const input = `
-          ${alterSchema} mydataset
-          SET OPTIONS(
-            default_table_expiration_days=3.75
-            )`;
-        const expected = dedent`
-          ${alterSchema}
-            mydataset
-          SET OPTIONS
-            (default_table_expiration_days = 3.75)`;
-        expect(format(input)).toBe(expected);
-      });
+    it(`Supports ALTER SCHEMA - SET OPTIONS`, () => {
+      const input = `
+        ALTER SCHEMA mydataset
+        SET OPTIONS(
+          default_table_expiration_days=3.75
+          )`;
+      const expected = dedent`
+        ALTER SCHEMA
+          mydataset
+        SET OPTIONS
+          (default_table_expiration_days = 3.75)`;
+      expect(format(input)).toBe(expected);
     });
 
-    const alterTables = ['ALTER TABLE', 'ALTER TABLE IF EXISTS'];
-    const alterColumns = ['ALTER COLUMN', 'ALTER COLUMN IF EXISTS'];
-    alterTables.forEach(alterTable => {
+    alterCmds.table.forEach(alterTable => {
       it(`Supports ${alterTable} - SET OPTIONS`, () => {
         const input = `
           ${alterTable} mydataset.mytable
@@ -666,112 +669,110 @@ describe('BigQueryFormatter', () => {
             )`;
         expect(format(input)).toBe(expected);
       });
+    });
 
-      it(`Supports ${alterTable} - ADD COLUMN`, () => {
+    it(`Supports ALTER TABLE - ADD COLUMN`, () => {
+      const input = `
+        ALTER TABLE mydataset.mytable
+        ADD COLUMN col1 STRING,
+        ADD COLUMN IF NOT EXISTS col2 GEOGRAPHY`;
+      const expected = dedent`
+        ALTER TABLE
+          mydataset.mytable
+        ADD COLUMN
+          col1 STRING,
+        ADD COLUMN IF NOT EXISTS
+          col2 GEOGRAPHY`;
+      expect(format(input)).toBe(expected);
+    });
+
+    it(`Supports ALTER TABLE - RENAME TO`, () => {
+      const input = `
+        ALTER TABLE mydataset.mytable RENAME TO mynewtable`;
+      const expected = dedent`
+        ALTER TABLE
+          mydataset.mytable
+        RENAME TO
+          mynewtable`;
+      expect(format(input)).toBe(expected);
+    });
+
+    it(`Supports ALTER TABLE - DROP COLUMN`, () => {
+      const input = `
+        ALTER TABLE mydataset.mytable
+        DROP COLUMN col1,
+        DROP COLUMN IF EXISTS col2`;
+      const expected = dedent`
+        ALTER TABLE
+          mydataset.mytable
+        DROP COLUMN
+          col1,
+        DROP COLUMN IF EXISTS
+          col2`;
+      expect(format(input)).toBe(expected);
+    });
+
+    it(`Supports ALTER TABLE - SET DEFAULT COLLATE`, () => {
+      const input = `
+        ALTER TABLE mydataset.mytable
+        SET DEFAULT COLLATE 'und:ci'`;
+      const expected = dedent`
+        ALTER TABLE
+          mydataset.mytable
+        SET DEFAULT COLLATE
+          'und:ci'`;
+      expect(format(input)).toBe(expected);
+    });
+
+    alterCmds.column.forEach(alterColumn => {
+      it(`Supports ${alterColumn} - SET OPTIONS`, () => {
         const input = `
-          ${alterTable} mydataset.mytable
-          ADD COLUMN col1 STRING,
-          ADD COLUMN IF NOT EXISTS col2 GEOGRAPHY`;
+          ALTER TABLE mydataset.mytable
+          ${alterColumn} price
+          SET OPTIONS (
+            description="Price per unit"
+          )`;
         const expected = dedent`
-          ${alterTable}
+          ALTER TABLE
             mydataset.mytable
-          ADD COLUMN
-            col1 STRING,
-          ADD COLUMN IF NOT EXISTS
-            col2 GEOGRAPHY`;
+          ${alterColumn}
+            price
+          SET OPTIONS
+            (description = "Price per unit")`;
         expect(format(input)).toBe(expected);
-      });
-
-      it(`Supports ${alterTable} - RENAME TO`, () => {
-        const input = `
-          ${alterTable} mydataset.mytable RENAME TO mynewtable`;
-        const expected = dedent`
-          ${alterTable}
-            mydataset.mytable
-          RENAME TO
-            mynewtable`;
-        expect(format(input)).toBe(expected);
-      });
-
-      it(`Supports ${alterTable} - DROP COLUMN`, () => {
-        const input = `
-          ${alterTable} mydataset.mytable
-          DROP COLUMN col1,
-          DROP COLUMN IF EXISTS col2`;
-        const expected = dedent`
-          ${alterTable}
-            mydataset.mytable
-          DROP COLUMN
-            col1,
-          DROP COLUMN IF EXISTS
-            col2`;
-        expect(format(input)).toBe(expected);
-      });
-
-      it(`Supports ${alterTable} - SET DEFAULT COLLATE`, () => {
-        const input = `
-          ${alterTable} mydataset.mytable
-          SET DEFAULT COLLATE 'und:ci'`;
-        const expected = dedent`
-          ${alterTable}
-            mydataset.mytable
-          SET DEFAULT COLLATE
-            'und:ci'`;
-        expect(format(input)).toBe(expected);
-      });
-
-      alterColumns.forEach(alterColumn => {
-        it(`Supports ${alterTable} - ${alterColumn} - SET OPTIONS`, () => {
-          const input = `
-            ${alterTable} mydataset.mytable
-            ${alterColumn} price
-            SET OPTIONS (
-              description="Price per unit"
-            )`;
-          const expected = dedent`
-            ${alterTable}
-              mydataset.mytable
-            ${alterColumn}
-              price
-            SET OPTIONS
-              (description = "Price per unit")`;
-          expect(format(input)).toBe(expected);
-        });
-
-        it(`Supports ${alterTable} - ${alterColumn} - DROP NOT NULL`, () => {
-          const input = `
-            ${alterTable} mydataset.mytable
-            ${alterColumn} price
-            DROP NOT NULL`;
-          const expected = dedent`
-            ${alterTable}
-              mydataset.mytable
-            ${alterColumn}
-              price
-            DROP NOT NULL`;
-          expect(format(input)).toBe(expected);
-        });
-
-        it(`Supports ${alterTable} - ${alterColumn} - SET DATA TYPE`, () => {
-          const input = `
-            ${alterTable} mydataset.mytable
-            ${alterColumn} price
-            SET DATA TYPE NUMERIC`;
-          const expected = dedent`
-            ${alterTable}
-              mydataset.mytable
-            ${alterColumn}
-              price
-            SET DATA TYPE
-              NUMERIC`;
-          expect(format(input)).toBe(expected);
-        });
       });
     });
 
-    const alterViews = ['ALTER VIEW', 'ALTER VIEW IF EXISTS'];
-    const alterMaterializedViews = ['ALTER MATERIALIZED VIEW', 'ALTER MATERIALIZED VIEW IF EXISTS'];
-    alterViews.concat(alterMaterializedViews).forEach(alterView => {
+    it(`Supports ALTER COLUMN - DROP NOT NULL`, () => {
+      const input = `
+        ALTER TABLE mydataset.mytable
+        ALTER COLUMN price
+        DROP NOT NULL`;
+      const expected = dedent`
+        ALTER TABLE
+          mydataset.mytable
+        ALTER COLUMN
+          price
+        DROP NOT NULL`;
+      expect(format(input)).toBe(expected);
+    });
+
+    it(`Supports ALTER COLUMN - SET DATA TYPE`, () => {
+      const input = `
+        ALTER TABLE mydataset.mytable
+        ALTER COLUMN price
+        SET DATA TYPE NUMERIC`;
+      const expected = dedent`
+        ALTER TABLE
+          mydataset.mytable
+        ALTER COLUMN
+          price
+        SET DATA TYPE
+          NUMERIC`;
+      expect(format(input)).toBe(expected);
+    });
+
+    alterCmds.view.concat(alterCmds.materializedView).forEach(alterView => {
       it(`Supports ${alterView} - SET OPTIONS`, () => {
         const input = `
           ${alterView} mydataset.myview
