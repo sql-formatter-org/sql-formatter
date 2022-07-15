@@ -319,7 +319,7 @@ describe('BigQueryFormatter', () => {
               labels = [("label1", "value1"), ("label2", "value2")]
             )
         `;
-        expect(format(input, { keywordCase: 'upper' })).toBe(expected);
+        expect(format(input)).toBe(expected);
       });
     });
 
@@ -380,9 +380,7 @@ describe('BigQueryFormatter', () => {
         COPY mydataset.sourcetable`;
       const expected = dedent`
         CREATE TABLE
-          mydataset.newtable
-        COPY
-          mydataset.sourcetable`;
+          mydataset.newtable COPY mydataset.sourcetable`;
 
       expect(format(input)).toBe(expected);
     });
@@ -393,9 +391,7 @@ describe('BigQueryFormatter', () => {
         CLONE mydataset.sourcetable`;
       const expected = dedent`
         CREATE TABLE
-          mydataset.newtable
-        CLONE
-          mydataset.sourcetable`;
+          mydataset.newtable CLONE mydataset.sourcetable`;
 
       expect(format(input)).toBe(expected);
     });
@@ -407,9 +403,7 @@ describe('BigQueryFormatter', () => {
           CLONE mydataset.mytable`;
         const expected = dedent`
           ${createSnapshotTable}
-            mydataset.mytablesnapshot
-          CLONE
-            mydataset.mytable`;
+            mydataset.mytablesnapshot CLONE mydataset.mytable`;
 
         expect(format(input)).toBe(expected);
       });

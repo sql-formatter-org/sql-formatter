@@ -129,6 +129,9 @@ export const keywords = flatKeywordList({
   misc: ['SAFE'],
   // https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
   ddl: [
+    // 'LIKE', // CREATE TABLE LIKE
+    'COPY', // CREATE TABLE COPY
+    'CLONE', // CREATE TABLE CLONE
     // 'IN',
     'OUT',
     'INOUT',
