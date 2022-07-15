@@ -477,13 +477,13 @@ describe('BigQueryFormatter', () => {
           RETURNS FLOAT64
           LANGUAGE js
           AS r"""
-            return x*y;
-          """;`;
+              return x*y;
+            """;`;
         const expected = dedent`
           ${createFunction}
             myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 LANGUAGE js AS r"""
-            return x*y;
-          """;`;
+              return x*y;
+            """;`;
         expect(format(input)).toBe(expected);
       });
     });
