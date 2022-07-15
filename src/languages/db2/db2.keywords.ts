@@ -138,8 +138,7 @@ export const keywords = flatKeywordList({
     'OBID',
     'OF',
     'OLD',
-    'ON DELETE',
-    'ON UPDATE',
+    'ON',
     'OPTIMIZATION',
     'OPTIMIZE',
     'ORDER',
@@ -221,6 +220,7 @@ export const keywords = flatKeywordList({
     'UNIQUE',
     'UNTIL',
     'USER',
+    'USING',
     'VALIDPROC',
     'VARIABLE',
     'VARIANT',
@@ -359,4 +359,5 @@ export const keywords = flatKeywordList({
     'TERM UTILITY',
     'TRACE CT',
   ],
+  constraints: ['ON DELETE', 'ON UPDATE'],
 });

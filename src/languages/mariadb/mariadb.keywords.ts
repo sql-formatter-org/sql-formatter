@@ -364,8 +364,7 @@ export const keywords = flatKeywordList({
     'OF',
     'OFFSET',
     'OLD_PASSWORD',
-    'ON DELETE',
-    'ON UPDATE',
+    'ON',
     'ONE',
     'ONLINE',
     'ONLY',
@@ -602,6 +601,7 @@ export const keywords = flatKeywordList({
     'USER',
     'USER_RESOURCES',
     'USE_FRM',
+    'USING',
     'UTC_DATE',
     'UTC_TIME',
     'UTC_TIMESTAMP',
@@ -635,4 +635,5 @@ export const keywords = flatKeywordList({
     'YEAR_MONTH',
     'ZEROFILL',
   ],
+  constraints: ['ON DELETE', 'ON UPDATE'],
 });

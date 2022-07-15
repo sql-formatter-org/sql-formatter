@@ -101,8 +101,7 @@ export const keywords = flatKeywordList({
     'NULLS',
     'OF',
     'OFFSET',
-    'ON DELETE',
-    'ON UPDATE',
+    'ON',
     'ONLY',
     'OPEN',
     // 'OR',
@@ -157,4 +156,5 @@ export const keywords = flatKeywordList({
     'WITH',
     'WITHOUT',
   ],
+  constraints: ['ON DELETE', 'ON UPDATE'],
 });

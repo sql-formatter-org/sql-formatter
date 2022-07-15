@@ -196,8 +196,7 @@ export const keywords = flatKeywordList({
     'OCITYPE',
     'OF',
     'OLD',
-    'ON DELETE',
-    'ON UPDATE',
+    'ON',
     'ONLY',
     'OPAQUE',
     'OPEN',
@@ -330,6 +329,7 @@ export const keywords = flatKeywordList({
     'UNTRUSTED',
     'USE',
     'USER',
+    'USING',
     'VALIDATE',
     'VALIST',
     'VALUE',
@@ -350,4 +350,5 @@ export const keywords = flatKeywordList({
     'YEAR',
     'ZONE',
   ],
+  constraints: ['ON DELETE', 'ON UPDATE'],
 });

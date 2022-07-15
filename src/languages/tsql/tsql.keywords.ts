@@ -105,8 +105,7 @@ export const keywords = flatKeywordList({
     'OF',
     'OFF',
     'OFFSETS',
-    'ON DELETE',
-    'ON UPDATE',
+    'ON',
     'OPEN',
     'OPENDATASOURCE',
     'OPENQUERY',
@@ -688,4 +687,5 @@ export const keywords = flatKeywordList({
     'YEAR',
     'ZONE',
   ],
+  constraints: ['ON DELETE', 'ON UPDATE'],
 });
