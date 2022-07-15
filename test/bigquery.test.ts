@@ -340,7 +340,7 @@ describe('BigQueryFormatter', () => {
             partition_expiration_days=1
           )`;
 
-        // need to fix the formatting of y STRUCT<a ARRAY<STRING>OPTIONS(description ="desc2"), b BOOL>
+        // TODO: need to fix the formatting of y STRUCT<a ARRAY<STRING>OPTIONS(description ="desc2"), b BOOL>
         const expected = dedent`
           ${createTable}
             mydataset.newtable (
@@ -490,6 +490,8 @@ describe('BigQueryFormatter', () => {
             FROM mydataset.mytable
             WHERE year = y
           )`;
+
+        // TODO: formatting for <name STRING, year INT64> can be improved
         const expected = dedent`
           ${createTableFunc}
             mydataset.names_by_year (y INT64)
