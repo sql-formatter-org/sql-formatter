@@ -471,9 +471,8 @@ describe('BigQueryFormatter', () => {
         expect(format(input, { aliasAs: 'always' })).toBe(expected);
       });
 
-      // it shouldn't format the js code
       it(`Supports ${createFunction} - js`, () => {
-        const input = `
+        const input = dedent`
           ${createFunction} myFunc(x FLOAT64, y FLOAT64)
           RETURNS FLOAT64
           LANGUAGE js
@@ -483,8 +482,8 @@ describe('BigQueryFormatter', () => {
         const expected = dedent`
           ${createFunction}
             myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 LANGUAGE js AS r"""
-                      return x*y;
-                    """;`;
+            return x*y;
+          """;`;
         expect(format(input)).toBe(expected);
       });
     });
@@ -572,58 +571,55 @@ describe('BigQueryFormatter', () => {
       });
     });
 
-    // it shouldn't format json here
     it(`Supports CREATE CAPACITY`, () => {
-      const input = `
+      const input = dedent`
         CREATE CAPACITY admin_project.region-us.my-commitment
         AS JSON """{
-        "slot_count": 100,
-        "plan": "FLEX"
-        }"""`;
+            "slot_count": 100,
+            "plan": "FLEX"
+          }"""`;
       const expected = dedent`
         CREATE CAPACITY
           admin_project.region-us.my-commitment
         AS JSON
           """{
-                "slot_count": 100,
-                "plan": "FLEX"
-                }"""`;
+            "slot_count": 100,
+            "plan": "FLEX"
+          }"""`;
       expect(format(input)).toBe(expected);
     });
 
-    // it shouldn't format json here
     it(`Supports CREATE RESERVATION`, () => {
-      const input = `
+      const input = dedent`
         CREATE RESERVATION admin_project.region-us.prod
         AS JSON """{
-        "slot_capacity": 100
-        }"""`;
+            "slot_capacity": 100
+          }"""`;
       const expected = dedent`
         CREATE RESERVATION
           admin_project.region-us.prod
         AS JSON
           """{
-                "slot_capacity": 100
-                }"""`;
+            "slot_capacity": 100
+          }"""`;
       expect(format(input)).toBe(expected);
     });
 
-    // it shouldn't format json here
     it(`Supports CREATE ASSIGNMENT`, () => {
-      const input = `
+      const input = dedent`
         CREATE ASSIGNMENT admin_project.region-us.prod.my_assignment
         AS JSON """{
-        "assignee": "projects/my_project",
-        "job_type": "QUERY"
-        }"""`;
+            "assignee": "projects/my_project",
+            "job_type": "QUERY"
+          }"""`;
       const expected = dedent`
         CREATE ASSIGNMENT
           admin_project.region-us.prod.my_assignment
         AS JSON
           """{
-                "assignee": "projects/my_project",
-                "job_type": "QUERY"
-                }"""`;
+            "assignee": "projects/my_project",
+            "job_type": "QUERY"
+          }"""`;
       expect(format(input)).toBe(expected);
     });
 
