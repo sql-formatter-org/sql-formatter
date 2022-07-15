@@ -20,7 +20,7 @@ describe('BigQueryFormatter', () => {
   const language = 'bigquery';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
-  behavesLikeSqlFormatter(format);
+  behavesLikeSqlFormatter(format, language);
   supportsComments(format, { hashComments: true });
   supportsCreateTable(format);
   supportsDeleteFrom(format);

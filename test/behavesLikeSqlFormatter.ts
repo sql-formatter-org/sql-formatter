@@ -20,7 +20,7 @@ import supportsLimit from './features/limit';
 /**
  * Core tests for all SQL formatters
  */
-export default function behavesLikeSqlFormatter(format: FormatFn) {
+export default function behavesLikeSqlFormatter(format: FormatFn, language?: string) {
   supportsCase(format);
   supportsNumbers(format);
 
@@ -249,13 +249,15 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     `);
   });
 
-  it('formats simple DROP query', () => {
-    const result = format('DROP TABLE IF EXISTS admin_role;');
-    expect(result).toBe(dedent`
-      DROP TABLE IF EXISTS
-        admin_role;
-    `);
-  });
+  if (language !== 'bigquery') {
+    it('formats simple DROP query', () => {
+      const result = format('DROP TABLE IF EXISTS admin_role;');
+      expect(result).toBe(dedent`
+        DROP TABLE
+          IF EXISTS admin_role;
+      `);
+    });
+  }
 
   it('formats incomplete query', () => {
     const result = format('SELECT count(');
