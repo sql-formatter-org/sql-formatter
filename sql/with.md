@@ -131,6 +131,13 @@ No dialect fully supports the standard:
     common_table_expression:
       identifier ["(" column_name_list ")"] AS "(" query_expression ")"
 
+[Trino][]:
+
+    WITH [RECURSIVE] common_table_expression ["," ...]
+
+    common_table_expression:
+      identifier ["(" column_name_list ")"] AS "(" query_expression ")"
+
 [sql standard]: https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#with-clause
 [bigquery]: https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax#with_clause
 [db2]: https://www.ibm.com/docs/en/db2-for-zos/12?topic=queries-select-statement
@@ -144,3 +151,4 @@ No dialect fully supports the standard:
 [spark]: https://spark.apache.org/docs/latest/sql-ref-syntax-qry-select-cte.html
 [sqlite]: https://www.sqlite.org/syntax/common-table-expression.html
 [transact-sql]: https://docs.microsoft.com/en-us/sql/t-sql/queries/with-common-table-expression-transact-sql?view=sql-server-ver16
+[trino]: https://github.com/trinodb/trino/blob/c7b26825218d5d11e9469984977dee6856f362ff/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L178

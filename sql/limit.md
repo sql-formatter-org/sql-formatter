@@ -75,6 +75,14 @@ Starting with [SQL Server 2012][], one can use the `OFFSET FETCH` syntax:
     OFFSET offset {ROW | ROWS}
     [FETCH {FIRST | NEXT} count {ROW | ROWS} ONLY]
 
+[Trino][]:
+
+    [OFFSET offset [ROW | ROWS]]
+    LIMIT count
+
+    [OFFSET offset [ROW | ROWS]]
+    FETCH {FIRST | NEXT} count {ROW | ROWS} {ONLY | WITH TIES}
+
 [sql standard]: https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#query-specification
 [bigquery]: https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax#limit_and_offset_clause
 [db2]: https://www.ibm.com/docs/en/db2/9.7?topic=queries-subselect#r0000875__fet1st
@@ -89,3 +97,4 @@ Starting with [SQL Server 2012][], one can use the `OFFSET FETCH` syntax:
 [sqlite]: https://www.sqlite.org/lang_select.html
 [transact-sql]: https://stackoverflow.com/questions/603724/how-to-implement-limit-with-sql-server
 [sql server 2012]: https://docs.microsoft.com/en-us/previous-versions/sql/sql-server-2012/ms188385(v=sql.110)?redirectedfrom=MSDN
+[trino]: https://github.com/trinodb/trino/blob/c7b26825218d5d11e9469984977dee6856f362ff/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L212

@@ -83,6 +83,20 @@ There's a considerable variation is dialects:
       | ROLLUP "(" group_expr ["," ...] ")"
       | CUBE "(" group_expr ["," ...] ")"
 
+[Trino][]:
+
+    GROUP BY [ALL | DISTINCT] {grp_set | rollup_cube | grouping_sets} ["," ...]
+
+    rollup_cube:
+      [ROLLUP | CUBE] "(" expr ["," ...] ")"
+
+    grouping_sets:
+      GROUPING SETS "(" grp_set ["," ...] ")"
+
+    grp_set:
+        expr
+      | "(" expr ["," ...] ")"
+
 [sql standard]: https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#query-specification
 [bigquery]: https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax#group_by_clause
 [db2]: https://www.ibm.com/docs/en/db2/9.7?topic=queries-subselect#r0000875__grpby
@@ -96,3 +110,4 @@ There's a considerable variation is dialects:
 [spark]: https://spark.apache.org/docs/latest/sql-ref-syntax-qry-select.html
 [sqlite]: https://www.sqlite.org/lang_select.html
 [transact-sql]: https://docs.microsoft.com/en-US/sql/t-sql/queries/select-group-by-transact-sql?view=sql-server-ver15
+[trino]: https://github.com/trinodb/trino/blob/c7b26825218d5d11e9469984977dee6856f362ff/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L257
