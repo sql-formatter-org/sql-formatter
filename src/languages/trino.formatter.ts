@@ -780,7 +780,7 @@ const reservedCommands = [
 
   'REFRESH MATERIALIZED VIEW',
   'RESET SESSION',
-  // 'SET SESSION', // TODO
+  'SET SESSION',
 
   'SHOW GRANTS',
   'SHOW CREATE TABLE',

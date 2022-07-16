@@ -45,15 +45,11 @@ describe('TrinoFormatter', () => {
   });
   supportsParams(format, { positional: true });
 
-  it('formats SET SESSION lines as their own statement', () => {
-    const result = format('SET SESSION foo = 444; SELECT * FROM tbl');
+  it('formats SET SESSION', () => {
+    const result = format('SET SESSION foo = 444;');
     expect(result).toBe(dedent`
-      SET SESSION foo = 444;
-
-      SELECT
-        *
-      FROM
-        tbl
+      SET SESSION
+        foo = 444;
     `);
   });
 });
