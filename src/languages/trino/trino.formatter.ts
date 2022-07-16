@@ -126,7 +126,7 @@ const reservedJoins = [
 
 export default class TrinoFormatter extends Formatter {
   // https://trino.io/docs/current/functions/list.html#id1
-  static operators = ['||', '<', '>', '<=', '>=', '=', '<>', '!=', '->', '+', '-', '*', '/', '%'];
+  static operators = ['||', '->'];
 
   tokenizer() {
     return new Tokenizer({
