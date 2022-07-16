@@ -31,4 +31,13 @@ describe('expandSinglePhrase()', () => {
       'CREATE OR REPLACE MATERIALIZED VIEW',
     ]);
   });
+
+  it('expands expression with [multi|choice|block]', () => {
+    expect(expandSinglePhrase('CREATE [TEMP|TEMPORARY|VIRTUAL] TABLE')).toEqual([
+      'CREATE TABLE',
+      'CREATE TEMP TABLE',
+      'CREATE TEMPORARY TABLE',
+      'CREATE VIRTUAL TABLE',
+    ]);
+  });
 });
