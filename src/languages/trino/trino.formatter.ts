@@ -3,11 +3,6 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './trino.functions';
 import { keywords } from './trino.keywords';
 
-/**
- * Priority 1 (first)
- * keywords that begin a new statement
- * will begin new indented block
- */
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L41
 const reservedCommands = [
   // DDL
@@ -129,14 +124,6 @@ const reservedJoins = [
   'NATURAL FULL OUTER JOIN',
 ];
 
-/**
- * Priority 3
- * keywords that follow a previous Statement, must be attached to subsequent data
- * can be fully inline or on newline with optional indent
- */
-// TODO
-const reservedDependentClauses = ['WHEN', 'ELSE'];
-
 export default class TrinoFormatter extends Formatter {
   // https://trino.io/docs/current/functions/list.html#id1
   // TODO: [] substring operator?
@@ -147,7 +134,7 @@ export default class TrinoFormatter extends Formatter {
       reservedCommands,
       reservedBinaryCommands,
       reservedJoins,
-      reservedDependentClauses,
+      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       openParens: ['(', '['],
