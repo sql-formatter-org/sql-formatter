@@ -250,10 +250,10 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   });
 
   it('formats simple DROP query', () => {
-    const result = format('DROP TABLE IF EXISTS admin_role;');
+    const result = format('DROP TABLE admin_role;');
     expect(result).toBe(dedent`
       DROP TABLE
-        IF EXISTS admin_role;
+        admin_role;
     `);
   });
 

@@ -536,6 +536,7 @@ export const functions = flatKeywordList({
     'TO_BASE64',
   ],
   other: ['BQ.JOBS.CANCEL', 'BQ.REFRESH_MATERIALIZED_VIEW'],
+  ddl: ['OPTIONS'],
   pivot: ['PIVOT', 'UNPIVOT'],
   // Data types with parameters like VARCHAR(100)
   // https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#parameterized_data_types
