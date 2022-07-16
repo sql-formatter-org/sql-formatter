@@ -2,11 +2,11 @@ import dedent from 'dedent-js';
 
 import { FormatFn } from 'src/sqlFormatter';
 
-type Options = {
+interface Options {
   without?: string[];
   additionally?: string[];
   supportsUsing?: boolean;
-};
+}
 
 export default function supportsJoin(
   format: FormatFn,
