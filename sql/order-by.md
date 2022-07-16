@@ -57,6 +57,10 @@ Other dialects have some variations:
 
     ORDER BY {expr [COLLATE collation] [ASC | DESC]} ["," ...]
 
+[Trino][]:
+
+    ORDER BY {expr [ASC | DESC] [NULLS FIRST | NULLS LAST]} ["," ...]
+
 [sql standard]: https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#order-by-clause
 [bigquery]: https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax#order_by_clause
 [db2]: https://www.ibm.com/docs/en/db2/9.7?topic=queries-subselect#r0000875__orderby
@@ -70,3 +74,4 @@ Other dialects have some variations:
 [spark]: https://spark.apache.org/docs/latest/sql-ref-syntax-qry-select.html
 [sqlite]: https://www.sqlite.org/lang_select.html
 [transact-sql]: https://docs.microsoft.com/en-US/sql/t-sql/queries/select-order-by-clause-transact-sql?view=sql-server-ver15
+[trino]: https://github.com/trinodb/trino/blob/c7b26825218d5d11e9469984977dee6856f362ff/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L212
