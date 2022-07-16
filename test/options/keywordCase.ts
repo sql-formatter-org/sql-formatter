@@ -18,7 +18,7 @@ export default function supportsKeywordCase(format: FormatFn) {
   });
 
   it('converts keywords to uppercase', () => {
-    const result = format('select distinct * frOM foo left JOIN bar WHERe cola > 1 and colb = 3', {
+    const result = format('select distinct * frOM foo left JOIN mycol WHERe cola > 1 and colb = 3', {
       keywordCase: 'upper',
     });
     expect(result).toBe(dedent`
@@ -26,7 +26,7 @@ export default function supportsKeywordCase(format: FormatFn) {
         DISTINCT *
       FROM
         foo
-        LEFT JOIN bar
+        LEFT JOIN mycol
       WHERE
         cola > 1
         AND colb = 3

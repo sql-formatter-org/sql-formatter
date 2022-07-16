@@ -18,6 +18,7 @@ The differences from this are listed below:
 - [SQLite][sqlite-syntax-pdf]: _(no differences)_
 - [Transact-SQL][]: `@` and `#` are allowed as first chars plus `$` in the rest. Also unicode letters are allowed.
   Though the beginning `@` signifies a local variable or parameter and `#` a temporary table or procedure.
+- [Trino][]: `[a-zA-Z0-9_]+`, no first-letter restrictions
 
 ## Delimited identifiers
 
@@ -36,6 +37,7 @@ There is a considerable variation in implementations:
 - `` `..` `` [Spark][]
 - `".."`, `` `..` ``, `[..]` [SQLite][sqlite-keywords]
 - `".."`<sup>3</sup>, `[..]` [Transact-SQL][]
+- `".."`, `` `..` `` [Trino][]
 
 Notes:
 
@@ -56,3 +58,4 @@ Notes:
 [sqlite-keywords]: https://www.sqlite.org/lang_keywords.html
 [sqlite-syntax-pdf]: https://www.pearsonhighered.com/assets/samplechapter/0/6/7/2/067232685X.pdf
 [transact-sql]: https://docs.microsoft.com/en-us/sql/relational-databases/databases/database-identifiers?view=sql-server-ver15
+[trino]: https://github.com/trinodb/trino/blob/ca7dcaa873b9dd24185e9a69cecdd1dd8717694c/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L1175-L1189

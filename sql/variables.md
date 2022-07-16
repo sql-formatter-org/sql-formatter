@@ -16,6 +16,7 @@
 - [Spark][]: `${name}` Like with Hive, these are substitution variables.
 - SQLite: _N/A_
 - [Transact-SQL][]: `@name` (using identifier syntax for name)
+- Trino: _N/A_
 
 [parameters]: ./parameters.md
 [bigquery]: https://cloud.google.com/bigquery/docs/reference/standard-sql/procedural-language

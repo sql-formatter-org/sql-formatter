@@ -60,6 +60,10 @@ All dialects (except Hive) suppurt this syntax, plus a bunch of extra stuff:
 
     INSERT [TOP ( expression ) [PERCENT]] [INTO] table_name
 
+[Trino][]:
+
+    INSERT INTO table_name
+
 [sql standard]: https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#insert-statement
 [bigquery]: https://cloud.google.com/bigquery/docs/reference/standard-sql/dml-syntax#insert_statement
 [db2]: https://www.ibm.com/docs/en/db2/9.7?topic=statements-insert
@@ -73,3 +77,4 @@ All dialects (except Hive) suppurt this syntax, plus a bunch of extra stuff:
 [spark]: https://spark.apache.org/docs/latest/sql-ref-syntax-dml-insert-table.html
 [sqlite]: https://www.sqlite.org/lang_insert.html
 [transact-sql]: https://docs.microsoft.com/en-us/sql/t-sql/statements/insert-transact-sql?view=sql-server-ver16
+[trino]: https://trino.io/docs/current/sql/insert.html

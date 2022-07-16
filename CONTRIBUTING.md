@@ -4,11 +4,7 @@
 
 Run `yarn` after checkout to install all dependencies.
 
-## Branch Guidelines
-
-New branches: Please branch off of the `develop` branch.
-
-### Naming
+## Branch Naming
 
 Please use one of the following prefixes: (ie. feature/new-feature)
 
@@ -42,6 +38,7 @@ For those who have admin access on the repo, the new release publish flow is as 
 - Andrew
 - Benjamin Bellamy
 - bingou
+- Boris Verkhovskiy <boris.verk@gmail.com>
 - Damon Davison <ddavison@avalere.com>
 - Davut Can Abacigil <can@teamsql.io>
 - Erik Hirmo <erik.hirmo@roguewave.com>

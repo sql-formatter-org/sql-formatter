@@ -64,6 +64,10 @@ _No support for CREATE VIEW._
 
     CREATE [OR ALTER] VIEW
 
+[Trino][]:
+
+    CREATE [OR REPLACE] VIEW
+
 [sql standard]: https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#_11_22_view_definition
 [bigquery]: https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language#create_view_statement
 [db2]: https://www.ibm.com/docs/en/db2/9.7?topic=statements-create-view
@@ -77,3 +81,4 @@ _No support for CREATE VIEW._
 [spark]: https://spark.apache.org/docs/latest/sql-ref-syntax-ddl-create-view.html
 [sqlite]: https://www.sqlite.org/lang_createview.html
 [transact-sql]: https://docs.microsoft.com/en-us/sql/t-sql/statements/create-view-transact-sql?view=sql-server-ver15
+[trino]: https://trino.io/docs/current/sql/create-view.html
