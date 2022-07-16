@@ -4,7 +4,6 @@ import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
 import TrinoFormatter from 'src/languages/trino.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
-// import supportsAlterTable from './features/alterTable';
 import supportsArrayLiterals from './features/arrayLiterals';
 import supportsBetween from './features/between';
 import supportsCreateTable from './features/createTable';
@@ -24,7 +23,6 @@ describe('TrinoFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format);
   supportsCreateTable(format);
-  // supportsAlterTable(format);
   supportsDeleteFrom(format);
   supportsStrings(format, ["''", "X''"]);
   supportsIdentifiers(format, ['""', '``']);
@@ -50,6 +48,36 @@ describe('TrinoFormatter', () => {
     expect(result).toBe(dedent`
       SET SESSION
         foo = 444;
+    `);
+  });
+
+  it('formats basic ALTER TABLE statements', () => {
+    const result = format(`
+      ALTER TABLE people RENAME TO persons;
+      ALTER TABLE persons ADD COLUMN location_id INT;
+      ALTER TABLE persons RENAME COLUMN location_id TO loc_id;
+      ALTER TABLE persons DROP COLUMN loc_id;
+    `);
+    expect(result).toBe(dedent`
+      ALTER TABLE
+        people
+      RENAME TO
+        persons;
+
+      ALTER TABLE
+        persons
+      ADD COLUMN
+        location_id INT;
+
+      ALTER TABLE
+        persons
+      RENAME COLUMN
+        location_id TO loc_id;
+
+      ALTER TABLE
+        persons
+      DROP COLUMN
+        loc_id;
     `);
   });
 });
