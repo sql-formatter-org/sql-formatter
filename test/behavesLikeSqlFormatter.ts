@@ -66,7 +66,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   it('formats SELECT with complex WHERE', () => {
     const result = format(`
       SELECT * FROM foo WHERE Column1 = 'testing'
-      AND ( (Column2 = Column3 OR Column4 >= NOW()) );
+      AND ( (Column2 = Column3 OR Column4 >= ABS(5)) );
     `);
     expect(result).toBe(dedent`
       SELECT
@@ -78,7 +78,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
         AND (
           (
             Column2 = Column3
-            OR Column4 >= NOW()
+            OR Column4 >= ABS(5)
           )
         );
     `);
@@ -195,18 +195,18 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   });
 
   it('keeps short parenthesized list with nested parenthesis on single line', () => {
-    const result = format('SELECT (a + b * (c - NOW()));');
+    const result = format('SELECT (a + b * (c - SIN(1)));');
     expect(result).toBe(dedent`
       SELECT
-        (a + b * (c - NOW()));
+        (a + b * (c - SIN(1)));
     `);
   });
 
   it('breaks long parenthesized lists to multiple lines', () => {
     const result = format(`
       INSERT INTO some_table (id_product, id_shop, id_currency, id_country, id_registration) (
-      SELECT IF(dq.id_discounter_shopping = 2, dq.value, dq.value / 100),
-      IF (dq.id_discounter_shopping = 2, 'amount', 'percentage') FROM foo);
+      SELECT COALESCE(dq.id_discounter_shopping = 2, dq.value, dq.value / 100),
+      COALESCE (dq.id_discounter_shopping = 2, 'amount', 'percentage') FROM foo);
     `);
     expect(result).toBe(dedent`
       INSERT INTO
@@ -218,12 +218,12 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
           id_registration
         ) (
           SELECT
-            IF(
+            COALESCE(
               dq.id_discounter_shopping = 2,
               dq.value,
               dq.value / 100
             ),
-            IF (
+            COALESCE(
               dq.id_discounter_shopping = 2,
               'amount',
               'percentage'
@@ -250,10 +250,10 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   });
 
   it('formats simple DROP query', () => {
-    const result = format('DROP TABLE IF EXISTS admin_role;');
+    const result = format('DROP TABLE admin_role;');
     expect(result).toBe(dedent`
       DROP TABLE
-        IF EXISTS admin_role;
+        admin_role;
     `);
   });
 

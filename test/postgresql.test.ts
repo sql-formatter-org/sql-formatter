@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import PostgreSqlFormatter from 'src/languages/postgresql.formatter';
+import PostgreSqlFormatter from 'src/languages/postgresql/postgresql.formatter';
 
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
@@ -18,6 +18,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
+import supportsWindow from './features/window';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -41,6 +42,7 @@ describe('PostgreSqlFormatter', () => {
   supportsJoin(format);
   supportsReturning(format);
   supportsParams(format, { numbered: ['$'] });
+  supportsWindow(format);
 
   it('allows $ character as part of identifiers', () => {
     expect(format('SELECT foo$, some$$ident')).toBe(dedent`

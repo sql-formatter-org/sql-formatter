@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import TSqlFormatter from 'src/languages/tsql.formatter';
+import TSqlFormatter from 'src/languages/tsql/tsql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
@@ -16,6 +16,7 @@ import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsWindow from './features/window';
 
 describe('TSqlFormatter', () => {
   const language = 'tsql';
@@ -37,6 +38,7 @@ describe('TSqlFormatter', () => {
   );
   supportsJoin(format, { without: ['NATURAL'] });
   supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });
+  supportsWindow(format);
 
   // TODO: The following are duplicated from StandardSQLFormatter test
 

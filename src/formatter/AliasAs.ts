@@ -99,7 +99,8 @@ export default class AliasAs {
       isToken.CAST(this.getPreviousReservedToken()) &&
       isToken.AS(this.lookAhead()) &&
       (this.lookAhead(2).type === TokenType.IDENTIFIER ||
-        this.lookAhead(2).type === TokenType.RESERVED_KEYWORD) &&
+        this.lookAhead(2).type === TokenType.RESERVED_KEYWORD ||
+        this.lookAhead(2).type === TokenType.RESERVED_FUNCTION_NAME) &&
       this.lookAhead(3).value === ')'
     );
   }
