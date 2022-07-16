@@ -59,7 +59,7 @@ export default function supportsJoin(format: FormatFn, { without, additionally }
 
   it('properly uppercases JOIN, ON and USING', () => {
     const result = format(
-      `select * from customers join foo on foo.id = customers.id join bar using (id);`,
+      `select * from customers join foo on foo.id = customers.id join foobar using (id);`,
       { keywordCase: 'upper' }
     );
     expect(result).toBe(dedent`
@@ -68,7 +68,7 @@ export default function supportsJoin(format: FormatFn, { without, additionally }
       FROM
         customers
         JOIN foo ON foo.id = customers.id
-        JOIN bar USING (id);
+        JOIN foobar USING (id);
     `);
   });
 }
