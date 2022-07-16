@@ -37,8 +37,6 @@
     "pl/sql",
     "postgres",
     "postgresql",
-    "presto",
-    "prestosql",
     "prettier",
     "redshift",
     "spark",
@@ -46,7 +44,6 @@
     "sql",
     "sqlite",
     "sql server",
-    "trino",
     "tsql"
   ],
   "activationEvents": [
@@ -126,7 +123,6 @@
             "redshift",
             "spark",
             "sqlite",
-            "trino",
             "tsql"
           ],
           "default": "sql",
