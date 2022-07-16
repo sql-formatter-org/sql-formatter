@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import TrinoFormatter from 'src/languages/trino.formatter';
+import TrinoFormatter from 'src/languages/trino/trino.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsArrayLiterals from './features/arrayLiterals';
