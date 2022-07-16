@@ -31,7 +31,6 @@ const reservedCommands = [
   'MERGE INTO',
   // 'USING',
   // DDL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
-  'SET SCHEMA', // added
   'CREATE SCHEMA',
   'CREATE SCHEMA IF NOT EXISTS',
   'DEFAULT COLLATE',
