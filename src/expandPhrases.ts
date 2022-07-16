@@ -20,7 +20,14 @@ export const expandPhrases = (phrases: string[]): string[] => phrases.flatMap(ex
 export const expandSinglePhrase = (phrase: string): string[] =>
   buildCombinations(parsePhrase(phrase)).map(text => text.trim());
 
-type PhrasePart = { type: 'required' | 'optional'; choices: string[] };
+// This data type holds variants of a single part in whole phrase.
+// Corresponding to syntax as follows:
+//
+//   "TABLE"            --> ["TABLE"]
+//   "[TABLE]"          --> ["", "TABLE"]
+//   "[TEMP|TEMPORARY]" --> ["", "TEMP", "TEMPORARY"]
+//
+type PhrasePart = string[];
 
 const REQUIRED_PART = /[^[]*/y;
 const OPTIONAL_PART = /\[.*?\]/y;
@@ -32,7 +39,7 @@ const parsePhrase = (text: string): PhrasePart[] => {
     REQUIRED_PART.lastIndex = index;
     const requiredMatch = REQUIRED_PART.exec(text);
     if (requiredMatch) {
-      result.push({ type: 'required', choices: [requiredMatch[0].trim()] });
+      result.push([requiredMatch[0].trim()]);
       index += requiredMatch[0].length;
     }
 
@@ -43,7 +50,7 @@ const parsePhrase = (text: string): PhrasePart[] => {
         .slice(1, -1)
         .split('|')
         .map(s => s.trim());
-      result.push({ type: 'optional', choices });
+      result.push(['', ...choices]);
       index += optionalMatch[0].length;
     }
   }
@@ -54,11 +61,7 @@ const buildCombinations = ([first, ...rest]: PhrasePart[]): string[] => {
   if (first === undefined) {
     return [''];
   }
-  if (first.type === 'required') {
-    return buildCombinations(rest).map(tail => first.choices[0].trim() + ' ' + tail.trim());
-  } else {
-    return buildCombinations(rest).flatMap(tail =>
-      ['', ...first.choices].map(head => head.trim() + ' ' + tail.trim())
-    );
-  }
+  return buildCombinations(rest).flatMap(tail =>
+    first.map(head => head.trim() + ' ' + tail.trim())
+  );
 };
