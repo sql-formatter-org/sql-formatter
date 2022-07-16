@@ -97,6 +97,10 @@ Additionally supports apply-joins:
 - `CROSS APPLY`
 - `OUTER APPLY`
 
+[Trino][]:
+
+Supports the full standard.
+
 [sql standard]: https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#_7_5_from_clause
 [bigquery]: https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax#join_types
 [db2]: https://www.ibm.com/docs/en/db2-for-zos/12?topic=clause-joined-table
@@ -110,3 +114,4 @@ Additionally supports apply-joins:
 [spark]: https://spark.apache.org/docs/latest/sql-ref-syntax-qry-select-join.html
 [sqlite]: https://www.sqlite.org/syntax/join-clause.html
 [transact-sql]: https://docs.microsoft.com/en-us/sql/t-sql/queries/from-transact-sql?view=sql-server-ver16
+[trino]: https://github.com/trinodb/trino/blob/c7b26825218d5d11e9469984977dee6856f362ff/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L299
