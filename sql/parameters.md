@@ -15,6 +15,7 @@ These come in the form of single question mark (`?`), supported by:
 - [N1QL][]
 - [SQLite][]
 - [Transact-SQL][]<sup>1</sup>
+- [Trino][]
 
 ## Numbered parameters
 
@@ -51,3 +52,4 @@ These come in the form of single question mark (`?`), supported by:
 [redshift]: https://docs.aws.amazon.com/redshift/latest/dg/r_PREPARE.html
 [sqlite]: https://sqlite.org/c3ref/bind_blob.html
 [transact-sql]: https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/configuring-parameters-and-parameter-data-types
+[trino]: https://trino.io/docs/current/sql/prepare.html

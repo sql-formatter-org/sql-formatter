@@ -66,6 +66,10 @@ All dialects support that, but also quite a bit extra stuff:
       [ALL | DISTINCT]
       [TOP ( expression ) [PERCENT] [WITH TIES]]
 
+[Trino][]:
+
+    SELECT [ALL | DISTINCT]
+
 [sql standard]: https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#query-specification
 [bigquery]: https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax
 [db2]: https://www.ibm.com/docs/en/db2/9.7?topic=queries-subselect
@@ -79,3 +83,4 @@ All dialects support that, but also quite a bit extra stuff:
 [spark]: https://spark.apache.org/docs/latest/sql-ref-syntax-qry-select.html
 [sqlite]: https://www.sqlite.org/lang_select.html
 [transact-sql]: https://docs.microsoft.com/en-US/sql/t-sql/queries/select-transact-sql?view=sql-server-ver15
+[trino]: https://trino.io/docs/current/sql/select.html

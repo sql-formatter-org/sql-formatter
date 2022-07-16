@@ -79,7 +79,7 @@ export default function supportsJoin(
 
   if (supportsUsing) {
     it('properly uppercases JOIN ... USING', () => {
-      const result = format(`select * from customers join bar using (id);`, {
+      const result = format(`select * from customers join foo using (id);`, {
         keywordCase: 'upper',
       });
       expect(result).toBe(dedent`
@@ -87,7 +87,7 @@ export default function supportsJoin(
           *
         FROM
           customers
-          JOIN bar USING (id);
+          JOIN foo USING (id);
       `);
     });
   }

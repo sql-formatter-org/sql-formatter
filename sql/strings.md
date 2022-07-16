@@ -46,6 +46,10 @@ The real world implementations have lots of variation:
   - `'..'` (two single quotes `''` are used for escaping)
   - (`".."`<sup>3</sup>)
   - `N'..'` (`N".."`<sup>3</sup>) unicode strings
+- [Trino][]:
+  - `'..'` (two single quotes `''` are used for escaping)
+  - `U&'..'`, `u&'..'` string with unicode escapes (two single quotes `''` are used for escaping)
+  - `X'..'`, `x'..'` hex string
 
 ### Notes:
 
@@ -67,3 +71,4 @@ The real world implementations have lots of variation:
 [spark]: https://spark.apache.org/docs/latest/sql-ref-literals.html#string-literal
 [sqlite]: https://www.sqlite.org/lang_expr.html#literal_values_constants_
 [transact-sql]: https://docs.microsoft.com/en-us/sql/t-sql/data-types/constants-transact-sql?view=sql-server-ver15
+[trino]: https://github.com/trinodb/trino/blob/ca7dcaa873b9dd24185e9a69cecdd1dd8717694c/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L1146-L1159

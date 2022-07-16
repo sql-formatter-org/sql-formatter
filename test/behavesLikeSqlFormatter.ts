@@ -250,10 +250,10 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   });
 
   it('formats simple DROP query', () => {
-    const result = format('DROP TABLE IF EXISTS admin_role;');
+    const result = format('DROP TABLE admin_role;');
     expect(result).toBe(dedent`
       DROP TABLE
-        IF EXISTS admin_role;
+        admin_role;
     `);
   });
 
@@ -286,13 +286,13 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   });
 
   it('formats top-level and newline multi-word reserved words with inconsistent spacing', () => {
-    const result = format('SELECT * FROM foo LEFT \t   \n JOIN bar ORDER \n BY blah');
+    const result = format('SELECT * FROM foo LEFT \t   \n JOIN mycol ORDER \n BY blah');
     expect(result).toBe(dedent`
       SELECT
         *
       FROM
         foo
-        LEFT JOIN bar
+        LEFT JOIN mycol
       ORDER BY
         blah
     `);

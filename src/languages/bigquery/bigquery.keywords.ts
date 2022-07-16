@@ -127,4 +127,21 @@ export const keywords = flatKeywordList({
   // https://cloud.google.com/bigquery/docs/reference/standard-sql/conversion_functions#formatting_syntax
   stringFormat: ['HEX', 'BASEX', 'BASE64M', 'ASCII', 'UTF-8', 'UTF8'],
   misc: ['SAFE'],
+  // https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
+  ddl: [
+    // 'LIKE', // CREATE TABLE LIKE
+    'COPY', // CREATE TABLE COPY
+    'CLONE', // CREATE TABLE CLONE
+    // 'IN',
+    'OUT',
+    'INOUT',
+    'RETURNS',
+    'LANGUAGE',
+    'ANY TYPE',
+    'ALL COLUMNS',
+    'CASCADE',
+    'RESTRICT',
+    'DETERMINISTIC',
+    'NOT DETERMINISTIC',
+  ],
 });

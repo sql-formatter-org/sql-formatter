@@ -61,6 +61,10 @@ _No support for CREATE TABLE._
 
     CREATE TABLE
 
+[Trino][]:
+
+    CREATE TABLE [IF NOT EXISTS]
+
 [sql standard]: https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#_11_3_table_definition
 [bigquery]: https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language#create_table_statement
 [db2]: https://www.ibm.com/docs/en/db2/9.7?topic=statements-create-table
@@ -74,3 +78,4 @@ _No support for CREATE TABLE._
 [spark]: https://spark.apache.org/docs/latest/sql-ref-syntax-ddl-create-table.html
 [sqlite]: https://www.sqlite.org/lang_createtable.html
 [transact-sql]: https://docs.microsoft.com/en-us/sql/t-sql/statements/create-table-transact-sql?view=sql-server-ver15
+[trino]: https://trino.io/docs/current/sql/create-table.html
