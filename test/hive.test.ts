@@ -29,7 +29,7 @@ describe('HiveFormatter', () => {
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
   supportsSchema(format);
-  supportsJoin(format, { without: ['NATURAL JOIN'] });
+  supportsJoin(format, { without: ['NATURAL JOIN'], supportsUsing: false });
   supportsOperators(format, HiveFormatter.operators);
   supportsArrayAndMapAccessors(format);
   supportsWindow(format);
