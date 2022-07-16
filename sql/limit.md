@@ -75,7 +75,7 @@ Starting with [SQL Server 2012][], one can use the `OFFSET FETCH` syntax:
     OFFSET offset {ROW | ROWS}
     [FETCH {FIRST | NEXT} count {ROW | ROWS} ONLY]
 
-[Trino][]:
+[Trino][] supports two forms:
 
     [OFFSET offset [ROW | ROWS]]
     LIMIT count
