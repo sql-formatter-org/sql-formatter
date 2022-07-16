@@ -2,7 +2,7 @@ import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
 import TrinoFormatter from 'src/languages/trino.formatter';
-// import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 // import supportsAlterTable from './features/alterTable';
 import supportsArrayLiterals from './features/arrayLiterals';
@@ -21,7 +21,7 @@ describe('TrinoFormatter', () => {
   const language = 'trino';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
-  // behavesLikeSqlFormatter(format);
+  behavesLikeSqlFormatter(format);
   supportsComments(format);
   supportsCreateTable(format);
   // supportsAlterTable(format);
