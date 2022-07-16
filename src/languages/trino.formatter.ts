@@ -725,7 +725,6 @@ const reservedKeywords = [
  * keywords that begin a new statement
  * will begin new indented block
  */
-// TODO
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L41
 const reservedCommands = [
   // DDL
@@ -754,9 +753,9 @@ const reservedCommands = [
   'DROP VIEW',
   'DROP ROLE',
   'TRUNCATE TABLE',
-  'USE', // TODO?
   // DML
   'INSERT INTO',
+  'MERGE INTO',
   'VALUES',
   'UPDATE',
   'SET',
@@ -768,17 +767,20 @@ const reservedCommands = [
   'WHERE',
   'GROUP BY',
   'HAVING',
-  'WINDOW', // verify
+  'WINDOW',
   'ORDER BY',
   'OFFSET',
   'LIMIT',
   'FETCH',
 
-  'PARTITION BY', // verify
-  'TABLESAMPLE',
-  'EXPLAIN',
+  'PARTITION BY',
+
   // Auxiliary
+  'EXPLAIN',
   'ANALYZE',
+  'EXPLAIN ANALYZE',
+  'EXPLAIN ANALYZE VERBOSE',
+  'USE',
 
   'COMMENT ON TABLE',
   'COMMENT ON COLUMN',
@@ -788,6 +790,8 @@ const reservedCommands = [
   'REFRESH MATERIALIZED VIEW',
   'RESET SESSION',
   'SET SESSION',
+  'SET PATH',
+  'SET TIME ZONE',
 
   'SHOW GRANTS',
   'SHOW CREATE TABLE',
@@ -804,9 +808,6 @@ const reservedCommands = [
   'SHOW ROLE GRANTS',
   'SHOW FUNCTIONS',
   'SHOW SESSION',
-
-  // other
-  'LATERAL', // verify
 ];
 
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L231-L235
