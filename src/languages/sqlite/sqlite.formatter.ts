@@ -44,9 +44,7 @@ const reservedBinaryCommands = expandPhrases([
 
 // joins - https://www.sqlite.org/syntax/join-operator.html
 const reservedJoins = expandPhrases([
-  'JOIN',
-  'LEFT JOIN',
-  'LEFT OUTER JOIN',
+  '[LEFT] [OUTER] JOIN',
   'INNER JOIN',
   'CROSS JOIN',
   'NATURAL JOIN',

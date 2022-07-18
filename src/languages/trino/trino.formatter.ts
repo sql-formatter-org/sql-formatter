@@ -110,14 +110,8 @@ const reservedBinaryCommands = expandPhrases([
 
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L299-L313
 const reservedJoins = expandPhrases([
-  'JOIN',
+  '[LEFT | RIGHT | FULL] [OUTER] JOIN',
   'INNER JOIN',
-  'LEFT JOIN',
-  'LEFT OUTER JOIN',
-  'RIGHT JOIN',
-  'RIGHT OUTER JOIN',
-  'FULL JOIN',
-  'FULL OUTER JOIN',
   'CROSS JOIN',
   'NATURAL JOIN',
   'NATURAL INNER JOIN',

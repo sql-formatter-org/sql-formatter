@@ -42,14 +42,8 @@ const reservedBinaryCommands = expandPhrases([
 ]);
 
 const reservedJoins = expandPhrases([
-  'JOIN',
+  '[LEFT | RIGHT | FULL] [OUTER] JOIN',
   'INNER JOIN',
-  'LEFT JOIN',
-  'LEFT OUTER JOIN',
-  'RIGHT JOIN',
-  'RIGHT OUTER JOIN',
-  'FULL JOIN',
-  'FULL OUTER JOIN',
   'CROSS JOIN',
   'NATURAL JOIN',
 ]);
