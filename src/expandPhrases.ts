@@ -36,6 +36,7 @@ const parsePhrase = (text: string): PhrasePart[] => {
   let index = 0;
   const result: PhrasePart[] = [];
   while (index < text.length) {
+    // Match everything else outside of "[...]" blocks
     REQUIRED_PART.lastIndex = index;
     const requiredMatch = REQUIRED_PART.exec(text);
     if (requiredMatch) {
@@ -43,6 +44,7 @@ const parsePhrase = (text: string): PhrasePart[] => {
       index += requiredMatch[0].length;
     }
 
+    // Match "[...]" block
     OPTIONAL_PART.lastIndex = index;
     const optionalMatch = OPTIONAL_PART.exec(text);
     if (optionalMatch) {
