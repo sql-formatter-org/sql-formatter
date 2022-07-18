@@ -1,3 +1,4 @@
+import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './postgresql.functions';
@@ -206,22 +207,14 @@ const reservedCommands = [
   'PARTITION BY',
 ];
 
-const reservedBinaryCommands = [
-  'INTERSECT',
-  'INTERSECT ALL',
-  'INTERSECT DISTINCT',
-  'UNION',
-  'UNION ALL',
-  'UNION DISTINCT',
-  'EXCEPT',
-  'EXCEPT ALL',
-  'EXCEPT DISTINCT',
-  'MINUS',
-  'MINUS ALL',
-  'MINUS DISTINCT',
-];
+const reservedBinaryCommands = expandPhrases([
+  'INTERSECT [ALL | DISTINCT]',
+  'UNION [ALL | DISTINCT]',
+  'EXCEPT [ALL | DISTINCT]',
+  'MINUS [ALL | DISTINCT]',
+]);
 
-const reservedJoins = [
+const reservedJoins = expandPhrases([
   'JOIN',
   'INNER JOIN',
   'LEFT JOIN',
@@ -232,7 +225,7 @@ const reservedJoins = [
   'FULL OUTER JOIN',
   'CROSS JOIN',
   'NATURAL JOIN',
-];
+]);
 
 const binaryOperators = [
   // Math Operators

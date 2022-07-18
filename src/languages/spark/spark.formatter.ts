@@ -1,3 +1,4 @@
+import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
@@ -80,26 +81,18 @@ const reservedCommands = [
   'WINDOW',
 ];
 
-const reservedBinaryCommands = [
+const reservedBinaryCommands = expandPhrases([
   // set booleans
-  'INTERSECT',
-  'INTERSECT ALL',
-  'INTERSECT DISTINCT',
-  'UNION',
-  'UNION ALL',
-  'UNION DISTINCT',
-  'EXCEPT',
-  'EXCEPT ALL',
-  'EXCEPT DISTINCT',
-  'MINUS',
-  'MINUS ALL',
-  'MINUS DISTINCT',
+  'INTERSECT [ALL | DISTINCT]',
+  'UNION [ALL | DISTINCT]',
+  'EXCEPT [ALL | DISTINCT]',
+  'MINUS [ALL | DISTINCT]',
   // apply
   'CROSS APPLY',
   'OUTER APPLY',
-];
+]);
 
-const reservedJoins = [
+const reservedJoins = expandPhrases([
   'JOIN',
   'INNER JOIN',
   'LEFT JOIN',
@@ -127,7 +120,7 @@ const reservedJoins = [
   'NATURAL RIGHT OUTER JOIN',
   'NATURAL RIGHT SEMI JOIN',
   'NATURAL SEMI JOIN',
-];
+]);
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkFormatter extends Formatter {

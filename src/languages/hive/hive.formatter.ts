@@ -1,3 +1,4 @@
+import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './hive.functions';
@@ -42,16 +43,12 @@ const reservedCommands = [
   'ROW FORMAT',
 ];
 
-const reservedBinaryCommands = [
-  'INTERSECT',
-  'INTERSECT ALL',
-  'INTERSECT DISTINCT',
-  'UNION',
-  'UNION ALL',
-  'UNION DISTINCT',
-];
+const reservedBinaryCommands = expandPhrases([
+  'INTERSECT [ALL | DISTINCT]',
+  'UNION [ALL | DISTINCT]',
+]);
 
-const reservedJoins = [
+const reservedJoins = expandPhrases([
   'JOIN',
   'INNER JOIN',
   'LEFT JOIN',
@@ -61,7 +58,7 @@ const reservedJoins = [
   'FULL JOIN',
   'FULL OUTER JOIN',
   'CROSS JOIN',
-];
+]);
 
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export default class HiveFormatter extends Formatter {
