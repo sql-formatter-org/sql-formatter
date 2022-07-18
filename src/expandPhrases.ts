@@ -29,7 +29,7 @@ export const expandSinglePhrase = (phrase: string): string[] =>
 //
 type PhrasePart = string[];
 
-const REQUIRED_PART = /[^[]*/y;
+const REQUIRED_PART = /[^[\]]+/y;
 const OPTIONAL_PART = /\[.*?\]/y;
 
 const parsePhrase = (text: string): PhrasePart[] => {
@@ -52,6 +52,10 @@ const parsePhrase = (text: string): PhrasePart[] => {
         .map(s => s.trim());
       result.push(['', ...choices]);
       index += optionalMatch[0].length;
+    }
+
+    if (!requiredMatch && !optionalMatch) {
+      throw new Error(`Unbalanced parenthesis in: ${text}`);
     }
   }
   return result;
