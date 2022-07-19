@@ -73,7 +73,10 @@ export default class SqliteFormatter extends Formatter {
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: [{ quote: "''", prefixes: ['X'] }],
+      stringTypes: [
+        { quote: "''", prefixes: ['X'] },
+        { quote: '""', prefixes: ['X'] },
+      ],
       identTypes: [`""`, '``', '[]'],
       // https://www.sqlite.org/lang_expr.html#parameters
       positionalParams: true,
