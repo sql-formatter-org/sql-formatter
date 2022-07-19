@@ -145,8 +145,8 @@ export default class SparkFormatter extends Formatter {
       openParens: ['(', '['],
       closeParens: [')', ']'],
       stringTypes: [
-        { quote: "''", prefixes: ['r'] },
-        { quote: '""', prefixes: ['r'] },
+        { quote: "''", prefixes: ['r', 'X'] },
+        { quote: '""', prefixes: ['r', 'X'] },
       ],
       identTypes: ['``'],
       variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
