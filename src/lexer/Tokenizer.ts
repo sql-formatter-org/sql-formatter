@@ -28,9 +28,9 @@ interface TokenizerOptions {
   // Types of quotes to use for variables
   variableTypes?: regexTypes.VariableType[];
   // Open-parenthesis characters
-  openParens?: ('(' | '[' | '{')[];
+  openParens?: ('(' | '[' | '{' | '{-')[];
   // Close-parenthesis characters
-  closeParens?: (')' | ']' | '}')[];
+  closeParens?: (')' | ']' | '}' | '-}')[];
   // True to allow for positional "?" parameter placeholders
   positionalParams?: boolean;
   // Prefixes for numbered parameter placeholders to support, e.g. :1, :2, :3

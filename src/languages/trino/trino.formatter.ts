@@ -86,6 +86,16 @@ const reservedCommands = [
   'SHOW ROLE GRANTS',
   'SHOW FUNCTIONS',
   'SHOW SESSION',
+
+  // MATCH_RECOGNIZE
+  'MATCH_RECOGNIZE',
+  'MEASURES',
+  'ONE ROW PER MATCH',
+  'ALL ROWS PER MATCH',
+  'AFTER MATCH',
+  'PATTERN',
+  'SUBSET',
+  'DEFINE',
 ];
 
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L231-L235
@@ -126,6 +136,7 @@ const reservedJoins = [
 
 export default class TrinoFormatter extends Formatter {
   // https://trino.io/docs/current/functions/list.html#id1
+  // https://trino.io/docs/current/sql/match-recognize.html#row-pattern-syntax
   static operators = ['||', '->'];
 
   tokenizer() {
@@ -136,10 +147,14 @@ export default class TrinoFormatter extends Formatter {
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      openParens: ['(', '['],
-      closeParens: [')', ']'],
+      // https://trino.io/docs/current/sql/match-recognize.html#row-pattern-syntax
+      openParens: ['(', '[', '{', '{-'],
+      closeParens: [')', ']', '}', '-}'],
+      // https://trino.io/docs/current/language/types.html#string
+      // https://trino.io/docs/current/language/types.html#varbinary
       stringTypes: [{ quote: "''", prefixes: ['X', 'U&'] }],
-      identTypes: ['""', '``'],
+      // https://trino.io/docs/current/language/reserved.html
+      identTypes: ['""'],
       positionalParams: true,
       operators: TrinoFormatter.operators,
     });

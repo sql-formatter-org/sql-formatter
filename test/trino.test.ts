@@ -24,8 +24,8 @@ describe('TrinoFormatter', () => {
   supportsComments(format);
   supportsCreateTable(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, ["''", "X''"]);
-  supportsIdentifiers(format, ['""', '``']);
+  supportsStrings(format, ["''", "X''", "U&''"]);
+  supportsIdentifiers(format, ['""']);
   supportsBetween(format);
   supportsOperators(format, TrinoFormatter.operators, ['AND', 'OR']);
   supportsArrayLiterals(format);
@@ -48,6 +48,56 @@ describe('TrinoFormatter', () => {
     expect(result).toBe(dedent`
       SET SESSION
         foo = 444;
+    `);
+  });
+
+  it('formats row PATTERN()s', () => {
+    const result = format(`
+      SELECT * FROM orders MATCH_RECOGNIZE(
+        PARTITION BY custkey
+        ORDER BY orderdate
+        MEASURES
+                  A.totalprice AS starting_price,
+                  LAST(B.totalprice) AS bottom_price,
+                  LAST(U.totalprice) AS top_price
+        ONE ROW PER MATCH
+        AFTER MATCH SKIP PAST LAST ROW
+        PATTERN ((A | B){5} {- C+ D+ -} E+)
+        SUBSET U = (C, D)
+        DEFINE
+                  B AS totalprice < PREV(totalprice),
+                  C AS totalprice > PREV(totalprice) AND totalprice <= A.totalprice,
+                  D AS totalprice > PREV(totalprice)
+        )
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        *
+      FROM
+        orders
+      MATCH_RECOGNIZE
+        (
+          PARTITION BY
+            custkey
+          ORDER BY
+            orderdate
+          MEASURES
+            A.totalprice AS starting_price,
+            LAST (B.totalprice) AS bottom_price,
+            LAST (U.totalprice) AS top_price
+          ONE ROW PER MATCH
+          AFTER MATCH
+            SKIP PAST LAST ROW
+          PATTERN
+            ((A | B) {5} {- C + D + -} E +)
+          SUBSET
+            U = (C, D)
+          DEFINE
+            B AS totalprice < PREV (totalprice),
+            C AS totalprice > PREV (totalprice)
+            AND totalprice <= A.totalprice,
+            D AS totalprice > PREV (totalprice)
+        )
     `);
   });
 
