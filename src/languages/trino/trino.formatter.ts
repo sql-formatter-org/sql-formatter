@@ -138,7 +138,7 @@ export default class TrinoFormatter extends Formatter {
       reservedFunctionNames: functions,
       openParens: ['(', '['],
       closeParens: [')', ']'],
-      stringTypes: [{ quote: "''", prefixes: ['U&', 'X'] }],
+      stringTypes: [{ quote: "''", prefixes: ['X', 'U&'] }],
       identTypes: ['""', '``'],
       positionalParams: true,
       operators: TrinoFormatter.operators,
