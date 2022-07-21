@@ -13,13 +13,17 @@ export interface IdentChars {
 
 export type PlainQuoteType = keyof typeof quotePatterns;
 
-export type PrefixedQuoteType = {
+export interface StringQuoteType {
   quote: PlainQuoteType;
+  escapes?: (`\\` | '"' | "'")[];
+}
+
+export interface PrefixedQuoteType extends StringQuoteType {
   prefixes: string[];
   requirePrefix?: boolean; // True when prefix is required
-};
+}
 
-export type QuoteType = PlainQuoteType | PrefixedQuoteType;
+export type QuoteType = PlainQuoteType | StringQuoteType | PrefixedQuoteType;
 
 export interface VariableRegex {
   regex: string;

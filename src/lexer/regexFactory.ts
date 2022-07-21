@@ -97,10 +97,15 @@ export const quotePatterns = {
 };
 
 const singleQuotePattern = (quoteTypes: QuoteType): string => {
+  // for plain quotes, used for identifiers and non standard strings
   if (typeof quoteTypes === 'string') {
     return quotePatterns[quoteTypes];
-  } else {
+  }
+
+  if ('prefixes' in quoteTypes) {
     return prefixesPattern(quoteTypes) + quotePatterns[quoteTypes.quote];
+  } else {
+    return quotePatterns[quoteTypes.quote];
   }
 };
 
