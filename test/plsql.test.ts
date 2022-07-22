@@ -263,4 +263,17 @@ describe('PlSqlFormatter', () => {
         order1;
     `);
   });
+
+  // regression test for sql-formatter#338
+  it.only('formats identifier with dblink', () => {
+    const result = format('SELECT * FROM database.table@dblink WHERE id = 1;');
+    expect(result).toBe(dedent`
+      SELECT
+        *
+      FROM
+        database.table@dblink
+      WHERE
+        id = 1;
+    `);
+  });
 });
