@@ -95,16 +95,16 @@ export default class Tokenizer {
         regex: regex.reservedWord(cfg.reservedJoins, cfg.identChars),
         value: v => v.toUpperCase(),
       },
-      [TokenType.RESERVED_KEYWORD]: {
-        regex: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
+      [TokenType.RESERVED_LOGICAL_OPERATOR]: {
+        regex: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
         value: v => v.toUpperCase(),
       },
       [TokenType.RESERVED_FUNCTION_NAME]: {
         regex: regex.reservedWord(cfg.reservedFunctionNames, cfg.identChars),
         value: v => v.toUpperCase(),
       },
-      [TokenType.RESERVED_LOGICAL_OPERATOR]: {
-        regex: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
+      [TokenType.RESERVED_KEYWORD]: {
+        regex: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
         value: v => v.toUpperCase(),
       },
       [TokenType.NAMED_PARAMETER]: {
