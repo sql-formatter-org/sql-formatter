@@ -88,11 +88,11 @@ export const parameter = (paramTypes: string[], pattern: string): RegExp | undef
 export const quotePatterns = {
   '``': '(?:`[^`]*(?:$|`))+',
   '[]': String.raw`(?:\[[^\]]*(?:$|\]))(?:\][^\]]*(?:$|\]))*`,
-  '""': String.raw`(?:"[^"\\]*(?:\\.[^"\\]*)*(?:"|$))+`,
-  "''": String.raw`(?:'[^'\\]*(?:\\.[^'\\]*)*(?:'|$))+`,
+  '""': String.raw`(?:"{escape}(?:\\.{escape})*(?:"|$))+`,
+  "''": String.raw`(?:'{escape}(?:\\.{escape})*(?:'|$))+`,
   '$$': String.raw`(?<tag>\$\w*\$)[\s\S]*?(?:\k<tag>|$)`,
-  "'''..'''": String.raw`'''[^\\]*?(?:\\.[^\\]*?)*?(?:'''|$)`,
-  '""".."""': String.raw`"""[^\\]*?(?:\\.[^\\]*?)*?(?:"""|$)`,
+  "'''..'''": String.raw`'''{escape}?(?:\\.{escape}?)*?(?:'''|$)`,
+  '""".."""': String.raw`"""{escape}?(?:\\.{escape}?)*?(?:"""|$)`,
   '{}': String.raw`(?:\{[^\}]*(?:$|\}))`,
 };
 
@@ -102,11 +102,16 @@ const singleQuotePattern = (quoteTypes: QuoteType): string => {
     return quotePatterns[quoteTypes];
   }
 
+  // for prefixed / escaped quote types
+  let quotePattern = quotePatterns[quoteTypes.quote];
   if ('prefixes' in quoteTypes) {
-    return prefixesPattern(quoteTypes) + quotePatterns[quoteTypes.quote];
-  } else {
-    return quotePatterns[quoteTypes.quote];
+    quotePattern = prefixesPattern(quoteTypes) + quotePattern;
   }
+
+  const escapePattern = quoteTypes.escapes ? `[^${quoteTypes.escapes.join('')}]*` : '';
+  quotePattern = quotePattern.replace(/{escape}/g, escapePattern);
+
+  return quotePattern;
 };
 
 /** Builds a RegExp for matching variables */

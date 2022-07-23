@@ -15,7 +15,7 @@ export type PlainQuoteType = keyof typeof quotePatterns;
 
 export interface StringQuoteType {
   quote: PlainQuoteType;
-  escapes?: (`\\` | '"' | "'")[];
+  escapes?: ('\\\\' | '"' | "'")[];
 }
 
 export interface PrefixedQuoteType extends StringQuoteType {
