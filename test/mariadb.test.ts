@@ -4,6 +4,7 @@ import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
 import supportsOperators from './features/operators';
 import supportsReturning from './features/returning';
+import supportsStrings from './features/strings';
 
 describe('MariaDbFormatter', () => {
   const language = 'mariadb';
@@ -13,4 +14,5 @@ describe('MariaDbFormatter', () => {
 
   supportsOperators(format, MariaDbFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsReturning(format);
+  supportsStrings(format, MariaDbFormatter.stringTypes);
 });

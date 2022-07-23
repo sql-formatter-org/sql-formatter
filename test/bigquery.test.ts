@@ -25,7 +25,7 @@ describe('BigQueryFormatter', () => {
   supportsComments(format, { hashComments: true });
   supportsCreateTable(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, ['""', "''"]);
+  supportsStrings(format, BigQueryFormatter.stringTypes);
   supportsIdentifiers(format, ['``']);
   supportsArrayLiterals(format);
   supportsBetween(format);

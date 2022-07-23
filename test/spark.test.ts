@@ -23,7 +23,7 @@ describe('SparkFormatter', () => {
   supportsComments(format);
   supportsCreateTable(format);
   supportsAlterTable(format);
-  supportsStrings(format, ["''", "X''"]);
+  supportsStrings(format, SparkFormatter.stringTypes);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
   supportsSchema(format);

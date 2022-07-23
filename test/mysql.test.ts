@@ -5,6 +5,7 @@ import MySqlFormatter from 'src/languages/mysql/mysql.formatter';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
 import supportsOperators from './features/operators';
+import supportsStrings from './features/strings';
 import supportsWindow from './features/window';
 
 describe('MySqlFormatter', () => {
@@ -14,6 +15,7 @@ describe('MySqlFormatter', () => {
   behavesLikeMariaDbFormatter(format);
 
   supportsOperators(format, MySqlFormatter.operators, ['AND', 'OR', 'XOR']);
+  supportsStrings(format, MySqlFormatter.stringTypes);
   supportsWindow(format);
 
   // TODO: disabled for now

@@ -25,7 +25,7 @@ describe('HiveFormatter', () => {
   supportsComments(format);
   supportsCreateTable(format);
   supportsAlterTable(format);
-  supportsStrings(format, ['""', "''"]);
+  supportsStrings(format, HiveFormatter.stringTypes);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
   supportsSchema(format);

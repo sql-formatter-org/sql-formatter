@@ -25,7 +25,7 @@ describe('N1qlFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format, { hashComments: true });
   supportsDeleteFrom(format);
-  supportsStrings(format, [`""`]);
+  supportsStrings(format, N1qlFormatter.stringTypes);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
   supportsSchema(format);

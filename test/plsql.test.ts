@@ -30,7 +30,7 @@ describe('PlSqlFormatter', () => {
   supportsAlterTable(format);
   supportsAlterTableModify(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, ["''", "N''"]);
+  supportsStrings(format, PlSqlFormatter.stringTypes);
   supportsIdentifiers(format, [`""`]);
   supportsBetween(format);
   supportsSchema(format);

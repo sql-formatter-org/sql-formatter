@@ -26,7 +26,7 @@ describe('RedshiftFormatter', () => {
   supportsAlterTable(format);
   supportsAlterTableModify(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, ["''"]);
+  supportsStrings(format, RedshiftFormatter.stringTypes);
   supportsIdentifiers(format, [`""`]);
   supportsSchema(format);
   supportsOperators(format, RedshiftFormatter.operators);

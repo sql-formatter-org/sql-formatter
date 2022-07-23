@@ -24,7 +24,7 @@ describe('TrinoFormatter', () => {
   supportsComments(format);
   supportsCreateTable(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, ["''", "X''"]);
+  supportsStrings(format, TrinoFormatter.stringTypes);
   supportsIdentifiers(format, ['""', '``']);
   supportsBetween(format);
   supportsOperators(format, TrinoFormatter.operators, ['AND', 'OR']);

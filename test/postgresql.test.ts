@@ -31,7 +31,7 @@ describe('PostgreSqlFormatter', () => {
   supportsArrayAndMapAccessors(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, ["''", "U&''", "X''"]);
+  supportsStrings(format, PostgreSqlFormatter.stringTypes);
   supportsIdentifiers(format, [`""`, 'U&""']);
   supportsBetween(format);
   supportsSchema(format);

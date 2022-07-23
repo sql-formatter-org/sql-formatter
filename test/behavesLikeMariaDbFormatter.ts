@@ -10,7 +10,6 @@ import supportsJoin from './features/join';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
-import supportsStrings from './features/strings';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 
@@ -20,7 +19,6 @@ import supportsParams from './options/param';
 export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   behavesLikeSqlFormatter(format);
   supportsComments(format, { hashComments: true });
-  supportsStrings(format, ["''", '""', "X''"]);
   supportsIdentifiers(format, ['``']);
   supportsCreateTable(format);
   supportsConstraints(format);
