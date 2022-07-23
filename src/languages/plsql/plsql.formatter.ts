@@ -94,8 +94,7 @@ export default class PlSqlFormatter extends Formatter {
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      // TODO: support custom-delimited strings: Q'{..}' q'<..>' etc
-      stringTypes: [{ quote: "''", prefixes: ['N'] }],
+      stringTypes: [{ quote: "''", prefixes: ['N'] }, "q''"],
       identTypes: [`""`],
       identChars: { rest: '$#' },
       variableTypes: [{ regex: '&{1,2}[A-Za-z][A-Za-z0-9_$#]*' }],
