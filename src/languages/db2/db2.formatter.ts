@@ -1,5 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
+import type { QuoteType } from 'src/lexer/regexTypes';
 import { functions } from './db2.functions';
 import { keywords } from './db2.keywords';
 
@@ -168,6 +169,7 @@ const reservedJoins = [
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
   static operators = ['**', '¬=', '¬>', '¬<', '!>', '!<', '||'];
+  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['X', 'G', 'N', 'GX', 'UX', 'U&'] }];
 
   tokenizer() {
     return new Tokenizer({
@@ -177,7 +179,7 @@ export default class Db2Formatter extends Formatter {
       reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: [{ quote: "''", prefixes: ['X', 'G', 'N', 'GX', 'UX', 'U&'] }],
+      stringTypes: Db2Formatter.stringTypes,
       identTypes: [`""`],
       positionalParams: true,
       namedParamTypes: [':'],

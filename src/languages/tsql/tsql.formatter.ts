@@ -1,5 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
+import type { QuoteType } from 'src/lexer/regexTypes';
 import { functions } from './tsql.functions';
 import { keywords } from './tsql.keywords';
 
@@ -218,6 +219,7 @@ const reservedJoins = [
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export default class TSqlFormatter extends Formatter {
   static operators = ['~', '!<', '!>', '+=', '-=', '*=', '/=', '%=', '|=', '&=', '^=', '::'];
+  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['N'] }];
 
   tokenizer() {
     return new Tokenizer({
@@ -227,7 +229,7 @@ export default class TSqlFormatter extends Formatter {
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: [{ quote: "''", prefixes: ['N'] }],
+      stringTypes: TSqlFormatter.stringTypes,
       identTypes: [`""`, '[]'],
       identChars: { first: '#@', rest: '#@$' },
       namedParamTypes: ['@'],

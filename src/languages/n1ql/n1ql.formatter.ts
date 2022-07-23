@@ -1,5 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
+import type { QuoteType } from 'src/lexer/regexTypes';
 import { functions } from './n1ql.functions';
 import { keywords } from './n1ql.keywords';
 
@@ -91,6 +92,7 @@ const reservedJoins = [
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html
 export default class N1qlFormatter extends Formatter {
   static operators = ['==', '||'];
+  static stringTypes: QuoteType[] = [`""`, "''"];
 
   tokenizer() {
     return new Tokenizer({
@@ -104,7 +106,7 @@ export default class N1qlFormatter extends Formatter {
       // NOTE: single quotes are actually not supported in N1QL,
       // but we support them anyway as all other SQL dialects do,
       // which simplifies writing tests that are shared between all dialects.
-      stringTypes: [`""`, "''"],
+      stringTypes: N1qlFormatter.stringTypes,
       identTypes: ['``'],
       openParens: ['(', '[', '{'],
       closeParens: [')', ']', '}'],

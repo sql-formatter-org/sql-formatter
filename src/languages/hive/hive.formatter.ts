@@ -1,4 +1,5 @@
 import Formatter from 'src/formatter/Formatter';
+import type { QuoteType } from 'src/lexer/regexTypes';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './hive.functions';
 import { keywords } from './hive.keywords';
@@ -66,6 +67,7 @@ const reservedJoins = [
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export default class HiveFormatter extends Formatter {
   static operators = ['<=>', '==', '||'];
+  static stringTypes: QuoteType[] = ['""', "''"];
 
   tokenizer() {
     return new Tokenizer({
@@ -77,7 +79,7 @@ export default class HiveFormatter extends Formatter {
       reservedFunctionNames: functions,
       openParens: ['(', '['],
       closeParens: [')', ']'],
-      stringTypes: ['""', "''"],
+      stringTypes: HiveFormatter.stringTypes,
       identTypes: ['``'],
       variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
       operators: HiveFormatter.operators,

@@ -1,5 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
+import type { QuoteType } from 'src/lexer/regexTypes';
 import { functions } from './redshift.functions';
 import { keywords } from './redshift.keywords';
 
@@ -133,6 +134,7 @@ const reservedJoins = [
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export default class RedshiftFormatter extends Formatter {
   static operators = ['~', '|/', '||/', '<<', '>>', '||'];
+  static stringTypes: QuoteType[] = ["''"];
 
   tokenizer() {
     return new Tokenizer({
@@ -142,7 +144,7 @@ export default class RedshiftFormatter extends Formatter {
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: ["''"],
+      stringTypes: RedshiftFormatter.stringTypes,
       identTypes: [`""`],
       numberedParamTypes: ['$'],
       operators: RedshiftFormatter.operators,

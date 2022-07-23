@@ -1,5 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
+import type { QuoteType } from 'src/lexer/regexTypes';
 import { functions } from './trino.functions';
 import { keywords } from './trino.keywords';
 
@@ -127,6 +128,7 @@ const reservedJoins = [
 export default class TrinoFormatter extends Formatter {
   // https://trino.io/docs/current/functions/list.html#id1
   static operators = ['||', '->'];
+  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['U&', 'X'] }];
 
   tokenizer() {
     return new Tokenizer({
@@ -138,7 +140,7 @@ export default class TrinoFormatter extends Formatter {
       reservedFunctionNames: functions,
       openParens: ['(', '['],
       closeParens: [')', ']'],
-      stringTypes: [{ quote: "''", prefixes: ['U&', 'X'] }],
+      stringTypes: TrinoFormatter.stringTypes,
       identTypes: ['""', '``'],
       positionalParams: true,
       operators: TrinoFormatter.operators,

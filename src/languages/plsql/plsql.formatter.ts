@@ -1,5 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
+import type { QuoteType } from 'src/lexer/regexTypes';
 import { EOF_TOKEN, isReserved, isToken, type Token, TokenType } from 'src/lexer/token';
 import { keywords } from './plsql.keywords';
 import { functions } from './plsql.functions';
@@ -85,6 +86,8 @@ export default class PlSqlFormatter extends Formatter {
     //  '..' // breaks operator test, handled by .
   ];
 
+  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['N'] }];
+
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
@@ -95,7 +98,7 @@ export default class PlSqlFormatter extends Formatter {
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       // TODO: support custom-delimited strings: Q'{..}' q'<..>' etc
-      stringTypes: [{ quote: "''", prefixes: ['N'] }],
+      stringTypes: PlSqlFormatter.stringTypes,
       identTypes: [`""`],
       identChars: { rest: '$#' },
       variableTypes: [{ regex: '&{1,2}[A-Za-z][A-Za-z0-9_$#]*' }],

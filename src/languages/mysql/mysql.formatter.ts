@@ -1,5 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
+import type { QuoteType } from 'src/lexer/regexTypes';
 import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
 import { keywords } from './mysql.keywords';
 import { functions } from './mysql.functions';
@@ -228,6 +229,7 @@ const reservedJoins = [
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
   static operators = ['~', ':=', '<<', '>>', '<=>', '&&', '||', '->', '->>'];
+  static stringTypes: QuoteType[] = ['""', { quote: "''", prefixes: ['X'] }];
 
   tokenizer() {
     return new Tokenizer({
@@ -238,7 +240,7 @@ export default class MySqlFormatter extends Formatter {
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: ['""', { quote: "''", prefixes: ['X'] }],
+      stringTypes: MySqlFormatter.stringTypes,
       identTypes: ['``'],
       identChars: { first: '$', rest: '$' },
       variableTypes: [

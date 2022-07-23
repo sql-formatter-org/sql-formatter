@@ -1,5 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
+import type { QuoteType } from 'src/lexer/regexTypes';
 import { functions } from './sql.functions';
 import { keywords } from './sql.keywords';
 
@@ -61,6 +62,7 @@ const reservedJoins = [
 
 export default class SqlFormatter extends Formatter {
   static operators = [];
+  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['X'] }];
 
   tokenizer() {
     return new Tokenizer({
@@ -70,7 +72,7 @@ export default class SqlFormatter extends Formatter {
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: [{ quote: "''", prefixes: ['X'] }],
+      stringTypes: SqlFormatter.stringTypes,
       identTypes: [`""`, '``'],
       positionalParams: true,
     });

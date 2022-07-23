@@ -1,5 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
+import type { QuoteType } from 'src/lexer/regexTypes';
 import { functions } from './sqlite.functions';
 import { keywords } from './sqlite.keywords';
 
@@ -64,6 +65,7 @@ const reservedJoins = [
 export default class SqliteFormatter extends Formatter {
   // https://www.sqlite.org/lang_expr.html
   static operators = ['~', '->', '->>', '||', '<<', '>>', '=='];
+  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['X'] }];
 
   tokenizer() {
     return new Tokenizer({
@@ -73,7 +75,7 @@ export default class SqliteFormatter extends Formatter {
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: [{ quote: "''", prefixes: ['X'] }],
+      stringTypes: SqliteFormatter.stringTypes,
       identTypes: [`""`, '``', '[]'],
       // https://www.sqlite.org/lang_expr.html#parameters
       positionalParams: true,

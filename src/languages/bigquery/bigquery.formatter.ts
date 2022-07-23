@@ -1,5 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
+import type { QuoteType } from 'src/lexer/regexTypes';
 import { EOF_TOKEN, isToken, TokenType, type Token } from 'src/lexer/token';
 import { expandPhrases } from 'src/expandPhrases';
 import { keywords } from './bigquery.keywords';
@@ -120,6 +121,14 @@ const reservedJoins = expandPhrases([
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
 export default class BigQueryFormatter extends Formatter {
   static operators = ['~', '>>', '<<', '||'];
+  static stringTypes: QuoteType[] = [
+    // The triple-quoted strings are listed first, so they get matched first.
+    // Otherwise the first two quotes of """ will get matched as an empty "" string.
+    { quote: '""".."""', prefixes: ['R', 'B', 'RB', 'BR'] },
+    { quote: "'''..'''", prefixes: ['R', 'B', 'RB', 'BR'] },
+    { quote: '""', prefixes: ['R', 'B', 'RB', 'BR'] },
+    { quote: "''", prefixes: ['R', 'B', 'RB', 'BR'] },
+  ];
   // TODO: handle trailing comma in select clause
 
   tokenizer() {
@@ -132,14 +141,7 @@ export default class BigQueryFormatter extends Formatter {
       reservedFunctionNames: functions,
       openParens: ['(', '['],
       closeParens: [')', ']'],
-      stringTypes: [
-        // The triple-quoted strings are listed first, so they get matched first.
-        // Otherwise the first two quotes of """ will get matched as an empty "" string.
-        { quote: '""".."""', prefixes: ['R', 'B', 'RB', 'BR'] },
-        { quote: "'''..'''", prefixes: ['R', 'B', 'RB', 'BR'] },
-        { quote: '""', prefixes: ['R', 'B', 'RB', 'BR'] },
-        { quote: "''", prefixes: ['R', 'B', 'RB', 'BR'] },
-      ],
+      stringTypes: BigQueryFormatter.stringTypes,
       identTypes: ['``'],
       identChars: { dashes: true },
       positionalParams: true,

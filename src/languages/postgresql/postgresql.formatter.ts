@@ -1,5 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
+import type { QuoteType } from 'src/lexer/regexTypes';
 import { functions } from './postgresql.functions';
 import { keywords } from './postgresql.keywords';
 
@@ -310,6 +311,7 @@ const binaryOperators = [
 // https://www.postgresql.org/docs/14/index.html
 export default class PostgreSqlFormatter extends Formatter {
   static operators = binaryOperators;
+  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['U&', 'E', 'X', 'B'] }, '$$'];
 
   tokenizer() {
     return new Tokenizer({
@@ -321,7 +323,7 @@ export default class PostgreSqlFormatter extends Formatter {
       reservedFunctionNames: functions,
       openParens: ['(', '['],
       closeParens: [')', ']'],
-      stringTypes: [{ quote: "''", prefixes: ['U&', 'E', 'X', 'B'] }, '$$'],
+      stringTypes: PostgreSqlFormatter.stringTypes,
       identTypes: [{ quote: '""', prefixes: ['U&'] }],
       identChars: { rest: '$' },
       numberedParamTypes: ['$'],

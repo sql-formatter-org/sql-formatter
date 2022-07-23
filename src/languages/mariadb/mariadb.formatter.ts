@@ -1,5 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
+import type { QuoteType } from 'src/lexer/regexTypes';
 import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
 import { keywords } from './mariadb.keywords';
 import { functions } from './mariadb.functions';
@@ -258,6 +259,7 @@ const reservedJoins = [
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {
   static operators = [':=', '<<', '>>', '<=>', '&&', '||'];
+  static stringTypes: QuoteType[] = ['""', { quote: "''", prefixes: ['X'] }];
 
   tokenizer() {
     return new Tokenizer({
@@ -268,7 +270,7 @@ export default class MariaDbFormatter extends Formatter {
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: ['""', { quote: "''", prefixes: ['X'] }],
+      stringTypes: MariaDbFormatter.stringTypes,
       identTypes: ['``'],
       identChars: { first: '$', rest: '$' },
       variableTypes: [

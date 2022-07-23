@@ -1,5 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
+import type { QuoteType } from 'src/lexer/regexTypes';
 import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
 import { keywords } from './spark.keywords';
 import { functions } from './spark.functions';
@@ -132,6 +133,7 @@ const reservedJoins = [
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkFormatter extends Formatter {
   static operators = ['~', '<=>', '&&', '||', '==', '->'];
+  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['X'] }];
 
   tokenizer() {
     return new Tokenizer({
@@ -144,7 +146,7 @@ export default class SparkFormatter extends Formatter {
       reservedFunctionNames: functions,
       openParens: ['(', '['],
       closeParens: [')', ']'],
-      stringTypes: [{ quote: "''", prefixes: ['X'] }],
+      stringTypes: SparkFormatter.stringTypes,
       identTypes: ['``'],
       variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
       operators: SparkFormatter.operators,
