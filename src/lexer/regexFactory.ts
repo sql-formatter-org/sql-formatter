@@ -99,7 +99,7 @@ export const quotePatterns = {
 const singleQuotePattern = (quoteTypes: QuoteType): string => {
   // for plain quotes, used for identifiers and non standard strings
   if (typeof quoteTypes === 'string') {
-    return quotePatterns[quoteTypes];
+    return quotePatterns[quoteTypes].replace(/{escape}/g, '');
   }
 
   // for prefixed / escaped quote types
