@@ -10,7 +10,7 @@ export default function supportsStrings(format: FormatFn, stringTypes: QuoteType
   // for each valid string type
   for (const quoteType of stringTypes) {
     const quoteString = typeof quoteType === 'string' ? quoteType : quoteType.quote;
-    it.only(`supports ${quoteString} strings`, () => {
+    it(`supports ${quoteString} strings`, () => {
       const testString = [
         quoteString.slice(0, quoteString.length / 2).replace(/[.]/g, ''),
         baseTestString,
