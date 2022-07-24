@@ -83,8 +83,8 @@ describe('TrinoFormatter', () => {
             orderdate
           MEASURES
             A.totalprice AS starting_price,
-            LAST (B.totalprice) AS bottom_price,
-            LAST (U.totalprice) AS top_price
+            LAST(B.totalprice) AS bottom_price,
+            LAST(U.totalprice) AS top_price
           ONE ROW PER MATCH
           AFTER MATCH
             SKIP PAST LAST ROW
@@ -93,10 +93,10 @@ describe('TrinoFormatter', () => {
           SUBSET
             U = (C, D)
           DEFINE
-            B AS totalprice < PREV (totalprice),
-            C AS totalprice > PREV (totalprice)
+            B AS totalprice < PREV(totalprice),
+            C AS totalprice > PREV(totalprice)
             AND totalprice <= A.totalprice,
-            D AS totalprice > PREV (totalprice)
+            D AS totalprice > PREV(totalprice)
         )
     `);
   });
