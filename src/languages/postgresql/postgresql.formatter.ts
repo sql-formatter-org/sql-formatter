@@ -313,7 +313,7 @@ export default class PostgreSqlFormatter extends Formatter {
   static operators = binaryOperators;
   static stringTypes: QuoteType[] = [
     { quote: "''", prefixes: ['U&', 'E', 'X', 'B'], escapes: ["'", '\\\\'] },
-    '$$',
+    '$$$$',
   ];
 
   tokenizer() {

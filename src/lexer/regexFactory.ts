@@ -90,7 +90,7 @@ export const quotePatterns = {
   '[]': String.raw`(?:\[[^\]]*(?:$|\]))(?:\][^\]]*(?:$|\]))*`,
   '""': String.raw`(?:"{escape}(?:\\.{escape})*(?:"|$))+`,
   "''": String.raw`(?:'{escape}(?:\\.{escape})*(?:'|$))+`,
-  '$$': String.raw`(?<tag>\$\w*\$)[\s\S]*?(?:\k<tag>|$)`,
+  '$$$$': String.raw`(?<tag>\$\w*\$)[\s\S]*?(?:\k<tag>|$)`,
   "'''..'''": String.raw`'''{escape}?(?:\\.{escape}?)*?(?:'''|$)`,
   '""".."""': String.raw`"""{escape}?(?:\\.{escape}?)*?(?:"""|$)`,
   '{}': String.raw`(?:\{[^\}]*(?:$|\}))`,
