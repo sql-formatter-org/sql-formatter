@@ -70,7 +70,7 @@ export default class SqlFormatter extends Formatter {
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: [{ quote: "''", prefixes: ['X'] }],
+      stringTypes: [{ quote: "''", prefixes: ['N', 'X', 'U&'] }],
       identTypes: [`""`, '``'],
       positionalParams: true,
     });

@@ -177,7 +177,7 @@ export default class Db2Formatter extends Formatter {
       reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: [{ quote: "''", prefixes: ['X', 'G', 'N', 'GX', 'UX', 'U&'] }],
+      stringTypes: [{ quote: "''", prefixes: ['G', 'N', 'X', 'BX', 'GX', 'UX', 'U&'] }],
       identTypes: [`""`],
       positionalParams: true,
       namedParamTypes: [':'],

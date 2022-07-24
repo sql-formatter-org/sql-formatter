@@ -268,7 +268,11 @@ export default class MariaDbFormatter extends Formatter {
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: ['""', { quote: "''", prefixes: ['X'] }],
+      // TODO: support _ char set prefixes such as _utf8, _latin1, _binary, _utf8mb4, etc.
+      stringTypes: [
+        { quote: "''", prefixes: ['B', 'X'] },
+        { quote: '""', prefixes: ['B', 'X'] },
+      ],
       identTypes: ['``'],
       identChars: { first: '$', rest: '$' },
       variableTypes: [
