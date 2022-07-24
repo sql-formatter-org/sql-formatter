@@ -128,7 +128,7 @@ const reservedJoins = [
 export default class TrinoFormatter extends Formatter {
   // https://trino.io/docs/current/functions/list.html#id1
   static operators = ['||', '->'];
-  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['X', 'U&'] }];
+  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['X', 'U&'], escapes: ["'"] }];
 
   tokenizer() {
     return new Tokenizer({

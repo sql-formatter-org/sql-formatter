@@ -67,7 +67,10 @@ const reservedJoins = [
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export default class HiveFormatter extends Formatter {
   static operators = ['<=>', '==', '||'];
-  static stringTypes: QuoteType[] = ['""', "''"];
+  static stringTypes: QuoteType[] = [
+    { quote: '""', escapes: ['\\\\'] },
+    { quote: "''", escapes: ['\\\\'] },
+  ];
 
   tokenizer() {
     return new Tokenizer({

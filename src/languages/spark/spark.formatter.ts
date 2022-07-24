@@ -134,8 +134,8 @@ const reservedJoins = [
 export default class SparkFormatter extends Formatter {
   static operators = ['~', '<=>', '&&', '||', '==', '->'];
   static stringTypes: QuoteType[] = [
-    { quote: "''", prefixes: ['R', 'X'] },
-    { quote: '""', prefixes: ['R', 'X'] },
+    { quote: "''", prefixes: ['R', 'X'], escapes: ['\\\\'] },
+    { quote: '""', prefixes: ['R', 'X'], escapes: ['\\\\'] },
   ];
 
   tokenizer() {

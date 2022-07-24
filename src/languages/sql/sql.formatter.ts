@@ -62,7 +62,7 @@ const reservedJoins = [
 
 export default class SqlFormatter extends Formatter {
   static operators = [];
-  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['N', 'X', 'U&'] }];
+  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['N', 'X', 'U&'], escapes: ["'"] }];
 
   tokenizer() {
     return new Tokenizer({

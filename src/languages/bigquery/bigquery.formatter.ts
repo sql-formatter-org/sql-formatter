@@ -124,10 +124,10 @@ export default class BigQueryFormatter extends Formatter {
   static stringTypes: QuoteType[] = [
     // The triple-quoted strings are listed first, so they get matched first.
     // Otherwise the first two quotes of """ will get matched as an empty "" string.
-    { quote: '""".."""', prefixes: ['R', 'B', 'RB', 'BR'] },
-    { quote: "'''..'''", prefixes: ['R', 'B', 'RB', 'BR'] },
-    { quote: '""', prefixes: ['R', 'B', 'RB', 'BR'] },
-    { quote: "''", prefixes: ['R', 'B', 'RB', 'BR'] },
+    { quote: '""".."""', prefixes: ['R', 'B', 'RB', 'BR'], escapes: ['\\\\'] },
+    { quote: "'''..'''", prefixes: ['R', 'B', 'RB', 'BR'], escapes: ['\\\\'] },
+    { quote: '""', prefixes: ['R', 'B', 'RB', 'BR'], escapes: ['\\\\', '"'] },
+    { quote: "''", prefixes: ['R', 'B', 'RB', 'BR'], escapes: ['\\\\', "'"] },
   ];
   // TODO: handle trailing comma in select clause
 

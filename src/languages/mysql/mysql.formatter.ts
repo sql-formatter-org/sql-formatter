@@ -231,8 +231,8 @@ export default class MySqlFormatter extends Formatter {
   static operators = ['~', ':=', '<<', '>>', '<=>', '&&', '||', '->', '->>'];
   // TODO: support _ char set prefixes such as _utf8, _latin1, _binary, _utf8mb4, etc.
   static stringTypes: QuoteType[] = [
-    { quote: "''", prefixes: ['B', 'N', 'X'] },
-    { quote: '""', prefixes: ['B', 'N', 'X'] },
+    { quote: "''", prefixes: ['B', 'N', 'X'], escapes: ['\\\\', '"'] },
+    { quote: '""', prefixes: ['B', 'N', 'X'], escapes: ['\\\\', "'"] },
   ];
 
   tokenizer() {

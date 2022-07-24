@@ -86,7 +86,7 @@ export default class PlSqlFormatter extends Formatter {
     //  '..' // breaks operator test, handled by .
   ];
 
-  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['N'] }];
+  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['N'], escapes: ["'"] }];
 
   tokenizer() {
     return new Tokenizer({

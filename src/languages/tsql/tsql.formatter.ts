@@ -219,7 +219,7 @@ const reservedJoins = [
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export default class TSqlFormatter extends Formatter {
   static operators = ['~', '!<', '!>', '+=', '-=', '*=', '/=', '%=', '|=', '&=', '^=', '::'];
-  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['N'] }];
+  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['N'], escapes: ["'"] }];
 
   tokenizer() {
     return new Tokenizer({

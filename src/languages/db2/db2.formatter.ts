@@ -170,7 +170,7 @@ const reservedJoins = [
 export default class Db2Formatter extends Formatter {
   static operators = ['**', '¬=', '¬>', '¬<', '!>', '!<', '||'];
   static stringTypes: QuoteType[] = [
-    { quote: "''", prefixes: ['G', 'N', 'X', 'BX', 'GX', 'UX', 'U&'] },
+    { quote: "''", prefixes: ['G', 'N', 'X', 'BX', 'GX', 'UX', 'U&'], escapes: ["'"] },
   ];
 
   tokenizer() {

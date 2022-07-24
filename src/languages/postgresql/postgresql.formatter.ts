@@ -311,7 +311,10 @@ const binaryOperators = [
 // https://www.postgresql.org/docs/14/index.html
 export default class PostgreSqlFormatter extends Formatter {
   static operators = binaryOperators;
-  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['U&', 'E', 'X', 'B'] }, '$$'];
+  static stringTypes: QuoteType[] = [
+    { quote: "''", prefixes: ['U&', 'E', 'X', 'B'], escapes: ["'", '\\\\'] },
+    '$$',
+  ];
 
   tokenizer() {
     return new Tokenizer({
