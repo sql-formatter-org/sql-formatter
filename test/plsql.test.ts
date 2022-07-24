@@ -91,7 +91,7 @@ describe('PlSqlFormatter', () => {
     `);
   });
 
-  it.only('supports Q custom delimiter strings', () => {
+  it('supports Q custom delimiter strings', () => {
     expect(format("q'<test string < > 'foo' bar >'")).toBe("q'<test string < > 'foo' bar >'");
     expect(format("Q'[test string [ ] 'foo' bar ]'")).toBe("Q'[test string [ ] 'foo' bar ]'");
     expect(format("q'(test string ( ) 'foo' bar )'")).toBe("q'(test string ( ) 'foo' bar )'");
