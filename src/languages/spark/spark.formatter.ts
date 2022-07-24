@@ -133,7 +133,10 @@ const reservedJoins = [
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkFormatter extends Formatter {
   static operators = ['~', '<=>', '&&', '||', '==', '->'];
-  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['X'] }];
+  static stringTypes: QuoteType[] = [
+    { quote: "''", prefixes: ['R', 'X'] },
+    { quote: '""', prefixes: ['R', 'X'] },
+  ];
 
   tokenizer() {
     return new Tokenizer({

@@ -169,7 +169,9 @@ const reservedJoins = [
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
   static operators = ['**', '¬=', '¬>', '¬<', '!>', '!<', '||'];
-  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['X', 'G', 'N', 'GX', 'UX', 'U&'] }];
+  static stringTypes: QuoteType[] = [
+    { quote: "''", prefixes: ['G', 'N', 'X', 'BX', 'GX', 'UX', 'U&'] },
+  ];
 
   tokenizer() {
     return new Tokenizer({

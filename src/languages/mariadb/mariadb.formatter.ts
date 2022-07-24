@@ -259,7 +259,11 @@ const reservedJoins = [
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {
   static operators = [':=', '<<', '>>', '<=>', '&&', '||'];
-  static stringTypes: QuoteType[] = ['""', { quote: "''", prefixes: ['X'] }];
+  // TODO: support _ char set prefixes such as _utf8, _latin1, _binary, _utf8mb4, etc.
+  static stringTypes: QuoteType[] = [
+    { quote: "''", prefixes: ['B', 'X'] },
+    { quote: '""', prefixes: ['B', 'X'] },
+  ];
 
   tokenizer() {
     return new Tokenizer({

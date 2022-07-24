@@ -229,7 +229,11 @@ const reservedJoins = [
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
   static operators = ['~', ':=', '<<', '>>', '<=>', '&&', '||', '->', '->>'];
-  static stringTypes: QuoteType[] = ['""', { quote: "''", prefixes: ['X'] }];
+  // TODO: support _ char set prefixes such as _utf8, _latin1, _binary, _utf8mb4, etc.
+  static stringTypes: QuoteType[] = [
+    { quote: "''", prefixes: ['B', 'N', 'X'] },
+    { quote: '""', prefixes: ['B', 'N', 'X'] },
+  ];
 
   tokenizer() {
     return new Tokenizer({

@@ -65,7 +65,10 @@ const reservedJoins = [
 export default class SqliteFormatter extends Formatter {
   // https://www.sqlite.org/lang_expr.html
   static operators = ['~', '->', '->>', '||', '<<', '>>', '=='];
-  static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['X'] }];
+  static stringTypes: QuoteType[] = [
+    { quote: "''", prefixes: ['X'] },
+    // { quote: '""', prefixes: ['X'] }, // currently conflict with "" identifiers
+  ];
 
   tokenizer() {
     return new Tokenizer({

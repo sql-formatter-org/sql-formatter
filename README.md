@@ -131,12 +131,12 @@ where
 
 The tool also accepts a JSON config file with the `--config` option that takes this form:
 
-```ts
+```json
 {
   "language": "spark",
   "tabWidth": 2,
   "keywordCase": "upper",
-  "linesBetweenQueries": 2,
+  "linesBetweenQueries": 2
 }
 ```
 
