@@ -92,10 +92,9 @@ const buildQStringPatterns = () => {
     singlePattern.replace(/{left}/g, escapeRegExp(left)).replace(/{right}/g, escapeRegExp(right))
   );
 
-  // standard pattern for common delimiters, ignores keys of specialDelimiterMap
-  const standardDelimiterPattern = String.raw`(?<tag>[^\s${escapeRegExp(
-    Object.keys(specialDelimiterMap).join('')
-  )}])(?:(?!\k<tag>).|\k<tag>(?!'))+\k<tag>`;
+  const specialDelimiters = escapeRegExp(Object.keys(specialDelimiterMap).join(''));
+  // standard pattern for common delimiters, ignores special delimiters
+  const standardDelimiterPattern = String.raw`(?<tag>[^\s${specialDelimiters}])(?:(?!\k<tag>).|\k<tag>(?!'))+\k<tag>`;
 
   // constructs final pattern by joining all cases
   const qStringPattern = `[Qq]'(?:${standardDelimiterPattern}|${patternList.join('|')})'`;
