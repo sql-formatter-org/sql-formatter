@@ -21,7 +21,7 @@ export const escapeParen = (paren: string): string => {
     return escapeRegExp(paren);
   } else {
     // longer word
-    return '\\b' + paren + '\\b';
+    return '\\b' + escapeRegExp(paren) + '\\b';
   }
 };
 
