@@ -303,6 +303,11 @@ export default class ExpressionFormatter {
       this.layout.add(WS.NO_SPACE, this.show(token));
       return;
     }
+    // special case for PLSQL @ dblink syntax
+    else if (token.value === '@' && this.cfg.language === 'plsql') {
+      this.layout.add(WS.NO_SPACE, this.show(token));
+      return;
+    }
 
     // other operators
     if (this.cfg.denseOperators) {
