@@ -15,34 +15,17 @@ export default function supportsJoin(
   const unsupportedJoinRegex = without ? new RegExp(without.join('|'), 'u') : /^whateve_!%&$/u;
   const isSupportedJoin = (join: string) => !unsupportedJoinRegex.test(join);
 
-  ['CROSS JOIN', 'NATURAL JOIN'].filter(isSupportedJoin).forEach(join => {
-    it(`supports ${join}`, () => {
-      const result = format(`SELECT * FROM tbl1 ${join} tbl2`);
-      expect(result).toBe(dedent`
-        SELECT
-          *
-        FROM
-          tbl1
-          ${join} tbl2
-      `);
-    });
-  });
-
-  // <join> ::= [ <join type> ] JOIN
-  //
-  // <join type> ::= INNER | <outer join type> [ OUTER ]
-  //
-  // <outer join type> ::= LEFT | RIGHT | FULL
-
   [
     'JOIN',
     'INNER JOIN',
+    'CROSS JOIN',
     'LEFT JOIN',
     'LEFT OUTER JOIN',
     'RIGHT JOIN',
     'RIGHT OUTER JOIN',
     'FULL JOIN',
     'FULL OUTER JOIN',
+    'NATURAL JOIN',
     ...(additionally || []),
   ]
     .filter(isSupportedJoin)
