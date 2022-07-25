@@ -63,18 +63,6 @@ describe('Db2Formatter', () => {
     `);
   });
 
-  // DB2-specific string types
-  it('supports strings with G, GX, UX prefixes', () => {
-    expect(format(`SELECT G'blah blah', GX'01AC', UX'CCF239' FROM foo`)).toBe(dedent`
-      SELECT
-        G'blah blah',
-        GX'01AC',
-        UX'CCF239'
-      FROM
-        foo
-    `);
-  });
-
   it('supports @, #, $ characters in named parameters', () => {
     expect(format(`SELECT :foo@bar, :foo#bar, :foo$bar, :@zip, :#zap, :$zop`)).toBe(dedent`
       SELECT

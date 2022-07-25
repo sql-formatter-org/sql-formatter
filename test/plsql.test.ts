@@ -117,14 +117,6 @@ describe('PlSqlFormatter', () => {
     `);
   });
 
-  it('formats simple SELECT with national characters', () => {
-    const result = format("SELECT N'value'");
-    expect(result).toBe(dedent`
-      SELECT
-        N'value'
-    `);
-  });
-
   it('formats SELECT query with OUTER APPLY', () => {
     const result = format('SELECT a, b FROM t OUTER APPLY fn(t.id)');
     expect(result).toBe(dedent`
