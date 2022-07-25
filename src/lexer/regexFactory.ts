@@ -85,7 +85,7 @@ const buildQStringPatterns = () => {
   };
 
   // base pattern for special delimiters, left must correspond with right
-  const singlePattern = "{left}(?:[^{right}]|{right}(?!'))+{right}";
+  const singlePattern = "{left}(?:(?!{right}').)*?{right}";
 
   // replace {left} and {right} with delimiters, collect as array
   const patternList = Object.entries(specialDelimiterMap).map(([left, right]) =>
@@ -94,7 +94,7 @@ const buildQStringPatterns = () => {
 
   const specialDelimiters = escapeRegExp(Object.keys(specialDelimiterMap).join(''));
   // standard pattern for common delimiters, ignores special delimiters
-  const standardDelimiterPattern = String.raw`(?<tag>[^\s${specialDelimiters}])(?:(?!\k<tag>).|\k<tag>(?!'))+\k<tag>`;
+  const standardDelimiterPattern = String.raw`(?<tag>[^\s${specialDelimiters}])(?:(?!\k<tag>').)*?\k<tag>`;
 
   // constructs final pattern by joining all cases
   const qStringPattern = `[Qq]'(?:${standardDelimiterPattern}|${patternList.join('|')})'`;
