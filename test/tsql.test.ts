@@ -36,7 +36,7 @@ describe('TSqlFormatter', () => {
     format,
     TSqlFormatter.operators.filter(op => op !== '::')
   );
-  supportsJoin(format, { without: ['NATURAL'], supportsUsing: false });
+  supportsJoin(format, { without: ['NATURAL'], supportsUsing: false, supportsApply: true });
   supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });
   supportsWindow(format);
 
@@ -51,30 +51,6 @@ describe('TSqlFormatter', () => {
         Customers (ID, MoneyBalance, Address, City)
       VALUES
         (12, -123.4, 'Skagen 2111', 'Stv');
-    `);
-  });
-
-  it('formats SELECT query with CROSS APPLY', () => {
-    const result = format('SELECT a, b FROM t CROSS APPLY fn(t.id)');
-    expect(result).toBe(dedent`
-      SELECT
-        a,
-        b
-      FROM
-        t
-        CROSS APPLY fn (t.id)
-    `);
-  });
-
-  it('formats SELECT query with OUTER APPLY', () => {
-    const result = format('SELECT a, b FROM t OUTER APPLY fn(t.id)');
-    expect(result).toBe(dedent`
-      SELECT
-        a,
-        b
-      FROM
-        t
-        OUTER APPLY fn (t.id)
     `);
   });
 

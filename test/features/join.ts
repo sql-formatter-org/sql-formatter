@@ -6,11 +6,12 @@ interface Options {
   without?: string[];
   additionally?: string[];
   supportsUsing?: boolean;
+  supportsApply?: boolean;
 }
 
 export default function supportsJoin(
   format: FormatFn,
-  { without, additionally, supportsUsing = true }: Options = {}
+  { without, additionally, supportsUsing = true, supportsApply }: Options = {}
 ) {
   const unsupportedJoinRegex = without ? new RegExp(without.join('|'), 'u') : /^whateve_!%&$/u;
   const isSupportedJoin = (join: string) => !unsupportedJoinRegex.test(join);
@@ -79,6 +80,22 @@ export default function supportsJoin(
           customers
           JOIN foo USING (id);
       `);
+    });
+  }
+
+  if (supportsApply) {
+    ['CROSS APPLY', 'OUTER APPLY'].forEach(apply => {
+      // TODO: improve formatting of custom functions
+      it(`supports ${apply}`, () => {
+        const result = format(`SELECT * FROM customers ${apply} fn(customers.id)`);
+        expect(result).toBe(dedent`
+          SELECT
+            *
+          FROM
+            customers
+            ${apply} fn (customers.id)
+        `);
+      });
     });
   }
 }

@@ -35,7 +35,7 @@ describe('PlSqlFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, PlSqlFormatter.operators, ['AND', 'OR', 'XOR']);
-  supportsJoin(format);
+  supportsJoin(format, { supportsApply: true });
   supportsReturning(format);
   supportsParams(format, { numbered: [':'], named: [':'] });
 
@@ -114,36 +114,11 @@ describe('PlSqlFormatter', () => {
     `);
   });
 
-  // TODO: improve formatting of custom functions
-  it('formats SELECT query with CROSS APPLY', () => {
-    const result = format('SELECT a, b FROM t CROSS APPLY fn(t.id)');
-    expect(result).toBe(dedent`
-      SELECT
-        a,
-        b
-      FROM
-        t
-        CROSS APPLY fn (t.id)
-    `);
-  });
-
   it('formats simple SELECT with national characters', () => {
     const result = format("SELECT N'value'");
     expect(result).toBe(dedent`
       SELECT
         N'value'
-    `);
-  });
-
-  it('formats SELECT query with OUTER APPLY', () => {
-    const result = format('SELECT a, b FROM t OUTER APPLY fn(t.id)');
-    expect(result).toBe(dedent`
-      SELECT
-        a,
-        b
-      FROM
-        t
-        OUTER APPLY fn (t.id)
     `);
   });
 
