@@ -150,6 +150,7 @@ export const keywords = flatKeywordList({
     'PATH',
     'PATTERN',
     'PER',
+    'PERMUTE',
     'PRECEDING',
     'PRECISION',
     'PREPARE',
