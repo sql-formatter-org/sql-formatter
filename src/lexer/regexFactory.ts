@@ -76,6 +76,32 @@ export const parameter = (paramTypes: string[], pattern: string): RegExp | undef
   return patternToRegex(`(?:${typesRegex})(?:${pattern})`);
 };
 
+const buildQStringPatterns = () => {
+  const specialDelimiterMap = {
+    '<': '>',
+    '[': ']',
+    '(': ')',
+    '{': '}',
+  };
+
+  // base pattern for special delimiters, left must correspond with right
+  const singlePattern = "{left}(?:(?!{right}').)*?{right}";
+
+  // replace {left} and {right} with delimiters, collect as array
+  const patternList = Object.entries(specialDelimiterMap).map(([left, right]) =>
+    singlePattern.replace(/{left}/g, escapeRegExp(left)).replace(/{right}/g, escapeRegExp(right))
+  );
+
+  const specialDelimiters = escapeRegExp(Object.keys(specialDelimiterMap).join(''));
+  // standard pattern for common delimiters, ignores special delimiters
+  const standardDelimiterPattern = String.raw`(?<tag>[^\s${specialDelimiters}])(?:(?!\k<tag>').)*?\k<tag>`;
+
+  // constructs final pattern by joining all cases
+  const qStringPattern = `[Qq]'(?:${standardDelimiterPattern}|${patternList.join('|')})'`;
+
+  return qStringPattern;
+};
+
 // This enables the following quote styles:
 // 1. backtick quoted using `` to escape
 // 2. square bracket quoted (SQL Server) using ]] to escape
@@ -94,6 +120,7 @@ export const quotePatterns = {
   "'''..'''": "'''[^\\\\]*?(?:\\\\.[^\\\\]*?)*?(?:'''|$)",
   '""".."""': '"""[^\\\\]*?(?:\\\\.[^\\\\]*?)*?(?:"""|$)',
   '{}': '(?:\\{[^\\}]*(?:$|\\}))',
+  "q''": buildQStringPatterns(),
 };
 
 const singleQuotePattern = (quoteTypes: QuoteType): string => {

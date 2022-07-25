@@ -91,6 +91,17 @@ describe('PlSqlFormatter', () => {
     `);
   });
 
+  it('supports Q custom delimiter strings', () => {
+    expect(format("q'<test string < > 'foo' bar >'")).toBe("q'<test string < > 'foo' bar >'");
+    expect(format("NQ'[test string [ ] 'foo' bar ]'")).toBe("NQ'[test string [ ] 'foo' bar ]'");
+    expect(format("nq'(test string ( ) 'foo' bar )'")).toBe("nq'(test string ( ) 'foo' bar )'");
+    expect(format("nQ'{test string { } 'foo' bar }'")).toBe("nQ'{test string { } 'foo' bar }'");
+    expect(format("Nq'%test string % % 'foo' bar %'")).toBe("Nq'%test string % % 'foo' bar %'");
+    expect(format("Q'Xtest string X X 'foo' bar X'")).toBe("Q'Xtest string X X 'foo' bar X'");
+    expect(format("q'$test string $'$''")).toBe("q'$test string $' $ ''");
+    expect(format("Q'Stest string S'S''")).toBe("Q'Stest string S' S ''");
+  });
+
   it('formats INSERT without INTO', () => {
     const result = format(
       "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
