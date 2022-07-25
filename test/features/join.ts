@@ -26,6 +26,13 @@ export default function supportsJoin(
     'FULL JOIN',
     'FULL OUTER JOIN',
     'NATURAL JOIN',
+    'NATURAL INNER JOIN',
+    'NATURAL LEFT JOIN',
+    'NATURAL LEFT OUTER JOIN',
+    'NATURAL RIGHT JOIN',
+    'NATURAL RIGHT OUTER JOIN',
+    'NATURAL FULL JOIN',
+    'NATURAL FULL OUTER JOIN',
     ...(additionally || []),
   ]
     .filter(isSupportedJoin)

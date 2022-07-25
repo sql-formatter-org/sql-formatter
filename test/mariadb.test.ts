@@ -13,14 +13,8 @@ describe('MariaDbFormatter', () => {
   behavesLikeMariaDbFormatter(format);
 
   supportsJoin(format, {
-    without: ['FULL'],
-    additionally: [
-      'STRAIGHT_JOIN',
-      'NATURAL LEFT JOIN',
-      'NATURAL LEFT OUTER JOIN',
-      'NATURAL RIGHT JOIN',
-      'NATURAL RIGHT OUTER JOIN',
-    ],
+    without: ['FULL', 'NATURAL INNER JOIN'],
+    additionally: ['STRAIGHT_JOIN'],
   });
   supportsOperators(format, MariaDbFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsReturning(format);

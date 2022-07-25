@@ -31,13 +31,6 @@ describe('SparkFormatter', () => {
   supportsArrayAndMapAccessors(format);
   supportsJoin(format, {
     additionally: [
-      'NATURAL INNER JOIN',
-      'NATURAL LEFT JOIN',
-      'NATURAL LEFT OUTER JOIN',
-      'NATURAL RIGHT JOIN',
-      'NATURAL RIGHT OUTER JOIN',
-      'NATURAL FULL JOIN',
-      'NATURAL FULL OUTER JOIN',
       // non-standard anti-join:
       'ANTI JOIN',
       'LEFT ANTI JOIN',

@@ -35,17 +35,7 @@ describe('PlSqlFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, PlSqlFormatter.operators, ['AND', 'OR', 'XOR']);
-  supportsJoin(format, {
-    additionally: [
-      'NATURAL INNER JOIN',
-      'NATURAL LEFT JOIN',
-      'NATURAL LEFT OUTER JOIN',
-      'NATURAL RIGHT JOIN',
-      'NATURAL RIGHT OUTER JOIN',
-      'NATURAL FULL JOIN',
-      'NATURAL FULL OUTER JOIN',
-    ],
-  });
+  supportsJoin(format);
   supportsReturning(format);
   supportsParams(format, { numbered: [':'], named: [':'] });
 

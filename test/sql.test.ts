@@ -32,17 +32,7 @@ describe('SqlFormatter', () => {
   supportsIdentifiers(format, [`""`, '``']);
   supportsBetween(format);
   supportsSchema(format);
-  supportsJoin(format, {
-    additionally: [
-      'NATURAL INNER JOIN',
-      'NATURAL LEFT JOIN',
-      'NATURAL LEFT OUTER JOIN',
-      'NATURAL RIGHT JOIN',
-      'NATURAL RIGHT OUTER JOIN',
-      'NATURAL FULL JOIN',
-      'NATURAL FULL OUTER JOIN',
-    ],
-  });
+  supportsJoin(format);
   supportsOperators(format, SqlFormatter.operators);
   supportsParams(format, { positional: true });
   supportsWindow(format);

@@ -39,17 +39,7 @@ describe('PostgreSqlFormatter', () => {
     format,
     PostgreSqlFormatter.operators.filter(op => op !== '::')
   );
-  supportsJoin(format, {
-    additionally: [
-      'NATURAL INNER JOIN',
-      'NATURAL LEFT JOIN',
-      'NATURAL LEFT OUTER JOIN',
-      'NATURAL RIGHT JOIN',
-      'NATURAL RIGHT OUTER JOIN',
-      'NATURAL FULL JOIN',
-      'NATURAL FULL OUTER JOIN',
-    ],
-  });
+  supportsJoin(format);
   supportsReturning(format);
   supportsParams(format, { numbered: ['$'] });
   supportsWindow(format);

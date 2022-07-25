@@ -30,17 +30,7 @@ describe('TrinoFormatter', () => {
   supportsOperators(format, TrinoFormatter.operators, ['AND', 'OR']);
   supportsArrayLiterals(format);
   supportsArrayAndMapAccessors(format);
-  supportsJoin(format, {
-    additionally: [
-      'NATURAL INNER JOIN',
-      'NATURAL LEFT JOIN',
-      'NATURAL LEFT OUTER JOIN',
-      'NATURAL RIGHT JOIN',
-      'NATURAL RIGHT OUTER JOIN',
-      'NATURAL FULL JOIN',
-      'NATURAL FULL OUTER JOIN',
-    ],
-  });
+  supportsJoin(format);
   supportsParams(format, { positional: true });
 
   it('formats SET SESSION', () => {

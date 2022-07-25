@@ -16,14 +16,7 @@ describe('MySqlFormatter', () => {
 
   supportsJoin(format, {
     without: ['FULL'],
-    additionally: [
-      'STRAIGHT_JOIN',
-      'NATURAL INNER JOIN',
-      'NATURAL LEFT JOIN',
-      'NATURAL LEFT OUTER JOIN',
-      'NATURAL RIGHT JOIN',
-      'NATURAL RIGHT OUTER JOIN',
-    ],
+    additionally: ['STRAIGHT_JOIN'],
   });
   supportsOperators(format, MySqlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsWindow(format);
