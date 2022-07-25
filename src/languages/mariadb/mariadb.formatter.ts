@@ -232,16 +232,13 @@ const reservedBinaryCommands = expandPhrases([
 ]);
 
 const reservedJoins = expandPhrases([
-  '[LEFT | RIGHT] [OUTER] JOIN',
-  'INNER JOIN',
-  'CROSS JOIN',
+  'JOIN',
+  '{LEFT | RIGHT} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
   'NATURAL JOIN',
+  'NATURAL {LEFT | RIGHT} [OUTER] JOIN',
   // non-standard joins
   'STRAIGHT_JOIN',
-  'NATURAL LEFT JOIN',
-  'NATURAL LEFT OUTER JOIN',
-  'NATURAL RIGHT JOIN',
-  'NATURAL RIGHT OUTER JOIN',
 ]);
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/

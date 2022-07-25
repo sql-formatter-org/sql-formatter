@@ -42,10 +42,12 @@ const reservedBinaryCommands = expandPhrases([
 ]);
 
 const reservedJoins = expandPhrases([
-  '[LEFT | RIGHT | FULL] [OUTER] JOIN',
-  'INNER JOIN',
-  'CROSS JOIN',
+  'JOIN',
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
   'NATURAL JOIN',
+  'NATURAL INNER JOIN',
+  'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
 ]);
 
 export default class SqlFormatter extends Formatter {

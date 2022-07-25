@@ -32,7 +32,7 @@ describe('Db2Formatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, Db2Formatter.operators);
-  supportsJoin(format, { supportsUsing: false });
+  supportsJoin(format, { without: ['NATURAL'], supportsUsing: false });
   supportsParams(format, { positional: true, named: [':'] });
 
   it('formats FETCH FIRST like LIMIT', () => {

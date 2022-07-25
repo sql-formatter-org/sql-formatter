@@ -197,9 +197,11 @@ const reservedBinaryCommands = expandPhrases([
 ]);
 
 const reservedJoins = expandPhrases([
-  '[LEFT | RIGHT | FULL] [OUTER] JOIN',
-  'INNER JOIN',
-  'CROSS JOIN',
+  'JOIN',
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
+  // non-standard joins
+  '{CROSS | OUTER} APPLY',
 ]);
 
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15

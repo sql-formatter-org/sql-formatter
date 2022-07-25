@@ -148,10 +148,9 @@ const reservedBinaryCommands = expandPhrases([
 ]);
 
 const reservedJoins = expandPhrases([
-  '[LEFT | RIGHT | FULL] [OUTER] JOIN',
-  'INNER JOIN',
-  'CROSS JOIN',
-  'NATURAL JOIN',
+  'JOIN',
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
 ]);
 
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm

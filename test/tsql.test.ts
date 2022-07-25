@@ -54,15 +54,27 @@ describe('TSqlFormatter', () => {
     `);
   });
 
-  it('formats SELECT query with CROSS JOIN', () => {
-    const result = format('SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t');
+  it('formats SELECT query with CROSS APPLY', () => {
+    const result = format('SELECT a, b FROM t CROSS APPLY fn(t.id)');
     expect(result).toBe(dedent`
       SELECT
         a,
         b
       FROM
         t
-        CROSS JOIN t2 on t.id = t2.id_t
+        CROSS APPLY fn (t.id)
+    `);
+  });
+
+  it('formats SELECT query with OUTER APPLY', () => {
+    const result = format('SELECT a, b FROM t OUTER APPLY fn(t.id)');
+    expect(result).toBe(dedent`
+      SELECT
+        a,
+        b
+      FROM
+        t
+        OUTER APPLY fn (t.id)
     `);
   });
 

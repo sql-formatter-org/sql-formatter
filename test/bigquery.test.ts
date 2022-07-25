@@ -29,7 +29,7 @@ describe('BigQueryFormatter', () => {
   supportsIdentifiers(format, ['``']);
   supportsArrayLiterals(format);
   supportsBetween(format);
-  supportsJoin(format, { without: ['NATURAL JOIN'] });
+  supportsJoin(format, { without: ['NATURAL'] });
   supportsOperators(format, BigQueryFormatter.operators);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
   supportsWindow(format);

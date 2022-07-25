@@ -35,7 +35,17 @@ describe('PlSqlFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, PlSqlFormatter.operators, ['AND', 'OR', 'XOR']);
-  supportsJoin(format);
+  supportsJoin(format, {
+    additionally: [
+      'NATURAL INNER JOIN',
+      'NATURAL LEFT JOIN',
+      'NATURAL LEFT OUTER JOIN',
+      'NATURAL RIGHT JOIN',
+      'NATURAL RIGHT OUTER JOIN',
+      'NATURAL FULL JOIN',
+      'NATURAL FULL OUTER JOIN',
+    ],
+  });
   supportsReturning(format);
   supportsParams(format, { numbered: [':'], named: [':'] });
 
@@ -123,8 +133,7 @@ describe('PlSqlFormatter', () => {
         b
       FROM
         t
-      CROSS APPLY
-      fn (t.id)
+        CROSS APPLY fn (t.id)
     `);
   });
 
@@ -144,8 +153,7 @@ describe('PlSqlFormatter', () => {
         b
       FROM
         t
-      OUTER APPLY
-      fn (t.id)
+        OUTER APPLY fn (t.id)
     `);
   });
 

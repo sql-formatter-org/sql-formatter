@@ -44,14 +44,12 @@ const reservedBinaryCommands = expandPhrases([
 
 // joins - https://www.sqlite.org/syntax/join-operator.html
 const reservedJoins = expandPhrases([
-  '[LEFT] [OUTER] JOIN',
-  'INNER JOIN',
-  'CROSS JOIN',
+  'JOIN',
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
   'NATURAL JOIN',
-  'NATURAL LEFT JOIN',
-  'NATURAL LEFT OUTER JOIN',
   'NATURAL INNER JOIN',
-  'NATURAL CROSS JOIN',
+  'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
 ]);
 
 export default class SqliteFormatter extends Formatter {

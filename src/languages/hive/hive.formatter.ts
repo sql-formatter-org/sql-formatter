@@ -49,9 +49,11 @@ const reservedBinaryCommands = expandPhrases([
 ]);
 
 const reservedJoins = expandPhrases([
-  '[LEFT | RIGHT | FULL] [OUTER] JOIN',
-  'INNER JOIN',
-  'CROSS JOIN',
+  'JOIN',
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
+  // non-standard joins
+  'LEFT SEMI JOIN',
 ]);
 
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual

@@ -31,22 +31,23 @@ describe('SparkFormatter', () => {
   supportsArrayAndMapAccessors(format);
   supportsJoin(format, {
     additionally: [
-      'ANTI JOIN',
-      'SEMI JOIN',
-      'LEFT ANTI JOIN',
-      'LEFT SEMI JOIN',
-      'RIGHT OUTER JOIN',
-      'RIGHT SEMI JOIN',
-      'NATURAL ANTI JOIN',
-      'NATURAL FULL OUTER JOIN',
       'NATURAL INNER JOIN',
-      'NATURAL LEFT ANTI JOIN',
+      'NATURAL LEFT JOIN',
       'NATURAL LEFT OUTER JOIN',
-      'NATURAL LEFT SEMI JOIN',
-      'NATURAL OUTER JOIN',
+      'NATURAL RIGHT JOIN',
       'NATURAL RIGHT OUTER JOIN',
-      'NATURAL RIGHT SEMI JOIN',
+      'NATURAL FULL JOIN',
+      'NATURAL FULL OUTER JOIN',
+      // non-standard anti-join:
+      'ANTI JOIN',
+      'LEFT ANTI JOIN',
+      'NATURAL ANTI JOIN',
+      'NATURAL LEFT ANTI JOIN',
+      // non-standard semi-join
+      'SEMI JOIN',
+      'LEFT SEMI JOIN',
       'NATURAL SEMI JOIN',
+      'NATURAL LEFT SEMI JOIN',
     ],
   });
 

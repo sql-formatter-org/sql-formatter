@@ -93,27 +93,15 @@ const reservedBinaryCommands = expandPhrases([
 ]);
 
 const reservedJoins = expandPhrases([
-  '[LEFT | RIGHT | FULL] [OUTER] JOIN',
-  'INNER JOIN',
-  'CROSS JOIN',
+  'JOIN',
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
   'NATURAL JOIN',
-  // non-standard-joins
-  'ANTI JOIN',
-  'SEMI JOIN',
-  'LEFT ANTI JOIN',
-  'LEFT SEMI JOIN',
-  'RIGHT OUTER JOIN',
-  'RIGHT SEMI JOIN',
-  'NATURAL ANTI JOIN',
-  'NATURAL FULL OUTER JOIN',
   'NATURAL INNER JOIN',
-  'NATURAL LEFT ANTI JOIN',
-  'NATURAL LEFT OUTER JOIN',
-  'NATURAL LEFT SEMI JOIN',
-  'NATURAL OUTER JOIN',
-  'NATURAL RIGHT OUTER JOIN',
-  'NATURAL RIGHT SEMI JOIN',
-  'NATURAL SEMI JOIN',
+  'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
+  // non-standard-joins
+  '[LEFT] {ANTI | SEMI} JOIN',
+  'NATURAL [LEFT] {ANTI | SEMI} JOIN',
 ]);
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html

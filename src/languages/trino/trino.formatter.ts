@@ -110,17 +110,12 @@ const reservedBinaryCommands = expandPhrases([
 
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L299-L313
 const reservedJoins = expandPhrases([
-  '[LEFT | RIGHT | FULL] [OUTER] JOIN',
-  'INNER JOIN',
-  'CROSS JOIN',
+  'JOIN',
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
   'NATURAL JOIN',
   'NATURAL INNER JOIN',
-  'NATURAL LEFT JOIN',
-  'NATURAL LEFT OUTER JOIN',
-  'NATURAL RIGHT JOIN',
-  'NATURAL RIGHT OUTER JOIN',
-  'NATURAL FULL JOIN',
-  'NATURAL FULL OUTER JOIN',
+  'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
 ]);
 
 export default class TrinoFormatter extends Formatter {

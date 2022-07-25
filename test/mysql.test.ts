@@ -4,6 +4,7 @@ import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
 import MySqlFormatter from 'src/languages/mysql/mysql.formatter';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
+import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsWindow from './features/window';
 
@@ -13,6 +14,17 @@ describe('MySqlFormatter', () => {
 
   behavesLikeMariaDbFormatter(format);
 
+  supportsJoin(format, {
+    without: ['FULL'],
+    additionally: [
+      'STRAIGHT_JOIN',
+      'NATURAL INNER JOIN',
+      'NATURAL LEFT JOIN',
+      'NATURAL LEFT OUTER JOIN',
+      'NATURAL RIGHT JOIN',
+      'NATURAL RIGHT OUTER JOIN',
+    ],
+  });
   supportsOperators(format, MySqlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsWindow(format);
 
