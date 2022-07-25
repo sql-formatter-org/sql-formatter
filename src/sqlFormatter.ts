@@ -35,9 +35,7 @@ export const formatters = {
 export type SqlLanguage = keyof typeof formatters;
 export const supportedDialects = Object.keys(formatters);
 
-export type FormatFnOptions = FormatOptions & { language: SqlLanguage };
-
-const defaultOptions: FormatFnOptions = {
+const defaultOptions: FormatOptions = {
   language: 'sql',
   tabWidth: 2,
   useTabs: false,
@@ -60,7 +58,7 @@ const defaultOptions: FormatFnOptions = {
  * @param {FormatOptions} cfg Configuration options (see docs in README)
  * @return {string} formatted query
  */
-export const format = (query: string, cfg: Partial<FormatFnOptions> = {}): string => {
+export const format = (query: string, cfg: Partial<FormatOptions> = {}): string => {
   if (typeof query !== 'string') {
     throw new Error('Invalid query argument. Expected string, instead got ' + typeof query);
   }
@@ -76,7 +74,7 @@ export const format = (query: string, cfg: Partial<FormatFnOptions> = {}): strin
 
 export class ConfigError extends Error {}
 
-function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
+function validateConfig(cfg: FormatOptions): FormatOptions {
   if (!supportedDialects.includes(cfg.language)) {
     throw new ConfigError(`Unsupported SQL dialect: ${cfg.language}`);
   }
