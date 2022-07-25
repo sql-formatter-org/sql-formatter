@@ -32,9 +32,21 @@ describe('expandSinglePhrase()', () => {
     ]);
   });
 
-  it('expands expression with [multi|choice|block]', () => {
+  it('expands expression with optional [multi|choice|block]', () => {
     expect(expandSinglePhrase('CREATE [TEMP|TEMPORARY|VIRTUAL] TABLE')).toEqual([
       'CREATE TABLE',
+      'CREATE TEMP TABLE',
+      'CREATE TEMPORARY TABLE',
+      'CREATE VIRTUAL TABLE',
+    ]);
+  });
+
+  it('removes braces around {mandatory} {block}', () => {
+    expect(expandSinglePhrase('CREATE {TEMP} {TABLE}')).toEqual(['CREATE TEMP TABLE']);
+  });
+
+  it('expands expression with mandatory {multi|choice|block}', () => {
+    expect(expandSinglePhrase('CREATE {TEMP|TEMPORARY|VIRTUAL} TABLE')).toEqual([
       'CREATE TEMP TABLE',
       'CREATE TEMPORARY TABLE',
       'CREATE VIRTUAL TABLE',
@@ -47,6 +59,15 @@ describe('expandSinglePhrase()', () => {
     );
     expect(() => expandSinglePhrase('CREATE TABLE]')).toThrowErrorMatchingInlineSnapshot(
       `"Unbalanced parenthesis in: CREATE TABLE]"`
+    );
+  });
+
+  it('throws error when encountering unbalanced }{-braces', () => {
+    expect(() => expandSinglePhrase('CREATE {TABLE')).toThrowErrorMatchingInlineSnapshot(
+      `"Unbalanced parenthesis in: CREATE {TABLE"`
+    );
+    expect(() => expandSinglePhrase('CREATE TABLE}')).toThrowErrorMatchingInlineSnapshot(
+      `"Unbalanced parenthesis in: CREATE TABLE}"`
     );
   });
 });
