@@ -133,7 +133,7 @@ describe('PlSqlFormatter', () => {
           tab1
         WHERE
           parent_id IS NULL
-        MINUS
+        UNION
           -- Recursive member.
         SELECT
           t2.id,
@@ -158,7 +158,7 @@ describe('PlSqlFormatter', () => {
             tab1
           WHERE
             parent_id IS NULL
-          MINUS
+          UNION
           -- Recursive member.
           SELECT
             t2.id,
@@ -196,7 +196,7 @@ describe('PlSqlFormatter', () => {
           tab1
         WHERE
           parent_id IS NULL
-        MINUS
+        UNION
           -- Recursive member.
         SELECT
           t2.id,
@@ -221,7 +221,7 @@ describe('PlSqlFormatter', () => {
             tab1
           WHERE
             parent_id IS NULL
-          MINUS
+          UNION
           -- Recursive member.
           SELECT
             t2.id,

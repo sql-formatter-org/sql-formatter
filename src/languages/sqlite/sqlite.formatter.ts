@@ -36,11 +36,7 @@ const reservedCommands = [
   'PARTITION BY',
 ];
 
-const reservedBinaryCommands = expandPhrases([
-  'INTERSECT [ALL | DISTINCT]',
-  'UNION [ALL | DISTINCT]',
-  'EXCEPT [ALL | DISTINCT]',
-]);
+const reservedBinaryCommands = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 
 // joins - https://www.sqlite.org/syntax/join-operator.html
 const reservedJoins = expandPhrases([

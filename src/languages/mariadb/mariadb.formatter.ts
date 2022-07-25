@@ -225,9 +225,9 @@ const reservedCommands = [
 ];
 
 const reservedBinaryCommands = expandPhrases([
-  'INTERSECT [ALL | DISTINCT]',
   'UNION [ALL | DISTINCT]',
   'EXCEPT [ALL | DISTINCT]',
+  'INTERSECT [ALL | DISTINCT]',
   'MINUS [ALL | DISTINCT]',
 ]);
 

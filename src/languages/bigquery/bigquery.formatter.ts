@@ -106,9 +106,9 @@ const reservedCommands = expandPhrases([
 ]);
 
 const reservedBinaryCommands = expandPhrases([
-  'INTERSECT [ALL | DISTINCT]',
-  'UNION [ALL | DISTINCT]',
-  'EXCEPT [ALL | DISTINCT]',
+  'UNION {ALL | DISTINCT}',
+  'EXCEPT DISTINCT',
+  'INTERSECT DISTINCT',
 ]);
 
 const reservedJoins = expandPhrases([

@@ -82,14 +82,9 @@ const reservedCommands = [
 ];
 
 const reservedBinaryCommands = expandPhrases([
-  // set booleans
-  'INTERSECT [ALL | DISTINCT]',
   'UNION [ALL | DISTINCT]',
   'EXCEPT [ALL | DISTINCT]',
-  'MINUS [ALL | DISTINCT]',
-  // apply
-  'CROSS APPLY',
-  'OUTER APPLY',
+  'INTERSECT [ALL | DISTINCT]',
 ]);
 
 const reservedJoins = expandPhrases([

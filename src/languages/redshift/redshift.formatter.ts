@@ -106,11 +106,7 @@ const reservedCommands = [
   'SET SCHEMA', // verify
 ];
 
-const reservedBinaryCommands = expandPhrases([
-  'INTERSECT [ALL | DISTINCT]',
-  'UNION [ALL | DISTINCT]',
-  'EXCEPT [ALL | DISTINCT]',
-]);
+const reservedBinaryCommands = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT', 'MINUS']);
 
 const reservedJoins = expandPhrases([
   'JOIN',

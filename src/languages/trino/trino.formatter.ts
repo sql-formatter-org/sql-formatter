@@ -102,10 +102,9 @@ const reservedCommands = [
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L231-L235
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L288-L291
 const reservedBinaryCommands = expandPhrases([
-  // set booleans
-  'INTERSECT [ALL | DISTINCT]',
   'UNION [ALL | DISTINCT]',
   'EXCEPT [ALL | DISTINCT]',
+  'INTERSECT [ALL | DISTINCT]',
 ]);
 
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L299-L313

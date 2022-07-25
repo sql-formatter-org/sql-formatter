@@ -208,10 +208,9 @@ const reservedCommands = [
 ];
 
 const reservedBinaryCommands = expandPhrases([
-  'INTERSECT [ALL | DISTINCT]',
   'UNION [ALL | DISTINCT]',
   'EXCEPT [ALL | DISTINCT]',
-  'MINUS [ALL | DISTINCT]',
+  'INTERSECT [ALL | DISTINCT]',
 ]);
 
 const reservedJoins = expandPhrases([

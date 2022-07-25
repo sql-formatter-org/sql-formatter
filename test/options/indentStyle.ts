@@ -60,7 +60,7 @@ export default function supportsIndentStyle(format: FormatFn) {
           dedent`
             SELECT *
             FROM a
-            UNION DISTINCT
+            UNION ALL
             SELECT *
             FROM b
             LEFT OUTER JOIN c;
@@ -70,7 +70,7 @@ export default function supportsIndentStyle(format: FormatFn) {
       ).toBe(dedent`
         SELECT    *
         FROM      a
-        UNION     DISTINCT
+        UNION ALL
         SELECT    *
         FROM      b
         LEFT      OUTER JOIN c;
@@ -147,7 +147,7 @@ export default function supportsIndentStyle(format: FormatFn) {
           dedent`
             SELECT *
             FROM a
-            UNION DISTINCT
+            UNION ALL
             SELECT *
             FROM b
             LEFT OUTER JOIN c;
@@ -158,7 +158,7 @@ export default function supportsIndentStyle(format: FormatFn) {
         [
           '   SELECT *',
           '     FROM a',
-          '    UNION DISTINCT',
+          'UNION ALL',
           '   SELECT *',
           '     FROM b',
           '     LEFT OUTER JOIN c;',

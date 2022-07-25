@@ -189,12 +189,7 @@ const reservedCommands = [
   'PARTITION BY',
 ];
 
-const reservedBinaryCommands = expandPhrases([
-  'INTERSECT [ALL | DISTINCT]',
-  'UNION [ALL | DISTINCT]',
-  'EXCEPT [ALL | DISTINCT]',
-  'MINUS [ALL | DISTINCT]',
-]);
+const reservedBinaryCommands = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 
 const reservedJoins = expandPhrases([
   'JOIN',

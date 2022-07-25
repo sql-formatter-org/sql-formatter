@@ -43,10 +43,7 @@ const reservedCommands = [
   'ROW FORMAT',
 ];
 
-const reservedBinaryCommands = expandPhrases([
-  'INTERSECT [ALL | DISTINCT]',
-  'UNION [ALL | DISTINCT]',
-]);
+const reservedBinaryCommands = expandPhrases(['UNION [ALL | DISTINCT]']);
 
 const reservedJoins = expandPhrases([
   'JOIN',

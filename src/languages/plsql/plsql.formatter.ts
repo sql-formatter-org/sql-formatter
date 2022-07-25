@@ -41,13 +41,7 @@ const reservedCommands = [
   'WITH',
 ];
 
-const reservedBinaryCommands = expandPhrases([
-  // set booleans
-  'INTERSECT [ALL | DISTINCT]',
-  'UNION [ALL | DISTINCT]',
-  'EXCEPT [ALL | DISTINCT]',
-  'MINUS [ALL | DISTINCT]',
-]);
+const reservedBinaryCommands = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 
 const reservedJoins = expandPhrases([
   'JOIN',
