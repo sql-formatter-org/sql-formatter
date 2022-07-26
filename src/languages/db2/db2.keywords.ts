@@ -25,7 +25,7 @@ export const keywords = flatKeywordList({
     'BY',
     'CAPTURE',
     'CASCADED',
-    // 'CAST',
+    'CAST',
     'CCSID',
     'CHARACTER',
     'CHECK',
