@@ -1,6 +1,7 @@
 import { flatKeywordList } from '../../utils';
 
 export const keywords = flatKeywordList({
+  // https://docs.oracle.com/cd/B19306_01/appdev.102/b14261/reservewords.htm
   all: [
     // 'A',
     'ACCESSIBLE',
