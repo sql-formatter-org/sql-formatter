@@ -16,7 +16,6 @@ export const keywords = flatKeywordList({
     'ALL', // (R)
     'ALTER', // (R)
     'ALWAYS',
-    'ANALYSE', // removed in 8.0.1
     'ANALYZE', // (R)
     'AND', // (R)
     'ANY',
@@ -136,7 +135,6 @@ export const keywords = flatKeywordList({
     'DESC', // (R)
     'DESCRIBE', // (R)
     'DESCRIPTION',
-    'DES_KEY_FILE', // removed in 8.0.3
     'DETERMINISTIC', // (R)
     'DIAGNOSTICS',
     'DIRECTORY',
@@ -342,7 +340,6 @@ export const keywords = flatKeywordList({
     'MASTER_PORT',
     'MASTER_PUBLIC_KEY_PATH',
     'MASTER_RETRY_COUNT',
-    'MASTER_SERVER_ID', // removed in 8.0.23
     'MASTER_SSL',
     'MASTER_SSL_CA',
     'MASTER_SSL_CAPATH',
@@ -490,7 +487,6 @@ export const keywords = flatKeywordList({
     'REBUILD',
     'RECOVER',
     'RECURSIVE', // (R)
-    'REDOFILE', // removed in 8.0.3
     'REDO_BUFFER_SIZE',
     'REDUNDANT',
     'REFERENCE',
@@ -504,7 +500,6 @@ export const keywords = flatKeywordList({
     'RELAY_THREAD',
     'RELEASE', // (R)
     'RELOAD',
-    'REMOTE', // removed in 8.0.14
     'REMOVE',
     'RENAME', // (R)
     'REORGANIZE',
@@ -627,7 +622,6 @@ export const keywords = flatKeywordList({
     'SQL_BEFORE_GTIDS',
     'SQL_BIG_RESULT', // (R)
     'SQL_BUFFER_RESULT',
-    'SQL_CACHE', // removed in 8.0.3
     'SQL_CALC_FOUND_ROWS', // (R)
     'SQL_NO_CACHE',
     'SQL_SMALL_RESULT', // (R)
