@@ -17,6 +17,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
 
 describe('N1qlFormatter', () => {
   const language = 'n1ql';
@@ -33,6 +34,14 @@ describe('N1qlFormatter', () => {
   supportsArrayAndMapAccessors(format);
   supportsArrayLiterals(format);
   supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'], supportsUsing: false });
+  supportsSetOperations(format, [
+    'UNION',
+    'UNION ALL',
+    'EXCEPT',
+    'EXCEPT ALL',
+    'INTERSECT',
+    'INTERSECT ALL',
+  ]);
   supportsReturning(format);
   supportsParams(format, { positional: true, numbered: ['$'], named: ['$'] });
   supportsWindow(format);

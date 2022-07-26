@@ -17,6 +17,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
 
 describe('TSqlFormatter', () => {
   const language = 'tsql';
@@ -37,6 +38,7 @@ describe('TSqlFormatter', () => {
     TSqlFormatter.operators.filter(op => op !== '::')
   );
   supportsJoin(format, { without: ['NATURAL'], supportsUsing: false, supportsApply: true });
+  supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });
   supportsWindow(format);
 

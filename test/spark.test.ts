@@ -14,6 +14,7 @@ import supportsStrings from './features/strings';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
+import supportsSetOperations from './features/setOperations';
 
 describe('SparkFormatter', () => {
   const language = 'spark';
@@ -43,6 +44,7 @@ describe('SparkFormatter', () => {
       'NATURAL LEFT SEMI JOIN',
     ],
   });
+  supportsSetOperations(format);
 
   it('formats basic WINDOW clause', () => {
     const result = format(`SELECT * FROM tbl WINDOW win1, WINDOW win2, WINDOW win3;`);

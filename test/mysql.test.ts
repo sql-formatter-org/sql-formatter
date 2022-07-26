@@ -7,6 +7,7 @@ import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
 
 describe('MySqlFormatter', () => {
   const language = 'mysql';
@@ -18,6 +19,7 @@ describe('MySqlFormatter', () => {
     without: ['FULL'],
     additionally: ['STRAIGHT_JOIN'],
   });
+  supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT']);
   supportsOperators(format, MySqlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsWindow(format);
 

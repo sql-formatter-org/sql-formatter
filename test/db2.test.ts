@@ -16,6 +16,7 @@ import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsSetOperations from './features/setOperations';
 
 describe('Db2Formatter', () => {
   const language = 'db2';
@@ -33,6 +34,14 @@ describe('Db2Formatter', () => {
   supportsSchema(format);
   supportsOperators(format, Db2Formatter.operators);
   supportsJoin(format, { without: ['NATURAL'], supportsUsing: false });
+  supportsSetOperations(format, [
+    'UNION',
+    'UNION ALL',
+    'EXCEPT',
+    'EXCEPT ALL',
+    'INTERSECT',
+    'INTERSECT ALL',
+  ]);
   supportsParams(format, { positional: true, named: [':'] });
 
   it('formats FETCH FIRST like LIMIT', () => {

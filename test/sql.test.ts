@@ -17,6 +17,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
 
 describe('SqlFormatter', () => {
   const language = 'sql';
@@ -33,6 +34,7 @@ describe('SqlFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format);
+  supportsSetOperations(format);
   supportsOperators(format, SqlFormatter.operators);
   supportsParams(format, { positional: true });
   supportsWindow(format);

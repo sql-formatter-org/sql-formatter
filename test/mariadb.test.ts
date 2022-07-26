@@ -5,6 +5,7 @@ import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsReturning from './features/returning';
+import supportsSetOperations, { standardSetOperations } from './features/setOperations';
 
 describe('MariaDbFormatter', () => {
   const language = 'mariadb';
@@ -16,6 +17,7 @@ describe('MariaDbFormatter', () => {
     without: ['FULL', 'NATURAL INNER JOIN'],
     additionally: ['STRAIGHT_JOIN'],
   });
+  supportsSetOperations(format, [...standardSetOperations, 'MINUS', 'MINUS ALL', 'MINUS DISTINCT']);
   supportsOperators(format, MariaDbFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsReturning(format);
 });

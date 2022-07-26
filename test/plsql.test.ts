@@ -18,6 +18,7 @@ import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsSetOperations from './features/setOperations';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -36,6 +37,7 @@ describe('PlSqlFormatter', () => {
   supportsSchema(format);
   supportsOperators(format, PlSqlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsJoin(format, { supportsApply: true });
+  supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsReturning(format);
   supportsParams(format, { numbered: [':'], named: [':'] });
 

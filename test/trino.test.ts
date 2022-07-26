@@ -15,6 +15,7 @@ import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsSetOperations from './features/setOperations';
 
 describe('TrinoFormatter', () => {
   const language = 'trino';
@@ -31,6 +32,7 @@ describe('TrinoFormatter', () => {
   supportsArrayLiterals(format);
   supportsArrayAndMapAccessors(format);
   supportsJoin(format);
+  supportsSetOperations(format);
   supportsParams(format, { positional: true });
 
   it('formats SET SESSION', () => {
