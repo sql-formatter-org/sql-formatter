@@ -1,6 +1,7 @@
 import { flatKeywordList } from '../../utils';
 
 export const keywords = flatKeywordList({
+  // https://cloud.google.com/bigquery/docs/reference/standard-sql/lexical#reserved_keywords
   keywords: [
     'ALL',
     // 'AND',
