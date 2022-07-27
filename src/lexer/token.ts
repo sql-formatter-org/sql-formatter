@@ -68,9 +68,8 @@ export const isToken = {
   WITH: testToken({ value: 'WITH', type: TokenType.RESERVED_COMMAND }),
 };
 
-/** Checks if token is a Reserved Command or Reserved set operation */
-export const isCommand = (token: Token): boolean =>
-  token.type === TokenType.RESERVED_COMMAND || token.type === TokenType.RESERVED_SET_OPERATION;
+/** Checks if token is a Reserved Command */
+export const isCommand = (token: Token): boolean => token.type === TokenType.RESERVED_COMMAND;
 
 /** Checks if token is any Reserved Keyword or Command */
 export const isReserved = (token: Token): boolean =>
