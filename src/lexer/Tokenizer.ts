@@ -83,7 +83,7 @@ export default class Tokenizer {
         regex: regex.reservedWord(cfg.reservedCommands, cfg.identChars),
         value: v => v.toUpperCase(),
       },
-      [TokenType.RESERVED_BINARY_COMMAND]: {
+      [TokenType.RESERVED_SET_OPERATION]: {
         regex: regex.reservedWord(cfg.reservedSetOperations, cfg.identChars),
         value: v => v.toUpperCase(),
       },
