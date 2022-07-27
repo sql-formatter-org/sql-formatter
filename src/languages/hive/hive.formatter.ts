@@ -43,7 +43,7 @@ const reservedCommands = [
   'ROW FORMAT',
 ];
 
-const reservedBinaryCommands = expandPhrases(['UNION [ALL | DISTINCT]']);
+const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);
 
 const reservedJoins = expandPhrases([
   'JOIN',
@@ -60,7 +60,7 @@ export default class HiveFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
-      reservedBinaryCommands,
+      reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,

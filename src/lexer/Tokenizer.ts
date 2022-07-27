@@ -13,8 +13,8 @@ interface TokenizerOptions {
   // Keywords in CASE expressions that begin new line, like: WHEN, ELSE
   reservedDependentClauses: string[];
   // Keywords that create newline but no indentaion of their body.
-  // These contain set operations like UNION and various joins like LEFT OUTER JOIN
-  reservedBinaryCommands: string[];
+  // These contain set operations like UNION
+  reservedSetOperations: string[];
   // Various joins like LEFT OUTER JOIN
   reservedJoins: string[];
   // built in function names
@@ -84,7 +84,7 @@ export default class Tokenizer {
         value: v => v.toUpperCase(),
       },
       [TokenType.RESERVED_BINARY_COMMAND]: {
-        regex: regex.reservedWord(cfg.reservedBinaryCommands, cfg.identChars),
+        regex: regex.reservedWord(cfg.reservedSetOperations, cfg.identChars),
         value: v => v.toUpperCase(),
       },
       [TokenType.RESERVED_DEPENDENT_CLAUSE]: {

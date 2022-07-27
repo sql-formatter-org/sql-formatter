@@ -105,7 +105,7 @@ const reservedCommands = expandPhrases([
   'EXPORT DATA',
 ]);
 
-const reservedBinaryCommands = expandPhrases([
+const reservedSetOperations = expandPhrases([
   'UNION {ALL | DISTINCT}',
   'EXCEPT DISTINCT',
   'INTERSECT DISTINCT',
@@ -125,7 +125,7 @@ export default class BigQueryFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
-      reservedBinaryCommands,
+      reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
