@@ -5,7 +5,7 @@ import {
   ArraySubscript,
   AstNode,
   BetweenPredicate,
-  BinaryClause,
+  SetOperation,
   Clause,
   FunctionCall,
   LimitClause,
@@ -54,7 +54,7 @@ export default class Parser {
     return (
       this.limitClause() ||
       this.clause() ||
-      this.binaryClause() ||
+      this.setOperation() ||
       this.functionCall() ||
       this.arraySubscript() ||
       this.parenthesis() ||
@@ -73,11 +73,11 @@ export default class Parser {
     return undefined;
   }
 
-  private binaryClause(): BinaryClause | undefined {
+  private setOperation(): SetOperation | undefined {
     if (this.look().type === TokenType.RESERVED_SET_OPERATION) {
       const name = this.next();
       const children = this.expressionsUntilClauseEnd();
-      return { type: NodeType.binary_clause, nameToken: name, children };
+      return { type: NodeType.set_operation, nameToken: name, children };
     }
     return undefined;
   }
