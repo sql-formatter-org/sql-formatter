@@ -87,7 +87,7 @@ export const parameter = (paramTypes: string[], pattern: string): RegExp | undef
 // 8. Hive and Spark variables: ${name}
 export const quotePatterns = {
   '``': '(?:`[^`]*(?:$|`))+',
-  '[]': String.raw`(?:\[[^\]]*(?:$|\]))(?:\][^\]]*(?:$|\]))*`,
+  '[]': String.raw`\[(?:[^\]]|\]\])*(?:\]|$)`,
   '""': String.raw`(?:"{escape}(?:\\.{escape})*(?:"|$))+`,
   "''": String.raw`(?:'{escape}(?:\\.{escape})*(?:'|$))+`,
   '$$$$': String.raw`(?<tag>\$\w*\$)[\s\S]*?(?:\k<tag>|$)`,

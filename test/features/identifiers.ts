@@ -79,7 +79,7 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: I
   if (identifierTypes.includes('[]')) {
     it('supports [bracket-quoted identifiers]', () => {
       expect(format('[foo JOIN bar]')).toBe('[foo JOIN bar]');
-      expect(format('[foo ]] JOIN bar]')).toBe('[foo ]] JOIN bar]');
+      expect(format('[foo ]]bar[[ JOIN baz]')).toBe('[foo ]]bar[[ JOIN baz]');
       expect(format('SELECT [where] FROM [update]')).toBe(dedent`
         SELECT
           [where]
