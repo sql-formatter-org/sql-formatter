@@ -15,6 +15,7 @@ import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsSetOperations from './features/setOperations';
 
 describe('RedshiftFormatter', () => {
   const language = 'redshift';
@@ -31,6 +32,7 @@ describe('RedshiftFormatter', () => {
   supportsSchema(format);
   supportsOperators(format, RedshiftFormatter.operators);
   supportsJoin(format);
+  supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT', 'MINUS']);
   supportsParams(format, { numbered: ['$'] });
 
   it('formats LIMIT', () => {

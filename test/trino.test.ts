@@ -15,6 +15,7 @@ import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsSetOperations from './features/setOperations';
 
 describe('TrinoFormatter', () => {
   const language = 'trino';
@@ -30,17 +31,8 @@ describe('TrinoFormatter', () => {
   supportsOperators(format, TrinoFormatter.operators, ['AND', 'OR']);
   supportsArrayLiterals(format);
   supportsArrayAndMapAccessors(format);
-  supportsJoin(format, {
-    additionally: [
-      'NATURAL INNER JOIN',
-      'NATURAL LEFT JOIN',
-      'NATURAL LEFT OUTER JOIN',
-      'NATURAL RIGHT JOIN',
-      'NATURAL RIGHT OUTER JOIN',
-      'NATURAL FULL JOIN',
-      'NATURAL FULL OUTER JOIN',
-    ],
-  });
+  supportsJoin(format);
+  supportsSetOperations(format);
   supportsParams(format, { positional: true });
 
   it('formats SET SESSION', () => {

@@ -106,15 +106,15 @@ const reservedCommands = expandPhrases([
 ]);
 
 const reservedBinaryCommands = expandPhrases([
-  'INTERSECT [ALL | DISTINCT]',
-  'UNION [ALL | DISTINCT]',
-  'EXCEPT [ALL | DISTINCT]',
+  'UNION {ALL | DISTINCT}',
+  'EXCEPT DISTINCT',
+  'INTERSECT DISTINCT',
 ]);
 
 const reservedJoins = expandPhrases([
-  '[LEFT | RIGHT | FULL] [OUTER] JOIN',
-  'INNER JOIN',
-  'CROSS JOIN',
+  'JOIN',
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
 ]);
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
