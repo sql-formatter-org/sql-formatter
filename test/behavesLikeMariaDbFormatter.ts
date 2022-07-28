@@ -48,7 +48,7 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   });
 
   // regression test for sql-formatter#334
-  it.only('supports identifiers that start with numbers', () => {
+  it('supports identifiers that start with numbers', () => {
     expect(format('SELECT 4four FROM tbl')).toBe(
       dedent`
         SELECT
