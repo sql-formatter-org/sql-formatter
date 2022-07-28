@@ -61,4 +61,40 @@ export default function supportsKeywordCase(format: FormatFn) {
         'distinct' AS foo
     `);
   });
+
+  // regression test for #356
+  it('formats multi-word commands into single line', () => {
+    const input = `
+      INSERT
+      INTO
+      Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');`;
+    const expected = dedent`
+      INSERT INTO
+        Customers (ID, MoneyBalance, Address, City)
+      VALUES
+        (12, -123.4, 'Skagen 2111', 'Stv');
+    `;
+
+    expect(format(input, { keywordCase: 'upper' })).toBe(expected);
+  });
+
+  // regression test for #356
+  it('formats multi-word joins into single line', () => {
+    const input = `
+      SELECT * FROM mytable
+      INNER
+      JOIN
+      mytable2 ON mytable1.col1 = mytable2.col1 WHERE mytable2.col1 = 5;`;
+    const expected = dedent`
+      SELECT
+        *
+      FROM
+        mytable
+        INNER JOIN mytable2 ON mytable1.col1 = mytable2.col1
+      WHERE
+        mytable2.col1 = 5;
+    `;
+
+    expect(format(input, { keywordCase: 'upper' })).toBe(expected);
+  });
 }
