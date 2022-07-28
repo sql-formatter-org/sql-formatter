@@ -47,6 +47,37 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
     `);
   });
 
+  // regression test for sql-formatter#334
+  it.only('supports identifiers that start with numbers', () => {
+    expect(format('SELECT 4four FROM tbl')).toBe(
+      dedent`
+        SELECT
+          4four
+        FROM
+          tbl
+      `
+    );
+    expect(format('SELECT 1, two, 3four FROM tbl')).toBe(
+      dedent`
+        SELECT
+          1,
+          two,
+          3four
+        FROM
+          tbl
+      `
+    );
+    expect(format('SELECT one + 2three, 4 + 5six FROM tbl')).toBe(
+      dedent`
+        SELECT
+          one + 2three,
+          4 + 5six
+        FROM
+          tbl
+      `
+    );
+  });
+
   it('supports @variables', () => {
     expect(format('SELECT @foo, @some_long.var$with$special.chars')).toBe(dedent`
       SELECT
