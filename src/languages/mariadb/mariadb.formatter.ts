@@ -270,7 +270,7 @@ export default class MariaDbFormatter extends Formatter {
       reservedFunctionNames: functions,
       stringTypes: ['""', { quote: "''", prefixes: ['X'] }],
       identTypes: ['``'],
-      identChars: { first: '$0-9', rest: '$' },
+      identChars: { first: '$', rest: '$', allowFirstCharNumber: true },
       variableTypes: [
         { regex: '@[A-Za-z0-9_.$]+' },
         { quote: '""', prefixes: ['@'], requirePrefix: true },
