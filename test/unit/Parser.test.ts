@@ -6,7 +6,7 @@ describe('Parser', () => {
     const tokens = new Tokenizer({
       reservedCommands: ['SELECT', 'FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
       reservedDependentClauses: ['WHEN', 'ELSE'],
-      reservedBinaryCommands: ['UNION'],
+      reservedSetOperations: ['UNION'],
       reservedJoins: ['JOIN'],
       reservedKeywords: ['BETWEEN', 'LIKE', 'ON', 'USING'],
       reservedFunctionNames: ['SQRT', 'OFFSET'],

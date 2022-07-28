@@ -207,7 +207,7 @@ const reservedCommands = [
   'PARTITION BY',
 ];
 
-const reservedBinaryCommands = expandPhrases([
+const reservedSetOperations = expandPhrases([
   'UNION [ALL | DISTINCT]',
   'EXCEPT [ALL | DISTINCT]',
   'INTERSECT [ALL | DISTINCT]',
@@ -302,7 +302,7 @@ export default class PostgreSqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
-      reservedBinaryCommands,
+      reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,

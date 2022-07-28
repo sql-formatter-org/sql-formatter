@@ -8,7 +8,7 @@ export enum TokenType {
   RESERVED_FUNCTION_NAME = 'RESERVED_FUNCTION_NAME',
   RESERVED_LOGICAL_OPERATOR = 'RESERVED_LOGICAL_OPERATOR',
   RESERVED_DEPENDENT_CLAUSE = 'RESERVED_DEPENDENT_CLAUSE',
-  RESERVED_BINARY_COMMAND = 'RESERVED_BINARY_COMMAND',
+  RESERVED_SET_OPERATION = 'RESERVED_SET_OPERATION',
   RESERVED_COMMAND = 'RESERVED_COMMAND',
   RESERVED_JOIN = 'RESERVED_JOIN',
   RESERVED_CASE_START = 'RESERVED_CASE_START',
@@ -68,10 +68,6 @@ export const isToken = {
   WITH: testToken({ value: 'WITH', type: TokenType.RESERVED_COMMAND }),
 };
 
-/** Checks if token is a Reserved Command or Reserved Binary Command */
-export const isCommand = (token: Token): boolean =>
-  token.type === TokenType.RESERVED_COMMAND || token.type === TokenType.RESERVED_BINARY_COMMAND;
-
 /** Checks if token is any Reserved Keyword or Command */
 export const isReserved = (token: Token): boolean =>
   token.type === TokenType.RESERVED_KEYWORD ||
@@ -79,7 +75,7 @@ export const isReserved = (token: Token): boolean =>
   token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
   token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
   token.type === TokenType.RESERVED_COMMAND ||
-  token.type === TokenType.RESERVED_BINARY_COMMAND ||
+  token.type === TokenType.RESERVED_SET_OPERATION ||
   token.type === TokenType.RESERVED_JOIN ||
   token.type === TokenType.RESERVED_CASE_START ||
   token.type === TokenType.RESERVED_CASE_END;

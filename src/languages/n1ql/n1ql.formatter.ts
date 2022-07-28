@@ -65,7 +65,7 @@ const reservedCommands = [
   'PARTITION BY',
 ];
 
-const reservedBinaryCommands = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);
+const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);
 
 const reservedJoins = expandPhrases(['JOIN', '{LEFT | RIGHT} [OUTER] JOIN', 'INNER JOIN']);
 
@@ -76,7 +76,7 @@ export default class N1qlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
-      reservedBinaryCommands,
+      reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],

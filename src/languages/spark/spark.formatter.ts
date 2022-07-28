@@ -81,7 +81,7 @@ const reservedCommands = [
   'WINDOW',
 ];
 
-const reservedBinaryCommands = expandPhrases([
+const reservedSetOperations = expandPhrases([
   'UNION [ALL | DISTINCT]',
   'EXCEPT [ALL | DISTINCT]',
   'INTERSECT [ALL | DISTINCT]',
@@ -106,7 +106,7 @@ export default class SparkFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
-      reservedBinaryCommands,
+      reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],

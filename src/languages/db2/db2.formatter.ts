@@ -141,7 +141,7 @@ const reservedCommands = [
   'WITH',
 ];
 
-const reservedBinaryCommands = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);
+const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);
 
 const reservedJoins = expandPhrases([
   'JOIN',
@@ -156,7 +156,7 @@ export default class Db2Formatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
-      reservedBinaryCommands,
+      reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF'],
       reservedKeywords: keywords,

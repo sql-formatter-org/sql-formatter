@@ -9,7 +9,7 @@ import {
   ArraySubscript,
   AstNode,
   BetweenPredicate,
-  BinaryClause,
+  SetOperation,
   Clause,
   FunctionCall,
   LimitClause,
@@ -68,8 +68,8 @@ export default class ExpressionFormatter {
         case NodeType.clause:
           this.formatClause(node);
           break;
-        case NodeType.binary_clause:
-          this.formatBinaryClause(node);
+        case NodeType.set_operation:
+          this.formatSetOperation(node);
           break;
         case NodeType.limit_clause:
           this.formatLimitClause(node);
@@ -148,7 +148,7 @@ export default class ExpressionFormatter {
     this.layout.indentation.decreaseTopLevel();
   }
 
-  private formatBinaryClause(node: BinaryClause) {
+  private formatSetOperation(node: SetOperation) {
     this.layout.indentation.decreaseTopLevel();
     this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
 

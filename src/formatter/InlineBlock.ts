@@ -39,7 +39,7 @@ export default class InlineBlock {
           break;
         case NodeType.clause:
         case NodeType.limit_clause:
-        case NodeType.binary_clause:
+        case NodeType.set_operation:
           return Infinity;
         case NodeType.all_columns_asterisk:
           length += 1;
