@@ -38,12 +38,13 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
 
   // regression test for sql-formatter#334
   it('supports identifiers that start with numbers', () => {
-    expect(format('SELECT 4four, 12345e, 12e45 FROM tbl')).toBe(
+    expect(format('SELECT 4four, 12345e, 12e45, $567 FROM tbl')).toBe(
       dedent`
         SELECT
           4four,
           12345e,
-          12e45
+          12e45,
+          $567
         FROM
           tbl
       `
