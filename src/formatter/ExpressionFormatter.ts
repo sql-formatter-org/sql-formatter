@@ -125,7 +125,7 @@ export default class ExpressionFormatter {
       WS.SPACE,
       this.show(node.expr1),
       WS.SPACE,
-      this.show(node.andToken),
+      this.showNonTabular(node.andToken),
       WS.SPACE,
       this.show(node.expr2),
       WS.SPACE
@@ -303,6 +303,11 @@ export default class ExpressionFormatter {
       this.layout.add(WS.NO_SPACE, this.show(token));
       return;
     }
+    // special case for PLSQL @ dblink syntax
+    else if (token.value === '@' && this.cfg.language === 'plsql') {
+      this.layout.add(WS.NO_SPACE, this.show(token));
+      return;
+    }
 
     // other operators
     if (this.cfg.denseOperators) {
@@ -364,7 +369,12 @@ export default class ExpressionFormatter {
     }
   }
 
-  // don't call this directly, always use show() instead.
+  // Like show(), but skips tabular formatting
+  private showNonTabular(token: Token): string {
+    return this.showToken(token);
+  }
+
+  // don't call this directly, always use show() or showNonTabular() instead.
   private showToken(token: Token): string {
     if (isReserved(token)) {
       switch (this.cfg.keywordCase) {

@@ -18,6 +18,7 @@ import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsSetOperations from './features/setOperations';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -35,7 +36,8 @@ describe('PlSqlFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, PlSqlFormatter.operators, ['AND', 'OR', 'XOR']);
-  supportsJoin(format);
+  supportsJoin(format, { supportsApply: true });
+  supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsReturning(format);
   supportsParams(format, { numbered: [':'], named: [':'] });
 
@@ -91,6 +93,17 @@ describe('PlSqlFormatter', () => {
     `);
   });
 
+  it('supports Q custom delimiter strings', () => {
+    expect(format("q'<test string < > 'foo' bar >'")).toBe("q'<test string < > 'foo' bar >'");
+    expect(format("NQ'[test string [ ] 'foo' bar ]'")).toBe("NQ'[test string [ ] 'foo' bar ]'");
+    expect(format("nq'(test string ( ) 'foo' bar )'")).toBe("nq'(test string ( ) 'foo' bar )'");
+    expect(format("nQ'{test string { } 'foo' bar }'")).toBe("nQ'{test string { } 'foo' bar }'");
+    expect(format("Nq'%test string % % 'foo' bar %'")).toBe("Nq'%test string % % 'foo' bar %'");
+    expect(format("Q'Xtest string X X 'foo' bar X'")).toBe("Q'Xtest string X X 'foo' bar X'");
+    expect(format("q'$test string $'$''")).toBe("q'$test string $' $ ''");
+    expect(format("Q'Stest string S'S''")).toBe("Q'Stest string S' S ''");
+  });
+
   it('formats INSERT without INTO', () => {
     const result = format(
       "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
@@ -141,7 +154,7 @@ describe('PlSqlFormatter', () => {
           tab1
         WHERE
           parent_id IS NULL
-        MINUS
+        UNION
           -- Recursive member.
         SELECT
           t2.id,
@@ -166,7 +179,7 @@ describe('PlSqlFormatter', () => {
             tab1
           WHERE
             parent_id IS NULL
-          MINUS
+          UNION
           -- Recursive member.
           SELECT
             t2.id,
@@ -204,7 +217,7 @@ describe('PlSqlFormatter', () => {
           tab1
         WHERE
           parent_id IS NULL
-        MINUS
+        UNION
           -- Recursive member.
         SELECT
           t2.id,
@@ -229,7 +242,7 @@ describe('PlSqlFormatter', () => {
             tab1
           WHERE
             parent_id IS NULL
-          MINUS
+          UNION
           -- Recursive member.
           SELECT
             t2.id,
@@ -253,6 +266,19 @@ describe('PlSqlFormatter', () => {
         t1
       ORDER BY
         order1;
+    `);
+  });
+
+  // regression test for sql-formatter#338
+  it('formats identifier with dblink', () => {
+    const result = format('SELECT * FROM database.table@dblink WHERE id = 1;');
+    expect(result).toBe(dedent`
+      SELECT
+        *
+      FROM
+        database.table@dblink
+      WHERE
+        id = 1;
     `);
   });
 });

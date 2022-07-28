@@ -14,6 +14,7 @@ import supportsStrings from './features/strings';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
+import supportsSetOperations from './features/setOperations';
 
 describe('SparkFormatter', () => {
   const language = 'spark';
@@ -31,24 +32,19 @@ describe('SparkFormatter', () => {
   supportsArrayAndMapAccessors(format);
   supportsJoin(format, {
     additionally: [
+      // non-standard anti-join:
       'ANTI JOIN',
-      'SEMI JOIN',
       'LEFT ANTI JOIN',
-      'LEFT SEMI JOIN',
-      'RIGHT OUTER JOIN',
-      'RIGHT SEMI JOIN',
       'NATURAL ANTI JOIN',
-      'NATURAL FULL OUTER JOIN',
-      'NATURAL INNER JOIN',
       'NATURAL LEFT ANTI JOIN',
-      'NATURAL LEFT OUTER JOIN',
-      'NATURAL LEFT SEMI JOIN',
-      'NATURAL OUTER JOIN',
-      'NATURAL RIGHT OUTER JOIN',
-      'NATURAL RIGHT SEMI JOIN',
+      // non-standard semi-join
+      'SEMI JOIN',
+      'LEFT SEMI JOIN',
       'NATURAL SEMI JOIN',
+      'NATURAL LEFT SEMI JOIN',
     ],
   });
+  supportsSetOperations(format);
 
   it('formats basic WINDOW clause', () => {
     const result = format(`SELECT * FROM tbl WINDOW win1, WINDOW win2, WINDOW win3;`);

@@ -428,4 +428,6 @@ export const functions = flatKeywordList({
     'ZIP',
     'ZIP_WITH',
   ],
+  // https://trino.io/docs/current/sql/match-recognize.html#row-pattern-recognition-expressions
+  rowPattern: ['CLASSIFIER', 'FIRST', 'LAST', 'MATCH_NUMBER', 'NEXT', 'PERMUTE', 'PREV'],
 });

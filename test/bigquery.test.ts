@@ -16,6 +16,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';
@@ -29,7 +30,13 @@ describe('BigQueryFormatter', () => {
   supportsIdentifiers(format, ['``']);
   supportsArrayLiterals(format);
   supportsBetween(format);
-  supportsJoin(format, { without: ['NATURAL JOIN'] });
+  supportsJoin(format, { without: ['NATURAL'] });
+  supportsSetOperations(format, [
+    'UNION ALL',
+    'UNION DISTINCT',
+    'EXCEPT DISTINCT',
+    'INTERSECT DISTINCT',
+  ]);
   supportsOperators(format, BigQueryFormatter.operators);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
   supportsWindow(format);

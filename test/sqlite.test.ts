@@ -17,6 +17,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
 
 describe('SqliteFormatter', () => {
   const language = 'sqlite';
@@ -32,10 +33,8 @@ describe('SqliteFormatter', () => {
   supportsIdentifiers(format, [`""`, '``', '[]']);
   supportsBetween(format);
   supportsSchema(format);
-  supportsJoin(format, {
-    without: ['FULL', 'RIGHT'],
-    additionally: ['NATURAL LEFT JOIN', 'NATURAL LEFT OUTER JOIN'],
-  });
+  supportsJoin(format);
+  supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsOperators(format, SqliteFormatter.operators);
   supportsParams(format, { positional: true, numbered: ['?'], named: [':', '$', '@'] });
   supportsWindow(format);

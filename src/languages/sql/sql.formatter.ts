@@ -1,3 +1,4 @@
+import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import type { QuoteType } from 'src/lexer/regexTypes';
@@ -35,30 +36,20 @@ const reservedCommands = [
   'PARTITION BY',
 ];
 
-const reservedBinaryCommands = [
-  'INTERSECT',
-  'INTERSECT ALL',
-  'INTERSECT DISTINCT',
-  'UNION',
-  'UNION ALL',
-  'UNION DISTINCT',
-  'EXCEPT',
-  'EXCEPT ALL',
-  'EXCEPT DISTINCT',
-];
+const reservedBinaryCommands = expandPhrases([
+  'UNION [ALL | DISTINCT]',
+  'EXCEPT [ALL | DISTINCT]',
+  'INTERSECT [ALL | DISTINCT]',
+]);
 
-const reservedJoins = [
+const reservedJoins = expandPhrases([
   'JOIN',
-  'INNER JOIN',
-  'LEFT JOIN',
-  'LEFT OUTER JOIN',
-  'RIGHT JOIN',
-  'RIGHT OUTER JOIN',
-  'FULL JOIN',
-  'FULL OUTER JOIN',
-  'CROSS JOIN',
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
   'NATURAL JOIN',
-];
+  'NATURAL INNER JOIN',
+  'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
+]);
 
 export default class SqlFormatter extends Formatter {
   static operators = [];

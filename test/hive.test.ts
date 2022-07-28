@@ -16,6 +16,7 @@ import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
 
 describe('HiveFormatter', () => {
   const language = 'hive';
@@ -29,7 +30,12 @@ describe('HiveFormatter', () => {
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
   supportsSchema(format);
-  supportsJoin(format, { without: ['NATURAL JOIN'], supportsUsing: false });
+  supportsJoin(format, {
+    without: ['NATURAL'],
+    additionally: ['LEFT SEMI JOIN'],
+    supportsUsing: false,
+  });
+  supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT']);
   supportsOperators(format, HiveFormatter.operators);
   supportsArrayAndMapAccessors(format);
   supportsWindow(format);

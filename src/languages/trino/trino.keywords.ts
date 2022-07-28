@@ -1,7 +1,7 @@
 import { flatKeywordList } from '../../utils';
 
 export const keywords = flatKeywordList({
-  // https://www.sqlite.org/lang_keywords.html
+  // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L858-L1128
   all: [
     'ABSENT',
     'ADD',
@@ -10,7 +10,7 @@ export const keywords = flatKeywordList({
     'ALL',
     'ALTER',
     'ANALYZE',
-    // 'AND',
+    'AND',
     'ANY',
     'ARRAY',
     'AS',
@@ -136,7 +136,7 @@ export const keywords = flatKeywordList({
     'ONE',
     'ONLY',
     'OPTION',
-    // 'OR',
+    'OR',
     'ORDER',
     'ORDINALITY',
     'OUTER',
@@ -239,8 +239,10 @@ export const keywords = flatKeywordList({
     'WRAPPER',
     'WRITE',
     'ZONE',
-    // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-main/src/main/java/io/trino/metadata/TypeRegistry.java#L131-L168
-    // or https://trino.io/docs/current/language/types.html
+  ],
+  // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-main/src/main/java/io/trino/metadata/TypeRegistry.java#L131-L168
+  // or https://trino.io/docs/current/language/types.html
+  types: [
     'BIGINT',
     'INT',
     'INTEGER',

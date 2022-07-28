@@ -6,7 +6,6 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsCreateTable from './features/createTable';
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
-import supportsJoin from './features/join';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
@@ -25,16 +24,6 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   supportsAlterTable(format);
   supportsDeleteFrom(format);
   supportsBetween(format);
-  supportsJoin(format, {
-    without: ['FULL'],
-    additionally: [
-      'STRAIGHT_JOIN',
-      'NATURAL LEFT JOIN',
-      'NATURAL LEFT OUTER JOIN',
-      'NATURAL RIGHT JOIN',
-      'NATURAL RIGHT OUTER JOIN',
-    ],
-  });
   supportsParams(format, { positional: true });
 
   it('allows $ character as part of identifiers', () => {

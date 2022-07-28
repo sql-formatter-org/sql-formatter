@@ -17,6 +17,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
 
 describe('TSqlFormatter', () => {
   const language = 'tsql';
@@ -36,7 +37,8 @@ describe('TSqlFormatter', () => {
     format,
     TSqlFormatter.operators.filter(op => op !== '::')
   );
-  supportsJoin(format, { without: ['NATURAL'], supportsUsing: false });
+  supportsJoin(format, { without: ['NATURAL'], supportsUsing: false, supportsApply: true });
+  supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });
   supportsWindow(format);
 
@@ -51,18 +53,6 @@ describe('TSqlFormatter', () => {
         Customers (ID, MoneyBalance, Address, City)
       VALUES
         (12, -123.4, 'Skagen 2111', 'Stv');
-    `);
-  });
-
-  it('formats SELECT query with CROSS JOIN', () => {
-    const result = format('SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t');
-    expect(result).toBe(dedent`
-      SELECT
-        a,
-        b
-      FROM
-        t
-        CROSS JOIN t2 on t.id = t2.id_t
     `);
   });
 

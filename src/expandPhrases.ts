@@ -26,17 +26,19 @@ export const expandSinglePhrase = (phrase: string): string[] =>
 //   "TABLE"            --> ["TABLE"]
 //   "[TABLE]"          --> ["", "TABLE"]
 //   "[TEMP|TEMPORARY]" --> ["", "TEMP", "TEMPORARY"]
+//   "{TEMP|TEMPORARY}" --> ["TEMP", "TEMPORARY"]
 //
 type PhrasePart = string[];
 
-const REQUIRED_PART = /[^[\]]+/y;
-const OPTIONAL_PART = /\[.*?\]/y;
+const REQUIRED_PART = /[^[\]{}]+/y;
+const REQUIRED_BLOCK = /\{.*?\}/y;
+const OPTIONAL_BLOCK = /\[.*?\]/y;
 
 const parsePhrase = (text: string): PhrasePart[] => {
   let index = 0;
   const result: PhrasePart[] = [];
   while (index < text.length) {
-    // Match everything else outside of "[...]" blocks
+    // Match everything else outside of "[...]" or "{...}" blocks
     REQUIRED_PART.lastIndex = index;
     const requiredMatch = REQUIRED_PART.exec(text);
     if (requiredMatch) {
@@ -45,18 +47,30 @@ const parsePhrase = (text: string): PhrasePart[] => {
     }
 
     // Match "[...]" block
-    OPTIONAL_PART.lastIndex = index;
-    const optionalMatch = OPTIONAL_PART.exec(text);
-    if (optionalMatch) {
-      const choices = optionalMatch[0]
+    OPTIONAL_BLOCK.lastIndex = index;
+    const optionalBlockMatch = OPTIONAL_BLOCK.exec(text);
+    if (optionalBlockMatch) {
+      const choices = optionalBlockMatch[0]
         .slice(1, -1)
         .split('|')
         .map(s => s.trim());
       result.push(['', ...choices]);
-      index += optionalMatch[0].length;
+      index += optionalBlockMatch[0].length;
     }
 
-    if (!requiredMatch && !optionalMatch) {
+    // Match "{...}" block
+    REQUIRED_BLOCK.lastIndex = index;
+    const requiredBlockMatch = REQUIRED_BLOCK.exec(text);
+    if (requiredBlockMatch) {
+      const choices = requiredBlockMatch[0]
+        .slice(1, -1)
+        .split('|')
+        .map(s => s.trim());
+      result.push(choices);
+      index += requiredBlockMatch[0].length;
+    }
+
+    if (!requiredMatch && !optionalBlockMatch && !requiredBlockMatch) {
       throw new Error(`Unbalanced parenthesis in: ${text}`);
     }
   }

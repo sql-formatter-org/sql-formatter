@@ -1,3 +1,4 @@
+import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import type { QuoteType } from 'src/lexer/regexTypes';
@@ -87,46 +88,39 @@ const reservedCommands = [
   'SHOW ROLE GRANTS',
   'SHOW FUNCTIONS',
   'SHOW SESSION',
+
+  // MATCH_RECOGNIZE
+  'MATCH_RECOGNIZE',
+  'MEASURES',
+  'ONE ROW PER MATCH',
+  'ALL ROWS PER MATCH',
+  'AFTER MATCH',
+  'PATTERN',
+  'SUBSET',
+  'DEFINE',
 ];
 
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L231-L235
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L288-L291
-const reservedBinaryCommands = [
-  // set booleans
-  'INTERSECT',
-  'INTERSECT ALL',
-  'INTERSECT DISTINCT',
-  'UNION',
-  'UNION ALL',
-  'UNION DISTINCT',
-  'EXCEPT',
-  'EXCEPT ALL',
-  'EXCEPT DISTINCT',
-];
+const reservedBinaryCommands = expandPhrases([
+  'UNION [ALL | DISTINCT]',
+  'EXCEPT [ALL | DISTINCT]',
+  'INTERSECT [ALL | DISTINCT]',
+]);
 
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L299-L313
-const reservedJoins = [
+const reservedJoins = expandPhrases([
   'JOIN',
-  'INNER JOIN',
-  'LEFT JOIN',
-  'LEFT OUTER JOIN',
-  'RIGHT JOIN',
-  'RIGHT OUTER JOIN',
-  'FULL JOIN',
-  'FULL OUTER JOIN',
-  'CROSS JOIN',
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
   'NATURAL JOIN',
   'NATURAL INNER JOIN',
-  'NATURAL LEFT JOIN',
-  'NATURAL LEFT OUTER JOIN',
-  'NATURAL RIGHT JOIN',
-  'NATURAL RIGHT OUTER JOIN',
-  'NATURAL FULL JOIN',
-  'NATURAL FULL OUTER JOIN',
-];
+  'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
+]);
 
 export default class TrinoFormatter extends Formatter {
   // https://trino.io/docs/current/functions/list.html#id1
+  // https://trino.io/docs/current/sql/match-recognize.html#row-pattern-syntax
   static operators = ['||', '->'];
   static stringTypes: QuoteType[] = [{ quote: "''", prefixes: ['X', 'U&'], escapes: ["'"] }];
 
@@ -138,10 +132,14 @@ export default class TrinoFormatter extends Formatter {
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      openParens: ['(', '['],
-      closeParens: [')', ']'],
+      // https://trino.io/docs/current/sql/match-recognize.html#row-pattern-syntax
+      openParens: ['(', '[', '{', '{-'],
+      closeParens: [')', ']', '}', '-}'],
+      // https://trino.io/docs/current/language/types.html#string
+      // https://trino.io/docs/current/language/types.html#varbinary
       stringTypes: TrinoFormatter.stringTypes,
-      identTypes: ['""', '``'],
+      // https://trino.io/docs/current/language/reserved.html
+      identTypes: ['""'],
       positionalParams: true,
       operators: TrinoFormatter.operators,
     });
