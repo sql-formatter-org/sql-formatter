@@ -61,4 +61,47 @@ export default function supportsKeywordCase(format: FormatFn) {
         'distinct' AS foo
     `);
   });
+
+  // regression test for #356
+  it('formats multi-word reserved commands into single line', () => {
+    const input = `
+      insert
+      into
+      Customers (ID, MoneyBalance, Address, City) values (12,-123.4, 'Skagen 2111','Stv');`;
+    const expected = dedent`
+      INSERT INTO
+        Customers (ID, MoneyBalance, Address, City)
+      VALUES
+        (12, -123.4, 'Skagen 2111', 'Stv');
+    `;
+
+    expect(format(input, { keywordCase: 'upper' })).toBe(expected);
+
+    const inputSelect = `
+      select * from mytable
+      inner
+      join
+      mytable2 on mytable1.col1 = mytable2.col1
+      where mytable2.col1 = 5
+      group
+      bY mytable1.col2
+      order
+      by
+      mytable2.col3;`;
+    const expectedSelect = dedent`
+      SELECT
+        *
+      FROM
+        mytable
+        INNER JOIN mytable2 ON mytable1.col1 = mytable2.col1
+      WHERE
+        mytable2.col1 = 5
+      GROUP BY
+        mytable1.col2
+      ORDER BY
+        mytable2.col3;
+    `;
+
+    expect(format(inputSelect, { keywordCase: 'upper' })).toBe(expectedSelect);
+  });
 }
