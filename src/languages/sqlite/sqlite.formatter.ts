@@ -1,3 +1,4 @@
+import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './sqlite.functions';
@@ -35,31 +36,16 @@ const reservedCommands = [
   'PARTITION BY',
 ];
 
-const reservedBinaryCommands = [
-  'INTERSECT',
-  'INTERSECT ALL',
-  'INTERSECT DISTINCT',
-  'UNION',
-  'UNION ALL',
-  'UNION DISTINCT',
-  'EXCEPT',
-  'EXCEPT ALL',
-  'EXCEPT DISTINCT',
-];
+const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 
 // joins - https://www.sqlite.org/syntax/join-operator.html
-const reservedJoins = [
+const reservedJoins = expandPhrases([
   'JOIN',
-  'LEFT JOIN',
-  'LEFT OUTER JOIN',
-  'INNER JOIN',
-  'CROSS JOIN',
-  'NATURAL JOIN',
-  'NATURAL LEFT JOIN',
-  'NATURAL LEFT OUTER JOIN',
-  'NATURAL INNER JOIN',
-  'NATURAL CROSS JOIN',
-];
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
+  'NATURAL [INNER] JOIN',
+  'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
+]);
 
 export default class SqliteFormatter extends Formatter {
   // https://www.sqlite.org/lang_expr.html
@@ -68,12 +54,15 @@ export default class SqliteFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
-      reservedBinaryCommands,
+      reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: [{ quote: "''", prefixes: ['X'] }],
+      stringTypes: [
+        { quote: "''", prefixes: ['X'] },
+        // { quote: '""', prefixes: ['X'] }, // currently conflict with "" identifiers
+      ],
       identTypes: [`""`, '``', '[]'],
       // https://www.sqlite.org/lang_expr.html#parameters
       positionalParams: true,

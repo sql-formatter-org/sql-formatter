@@ -1,3 +1,4 @@
+import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './sql.functions';
@@ -34,30 +35,19 @@ const reservedCommands = [
   'PARTITION BY',
 ];
 
-const reservedBinaryCommands = [
-  'INTERSECT',
-  'INTERSECT ALL',
-  'INTERSECT DISTINCT',
-  'UNION',
-  'UNION ALL',
-  'UNION DISTINCT',
-  'EXCEPT',
-  'EXCEPT ALL',
-  'EXCEPT DISTINCT',
-];
+const reservedSetOperations = expandPhrases([
+  'UNION [ALL | DISTINCT]',
+  'EXCEPT [ALL | DISTINCT]',
+  'INTERSECT [ALL | DISTINCT]',
+]);
 
-const reservedJoins = [
+const reservedJoins = expandPhrases([
   'JOIN',
-  'INNER JOIN',
-  'LEFT JOIN',
-  'LEFT OUTER JOIN',
-  'RIGHT JOIN',
-  'RIGHT OUTER JOIN',
-  'FULL JOIN',
-  'FULL OUTER JOIN',
-  'CROSS JOIN',
-  'NATURAL JOIN',
-];
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
+  'NATURAL [INNER] JOIN',
+  'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
+]);
 
 export default class SqlFormatter extends Formatter {
   static operators = [];
@@ -65,12 +55,12 @@ export default class SqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
-      reservedBinaryCommands,
+      reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: [{ quote: "''", prefixes: ['X'] }],
+      stringTypes: [{ quote: "''", prefixes: ['N', 'X', 'U&'] }],
       identTypes: [`""`, '``'],
       positionalParams: true,
     });

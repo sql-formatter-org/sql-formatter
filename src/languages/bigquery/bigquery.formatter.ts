@@ -105,16 +105,16 @@ const reservedCommands = expandPhrases([
   'EXPORT DATA',
 ]);
 
-const reservedBinaryCommands = expandPhrases([
-  'INTERSECT [ALL | DISTINCT]',
-  'UNION [ALL | DISTINCT]',
-  'EXCEPT [ALL | DISTINCT]',
+const reservedSetOperations = expandPhrases([
+  'UNION {ALL | DISTINCT}',
+  'EXCEPT DISTINCT',
+  'INTERSECT DISTINCT',
 ]);
 
 const reservedJoins = expandPhrases([
-  '[LEFT | RIGHT | FULL] [OUTER] JOIN',
-  'INNER JOIN',
-  'CROSS JOIN',
+  'JOIN',
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
 ]);
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
@@ -125,7 +125,7 @@ export default class BigQueryFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
-      reservedBinaryCommands,
+      reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,

@@ -6,43 +6,34 @@ interface Options {
   without?: string[];
   additionally?: string[];
   supportsUsing?: boolean;
+  supportsApply?: boolean;
 }
 
 export default function supportsJoin(
   format: FormatFn,
-  { without, additionally, supportsUsing = true }: Options = {}
+  { without, additionally, supportsUsing = true, supportsApply }: Options = {}
 ) {
   const unsupportedJoinRegex = without ? new RegExp(without.join('|'), 'u') : /^whateve_!%&$/u;
   const isSupportedJoin = (join: string) => !unsupportedJoinRegex.test(join);
 
-  ['CROSS JOIN', 'NATURAL JOIN'].filter(isSupportedJoin).forEach(join => {
-    it(`supports ${join}`, () => {
-      const result = format(`SELECT * FROM tbl1 ${join} tbl2`);
-      expect(result).toBe(dedent`
-        SELECT
-          *
-        FROM
-          tbl1
-          ${join} tbl2
-      `);
-    });
-  });
-
-  // <join> ::= [ <join type> ] JOIN
-  //
-  // <join type> ::= INNER | <outer join type> [ OUTER ]
-  //
-  // <outer join type> ::= LEFT | RIGHT | FULL
-
   [
     'JOIN',
     'INNER JOIN',
+    'CROSS JOIN',
     'LEFT JOIN',
     'LEFT OUTER JOIN',
     'RIGHT JOIN',
     'RIGHT OUTER JOIN',
     'FULL JOIN',
     'FULL OUTER JOIN',
+    'NATURAL JOIN',
+    'NATURAL INNER JOIN',
+    'NATURAL LEFT JOIN',
+    'NATURAL LEFT OUTER JOIN',
+    'NATURAL RIGHT JOIN',
+    'NATURAL RIGHT OUTER JOIN',
+    'NATURAL FULL JOIN',
+    'NATURAL FULL OUTER JOIN',
     ...(additionally || []),
   ]
     .filter(isSupportedJoin)
@@ -89,6 +80,22 @@ export default function supportsJoin(
           customers
           JOIN foo USING (id);
       `);
+    });
+  }
+
+  if (supportsApply) {
+    ['CROSS APPLY', 'OUTER APPLY'].forEach(apply => {
+      // TODO: improve formatting of custom functions
+      it(`supports ${apply}`, () => {
+        const result = format(`SELECT * FROM customers ${apply} fn(customers.id)`);
+        expect(result).toBe(dedent`
+          SELECT
+            *
+          FROM
+            customers
+            ${apply} fn (customers.id)
+        `);
+      });
     });
   }
 }

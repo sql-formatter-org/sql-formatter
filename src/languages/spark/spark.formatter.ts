@@ -1,3 +1,4 @@
+import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
@@ -80,54 +81,22 @@ const reservedCommands = [
   'WINDOW',
 ];
 
-const reservedBinaryCommands = [
-  // set booleans
-  'INTERSECT',
-  'INTERSECT ALL',
-  'INTERSECT DISTINCT',
-  'UNION',
-  'UNION ALL',
-  'UNION DISTINCT',
-  'EXCEPT',
-  'EXCEPT ALL',
-  'EXCEPT DISTINCT',
-  'MINUS',
-  'MINUS ALL',
-  'MINUS DISTINCT',
-  // apply
-  'CROSS APPLY',
-  'OUTER APPLY',
-];
+const reservedSetOperations = expandPhrases([
+  'UNION [ALL | DISTINCT]',
+  'EXCEPT [ALL | DISTINCT]',
+  'INTERSECT [ALL | DISTINCT]',
+]);
 
-const reservedJoins = [
+const reservedJoins = expandPhrases([
   'JOIN',
-  'INNER JOIN',
-  'LEFT JOIN',
-  'LEFT OUTER JOIN',
-  'RIGHT JOIN',
-  'RIGHT OUTER JOIN',
-  'FULL JOIN',
-  'FULL OUTER JOIN',
-  'CROSS JOIN',
-  'NATURAL JOIN',
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
+  'NATURAL [INNER] JOIN',
+  'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
   // non-standard-joins
-  'ANTI JOIN',
-  'SEMI JOIN',
-  'LEFT ANTI JOIN',
-  'LEFT SEMI JOIN',
-  'RIGHT OUTER JOIN',
-  'RIGHT SEMI JOIN',
-  'NATURAL ANTI JOIN',
-  'NATURAL FULL OUTER JOIN',
-  'NATURAL INNER JOIN',
-  'NATURAL LEFT ANTI JOIN',
-  'NATURAL LEFT OUTER JOIN',
-  'NATURAL LEFT SEMI JOIN',
-  'NATURAL OUTER JOIN',
-  'NATURAL RIGHT OUTER JOIN',
-  'NATURAL RIGHT SEMI JOIN',
-  'NATURAL SEMI JOIN',
-];
+  '[LEFT] {ANTI | SEMI} JOIN',
+  'NATURAL [LEFT] {ANTI | SEMI} JOIN',
+]);
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkFormatter extends Formatter {
@@ -136,7 +105,7 @@ export default class SparkFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
-      reservedBinaryCommands,
+      reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
@@ -144,7 +113,10 @@ export default class SparkFormatter extends Formatter {
       reservedFunctionNames: functions,
       openParens: ['(', '['],
       closeParens: [')', ']'],
-      stringTypes: [{ quote: "''", prefixes: ['X'] }],
+      stringTypes: [
+        { quote: "''", prefixes: ['R', 'X'] },
+        { quote: '""', prefixes: ['R', 'X'] },
+      ],
       identTypes: ['``'],
       variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
       operators: SparkFormatter.operators,

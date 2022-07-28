@@ -15,6 +15,7 @@ import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsSetOperations from './features/setOperations';
 
 describe('TrinoFormatter', () => {
   const language = 'trino';
@@ -24,23 +25,14 @@ describe('TrinoFormatter', () => {
   supportsComments(format);
   supportsCreateTable(format);
   supportsDeleteFrom(format);
-  supportsStrings(format, ["''", "X''"]);
-  supportsIdentifiers(format, ['""', '``']);
+  supportsStrings(format, ["''", "X''", "U&''"]);
+  supportsIdentifiers(format, ['""']);
   supportsBetween(format);
   supportsOperators(format, TrinoFormatter.operators, ['AND', 'OR']);
   supportsArrayLiterals(format);
   supportsArrayAndMapAccessors(format);
-  supportsJoin(format, {
-    additionally: [
-      'NATURAL INNER JOIN',
-      'NATURAL LEFT JOIN',
-      'NATURAL LEFT OUTER JOIN',
-      'NATURAL RIGHT JOIN',
-      'NATURAL RIGHT OUTER JOIN',
-      'NATURAL FULL JOIN',
-      'NATURAL FULL OUTER JOIN',
-    ],
-  });
+  supportsJoin(format);
+  supportsSetOperations(format);
   supportsParams(format, { positional: true });
 
   it('formats SET SESSION', () => {
@@ -48,6 +40,56 @@ describe('TrinoFormatter', () => {
     expect(result).toBe(dedent`
       SET SESSION
         foo = 444;
+    `);
+  });
+
+  it('formats row PATTERN()s', () => {
+    const result = format(`
+      SELECT * FROM orders MATCH_RECOGNIZE(
+        PARTITION BY custkey
+        ORDER BY orderdate
+        MEASURES
+                  A.totalprice AS starting_price,
+                  LAST(B.totalprice) AS bottom_price,
+                  LAST(U.totalprice) AS top_price
+        ONE ROW PER MATCH
+        AFTER MATCH SKIP PAST LAST ROW
+        PATTERN ((A | B){5} {- C+ D+ -} E+)
+        SUBSET U = (C, D)
+        DEFINE
+                  B AS totalprice < PREV(totalprice),
+                  C AS totalprice > PREV(totalprice) AND totalprice <= A.totalprice,
+                  D AS totalprice > PREV(totalprice)
+        )
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        *
+      FROM
+        orders
+      MATCH_RECOGNIZE
+        (
+          PARTITION BY
+            custkey
+          ORDER BY
+            orderdate
+          MEASURES
+            A.totalprice AS starting_price,
+            LAST(B.totalprice) AS bottom_price,
+            LAST(U.totalprice) AS top_price
+          ONE ROW PER MATCH
+          AFTER MATCH
+            SKIP PAST LAST ROW
+          PATTERN
+            ((A | B) {5} {- C + D + -} E +)
+          SUBSET
+            U = (C, D)
+          DEFINE
+            B AS totalprice < PREV(totalprice),
+            C AS totalprice > PREV(totalprice)
+            AND totalprice <= A.totalprice,
+            D AS totalprice > PREV(totalprice)
+        )
     `);
   });
 

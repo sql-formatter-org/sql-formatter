@@ -1,3 +1,4 @@
+import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './n1ql.functions';
@@ -64,29 +65,9 @@ const reservedCommands = [
   'PARTITION BY',
 ];
 
-const reservedBinaryCommands = [
-  'INTERSECT',
-  'INTERSECT ALL',
-  'INTERSECT DISTINCT',
-  'UNION',
-  'UNION ALL',
-  'UNION DISTINCT',
-  'EXCEPT',
-  'EXCEPT ALL',
-  'EXCEPT DISTINCT',
-  'MINUS',
-  'MINUS ALL',
-  'MINUS DISTINCT',
-];
+const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);
 
-const reservedJoins = [
-  'JOIN',
-  'INNER JOIN',
-  'LEFT JOIN',
-  'LEFT OUTER JOIN',
-  'RIGHT JOIN',
-  'RIGHT OUTER JOIN',
-];
+const reservedJoins = expandPhrases(['JOIN', '{LEFT | RIGHT} [OUTER] JOIN', 'INNER JOIN']);
 
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html
 export default class N1qlFormatter extends Formatter {
@@ -95,7 +76,7 @@ export default class N1qlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
-      reservedBinaryCommands,
+      reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
@@ -104,7 +85,7 @@ export default class N1qlFormatter extends Formatter {
       // NOTE: single quotes are actually not supported in N1QL,
       // but we support them anyway as all other SQL dialects do,
       // which simplifies writing tests that are shared between all dialects.
-      stringTypes: [`""`, "''"],
+      stringTypes: ['""', "''"],
       identTypes: ['``'],
       openParens: ['(', '[', '{'],
       closeParens: [')', ']', '}'],

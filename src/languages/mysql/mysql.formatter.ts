@@ -1,3 +1,4 @@
+import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
@@ -196,34 +197,17 @@ const reservedCommands = [
   'PARTITION BY',
 ];
 
-const reservedBinaryCommands = [
-  'INTERSECT',
-  'INTERSECT ALL',
-  'INTERSECT DISTINCT',
-  'UNION',
-  'UNION ALL',
-  'UNION DISTINCT',
-  'EXCEPT',
-  'EXCEPT ALL',
-  'EXCEPT DISTINCT',
-];
+const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);
 
-const reservedJoins = [
+const reservedJoins = expandPhrases([
   'JOIN',
-  'INNER JOIN',
-  'LEFT JOIN',
-  'LEFT OUTER JOIN',
-  'RIGHT JOIN',
-  'RIGHT OUTER JOIN',
-  'CROSS JOIN',
-  'NATURAL JOIN',
+  '{LEFT | RIGHT} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
+  'NATURAL [INNER] JOIN',
+  'NATURAL {LEFT | RIGHT} [OUTER] JOIN',
   // non-standard joins
   'STRAIGHT_JOIN',
-  'NATURAL LEFT JOIN',
-  'NATURAL LEFT OUTER JOIN',
-  'NATURAL RIGHT JOIN',
-  'NATURAL RIGHT OUTER JOIN',
-];
+]);
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
@@ -232,13 +216,17 @@ export default class MySqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
-      reservedBinaryCommands,
+      reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF'],
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: ['""', { quote: "''", prefixes: ['X'] }],
+      // TODO: support _ char set prefixes such as _utf8, _latin1, _binary, _utf8mb4, etc.
+      stringTypes: [
+        { quote: "''", prefixes: ['B', 'N', 'X'] },
+        { quote: '""', prefixes: ['B', 'N', 'X'] },
+      ],
       identTypes: ['``'],
       identChars: { first: '$', rest: '$', allowFirstCharNumber: true },
       variableTypes: [

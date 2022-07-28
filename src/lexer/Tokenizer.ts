@@ -1,6 +1,7 @@
 import { Token, TokenType } from 'src/lexer/token';
 import * as regex from 'src/lexer/regexFactory';
 import * as regexTypes from 'src/lexer/regexTypes';
+import { equalizeWhitespace } from 'src/utils';
 
 import { escapeRegExp } from './regexUtil';
 import TokenizerEngine, { type TokenRule } from './TokenizerEngine';
@@ -13,8 +14,8 @@ interface TokenizerOptions {
   // Keywords in CASE expressions that begin new line, like: WHEN, ELSE
   reservedDependentClauses: string[];
   // Keywords that create newline but no indentaion of their body.
-  // These contain set operations like UNION and various joins like LEFT OUTER JOIN
-  reservedBinaryCommands: string[];
+  // These contain set operations like UNION
+  reservedSetOperations: string[];
   // Various joins like LEFT OUTER JOIN
   reservedJoins: string[];
   // built in function names
@@ -28,9 +29,9 @@ interface TokenizerOptions {
   // Types of quotes to use for variables
   variableTypes?: regexTypes.VariableType[];
   // Open-parenthesis characters
-  openParens?: ('(' | '[' | '{')[];
+  openParens?: ('(' | '[' | '{' | '{-')[];
   // Close-parenthesis characters
-  closeParens?: (')' | ']' | '}')[];
+  closeParens?: (')' | ']' | '}' | '-}')[];
   // True to allow for positional "?" parameter placeholders
   positionalParams?: boolean;
   // Prefixes for numbered parameter placeholders to support, e.g. :1, :2, :3
@@ -76,36 +77,39 @@ export default class Tokenizer {
       },
       [TokenType.RESERVED_CASE_START]: {
         regex: /[Cc][Aa][Ss][Ee]\b/uy,
-        value: v => v.toUpperCase(),
+        value: v => equalizeWhitespace(v.toUpperCase()),
       },
-      [TokenType.RESERVED_CASE_END]: { regex: /[Ee][Nn][Dd]\b/uy, value: v => v.toUpperCase() },
+      [TokenType.RESERVED_CASE_END]: {
+        regex: /[Ee][Nn][Dd]\b/uy,
+        value: v => equalizeWhitespace(v.toUpperCase()),
+      },
       [TokenType.RESERVED_COMMAND]: {
         regex: regex.reservedWord(cfg.reservedCommands, cfg.identChars),
-        value: v => v.toUpperCase(),
+        value: v => equalizeWhitespace(v.toUpperCase()),
       },
-      [TokenType.RESERVED_BINARY_COMMAND]: {
-        regex: regex.reservedWord(cfg.reservedBinaryCommands, cfg.identChars),
-        value: v => v.toUpperCase(),
+      [TokenType.RESERVED_SET_OPERATION]: {
+        regex: regex.reservedWord(cfg.reservedSetOperations, cfg.identChars),
+        value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.RESERVED_DEPENDENT_CLAUSE]: {
         regex: regex.reservedWord(cfg.reservedDependentClauses, cfg.identChars),
-        value: v => v.toUpperCase(),
+        value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.RESERVED_JOIN]: {
         regex: regex.reservedWord(cfg.reservedJoins, cfg.identChars),
-        value: v => v.toUpperCase(),
+        value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.RESERVED_LOGICAL_OPERATOR]: {
         regex: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
-        value: v => v.toUpperCase(),
+        value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.RESERVED_FUNCTION_NAME]: {
         regex: regex.reservedWord(cfg.reservedFunctionNames, cfg.identChars),
-        value: v => v.toUpperCase(),
+        value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.RESERVED_KEYWORD]: {
         regex: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
-        value: v => v.toUpperCase(),
+        value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.NAMED_PARAMETER]: {
         regex: regex.parameter(

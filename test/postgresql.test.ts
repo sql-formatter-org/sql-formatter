@@ -19,6 +19,7 @@ import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -40,6 +41,7 @@ describe('PostgreSqlFormatter', () => {
     PostgreSqlFormatter.operators.filter(op => op !== '::')
   );
   supportsJoin(format);
+  supportsSetOperations(format);
   supportsReturning(format);
   supportsParams(format, { numbered: ['$'] });
   supportsWindow(format);

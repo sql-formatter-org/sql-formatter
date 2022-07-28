@@ -1,5 +1,5 @@
 import type { AliasMode, FormatOptions } from 'src/types';
-import { isCommand, isToken, type Token, TokenType, EOF_TOKEN, isReserved } from 'src/lexer/token';
+import { isToken, type Token, TokenType, EOF_TOKEN, isReserved } from 'src/lexer/token';
 import AsTokenFactory from './AsTokenFactory';
 
 /** Adds and removes AS tokens as configured by aliasAs option */
@@ -82,7 +82,7 @@ export default class AliasAs {
       token.type === TokenType.IDENTIFIER &&
       (isToken.END(prevToken) ||
         ((prevToken.type === TokenType.IDENTIFIER || prevToken.type === TokenType.NUMBER) &&
-          (nextToken.type === TokenType.COMMA || isCommand(nextToken))))
+          (nextToken.type === TokenType.COMMA || nextToken.type === TokenType.RESERVED_COMMAND)))
     );
   }
 

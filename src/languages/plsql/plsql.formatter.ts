@@ -1,3 +1,4 @@
+import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { EOF_TOKEN, isReserved, isToken, type Token, TokenType } from 'src/lexer/token';
@@ -40,37 +41,17 @@ const reservedCommands = [
   'WITH',
 ];
 
-const reservedBinaryCommands = [
-  // set booleans
-  'INTERSECT',
-  'INTERSECT ALL',
-  'INTERSECT DISTINCT',
-  'UNION',
-  'UNION ALL',
-  'UNION DISTINCT',
-  'EXCEPT',
-  'EXCEPT ALL',
-  'EXCEPT DISTINCT',
-  'MINUS',
-  'MINUS ALL',
-  'MINUS DISTINCT',
-  // apply
-  'CROSS APPLY',
-  'OUTER APPLY',
-];
+const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 
-const reservedJoins = [
+const reservedJoins = expandPhrases([
   'JOIN',
-  'INNER JOIN',
-  'LEFT JOIN',
-  'LEFT OUTER JOIN',
-  'RIGHT JOIN',
-  'RIGHT OUTER JOIN',
-  'FULL JOIN',
-  'FULL OUTER JOIN',
-  'CROSS JOIN',
-  'NATURAL JOIN',
-];
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
+  'NATURAL [INNER] JOIN',
+  'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
+  // non-standard joins
+  '{CROSS | OUTER} APPLY',
+]);
 
 export default class PlSqlFormatter extends Formatter {
   static operators = [
@@ -88,14 +69,16 @@ export default class PlSqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
-      reservedBinaryCommands,
+      reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      // TODO: support custom-delimited strings: Q'{..}' q'<..>' etc
-      stringTypes: [{ quote: "''", prefixes: ['N'] }],
+      stringTypes: [
+        { quote: "''", prefixes: ['N'] },
+        { quote: "q''", prefixes: ['N'] },
+      ],
       identTypes: [`""`],
       identChars: { rest: '$#' },
       variableTypes: [{ regex: '&{1,2}[A-Za-z][A-Za-z0-9_$#]*' }],
