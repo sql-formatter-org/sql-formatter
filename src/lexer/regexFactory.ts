@@ -138,7 +138,7 @@ export const identifierPattern = ({ first, rest, dashes }: IdentChars = {}): str
   const firstChars = escapeRegExp(first ?? '');
   const restChars = escapeRegExp(rest ?? '');
 
-  const pattern = `[${letter}${number}${firstChars}][${letter}${number}${restChars}]*`;
+  const pattern = `[${letter}${firstChars}][${letter}${number}${restChars}]*`;
 
   return dashes ? withDashes(pattern) : pattern;
 };
