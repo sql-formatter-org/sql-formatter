@@ -134,7 +134,7 @@ const reservedJoins = [
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export default class RedshiftFormatter extends Formatter {
   static operators = ['~', '|/', '||/', '<<', '>>', '||'];
-  static stringTypes: QuoteType[] = [{ quote: '""', escapes: ['"'] }];
+  static stringTypes: QuoteType[] = [{ quote: "''", escapes: ["'"] }];
 
   tokenizer() {
     return new Tokenizer({
