@@ -240,7 +240,7 @@ export default class MySqlFormatter extends Formatter {
       reservedFunctionNames: functions,
       stringTypes: ['""', { quote: "''", prefixes: ['X'] }],
       identTypes: ['``'],
-      identChars: { first: '$', rest: '$' },
+      identChars: { first: '$0-9', rest: '$' },
       variableTypes: [
         { regex: '@[A-Za-z0-9_.$]+' },
         { quote: '""', prefixes: ['@'], requirePrefix: true },
