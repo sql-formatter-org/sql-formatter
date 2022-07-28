@@ -63,6 +63,16 @@ describe('RedshiftFormatter', () => {
     `);
   });
 
+  // Regression test for sql-formatter#358
+  it('formats temp table name starting with #', () => {
+    expect(format(`CREATE TABLE #tablename AS tbl;`)).toBe(
+      dedent`
+        CREATE TABLE
+          #tablename AS tbl;
+      `
+    );
+  });
+
   it.skip('formats DISTKEY and SORTKEY after CREATE TABLE', () => {
     expect(
       format(
