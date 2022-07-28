@@ -171,7 +171,7 @@ export const identifierPattern = ({
   const restChars = escapeRegExp(rest ?? '');
 
   const pattern = allowFirstCharNumber
-    ? `[${firstChars}][${letter}${number}${restChars}]+|[${letter}${number}${restChars}]*[${letter}${restChars}]+[${letter}${number}${restChars}]*`
+    ? `[${letter}${number}${firstChars}][${letter}${number}${restChars}]*`
     : `[${letter}${firstChars}][${letter}${number}${restChars}]*`;
 
   return dashes ? withDashes(pattern) : pattern;
