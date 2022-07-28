@@ -156,7 +156,12 @@ export const identifier = (specialChars: IdentChars = {}): RegExp =>
 /**
  * Builds a RegExp string for valid identifiers in a SQL dialect
  */
-export const identifierPattern = ({ first, rest, dashes }: IdentChars = {}): string => {
+export const identifierPattern = ({
+  first,
+  rest,
+  dashes,
+  allowFirstCharNumber,
+}: IdentChars = {}): string => {
   // Unicode letters, diacritical marks and underscore
   const letter = '\\p{Alphabetic}\\p{Mark}_';
   // Numbers 0..9, plus various unicode numbers
@@ -165,7 +170,9 @@ export const identifierPattern = ({ first, rest, dashes }: IdentChars = {}): str
   const firstChars = escapeRegExp(first ?? '');
   const restChars = escapeRegExp(rest ?? '');
 
-  const pattern = `[${letter}${firstChars}][${letter}${number}${restChars}]*`;
+  const pattern = allowFirstCharNumber
+    ? `[${letter}${number}${firstChars}][${letter}${number}${restChars}]*`
+    : `[${letter}${firstChars}][${letter}${number}${restChars}]*`;
 
   return dashes ? withDashes(pattern) : pattern;
 };

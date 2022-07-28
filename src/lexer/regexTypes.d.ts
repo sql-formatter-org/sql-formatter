@@ -9,6 +9,8 @@ export interface IdentChars {
   rest?: string;
   // True to allow single dashes (-) inside identifiers, but not at the beginning or end
   dashes?: boolean;
+  // Allows identifier to begin with number
+  allowFirstCharNumber?: boolean;
 }
 
 export type PlainQuoteType = keyof typeof quotePatterns;

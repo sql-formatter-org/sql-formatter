@@ -73,7 +73,7 @@ export default class Tokenizer {
       [TokenType.QUOTED_IDENTIFIER]: { regex: regex.string(cfg.identTypes) },
       [TokenType.NUMBER]: {
         regex:
-          /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)/uy,
+          /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)(?!\w)/uy,
       },
       [TokenType.RESERVED_CASE_START]: {
         regex: /[Cc][Aa][Ss][Ee]\b/uy,
@@ -99,16 +99,16 @@ export default class Tokenizer {
         regex: regex.reservedWord(cfg.reservedJoins, cfg.identChars),
         value: v => equalizeWhitespace(v.toUpperCase()),
       },
-      [TokenType.RESERVED_KEYWORD]: {
-        regex: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
+      [TokenType.RESERVED_LOGICAL_OPERATOR]: {
+        regex: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
         value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.RESERVED_FUNCTION_NAME]: {
         regex: regex.reservedWord(cfg.reservedFunctionNames, cfg.identChars),
         value: v => equalizeWhitespace(v.toUpperCase()),
       },
-      [TokenType.RESERVED_LOGICAL_OPERATOR]: {
-        regex: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
+      [TokenType.RESERVED_KEYWORD]: {
+        regex: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
         value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.NAMED_PARAMETER]: {
