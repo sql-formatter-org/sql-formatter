@@ -108,7 +108,7 @@ const singleQuotePattern = (quoteTypes: QuoteType): string => {
     quotePattern = prefixesPattern(quoteTypes) + quotePattern;
   }
 
-  const escapePattern = quoteTypes.escapes ? `[^${quoteTypes.escapes.join('')}]` : '';
+  const escapePattern = quoteTypes.escapes ? `[^${quoteTypes.escapes.join('')}]` : '.';
   quotePattern = quotePattern.replace(/{escape}/g, escapePattern);
 
   return quotePattern;
