@@ -17,7 +17,7 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: I
       `);
     });
 
-    it('no space around dot between two double-quoted identifiers', () => {
+    it('does not place spaces around dot between two double-quoted identifiers', () => {
       const result = format(`SELECT "my table"."col name";`);
       expect(result).toBe(dedent`
         SELECT
@@ -42,7 +42,7 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: I
       `);
     });
 
-    it('no space around dot between two backtick-quoted identifiers', () => {
+    it('does not place spaces around dot between two backtick-quoted identifiers', () => {
       const result = format(`SELECT \`my table\`.\`col name\`;`);
       expect(result).toBe(dedent`
         SELECT
@@ -63,7 +63,7 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: I
       `);
     });
 
-    it('no space around dot between unicode double-quoted identifiers', () => {
+    it('does not place spaces around dot between unicode double-quoted identifiers', () => {
       const result = format(`SELECT U&"my table".U&"col name";`);
       expect(result).toBe(dedent`
         SELECT
@@ -71,7 +71,7 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: I
       `);
     });
 
-    it('detects consecuitive U&"" identifiers as separate ones', () => {
+    it('detects consecutive U&"" identifiers as separate ones', () => {
       expect(format('U&"foo"U&"bar"')).toBe('U&"foo" U&"bar"');
     });
   }
@@ -88,7 +88,7 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: I
       `);
     });
 
-    it('no space around dot between two [bracket-quoted identifiers]', () => {
+    it('does not place spaces around dot between two [bracket-quoted identifiers]', () => {
       const result = format(`SELECT [my table].[col name];`);
       expect(result).toBe(dedent`
         SELECT
