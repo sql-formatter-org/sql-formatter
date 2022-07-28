@@ -160,15 +160,20 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   });
 
   it('formats simple INSERT query', () => {
-    const result = format(
-      "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
-    );
-    expect(result).toBe(dedent`
+    const input = `
+      INSERT
+      INTO
+      Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');`;
+    const expected = dedent`
       INSERT INTO
         Customers (ID, MoneyBalance, Address, City)
       VALUES
         (12, -123.4, 'Skagen 2111', 'Stv');
-    `);
+    `;
+    expect(format(input)).toBe(expected);
+
+    // regression test for #356
+    expect(format(input, { keywordCase: 'upper' })).toBe(expected);
   });
 
   it('formats open paren after comma', () => {

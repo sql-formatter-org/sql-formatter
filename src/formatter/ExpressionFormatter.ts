@@ -381,9 +381,9 @@ export default class ExpressionFormatter {
         case 'preserve':
           return equalizeWhitespace(token.text);
         case 'upper':
-          return token.value;
+          return equalizeWhitespace(token.value);
         case 'lower':
-          return token.value.toLowerCase();
+          return equalizeWhitespace(token.value.toLowerCase());
       }
     } else if (isParameter(token)) {
       return this.params.get(token);
