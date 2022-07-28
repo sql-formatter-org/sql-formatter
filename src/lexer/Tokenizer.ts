@@ -77,9 +77,12 @@ export default class Tokenizer {
       },
       [TokenType.RESERVED_CASE_START]: {
         regex: /[Cc][Aa][Ss][Ee]\b/uy,
-        value: v => v.toUpperCase(),
+        value: v => equalizeWhitespace(v.toUpperCase()),
       },
-      [TokenType.RESERVED_CASE_END]: { regex: /[Ee][Nn][Dd]\b/uy, value: v => v.toUpperCase() },
+      [TokenType.RESERVED_CASE_END]: {
+        regex: /[Ee][Nn][Dd]\b/uy,
+        value: v => equalizeWhitespace(v.toUpperCase()),
+      },
       [TokenType.RESERVED_COMMAND]: {
         regex: regex.reservedWord(cfg.reservedCommands, cfg.identChars),
         value: v => equalizeWhitespace(v.toUpperCase()),
