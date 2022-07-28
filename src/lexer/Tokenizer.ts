@@ -70,6 +70,10 @@ export default class Tokenizer {
       [TokenType.OPEN_PAREN]: { regex: regex.parenthesis(cfg.openParens ?? ['(']) },
       [TokenType.CLOSE_PAREN]: { regex: regex.parenthesis(cfg.closeParens ?? [')']) },
       [TokenType.QUOTED_IDENTIFIER]: { regex: regex.string(cfg.identTypes) },
+      [TokenType.NUMBER]: {
+        regex:
+          /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)/uy,
+      },
       [TokenType.RESERVED_CASE_START]: {
         regex: /[Cc][Aa][Ss][Ee]\b/uy,
         value: v => v.toUpperCase(),
@@ -132,10 +136,6 @@ export default class Tokenizer {
       [TokenType.STRING]: { regex: regex.string(cfg.stringTypes) },
       [TokenType.IDENTIFIER]: {
         regex: regex.identifier(cfg.identChars),
-      },
-      [TokenType.NUMBER]: {
-        regex:
-          /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)/uy,
       },
       [TokenType.DELIMITER]: { regex: /[;]/uy },
       [TokenType.OPERATOR]: {

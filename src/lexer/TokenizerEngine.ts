@@ -67,6 +67,7 @@ export default class TokenizerEngine {
       this.matchToken(TokenType.OPEN_PAREN) ||
       this.matchToken(TokenType.CLOSE_PAREN) ||
       this.matchToken(TokenType.QUOTED_IDENTIFIER) ||
+      this.matchToken(TokenType.NUMBER) ||
       this.matchReservedWordToken(previousToken) ||
       this.matchPlaceholderToken(TokenType.NAMED_PARAMETER) ||
       this.matchPlaceholderToken(TokenType.QUOTED_PARAMETER) ||
@@ -75,7 +76,6 @@ export default class TokenizerEngine {
       this.matchToken(TokenType.VARIABLE) ||
       this.matchToken(TokenType.STRING) ||
       this.matchToken(TokenType.IDENTIFIER) ||
-      this.matchToken(TokenType.NUMBER) ||
       this.matchToken(TokenType.DELIMITER) ||
       this.matchToken(TokenType.OPERATOR)
     );
