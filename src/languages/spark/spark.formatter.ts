@@ -91,8 +91,7 @@ const reservedJoins = expandPhrases([
   'JOIN',
   '{LEFT | RIGHT | FULL} [OUTER] JOIN',
   '{INNER | CROSS} JOIN',
-  'NATURAL JOIN',
-  'NATURAL INNER JOIN',
+  'NATURAL [INNER] JOIN',
   'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
   // non-standard-joins
   '[LEFT] {ANTI | SEMI} JOIN',
