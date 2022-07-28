@@ -63,11 +63,11 @@ export default function supportsKeywordCase(format: FormatFn) {
   });
 
   // regression test for #356
-  it('formats multi-word commands into single line', () => {
+  it('formats multi-word reserved commands into single line', () => {
     const input = `
-      INSERT
-      INTO
-      Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');`;
+      insert
+      into
+      Customers (ID, MoneyBalance, Address, City) values (12,-123.4, 'Skagen 2111','Stv');`;
     const expected = dedent`
       INSERT INTO
         Customers (ID, MoneyBalance, Address, City)
@@ -76,25 +76,32 @@ export default function supportsKeywordCase(format: FormatFn) {
     `;
 
     expect(format(input, { keywordCase: 'upper' })).toBe(expected);
-  });
 
-  // regression test for #356
-  it('formats multi-word joins into single line', () => {
-    const input = `
-      SELECT * FROM mytable
-      INNER
-      JOIN
-      mytable2 ON mytable1.col1 = mytable2.col1 WHERE mytable2.col1 = 5;`;
-    const expected = dedent`
+    const inputSelect = `
+      select * from mytable
+      inner
+      join
+      mytable2 on mytable1.col1 = mytable2.col1
+      where mytable2.col1 = 5
+      group
+      bY mytable1.col2
+      order
+      by
+      mytable2.col3;`;
+    const expectedSelect = dedent`
       SELECT
         *
       FROM
         mytable
         INNER JOIN mytable2 ON mytable1.col1 = mytable2.col1
       WHERE
-        mytable2.col1 = 5;
+        mytable2.col1 = 5
+      GROUP BY
+        mytable1.col2
+      ORDER BY
+        mytable2.col3;
     `;
 
-    expect(format(input, { keywordCase: 'upper' })).toBe(expected);
+    expect(format(inputSelect, { keywordCase: 'upper' })).toBe(expectedSelect);
   });
 }

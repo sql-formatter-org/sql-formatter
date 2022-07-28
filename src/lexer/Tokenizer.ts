@@ -90,7 +90,7 @@ export default class Tokenizer {
       },
       [TokenType.RESERVED_DEPENDENT_CLAUSE]: {
         regex: regex.reservedWord(cfg.reservedDependentClauses, cfg.identChars),
-        value: v => v.toUpperCase(),
+        value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.RESERVED_JOIN]: {
         regex: regex.reservedWord(cfg.reservedJoins, cfg.identChars),
@@ -102,11 +102,11 @@ export default class Tokenizer {
       },
       [TokenType.RESERVED_FUNCTION_NAME]: {
         regex: regex.reservedWord(cfg.reservedFunctionNames, cfg.identChars),
-        value: v => v.toUpperCase(),
+        value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.RESERVED_LOGICAL_OPERATOR]: {
         regex: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
-        value: v => v.toUpperCase(),
+        value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.NAMED_PARAMETER]: {
         regex: regex.parameter(
