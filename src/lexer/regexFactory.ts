@@ -86,14 +86,14 @@ export const parameter = (paramTypes: string[], pattern: string): RegExp | undef
 // 7. BigQuery """triple-quoted"""
 // 8. Hive and Spark variables: ${name}
 export const quotePatterns = {
-  '``': '(?:`[^`]*(?:$|`))+',
+  '``': '`(?:[^`]|``)*(?:`|$)',
   '[]': String.raw`\[(?:[^\]]|\]\])*(?:\]|$)`,
   '""': String.raw`(?:"{escape}*?(?:\\.[^"\\]*)*(?:"|$))+`,
   "''": String.raw`(?:'{escape}*?(?:\\.[^'\\]*)*(?:'|$))+`,
   '$$$$': String.raw`(?<tag>\$\w*\$)[\s\S]*?(?:\k<tag>|$)`,
   "'''..'''": String.raw`'''[^\\]*?(?:\\.[^\\]*?)*?(?:'''|$)`,
   '""".."""': String.raw`"""[^\\]*?(?:\\.[^\\]*?)*?(?:"""|$)`,
-  '{}': String.raw`(?:\{[^\}]*(?:$|\}))`,
+  '{}': String.raw`\{[^\}]*(?:\}|$)`,
 };
 
 const singleQuotePattern = (quoteTypes: QuoteType): string => {
