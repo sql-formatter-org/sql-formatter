@@ -33,7 +33,7 @@ export function isTabularToken(token: Token): boolean {
     token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
     token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
     token.type === TokenType.RESERVED_COMMAND ||
-    token.type === TokenType.RESERVED_BINARY_COMMAND ||
+    token.type === TokenType.RESERVED_SET_OPERATION ||
     token.type === TokenType.RESERVED_JOIN
   );
 }

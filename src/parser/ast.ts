@@ -3,7 +3,7 @@ import { Token } from 'src/lexer/token';
 export enum NodeType {
   statement = 'statement',
   clause = 'clause',
-  binary_clause = 'binary_clause',
+  set_operation = 'set_operation',
   function_call = 'function_call',
   array_subscript = 'array_subscript',
   parenthesis = 'parenthesis',
@@ -25,8 +25,8 @@ export type Clause = {
   children: AstNode[];
 };
 
-export type BinaryClause = {
-  type: NodeType.binary_clause;
+export type SetOperation = {
+  type: NodeType.set_operation;
   nameToken: Token;
   children: AstNode[];
 };
@@ -82,7 +82,7 @@ export type AllColumnsAsterisk = {
 
 export type AstNode =
   | Clause
-  | BinaryClause
+  | SetOperation
   | FunctionCall
   | ArraySubscript
   | Parenthesis
