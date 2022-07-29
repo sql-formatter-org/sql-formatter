@@ -4,8 +4,19 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './db2.functions';
 import { keywords } from './db2.keywords';
 
-// https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
 const reservedCommands = [
+  // queries
+  'WITH',
+  'SELECT',
+  'FROM',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'ORDER BY',
+  'LIMIT',
+  'OFFSET',
+  'FETCH FIRST',
+  // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
   'ALTER DATABASE',
   'ALTER FUNCTION',
@@ -85,7 +96,6 @@ const reservedCommands = [
   'REVOKE',
   'ROLLBACK',
   'SAVEPOINT',
-  'SELECT',
   'SELECT INTO',
   'SET CONNECTION',
   'SET',
@@ -126,19 +136,9 @@ const reservedCommands = [
   'ALTER COLUMN', // verify
   'AFTER',
   'DROP TABLE', // verify
-  'FETCH FIRST',
-  'FROM',
-  'GROUP BY',
   'GO',
-  'HAVING',
   'INSERT INTO',
-  'LIMIT',
-  'OFFSET',
-  'ORDER BY',
-  'SELECT',
   'SET CURRENT SCHEMA',
-  'WHERE',
-  'WITH',
 ];
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);

@@ -5,8 +5,19 @@ import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
 import { keywords } from './mariadb.keywords';
 import { functions } from './mariadb.functions';
 
-// https://mariadb.com/docs/reference/mdb/sql-statements/
 const reservedCommands = [
+  // queries
+  'WITH',
+  'SELECT',
+  'FROM',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'ORDER BY',
+  'LIMIT',
+  'OFFSET',
+
+  // https://mariadb.com/docs/reference/mdb/sql-statements/
   'ALTER DATABASE',
   'ALTER DATABASE COMMENT',
   'ALTER EVENT',
@@ -200,7 +211,6 @@ const reservedCommands = [
   'UNLOCK TABLE',
   'UPDATE',
   'USE',
-  'WITH',
   'XA BEGIN',
   'XA COMMIT',
   'XA END',
@@ -211,17 +221,9 @@ const reservedCommands = [
   // other
   'ADD',
   'ALTER COLUMN',
-  'FROM',
-  'GROUP BY',
-  'HAVING',
   'INSERT INTO',
   'INSERT',
-  'LIMIT',
-  'OFFSET',
-  'ORDER BY',
-  'SELECT',
   'VALUES',
-  'WHERE',
 ];
 
 const reservedSetOperations = expandPhrases([

@@ -4,8 +4,20 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './tsql.functions';
 import { keywords } from './tsql.keywords';
 
-// https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
 const reservedCommands = [
+  // queries
+  'WITH',
+  'SELECT',
+  'FROM',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'WINDOW',
+  'PARTITION BY',
+  'ORDER BY',
+  'LIMIT',
+  'OFFSET',
+  // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',
   'ADD SIGNATURE',
   'AGGREGATE',
@@ -172,21 +184,10 @@ const reservedCommands = [
   'ALTER COLUMN',
   'ALTER TABLE',
   'CREATE TABLE',
-  'FROM',
-  'GROUP BY',
-  'HAVING',
   'INSERT INTO', // verify
   'DROP TABLE', // verify
   'SET SCHEMA', // verify
-  'LIMIT',
-  'OFFSET',
-  'ORDER BY',
-  'SELECT',
   'VALUES',
-  'WHERE',
-  'WITH',
-  'WINDOW',
-  'PARTITION BY',
 ];
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

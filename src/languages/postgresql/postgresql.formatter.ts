@@ -4,8 +4,20 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './postgresql.functions';
 import { keywords } from './postgresql.keywords';
 
-// https://www.postgresql.org/docs/14/sql-commands.html
 const reservedCommands = [
+  // queries
+  'WITH',
+  'SELECT',
+  'FROM',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'WINDOW',
+  'PARTITION BY',
+  'ORDER BY',
+  'LIMIT',
+  'OFFSET',
+  // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
   'ALTER AGGREGATE',
   'ALTER COLLATION',
@@ -175,7 +187,6 @@ const reservedCommands = [
   'ROLLBACK TO SAVEPOINT',
   'SAVEPOINT',
   'SECURITY LABEL',
-  'SELECT',
   'SELECT INTO',
   'SET',
   'SET CONSTRAINTS',
@@ -195,16 +206,6 @@ const reservedCommands = [
   'ALTER COLUMN',
   'INSERT INTO', // verify
   'SET SCHEMA', // verify
-  'FROM',
-  'GROUP BY',
-  'HAVING',
-  'LIMIT',
-  'OFFSET',
-  'ORDER BY',
-  'WHERE',
-  'WITH',
-  'WINDOW',
-  'PARTITION BY',
 ];
 
 const reservedSetOperations = expandPhrases([

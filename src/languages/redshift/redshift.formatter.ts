@@ -4,8 +4,19 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './redshift.functions';
 import { keywords } from './redshift.keywords';
 
-// https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
 const reservedCommands = [
+  // queries
+  'WITH',
+  'SELECT',
+  'FROM',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'ORDER BY',
+  'LIMIT',
+  'OFFSET',
+  'VALUES',
+  // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
   'ABORT',
   'ALTER DATABASE',
   'ALTER DATASHARE',
@@ -65,9 +76,7 @@ const reservedCommands = [
   'EXECUTE',
   'EXPLAIN',
   'FETCH',
-  'FROM',
   'GRANT',
-  'HAVING',
   'INSERT',
   'LOCK',
   'PREPARE',
@@ -75,7 +84,6 @@ const reservedCommands = [
   'RESET',
   'REVOKE',
   'ROLLBACK',
-  'SELECT',
   'SELECT INTO',
   'SET',
   'SET SESSION AUTHORIZATION',
@@ -92,14 +100,7 @@ const reservedCommands = [
   'UNLOAD',
   'UPDATE',
   'VACUUM',
-  'WHERE',
-  'WITH',
   // other
-  'GROUP BY',
-  'ORDER BY',
-  'LIMIT',
-  'OFFSET',
-  'VALUES',
   'MODIFY', // verify
   'INSERT INTO', // verify
   'ALTER COLUMN', // verify

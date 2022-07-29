@@ -5,7 +5,19 @@ import { functions } from './hive.functions';
 import { keywords } from './hive.keywords';
 
 const reservedCommands = [
-  // commands
+  // queries
+  'WITH',
+  'SELECT',
+  'FROM',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'WINDOW',
+  'PARTITION BY',
+  'ORDER BY',
+  'LIMIT',
+  'OFFSET',
+  // other
   'ALTER',
   'ALTER COLUMN', // added
   'ALTER TABLE', // added
@@ -16,15 +28,8 @@ const reservedCommands = [
   'DROP',
   'DROP TABLE', // added
   'FETCH',
-  'FROM',
-  'GROUP BY',
-  'HAVING',
   'INSERT',
   'INSERT INTO', // added
-  'LIMIT',
-  'OFFSET',
-  'ORDER BY',
-  'SELECT',
   'SET',
   'SET SCHEMA', // added
   'SHOW',
@@ -32,11 +37,6 @@ const reservedCommands = [
   'TRUNCATE',
   'UPDATE',
   'VALUES',
-  'WHERE',
-  'WITH',
-  'WINDOW',
-  'PARTITION BY',
-
   // newline keywords
   'STORED AS',
   'STORED BY',

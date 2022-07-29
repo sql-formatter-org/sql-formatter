@@ -6,19 +6,19 @@ import { keywords } from './bigquery.keywords';
 import { functions } from './bigquery.functions';
 
 const reservedCommands = expandPhrases([
-  // DQL, https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax
+  // Queries: https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax
+  'WITH',
   'SELECT',
   'FROM',
   'WHERE',
   'GROUP BY',
   'HAVING',
-  'ORDER BY',
   'QUALIFY',
   'WINDOW',
   'PARTITION BY',
+  'ORDER BY',
   'LIMIT',
   'OFFSET',
-  'WITH',
   'OMIT RECORD IF', // legacy
   // DML, https://cloud.google.com/bigquery/docs/reference/standard-sql/dml-syntax
   'INSERT [INTO]',
