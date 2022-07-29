@@ -8,7 +8,7 @@ import { functions } from './mariadb.functions';
 const reservedCommands = expandPhrases([
   // queries
   'WITH [RECURSIVE]',
-  'SELECT',
+  'SELECT [ALL | DISTINCT | DISTINCTROW]',
   'FROM',
   'WHERE',
   'GROUP BY',

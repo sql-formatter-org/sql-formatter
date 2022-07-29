@@ -8,7 +8,7 @@ import { functions } from './plsql.functions';
 const reservedCommands = expandPhrases([
   // queries
   'WITH',
-  'SELECT',
+  'SELECT [ALL | DISTINCT | UNIQUE]',
   'FROM',
   'WHERE',
   'GROUP BY',

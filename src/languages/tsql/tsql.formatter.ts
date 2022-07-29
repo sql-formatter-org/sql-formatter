@@ -7,7 +7,7 @@ import { keywords } from './tsql.keywords';
 const reservedCommands = expandPhrases([
   // queries
   'WITH',
-  'SELECT',
+  'SELECT [ALL | DISTINCT]',
   'FROM',
   'WHERE',
   'GROUP BY',

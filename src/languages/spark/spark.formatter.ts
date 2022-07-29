@@ -9,7 +9,7 @@ import { functions } from './spark.functions';
 const reservedCommands = expandPhrases([
   // queries
   'WITH',
-  'SELECT',
+  'SELECT [ALL | DISTINCT]',
   'FROM',
   'WHERE',
   'GROUP BY',

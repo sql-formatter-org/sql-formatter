@@ -53,8 +53,8 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
       "SELECT DISTINCT name, ROUND(age/7) field1, 18 + 20 AS field2, 'some string' FROM foo;"
     );
     expect(result).toBe(dedent`
-      SELECT
-        DISTINCT name,
+      SELECT DISTINCT
+        name,
         ROUND(age / 7) field1,
         18 + 20 AS field2,
         'some string'

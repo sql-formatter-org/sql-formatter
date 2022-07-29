@@ -6,8 +6,8 @@ export default function supportsKeywordCase(format: FormatFn) {
   it('preserves keyword case by default', () => {
     const result = format('select distinct * frOM foo left JOIN bar WHERe cola > 1 and colb = 3');
     expect(result).toBe(dedent`
-      select
-        distinct *
+      select distinct
+        *
       frOM
         foo
         left JOIN bar
@@ -25,8 +25,8 @@ export default function supportsKeywordCase(format: FormatFn) {
       }
     );
     expect(result).toBe(dedent`
-      SELECT
-        DISTINCT *
+      SELECT DISTINCT
+        *
       FROM
         foo
         LEFT JOIN mycol
@@ -41,8 +41,8 @@ export default function supportsKeywordCase(format: FormatFn) {
       keywordCase: 'lower',
     });
     expect(result).toBe(dedent`
-      select
-        distinct *
+      select distinct
+        *
       from
         foo
         left join bar

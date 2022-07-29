@@ -7,7 +7,7 @@ import { keywords } from './sqlite.keywords';
 const reservedCommands = expandPhrases([
   // queries
   'WITH [RECURSIVE]',
-  'SELECT',
+  'SELECT [ALL | DISTINCT]',
   'FROM',
   'WHERE',
   'GROUP BY',
