@@ -5,7 +5,7 @@ import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
 import { keywords } from './mysql.keywords';
 import { functions } from './mysql.functions';
 
-const reservedCommands = [
+const reservedCommands = expandPhrases([
   // queries
   'WITH',
   'SELECT',
@@ -196,7 +196,7 @@ const reservedCommands = [
   'ADD',
   'ALTER COLUMN',
   'INSERT INTO',
-];
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);
 

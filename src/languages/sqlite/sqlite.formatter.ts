@@ -4,7 +4,7 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './sqlite.functions';
 import { keywords } from './sqlite.keywords';
 
-const reservedCommands = [
+const reservedCommands = expandPhrases([
   // queries
   'WITH',
   'SELECT',
@@ -36,7 +36,7 @@ const reservedCommands = [
   'SET',
   'UPDATE',
   'VALUES',
-];
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 

@@ -5,7 +5,7 @@ import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
 import { keywords } from './mariadb.keywords';
 import { functions } from './mariadb.functions';
 
-const reservedCommands = [
+const reservedCommands = expandPhrases([
   // queries
   'WITH',
   'SELECT',
@@ -224,7 +224,7 @@ const reservedCommands = [
   'INSERT INTO',
   'INSERT',
   'VALUES',
-];
+]);
 
 const reservedSetOperations = expandPhrases([
   'UNION [ALL | DISTINCT]',

@@ -4,7 +4,7 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './db2.functions';
 import { keywords } from './db2.keywords';
 
-const reservedCommands = [
+const reservedCommands = expandPhrases([
   // queries
   'WITH',
   'SELECT',
@@ -139,7 +139,7 @@ const reservedCommands = [
   'GO',
   'INSERT INTO',
   'SET CURRENT SCHEMA',
-];
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);
 

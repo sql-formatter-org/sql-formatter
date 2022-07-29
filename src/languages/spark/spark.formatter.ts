@@ -6,7 +6,7 @@ import { keywords } from './spark.keywords';
 import { functions } from './spark.functions';
 
 // http://spark.apache.org/docs/latest/sql-ref-syntax.html
-const reservedCommands = [
+const reservedCommands = expandPhrases([
   // queries
   'WITH',
   'SELECT',
@@ -80,7 +80,7 @@ const reservedCommands = [
   'INSERT',
   'LATERAL VIEW',
   'UPDATE',
-];
+]);
 
 const reservedSetOperations = expandPhrases([
   'UNION [ALL | DISTINCT]',

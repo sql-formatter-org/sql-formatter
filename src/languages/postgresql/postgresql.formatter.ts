@@ -4,7 +4,7 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './postgresql.functions';
 import { keywords } from './postgresql.keywords';
 
-const reservedCommands = [
+const reservedCommands = expandPhrases([
   // queries
   'WITH',
   'SELECT',
@@ -206,7 +206,7 @@ const reservedCommands = [
   'ALTER COLUMN',
   'INSERT INTO', // verify
   'SET SCHEMA', // verify
-];
+]);
 
 const reservedSetOperations = expandPhrases([
   'UNION [ALL | DISTINCT]',

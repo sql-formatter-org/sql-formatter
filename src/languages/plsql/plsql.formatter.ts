@@ -5,7 +5,7 @@ import { EOF_TOKEN, isReserved, isToken, type Token, TokenType } from 'src/lexer
 import { keywords } from './plsql.keywords';
 import { functions } from './plsql.functions';
 
-const reservedCommands = [
+const reservedCommands = expandPhrases([
   // queries
   'WITH',
   'SELECT',
@@ -41,7 +41,7 @@ const reservedCommands = [
   'START WITH',
   'UPDATE',
   'VALUES',
-];
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 

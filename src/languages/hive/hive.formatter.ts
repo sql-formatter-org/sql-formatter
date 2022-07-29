@@ -4,7 +4,7 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './hive.functions';
 import { keywords } from './hive.keywords';
 
-const reservedCommands = [
+const reservedCommands = expandPhrases([
   // queries
   'WITH',
   'SELECT',
@@ -41,7 +41,7 @@ const reservedCommands = [
   'STORED AS',
   'STORED BY',
   'ROW FORMAT',
-];
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);
 

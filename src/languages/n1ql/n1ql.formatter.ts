@@ -4,7 +4,7 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './n1ql.functions';
 import { keywords } from './n1ql.keywords';
 
-const reservedCommands = [
+const reservedCommands = expandPhrases([
   // queries
   'WITH',
   'SELECT',
@@ -64,7 +64,7 @@ const reservedCommands = [
   'UNNEST',
   'USE KEYS',
   'VALUES',
-];
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);
 

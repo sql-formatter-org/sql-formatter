@@ -4,7 +4,7 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './tsql.functions';
 import { keywords } from './tsql.keywords';
 
-const reservedCommands = [
+const reservedCommands = expandPhrases([
   // queries
   'WITH',
   'SELECT',
@@ -188,7 +188,7 @@ const reservedCommands = [
   'DROP TABLE', // verify
   'SET SCHEMA', // verify
   'VALUES',
-];
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 

@@ -4,7 +4,7 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './sql.functions';
 import { keywords } from './sql.keywords';
 
-const reservedCommands = [
+const reservedCommands = expandPhrases([
   // queries
   'WITH',
   'SELECT',
@@ -35,7 +35,7 @@ const reservedCommands = [
   'SET',
   'UPDATE',
   'VALUES',
-];
+]);
 
 const reservedSetOperations = expandPhrases([
   'UNION [ALL | DISTINCT]',

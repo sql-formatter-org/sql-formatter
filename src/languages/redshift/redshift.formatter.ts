@@ -4,7 +4,7 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './redshift.functions';
 import { keywords } from './redshift.keywords';
 
-const reservedCommands = [
+const reservedCommands = expandPhrases([
   // queries
   'WITH',
   'SELECT',
@@ -105,7 +105,7 @@ const reservedCommands = [
   'INSERT INTO', // verify
   'ALTER COLUMN', // verify
   'SET SCHEMA', // verify
-];
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT', 'MINUS']);
 
