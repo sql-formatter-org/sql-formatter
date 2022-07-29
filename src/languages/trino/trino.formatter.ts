@@ -7,7 +7,7 @@ import { keywords } from './trino.keywords';
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L41
 const reservedCommands = expandPhrases([
   // queries
-  'WITH',
+  'WITH [RECURSIVE]',
   'SELECT',
   'FROM',
   'WHERE',

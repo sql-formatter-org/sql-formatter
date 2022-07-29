@@ -6,7 +6,7 @@ import { keywords } from './postgresql.keywords';
 
 const reservedCommands = expandPhrases([
   // queries
-  'WITH',
+  'WITH [RECURSIVE]',
   'SELECT',
   'FROM',
   'WHERE',

@@ -7,7 +7,7 @@ import { functions } from './mariadb.functions';
 
 const reservedCommands = expandPhrases([
   // queries
-  'WITH',
+  'WITH [RECURSIVE]',
   'SELECT',
   'FROM',
   'WHERE',

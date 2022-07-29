@@ -6,7 +6,7 @@ import { keywords } from './sql.keywords';
 
 const reservedCommands = expandPhrases([
   // queries
-  'WITH',
+  'WITH [RECURSIVE]',
   'SELECT',
   'FROM',
   'WHERE',

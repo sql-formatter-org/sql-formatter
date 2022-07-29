@@ -7,7 +7,7 @@ import { functions } from './mysql.functions';
 
 const reservedCommands = expandPhrases([
   // queries
-  'WITH',
+  'WITH [RECURSIVE]',
   'SELECT',
   'FROM',
   'WHERE',

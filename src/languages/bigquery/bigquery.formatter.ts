@@ -7,7 +7,7 @@ import { functions } from './bigquery.functions';
 
 const reservedCommands = expandPhrases([
   // Queries: https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax
-  'WITH',
+  'WITH [RECURSIVE]',
   'SELECT',
   'FROM',
   'WHERE',
