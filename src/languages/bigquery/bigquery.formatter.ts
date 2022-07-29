@@ -27,7 +27,6 @@ const reservedCommands = expandPhrases([
   'TRUNCATE TABLE',
   'UPDATE',
   'MERGE [INTO]',
-  // 'USING',
   // DDL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
   'CREATE SCHEMA [IF NOT EXISTS]',
   'DEFAULT COLLATE',
