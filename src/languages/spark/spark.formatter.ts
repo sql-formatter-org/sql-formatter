@@ -15,9 +15,10 @@ const reservedCommands = expandPhrases([
   'GROUP BY',
   'HAVING',
   'WINDOW',
+  'ORDER BY',
+  'SORT BY',
   'CLUSTER BY',
   'DISTRIBUTE BY',
-  'ORDER BY',
   'LIMIT',
   'OFFSET',
   // DDL
@@ -43,7 +44,6 @@ const reservedCommands = expandPhrases([
   'LOAD',
   // Data Retrieval
   'VALUES',
-  'SORT BY',
   'TABLESAMPLE',
   'PIVOT',
   'TRANSFORM',

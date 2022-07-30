@@ -15,6 +15,9 @@ const reservedCommands = expandPhrases([
   'WINDOW',
   'PARTITION BY',
   'ORDER BY',
+  'SORT BY',
+  'CLUSTER BY',
+  'DISTRIBUTE BY',
   'LIMIT',
   'OFFSET',
   // other
@@ -33,7 +36,6 @@ const reservedCommands = expandPhrases([
   'SET',
   'SET SCHEMA', // added
   'SHOW',
-  'SORT BY',
   'TRUNCATE',
   'UPDATE',
   'VALUES',
