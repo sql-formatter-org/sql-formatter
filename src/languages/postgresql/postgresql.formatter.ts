@@ -10,7 +10,7 @@ const reservedCommands = expandPhrases([
   'SELECT [ALL | DISTINCT]',
   'FROM',
   'WHERE',
-  'GROUP BY',
+  'GROUP BY [ALL | DISTINCT]',
   'HAVING',
   'WINDOW',
   'PARTITION BY',
