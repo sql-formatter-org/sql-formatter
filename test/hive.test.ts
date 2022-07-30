@@ -17,6 +17,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
+import supportsLimit from './features/limit';
 
 describe('HiveFormatter', () => {
   const language = 'hive';
@@ -39,6 +40,7 @@ describe('HiveFormatter', () => {
   supportsOperators(format, HiveFormatter.operators);
   supportsArrayAndMapAccessors(format);
   supportsWindow(format);
+  supportsLimit(format);
 
   it('throws error when params option used', () => {
     expect(() => format('SELECT *', { params: ['1', '2', '3'] })).toThrow(

@@ -16,6 +16,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsSetOperations from './features/setOperations';
+import supportsLimit from './features/limit';
 
 describe('TrinoFormatter', () => {
   const language = 'trino';
@@ -34,6 +35,7 @@ describe('TrinoFormatter', () => {
   supportsJoin(format);
   supportsSetOperations(format);
   supportsParams(format, { positional: true });
+  supportsLimit(format);
 
   it('formats SET SESSION', () => {
     const result = format('SET SESSION foo = 444;');

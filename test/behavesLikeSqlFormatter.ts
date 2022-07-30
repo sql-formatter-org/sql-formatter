@@ -15,7 +15,6 @@ import supportsLinesBetweenQueries from './options/linesBetweenQueries';
 import supportsNewlineBeforeSemicolon from './options/newlineBeforeSemicolon';
 import supportsLogicalOperatorNewline from './options/logicalOperatorNewline';
 import supportsTabulateAlias from './options/tabulateAlias';
-import supportsLimit from './features/limit';
 
 /**
  * Core tests for all SQL formatters
@@ -35,7 +34,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsNewlineBeforeSemicolon(format);
   supportsCommaPosition(format);
   supportsLogicalOperatorNewline(format);
-  supportsLimit(format);
 
   it('formats simple SELECT query', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;');
@@ -87,7 +85,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   it('formats SELECT with top level reserved words', () => {
     const result = format(`
       SELECT * FROM foo WHERE name = 'John' GROUP BY some_column
-      HAVING column > 10 ORDER BY other_column LIMIT 5;
+      HAVING column > 10 ORDER BY other_column;
     `);
     expect(result).toBe(dedent`
       SELECT
@@ -101,9 +99,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
       HAVING
         column > 10
       ORDER BY
-        other_column
-      LIMIT
-        5;
+        other_column;
     `);
   });
 
@@ -139,7 +135,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
 
   it('formats SELECT query with SELECT query inside it', () => {
     const result = format(
-      'SELECT *, SUM(*) AS total FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b'
+      'SELECT *, SUM(*) AS total FROM (SELECT * FROM Posts WHERE age > 10) WHERE a > b'
     );
     expect(result).toBe(dedent`
       SELECT
@@ -151,8 +147,8 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
             *
           FROM
             Posts
-          LIMIT
-            30
+          WHERE
+            age > 10
         )
       WHERE
         a > b

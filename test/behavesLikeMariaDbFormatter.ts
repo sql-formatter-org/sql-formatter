@@ -12,6 +12,7 @@ import supportsComments from './features/comments';
 import supportsStrings from './features/strings';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsLimit from './features/limit';
 
 /**
  * Shared tests for MySQL and MariaDB
@@ -27,6 +28,7 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   supportsDeleteFrom(format);
   supportsBetween(format);
   supportsParams(format, { positional: true });
+  supportsLimit(format);
 
   it('allows $ character as part of identifiers', () => {
     expect(format('SELECT $foo, some$$ident')).toBe(dedent`
