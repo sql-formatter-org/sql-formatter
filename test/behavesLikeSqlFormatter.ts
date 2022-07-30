@@ -4,6 +4,7 @@ import { FormatFn } from 'src/sqlFormatter';
 
 import supportsCase from './features/case';
 import supportsNumbers from './features/numbers';
+import supportsWith from './features/with';
 import supportsTabWidth from './options/tabWidth';
 import supportsUseTabs from './options/useTabs';
 import supportsAliasAs from './options/aliasAs';
@@ -22,6 +23,7 @@ import supportsTabulateAlias from './options/tabulateAlias';
 export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsCase(format);
   supportsNumbers(format);
+  supportsWith(format);
 
   supportsAliasAs(format);
   supportsTabulateAlias(format);
