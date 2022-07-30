@@ -17,6 +17,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsSetOperations from './features/setOperations';
+import supportsLimit from './features/limit';
 
 describe('Db2Formatter', () => {
   const language = 'db2';
@@ -43,6 +44,7 @@ describe('Db2Formatter', () => {
     'INTERSECT ALL',
   ]);
   supportsParams(format, { positional: true, named: [':'] });
+  supportsLimit(format, { fetchFirst: true });
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`

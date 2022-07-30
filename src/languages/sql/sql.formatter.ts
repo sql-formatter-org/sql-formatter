@@ -17,6 +17,7 @@ const reservedCommands = expandPhrases([
   'ORDER BY',
   'LIMIT',
   'OFFSET',
+  'FETCH {FIRST | NEXT}',
   // other
   'ADD',
   'ALTER COLUMN',
@@ -24,8 +25,6 @@ const reservedCommands = expandPhrases([
   'CREATE TABLE',
   'DROP TABLE',
   'DELETE FROM',
-  'FETCH FIRST',
-  'FETCH NEXT',
   'FETCH PRIOR',
   'FETCH LAST',
   'FETCH ABSOLUTE',

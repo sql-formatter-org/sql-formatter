@@ -46,7 +46,7 @@ describe('N1qlFormatter', () => {
   supportsReturning(format);
   supportsParams(format, { positional: true, numbered: ['$'], named: ['$'] });
   supportsWindow(format);
-  supportsLimit(format);
+  supportsLimit(format, { limit: true, offset: true });
 
   it('formats INSERT with {} object literal', () => {
     const result = format(

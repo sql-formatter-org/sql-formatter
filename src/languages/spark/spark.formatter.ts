@@ -20,7 +20,6 @@ const reservedCommands = expandPhrases([
   'CLUSTER BY',
   'DISTRIBUTE BY',
   'LIMIT',
-  'OFFSET',
   // DDL
   'ALTER COLUMN',
   'ALTER DATABASE',

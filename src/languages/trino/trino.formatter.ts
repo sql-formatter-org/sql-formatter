@@ -18,7 +18,7 @@ const reservedCommands = expandPhrases([
   'ORDER BY',
   'LIMIT',
   'OFFSET',
-  'FETCH',
+  'FETCH {FIRST | NEXT}',
   // DDL
   'ALTER SCHEMA',
   'ALTER TABLE',

@@ -19,7 +19,6 @@ const reservedCommands = expandPhrases([
   'CLUSTER BY',
   'DISTRIBUTE BY',
   'LIMIT',
-  'OFFSET',
   // other
   'ALTER',
   'ALTER COLUMN', // added

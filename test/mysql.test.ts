@@ -8,6 +8,7 @@ import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
+import supportsLimit from './features/limit';
 
 describe('MySqlFormatter', () => {
   const language = 'mysql';
@@ -22,6 +23,7 @@ describe('MySqlFormatter', () => {
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT']);
   supportsOperators(format, MySqlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsWindow(format);
+  supportsLimit(format, { limit: true, offset: true });
 
   // TODO: disabled for now
   it.skip('supports @@ system variables', () => {

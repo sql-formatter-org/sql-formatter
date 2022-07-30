@@ -46,7 +46,7 @@ describe('SparkFormatter', () => {
     ],
   });
   supportsSetOperations(format);
-  supportsLimit(format);
+  supportsLimit(format, { limit: true });
 
   it('formats basic WINDOW clause', () => {
     const result = format(`SELECT * FROM tbl WINDOW win1, WINDOW win2, WINDOW win3;`);

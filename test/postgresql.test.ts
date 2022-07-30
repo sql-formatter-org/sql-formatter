@@ -46,7 +46,7 @@ describe('PostgreSqlFormatter', () => {
   supportsReturning(format);
   supportsParams(format, { numbered: ['$'] });
   supportsWindow(format);
-  supportsLimit(format);
+  supportsLimit(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
 
   it('allows $ character as part of identifiers', () => {
     expect(format('SELECT foo$, some$$ident')).toBe(dedent`

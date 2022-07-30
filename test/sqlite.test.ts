@@ -39,7 +39,7 @@ describe('SqliteFormatter', () => {
   supportsOperators(format, SqliteFormatter.operators);
   supportsParams(format, { positional: true, numbered: ['?'], named: [':', '$', '@'] });
   supportsWindow(format);
-  supportsLimit(format);
+  supportsLimit(format, { limit: true, offset: true });
 
   it('formats FETCH FIRST like LIMIT', () => {
     const result = format('SELECT * FETCH FIRST 2 ROWS ONLY;');

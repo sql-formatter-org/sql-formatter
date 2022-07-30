@@ -40,7 +40,7 @@ describe('HiveFormatter', () => {
   supportsOperators(format, HiveFormatter.operators);
   supportsArrayAndMapAccessors(format);
   supportsWindow(format);
-  supportsLimit(format);
+  supportsLimit(format, { limit: true });
 
   it('throws error when params option used', () => {
     expect(() => format('SELECT *', { params: ['1', '2', '3'] })).toThrow(

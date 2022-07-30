@@ -35,7 +35,7 @@ describe('TrinoFormatter', () => {
   supportsJoin(format);
   supportsSetOperations(format);
   supportsParams(format, { positional: true });
-  supportsLimit(format);
+  supportsLimit(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
 
   it('formats SET SESSION', () => {
     const result = format('SET SESSION foo = 444;');
