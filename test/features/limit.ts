@@ -11,18 +11,6 @@ export default function supportsLimit(format: FormatFn) {
     `);
   });
 
-  it('formats LIMIT of single value followed by another SELECT using commas', () => {
-    const result = format('LIMIT 5; SELECT foo, bar;');
-    expect(result).toBe(dedent`
-      LIMIT
-        5;
-
-      SELECT
-        foo,
-        bar;
-    `);
-  });
-
   it('formats LIMIT of single value and OFFSET', () => {
     const result = format('LIMIT 5 OFFSET 8;');
     expect(result).toBe(dedent`
