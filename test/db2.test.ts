@@ -46,19 +46,6 @@ describe('Db2Formatter', () => {
   supportsParams(format, { positional: true, named: [':'] });
   supportsLimiting(format, { fetchFirst: true });
 
-  it('formats FETCH FIRST like LIMIT', () => {
-    expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
-        SELECT
-          col1
-        FROM
-          tbl
-        ORDER BY
-          col2 DESC
-        FETCH FIRST
-          20 ROWS ONLY;
-      `);
-  });
-
   it('formats only -- as a line comment', () => {
     const result = format(`
       SELECT col FROM

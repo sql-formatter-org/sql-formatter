@@ -43,19 +43,6 @@ describe('PlSqlFormatter', () => {
   supportsParams(format, { numbered: [':'], named: [':'] });
   supportsLimiting(format, { offset: true, fetchFirst: true, fetchNext: true });
 
-  it('formats FETCH FIRST like LIMIT', () => {
-    expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
-      SELECT
-        col1
-      FROM
-        tbl
-      ORDER BY
-        col2 DESC
-      FETCH FIRST
-        20 ROWS ONLY;
-    `);
-  });
-
   it('recognizes _, $, # as part of identifiers', () => {
     const result = format('SELECT my_col$1#, col.a$, type#, procedure$, user# FROM tbl;');
     expect(result).toBe(dedent`
