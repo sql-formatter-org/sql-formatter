@@ -15,7 +15,6 @@ const reservedCommands = expandPhrases([
   'WINDOW',
   'PARTITION BY',
   'ORDER BY',
-  'LIMIT',
   'OFFSET',
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',

@@ -14,8 +14,6 @@ const reservedCommands = expandPhrases([
   'GROUP BY',
   'HAVING',
   'ORDER [SIBLINGS] BY',
-  'LIMIT',
-  'OFFSET',
   // other
   'ADD',
   'ALTER COLUMN',

@@ -13,8 +13,6 @@ const reservedCommands = expandPhrases([
   'GROUP BY',
   'HAVING',
   'ORDER BY [INPUT SEQUENCE]',
-  'LIMIT',
-  'OFFSET',
   'FETCH FIRST',
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
