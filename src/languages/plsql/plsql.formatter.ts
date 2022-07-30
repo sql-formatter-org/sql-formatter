@@ -13,6 +13,7 @@ const reservedCommands = expandPhrases([
   'WHERE',
   'GROUP BY',
   'HAVING',
+  'ORDER [SIBLINGS] BY',
   'LIMIT',
   'OFFSET',
   // other
@@ -33,7 +34,6 @@ const reservedCommands = expandPhrases([
   'INSERT',
   'LOOP',
   'MODIFY',
-  'ORDER BY',
   'RETURNING',
   'SET CURRENT SCHEMA',
   'SET SCHEMA',
