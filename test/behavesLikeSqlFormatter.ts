@@ -168,25 +168,18 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   });
 
   it('formats open paren after comma', () => {
-    const result = format(
-      'WITH TestIds AS (VALUES (4),(5), (6),(7),(9),(10),(11)) SELECT * FROM TestIds;'
-    );
-    expect(result).toBe(dedent/* sql */ `
-      WITH
-        TestIds AS (
-          VALUES
-            (4),
-            (5),
-            (6),
-            (7),
-            (9),
-            (10),
-            (11)
-        )
-      SELECT
-        *
-      FROM
-        TestIds;
+    const result = format('INSERT INTO TestIds (id) VALUES (4),(5), (6),(7),(9),(10),(11);');
+    expect(result).toBe(dedent`
+      INSERT INTO
+        TestIds (id)
+      VALUES
+        (4),
+        (5),
+        (6),
+        (7),
+        (9),
+        (10),
+        (11);
     `);
   });
 
