@@ -95,4 +95,16 @@ describe('PostgreSqlFormatter', () => {
         ARRAY[1, 2, 3]
     `);
   });
+
+  // issue #144 (unsolved)
+  // This is currently far from ideal.
+  it('formats SELECT DISTINCT ON () syntax', () => {
+    expect(format('SELECT DISTINCT ON (c1, c2) c1, c2 FROM tbl;')).toBe(dedent`
+      SELECT DISTINCT
+        ON (c1, c2) c1,
+        c2
+      FROM
+        tbl;
+    `);
+  });
 });
