@@ -12,7 +12,7 @@ const reservedCommands = expandPhrases([
   'WHERE',
   'GROUP BY',
   'HAVING',
-  'ORDER BY',
+  'ORDER BY [INPUT SEQUENCE]',
   'LIMIT',
   'OFFSET',
   'FETCH FIRST',
