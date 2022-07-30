@@ -99,4 +99,22 @@ describe('SparkFormatter', () => {
         name = '\${name}';
     `);
   });
+
+  it('supports SORT BY, CLUSTER BY, DISTRIBUTE BY', () => {
+    const result = format(
+      'SELECT value, count DISTRIBUTE BY count CLUSTER BY value SORT BY value, count;'
+    );
+    expect(result).toBe(dedent`
+      SELECT
+        value,
+        count
+      DISTRIBUTE BY
+        count
+      CLUSTER BY
+        value
+      SORT BY
+        value,
+        count;
+    `);
+  });
 });
