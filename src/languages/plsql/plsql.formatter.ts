@@ -29,7 +29,6 @@ const reservedCommands = expandPhrases([
   'DELETE FROM',
   'EXCEPT',
   'EXCEPTION',
-  'FETCH FIRST',
   'INSERT INTO',
   'INSERT',
   'LOOP',
