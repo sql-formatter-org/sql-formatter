@@ -161,6 +161,34 @@ describe('BigQueryFormatter', () => {
     `);
   });
 
+  it('supports QUALIFY clause', () => {
+    expect(
+      format(`
+        SELECT
+          item,
+          RANK() OVER (PARTITION BY category ORDER BY purchases DESC) AS rank
+        FROM Produce
+        WHERE Produce.category = 'vegetable'
+        QUALIFY rank <= 3
+      `)
+    ).toBe(dedent`
+      SELECT
+        item,
+        RANK() OVER (
+          PARTITION BY
+            category
+          ORDER BY
+            purchases DESC
+        ) AS rank
+      FROM
+        Produce
+      WHERE
+        Produce.category = 'vegetable'
+      QUALIFY
+        rank <= 3
+    `);
+  });
+
   it('supports parameterised types', () => {
     const result = format(
       `
