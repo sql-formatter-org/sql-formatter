@@ -2,192 +2,260 @@ import { flatKeywordList } from '../../utils';
 
 export const keywords = flatKeywordList({
   // https://docs.singlestore.com/managed-service/en/reference/sql-reference.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/restricted-keywords/list-of-restricted-keywords.html
   all: [
-    'ACCESSIBLE', // (R)
+    'ABORT',
+    'ABSOLUTE',
+    'ACCESS',
+    'ACCESSIBLE', // carried from mysql
     'ACCOUNT',
     'ACTION',
-    'ACTIVE',
-    'ADD', // (R)
+    'ACTIVE', // carried from mysql
+    'ADD',
     'ADMIN',
     'AFTER',
     'AGAINST',
     'AGGREGATE',
-    'AGGREGATOR', // (R)
+    'AGGREGATES',
+    'AGGREGATOR',
+    'AGGREGATOR_ID',
+    'AGGREGATOR_PLAN_HASH',
+    'AGGREGATORS',
     'ALGORITHM',
-    'ALL', // (R)
-    'ALTER', // (R)
+    'ALL',
+    'ALSO',
+    'ALTER',
     'ALWAYS',
-    'ANALYZE', // (R)
-    'AND', // (R)
+    'ANALYZE',
+    'AND',
     'ANY',
+    'ARGHISTORY', // maybe function?
+    'ARRANGE', // maybe function?
+    'ARRANGEMENT',
     'ARRAY',
-    'AS', // (R)
-    'ASC', // (R)
+    'AS',
+    'ASC',
     'ASCII',
-    'ASENSITIVE', // (R)
+    'ASENSITIVE',
+    'ASM', // maybe function?
+    'ASSERTION', // maybe function?
+    'ASSIGNMENT', // maybe function?
+    'AST', // maybe function?
+    'ASYMMETRIC', // maybe function?
+    'ASYNC', // maybe function?
     'AT',
-    'ATTACH', // (R)
+    'ATTACH',
     'ATTRIBUTE',
-    'AUTHENTICATION',
-    'AUTOEXTEND_SIZE',
+    'AUTHORIZATION', // maybe function?
+    'AUTO', // maybe function?
     'AUTO_INCREMENT',
+    'AUTO_REPROVISION',
+    'AUTOSTATS',
+    'AUTOSTATS_CARDINALITY_MODE',
+    'AUTOSTATS_ENABLED',
+    'AUTOSTATS_HISTOGRAM_MODE',
+    'AUTOSTATS_SAMPLING',
+    'AVAILABILITY',
     'AVG',
     'AVG_ROW_LENGTH',
+    'AVRO', // maybe function?
+    'AZURE',
+    'BACKGROUND', // maybe function?
+    '_BACKGROUND_THREADS_FOR_CLEANUP', // maybe function?
     'BACKUP',
-    'BEFORE', // (R)
+    'BACKUP_HISTORY',
+    'BACKUP_ID',
+    'BACKWARD',
+    'BATCH',
+    'BATCHES',
+    'BATCH_INTERVAL',
+    '_BATCH_SIZE_LIMIT',
+    'BEFORE',
     'BEGIN',
-    'BETWEEN', // (R)
-    'BIGINT', // (R)
-    'BINARY', // (R)
-    'BINLOG',
+    'BETWEEN',
+    'BIGINT',
+    'BINARY',
+    '_BINARY',
     'BIT',
-    'BLOB', // (R)
-    'BLOCK',
+    'BLOB',
     'BOOL',
     'BOOLEAN',
-    'BOOTSTRAP', // (R)
-    'BOTH', // (R)
+    'BOOTSTRAP',
+    'BOTH',
+    '_BT',
     'BTREE',
+    'BUCKET_COUNT',
     'BUCKETS',
-    'BY', // (R)
+    'BY',
     'BYTE',
+    'BYTE_LENGTH', // maybe function?
     'CACHE',
-    'CALL', // (R)
-    'CASCADE', // (R)
+    'CALL',
+    'CALL_FOR_PIPELINE',
+    'CALLED',
+    'CAPTURE',
+    'CASCADE',
     'CASCADED',
-    'CASE', // (R)
-    'CATALOG_NAME',
+    'CASE',
+    'CATALOG',
     'CHAIN',
-    'CHALLENGE_RESPONSE',
-    'CHANGE', // (R)
-    'CHANGED',
-    'CHANNEL',
-    'CHAR', // (R)
-    'CHARACTER', // (R)
+    'CHANGE',
+    'CHAR',
+    'CHARACTER',
+    'CHARACTERISTICS',
     'CHARSET',
-    'CHECK', // (R)
+    'CHECK',
+    'CHECKPOINT',
+    '_CHECK_CAN_CONNECT', // maybe function?
+    '_CHECK_CONSISTENCY', // maybe function?
     'CHECKSUM',
-    'CIPHER',
-    'CLASS_ORIGIN',
-    'CLEAR', // (R)
+    '_CHECKSUM',
+    'CLASS',
+    'CLEAR',
     'CLIENT',
-    'CLONE',
+    'CLIENT_FOUND_ROWS',
     'CLOSE',
+    'CLUSTER',
+    'CLUSTERED',
+    'CNF',
     'COALESCE',
-    'CODE',
-    'COLLATE', // (R)
+    'COLLATE',
     'COLLATION',
-    'COLUMN', // (R)
+    'COLUMN',
+    'COLUMNAR',
     'COLUMNS',
-    'COLUMN_FORMAT',
-    'COLUMN_NAME',
+    'COLUMNSTORE',
+    'COLUMNSTORE_SEGMENT_ROWS',
     'COMMENT',
+    'COMMENTS',
     'COMMIT',
     'COMMITTED',
+    '_COMMIT_LOG_TAIL',
     'COMPACT',
-    'COMPLETION',
-    'COMPONENT',
+    'COMPILE', // maybe function?
     'COMPRESSED',
     'COMPRESSION',
     'CONCURRENT',
-    'CONDITION', // (R)
+    'CONCURRENTLY',
+    'CONDITION',
+    'CONFIGURATION',
     'CONNECTION',
-    'CONSISTENT',
-    'CONSTRAINT', // (R)
-    'CONSTRAINT_CATALOG',
-    'CONSTRAINT_NAME',
-    'CONSTRAINT_SCHEMA',
+    'CONNECTIONS',
+    'CONFIG', // maybe a function?
+    'CONSTRAINT',
     'CONTAINS',
-    'CONTEXT',
-    'CONTINUE', // (R)
-    'CONVERT', // (R)
-    'CPU',
-    'CREATE', // (R)
-    'CROSS', // (R)
-    'CUBE', // (R)
-    'CUME_DIST', // (R)
+    'CONTENT',
+    'CONTINUE',
+    '_CONTINUE_REPLAY',
+    'CONVERSION',
+    'CONVERT',
+    'COPY',
+    '_CORE',
+    'COST',
+    'CREATE',
+    'CREDENTIALS',
+    'CROSS',
+    'CUBE',
+    'CSV',
+    'CUME_DIST',
     'CURRENT',
-    'CURRENT_DATE', // (R)
-    'CURRENT_TIME', // (R)
-    'CURRENT_TIMESTAMP', // (R)
-    'CURRENT_USER', // (R)
-    'CURSOR', // (R)
-    'CURSOR_NAME',
+    'CURRENT_CATALOG',
+    'CURRENT_DATE',
+    'CURRENT_SCHEMA', // maybe a function?
+    'CURRENT_SECURITY_GROUPS', // maybe a function?
+    'CURRENT_SECURITY_ROLES', // maybe a function?
+    'CURRENT_TIME',
+    'CURRENT_TIMESTAMP',
+    'CURRENT_USER',
+    'CURSOR',
+    'CYCLE',
     'DATA',
-    'DATABASE', // (R)
-    'DATABASES', // (R)
-    'DATAFILE',
+    'DATABASE',
+    'DATABASES',
     'DATE',
     'DATETIME',
     'DAY',
-    'DAY_HOUR', // (R)
-    'DAY_MICROSECOND', // (R)
-    'DAY_MINUTE', // (R)
-    'DAY_SECOND', // (R)
+    'DAY_HOUR',
+    'DAY_MICROSECOND',
+    'DAY_MINUTE',
+    'DAY_SECOND',
     'DEALLOCATE',
-    'DEC', // (R)
-    'DECIMAL', // (R)
-    'DECLARE', // (R)
-    'DEFAULT', // (R)
-    'DEFAULT_AUTH',
+    'DEC',
+    'DECIMAL',
+    'DECLARE',
+    'DEFAULT',
+    'DEFAULTS',
+    'DEFERRABLE',
+    'DEFERRED',
+    'DEFINED',
     'DEFINER',
-    'DEFINITION',
-    'DELAYED', // (R)
+    'DELAYED',
     'DELAY_KEY_WRITE',
-    'DELETE', // (R)
-    'DENSE_RANK', // (R)
-    'DESC', // (R)
-    'DESCRIBE', // (R)
-    'DESCRIPTION',
-    'DETERMINISTIC', // (R)
-    'DIAGNOSTICS',
+    'DELETE',
+    'DELIMITER',
+    'DELIMITERS',
+    'DENSE_RANK',
+    'DESC',
+    'DESCRIBE',
+    'DETACH',
+    'DETERMINISTIC',
+    'DICTIONARY',
+    'DIFFERENTIAL',
     'DIRECTORY',
     'DISABLE',
     'DISCARD',
+    '_DISCONNECT',
     'DISK',
-    'DISTINCT', // (R)
-    'DISTINCTROW', // (R)
-    'DIV', // (R)
+    'DISTINCT',
+    'DISTINCTROW',
+    'DISTRIBUTED_JOINS',
+    'DIV',
     'DO',
-    'DOUBLE', // (R)
-    'DROP', // (R)
-    'DUAL', // (R)
-    'DUMPFILE',
+    'DOCUMENT',
+    'DOMAIN',
+    'DOUBLE',
+    'DROP',
+    '_DROP_PROFILE',
+    'DUAL',
+    'DUMP',
     'DUPLICATE',
     'DYNAMIC',
-    'EACH', // (R)
-    'ELSE', // (R)
-    'ELSEIF', // (R)
-    'EMPTY', // (R)
+    'EARLIEST',
+    'EACH',
+    'ECHO',
+    'ELECTION',
+    'ELSE',
+    'ELSEIF',
     'ENABLE',
-    'ENCLOSED', // (R)
-    'ENCRYPTION',
+    'ENCLOSED',
+    'ENCODING',
+    'ENCRYPTED',
     'END',
-    'ENDS',
-    'ENFORCED',
     'ENGINE',
     'ENGINES',
-    'ENGINE_ATTRIBUTE',
     'ENUM',
-    'ERROR',
     'ERRORS',
     'ESCAPE',
-    'ESCAPED', // (R)
+    'ESCAPED',
+    'ESTIMATE',
     'EVENT',
     'EVENTS',
-    'EVERY',
-    'EXCEPT', // (R)
-    'EXCHANGE',
+    'EXCEPT',
     'EXCLUDE',
+    'EXCLUDING',
+    'EXCLUSIVE',
     'EXECUTE',
-    'EXISTS', // (R)
-    'EXIT', // (R)
-    'EXPANSION',
-    'EXPIRE',
-    'EXPLAIN', // (R)
-    'EXPORT',
+    'EXISTS',
+    'EXIT',
+    'EXPLAIN',
     'EXTENDED',
-    'EXTENT_SIZE',
+    'EXTENSION',
+    'EXTERNAL',
+    'EXTERNAL_HOST',
+    'EXTERNAL_PORT',
+    'EXTRACTOR',
+    'EXTRACTORS',
+    'EXTRA_JOIN',
     'FACTOR',
     'FAILED_LOGIN_ATTEMPTS',
     'FALSE', // (R)
@@ -723,6 +791,7 @@ export const keywords = flatKeywordList({
     'USE', // (R)
     'USER',
     'USER_RESOURCES',
+    'USER_VARIABLES', // (R)
     'USE_FRM',
     'USING', // (R)
     'UTC_DATE', // (R)
