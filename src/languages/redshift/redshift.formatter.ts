@@ -15,7 +15,6 @@ const reservedCommands = expandPhrases([
   'ORDER BY',
   'LIMIT',
   'OFFSET',
-  'VALUES',
   // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
   'ABORT',
   'ALTER DATABASE',
@@ -100,6 +99,7 @@ const reservedCommands = expandPhrases([
   'UNLOAD',
   'UPDATE',
   'VACUUM',
+  'VALUES',
   // other
   'MODIFY', // verify
   'INSERT INTO', // verify
