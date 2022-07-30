@@ -20,7 +20,7 @@ import supportsParams from './options/param';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
-import supportsLimit from './features/limit';
+import supportsLimiting from './features/limiting';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -46,7 +46,7 @@ describe('PostgreSqlFormatter', () => {
   supportsReturning(format);
   supportsParams(format, { numbered: ['$'] });
   supportsWindow(format);
-  supportsLimit(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
+  supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
 
   it('allows $ character as part of identifiers', () => {
     expect(format('SELECT foo$, some$$ident')).toBe(dedent`

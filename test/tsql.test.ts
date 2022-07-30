@@ -18,7 +18,7 @@ import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
-import supportsLimit from './features/limit';
+import supportsLimiting from './features/limiting';
 
 describe('TSqlFormatter', () => {
   const language = 'tsql';
@@ -42,7 +42,7 @@ describe('TSqlFormatter', () => {
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });
   supportsWindow(format);
-  supportsLimit(format, { offset: true, fetchFirst: true, fetchNext: true });
+  supportsLimiting(format, { offset: true, fetchFirst: true, fetchNext: true });
 
   // TODO: The following are duplicated from StandardSQLFormatter test
 

@@ -16,7 +16,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsSetOperations from './features/setOperations';
-import supportsLimit from './features/limit';
+import supportsLimiting from './features/limiting';
 
 describe('RedshiftFormatter', () => {
   const language = 'redshift';
@@ -35,7 +35,7 @@ describe('RedshiftFormatter', () => {
   supportsJoin(format);
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT', 'MINUS']);
   supportsParams(format, { numbered: ['$'] });
-  supportsLimit(format, { limit: true, offset: true });
+  supportsLimiting(format, { limit: true, offset: true });
 
   it('formats LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC LIMIT 10;')).toBe(dedent`

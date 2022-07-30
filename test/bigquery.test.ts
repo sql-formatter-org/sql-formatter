@@ -17,7 +17,7 @@ import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
-import supportsLimit from './features/limit';
+import supportsLimiting from './features/limiting';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';
@@ -41,7 +41,7 @@ describe('BigQueryFormatter', () => {
   supportsOperators(format, BigQueryFormatter.operators);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
   supportsWindow(format);
-  supportsLimit(format, { limit: true, offset: true });
+  supportsLimiting(format, { limit: true, offset: true });
 
   // Note: BigQuery supports single dashes inside identifiers, so my-ident would be
   // detected as identifier, while other SQL dialects would detect it as

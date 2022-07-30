@@ -15,7 +15,7 @@ import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsSetOperations from './features/setOperations';
-import supportsLimit from './features/limit';
+import supportsLimiting from './features/limiting';
 
 describe('SparkFormatter', () => {
   const language = 'spark';
@@ -46,7 +46,7 @@ describe('SparkFormatter', () => {
     ],
   });
   supportsSetOperations(format);
-  supportsLimit(format, { limit: true });
+  supportsLimiting(format, { limit: true });
 
   it('formats basic WINDOW clause', () => {
     const result = format(`SELECT * FROM tbl WINDOW win1, WINDOW win2, WINDOW win3;`);

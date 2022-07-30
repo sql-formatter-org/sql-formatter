@@ -19,7 +19,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsSetOperations from './features/setOperations';
-import supportsLimit from './features/limit';
+import supportsLimiting from './features/limiting';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -41,7 +41,7 @@ describe('PlSqlFormatter', () => {
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsReturning(format);
   supportsParams(format, { numbered: [':'], named: [':'] });
-  supportsLimit(format, { offset: true, fetchFirst: true, fetchNext: true });
+  supportsLimiting(format, { offset: true, fetchFirst: true, fetchNext: true });
 
   it('formats FETCH FIRST like LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`

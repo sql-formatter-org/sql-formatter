@@ -18,7 +18,7 @@ import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
-import supportsLimit from './features/limit';
+import supportsLimiting from './features/limiting';
 
 describe('SqlFormatter', () => {
   const language = 'sql';
@@ -39,7 +39,7 @@ describe('SqlFormatter', () => {
   supportsOperators(format, SqlFormatter.operators);
   supportsParams(format, { positional: true });
   supportsWindow(format);
-  supportsLimit(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
+  supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
 
   it('formats FETCH FIRST like LIMIT', () => {
     const result = format('SELECT * FETCH FIRST 2 ROWS ONLY;');

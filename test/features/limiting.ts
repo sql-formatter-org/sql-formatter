@@ -9,7 +9,7 @@ interface LimitingTypes {
   fetchNext?: boolean;
 }
 
-export default function supportsLimit(format: FormatFn, types: LimitingTypes) {
+export default function supportsLimiting(format: FormatFn, types: LimitingTypes) {
   if (types.limit) {
     it('formats LIMIT with two comma-separated values on single line', () => {
       const result = format('SELECT * FROM tbl LIMIT 5, 10;');

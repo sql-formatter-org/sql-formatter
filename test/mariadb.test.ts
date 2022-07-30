@@ -6,7 +6,7 @@ import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsReturning from './features/returning';
 import supportsSetOperations, { standardSetOperations } from './features/setOperations';
-import supportsLimit from './features/limit';
+import supportsLimiting from './features/limiting';
 
 describe('MariaDbFormatter', () => {
   const language = 'mariadb';
@@ -21,5 +21,5 @@ describe('MariaDbFormatter', () => {
   supportsSetOperations(format, [...standardSetOperations, 'MINUS', 'MINUS ALL', 'MINUS DISTINCT']);
   supportsOperators(format, MariaDbFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsReturning(format);
-  supportsLimit(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
+  supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
 });
