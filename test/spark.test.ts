@@ -15,6 +15,7 @@ import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
 
 describe('SparkFormatter', () => {
   const language = 'spark';
@@ -45,6 +46,7 @@ describe('SparkFormatter', () => {
     ],
   });
   supportsSetOperations(format);
+  supportsLimiting(format, { limit: true });
 
   it('formats basic WINDOW clause', () => {
     const result = format(`SELECT * FROM tbl WINDOW win1, WINDOW win2, WINDOW win3;`);
@@ -95,6 +97,24 @@ describe('SparkFormatter', () => {
         \${table_name}
       WHERE
         name = '\${name}';
+    `);
+  });
+
+  it('supports SORT BY, CLUSTER BY, DISTRIBUTE BY', () => {
+    const result = format(
+      'SELECT value, count DISTRIBUTE BY count CLUSTER BY value SORT BY value, count;'
+    );
+    expect(result).toBe(dedent`
+      SELECT
+        value,
+        count
+      DISTRIBUTE BY
+        count
+      CLUSTER BY
+        value
+      SORT BY
+        value,
+        count;
     `);
   });
 });

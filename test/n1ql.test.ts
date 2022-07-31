@@ -18,6 +18,7 @@ import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
 
 describe('N1qlFormatter', () => {
   const language = 'n1ql';
@@ -45,6 +46,7 @@ describe('N1qlFormatter', () => {
   supportsReturning(format);
   supportsParams(format, { positional: true, numbered: ['$'], named: ['$'] });
   supportsWindow(format);
+  supportsLimiting(format, { limit: true, offset: true });
 
   it('formats INSERT with {} object literal', () => {
     const result = format(

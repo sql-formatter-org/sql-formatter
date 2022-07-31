@@ -4,8 +4,22 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './hive.functions';
 import { keywords } from './hive.keywords';
 
-const reservedCommands = [
-  // commands
+const reservedCommands = expandPhrases([
+  // queries
+  'WITH',
+  'SELECT [ALL | DISTINCT]',
+  'FROM',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'WINDOW',
+  'PARTITION BY',
+  'ORDER BY',
+  'SORT BY',
+  'CLUSTER BY',
+  'DISTRIBUTE BY',
+  'LIMIT',
+  // other
   'ALTER',
   'ALTER COLUMN', // added
   'ALTER TABLE', // added
@@ -16,32 +30,19 @@ const reservedCommands = [
   'DROP',
   'DROP TABLE', // added
   'FETCH',
-  'FROM',
-  'GROUP BY',
-  'HAVING',
   'INSERT',
   'INSERT INTO', // added
-  'LIMIT',
-  'OFFSET',
-  'ORDER BY',
-  'SELECT',
   'SET',
   'SET SCHEMA', // added
   'SHOW',
-  'SORT BY',
   'TRUNCATE',
   'UPDATE',
   'VALUES',
-  'WHERE',
-  'WITH',
-  'WINDOW',
-  'PARTITION BY',
-
   // newline keywords
   'STORED AS',
   'STORED BY',
   'ROW FORMAT',
-];
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);
 

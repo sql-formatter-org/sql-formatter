@@ -6,19 +6,19 @@ import { keywords } from './bigquery.keywords';
 import { functions } from './bigquery.functions';
 
 const reservedCommands = expandPhrases([
-  // DQL, https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax
-  'SELECT',
+  // Queries: https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax
+  'WITH [RECURSIVE]',
+  'SELECT [ALL | DISTINCT] [AS STRUCT | AS VALUE]',
   'FROM',
   'WHERE',
   'GROUP BY',
   'HAVING',
-  'ORDER BY',
   'QUALIFY',
   'WINDOW',
   'PARTITION BY',
+  'ORDER BY',
   'LIMIT',
   'OFFSET',
-  'WITH',
   'OMIT RECORD IF', // legacy
   // DML, https://cloud.google.com/bigquery/docs/reference/standard-sql/dml-syntax
   'INSERT [INTO]',
@@ -27,7 +27,6 @@ const reservedCommands = expandPhrases([
   'TRUNCATE TABLE',
   'UPDATE',
   'MERGE [INTO]',
-  // 'USING',
   // DDL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
   'CREATE SCHEMA [IF NOT EXISTS]',
   'DEFAULT COLLATE',

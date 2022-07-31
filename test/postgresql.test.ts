@@ -20,6 +20,7 @@ import supportsParams from './options/param';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -45,6 +46,7 @@ describe('PostgreSqlFormatter', () => {
   supportsReturning(format);
   supportsParams(format, { numbered: ['$'] });
   supportsWindow(format);
+  supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
 
   it('allows $ character as part of identifiers', () => {
     expect(format('SELECT foo$, some$$ident')).toBe(dedent`
@@ -93,6 +95,18 @@ describe('PostgreSqlFormatter', () => {
     expect(format('SELECT ARRAY[1, 2, 3]')).toBe(dedent`
       SELECT
         ARRAY[1, 2, 3]
+    `);
+  });
+
+  // issue #144 (unsolved)
+  // This is currently far from ideal.
+  it('formats SELECT DISTINCT ON () syntax', () => {
+    expect(format('SELECT DISTINCT ON (c1, c2) c1, c2 FROM tbl;')).toBe(dedent`
+      SELECT DISTINCT
+        ON (c1, c2) c1,
+        c2
+      FROM
+        tbl;
     `);
   });
 });

@@ -17,6 +17,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
 
 describe('HiveFormatter', () => {
   const language = 'hive';
@@ -39,6 +40,7 @@ describe('HiveFormatter', () => {
   supportsOperators(format, HiveFormatter.operators);
   supportsArrayAndMapAccessors(format);
   supportsWindow(format);
+  supportsLimiting(format, { limit: true });
 
   it('throws error when params option used', () => {
     expect(() => format('SELECT *', { params: ['1', '2', '3'] })).toThrow(
@@ -60,6 +62,24 @@ describe('HiveFormatter', () => {
         \${hivevar:table_name}
       WHERE
         name = '\${hivevar:name}';
+    `);
+  });
+
+  it('supports SORT BY, CLUSTER BY, DISTRIBUTE BY', () => {
+    const result = format(
+      'SELECT value, count DISTRIBUTE BY count CLUSTER BY value SORT BY value, count;'
+    );
+    expect(result).toBe(dedent`
+      SELECT
+        value,
+        count
+      DISTRIBUTE BY
+        count
+      CLUSTER BY
+        value
+      SORT BY
+        value,
+        count;
     `);
   });
 });

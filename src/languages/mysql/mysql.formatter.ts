@@ -5,8 +5,20 @@ import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
 import { keywords } from './mysql.keywords';
 import { functions } from './mysql.functions';
 
-// https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
-const reservedCommands = [
+const reservedCommands = expandPhrases([
+  // queries
+  'WITH [RECURSIVE]',
+  'SELECT [ALL | DISTINCT | DISTINCTROW]',
+  'FROM',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'WINDOW',
+  'PARTITION BY',
+  'ORDER BY',
+  'LIMIT',
+  'OFFSET',
+  // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',
   'ALTER EVENT',
   'ALTER FUNCTION',
@@ -102,7 +114,6 @@ const reservedCommands = [
   'ROLLBACK',
   'ROLLBACK TO SAVEPOINT',
   'SAVEPOINT',
-  'SELECT',
   'SET',
   'SET CHARACTER SET',
   'SET DEFAULT ROLE',
@@ -172,7 +183,6 @@ const reservedCommands = [
   'UPDATE',
   'USE',
   'VALUES',
-  'WITH',
   'XA',
   // flow control
   // 'IF',
@@ -185,17 +195,8 @@ const reservedCommands = [
   // other
   'ADD',
   'ALTER COLUMN',
-  'FROM',
-  'GROUP BY',
-  'HAVING',
   'INSERT INTO',
-  'LIMIT',
-  'OFFSET',
-  'ORDER BY',
-  'WHERE',
-  'WINDOW',
-  'PARTITION BY',
-];
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);
 

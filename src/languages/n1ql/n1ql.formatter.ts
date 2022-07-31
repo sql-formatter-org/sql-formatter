@@ -4,8 +4,20 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './n1ql.functions';
 import { keywords } from './n1ql.keywords';
 
-// https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html
-const reservedCommands = [
+const reservedCommands = expandPhrases([
+  // queries
+  'WITH',
+  'SELECT [ALL | DISTINCT]',
+  'FROM',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'WINDOW',
+  'PARTITION BY',
+  'ORDER BY',
+  'LIMIT',
+  'OFFSET',
+  // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html
   'ADVISE',
   'ALTER INDEX',
   'BEGIN TRANSACTION',
@@ -36,22 +48,15 @@ const reservedCommands = [
   'REVOKE',
   'ROLLBACK TRANSACTION',
   'SAVEPOINT',
-  'SELECT',
   'SET TRANSACTION',
   'UPDATE',
   'UPDATE STATISTICS',
   'UPSERT',
   // other
   'DROP TABLE', // verify,
-  'FROM',
-  'GROUP BY',
-  'HAVING',
   'INSERT INTO',
   'LET',
-  'LIMIT',
-  'OFFSET',
   'NEST',
-  'ORDER BY',
   'SET CURRENT SCHEMA',
   'SET SCHEMA',
   'SET',
@@ -59,11 +64,7 @@ const reservedCommands = [
   'UNNEST',
   'USE KEYS',
   'VALUES',
-  'WHERE',
-  'WITH',
-  'WINDOW',
-  'PARTITION BY',
-];
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);
 

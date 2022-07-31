@@ -5,7 +5,18 @@ import { EOF_TOKEN, isReserved, isToken, type Token, TokenType } from 'src/lexer
 import { keywords } from './plsql.keywords';
 import { functions } from './plsql.functions';
 
-const reservedCommands = [
+const reservedCommands = expandPhrases([
+  // queries
+  'WITH',
+  'SELECT [ALL | DISTINCT | UNIQUE]',
+  'FROM',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'ORDER [SIBLINGS] BY',
+  'OFFSET',
+  'FETCH {FIRST | NEXT}',
+  // other
   'ADD',
   'ALTER COLUMN',
   'ALTER TABLE',
@@ -18,28 +29,18 @@ const reservedCommands = [
   'DELETE FROM',
   'EXCEPT',
   'EXCEPTION',
-  'FETCH FIRST',
-  'FROM',
-  'GROUP BY',
-  'HAVING',
   'INSERT INTO',
   'INSERT',
-  'LIMIT',
-  'OFFSET',
   'LOOP',
   'MODIFY',
-  'ORDER BY',
   'RETURNING',
-  'SELECT',
   'SET CURRENT SCHEMA',
   'SET SCHEMA',
   'SET',
   'START WITH',
   'UPDATE',
   'VALUES',
-  'WHERE',
-  'WITH',
-];
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 

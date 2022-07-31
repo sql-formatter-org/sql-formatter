@@ -19,6 +19,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -40,19 +41,7 @@ describe('PlSqlFormatter', () => {
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsReturning(format);
   supportsParams(format, { numbered: [':'], named: [':'] });
-
-  it('formats FETCH FIRST like LIMIT', () => {
-    expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
-      SELECT
-        col1
-      FROM
-        tbl
-      ORDER BY
-        col2 DESC
-      FETCH FIRST
-        20 ROWS ONLY;
-    `);
-  });
+  supportsLimiting(format, { offset: true, fetchFirst: true, fetchNext: true });
 
   it('recognizes _, $, # as part of identifiers', () => {
     const result = format('SELECT my_col$1#, col.a$, type#, procedure$, user# FROM tbl;');
@@ -126,127 +115,23 @@ describe('PlSqlFormatter', () => {
 
   it('formats Oracle recursive sub queries', () => {
     const result = format(`
-      WITH t1(id, parent_id) AS (
-        -- Anchor member.
-        SELECT
-          id,
-          parent_id
-        FROM
-          tab1
-        WHERE
-          parent_id IS NULL
-        UNION
-          -- Recursive member.
-        SELECT
-          t2.id,
-          t2.parent_id
-        FROM
-          tab1 t2,
-          t1
-        WHERE
-          t2.parent_id = t1.id
-      ) SEARCH BREADTH FIRST BY id SET order1,
-      another AS (SELECT * FROM dual)
-      SELECT id, parent_id FROM t1 ORDER BY order1;
+      WITH t1 AS (
+        SELECT * FROM tbl
+      ) SEARCH BREADTH FIRST BY id SET order1
+      SELECT * FROM t1;
     `);
     expect(result).toBe(dedent`
       WITH
-        t1 (id, parent_id) AS (
-          -- Anchor member.
-          SELECT
-            id,
-            parent_id
-          FROM
-            tab1
-          WHERE
-            parent_id IS NULL
-          UNION
-          -- Recursive member.
-          SELECT
-            t2.id,
-            t2.parent_id
-          FROM
-            tab1 t2,
-            t1
-          WHERE
-            t2.parent_id = t1.id
-        ) SEARCH BREADTH FIRST BY id SET order1,
-        another AS (
+        t1 AS (
           SELECT
             *
           FROM
-            dual
-        )
+            tbl
+        ) SEARCH BREADTH FIRST BY id SET order1
       SELECT
-        id,
-        parent_id
+        *
       FROM
-        t1
-      ORDER BY
-        order1;
-    `);
-  });
-
-  it('formats Oracle recursive sub queries regardless of capitalization', () => {
-    const result = format(/* sql */ `
-      WITH t1(id, parent_id) AS (
-        -- Anchor member.
-        SELECT
-          id,
-          parent_id
-        FROM
-          tab1
-        WHERE
-          parent_id IS NULL
-        UNION
-          -- Recursive member.
-        SELECT
-          t2.id,
-          t2.parent_id
-        FROM
-          tab1 t2,
-          t1
-        WHERE
-          t2.parent_id = t1.id
-      ) SEARCH BREADTH FIRST by id set order1,
-      another AS (SELECT * FROM dual)
-      SELECT id, parent_id FROM t1 ORDER BY order1;
-    `);
-    expect(result).toBe(dedent/* sql */ `
-      WITH
-        t1 (id, parent_id) AS (
-          -- Anchor member.
-          SELECT
-            id,
-            parent_id
-          FROM
-            tab1
-          WHERE
-            parent_id IS NULL
-          UNION
-          -- Recursive member.
-          SELECT
-            t2.id,
-            t2.parent_id
-          FROM
-            tab1 t2,
-            t1
-          WHERE
-            t2.parent_id = t1.id
-        ) SEARCH BREADTH FIRST by id set order1,
-        another AS (
-          SELECT
-            *
-          FROM
-            dual
-        )
-      SELECT
-        id,
-        parent_id
-      FROM
-        t1
-      ORDER BY
-        order1;
+        t1;
     `);
   });
 

@@ -6,7 +6,20 @@ import { keywords } from './spark.keywords';
 import { functions } from './spark.functions';
 
 // http://spark.apache.org/docs/latest/sql-ref-syntax.html
-const reservedCommands = [
+const reservedCommands = expandPhrases([
+  // queries
+  'WITH',
+  'SELECT [ALL | DISTINCT]',
+  'FROM',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'WINDOW',
+  'ORDER BY',
+  'SORT BY',
+  'CLUSTER BY',
+  'DISTRIBUTE BY',
+  'LIMIT',
   // DDL
   'ALTER COLUMN',
   'ALTER DATABASE',
@@ -29,19 +42,8 @@ const reservedCommands = [
   'INSERT OVERWRITE DIRECTORY',
   'LOAD',
   // Data Retrieval
-  'SELECT',
-  'WITH',
-  'CLUSTER BY',
-  'DISTRIBUTE BY',
-  'GROUP BY',
-  'HAVING',
   'VALUES',
-  'LIMIT',
-  'OFFSET',
-  'ORDER BY',
-  'SORT BY',
   'TABLESAMPLE',
-  'WHERE',
   'PIVOT',
   'TRANSFORM',
   'EXPLAIN',
@@ -74,12 +76,10 @@ const reservedCommands = [
   'SHOW VIEWS',
   'UNCACHE TABLE',
   // other
-  'FROM',
   'INSERT',
   'LATERAL VIEW',
   'UPDATE',
-  'WINDOW',
-];
+]);
 
 const reservedSetOperations = expandPhrases([
   'UNION [ALL | DISTINCT]',

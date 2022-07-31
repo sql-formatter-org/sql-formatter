@@ -4,6 +4,7 @@ import { FormatFn } from 'src/sqlFormatter';
 
 import supportsCase from './features/case';
 import supportsNumbers from './features/numbers';
+import supportsWith from './features/with';
 import supportsTabWidth from './options/tabWidth';
 import supportsUseTabs from './options/useTabs';
 import supportsAliasAs from './options/aliasAs';
@@ -15,7 +16,6 @@ import supportsLinesBetweenQueries from './options/linesBetweenQueries';
 import supportsNewlineBeforeSemicolon from './options/newlineBeforeSemicolon';
 import supportsLogicalOperatorNewline from './options/logicalOperatorNewline';
 import supportsTabulateAlias from './options/tabulateAlias';
-import supportsLimit from './features/limit';
 
 /**
  * Core tests for all SQL formatters
@@ -23,6 +23,7 @@ import supportsLimit from './features/limit';
 export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsCase(format);
   supportsNumbers(format);
+  supportsWith(format);
 
   supportsAliasAs(format);
   supportsTabulateAlias(format);
@@ -35,7 +36,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsNewlineBeforeSemicolon(format);
   supportsCommaPosition(format);
   supportsLogicalOperatorNewline(format);
-  supportsLimit(format);
 
   it('formats simple SELECT query', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;');
@@ -53,8 +53,8 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
       "SELECT DISTINCT name, ROUND(age/7) field1, 18 + 20 AS field2, 'some string' FROM foo;"
     );
     expect(result).toBe(dedent`
-      SELECT
-        DISTINCT name,
+      SELECT DISTINCT
+        name,
         ROUND(age / 7) field1,
         18 + 20 AS field2,
         'some string'
@@ -87,7 +87,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   it('formats SELECT with top level reserved words', () => {
     const result = format(`
       SELECT * FROM foo WHERE name = 'John' GROUP BY some_column
-      HAVING column > 10 ORDER BY other_column LIMIT 5;
+      HAVING column > 10 ORDER BY other_column;
     `);
     expect(result).toBe(dedent`
       SELECT
@@ -101,9 +101,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
       HAVING
         column > 10
       ORDER BY
-        other_column
-      LIMIT
-        5;
+        other_column;
     `);
   });
 
@@ -139,7 +137,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
 
   it('formats SELECT query with SELECT query inside it', () => {
     const result = format(
-      'SELECT *, SUM(*) AS total FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b'
+      'SELECT *, SUM(*) AS total FROM (SELECT * FROM Posts WHERE age > 10) WHERE a > b'
     );
     expect(result).toBe(dedent`
       SELECT
@@ -151,8 +149,8 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
             *
           FROM
             Posts
-          LIMIT
-            30
+          WHERE
+            age > 10
         )
       WHERE
         a > b
@@ -172,25 +170,18 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   });
 
   it('formats open paren after comma', () => {
-    const result = format(
-      'WITH TestIds AS (VALUES (4),(5), (6),(7),(9),(10),(11)) SELECT * FROM TestIds;'
-    );
-    expect(result).toBe(dedent/* sql */ `
-      WITH
-        TestIds AS (
-          VALUES
-            (4),
-            (5),
-            (6),
-            (7),
-            (9),
-            (10),
-            (11)
-        )
-      SELECT
-        *
-      FROM
-        TestIds;
+    const result = format('INSERT INTO TestIds (id) VALUES (4),(5), (6),(7),(9),(10),(11);');
+    expect(result).toBe(dedent`
+      INSERT INTO
+        TestIds (id)
+      VALUES
+        (4),
+        (5),
+        (6),
+        (7),
+        (9),
+        (10),
+        (11);
     `);
   });
 
@@ -344,25 +335,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
         õ
       FROM
         tbl;
-    `);
-  });
-
-  it('does not split UNION ALL in half', () => {
-    const result = format(`
-      SELECT * FROM tbl1
-      UNION ALL
-      SELECT * FROM tbl2;
-    `);
-    expect(result).toBe(dedent/* sql */ `
-      SELECT
-        *
-      FROM
-        tbl1
-      UNION ALL
-      SELECT
-        *
-      FROM
-        tbl2;
     `);
   });
 }

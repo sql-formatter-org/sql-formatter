@@ -18,6 +18,7 @@ import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
 
 describe('SqlFormatter', () => {
   const language = 'sql';
@@ -38,16 +39,7 @@ describe('SqlFormatter', () => {
   supportsOperators(format, SqlFormatter.operators);
   supportsParams(format, { positional: true });
   supportsWindow(format);
-
-  it('formats FETCH FIRST like LIMIT', () => {
-    const result = format('SELECT * FETCH FIRST 2 ROWS ONLY;');
-    expect(result).toBe(dedent`
-      SELECT
-        *
-      FETCH FIRST
-        2 ROWS ONLY;
-    `);
-  });
+  supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
 
   // This is a crappy behavior, but at least we don't crash
   it('does not crash when encountering characters or operators it does not recognize', () => {

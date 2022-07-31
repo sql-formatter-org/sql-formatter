@@ -4,7 +4,20 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './sqlite.functions';
 import { keywords } from './sqlite.keywords';
 
-const reservedCommands = [
+const reservedCommands = expandPhrases([
+  // queries
+  'WITH [RECURSIVE]',
+  'SELECT [ALL | DISTINCT]',
+  'FROM',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'WINDOW',
+  'PARTITION BY',
+  'ORDER BY',
+  'LIMIT',
+  'OFFSET',
+  // other
   'ADD',
   'ALTER COLUMN',
   'ALTER TABLE',
@@ -12,29 +25,12 @@ const reservedCommands = [
   'DROP TABLE',
   'DELETE',
   'DELETE FROM',
-  'FETCH FIRST',
-  'FETCH NEXT',
-  'FETCH PRIOR',
-  'FETCH LAST',
-  'FETCH ABSOLUTE',
-  'FETCH RELATIVE',
-  'FROM',
-  'GROUP BY',
-  'HAVING',
   'INSERT INTO',
-  'LIMIT',
-  'OFFSET',
-  'ORDER BY',
-  'SELECT',
   'SET SCHEMA',
   'SET',
   'UPDATE',
   'VALUES',
-  'WHERE',
-  'WITH',
-  'WINDOW',
-  'PARTITION BY',
-];
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 

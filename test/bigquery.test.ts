@@ -17,6 +17,7 @@ import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';
@@ -40,6 +41,7 @@ describe('BigQueryFormatter', () => {
   supportsOperators(format, BigQueryFormatter.operators);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
   supportsWindow(format);
+  supportsLimiting(format, { limit: true, offset: true });
 
   // Note: BigQuery supports single dashes inside identifiers, so my-ident would be
   // detected as identifier, while other SQL dialects would detect it as
@@ -156,6 +158,34 @@ describe('BigQueryFormatter', () => {
       .toBe(dedent`
       select
         STRUCT<Nr INT64, myName STRING> (1, "foo");
+    `);
+  });
+
+  it('supports QUALIFY clause', () => {
+    expect(
+      format(`
+        SELECT
+          item,
+          RANK() OVER (PARTITION BY category ORDER BY purchases DESC) AS rank
+        FROM Produce
+        WHERE Produce.category = 'vegetable'
+        QUALIFY rank <= 3
+      `)
+    ).toBe(dedent`
+      SELECT
+        item,
+        RANK() OVER (
+          PARTITION BY
+            category
+          ORDER BY
+            purchases DESC
+        ) AS rank
+      FROM
+        Produce
+      WHERE
+        Produce.category = 'vegetable'
+      QUALIFY
+        rank <= 3
     `);
   });
 

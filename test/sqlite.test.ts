@@ -1,5 +1,3 @@
-import dedent from 'dedent-js';
-
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
 import SqliteFormatter from 'src/languages/sqlite/sqlite.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
@@ -18,6 +16,7 @@ import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
 
 describe('SqliteFormatter', () => {
   const language = 'sqlite';
@@ -38,14 +37,5 @@ describe('SqliteFormatter', () => {
   supportsOperators(format, SqliteFormatter.operators);
   supportsParams(format, { positional: true, numbered: ['?'], named: [':', '$', '@'] });
   supportsWindow(format);
-
-  it('formats FETCH FIRST like LIMIT', () => {
-    const result = format('SELECT * FETCH FIRST 2 ROWS ONLY;');
-    expect(result).toBe(dedent`
-      SELECT
-        *
-      FETCH FIRST
-        2 ROWS ONLY;
-    `);
-  });
+  supportsLimiting(format, { limit: true, offset: true });
 });

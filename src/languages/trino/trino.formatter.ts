@@ -5,7 +5,20 @@ import { functions } from './trino.functions';
 import { keywords } from './trino.keywords';
 
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L41
-const reservedCommands = [
+const reservedCommands = expandPhrases([
+  // queries
+  'WITH [RECURSIVE]',
+  'SELECT [ALL | DISTINCT]',
+  'FROM',
+  'WHERE',
+  'GROUP BY [ALL | DISTINCT]',
+  'HAVING',
+  'WINDOW',
+  'PARTITION BY',
+  'ORDER BY',
+  'LIMIT',
+  'OFFSET',
+  'FETCH {FIRST | NEXT}',
   // DDL
   'ALTER SCHEMA',
   'ALTER TABLE',
@@ -39,21 +52,6 @@ const reservedCommands = [
   'UPDATE',
   'SET',
   'DELETE FROM',
-  // Data Retrieval
-  'WITH',
-  'SELECT',
-  'FROM',
-  'WHERE',
-  'GROUP BY',
-  'HAVING',
-  'WINDOW',
-  'ORDER BY',
-  'OFFSET',
-  'LIMIT',
-  'FETCH',
-
-  'PARTITION BY',
-
   // Auxiliary
   'EXPLAIN',
   'ANALYZE',
@@ -97,7 +95,7 @@ const reservedCommands = [
   'PATTERN',
   'SUBSET',
   'DEFINE',
-];
+]);
 
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L231-L235
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L288-L291
