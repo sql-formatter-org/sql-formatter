@@ -116,6 +116,11 @@ const reservedJoins = expandPhrases([
   '{INNER | CROSS} JOIN',
 ]);
 
+const reservedPhrases = [
+  // https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax#tablesample_operator
+  'TABLESAMPLE SYSTEM',
+];
+
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
 export default class BigQueryFormatter extends Formatter {
   static operators = ['~', '>>', '<<', '||'];
@@ -127,6 +132,7 @@ export default class BigQueryFormatter extends Formatter {
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
+      reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       openParens: ['(', '['],

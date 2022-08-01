@@ -85,7 +85,7 @@ export const keywords = flatKeywordList({
     'SOME',
     'STRUCT',
     'TABLE',
-    'TABLESAMPLE SYSTEM',
+    'TABLESAMPLE',
     'THEN',
     'TO',
     'TREAT',
