@@ -210,6 +210,8 @@ const reservedJoins = expandPhrases([
   'STRAIGHT_JOIN',
 ]);
 
+const reservedPhrases = ['ON DELETE', 'ON UPDATE'];
+
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
   static operators = ['~', ':=', '<<', '>>', '<=>', '&&', '||', '->', '->>'];
@@ -220,6 +222,7 @@ export default class MySqlFormatter extends Formatter {
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF'],
+      reservedPhrases,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,

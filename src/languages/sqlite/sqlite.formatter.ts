@@ -43,6 +43,8 @@ const reservedJoins = expandPhrases([
   'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
 ]);
 
+const reservedPhrases = ['ON DELETE', 'ON UPDATE'];
+
 export default class SqliteFormatter extends Formatter {
   // https://www.sqlite.org/lang_expr.html
   static operators = ['~', '->', '->>', '||', '<<', '>>', '=='];
@@ -53,6 +55,7 @@ export default class SqliteFormatter extends Formatter {
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
+      reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       stringTypes: [

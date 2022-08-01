@@ -413,5 +413,4 @@ export const keywords = flatKeywordList({
     'YEAR',
     'ZONE',
   ],
-  constraints: ['ON DELETE', 'ON UPDATE'],
 });

@@ -46,6 +46,8 @@ const reservedJoins = expandPhrases([
   'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
 ]);
 
+const reservedPhrases = ['ON DELETE', 'ON UPDATE'];
+
 export default class SqlFormatter extends Formatter {
   static operators = [];
 
@@ -55,6 +57,7 @@ export default class SqlFormatter extends Formatter {
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
+      reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       stringTypes: [{ quote: "''", prefixes: ['N', 'X', 'U&'] }],

@@ -275,5 +275,4 @@ export const keywords = flatKeywordList({
     'VARIABLES',
     'YEAR_MONTH',
   ],
-  constraints: ['ON DELETE', 'ON UPDATE'],
 });

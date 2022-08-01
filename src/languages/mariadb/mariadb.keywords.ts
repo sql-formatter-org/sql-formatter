@@ -689,6 +689,5 @@ export const keywords = flatKeywordList({
     'YEAR_MONTH',
     'ZEROFILL',
   ],
-  constraints: ['ON DELETE', 'ON UPDATE'],
   charset: ['CHARACTER SET'],
 });
