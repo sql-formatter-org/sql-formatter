@@ -22,6 +22,7 @@ import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -35,6 +36,7 @@ describe('PostgreSqlFormatter', () => {
   supportsArrayAndMapAccessors(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
+  supportsInsertInto(format);
   supportsStrings(format, ["''", "U&''", "X''"]);
   supportsIdentifiers(format, [`""`, 'U&""']);
   supportsBetween(format);

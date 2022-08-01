@@ -13,6 +13,7 @@ import supportsComments from './features/comments';
 import supportsStrings from './features/strings';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsInsertInto from './features/insertInto';
 
 /**
  * Shared tests for MySQL and MariaDB
@@ -27,6 +28,7 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
+  supportsInsertInto(format, { withoutInto: true });
   supportsBetween(format);
   supportsParams(format, { positional: true });
 

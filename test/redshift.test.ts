@@ -16,6 +16,7 @@ import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
 
 describe('RedshiftFormatter', () => {
   const language = 'redshift';
@@ -27,6 +28,7 @@ describe('RedshiftFormatter', () => {
   supportsDropTable(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
+  supportsInsertInto(format);
   supportsStrings(format, ["''"]);
   supportsIdentifiers(format, [`""`]);
   supportsOperators(format, RedshiftFormatter.operators);

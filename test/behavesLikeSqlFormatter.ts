@@ -157,18 +157,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     `);
   });
 
-  it('formats simple INSERT query', () => {
-    const result = format(
-      "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
-    );
-    expect(result).toBe(dedent`
-      INSERT INTO
-        Customers (ID, MoneyBalance, Address, City)
-      VALUES
-        (12, -123.4, 'Skagen 2111', 'Stv');
-    `);
-  });
-
   it('formats open paren after comma', () => {
     const result = format('INSERT INTO TestIds (id) VALUES (4),(5), (6),(7),(9),(10),(11);');
     expect(result).toBe(dedent`

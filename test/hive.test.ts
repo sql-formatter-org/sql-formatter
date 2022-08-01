@@ -84,4 +84,14 @@ describe('HiveFormatter', () => {
         count;
     `);
   });
+
+  it('formats INSERT INTO TABLE', () => {
+    const result = format("INSERT INTO TABLE Customers VALUES (12,-123.4, 'Skagen 2111','Stv');");
+    expect(result).toBe(dedent`
+      INSERT INTO TABLE
+        Customers
+      VALUES
+        (12, -123.4, 'Skagen 2111', 'Stv');
+    `);
+  });
 });
