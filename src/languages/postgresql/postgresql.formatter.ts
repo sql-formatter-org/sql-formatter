@@ -223,6 +223,8 @@ const reservedJoins = expandPhrases([
   'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
 ]);
 
+const reservedPhrases = ['ON DELETE', 'ON UPDATE'];
+
 const binaryOperators = [
   // Math Operators
   '<<',
@@ -306,6 +308,7 @@ export default class PostgreSqlFormatter extends Formatter {
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
+      reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       openParens: ['(', '['],

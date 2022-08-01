@@ -243,6 +243,8 @@ const reservedJoins = expandPhrases([
   'STRAIGHT_JOIN',
 ]);
 
+const reservedPhrases = ['ON DELETE', 'ON UPDATE', 'CHARACTER SET'];
+
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {
   static operators = [':=', '<<', '>>', '<=>', '&&', '||'];
@@ -253,6 +255,7 @@ export default class MariaDbFormatter extends Formatter {
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF', 'ELSIF'],
+      reservedPhrases,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,

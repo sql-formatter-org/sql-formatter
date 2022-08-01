@@ -147,6 +147,8 @@ const reservedJoins = expandPhrases([
   '{INNER | CROSS} JOIN',
 ]);
 
+const reservedPhrases = ['ON DELETE', 'ON UPDATE'];
+
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
   static operators = ['**', '¬=', '¬>', '¬<', '!>', '!<', '||'];
@@ -157,6 +159,7 @@ export default class Db2Formatter extends Formatter {
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF'],
+      reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       stringTypes: [{ quote: "''", prefixes: ['G', 'N', 'X', 'BX', 'GX', 'UX', 'U&'] }],

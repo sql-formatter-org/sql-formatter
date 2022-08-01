@@ -54,6 +54,8 @@ const reservedJoins = expandPhrases([
   '{CROSS | OUTER} APPLY',
 ]);
 
+const reservedPhrases = ['ON DELETE', 'ON UPDATE', 'ON COMMIT'];
+
 export default class PlSqlFormatter extends Formatter {
   static operators = [
     '||',
@@ -73,6 +75,7 @@ export default class PlSqlFormatter extends Formatter {
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
+      reservedPhrases,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,

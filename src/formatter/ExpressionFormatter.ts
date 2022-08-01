@@ -199,6 +199,7 @@ export default class ExpressionFormatter {
         return this.formatLogicalOperator(token);
       case TokenType.RESERVED_KEYWORD:
       case TokenType.RESERVED_FUNCTION_NAME:
+      case TokenType.RESERVED_PHRASE:
         return this.formatKeyword(token);
       case TokenType.RESERVED_CASE_START:
         return this.formatCaseStart(token);

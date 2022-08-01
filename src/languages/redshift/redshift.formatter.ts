@@ -117,6 +117,14 @@ const reservedJoins = expandPhrases([
   'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
 ]);
 
+const reservedPhrases = [
+  // https://docs.aws.amazon.com/redshift/latest/dg/copy-parameters-data-conversion.html
+  'NULL AS',
+  // https://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_EXTERNAL_SCHEMA.html
+  'DATA CATALOG',
+  'HIVE METASTORE',
+];
+
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export default class RedshiftFormatter extends Formatter {
   static operators = ['~', '|/', '||/', '<<', '>>', '||'];
@@ -127,6 +135,7 @@ export default class RedshiftFormatter extends Formatter {
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
+      reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       stringTypes: ["''"],

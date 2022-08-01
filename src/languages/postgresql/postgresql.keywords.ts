@@ -461,5 +461,4 @@ export const keywords = flatKeywordList({
     'YES',
     'ZONE',
   ],
-  constraints: ['ON DELETE', 'ON UPDATE', 'ON COMMIT'],
 });

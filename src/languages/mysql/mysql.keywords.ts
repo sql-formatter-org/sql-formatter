@@ -750,6 +750,4 @@ export const keywords = flatKeywordList({
     'ZEROFILL', // (R)
     'ZONE',
   ],
-  constraints: ['ON DELETE', 'ON UPDATE'],
-  charset: ['CHARACTER SET'],
 });

@@ -18,6 +18,9 @@ interface TokenizerOptions {
   reservedSetOperations: string[];
   // Various joins like LEFT OUTER JOIN
   reservedJoins: string[];
+  // These are essentially multi-word sequences of keywords,
+  // that we prioritize over normal keywords
+  reservedPhrases?: string[];
   // built in function names
   reservedFunctionNames: string[];
   // all other reserved words (not included to any of the above lists)
@@ -97,6 +100,10 @@ export default class Tokenizer {
       },
       [TokenType.RESERVED_JOIN]: {
         regex: regex.reservedWord(cfg.reservedJoins, cfg.identChars),
+        value: v => equalizeWhitespace(v.toUpperCase()),
+      },
+      [TokenType.RESERVED_PHRASE]: {
+        regex: regex.reservedWord(cfg.reservedPhrases ?? [], cfg.identChars),
         value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.RESERVED_LOGICAL_OPERATOR]: {

@@ -240,7 +240,6 @@ export const keywords = flatKeywordList({
     'COALESCE',
     'CONTAINS',
     'CONVERT',
-    'CURRENT ROW',
     'DAYS',
     'DAY_HOUR',
     'DAY_MINUTE',
@@ -275,5 +274,4 @@ export const keywords = flatKeywordList({
     'VARIABLES',
     'YEAR_MONTH',
   ],
-  constraints: ['ON DELETE', 'ON UPDATE'],
 });
