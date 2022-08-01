@@ -100,4 +100,14 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
         t MODIFY col1 VARCHAR(50) CHARACTER SET greek
     `);
   });
+
+  it('supports REPLACE INTO syntax', () => {
+    expect(format(`REPLACE INTO tbl VALUES (1,'Leopard'),(2,'Dog');`)).toBe(dedent`
+      REPLACE INTO
+        tbl
+      VALUES
+        (1, 'Leopard'),
+        (2, 'Dog');
+    `);
+  });
 }

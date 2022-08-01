@@ -19,6 +19,7 @@ const reservedCommands = expandPhrases([
   'OFFSET',
   // Data manipulation
   'INSERT [OR ABORT | OR FAIL | OR IGNORE | OR REPLACE | OR ROLLBACK] INTO',
+  'REPLACE INTO',
   'VALUES',
   // other
   'ADD',

@@ -20,6 +20,7 @@ const reservedCommands = expandPhrases([
   'OFFSET',
   // Data manipulation
   'INSERT [LOW_PRIORITY | DELAYED | HIGH_PRIORITY] [IGNORE] [INTO]',
+  'REPLACE [LOW_PRIORITY | DELAYED] [INTO]',
   'VALUES',
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',
@@ -105,7 +106,6 @@ const reservedCommands = expandPhrases([
   'RENAME TABLE',
   'RENAME USER',
   'REPAIR TABLE',
-  'REPLACE',
   'RESET',
   'RESET MASTER',
   'RESET PERSIST',

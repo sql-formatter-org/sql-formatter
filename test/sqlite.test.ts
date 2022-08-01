@@ -1,3 +1,4 @@
+import dedent from 'dedent-js';
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
 import SqliteFormatter from 'src/languages/sqlite/sqlite.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
@@ -42,4 +43,14 @@ describe('SqliteFormatter', () => {
   supportsParams(format, { positional: true, numbered: ['?'], named: [':', '$', '@'] });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
+
+  it('supports REPLACE INTO syntax', () => {
+    expect(format(`REPLACE INTO tbl VALUES (1,'Leopard'),(2,'Dog');`)).toBe(dedent`
+      REPLACE INTO
+        tbl
+      VALUES
+        (1, 'Leopard'),
+        (2, 'Dog');
+    `);
+  });
 });

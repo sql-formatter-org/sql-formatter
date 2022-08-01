@@ -19,6 +19,7 @@ const reservedCommands = expandPhrases([
   'FETCH {FIRST | NEXT}',
   // Data manipulation
   'INSERT [LOW_PRIORITY | DELAYED | HIGH_PRIORITY] [IGNORE] [INTO]',
+  'REPLACE [LOW_PRIORITY | DELAYED] [INTO]',
   'VALUES',
   // https://mariadb.com/docs/reference/mdb/sql-statements/
   'ALTER DATABASE',
@@ -104,7 +105,6 @@ const reservedCommands = expandPhrases([
   'RENAME USER',
   'REPAIR TABLE',
   'REPAIR VIEW',
-  'REPLACE',
   'RESET MASTER',
   'RESET QUERY CACHE',
   'RESET REPLICA',
