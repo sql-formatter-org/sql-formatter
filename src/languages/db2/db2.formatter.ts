@@ -131,9 +131,9 @@ const reservedCommands = expandPhrases([
   'WHENEVER',
   // other
   'ADD',
-  'ALTER COLUMN', // verify
+  'ALTER COLUMN',
   'AFTER',
-  'DROP TABLE', // verify
+  'DROP TABLE',
   'GO',
   'INSERT INTO',
   'SET CURRENT SCHEMA',

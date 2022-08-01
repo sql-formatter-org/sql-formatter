@@ -7,9 +7,9 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsCreateTable from './features/createTable';
+import supportsDropTable from './features/dropTable';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
-import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
@@ -24,11 +24,11 @@ describe('SparkFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format);
   supportsCreateTable(format);
+  supportsDropTable(format);
   supportsAlterTable(format);
   supportsStrings(format, ["''", "X''"]);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
-  supportsSchema(format);
   supportsOperators(format, SparkFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsArrayAndMapAccessors(format);
   supportsJoin(format, {

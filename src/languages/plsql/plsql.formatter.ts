@@ -22,8 +22,8 @@ const reservedCommands = expandPhrases([
   'ALTER TABLE',
   'BEGIN',
   'CONNECT BY',
-  'CREATE TABLE', // verify
-  'DROP TABLE', // verify
+  'CREATE TABLE',
+  'DROP TABLE',
   'DECLARE',
   'DELETE',
   'DELETE FROM',

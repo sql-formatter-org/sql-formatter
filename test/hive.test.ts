@@ -6,6 +6,7 @@ import HiveFormatter from 'src/languages/hive/hive.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
+import supportsDropTable from './features/dropTable';
 import supportsAlterTable from './features/alterTable';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
@@ -26,6 +27,7 @@ describe('HiveFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format);
   supportsCreateTable(format);
+  supportsDropTable(format);
   supportsAlterTable(format);
   supportsStrings(format, ['""', "''"]);
   supportsIdentifiers(format, ['``']);

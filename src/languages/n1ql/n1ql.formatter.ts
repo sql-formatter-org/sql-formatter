@@ -28,7 +28,6 @@ const reservedCommands = expandPhrases([
   'CREATE INDEX',
   'CREATE PRIMARY INDEX',
   'CREATE SCOPE',
-  'CREATE TABLE', // verify
   'DELETE',
   'DELETE FROM',
   'DROP COLLECTION',
@@ -53,7 +52,6 @@ const reservedCommands = expandPhrases([
   'UPDATE STATISTICS',
   'UPSERT',
   // other
-  'DROP TABLE', // verify,
   'INSERT INTO',
   'LET',
   'NEST',

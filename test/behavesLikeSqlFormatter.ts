@@ -240,14 +240,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     `);
   });
 
-  it('formats simple DROP query', () => {
-    const result = format('DROP TABLE admin_role;');
-    expect(result).toBe(dedent`
-      DROP TABLE
-        admin_role;
-    `);
-  });
-
   it('formats incomplete query', () => {
     const result = format('SELECT count(');
     expect(result).toBe(dedent`

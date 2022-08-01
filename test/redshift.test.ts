@@ -5,11 +5,10 @@ import RedshiftFormatter from 'src/languages/redshift/redshift.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
-import supportsAlterTableModify from './features/alterTableModify';
 import supportsCreateTable from './features/createTable';
+import supportsDropTable from './features/dropTable';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
-import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
@@ -25,12 +24,11 @@ describe('RedshiftFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format);
   supportsCreateTable(format);
+  supportsDropTable(format);
   supportsAlterTable(format);
-  supportsAlterTableModify(format);
   supportsDeleteFrom(format);
   supportsStrings(format, ["''"]);
   supportsIdentifiers(format, [`""`]);
-  supportsSchema(format);
   supportsOperators(format, RedshiftFormatter.operators);
   supportsJoin(format);
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT', 'MINUS']);

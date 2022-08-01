@@ -101,10 +101,8 @@ const reservedCommands = expandPhrases([
   'VACUUM',
   'VALUES',
   // other
-  'MODIFY', // verify
-  'INSERT INTO', // verify
-  'ALTER COLUMN', // verify
-  'SET SCHEMA', // verify
+  'INSERT INTO',
+  'ALTER COLUMN',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT', 'MINUS']);
