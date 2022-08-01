@@ -6,6 +6,7 @@ import { flatKeywordList } from 'src/utils';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
+import supportsDropTable from './features/dropTable';
 import supportsStrings from './features/strings';
 import supportsArrayLiterals from './features/arrayLiterals';
 import supportsBetween from './features/between';
@@ -26,6 +27,7 @@ describe('BigQueryFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format, { hashComments: true });
   supportsCreateTable(format);
+  supportsDropTable(format);
   supportsDeleteFrom(format);
   supportsStrings(format, ['""', "''"]);
   supportsIdentifiers(format, ['``']);

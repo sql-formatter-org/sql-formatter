@@ -4,6 +4,7 @@ import { FormatFn } from 'src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
+import supportsDropTable from './features/dropTable';
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsConstraints from './features/constraints';
@@ -22,6 +23,7 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   supportsStrings(format, ["''", '""', "X''"]);
   supportsIdentifiers(format, ['``']);
   supportsCreateTable(format);
+  supportsDropTable(format);
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);

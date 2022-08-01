@@ -7,6 +7,7 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsArrayLiterals from './features/arrayLiterals';
 import supportsBetween from './features/between';
 import supportsCreateTable from './features/createTable';
+import supportsDropTable from './features/dropTable';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
@@ -26,6 +27,7 @@ describe('TrinoFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format);
   supportsCreateTable(format);
+  supportsDropTable(format);
   supportsDeleteFrom(format);
   supportsStrings(format, ["''", "X''", "U&''"]);
   supportsIdentifiers(format, ['""']);

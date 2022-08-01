@@ -5,6 +5,7 @@ import TSqlFormatter from 'src/languages/tsql/tsql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
+import supportsDropTable from './features/dropTable';
 import supportsAlterTable from './features/alterTable';
 import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
@@ -26,6 +27,7 @@ describe('TSqlFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format);
   supportsCreateTable(format);
+  supportsDropTable(format);
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);

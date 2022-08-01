@@ -6,6 +6,7 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
 import supportsCreateTable from './features/createTable';
+import supportsDropTable from './features/dropTable';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsStrings from './features/strings';
@@ -23,6 +24,7 @@ describe('RedshiftFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format);
   supportsCreateTable(format);
+  supportsDropTable(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
   supportsStrings(format, ["''"]);

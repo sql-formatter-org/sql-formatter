@@ -53,7 +53,6 @@ const reservedCommands = expandPhrases([
   'UPDATE STATISTICS',
   'UPSERT',
   // other
-  'DROP TABLE', // verify,
   'INSERT INTO',
   'LET',
   'NEST',
