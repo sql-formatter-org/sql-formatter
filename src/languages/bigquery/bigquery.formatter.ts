@@ -119,6 +119,10 @@ const reservedJoins = expandPhrases([
 const reservedPhrases = [
   // https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax#tablesample_operator
   'TABLESAMPLE SYSTEM',
+  // From DDL: https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
+  'ANY TYPE',
+  'ALL COLUMNS',
+  'NOT DETERMINISTIC',
 ];
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference

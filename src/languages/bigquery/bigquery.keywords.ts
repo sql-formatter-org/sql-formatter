@@ -138,11 +138,8 @@ export const keywords = flatKeywordList({
     'INOUT',
     'RETURNS',
     'LANGUAGE',
-    'ANY TYPE',
-    'ALL COLUMNS',
     'CASCADE',
     'RESTRICT',
     'DETERMINISTIC',
-    'NOT DETERMINISTIC',
   ],
 });
