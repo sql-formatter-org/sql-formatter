@@ -20,6 +20,9 @@ const reservedCommands = expandPhrases([
   'CLUSTER BY',
   'DISTRIBUTE BY',
   'LIMIT',
+  // Data manipulation
+  'INSERT [INTO | OVERWRITE] [TABLE]',
+  'VALUES',
   // DDL
   'ALTER COLUMN',
   'ALTER DATABASE',
@@ -37,12 +40,9 @@ const reservedCommands = expandPhrases([
   'TRUNCATE TABLE',
   'USE DATABASE',
   // DML
-  'INSERT INTO',
-  'INSERT OVERWRITE',
   'INSERT OVERWRITE DIRECTORY',
   'LOAD',
   // Data Retrieval
-  'VALUES',
   'TABLESAMPLE',
   'PIVOT',
   'TRANSFORM',
@@ -75,7 +75,6 @@ const reservedCommands = expandPhrases([
   'SHOW VIEWS',
   'UNCACHE TABLE',
   // other
-  'INSERT',
   'LATERAL VIEW',
   'UPDATE',
 ]);

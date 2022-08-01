@@ -16,6 +16,9 @@ const reservedCommands = expandPhrases([
   'ORDER [SIBLINGS] BY',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  // Data manipulation
+  'INSERT [INTO | ALL INTO]',
+  'VALUES',
   // other
   'ADD',
   'ALTER COLUMN',
@@ -29,8 +32,6 @@ const reservedCommands = expandPhrases([
   'DELETE FROM',
   'EXCEPT',
   'EXCEPTION',
-  'INSERT INTO',
-  'INSERT',
   'LOOP',
   'MODIFY',
   'RETURNING',
@@ -39,7 +40,6 @@ const reservedCommands = expandPhrases([
   'SET',
   'START WITH',
   'UPDATE',
-  'VALUES',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

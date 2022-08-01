@@ -19,6 +19,9 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  // Data manipulation
+  'INSERT INTO',
+  'VALUES',
   // DDL
   'ALTER SCHEMA',
   'ALTER TABLE',
@@ -46,9 +49,7 @@ const reservedCommands = expandPhrases([
   'DROP ROLE',
   'TRUNCATE TABLE',
   // DML
-  'INSERT INTO',
   'MERGE INTO',
-  'VALUES',
   'UPDATE',
   'SET',
   'DELETE FROM',

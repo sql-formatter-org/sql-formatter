@@ -17,6 +17,9 @@ const reservedCommands = expandPhrases([
   'ORDER BY',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  // Data manipulation
+  'INSERT [INTO]',
+  'VALUES',
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',
   'ADD SIGNATURE',
@@ -97,7 +100,6 @@ const reservedCommands = expandPhrases([
   'IDENTITY_INSERT',
   'IMPLICIT_TRANSACTIONS',
   'INDEX',
-  'INSERT',
   'LANGUAGE',
   'LOCK_TIMEOUT',
   'LOGIN',
@@ -184,9 +186,7 @@ const reservedCommands = expandPhrases([
   'ALTER COLUMN',
   'ALTER TABLE',
   'CREATE TABLE',
-  'INSERT INTO',
   'DROP TABLE',
-  'VALUES',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

@@ -14,6 +14,9 @@ const reservedCommands = expandPhrases([
   'HAVING',
   'ORDER BY [INPUT SEQUENCE]',
   'FETCH FIRST',
+  // Data modification
+  'INSERT INTO',
+  'VALUES',
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
   'ALTER DATABASE',
@@ -81,7 +84,6 @@ const reservedCommands = expandPhrases([
   'GRANT',
   'HOLD LOCATOR',
   'INCLUDE',
-  'INSERT',
   'LABEL',
   'LOCK TABLE',
   'MERGE',
@@ -126,7 +128,6 @@ const reservedCommands = expandPhrases([
   'SIGNAL',
   'TRUNCATE',
   'UPDATE',
-  'VALUES',
   'VALUES INTO',
   'WHENEVER',
   // other
@@ -135,7 +136,6 @@ const reservedCommands = expandPhrases([
   'AFTER',
   'DROP TABLE',
   'GO',
-  'INSERT INTO',
   'SET CURRENT SCHEMA',
 ]);
 

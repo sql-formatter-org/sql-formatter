@@ -18,6 +18,9 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  // Data manipulation
+  'INSERT INTO',
+  'VALUES',
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
   'ALTER AGGREGATE',
@@ -168,7 +171,6 @@ const reservedCommands = expandPhrases([
   'FETCH',
   'GRANT',
   'IMPORT FOREIGN SCHEMA',
-  'INSERT',
   'LISTEN',
   'LOAD',
   'LOCK',
@@ -200,12 +202,10 @@ const reservedCommands = expandPhrases([
   'UNLISTEN',
   'UPDATE',
   'VACUUM',
-  'VALUES',
   // other
   'ADD',
   'AFTER',
   'ALTER COLUMN',
-  'INSERT INTO',
   'SET SCHEMA',
 ]);
 

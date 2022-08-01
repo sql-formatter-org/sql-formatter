@@ -18,6 +18,9 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  // Data manipulation
+  'INSERT INTO',
+  'VALUES',
   // other
   'ADD',
   'ALTER COLUMN',
@@ -25,11 +28,9 @@ const reservedCommands = expandPhrases([
   'CREATE TABLE',
   'DROP TABLE',
   'DELETE FROM',
-  'INSERT INTO',
   'SET SCHEMA',
   'SET',
   'UPDATE',
-  'VALUES',
 ]);
 
 const reservedSetOperations = expandPhrases([

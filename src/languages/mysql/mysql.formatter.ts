@@ -18,6 +18,9 @@ const reservedCommands = expandPhrases([
   'ORDER BY',
   'LIMIT',
   'OFFSET',
+  // Data manipulation
+  'INSERT [LOW_PRIORITY | DELAYED | HIGH_PRIORITY] [IGNORE] [INTO]',
+  'VALUES',
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',
   'ALTER EVENT',
@@ -86,7 +89,6 @@ const reservedCommands = expandPhrases([
   'HANDLER',
   'HELP',
   'IMPORT TABLE',
-  'INSERT',
   'INSTALL COMPONENT',
   'INSTALL PLUGIN',
   'KILL',
@@ -182,7 +184,6 @@ const reservedCommands = expandPhrases([
   'UNLOCK TABLES',
   'UPDATE',
   'USE',
-  'VALUES',
   'XA',
   // flow control
   // 'IF',
@@ -195,7 +196,6 @@ const reservedCommands = expandPhrases([
   // other
   'ADD',
   'ALTER COLUMN',
-  'INSERT INTO',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);

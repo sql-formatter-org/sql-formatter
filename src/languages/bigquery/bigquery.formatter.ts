@@ -20,7 +20,7 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   'OMIT RECORD IF', // legacy
-  // DML, https://cloud.google.com/bigquery/docs/reference/standard-sql/dml-syntax
+  // Data modification: https://cloud.google.com/bigquery/docs/reference/standard-sql/dml-syntax
   'INSERT [INTO]',
   'VALUES',
   'DELETE [FROM]',

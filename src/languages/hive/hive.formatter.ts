@@ -19,6 +19,11 @@ const reservedCommands = expandPhrases([
   'CLUSTER BY',
   'DISTRIBUTE BY',
   'LIMIT',
+  // Data manipulation
+  // Hive does not actually support plain INSERT INTO, only INSERT INTO TABLE
+  // but it's a nuisance to not support it, as all other dialects do.
+  'INSERT INTO [TABLE]',
+  'VALUES',
   // other
   'ALTER',
   'ALTER COLUMN', // added
@@ -30,14 +35,11 @@ const reservedCommands = expandPhrases([
   'DROP',
   'DROP TABLE', // added
   'FETCH',
-  'INSERT',
-  'INSERT INTO', // added
   'SET',
   'SET SCHEMA', // added
   'SHOW',
   'TRUNCATE',
   'UPDATE',
-  'VALUES',
   // newline keywords
   'STORED AS',
   'STORED BY',

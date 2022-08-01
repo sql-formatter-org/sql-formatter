@@ -17,6 +17,9 @@ const reservedCommands = expandPhrases([
   'ORDER BY',
   'LIMIT',
   'OFFSET',
+  // Data manipulation
+  'INSERT [OR ABORT | OR FAIL | OR IGNORE | OR REPLACE | OR ROLLBACK] INTO',
+  'VALUES',
   // other
   'ADD',
   'ALTER COLUMN',
@@ -25,11 +28,9 @@ const reservedCommands = expandPhrases([
   'DROP TABLE',
   'DELETE',
   'DELETE FROM',
-  'INSERT INTO',
   'SET SCHEMA',
   'SET',
   'UPDATE',
-  'VALUES',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

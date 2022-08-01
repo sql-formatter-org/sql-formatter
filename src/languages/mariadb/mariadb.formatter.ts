@@ -17,6 +17,9 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  // Data manipulation
+  'INSERT [LOW_PRIORITY | DELAYED | HIGH_PRIORITY] [IGNORE] [INTO]',
+  'VALUES',
   // https://mariadb.com/docs/reference/mdb/sql-statements/
   'ALTER DATABASE',
   'ALTER DATABASE COMMENT',
@@ -85,7 +88,6 @@ const reservedCommands = expandPhrases([
   'GRANT',
   'HANDLER',
   'HELP',
-  'INSERT',
   'INSTALL PLUGIN',
   'INSTALL SONAME',
   'KILL',
@@ -221,9 +223,6 @@ const reservedCommands = expandPhrases([
   // other
   'ADD',
   'ALTER COLUMN',
-  'INSERT INTO',
-  'INSERT',
-  'VALUES',
 ]);
 
 const reservedSetOperations = expandPhrases([
