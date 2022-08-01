@@ -7,10 +7,10 @@ export const keywords = flatKeywordList({
     'ABORT',
     'ABSOLUTE',
     'ACCESS',
-    'ACCESSIBLE', // carried from mysql
+    'ACCESSIBLE',
     'ACCOUNT',
     'ACTION',
-    'ACTIVE', // carried from mysql
+    'ACTIVE',
     'ADD',
     'ADMIN',
     'AFTER',
@@ -29,25 +29,25 @@ export const keywords = flatKeywordList({
     'ANALYZE',
     'AND',
     'ANY',
-    'ARGHISTORY', // maybe function?
-    'ARRANGE', // maybe function?
+    'ARGHISTORY',
+    'ARRANGE',
     'ARRANGEMENT',
     'ARRAY',
     'AS',
     'ASC',
     'ASCII',
     'ASENSITIVE',
-    'ASM', // maybe function?
-    'ASSERTION', // maybe function?
-    'ASSIGNMENT', // maybe function?
-    'AST', // maybe function?
-    'ASYMMETRIC', // maybe function?
-    'ASYNC', // maybe function?
+    'ASM',
+    'ASSERTION',
+    'ASSIGNMENT',
+    'AST',
+    'ASYMMETRIC',
+    'ASYNC',
     'AT',
     'ATTACH',
     'ATTRIBUTE',
-    'AUTHORIZATION', // maybe function?
-    'AUTO', // maybe function?
+    'AUTHORIZATION',
+    'AUTO',
     'AUTO_INCREMENT',
     'AUTO_REPROVISION',
     'AUTOSTATS',
@@ -58,10 +58,10 @@ export const keywords = flatKeywordList({
     'AVAILABILITY',
     'AVG',
     'AVG_ROW_LENGTH',
-    'AVRO', // maybe function?
+    'AVRO',
     'AZURE',
-    'BACKGROUND', // maybe function?
-    '_BACKGROUND_THREADS_FOR_CLEANUP', // maybe function?
+    'BACKGROUND',
+    '_BACKGROUND_THREADS_FOR_CLEANUP',
     'BACKUP',
     'BACKUP_HISTORY',
     'BACKUP_ID',
@@ -88,7 +88,7 @@ export const keywords = flatKeywordList({
     'BUCKETS',
     'BY',
     'BYTE',
-    'BYTE_LENGTH', // maybe function?
+    'BYTE_LENGTH',
     'CACHE',
     'CALL',
     'CALL_FOR_PIPELINE',
@@ -106,8 +106,8 @@ export const keywords = flatKeywordList({
     'CHARSET',
     'CHECK',
     'CHECKPOINT',
-    '_CHECK_CAN_CONNECT', // maybe function?
-    '_CHECK_CONSISTENCY', // maybe function?
+    '_CHECK_CAN_CONNECT',
+    '_CHECK_CONSISTENCY',
     'CHECKSUM',
     '_CHECKSUM',
     'CLASS',
@@ -132,7 +132,7 @@ export const keywords = flatKeywordList({
     'COMMITTED',
     '_COMMIT_LOG_TAIL',
     'COMPACT',
-    'COMPILE', // maybe function?
+    'COMPILE',
     'COMPRESSED',
     'COMPRESSION',
     'CONCURRENT',
@@ -141,7 +141,7 @@ export const keywords = flatKeywordList({
     'CONFIGURATION',
     'CONNECTION',
     'CONNECTIONS',
-    'CONFIG', // maybe a function?
+    'CONFIG',
     'CONSTRAINT',
     'CONTAINS',
     'CONTENT',
@@ -161,9 +161,9 @@ export const keywords = flatKeywordList({
     'CURRENT',
     'CURRENT_CATALOG',
     'CURRENT_DATE',
-    'CURRENT_SCHEMA', // maybe a function?
-    'CURRENT_SECURITY_GROUPS', // maybe a function?
-    'CURRENT_SECURITY_ROLES', // maybe a function?
+    'CURRENT_SCHEMA',
+    'CURRENT_SECURITY_GROUPS',
+    'CURRENT_SECURITY_ROLES',
     'CURRENT_TIME',
     'CURRENT_TIMESTAMP',
     'CURRENT_USER',
@@ -219,6 +219,7 @@ export const keywords = flatKeywordList({
     'DUAL',
     'DUMP',
     'DUPLICATE',
+    'DURABILITY',
     'DYNAMIC',
     'EARLIEST',
     'EACH',
@@ -256,580 +257,594 @@ export const keywords = flatKeywordList({
     'EXTRACTOR',
     'EXTRACTORS',
     'EXTRA_JOIN',
-    'FACTOR',
+    '_FAILOVER',
     'FAILED_LOGIN_ATTEMPTS',
-    'FALSE', // (R)
-    'FAST',
-    'FAULTS',
-    'FETCH', // (R)
+    'FAILURE',
+    'FALSE',
+    'FAMILY',
+    'FAULT',
+    'FETCH',
     'FIELDS',
     'FILE',
-    'FILE_BLOCK_SIZE',
-    'FILTER',
-    'FINISH',
-    'FIRST',
-    'FIRST_VALUE', // (R)
+    'FILES',
+    'FILL',
+    'FIX_ALTER',
     'FIXED',
-    'FLOAT', // (R)
-    'FLOAT4', // (R)
-    'FLOAT8', // (R)
+    'FLOAT',
+    'FLOAT4',
+    'FLOAT8',
     'FLUSH',
     'FOLLOWING',
-    'FOLLOWS',
-    'FOR', // (R)
-    'FORCE', // (R)
-    'FOREIGN', // (R)
+    'FOR',
+    'FORCE',
+    'FORCE_COMPILED_MODE',
+    'FORCE_INTERPRETER_MODE',
+    'FOREGROUND',
+    'FOREIGN',
     'FORMAT',
-    'FOUND',
-    'FROM', // (R)
+    'FORWARD',
+    'FREEZE',
+    'FROM',
+    'FS',
+    '_FSYNC',
     'FULL',
-    'FULLTEXT', // (R)
-    'FUNCTION', // (R)
-    'GENERAL',
-    'GENERATED', // (R)
-    'GEOGRAPHY', // (R)
-    'GEOGRAPHYPOINT', // (R)
-    'GEOMCOLLECTION',
-    'GEOMETRY',
-    'GEOMETRYCOLLECTION',
-    'GET', // (R)
+    'FULLTEXT',
+    'FUNCTION',
+    'FUNCTIONS',
+    'GC',
+    'GCS',
     'GET_FORMAT',
-    'GET_MASTER_PUBLIC_KEY',
-    'GET_SOURCE_PUBLIC_KEY',
+    '_GC',
+    '_GCX',
+    'GENERATE',
+    'GEOGRAPHY',
+    'GEOGRAPHYPOINT',
+    'GEOMETRY',
+    'GEOMETRYPOINT',
     'GLOBAL',
-    'GRANT', // (R)
+    '_GLOBAL_VERSION_TIMESTAMP',
+    'GRANT',
+    'GRANTED',
     'GRANTS',
-    'GROUP', // (R)
-    'GROUPING', // (R)
-    'GROUPS', // (R)
-    'GROUP_REPLICATION',
-    'GTID_ONLY',
+    'GROUP',
+    'GROUPING',
+    'GROUPS',
+    'GZIP',
+    'HANDLE',
     'HANDLER',
+    'HARD_CPU_LIMIT_PERCENTAGE',
     'HASH',
-    'HAVING', // (R)
-    'HELP',
-    'HIGH_PRIORITY', // (R)
+    'HAS_TEMP_TABLES',
+    'HAVING',
+    'HDFS',
+    'HEADER',
+    'HEARTBEAT_NO_LOGGING',
+    'HIGH_PRIORITY',
     'HISTOGRAM',
-    'HISTORY',
+    'HOLD',
+    'HOLDING',
     'HOST',
     'HOSTS',
     'HOUR',
-    'HOUR_MICROSECOND', // (R)
-    'HOUR_MINUTE', // (R)
-    'HOUR_SECOND', // (R)
+    'HOUR_MICROSECOND',
+    'HOUR_MINUTE',
+    'HOUR_SECOND',
     'IDENTIFIED',
-    'IF', // (R)
-    'IGNORE', // (R)
-    'IGNORE_SERVER_IDS',
+    'IDENTITY',
+    'IF',
+    'IGNORE',
+    'ILIKE',
+    'IMMEDIATE',
+    'IMMUTABLE',
+    'IMPLICIT',
     'IMPORT',
-    'IN', // (R)
-    'INACTIVE',
-    'INDEX', // (R)
+    'IN',
+    'INCLUDING',
+    'INCREMENT',
+    'INCREMENTAL',
+    'INDEX',
     'INDEXES',
-    'INFILE', // (R)
-    'INITIAL',
-    'INITIAL_SIZE',
-    'INITIATE',
-    'INNER', // (R)
-    'INOUT', // (R)
-    'INSENSITIVE', // (R)
-    'INSERT', // (R)
+    'INFILE',
+    'INHERIT',
+    'INHERITS',
+    '_INIT_PROFILE',
+    'INIT',
+    'INITIALIZE',
+    'INITIALLY',
+    'INJECT',
+    'INLINE',
+    'INNER',
+    'INOUT',
+    'INPUT',
+    'INSENSITIVE',
+    'INSERT',
     'INSERT_METHOD',
-    'INSTALL',
     'INSTANCE',
-    'IN', // <-- moved over from functions
-    'INT', // (R)
-    'INT1', // (R)
-    'INT2', // (R)
-    'INT3', // (R)
-    'INT4', // (R)
-    'INT8', // (R)
-    'INTEGER', // (R)
-    'INTERSECT', // (R)
-    'INTERVAL', // (R)
-    'INTO', // (R)
-    'INVISIBLE',
+    'INSTEAD',
+    'IN',
+    'INT',
+    'INT1',
+    'INT2',
+    'INT3',
+    'INT4',
+    'INT8',
+    'INTEGER',
+    '_INTERNAL_DYNAMIC_TYPECAST',
+    'INTERPRETER_MODE',
+    'INTERSECT',
+    'INTERVAL',
+    'INTO',
     'INVOKER',
-    'IO',
-    'IO_AFTER_GTIDS', // (R)
-    'IO_BEFORE_GTIDS', // (R)
-    'IO_THREAD',
-    'IPC',
-    'IS', // (R)
     'ISOLATION',
-    'ISSUER',
-    'ITERATE', // (R)
-    'JOIN', // (R)
+    'ITERATE',
+    'JOIN',
     'JSON',
-    'JSON_TABLE', // (R)
-    'JSON_VALUE',
-    'KEY', // (R)
-    'KEYRING',
-    'KEYS', // (R)
+    'KAFKA',
+    'KEY',
     'KEY_BLOCK_SIZE',
-    'KILL', // (R)
-    'LAG', // (R)
+    'KEYS',
+    'KILL',
+    'KILLALL',
+    'LABEL',
+    'LAG',
     'LANGUAGE',
+    'LARGE',
     'LAST',
-    'LAST_VALUE', // (R)
-    'LATERAL', // (R)
-    'LEAD', // (R)
-    'LEADING', // (R)
-    'LEAF', // (R)
-    'LEAVE', // (R)
+    'LAST_VALUE',
+    'LATERAL',
+    'LATEST',
+    'LC_COLLATE',
+    'LC_CTYPE',
+    'LEAD',
+    'LEADING',
+    'LEAF',
+    'LEAKPROOF',
+    'LEAVE',
     'LEAVES',
-    'LEFT', // (R)
-    'LESS',
+    'LEFT',
     'LEVEL',
-    'LIKE', // (R)
-    'LIMIT', // (R)
-    'LINEAR', // (R)
-    'LINES', // (R)
-    'LINESTRING',
-    'LIST',
-    'LOAD', // (R)
+    'LICENSE',
+    'LIKE',
+    'LIMIT',
+    'LINES',
+    'LISTEN',
+    'LLVM',
+    'LOADDATA_WHERE',
+    'LOAD',
     'LOCAL',
-    'LOCALTIME', // (R)
-    'LOCALTIMESTAMP', // (R)
-    'LOCK', // (R)
-    'LOCKED',
-    'LOCKS',
-    'LOGFILE',
-    'LOGS',
-    'LONG', // (R)
-    'LONGBLOB', // (R)
-    'LONGTEXT', // (R)
-    'LOOP', // (R)
-    'LOW_PRIORITY', // (R)
+    'LOCALTIME',
+    'LOCALTIMESTAMP',
+    'LOCATION',
+    'LOCK',
+    'LONG',
+    'LONGBLOB',
+    'LONGTEXT',
+    'LOOP',
+    'LOW_PRIORITY',
+    '_LS',
+    'LZ4',
+    'MANAGEMENT',
+    '_MANAGEMENT_THREAD',
+    'MAPPING',
     'MASTER',
-    'MASTER_AUTO_POSITION',
-    'MASTER_BIND', // (R)
-    'MASTER_COMPRESSION_ALGORITHMS',
-    'MASTER_CONNECT_RETRY',
-    'MASTER_DELAY',
-    'MASTER_HEARTBEAT_PERIOD',
-    'MASTER_HOST',
-    'MASTER_LOG_FILE',
-    'MASTER_LOG_POS',
-    'MASTER_PASSWORD',
-    'MASTER_PORT',
-    'MASTER_PUBLIC_KEY_PATH',
-    'MASTER_RETRY_COUNT',
-    'MASTER_SSL',
-    'MASTER_SSL_CA',
-    'MASTER_SSL_CAPATH',
-    'MASTER_SSL_CERT',
-    'MASTER_SSL_CIPHER',
-    'MASTER_SSL_CRL',
-    'MASTER_SSL_CRLPATH',
-    'MASTER_SSL_KEY',
-    'MASTER_SSL_VERIFY_SERVER_CERT', // (R)
-    'MASTER_TLS_CIPHERSUITES',
-    'MASTER_TLS_VERSION',
-    'MASTER_USER',
-    'MASTER_ZSTD_COMPRESSION_LEVEL',
-    'MATCH', // (R)
-    'MAXVALUE', // (R)
-    'MAX_CONNECTIONS_PER_HOUR',
-    'MAX_QUERIES_PER_HOUR',
+    'MATCH',
+    'MATERIALIZED',
+    'MAXVALUE',
+    'MAX_CONCURRENCY',
+    'MAX_ERRORS',
+    'MAX_PARTITIONS_PER_BATCH',
+    'MAX_QUEUE_DEPTH',
+    'MAX_RETRIES_PER_BATCH_PARTITION',
     'MAX_ROWS',
-    'MAX_SIZE',
-    'MAX_UPDATES_PER_HOUR',
-    'MAX_USER_CONNECTIONS',
-    'MEDIUM',
-    'MEDIUMBLOB', // (R)
-    'MEDIUMINT', // (R)
-    'MEDIUMTEXT', // (R)
+    'MBC',
+    'MPL',
+    'MEDIUMBLOB',
+    'MEDIUMINT',
+    'MEDIUMTEXT',
     'MEMBER',
     'MEMORY',
+    'MEMORY_PERCENTAGE',
+    '_MEMSQL_TABLE_ID_LOOKUP',
+    'MEMSQL',
+    'MEMSQL_DESERIALIZE',
+    'MEMSQL_IMITATING_KAFKA',
+    'MEMSQL_SERIALIZE',
     'MERGE',
-    'MESSAGE_TEXT',
+    'METADATA',
     'MICROSECOND',
-    'MIDDLEINT', // (R)
-    'MIGRATE',
-    'MINUTE',
-    'MINUTE_MICROSECOND', // (R)
-    'MINUTE_SECOND', // (R)
+    'MIDDLEINT',
     'MIN_ROWS',
-    'MOD', // (R)
+    'MINUS',
+    'MINUTE_MICROSECOND',
+    'MINUTE_SECOND',
+    'MINVALUE',
+    'MOD',
     'MODE',
-    'MODIFIES', // (R)
+    'MODEL',
+    'MODIFIES',
     'MODIFY',
     'MONTH',
-    'MULTILINESTRING',
-    'MULTIPOINT',
-    'MULTIPOLYGON',
-    'MUTEX',
-    'MYSQL_ERRNO',
-    'NAME',
+    'MOVE',
+    'MPL',
     'NAMES',
+    'NAMED',
+    'NAMESPACE',
     'NATIONAL',
-    'NATURAL', // (R)
+    'NATURAL',
     'NCHAR',
-    'NDB',
-    'NDBCLUSTER',
-    'NESTED',
-    'NETWORK_NAMESPACE',
-    'NEVER',
-    'NEW',
     'NEXT',
     'NO',
-    'NODEGROUP',
+    'NODE',
     'NONE',
-    'NOT', // (R)
+    'NO_QUERY_REWRITE',
+    'NOPARAM',
+    'NOT',
+    'NOTHING',
+    'NOTIFY',
     'NOWAIT',
-    'NO_WAIT',
-    'NO_WRITE_TO_BINLOG', // (R)
-    'NTH_VALUE', // (R)
-    'NTILE', // (R)
-    'NULL', // (R)
+    'NO_WRITE_TO_BINLOG',
+    'NO_QUERY_REWRITE',
+    'NORELY',
+    'NTH_VALUE',
+    'NTILE',
+    'NULL',
+    'NULLCOLS',
     'NULLS',
-    'NUMBER',
-    'NUMERIC', // (R)
+    'NUMERIC',
     'NVARCHAR',
-    'OF', // (R)
+    'OBJECT',
+    'OF',
     'OFF',
+    'OFFLINE',
     'OFFSET',
-    'OJ',
-    'OLD',
-    'ON', // (R)
-    'ONE',
+    'OFFSETS',
+    'OIDS',
+    'ON',
+    'ONLINE',
     'ONLY',
     'OPEN',
-    'OPTIMIZE', // (R)
-    'OPTIMIZER_COSTS', // (R)
-    'OPTION', // (R)
-    'OPTIONAL',
-    'OPTIONALLY', // (R)
+    'OPERATOR',
+    'OPTIMIZATION',
+    'OPTIMIZE',
+    'OPTIMIZER',
+    'OPTIMIZER_STATE',
+    'OPTION',
     'OPTIONS',
-    'OR', // (R)
-    'ORPHAN', // (R)
-    'ORDER', // (R)
-    'ORDINALITY',
-    'ORGANIZATION',
-    'OTHERS',
-    'OUT', // (R)
-    'OUTER', // (R)
-    'OUTFILE', // (R)
-    'OVER', // (R)
+    'OPTIONALLY',
+    'OR',
+    'ORDER',
+    'ORDERED_SERIALIZE',
+    'ORPHAN',
+    'OUT',
+    'OUT_OF_ORDER',
+    'OUTER',
+    'OUTFILE',
+    'OVER',
+    'OVERLAPS',
+    'OVERLAY',
+    'OWNED',
     'OWNER',
     'PACK_KEYS',
-    'PAGE',
+    'PAIRED',
     'PARSER',
+    'PARQUET',
     'PARTIAL',
-    'PARTITION', // (R)
+    'PARTITION',
+    'PARTITION_ID',
     'PARTITIONING',
     'PARTITIONS',
+    'PASSING',
     'PASSWORD',
     'PASSWORD_LOCK_TIME',
-    'PATH',
-    'PERCENT_RANK', // (R)
-    'PERSIST',
-    'PERSIST_ONLY',
-    'PHASE',
-    'PLUGIN',
+    'PAUSE',
+    '_PAUSE_REPLAY',
+    'PERIODIC',
+    'PERSISTED',
+    'PIPELINE',
+    'PIPELINES',
+    'PLACING',
+    'PLAN',
+    'PLANS',
+    'PLANCACHE',
     'PLUGINS',
-    'PLUGIN_DIR',
-    'POINT',
-    'POLYGON',
+    'POOL',
+    'POOLS',
     'PORT',
-    'PRECEDES',
     'PRECEDING',
-    'PRECISION', // (R)
+    'PRECISION',
     'PREPARE',
     'PRESERVE',
-    'PREV',
-    'PRIMARY', // (R)
+    'PRIMARY',
+    'PRIOR',
     'PRIVILEGES',
-    'PRIVILEGE_CHECKS_USER',
-    'PROCEDURE', // (R)
+    'PROCEDURAL',
+    'PROCEDURE',
+    'PROCEDURES',
     'PROCESS',
     'PROCESSLIST',
     'PROFILE',
     'PROFILES',
+    'PROGRAM',
+    'PROMOTE',
     'PROXY',
-    'PURGE', // (R)
+    'PURGE',
     'QUARTER',
+    'QUERIES',
     'QUERY',
-    'QUICK',
-    'RANDOM',
-    'RANGE', // (R)
-    'RANK', // (R)
-    'READ', // (R)
-    'READS', // (R)
-    'READ_ONLY',
-    'READ_WRITE', // (R)
-    'REAL', // (R)
-    'REBALANCE', // (R)
-    'REBUILD',
-    'RECORD', // (R)
-    'RECOVER',
-    'RECURSIVE', // (R)
-    'REDO_BUFFER_SIZE',
-    'REDUNDANCY', // (R)
+    'QUERY_TIMEOUT',
+    'QUEUE',
+    'RANGE',
+    'RANK',
+    'READ',
+    '_READ',
+    'READS',
+    'REAL',
+    'REASSIGN',
+    'REBALANCE',
+    'RECHECK',
+    'RECORD',
+    'RECURSIVE',
+    'REDUNDANCY',
     'REDUNDANT',
+    'REF',
     'REFERENCE',
-    'REFERENCES', // (R)
-    'REGEXP', // (R)
-    'REGISTRATION',
-    'RELAY',
-    'RELAYLOG',
-    'RELAY_LOG_FILE',
-    'RELAY_LOG_POS',
-    'RELAY_THREAD',
-    'RELEASE', // (R)
+    'REFERENCES',
+    'REFRESH',
+    'REGEXP',
+    'REINDEX',
+    'RELATIVE',
+    'RELEASE',
     'RELOAD',
+    'RELY',
+    'REMOTE',
     'REMOVE',
-    'RENAME', // (R)
-    'REORGANIZE',
+    'RENAME',
     'REPAIR',
-    'REPEAT', // (R)
+    '_REPAIR_TABLE',
+    'REPEAT',
     'REPEATABLE',
-    'REPLACE', // (R)
+    '_REPL',
+    '_REPROVISIONING',
+    'REPLACE',
     'REPLICA',
-    'REPLICAS',
-    'REPLICATE', // (R)
-    'REPLICATE_DO_DB',
-    'REPLICATE_DO_TABLE',
-    'REPLICATE_IGNORE_DB',
-    'REPLICATE_IGNORE_TABLE',
-    'REPLICATE_REWRITE_DB',
-    'REPLICATE_WILD_DO_TABLE',
-    'REPLICATE_WILD_IGNORE_TABLE',
-    'REPLICATING', // (R)
+    'REPLICATE',
+    'REPLICATING',
     'REPLICATION',
-    'REQUIRE', // (R)
-    'REQUIRE_ROW_FORMAT',
-    'RESET',
-    'RESIGNAL', // (R)
+    'REQUIRE',
     'RESOURCE',
-    'RESPECT',
+    'RESOURCE_POOL',
+    'RESET',
     'RESTART',
     'RESTORE',
-    'RESTRICT', // (R)
-    'RESUME',
-    'RETAIN',
-    'RETURN', // (R)
-    'RETURNED_SQLSTATE',
+    'RESTRICT',
+    'RESULT',
+    '_RESURRECT',
+    'RETRY',
+    'RETURN',
     'RETURNING',
     'RETURNS',
-    'REUSE',
     'REVERSE',
-    'REVOKE', // (R)
-    'RIGHT', // (R)
-    'RLIKE', // (R)
-    'ROLE',
+    'RG_POOL',
+    'REVOKE',
+    'RIGHT',
+    'RIGHT_ANTI_JOIN',
+    'RIGHT_SEMI_JOIN',
+    'RIGHT_STRAIGHT_JOIN',
+    'RLIKE',
+    'ROLES',
     'ROLLBACK',
     'ROLLUP',
-    'ROTATE',
     'ROUTINE',
-    'ROW', // (R)
-    'ROWS', // (R)
+    'ROW',
     'ROW_COUNT',
     'ROW_FORMAT',
-    'ROW_NUMBER', // (R)
-    'RTREE',
+    'ROW_NUMBER',
+    'ROWS',
+    'ROWSTORE',
+    'RULE',
+    '_RPC',
+    'RUNNING',
+    'S3',
+    'SAFE',
+    'SAVE',
     'SAVEPOINT',
-    'SCHEDULE',
-    'SCHEMA', // (R)
-    'SCHEMAS', // (R)
-    'SCHEMA_NAME',
+    'SCALAR',
+    'SCHEMA',
+    'SCHEMAS',
+    'SCHEMA_BINDING',
+    'SCROLL',
+    'SEARCH',
     'SECOND',
-    'SECONDARY',
-    'SECONDARY_ENGINE',
-    'SECONDARY_ENGINE_ATTRIBUTE',
-    'SECONDARY_LOAD',
-    'SECONDARY_UNLOAD',
-    'SECOND_MICROSECOND', // (R)
+    'SECOND_MICROSECOND',
     'SECURITY',
-    'SELECT', // (R)
-    'SENSITIVE', // (R)
-    'SEPARATOR', // (R)
+    'SELECT',
+    'SEMI_JOIN',
+    '_SEND_THREADS',
+    'SENSITIVE',
+    'SEPARATOR',
+    'SEQUENCE',
+    'SEQUENCES',
     'SERIAL',
     'SERIALIZABLE',
+    'SERIES',
+    'SERVICE_USER',
     'SERVER',
     'SESSION',
-    'SET', // (R)
+    'SESSION_USER',
+    'SET',
+    'SETOF',
+    'SECURITY_LISTS_INTERSECT',
+    'SHA',
+    'SHARD',
+    'SHARDED',
+    'SHARDED_ID',
     'SHARE',
-    'SHOW', // (R)
+    'SHOW',
     'SHUTDOWN',
-    'SIGNAL', // (R)
+    'SIGNAL',
     'SIGNED',
+    'SIMILAR',
     'SIMPLE',
+    'SITE',
     'SKIP',
-    'SLAVE',
-    'SLOW',
-    'SMALLINT', // (R)
+    'SKIPPED_BATCHES',
+    '__SLEEP',
+    'SMALLINT',
     'SNAPSHOT',
-    'SOCKET',
+    '_SNAPSHOT',
+    '_SNAPSHOTS',
+    'SOFT_CPU_LIMIT_PERCENTAGE',
     'SOME',
     'SONAME',
-    'SOUNDS',
-    'SOURCE',
-    'SOURCE_AUTO_POSITION',
-    'SOURCE_BIND',
-    'SOURCE_COMPRESSION_ALGORITHMS',
-    'SOURCE_CONNECT_RETRY',
-    'SOURCE_DELAY',
-    'SOURCE_HEARTBEAT_PERIOD',
-    'SOURCE_HOST',
-    'SOURCE_LOG_FILE',
-    'SOURCE_LOG_POS',
-    'SOURCE_PASSWORD',
-    'SOURCE_PORT',
-    'SOURCE_PUBLIC_KEY_PATH',
-    'SOURCE_RETRY_COUNT',
-    'SOURCE_SSL',
-    'SOURCE_SSL_CA',
-    'SOURCE_SSL_CAPATH',
-    'SOURCE_SSL_CERT',
-    'SOURCE_SSL_CIPHER',
-    'SOURCE_SSL_CRL',
-    'SOURCE_SSL_CRLPATH',
-    'SOURCE_SSL_KEY',
-    'SOURCE_SSL_VERIFY_SERVER_CERT',
-    'SOURCE_TLS_CIPHERSUITES',
-    'SOURCE_TLS_VERSION',
-    'SOURCE_USER',
-    'SOURCE_ZSTD_COMPRESSION_LEVEL',
-    'SPATIAL', // (R)
-    'SPECIFIC', // (R)
-    'SQL', // (R)
-    'SQLEXCEPTION', // (R)
-    'SQLSTATE', // (R)
-    'SQLWARNING', // (R)
-    'SQL_AFTER_GTIDS',
-    'SQL_AFTER_MTS_GAPS',
-    'SQL_BEFORE_GTIDS',
-    'SQL_BIG_RESULT', // (R)
+    'SPARSE',
+    'SPATIAL',
+    'SPATIAL_CHECK_INDEX',
+    'SPECIFIC',
+    'SQL',
+    'SQL_BIG_RESULT',
     'SQL_BUFFER_RESULT',
-    'SQL_CALC_FOUND_ROWS', // (R)
+    'SQL_CACHE',
+    'SQL_CALC_FOUND_ROWS',
+    'SQLEXCEPTION',
+    'SQL_MODE',
     'SQL_NO_CACHE',
-    'SQL_SMALL_RESULT', // (R)
-    'SQL_THREAD',
-    'SQL_TSI_DAY',
-    'SQL_TSI_HOUR',
-    'SQL_TSI_MINUTE',
-    'SQL_TSI_MONTH',
-    'SQL_TSI_QUARTER',
-    'SQL_TSI_SECOND',
-    'SQL_TSI_WEEK',
-    'SQL_TSI_YEAR',
-    'SRID',
-    'SSL', // (R)
-    'STACKED',
-    'START',
-    'STARTING', // (R)
-    'STARTS',
-    'STATS_AUTO_RECALC',
-    'STATS_PERSISTENT',
-    'STATS_SAMPLE_PAGES',
-    'STATUS',
+    'SQL_NO_LOGGING',
+    'SQL_SMALL_RESULT',
+    'SQLSTATE',
+    'SQLWARNING',
+    'STDIN',
+    'STDOUT',
     'STOP',
     'STORAGE',
-    'STORED', // (R)
-    'STRAIGHT_JOIN', // (R)
-    'STREAM',
+    'STRAIGHT_JOIN',
+    'STRICT',
     'STRING',
-    'SUBCLASS_ORIGIN',
-    'SUBJECT',
-    'SUBPARTITION',
-    'SUBPARTITIONS',
+    'STRIP',
+    'SUCCESS',
     'SUPER',
-    'SUSPEND',
-    'SWAPS',
-    'SWITCHES',
-    'SYSTEM', // (R)
-    'TABLE', // (R)
+    'SYMMETRIC',
+    'SYNC_SNAPSHOT',
+    'SYNC',
+    '_SYNC',
+    '_SYNC2',
+    '_SYNC_PARTITIONS',
+    '_SYNC_SNAPSHOT',
+    'SYNCHRONIZE',
+    'SYSID',
+    'SYSTEM',
+    'TABLE',
+    'TABLE_CHECKSUM',
     'TABLES',
     'TABLESPACE',
-    'TABLE_CHECKSUM',
-    'TABLE_NAME',
+    'TAGS',
+    'TARGET_SIZE',
+    'TASK',
+    'TEMP',
+    'TEMPLATE',
     'TEMPORARY',
     'TEMPTABLE',
-    'TERMINATED', // (R)
+    '_TERM_BUMP',
+    'TERMINATE',
+    'TERMINATED',
     'TEXT',
-    'THAN',
-    'THEN', // (R)
-    'THREAD_PRIORITY',
-    'TIES',
+    'THEN',
     'TIME',
+    'TIMEOUT',
     'TIMESTAMP',
     'TIMESTAMPADD',
     'TIMESTAMPDIFF',
-    'TINYBLOB', // (R)
-    'TINYINT', // (R)
-    'TINYTEXT', // (R)
-    'TLS',
-    'TO', // (R)
-    'TRAILING', // (R)
+    'TIMEZONE',
+    'TINYBLOB',
+    'TINYINT',
+    'TINYTEXT',
+    'TO',
+    'TRACELOGS',
+    'TRADITIONAL',
+    'TRAILING',
+    'TRANSFORM',
     'TRANSACTION',
-    'TRIGGER', // (R)
+    '_TRANSACTIONS_EXPERIMENTAL',
+    'TREAT',
+    'TRIGGER',
     'TRIGGERS',
-    'TRUE', // (R)
+    'TRUE',
+    'TRUNC',
     'TRUNCATE',
+    'TRUSTED',
+    'TWO_PHASE',
+    '_TWOPCID',
     'TYPE',
     'TYPES',
     'UNBOUNDED',
     'UNCOMMITTED',
     'UNDEFINED',
-    'UNDO', // (R)
-    'UNDOFILE',
-    'UNDO_BUFFER_SIZE',
+    'UNDO',
+    'UNENCRYPTED',
+    'UNENFORCED',
+    'UNHOLD',
     'UNICODE',
-    'UNINSTALL',
-    'UNION', // (R)
-    'UNIQUE', // (R)
+    'UNION',
+    'UNIQUE',
+    '_UNITTEST',
     'UNKNOWN',
-    'UNLOCK', // (R)
-    'UNREGISTER',
-    'UNSIGNED', // (R)
+    'UNLISTEN',
+    '_UNLOAD',
+    'UNLOCK',
+    'UNLOGGED',
+    'UNPIVOT',
+    'UNSIGNED',
     'UNTIL',
-    'UPDATE', // (R)
+    'UPDATE',
     'UPGRADE',
-    'USAGE', // (R)
-    'USE', // (R)
+    'USAGE',
+    'USE',
     'USER',
-    'USER_RESOURCES',
-    'USER_VARIABLES', // (R)
-    'USE_FRM',
-    'USING', // (R)
-    'UTC_DATE', // (R)
-    'UTC_TIME', // (R)
-    'UTC_TIMESTAMP', // (R)
-    'VALIDATION',
+    'USERS',
+    'USING',
+    'UTC_DATE',
+    'UTC_TIME',
+    'UTC_TIMESTAMP',
+    '_UTF8',
+    'VACUUM',
+    'VALID',
+    'VALIDATE',
+    'VALIDATOR',
     'VALUE',
-    'VALUES', // (R)
-    'VARBINARY', // (R)
-    'VARCHAR', // (R)
-    'VARCHARACTER', // (R)
+    'VALUES',
+    'VARBINARY',
+    'VARCHAR',
+    'VARCHARACTER',
     'VARIABLES',
-    'VARYING', // (R)
-    'VCPU',
+    'VARIADIC',
+    'VARYING',
+    'VERBOSE',
     'VIEW',
-    'VIRTUAL', // (R)
-    'VISIBLE',
+    'VOID',
+    'VOLATILE',
+    'VOTING',
     'WAIT',
+    '_WAKE',
     'WARNINGS',
     'WEEK',
-    'WEIGHT_STRING',
-    'WHEN', // (R)
-    'WHERE', // (R)
-    'WHILE', // (R)
-    'WINDOW', // (R)
-    'WITH', // (R)
+    'WHEN',
+    'WHERE',
+    'WHILE',
+    'WHITESPACE',
+    'WINDOW',
+    'WITH',
     'WITHOUT',
+    'WITHIN',
+    '_WM_HEARTBEAT',
     'WORK',
+    'WORKLOAD',
     'WRAPPER',
-    'WRITE', // (R)
-    'X509',
-    'XA',
-    'XID',
-    'XML',
-    'XOR', // (R)
+    'WRITE',
+    'XACT_ID',
+    'XOR',
     'YEAR',
-    'YEAR_MONTH', // (R)
-    'ZEROFILL', // (R)
+    'YEAR_MONTH',
+    'YES',
+    'ZEROFILL',
     'ZONE',
   ],
   constraints: ['ON DELETE', 'ON UPDATE'],
