@@ -205,8 +205,8 @@ const reservedCommands = expandPhrases([
   'ADD',
   'AFTER',
   'ALTER COLUMN',
-  'INSERT INTO', // verify
-  'SET SCHEMA', // verify
+  'INSERT INTO',
+  'SET SCHEMA',
 ]);
 
 const reservedSetOperations = expandPhrases([

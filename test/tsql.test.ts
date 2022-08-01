@@ -6,7 +6,6 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
 import supportsAlterTable from './features/alterTable';
-import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
 import supportsOperators from './features/operators';
@@ -33,7 +32,6 @@ describe('TSqlFormatter', () => {
   supportsStrings(format, ["N''", "''"]);
   supportsIdentifiers(format, [`""`, '[]']);
   supportsBetween(format);
-  supportsSchema(format);
   supportsOperators(
     format,
     TSqlFormatter.operators.filter(op => op !== '::')

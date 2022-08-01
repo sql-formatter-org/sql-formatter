@@ -64,7 +64,6 @@ const reservedCommands = expandPhrases([
   'REFRESH FUNCTION',
   'RESET',
   'SET',
-  'SET SCHEMA', // verify
   'SHOW COLUMNS',
   'SHOW CREATE TABLE',
   'SHOW DATABASES',

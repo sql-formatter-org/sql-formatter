@@ -184,9 +184,8 @@ const reservedCommands = expandPhrases([
   'ALTER COLUMN',
   'ALTER TABLE',
   'CREATE TABLE',
-  'INSERT INTO', // verify
-  'DROP TABLE', // verify
-  'SET SCHEMA', // verify
+  'INSERT INTO',
+  'DROP TABLE',
   'VALUES',
 ]);
 
