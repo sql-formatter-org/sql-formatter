@@ -122,7 +122,6 @@ export const keywords = flatKeywordList({
     'FILLRECORD',
     'IGNOREBLANKLINES',
     'IGNOREHEADER',
-    'NULL AS',
     'REMOVEQUOTES',
     'ROUNDEC',
     'TIMEFORMAT',
@@ -177,7 +176,6 @@ export const keywords = flatKeywordList({
     'CATALOG_ROLE',
     'SECRET_ARN',
     'EXTERNAL',
-    'HIVE METASTORE', // https://docs.aws.amazon.com/redshift/latest/dg/c-spectrum-external-schemas.html
     // https://docs.aws.amazon.com/redshift/latest/dg/c_choosing_dist_sort.html
     'AUTO',
     'EVEN',
@@ -185,7 +183,6 @@ export const keywords = flatKeywordList({
     'PREDICATE', // ANALYZE | ANALYSE (https://docs.aws.amazon.com/redshift/latest/dg/r_ANALYZE.html)
     // unknown
     'COMPRESSION',
-    'DATA CATALOG',
   ],
   /**
    * Other keywords not included:
