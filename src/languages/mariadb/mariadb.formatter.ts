@@ -243,7 +243,7 @@ const reservedJoins = expandPhrases([
   'STRAIGHT_JOIN',
 ]);
 
-const reservedPhrases = ['ON DELETE', 'ON UPDATE'];
+const reservedPhrases = ['ON DELETE', 'ON UPDATE', 'CHARACTER SET'];
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {

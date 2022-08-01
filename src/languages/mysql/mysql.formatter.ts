@@ -210,7 +210,7 @@ const reservedJoins = expandPhrases([
   'STRAIGHT_JOIN',
 ]);
 
-const reservedPhrases = ['ON DELETE', 'ON UPDATE'];
+const reservedPhrases = ['ON DELETE', 'ON UPDATE', 'CHARACTER SET'];
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {
