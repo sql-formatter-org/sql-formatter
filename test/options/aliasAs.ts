@@ -206,23 +206,6 @@ export default function supportsAliasAs(format: FormatFn) {
       );
     });
 
-    it('does not remove AS keyword when "AS WITH" or "AS ("', () => {
-      const result = format(
-        dedent`CREATE TABLE 'test.example_table' AS WITH cte AS (SELECT a AS alpha)`,
-        { aliasAs: 'never' }
-      );
-
-      expect(result).toBe(dedent`
-        CREATE TABLE
-          'test.example_table' AS
-        WITH
-          cte AS (
-            SELECT
-              a alpha
-          )
-      `);
-    });
-
     it('does not remove AS keywords from CAST(... AS ...)', () => {
       const result = format(
         dedent`SELECT
