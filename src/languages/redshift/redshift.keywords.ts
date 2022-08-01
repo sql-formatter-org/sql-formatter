@@ -191,14 +191,6 @@ export const keywords = flatKeywordList({
    * SVL: https://docs.aws.amazon.com/redshift/latest/dg/svl_views.html
    * SVV: https://docs.aws.amazon.com/redshift/latest/dg/svv_views.html
    */
-  dataTypes: [
-    'CHAR',
-    'CHARACTER',
-    'NCHAR',
-    'VARCHAR',
-    'CHARACTER VARYING',
-    'NVARCHAR',
-    'BPCHAR',
-    'TEXT',
-  ],
+  // https://docs.aws.amazon.com/redshift/latest/dg/r_Character_types.html#r_Character_types-text-and-bpchar-types
+  dataTypes: ['BPCHAR', 'TEXT'],
 });
