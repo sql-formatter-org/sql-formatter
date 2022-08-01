@@ -98,7 +98,7 @@ const reservedJoins = expandPhrases([
   'NATURAL [LEFT] {ANTI | SEMI} JOIN',
 ]);
 
-const reservedPhrases = ['ON DELETE', 'ON UPDATE'];
+const reservedPhrases = ['ON DELETE', 'ON UPDATE', 'CURRENT ROW'];
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkFormatter extends Formatter {

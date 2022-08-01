@@ -240,7 +240,6 @@ export const keywords = flatKeywordList({
     'COALESCE',
     'CONTAINS',
     'CONVERT',
-    'CURRENT ROW',
     'DAYS',
     'DAY_HOUR',
     'DAY_MINUTE',
