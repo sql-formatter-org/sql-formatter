@@ -17,10 +17,14 @@ const reservedCommands = expandPhrases([
   'OFFSET',
   'FETCH {FIRST | NEXT}',
   // Data manipulation
+  // - insert:
   'INSERT [INTO | ALL INTO]',
   'VALUES',
+  // - update:
   'UPDATE [ONLY]',
   'SET',
+  // - delete:
+  'DELETE FROM [ONLY]',
   // other
   'ADD',
   'ALTER COLUMN',
@@ -30,8 +34,6 @@ const reservedCommands = expandPhrases([
   'CREATE TABLE',
   'DROP TABLE',
   'DECLARE',
-  'DELETE',
-  'DELETE FROM',
   'EXCEPT',
   'EXCEPTION',
   'LOOP',

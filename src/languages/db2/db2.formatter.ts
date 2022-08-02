@@ -15,12 +15,16 @@ const reservedCommands = expandPhrases([
   'ORDER BY [INPUT SEQUENCE]',
   'FETCH FIRST',
   // Data modification
+  // - insert:
   'INSERT INTO',
   'VALUES',
+  // - update:
   'UPDATE',
   'SET',
   'WHERE CURRENT OF',
   'WITH {RR | RS | CS | UR}',
+  // - delete:
+  'DELETE FROM',
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
   'ALTER DATABASE',
@@ -69,8 +73,6 @@ const reservedCommands = expandPhrases([
   'DECLARE STATEMENT',
   'DECLARE TABLE',
   'DECLARE VARIABLE',
-  'DELETE',
-  'DELETE FROM',
   'DESCRIBE CURSOR',
   'DESCRIBE INPUT',
   'DESCRIBE OUTPUT',

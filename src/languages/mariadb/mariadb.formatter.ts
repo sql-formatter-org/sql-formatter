@@ -18,11 +18,15 @@ const reservedCommands = expandPhrases([
   'OFFSET',
   'FETCH {FIRST | NEXT}',
   // Data manipulation
+  // - insert:
   'INSERT [LOW_PRIORITY | DELAYED | HIGH_PRIORITY] [IGNORE] [INTO]',
   'REPLACE [LOW_PRIORITY | DELAYED] [INTO]',
   'VALUES',
+  // - update:
   'UPDATE [LOW_PRIORITY] [IGNORE]',
   'SET',
+  // - delete:
+  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
   // https://mariadb.com/docs/reference/mdb/sql-statements/
   'ALTER DATABASE',
   'ALTER DATABASE COMMENT',
@@ -66,8 +70,6 @@ const reservedCommands = expandPhrases([
   'CREATE USER',
   'CREATE VIEW',
   'DEALLOCATE PREPARE',
-  'DELETE',
-  'DELETE FROM',
   'DESCRIBE',
   'DO',
   'DROP DATABASE',

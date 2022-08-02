@@ -18,11 +18,15 @@ const reservedCommands = expandPhrases([
   'OFFSET',
   'FETCH {FIRST | NEXT}',
   // Data manipulation
+  // - insert:
   'INSERT [INTO]',
   'VALUES',
+  // - update:
   'UPDATE',
   'SET',
   'WHERE CURRENT OF',
+  // - delete:
+  'DELETE [FROM]',
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',
   'ADD SIGNATURE',
@@ -72,8 +76,6 @@ const reservedCommands = expandPhrases([
   'DATEFORMAT',
   'DEADLOCK_PRIORITY',
   'DEFAULT',
-  'DELETE',
-  'DELETE FROM',
   'DENY',
   'DENY XML',
   'DISABLE TRIGGER',

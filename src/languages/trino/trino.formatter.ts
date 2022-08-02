@@ -20,10 +20,14 @@ const reservedCommands = expandPhrases([
   'OFFSET',
   'FETCH {FIRST | NEXT}',
   // Data manipulation
+  // - insert:
   'INSERT INTO',
   'VALUES',
+  // - update:
   'UPDATE',
   'SET',
+  // - delete:
+  'DELETE FROM',
   // DDL
   'ALTER SCHEMA',
   'ALTER TABLE',
@@ -52,7 +56,6 @@ const reservedCommands = expandPhrases([
   'TRUNCATE TABLE',
   // DML
   'MERGE INTO',
-  'DELETE FROM',
   // Auxiliary
   'EXPLAIN',
   'ANALYZE',

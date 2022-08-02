@@ -16,10 +16,14 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   // Data manipulation
+  // - insert:
   'INSERT INTO',
   'VALUES',
+  // - update:
   'UPDATE',
   'SET',
+  // - delete:
+  'DELETE [FROM]',
   // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
   'ABORT',
   'ALTER DATABASE',
@@ -61,8 +65,6 @@ const reservedCommands = expandPhrases([
   'CREATE VIEW',
   'DEALLOCATE',
   'DECLARE',
-  'DELETE',
-  'DELETE FROM',
   'DESC DATASHARE',
   'DROP DATABASE',
   'DROP DATASHARE',

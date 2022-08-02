@@ -20,12 +20,16 @@ const reservedCommands = expandPhrases([
   'DISTRIBUTE BY',
   'LIMIT',
   // Data manipulation
-  // Hive does not actually support plain INSERT INTO, only INSERT INTO TABLE
-  // but it's a nuisance to not support it, as all other dialects do.
+  // - insert:
+  //   Hive does not actually support plain INSERT INTO, only INSERT INTO TABLE
+  //   but it's a nuisance to not support it, as all other dialects do.
   'INSERT INTO [TABLE]',
   'VALUES',
+  // - update:
   'UPDATE',
   'SET',
+  // - delete:
+  'DELETE FROM',
   // other
   'ALTER',
   'ALTER COLUMN', // added

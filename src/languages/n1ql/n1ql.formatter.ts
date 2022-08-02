@@ -18,10 +18,14 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   // Data manipulation
+  // - insert:
   'INSERT INTO',
   'VALUES',
+  // - update:
   'UPDATE',
   'SET',
+  // - delete:
+  'DELETE FROM',
   // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html
   'ADVISE',
   'ALTER INDEX',
@@ -33,8 +37,6 @@ const reservedCommands = expandPhrases([
   'CREATE INDEX',
   'CREATE PRIMARY INDEX',
   'CREATE SCOPE',
-  'DELETE',
-  'DELETE FROM',
   'DROP COLLECTION',
   'DROP FUNCTION',
   'DROP INDEX',

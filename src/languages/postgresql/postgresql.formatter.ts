@@ -19,11 +19,15 @@ const reservedCommands = expandPhrases([
   'OFFSET',
   'FETCH {FIRST | NEXT}',
   // Data manipulation
+  // - insert:
   'INSERT INTO',
   'VALUES',
+  // - update:
   'UPDATE [ONLY]',
   'SET',
   'WHERE CURRENT OF',
+  // - delete:
+  'DELETE FROM [ONLY]',
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
   'ALTER AGGREGATE',
@@ -122,8 +126,6 @@ const reservedCommands = expandPhrases([
   'CREATE VIEW',
   'DEALLOCATE',
   'DECLARE',
-  'DELETE',
-  'DELETE FROM',
   'DISCARD',
   'DO',
   'DROP ACCESS METHOD',

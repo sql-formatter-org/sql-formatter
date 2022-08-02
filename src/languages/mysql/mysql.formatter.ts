@@ -19,11 +19,15 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   // Data manipulation
+  // - insert:
   'INSERT [LOW_PRIORITY | DELAYED | HIGH_PRIORITY] [IGNORE] [INTO]',
   'REPLACE [LOW_PRIORITY | DELAYED] [INTO]',
   'VALUES',
+  // - update:
   'UPDATE [LOW_PRIORITY] [IGNORE]',
   'SET',
+  // - delete:
+  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',
   'ALTER EVENT',
@@ -65,8 +69,6 @@ const reservedCommands = expandPhrases([
   'CREATE USER',
   'CREATE VIEW',
   'DEALLOCATE PREPARE',
-  'DELETE',
-  'DELETE FROM',
   'DESCRIBE',
   'DO',
   'DROP DATABASE',
