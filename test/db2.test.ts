@@ -90,4 +90,14 @@ describe('Db2Formatter', () => {
         :$zop
     `);
   });
+
+  it('supports WITH isolation level modifiers for UPDATE statement', () => {
+    expect(format('UPDATE foo SET x = 10 WITH CS')).toBe(dedent`
+      UPDATE
+        foo
+      SET
+        x = 10
+      WITH CS
+    `);
+  });
 });

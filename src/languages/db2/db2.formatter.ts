@@ -20,6 +20,7 @@ const reservedCommands = expandPhrases([
   'UPDATE',
   'SET',
   'WHERE CURRENT OF',
+  'WITH {RR | RS | CS | UR}',
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
   'ALTER DATABASE',
