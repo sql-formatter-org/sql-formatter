@@ -20,6 +20,7 @@ import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';
@@ -31,6 +32,7 @@ describe('BigQueryFormatter', () => {
   supportsDropTable(format);
   supportsDeleteFrom(format);
   supportsInsertInto(format, { withoutInto: true });
+  supportsUpdate(format);
   supportsStrings(format, ['""', "''"]);
   supportsIdentifiers(format, ['``']);
   supportsArrayLiterals(format);

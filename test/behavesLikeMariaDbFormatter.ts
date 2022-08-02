@@ -14,6 +14,7 @@ import supportsStrings from './features/strings';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
 
 /**
  * Shared tests for MySQL and MariaDB
@@ -29,6 +30,7 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   supportsAlterTable(format);
   supportsDeleteFrom(format);
   supportsInsertInto(format, { withoutInto: true });
+  supportsUpdate(format);
   supportsBetween(format);
   supportsParams(format, { positional: true });
 

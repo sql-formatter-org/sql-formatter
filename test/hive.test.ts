@@ -19,6 +19,7 @@ import supportsIdentifiers from './features/identifiers';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
+import supportsUpdate from './features/update';
 
 describe('HiveFormatter', () => {
   const language = 'hive';
@@ -29,6 +30,7 @@ describe('HiveFormatter', () => {
   supportsCreateTable(format);
   supportsDropTable(format);
   supportsAlterTable(format);
+  supportsUpdate(format);
   supportsStrings(format, ['""', "''"]);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);

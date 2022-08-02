@@ -213,46 +213,11 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     `);
   });
 
-  it('formats simple UPDATE query', () => {
-    const result = format(
-      "UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';"
-    );
-    expect(result).toBe(dedent`
-      UPDATE
-        Customers
-      SET
-        ContactName = 'Alfred Schmidt',
-        City = 'Hamburg'
-      WHERE
-        CustomerName = 'Alfreds Futterkiste';
-    `);
-  });
-
   it('formats incomplete query', () => {
     const result = format('SELECT count(');
     expect(result).toBe(dedent`
       SELECT
         count(
-    `);
-  });
-
-  it('formats UPDATE query with AS part', () => {
-    const result = format(
-      'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary',
-      { aliasAs: 'always' }
-    );
-    expect(result).toBe(dedent`
-      UPDATE
-        customers
-      SET
-        total_orders = order_summary.total
-      FROM
-        (
-          SELECT
-            *
-          FROM
-            bank
-        ) AS order_summary
     `);
   });
 

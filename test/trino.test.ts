@@ -20,6 +20,7 @@ import supportsSetOperations from './features/setOperations';
 import supportsWindow from './features/window';
 import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
 
 describe('TrinoFormatter', () => {
   const language = 'trino';
@@ -31,6 +32,7 @@ describe('TrinoFormatter', () => {
   supportsDropTable(format);
   supportsDeleteFrom(format);
   supportsInsertInto(format);
+  supportsUpdate(format);
   supportsStrings(format, ["''", "X''", "U&''"]);
   supportsIdentifiers(format, ['""']);
   supportsBetween(format);

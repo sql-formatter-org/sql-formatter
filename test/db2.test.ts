@@ -20,6 +20,7 @@ import supportsParams from './options/param';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
 
 describe('Db2Formatter', () => {
   const language = 'db2';
@@ -33,6 +34,7 @@ describe('Db2Formatter', () => {
   supportsAlterTable(format);
   supportsDeleteFrom(format);
   supportsInsertInto(format);
+  supportsUpdate(format);
   supportsStrings(format, ["''", "X''", "U&''", "N''"]);
   supportsIdentifiers(format, [`""`]);
   supportsBetween(format);

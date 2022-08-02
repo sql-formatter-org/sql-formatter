@@ -21,6 +21,7 @@ import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
 
 describe('SqlFormatter', () => {
   const language = 'sql';
@@ -34,6 +35,7 @@ describe('SqlFormatter', () => {
   supportsAlterTable(format);
   supportsDeleteFrom(format);
   supportsInsertInto(format);
+  supportsUpdate(format);
   supportsStrings(format, ["''", "X''"]);
   supportsIdentifiers(format, [`""`, '``']);
   supportsBetween(format);

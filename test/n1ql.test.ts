@@ -20,6 +20,7 @@ import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
 
 describe('N1qlFormatter', () => {
   const language = 'n1ql';
@@ -49,6 +50,7 @@ describe('N1qlFormatter', () => {
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
   supportsInsertInto(format);
+  supportsUpdate(format);
 
   it('formats INSERT with {} object literal', () => {
     const result = format(
