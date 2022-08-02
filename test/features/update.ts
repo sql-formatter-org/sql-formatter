@@ -2,7 +2,11 @@ import dedent from 'dedent-js';
 
 import { FormatFn } from 'src/sqlFormatter';
 
-export default function supportsUpdate(format: FormatFn) {
+interface UpdateConfig {
+  whereCurrentOf?: boolean;
+}
+
+export default function supportsUpdate(format: FormatFn, { whereCurrentOf }: UpdateConfig = {}) {
   it('formats simple UPDATE statement', () => {
     const result = format(
       "UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';"
@@ -37,4 +41,18 @@ export default function supportsUpdate(format: FormatFn) {
         ) AS order_summary
     `);
   });
+
+  if (whereCurrentOf) {
+    it('formats UPDATE statement with cursor position', () => {
+      const result = format("UPDATE Customers SET Name='John' WHERE CURRENT OF my_cursor;");
+      expect(result).toBe(dedent`
+        UPDATE
+          Customers
+        SET
+          Name = 'John'
+        WHERE CURRENT OF
+          my_cursor;
+      `);
+    });
+  }
 }

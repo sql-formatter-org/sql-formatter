@@ -22,6 +22,7 @@ const reservedCommands = expandPhrases([
   'VALUES',
   'UPDATE',
   'SET',
+  'WHERE CURRENT OF',
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',
   'ADD SIGNATURE',

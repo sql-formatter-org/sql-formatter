@@ -34,7 +34,7 @@ describe('Db2Formatter', () => {
   supportsAlterTable(format);
   supportsDeleteFrom(format);
   supportsInsertInto(format);
-  supportsUpdate(format);
+  supportsUpdate(format, { whereCurrentOf: true });
   supportsStrings(format, ["''", "X''", "U&''", "N''"]);
   supportsIdentifiers(format, [`""`]);
   supportsBetween(format);

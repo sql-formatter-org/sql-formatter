@@ -38,7 +38,7 @@ describe('PostgreSqlFormatter', () => {
   supportsAlterTable(format);
   supportsDeleteFrom(format);
   supportsInsertInto(format);
-  supportsUpdate(format);
+  supportsUpdate(format, { whereCurrentOf: true });
   supportsStrings(format, ["''", "U&''", "X''"]);
   supportsIdentifiers(format, [`""`, 'U&""']);
   supportsBetween(format);

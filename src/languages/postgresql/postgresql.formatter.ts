@@ -23,6 +23,7 @@ const reservedCommands = expandPhrases([
   'VALUES',
   'UPDATE [ONLY]',
   'SET',
+  'WHERE CURRENT OF',
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
   'ALTER AGGREGATE',

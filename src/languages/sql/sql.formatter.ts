@@ -23,6 +23,7 @@ const reservedCommands = expandPhrases([
   'VALUES',
   'UPDATE',
   'SET',
+  'WHERE CURRENT OF',
   // other
   'ADD',
   'ALTER COLUMN',

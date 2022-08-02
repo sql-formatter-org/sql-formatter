@@ -34,7 +34,7 @@ describe('TSqlFormatter', () => {
   supportsAlterTable(format);
   supportsDeleteFrom(format);
   supportsInsertInto(format, { withoutInto: true });
-  supportsUpdate(format);
+  supportsUpdate(format, { whereCurrentOf: true });
   supportsStrings(format, ["N''", "''"]);
   supportsIdentifiers(format, [`""`, '[]']);
   supportsBetween(format);

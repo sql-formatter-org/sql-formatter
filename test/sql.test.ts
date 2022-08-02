@@ -35,7 +35,7 @@ describe('SqlFormatter', () => {
   supportsAlterTable(format);
   supportsDeleteFrom(format);
   supportsInsertInto(format);
-  supportsUpdate(format);
+  supportsUpdate(format, { whereCurrentOf: true });
   supportsStrings(format, ["''", "X''"]);
   supportsIdentifiers(format, [`""`, '``']);
   supportsBetween(format);

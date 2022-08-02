@@ -19,6 +19,7 @@ const reservedCommands = expandPhrases([
   'VALUES',
   'UPDATE',
   'SET',
+  'WHERE CURRENT OF',
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
   'ALTER DATABASE',
