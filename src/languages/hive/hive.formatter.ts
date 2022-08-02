@@ -24,6 +24,8 @@ const reservedCommands = expandPhrases([
   // but it's a nuisance to not support it, as all other dialects do.
   'INSERT INTO [TABLE]',
   'VALUES',
+  'UPDATE',
+  'SET',
   // other
   'ALTER',
   'ALTER COLUMN', // added
@@ -35,11 +37,9 @@ const reservedCommands = expandPhrases([
   'DROP',
   'DROP TABLE', // added
   'FETCH',
-  'SET',
   'SET SCHEMA', // added
   'SHOW',
   'TRUNCATE',
-  'UPDATE',
   // newline keywords
   'STORED AS',
   'STORED BY',

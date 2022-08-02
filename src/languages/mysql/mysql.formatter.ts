@@ -22,6 +22,8 @@ const reservedCommands = expandPhrases([
   'INSERT [LOW_PRIORITY | DELAYED | HIGH_PRIORITY] [IGNORE] [INTO]',
   'REPLACE [LOW_PRIORITY | DELAYED] [INTO]',
   'VALUES',
+  'UPDATE [LOW_PRIORITY] [IGNORE]',
+  'SET',
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',
   'ALTER EVENT',
@@ -116,7 +118,6 @@ const reservedCommands = expandPhrases([
   'ROLLBACK',
   'ROLLBACK TO SAVEPOINT',
   'SAVEPOINT',
-  'SET',
   'SET CHARACTER SET',
   'SET DEFAULT ROLE',
   'SET NAMES',
@@ -182,7 +183,6 @@ const reservedCommands = expandPhrases([
   'UNINSTALL PLUGIN',
   'UNLOCK INSTANCE',
   'UNLOCK TABLES',
-  'UPDATE',
   'USE',
   'XA',
   // flow control

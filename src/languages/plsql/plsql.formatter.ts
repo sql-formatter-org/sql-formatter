@@ -19,6 +19,8 @@ const reservedCommands = expandPhrases([
   // Data manipulation
   'INSERT [INTO | ALL INTO]',
   'VALUES',
+  'UPDATE [ONLY]',
+  'SET',
   // other
   'ADD',
   'ALTER COLUMN',
@@ -37,9 +39,7 @@ const reservedCommands = expandPhrases([
   'RETURNING',
   'SET CURRENT SCHEMA',
   'SET SCHEMA',
-  'SET',
   'START WITH',
-  'UPDATE',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

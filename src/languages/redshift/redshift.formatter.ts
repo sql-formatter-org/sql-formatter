@@ -18,6 +18,8 @@ const reservedCommands = expandPhrases([
   // Data manipulation
   'INSERT INTO',
   'VALUES',
+  'UPDATE',
+  'SET',
   // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
   'ABORT',
   'ALTER DATABASE',
@@ -86,7 +88,6 @@ const reservedCommands = expandPhrases([
   'REVOKE',
   'ROLLBACK',
   'SELECT INTO',
-  'SET',
   'SET SESSION AUTHORIZATION',
   'SET SESSION CHARACTERISTICS',
   'SHOW',
@@ -99,7 +100,6 @@ const reservedCommands = expandPhrases([
   'START TRANSACTION',
   'TRUNCATE',
   'UNLOAD',
-  'UPDATE',
   'VACUUM',
   // other
   'ALTER COLUMN',

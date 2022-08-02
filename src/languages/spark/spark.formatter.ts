@@ -23,6 +23,8 @@ const reservedCommands = expandPhrases([
   // Data manipulation
   'INSERT [INTO | OVERWRITE] [TABLE]',
   'VALUES',
+  'UPDATE', // TODO: not supported
+  'SET', // TODO: not supported
   // DDL
   'ALTER COLUMN',
   'ALTER DATABASE',
@@ -63,7 +65,6 @@ const reservedCommands = expandPhrases([
   'REFRESH TABLE',
   'REFRESH FUNCTION',
   'RESET',
-  'SET',
   'SHOW COLUMNS',
   'SHOW CREATE TABLE',
   'SHOW DATABASES',
@@ -76,7 +77,6 @@ const reservedCommands = expandPhrases([
   'UNCACHE TABLE',
   // other
   'LATERAL VIEW',
-  'UPDATE',
 ]);
 
 const reservedSetOperations = expandPhrases([

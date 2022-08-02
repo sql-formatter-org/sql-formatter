@@ -20,6 +20,8 @@ const reservedCommands = expandPhrases([
   // Data manipulation
   'INSERT [INTO]',
   'VALUES',
+  'UPDATE',
+  'SET',
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',
   'ADD SIGNATURE',
@@ -153,7 +155,6 @@ const reservedCommands = expandPhrases([
   'SERVER ROLE',
   'SERVICE',
   'SERVICE MASTER KEY',
-  'SET',
   'SETUSER',
   'SHOWPLAN_ALL',
   'SHOWPLAN_TEXT',
@@ -174,7 +175,6 @@ const reservedCommands = expandPhrases([
   'TRIGGER',
   'TRUNCATE TABLE',
   'TYPE',
-  'UPDATE',
   'UPDATE STATISTICS',
   'USER',
   'VIEW',

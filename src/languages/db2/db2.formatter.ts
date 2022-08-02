@@ -17,6 +17,8 @@ const reservedCommands = expandPhrases([
   // Data modification
   'INSERT INTO',
   'VALUES',
+  'UPDATE',
+  'SET',
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
   'ALTER DATABASE',
@@ -98,7 +100,6 @@ const reservedCommands = expandPhrases([
   'SAVEPOINT',
   'SELECT INTO',
   'SET CONNECTION',
-  'SET',
   'SET CURRENT ACCELERATOR',
   'SET CURRENT APPLICATION COMPATIBILITY',
   'SET CURRENT APPLICATION ENCODING SCHEME',
@@ -127,7 +128,6 @@ const reservedCommands = expandPhrases([
   'SET SESSION TIME ZONE',
   'SIGNAL',
   'TRUNCATE',
-  'UPDATE',
   'VALUES INTO',
   'WHENEVER',
   // other

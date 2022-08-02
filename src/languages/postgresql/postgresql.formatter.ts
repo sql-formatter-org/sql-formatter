@@ -21,6 +21,8 @@ const reservedCommands = expandPhrases([
   // Data manipulation
   'INSERT INTO',
   'VALUES',
+  'UPDATE [ONLY]',
+  'SET',
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
   'ALTER AGGREGATE',
@@ -191,7 +193,6 @@ const reservedCommands = expandPhrases([
   'SAVEPOINT',
   'SECURITY LABEL',
   'SELECT INTO',
-  'SET',
   'SET CONSTRAINTS',
   'SET ROLE',
   'SET SESSION AUTHORIZATION',
@@ -200,7 +201,6 @@ const reservedCommands = expandPhrases([
   'START TRANSACTION',
   'TRUNCATE',
   'UNLISTEN',
-  'UPDATE',
   'VACUUM',
   // other
   'ADD',

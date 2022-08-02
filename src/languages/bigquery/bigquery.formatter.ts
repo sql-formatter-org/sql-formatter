@@ -23,9 +23,10 @@ const reservedCommands = expandPhrases([
   // Data modification: https://cloud.google.com/bigquery/docs/reference/standard-sql/dml-syntax
   'INSERT [INTO]',
   'VALUES',
+  'UPDATE',
+  'SET',
   'DELETE [FROM]',
   'TRUNCATE TABLE',
-  'UPDATE',
   'MERGE [INTO]',
   // DDL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
   'CREATE SCHEMA [IF NOT EXISTS]',
@@ -77,7 +78,6 @@ const reservedCommands = expandPhrases([
   'REVOKE',
   // Script, https://cloud.google.com/bigquery/docs/reference/standard-sql/scripting
   'DECLARE',
-  'SET',
   'EXECUTE IMMEDIATE',
   'LOOP',
   'END LOOP',

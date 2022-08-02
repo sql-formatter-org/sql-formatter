@@ -21,6 +21,8 @@ const reservedCommands = expandPhrases([
   // Data manipulation
   'INSERT INTO',
   'VALUES',
+  'UPDATE',
+  'SET',
   // other
   'ADD',
   'ALTER COLUMN',
@@ -29,8 +31,6 @@ const reservedCommands = expandPhrases([
   'DROP TABLE',
   'DELETE FROM',
   'SET SCHEMA',
-  'SET',
-  'UPDATE',
 ]);
 
 const reservedSetOperations = expandPhrases([

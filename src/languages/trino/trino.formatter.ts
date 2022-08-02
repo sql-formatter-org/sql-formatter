@@ -22,6 +22,8 @@ const reservedCommands = expandPhrases([
   // Data manipulation
   'INSERT INTO',
   'VALUES',
+  'UPDATE',
+  'SET',
   // DDL
   'ALTER SCHEMA',
   'ALTER TABLE',
@@ -50,8 +52,6 @@ const reservedCommands = expandPhrases([
   'TRUNCATE TABLE',
   // DML
   'MERGE INTO',
-  'UPDATE',
-  'SET',
   'DELETE FROM',
   // Auxiliary
   'EXPLAIN',

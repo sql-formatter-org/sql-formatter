@@ -21,6 +21,8 @@ const reservedCommands = expandPhrases([
   'INSERT [OR ABORT | OR FAIL | OR IGNORE | OR REPLACE | OR ROLLBACK] INTO',
   'REPLACE INTO',
   'VALUES',
+  'UPDATE [OR ABORT | OR FAIL | OR IGNORE | OR REPLACE | OR ROLLBACK]',
+  'SET',
   // other
   'ADD',
   'ALTER COLUMN',
@@ -30,8 +32,6 @@ const reservedCommands = expandPhrases([
   'DELETE',
   'DELETE FROM',
   'SET SCHEMA',
-  'SET',
-  'UPDATE',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

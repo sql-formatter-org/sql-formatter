@@ -20,6 +20,8 @@ const reservedCommands = expandPhrases([
   // Data manipulation
   'INSERT INTO',
   'VALUES',
+  'UPDATE',
+  'SET',
   // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html
   'ADVISE',
   'ALTER INDEX',
@@ -50,7 +52,6 @@ const reservedCommands = expandPhrases([
   'ROLLBACK TRANSACTION',
   'SAVEPOINT',
   'SET TRANSACTION',
-  'UPDATE',
   'UPDATE STATISTICS',
   'UPSERT',
   // other
@@ -58,7 +59,6 @@ const reservedCommands = expandPhrases([
   'NEST',
   'SET CURRENT SCHEMA',
   'SET SCHEMA',
-  'SET',
   'SHOW',
   'UNNEST',
   'USE KEYS',
