@@ -30,7 +30,7 @@ describe('BigQueryFormatter', () => {
   supportsComments(format, { hashComments: true });
   supportsCreateTable(format);
   supportsDropTable(format);
-  supportsDeleteFrom(format);
+  supportsDeleteFrom(format, { withoutFrom: true });
   supportsInsertInto(format, { withoutInto: true });
   supportsUpdate(format);
   supportsStrings(format, ['""', "''"]);

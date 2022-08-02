@@ -28,7 +28,7 @@ describe('RedshiftFormatter', () => {
   supportsCreateTable(format);
   supportsDropTable(format);
   supportsAlterTable(format);
-  supportsDeleteFrom(format);
+  supportsDeleteFrom(format, { withoutFrom: true });
   supportsInsertInto(format);
   supportsUpdate(format);
   supportsStrings(format, ["''"]);

@@ -2,8 +2,15 @@ import dedent from 'dedent-js';
 
 import { FormatFn } from 'src/sqlFormatter';
 
-export default function supportsDeleteFrom(format: FormatFn) {
-  it('formats simple DELETE FROM statement', () => {
+interface DeleteFromConfig {
+  withoutFrom?: boolean;
+}
+
+export default function supportsDeleteFrom(
+  format: FormatFn,
+  { withoutFrom }: DeleteFromConfig = {}
+) {
+  it('formats DELETE FROM statement', () => {
     const result = format("DELETE FROM Customers WHERE CustomerName='Alfred' AND Phone=5002132;");
     expect(result).toBe(dedent`
       DELETE FROM
@@ -13,4 +20,16 @@ export default function supportsDeleteFrom(format: FormatFn) {
         AND Phone = 5002132;
     `);
   });
+
+  if (withoutFrom) {
+    it('formats DELETE statement (without FROM)', () => {
+      const result = format("DELETE Customers WHERE CustomerName='Alfred';");
+      expect(result).toBe(dedent`
+        DELETE
+          Customers
+        WHERE
+          CustomerName = 'Alfred';
+      `);
+    });
+  }
 }
