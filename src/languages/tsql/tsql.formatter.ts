@@ -27,6 +27,8 @@ const reservedCommands = expandPhrases([
   'WHERE CURRENT OF',
   // - delete:
   'DELETE [FROM]',
+  // - truncate:
+  'TRUNCATE TABLE',
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',
   'ADD SIGNATURE',
@@ -176,7 +178,6 @@ const reservedCommands = expandPhrases([
   'TEXTSIZE',
   'TRANSACTION ISOLATION LEVEL',
   'TRIGGER',
-  'TRUNCATE TABLE',
   'TYPE',
   'UPDATE STATISTICS',
   'USER',

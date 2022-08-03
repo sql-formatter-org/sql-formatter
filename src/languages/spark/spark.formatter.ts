@@ -21,8 +21,11 @@ const reservedCommands = expandPhrases([
   'DISTRIBUTE BY',
   'LIMIT',
   // Data manipulation
+  // - insert:
   'INSERT [INTO | OVERWRITE] [TABLE]',
   'VALUES',
+  // - truncate:
+  'TRUNCATE TABLE',
   // DDL
   'ALTER COLUMN',
   'ALTER DATABASE',
@@ -37,7 +40,6 @@ const reservedCommands = expandPhrases([
   'DROP TABLE',
   'DROP VIEW',
   'REPAIR TABLE',
-  'TRUNCATE TABLE',
   'USE DATABASE',
   // DML
   'INSERT OVERWRITE DIRECTORY',

@@ -21,6 +21,7 @@ import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
+import supportsTruncateTable from './features/truncateTable';
 
 describe('TSqlFormatter', () => {
   const language = 'tsql';
@@ -35,6 +36,7 @@ describe('TSqlFormatter', () => {
   supportsDeleteFrom(format);
   supportsInsertInto(format, { withoutInto: true });
   supportsUpdate(format, { whereCurrentOf: true });
+  supportsTruncateTable(format);
   supportsStrings(format, ["N''", "''"]);
   supportsIdentifiers(format, [`""`, '[]']);
   supportsBetween(format);

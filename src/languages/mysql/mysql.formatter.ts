@@ -28,6 +28,8 @@ const reservedCommands = expandPhrases([
   'SET',
   // - delete:
   'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',
   'ALTER EVENT',
@@ -180,7 +182,6 @@ const reservedCommands = expandPhrases([
   'STOP REPLICA',
   'STOP SLAVE',
   'TABLE',
-  'TRUNCATE TABLE',
   'UNINSTALL COMPONENT',
   'UNINSTALL PLUGIN',
   'UNLOCK INSTANCE',

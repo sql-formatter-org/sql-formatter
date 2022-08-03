@@ -25,6 +25,8 @@ const reservedCommands = expandPhrases([
   'SET',
   // - delete:
   'DELETE FROM [ONLY]',
+  // - truncate:
+  'TRUNCATE TABLE',
   // other
   'ADD',
   'ALTER COLUMN',

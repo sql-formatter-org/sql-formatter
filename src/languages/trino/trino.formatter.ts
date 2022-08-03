@@ -28,6 +28,8 @@ const reservedCommands = expandPhrases([
   'SET',
   // - delete:
   'DELETE FROM',
+  // - truncate:
+  'TRUNCATE TABLE',
   // DDL
   'ALTER SCHEMA',
   'ALTER TABLE',
@@ -53,7 +55,6 @@ const reservedCommands = expandPhrases([
   'DROP MATERIALIZED VIEW',
   'DROP VIEW',
   'DROP ROLE',
-  'TRUNCATE TABLE',
   // DML
   'MERGE INTO',
   // Auxiliary

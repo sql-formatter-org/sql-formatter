@@ -25,6 +25,8 @@ const reservedCommands = expandPhrases([
   'WITH {RR | RS | CS | UR}',
   // - delete:
   'DELETE FROM',
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
   'ALTER DATABASE',
@@ -131,7 +133,6 @@ const reservedCommands = expandPhrases([
   'SET SCHEMA',
   'SET SESSION TIME ZONE',
   'SIGNAL',
-  'TRUNCATE',
   'VALUES INTO',
   'WHENEVER',
   // other

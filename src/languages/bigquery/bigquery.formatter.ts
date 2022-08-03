@@ -29,6 +29,7 @@ const reservedCommands = expandPhrases([
   'SET',
   // - delete:
   'DELETE [FROM]',
+  // - truncate:
   'TRUNCATE TABLE',
   'MERGE [INTO]',
   // DDL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language

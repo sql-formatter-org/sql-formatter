@@ -24,6 +24,7 @@ import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
+import supportsTruncateTable from './features/truncateTable';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -39,6 +40,7 @@ describe('PostgreSqlFormatter', () => {
   supportsDeleteFrom(format);
   supportsInsertInto(format);
   supportsUpdate(format, { whereCurrentOf: true });
+  supportsTruncateTable(format, { withoutTable: true });
   supportsStrings(format, ["''", "U&''", "X''"]);
   supportsIdentifiers(format, [`""`, 'U&""']);
   supportsBetween(format);

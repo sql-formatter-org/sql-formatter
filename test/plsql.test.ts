@@ -23,6 +23,7 @@ import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
+import supportsTruncateTable from './features/truncateTable';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -38,6 +39,7 @@ describe('PlSqlFormatter', () => {
   supportsDeleteFrom(format);
   supportsInsertInto(format);
   supportsUpdate(format);
+  supportsTruncateTable(format);
   supportsStrings(format, ["''", "N''"]);
   supportsIdentifiers(format, [`""`]);
   supportsBetween(format);

@@ -30,6 +30,8 @@ const reservedCommands = expandPhrases([
   'SET',
   // - delete:
   'DELETE FROM',
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // other
   'ALTER',
   'ALTER COLUMN', // added
@@ -43,7 +45,6 @@ const reservedCommands = expandPhrases([
   'FETCH',
   'SET SCHEMA', // added
   'SHOW',
-  'TRUNCATE',
   // newline keywords
   'STORED AS',
   'STORED BY',

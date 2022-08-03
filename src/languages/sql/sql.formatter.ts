@@ -28,6 +28,8 @@ const reservedCommands = expandPhrases([
   'WHERE CURRENT OF',
   // - delete:
   'DELETE FROM',
+  // - truncate:
+  'TRUNCATE TABLE',
   // other
   'ADD',
   'ALTER COLUMN',

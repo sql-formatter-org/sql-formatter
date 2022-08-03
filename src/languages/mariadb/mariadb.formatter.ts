@@ -27,6 +27,8 @@ const reservedCommands = expandPhrases([
   'SET',
   // - delete:
   'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // https://mariadb.com/docs/reference/mdb/sql-statements/
   'ALTER DATABASE',
   'ALTER DATABASE COMMENT',
@@ -209,8 +211,6 @@ const reservedCommands = expandPhrases([
   'STOP ALL SLAVES',
   'STOP REPLICA',
   'STOP SLAVE',
-  'TRUNCATE',
-  'TRUNCATE TABLE',
   'UNINSTALL PLUGIN',
   'UNINSTALL SONAME',
   'UNLOCK TABLE',

@@ -24,6 +24,8 @@ const reservedCommands = expandPhrases([
   'SET',
   // - delete:
   'DELETE [FROM]',
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
   'ABORT',
   'ALTER DATABASE',
@@ -100,7 +102,6 @@ const reservedCommands = expandPhrases([
   'SHOW TABLE',
   'SHOW VIEW',
   'START TRANSACTION',
-  'TRUNCATE',
   'UNLOAD',
   'VACUUM',
   // other

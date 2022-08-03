@@ -28,6 +28,8 @@ const reservedCommands = expandPhrases([
   'WHERE CURRENT OF',
   // - delete:
   'DELETE FROM [ONLY]',
+  // - truncate:
+  'TRUNCATE [TABLE] [ONLY]',
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
   'ALTER AGGREGATE',
@@ -202,7 +204,6 @@ const reservedCommands = expandPhrases([
   'SET TRANSACTION',
   'SHOW',
   'START TRANSACTION',
-  'TRUNCATE',
   'UNLISTEN',
   'VACUUM',
   // other
