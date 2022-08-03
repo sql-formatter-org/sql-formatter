@@ -7,7 +7,6 @@ import supportsNumbers from './features/numbers';
 import supportsWith from './features/with';
 import supportsTabWidth from './options/tabWidth';
 import supportsUseTabs from './options/useTabs';
-import supportsAliasAs from './options/aliasAs';
 import supportsExpressionWidth from './options/expressionWidth';
 import supportsKeywordCase from './options/keywordCase';
 import supportsIndentStyle from './options/indentStyle';
@@ -25,7 +24,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsNumbers(format);
   supportsWith(format);
 
-  supportsAliasAs(format);
   supportsTabulateAlias(format);
   supportsTabWidth(format);
   supportsUseTabs(format);
@@ -250,8 +248,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
 
   it('formats UPDATE query with AS part', () => {
     const result = format(
-      'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary',
-      { aliasAs: 'always' }
+      'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary'
     );
     expect(result).toBe(dedent`
       UPDATE

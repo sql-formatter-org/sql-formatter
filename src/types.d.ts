@@ -5,8 +5,6 @@ export type IndentStyle = 'standard' | 'tabularLeft' | 'tabularRight';
 
 export type KeywordCase = 'preserve' | 'upper' | 'lower';
 
-export type AliasMode = 'preserve' | 'always' | 'never' | 'select';
-
 export type CommaPosition = 'before' | 'after' | 'tabular';
 
 export type LogicalOperatorNewline = 'before' | 'after';
@@ -18,7 +16,6 @@ export interface FormatOptions {
   keywordCase: KeywordCase;
   indentStyle: IndentStyle;
   logicalOperatorNewline: LogicalOperatorNewline;
-  aliasAs: AliasMode;
   tabulateAlias: boolean;
   commaPosition: CommaPosition;
   expressionWidth: number;
