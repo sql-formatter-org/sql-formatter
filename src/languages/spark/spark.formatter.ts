@@ -26,6 +26,13 @@ const reservedCommands = expandPhrases([
   'VALUES',
   // - truncate:
   'TRUNCATE TABLE',
+  // - insert overwrite directory (spark-specific):
+  //   https://spark.apache.org/docs/latest/sql-ref-syntax-dml-insert-overwrite-directory.html
+  'INSERT OVERWRITE [LOCAL] DIRECTORY',
+  // - load (spark-specific):
+  //   https://spark.apache.org/docs/latest/sql-ref-syntax-dml-load.html
+  'LOAD DATA [LOCAL] INPATH',
+  '[OVERWRITE] INTO TABLE',
   // DDL
   'ALTER COLUMN',
   'ALTER DATABASE',
@@ -41,9 +48,6 @@ const reservedCommands = expandPhrases([
   'DROP VIEW',
   'REPAIR TABLE',
   'USE DATABASE',
-  // DML
-  'INSERT OVERWRITE DIRECTORY',
-  'LOAD',
   // Data Retrieval
   'TABLESAMPLE',
   'PIVOT',
