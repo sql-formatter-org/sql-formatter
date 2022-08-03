@@ -236,7 +236,7 @@ export default class ExpressionFormatter {
 
   /** Formats a block comment onto query */
   private formatBlockComment(token: Token) {
-    this.splitBlockComment(token.value).forEach(line => {
+    this.splitBlockComment(token.text).forEach(line => {
       this.layout.add(WS.NEWLINE, WS.INDENT, line);
     });
     this.layout.add(WS.NEWLINE, WS.INDENT);
@@ -297,15 +297,15 @@ export default class ExpressionFormatter {
    */
   private formatOperator(token: Token) {
     // special operator
-    if (token.value === ':') {
+    if (token.text === ':') {
       this.layout.add(WS.NO_SPACE, this.show(token), WS.SPACE);
       return;
-    } else if (token.value === '.' || token.value === '::') {
+    } else if (token.text === '.' || token.text === '::') {
       this.layout.add(WS.NO_SPACE, this.show(token));
       return;
     }
     // special case for PLSQL @ dblink syntax
-    else if (token.value === '@' && this.cfg.language === 'plsql') {
+    else if (token.text === '@' && this.cfg.language === 'plsql') {
       this.layout.add(WS.NO_SPACE, this.show(token));
       return;
     }
@@ -382,14 +382,14 @@ export default class ExpressionFormatter {
         case 'preserve':
           return equalizeWhitespace(token.raw);
         case 'upper':
-          return token.value;
+          return token.text;
         case 'lower':
-          return token.value.toLowerCase();
+          return token.text.toLowerCase();
       }
     } else if (isParameter(token)) {
       return this.params.get(token);
     } else {
-      return token.value;
+      return token.text;
     }
   }
 }

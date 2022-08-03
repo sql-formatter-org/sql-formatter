@@ -139,10 +139,10 @@ function postProcess(tokens: Token[]) {
     }
 
     // TODO: deprecate this once ITEMS is merged with COLLECTION
-    if (token.value === 'ITEMS' && token.type === TokenType.RESERVED_KEYWORD) {
-      if (!(prevToken.value === 'COLLECTION' && nextToken.value === 'TERMINATED')) {
+    if (token.text === 'ITEMS' && token.type === TokenType.RESERVED_KEYWORD) {
+      if (!(prevToken.text === 'COLLECTION' && nextToken.text === 'TERMINATED')) {
         // this is a word and not COLLECTION ITEMS
-        return { type: TokenType.IDENTIFIER, raw: token.raw, value: token.raw };
+        return { type: TokenType.IDENTIFIER, raw: token.raw, text: token.raw };
       }
     }
 

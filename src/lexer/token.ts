@@ -33,7 +33,7 @@ export enum TokenType {
 export interface Token {
   type: TokenType;
   raw: string; // The raw original text that was matched
-  value: string; // Cleaned up `text` e.g. keyword converted to uppercase and extra spaces removed
+  text: string; // Cleaned up text e.g. keyword converted to uppercase and extra spaces removed
   key?: string;
 }
 
@@ -41,33 +41,33 @@ export interface Token {
  * For use as a "missing token"
  * e.g. in lookAhead and lookBehind to avoid dealing with null values
  */
-export const EOF_TOKEN = { type: TokenType.EOF, raw: '«EOF»', value: '«EOF»' };
+export const EOF_TOKEN = { type: TokenType.EOF, raw: '«EOF»', text: '«EOF»' };
 
 /** Checks if two tokens are equivalent */
 export const testToken =
-  (compareToken: { type: TokenType; value: string }) =>
+  (compareToken: { type: TokenType; text: string }) =>
   (token: Token): boolean =>
-    token.type === compareToken.type && token.value === compareToken.value;
+    token.type === compareToken.type && token.text === compareToken.text;
 
 /** Util object that allows for easy checking of Reserved Keywords */
 export const isToken = {
-  AS: testToken({ value: 'AS', type: TokenType.RESERVED_KEYWORD }),
-  AND: testToken({ value: 'AND', type: TokenType.RESERVED_LOGICAL_OPERATOR }),
-  ARRAY: testToken({ value: 'ARRAY', type: TokenType.RESERVED_KEYWORD }),
-  BETWEEN: testToken({ value: 'BETWEEN', type: TokenType.RESERVED_KEYWORD }),
-  CASE: testToken({ value: 'CASE', type: TokenType.RESERVED_CASE_START }),
-  CAST: testToken({ value: 'CAST', type: TokenType.RESERVED_FUNCTION_NAME }),
-  BY: testToken({ value: 'BY', type: TokenType.RESERVED_KEYWORD }),
-  END: testToken({ value: 'END', type: TokenType.RESERVED_CASE_END }),
-  FROM: testToken({ value: 'FROM', type: TokenType.RESERVED_COMMAND }),
-  LIMIT: testToken({ value: 'LIMIT', type: TokenType.RESERVED_COMMAND }),
+  AS: testToken({ text: 'AS', type: TokenType.RESERVED_KEYWORD }),
+  AND: testToken({ text: 'AND', type: TokenType.RESERVED_LOGICAL_OPERATOR }),
+  ARRAY: testToken({ text: 'ARRAY', type: TokenType.RESERVED_KEYWORD }),
+  BETWEEN: testToken({ text: 'BETWEEN', type: TokenType.RESERVED_KEYWORD }),
+  CASE: testToken({ text: 'CASE', type: TokenType.RESERVED_CASE_START }),
+  CAST: testToken({ text: 'CAST', type: TokenType.RESERVED_FUNCTION_NAME }),
+  BY: testToken({ text: 'BY', type: TokenType.RESERVED_KEYWORD }),
+  END: testToken({ text: 'END', type: TokenType.RESERVED_CASE_END }),
+  FROM: testToken({ text: 'FROM', type: TokenType.RESERVED_COMMAND }),
+  LIMIT: testToken({ text: 'LIMIT', type: TokenType.RESERVED_COMMAND }),
   SELECT: (token: Token) =>
-    /^SELECT\b/.test(token.value) && token.type === TokenType.RESERVED_COMMAND,
-  SET: testToken({ value: 'SET', type: TokenType.RESERVED_COMMAND }),
-  STRUCT: testToken({ value: 'STRUCT', type: TokenType.RESERVED_KEYWORD }),
-  TABLE: testToken({ value: 'TABLE', type: TokenType.RESERVED_KEYWORD }),
-  WINDOW: testToken({ value: 'WINDOW', type: TokenType.RESERVED_COMMAND }),
-  WITH: testToken({ value: 'WITH', type: TokenType.RESERVED_COMMAND }),
+    /^SELECT\b/.test(token.text) && token.type === TokenType.RESERVED_COMMAND,
+  SET: testToken({ text: 'SET', type: TokenType.RESERVED_COMMAND }),
+  STRUCT: testToken({ text: 'STRUCT', type: TokenType.RESERVED_KEYWORD }),
+  TABLE: testToken({ text: 'TABLE', type: TokenType.RESERVED_KEYWORD }),
+  WINDOW: testToken({ text: 'WINDOW', type: TokenType.RESERVED_COMMAND }),
+  WITH: testToken({ text: 'WITH', type: TokenType.RESERVED_COMMAND }),
 };
 
 /** Checks if token is any Reserved Keyword or Command */

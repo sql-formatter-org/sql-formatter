@@ -87,7 +87,7 @@ export default class TokenizerEngine {
       const tokenRule = this.rules[tokenType];
       if (token) {
         if (tokenRule?.key) {
-          return { ...token, key: tokenRule.key(token.value) };
+          return { ...token, key: tokenRule.key(token.text) };
         }
         return token; // POSITIONAL_PARAMETER does not have a key transform function
       }
@@ -98,7 +98,7 @@ export default class TokenizerEngine {
   private matchReservedWordToken(previousToken?: Token): Token | undefined {
     // A reserved word cannot be preceded by a '.'
     // this makes it so in "mytable.from", "from" is not considered a reserved word
-    if (previousToken?.value === '.') {
+    if (previousToken?.text === '.') {
       return undefined;
     }
 
@@ -150,7 +150,7 @@ export default class TokenizerEngine {
       return {
         type,
         raw: matchedToken,
-        value: transform ? transform(matchedToken) : matchedToken,
+        text: transform ? transform(matchedToken) : matchedToken,
       };
     }
     return undefined;
