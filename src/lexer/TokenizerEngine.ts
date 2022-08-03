@@ -149,7 +149,7 @@ export default class TokenizerEngine {
       this.index += matchedToken.length;
       return {
         type,
-        text: matchedToken,
+        raw: matchedToken,
         value: transform ? transform(matchedToken) : matchedToken,
       };
     }

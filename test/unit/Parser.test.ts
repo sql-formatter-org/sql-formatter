@@ -29,7 +29,7 @@ describe('Parser', () => {
           "children": Array [
             Object {
               "token": Object {
-                "text": "foo",
+                "raw": "foo",
                 "type": "IDENTIFIER",
                 "value": "foo",
               },
@@ -43,7 +43,7 @@ describe('Parser', () => {
           "children": Array [
             Object {
               "token": Object {
-                "text": "bar",
+                "raw": "bar",
                 "type": "IDENTIFIER",
                 "value": "bar",
               },
@@ -66,7 +66,7 @@ describe('Parser', () => {
               "children": Array [
                 Object {
                   "nameToken": Object {
-                    "text": "SQRT",
+                    "raw": "SQRT",
                     "type": "RESERVED_FUNCTION_NAME",
                     "value": "SQRT",
                   },
@@ -74,7 +74,7 @@ describe('Parser', () => {
                     "children": Array [
                       Object {
                         "token": Object {
-                          "text": "2",
+                          "raw": "2",
                           "type": "NUMBER",
                           "value": "2",
                         },
@@ -89,7 +89,7 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
-                "text": "SELECT",
+                "raw": "SELECT",
                 "type": "RESERVED_COMMAND",
                 "value": "SELECT",
               },
@@ -112,7 +112,7 @@ describe('Parser', () => {
               "children": Array [
                 Object {
                   "arrayToken": Object {
-                    "text": "my_array",
+                    "raw": "my_array",
                     "type": "IDENTIFIER",
                     "value": "my_array",
                   },
@@ -120,7 +120,7 @@ describe('Parser', () => {
                     "children": Array [
                       Object {
                         "nameToken": Object {
-                          "text": "OFFSET",
+                          "raw": "OFFSET",
                           "type": "RESERVED_FUNCTION_NAME",
                           "value": "OFFSET",
                         },
@@ -128,7 +128,7 @@ describe('Parser', () => {
                           "children": Array [
                             Object {
                               "token": Object {
-                                "text": "5",
+                                "raw": "5",
                                 "type": "NUMBER",
                                 "value": "5",
                               },
@@ -150,7 +150,7 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
-                "text": "SELECT",
+                "raw": "SELECT",
                 "type": "RESERVED_COMMAND",
                 "value": "SELECT",
               },
@@ -175,7 +175,7 @@ describe('Parser', () => {
                   "children": Array [
                     Object {
                       "token": Object {
-                        "text": "birth_year",
+                        "raw": "birth_year",
                         "type": "IDENTIFIER",
                         "value": "birth_year",
                       },
@@ -183,7 +183,7 @@ describe('Parser', () => {
                     },
                     Object {
                       "token": Object {
-                        "text": "-",
+                        "raw": "-",
                         "type": "OPERATOR",
                         "value": "-",
                       },
@@ -193,7 +193,7 @@ describe('Parser', () => {
                       "children": Array [
                         Object {
                           "token": Object {
-                            "text": "CURRENT_DATE",
+                            "raw": "CURRENT_DATE",
                             "type": "IDENTIFIER",
                             "value": "CURRENT_DATE",
                           },
@@ -201,7 +201,7 @@ describe('Parser', () => {
                         },
                         Object {
                           "token": Object {
-                            "text": "+",
+                            "raw": "+",
                             "type": "OPERATOR",
                             "value": "+",
                           },
@@ -209,7 +209,7 @@ describe('Parser', () => {
                         },
                         Object {
                           "token": Object {
-                            "text": "1",
+                            "raw": "1",
                             "type": "NUMBER",
                             "value": "1",
                           },
@@ -227,7 +227,7 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
-                "text": "SELECT",
+                "raw": "SELECT",
                 "type": "RESERVED_COMMAND",
                 "value": "SELECT",
               },
@@ -250,7 +250,7 @@ describe('Parser', () => {
               "children": Array [
                 Object {
                   "token": Object {
-                    "text": "age",
+                    "raw": "age",
                     "type": "IDENTIFIER",
                     "value": "age",
                   },
@@ -258,22 +258,22 @@ describe('Parser', () => {
                 },
                 Object {
                   "andToken": Object {
-                    "text": "and",
+                    "raw": "and",
                     "type": "RESERVED_LOGICAL_OPERATOR",
                     "value": "AND",
                   },
                   "betweenToken": Object {
-                    "text": "BETWEEN",
+                    "raw": "BETWEEN",
                     "type": "RESERVED_KEYWORD",
                     "value": "BETWEEN",
                   },
                   "expr1": Object {
-                    "text": "10",
+                    "raw": "10",
                     "type": "NUMBER",
                     "value": "10",
                   },
                   "expr2": Object {
-                    "text": "15",
+                    "raw": "15",
                     "type": "NUMBER",
                     "value": "15",
                   },
@@ -281,7 +281,7 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
-                "text": "WHERE",
+                "raw": "WHERE",
                 "type": "RESERVED_COMMAND",
                 "value": "WHERE",
               },
@@ -304,7 +304,7 @@ describe('Parser', () => {
               "count": Array [
                 Object {
                   "token": Object {
-                    "text": "10",
+                    "raw": "10",
                     "type": "NUMBER",
                     "value": "10",
                   },
@@ -312,7 +312,7 @@ describe('Parser', () => {
                 },
               ],
               "limitToken": Object {
-                "text": "LIMIT",
+                "raw": "LIMIT",
                 "type": "RESERVED_COMMAND",
                 "value": "LIMIT",
               },
@@ -335,7 +335,7 @@ describe('Parser', () => {
               "count": Array [
                 Object {
                   "token": Object {
-                    "text": "10",
+                    "raw": "10",
                     "type": "NUMBER",
                     "value": "10",
                   },
@@ -343,14 +343,14 @@ describe('Parser', () => {
                 },
               ],
               "limitToken": Object {
-                "text": "LIMIT",
+                "raw": "LIMIT",
                 "type": "RESERVED_COMMAND",
                 "value": "LIMIT",
               },
               "offset": Array [
                 Object {
                   "token": Object {
-                    "text": "200",
+                    "raw": "200",
                     "type": "NUMBER",
                     "value": "200",
                   },
@@ -379,7 +379,7 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
-                "text": "SELECT",
+                "raw": "SELECT",
                 "type": "RESERVED_COMMAND",
                 "value": "SELECT",
               },
@@ -405,7 +405,7 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
-                "text": "SELECT DISTINCT",
+                "raw": "SELECT DISTINCT",
                 "type": "RESERVED_COMMAND",
                 "value": "SELECT DISTINCT",
               },

@@ -380,7 +380,7 @@ export default class ExpressionFormatter {
     if (isReserved(token)) {
       switch (this.cfg.keywordCase) {
         case 'preserve':
-          return equalizeWhitespace(token.text);
+          return equalizeWhitespace(token.raw);
         case 'upper':
           return token.value;
         case 'lower':

@@ -32,7 +32,7 @@ export enum TokenType {
 /** Struct to store the most basic cohesive unit of language grammar */
 export interface Token {
   type: TokenType;
-  text: string; // The raw original text that was matched
+  raw: string; // The raw original text that was matched
   value: string; // Cleaned up `text` e.g. keyword converted to uppercase and extra spaces removed
   key?: string;
 }
@@ -41,7 +41,7 @@ export interface Token {
  * For use as a "missing token"
  * e.g. in lookAhead and lookBehind to avoid dealing with null values
  */
-export const EOF_TOKEN = { type: TokenType.EOF, text: '«EOF»', value: '«EOF»' };
+export const EOF_TOKEN = { type: TokenType.EOF, raw: '«EOF»', value: '«EOF»' };
 
 /** Checks if two tokens are equivalent */
 export const testToken =

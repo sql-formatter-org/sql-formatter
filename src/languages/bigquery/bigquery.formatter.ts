@@ -192,8 +192,8 @@ function combineParameterizedTypes(tokens: Token[]) {
       const typeDefTokens = tokens.slice(i, endIndex + 1);
       processed.push({
         type: TokenType.IDENTIFIER,
+        raw: typeDefTokens.map(formatTypeDefToken('raw')).join(''),
         value: typeDefTokens.map(formatTypeDefToken('value')).join(''),
-        text: typeDefTokens.map(formatTypeDefToken('text')).join(''),
       });
       i = endIndex;
     } else {
@@ -204,7 +204,7 @@ function combineParameterizedTypes(tokens: Token[]) {
 }
 
 const formatTypeDefToken =
-  (key: 'text' | 'value') =>
+  (key: 'raw' | 'value') =>
   (token: Token): string => {
     if (token.type === TokenType.IDENTIFIER || token.type === TokenType.COMMA) {
       return token[key] + ' ';
