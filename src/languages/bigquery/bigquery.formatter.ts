@@ -185,9 +185,8 @@ function combineParameterizedTypes(tokens: Token[]) {
   const processed: Token[] = [];
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
-    const nextToken = tokens[i + 1] || EOF_TOKEN;
 
-    if ((isToken.ARRAY(token) || isToken.STRUCT(token)) && nextToken.value === '<') {
+    if ((isToken.ARRAY(token) || isToken.STRUCT(token)) && tokens[i + 1]?.value === '<') {
       const endIndex = findClosingAngleBracketIndex(tokens, i + 1);
       const typeDefTokens = tokens.slice(i, endIndex + 1);
       processed.push({
@@ -204,7 +203,7 @@ function combineParameterizedTypes(tokens: Token[]) {
 }
 
 const formatTypeDefToken =
-  (key: 'raw' | 'value') =>
+  (key: Extract<keyof Token, 'raw' | 'value'>) =>
   (token: Token): string => {
     if (token.type === TokenType.IDENTIFIER || token.type === TokenType.COMMA) {
       return token[key] + ' ';
