@@ -61,7 +61,8 @@ export const isToken = {
   END: testToken({ value: 'END', type: TokenType.RESERVED_CASE_END }),
   FROM: testToken({ value: 'FROM', type: TokenType.RESERVED_COMMAND }),
   LIMIT: testToken({ value: 'LIMIT', type: TokenType.RESERVED_COMMAND }),
-  SELECT: testToken({ value: 'SELECT', type: TokenType.RESERVED_COMMAND }),
+  SELECT: (token: Token) =>
+    /^SELECT\b/.test(token.value) && token.type === TokenType.RESERVED_COMMAND,
   SET: testToken({ value: 'SET', type: TokenType.RESERVED_COMMAND }),
   STRUCT: testToken({ value: 'STRUCT', type: TokenType.RESERVED_KEYWORD }),
   TABLE: testToken({ value: 'TABLE', type: TokenType.RESERVED_KEYWORD }),

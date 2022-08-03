@@ -4,7 +4,7 @@ import Tokenizer from 'src/lexer/Tokenizer';
 describe('Parser', () => {
   const parse = (sql: string) => {
     const tokens = new Tokenizer({
-      reservedCommands: ['SELECT', 'FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
+      reservedCommands: ['SELECT', 'SELECT DISTINCT', 'FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedSetOperations: ['UNION'],
       reservedJoins: ['JOIN'],
@@ -382,6 +382,32 @@ describe('Parser', () => {
                 "text": "SELECT",
                 "type": "RESERVED_COMMAND",
                 "value": "SELECT",
+              },
+              "type": "clause",
+            },
+          ],
+          "hasSemicolon": false,
+          "type": "statement",
+        },
+      ]
+    `);
+  });
+
+  it('parses SELECT DISTINCT *', () => {
+    expect(parse('SELECT DISTINCT *')).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "type": "all_columns_asterisk",
+                },
+              ],
+              "nameToken": Object {
+                "text": "SELECT DISTINCT",
+                "type": "RESERVED_COMMAND",
+                "value": "SELECT DISTINCT",
               },
               "type": "clause",
             },
