@@ -29,6 +29,10 @@ const reservedCommands = expandPhrases([
   'DELETE [FROM]',
   // - truncate:
   'TRUNCATE TABLE',
+  // - merge:
+  'MERGE [INTO]',
+  'WHEN [NOT] MATCHED [BY TARGET | BY SOURCE] [THEN]',
+  'UPDATE SET',
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',
   'ADD SIGNATURE',
@@ -111,7 +115,6 @@ const reservedCommands = expandPhrases([
   'LOCK_TIMEOUT',
   'LOGIN',
   'MASTER KEY',
-  'MERGE',
   'MESSAGE TYPE',
   'MOVE CONVERSATION',
   'NOCOUNT',

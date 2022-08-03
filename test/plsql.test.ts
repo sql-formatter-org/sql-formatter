@@ -24,6 +24,7 @@ import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
 import supportsTruncateTable from './features/truncateTable';
+import supportsMergeInto from './features/mergeInto';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -40,6 +41,7 @@ describe('PlSqlFormatter', () => {
   supportsInsertInto(format);
   supportsUpdate(format);
   supportsTruncateTable(format);
+  supportsMergeInto(format);
   supportsStrings(format, ["''", "N''"]);
   supportsIdentifiers(format, [`""`]);
   supportsBetween(format);

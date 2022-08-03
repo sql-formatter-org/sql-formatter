@@ -26,6 +26,11 @@ const reservedCommands = expandPhrases([
   'SET',
   // - delete:
   'DELETE FROM',
+  // - merge:
+  'MERGE INTO',
+  'WHEN [NOT] MATCHED THEN',
+  'UPDATE SET',
+  'INSERT',
   // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html
   'ADVISE',
   'ALTER INDEX',
@@ -47,7 +52,6 @@ const reservedCommands = expandPhrases([
   'EXPLAIN',
   'GRANT',
   'INFER',
-  'MERGE',
   'PREPARE',
   'RETURNING',
   'REVOKE',

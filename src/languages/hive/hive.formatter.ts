@@ -32,6 +32,11 @@ const reservedCommands = expandPhrases([
   'DELETE FROM',
   // - truncate:
   'TRUNCATE [TABLE]',
+  // - merge:
+  'MERGE INTO',
+  'WHEN [NOT] MATCHED [THEN]',
+  'UPDATE SET',
+  'INSERT [VALUES]',
   // other
   'ALTER',
   'ALTER COLUMN', // added

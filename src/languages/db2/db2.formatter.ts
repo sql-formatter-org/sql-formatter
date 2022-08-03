@@ -27,6 +27,11 @@ const reservedCommands = expandPhrases([
   'DELETE FROM',
   // - truncate:
   'TRUNCATE [TABLE]',
+  // - merge:
+  'MERGE INTO',
+  'WHEN [NOT] MATCHED [THEN]',
+  'UPDATE SET',
+  'INSERT',
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
   'ALTER DATABASE',
@@ -94,7 +99,6 @@ const reservedCommands = expandPhrases([
   'INCLUDE',
   'LABEL',
   'LOCK TABLE',
-  'MERGE',
   'OPEN',
   'PREPARE',
   'REFRESH',

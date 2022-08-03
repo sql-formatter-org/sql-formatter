@@ -31,7 +31,10 @@ const reservedCommands = expandPhrases([
   'DELETE [FROM]',
   // - truncate:
   'TRUNCATE TABLE',
+  // - merge:
   'MERGE [INTO]',
+  'WHEN [NOT] MATCHED [BY SOURCE | BY TARGET] [THEN]',
+  'UPDATE SET',
   // DDL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
   'CREATE SCHEMA [IF NOT EXISTS]',
   'DEFAULT COLLATE',

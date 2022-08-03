@@ -22,6 +22,7 @@ import supportsLimiting from './features/limiting';
 import supportsUpdate from './features/update';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsTruncateTable from './features/truncateTable';
+import supportsMergeInto from './features/mergeInto';
 
 describe('HiveFormatter', () => {
   const language = 'hive';
@@ -35,6 +36,7 @@ describe('HiveFormatter', () => {
   supportsUpdate(format);
   supportsDeleteFrom(format);
   supportsTruncateTable(format, { withoutTable: true });
+  supportsMergeInto(format);
   supportsStrings(format, ['""', "''"]);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);

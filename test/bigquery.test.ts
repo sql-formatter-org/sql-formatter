@@ -22,6 +22,7 @@ import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
 import supportsTruncateTable from './features/truncateTable';
+import supportsMergeInto from './features/mergeInto';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';
@@ -35,6 +36,7 @@ describe('BigQueryFormatter', () => {
   supportsInsertInto(format, { withoutInto: true });
   supportsUpdate(format);
   supportsTruncateTable(format);
+  supportsMergeInto(format);
   supportsStrings(format, ['""', "''"]);
   supportsIdentifiers(format, ['``']);
   supportsArrayLiterals(format);

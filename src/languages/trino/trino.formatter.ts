@@ -55,8 +55,6 @@ const reservedCommands = expandPhrases([
   'DROP MATERIALIZED VIEW',
   'DROP VIEW',
   'DROP ROLE',
-  // DML
-  'MERGE INTO',
   // Auxiliary
   'EXPLAIN',
   'ANALYZE',
