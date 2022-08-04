@@ -58,6 +58,8 @@ export default class TokenizerEngine {
     if (matches) {
       // if whitespace contains linebreaks
       if (LINEBREAK_REGEX.test(matches[0])) {
+        this.line++;
+        // increment line for each newline match
         while (LINEBREAK_REGEX.exec(matches[0]) !== null) {
           this.line++;
         }
