@@ -24,7 +24,7 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   supportsComments(format, { hashComments: true });
   supportsStrings(format, ["''", '""', "X''"]);
   supportsIdentifiers(format, ['``']);
-  supportsDropTable(format);
+  supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);

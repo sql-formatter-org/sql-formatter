@@ -33,6 +33,7 @@ const reservedCommands = expandPhrases([
   'UPDATE SET',
   // DDL
   'CREATE [GLOBAL TEMPORARY | PRIVATE TEMPORARY | SHARDED | DUPLICATED | IMMUTABLE BLOCKCHAIN | BLOCKCHAIN | IMMUTABLE] TABLE',
+  'DROP TABLE',
 
   // other
   'ADD',
@@ -40,7 +41,6 @@ const reservedCommands = expandPhrases([
   'ALTER TABLE',
   'BEGIN',
   'CONNECT BY',
-  'DROP TABLE',
   'DECLARE',
   'EXCEPT',
   'EXCEPTION',

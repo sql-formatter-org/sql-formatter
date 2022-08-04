@@ -33,7 +33,7 @@ describe('PostgreSqlFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format);
   supportsCreateTable(format, { ifNotExists: true });
-  supportsDropTable(format);
+  supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);
   supportsArrayAndMapAccessors(format);
   supportsAlterTable(format);

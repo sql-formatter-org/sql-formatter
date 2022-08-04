@@ -37,6 +37,7 @@ const reservedCommands = expandPhrases([
   'UPDATE SET',
   // DDL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
   'CREATE [OR REPLACE] [TEMP|TEMPORARY|SNAPSHOT|EXTERNAL] TABLE [IF NOT EXISTS]',
+  'DROP [SNAPSHOT | EXTERNAL] TABLE [IF EXISTS]',
 
   'CREATE SCHEMA [IF NOT EXISTS]',
   'DEFAULT COLLATE',
@@ -70,7 +71,6 @@ const reservedCommands = expandPhrases([
   'ALTER [MATERIALIZED] VIEW [IF EXISTS]',
   'ALTER BI_CAPACITY',
   'DROP SCHEMA [IF EXISTS]',
-  'DROP [SNAPSHOT|EXTERNAL] TABLE [IF EXISTS]',
   'DROP [MATERIALIZED] VIEW [IF EXISTS]',
   'DROP [TABLE] FUNCTION [IF EXISTS]',
   'DROP PROCEDURE [IF EXISTS]',

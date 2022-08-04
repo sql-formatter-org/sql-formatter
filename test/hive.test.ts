@@ -31,7 +31,7 @@ describe('HiveFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format);
   supportsCreateTable(format, { ifNotExists: true });
-  supportsDropTable(format);
+  supportsDropTable(format, { ifExists: true });
   supportsAlterTable(format);
   supportsUpdate(format);
   supportsDeleteFrom(format);

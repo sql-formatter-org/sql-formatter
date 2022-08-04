@@ -35,6 +35,7 @@ const reservedCommands = expandPhrases([
   '[OVERWRITE] INTO TABLE',
   // DDL
   'CREATE [EXTERNAL] TABLE [IF NOT EXISTS]',
+  'DROP TABLE [IF EXISTS]',
 
   'ALTER COLUMN',
   'ALTER DATABASE',
@@ -45,7 +46,6 @@ const reservedCommands = expandPhrases([
   'CREATE VIEW',
   'DROP DATABASE',
   'DROP FUNCTION',
-  'DROP TABLE',
   'DROP VIEW',
   'REPAIR TABLE',
   'USE DATABASE',

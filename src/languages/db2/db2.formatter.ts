@@ -34,6 +34,7 @@ const reservedCommands = expandPhrases([
   'INSERT',
   // DDL
   'CREATE [GLOBAL TEMPORARY] TABLE',
+  'DROP TABLE [HIERARCHY]',
 
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
@@ -145,7 +146,6 @@ const reservedCommands = expandPhrases([
   'ADD',
   'ALTER COLUMN',
   'AFTER',
-  'DROP TABLE',
   'GO',
   'SET CURRENT SCHEMA',
 ]);

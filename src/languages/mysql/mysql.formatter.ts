@@ -32,6 +32,7 @@ const reservedCommands = expandPhrases([
   'TRUNCATE [TABLE]',
   // DDL
   'CREATE [TEMPORARY] TABLE [IF NOT EXISTS]',
+  'DROP [TEMPORARY] TABLE [IF EXISTS]',
 
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',
@@ -86,7 +87,6 @@ const reservedCommands = expandPhrases([
   'DROP ROLE',
   'DROP SERVER',
   'DROP SPATIAL REFERENCE SYSTEM',
-  'DROP TABLE',
   'DROP TABLESPACE',
   'DROP TRIGGER',
   'DROP USER',

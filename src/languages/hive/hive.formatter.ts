@@ -46,6 +46,7 @@ const reservedCommands = expandPhrases([
   '[OVERWRITE] INTO TABLE',
   // DDL
   'CREATE [TEMPORARY] [EXTERNAL] TABLE [IF NOT EXISTS]',
+  'DROP TABLE [IF EXISTS]',
 
   // other
   'ALTER',
@@ -55,7 +56,6 @@ const reservedCommands = expandPhrases([
   'USE',
   'DESCRIBE',
   'DROP',
-  'DROP TABLE', // added
   'FETCH',
   'SET SCHEMA', // added
   'SHOW',

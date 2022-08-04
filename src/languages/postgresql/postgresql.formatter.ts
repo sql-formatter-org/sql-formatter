@@ -32,6 +32,7 @@ const reservedCommands = expandPhrases([
   'TRUNCATE [TABLE] [ONLY]',
   // DDL
   'CREATE [GLOBAL | LOCAL] [TEMPORARY | TEMP | UNLOGGED] TABLE [IF NOT EXISTS]',
+  'DROP TABLE [IF EXISTS]',
 
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
@@ -162,7 +163,6 @@ const reservedCommands = expandPhrases([
   'DROP SERVER',
   'DROP STATISTICS',
   'DROP SUBSCRIPTION',
-  'DROP TABLE',
   'DROP TABLESPACE',
   'DROP TEXT SEARCH CONFIGURATION',
   'DROP TEXT SEARCH DICTIONARY',

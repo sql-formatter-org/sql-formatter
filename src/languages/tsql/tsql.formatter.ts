@@ -35,6 +35,7 @@ const reservedCommands = expandPhrases([
   'UPDATE SET',
   // DDL
   'CREATE TABLE',
+  'DROP TABLE [IF EXISTS]',
 
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',
@@ -195,7 +196,6 @@ const reservedCommands = expandPhrases([
   // other
   'ALTER COLUMN',
   'ALTER TABLE',
-  'DROP TABLE',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

@@ -31,6 +31,7 @@ const reservedCommands = expandPhrases([
   'TRUNCATE [TABLE]',
   // DDL
   'CREATE [OR REPLACE] [TEMPORARY] TABLE [IF NOT EXISTS]',
+  'DROP [TEMPORARY] TABLE [IF EXISTS]',
 
   // https://mariadb.com/docs/reference/mdb/sql-statements/
   'ALTER DATABASE',
@@ -85,7 +86,6 @@ const reservedCommands = expandPhrases([
   'DROP ROLE',
   'DROP SEQUENCE',
   'DROP SERVER',
-  'DROP TABLE',
   'DROP TRIGGER',
   'DROP USER',
   'DROP VIEW',

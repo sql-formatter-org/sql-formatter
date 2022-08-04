@@ -28,6 +28,7 @@ const reservedCommands = expandPhrases([
   'TRUNCATE [TABLE]',
   // DDL
   'CREATE [TEMPORARY | TEMP | LOCAL TEMPORARY | LOCAL TEMP] TABLE [IF NOT EXISTS]',
+  'DROP TABLE [IF EXISTS]',
 
   // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
   'ABORT',
@@ -78,7 +79,6 @@ const reservedCommands = expandPhrases([
   'DROP MATERIALIZED VIEW',
   'DROP PROCEDURE',
   'DROP SCHEMA',
-  'DROP TABLE',
   'DROP USER',
   'DROP VIEW',
   'DROP',

@@ -32,12 +32,12 @@ const reservedCommands = expandPhrases([
   'TRUNCATE TABLE',
   // DDL
   'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
+  'DROP TABLE',
 
   // other
   'ADD',
   'ALTER COLUMN',
   'ALTER TABLE',
-  'DROP TABLE',
   'SET SCHEMA',
 ]);
 

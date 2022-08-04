@@ -31,7 +31,7 @@ describe('BigQueryFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format, { hashComments: true });
   supportsCreateTable(format, { orReplace: true, ifNotExists: true });
-  supportsDropTable(format);
+  supportsDropTable(format, { ifExists: true });
   supportsDeleteFrom(format, { withoutFrom: true });
   supportsInsertInto(format, { withoutInto: true });
   supportsUpdate(format);

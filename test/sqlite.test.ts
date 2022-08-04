@@ -29,7 +29,7 @@ describe('SqliteFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format);
   supportsCreateTable(format, { ifNotExists: true });
-  supportsDropTable(format);
+  supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);

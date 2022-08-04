@@ -29,12 +29,12 @@ const reservedCommands = expandPhrases([
   'DELETE FROM',
   // DDL
   'CREATE [TEMPORARY | TEMP] TABLE [IF NOT EXISTS]',
+  'DROP TABLE [IF EXISTS]',
 
   // other
   'ADD',
   'ALTER COLUMN',
   'ALTER TABLE',
-  'DROP TABLE',
   'SET SCHEMA',
 ]);
 
