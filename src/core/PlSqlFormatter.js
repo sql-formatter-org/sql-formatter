@@ -321,7 +321,7 @@ export default class PlSqlFormatter {
                     this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1);
                 }
                 if (lastIndent.key != "procedure" && lastIndent.key != "function") {
-                    this.indentsKeyWords.push({key: token.value, name: "", indent: this.indentCount});
+                    this.indentsKeyWords.push({key: token.value, name: "", indent: this.indentCount - 1});
                 }
                 else {
                     this.indentsKeyWords[this.indentsKeyWords.length - 1].key = token.value;
