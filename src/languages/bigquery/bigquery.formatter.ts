@@ -170,7 +170,7 @@ function postProcess(tokens: Token[]): Token[] {
 function detectArraySubscripts(tokens: Token[]) {
   let prevToken = EOF_TOKEN;
   return tokens.map(token => {
-    if (token.value === 'OFFSET' && prevToken.value === '[') {
+    if (token.text === 'OFFSET' && prevToken.text === '[') {
       prevToken = token;
       return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
     } else {
@@ -185,14 +185,13 @@ function combineParameterizedTypes(tokens: Token[]) {
   const processed: Token[] = [];
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
-    const nextToken = tokens[i + 1] || EOF_TOKEN;
 
-    if ((isToken.ARRAY(token) || isToken.STRUCT(token)) && nextToken.value === '<') {
+    if ((isToken.ARRAY(token) || isToken.STRUCT(token)) && tokens[i + 1]?.text === '<') {
       const endIndex = findClosingAngleBracketIndex(tokens, i + 1);
       const typeDefTokens = tokens.slice(i, endIndex + 1);
       processed.push({
         type: TokenType.IDENTIFIER,
-        value: typeDefTokens.map(formatTypeDefToken('value')).join(''),
+        raw: typeDefTokens.map(formatTypeDefToken('raw')).join(''),
         text: typeDefTokens.map(formatTypeDefToken('text')).join(''),
       });
       i = endIndex;
@@ -204,7 +203,7 @@ function combineParameterizedTypes(tokens: Token[]) {
 }
 
 const formatTypeDefToken =
-  (key: 'text' | 'value') =>
+  (key: Extract<keyof Token, 'raw' | 'text'>) =>
   (token: Token): string => {
     if (token.type === TokenType.IDENTIFIER || token.type === TokenType.COMMA) {
       return token[key] + ' ';
@@ -217,11 +216,11 @@ function findClosingAngleBracketIndex(tokens: Token[], startIndex: number): numb
   let level = 0;
   for (let i = startIndex; i < tokens.length; i++) {
     const token = tokens[i];
-    if (token.value === '<') {
+    if (token.text === '<') {
       level++;
-    } else if (token.value === '>') {
+    } else if (token.text === '>') {
       level--;
-    } else if (token.value === '>>') {
+    } else if (token.text === '>>') {
       level -= 2;
     }
     if (level === 0) {

@@ -250,7 +250,7 @@ export default class MySqlFormatter extends Formatter {
 function postProcess(tokens: Token[]) {
   return tokens.map((token, i) => {
     const nextToken = tokens[i + 1] || EOF_TOKEN;
-    if (isToken.SET(token) && nextToken.value === '(') {
+    if (isToken.SET(token) && nextToken.text === '(') {
       // This is SET datatype, not SET statement
       return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
     }
