@@ -10,10 +10,11 @@ export interface TokenRule {
 export default class TokenizerEngine {
   private rules: Partial<Record<TokenType, TokenRule>>;
 
-  // The input SQL string to process
-  private input = '';
-  // Current position in string
-  private index = 0;
+  private input = ''; // The input SQL string to process
+
+  private index = 0; // Current position in string
+  private line = 0; // Current line that is processing
+  private col = 0; // Index within the current line
 
   constructor(rules: Partial<Record<TokenType, TokenRule>>) {
     this.rules = rules;
@@ -52,8 +53,20 @@ export default class TokenizerEngine {
 
   private skipWhitespace(): void {
     WHITESPACE_REGEX.lastIndex = this.index;
+    const lineBreakRegex = /\v|\n|\r\n/g;
+
     const matches = WHITESPACE_REGEX.exec(this.input);
     if (matches) {
+      // if whitespace contains linebreaks
+      if (lineBreakRegex.test(matches[0])) {
+        while (lineBreakRegex.exec(matches[0]) !== null) {
+          this.line++;
+        }
+        this.col = lineBreakRegex.lastIndex;
+      } else {
+        this.col += matches[0].length;
+      }
+
       // Advance current position by matched whitespace length
       this.index += matches[0].length;
     }
@@ -146,13 +159,17 @@ export default class TokenizerEngine {
       const matchedToken = matches[0];
 
       const tokenStart = this.index;
+      const tokenColInLine = this.col;
       // Advance current position by matched token length
       this.index += matchedToken.length;
+      this.col += matchedToken.length;
       return {
         type,
         raw: matchedToken,
         text: transform ? transform(matchedToken) : matchedToken,
         index: tokenStart,
+        line: this.line,
+        col: tokenColInLine,
       };
     }
     return undefined;
