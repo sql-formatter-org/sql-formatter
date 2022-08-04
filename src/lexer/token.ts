@@ -35,9 +35,9 @@ export interface Token {
   raw: string; // The raw original text that was matched
   text: string; // Cleaned up text e.g. keyword converted to uppercase and extra spaces removed
   key?: string;
-  index: number; // index of the token in the whole query string
-  line?: number; // line number that the token appears on
-  col?: number; // column within the line on which the token appears
+  index: number; // 0-based index of the token in the whole query string
+  line?: number; // 0-based line number that the token appears on
+  col?: number; // 0-based column within the line on which the token appears
 }
 
 /**
