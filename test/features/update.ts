@@ -24,8 +24,7 @@ export default function supportsUpdate(format: FormatFn, { whereCurrentOf }: Upd
 
   it('formats UPDATE statement with AS part', () => {
     const result = format(
-      'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary',
-      { aliasAs: 'always' }
+      'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary'
     );
     expect(result).toBe(dedent`
       UPDATE

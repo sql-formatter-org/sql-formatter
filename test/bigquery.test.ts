@@ -503,9 +503,6 @@ describe('BigQueryFormatter', () => {
           ${createFunction}
             mydataset.myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 AS (x * y);`;
         expect(format(input)).toBe(expected);
-
-        // Regression test for issue #309
-        expect(format(input, { aliasAs: 'always' })).toBe(expected);
       });
     });
 

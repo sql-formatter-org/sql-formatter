@@ -150,7 +150,6 @@ All fields are optional and all fields that are not specified will be filled wit
 - [**`keywordCase`**](docs/keywordCase.md) uppercases or lowercases keywords.
 - [**`indentStyle`**](docs/indentStyle.md) defines overall indentation style.
 - [**`logicalOperatorNewline`**](docs/logicalOperatorNewline.md) newline before or after boolean operator (AND, OR, XOR).
-- [**`aliasAs`**](docs/aliasAs.md) enforces or forbids use of AS keyword for aliases.
 - [**`tabulateAlias`**](docs/tabulateAlias.md) aligns column aliases vertically.
 - [**`commaPosition`**](docs/commaPosition.md) where to place the comma in column lists.
 - [**`expressionWidth`**](docs/expressionWidth.md) maximum number of characters in parenthesized expressions to be kept on single line.
