@@ -27,11 +27,13 @@ const reservedCommands = expandPhrases([
   'SET',
   // - delete:
   'DELETE FROM',
+  // DDL
+  'CREATE [TEMPORARY | TEMP] TABLE [IF NOT EXISTS]',
+
   // other
   'ADD',
   'ALTER COLUMN',
   'ALTER TABLE',
-  'CREATE TABLE',
   'DROP TABLE',
   'SET SCHEMA',
 ]);

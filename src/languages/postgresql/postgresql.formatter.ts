@@ -30,6 +30,9 @@ const reservedCommands = expandPhrases([
   'DELETE FROM [ONLY]',
   // - truncate:
   'TRUNCATE [TABLE] [ONLY]',
+  // DDL
+  'CREATE [GLOBAL | LOCAL] [TEMPORARY | TEMP | UNLOGGED] TABLE [IF NOT EXISTS]',
+
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
   'ALTER AGGREGATE',
@@ -113,8 +116,6 @@ const reservedCommands = expandPhrases([
   'CREATE SERVER',
   'CREATE STATISTICS',
   'CREATE SUBSCRIPTION',
-  'CREATE TABLE',
-  'CREATE TABLE AS',
   'CREATE TABLESPACE',
   'CREATE TEXT SEARCH CONFIGURATION',
   'CREATE TEXT SEARCH DICTIONARY',

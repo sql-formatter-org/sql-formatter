@@ -29,7 +29,7 @@ describe('TrinoFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
-  supportsCreateTable(format);
+  supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format);
   supportsDeleteFrom(format);
   supportsInsertInto(format);

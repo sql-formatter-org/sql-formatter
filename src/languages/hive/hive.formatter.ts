@@ -44,12 +44,14 @@ const reservedCommands = expandPhrases([
   //   https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML#LanguageManualDML-Loadingfilesintotables
   'LOAD DATA [LOCAL] INPATH',
   '[OVERWRITE] INTO TABLE',
+  // DDL
+  'CREATE [TEMPORARY] [EXTERNAL] TABLE [IF NOT EXISTS]',
+
   // other
   'ALTER',
   'ALTER COLUMN', // added
   'ALTER TABLE', // added
   'CREATE',
-  'CREATE TABLE', // added
   'USE',
   'DESCRIBE',
   'DROP',

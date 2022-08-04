@@ -3,7 +3,6 @@ import dedent from 'dedent-js';
 import { FormatFn } from 'src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
-import supportsCreateTable from './features/createTable';
 import supportsDropTable from './features/dropTable';
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
@@ -25,7 +24,6 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   supportsComments(format, { hashComments: true });
   supportsStrings(format, ["''", '""', "X''"]);
   supportsIdentifiers(format, ['``']);
-  supportsCreateTable(format);
   supportsDropTable(format);
   supportsConstraints(format);
   supportsAlterTable(format);

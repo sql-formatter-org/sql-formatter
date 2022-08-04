@@ -30,11 +30,13 @@ const reservedCommands = expandPhrases([
   'DELETE FROM',
   // - truncate:
   'TRUNCATE TABLE',
+  // DDL
+  'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
+
   // other
   'ADD',
   'ALTER COLUMN',
   'ALTER TABLE',
-  'CREATE TABLE',
   'DROP TABLE',
   'SET SCHEMA',
 ]);

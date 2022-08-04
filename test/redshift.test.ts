@@ -26,7 +26,7 @@ describe('RedshiftFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
-  supportsCreateTable(format);
+  supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format, { withoutFrom: true });

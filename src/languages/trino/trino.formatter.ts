@@ -31,6 +31,8 @@ const reservedCommands = expandPhrases([
   // - truncate:
   'TRUNCATE TABLE',
   // DDL
+  'CREATE TABLE [IF NOT EXISTS]',
+
   'ALTER SCHEMA',
   'ALTER TABLE',
   'RENAME TO',
@@ -43,7 +45,6 @@ const reservedCommands = expandPhrases([
   'ALTER MATERIALIZED VIEW',
   'ALTER VIEW',
   'CREATE SCHEMA',
-  'CREATE TABLE',
   'CREATE VIEW',
   'CREATE OR REPLACE VIEW',
   'CREATE MATERIALIZED VIEW',

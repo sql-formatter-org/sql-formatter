@@ -32,6 +32,9 @@ const reservedCommands = expandPhrases([
   'WHEN [NOT] MATCHED [THEN]',
   'UPDATE SET',
   'INSERT',
+  // DDL
+  'CREATE [GLOBAL TEMPORARY] TABLE',
+
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
   'ALTER DATABASE',
@@ -68,7 +71,6 @@ const reservedCommands = expandPhrases([
   'CREATE SEQUENCE',
   'CREATE STOGROUP',
   'CREATE SYNONYM',
-  'CREATE TABLE',
   'CREATE TABLESPACE',
   'CREATE TRIGGER',
   'CREATE TRUSTED CONTEXT',

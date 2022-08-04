@@ -29,6 +29,9 @@ const reservedCommands = expandPhrases([
   'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
   // - truncate:
   'TRUNCATE [TABLE]',
+  // DDL
+  'CREATE [OR REPLACE] [TEMPORARY] TABLE [IF NOT EXISTS]',
+
   // https://mariadb.com/docs/reference/mdb/sql-statements/
   'ALTER DATABASE',
   'ALTER DATABASE COMMENT',
@@ -66,7 +69,6 @@ const reservedCommands = expandPhrases([
   'CREATE SEQUENCE',
   'CREATE SERVER',
   'CREATE SPATIAL INDEX',
-  'CREATE TABLE',
   'CREATE TRIGGER',
   'CREATE UNIQUE INDEX',
   'CREATE USER',

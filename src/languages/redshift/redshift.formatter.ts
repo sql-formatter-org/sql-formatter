@@ -26,6 +26,9 @@ const reservedCommands = expandPhrases([
   'DELETE [FROM]',
   // - truncate:
   'TRUNCATE [TABLE]',
+  // DDL
+  'CREATE [TEMPORARY | TEMP | LOCAL TEMPORARY | LOCAL TEMP] TABLE [IF NOT EXISTS]',
+
   // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
   'ABORT',
   'ALTER DATABASE',
@@ -61,8 +64,6 @@ const reservedCommands = expandPhrases([
   'CREATE MODEL',
   'CREATE PROCEDURE',
   'CREATE SCHEMA',
-  'CREATE TABLE',
-  'CREATE TABLE AS',
   'CREATE USER',
   'CREATE VIEW',
   'DEALLOCATE',

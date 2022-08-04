@@ -30,6 +30,9 @@ const reservedCommands = expandPhrases([
   'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
   // - truncate:
   'TRUNCATE [TABLE]',
+  // DDL
+  'CREATE [TEMPORARY] TABLE [IF NOT EXISTS]',
+
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',
   'ALTER EVENT',
@@ -65,7 +68,6 @@ const reservedCommands = expandPhrases([
   'CREATE ROLE',
   'CREATE SERVER',
   'CREATE SPATIAL REFERENCE SYSTEM',
-  'CREATE TABLE',
   'CREATE TABLESPACE',
   'CREATE TRIGGER',
   'CREATE USER',

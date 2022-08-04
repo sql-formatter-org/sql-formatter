@@ -33,6 +33,9 @@ const reservedCommands = expandPhrases([
   'MERGE [INTO]',
   'WHEN [NOT] MATCHED [BY TARGET | BY SOURCE] [THEN]',
   'UPDATE SET',
+  // DDL
+  'CREATE TABLE',
+
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',
   'ADD SIGNATURE',
@@ -192,7 +195,6 @@ const reservedCommands = expandPhrases([
   // other
   'ALTER COLUMN',
   'ALTER TABLE',
-  'CREATE TABLE',
   'DROP TABLE',
 ]);
 
