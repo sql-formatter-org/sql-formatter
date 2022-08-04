@@ -145,12 +145,14 @@ export default class TokenizerEngine {
     if (matches) {
       const matchedToken = matches[0];
 
+      const tokenStart = this.index;
       // Advance current position by matched token length
       this.index += matchedToken.length;
       return {
         type,
         raw: matchedToken,
         text: transform ? transform(matchedToken) : matchedToken,
+        index: tokenStart,
       };
     }
     return undefined;
