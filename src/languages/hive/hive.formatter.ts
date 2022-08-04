@@ -37,6 +37,13 @@ const reservedCommands = expandPhrases([
   'WHEN [NOT] MATCHED [THEN]',
   'UPDATE SET',
   'INSERT [VALUES]',
+  // - insert overwrite directory:
+  //   https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML#LanguageManualDML-Writingdataintothefilesystemfromqueries
+  'INSERT OVERWRITE [LOCAL] DIRECTORY',
+  // - load:
+  //   https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML#LanguageManualDML-Loadingfilesintotables
+  'LOAD DATA [LOCAL] INPATH',
+  '[OVERWRITE] INTO TABLE',
   // other
   'ALTER',
   'ALTER COLUMN', // added

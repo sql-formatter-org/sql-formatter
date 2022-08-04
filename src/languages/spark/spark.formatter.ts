@@ -26,10 +26,10 @@ const reservedCommands = expandPhrases([
   'VALUES',
   // - truncate:
   'TRUNCATE TABLE',
-  // - insert overwrite directory (spark-specific):
+  // - insert overwrite directory:
   //   https://spark.apache.org/docs/latest/sql-ref-syntax-dml-insert-overwrite-directory.html
   'INSERT OVERWRITE [LOCAL] DIRECTORY',
-  // - load (spark-specific):
+  // - load:
   //   https://spark.apache.org/docs/latest/sql-ref-syntax-dml-load.html
   'LOAD DATA [LOCAL] INPATH',
   '[OVERWRITE] INTO TABLE',
