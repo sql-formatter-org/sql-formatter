@@ -18,18 +18,25 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  // Data manipulation
+  // - insert:
+  'INSERT INTO',
+  'VALUES',
+  // - update:
+  'UPDATE',
+  'SET',
+  'WHERE CURRENT OF',
+  // - delete:
+  'DELETE FROM',
+  // - truncate:
+  'TRUNCATE TABLE',
   // other
   'ADD',
   'ALTER COLUMN',
   'ALTER TABLE',
   'CREATE TABLE',
   'DROP TABLE',
-  'DELETE FROM',
-  'INSERT INTO',
   'SET SCHEMA',
-  'SET',
-  'UPDATE',
-  'VALUES',
 ]);
 
 const reservedSetOperations = expandPhrases([

@@ -19,6 +19,17 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  // Data manipulation
+  // - insert:
+  'INSERT INTO',
+  'VALUES',
+  // - update:
+  'UPDATE',
+  'SET',
+  // - delete:
+  'DELETE FROM',
+  // - truncate:
+  'TRUNCATE TABLE',
   // DDL
   'ALTER SCHEMA',
   'ALTER TABLE',
@@ -44,14 +55,6 @@ const reservedCommands = expandPhrases([
   'DROP MATERIALIZED VIEW',
   'DROP VIEW',
   'DROP ROLE',
-  'TRUNCATE TABLE',
-  // DML
-  'INSERT INTO',
-  'MERGE INTO',
-  'VALUES',
-  'UPDATE',
-  'SET',
-  'DELETE FROM',
   // Auxiliary
   'EXPLAIN',
   'ANALYZE',

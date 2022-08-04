@@ -18,6 +18,18 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  // Data manipulation
+  // - insert:
+  'INSERT INTO',
+  'VALUES',
+  // - update:
+  'UPDATE [ONLY]',
+  'SET',
+  'WHERE CURRENT OF',
+  // - delete:
+  'DELETE FROM [ONLY]',
+  // - truncate:
+  'TRUNCATE [TABLE] [ONLY]',
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
   'ALTER AGGREGATE',
@@ -116,8 +128,6 @@ const reservedCommands = expandPhrases([
   'CREATE VIEW',
   'DEALLOCATE',
   'DECLARE',
-  'DELETE',
-  'DELETE FROM',
   'DISCARD',
   'DO',
   'DROP ACCESS METHOD',
@@ -168,7 +178,6 @@ const reservedCommands = expandPhrases([
   'FETCH',
   'GRANT',
   'IMPORT FOREIGN SCHEMA',
-  'INSERT',
   'LISTEN',
   'LOAD',
   'LOCK',
@@ -189,23 +198,18 @@ const reservedCommands = expandPhrases([
   'SAVEPOINT',
   'SECURITY LABEL',
   'SELECT INTO',
-  'SET',
   'SET CONSTRAINTS',
   'SET ROLE',
   'SET SESSION AUTHORIZATION',
   'SET TRANSACTION',
   'SHOW',
   'START TRANSACTION',
-  'TRUNCATE',
   'UNLISTEN',
-  'UPDATE',
   'VACUUM',
-  'VALUES',
   // other
   'ADD',
   'AFTER',
   'ALTER COLUMN',
-  'INSERT INTO',
   'SET SCHEMA',
 ]);
 

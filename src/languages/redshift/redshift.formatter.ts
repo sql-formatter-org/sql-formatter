@@ -15,6 +15,17 @@ const reservedCommands = expandPhrases([
   'ORDER BY',
   'LIMIT',
   'OFFSET',
+  // Data manipulation
+  // - insert:
+  'INSERT INTO',
+  'VALUES',
+  // - update:
+  'UPDATE',
+  'SET',
+  // - delete:
+  'DELETE [FROM]',
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
   'ABORT',
   'ALTER DATABASE',
@@ -56,8 +67,6 @@ const reservedCommands = expandPhrases([
   'CREATE VIEW',
   'DEALLOCATE',
   'DECLARE',
-  'DELETE',
-  'DELETE FROM',
   'DESC DATASHARE',
   'DROP DATABASE',
   'DROP DATASHARE',
@@ -76,7 +85,6 @@ const reservedCommands = expandPhrases([
   'EXPLAIN',
   'FETCH',
   'GRANT',
-  'INSERT',
   'LOCK',
   'PREPARE',
   'REFRESH MATERIALIZED VIEW',
@@ -84,7 +92,6 @@ const reservedCommands = expandPhrases([
   'REVOKE',
   'ROLLBACK',
   'SELECT INTO',
-  'SET',
   'SET SESSION AUTHORIZATION',
   'SET SESSION CHARACTERISTICS',
   'SHOW',
@@ -95,13 +102,9 @@ const reservedCommands = expandPhrases([
   'SHOW TABLE',
   'SHOW VIEW',
   'START TRANSACTION',
-  'TRUNCATE',
   'UNLOAD',
-  'UPDATE',
   'VACUUM',
-  'VALUES',
   // other
-  'INSERT INTO',
   'ALTER COLUMN',
 ]);
 

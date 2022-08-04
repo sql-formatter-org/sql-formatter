@@ -17,6 +17,18 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  // Data manipulation
+  // - insert:
+  'INSERT [LOW_PRIORITY | DELAYED | HIGH_PRIORITY] [IGNORE] [INTO]',
+  'REPLACE [LOW_PRIORITY | DELAYED] [INTO]',
+  'VALUES',
+  // - update:
+  'UPDATE [LOW_PRIORITY] [IGNORE]',
+  'SET',
+  // - delete:
+  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // https://mariadb.com/docs/reference/mdb/sql-statements/
   'ALTER DATABASE',
   'ALTER DATABASE COMMENT',
@@ -60,8 +72,6 @@ const reservedCommands = expandPhrases([
   'CREATE USER',
   'CREATE VIEW',
   'DEALLOCATE PREPARE',
-  'DELETE',
-  'DELETE FROM',
   'DESCRIBE',
   'DO',
   'DROP DATABASE',
@@ -85,7 +95,6 @@ const reservedCommands = expandPhrases([
   'GRANT',
   'HANDLER',
   'HELP',
-  'INSERT',
   'INSTALL PLUGIN',
   'INSTALL SONAME',
   'KILL',
@@ -102,7 +111,6 @@ const reservedCommands = expandPhrases([
   'RENAME USER',
   'REPAIR TABLE',
   'REPAIR VIEW',
-  'REPLACE',
   'RESET MASTER',
   'RESET QUERY CACHE',
   'RESET REPLICA',
@@ -113,7 +121,6 @@ const reservedCommands = expandPhrases([
   'ROLLBACK',
   'SAVEPOINT',
   'SELECT',
-  'SET',
   'SET CHARACTER SET',
   'SET DEFAULT ROLE',
   'SET GLOBAL TRANSACTION',
@@ -204,12 +211,9 @@ const reservedCommands = expandPhrases([
   'STOP ALL SLAVES',
   'STOP REPLICA',
   'STOP SLAVE',
-  'TRUNCATE',
-  'TRUNCATE TABLE',
   'UNINSTALL PLUGIN',
   'UNINSTALL SONAME',
   'UNLOCK TABLE',
-  'UPDATE',
   'USE',
   'XA BEGIN',
   'XA COMMIT',
@@ -221,9 +225,6 @@ const reservedCommands = expandPhrases([
   // other
   'ADD',
   'ALTER COLUMN',
-  'INSERT INTO',
-  'INSERT',
-  'VALUES',
 ]);
 
 const reservedSetOperations = expandPhrases([

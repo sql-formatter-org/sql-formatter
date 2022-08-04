@@ -21,6 +21,10 @@ import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
+import supportsTruncateTable from './features/truncateTable';
+import supportsMergeInto from './features/mergeInto';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -34,6 +38,10 @@ describe('PlSqlFormatter', () => {
   supportsAlterTable(format);
   supportsAlterTableModify(format);
   supportsDeleteFrom(format);
+  supportsInsertInto(format);
+  supportsUpdate(format);
+  supportsTruncateTable(format);
+  supportsMergeInto(format);
   supportsStrings(format, ["''", "N''"]);
   supportsIdentifiers(format, [`""`]);
   supportsBetween(format);
@@ -93,18 +101,6 @@ describe('PlSqlFormatter', () => {
     expect(format("Q'Xtest string X X 'foo' bar X'")).toBe("Q'Xtest string X X 'foo' bar X'");
     expect(format("q'$test string $'$''")).toBe("q'$test string $' $ ''");
     expect(format("Q'Stest string S'S''")).toBe("Q'Stest string S' S ''");
-  });
-
-  it('formats INSERT without INTO', () => {
-    const result = format(
-      "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
-    );
-    expect(result).toBe(dedent`
-      INSERT
-        Customers (ID, MoneyBalance, Address, City)
-      VALUES
-        (12, -123.4, 'Skagen 2111', 'Stv');
-    `);
   });
 
   it('formats simple SELECT with national characters', () => {

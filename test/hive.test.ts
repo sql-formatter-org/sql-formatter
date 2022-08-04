@@ -19,6 +19,10 @@ import supportsIdentifiers from './features/identifiers';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
+import supportsUpdate from './features/update';
+import supportsDeleteFrom from './features/deleteFrom';
+import supportsTruncateTable from './features/truncateTable';
+import supportsMergeInto from './features/mergeInto';
 
 describe('HiveFormatter', () => {
   const language = 'hive';
@@ -29,6 +33,10 @@ describe('HiveFormatter', () => {
   supportsCreateTable(format);
   supportsDropTable(format);
   supportsAlterTable(format);
+  supportsUpdate(format);
+  supportsDeleteFrom(format);
+  supportsTruncateTable(format, { withoutTable: true });
+  supportsMergeInto(format);
   supportsStrings(format, ['""', "''"]);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
@@ -82,6 +90,16 @@ describe('HiveFormatter', () => {
       SORT BY
         value,
         count;
+    `);
+  });
+
+  it('formats INSERT INTO TABLE', () => {
+    const result = format("INSERT INTO TABLE Customers VALUES (12,-123.4, 'Skagen 2111','Stv');");
+    expect(result).toBe(dedent`
+      INSERT INTO TABLE
+        Customers
+      VALUES
+        (12, -123.4, 'Skagen 2111', 'Stv');
     `);
   });
 });

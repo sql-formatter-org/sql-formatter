@@ -20,13 +20,21 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   'OMIT RECORD IF', // legacy
-  // DML, https://cloud.google.com/bigquery/docs/reference/standard-sql/dml-syntax
+  // Data modification: https://cloud.google.com/bigquery/docs/reference/standard-sql/dml-syntax
+  // - insert:
   'INSERT [INTO]',
   'VALUES',
-  'DELETE [FROM]',
-  'TRUNCATE TABLE',
+  // - update:
   'UPDATE',
+  'SET',
+  // - delete:
+  'DELETE [FROM]',
+  // - truncate:
+  'TRUNCATE TABLE',
+  // - merge:
   'MERGE [INTO]',
+  'WHEN [NOT] MATCHED [BY SOURCE | BY TARGET] [THEN]',
+  'UPDATE SET',
   // DDL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
   'CREATE SCHEMA [IF NOT EXISTS]',
   'DEFAULT COLLATE',
@@ -77,7 +85,6 @@ const reservedCommands = expandPhrases([
   'REVOKE',
   // Script, https://cloud.google.com/bigquery/docs/reference/standard-sql/scripting
   'DECLARE',
-  'SET',
   'EXECUTE IMMEDIATE',
   'LOOP',
   'END LOOP',

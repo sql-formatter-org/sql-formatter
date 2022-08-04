@@ -19,6 +19,10 @@ import supportsParams from './options/param';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
+import supportsTruncateTable from './features/truncateTable';
+import supportsMergeInto from './features/mergeInto';
 
 describe('TSqlFormatter', () => {
   const language = 'tsql';
@@ -31,6 +35,10 @@ describe('TSqlFormatter', () => {
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
+  supportsInsertInto(format, { withoutInto: true });
+  supportsUpdate(format, { whereCurrentOf: true });
+  supportsTruncateTable(format);
+  supportsMergeInto(format);
   supportsStrings(format, ["N''", "''"]);
   supportsIdentifiers(format, [`""`, '[]']);
   supportsBetween(format);

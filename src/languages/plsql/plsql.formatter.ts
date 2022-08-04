@@ -16,6 +16,21 @@ const reservedCommands = expandPhrases([
   'ORDER [SIBLINGS] BY',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  // Data manipulation
+  // - insert:
+  'INSERT [INTO | ALL INTO]',
+  'VALUES',
+  // - update:
+  'UPDATE [ONLY]',
+  'SET',
+  // - delete:
+  'DELETE FROM [ONLY]',
+  // - truncate:
+  'TRUNCATE TABLE',
+  // - merge:
+  'MERGE [INTO]',
+  'WHEN [NOT] MATCHED [THEN]',
+  'UPDATE SET',
   // other
   'ADD',
   'ALTER COLUMN',
@@ -25,21 +40,14 @@ const reservedCommands = expandPhrases([
   'CREATE TABLE',
   'DROP TABLE',
   'DECLARE',
-  'DELETE',
-  'DELETE FROM',
   'EXCEPT',
   'EXCEPTION',
-  'INSERT INTO',
-  'INSERT',
   'LOOP',
   'MODIFY',
   'RETURNING',
   'SET CURRENT SCHEMA',
   'SET SCHEMA',
-  'SET',
   'START WITH',
-  'UPDATE',
-  'VALUES',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

@@ -14,6 +14,24 @@ const reservedCommands = expandPhrases([
   'HAVING',
   'ORDER BY [INPUT SEQUENCE]',
   'FETCH FIRST',
+  // Data modification
+  // - insert:
+  'INSERT INTO',
+  'VALUES',
+  // - update:
+  'UPDATE',
+  'SET',
+  'WHERE CURRENT OF',
+  'WITH {RR | RS | CS | UR}',
+  // - delete:
+  'DELETE FROM',
+  // - truncate:
+  'TRUNCATE [TABLE]',
+  // - merge:
+  'MERGE INTO',
+  'WHEN [NOT] MATCHED [THEN]',
+  'UPDATE SET',
+  'INSERT',
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
   'ALTER DATABASE',
@@ -62,8 +80,6 @@ const reservedCommands = expandPhrases([
   'DECLARE STATEMENT',
   'DECLARE TABLE',
   'DECLARE VARIABLE',
-  'DELETE',
-  'DELETE FROM',
   'DESCRIBE CURSOR',
   'DESCRIBE INPUT',
   'DESCRIBE OUTPUT',
@@ -81,10 +97,8 @@ const reservedCommands = expandPhrases([
   'GRANT',
   'HOLD LOCATOR',
   'INCLUDE',
-  'INSERT',
   'LABEL',
   'LOCK TABLE',
-  'MERGE',
   'OPEN',
   'PREPARE',
   'REFRESH',
@@ -96,7 +110,6 @@ const reservedCommands = expandPhrases([
   'SAVEPOINT',
   'SELECT INTO',
   'SET CONNECTION',
-  'SET',
   'SET CURRENT ACCELERATOR',
   'SET CURRENT APPLICATION COMPATIBILITY',
   'SET CURRENT APPLICATION ENCODING SCHEME',
@@ -124,9 +137,6 @@ const reservedCommands = expandPhrases([
   'SET SCHEMA',
   'SET SESSION TIME ZONE',
   'SIGNAL',
-  'TRUNCATE',
-  'UPDATE',
-  'VALUES',
   'VALUES INTO',
   'WHENEVER',
   // other
@@ -135,7 +145,6 @@ const reservedCommands = expandPhrases([
   'AFTER',
   'DROP TABLE',
   'GO',
-  'INSERT INTO',
   'SET CURRENT SCHEMA',
 ]);
 

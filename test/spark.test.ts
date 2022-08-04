@@ -16,6 +16,8 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsTruncateTable from './features/truncateTable';
 
 describe('SparkFormatter', () => {
   const language = 'spark';
@@ -26,6 +28,8 @@ describe('SparkFormatter', () => {
   supportsCreateTable(format);
   supportsDropTable(format);
   supportsAlterTable(format);
+  supportsInsertInto(format, { withoutInto: true });
+  supportsTruncateTable(format);
   supportsStrings(format, ["''", "X''"]);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);

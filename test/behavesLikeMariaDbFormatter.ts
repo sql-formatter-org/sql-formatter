@@ -13,6 +13,9 @@ import supportsComments from './features/comments';
 import supportsStrings from './features/strings';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
+import supportsTruncateTable from './features/truncateTable';
 
 /**
  * Shared tests for MySQL and MariaDB
@@ -27,6 +30,9 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   supportsConstraints(format);
   supportsAlterTable(format);
   supportsDeleteFrom(format);
+  supportsInsertInto(format, { withoutInto: true });
+  supportsUpdate(format);
+  supportsTruncateTable(format, { withoutTable: true });
   supportsBetween(format);
   supportsParams(format, { positional: true });
 
@@ -96,6 +102,16 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
     expect(format('ALTER TABLE t MODIFY col1 VARCHAR(50) CHARACTER SET greek')).toBe(dedent`
       ALTER TABLE
         t MODIFY col1 VARCHAR(50) CHARACTER SET greek
+    `);
+  });
+
+  it('supports REPLACE INTO syntax', () => {
+    expect(format(`REPLACE INTO tbl VALUES (1,'Leopard'),(2,'Dog');`)).toBe(dedent`
+      REPLACE INTO
+        tbl
+      VALUES
+        (1, 'Leopard'),
+        (2, 'Dog');
     `);
   });
 }

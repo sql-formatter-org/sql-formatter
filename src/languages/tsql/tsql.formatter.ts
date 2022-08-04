@@ -17,6 +17,22 @@ const reservedCommands = expandPhrases([
   'ORDER BY',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  // Data manipulation
+  // - insert:
+  'INSERT [INTO]',
+  'VALUES',
+  // - update:
+  'UPDATE',
+  'SET',
+  'WHERE CURRENT OF',
+  // - delete:
+  'DELETE [FROM]',
+  // - truncate:
+  'TRUNCATE TABLE',
+  // - merge:
+  'MERGE [INTO]',
+  'WHEN [NOT] MATCHED [BY TARGET | BY SOURCE] [THEN]',
+  'UPDATE SET',
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',
   'ADD SIGNATURE',
@@ -66,8 +82,6 @@ const reservedCommands = expandPhrases([
   'DATEFORMAT',
   'DEADLOCK_PRIORITY',
   'DEFAULT',
-  'DELETE',
-  'DELETE FROM',
   'DENY',
   'DENY XML',
   'DISABLE TRIGGER',
@@ -97,12 +111,10 @@ const reservedCommands = expandPhrases([
   'IDENTITY_INSERT',
   'IMPLICIT_TRANSACTIONS',
   'INDEX',
-  'INSERT',
   'LANGUAGE',
   'LOCK_TIMEOUT',
   'LOGIN',
   'MASTER KEY',
-  'MERGE',
   'MESSAGE TYPE',
   'MOVE CONVERSATION',
   'NOCOUNT',
@@ -151,7 +163,6 @@ const reservedCommands = expandPhrases([
   'SERVER ROLE',
   'SERVICE',
   'SERVICE MASTER KEY',
-  'SET',
   'SETUSER',
   'SHOWPLAN_ALL',
   'SHOWPLAN_TEXT',
@@ -170,9 +181,7 @@ const reservedCommands = expandPhrases([
   'TEXTSIZE',
   'TRANSACTION ISOLATION LEVEL',
   'TRIGGER',
-  'TRUNCATE TABLE',
   'TYPE',
-  'UPDATE',
   'UPDATE STATISTICS',
   'USER',
   'VIEW',
@@ -184,9 +193,7 @@ const reservedCommands = expandPhrases([
   'ALTER COLUMN',
   'ALTER TABLE',
   'CREATE TABLE',
-  'INSERT INTO',
   'DROP TABLE',
-  'VALUES',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

@@ -18,6 +18,18 @@ const reservedCommands = expandPhrases([
   'ORDER BY',
   'LIMIT',
   'OFFSET',
+  // Data manipulation
+  // - insert:
+  'INSERT [LOW_PRIORITY | DELAYED | HIGH_PRIORITY] [IGNORE] [INTO]',
+  'REPLACE [LOW_PRIORITY | DELAYED] [INTO]',
+  'VALUES',
+  // - update:
+  'UPDATE [LOW_PRIORITY] [IGNORE]',
+  'SET',
+  // - delete:
+  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',
   'ALTER EVENT',
@@ -59,8 +71,6 @@ const reservedCommands = expandPhrases([
   'CREATE USER',
   'CREATE VIEW',
   'DEALLOCATE PREPARE',
-  'DELETE',
-  'DELETE FROM',
   'DESCRIBE',
   'DO',
   'DROP DATABASE',
@@ -86,7 +96,6 @@ const reservedCommands = expandPhrases([
   'HANDLER',
   'HELP',
   'IMPORT TABLE',
-  'INSERT',
   'INSTALL COMPONENT',
   'INSTALL PLUGIN',
   'KILL',
@@ -103,7 +112,6 @@ const reservedCommands = expandPhrases([
   'RENAME TABLE',
   'RENAME USER',
   'REPAIR TABLE',
-  'REPLACE',
   'RESET',
   'RESET MASTER',
   'RESET PERSIST',
@@ -114,7 +122,6 @@ const reservedCommands = expandPhrases([
   'ROLLBACK',
   'ROLLBACK TO SAVEPOINT',
   'SAVEPOINT',
-  'SET',
   'SET CHARACTER SET',
   'SET DEFAULT ROLE',
   'SET NAMES',
@@ -175,14 +182,11 @@ const reservedCommands = expandPhrases([
   'STOP REPLICA',
   'STOP SLAVE',
   'TABLE',
-  'TRUNCATE TABLE',
   'UNINSTALL COMPONENT',
   'UNINSTALL PLUGIN',
   'UNLOCK INSTANCE',
   'UNLOCK TABLES',
-  'UPDATE',
   'USE',
-  'VALUES',
   'XA',
   // flow control
   // 'IF',
@@ -195,7 +199,6 @@ const reservedCommands = expandPhrases([
   // other
   'ADD',
   'ALTER COLUMN',
-  'INSERT INTO',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);

@@ -20,6 +20,19 @@ const reservedCommands = expandPhrases([
   'CLUSTER BY',
   'DISTRIBUTE BY',
   'LIMIT',
+  // Data manipulation
+  // - insert:
+  'INSERT [INTO | OVERWRITE] [TABLE]',
+  'VALUES',
+  // - truncate:
+  'TRUNCATE TABLE',
+  // - insert overwrite directory:
+  //   https://spark.apache.org/docs/latest/sql-ref-syntax-dml-insert-overwrite-directory.html
+  'INSERT OVERWRITE [LOCAL] DIRECTORY',
+  // - load:
+  //   https://spark.apache.org/docs/latest/sql-ref-syntax-dml-load.html
+  'LOAD DATA [LOCAL] INPATH',
+  '[OVERWRITE] INTO TABLE',
   // DDL
   'ALTER COLUMN',
   'ALTER DATABASE',
@@ -34,15 +47,8 @@ const reservedCommands = expandPhrases([
   'DROP TABLE',
   'DROP VIEW',
   'REPAIR TABLE',
-  'TRUNCATE TABLE',
   'USE DATABASE',
-  // DML
-  'INSERT INTO',
-  'INSERT OVERWRITE',
-  'INSERT OVERWRITE DIRECTORY',
-  'LOAD',
   // Data Retrieval
-  'VALUES',
   'TABLESAMPLE',
   'PIVOT',
   'TRANSFORM',
@@ -63,7 +69,6 @@ const reservedCommands = expandPhrases([
   'REFRESH TABLE',
   'REFRESH FUNCTION',
   'RESET',
-  'SET',
   'SHOW COLUMNS',
   'SHOW CREATE TABLE',
   'SHOW DATABASES',
@@ -75,9 +80,7 @@ const reservedCommands = expandPhrases([
   'SHOW VIEWS',
   'UNCACHE TABLE',
   // other
-  'INSERT',
   'LATERAL VIEW',
-  'UPDATE',
 ]);
 
 const reservedSetOperations = expandPhrases([
