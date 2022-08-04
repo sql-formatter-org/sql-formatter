@@ -193,7 +193,7 @@ function combineParameterizedTypes(tokens: Token[]) {
         type: TokenType.IDENTIFIER,
         raw: typeDefTokens.map(formatTypeDefToken('raw')).join(''),
         text: typeDefTokens.map(formatTypeDefToken('text')).join(''),
-        index: 0,
+        index: token.index, // TODO: this currently breaks all following token indices
       });
       i = endIndex;
     } else {
