@@ -358,7 +358,7 @@ describe('Parser', () => {
     `);
   });
 
-  it.only('parses LIMIT clause', () => {
+  it('parses LIMIT clause', () => {
     expect(parse('LIMIT 10')).toMatchInlineSnapshot(`
       Array [
         Object {

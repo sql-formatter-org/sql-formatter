@@ -1,5 +1,5 @@
 import { Token, TokenType } from 'src/lexer/token';
-import { WHITESPACE_REGEX } from './regexUtil';
+import { LINEBREAK_REGEX, WHITESPACE_REGEX } from './regexUtil';
 
 export interface TokenRule {
   regex: RegExp;
@@ -53,16 +53,15 @@ export default class TokenizerEngine {
 
   private skipWhitespace(): void {
     WHITESPACE_REGEX.lastIndex = this.index;
-    const lineBreakRegex = /\v|\n|\r\n/g;
 
     const matches = WHITESPACE_REGEX.exec(this.input);
     if (matches) {
       // if whitespace contains linebreaks
-      if (lineBreakRegex.test(matches[0])) {
-        while (lineBreakRegex.exec(matches[0]) !== null) {
+      if (LINEBREAK_REGEX.test(matches[0])) {
+        while (LINEBREAK_REGEX.exec(matches[0]) !== null) {
           this.line++;
         }
-        this.col = lineBreakRegex.lastIndex;
+        this.col = LINEBREAK_REGEX.lastIndex;
       } else {
         this.col += matches[0].length;
       }
