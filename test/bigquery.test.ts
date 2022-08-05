@@ -38,7 +38,6 @@ describe('BigQueryFormatter', () => {
   supportsAlterTable(format, {
     addColumn: true,
     dropColumn: true,
-    alterColumn: true,
     renameTo: true,
   });
   supportsDeleteFrom(format, { withoutFrom: true });

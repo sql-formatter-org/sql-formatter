@@ -5,7 +5,6 @@ import { FormatFn } from 'src/sqlFormatter';
 interface AlterTableConfig {
   addColumn?: boolean;
   dropColumn?: boolean;
-  alterColumn?: boolean;
   modify?: boolean;
   renameTo?: boolean;
   renameColumn?: boolean;
@@ -32,18 +31,6 @@ export default function supportsAlterTable(format: FormatFn, cfg: AlterTableConf
           supplier
         DROP COLUMN
           unit_price;
-      `);
-    });
-  }
-
-  if (cfg.alterColumn) {
-    it('formats ALTER TABLE ... ALTER COLUMN query', () => {
-      const result = format('ALTER TABLE supplier ALTER COLUMN unit_price SOME_FAKE_SQL;');
-      expect(result).toBe(dedent`
-        ALTER TABLE
-          supplier
-        ALTER COLUMN
-          unit_price SOME_FAKE_SQL;
       `);
     });
   }

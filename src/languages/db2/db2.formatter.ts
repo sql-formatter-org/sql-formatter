@@ -40,8 +40,11 @@ const reservedCommands = expandPhrases([
   'ALTER TABLE',
   'ADD [COLUMN]',
   'DROP [COLUMN]',
-  'ALTER [COLUMN]',
   'RENAME [COLUMN]',
+  'ALTER [COLUMN]',
+  'SET DATA TYPE', // for alter column
+  'SET NOT NULL', // for alter column
+  'DROP {IDENTITY | EXPRESSION | DEFAULT | NOT NULL}', // for alter column
 
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',

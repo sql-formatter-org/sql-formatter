@@ -37,7 +37,6 @@ describe('TSqlFormatter', () => {
   supportsConstraints(format);
   supportsAlterTable(format, {
     dropColumn: true,
-    alterColumn: true,
   });
   supportsDeleteFrom(format);
   supportsInsertInto(format, { withoutInto: true });
@@ -93,6 +92,15 @@ describe('TSqlFormatter', () => {
         ##flam
       FROM
         tbl;
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(format(`ALTER TABLE t ALTER COLUMN foo INT NOT NULL DEFAULT 5;`)).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo INT NOT NULL DEFAULT 5;
     `);
   });
 });

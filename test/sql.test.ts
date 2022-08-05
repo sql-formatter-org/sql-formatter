@@ -38,7 +38,6 @@ describe('SqlFormatter', () => {
   supportsAlterTable(format, {
     addColumn: true,
     dropColumn: true,
-    alterColumn: true,
     renameTo: true,
     renameColumn: true,
   });
@@ -69,6 +68,45 @@ describe('SqlFormatter', () => {
       : bar
       FROM
         { foo };
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(
+      format(
+        `ALTER TABLE t ALTER COLUMN foo SET DEFAULT 5;
+         ALTER TABLE t ALTER COLUMN foo DROP DEFAULT;
+         ALTER TABLE t ALTER COLUMN foo DROP SCOPE CASCADE;
+         ALTER TABLE t ALTER COLUMN foo RESTART WITH 10;`
+      )
+    ).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DEFAULT
+        5;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP DEFAULT
+      ;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP SCOPE CASCADE
+      ;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      RESTART WITH
+        10;
     `);
   });
 });

@@ -41,9 +41,9 @@ const reservedCommands = expandPhrases([
   'ALTER TABLE',
   'ADD COLUMNS',
   'DROP {COLUMN | COLUMNS}',
-  'ALTER COLUMN',
   'RENAME TO',
   'RENAME COLUMN',
+  'ALTER COLUMN',
 
   'ALTER DATABASE',
   'ALTER VIEW',

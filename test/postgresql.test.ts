@@ -41,7 +41,6 @@ describe('PostgreSqlFormatter', () => {
   supportsAlterTable(format, {
     addColumn: true,
     dropColumn: true,
-    alterColumn: true,
     renameTo: true,
     renameColumn: true,
   });
@@ -123,6 +122,52 @@ describe('PostgreSqlFormatter', () => {
         c2
       FROM
         tbl;
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(
+      format(
+        `ALTER TABLE t ALTER COLUMN foo SET DATA TYPE VARCHAR;
+         ALTER TABLE t ALTER COLUMN foo SET DEFAULT 5;
+         ALTER TABLE t ALTER COLUMN foo DROP DEFAULT;
+         ALTER TABLE t ALTER COLUMN foo SET NOT NULL;
+         ALTER TABLE t ALTER COLUMN foo DROP NOT NULL`
+      )
+    ).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DATA TYPE
+        VARCHAR;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DEFAULT
+        5;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP DEFAULT
+      ;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET NOT NULL
+      ;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP NOT NULL
     `);
   });
 });

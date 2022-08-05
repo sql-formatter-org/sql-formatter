@@ -43,6 +43,9 @@ const reservedCommands = expandPhrases([
   'ADD [COLUMN] [IF NOT EXISTS]',
   'DROP [COLUMN] [IF EXISTS]',
   'ALTER [COLUMN]',
+  '[SET DATA] TYPE', // for alter column
+  '{SET | DROP} DEFAULT', // for alter column
+  '{SET | DROP} NOT NULL', // for alter column
 
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',

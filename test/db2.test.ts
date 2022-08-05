@@ -38,7 +38,6 @@ describe('Db2Formatter', () => {
   supportsAlterTable(format, {
     addColumn: true,
     dropColumn: true,
-    alterColumn: true,
     renameColumn: true,
   });
   supportsDeleteFrom(format);
@@ -109,6 +108,28 @@ describe('Db2Formatter', () => {
       SET
         x = 10
       WITH CS
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(
+      format(
+        `ALTER TABLE t ALTER COLUMN foo SET DATA TYPE VARCHAR;
+         ALTER TABLE t ALTER COLUMN foo SET NOT NULL`
+      )
+    ).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DATA TYPE
+        VARCHAR;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET NOT NULL
     `);
   });
 });

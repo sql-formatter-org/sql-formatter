@@ -33,7 +33,6 @@ describe('RedshiftFormatter', () => {
   supportsAlterTable(format, {
     addColumn: true,
     dropColumn: true,
-    alterColumn: true,
     renameTo: true,
     renameColumn: true,
   });
@@ -128,6 +127,29 @@ describe('RedshiftFormatter', () => {
         ',' QUOTE '"'
       REGION
         AS 'us-east-1'
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(
+      format(
+        `ALTER TABLE t ALTER COLUMN foo TYPE VARCHAR;
+         ALTER TABLE t ALTER COLUMN foo ENCODE my_encoding;`
+      )
+    ).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      TYPE
+        VARCHAR;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      ENCODE
+        my_encoding;
     `);
   });
 });

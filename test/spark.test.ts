@@ -31,7 +31,6 @@ describe('SparkFormatter', () => {
   supportsDropTable(format, { ifExists: true });
   supportsAlterTable(format, {
     dropColumn: true,
-    alterColumn: true,
     renameTo: true,
     renameColumn: true,
   });
@@ -126,6 +125,16 @@ describe('SparkFormatter', () => {
       SORT BY
         value,
         count;
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(format(`ALTER TABLE StudentInfo ALTER COLUMN FirstName COMMENT "new comment";`))
+      .toBe(dedent`
+      ALTER TABLE
+        StudentInfo
+      ALTER COLUMN
+        FirstName COMMENT "new comment";
     `);
   });
 });

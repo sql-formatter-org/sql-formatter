@@ -35,9 +35,11 @@ const reservedCommands = expandPhrases([
   'ALTER TABLE APPEND',
   'ADD [COLUMN]',
   'DROP [COLUMN]',
-  'ALTER COLUMN',
   'RENAME TO',
   'RENAME COLUMN',
+  'ALTER COLUMN',
+  'TYPE', // for alter column
+  'ENCODE', // for alter column
 
   // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
   'ABORT',

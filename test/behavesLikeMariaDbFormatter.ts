@@ -31,7 +31,6 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   supportsAlterTable(format, {
     addColumn: true,
     dropColumn: true,
-    alterColumn: true,
     modify: true,
     renameTo: true,
     renameColumn: true,
@@ -121,6 +120,28 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
       VALUES
         (1, 'Leopard'),
         (2, 'Dog');
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(
+      format(
+        `ALTER TABLE t ALTER COLUMN foo SET DEFAULT 10;
+         ALTER TABLE t ALTER COLUMN foo DROP DEFAULT`
+      )
+    ).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DEFAULT
+        10;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP DEFAULT
     `);
   });
 }

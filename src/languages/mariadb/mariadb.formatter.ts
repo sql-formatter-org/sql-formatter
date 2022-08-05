@@ -36,11 +36,13 @@ const reservedCommands = expandPhrases([
   // - alter table:
   'ALTER [ONLINE] [IGNORE] TABLE [IF EXISTS]',
   'ADD [COLUMN] [IF NOT EXISTS]',
-  'ALTER [COLUMN]',
   '{CHANGE | MODIFY} [COLUMN] [IF EXISTS]',
   'DROP [COLUMN] [IF EXISTS]',
   'RENAME [TO]',
   'RENAME COLUMN',
+  'ALTER [COLUMN]',
+  '{SET | DROP} DEFAULT', // for alter column
+  'SET {VISIBLE | INVISIBLE}', // for alter column
 
   // https://mariadb.com/docs/reference/mdb/sql-statements/
   'ALTER DATABASE',

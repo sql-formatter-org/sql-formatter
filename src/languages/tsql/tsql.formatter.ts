@@ -91,7 +91,6 @@ const reservedCommands = expandPhrases([
   'DATEFIRST',
   'DATEFORMAT',
   'DEADLOCK_PRIORITY',
-  'DEFAULT',
   'DENY',
   'DENY XML',
   'DISABLE TRIGGER',

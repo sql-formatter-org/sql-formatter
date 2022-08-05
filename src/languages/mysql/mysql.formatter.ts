@@ -37,11 +37,12 @@ const reservedCommands = expandPhrases([
   // - alter table:
   'ALTER TABLE',
   'ADD [COLUMN]',
-  'ALTER [COLUMN]',
   '{CHANGE | MODIFY} [COLUMN]',
   'DROP [COLUMN]',
   'RENAME [TO | AS]',
   'RENAME COLUMN',
+  'ALTER [COLUMN]',
+  '{SET | DROP} DEFAULT', // for alter column
 
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',

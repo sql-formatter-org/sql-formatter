@@ -37,10 +37,14 @@ const reservedCommands = expandPhrases([
   // - alter table:
   'ALTER TABLE',
   'ADD COLUMN',
-  'ALTER [COLUMN]',
   'DROP [COLUMN]',
   'RENAME COLUMN',
   'RENAME TO',
+  'ALTER [COLUMN]',
+  '{SET | DROP} DEFAULT', // for alter column
+  'ADD SCOPE', // for alter column
+  'DROP SCOPE {CASCADE | RESTRICT}', // for alter column
+  'RESTART WITH', // for alter column
 
   // other
   'SET SCHEMA',

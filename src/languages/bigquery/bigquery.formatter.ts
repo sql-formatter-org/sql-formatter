@@ -43,12 +43,12 @@ const reservedCommands = expandPhrases([
   'ALTER TABLE [IF EXISTS]',
   'ADD COLUMN [IF NOT EXISTS]',
   'DROP COLUMN [IF EXISTS]',
-  'ALTER COLUMN [IF EXISTS]',
   'RENAME TO',
-  'SET DEFAULT COLLATE',
-  'SET OPTIONS',
-  'DROP NOT NULL',
-  'SET DATA TYPE',
+  'ALTER COLUMN [IF EXISTS]',
+  'SET DEFAULT COLLATE', // for alter column
+  'SET OPTIONS', // for alter column
+  'DROP NOT NULL', // for alter column
+  'SET DATA TYPE', // for alter column
 
   'CREATE SCHEMA [IF NOT EXISTS]',
   'DEFAULT COLLATE',
