@@ -23,6 +23,7 @@ import supportsUpdate from './features/update';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsTruncateTable from './features/truncateTable';
 import supportsMergeInto from './features/mergeInto';
+import supportsCreateView from './features/createView';
 
 describe('HiveFormatter', () => {
   const language = 'hive';
@@ -30,6 +31,7 @@ describe('HiveFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCreateView(format, { materialized: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
   supportsAlterTable(format);

@@ -31,6 +31,7 @@ const reservedCommands = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE]',
   // DDL
+  'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY] TABLE [IF NOT EXISTS]',
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
 
@@ -72,7 +73,6 @@ const reservedCommands = expandPhrases([
   'CREATE TABLESPACE',
   'CREATE TRIGGER',
   'CREATE USER',
-  'CREATE VIEW',
   'DEALLOCATE PREPARE',
   'DESCRIBE',
   'DO',

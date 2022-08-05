@@ -28,6 +28,7 @@ const reservedCommands = expandPhrases([
   // - delete:
   'DELETE FROM',
   // DDL
+  'CREATE [TEMPORARY | TEMP] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY | TEMP] TABLE [IF NOT EXISTS]',
   'DROP TABLE [IF EXISTS]',
 

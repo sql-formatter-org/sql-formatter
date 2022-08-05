@@ -22,6 +22,7 @@ import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
 import supportsTruncateTable from './features/truncateTable';
+import supportsCreateView from './features/createView';
 
 describe('TrinoFormatter', () => {
   const language = 'trino';
@@ -29,6 +30,7 @@ describe('TrinoFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCreateView(format, { orReplace: true, materialized: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
   supportsDeleteFrom(format);

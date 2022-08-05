@@ -27,6 +27,7 @@ const reservedCommands = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE]',
   // DDL
+  'CREATE [OR REPLACE | MATERIALIZED] VIEW',
   'CREATE [TEMPORARY | TEMP | LOCAL TEMPORARY | LOCAL TEMP] TABLE [IF NOT EXISTS]',
   'DROP TABLE [IF EXISTS]',
 
@@ -61,12 +62,10 @@ const reservedCommands = expandPhrases([
   'CREATE FUNCTION',
   'CREATE GROUP',
   'CREATE LIBRARY',
-  'CREATE MATERIALIZED VIEW',
   'CREATE MODEL',
   'CREATE PROCEDURE',
   'CREATE SCHEMA',
   'CREATE USER',
-  'CREATE VIEW',
   'DEALLOCATE',
   'DECLARE',
   'DESC DATASHARE',

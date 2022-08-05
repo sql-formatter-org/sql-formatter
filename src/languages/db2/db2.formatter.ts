@@ -33,6 +33,7 @@ const reservedCommands = expandPhrases([
   'UPDATE SET',
   'INSERT',
   // DDL
+  'CREATE [OR REPLACE] VIEW',
   'CREATE [GLOBAL TEMPORARY] TABLE',
   'DROP TABLE [HIERARCHY]',
 
@@ -77,7 +78,6 @@ const reservedCommands = expandPhrases([
   'CREATE TRUSTED CONTEXT',
   'CREATE TYPE',
   'CREATE VARIABLE',
-  'CREATE VIEW',
   'DECLARE CURSOR',
   'DECLARE GLOBAL TEMPORARY TABLE',
   'DECLARE STATEMENT',

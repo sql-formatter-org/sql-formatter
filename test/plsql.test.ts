@@ -25,6 +25,7 @@ import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
 import supportsTruncateTable from './features/truncateTable';
 import supportsMergeInto from './features/mergeInto';
+import supportsCreateView from './features/createView';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -32,6 +33,7 @@ describe('PlSqlFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCreateView(format, { orReplace: true, materialized: true });
   supportsCreateTable(format);
   supportsDropTable(format);
   supportsConstraints(format);

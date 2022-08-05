@@ -31,6 +31,8 @@ const reservedCommands = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE] [ONLY]',
   // DDL
+  'CREATE [OR REPLACE] [TEMP | TEMPORARY] [RECURSIVE] VIEW',
+  'CREATE MATERIALIZED VIEW [IF NOT EXISTS]',
   'CREATE [GLOBAL | LOCAL] [TEMPORARY | TEMP | UNLOGGED] TABLE [IF NOT EXISTS]',
   'DROP TABLE [IF EXISTS]',
 
@@ -103,7 +105,6 @@ const reservedCommands = expandPhrases([
   'CREATE GROUP',
   'CREATE INDEX',
   'CREATE LANGUAGE',
-  'CREATE MATERIALIZED VIEW',
   'CREATE OPERATOR',
   'CREATE OPERATOR CLASS',
   'CREATE OPERATOR FAMILY',
@@ -127,7 +128,6 @@ const reservedCommands = expandPhrases([
   'CREATE TYPE',
   'CREATE USER',
   'CREATE USER MAPPING',
-  'CREATE VIEW',
   'DEALLOCATE',
   'DECLARE',
   'DISCARD',

@@ -15,6 +15,7 @@ import supportsParams from './options/param';
 import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
 import supportsTruncateTable from './features/truncateTable';
+import supportsCreateView from './features/createView';
 
 /**
  * Shared tests for MySQL and MariaDB
@@ -24,6 +25,7 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   supportsComments(format, { hashComments: true });
   supportsStrings(format, ["''", '""', "X''"]);
   supportsIdentifiers(format, ['``']);
+  supportsCreateView(format, { orReplace: true });
   supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);
   supportsAlterTable(format);

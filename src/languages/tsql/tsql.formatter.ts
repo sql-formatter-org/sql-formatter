@@ -34,6 +34,7 @@ const reservedCommands = expandPhrases([
   'WHEN [NOT] MATCHED [BY TARGET | BY SOURCE] [THEN]',
   'UPDATE SET',
   // DDL
+  'CREATE [OR ALTER] [MATERIALIZED] VIEW',
   'CREATE TABLE',
   'DROP TABLE [IF EXISTS]',
 
@@ -188,7 +189,6 @@ const reservedCommands = expandPhrases([
   'TYPE',
   'UPDATE STATISTICS',
   'USER',
-  'VIEW',
   'WORKLOAD GROUP',
   'XACT_ABORT',
   'XML INDEX',

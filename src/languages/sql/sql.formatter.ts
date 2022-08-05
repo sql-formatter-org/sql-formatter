@@ -31,6 +31,7 @@ const reservedCommands = expandPhrases([
   // - truncate:
   'TRUNCATE TABLE',
   // DDL
+  'CREATE [RECURSIVE] VIEW',
   'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
   'DROP TABLE',
 

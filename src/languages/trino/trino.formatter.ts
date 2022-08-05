@@ -31,6 +31,7 @@ const reservedCommands = expandPhrases([
   // - truncate:
   'TRUNCATE TABLE',
   // DDL
+  'CREATE [OR REPLACE] [MATERIALIZED] VIEW',
   'CREATE TABLE [IF NOT EXISTS]',
   'DROP TABLE [IF EXISTS]',
 
@@ -46,10 +47,6 @@ const reservedCommands = expandPhrases([
   'ALTER MATERIALIZED VIEW',
   'ALTER VIEW',
   'CREATE SCHEMA',
-  'CREATE VIEW',
-  'CREATE OR REPLACE VIEW',
-  'CREATE MATERIALIZED VIEW',
-  'CREATE OR REPLACE MATERIALIZED VIEW',
   'CREATE ROLE',
   'DROP SCHEMA',
   'DROP COLUMN',

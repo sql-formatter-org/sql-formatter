@@ -19,6 +19,7 @@ import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
 import supportsTruncateTable from './features/truncateTable';
+import supportsCreateView from './features/createView';
 
 describe('RedshiftFormatter', () => {
   const language = 'redshift';
@@ -26,6 +27,7 @@ describe('RedshiftFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCreateView(format, { orReplace: true, materialized: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
   supportsAlterTable(format);

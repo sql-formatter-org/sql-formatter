@@ -23,6 +23,7 @@ import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
 import supportsTruncateTable from './features/truncateTable';
+import supportsCreateView from './features/createView';
 
 describe('SqlFormatter', () => {
   const language = 'sql';
@@ -30,6 +31,7 @@ describe('SqlFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCreateView(format);
   supportsCreateTable(format);
   supportsDropTable(format);
   supportsConstraints(format);

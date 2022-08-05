@@ -23,6 +23,7 @@ import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
 import supportsTruncateTable from './features/truncateTable';
 import supportsMergeInto from './features/mergeInto';
+import supportsCreateView from './features/createView';
 
 describe('TSqlFormatter', () => {
   const language = 'tsql';
@@ -30,6 +31,7 @@ describe('TSqlFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCreateView(format, { materialized: true });
   supportsCreateTable(format);
   supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);

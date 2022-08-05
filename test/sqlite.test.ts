@@ -21,6 +21,7 @@ import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
+import supportsCreateView from './features/createView';
 
 describe('SqliteFormatter', () => {
   const language = 'sqlite';
@@ -28,6 +29,7 @@ describe('SqliteFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCreateView(format);
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);

@@ -34,6 +34,7 @@ const reservedCommands = expandPhrases([
   'LOAD DATA [LOCAL] INPATH',
   '[OVERWRITE] INTO TABLE',
   // DDL
+  'CREATE [OR REPLACE] [GLOBAL TEMPORARY | TEMPORARY] VIEW [IF NOT EXISTS]',
   'CREATE [EXTERNAL] TABLE [IF NOT EXISTS]',
   'DROP TABLE [IF EXISTS]',
 
@@ -43,7 +44,6 @@ const reservedCommands = expandPhrases([
   'ALTER VIEW',
   'CREATE DATABASE',
   'CREATE FUNCTION',
-  'CREATE VIEW',
   'DROP DATABASE',
   'DROP FUNCTION',
   'DROP VIEW',
