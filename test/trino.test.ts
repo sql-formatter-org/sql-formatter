@@ -113,34 +113,4 @@ describe('TrinoFormatter', () => {
         )
     `);
   });
-
-  it('formats basic ALTER TABLE statements', () => {
-    const result = format(`
-      ALTER TABLE people RENAME TO persons;
-      ALTER TABLE persons ADD COLUMN location_id INT;
-      ALTER TABLE persons RENAME COLUMN location_id TO loc_id;
-      ALTER TABLE persons DROP COLUMN loc_id;
-    `);
-    expect(result).toBe(dedent`
-      ALTER TABLE
-        people
-      RENAME TO
-        persons;
-
-      ALTER TABLE
-        persons
-      ADD COLUMN
-        location_id INT;
-
-      ALTER TABLE
-        persons
-      RENAME COLUMN
-        location_id TO loc_id;
-
-      ALTER TABLE
-        persons
-      DROP COLUMN
-        loc_id;
-    `);
-  });
 });
