@@ -38,7 +38,13 @@ describe('PostgreSqlFormatter', () => {
   supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);
   supportsArrayAndMapAccessors(format);
-  supportsAlterTable(format);
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    alterColumn: true,
+    renameTo: true,
+    renameColumn: true,
+  });
   supportsDeleteFrom(format);
   supportsInsertInto(format);
   supportsUpdate(format, { whereCurrentOf: true });

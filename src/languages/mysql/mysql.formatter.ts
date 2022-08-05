@@ -34,7 +34,14 @@ const reservedCommands = expandPhrases([
   'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY] TABLE [IF NOT EXISTS]',
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
+  // - alter table:
   'ALTER TABLE',
+  'ADD [COLUMN]',
+  'ALTER [COLUMN]',
+  '{CHANGE | MODIFY} [COLUMN]',
+  'DROP [COLUMN]',
+  'RENAME [TO | AS]',
+  'RENAME COLUMN',
 
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',
@@ -198,9 +205,6 @@ const reservedCommands = expandPhrases([
   'REPEAT',
   'RETURN',
   'WHILE',
-  // other
-  'ADD',
-  'ALTER COLUMN',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);

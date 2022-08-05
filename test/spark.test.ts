@@ -29,7 +29,12 @@ describe('SparkFormatter', () => {
   supportsCreateView(format, { orReplace: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
-  supportsAlterTable(format);
+  supportsAlterTable(format, {
+    dropColumn: true,
+    alterColumn: true,
+    renameTo: true,
+    renameColumn: true,
+  });
   supportsInsertInto(format, { withoutInto: true });
   supportsTruncateTable(format);
   supportsStrings(format, ["''", "X''"]);

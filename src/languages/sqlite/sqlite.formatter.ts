@@ -31,11 +31,14 @@ const reservedCommands = expandPhrases([
   'CREATE [TEMPORARY | TEMP] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY | TEMP] TABLE [IF NOT EXISTS]',
   'DROP TABLE [IF EXISTS]',
+  // - alter table:
   'ALTER TABLE',
+  'ADD [COLUMN]',
+  'DROP [COLUMN]',
+  'RENAME [COLUMN]',
+  'RENAME TO',
 
   // other
-  'ADD',
-  'ALTER COLUMN',
   'SET SCHEMA',
 ]);
 

@@ -35,8 +35,14 @@ const reservedCommands = expandPhrases([
   'CREATE MATERIALIZED VIEW [IF NOT EXISTS]',
   'CREATE [GLOBAL | LOCAL] [TEMPORARY | TEMP | UNLOGGED] TABLE [IF NOT EXISTS]',
   'DROP TABLE [IF EXISTS]',
+  // - alter table:
   'ALTER TABLE [IF EXISTS] [ONLY]',
   'ALTER TABLE ALL IN TABLESPACE',
+  'RENAME [COLUMN]',
+  'RENAME TO',
+  'ADD [COLUMN] [IF NOT EXISTS]',
+  'DROP [COLUMN] [IF EXISTS]',
+  'ALTER [COLUMN]',
 
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
@@ -209,9 +215,7 @@ const reservedCommands = expandPhrases([
   'UNLISTEN',
   'VACUUM',
   // other
-  'ADD',
   'AFTER',
-  'ALTER COLUMN',
   'SET SCHEMA',
 ]);
 

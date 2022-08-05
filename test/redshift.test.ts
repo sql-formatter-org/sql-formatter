@@ -30,7 +30,13 @@ describe('RedshiftFormatter', () => {
   supportsCreateView(format, { orReplace: true, materialized: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
-  supportsAlterTable(format);
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    alterColumn: true,
+    renameTo: true,
+    renameColumn: true,
+  });
   supportsDeleteFrom(format, { withoutFrom: true });
   supportsInsertInto(format);
   supportsUpdate(format);

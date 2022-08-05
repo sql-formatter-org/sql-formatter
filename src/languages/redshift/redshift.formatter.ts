@@ -30,8 +30,14 @@ const reservedCommands = expandPhrases([
   'CREATE [OR REPLACE | MATERIALIZED] VIEW',
   'CREATE [TEMPORARY | TEMP | LOCAL TEMPORARY | LOCAL TEMP] TABLE [IF NOT EXISTS]',
   'DROP TABLE [IF EXISTS]',
+  // - alter table:
   'ALTER TABLE',
   'ALTER TABLE APPEND',
+  'ADD [COLUMN]',
+  'DROP [COLUMN]',
+  'ALTER COLUMN',
+  'RENAME TO',
+  'RENAME COLUMN',
 
   // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
   'ABORT',

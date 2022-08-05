@@ -35,7 +35,10 @@ describe('TSqlFormatter', () => {
   supportsCreateTable(format);
   supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);
-  supportsAlterTable(format);
+  supportsAlterTable(format, {
+    dropColumn: true,
+    alterColumn: true,
+  });
   supportsDeleteFrom(format);
   supportsInsertInto(format, { withoutInto: true });
   supportsUpdate(format, { whereCurrentOf: true });

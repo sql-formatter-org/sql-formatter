@@ -35,7 +35,13 @@ describe('SqlFormatter', () => {
   supportsCreateTable(format);
   supportsDropTable(format);
   supportsConstraints(format);
-  supportsAlterTable(format);
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    alterColumn: true,
+    renameTo: true,
+    renameColumn: true,
+  });
   supportsDeleteFrom(format);
   supportsInsertInto(format);
   supportsUpdate(format, { whereCurrentOf: true });

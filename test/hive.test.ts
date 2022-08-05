@@ -34,7 +34,7 @@ describe('HiveFormatter', () => {
   supportsCreateView(format, { materialized: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
-  supportsAlterTable(format);
+  supportsAlterTable(format, { renameTo: true });
   supportsUpdate(format);
   supportsDeleteFrom(format);
   supportsTruncateTable(format, { withoutTable: true });

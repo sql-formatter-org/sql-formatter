@@ -37,7 +37,11 @@ const reservedCommands = expandPhrases([
   'CREATE [OR ALTER] [MATERIALIZED] VIEW',
   'CREATE TABLE',
   'DROP TABLE [IF EXISTS]',
+  // - alter table:
   'ALTER TABLE',
+  'ADD',
+  'DROP COLUMN [IF EXISTS]',
+  'ALTER COLUMN',
 
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',
@@ -194,9 +198,6 @@ const reservedCommands = expandPhrases([
   'XACT_ABORT',
   'XML INDEX',
   'XML SCHEMA COLLECTION',
-  // other
-  'ALTER COLUMN',
-  'ALTER TABLE',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

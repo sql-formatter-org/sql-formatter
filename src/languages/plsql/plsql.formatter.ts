@@ -36,22 +36,24 @@ const reservedCommands = expandPhrases([
   'CREATE MATERIALIZED VIEW',
   'CREATE [GLOBAL TEMPORARY | PRIVATE TEMPORARY | SHARDED | DUPLICATED | IMMUTABLE BLOCKCHAIN | BLOCKCHAIN | IMMUTABLE] TABLE',
   'DROP TABLE',
+  // - alter table:
   'ALTER TABLE',
+  'ADD',
+  'DROP {COLUMN | UNUSED COLUMNS | COLUMNS CONTINUE}',
+  'MODIFY',
+  'RENAME TO',
+  'RENAME COLUMN',
 
   // other
-  'ADD',
-  'ALTER COLUMN',
   'BEGIN',
   'CONNECT BY',
   'DECLARE',
   'EXCEPT',
   'EXCEPTION',
   'LOOP',
-  'MODIFY',
   'RETURNING',
-  'SET CURRENT SCHEMA',
-  'SET SCHEMA',
   'START WITH',
+  'SET SCHEMA',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

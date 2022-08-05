@@ -36,7 +36,12 @@ const reservedCommands = expandPhrases([
   'CREATE [OR REPLACE] VIEW',
   'CREATE [GLOBAL TEMPORARY] TABLE',
   'DROP TABLE [HIERARCHY]',
+  // alter table:
   'ALTER TABLE',
+  'ADD [COLUMN]',
+  'DROP [COLUMN]',
+  'ALTER [COLUMN]',
+  'RENAME [COLUMN]',
 
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
@@ -143,8 +148,6 @@ const reservedCommands = expandPhrases([
   'VALUES INTO',
   'WHENEVER',
   // other
-  'ADD',
-  'ALTER COLUMN',
   'AFTER',
   'GO',
   'SET CURRENT SCHEMA',

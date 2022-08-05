@@ -28,7 +28,14 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   supportsCreateView(format, { orReplace: true });
   supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);
-  supportsAlterTable(format);
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    alterColumn: true,
+    modify: true,
+    renameTo: true,
+    renameColumn: true,
+  });
   supportsDeleteFrom(format);
   supportsInsertInto(format, { withoutInto: true });
   supportsUpdate(format);
@@ -101,7 +108,9 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   it('does not wrap CHARACTER SET to multiple lines', () => {
     expect(format('ALTER TABLE t MODIFY col1 VARCHAR(50) CHARACTER SET greek')).toBe(dedent`
       ALTER TABLE
-        t MODIFY col1 VARCHAR(50) CHARACTER SET greek
+        t
+      MODIFY
+        col1 VARCHAR(50) CHARACTER SET greek
     `);
   });
 
