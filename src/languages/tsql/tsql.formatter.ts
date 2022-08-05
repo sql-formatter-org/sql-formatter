@@ -37,6 +37,7 @@ const reservedCommands = expandPhrases([
   'CREATE [OR ALTER] [MATERIALIZED] VIEW',
   'CREATE TABLE',
   'DROP TABLE [IF EXISTS]',
+  'ALTER TABLE',
 
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',

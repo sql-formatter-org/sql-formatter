@@ -33,6 +33,7 @@ const reservedCommands = expandPhrases([
   'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [TEMPORARY] TABLE [IF NOT EXISTS]',
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
+  'ALTER [ONLINE] [IGNORE] TABLE [IF EXISTS]',
 
   // https://mariadb.com/docs/reference/mdb/sql-statements/
   'ALTER DATABASE',
@@ -44,7 +45,6 @@ const reservedCommands = expandPhrases([
   'ALTER SCHEMA COMMENT',
   'ALTER SEQUENCE',
   'ALTER SERVER',
-  'ALTER TABLE',
   'ALTER USER',
   'ALTER VIEW',
   'ANALYZE',

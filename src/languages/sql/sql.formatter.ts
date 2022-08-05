@@ -34,11 +34,11 @@ const reservedCommands = expandPhrases([
   'CREATE [RECURSIVE] VIEW',
   'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
   'DROP TABLE',
+  'ALTER TABLE',
 
   // other
   'ADD',
   'ALTER COLUMN',
-  'ALTER TABLE',
   'SET SCHEMA',
 ]);
 

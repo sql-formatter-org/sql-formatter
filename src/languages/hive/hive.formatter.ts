@@ -48,11 +48,11 @@ const reservedCommands = expandPhrases([
   'CREATE [MATERIALIZED] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY] [EXTERNAL] TABLE [IF NOT EXISTS]',
   'DROP TABLE [IF EXISTS]',
+  'ALTER TABLE',
 
   // other
   'ALTER',
   'ALTER COLUMN', // added
-  'ALTER TABLE', // added
   'CREATE',
   'USE',
   'DESCRIBE',

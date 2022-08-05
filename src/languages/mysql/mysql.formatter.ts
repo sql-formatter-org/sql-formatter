@@ -34,6 +34,7 @@ const reservedCommands = expandPhrases([
   'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY] TABLE [IF NOT EXISTS]',
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
+  'ALTER TABLE',
 
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',
@@ -44,7 +45,6 @@ const reservedCommands = expandPhrases([
   'ALTER PROCEDURE',
   'ALTER RESOURCE GROUP',
   'ALTER SERVER',
-  'ALTER TABLE',
   'ALTER TABLESPACE',
   'ALTER USER',
   'ALTER VIEW',

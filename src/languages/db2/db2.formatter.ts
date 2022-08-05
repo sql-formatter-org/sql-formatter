@@ -36,6 +36,7 @@ const reservedCommands = expandPhrases([
   'CREATE [OR REPLACE] VIEW',
   'CREATE [GLOBAL TEMPORARY] TABLE',
   'DROP TABLE [HIERARCHY]',
+  'ALTER TABLE',
 
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
@@ -47,7 +48,6 @@ const reservedCommands = expandPhrases([
   'ALTER PROCEDURE',
   'ALTER SEQUENCE',
   'ALTER STOGROUP',
-  'ALTER TABLE',
   'ALTER TABLESPACE',
   'ALTER TRIGGER',
   'ALTER TRUSTED CONTEXT',
