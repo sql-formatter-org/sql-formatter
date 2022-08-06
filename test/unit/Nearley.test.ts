@@ -9,10 +9,10 @@ describe('Nearley integration', () => {
     const tokenizer = new Tokenizer({
       reservedCommands: ['SELECT', 'FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
       reservedDependentClauses: ['WHEN', 'ELSE'],
-      reservedBinaryCommands: ['UNION'],
+      reservedSetOperations: ['UNION'],
       reservedJoins: ['JOIN'],
-      reservedJoinConditions: ['ON', 'USING'],
-      reservedKeywords: ['BETWEEN', 'LIKE', 'SQRT'],
+      reservedFunctionNames: ['SQRT'],
+      reservedKeywords: ['BETWEEN', 'LIKE', 'ON', 'USING'],
       openParens: ['(', '['],
       closeParens: [')', ']'],
       stringTypes: ["''"],
@@ -41,10 +41,9 @@ describe('Nearley integration', () => {
           "children": Array [
             Object {
               "token": Object {
+                "raw": "foo",
                 "text": "foo",
                 "type": "IDENTIFIER",
-                "value": "foo",
-                "whitespaceBefore": "",
               },
               "type": "token",
             },
@@ -56,10 +55,9 @@ describe('Nearley integration', () => {
           "children": Array [
             Object {
               "token": Object {
+                "raw": "bar",
                 "text": "bar",
                 "type": "IDENTIFIER",
-                "value": "bar",
-                "whitespaceBefore": " ",
               },
               "type": "token",
             },
@@ -80,19 +78,17 @@ describe('Nearley integration', () => {
               "children": Array [
                 Object {
                   "arrayToken": Object {
+                    "raw": "my_array",
                     "text": "my_array",
                     "type": "IDENTIFIER",
-                    "value": "my_array",
-                    "whitespaceBefore": " ",
                   },
                   "parenthesis": Object {
                     "children": Array [
                       Object {
                         "token": Object {
+                          "raw": "5",
                           "text": "5",
                           "type": "NUMBER",
-                          "value": "5",
-                          "whitespaceBefore": "",
                         },
                         "type": "token",
                       },
@@ -105,10 +101,9 @@ describe('Nearley integration', () => {
                 },
               ],
               "nameToken": Object {
+                "raw": "SELECT",
                 "text": "SELECT",
                 "type": "RESERVED_COMMAND",
-                "value": "SELECT",
-                "whitespaceBefore": "",
               },
               "type": "clause",
             },
@@ -131,19 +126,17 @@ describe('Nearley integration', () => {
                   "children": Array [
                     Object {
                       "token": Object {
+                        "raw": "birth_year",
                         "text": "birth_year",
                         "type": "IDENTIFIER",
-                        "value": "birth_year",
-                        "whitespaceBefore": "",
                       },
                       "type": "token",
                     },
                     Object {
                       "token": Object {
+                        "raw": "-",
                         "text": "-",
                         "type": "OPERATOR",
-                        "value": "-",
-                        "whitespaceBefore": " ",
                       },
                       "type": "token",
                     },
@@ -151,28 +144,25 @@ describe('Nearley integration', () => {
                       "children": Array [
                         Object {
                           "token": Object {
+                            "raw": "CURRENT_DATE",
                             "text": "CURRENT_DATE",
                             "type": "IDENTIFIER",
-                            "value": "CURRENT_DATE",
-                            "whitespaceBefore": "",
                           },
                           "type": "token",
                         },
                         Object {
                           "token": Object {
+                            "raw": "+",
                             "text": "+",
                             "type": "OPERATOR",
-                            "value": "+",
-                            "whitespaceBefore": " ",
                           },
                           "type": "token",
                         },
                         Object {
                           "token": Object {
+                            "raw": "1",
                             "text": "1",
                             "type": "NUMBER",
-                            "value": "1",
-                            "whitespaceBefore": " ",
                           },
                           "type": "token",
                         },
@@ -188,10 +178,9 @@ describe('Nearley integration', () => {
                 },
               ],
               "nameToken": Object {
+                "raw": "SELECT",
                 "text": "SELECT",
                 "type": "RESERVED_COMMAND",
-                "value": "SELECT",
-                "whitespaceBefore": "",
               },
               "type": "clause",
             },

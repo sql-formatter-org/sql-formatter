@@ -1,5 +1,9 @@
 import { Token, TokenType } from 'src/lexer/token';
 
+// Nearly type definitions say that Token must have a value field,
+// which however is wrong.  Instead Nearley expects a text field.
+type NearleyToken = Token & { value: string };
+
 export default class LexerAdapter {
   private index = 0;
   private tokens: Token[] = [];
@@ -11,14 +15,14 @@ export default class LexerAdapter {
     this.tokens = this.tokenize(chunk);
   }
 
-  next(): Token {
-    return this.tokens[this.index++];
+  next(): NearleyToken | undefined {
+    return this.tokens[this.index++] as NearleyToken | undefined;
   }
 
   save(): any {}
 
-  formatError(token: Token) {
-    return `Parse error at token: ${token.value}`;
+  formatError(token: NearleyToken) {
+    return `Parse error at token: ${token.text}`;
   }
 
   has(name: string): boolean {
