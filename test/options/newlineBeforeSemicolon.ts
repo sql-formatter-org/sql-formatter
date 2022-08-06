@@ -21,7 +21,17 @@ export default function supportsNewlineBeforeSemicolon(format: FormatFn) {
     `);
   });
 
-  it('places semicolon on the same line as a clause keyword', () => {
+  // A regression test for semicolon placement in single-line clauses like:
+  //
+  //   ALTER TABLE
+  //     my_table
+  //   ALTER COLUMN
+  //     foo
+  //   DROP DEFAULT;  <-- here
+  //
+  // Unfortunately there's really no such single-line clause that exists in all dialects,
+  // so our test resorts to using somewhat invalid SQL.
+  it('places semicolon on the same line as a single-line clause', () => {
     const result = format(`SELECT a FROM;`);
     expect(result).toBe(dedent`
       SELECT
