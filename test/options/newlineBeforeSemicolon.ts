@@ -21,6 +21,15 @@ export default function supportsNewlineBeforeSemicolon(format: FormatFn) {
     `);
   });
 
+  it('places semicolon on the same line as a clause keyword', () => {
+    const result = format(`SELECT a FROM;`);
+    expect(result).toBe(dedent`
+      SELECT
+        a
+      FROM;
+    `);
+  });
+
   it('supports semicolon on separate line', () => {
     const result = format(`SELECT a FROM b;`, { newlineBeforeSemicolon: true });
     expect(result).toBe(dedent`

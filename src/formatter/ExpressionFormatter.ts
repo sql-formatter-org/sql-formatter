@@ -231,7 +231,7 @@ export default class ExpressionFormatter {
 
   /** Formats a line comment onto query */
   private formatLineComment(token: Token) {
-    this.layout.add(this.show(token), WS.NEWLINE, WS.INDENT);
+    this.layout.add(this.show(token), WS.MANDATORY_NEWLINE, WS.INDENT);
   }
 
   /** Formats a block comment onto query */
