@@ -3,13 +3,13 @@ import { equalizeWhitespace } from 'src/utils';
 
 import Params from 'src/formatter/Params';
 import { isTabularStyle } from 'src/formatter/config';
-import { isReserved, type Token, TokenType } from 'src/lexer/token';
+import { isReserved, type Token, TokenType, isParameter } from 'src/lexer/token';
 import {
   AllColumnsAsterisk,
   ArraySubscript,
   AstNode,
   BetweenPredicate,
-  BinaryClause,
+  SetOperation,
   Clause,
   FunctionCall,
   LimitClause,
@@ -68,8 +68,8 @@ export default class ExpressionFormatter {
         case NodeType.clause:
           this.formatClause(node);
           break;
-        case NodeType.binary_clause:
-          this.formatBinaryClause(node);
+        case NodeType.set_operation:
+          this.formatSetOperation(node);
           break;
         case NodeType.limit_clause:
           this.formatLimitClause(node);
@@ -125,7 +125,7 @@ export default class ExpressionFormatter {
       WS.SPACE,
       this.show(node.expr1),
       WS.SPACE,
-      this.show(node.andToken),
+      this.showNonTabular(node.andToken),
       WS.SPACE,
       this.show(node.expr2),
       WS.SPACE
@@ -148,7 +148,7 @@ export default class ExpressionFormatter {
     this.layout.indentation.decreaseTopLevel();
   }
 
-  private formatBinaryClause(node: BinaryClause) {
+  private formatSetOperation(node: SetOperation) {
     this.layout.indentation.decreaseTopLevel();
     this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
 
@@ -195,21 +195,16 @@ export default class ExpressionFormatter {
         return this.formatJoin(token);
       case TokenType.RESERVED_DEPENDENT_CLAUSE:
         return this.formatDependentClause(token);
-      case TokenType.RESERVED_JOIN_CONDITION:
-        return this.formatJoinCondition(token);
       case TokenType.RESERVED_LOGICAL_OPERATOR:
         return this.formatLogicalOperator(token);
       case TokenType.RESERVED_KEYWORD:
+      case TokenType.RESERVED_FUNCTION_NAME:
+      case TokenType.RESERVED_PHRASE:
         return this.formatKeyword(token);
       case TokenType.RESERVED_CASE_START:
         return this.formatCaseStart(token);
       case TokenType.RESERVED_CASE_END:
         return this.formatCaseEnd(token);
-      case TokenType.NAMED_PARAMETER:
-      case TokenType.QUOTED_PARAMETER:
-      case TokenType.INDEXED_PARAMETER:
-      case TokenType.POSITIONAL_PARAMETER:
-        return this.formatParameter(token);
       case TokenType.COMMA:
         return this.formatComma(token);
       case TokenType.OPERATOR:
@@ -219,16 +214,18 @@ export default class ExpressionFormatter {
       case TokenType.STRING:
       case TokenType.NUMBER:
       case TokenType.VARIABLE:
-        return this.formatWord(token);
+      case TokenType.NAMED_PARAMETER:
+      case TokenType.QUOTED_PARAMETER:
+      case TokenType.INDEXED_PARAMETER:
+      case TokenType.POSITIONAL_PARAMETER:
+        return this.formatLiteral(token);
       default:
         throw new Error(`Unexpected token type: ${token.type}`);
     }
   }
 
-  /**
-   * Formats ident/string/number/variable tokens
-   */
-  private formatWord(token: Token) {
+  /** Default formatting for most token types */
+  private formatLiteral(token: Token) {
     this.layout.add(this.show(token), WS.SPACE);
   }
 
@@ -239,7 +236,7 @@ export default class ExpressionFormatter {
 
   /** Formats a block comment onto query */
   private formatBlockComment(token: Token) {
-    this.splitBlockComment(token.value).forEach(line => {
+    this.splitBlockComment(token.text).forEach(line => {
       this.layout.add(WS.NEWLINE, WS.INDENT, line);
     });
     this.layout.add(WS.NEWLINE, WS.INDENT);
@@ -295,20 +292,20 @@ export default class ExpressionFormatter {
     this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
   }
 
-  // Formats ON and USING keywords
-  private formatJoinCondition(token: Token) {
-    this.layout.add(this.show(token), WS.SPACE);
-  }
-
   /**
    * Formats an Operator onto query, following rules for specific characters
    */
   private formatOperator(token: Token) {
     // special operator
-    if (token.value === ':') {
+    if (token.text === ':') {
       this.layout.add(WS.NO_SPACE, this.show(token), WS.SPACE);
       return;
-    } else if (token.value === '.' || token.value === '::') {
+    } else if (token.text === '.' || token.text === '::') {
+      this.layout.add(WS.NO_SPACE, this.show(token));
+      return;
+    }
+    // special case for PLSQL @ dblink syntax
+    else if (token.text === '@' && this.cfg.language === 'plsql') {
       this.layout.add(WS.NO_SPACE, this.show(token));
       return;
     }
@@ -355,13 +352,6 @@ export default class ExpressionFormatter {
   }
 
   /**
-   * Formats a parameter placeholder item onto query, to be replaced with the value of the placeholder
-   */
-  private formatParameter(token: Token) {
-    this.layout.add(this.params.get(token), WS.SPACE);
-  }
-
-  /**
    * Formats a comma Operator onto query, ending line unless in an Inline Block
    */
   private formatComma(token: Token) {
@@ -380,19 +370,26 @@ export default class ExpressionFormatter {
     }
   }
 
-  // don't call this directly, always use show() instead.
+  // Like show(), but skips tabular formatting
+  private showNonTabular(token: Token): string {
+    return this.showToken(token);
+  }
+
+  // don't call this directly, always use show() or showNonTabular() instead.
   private showToken(token: Token): string {
     if (isReserved(token)) {
       switch (this.cfg.keywordCase) {
         case 'preserve':
-          return equalizeWhitespace(token.text);
+          return equalizeWhitespace(token.raw);
         case 'upper':
-          return token.value;
+          return token.text;
         case 'lower':
-          return token.value.toLowerCase();
+          return token.text.toLowerCase();
       }
+    } else if (isParameter(token)) {
+      return this.params.get(token);
     } else {
-      return token.value;
+      return token.text;
     }
   }
 }

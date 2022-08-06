@@ -26,10 +26,10 @@ export default class InlineBlock {
     for (const node of parenthesis.children) {
       switch (node.type) {
         case NodeType.function_call:
-          length += node.nameToken.value.length + this.inlineWidth(node.parenthesis);
+          length += node.nameToken.text.length + this.inlineWidth(node.parenthesis);
           break;
         case NodeType.array_subscript:
-          length += node.arrayToken.value.length + this.inlineWidth(node.parenthesis);
+          length += node.arrayToken.text.length + this.inlineWidth(node.parenthesis);
           break;
         case NodeType.parenthesis:
           length += this.inlineWidth(node);
@@ -39,13 +39,13 @@ export default class InlineBlock {
           break;
         case NodeType.clause:
         case NodeType.limit_clause:
-        case NodeType.binary_clause:
+        case NodeType.set_operation:
           return Infinity;
         case NodeType.all_columns_asterisk:
           length += 1;
           break;
         case NodeType.token:
-          length += node.token.value.length;
+          length += node.token.text.length;
           if (this.isForbiddenToken(node.token)) {
             return Infinity;
           }
@@ -62,7 +62,7 @@ export default class InlineBlock {
 
   private betweenWidth(node: BetweenPredicate): number {
     return sum(
-      [node.betweenToken, node.expr1, node.andToken, node.expr2].map(token => token.value.length)
+      [node.betweenToken, node.expr1, node.andToken, node.expr2].map(token => token.text.length)
     );
   }
 

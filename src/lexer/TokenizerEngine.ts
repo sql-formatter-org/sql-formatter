@@ -34,8 +34,8 @@ export default class TokenizerEngine {
 
     // Keep processing the string until end is reached
     while (this.index < this.input.length) {
-      // grab any preceding whitespace
-      const whitespaceBefore = this.getWhitespace();
+      // skip any preceding whitespace
+      this.skipWhitespace();
 
       if (this.index < this.input.length) {
         // Get the next token and the token type
@@ -44,21 +44,18 @@ export default class TokenizerEngine {
           throw new Error(`Parse error: Unexpected "${input.slice(this.index, 100)}"`);
         }
 
-        tokens.push({ ...token, whitespaceBefore });
+        tokens.push(token);
       }
     }
     return tokens;
   }
 
-  private getWhitespace(): string {
+  private skipWhitespace(): void {
     WHITESPACE_REGEX.lastIndex = this.index;
     const matches = WHITESPACE_REGEX.exec(this.input);
     if (matches) {
       // Advance current position by matched whitespace length
       this.index += matches[0].length;
-      return matches[0];
-    } else {
-      return '';
     }
   }
 
@@ -90,7 +87,7 @@ export default class TokenizerEngine {
       const tokenRule = this.rules[tokenType];
       if (token) {
         if (tokenRule?.key) {
-          return { ...token, key: tokenRule.key(token.value) };
+          return { ...token, key: tokenRule.key(token.text) };
         }
         return token; // POSITIONAL_PARAMETER does not have a key transform function
       }
@@ -101,7 +98,7 @@ export default class TokenizerEngine {
   private matchReservedWordToken(previousToken?: Token): Token | undefined {
     // A reserved word cannot be preceded by a '.'
     // this makes it so in "mytable.from", "from" is not considered a reserved word
-    if (previousToken?.value === '.') {
+    if (previousToken?.text === '.') {
       return undefined;
     }
 
@@ -110,12 +107,13 @@ export default class TokenizerEngine {
       this.matchToken(TokenType.RESERVED_CASE_START) ||
       this.matchToken(TokenType.RESERVED_CASE_END) ||
       this.matchToken(TokenType.RESERVED_COMMAND) ||
-      this.matchToken(TokenType.RESERVED_BINARY_COMMAND) ||
+      this.matchToken(TokenType.RESERVED_SET_OPERATION) ||
       this.matchToken(TokenType.RESERVED_DEPENDENT_CLAUSE) ||
       this.matchToken(TokenType.RESERVED_JOIN) ||
-      this.matchToken(TokenType.RESERVED_KEYWORD) ||
+      this.matchToken(TokenType.RESERVED_PHRASE) ||
       this.matchToken(TokenType.RESERVED_LOGICAL_OPERATOR) ||
-      this.matchToken(TokenType.RESERVED_JOIN_CONDITION)
+      this.matchToken(TokenType.RESERVED_FUNCTION_NAME) ||
+      this.matchToken(TokenType.RESERVED_KEYWORD)
     );
   }
 
@@ -123,7 +121,7 @@ export default class TokenizerEngine {
   private matchToken(tokenType: TokenType): Token | undefined {
     const rule = this.rules[tokenType];
     if (!rule) {
-      throw Error(`Unknown token type found: ${tokenType}`);
+      return undefined;
     }
     return this.match({
       type: tokenType,
@@ -151,8 +149,8 @@ export default class TokenizerEngine {
       this.index += matchedToken.length;
       return {
         type,
-        text: matchedToken,
-        value: transform ? transform(matchedToken) : matchedToken,
+        raw: matchedToken,
+        text: transform ? transform(matchedToken) : matchedToken,
       };
     }
     return undefined;

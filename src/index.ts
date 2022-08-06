@@ -1,2 +1,8 @@
 export * from './sqlFormatter';
-export * from './types';
+export type {
+  IndentStyle,
+  KeywordCase,
+  CommaPosition,
+  LogicalOperatorNewline,
+  FormatOptions,
+} from './types';

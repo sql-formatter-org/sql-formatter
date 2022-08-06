@@ -1,10 +1,10 @@
 import dedent from 'dedent-js';
-
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import SqliteFormatter from 'src/languages/sqlite.formatter';
+import SqliteFormatter from 'src/languages/sqlite/sqlite.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
+import supportsDropTable from './features/dropTable';
 import supportsAlterTable from './features/alterTable';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
@@ -17,6 +17,11 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
+import supportsCreateView from './features/createView';
 
 describe('SqliteFormatter', () => {
   const language = 'sqlite';
@@ -24,29 +29,37 @@ describe('SqliteFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
-  supportsCreateTable(format);
+  supportsCreateView(format);
+  supportsCreateTable(format, { ifNotExists: true });
+  supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);
-  supportsAlterTable(format);
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    renameTo: true,
+    renameColumn: true,
+  });
   supportsDeleteFrom(format);
+  supportsInsertInto(format);
+  supportsUpdate(format);
   supportsStrings(format, ["''", "X''"]);
   supportsIdentifiers(format, [`""`, '``', '[]']);
   supportsBetween(format);
   supportsSchema(format);
-  supportsJoin(format, {
-    without: ['FULL', 'RIGHT'],
-    additionally: ['NATURAL LEFT JOIN', 'NATURAL LEFT OUTER JOIN'],
-  });
+  supportsJoin(format);
+  supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsOperators(format, SqliteFormatter.operators);
   supportsParams(format, { positional: true, numbered: ['?'], named: [':', '$', '@'] });
   supportsWindow(format);
+  supportsLimiting(format, { limit: true, offset: true });
 
-  it('formats FETCH FIRST like LIMIT', () => {
-    const result = format('SELECT * FETCH FIRST 2 ROWS ONLY;');
-    expect(result).toBe(dedent`
-      SELECT
-        *
-      FETCH FIRST
-        2 ROWS ONLY;
+  it('supports REPLACE INTO syntax', () => {
+    expect(format(`REPLACE INTO tbl VALUES (1,'Leopard'),(2,'Dog');`)).toBe(dedent`
+      REPLACE INTO
+        tbl
+      VALUES
+        (1, 'Leopard'),
+        (2, 'Dog');
     `);
   });
 });

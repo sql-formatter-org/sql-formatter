@@ -1,16 +1,17 @@
-import BigQueryFormatter from 'src/languages/bigquery.formatter';
-import Db2Formatter from 'src/languages/db2.formatter';
-import HiveFormatter from 'src/languages/hive.formatter';
-import MariaDbFormatter from 'src/languages/mariadb.formatter';
-import MySqlFormatter from 'src/languages/mysql.formatter';
-import N1qlFormatter from 'src/languages/n1ql.formatter';
-import PlSqlFormatter from 'src/languages/plsql.formatter';
-import PostgreSqlFormatter from 'src/languages/postgresql.formatter';
-import RedshiftFormatter from 'src/languages/redshift.formatter';
-import SparkFormatter from 'src/languages/spark.formatter';
-import SqliteFormatter from 'src/languages/sqlite.formatter';
-import SqlFormatter from 'src/languages/sql.formatter';
-import TSqlFormatter from 'src/languages/tsql.formatter';
+import BigQueryFormatter from 'src/languages/bigquery/bigquery.formatter';
+import Db2Formatter from 'src/languages/db2/db2.formatter';
+import HiveFormatter from 'src/languages/hive/hive.formatter';
+import MariaDbFormatter from 'src/languages/mariadb/mariadb.formatter';
+import MySqlFormatter from 'src/languages/mysql/mysql.formatter';
+import N1qlFormatter from 'src/languages/n1ql/n1ql.formatter';
+import PlSqlFormatter from 'src/languages/plsql/plsql.formatter';
+import PostgreSqlFormatter from 'src/languages/postgresql/postgresql.formatter';
+import RedshiftFormatter from 'src/languages/redshift/redshift.formatter';
+import SparkFormatter from 'src/languages/spark/spark.formatter';
+import SqliteFormatter from 'src/languages/sqlite/sqlite.formatter';
+import SqlFormatter from 'src/languages/sql/sql.formatter';
+import TrinoFormatter from 'src/languages/trino/trino.formatter';
+import TSqlFormatter from 'src/languages/tsql/tsql.formatter';
 
 import type { FormatOptions } from './types';
 import { ParamItems } from './formatter/Params';
@@ -28,21 +29,19 @@ export const formatters = {
   spark: SparkFormatter,
   sql: SqlFormatter,
   sqlite: SqliteFormatter,
+  trino: TrinoFormatter,
   tsql: TSqlFormatter,
 };
 export type SqlLanguage = keyof typeof formatters;
 export const supportedDialects = Object.keys(formatters);
 
-export type FormatFnOptions = FormatOptions & { language: SqlLanguage };
-
-const defaultOptions: FormatFnOptions = {
+const defaultOptions: FormatOptions = {
   language: 'sql',
   tabWidth: 2,
   useTabs: false,
   keywordCase: 'preserve',
   indentStyle: 'standard',
   logicalOperatorNewline: 'before',
-  aliasAs: 'preserve',
   tabulateAlias: false,
   commaPosition: 'after',
   expressionWidth: 50,
@@ -58,7 +57,7 @@ const defaultOptions: FormatFnOptions = {
  * @param {FormatOptions} cfg Configuration options (see docs in README)
  * @return {string} formatted query
  */
-export const format = (query: string, cfg: Partial<FormatFnOptions> = {}): string => {
+export const format = (query: string, cfg: Partial<FormatOptions> = {}): string => {
   if (typeof query !== 'string') {
     throw new Error('Invalid query argument. Expected string, instead got ' + typeof query);
   }
@@ -74,7 +73,7 @@ export const format = (query: string, cfg: Partial<FormatFnOptions> = {}): strin
 
 export class ConfigError extends Error {}
 
-function validateConfig(cfg: FormatFnOptions): FormatFnOptions {
+function validateConfig(cfg: FormatOptions): FormatOptions {
   if (!supportedDialects.includes(cfg.language)) {
     throw new ConfigError(`Unsupported SQL dialect: ${cfg.language}`);
   }

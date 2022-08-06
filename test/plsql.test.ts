@@ -1,13 +1,13 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import PlSqlFormatter from 'src/languages/plsql.formatter';
+import PlSqlFormatter from 'src/languages/plsql/plsql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
-import supportsAlterTableModify from './features/alterTableModify';
 import supportsBetween from './features/between';
 import supportsCreateTable from './features/createTable';
+import supportsDropTable from './features/dropTable';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
@@ -18,6 +18,13 @@ import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
+import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
+import supportsTruncateTable from './features/truncateTable';
+import supportsMergeInto from './features/mergeInto';
+import supportsCreateView from './features/createView';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -25,32 +32,31 @@ describe('PlSqlFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCreateView(format, { orReplace: true, materialized: true });
   supportsCreateTable(format);
+  supportsDropTable(format);
   supportsConstraints(format);
-  supportsAlterTable(format);
-  supportsAlterTableModify(format);
+  supportsAlterTable(format, {
+    dropColumn: true,
+    modify: true,
+    renameTo: true,
+    renameColumn: true,
+  });
   supportsDeleteFrom(format);
+  supportsInsertInto(format);
+  supportsUpdate(format);
+  supportsTruncateTable(format);
+  supportsMergeInto(format);
   supportsStrings(format, ["''", "N''"]);
   supportsIdentifiers(format, [`""`]);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, PlSqlFormatter.operators, ['AND', 'OR', 'XOR']);
-  supportsJoin(format);
+  supportsJoin(format, { supportsApply: true });
+  supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsReturning(format);
   supportsParams(format, { numbered: [':'], named: [':'] });
-
-  it('formats FETCH FIRST like LIMIT', () => {
-    expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent`
-      SELECT
-        col1
-      FROM
-        tbl
-      ORDER BY
-        col2 DESC
-      FETCH FIRST
-        20 ROWS ONLY;
-    `);
-  });
+  supportsLimiting(format, { offset: true, fetchFirst: true, fetchNext: true });
 
   it('recognizes _, $, # as part of identifiers', () => {
     const result = format('SELECT my_col$1#, col.a$, type#, procedure$, user# FROM tbl;');
@@ -91,29 +97,15 @@ describe('PlSqlFormatter', () => {
     `);
   });
 
-  it('formats INSERT without INTO', () => {
-    const result = format(
-      "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
-    );
-    expect(result).toBe(dedent`
-      INSERT
-        Customers (ID, MoneyBalance, Address, City)
-      VALUES
-        (12, -123.4, 'Skagen 2111', 'Stv');
-    `);
-  });
-
-  it('formats SELECT query with CROSS APPLY', () => {
-    const result = format('SELECT a, b FROM t CROSS APPLY fn(t.id)');
-    expect(result).toBe(dedent`
-      SELECT
-        a,
-        b
-      FROM
-        t
-      CROSS APPLY
-      fn(t.id)
-    `);
+  it('supports Q custom delimiter strings', () => {
+    expect(format("q'<test string < > 'foo' bar >'")).toBe("q'<test string < > 'foo' bar >'");
+    expect(format("NQ'[test string [ ] 'foo' bar ]'")).toBe("NQ'[test string [ ] 'foo' bar ]'");
+    expect(format("nq'(test string ( ) 'foo' bar )'")).toBe("nq'(test string ( ) 'foo' bar )'");
+    expect(format("nQ'{test string { } 'foo' bar }'")).toBe("nQ'{test string { } 'foo' bar }'");
+    expect(format("Nq'%test string % % 'foo' bar %'")).toBe("Nq'%test string % % 'foo' bar %'");
+    expect(format("Q'Xtest string X X 'foo' bar X'")).toBe("Q'Xtest string X X 'foo' bar X'");
+    expect(format("q'$test string $'$''")).toBe("q'$test string $' $ ''");
+    expect(format("Q'Stest string S'S''")).toBe("Q'Stest string S' S ''");
   });
 
   it('formats simple SELECT with national characters', () => {
@@ -124,142 +116,38 @@ describe('PlSqlFormatter', () => {
     `);
   });
 
-  it('formats SELECT query with OUTER APPLY', () => {
-    const result = format('SELECT a, b FROM t OUTER APPLY fn(t.id)');
-    expect(result).toBe(dedent`
-      SELECT
-        a,
-        b
-      FROM
-        t
-      OUTER APPLY
-      fn(t.id)
-    `);
-  });
-
   it('formats Oracle recursive sub queries', () => {
     const result = format(`
-      WITH t1(id, parent_id) AS (
-        -- Anchor member.
-        SELECT
-          id,
-          parent_id
-        FROM
-          tab1
-        WHERE
-          parent_id IS NULL
-        MINUS
-          -- Recursive member.
-        SELECT
-          t2.id,
-          t2.parent_id
-        FROM
-          tab1 t2,
-          t1
-        WHERE
-          t2.parent_id = t1.id
-      ) SEARCH BREADTH FIRST BY id SET order1,
-      another AS (SELECT * FROM dual)
-      SELECT id, parent_id FROM t1 ORDER BY order1;
+      WITH t1 AS (
+        SELECT * FROM tbl
+      ) SEARCH BREADTH FIRST BY id SET order1
+      SELECT * FROM t1;
     `);
     expect(result).toBe(dedent`
       WITH
-        t1(id, parent_id) AS (
-          -- Anchor member.
-          SELECT
-            id,
-            parent_id
-          FROM
-            tab1
-          WHERE
-            parent_id IS NULL
-          MINUS
-          -- Recursive member.
-          SELECT
-            t2.id,
-            t2.parent_id
-          FROM
-            tab1 t2,
-            t1
-          WHERE
-            t2.parent_id = t1.id
-        ) SEARCH BREADTH FIRST BY id SET order1,
-        another AS (
+        t1 AS (
           SELECT
             *
           FROM
-            dual
-        )
+            tbl
+        ) SEARCH BREADTH FIRST BY id SET order1
       SELECT
-        id,
-        parent_id
+        *
       FROM
-        t1
-      ORDER BY
-        order1;
+        t1;
     `);
   });
 
-  it('formats Oracle recursive sub queries regardless of capitalization', () => {
-    const result = format(/* sql */ `
-      WITH t1(id, parent_id) AS (
-        -- Anchor member.
-        SELECT
-          id,
-          parent_id
-        FROM
-          tab1
-        WHERE
-          parent_id IS NULL
-        MINUS
-          -- Recursive member.
-        SELECT
-          t2.id,
-          t2.parent_id
-        FROM
-          tab1 t2,
-          t1
-        WHERE
-          t2.parent_id = t1.id
-      ) SEARCH BREADTH FIRST by id set order1,
-      another AS (SELECT * FROM dual)
-      SELECT id, parent_id FROM t1 ORDER BY order1;
-    `);
-    expect(result).toBe(dedent/* sql */ `
-      WITH
-        t1(id, parent_id) AS (
-          -- Anchor member.
-          SELECT
-            id,
-            parent_id
-          FROM
-            tab1
-          WHERE
-            parent_id IS NULL
-          MINUS
-          -- Recursive member.
-          SELECT
-            t2.id,
-            t2.parent_id
-          FROM
-            tab1 t2,
-            t1
-          WHERE
-            t2.parent_id = t1.id
-        ) SEARCH BREADTH FIRST by id set order1,
-        another AS (
-          SELECT
-            *
-          FROM
-            dual
-        )
+  // regression test for sql-formatter#338
+  it('formats identifier with dblink', () => {
+    const result = format('SELECT * FROM database.table@dblink WHERE id = 1;');
+    expect(result).toBe(dedent`
       SELECT
-        id,
-        parent_id
+        *
       FROM
-        t1
-      ORDER BY
-        order1;
+        database.table@dblink
+      WHERE
+        id = 1;
     `);
   });
 });

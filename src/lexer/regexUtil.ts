@@ -3,9 +3,7 @@ import type { PrefixedQuoteType } from './regexTypes';
 // Escapes regex special chars
 export const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
 
-export const NULL_REGEX = /^(?!)/; // zero-width negative lookahead, matches nothing
-
-export const WHITESPACE_REGEX = /(\s+)/uy;
+export const WHITESPACE_REGEX = /\s+/uy;
 
 export const patternToRegex = (pattern: string): RegExp => new RegExp(`(?:${pattern})`, 'uy');
 
@@ -23,7 +21,7 @@ export const escapeParen = (paren: string): string => {
     return escapeRegExp(paren);
   } else {
     // longer word
-    return '\\b' + paren + '\\b';
+    return '\\b' + escapeRegExp(paren) + '\\b';
   }
 };
 

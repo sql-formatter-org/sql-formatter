@@ -4,9 +4,9 @@ import { FormatFn } from 'src/sqlFormatter';
 
 import supportsCase from './features/case';
 import supportsNumbers from './features/numbers';
+import supportsWith from './features/with';
 import supportsTabWidth from './options/tabWidth';
 import supportsUseTabs from './options/useTabs';
-import supportsAliasAs from './options/aliasAs';
 import supportsExpressionWidth from './options/expressionWidth';
 import supportsKeywordCase from './options/keywordCase';
 import supportsIndentStyle from './options/indentStyle';
@@ -15,7 +15,6 @@ import supportsLinesBetweenQueries from './options/linesBetweenQueries';
 import supportsNewlineBeforeSemicolon from './options/newlineBeforeSemicolon';
 import supportsLogicalOperatorNewline from './options/logicalOperatorNewline';
 import supportsTabulateAlias from './options/tabulateAlias';
-import supportsLimit from './features/limit';
 
 /**
  * Core tests for all SQL formatters
@@ -23,8 +22,8 @@ import supportsLimit from './features/limit';
 export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsCase(format);
   supportsNumbers(format);
+  supportsWith(format);
 
-  supportsAliasAs(format);
   supportsTabulateAlias(format);
   supportsTabWidth(format);
   supportsUseTabs(format);
@@ -35,7 +34,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsNewlineBeforeSemicolon(format);
   supportsCommaPosition(format);
   supportsLogicalOperatorNewline(format);
-  supportsLimit(format);
 
   it('formats simple SELECT query', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;');
@@ -53,8 +51,8 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
       "SELECT DISTINCT name, ROUND(age/7) field1, 18 + 20 AS field2, 'some string' FROM foo;"
     );
     expect(result).toBe(dedent`
-      SELECT
-        DISTINCT name,
+      SELECT DISTINCT
+        name,
         ROUND(age / 7) field1,
         18 + 20 AS field2,
         'some string'
@@ -66,7 +64,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   it('formats SELECT with complex WHERE', () => {
     const result = format(`
       SELECT * FROM foo WHERE Column1 = 'testing'
-      AND ( (Column2 = Column3 OR Column4 >= NOW()) );
+      AND ( (Column2 = Column3 OR Column4 >= ABS(5)) );
     `);
     expect(result).toBe(dedent`
       SELECT
@@ -78,7 +76,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
         AND (
           (
             Column2 = Column3
-            OR Column4 >= NOW()
+            OR Column4 >= ABS(5)
           )
         );
     `);
@@ -87,7 +85,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   it('formats SELECT with top level reserved words', () => {
     const result = format(`
       SELECT * FROM foo WHERE name = 'John' GROUP BY some_column
-      HAVING column > 10 ORDER BY other_column LIMIT 5;
+      HAVING column > 10 ORDER BY other_column;
     `);
     expect(result).toBe(dedent`
       SELECT
@@ -101,9 +99,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
       HAVING
         column > 10
       ORDER BY
-        other_column
-      LIMIT
-        5;
+        other_column;
     `);
   });
 
@@ -139,7 +135,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
 
   it('formats SELECT query with SELECT query inside it', () => {
     const result = format(
-      'SELECT *, SUM(*) AS total FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b'
+      'SELECT *, SUM(*) AS total FROM (SELECT * FROM Posts WHERE age > 10) WHERE a > b'
     );
     expect(result).toBe(dedent`
       SELECT
@@ -151,62 +147,43 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
             *
           FROM
             Posts
-          LIMIT
-            30
+          WHERE
+            age > 10
         )
       WHERE
         a > b
     `);
   });
 
-  it('formats simple INSERT query', () => {
-    const result = format(
-      "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
-    );
+  it('formats open paren after comma', () => {
+    const result = format('INSERT INTO TestIds (id) VALUES (4),(5), (6),(7),(9),(10),(11);');
     expect(result).toBe(dedent`
       INSERT INTO
-        Customers (ID, MoneyBalance, Address, City)
+        TestIds (id)
       VALUES
-        (12, -123.4, 'Skagen 2111', 'Stv');
-    `);
-  });
-
-  it('formats open paren after comma', () => {
-    const result = format(
-      'WITH TestIds AS (VALUES (4),(5), (6),(7),(9),(10),(11)) SELECT * FROM TestIds;'
-    );
-    expect(result).toBe(dedent/* sql */ `
-      WITH
-        TestIds AS (
-          VALUES
-            (4),
-            (5),
-            (6),
-            (7),
-            (9),
-            (10),
-            (11)
-        )
-      SELECT
-        *
-      FROM
-        TestIds;
+        (4),
+        (5),
+        (6),
+        (7),
+        (9),
+        (10),
+        (11);
     `);
   });
 
   it('keeps short parenthesized list with nested parenthesis on single line', () => {
-    const result = format('SELECT (a + b * (c - NOW()));');
+    const result = format('SELECT (a + b * (c - SIN(1)));');
     expect(result).toBe(dedent`
       SELECT
-        (a + b * (c - NOW()));
+        (a + b * (c - SIN(1)));
     `);
   });
 
   it('breaks long parenthesized lists to multiple lines', () => {
     const result = format(`
       INSERT INTO some_table (id_product, id_shop, id_currency, id_country, id_registration) (
-      SELECT IF(dq.id_discounter_shopping = 2, dq.value, dq.value / 100),
-      IF (dq.id_discounter_shopping = 2, 'amount', 'percentage') FROM foo);
+      SELECT COALESCE(dq.id_discounter_shopping = 2, dq.value, dq.value / 100),
+      COALESCE (dq.id_discounter_shopping = 2, 'amount', 'percentage') FROM foo);
     `);
     expect(result).toBe(dedent`
       INSERT INTO
@@ -218,12 +195,12 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
           id_registration
         ) (
           SELECT
-            IF(
+            COALESCE(
               dq.id_discounter_shopping = 2,
               dq.value,
               dq.value / 100
             ),
-            IF (
+            COALESCE(
               dq.id_discounter_shopping = 2,
               'amount',
               'percentage'
@@ -231,29 +208,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
           FROM
             foo
         );
-    `);
-  });
-
-  it('formats simple UPDATE query', () => {
-    const result = format(
-      "UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';"
-    );
-    expect(result).toBe(dedent`
-      UPDATE
-        Customers
-      SET
-        ContactName = 'Alfred Schmidt',
-        City = 'Hamburg'
-      WHERE
-        CustomerName = 'Alfreds Futterkiste';
-    `);
-  });
-
-  it('formats simple DROP query', () => {
-    const result = format('DROP TABLE IF EXISTS admin_role;');
-    expect(result).toBe(dedent`
-      DROP TABLE
-        IF EXISTS admin_role;
     `);
   });
 
@@ -265,34 +219,14 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     `);
   });
 
-  it('formats UPDATE query with AS part', () => {
-    const result = format(
-      'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary',
-      { aliasAs: 'always' }
-    );
-    expect(result).toBe(dedent`
-      UPDATE
-        customers
-      SET
-        total_orders = order_summary.total
-      FROM
-        (
-          SELECT
-            *
-          FROM
-            bank
-        ) AS order_summary
-    `);
-  });
-
   it('formats top-level and newline multi-word reserved words with inconsistent spacing', () => {
-    const result = format('SELECT * FROM foo LEFT \t   \n JOIN bar ORDER \n BY blah');
+    const result = format('SELECT * FROM foo LEFT \t   \n JOIN mycol ORDER \n BY blah');
     expect(result).toBe(dedent`
       SELECT
         *
       FROM
         foo
-        LEFT JOIN bar
+        LEFT JOIN mycol
       ORDER BY
         blah
     `);
@@ -344,25 +278,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
         õ
       FROM
         tbl;
-    `);
-  });
-
-  it('does not split UNION ALL in half', () => {
-    const result = format(`
-      SELECT * FROM tbl1
-      UNION ALL
-      SELECT * FROM tbl2;
-    `);
-    expect(result).toBe(dedent/* sql */ `
-      SELECT
-        *
-      FROM
-        tbl1
-      UNION ALL
-      SELECT
-        *
-      FROM
-        tbl2;
     `);
   });
 }

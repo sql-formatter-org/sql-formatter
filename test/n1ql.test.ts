@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import N1qlFormatter from 'src/languages/n1ql.formatter';
+import N1qlFormatter from 'src/languages/n1ql/n1ql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsBetween from './features/between';
@@ -17,6 +17,11 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
+import supportsMergeInto from './features/mergeInto';
 
 describe('N1qlFormatter', () => {
   const language = 'n1ql';
@@ -32,10 +37,22 @@ describe('N1qlFormatter', () => {
   supportsOperators(format, N1qlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsArrayAndMapAccessors(format);
   supportsArrayLiterals(format);
-  supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'] });
+  supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'], supportsUsing: false });
+  supportsSetOperations(format, [
+    'UNION',
+    'UNION ALL',
+    'EXCEPT',
+    'EXCEPT ALL',
+    'INTERSECT',
+    'INTERSECT ALL',
+  ]);
   supportsReturning(format);
   supportsParams(format, { positional: true, numbered: ['$'], named: ['$'] });
   supportsWindow(format);
+  supportsLimiting(format, { limit: true, offset: true });
+  supportsInsertInto(format);
+  supportsUpdate(format);
+  supportsMergeInto(format);
 
   it('formats INSERT with {} object literal', () => {
     const result = format(

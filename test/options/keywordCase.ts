@@ -6,8 +6,8 @@ export default function supportsKeywordCase(format: FormatFn) {
   it('preserves keyword case by default', () => {
     const result = format('select distinct * frOM foo left JOIN bar WHERe cola > 1 and colb = 3');
     expect(result).toBe(dedent`
-      select
-        distinct *
+      select distinct
+        *
       frOM
         foo
         left JOIN bar
@@ -18,15 +18,18 @@ export default function supportsKeywordCase(format: FormatFn) {
   });
 
   it('converts keywords to uppercase', () => {
-    const result = format('select distinct * frOM foo left JOIN bar WHERe cola > 1 and colb = 3', {
-      keywordCase: 'upper',
-    });
+    const result = format(
+      'select distinct * frOM foo left JOIN mycol WHERe cola > 1 and colb = 3',
+      {
+        keywordCase: 'upper',
+      }
+    );
     expect(result).toBe(dedent`
-      SELECT
-        DISTINCT *
+      SELECT DISTINCT
+        *
       FROM
         foo
-        LEFT JOIN bar
+        LEFT JOIN mycol
       WHERE
         cola > 1
         AND colb = 3
@@ -38,8 +41,8 @@ export default function supportsKeywordCase(format: FormatFn) {
       keywordCase: 'lower',
     });
     expect(result).toBe(dedent`
-      select
-        distinct *
+      select distinct
+        *
       from
         foo
         left join bar
@@ -56,6 +59,36 @@ export default function supportsKeywordCase(format: FormatFn) {
     expect(result).toBe(dedent`
       SELECT
         'distinct' AS foo
+    `);
+  });
+
+  // regression test for #356
+  it('formats multi-word reserved commands into single line', () => {
+    const result = format(
+      `select * from mytable
+      inner
+      join
+      mytable2 on mytable1.col1 = mytable2.col1
+      where mytable2.col1 = 5
+      group
+      bY mytable1.col2
+      order
+      by
+      mytable2.col3;`,
+      { keywordCase: 'upper' }
+    );
+    expect(result).toBe(dedent`
+      SELECT
+        *
+      FROM
+        mytable
+        INNER JOIN mytable2 ON mytable1.col1 = mytable2.col1
+      WHERE
+        mytable2.col1 = 5
+      GROUP BY
+        mytable1.col2
+      ORDER BY
+        mytable2.col3;
     `);
   });
 }

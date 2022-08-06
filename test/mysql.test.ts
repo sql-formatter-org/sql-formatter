@@ -1,11 +1,15 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import MySqlFormatter from 'src/languages/mysql.formatter';
+import MySqlFormatter from 'src/languages/mysql/mysql.formatter';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
+import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
+import supportsCreateTable from './features/createTable';
 
 describe('MySqlFormatter', () => {
   const language = 'mysql';
@@ -13,8 +17,15 @@ describe('MySqlFormatter', () => {
 
   behavesLikeMariaDbFormatter(format);
 
+  supportsJoin(format, {
+    without: ['FULL'],
+    additionally: ['STRAIGHT_JOIN'],
+  });
+  supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT']);
   supportsOperators(format, MySqlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsWindow(format);
+  supportsLimiting(format, { limit: true, offset: true });
+  supportsCreateTable(format, { ifNotExists: true });
 
   // TODO: disabled for now
   it.skip('supports @@ system variables', () => {

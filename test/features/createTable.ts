@@ -2,7 +2,15 @@ import dedent from 'dedent-js';
 
 import { FormatFn } from 'src/sqlFormatter';
 
-export default function supportsCreateTable(format: FormatFn) {
+interface CreateTableConfig {
+  orReplace?: boolean;
+  ifNotExists?: boolean;
+}
+
+export default function supportsCreateTable(
+  format: FormatFn,
+  { orReplace, ifNotExists }: CreateTableConfig = {}
+) {
   it('formats short CREATE TABLE', () => {
     expect(format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);')).toBe(dedent`
       CREATE TABLE
@@ -25,4 +33,22 @@ export default function supportsCreateTable(format: FormatFn) {
         );
     `);
   });
+
+  if (orReplace) {
+    it('formats short CREATE OR REPLACE TABLE', () => {
+      expect(format('CREATE OR REPLACE TABLE tbl (a INT PRIMARY KEY, b TEXT);')).toBe(dedent`
+        CREATE OR REPLACE TABLE
+          tbl (a INT PRIMARY KEY, b TEXT);
+      `);
+    });
+  }
+
+  if (ifNotExists) {
+    it('formats short CREATE TABLE IF NOT EXISTS', () => {
+      expect(format('CREATE TABLE IF NOT EXISTS tbl (a INT PRIMARY KEY, b TEXT);')).toBe(dedent`
+        CREATE TABLE IF NOT EXISTS
+          tbl (a INT PRIMARY KEY, b TEXT);
+      `);
+    });
+  }
 }

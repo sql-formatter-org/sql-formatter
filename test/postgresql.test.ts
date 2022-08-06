@@ -1,12 +1,13 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import PostgreSqlFormatter from 'src/languages/postgresql.formatter';
+import PostgreSqlFormatter from 'src/languages/postgresql/postgresql.formatter';
 
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsCreateTable from './features/createTable';
+import supportsDropTable from './features/dropTable';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
 import supportsSchema from './features/schema';
@@ -19,6 +20,12 @@ import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
+import supportsTruncateTable from './features/truncateTable';
+import supportsCreateView from './features/createView';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -26,11 +33,21 @@ describe('PostgreSqlFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
-  supportsCreateTable(format);
+  supportsCreateView(format, { orReplace: true, materialized: true });
+  supportsCreateTable(format, { ifNotExists: true });
+  supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);
   supportsArrayAndMapAccessors(format);
-  supportsAlterTable(format);
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    renameTo: true,
+    renameColumn: true,
+  });
   supportsDeleteFrom(format);
+  supportsInsertInto(format);
+  supportsUpdate(format, { whereCurrentOf: true });
+  supportsTruncateTable(format, { withoutTable: true });
   supportsStrings(format, ["''", "U&''", "X''"]);
   supportsIdentifiers(format, [`""`, 'U&""']);
   supportsBetween(format);
@@ -40,9 +57,11 @@ describe('PostgreSqlFormatter', () => {
     PostgreSqlFormatter.operators.filter(op => op !== '::')
   );
   supportsJoin(format);
+  supportsSetOperations(format);
   supportsReturning(format);
   supportsParams(format, { numbered: ['$'] });
   supportsWindow(format);
+  supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
 
   it('allows $ character as part of identifiers', () => {
     expect(format('SELECT foo$, some$$ident')).toBe(dedent`
@@ -91,6 +110,64 @@ describe('PostgreSqlFormatter', () => {
     expect(format('SELECT ARRAY[1, 2, 3]')).toBe(dedent`
       SELECT
         ARRAY[1, 2, 3]
+    `);
+  });
+
+  // issue #144 (unsolved)
+  // This is currently far from ideal.
+  it('formats SELECT DISTINCT ON () syntax', () => {
+    expect(format('SELECT DISTINCT ON (c1, c2) c1, c2 FROM tbl;')).toBe(dedent`
+      SELECT DISTINCT
+        ON (c1, c2) c1,
+        c2
+      FROM
+        tbl;
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(
+      format(
+        `ALTER TABLE t ALTER COLUMN foo SET DATA TYPE VARCHAR;
+         ALTER TABLE t ALTER COLUMN foo SET DEFAULT 5;
+         ALTER TABLE t ALTER COLUMN foo DROP DEFAULT;
+         ALTER TABLE t ALTER COLUMN foo SET NOT NULL;
+         ALTER TABLE t ALTER COLUMN foo DROP NOT NULL`
+      )
+    ).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DATA TYPE
+        VARCHAR;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DEFAULT
+        5;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP DEFAULT
+      ;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET NOT NULL
+      ;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP NOT NULL
     `);
   });
 });

@@ -1,10 +1,11 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import SqlFormatter from 'src/languages/sql.formatter';
+import SqlFormatter from 'src/languages/sql/sql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
+import supportsDropTable from './features/dropTable';
 import supportsAlterTable from './features/alterTable';
 import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
@@ -17,6 +18,12 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
+import supportsTruncateTable from './features/truncateTable';
+import supportsCreateView from './features/createView';
 
 describe('SqlFormatter', () => {
   const language = 'sql';
@@ -24,28 +31,30 @@ describe('SqlFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCreateView(format);
   supportsCreateTable(format);
+  supportsDropTable(format);
   supportsConstraints(format);
-  supportsAlterTable(format);
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    renameTo: true,
+    renameColumn: true,
+  });
   supportsDeleteFrom(format);
+  supportsInsertInto(format);
+  supportsUpdate(format, { whereCurrentOf: true });
+  supportsTruncateTable(format);
   supportsStrings(format, ["''", "X''"]);
   supportsIdentifiers(format, [`""`, '``']);
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format);
+  supportsSetOperations(format);
   supportsOperators(format, SqlFormatter.operators);
   supportsParams(format, { positional: true });
   supportsWindow(format);
-
-  it('formats FETCH FIRST like LIMIT', () => {
-    const result = format('SELECT * FETCH FIRST 2 ROWS ONLY;');
-    expect(result).toBe(dedent`
-      SELECT
-        *
-      FETCH FIRST
-        2 ROWS ONLY;
-    `);
-  });
+  supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
 
   // This is a crappy behavior, but at least we don't crash
   it('does not crash when encountering characters or operators it does not recognize', () => {
@@ -59,6 +68,45 @@ describe('SqlFormatter', () => {
       : bar
       FROM
         { foo };
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(
+      format(
+        `ALTER TABLE t ALTER COLUMN foo SET DEFAULT 5;
+         ALTER TABLE t ALTER COLUMN foo DROP DEFAULT;
+         ALTER TABLE t ALTER COLUMN foo DROP SCOPE CASCADE;
+         ALTER TABLE t ALTER COLUMN foo RESTART WITH 10;`
+      )
+    ).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DEFAULT
+        5;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP DEFAULT
+      ;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP SCOPE CASCADE
+      ;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      RESTART WITH
+        10;
     `);
   });
 });

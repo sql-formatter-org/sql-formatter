@@ -60,7 +60,7 @@ export default function supportsIndentStyle(format: FormatFn) {
           dedent`
             SELECT *
             FROM a
-            UNION DISTINCT
+            UNION ALL
             SELECT *
             FROM b
             LEFT OUTER JOIN c;
@@ -70,7 +70,7 @@ export default function supportsIndentStyle(format: FormatFn) {
       ).toBe(dedent`
         SELECT    *
         FROM      a
-        UNION     DISTINCT
+        UNION ALL
         SELECT    *
         FROM      b
         LEFT      OUTER JOIN c;
@@ -118,6 +118,17 @@ export default function supportsIndentStyle(format: FormatFn) {
         ;
       `);
     });
+
+    // Regression test for issue #341
+    it('formats BETWEEN..AND', () => {
+      expect(
+        format('SELECT * FROM tbl WHERE id BETWEEN 1 AND 5000;', { indentStyle: 'tabularLeft' })
+      ).toBe(dedent`
+        SELECT    *
+        FROM      tbl
+        WHERE     id BETWEEN 1 AND 5000;
+      `);
+    });
   });
 
   describe('indentStyle: tabularRight', () => {
@@ -147,7 +158,7 @@ export default function supportsIndentStyle(format: FormatFn) {
           dedent`
             SELECT *
             FROM a
-            UNION DISTINCT
+            UNION ALL
             SELECT *
             FROM b
             LEFT OUTER JOIN c;
@@ -158,10 +169,24 @@ export default function supportsIndentStyle(format: FormatFn) {
         [
           '   SELECT *',
           '     FROM a',
-          '    UNION DISTINCT',
+          'UNION ALL',
           '   SELECT *',
           '     FROM b',
           '     LEFT OUTER JOIN c;',
+        ].join('\n')
+      );
+    });
+
+    // Regression test for issue #341
+    it('formats BETWEEN..AND', () => {
+      expect(
+        format('SELECT * FROM tbl WHERE id BETWEEN 1 AND 5000;', { indentStyle: 'tabularRight' })
+      ).toBe(
+        [
+          // ...comment to force multi-line array...
+          '   SELECT *',
+          '     FROM tbl',
+          '    WHERE id BETWEEN 1 AND 5000;',
         ].join('\n')
       );
     });

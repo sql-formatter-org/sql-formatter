@@ -4,21 +4,6 @@
 
 Run `yarn` after checkout to install all dependencies.
 
-## Branch Guidelines
-
-New branches: Please branch off of the `develop` branch.
-
-### Naming
-
-Please use one of the following prefixes: (ie. feature/new-feature)
-
-- feature/ - development towards a new feature
-- dev/ - misc development not tied to a key feature / refactoring
-- vscode/ - development related to the VSCode Extension
-- issue/ - fix specifically for a issue #
-- bug/ - misc bug fixes not tied to a public issue
-- repo/ - meta dev related changes (ie. typescript, CI/CD, dependencies)
-
 ## Tests
 
 Tests can be run with `yarn test`.
@@ -42,6 +27,7 @@ For those who have admin access on the repo, the new release publish flow is as 
 - Andrew
 - Benjamin Bellamy
 - bingou
+- Boris Verkhovskiy <boris.verk@gmail.com>
 - Damon Davison <ddavison@avalere.com>
 - Davut Can Abacigil <can@teamsql.io>
 - Erik Hirmo <erik.hirmo@roguewave.com>

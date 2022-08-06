@@ -1,19 +1,24 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import SparkFormatter from 'src/languages/spark.formatter';
+import SparkFormatter from 'src/languages/spark/spark.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsCreateTable from './features/createTable';
+import supportsDropTable from './features/dropTable';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
-import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
+import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsTruncateTable from './features/truncateTable';
+import supportsCreateView from './features/createView';
 
 describe('SparkFormatter', () => {
   const language = 'spark';
@@ -21,34 +26,37 @@ describe('SparkFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
-  supportsCreateTable(format);
-  supportsAlterTable(format);
+  supportsCreateView(format, { orReplace: true });
+  supportsCreateTable(format, { ifNotExists: true });
+  supportsDropTable(format, { ifExists: true });
+  supportsAlterTable(format, {
+    dropColumn: true,
+    renameTo: true,
+    renameColumn: true,
+  });
+  supportsInsertInto(format, { withoutInto: true });
+  supportsTruncateTable(format);
   supportsStrings(format, ["''", "X''"]);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
-  supportsSchema(format);
   supportsOperators(format, SparkFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsArrayAndMapAccessors(format);
   supportsJoin(format, {
     additionally: [
+      // non-standard anti-join:
       'ANTI JOIN',
-      'SEMI JOIN',
       'LEFT ANTI JOIN',
-      'LEFT SEMI JOIN',
-      'RIGHT OUTER JOIN',
-      'RIGHT SEMI JOIN',
       'NATURAL ANTI JOIN',
-      'NATURAL FULL OUTER JOIN',
-      'NATURAL INNER JOIN',
       'NATURAL LEFT ANTI JOIN',
-      'NATURAL LEFT OUTER JOIN',
-      'NATURAL LEFT SEMI JOIN',
-      'NATURAL OUTER JOIN',
-      'NATURAL RIGHT OUTER JOIN',
-      'NATURAL RIGHT SEMI JOIN',
+      // non-standard semi-join
+      'SEMI JOIN',
+      'LEFT SEMI JOIN',
       'NATURAL SEMI JOIN',
+      'NATURAL LEFT SEMI JOIN',
     ],
   });
+  supportsSetOperations(format);
+  supportsLimiting(format, { limit: true });
 
   it('formats basic WINDOW clause', () => {
     const result = format(`SELECT * FROM tbl WINDOW win1, WINDOW win2, WINDOW win3;`);
@@ -99,6 +107,34 @@ describe('SparkFormatter', () => {
         \${table_name}
       WHERE
         name = '\${name}';
+    `);
+  });
+
+  it('supports SORT BY, CLUSTER BY, DISTRIBUTE BY', () => {
+    const result = format(
+      'SELECT value, count DISTRIBUTE BY count CLUSTER BY value SORT BY value, count;'
+    );
+    expect(result).toBe(dedent`
+      SELECT
+        value,
+        count
+      DISTRIBUTE BY
+        count
+      CLUSTER BY
+        value
+      SORT BY
+        value,
+        count;
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(format(`ALTER TABLE StudentInfo ALTER COLUMN FirstName COMMENT "new comment";`))
+      .toBe(dedent`
+      ALTER TABLE
+        StudentInfo
+      ALTER COLUMN
+        FirstName COMMENT "new comment";
     `);
   });
 });

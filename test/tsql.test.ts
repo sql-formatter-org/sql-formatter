@@ -1,12 +1,12 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import TSqlFormatter from 'src/languages/tsql.formatter';
+import TSqlFormatter from 'src/languages/tsql/tsql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
+import supportsDropTable from './features/dropTable';
 import supportsAlterTable from './features/alterTable';
-import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
 import supportsOperators from './features/operators';
@@ -17,6 +17,13 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
+import supportsTruncateTable from './features/truncateTable';
+import supportsMergeInto from './features/mergeInto';
+import supportsCreateView from './features/createView';
 
 describe('TSqlFormatter', () => {
   const language = 'tsql';
@@ -24,21 +31,30 @@ describe('TSqlFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCreateView(format, { materialized: true });
   supportsCreateTable(format);
+  supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);
-  supportsAlterTable(format);
+  supportsAlterTable(format, {
+    dropColumn: true,
+  });
   supportsDeleteFrom(format);
+  supportsInsertInto(format, { withoutInto: true });
+  supportsUpdate(format, { whereCurrentOf: true });
+  supportsTruncateTable(format);
+  supportsMergeInto(format);
   supportsStrings(format, ["N''", "''"]);
   supportsIdentifiers(format, [`""`, '[]']);
   supportsBetween(format);
-  supportsSchema(format);
   supportsOperators(
     format,
     TSqlFormatter.operators.filter(op => op !== '::')
   );
-  supportsJoin(format, { without: ['NATURAL'] });
+  supportsJoin(format, { without: ['NATURAL'], supportsUsing: false, supportsApply: true });
+  supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });
   supportsWindow(format);
+  supportsLimiting(format, { offset: true, fetchFirst: true, fetchNext: true });
 
   // TODO: The following are duplicated from StandardSQLFormatter test
 
@@ -51,18 +67,6 @@ describe('TSqlFormatter', () => {
         Customers (ID, MoneyBalance, Address, City)
       VALUES
         (12, -123.4, 'Skagen 2111', 'Stv');
-    `);
-  });
-
-  it('formats SELECT query with CROSS JOIN', () => {
-    const result = format('SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t');
-    expect(result).toBe(dedent`
-      SELECT
-        a,
-        b
-      FROM
-        t
-        CROSS JOIN t2 on t.id = t2.id_t
     `);
   });
 
@@ -88,6 +92,15 @@ describe('TSqlFormatter', () => {
         ##flam
       FROM
         tbl;
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(format(`ALTER TABLE t ALTER COLUMN foo INT NOT NULL DEFAULT 5;`)).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo INT NOT NULL DEFAULT 5;
     `);
   });
 });

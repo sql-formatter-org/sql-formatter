@@ -5,7 +5,7 @@ import {
   ArraySubscript,
   AstNode,
   BetweenPredicate,
-  BinaryClause,
+  SetOperation,
   Clause,
   FunctionCall,
   LimitClause,
@@ -54,7 +54,7 @@ export default class Parser {
     return (
       this.limitClause() ||
       this.clause() ||
-      this.binaryClause() ||
+      this.setOperation() ||
       this.functionCall() ||
       this.arraySubscript() ||
       this.parenthesis() ||
@@ -73,22 +73,17 @@ export default class Parser {
     return undefined;
   }
 
-  private binaryClause(): BinaryClause | undefined {
-    if (this.look().type === TokenType.RESERVED_BINARY_COMMAND) {
+  private setOperation(): SetOperation | undefined {
+    if (this.look().type === TokenType.RESERVED_SET_OPERATION) {
       const name = this.next();
       const children = this.expressionsUntilClauseEnd();
-      return { type: NodeType.binary_clause, nameToken: name, children };
+      return { type: NodeType.set_operation, nameToken: name, children };
     }
     return undefined;
   }
 
   private functionCall(): FunctionCall | undefined {
-    if (
-      (this.look().type === TokenType.RESERVED_KEYWORD ||
-        this.look().type === TokenType.IDENTIFIER) &&
-      this.look(1).value === '(' &&
-      !this.look(1).whitespaceBefore
-    ) {
+    if (this.look().type === TokenType.RESERVED_FUNCTION_NAME && this.look(1).text === '(') {
       return {
         type: NodeType.function_call,
         nameToken: this.next(),
@@ -102,7 +97,7 @@ export default class Parser {
     if (
       (this.look().type === TokenType.RESERVED_KEYWORD ||
         this.look().type === TokenType.IDENTIFIER) &&
-      this.look(1).value === '['
+      this.look(1).text === '['
     ) {
       return {
         type: NodeType.array_subscript,
@@ -117,13 +112,13 @@ export default class Parser {
     if (this.look().type === TokenType.OPEN_PAREN) {
       const children: AstNode[] = [];
       const token = this.next();
-      const openParen = token.value;
+      const openParen = token.text;
       let closeParen = '';
       while (this.look().type !== TokenType.CLOSE_PAREN && this.look().type !== TokenType.EOF) {
         children.push(this.expression());
       }
       if (this.look().type === TokenType.CLOSE_PAREN) {
-        closeParen = this.next().value;
+        closeParen = this.next().text;
       }
       return { type: NodeType.parenthesis, children, openParen, closeParen };
     }
@@ -168,7 +163,7 @@ export default class Parser {
   }
 
   private allColumnsAsterisk(): AllColumnsAsterisk | undefined {
-    if (this.look().value === '*' && isToken.SELECT(this.look(-1))) {
+    if (this.look().text === '*' && isToken.SELECT(this.look(-1))) {
       this.next();
       return { type: NodeType.all_columns_asterisk };
     }
@@ -181,7 +176,7 @@ export default class Parser {
     const children: AstNode[] = [];
     while (
       this.look().type !== TokenType.RESERVED_COMMAND &&
-      this.look().type !== TokenType.RESERVED_BINARY_COMMAND &&
+      this.look().type !== TokenType.RESERVED_SET_OPERATION &&
       this.look().type !== TokenType.EOF &&
       this.look().type !== TokenType.CLOSE_PAREN &&
       this.look().type !== TokenType.DELIMITER &&

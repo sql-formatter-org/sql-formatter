@@ -20,11 +20,11 @@ export default class Params {
   /**
    * Returns param value that matches given placeholder with param key.
    * @param {Token} token
-   * @return {string} param or token.value when params are missing
+   * @return {string} param or token.text when params are missing
    */
-  get({ key, value }: Token): string {
+  get({ key, text }: Token): string {
     if (!this.params) {
-      return value;
+      return text;
     }
 
     if (key) {

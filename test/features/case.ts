@@ -20,12 +20,12 @@ export default function supportsCase(format: FormatFn) {
 
   it('formats CASE ... WHEN with an expression', () => {
     const result = format(
-      "CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;"
+      "CASE trim(sqrt(2)) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;"
     );
 
     expect(result).toBe(dedent`
       CASE
-        toString(getNumber())
+        trim(sqrt(2))
         WHEN 'one' THEN 1
         WHEN 'two' THEN 2
         WHEN 'three' THEN 3
@@ -80,12 +80,12 @@ export default function supportsCase(format: FormatFn) {
 
   it('properly converts to uppercase in case statements', () => {
     const result = format(
-      "case stringify(getNumber()) when 'one' then 1 when 'two' then 2 when 'three' then 3 else 4 end;",
+      "case trim(sqrt(my_field)) when 'one' then 1 when 'two' then 2 when 'three' then 3 else 4 end;",
       { keywordCase: 'upper' }
     );
     expect(result).toBe(dedent`
       CASE
-        stringify(getNumber())
+        TRIM(SQRT(my_field))
         WHEN 'one' THEN 1
         WHEN 'two' THEN 2
         WHEN 'three' THEN 3

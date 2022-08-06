@@ -7,7 +7,7 @@
 It started as a port of a [PHP Library][], but has since considerably diverged.
 
 It supports various SQL dialects:
-GCP BigQuery, IBM DB2, Apache Hive, MariaDB, MySQL, Couchbase N1QL, Oracle PL/SQL, PostgreSQL, Amazon Redshift, Spark, SQL Server Transact-SQL.
+GCP BigQuery, IBM DB2, Apache Hive, MariaDB, MySQL, Couchbase N1QL, Oracle PL/SQL, PostgreSQL, Amazon Redshift, Spark, SQL Server Transact-SQL, Trino/Presto.
 See [language option docs](docs/language.md) for more details.
 
 It does not support:
@@ -95,7 +95,7 @@ sql-formatter -h
 
 ```
 usage: sql-formatter [-h] [-o OUTPUT] \
-[-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,tsql}] [-c CONFIG] [--version] [FILE]
+[-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,trino,tsql}] [-c CONFIG] [--version] [FILE]
 
 SQL Formatter
 
@@ -106,7 +106,7 @@ optional arguments:
   -h, --help      show this help message and exit
   -o, --output    OUTPUT
                     File to write SQL output (defaults to stdout)
-  -l, --language  {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,tsql}
+  -l, --language  {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,trino,tsql}
                     SQL dialect (defaults to standard sql)
   -c, --config    CONFIG
                     Path to config json file (will use default configs if unspecified)
@@ -131,12 +131,12 @@ where
 
 The tool also accepts a JSON config file with the `--config` option that takes this form:
 
-```ts
+```json
 {
   "language": "spark",
   "tabWidth": 2,
   "keywordCase": "upper",
-  "linesBetweenQueries": 2,
+  "linesBetweenQueries": 2
 }
 ```
 
@@ -150,7 +150,6 @@ All fields are optional and all fields that are not specified will be filled wit
 - [**`keywordCase`**](docs/keywordCase.md) uppercases or lowercases keywords.
 - [**`indentStyle`**](docs/indentStyle.md) defines overall indentation style.
 - [**`logicalOperatorNewline`**](docs/logicalOperatorNewline.md) newline before or after boolean operator (AND, OR, XOR).
-- [**`aliasAs`**](docs/aliasAs.md) enforces or forbids use of AS keyword for aliases.
 - [**`tabulateAlias`**](docs/tabulateAlias.md) aligns column aliases vertically.
 - [**`commaPosition`**](docs/commaPosition.md) where to place the comma in column lists.
 - [**`expressionWidth`**](docs/expressionWidth.md) maximum number of characters in parenthesized expressions to be kept on single line.

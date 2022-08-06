@@ -9,7 +9,6 @@ import { Statement } from 'src/parser/ast';
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
 import ExpressionFormatter from './ExpressionFormatter';
-import AliasAs from './AliasAs';
 import Layout, { WS } from './Layout';
 import Indentation from './Indentation';
 
@@ -48,8 +47,7 @@ export default class Formatter {
    */
   public format(query: string): string {
     const tokens = this.cachedTokenizer().tokenize(query);
-    const processedTokens = new AliasAs(this.cfg, tokens).process();
-    const ast = new Parser(processedTokens).parse();
+    const ast = new Parser(tokens).parse();
     const formattedQuery = this.formatAst(ast);
     const finalQuery = this.postFormat(formattedQuery);
 

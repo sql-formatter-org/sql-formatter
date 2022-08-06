@@ -5,12 +5,12 @@ import { FormatFn } from 'src/sqlFormatter';
 export default function supportsWindow(format: FormatFn) {
   it('formats WINDOW clause at top level', () => {
     const result = format(
-      'SELECT *, LAG(value) OVER wnd AS next_value FROM tbl WINDOW wnd AS (PARTITION BY id ORDER BY time);'
+      'SELECT *, ROW_NUMBER() OVER wnd AS next_value FROM tbl WINDOW wnd AS (PARTITION BY id ORDER BY time);'
     );
     expect(result).toBe(dedent`
       SELECT
         *,
-        LAG(value) OVER wnd AS next_value
+        ROW_NUMBER() OVER wnd AS next_value
       FROM
         tbl
       WINDOW

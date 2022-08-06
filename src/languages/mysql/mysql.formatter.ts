@@ -1,0 +1,269 @@
+import { expandPhrases } from 'src/expandPhrases';
+import Formatter from 'src/formatter/Formatter';
+import Tokenizer from 'src/lexer/Tokenizer';
+import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
+import { keywords } from './mysql.keywords';
+import { functions } from './mysql.functions';
+
+const reservedCommands = expandPhrases([
+  // queries
+  'WITH [RECURSIVE]',
+  'SELECT [ALL | DISTINCT | DISTINCTROW]',
+  'FROM',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'WINDOW',
+  'PARTITION BY',
+  'ORDER BY',
+  'LIMIT',
+  'OFFSET',
+  // Data manipulation
+  // - insert:
+  'INSERT [LOW_PRIORITY | DELAYED | HIGH_PRIORITY] [IGNORE] [INTO]',
+  'REPLACE [LOW_PRIORITY | DELAYED] [INTO]',
+  'VALUES',
+  // - update:
+  'UPDATE [LOW_PRIORITY] [IGNORE]',
+  'SET',
+  // - delete:
+  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
+  // - truncate:
+  'TRUNCATE [TABLE]',
+  // Data definition
+  'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
+  'CREATE [TEMPORARY] TABLE [IF NOT EXISTS]',
+  'DROP [TEMPORARY] TABLE [IF EXISTS]',
+  // - alter table:
+  'ALTER TABLE',
+  'ADD [COLUMN]',
+  '{CHANGE | MODIFY} [COLUMN]',
+  'DROP [COLUMN]',
+  'RENAME [TO | AS]',
+  'RENAME COLUMN',
+  'ALTER [COLUMN]',
+  '{SET | DROP} DEFAULT', // for alter column
+
+  // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
+  'ALTER DATABASE',
+  'ALTER EVENT',
+  'ALTER FUNCTION',
+  'ALTER INSTANCE',
+  'ALTER LOGFILE GROUP',
+  'ALTER PROCEDURE',
+  'ALTER RESOURCE GROUP',
+  'ALTER SERVER',
+  'ALTER TABLESPACE',
+  'ALTER USER',
+  'ALTER VIEW',
+  'ANALYZE TABLE',
+  'BINLOG',
+  'CACHE INDEX',
+  'CALL',
+  'CHANGE MASTER TO',
+  'CHANGE REPLICATION FILTER',
+  'CHANGE REPLICATION SOURCE TO',
+  'CHECK TABLE',
+  'CHECKSUM TABLE',
+  'CLONE',
+  'COMMIT',
+  'CREATE DATABASE',
+  'CREATE EVENT',
+  'CREATE FUNCTION',
+  'CREATE FUNCTION',
+  'CREATE INDEX',
+  'CREATE LOGFILE GROUP',
+  'CREATE PROCEDURE',
+  'CREATE RESOURCE GROUP',
+  'CREATE ROLE',
+  'CREATE SERVER',
+  'CREATE SPATIAL REFERENCE SYSTEM',
+  'CREATE TABLESPACE',
+  'CREATE TRIGGER',
+  'CREATE USER',
+  'DEALLOCATE PREPARE',
+  'DESCRIBE',
+  'DO',
+  'DROP DATABASE',
+  'DROP EVENT',
+  'DROP FUNCTION',
+  'DROP FUNCTION',
+  'DROP INDEX',
+  'DROP LOGFILE GROUP',
+  'DROP PROCEDURE',
+  'DROP RESOURCE GROUP',
+  'DROP ROLE',
+  'DROP SERVER',
+  'DROP SPATIAL REFERENCE SYSTEM',
+  'DROP TABLESPACE',
+  'DROP TRIGGER',
+  'DROP USER',
+  'DROP VIEW',
+  'EXECUTE',
+  'EXPLAIN',
+  'FLUSH',
+  'GRANT',
+  'HANDLER',
+  'HELP',
+  'IMPORT TABLE',
+  'INSTALL COMPONENT',
+  'INSTALL PLUGIN',
+  'KILL',
+  'LOAD DATA',
+  'LOAD INDEX INTO CACHE',
+  'LOAD XML',
+  'LOCK INSTANCE FOR BACKUP',
+  'LOCK TABLES',
+  'MASTER_POS_WAIT',
+  'OPTIMIZE TABLE',
+  'PREPARE',
+  'PURGE BINARY LOGS',
+  'RELEASE SAVEPOINT',
+  'RENAME TABLE',
+  'RENAME USER',
+  'REPAIR TABLE',
+  'RESET',
+  'RESET MASTER',
+  'RESET PERSIST',
+  'RESET REPLICA',
+  'RESET SLAVE',
+  'RESTART',
+  'REVOKE',
+  'ROLLBACK',
+  'ROLLBACK TO SAVEPOINT',
+  'SAVEPOINT',
+  'SET CHARACTER SET',
+  'SET DEFAULT ROLE',
+  'SET NAMES',
+  'SET PASSWORD',
+  'SET RESOURCE GROUP',
+  'SET ROLE',
+  'SET TRANSACTION',
+  'SHOW',
+  'SHOW BINARY LOGS',
+  'SHOW BINLOG EVENTS',
+  'SHOW CHARACTER SET',
+  'SHOW COLLATION',
+  'SHOW COLUMNS',
+  'SHOW CREATE DATABASE',
+  'SHOW CREATE EVENT',
+  'SHOW CREATE FUNCTION',
+  'SHOW CREATE PROCEDURE',
+  'SHOW CREATE TABLE',
+  'SHOW CREATE TRIGGER',
+  'SHOW CREATE USER',
+  'SHOW CREATE VIEW',
+  'SHOW DATABASES',
+  'SHOW ENGINE',
+  'SHOW ENGINES',
+  'SHOW ERRORS',
+  'SHOW EVENTS',
+  'SHOW FUNCTION CODE',
+  'SHOW FUNCTION STATUS',
+  'SHOW GRANTS',
+  'SHOW INDEX',
+  'SHOW MASTER STATUS',
+  'SHOW OPEN TABLES',
+  'SHOW PLUGINS',
+  'SHOW PRIVILEGES',
+  'SHOW PROCEDURE CODE',
+  'SHOW PROCEDURE STATUS',
+  'SHOW PROCESSLIST',
+  'SHOW PROFILE',
+  'SHOW PROFILES',
+  'SHOW RELAYLOG EVENTS',
+  'SHOW REPLICA STATUS',
+  'SHOW REPLICAS',
+  'SHOW SLAVE',
+  'SHOW SLAVE HOSTS',
+  'SHOW STATUS',
+  'SHOW TABLE STATUS',
+  'SHOW TABLES',
+  'SHOW TRIGGERS',
+  'SHOW VARIABLES',
+  'SHOW WARNINGS',
+  'SHUTDOWN',
+  'SOURCE_POS_WAIT',
+  'START GROUP_REPLICATION',
+  'START REPLICA',
+  'START SLAVE',
+  'START TRANSACTION',
+  'STOP GROUP_REPLICATION',
+  'STOP REPLICA',
+  'STOP SLAVE',
+  'TABLE',
+  'UNINSTALL COMPONENT',
+  'UNINSTALL PLUGIN',
+  'UNLOCK INSTANCE',
+  'UNLOCK TABLES',
+  'USE',
+  'XA',
+  // flow control
+  // 'IF',
+  'ITERATE',
+  'LEAVE',
+  'LOOP',
+  'REPEAT',
+  'RETURN',
+  'WHILE',
+]);
+
+const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);
+
+const reservedJoins = expandPhrases([
+  'JOIN',
+  '{LEFT | RIGHT} [OUTER] JOIN',
+  '{INNER | CROSS} JOIN',
+  'NATURAL [INNER] JOIN',
+  'NATURAL {LEFT | RIGHT} [OUTER] JOIN',
+  // non-standard joins
+  'STRAIGHT_JOIN',
+]);
+
+const reservedPhrases = ['ON DELETE', 'ON UPDATE', 'CHARACTER SET'];
+
+// https://dev.mysql.com/doc/refman/8.0/en/
+export default class MySqlFormatter extends Formatter {
+  static operators = ['~', ':=', '<<', '>>', '<=>', '&&', '||', '->', '->>'];
+
+  tokenizer() {
+    return new Tokenizer({
+      reservedCommands,
+      reservedSetOperations,
+      reservedJoins,
+      reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF'],
+      reservedPhrases,
+      reservedLogicalOperators: ['AND', 'OR', 'XOR'],
+      reservedKeywords: keywords,
+      reservedFunctionNames: functions,
+      // TODO: support _ char set prefixes such as _utf8, _latin1, _binary, _utf8mb4, etc.
+      stringTypes: [
+        { quote: "''", prefixes: ['B', 'N', 'X'] },
+        { quote: '""', prefixes: ['B', 'N', 'X'] },
+      ],
+      identTypes: ['``'],
+      identChars: { first: '$', rest: '$', allowFirstCharNumber: true },
+      variableTypes: [
+        { regex: '@[A-Za-z0-9_.$]+' },
+        { quote: '""', prefixes: ['@'], requirePrefix: true },
+        { quote: "''", prefixes: ['@'], requirePrefix: true },
+        { quote: '``', prefixes: ['@'], requirePrefix: true },
+      ],
+      positionalParams: true,
+      lineCommentTypes: ['--', '#'],
+      operators: MySqlFormatter.operators,
+      postProcess,
+    });
+  }
+}
+
+function postProcess(tokens: Token[]) {
+  return tokens.map((token, i) => {
+    const nextToken = tokens[i + 1] || EOF_TOKEN;
+    if (isToken.SET(token) && nextToken.text === '(') {
+      // This is SET datatype, not SET statement
+      return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
+    }
+    return token;
+  });
+}
