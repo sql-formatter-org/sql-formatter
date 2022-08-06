@@ -52,7 +52,7 @@ clause -> %RESERVED_COMMAND expression:* {%
   })
 %}
 
-expression -> array_subscript | parenthesis | plain_token
+expression -> array_subscript | function_call| parenthesis | plain_token
 
 array_subscript -> (%IDENTIFIER | %RESERVED_KEYWORD) "[" expression:* "]" {%
   ([[arrayToken], open, children, close]) => ({
@@ -64,6 +64,14 @@ array_subscript -> (%IDENTIFIER | %RESERVED_KEYWORD) "[" expression:* "]" {%
       openParen: "[",
       closeParen: "]",
     },
+  })
+%}
+
+function_call -> %RESERVED_FUNCTION_NAME parenthesis {%
+  ([name, parens]) => ({
+    type: NodeType.function_call,
+    nameToken: name,
+    parenthesis: parens,
   })
 %}
 
@@ -82,7 +90,6 @@ plain_token ->
   | %STRING
   | %VARIABLE
   | %RESERVED_KEYWORD
-  | %RESERVED_FUNCTION_NAME
   | %RESERVED_PHRASE
   | %RESERVED_LOGICAL_OPERATOR
   | %RESERVED_DEPENDENT_CLAUSE

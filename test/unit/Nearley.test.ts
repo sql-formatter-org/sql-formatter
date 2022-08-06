@@ -191,4 +191,50 @@ describe('Nearley integration', () => {
       ]
     `);
   });
+
+  it('parses function call', () => {
+    expect(parse('SELECT sqrt(2)')).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "nameToken": Object {
+                    "raw": "sqrt",
+                    "text": "SQRT",
+                    "type": "RESERVED_FUNCTION_NAME",
+                  },
+                  "parenthesis": Object {
+                    "children": Array [
+                      Object {
+                        "token": Object {
+                          "raw": "2",
+                          "text": "2",
+                          "type": "NUMBER",
+                        },
+                        "type": "token",
+                      },
+                    ],
+                    "closeParen": ")",
+                    "openParen": "(",
+                    "type": "parenthesis",
+                  },
+                  "type": "function_call",
+                },
+              ],
+              "nameToken": Object {
+                "raw": "SELECT",
+                "text": "SELECT",
+                "type": "RESERVED_COMMAND",
+              },
+              "type": "clause",
+            },
+          ],
+          "hasSemicolon": false,
+          "type": "statement",
+        },
+      ]
+    `);
+  });
 });
