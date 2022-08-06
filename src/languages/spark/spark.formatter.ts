@@ -33,7 +33,7 @@ const reservedCommands = expandPhrases([
   //   https://spark.apache.org/docs/latest/sql-ref-syntax-dml-load.html
   'LOAD DATA [LOCAL] INPATH',
   '[OVERWRITE] INTO TABLE',
-  // DDL
+  // Data definition
   'CREATE [OR REPLACE] [GLOBAL TEMPORARY | TEMPORARY] VIEW [IF NOT EXISTS]',
   'CREATE [EXTERNAL] TABLE [IF NOT EXISTS]',
   'DROP TABLE [IF EXISTS]',

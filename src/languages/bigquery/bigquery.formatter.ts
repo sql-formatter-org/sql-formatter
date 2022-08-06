@@ -35,7 +35,7 @@ const reservedCommands = expandPhrases([
   'MERGE [INTO]',
   'WHEN [NOT] MATCHED [BY SOURCE | BY TARGET] [THEN]',
   'UPDATE SET',
-  // DDL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
+  // Data definition, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
   'CREATE [OR REPLACE] [MATERIALIZED] VIEW [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [TEMP|TEMPORARY|SNAPSHOT|EXTERNAL] TABLE [IF NOT EXISTS]',
   'DROP [SNAPSHOT | EXTERNAL] TABLE [IF EXISTS]',

@@ -30,7 +30,7 @@ const reservedCommands = expandPhrases([
   'DELETE FROM',
   // - truncate:
   'TRUNCATE TABLE',
-  // DDL
+  // Data definition
   'CREATE [RECURSIVE] VIEW',
   'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
   'DROP TABLE',

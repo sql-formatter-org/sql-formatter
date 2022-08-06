@@ -32,7 +32,7 @@ const reservedCommands = expandPhrases([
   'WHEN [NOT] MATCHED [THEN]',
   'UPDATE SET',
   'INSERT',
-  // DDL
+  // Data definition
   'CREATE [OR REPLACE] VIEW',
   'CREATE [GLOBAL TEMPORARY] TABLE',
   'DROP TABLE [HIERARCHY]',

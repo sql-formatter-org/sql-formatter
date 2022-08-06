@@ -33,7 +33,7 @@ const reservedCommands = expandPhrases([
   'MERGE [INTO]',
   'WHEN [NOT] MATCHED [BY TARGET | BY SOURCE] [THEN]',
   'UPDATE SET',
-  // DDL
+  // Data definition
   'CREATE [OR ALTER] [MATERIALIZED] VIEW',
   'CREATE TABLE',
   'DROP TABLE [IF EXISTS]',
