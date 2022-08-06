@@ -6,12 +6,14 @@ import Indentation from './Indentation';
 export enum WS {
   SPACE, // Adds single space
   NO_SPACE, // Removes preceding horizontal whitespace (if any)
+  NO_NEWLINE, // Removes all preceding whitespace (whether horizontal or vertical)
   NEWLINE, // Adds single newline (and removes any preceding whitespace)
+  MANDATORY_NEWLINE, // Adds single newline that can't be removed by NO_NEWLINE
   INDENT, // Adds indentation (as much as needed for current indentation level)
   SINGLE_INDENT, // Adds whitespace for single indentation step
 }
 
-export type LayoutItem = WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | string;
+export type LayoutItem = WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | WS.MANDATORY_NEWLINE | string;
 
 /**
  * API for constructing SQL string (especially the whitespace part).
@@ -37,9 +39,16 @@ export default class Layout {
         case WS.NO_SPACE:
           this.trimHorizontalWhitespace();
           break;
+        case WS.NO_NEWLINE:
+          this.trimWhitespace();
+          break;
         case WS.NEWLINE:
           this.trimHorizontalWhitespace();
-          this.addNewline();
+          this.addNewline(WS.NEWLINE);
+          break;
+        case WS.MANDATORY_NEWLINE:
+          this.trimHorizontalWhitespace();
+          this.addNewline(WS.MANDATORY_NEWLINE);
           break;
         case WS.INDENT:
           this.addIndentation();
@@ -59,9 +68,26 @@ export default class Layout {
     }
   }
 
-  private addNewline() {
-    if (this.items.length > 0 && last(this.items) !== WS.NEWLINE) {
-      this.items.push(WS.NEWLINE);
+  private trimWhitespace() {
+    while (isRemovableWhitespace(last(this.items))) {
+      this.items.pop();
+    }
+  }
+
+  private addNewline(newline: WS.NEWLINE | WS.MANDATORY_NEWLINE) {
+    if (this.items.length > 0) {
+      switch (last(this.items)) {
+        case WS.NEWLINE:
+          this.items.pop();
+          this.items.push(newline);
+          break;
+        case WS.MANDATORY_NEWLINE:
+          // keep as is
+          break;
+        default:
+          this.items.push(newline);
+          break;
+      }
     }
   }
 
@@ -83,6 +109,7 @@ export default class Layout {
       case WS.SPACE:
         return ' ';
       case WS.NEWLINE:
+      case WS.MANDATORY_NEWLINE:
         return '\n';
       case WS.SINGLE_INDENT:
         return this.indentation.getSingleIndent();
@@ -94,3 +121,6 @@ export default class Layout {
 
 const isHorizontalWhitespace = (item: WS | string | undefined) =>
   item === WS.SPACE || item === WS.SINGLE_INDENT;
+
+const isRemovableWhitespace = (item: WS | string | undefined) =>
+  item === WS.SPACE || item === WS.SINGLE_INDENT || item === WS.NEWLINE;
