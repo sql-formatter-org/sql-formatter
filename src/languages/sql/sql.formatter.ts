@@ -30,12 +30,23 @@ const reservedCommands = expandPhrases([
   'DELETE FROM',
   // - truncate:
   'TRUNCATE TABLE',
-  // other
-  'ADD',
-  'ALTER COLUMN',
-  'ALTER TABLE',
-  'CREATE TABLE',
+  // Data definition
+  'CREATE [RECURSIVE] VIEW',
+  'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
   'DROP TABLE',
+  // - alter table:
+  'ALTER TABLE',
+  'ADD COLUMN',
+  'DROP [COLUMN]',
+  'RENAME COLUMN',
+  'RENAME TO',
+  'ALTER [COLUMN]',
+  '{SET | DROP} DEFAULT', // for alter column
+  'ADD SCOPE', // for alter column
+  'DROP SCOPE {CASCADE | RESTRICT}', // for alter column
+  'RESTART WITH', // for alter column
+
+  // other
   'SET SCHEMA',
 ]);
 

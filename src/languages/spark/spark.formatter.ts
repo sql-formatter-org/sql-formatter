@@ -33,18 +33,24 @@ const reservedCommands = expandPhrases([
   //   https://spark.apache.org/docs/latest/sql-ref-syntax-dml-load.html
   'LOAD DATA [LOCAL] INPATH',
   '[OVERWRITE] INTO TABLE',
-  // DDL
-  'ALTER COLUMN',
-  'ALTER DATABASE',
+  // Data definition
+  'CREATE [OR REPLACE] [GLOBAL TEMPORARY | TEMPORARY] VIEW [IF NOT EXISTS]',
+  'CREATE [EXTERNAL] TABLE [IF NOT EXISTS]',
+  'DROP TABLE [IF EXISTS]',
+  // - alter table:
   'ALTER TABLE',
+  'ADD COLUMNS',
+  'DROP {COLUMN | COLUMNS}',
+  'RENAME TO',
+  'RENAME COLUMN',
+  'ALTER COLUMN',
+
+  'ALTER DATABASE',
   'ALTER VIEW',
   'CREATE DATABASE',
   'CREATE FUNCTION',
-  'CREATE TABLE',
-  'CREATE VIEW',
   'DROP DATABASE',
   'DROP FUNCTION',
-  'DROP TABLE',
   'DROP VIEW',
   'REPAIR TABLE',
   'USE DATABASE',
