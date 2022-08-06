@@ -29,6 +29,21 @@ const reservedCommands = expandPhrases([
   'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
   // - truncate:
   'TRUNCATE [TABLE]',
+  // Data definition
+  'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
+  'CREATE [OR REPLACE] [TEMPORARY] TABLE [IF NOT EXISTS]',
+  'DROP [TEMPORARY] TABLE [IF EXISTS]',
+  // - alter table:
+  'ALTER [ONLINE] [IGNORE] TABLE [IF EXISTS]',
+  'ADD [COLUMN] [IF NOT EXISTS]',
+  '{CHANGE | MODIFY} [COLUMN] [IF EXISTS]',
+  'DROP [COLUMN] [IF EXISTS]',
+  'RENAME [TO]',
+  'RENAME COLUMN',
+  'ALTER [COLUMN]',
+  '{SET | DROP} DEFAULT', // for alter column
+  'SET {VISIBLE | INVISIBLE}', // for alter column
+
   // https://mariadb.com/docs/reference/mdb/sql-statements/
   'ALTER DATABASE',
   'ALTER DATABASE COMMENT',
@@ -39,7 +54,6 @@ const reservedCommands = expandPhrases([
   'ALTER SCHEMA COMMENT',
   'ALTER SEQUENCE',
   'ALTER SERVER',
-  'ALTER TABLE',
   'ALTER USER',
   'ALTER VIEW',
   'ANALYZE',
@@ -66,11 +80,9 @@ const reservedCommands = expandPhrases([
   'CREATE SEQUENCE',
   'CREATE SERVER',
   'CREATE SPATIAL INDEX',
-  'CREATE TABLE',
   'CREATE TRIGGER',
   'CREATE UNIQUE INDEX',
   'CREATE USER',
-  'CREATE VIEW',
   'DEALLOCATE PREPARE',
   'DESCRIBE',
   'DO',
@@ -83,7 +95,6 @@ const reservedCommands = expandPhrases([
   'DROP ROLE',
   'DROP SEQUENCE',
   'DROP SERVER',
-  'DROP TABLE',
   'DROP TRIGGER',
   'DROP USER',
   'DROP VIEW',
@@ -222,9 +233,6 @@ const reservedCommands = expandPhrases([
   'XA RECOVER',
   'XA ROLLBACK',
   'XA START',
-  // other
-  'ADD',
-  'ALTER COLUMN',
 ]);
 
 const reservedSetOperations = expandPhrases([

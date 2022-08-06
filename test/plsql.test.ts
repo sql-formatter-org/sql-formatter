@@ -5,7 +5,6 @@ import PlSqlFormatter from 'src/languages/plsql/plsql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
-import supportsAlterTableModify from './features/alterTableModify';
 import supportsBetween from './features/between';
 import supportsCreateTable from './features/createTable';
 import supportsDropTable from './features/dropTable';
@@ -25,6 +24,7 @@ import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
 import supportsTruncateTable from './features/truncateTable';
 import supportsMergeInto from './features/mergeInto';
+import supportsCreateView from './features/createView';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -32,11 +32,16 @@ describe('PlSqlFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCreateView(format, { orReplace: true, materialized: true });
   supportsCreateTable(format);
   supportsDropTable(format);
   supportsConstraints(format);
-  supportsAlterTable(format);
-  supportsAlterTableModify(format);
+  supportsAlterTable(format, {
+    dropColumn: true,
+    modify: true,
+    renameTo: true,
+    renameColumn: true,
+  });
   supportsDeleteFrom(format);
   supportsInsertInto(format);
   supportsUpdate(format);

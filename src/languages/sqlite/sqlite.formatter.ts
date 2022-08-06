@@ -27,12 +27,18 @@ const reservedCommands = expandPhrases([
   'SET',
   // - delete:
   'DELETE FROM',
-  // other
-  'ADD',
-  'ALTER COLUMN',
+  // Data definition
+  'CREATE [TEMPORARY | TEMP] VIEW [IF NOT EXISTS]',
+  'CREATE [TEMPORARY | TEMP] TABLE [IF NOT EXISTS]',
+  'DROP TABLE [IF EXISTS]',
+  // - alter table:
   'ALTER TABLE',
-  'CREATE TABLE',
-  'DROP TABLE',
+  'ADD [COLUMN]',
+  'DROP [COLUMN]',
+  'RENAME [COLUMN]',
+  'RENAME TO',
+
+  // other
   'SET SCHEMA',
 ]);
 

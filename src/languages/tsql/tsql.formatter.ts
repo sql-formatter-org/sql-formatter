@@ -33,6 +33,16 @@ const reservedCommands = expandPhrases([
   'MERGE [INTO]',
   'WHEN [NOT] MATCHED [BY TARGET | BY SOURCE] [THEN]',
   'UPDATE SET',
+  // Data definition
+  'CREATE [OR ALTER] [MATERIALIZED] VIEW',
+  'CREATE TABLE',
+  'DROP TABLE [IF EXISTS]',
+  // - alter table:
+  'ALTER TABLE',
+  'ADD',
+  'DROP COLUMN [IF EXISTS]',
+  'ALTER COLUMN',
+
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',
   'ADD SIGNATURE',
@@ -81,7 +91,6 @@ const reservedCommands = expandPhrases([
   'DATEFIRST',
   'DATEFORMAT',
   'DEADLOCK_PRIORITY',
-  'DEFAULT',
   'DENY',
   'DENY XML',
   'DISABLE TRIGGER',
@@ -184,16 +193,10 @@ const reservedCommands = expandPhrases([
   'TYPE',
   'UPDATE STATISTICS',
   'USER',
-  'VIEW',
   'WORKLOAD GROUP',
   'XACT_ABORT',
   'XML INDEX',
   'XML SCHEMA COLLECTION',
-  // other
-  'ALTER COLUMN',
-  'ALTER TABLE',
-  'CREATE TABLE',
-  'DROP TABLE',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

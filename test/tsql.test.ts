@@ -23,6 +23,7 @@ import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
 import supportsTruncateTable from './features/truncateTable';
 import supportsMergeInto from './features/mergeInto';
+import supportsCreateView from './features/createView';
 
 describe('TSqlFormatter', () => {
   const language = 'tsql';
@@ -30,10 +31,13 @@ describe('TSqlFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCreateView(format, { materialized: true });
   supportsCreateTable(format);
-  supportsDropTable(format);
+  supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);
-  supportsAlterTable(format);
+  supportsAlterTable(format, {
+    dropColumn: true,
+  });
   supportsDeleteFrom(format);
   supportsInsertInto(format, { withoutInto: true });
   supportsUpdate(format, { whereCurrentOf: true });
@@ -88,6 +92,15 @@ describe('TSqlFormatter', () => {
         ##flam
       FROM
         tbl;
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(format(`ALTER TABLE t ALTER COLUMN foo INT NOT NULL DEFAULT 5;`)).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo INT NOT NULL DEFAULT 5;
     `);
   });
 });

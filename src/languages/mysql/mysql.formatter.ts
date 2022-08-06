@@ -30,6 +30,20 @@ const reservedCommands = expandPhrases([
   'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
   // - truncate:
   'TRUNCATE [TABLE]',
+  // Data definition
+  'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
+  'CREATE [TEMPORARY] TABLE [IF NOT EXISTS]',
+  'DROP [TEMPORARY] TABLE [IF EXISTS]',
+  // - alter table:
+  'ALTER TABLE',
+  'ADD [COLUMN]',
+  '{CHANGE | MODIFY} [COLUMN]',
+  'DROP [COLUMN]',
+  'RENAME [TO | AS]',
+  'RENAME COLUMN',
+  'ALTER [COLUMN]',
+  '{SET | DROP} DEFAULT', // for alter column
+
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',
   'ALTER EVENT',
@@ -39,7 +53,6 @@ const reservedCommands = expandPhrases([
   'ALTER PROCEDURE',
   'ALTER RESOURCE GROUP',
   'ALTER SERVER',
-  'ALTER TABLE',
   'ALTER TABLESPACE',
   'ALTER USER',
   'ALTER VIEW',
@@ -65,11 +78,9 @@ const reservedCommands = expandPhrases([
   'CREATE ROLE',
   'CREATE SERVER',
   'CREATE SPATIAL REFERENCE SYSTEM',
-  'CREATE TABLE',
   'CREATE TABLESPACE',
   'CREATE TRIGGER',
   'CREATE USER',
-  'CREATE VIEW',
   'DEALLOCATE PREPARE',
   'DESCRIBE',
   'DO',
@@ -84,7 +95,6 @@ const reservedCommands = expandPhrases([
   'DROP ROLE',
   'DROP SERVER',
   'DROP SPATIAL REFERENCE SYSTEM',
-  'DROP TABLE',
   'DROP TABLESPACE',
   'DROP TRIGGER',
   'DROP USER',
@@ -196,9 +206,6 @@ const reservedCommands = expandPhrases([
   'REPEAT',
   'RETURN',
   'WHILE',
-  // other
-  'ADD',
-  'ALTER COLUMN',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);

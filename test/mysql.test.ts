@@ -9,6 +9,7 @@ import supportsOperators from './features/operators';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
+import supportsCreateTable from './features/createTable';
 
 describe('MySqlFormatter', () => {
   const language = 'mysql';
@@ -24,6 +25,7 @@ describe('MySqlFormatter', () => {
   supportsOperators(format, MySqlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
+  supportsCreateTable(format, { ifNotExists: true });
 
   // TODO: disabled for now
   it.skip('supports @@ system variables', () => {

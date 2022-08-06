@@ -23,6 +23,8 @@ import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
 import supportsTruncateTable from './features/truncateTable';
 import supportsMergeInto from './features/mergeInto';
+import supportsCreateView from './features/createView';
+import supportsAlterTable from './features/alterTable';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';
@@ -30,8 +32,14 @@ describe('BigQueryFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format, { hashComments: true });
-  supportsCreateTable(format);
-  supportsDropTable(format);
+  supportsCreateView(format, { orReplace: true, materialized: true });
+  supportsCreateTable(format, { orReplace: true, ifNotExists: true });
+  supportsDropTable(format, { ifExists: true });
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    renameTo: true,
+  });
   supportsDeleteFrom(format, { withoutFrom: true });
   supportsInsertInto(format, { withoutInto: true });
   supportsUpdate(format);
@@ -300,27 +308,6 @@ describe('BigQueryFormatter', () => {
   describe('BigQuery DDL Create Statements', () => {
     const createCmds = {
       schema: ['CREATE SCHEMA', 'CREATE SCHEMA IF NOT EXISTS'],
-      table: ['CREATE TABLE', 'CREATE TABLE IF NOT EXISTS', 'CREATE OR REPLACE TABLE'],
-      tempTable: [
-        'CREATE TEMP TABLE',
-        'CREATE TEMP TABLE IF NOT EXISTS',
-        'CREATE TEMPORARY TABLE',
-        'CREATE TEMPORARY TABLE IF NOT EXISTS',
-        'CREATE OR REPLACE TEMP TABLE',
-        'CREATE OR REPLACE TEMPORARY TABLE',
-      ],
-      snapshotTable: ['CREATE SNAPSHOT TABLE', 'CREATE SNAPSHOT TABLE IF NOT EXISTS'],
-      view: ['CREATE VIEW', 'CREATE OR REPLACE VIEW', 'CREATE VIEW IF NOT EXISTS'],
-      materializedView: [
-        'CREATE MATERIALIZED VIEW',
-        'CREATE OR REPLACE MATERIALIZED VIEW',
-        'CREATE MATERIALIZED VIEW IF NOT EXISTS',
-      ],
-      externalTable: [
-        'CREATE EXTERNAL TABLE',
-        'CREATE OR REPLACE EXTERNAL TABLE',
-        'CREATE EXTERNAL TABLE IF NOT EXISTS',
-      ],
       function: ['CREATE FUNCTION', 'CREATE OR REPLACE FUNCTION', 'CREATE FUNCTION IF NOT EXISTS'],
       tempFunction: [
         'CREATE TEMP FUNCTION',
@@ -368,40 +355,6 @@ describe('BigQueryFormatter', () => {
       });
     });
 
-    createCmds.table.concat(createCmds.tempTable).forEach((createTable: string) => {
-      it(`Supports ${createTable}`, () => {
-        const input = `
-          ${createTable} mydataset.newtable
-          (
-            x INT64 OPTIONS(description="desc1"),
-            y STRUCT<
-              a ARRAY<STRING> OPTIONS(description="desc2"),
-              b BOOL
-            >
-          )
-          PARTITION BY _PARTITIONDATE
-          OPTIONS(
-            expiration_timestamp=TIMESTAMP "2025-01-01 00:00:00 UTC",
-            partition_expiration_days=1
-          )`;
-
-        // TODO: need to fix the formatting of y STRUCT<a ARRAY<STRING>OPTIONS(description ="desc2"), b BOOL>
-        const expected = dedent`
-          ${createTable}
-            mydataset.newtable (
-              x INT64 OPTIONS(description = "desc1"),
-              y STRUCT<a ARRAY<STRING>OPTIONS(description ="desc2"), b BOOL>
-            )
-          PARTITION BY
-            _PARTITIONDATE OPTIONS(
-              expiration_timestamp = TIMESTAMP "2025-01-01 00:00:00 UTC",
-              partition_expiration_days = 1
-            )`;
-
-        expect(format(input)).toBe(expected);
-      });
-    });
-
     it(`Supports CREATE TABLE LIKE`, () => {
       const input = `
         CREATE TABLE mydataset.newtable
@@ -441,56 +394,23 @@ describe('BigQueryFormatter', () => {
       expect(format(input)).toBe(expected);
     });
 
-    createCmds.snapshotTable.forEach(createSnapshotTable => {
-      it(`Supports ${createSnapshotTable}`, () => {
-        const input = `
-          ${createSnapshotTable} mydataset.mytablesnapshot
-          CLONE mydataset.mytable`;
-        const expected = dedent`
-          ${createSnapshotTable}
-            mydataset.mytablesnapshot CLONE mydataset.mytable`;
-
-        expect(format(input)).toBe(expected);
-      });
-    });
-
-    createCmds.view.concat(createCmds.materializedView).forEach(createView => {
-      it(`Supports ${createView}`, () => {
-        const input = `
-          ${createView} my_dataset.my_view AS (
-          SELECT t1.col1, t1.col2 FROM my_dataset.my_table)`;
-        const expected = dedent`
-          ${createView}
-            my_dataset.my_view AS (
-              SELECT
-                t1.col1,
-                t1.col2
-              FROM
-                my_dataset.my_table
-            )`;
-        expect(format(input)).toBe(expected);
-      });
-    });
-
-    createCmds.externalTable.forEach(createExternalTable => {
-      it(`Supports ${createExternalTable}`, () => {
-        const input = `
-          ${createExternalTable} dataset.CsvTable
-          WITH PARTITION COLUMNS (
-            field_1 STRING,
-            field_2 INT64
-          )
-          OPTIONS(
-            format = 'CSV',
-            uris = ['gs://bucket/path1.csv']
-          )`;
-        const expected = dedent`
-          ${createExternalTable}
-            dataset.CsvTable
-          WITH PARTITION COLUMNS
-            (field_1 STRING, field_2 INT64) OPTIONS(format = 'CSV', uris = ['gs://bucket/path1.csv'])`;
-        expect(format(input)).toBe(expected);
-      });
+    it(`Supports CREATE EXTERNAL TABLE ... WITH PARTITION COLUMN`, () => {
+      const input = `
+        CREATE EXTERNAL TABLE dataset.CsvTable
+        WITH PARTITION COLUMNS (
+          field_1 STRING,
+          field_2 INT64
+        )
+        OPTIONS(
+          format = 'CSV',
+          uris = ['gs://bucket/path1.csv']
+        )`;
+      const expected = dedent`
+        CREATE EXTERNAL TABLE
+          dataset.CsvTable
+        WITH PARTITION COLUMNS
+          (field_1 STRING, field_2 INT64) OPTIONS(format = 'CSV', uris = ['gs://bucket/path1.csv'])`;
+      expect(format(input)).toBe(expected);
     });
 
     createCmds.function.concat(createCmds.tempFunction).forEach(createFunction => {
@@ -658,26 +578,16 @@ describe('BigQueryFormatter', () => {
   });
 
   describe('BigQuery DDL Alter Statements', () => {
-    const alterCmds = {
-      schema: ['ALTER SCHEMA', 'ALTER SCHEMA IF EXISTS'],
-      table: ['ALTER TABLE', 'ALTER TABLE IF EXISTS'],
-      column: ['ALTER COLUMN', 'ALTER COLUMN IF EXISTS'],
-      view: ['ALTER VIEW', 'ALTER VIEW IF EXISTS'],
-      materializedView: ['ALTER MATERIALIZED VIEW', 'ALTER MATERIALIZED VIEW IF EXISTS'],
-    };
-
-    alterCmds.schema.forEach(alterSchema => {
-      it(`Supports ${alterSchema} - SET DEFAULT COLLATE`, () => {
-        const input = `
-          ${alterSchema} mydataset
-          SET DEFAULT COLLATE 'und:ci'`;
-        const expected = dedent`
-          ${alterSchema}
-            mydataset
-          SET DEFAULT COLLATE
-            'und:ci'`;
-        expect(format(input)).toBe(expected);
-      });
+    it(`Supports ALTER SCHEMA - SET DEFAULT COLLATE`, () => {
+      const input = `
+        ALTER SCHEMA mydataset
+        SET DEFAULT COLLATE 'und:ci'`;
+      const expected = dedent`
+        ALTER SCHEMA
+          mydataset
+        SET DEFAULT COLLATE
+          'und:ci'`;
+      expect(format(input)).toBe(expected);
     });
 
     it(`Supports ALTER SCHEMA - SET OPTIONS`, () => {
@@ -694,62 +604,19 @@ describe('BigQueryFormatter', () => {
       expect(format(input)).toBe(expected);
     });
 
-    alterCmds.table.forEach(alterTable => {
-      it(`Supports ${alterTable} - SET OPTIONS`, () => {
-        const input = `
-          ${alterTable} mydataset.mytable
-          SET OPTIONS(
-            expiration_timestamp=TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+    it(`Supports ALTER TABLE - SET OPTIONS`, () => {
+      const input = `
+        ALTER TABLE mydataset.mytable
+        SET OPTIONS(
+          expiration_timestamp=TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+        )`;
+      const expected = dedent`
+        ALTER TABLE
+          mydataset.mytable
+        SET OPTIONS
+          (
+            expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
           )`;
-        const expected = dedent`
-          ${alterTable}
-            mydataset.mytable
-          SET OPTIONS
-            (
-              expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
-            )`;
-        expect(format(input)).toBe(expected);
-      });
-    });
-
-    it(`Supports ALTER TABLE - ADD COLUMN`, () => {
-      const input = `
-        ALTER TABLE mydataset.mytable
-        ADD COLUMN col1 STRING,
-        ADD COLUMN IF NOT EXISTS col2 GEOGRAPHY`;
-      const expected = dedent`
-        ALTER TABLE
-          mydataset.mytable
-        ADD COLUMN
-          col1 STRING,
-        ADD COLUMN IF NOT EXISTS
-          col2 GEOGRAPHY`;
-      expect(format(input)).toBe(expected);
-    });
-
-    it(`Supports ALTER TABLE - RENAME TO`, () => {
-      const input = `
-        ALTER TABLE mydataset.mytable RENAME TO mynewtable`;
-      const expected = dedent`
-        ALTER TABLE
-          mydataset.mytable
-        RENAME TO
-          mynewtable`;
-      expect(format(input)).toBe(expected);
-    });
-
-    it(`Supports ALTER TABLE - DROP COLUMN`, () => {
-      const input = `
-        ALTER TABLE mydataset.mytable
-        DROP COLUMN col1,
-        DROP COLUMN IF EXISTS col2`;
-      const expected = dedent`
-        ALTER TABLE
-          mydataset.mytable
-        DROP COLUMN
-          col1,
-        DROP COLUMN IF EXISTS
-          col2`;
       expect(format(input)).toBe(expected);
     });
 
@@ -765,23 +632,21 @@ describe('BigQueryFormatter', () => {
       expect(format(input)).toBe(expected);
     });
 
-    alterCmds.column.forEach(alterColumn => {
-      it(`Supports ${alterColumn} - SET OPTIONS`, () => {
-        const input = `
-          ALTER TABLE mydataset.mytable
-          ${alterColumn} price
-          SET OPTIONS (
-            description="Price per unit"
-          )`;
-        const expected = dedent`
-          ALTER TABLE
-            mydataset.mytable
-          ${alterColumn}
-            price
-          SET OPTIONS
-            (description = "Price per unit")`;
-        expect(format(input)).toBe(expected);
-      });
+    it(`Supports ALTER COLUMN - SET OPTIONS`, () => {
+      const input = `
+        ALTER TABLE mydataset.mytable
+        ALTER COLUMN price
+        SET OPTIONS (
+          description="Price per unit"
+        )`;
+      const expected = dedent`
+        ALTER TABLE
+          mydataset.mytable
+        ALTER COLUMN
+          price
+        SET OPTIONS
+          (description = "Price per unit")`;
+      expect(format(input)).toBe(expected);
     });
 
     it(`Supports ALTER COLUMN - DROP NOT NULL`, () => {
@@ -813,22 +678,20 @@ describe('BigQueryFormatter', () => {
       expect(format(input)).toBe(expected);
     });
 
-    alterCmds.view.concat(alterCmds.materializedView).forEach(alterView => {
-      it(`Supports ${alterView} - SET OPTIONS`, () => {
-        const input = `
-          ${alterView} mydataset.myview
-          SET OPTIONS (
-            expiration_timestamp=TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+    it(`Supports ALTER VIEW - SET OPTIONS`, () => {
+      const input = `
+        ALTER VIEW mydataset.myview
+        SET OPTIONS (
+          expiration_timestamp=TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+        )`;
+      const expected = dedent`
+        ALTER VIEW
+          mydataset.myview
+        SET OPTIONS
+          (
+            expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
           )`;
-        const expected = dedent`
-          ${alterView}
-            mydataset.myview
-          SET OPTIONS
-            (
-              expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
-            )`;
-        expect(format(input)).toBe(expected);
-      });
+      expect(format(input)).toBe(expected);
     });
 
     it(`Supports ALTER BI_CAPACITY - SET OPTIONS`, () => {
@@ -849,9 +712,6 @@ describe('BigQueryFormatter', () => {
   describe('BigQuery DDL Drop Statements', () => {
     const dropCmds = {
       schema: ['DROP SCHEMA', 'DROP SCHEMA IF EXISTS'],
-      table: ['DROP TABLE', 'DROP TABLE IF EXISTS'],
-      snapshotTable: ['DROP SNAPSHOT TABLE', 'DROP SNAPSHOT TABLE IF EXISTS'],
-      externalTable: ['DROP EXTERNAL TABLE', 'DROP EXTERNAL TABLE IF EXISTS'],
       view: ['DROP VIEW', 'DROP VIEW IF EXISTS'],
       materializedViews: ['DROP MATERIALIZED VIEW', 'DROP MATERIALIZED VIEW IF EXISTS'],
       function: ['DROP FUNCTION', 'DROP FUNCTION IF EXISTS'],
