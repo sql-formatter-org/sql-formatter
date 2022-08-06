@@ -13,7 +13,7 @@ import SqlFormatter from 'src/languages/sql/sql.formatter';
 import TrinoFormatter from 'src/languages/trino/trino.formatter';
 import TSqlFormatter from 'src/languages/tsql/tsql.formatter';
 
-import type { FormatOptions } from './types';
+import type { FormatOptions } from './FormatOptions';
 import { ParamItems } from './formatter/Params';
 
 export const formatters = {
