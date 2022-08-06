@@ -36,7 +36,7 @@ Better to always pick something more specific if possible.
 [postgresql]: https://www.postgresql.org/
 [presto]: https://prestodb.io/docs/current/
 [amazon redshift]: https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
-[SingleStoreDB]: https://docs.singlestore.com/managed-service/en/reference.html
+[singlestoredb]: https://docs.singlestore.com/managed-service/en/reference.html
 [spark]: https://spark.apache.org/docs/latest/api/sql/index.html
 [sqlite]: https://sqlite.org/index.html
 [trino]: https://trino.io/docs/current/
