@@ -5,8 +5,42 @@ import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
 import { keywords } from './singlestoredb.keywords';
 import { functions } from './singlestoredb.functions';
 
-// https://docs.singlestore.com/managed-service/en/reference/sql-reference.html
-const reservedCommands = [
+const reservedCommands = expandPhrases([
+  // queries
+  'SELECT [ALL | DISTINCT | DISTINCTROW]',
+  'FROM',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'ORDER BY',
+  'LIMIT',
+  'OFFSET',
+  // Data manipulation
+  // - insert:
+  'INSERT [IGNORE] [INTO]',
+  'VALUES',
+  'REPLACE [INTO]',
+  // - update:
+  'UPDATE',
+  'SET',
+  // - delete:
+  'DELETE [FROM]',
+  // - truncate:
+  'TRUNCATE [TABLE]',
+  // Data definition
+  'CREATE [ROWSTORE] [REFERENCE | TEMPORARY | GLOBAL TEMPORARY] TABLE [IF NOT EXISTS]',
+  'CREATE [OR REPLACE] [TEMPORARY] PROCEDURE [IF NOT EXISTS]',
+  'CREATE [OR REPLACE] [EXTERNAL] FUNCTION',
+  'DROP [TEMPORARY] TABLE [IF EXISTS]',
+  // - alter table:
+  'ALTER [ONLINE] TABLE',
+  'ADD [COLUMN]',
+  'ADD [UNIQUE]',
+  'DROP [COLUMN]',
+  'MODIFY [COLUMN]',
+  'RENAME [TO | AS]',
+
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference.html
   'ADD AGGREGATOR',
   'ADD LEAF',
   'AGGREGATOR SET AS MASTER',
@@ -18,7 +52,6 @@ const reservedCommands = [
   'ALTER PROCEDURE',
   'ALTER RESOURCE GROUP',
   'ALTER SERVER',
-  'ALTER TABLE',
   'ALTER TABLESPACE',
   'ALTER USER',
   'ALTER VIEW',
@@ -30,6 +63,7 @@ const reservedCommands = [
   'BOOTSTRAP AGGREGATOR',
   'CACHE INDEX',
   'CALL',
+  'CHANGE',
   'CHANGE MASTER TO',
   'CHANGE REPLICATION FILTER',
   'CHANGE REPLICATION SOURCE TO',
@@ -41,8 +75,6 @@ const reservedCommands = [
   'COMMIT',
   'CREATE DATABASE',
   'CREATE EVENT',
-  'CREATE FUNCTION',
-  'CREATE FUNCTION',
   'CREATE INDEX',
   'CREATE LOGFILE GROUP',
   'CREATE PROCEDURE',
@@ -50,14 +82,11 @@ const reservedCommands = [
   'CREATE ROLE',
   'CREATE SERVER',
   'CREATE SPATIAL REFERENCE SYSTEM',
-  'CREATE TABLE',
   'CREATE TABLESPACE',
   'CREATE TRIGGER',
   'CREATE USER',
   'CREATE VIEW',
   'DEALLOCATE PREPARE',
-  'DELETE',
-  'DELETE FROM',
   'DESCRIBE',
   'DO',
   'DROP DATABASE',
@@ -71,7 +100,6 @@ const reservedCommands = [
   'DROP ROLE',
   'DROP SERVER',
   'DROP SPATIAL REFERENCE SYSTEM',
-  'DROP TABLE',
   'DROP TABLESPACE',
   'DROP TRIGGER',
   'DROP USER',
@@ -79,6 +107,7 @@ const reservedCommands = [
   'EXECUTE',
   'EXPLAIN',
   'FLUSH',
+  'FORCE',
   'GRANT',
   'HANDLER',
   'HELP',
@@ -118,7 +147,6 @@ const reservedCommands = [
   'ROLLBACK TO SAVEPOINT',
   'SAVEPOINT',
   'SELECT',
-  'SET',
   'SET CHARACTER SET',
   'SET DEFAULT ROLE',
   'SET NAMES',
@@ -185,9 +213,7 @@ const reservedCommands = [
   'UNINSTALL PLUGIN',
   'UNLOCK INSTANCE',
   'UNLOCK TABLES',
-  'UPDATE',
   'USE',
-  'VALUES',
   'WITH',
   'XA',
   // flow control
@@ -211,15 +237,14 @@ const reservedCommands = [
   'WHERE',
   'WINDOW',
   'PARTITION BY',
-];
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);
 
 const reservedJoins = expandPhrases([
   'JOIN',
-  '{LEFT | RIGHT} [OUTER] JOIN',
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
   '{INNER | CROSS} JOIN',
-  'NATURAL [INNER] JOIN',
   'NATURAL {LEFT | RIGHT} [OUTER] JOIN',
   // non-standard joins
   'STRAIGHT_JOIN',
@@ -262,7 +287,7 @@ export default class SingleStoreDBFormatter extends Formatter {
 function postProcess(tokens: Token[]) {
   return tokens.map((token, i) => {
     const nextToken = tokens[i + 1] || EOF_TOKEN;
-    if (isToken.SET(token) && nextToken.value === '(') {
+    if (isToken.SET(token) && nextToken.text === '(') {
       // This is SET datatype, not SET statement
       return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
     }

@@ -12,6 +12,7 @@ import SqliteFormatter from 'src/languages/sqlite/sqlite.formatter';
 import SqlFormatter from 'src/languages/sql/sql.formatter';
 import TrinoFormatter from 'src/languages/trino/trino.formatter';
 import TSqlFormatter from 'src/languages/tsql/tsql.formatter';
+import SingleStoreDBFormatter from './languages/singlestoredb/singlestoredb.formatter';
 
 import type { FormatOptions } from './types';
 import { ParamItems } from './formatter/Params';
@@ -26,6 +27,7 @@ export const formatters = {
   plsql: PlSqlFormatter,
   postgresql: PostgreSqlFormatter,
   redshift: RedshiftFormatter,
+  singlestoredb: SingleStoreDBFormatter,
   spark: SparkFormatter,
   sql: SqlFormatter,
   sqlite: SqliteFormatter,
