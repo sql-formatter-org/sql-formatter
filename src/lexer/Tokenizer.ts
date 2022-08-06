@@ -1,64 +1,10 @@
 import { Token, TokenType } from 'src/lexer/token';
 import * as regex from 'src/lexer/regexFactory';
-import type * as regexTypes from 'src/lexer/regexTypes';
+import { TokenizerOptions } from 'src/lexer/regexTypes';
 import { equalizeWhitespace } from 'src/utils';
 
 import { escapeRegExp } from './regexUtil';
 import TokenizerEngine, { type TokenRule } from './TokenizerEngine';
-
-interface TokenizerOptions {
-  // Main clauses that start new block, like: SELECT, FROM, WHERE, ORDER BY
-  reservedCommands: string[];
-  // Logical operator keywords, defaults to: [AND, OR]
-  reservedLogicalOperators?: string[];
-  // Keywords in CASE expressions that begin new line, like: WHEN, ELSE
-  reservedDependentClauses: string[];
-  // Keywords that create newline but no indentaion of their body.
-  // These contain set operations like UNION
-  reservedSetOperations: string[];
-  // Various joins like LEFT OUTER JOIN
-  reservedJoins: string[];
-  // These are essentially multi-word sequences of keywords,
-  // that we prioritize over normal keywords
-  reservedPhrases?: string[];
-  // built in function names
-  reservedFunctionNames: string[];
-  // all other reserved words (not included to any of the above lists)
-  reservedKeywords: string[];
-  // Types of quotes to use for strings
-  stringTypes: regexTypes.QuoteType[];
-  // Types of quotes to use for quoted identifiers
-  identTypes: regexTypes.QuoteType[];
-  // Types of quotes to use for variables
-  variableTypes?: regexTypes.VariableType[];
-  // Open-parenthesis characters
-  openParens?: ('(' | '[' | '{' | '{-')[];
-  // Close-parenthesis characters
-  closeParens?: (')' | ']' | '}' | '-}')[];
-  // True to allow for positional "?" parameter placeholders
-  positionalParams?: boolean;
-  // Prefixes for numbered parameter placeholders to support, e.g. :1, :2, :3
-  numberedParamTypes?: ('?' | ':' | '$')[];
-  // Prefixes for named parameter placeholders to support, e.g. :name
-  namedParamTypes?: (':' | '@' | '$')[];
-  // Prefixes for quoted parameter placeholders to support, e.g. :"name"
-  // The type of quotes will depend on `identifierTypes` option.
-  quotedParamTypes?: (':' | '@' | '$')[];
-  // Line comment types to support, defaults to --
-  lineCommentTypes?: string[];
-  // Additional characters to support in identifiers
-  identChars?: regexTypes.IdentChars;
-  // Additional characters to support in named parameters
-  // Use this when parameters allow different characters from identifiers
-  // Defaults to `identChars`.
-  paramChars?: regexTypes.IdentChars;
-  // Additional multi-character operators to support, in addition to <=, >=, <>, !=
-  operators?: string[];
-  // Allows custom modifications on the token array.
-  // Called after the whole input string has been split into tokens.
-  // The result of this will be the output of the tokenizer.
-  postProcess?: (tokens: Token[]) => Token[];
-}
 
 export default class Tokenizer {
   private engine: TokenizerEngine;
