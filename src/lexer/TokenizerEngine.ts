@@ -165,20 +165,20 @@ export default class TokenizerEngine {
     if (matches) {
       const matchedToken = matches[0];
 
-      const tokenStart = this.index;
-      const tokenColInLine = this.col;
-      // Advance current position by matched token length
-      this.index += matchedToken.length;
-      this.updateLineCol(matchedToken);
-      return {
+      const outToken = {
         type,
         raw: matchedToken,
         text: transform ? transform(matchedToken) : matchedToken,
-        start: tokenStart,
-        end: this.index,
+        start: this.index,
+        end: this.index + matchedToken.length,
         line: this.line,
-        col: tokenColInLine,
+        col: this.col,
       };
+
+      // Advance current position by matched token length
+      this.index += matchedToken.length;
+      this.updateLineCol(matchedToken);
+      return outToken;
     }
     return undefined;
   }
