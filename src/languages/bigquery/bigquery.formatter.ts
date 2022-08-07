@@ -194,6 +194,7 @@ function combineParameterizedTypes(tokens: Token[]) {
         raw: typeDefTokens.map(formatTypeDefToken('raw')).join(''),
         text: typeDefTokens.map(formatTypeDefToken('text')).join(''),
         start: token.start, // TODO: this currently breaks all following token indices
+        end: token.end,
       });
       i = endIndex;
     } else {

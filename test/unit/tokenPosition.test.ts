@@ -38,6 +38,7 @@ describe('token positions', () => {
               ],
               "nameToken": Object {
                 "col": 0,
+                "end": 6,
                 "line": 0,
                 "raw": "SELECT",
                 "start": 0,
@@ -51,6 +52,7 @@ describe('token positions', () => {
                 Object {
                   "token": Object {
                     "col": 5,
+                    "end": 17,
                     "line": 1,
                     "raw": "tbl",
                     "start": 14,
@@ -62,6 +64,7 @@ describe('token positions', () => {
               ],
               "nameToken": Object {
                 "col": 0,
+                "end": 13,
                 "line": 1,
                 "raw": "FROM",
                 "start": 9,
@@ -75,6 +78,7 @@ describe('token positions', () => {
                 Object {
                   "token": Object {
                     "col": 6,
+                    "end": 26,
                     "line": 2,
                     "raw": "id",
                     "start": 24,
@@ -86,6 +90,7 @@ describe('token positions', () => {
                 Object {
                   "token": Object {
                     "col": 9,
+                    "end": 28,
                     "line": 2,
                     "raw": "=",
                     "start": 27,
@@ -97,6 +102,7 @@ describe('token positions', () => {
                 Object {
                   "token": Object {
                     "col": 11,
+                    "end": 30,
                     "line": 2,
                     "raw": "1",
                     "start": 29,
@@ -108,6 +114,7 @@ describe('token positions', () => {
               ],
               "nameToken": Object {
                 "col": 0,
+                "end": 23,
                 "line": 2,
                 "raw": "WHERE",
                 "start": 18,

@@ -169,6 +169,7 @@ export default class TokenizerEngine {
         raw: matchedToken,
         text: transform ? transform(matchedToken) : matchedToken,
         start: tokenStart,
+        end: this.index,
         line: this.line,
         col: tokenColInLine,
       };

@@ -30,6 +30,7 @@ describe('Parser', () => {
             Object {
               "token": Object {
                 "col": 0,
+                "end": 3,
                 "line": 0,
                 "raw": "foo",
                 "start": 0,
@@ -47,6 +48,7 @@ describe('Parser', () => {
             Object {
               "token": Object {
                 "col": 5,
+                "end": 8,
                 "line": 0,
                 "raw": "bar",
                 "start": 5,
@@ -73,6 +75,7 @@ describe('Parser', () => {
                 Object {
                   "nameToken": Object {
                     "col": 7,
+                    "end": 11,
                     "line": 0,
                     "raw": "SQRT",
                     "start": 7,
@@ -84,6 +87,7 @@ describe('Parser', () => {
                       Object {
                         "token": Object {
                           "col": 12,
+                          "end": 13,
                           "line": 0,
                           "raw": "2",
                           "start": 12,
@@ -102,6 +106,7 @@ describe('Parser', () => {
               ],
               "nameToken": Object {
                 "col": 0,
+                "end": 6,
                 "line": 0,
                 "raw": "SELECT",
                 "start": 0,
@@ -128,6 +133,7 @@ describe('Parser', () => {
                 Object {
                   "arrayToken": Object {
                     "col": 7,
+                    "end": 15,
                     "line": 0,
                     "raw": "my_array",
                     "start": 7,
@@ -139,6 +145,7 @@ describe('Parser', () => {
                       Object {
                         "nameToken": Object {
                           "col": 16,
+                          "end": 22,
                           "line": 0,
                           "raw": "OFFSET",
                           "start": 16,
@@ -150,6 +157,7 @@ describe('Parser', () => {
                             Object {
                               "token": Object {
                                 "col": 23,
+                                "end": 24,
                                 "line": 0,
                                 "raw": "5",
                                 "start": 23,
@@ -175,6 +183,7 @@ describe('Parser', () => {
               ],
               "nameToken": Object {
                 "col": 0,
+                "end": 6,
                 "line": 0,
                 "raw": "SELECT",
                 "start": 0,
@@ -203,6 +212,7 @@ describe('Parser', () => {
                     Object {
                       "token": Object {
                         "col": 8,
+                        "end": 18,
                         "line": 0,
                         "raw": "birth_year",
                         "start": 8,
@@ -214,6 +224,7 @@ describe('Parser', () => {
                     Object {
                       "token": Object {
                         "col": 19,
+                        "end": 20,
                         "line": 0,
                         "raw": "-",
                         "start": 19,
@@ -227,6 +238,7 @@ describe('Parser', () => {
                         Object {
                           "token": Object {
                             "col": 22,
+                            "end": 34,
                             "line": 0,
                             "raw": "CURRENT_DATE",
                             "start": 22,
@@ -238,6 +250,7 @@ describe('Parser', () => {
                         Object {
                           "token": Object {
                             "col": 35,
+                            "end": 36,
                             "line": 0,
                             "raw": "+",
                             "start": 35,
@@ -249,6 +262,7 @@ describe('Parser', () => {
                         Object {
                           "token": Object {
                             "col": 37,
+                            "end": 38,
                             "line": 0,
                             "raw": "1",
                             "start": 37,
@@ -270,6 +284,7 @@ describe('Parser', () => {
               ],
               "nameToken": Object {
                 "col": 0,
+                "end": 6,
                 "line": 0,
                 "raw": "SELECT",
                 "start": 0,
@@ -296,6 +311,7 @@ describe('Parser', () => {
                 Object {
                   "token": Object {
                     "col": 6,
+                    "end": 9,
                     "line": 0,
                     "raw": "age",
                     "start": 6,
@@ -307,6 +323,7 @@ describe('Parser', () => {
                 Object {
                   "andToken": Object {
                     "col": 21,
+                    "end": 24,
                     "line": 0,
                     "raw": "and",
                     "start": 21,
@@ -315,6 +332,7 @@ describe('Parser', () => {
                   },
                   "betweenToken": Object {
                     "col": 10,
+                    "end": 17,
                     "line": 0,
                     "raw": "BETWEEN",
                     "start": 10,
@@ -323,6 +341,7 @@ describe('Parser', () => {
                   },
                   "expr1": Object {
                     "col": 18,
+                    "end": 20,
                     "line": 0,
                     "raw": "10",
                     "start": 18,
@@ -331,6 +350,7 @@ describe('Parser', () => {
                   },
                   "expr2": Object {
                     "col": 25,
+                    "end": 27,
                     "line": 0,
                     "raw": "15",
                     "start": 25,
@@ -342,6 +362,7 @@ describe('Parser', () => {
               ],
               "nameToken": Object {
                 "col": 0,
+                "end": 5,
                 "line": 0,
                 "raw": "WHERE",
                 "start": 0,
@@ -368,6 +389,7 @@ describe('Parser', () => {
                 Object {
                   "token": Object {
                     "col": 6,
+                    "end": 8,
                     "line": 0,
                     "raw": "10",
                     "start": 6,
@@ -379,6 +401,7 @@ describe('Parser', () => {
               ],
               "limitToken": Object {
                 "col": 0,
+                "end": 5,
                 "line": 0,
                 "raw": "LIMIT",
                 "start": 0,
@@ -405,6 +428,7 @@ describe('Parser', () => {
                 Object {
                   "token": Object {
                     "col": 11,
+                    "end": 13,
                     "line": 0,
                     "raw": "10",
                     "start": 11,
@@ -416,6 +440,7 @@ describe('Parser', () => {
               ],
               "limitToken": Object {
                 "col": 0,
+                "end": 5,
                 "line": 0,
                 "raw": "LIMIT",
                 "start": 0,
@@ -426,6 +451,7 @@ describe('Parser', () => {
                 Object {
                   "token": Object {
                     "col": 6,
+                    "end": 9,
                     "line": 0,
                     "raw": "200",
                     "start": 6,
@@ -458,6 +484,7 @@ describe('Parser', () => {
               ],
               "nameToken": Object {
                 "col": 0,
+                "end": 6,
                 "line": 0,
                 "raw": "SELECT",
                 "start": 0,
@@ -487,6 +514,7 @@ describe('Parser', () => {
               ],
               "nameToken": Object {
                 "col": 0,
+                "end": 15,
                 "line": 0,
                 "raw": "SELECT DISTINCT",
                 "start": 0,
