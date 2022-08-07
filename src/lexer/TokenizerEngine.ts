@@ -13,8 +13,8 @@ export default class TokenizerEngine {
   private input = ''; // The input SQL string to process
 
   private index = 0; // Current position in string
-  private line = 0; // Current line that is processing
-  private col = 0; // Index within the current line
+  private line = 1; // Current line that is processing
+  private col = 1; // Index within the current line
 
   constructor(rules: Partial<Record<TokenType, TokenRule>>) {
     this.rules = rules;
@@ -73,7 +73,7 @@ export default class TokenizerEngine {
         this.line++;
         lastIndex = LINEBREAK_REGEX.lastIndex;
       }
-      this.col = token.length - lastIndex;
+      this.col = token.length - lastIndex + 1;
     } else {
       this.col += token.length;
     }

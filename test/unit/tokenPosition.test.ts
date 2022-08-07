@@ -37,7 +37,7 @@ describe('token positions', () => {
                 },
               ],
               "nameToken": Object {
-                "col": 0,
+                "col": 1,
                 "end": 6,
                 "line": 1,
                 "raw": "SELECT",
@@ -51,7 +51,7 @@ describe('token positions', () => {
               "children": Array [
                 Object {
                   "token": Object {
-                    "col": 5,
+                    "col": 6,
                     "end": 17,
                     "line": 2,
                     "raw": "tbl",
@@ -63,7 +63,7 @@ describe('token positions', () => {
                 },
               ],
               "nameToken": Object {
-                "col": 0,
+                "col": 1,
                 "end": 13,
                 "line": 2,
                 "raw": "FROM",
@@ -77,7 +77,7 @@ describe('token positions', () => {
               "children": Array [
                 Object {
                   "token": Object {
-                    "col": 6,
+                    "col": 7,
                     "end": 26,
                     "line": 3,
                     "raw": "id",
@@ -89,7 +89,7 @@ describe('token positions', () => {
                 },
                 Object {
                   "token": Object {
-                    "col": 9,
+                    "col": 10,
                     "end": 28,
                     "line": 3,
                     "raw": "=",
@@ -101,7 +101,7 @@ describe('token positions', () => {
                 },
                 Object {
                   "token": Object {
-                    "col": 11,
+                    "col": 12,
                     "end": 30,
                     "line": 3,
                     "raw": "1",
@@ -113,7 +113,7 @@ describe('token positions', () => {
                 },
               ],
               "nameToken": Object {
-                "col": 0,
+                "col": 1,
                 "end": 23,
                 "line": 3,
                 "raw": "WHERE",
@@ -151,9 +151,9 @@ describe('token positions', () => {
                 },
                 Object {
                   "token": Object {
-                    "col": 0,
+                    "col": 1,
                     "end": 29,
-                    "line": 1,
+                    "line": 2,
                     "raw": "/* TEST
         COMMENT
       */",
@@ -167,9 +167,9 @@ describe('token positions', () => {
                 },
               ],
               "nameToken": Object {
-                "col": 0,
+                "col": 1,
                 "end": 6,
-                "line": 0,
+                "line": 1,
                 "raw": "SELECT",
                 "start": 0,
                 "text": "SELECT",
@@ -181,9 +181,9 @@ describe('token positions', () => {
               "children": Array [
                 Object {
                   "token": Object {
-                    "col": 8,
+                    "col": 9,
                     "end": 38,
-                    "line": 3,
+                    "line": 4,
                     "raw": "tbl",
                     "start": 35,
                     "text": "tbl",
@@ -193,9 +193,9 @@ describe('token positions', () => {
                 },
               ],
               "nameToken": Object {
-                "col": 3,
+                "col": 4,
                 "end": 34,
-                "line": 3,
+                "line": 4,
                 "raw": "FROM",
                 "start": 30,
                 "text": "FROM",
@@ -207,9 +207,9 @@ describe('token positions', () => {
               "children": Array [
                 Object {
                   "token": Object {
-                    "col": 6,
+                    "col": 7,
                     "end": 47,
-                    "line": 4,
+                    "line": 5,
                     "raw": "id",
                     "start": 45,
                     "text": "id",
@@ -219,9 +219,9 @@ describe('token positions', () => {
                 },
                 Object {
                   "token": Object {
-                    "col": 9,
+                    "col": 10,
                     "end": 49,
-                    "line": 4,
+                    "line": 5,
                     "raw": "=",
                     "start": 48,
                     "text": "=",
@@ -231,9 +231,9 @@ describe('token positions', () => {
                 },
                 Object {
                   "token": Object {
-                    "col": 11,
+                    "col": 12,
                     "end": 51,
-                    "line": 4,
+                    "line": 5,
                     "raw": "1",
                     "start": 50,
                     "text": "1",
@@ -243,9 +243,9 @@ describe('token positions', () => {
                 },
               ],
               "nameToken": Object {
-                "col": 0,
+                "col": 1,
                 "end": 44,
-                "line": 4,
+                "line": 5,
                 "raw": "WHERE",
                 "start": 39,
                 "text": "WHERE",

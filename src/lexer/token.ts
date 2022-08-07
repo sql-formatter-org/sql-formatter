@@ -37,8 +37,8 @@ export interface Token {
   key?: string;
   start: number; // 0-based index of the token in the whole query string
   end: number; // 0-based index of where the token ends in the query string
-  line?: number; // 0-based line number that the token appears on
-  col?: number; // 0-based column within the line on which the token appears
+  line?: number; // 1-based line number that the token appears on
+  col?: number; // 1-based column within the line on which the token appears
 }
 
 /**

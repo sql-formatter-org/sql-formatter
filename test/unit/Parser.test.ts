@@ -29,9 +29,9 @@ describe('Parser', () => {
           "children": Array [
             Object {
               "token": Object {
-                "col": 0,
+                "col": 1,
                 "end": 3,
-                "line": 0,
+                "line": 1,
                 "raw": "foo",
                 "start": 0,
                 "text": "foo",
@@ -47,9 +47,9 @@ describe('Parser', () => {
           "children": Array [
             Object {
               "token": Object {
-                "col": 5,
+                "col": 6,
                 "end": 8,
-                "line": 0,
+                "line": 1,
                 "raw": "bar",
                 "start": 5,
                 "text": "bar",
@@ -74,9 +74,9 @@ describe('Parser', () => {
               "children": Array [
                 Object {
                   "nameToken": Object {
-                    "col": 7,
+                    "col": 8,
                     "end": 11,
-                    "line": 0,
+                    "line": 1,
                     "raw": "SQRT",
                     "start": 7,
                     "text": "SQRT",
@@ -86,9 +86,9 @@ describe('Parser', () => {
                     "children": Array [
                       Object {
                         "token": Object {
-                          "col": 12,
+                          "col": 13,
                           "end": 13,
-                          "line": 0,
+                          "line": 1,
                           "raw": "2",
                           "start": 12,
                           "text": "2",
@@ -105,9 +105,9 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
-                "col": 0,
+                "col": 1,
                 "end": 6,
-                "line": 0,
+                "line": 1,
                 "raw": "SELECT",
                 "start": 0,
                 "text": "SELECT",
@@ -132,9 +132,9 @@ describe('Parser', () => {
               "children": Array [
                 Object {
                   "arrayToken": Object {
-                    "col": 7,
+                    "col": 8,
                     "end": 15,
-                    "line": 0,
+                    "line": 1,
                     "raw": "my_array",
                     "start": 7,
                     "text": "my_array",
@@ -144,9 +144,9 @@ describe('Parser', () => {
                     "children": Array [
                       Object {
                         "nameToken": Object {
-                          "col": 16,
+                          "col": 17,
                           "end": 22,
-                          "line": 0,
+                          "line": 1,
                           "raw": "OFFSET",
                           "start": 16,
                           "text": "OFFSET",
@@ -156,9 +156,9 @@ describe('Parser', () => {
                           "children": Array [
                             Object {
                               "token": Object {
-                                "col": 23,
+                                "col": 24,
                                 "end": 24,
-                                "line": 0,
+                                "line": 1,
                                 "raw": "5",
                                 "start": 23,
                                 "text": "5",
@@ -182,9 +182,9 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
-                "col": 0,
+                "col": 1,
                 "end": 6,
-                "line": 0,
+                "line": 1,
                 "raw": "SELECT",
                 "start": 0,
                 "text": "SELECT",
@@ -211,9 +211,9 @@ describe('Parser', () => {
                   "children": Array [
                     Object {
                       "token": Object {
-                        "col": 8,
+                        "col": 9,
                         "end": 18,
-                        "line": 0,
+                        "line": 1,
                         "raw": "birth_year",
                         "start": 8,
                         "text": "birth_year",
@@ -223,9 +223,9 @@ describe('Parser', () => {
                     },
                     Object {
                       "token": Object {
-                        "col": 19,
+                        "col": 20,
                         "end": 20,
-                        "line": 0,
+                        "line": 1,
                         "raw": "-",
                         "start": 19,
                         "text": "-",
@@ -237,9 +237,9 @@ describe('Parser', () => {
                       "children": Array [
                         Object {
                           "token": Object {
-                            "col": 22,
+                            "col": 23,
                             "end": 34,
-                            "line": 0,
+                            "line": 1,
                             "raw": "CURRENT_DATE",
                             "start": 22,
                             "text": "CURRENT_DATE",
@@ -249,9 +249,9 @@ describe('Parser', () => {
                         },
                         Object {
                           "token": Object {
-                            "col": 35,
+                            "col": 36,
                             "end": 36,
-                            "line": 0,
+                            "line": 1,
                             "raw": "+",
                             "start": 35,
                             "text": "+",
@@ -261,9 +261,9 @@ describe('Parser', () => {
                         },
                         Object {
                           "token": Object {
-                            "col": 37,
+                            "col": 38,
                             "end": 38,
-                            "line": 0,
+                            "line": 1,
                             "raw": "1",
                             "start": 37,
                             "text": "1",
@@ -283,9 +283,9 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
-                "col": 0,
+                "col": 1,
                 "end": 6,
-                "line": 0,
+                "line": 1,
                 "raw": "SELECT",
                 "start": 0,
                 "text": "SELECT",
@@ -310,9 +310,9 @@ describe('Parser', () => {
               "children": Array [
                 Object {
                   "token": Object {
-                    "col": 6,
+                    "col": 7,
                     "end": 9,
-                    "line": 0,
+                    "line": 1,
                     "raw": "age",
                     "start": 6,
                     "text": "age",
@@ -322,36 +322,36 @@ describe('Parser', () => {
                 },
                 Object {
                   "andToken": Object {
-                    "col": 21,
+                    "col": 22,
                     "end": 24,
-                    "line": 0,
+                    "line": 1,
                     "raw": "and",
                     "start": 21,
                     "text": "AND",
                     "type": "RESERVED_LOGICAL_OPERATOR",
                   },
                   "betweenToken": Object {
-                    "col": 10,
+                    "col": 11,
                     "end": 17,
-                    "line": 0,
+                    "line": 1,
                     "raw": "BETWEEN",
                     "start": 10,
                     "text": "BETWEEN",
                     "type": "RESERVED_KEYWORD",
                   },
                   "expr1": Object {
-                    "col": 18,
+                    "col": 19,
                     "end": 20,
-                    "line": 0,
+                    "line": 1,
                     "raw": "10",
                     "start": 18,
                     "text": "10",
                     "type": "NUMBER",
                   },
                   "expr2": Object {
-                    "col": 25,
+                    "col": 26,
                     "end": 27,
-                    "line": 0,
+                    "line": 1,
                     "raw": "15",
                     "start": 25,
                     "text": "15",
@@ -361,9 +361,9 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
-                "col": 0,
+                "col": 1,
                 "end": 5,
-                "line": 0,
+                "line": 1,
                 "raw": "WHERE",
                 "start": 0,
                 "text": "WHERE",
@@ -388,9 +388,9 @@ describe('Parser', () => {
               "count": Array [
                 Object {
                   "token": Object {
-                    "col": 6,
+                    "col": 7,
                     "end": 8,
-                    "line": 0,
+                    "line": 1,
                     "raw": "10",
                     "start": 6,
                     "text": "10",
@@ -400,9 +400,9 @@ describe('Parser', () => {
                 },
               ],
               "limitToken": Object {
-                "col": 0,
+                "col": 1,
                 "end": 5,
-                "line": 0,
+                "line": 1,
                 "raw": "LIMIT",
                 "start": 0,
                 "text": "LIMIT",
@@ -427,9 +427,9 @@ describe('Parser', () => {
               "count": Array [
                 Object {
                   "token": Object {
-                    "col": 11,
+                    "col": 12,
                     "end": 13,
-                    "line": 0,
+                    "line": 1,
                     "raw": "10",
                     "start": 11,
                     "text": "10",
@@ -439,9 +439,9 @@ describe('Parser', () => {
                 },
               ],
               "limitToken": Object {
-                "col": 0,
+                "col": 1,
                 "end": 5,
-                "line": 0,
+                "line": 1,
                 "raw": "LIMIT",
                 "start": 0,
                 "text": "LIMIT",
@@ -450,9 +450,9 @@ describe('Parser', () => {
               "offset": Array [
                 Object {
                   "token": Object {
-                    "col": 6,
+                    "col": 7,
                     "end": 9,
-                    "line": 0,
+                    "line": 1,
                     "raw": "200",
                     "start": 6,
                     "text": "200",
@@ -483,9 +483,9 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
-                "col": 0,
+                "col": 1,
                 "end": 6,
-                "line": 0,
+                "line": 1,
                 "raw": "SELECT",
                 "start": 0,
                 "text": "SELECT",
@@ -513,9 +513,9 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
-                "col": 0,
+                "col": 1,
                 "end": 15,
-                "line": 0,
+                "line": 1,
                 "raw": "SELECT DISTINCT",
                 "start": 0,
                 "text": "SELECT DISTINCT",
