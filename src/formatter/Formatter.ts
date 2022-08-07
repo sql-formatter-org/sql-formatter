@@ -72,7 +72,7 @@ export default class Formatter {
     } else if (this.cfg.newlineBeforeSemicolon) {
       layout.add(WS.NEWLINE, ';');
     } else {
-      layout.add(WS.NO_SPACE, ';');
+      layout.add(WS.NO_NEWLINE, ';');
     }
     return layout.toString();
   }

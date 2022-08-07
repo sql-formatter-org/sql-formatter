@@ -127,7 +127,7 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
     expect(
       format(
         `ALTER TABLE t ALTER COLUMN foo SET DEFAULT 10;
-         ALTER TABLE t ALTER COLUMN foo DROP DEFAULT`
+         ALTER TABLE t ALTER COLUMN foo DROP DEFAULT;`
       )
     ).toBe(dedent`
       ALTER TABLE
@@ -141,7 +141,7 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
         t
       ALTER COLUMN
         foo
-      DROP DEFAULT
+      DROP DEFAULT;
     `);
   });
 }

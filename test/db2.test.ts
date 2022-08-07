@@ -115,7 +115,7 @@ describe('Db2Formatter', () => {
     expect(
       format(
         `ALTER TABLE t ALTER COLUMN foo SET DATA TYPE VARCHAR;
-         ALTER TABLE t ALTER COLUMN foo SET NOT NULL`
+         ALTER TABLE t ALTER COLUMN foo SET NOT NULL;`
       )
     ).toBe(dedent`
       ALTER TABLE
@@ -129,7 +129,7 @@ describe('Db2Formatter', () => {
         t
       ALTER COLUMN
         foo
-      SET NOT NULL
+      SET NOT NULL;
     `);
   });
 });
