@@ -56,20 +56,26 @@ export default class TokenizerEngine {
 
     const matches = WHITESPACE_REGEX.exec(this.input);
     if (matches) {
-      // if whitespace contains linebreaks
-      if (LINEBREAK_REGEX.test(matches[0])) {
-        this.line++;
-        // increment line for each newline match
-        while (LINEBREAK_REGEX.exec(matches[0]) !== null) {
-          this.line++;
-        }
-        this.col = LINEBREAK_REGEX.lastIndex;
-      } else {
-        this.col += matches[0].length;
-      }
+      this.updateLineCol(matches[0]);
 
       // Advance current position by matched whitespace length
       this.index += matches[0].length;
+    }
+  }
+
+  private updateLineCol(token: string) {
+    // if whitespace contains linebreaks
+    if (LINEBREAK_REGEX.test(token)) {
+      this.line++;
+      // increment line for each newline match
+      let lastIndex = 1;
+      while (LINEBREAK_REGEX.exec(token) !== null) {
+        this.line++;
+        lastIndex = LINEBREAK_REGEX.lastIndex;
+      }
+      this.col = token.length - lastIndex;
+    } else {
+      this.col += token.length;
     }
   }
 
@@ -163,7 +169,7 @@ export default class TokenizerEngine {
       const tokenColInLine = this.col;
       // Advance current position by matched token length
       this.index += matchedToken.length;
-      this.col += matchedToken.length;
+      this.updateLineCol(matchedToken);
       return {
         type,
         raw: matchedToken,
