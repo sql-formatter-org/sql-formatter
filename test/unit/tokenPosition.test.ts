@@ -38,9 +38,9 @@ describe('token positions', () => {
               ],
               "nameToken": Object {
                 "col": 0,
-                "index": 0,
                 "line": 0,
                 "raw": "SELECT",
+                "start": 0,
                 "text": "SELECT",
                 "type": "RESERVED_COMMAND",
               },
@@ -51,9 +51,9 @@ describe('token positions', () => {
                 Object {
                   "token": Object {
                     "col": 5,
-                    "index": 14,
                     "line": 1,
                     "raw": "tbl",
+                    "start": 14,
                     "text": "tbl",
                     "type": "IDENTIFIER",
                   },
@@ -62,9 +62,9 @@ describe('token positions', () => {
               ],
               "nameToken": Object {
                 "col": 0,
-                "index": 9,
                 "line": 1,
                 "raw": "FROM",
+                "start": 9,
                 "text": "FROM",
                 "type": "RESERVED_COMMAND",
               },
@@ -75,9 +75,9 @@ describe('token positions', () => {
                 Object {
                   "token": Object {
                     "col": 6,
-                    "index": 24,
                     "line": 2,
                     "raw": "id",
+                    "start": 24,
                     "text": "id",
                     "type": "IDENTIFIER",
                   },
@@ -86,9 +86,9 @@ describe('token positions', () => {
                 Object {
                   "token": Object {
                     "col": 9,
-                    "index": 27,
                     "line": 2,
                     "raw": "=",
+                    "start": 27,
                     "text": "=",
                     "type": "OPERATOR",
                   },
@@ -97,9 +97,9 @@ describe('token positions', () => {
                 Object {
                   "token": Object {
                     "col": 11,
-                    "index": 29,
                     "line": 2,
                     "raw": "1",
+                    "start": 29,
                     "text": "1",
                     "type": "NUMBER",
                   },
@@ -108,9 +108,9 @@ describe('token positions', () => {
               ],
               "nameToken": Object {
                 "col": 0,
-                "index": 18,
                 "line": 2,
                 "raw": "WHERE",
+                "start": 18,
                 "text": "WHERE",
                 "type": "RESERVED_COMMAND",
               },

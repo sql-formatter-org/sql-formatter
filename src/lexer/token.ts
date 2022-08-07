@@ -35,7 +35,7 @@ export interface Token {
   raw: string; // The raw original text that was matched
   text: string; // Cleaned up text e.g. keyword converted to uppercase and extra spaces removed
   key?: string;
-  index: number; // 0-based index of the token in the whole query string
+  start: number; // 0-based index of the token in the whole query string
   line?: number; // 0-based line number that the token appears on
   col?: number; // 0-based column within the line on which the token appears
 }
@@ -44,7 +44,7 @@ export interface Token {
  * For use as a "missing token"
  * e.g. in lookAhead and lookBehind to avoid dealing with null values
  */
-export const EOF_TOKEN: Token = { type: TokenType.EOF, raw: '«EOF»', text: '«EOF»', index: -1 };
+export const EOF_TOKEN: Token = { type: TokenType.EOF, raw: '«EOF»', text: '«EOF»', start: -1 };
 
 /** Checks if two tokens are equivalent */
 export const testToken =
