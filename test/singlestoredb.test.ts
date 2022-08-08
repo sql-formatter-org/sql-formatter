@@ -39,5 +39,5 @@ describe('SingleStoreDbFormatter', () => {
   supportsUpdate(format);
   supportsTruncateTable(format, { withoutTable: true });
   supportsBetween(format);
-  supportsParams(format, { positional: true });
+  supportsParams(format, { positional: false });
 });

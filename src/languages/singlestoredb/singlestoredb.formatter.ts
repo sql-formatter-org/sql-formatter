@@ -247,7 +247,7 @@ export default class SingleStoreDBFormatter extends Formatter {
         { quote: "''", prefixes: ['@'], requirePrefix: true },
         { quote: '``', prefixes: ['@'], requirePrefix: true },
       ],
-      positionalParams: true,
+      positionalParams: false,
       lineCommentTypes: ['--', '#'],
       operators: SingleStoreDBFormatter.operators,
       postProcess,
