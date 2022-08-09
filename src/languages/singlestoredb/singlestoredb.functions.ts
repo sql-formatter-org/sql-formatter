@@ -269,7 +269,7 @@ export const functions = flatKeywordList({
     'WEEKOFYEAR',
     'YEAR',
     // Data types with parameters
-    // https://dev.mysql.com/doc/refman/8.0/en/data-types.html
+    // https://docs.singlestore.com/managed-service/en/reference/sql-reference/data-types.html
     'BIT',
     'TINYINT',
     'SMALLINT',

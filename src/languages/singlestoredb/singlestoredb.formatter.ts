@@ -7,11 +7,14 @@ import { functions } from './singlestoredb.functions';
 
 const reservedCommands = expandPhrases([
   // queries
+  'WITH',
   'SELECT [ALL | DISTINCT | DISTINCTROW]',
   'FROM',
   'WHERE',
   'GROUP BY',
   'HAVING',
+  'WINDOW',
+  'PARTITION BY',
   'ORDER BY',
   'LIMIT',
   'OFFSET',
@@ -28,6 +31,7 @@ const reservedCommands = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE]',
   // Data definition
+  'CREATE VIEW',
   'CREATE [ROWSTORE] [REFERENCE | TEMPORARY | GLOBAL TEMPORARY] TABLE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [TEMPORARY] PROCEDURE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [EXTERNAL] FUNCTION',
@@ -77,7 +81,6 @@ const reservedCommands = expandPhrases([
   'CREATE RESOURCE POOL',
   'CREATE ROLE',
   'CREATE USER',
-  'CREATE VIEW',
   'DEALLOCATE PREPARE',
   'DESCRIBE',
   'DETACH DATABASE',
@@ -194,23 +197,25 @@ const reservedCommands = expandPhrases([
   'UNLOCK INSTANCE',
   'UNLOCK TABLES',
   'USE',
-  'WITH',
   'XA',
   // flow control
-  // 'IF',
   'ITERATE',
   'LEAVE',
   'LOOP',
   'REPEAT',
   'RETURN',
   'WHILE',
-  // other
-  'ADD',
-  'WINDOW',
-  'PARTITION BY',
 ]);
 
-const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);
+// https://docs.singlestore.com/managed-service/en/reference/sql-reference/data-manipulation-language-dml/union.html
+// https://docs.singlestore.com/managed-service/en/reference/sql-reference/data-manipulation-language-dml/intersect.html
+// https://docs.singlestore.com/managed-service/en/reference/sql-reference/data-manipulation-language-dml/except-and-minus.html
+const reservedSetOperations = expandPhrases([
+  'UNION [ALL | DISTINCT]',
+  'EXCEPT',
+  'INTERSECT',
+  'MINUS',
+]);
 
 const reservedJoins = expandPhrases([
   'JOIN',
@@ -221,9 +226,11 @@ const reservedJoins = expandPhrases([
   'STRAIGHT_JOIN',
 ]);
 
-// https://dev.mysql.com/doc/refman/8.0/en/
-export default class SingleStoreDBFormatter extends Formatter {
-  static operators = ['=', '<=>', '>', '>=', '<', '<=', '!=', '<>'];
+const reservedPhrases = ['ON DELETE', 'ON UPDATE', 'CHARACTER SET'];
+
+// https://docs.singlestore.com/managed-service/en/reference/sql-reference/comparison-operators-and-functions.html
+export default class SingleStoreDbFormatter extends Formatter {
+  static operators = ['=', '<=>', '>', '<'];
 
   tokenizer() {
     return new Tokenizer({
@@ -231,6 +238,7 @@ export default class SingleStoreDBFormatter extends Formatter {
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF'],
+      reservedPhrases,
       reservedLogicalOperators: ['AND', 'OR', 'XOR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
@@ -247,9 +255,8 @@ export default class SingleStoreDBFormatter extends Formatter {
         { quote: "''", prefixes: ['@'], requirePrefix: true },
         { quote: '``', prefixes: ['@'], requirePrefix: true },
       ],
-      positionalParams: false,
       lineCommentTypes: ['--', '#'],
-      operators: SingleStoreDBFormatter.operators,
+      operators: SingleStoreDbFormatter.operators,
       postProcess,
     });
   }

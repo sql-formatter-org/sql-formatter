@@ -10,7 +10,6 @@ import supportsDeleteFrom from './features/deleteFrom';
 import supportsDropTable from './features/dropTable';
 import supportsIdentifiers from './features/identifiers';
 import supportsInsertInto from './features/insertInto';
-import supportsParams from './options/param';
 import supportsStrings from './features/strings';
 import supportsTruncateTable from './features/truncateTable';
 import supportsUpdate from './features/update';
@@ -19,7 +18,6 @@ describe('SingleStoreDbFormatter', () => {
   const language = 'singlestoredb';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
-  // behavesLikeMariaDbFormatter(format);
   behavesLikeSqlFormatter(format);
   supportsComments(format, { hashComments: true });
   supportsStrings(format, ["''", '""', "X''"]);
@@ -39,5 +37,4 @@ describe('SingleStoreDbFormatter', () => {
   supportsUpdate(format);
   supportsTruncateTable(format, { withoutTable: true });
   supportsBetween(format);
-  supportsParams(format, { positional: false });
 });
