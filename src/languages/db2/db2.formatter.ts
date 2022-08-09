@@ -14,6 +14,38 @@ const reservedCommands = expandPhrases([
   'HAVING',
   'ORDER BY [INPUT SEQUENCE]',
   'FETCH FIRST',
+  // Data modification
+  // - insert:
+  'INSERT INTO',
+  'VALUES',
+  // - update:
+  'UPDATE',
+  'SET',
+  'WHERE CURRENT OF',
+  'WITH {RR | RS | CS | UR}',
+  // - delete:
+  'DELETE FROM',
+  // - truncate:
+  'TRUNCATE [TABLE]',
+  // - merge:
+  'MERGE INTO',
+  'WHEN [NOT] MATCHED [THEN]',
+  'UPDATE SET',
+  'INSERT',
+  // Data definition
+  'CREATE [OR REPLACE] VIEW',
+  'CREATE [GLOBAL TEMPORARY] TABLE',
+  'DROP TABLE [HIERARCHY]',
+  // alter table:
+  'ALTER TABLE',
+  'ADD [COLUMN]',
+  'DROP [COLUMN]',
+  'RENAME [COLUMN]',
+  'ALTER [COLUMN]',
+  'SET DATA TYPE', // for alter column
+  'SET NOT NULL', // for alter column
+  'DROP {IDENTITY | EXPRESSION | DEFAULT | NOT NULL}', // for alter column
+
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
   'ALTER DATABASE',
@@ -24,7 +56,6 @@ const reservedCommands = expandPhrases([
   'ALTER PROCEDURE',
   'ALTER SEQUENCE',
   'ALTER STOGROUP',
-  'ALTER TABLE',
   'ALTER TABLESPACE',
   'ALTER TRIGGER',
   'ALTER TRUSTED CONTEXT',
@@ -50,20 +81,16 @@ const reservedCommands = expandPhrases([
   'CREATE SEQUENCE',
   'CREATE STOGROUP',
   'CREATE SYNONYM',
-  'CREATE TABLE',
   'CREATE TABLESPACE',
   'CREATE TRIGGER',
   'CREATE TRUSTED CONTEXT',
   'CREATE TYPE',
   'CREATE VARIABLE',
-  'CREATE VIEW',
   'DECLARE CURSOR',
   'DECLARE GLOBAL TEMPORARY TABLE',
   'DECLARE STATEMENT',
   'DECLARE TABLE',
   'DECLARE VARIABLE',
-  'DELETE',
-  'DELETE FROM',
   'DESCRIBE CURSOR',
   'DESCRIBE INPUT',
   'DESCRIBE OUTPUT',
@@ -81,10 +108,8 @@ const reservedCommands = expandPhrases([
   'GRANT',
   'HOLD LOCATOR',
   'INCLUDE',
-  'INSERT',
   'LABEL',
   'LOCK TABLE',
-  'MERGE',
   'OPEN',
   'PREPARE',
   'REFRESH',
@@ -96,7 +121,6 @@ const reservedCommands = expandPhrases([
   'SAVEPOINT',
   'SELECT INTO',
   'SET CONNECTION',
-  'SET',
   'SET CURRENT ACCELERATOR',
   'SET CURRENT APPLICATION COMPATIBILITY',
   'SET CURRENT APPLICATION ENCODING SCHEME',
@@ -124,18 +148,11 @@ const reservedCommands = expandPhrases([
   'SET SCHEMA',
   'SET SESSION TIME ZONE',
   'SIGNAL',
-  'TRUNCATE',
-  'UPDATE',
-  'VALUES',
   'VALUES INTO',
   'WHENEVER',
   // other
-  'ADD',
-  'ALTER COLUMN',
   'AFTER',
-  'DROP TABLE',
   'GO',
-  'INSERT INTO',
   'SET CURRENT SCHEMA',
 ]);
 

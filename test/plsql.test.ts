@@ -5,7 +5,6 @@ import PlSqlFormatter from 'src/languages/plsql/plsql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
-import supportsAlterTableModify from './features/alterTableModify';
 import supportsBetween from './features/between';
 import supportsCreateTable from './features/createTable';
 import supportsDropTable from './features/dropTable';
@@ -21,6 +20,11 @@ import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
+import supportsTruncateTable from './features/truncateTable';
+import supportsMergeInto from './features/mergeInto';
+import supportsCreateView from './features/createView';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -28,12 +32,21 @@ describe('PlSqlFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCreateView(format, { orReplace: true, materialized: true });
   supportsCreateTable(format);
   supportsDropTable(format);
   supportsConstraints(format);
-  supportsAlterTable(format);
-  supportsAlterTableModify(format);
+  supportsAlterTable(format, {
+    dropColumn: true,
+    modify: true,
+    renameTo: true,
+    renameColumn: true,
+  });
   supportsDeleteFrom(format);
+  supportsInsertInto(format);
+  supportsUpdate(format);
+  supportsTruncateTable(format);
+  supportsMergeInto(format);
   supportsStrings(format, ["''", "N''"]);
   supportsIdentifiers(format, [`""`]);
   supportsBetween(format);
@@ -93,18 +106,6 @@ describe('PlSqlFormatter', () => {
     expect(format("Q'Xtest string X X 'foo' bar X'")).toBe("Q'Xtest string X X 'foo' bar X'");
     expect(format("q'$test string $'$''")).toBe("q'$test string $' $ ''");
     expect(format("Q'Stest string S'S''")).toBe("Q'Stest string S' S ''");
-  });
-
-  it('formats INSERT without INTO', () => {
-    const result = format(
-      "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
-    );
-    expect(result).toBe(dedent`
-      INSERT
-        Customers (ID, MoneyBalance, Address, City)
-      VALUES
-        (12, -123.4, 'Skagen 2111', 'Stv');
-    `);
   });
 
   it('formats simple SELECT with national characters', () => {

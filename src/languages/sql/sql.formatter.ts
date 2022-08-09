@@ -18,18 +18,36 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
-  // other
-  'ADD',
-  'ALTER COLUMN',
-  'ALTER TABLE',
-  'CREATE TABLE',
-  'DROP TABLE',
-  'DELETE FROM',
+  // Data manipulation
+  // - insert:
   'INSERT INTO',
-  'SET SCHEMA',
-  'SET',
-  'UPDATE',
   'VALUES',
+  // - update:
+  'UPDATE',
+  'SET',
+  'WHERE CURRENT OF',
+  // - delete:
+  'DELETE FROM',
+  // - truncate:
+  'TRUNCATE TABLE',
+  // Data definition
+  'CREATE [RECURSIVE] VIEW',
+  'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
+  'DROP TABLE',
+  // - alter table:
+  'ALTER TABLE',
+  'ADD COLUMN',
+  'DROP [COLUMN]',
+  'RENAME COLUMN',
+  'RENAME TO',
+  'ALTER [COLUMN]',
+  '{SET | DROP} DEFAULT', // for alter column
+  'ADD SCOPE', // for alter column
+  'DROP SCOPE {CASCADE | RESTRICT}', // for alter column
+  'RESTART WITH', // for alter column
+
+  // other
+  'SET SCHEMA',
 ]);
 
 const reservedSetOperations = expandPhrases([

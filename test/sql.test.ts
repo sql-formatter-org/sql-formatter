@@ -20,6 +20,10 @@ import supportsParams from './options/param';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
+import supportsTruncateTable from './features/truncateTable';
+import supportsCreateView from './features/createView';
 
 describe('SqlFormatter', () => {
   const language = 'sql';
@@ -27,11 +31,20 @@ describe('SqlFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCreateView(format);
   supportsCreateTable(format);
   supportsDropTable(format);
   supportsConstraints(format);
-  supportsAlterTable(format);
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    renameTo: true,
+    renameColumn: true,
+  });
   supportsDeleteFrom(format);
+  supportsInsertInto(format);
+  supportsUpdate(format, { whereCurrentOf: true });
+  supportsTruncateTable(format);
   supportsStrings(format, ["''", "X''"]);
   supportsIdentifiers(format, [`""`, '``']);
   supportsBetween(format);
@@ -55,6 +68,43 @@ describe('SqlFormatter', () => {
       : bar
       FROM
         { foo };
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(
+      format(
+        `ALTER TABLE t ALTER COLUMN foo SET DEFAULT 5;
+         ALTER TABLE t ALTER COLUMN foo DROP DEFAULT;
+         ALTER TABLE t ALTER COLUMN foo DROP SCOPE CASCADE;
+         ALTER TABLE t ALTER COLUMN foo RESTART WITH 10;`
+      )
+    ).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DEFAULT
+        5;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP DEFAULT;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP SCOPE CASCADE;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      RESTART WITH
+        10;
     `);
   });
 });

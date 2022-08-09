@@ -16,30 +16,44 @@ const reservedCommands = expandPhrases([
   'ORDER [SIBLINGS] BY',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
-  // other
-  'ADD',
-  'ALTER COLUMN',
+  // Data manipulation
+  // - insert:
+  'INSERT [INTO | ALL INTO]',
+  'VALUES',
+  // - update:
+  'UPDATE [ONLY]',
+  'SET',
+  // - delete:
+  'DELETE FROM [ONLY]',
+  // - truncate:
+  'TRUNCATE TABLE',
+  // - merge:
+  'MERGE [INTO]',
+  'WHEN [NOT] MATCHED [THEN]',
+  'UPDATE SET',
+  // Data definition
+  'CREATE [OR REPLACE] [NO FORCE | FORCE] [EDITIONING | EDITIONABLE | EDITIONABLE EDITIONING | NONEDITIONABLE] VIEW',
+  'CREATE MATERIALIZED VIEW',
+  'CREATE [GLOBAL TEMPORARY | PRIVATE TEMPORARY | SHARDED | DUPLICATED | IMMUTABLE BLOCKCHAIN | BLOCKCHAIN | IMMUTABLE] TABLE',
+  'DROP TABLE',
+  // - alter table:
   'ALTER TABLE',
+  'ADD',
+  'DROP {COLUMN | UNUSED COLUMNS | COLUMNS CONTINUE}',
+  'MODIFY',
+  'RENAME TO',
+  'RENAME COLUMN',
+
+  // other
   'BEGIN',
   'CONNECT BY',
-  'CREATE TABLE',
-  'DROP TABLE',
   'DECLARE',
-  'DELETE',
-  'DELETE FROM',
   'EXCEPT',
   'EXCEPTION',
-  'INSERT INTO',
-  'INSERT',
   'LOOP',
-  'MODIFY',
   'RETURNING',
-  'SET CURRENT SCHEMA',
-  'SET SCHEMA',
-  'SET',
   'START WITH',
-  'UPDATE',
-  'VALUES',
+  'SET SCHEMA',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

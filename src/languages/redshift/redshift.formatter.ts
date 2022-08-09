@@ -15,6 +15,32 @@ const reservedCommands = expandPhrases([
   'ORDER BY',
   'LIMIT',
   'OFFSET',
+  // Data manipulation
+  // - insert:
+  'INSERT INTO',
+  'VALUES',
+  // - update:
+  'UPDATE',
+  'SET',
+  // - delete:
+  'DELETE [FROM]',
+  // - truncate:
+  'TRUNCATE [TABLE]',
+  // Data definition
+  'CREATE [OR REPLACE | MATERIALIZED] VIEW',
+  'CREATE [TEMPORARY | TEMP | LOCAL TEMPORARY | LOCAL TEMP] TABLE [IF NOT EXISTS]',
+  'DROP TABLE [IF EXISTS]',
+  // - alter table:
+  'ALTER TABLE',
+  'ALTER TABLE APPEND',
+  'ADD [COLUMN]',
+  'DROP [COLUMN]',
+  'RENAME TO',
+  'RENAME COLUMN',
+  'ALTER COLUMN',
+  'TYPE', // for alter column
+  'ENCODE', // for alter column
+
   // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
   'ABORT',
   'ALTER DATABASE',
@@ -24,8 +50,6 @@ const reservedCommands = expandPhrases([
   'ALTER MATERIALIZED VIEW',
   'ALTER PROCEDURE',
   'ALTER SCHEMA',
-  'ALTER TABLE',
-  'ALTER TABLE APPEND',
   'ALTER USER',
   'ANALYSE',
   'ANALYZE',
@@ -46,18 +70,12 @@ const reservedCommands = expandPhrases([
   'CREATE FUNCTION',
   'CREATE GROUP',
   'CREATE LIBRARY',
-  'CREATE MATERIALIZED VIEW',
   'CREATE MODEL',
   'CREATE PROCEDURE',
   'CREATE SCHEMA',
-  'CREATE TABLE',
-  'CREATE TABLE AS',
   'CREATE USER',
-  'CREATE VIEW',
   'DEALLOCATE',
   'DECLARE',
-  'DELETE',
-  'DELETE FROM',
   'DESC DATASHARE',
   'DROP DATABASE',
   'DROP DATASHARE',
@@ -68,7 +86,6 @@ const reservedCommands = expandPhrases([
   'DROP MATERIALIZED VIEW',
   'DROP PROCEDURE',
   'DROP SCHEMA',
-  'DROP TABLE',
   'DROP USER',
   'DROP VIEW',
   'DROP',
@@ -76,7 +93,6 @@ const reservedCommands = expandPhrases([
   'EXPLAIN',
   'FETCH',
   'GRANT',
-  'INSERT',
   'LOCK',
   'PREPARE',
   'REFRESH MATERIALIZED VIEW',
@@ -84,7 +100,6 @@ const reservedCommands = expandPhrases([
   'REVOKE',
   'ROLLBACK',
   'SELECT INTO',
-  'SET',
   'SET SESSION AUTHORIZATION',
   'SET SESSION CHARACTERISTICS',
   'SHOW',
@@ -95,13 +110,9 @@ const reservedCommands = expandPhrases([
   'SHOW TABLE',
   'SHOW VIEW',
   'START TRANSACTION',
-  'TRUNCATE',
   'UNLOAD',
-  'UPDATE',
   'VACUUM',
-  'VALUES',
   // other
-  'INSERT INTO',
   'ALTER COLUMN',
 ]);
 

@@ -1,4 +1,4 @@
-import type { IndentStyle } from 'src/types';
+import type { IndentStyle } from 'src/FormatOptions';
 import { Token, TokenType } from 'src/lexer/token';
 
 /**

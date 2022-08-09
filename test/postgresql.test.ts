@@ -22,6 +22,10 @@ import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
+import supportsTruncateTable from './features/truncateTable';
+import supportsCreateView from './features/createView';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -29,12 +33,21 @@ describe('PostgreSqlFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
-  supportsCreateTable(format);
-  supportsDropTable(format);
+  supportsCreateView(format, { orReplace: true, materialized: true });
+  supportsCreateTable(format, { ifNotExists: true });
+  supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);
   supportsArrayAndMapAccessors(format);
-  supportsAlterTable(format);
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    renameTo: true,
+    renameColumn: true,
+  });
   supportsDeleteFrom(format);
+  supportsInsertInto(format);
+  supportsUpdate(format, { whereCurrentOf: true });
+  supportsTruncateTable(format, { withoutTable: true });
   supportsStrings(format, ["''", "U&''", "X''"]);
   supportsIdentifiers(format, [`""`, 'U&""']);
   supportsBetween(format);
@@ -109,6 +122,50 @@ describe('PostgreSqlFormatter', () => {
         c2
       FROM
         tbl;
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(
+      format(
+        `ALTER TABLE t ALTER COLUMN foo SET DATA TYPE VARCHAR;
+         ALTER TABLE t ALTER COLUMN foo SET DEFAULT 5;
+         ALTER TABLE t ALTER COLUMN foo DROP DEFAULT;
+         ALTER TABLE t ALTER COLUMN foo SET NOT NULL;
+         ALTER TABLE t ALTER COLUMN foo DROP NOT NULL;`
+      )
+    ).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DATA TYPE
+        VARCHAR;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DEFAULT
+        5;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP DEFAULT;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET NOT NULL;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP NOT NULL;
     `);
   });
 });

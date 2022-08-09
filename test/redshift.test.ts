@@ -16,6 +16,10 @@ import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
+import supportsTruncateTable from './features/truncateTable';
+import supportsCreateView from './features/createView';
 
 describe('RedshiftFormatter', () => {
   const language = 'redshift';
@@ -23,10 +27,19 @@ describe('RedshiftFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
-  supportsCreateTable(format);
-  supportsDropTable(format);
-  supportsAlterTable(format);
-  supportsDeleteFrom(format);
+  supportsCreateView(format, { orReplace: true, materialized: true });
+  supportsCreateTable(format, { ifNotExists: true });
+  supportsDropTable(format, { ifExists: true });
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    renameTo: true,
+    renameColumn: true,
+  });
+  supportsDeleteFrom(format, { withoutFrom: true });
+  supportsInsertInto(format);
+  supportsUpdate(format);
+  supportsTruncateTable(format, { withoutTable: true });
   supportsStrings(format, ["''"]);
   supportsIdentifiers(format, [`""`]);
   supportsOperators(format, RedshiftFormatter.operators);
@@ -114,6 +127,29 @@ describe('RedshiftFormatter', () => {
         ',' QUOTE '"'
       REGION
         AS 'us-east-1'
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(
+      format(
+        `ALTER TABLE t ALTER COLUMN foo TYPE VARCHAR;
+         ALTER TABLE t ALTER COLUMN foo ENCODE my_encoding;`
+      )
+    ).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      TYPE
+        VARCHAR;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      ENCODE
+        my_encoding;
     `);
   });
 });

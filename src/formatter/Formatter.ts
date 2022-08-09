@@ -1,4 +1,4 @@
-import type { FormatOptions } from 'src/types';
+import type { FormatOptions } from 'src/FormatOptions';
 import { indentString } from 'src/formatter/config';
 import Params from 'src/formatter/Params';
 import Tokenizer from 'src/lexer/Tokenizer';
@@ -72,7 +72,7 @@ export default class Formatter {
     } else if (this.cfg.newlineBeforeSemicolon) {
       layout.add(WS.NEWLINE, ';');
     } else {
-      layout.add(WS.NO_SPACE, ';');
+      layout.add(WS.NO_NEWLINE, ';');
     }
     return layout.toString();
   }

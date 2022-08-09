@@ -155,18 +155,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     `);
   });
 
-  it('formats simple INSERT query', () => {
-    const result = format(
-      "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
-    );
-    expect(result).toBe(dedent`
-      INSERT INTO
-        Customers (ID, MoneyBalance, Address, City)
-      VALUES
-        (12, -123.4, 'Skagen 2111', 'Stv');
-    `);
-  });
-
   it('formats open paren after comma', () => {
     const result = format('INSERT INTO TestIds (id) VALUES (4),(5), (6),(7),(9),(10),(11);');
     expect(result).toBe(dedent`
@@ -223,45 +211,11 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     `);
   });
 
-  it('formats simple UPDATE query', () => {
-    const result = format(
-      "UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';"
-    );
-    expect(result).toBe(dedent`
-      UPDATE
-        Customers
-      SET
-        ContactName = 'Alfred Schmidt',
-        City = 'Hamburg'
-      WHERE
-        CustomerName = 'Alfreds Futterkiste';
-    `);
-  });
-
   it('formats incomplete query', () => {
     const result = format('SELECT count(');
     expect(result).toBe(dedent`
       SELECT
         count(
-    `);
-  });
-
-  it('formats UPDATE query with AS part', () => {
-    const result = format(
-      'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary'
-    );
-    expect(result).toBe(dedent`
-      UPDATE
-        customers
-      SET
-        total_orders = order_summary.total
-      FROM
-        (
-          SELECT
-            *
-          FROM
-            bank
-        ) AS order_summary
     `);
   });
 

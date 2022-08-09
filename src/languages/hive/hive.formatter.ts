@@ -19,25 +19,48 @@ const reservedCommands = expandPhrases([
   'CLUSTER BY',
   'DISTRIBUTE BY',
   'LIMIT',
+  // Data manipulation
+  // - insert:
+  //   Hive does not actually support plain INSERT INTO, only INSERT INTO TABLE
+  //   but it's a nuisance to not support it, as all other dialects do.
+  'INSERT INTO [TABLE]',
+  'VALUES',
+  // - update:
+  'UPDATE',
+  'SET',
+  // - delete:
+  'DELETE FROM',
+  // - truncate:
+  'TRUNCATE [TABLE]',
+  // - merge:
+  'MERGE INTO',
+  'WHEN [NOT] MATCHED [THEN]',
+  'UPDATE SET',
+  'INSERT [VALUES]',
+  // - insert overwrite directory:
+  //   https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML#LanguageManualDML-Writingdataintothefilesystemfromqueries
+  'INSERT OVERWRITE [LOCAL] DIRECTORY',
+  // - load:
+  //   https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML#LanguageManualDML-Loadingfilesintotables
+  'LOAD DATA [LOCAL] INPATH',
+  '[OVERWRITE] INTO TABLE',
+  // Data definition
+  'CREATE [MATERIALIZED] VIEW [IF NOT EXISTS]',
+  'CREATE [TEMPORARY] [EXTERNAL] TABLE [IF NOT EXISTS]',
+  'DROP TABLE [IF EXISTS]',
+  // - alter table:
+  'ALTER TABLE',
+  'RENAME TO',
+
   // other
   'ALTER',
-  'ALTER COLUMN', // added
-  'ALTER TABLE', // added
   'CREATE',
-  'CREATE TABLE', // added
   'USE',
   'DESCRIBE',
   'DROP',
-  'DROP TABLE', // added
   'FETCH',
-  'INSERT',
-  'INSERT INTO', // added
-  'SET',
   'SET SCHEMA', // added
   'SHOW',
-  'TRUNCATE',
-  'UPDATE',
-  'VALUES',
   // newline keywords
   'STORED AS',
   'STORED BY',

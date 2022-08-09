@@ -1,4 +1,4 @@
-import type { FormatOptions } from 'src/types';
+import type { FormatOptions } from 'src/FormatOptions';
 import { equalizeWhitespace } from 'src/utils';
 
 import Params from 'src/formatter/Params';
@@ -231,7 +231,7 @@ export default class ExpressionFormatter {
 
   /** Formats a line comment onto query */
   private formatLineComment(token: Token) {
-    this.layout.add(this.show(token), WS.NEWLINE, WS.INDENT);
+    this.layout.add(this.show(token), WS.MANDATORY_NEWLINE, WS.INDENT);
   }
 
   /** Formats a block comment onto query */

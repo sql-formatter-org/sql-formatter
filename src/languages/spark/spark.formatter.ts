@@ -20,29 +20,41 @@ const reservedCommands = expandPhrases([
   'CLUSTER BY',
   'DISTRIBUTE BY',
   'LIMIT',
-  // DDL
-  'ALTER COLUMN',
-  'ALTER DATABASE',
+  // Data manipulation
+  // - insert:
+  'INSERT [INTO | OVERWRITE] [TABLE]',
+  'VALUES',
+  // - truncate:
+  'TRUNCATE TABLE',
+  // - insert overwrite directory:
+  //   https://spark.apache.org/docs/latest/sql-ref-syntax-dml-insert-overwrite-directory.html
+  'INSERT OVERWRITE [LOCAL] DIRECTORY',
+  // - load:
+  //   https://spark.apache.org/docs/latest/sql-ref-syntax-dml-load.html
+  'LOAD DATA [LOCAL] INPATH',
+  '[OVERWRITE] INTO TABLE',
+  // Data definition
+  'CREATE [OR REPLACE] [GLOBAL TEMPORARY | TEMPORARY] VIEW [IF NOT EXISTS]',
+  'CREATE [EXTERNAL] TABLE [IF NOT EXISTS]',
+  'DROP TABLE [IF EXISTS]',
+  // - alter table:
   'ALTER TABLE',
+  'ADD COLUMNS',
+  'DROP {COLUMN | COLUMNS}',
+  'RENAME TO',
+  'RENAME COLUMN',
+  'ALTER COLUMN',
+
+  'ALTER DATABASE',
   'ALTER VIEW',
   'CREATE DATABASE',
   'CREATE FUNCTION',
-  'CREATE TABLE',
-  'CREATE VIEW',
   'DROP DATABASE',
   'DROP FUNCTION',
-  'DROP TABLE',
   'DROP VIEW',
   'REPAIR TABLE',
-  'TRUNCATE TABLE',
   'USE DATABASE',
-  // DML
-  'INSERT INTO',
-  'INSERT OVERWRITE',
-  'INSERT OVERWRITE DIRECTORY',
-  'LOAD',
   // Data Retrieval
-  'VALUES',
   'TABLESAMPLE',
   'PIVOT',
   'TRANSFORM',
@@ -63,7 +75,6 @@ const reservedCommands = expandPhrases([
   'REFRESH TABLE',
   'REFRESH FUNCTION',
   'RESET',
-  'SET',
   'SHOW COLUMNS',
   'SHOW CREATE TABLE',
   'SHOW DATABASES',
@@ -75,9 +86,7 @@ const reservedCommands = expandPhrases([
   'SHOW VIEWS',
   'UNCACHE TABLE',
   // other
-  'INSERT',
   'LATERAL VIEW',
-  'UPDATE',
 ]);
 
 const reservedSetOperations = expandPhrases([

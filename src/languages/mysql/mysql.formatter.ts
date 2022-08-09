@@ -18,6 +18,32 @@ const reservedCommands = expandPhrases([
   'ORDER BY',
   'LIMIT',
   'OFFSET',
+  // Data manipulation
+  // - insert:
+  'INSERT [LOW_PRIORITY | DELAYED | HIGH_PRIORITY] [IGNORE] [INTO]',
+  'REPLACE [LOW_PRIORITY | DELAYED] [INTO]',
+  'VALUES',
+  // - update:
+  'UPDATE [LOW_PRIORITY] [IGNORE]',
+  'SET',
+  // - delete:
+  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
+  // - truncate:
+  'TRUNCATE [TABLE]',
+  // Data definition
+  'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
+  'CREATE [TEMPORARY] TABLE [IF NOT EXISTS]',
+  'DROP [TEMPORARY] TABLE [IF EXISTS]',
+  // - alter table:
+  'ALTER TABLE',
+  'ADD [COLUMN]',
+  '{CHANGE | MODIFY} [COLUMN]',
+  'DROP [COLUMN]',
+  'RENAME [TO | AS]',
+  'RENAME COLUMN',
+  'ALTER [COLUMN]',
+  '{SET | DROP} DEFAULT', // for alter column
+
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',
   'ALTER EVENT',
@@ -27,7 +53,6 @@ const reservedCommands = expandPhrases([
   'ALTER PROCEDURE',
   'ALTER RESOURCE GROUP',
   'ALTER SERVER',
-  'ALTER TABLE',
   'ALTER TABLESPACE',
   'ALTER USER',
   'ALTER VIEW',
@@ -53,14 +78,10 @@ const reservedCommands = expandPhrases([
   'CREATE ROLE',
   'CREATE SERVER',
   'CREATE SPATIAL REFERENCE SYSTEM',
-  'CREATE TABLE',
   'CREATE TABLESPACE',
   'CREATE TRIGGER',
   'CREATE USER',
-  'CREATE VIEW',
   'DEALLOCATE PREPARE',
-  'DELETE',
-  'DELETE FROM',
   'DESCRIBE',
   'DO',
   'DROP DATABASE',
@@ -74,7 +95,6 @@ const reservedCommands = expandPhrases([
   'DROP ROLE',
   'DROP SERVER',
   'DROP SPATIAL REFERENCE SYSTEM',
-  'DROP TABLE',
   'DROP TABLESPACE',
   'DROP TRIGGER',
   'DROP USER',
@@ -86,7 +106,6 @@ const reservedCommands = expandPhrases([
   'HANDLER',
   'HELP',
   'IMPORT TABLE',
-  'INSERT',
   'INSTALL COMPONENT',
   'INSTALL PLUGIN',
   'KILL',
@@ -103,7 +122,6 @@ const reservedCommands = expandPhrases([
   'RENAME TABLE',
   'RENAME USER',
   'REPAIR TABLE',
-  'REPLACE',
   'RESET',
   'RESET MASTER',
   'RESET PERSIST',
@@ -114,7 +132,6 @@ const reservedCommands = expandPhrases([
   'ROLLBACK',
   'ROLLBACK TO SAVEPOINT',
   'SAVEPOINT',
-  'SET',
   'SET CHARACTER SET',
   'SET DEFAULT ROLE',
   'SET NAMES',
@@ -175,14 +192,11 @@ const reservedCommands = expandPhrases([
   'STOP REPLICA',
   'STOP SLAVE',
   'TABLE',
-  'TRUNCATE TABLE',
   'UNINSTALL COMPONENT',
   'UNINSTALL PLUGIN',
   'UNLOCK INSTANCE',
   'UNLOCK TABLES',
-  'UPDATE',
   'USE',
-  'VALUES',
   'XA',
   // flow control
   // 'IF',
@@ -192,10 +206,6 @@ const reservedCommands = expandPhrases([
   'REPEAT',
   'RETURN',
   'WHILE',
-  // other
-  'ADD',
-  'ALTER COLUMN',
-  'INSERT INTO',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);

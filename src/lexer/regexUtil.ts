@@ -1,4 +1,4 @@
-import type { PrefixedQuoteType } from './regexTypes';
+import type { PrefixedQuoteType } from './TokenizerOptions';
 
 // Escapes regex special chars
 export const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');

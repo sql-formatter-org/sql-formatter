@@ -19,6 +19,11 @@ import supportsParams from './options/param';
 import supportsSetOperations from './features/setOperations';
 import supportsWindow from './features/window';
 import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
+import supportsTruncateTable from './features/truncateTable';
+import supportsCreateView from './features/createView';
+import supportsAlterTable from './features/alterTable';
 
 describe('TrinoFormatter', () => {
   const language = 'trino';
@@ -26,9 +31,19 @@ describe('TrinoFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
-  supportsCreateTable(format);
-  supportsDropTable(format);
+  supportsCreateView(format, { orReplace: true, materialized: true });
+  supportsCreateTable(format, { ifNotExists: true });
+  supportsDropTable(format, { ifExists: true });
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    renameTo: true,
+    renameColumn: true,
+  });
   supportsDeleteFrom(format);
+  supportsInsertInto(format);
+  supportsUpdate(format);
+  supportsTruncateTable(format);
   supportsStrings(format, ["''", "X''", "U&''"]);
   supportsIdentifiers(format, ['""']);
   supportsBetween(format);
@@ -96,36 +111,6 @@ describe('TrinoFormatter', () => {
             AND totalprice <= A.totalprice,
             D AS totalprice > PREV(totalprice)
         )
-    `);
-  });
-
-  it('formats basic ALTER TABLE statements', () => {
-    const result = format(`
-      ALTER TABLE people RENAME TO persons;
-      ALTER TABLE persons ADD COLUMN location_id INT;
-      ALTER TABLE persons RENAME COLUMN location_id TO loc_id;
-      ALTER TABLE persons DROP COLUMN loc_id;
-    `);
-    expect(result).toBe(dedent`
-      ALTER TABLE
-        people
-      RENAME TO
-        persons;
-
-      ALTER TABLE
-        persons
-      ADD COLUMN
-        location_id INT;
-
-      ALTER TABLE
-        persons
-      RENAME COLUMN
-        location_id TO loc_id;
-
-      ALTER TABLE
-        persons
-      DROP COLUMN
-        loc_id;
     `);
   });
 });

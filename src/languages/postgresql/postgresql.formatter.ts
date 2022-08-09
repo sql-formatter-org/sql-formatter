@@ -18,6 +18,35 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  // Data manipulation
+  // - insert:
+  'INSERT INTO',
+  'VALUES',
+  // - update:
+  'UPDATE [ONLY]',
+  'SET',
+  'WHERE CURRENT OF',
+  // - delete:
+  'DELETE FROM [ONLY]',
+  // - truncate:
+  'TRUNCATE [TABLE] [ONLY]',
+  // Data definition
+  'CREATE [OR REPLACE] [TEMP | TEMPORARY] [RECURSIVE] VIEW',
+  'CREATE MATERIALIZED VIEW [IF NOT EXISTS]',
+  'CREATE [GLOBAL | LOCAL] [TEMPORARY | TEMP | UNLOGGED] TABLE [IF NOT EXISTS]',
+  'DROP TABLE [IF EXISTS]',
+  // - alter table:
+  'ALTER TABLE [IF EXISTS] [ONLY]',
+  'ALTER TABLE ALL IN TABLESPACE',
+  'RENAME [COLUMN]',
+  'RENAME TO',
+  'ADD [COLUMN] [IF NOT EXISTS]',
+  'DROP [COLUMN] [IF EXISTS]',
+  'ALTER [COLUMN]',
+  '[SET DATA] TYPE', // for alter column
+  '{SET | DROP} DEFAULT', // for alter column
+  '{SET | DROP} NOT NULL', // for alter column
+
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
   'ALTER AGGREGATE',
@@ -51,7 +80,6 @@ const reservedCommands = expandPhrases([
   'ALTER STATISTICS',
   'ALTER SUBSCRIPTION',
   'ALTER SYSTEM',
-  'ALTER TABLE',
   'ALTER TABLESPACE',
   'ALTER TEXT SEARCH CONFIGURATION',
   'ALTER TEXT SEARCH DICTIONARY',
@@ -87,7 +115,6 @@ const reservedCommands = expandPhrases([
   'CREATE GROUP',
   'CREATE INDEX',
   'CREATE LANGUAGE',
-  'CREATE MATERIALIZED VIEW',
   'CREATE OPERATOR',
   'CREATE OPERATOR CLASS',
   'CREATE OPERATOR FAMILY',
@@ -101,8 +128,6 @@ const reservedCommands = expandPhrases([
   'CREATE SERVER',
   'CREATE STATISTICS',
   'CREATE SUBSCRIPTION',
-  'CREATE TABLE',
-  'CREATE TABLE AS',
   'CREATE TABLESPACE',
   'CREATE TEXT SEARCH CONFIGURATION',
   'CREATE TEXT SEARCH DICTIONARY',
@@ -113,11 +138,8 @@ const reservedCommands = expandPhrases([
   'CREATE TYPE',
   'CREATE USER',
   'CREATE USER MAPPING',
-  'CREATE VIEW',
   'DEALLOCATE',
   'DECLARE',
-  'DELETE',
-  'DELETE FROM',
   'DISCARD',
   'DO',
   'DROP ACCESS METHOD',
@@ -151,7 +173,6 @@ const reservedCommands = expandPhrases([
   'DROP SERVER',
   'DROP STATISTICS',
   'DROP SUBSCRIPTION',
-  'DROP TABLE',
   'DROP TABLESPACE',
   'DROP TEXT SEARCH CONFIGURATION',
   'DROP TEXT SEARCH DICTIONARY',
@@ -168,7 +189,6 @@ const reservedCommands = expandPhrases([
   'FETCH',
   'GRANT',
   'IMPORT FOREIGN SCHEMA',
-  'INSERT',
   'LISTEN',
   'LOAD',
   'LOCK',
@@ -189,23 +209,16 @@ const reservedCommands = expandPhrases([
   'SAVEPOINT',
   'SECURITY LABEL',
   'SELECT INTO',
-  'SET',
   'SET CONSTRAINTS',
   'SET ROLE',
   'SET SESSION AUTHORIZATION',
   'SET TRANSACTION',
   'SHOW',
   'START TRANSACTION',
-  'TRUNCATE',
   'UNLISTEN',
-  'UPDATE',
   'VACUUM',
-  'VALUES',
   // other
-  'ADD',
   'AFTER',
-  'ALTER COLUMN',
-  'INSERT INTO',
   'SET SCHEMA',
 ]);
 

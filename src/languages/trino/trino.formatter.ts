@@ -19,39 +19,41 @@ const reservedCommands = expandPhrases([
   'LIMIT',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
-  // DDL
-  'ALTER SCHEMA',
-  'ALTER TABLE',
+  // Data manipulation
+  // - insert:
+  'INSERT INTO',
+  'VALUES',
+  // - update:
+  'UPDATE',
+  'SET',
+  // - delete:
+  'DELETE FROM',
+  // - truncate:
+  'TRUNCATE TABLE',
+  // Data definition
+  'CREATE [OR REPLACE] [MATERIALIZED] VIEW',
+  'CREATE TABLE [IF NOT EXISTS]',
+  'DROP TABLE [IF EXISTS]',
+  // - alter table:
+  'ALTER TABLE [IF EXISTS]',
+  'ADD COLUMN [IF NOT EXISTS]',
+  'DROP COLUMN [IF EXISTS]',
+  'RENAME COLUMN [IF EXISTS]',
   'RENAME TO',
-  'ADD COLUMN',
-  'RENAME COLUMN',
-  'DROP COLUMN',
-  'SET AUTHORIZATION',
+  'SET AUTHORIZATION [USER | ROLE]',
   'SET PROPERTIES',
   'EXECUTE',
+
+  'ALTER SCHEMA',
   'ALTER MATERIALIZED VIEW',
   'ALTER VIEW',
   'CREATE SCHEMA',
-  'CREATE TABLE',
-  'CREATE VIEW',
-  'CREATE OR REPLACE VIEW',
-  'CREATE MATERIALIZED VIEW',
-  'CREATE OR REPLACE MATERIALIZED VIEW',
   'CREATE ROLE',
   'DROP SCHEMA',
-  'DROP TABLE',
   'DROP COLUMN',
   'DROP MATERIALIZED VIEW',
   'DROP VIEW',
   'DROP ROLE',
-  'TRUNCATE TABLE',
-  // DML
-  'INSERT INTO',
-  'MERGE INTO',
-  'VALUES',
-  'UPDATE',
-  'SET',
-  'DELETE FROM',
   // Auxiliary
   'EXPLAIN',
   'ANALYZE',

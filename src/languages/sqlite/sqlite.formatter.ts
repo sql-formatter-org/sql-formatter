@@ -17,19 +17,29 @@ const reservedCommands = expandPhrases([
   'ORDER BY',
   'LIMIT',
   'OFFSET',
-  // other
-  'ADD',
-  'ALTER COLUMN',
-  'ALTER TABLE',
-  'CREATE TABLE',
-  'DROP TABLE',
-  'DELETE',
-  'DELETE FROM',
-  'INSERT INTO',
-  'SET SCHEMA',
-  'SET',
-  'UPDATE',
+  // Data manipulation
+  // - insert:
+  'INSERT [OR ABORT | OR FAIL | OR IGNORE | OR REPLACE | OR ROLLBACK] INTO',
+  'REPLACE INTO',
   'VALUES',
+  // - update:
+  'UPDATE [OR ABORT | OR FAIL | OR IGNORE | OR REPLACE | OR ROLLBACK]',
+  'SET',
+  // - delete:
+  'DELETE FROM',
+  // Data definition
+  'CREATE [TEMPORARY | TEMP] VIEW [IF NOT EXISTS]',
+  'CREATE [TEMPORARY | TEMP] TABLE [IF NOT EXISTS]',
+  'DROP TABLE [IF EXISTS]',
+  // - alter table:
+  'ALTER TABLE',
+  'ADD [COLUMN]',
+  'DROP [COLUMN]',
+  'RENAME [COLUMN]',
+  'RENAME TO',
+
+  // other
+  'SET SCHEMA',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

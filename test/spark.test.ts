@@ -16,6 +16,9 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsTruncateTable from './features/truncateTable';
+import supportsCreateView from './features/createView';
 
 describe('SparkFormatter', () => {
   const language = 'spark';
@@ -23,9 +26,16 @@ describe('SparkFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
-  supportsCreateTable(format);
-  supportsDropTable(format);
-  supportsAlterTable(format);
+  supportsCreateView(format, { orReplace: true });
+  supportsCreateTable(format, { ifNotExists: true });
+  supportsDropTable(format, { ifExists: true });
+  supportsAlterTable(format, {
+    dropColumn: true,
+    renameTo: true,
+    renameColumn: true,
+  });
+  supportsInsertInto(format, { withoutInto: true });
+  supportsTruncateTable(format);
   supportsStrings(format, ["''", "X''"]);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
@@ -115,6 +125,16 @@ describe('SparkFormatter', () => {
       SORT BY
         value,
         count;
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(format(`ALTER TABLE StudentInfo ALTER COLUMN FirstName COMMENT "new comment";`))
+      .toBe(dedent`
+      ALTER TABLE
+        StudentInfo
+      ALTER COLUMN
+        FirstName COMMENT "new comment";
     `);
   });
 });

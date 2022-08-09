@@ -17,6 +17,20 @@ const reservedCommands = expandPhrases([
   'ORDER BY',
   'LIMIT',
   'OFFSET',
+  // Data manipulation
+  // - insert:
+  'INSERT INTO',
+  'VALUES',
+  // - update:
+  'UPDATE',
+  'SET',
+  // - delete:
+  'DELETE FROM',
+  // - merge:
+  'MERGE INTO',
+  'WHEN [NOT] MATCHED THEN',
+  'UPDATE SET',
+  'INSERT',
   // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html
   'ADVISE',
   'ALTER INDEX',
@@ -28,8 +42,6 @@ const reservedCommands = expandPhrases([
   'CREATE INDEX',
   'CREATE PRIMARY INDEX',
   'CREATE SCOPE',
-  'DELETE',
-  'DELETE FROM',
   'DROP COLLECTION',
   'DROP FUNCTION',
   'DROP INDEX',
@@ -40,28 +52,22 @@ const reservedCommands = expandPhrases([
   'EXPLAIN',
   'GRANT',
   'INFER',
-  'INSERT',
-  'MERGE',
   'PREPARE',
   'RETURNING',
   'REVOKE',
   'ROLLBACK TRANSACTION',
   'SAVEPOINT',
   'SET TRANSACTION',
-  'UPDATE',
   'UPDATE STATISTICS',
   'UPSERT',
   // other
-  'INSERT INTO',
   'LET',
   'NEST',
   'SET CURRENT SCHEMA',
   'SET SCHEMA',
-  'SET',
   'SHOW',
   'UNNEST',
   'USE KEYS',
-  'VALUES',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);

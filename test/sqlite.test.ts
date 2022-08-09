@@ -1,3 +1,4 @@
+import dedent from 'dedent-js';
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
 import SqliteFormatter from 'src/languages/sqlite/sqlite.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
@@ -18,6 +19,9 @@ import supportsParams from './options/param';
 import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
+import supportsInsertInto from './features/insertInto';
+import supportsUpdate from './features/update';
+import supportsCreateView from './features/createView';
 
 describe('SqliteFormatter', () => {
   const language = 'sqlite';
@@ -25,11 +29,19 @@ describe('SqliteFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
-  supportsCreateTable(format);
-  supportsDropTable(format);
+  supportsCreateView(format);
+  supportsCreateTable(format, { ifNotExists: true });
+  supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);
-  supportsAlterTable(format);
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    renameTo: true,
+    renameColumn: true,
+  });
   supportsDeleteFrom(format);
+  supportsInsertInto(format);
+  supportsUpdate(format);
   supportsStrings(format, ["''", "X''"]);
   supportsIdentifiers(format, [`""`, '``', '[]']);
   supportsBetween(format);
@@ -40,4 +52,14 @@ describe('SqliteFormatter', () => {
   supportsParams(format, { positional: true, numbered: ['?'], named: [':', '$', '@'] });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
+
+  it('supports REPLACE INTO syntax', () => {
+    expect(format(`REPLACE INTO tbl VALUES (1,'Leopard'),(2,'Dog');`)).toBe(dedent`
+      REPLACE INTO
+        tbl
+      VALUES
+        (1, 'Leopard'),
+        (2, 'Dog');
+    `);
+  });
 });
