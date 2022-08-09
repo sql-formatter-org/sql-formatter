@@ -178,23 +178,6 @@
           "default": "before",
           "markdownDescription": "Whether to break before or after AND and OR"
         },
-        "Prettier-SQL.aliasAS": {
-          "type": "string",
-          "enum": [
-            "preserve",
-            "always",
-            "select",
-            "never"
-          ],
-          "enumDescriptions": [
-            "Preserve existing AS usage",
-            "Use AS in SELECT clauses and for tables",
-            "Use AS only in SELECT clauses",
-            "Do not use AS for aliases"
-          ],
-          "default": "preserve",
-          "markdownDescription": "Where to use AS in column or table aliases"
-        },
         "Prettier-SQL.tabulateAlias": {
           "type": "boolean",
           "default": false,

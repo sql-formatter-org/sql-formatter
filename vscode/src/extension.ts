@@ -4,7 +4,6 @@ import type {
   SqlLanguage,
   KeywordCase,
   IndentStyle,
-  AliasMode,
   CommaPosition,
   LogicalOperatorNewline,
 } from 'sql-formatter';
@@ -33,7 +32,6 @@ const getConfigs = (
     keywordCase: settings.get<KeywordCase>('keywordCase'),
     indentStyle: settings.get<IndentStyle>('indentStyle'),
     logicalOperatorNewline: settings.get<LogicalOperatorNewline>('logicalOperatorNewline'),
-    aliasAs: settings.get<AliasMode>('aliasAS'),
     tabulateAlias: settings.get<boolean>('tabulateAlias'),
     commaPosition: settings.get<CommaPosition>('commaPosition'),
     expressionWidth: settings.get<number>('expressionWidth'),
