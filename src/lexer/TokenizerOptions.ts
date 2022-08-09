@@ -16,11 +16,11 @@ export interface IdentChars {
 
 export type PlainQuoteType = keyof typeof quotePatterns;
 
-export type PrefixedQuoteType = {
+export interface PrefixedQuoteType {
   quote: PlainQuoteType;
   prefixes: string[];
   requirePrefix?: boolean; // True when prefix is required
-};
+}
 
 export type QuoteType = PlainQuoteType | PrefixedQuoteType;
 
