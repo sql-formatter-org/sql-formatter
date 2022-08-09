@@ -5,4 +5,4 @@ export type {
   CommaPosition,
   LogicalOperatorNewline,
   FormatOptions,
-} from './types';
+} from './FormatOptions';
