@@ -77,6 +77,28 @@ export default function supportsIndentStyle(format: FormatFn) {
       `);
     });
 
+    // Regression test for issue #383
+    it('correctly indents set operations inside subqueries', () => {
+      expect(
+        format(
+          `SELECT * FROM (
+            SELECT * FROM a
+            UNION ALL
+            SELECT * FROM b) AS tbl;`,
+          { indentStyle: 'tabularLeft' }
+        )
+      ).toBe(dedent`
+        SELECT    *
+        FROM      (
+                  SELECT    *
+                  FROM      a
+                  UNION ALL
+                  SELECT    *
+                  FROM      b
+                  ) AS tbl;
+        `);
+    });
+
     it('handles multiple levels of nested queries', () => {
       expect(
         format(

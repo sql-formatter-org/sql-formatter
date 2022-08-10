@@ -149,7 +149,6 @@ export default class ExpressionFormatter {
   }
 
   private formatSetOperation(node: SetOperation) {
-    this.layout.indentation.decreaseTopLevel();
     this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
 
     this.layout.add(WS.INDENT);
