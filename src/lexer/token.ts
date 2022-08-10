@@ -47,8 +47,8 @@ export const EOF_TOKEN: Token = {
   type: TokenType.EOF,
   raw: '«EOF»',
   text: '«EOF»',
-  start: Number.POSITIVE_INFINITY,
-  end: Number.POSITIVE_INFINITY,
+  start: Infinity,
+  end: Infinity,
 };
 
 /** Checks if two tokens are equivalent */
