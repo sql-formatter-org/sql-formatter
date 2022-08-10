@@ -100,18 +100,6 @@ function validateConfig(cfg: FormatOptions): FormatOptions {
     );
   }
 
-  if (cfg.language === 'hive' && cfg.params !== undefined) {
-    throw new ConfigError(
-      'Unexpected "params" option. Prepared statement placeholders not supported for Hive.'
-    );
-  }
-
-  if (cfg.language === 'spark' && cfg.params !== undefined) {
-    throw new ConfigError(
-      'Unexpected "params" option. Prepared statement placeholders not supported for Spark.'
-    );
-  }
-
   if (cfg.params && !validateParams(cfg.params)) {
     // eslint-disable-next-line no-console
     console.warn('WARNING: All "params" option values should be strings.');

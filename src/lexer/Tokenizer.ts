@@ -1,17 +1,30 @@
 import { Token, TokenType } from 'src/lexer/token';
 import * as regex from 'src/lexer/regexFactory';
-import { TokenizerOptions } from 'src/lexer/TokenizerOptions';
+import { ParamTypes, TokenizerOptions } from 'src/lexer/TokenizerOptions';
+import TokenizerEngine, { type TokenRule } from 'src/lexer/TokenizerEngine';
+import { escapeRegExp } from 'src/lexer/regexUtil';
 import { equalizeWhitespace } from 'src/utils';
 
-import { escapeRegExp } from './regexUtil';
-import TokenizerEngine, { type TokenRule } from './TokenizerEngine';
-
 export default class Tokenizer {
-  private engine: TokenizerEngine;
-  private postProcess?: (tokens: Token[]) => Token[];
+  private dialectRules: Partial<Record<TokenType, TokenRule>>;
 
-  constructor(cfg: TokenizerOptions) {
-    const rules = this.validRules({
+  constructor(private cfg: TokenizerOptions) {
+    this.dialectRules = this.buildDialectRules(cfg);
+  }
+
+  public tokenize(input: string, paramTypesOverrides: ParamTypes): Token[] {
+    const rules = {
+      ...this.dialectRules,
+      ...this.buildParamRules(this.cfg, paramTypesOverrides),
+    };
+    const tokens = new TokenizerEngine(rules).tokenize(input);
+    return this.cfg.postProcess ? this.cfg.postProcess(tokens) : tokens;
+  }
+
+  // These rules can be cached as they only depend on
+  // the Tokenizer config options specified for each SQL dialect
+  private buildDialectRules(cfg: TokenizerOptions): Partial<Record<TokenType, TokenRule>> {
+    return this.validRules({
       [TokenType.BLOCK_COMMENT]: { regex: /(\/\*[^]*?(?:\*\/|$))/uy },
       [TokenType.LINE_COMMENT]: {
         regex: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
@@ -64,29 +77,6 @@ export default class Tokenizer {
         regex: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
         value: v => equalizeWhitespace(v.toUpperCase()),
       },
-      [TokenType.NAMED_PARAMETER]: {
-        regex: regex.parameter(
-          cfg.paramTypes?.named ?? [],
-          regex.identifierPattern(cfg.paramChars || cfg.identChars)
-        ),
-        key: v => v.slice(1),
-      },
-      [TokenType.QUOTED_PARAMETER]: {
-        regex: regex.parameter(cfg.paramTypes?.quoted ?? [], regex.stringPattern(cfg.identTypes)),
-        key: v =>
-          (({ tokenKey, quoteChar }) =>
-            tokenKey.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar))({
-            tokenKey: v.slice(2, -1),
-            quoteChar: v.slice(-1),
-          }),
-      },
-      [TokenType.NUMBERED_PARAMETER]: {
-        regex: regex.parameter(cfg.paramTypes?.numbered ?? [], '[0-9]+'),
-        key: v => v.slice(1),
-      },
-      [TokenType.POSITIONAL_PARAMETER]: {
-        regex: cfg.paramTypes?.positional ? /[?]/y : undefined,
-      },
       [TokenType.VARIABLE]: {
         regex: cfg.variableTypes ? regex.variable(cfg.variableTypes) : undefined,
       },
@@ -105,21 +95,57 @@ export default class Tokenizer {
         ]),
       },
     });
-
-    this.engine = new TokenizerEngine(rules);
-
-    this.postProcess = cfg.postProcess;
   }
 
-  // filters out unsupported *_PARAMETER types whose regex is undefined
+  // These rules can't be blindly cached as the paramTypesOverrides object
+  // can differ on each invocation of the format() function.
+  private buildParamRules(
+    cfg: TokenizerOptions,
+    paramTypesOverrides: ParamTypes
+  ): Partial<Record<TokenType, TokenRule>> {
+    // Each dialect has its own default parameter types (if any),
+    // but these can be overriden by the user of the library.
+    const paramTypes = {
+      named: paramTypesOverrides?.named || cfg.paramTypes?.named || [],
+      quoted: paramTypesOverrides?.quoted || cfg.paramTypes?.quoted || [],
+      numbered: paramTypesOverrides?.numbered || cfg.paramTypes?.numbered || [],
+      positional:
+        typeof paramTypesOverrides?.positional === 'boolean'
+          ? paramTypesOverrides.positional
+          : cfg.paramTypes?.positional,
+    };
+
+    return this.validRules({
+      [TokenType.NAMED_PARAMETER]: {
+        regex: regex.parameter(
+          paramTypes.named,
+          regex.identifierPattern(cfg.paramChars || cfg.identChars)
+        ),
+        key: v => v.slice(1),
+      },
+      [TokenType.QUOTED_PARAMETER]: {
+        regex: regex.parameter(paramTypes.quoted, regex.stringPattern(cfg.identTypes)),
+        key: v =>
+          (({ tokenKey, quoteChar }) =>
+            tokenKey.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar))({
+            tokenKey: v.slice(2, -1),
+            quoteChar: v.slice(-1),
+          }),
+      },
+      [TokenType.NUMBERED_PARAMETER]: {
+        regex: regex.parameter(paramTypes.numbered, '[0-9]+'),
+        key: v => v.slice(1),
+      },
+      [TokenType.POSITIONAL_PARAMETER]: {
+        regex: paramTypes.positional ? /[?]/y : undefined,
+      },
+    });
+  }
+
+  // filters out rules for token types whose regex is undefined
   private validRules(
     rules: Partial<Record<TokenType, TokenRule | { regex: undefined }>>
   ): Partial<Record<TokenType, TokenRule>> {
     return Object.fromEntries(Object.entries(rules).filter(([_, rule]) => rule.regex));
-  }
-
-  public tokenize(input: string): Token[] {
-    const tokens = this.engine.tokenize(input);
-    return this.postProcess ? this.postProcess(tokens) : tokens;
   }
 }
