@@ -10,10 +10,9 @@ export interface TokenRule {
 export default class TokenizerEngine {
   private rules: Partial<Record<TokenType, TokenRule>>;
 
-  // The input SQL string to process
-  private input = '';
-  // Current position in string
-  private index = 0;
+  private input = ''; // The input SQL string to process
+
+  private index = 0; // Current position in string
 
   constructor(rules: Partial<Record<TokenType, TokenRule>>) {
     this.rules = rules;
@@ -52,6 +51,7 @@ export default class TokenizerEngine {
 
   private skipWhitespace(): void {
     WHITESPACE_REGEX.lastIndex = this.index;
+
     const matches = WHITESPACE_REGEX.exec(this.input);
     if (matches) {
       // Advance current position by matched whitespace length
@@ -145,13 +145,17 @@ export default class TokenizerEngine {
     if (matches) {
       const matchedToken = matches[0];
 
-      // Advance current position by matched token length
-      this.index += matchedToken.length;
-      return {
+      const outToken = {
         type,
         raw: matchedToken,
         text: transform ? transform(matchedToken) : matchedToken,
+        start: this.index,
+        end: this.index + matchedToken.length,
       };
+
+      // Advance current position by matched token length
+      this.index += matchedToken.length;
+      return outToken;
     }
     return undefined;
   }
