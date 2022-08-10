@@ -71,7 +71,7 @@ export default class TokenizerEngine {
       this.matchReservedWordToken(previousToken) ||
       this.matchPlaceholderToken(TokenType.NAMED_PARAMETER) ||
       this.matchPlaceholderToken(TokenType.QUOTED_PARAMETER) ||
-      this.matchPlaceholderToken(TokenType.INDEXED_PARAMETER) ||
+      this.matchPlaceholderToken(TokenType.NUMBERED_PARAMETER) ||
       this.matchPlaceholderToken(TokenType.POSITIONAL_PARAMETER) ||
       this.matchToken(TokenType.VARIABLE) ||
       this.matchToken(TokenType.STRING) ||

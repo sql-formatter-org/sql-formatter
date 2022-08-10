@@ -80,7 +80,7 @@ export default class Tokenizer {
             quoteChar: v.slice(-1),
           }),
       },
-      [TokenType.INDEXED_PARAMETER]: {
+      [TokenType.NUMBERED_PARAMETER]: {
         regex: regex.parameter(cfg.paramTypes?.numbered ?? [], '[0-9]+'),
         key: v => v.slice(1),
       },

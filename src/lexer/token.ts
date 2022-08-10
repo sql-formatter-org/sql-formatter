@@ -23,7 +23,7 @@ export enum TokenType {
   NUMBER = 'NUMBER',
   NAMED_PARAMETER = 'NAMED_PARAMETER',
   QUOTED_PARAMETER = 'QUOTED_PARAMETER',
-  INDEXED_PARAMETER = 'INDEXED_PARAMETER',
+  NUMBERED_PARAMETER = 'NUMBERED_PARAMETER',
   POSITIONAL_PARAMETER = 'POSITIONAL_PARAMETER',
   DELIMITER = 'DELIMITER',
   EOF = 'EOF',
@@ -93,7 +93,7 @@ export const isReserved = (token: Token): boolean =>
 
 /** checks if token is one of the parameter tokens */
 export const isParameter = (token: Token): boolean =>
-  token.type === TokenType.INDEXED_PARAMETER ||
+  token.type === TokenType.NUMBERED_PARAMETER ||
   token.type === TokenType.NAMED_PARAMETER ||
   token.type === TokenType.POSITIONAL_PARAMETER ||
   token.type === TokenType.QUOTED_PARAMETER;
