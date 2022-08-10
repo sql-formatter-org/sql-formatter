@@ -24,8 +24,6 @@ Use the FORMATTING template if it is an issue related the formatting of the SQL,
 
 `Prettier-SQL.logicalOperatorNewline`: Whether to break before or after AND and OR
 
-`Prettier-SQL.aliasAS`: Where to use AS in column or table aliases
-
 `Prettier-SQL.tabulateAlias`: Whether to right-align aliases to the longest line in the SELECT clause
 
 `Prettier-SQL.commaPosition`: Where to place commas for SELECT and GROUP BY clauses

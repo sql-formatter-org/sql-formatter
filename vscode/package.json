@@ -2,7 +2,7 @@
   "name": "prettier-sql-vscode",
   "displayName": "Prettier SQL VSCode",
   "description": "VSCode Extension to format SQL files",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "publisher": "inferrinizzard",
   "author": {
     "name": "inferrinizzard"
@@ -37,6 +37,7 @@
     "pl/sql",
     "postgres",
     "postgresql",
+    "presto",
     "prettier",
     "redshift",
     "spark",
@@ -44,6 +45,7 @@
     "sql",
     "sqlite",
     "sql server",
+    "trino",
     "tsql"
   ],
   "activationEvents": [
@@ -67,7 +69,7 @@
     "vsce:publish": "vsce publish"
   },
   "dependencies": {
-    "sql-formatter": "^8.2.0"
+    "sql-formatter": "^9.0.0"
   },
   "devDependencies": {
     "@types/glob": "^7.1.4",
@@ -123,6 +125,7 @@
             "redshift",
             "spark",
             "sqlite",
+            "trino",
             "tsql"
           ],
           "default": "sql",
@@ -177,23 +180,6 @@
           ],
           "default": "before",
           "markdownDescription": "Whether to break before or after AND and OR"
-        },
-        "Prettier-SQL.aliasAS": {
-          "type": "string",
-          "enum": [
-            "preserve",
-            "always",
-            "select",
-            "never"
-          ],
-          "enumDescriptions": [
-            "Preserve existing AS usage",
-            "Use AS in SELECT clauses and for tables",
-            "Use AS only in SELECT clauses",
-            "Do not use AS for aliases"
-          ],
-          "default": "preserve",
-          "markdownDescription": "Where to use AS in column or table aliases"
         },
         "Prettier-SQL.tabulateAlias": {
           "type": "boolean",
