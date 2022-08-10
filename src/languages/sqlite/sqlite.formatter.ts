@@ -74,9 +74,7 @@ export default class SqliteFormatter extends Formatter {
       ],
       identTypes: [`""`, '``', '[]'],
       // https://www.sqlite.org/lang_expr.html#parameters
-      positionalParams: true,
-      numberedParamTypes: ['?'],
-      namedParamTypes: [':', '@', '$'],
+      paramTypes: { positional: true, numbered: ['?'], named: [':', '@', '$'] },
       operators: SqliteFormatter.operators,
     });
   }

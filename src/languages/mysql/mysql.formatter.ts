@@ -249,7 +249,7 @@ export default class MySqlFormatter extends Formatter {
         { quote: "''", prefixes: ['@'], requirePrefix: true },
         { quote: '``', prefixes: ['@'], requirePrefix: true },
       ],
-      positionalParams: true,
+      paramTypes: { positional: true },
       lineCommentTypes: ['--', '#'],
       operators: MySqlFormatter.operators,
       postProcess,

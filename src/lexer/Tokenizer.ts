@@ -66,13 +66,13 @@ export default class Tokenizer {
       },
       [TokenType.NAMED_PARAMETER]: {
         regex: regex.parameter(
-          cfg.namedParamTypes ?? [],
+          cfg.paramTypes?.named ?? [],
           regex.identifierPattern(cfg.paramChars || cfg.identChars)
         ),
         key: v => v.slice(1),
       },
       [TokenType.QUOTED_PARAMETER]: {
-        regex: regex.parameter(cfg.quotedParamTypes ?? [], regex.stringPattern(cfg.identTypes)),
+        regex: regex.parameter(cfg.paramTypes?.quoted ?? [], regex.stringPattern(cfg.identTypes)),
         key: v =>
           (({ tokenKey, quoteChar }) =>
             tokenKey.replace(new RegExp(escapeRegExp('\\' + quoteChar), 'gu'), quoteChar))({
@@ -81,11 +81,11 @@ export default class Tokenizer {
           }),
       },
       [TokenType.INDEXED_PARAMETER]: {
-        regex: regex.parameter(cfg.numberedParamTypes ?? [], '[0-9]+'),
+        regex: regex.parameter(cfg.paramTypes?.numbered ?? [], '[0-9]+'),
         key: v => v.slice(1),
       },
       [TokenType.POSITIONAL_PARAMETER]: {
-        regex: cfg.positionalParams ? /[?]/y : undefined,
+        regex: cfg.paramTypes?.positional ? /[?]/y : undefined,
       },
       [TokenType.VARIABLE]: {
         regex: cfg.variableTypes ? regex.variable(cfg.variableTypes) : undefined,

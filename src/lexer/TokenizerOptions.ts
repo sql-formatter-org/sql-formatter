@@ -30,6 +30,18 @@ export interface VariableRegex {
 
 export type VariableType = VariableRegex | PrefixedQuoteType;
 
+export interface ParamTypes {
+  // True to allow for positional "?" parameter placeholders
+  positional?: boolean;
+  // Prefixes for numbered parameter placeholders to support, e.g. :1, :2, :3
+  numbered?: ('?' | ':' | '$')[];
+  // Prefixes for named parameter placeholders to support, e.g. :name
+  named?: (':' | '@' | '$')[];
+  // Prefixes for quoted parameter placeholders to support, e.g. :"name"
+  // The type of quotes will depend on `identifierTypes` option.
+  quoted?: (':' | '@' | '$')[];
+}
+
 export interface TokenizerOptions {
   // Main clauses that start new block, like: SELECT, FROM, WHERE, ORDER BY
   reservedCommands: string[];
@@ -59,15 +71,8 @@ export interface TokenizerOptions {
   openParens?: ('(' | '[' | '{' | '{-')[];
   // Close-parenthesis characters
   closeParens?: (')' | ']' | '}' | '-}')[];
-  // True to allow for positional "?" parameter placeholders
-  positionalParams?: boolean;
-  // Prefixes for numbered parameter placeholders to support, e.g. :1, :2, :3
-  numberedParamTypes?: ('?' | ':' | '$')[];
-  // Prefixes for named parameter placeholders to support, e.g. :name
-  namedParamTypes?: (':' | '@' | '$')[];
-  // Prefixes for quoted parameter placeholders to support, e.g. :"name"
-  // The type of quotes will depend on `identifierTypes` option.
-  quotedParamTypes?: (':' | '@' | '$')[];
+  // Types of parameter placeholders supported with prepared statements
+  paramTypes?: ParamTypes;
   // Line comment types to support, defaults to --
   lineCommentTypes?: string[];
   // Additional characters to support in identifiers
