@@ -4,7 +4,6 @@ import type { PrefixedQuoteType } from './TokenizerOptions';
 export const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
 
 export const WHITESPACE_REGEX = /\s+/uy;
-export const LINEBREAK_REGEX = /\r\n|\n|\v/g;
 
 export const patternToRegex = (pattern: string): RegExp => new RegExp(`(?:${pattern})`, 'uy');
 
