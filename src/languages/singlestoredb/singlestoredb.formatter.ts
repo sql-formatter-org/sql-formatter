@@ -245,7 +245,7 @@ export default class SingleStoreDbFormatter extends Formatter {
       reservedLogicalOperators: ['AND', 'OR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      // TODO: support _ char set prefixes such as _utf8, _latin1, _binary, _utf8mb4, etc.
+      // TODO: support _binary"some string" prefix
       stringTypes: [
         { quote: "''", prefixes: ['B', 'X'] },
         { quote: '""', prefixes: ['B', 'X'] },
