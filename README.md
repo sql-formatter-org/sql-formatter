@@ -95,7 +95,7 @@ sql-formatter -h
 
 ```
 usage: sql-formatter [-h] [-o OUTPUT] \
-[-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,trino,tsql}] [-c CONFIG] [--version] [FILE]
+[-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,singlestoredb,spark,sql,sqlite,trino,tsql}] [-c CONFIG] [--version] [FILE]
 
 SQL Formatter
 
@@ -106,8 +106,8 @@ optional arguments:
   -h, --help      show this help message and exit
   -o, --output    OUTPUT
                     File to write SQL output (defaults to stdout)
-  -l, --language  {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,trino,tsql}
-                    SQL dialect (defaults to standard sql)
+  -l, --language  {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,singlestoredb,spark,sql,sqlite,trino,tsql}
+                    SQL dialect (defaults to basic sql)
   -c, --config    CONFIG
                     Path to config json file (will use default configs if unspecified)
   --version       show program's version number and exit
