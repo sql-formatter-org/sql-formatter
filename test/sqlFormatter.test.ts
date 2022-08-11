@@ -42,4 +42,10 @@ describe('sqlFormatter', () => {
       format('SELECT *', { newlineBeforeCloseParen: true } as any);
     }).toThrow('newlineBeforeCloseParen config is no more supported.');
   });
+
+  it('throws error when aliasAs config option used', () => {
+    expect(() => {
+      format('SELECT *', { aliasAs: 'always' } as any);
+    }).toThrow('aliasAs config is no more supported.');
+  });
 });
