@@ -224,7 +224,7 @@ const reservedJoins = expandPhrases([
   'JOIN',
   '{LEFT | RIGHT | FULL} [OUTER] JOIN',
   '{INNER | CROSS} JOIN',
-  '{LEFT | RIGHT} [OUTER] JOIN',
+  'NATURAL {LEFT | RIGHT} [OUTER] JOIN',
   // non-standard joins
   'STRAIGHT_JOIN',
 ]);

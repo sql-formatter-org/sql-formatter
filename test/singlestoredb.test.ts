@@ -18,7 +18,7 @@ describe('SingleStoreDbFormatter', () => {
   behavesLikeMariaDbFormatter(format);
 
   supportsJoin(format, {
-    without: ['NATURAL'],
+    without: ['NATURAL INNER JOIN', 'NATURAL FULL', 'NATURAL JOIN'],
     additionally: ['STRAIGHT_JOIN'],
   });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT']);
