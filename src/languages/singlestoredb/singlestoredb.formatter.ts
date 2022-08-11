@@ -254,8 +254,6 @@ export default class SingleStoreDbFormatter extends Formatter {
       identChars: { first: '$', rest: '$', allowFirstCharNumber: true },
       variableTypes: [
         { regex: '@[A-Za-z0-9_.$]+' },
-        { quote: '""', prefixes: ['@'], requirePrefix: true },
-        { quote: "''", prefixes: ['@'], requirePrefix: true },
         { quote: '``', prefixes: ['@'], requirePrefix: true },
       ],
       lineCommentTypes: ['--', '#'],

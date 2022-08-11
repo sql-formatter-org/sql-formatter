@@ -39,6 +39,16 @@ describe('MySqlFormatter', () => {
     renameColumn: true,
   });
 
+  it(`supports @"name", @'name' variables`, () => {
+    expect(format(`SELECT @"foo fo", @'bar ar' FROM tbl;`)).toBe(dedent`
+      SELECT
+        @"foo fo",
+        @'bar ar'
+      FROM
+        tbl;
+    `);
+  });
+
   // TODO: disabled for now
   it.skip('supports @@ system variables', () => {
     const result = format('SELECT @@GLOBAL.time, @@SYSTEM.date, @@hour FROM foo;');

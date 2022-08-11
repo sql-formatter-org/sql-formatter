@@ -61,6 +61,15 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
     `);
   });
 
+  it('supports @`name` variables', () => {
+    expect(format('SELECT @`baz zaz` FROM tbl;')).toBe(dedent`
+      SELECT
+        @\`baz zaz\`
+      FROM
+        tbl;
+    `);
+  });
+
   it('supports setting variables: @var :=', () => {
     expect(format('SET @foo := 10;')).toBe(dedent`
       SET
@@ -68,21 +77,10 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
     `);
   });
 
-  it('supports @"name", @\'name\', @`name` variables', () => {
-    expect(format(`SELECT @"foo fo", @'bar ar', @\`baz zaz\` FROM tbl;`)).toBe(dedent`
-      SELECT
-        @"foo fo",
-        @'bar ar',
-        @\`baz zaz\`
-      FROM
-        tbl;
-    `);
-  });
-
-  it('supports setting variables: @"var" :=', () => {
-    expect(format('SET @"foo" := (SELECT * FROM tbl);')).toBe(dedent`
+  it('supports setting variables: @`var` :=', () => {
+    expect(format('SET @`foo` := (SELECT * FROM tbl);')).toBe(dedent`
       SET
-        @"foo" := (
+        @\`foo\` := (
           SELECT
             *
           FROM

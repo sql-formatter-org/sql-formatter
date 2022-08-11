@@ -1,3 +1,5 @@
+import dedent from 'dedent-js';
+
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
 import MariaDbFormatter from 'src/languages/mariadb/mariadb.formatter';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
@@ -35,5 +37,15 @@ describe('MariaDbFormatter', () => {
     modify: true,
     renameTo: true,
     renameColumn: true,
+  });
+
+  it(`supports @"name", @'name' variables`, () => {
+    expect(format(`SELECT @"foo fo", @'bar ar' FROM tbl;`)).toBe(dedent`
+      SELECT
+        @"foo fo",
+        @'bar ar'
+      FROM
+        tbl;
+    `);
   });
 });
