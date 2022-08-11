@@ -37,9 +37,10 @@ const reservedCommands = expandPhrases([
   // - alter table:
   'ALTER [ONLINE] TABLE',
   'ADD [COLUMN]',
-  'ADD [UNIQUE]',
+  'ADD [UNIQUE] {INDEX | KEY}',
   'DROP [COLUMN]',
   'MODIFY [COLUMN]',
+  'CHANGE',
   'RENAME [TO | AS]',
 
   // https://docs.singlestore.com/managed-service/en/reference/sql-reference.html
