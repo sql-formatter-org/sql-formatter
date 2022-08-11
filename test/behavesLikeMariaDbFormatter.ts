@@ -108,26 +108,4 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
         (2, 'Dog');
     `);
   });
-
-  it('formats ALTER TABLE ... ALTER COLUMN', () => {
-    expect(
-      format(
-        `ALTER TABLE t ALTER COLUMN foo SET DEFAULT 10;
-         ALTER TABLE t ALTER COLUMN foo DROP DEFAULT;`
-      )
-    ).toBe(dedent`
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
-      SET DEFAULT
-        10;
-
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
-      DROP DEFAULT;
-    `);
-  });
 }

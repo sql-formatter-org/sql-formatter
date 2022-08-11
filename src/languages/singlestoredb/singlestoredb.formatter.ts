@@ -41,9 +41,6 @@ const reservedCommands = expandPhrases([
   'DROP [COLUMN]',
   'MODIFY [COLUMN]',
   'RENAME [TO | AS]',
-  'ALTER [COLUMN]',
-  '{SET | DROP} DEFAULT', // for alter column
-  'SET {VISIBLE | INVISIBLE}', // for alter column
 
   // https://docs.singlestore.com/managed-service/en/reference/sql-reference.html
   'ADD AGGREGATOR',
