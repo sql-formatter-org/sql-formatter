@@ -1,4 +1,4 @@
-import type { FormatOptions } from 'src/types';
+import type { FormatOptions } from 'src/FormatOptions';
 import { equalizeWhitespace } from 'src/utils';
 
 import Params from 'src/formatter/Params';
@@ -149,7 +149,6 @@ export default class ExpressionFormatter {
   }
 
   private formatSetOperation(node: SetOperation) {
-    this.layout.indentation.decreaseTopLevel();
     this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
 
     this.layout.add(WS.INDENT);

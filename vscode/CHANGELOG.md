@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.2.0] - 2022-08-09
+
+- updated `sql-formatter` to v9.x
+- removed `aliasAS`
+- added `trino` (aka presto) as new supported dialect
+
 ## [1.1.1] - 2022-07-05
 
 - updated package metadata to point at `sql-formatter` instead of `prettier-sql`

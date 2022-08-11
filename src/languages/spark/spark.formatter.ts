@@ -151,7 +151,7 @@ function postProcess(tokens: Token[]) {
     if (token.text === 'ITEMS' && token.type === TokenType.RESERVED_KEYWORD) {
       if (!(prevToken.text === 'COLLECTION' && nextToken.text === 'TERMINATED')) {
         // this is a word and not COLLECTION ITEMS
-        return { type: TokenType.IDENTIFIER, raw: token.raw, text: token.raw };
+        return { ...token, type: TokenType.IDENTIFIER, text: token.raw };
       }
     }
 

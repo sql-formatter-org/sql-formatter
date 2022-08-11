@@ -1,6 +1,6 @@
 import { sortByLengthDesc } from 'src/utils';
 
-import type { IdentChars, QuoteType, VariableType } from './regexTypes';
+import type { IdentChars, QuoteType, VariableType } from './TokenizerOptions';
 import {
   escapeParen,
   escapeRegExp,
