@@ -1,30 +1,32 @@
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import SingleStoreDbFormatter from 'src/languages/singlestoredb/singlestoredb.formatter';
+import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
-import supportsAlterTable from './features/alterTable';
-import supportsBetween from './features/between';
-import supportsComments from './features/comments';
-import supportsConstraints from './features/constraints';
+import supportsJoin from './features/join';
+import supportsOperators from './features/operators';
+import supportsWindow from './features/window';
+import supportsSetOperations from './features/setOperations';
+import supportsLimiting from './features/limiting';
+import supportsCreateTable from './features/createTable';
 import supportsCreateView from './features/createView';
-import supportsDeleteFrom from './features/deleteFrom';
-import supportsDropTable from './features/dropTable';
-import supportsIdentifiers from './features/identifiers';
-import supportsInsertInto from './features/insertInto';
-import supportsStrings from './features/strings';
-import supportsTruncateTable from './features/truncateTable';
-import supportsUpdate from './features/update';
+import supportsAlterTable from './features/alterTable';
 
 describe('SingleStoreDbFormatter', () => {
   const language = 'singlestoredb';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
-  behavesLikeSqlFormatter(format);
-  supportsComments(format, { hashComments: true });
-  supportsStrings(format, ["''", '""', "X''"]);
-  supportsIdentifiers(format, ['``']);
+  behavesLikeMariaDbFormatter(format);
+
+  supportsJoin(format, {
+    without: ['NATURAL'],
+    additionally: ['STRAIGHT_JOIN'],
+  });
+  supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT']);
+  supportsOperators(format, SingleStoreDbFormatter.operators, ['AND', 'OR']);
+  supportsWindow(format);
+  supportsLimiting(format, { limit: true, offset: true });
+  supportsCreateTable(format, { ifNotExists: true });
   supportsCreateView(format, { orReplace: false });
-  supportsDropTable(format, { ifExists: true });
-  supportsConstraints(format);
   supportsAlterTable(format, {
     addColumn: true,
     dropColumn: true,
@@ -32,9 +34,4 @@ describe('SingleStoreDbFormatter', () => {
     renameTo: true,
     renameColumn: false,
   });
-  supportsDeleteFrom(format);
-  supportsInsertInto(format, { withoutInto: true });
-  supportsUpdate(format);
-  supportsTruncateTable(format, { withoutTable: true });
-  supportsBetween(format);
 });

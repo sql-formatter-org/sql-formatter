@@ -8,6 +8,9 @@ import supportsReturning from './features/returning';
 import supportsSetOperations, { standardSetOperations } from './features/setOperations';
 import supportsLimiting from './features/limiting';
 import supportsCreateTable from './features/createTable';
+import supportsParams from './options/param';
+import supportsCreateView from './features/createView';
+import supportsAlterTable from './features/alterTable';
 
 describe('MariaDbFormatter', () => {
   const language = 'mariadb';
@@ -24,4 +27,13 @@ describe('MariaDbFormatter', () => {
   supportsReturning(format);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
   supportsCreateTable(format, { orReplace: true, ifNotExists: true });
+  supportsParams(format, { positional: true });
+  supportsCreateView(format, { orReplace: true });
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    modify: true,
+    renameTo: true,
+    renameColumn: true,
+  });
 });

@@ -43,6 +43,9 @@ const reservedCommands = expandPhrases([
   'DROP [COLUMN]',
   'MODIFY [COLUMN]',
   'RENAME [TO | AS]',
+  'ALTER [COLUMN]',
+  '{SET | DROP} DEFAULT', // for alter column
+  'SET {VISIBLE | INVISIBLE}', // for alter column
 
   // https://docs.singlestore.com/managed-service/en/reference/sql-reference.html
   'ADD AGGREGATOR',
@@ -221,7 +224,7 @@ const reservedJoins = expandPhrases([
   'JOIN',
   '{LEFT | RIGHT | FULL} [OUTER] JOIN',
   '{INNER | CROSS} JOIN',
-  'NATURAL {LEFT | RIGHT} [OUTER] JOIN',
+  '{LEFT | RIGHT} [OUTER] JOIN',
   // non-standard joins
   'STRAIGHT_JOIN',
 ]);
@@ -230,7 +233,7 @@ const reservedPhrases = ['ON DELETE', 'ON UPDATE', 'CHARACTER SET'];
 
 // https://docs.singlestore.com/managed-service/en/reference/sql-reference/comparison-operators-and-functions.html
 export default class SingleStoreDbFormatter extends Formatter {
-  static operators = ['~', '<=>', '<<', '>>', '&&', '||'];
+  static operators = ['~', ':=', '<=>', '<<', '>>', '&&', '||'];
 
   tokenizer() {
     return new Tokenizer({
