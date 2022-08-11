@@ -71,6 +71,20 @@ An object with the following following optional fields:
   while in Transact-SQL `:"name"` and `:[name]` would work instead.
   See [identifier syntax wiki page][] for information about differences in support quoted identifiers.
 
+Note that using this config will override the by default supported placeholders types.
+For example PL/SQL supports numbered (`:1`) and named (`:name`) placeholders by default.
+When you provide the following `paramTypes` configuration:
+
+```js
+paramTypes: { positional: true, numbered: [], named: [':', '@'] }
+```
+
+The result will be:
+
+- `?` positional placeholders are supported
+- `:1` numbered placeholders are no more supported
+- `:name` is still supported and `@name` named placeholder is also supported.
+
 ## Parameter value substitution
 
 This config option can be used together with [params][] to substitute the placeholders with actual values.
