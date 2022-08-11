@@ -82,17 +82,23 @@ WHERE
 
 ## Available placeholder types
 
-The placeholder types available depend on SQL dialect used:
+The placeholder types available by default depend on SQL dialect used:
 
-- sql - `?`, `?1`
-- bigquery - `?`, `?1`
-- db2 - `?`, `?1`, `:name`
-- hive - `?`, `?1`
-- mariadb - `?`, `?1`
-- mysql - `?`, `?1`
-- n1ql - `$name`
-- plsql - `?`, `?1`, `:name`
-- postgresql - `$`, `$1`, `:name`
-- redshift - `?`, `?1`, `@name`, `#name`, `$name`
-- sparksql - `?`, `?1`, `$name`
-- tsql - `@name`
+- sql - `?`
+- bigquery - `?`, `@name`, `` @`name` ``
+- db2 - `?`, `:name`
+- hive - _no support_
+- mariadb - `?`
+- mysql - `?`
+- n1ql - `?`, `$1`, `$name`
+- plsql - `:1`, `:name`
+- postgresql - `$1`
+- redshift - `$1`
+- sqlite - `?`, `?1`, `:name`, `@name`, `$name`
+- spark - _no support_
+- tsql - `@name`, `@"name"`, `@[name]`
+- trino - _no support_
+
+You can also configure the supported placeholder types using the [paramTypes][] config option.
+
+[paramtypes]: ./paramTypes.md
