@@ -190,7 +190,6 @@ const reservedCommands = expandPhrases([
   'STOP REPLICA',
   'STOP REPLICATING',
   'STOP SLAVE',
-  'TABLE',
   'TEST PIPELINE',
   'TRUNCATE TABLE',
   'UNLOCK INSTANCE',
