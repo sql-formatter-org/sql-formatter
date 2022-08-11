@@ -10,6 +10,9 @@ import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
 import supportsCreateTable from './features/createTable';
+import supportsParams from './options/param';
+import supportsCreateView from './features/createView';
+import supportsAlterTable from './features/alterTable';
 
 describe('MySqlFormatter', () => {
   const language = 'mysql';
@@ -26,6 +29,25 @@ describe('MySqlFormatter', () => {
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
   supportsCreateTable(format, { ifNotExists: true });
+  supportsParams(format, { positional: true });
+  supportsCreateView(format, { orReplace: true });
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    modify: true,
+    renameTo: true,
+    renameColumn: true,
+  });
+
+  it(`supports @"name", @'name' variables`, () => {
+    expect(format(`SELECT @"foo fo", @'bar ar' FROM tbl;`)).toBe(dedent`
+      SELECT
+        @"foo fo",
+        @'bar ar'
+      FROM
+        tbl;
+    `);
+  });
 
   // TODO: disabled for now
   it.skip('supports @@ system variables', () => {
@@ -37,6 +59,28 @@ describe('MySqlFormatter', () => {
         @@hour
       FROM
         foo;
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(
+      format(
+        `ALTER TABLE t ALTER COLUMN foo SET DEFAULT 10;
+         ALTER TABLE t ALTER COLUMN foo DROP DEFAULT;`
+      )
+    ).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DEFAULT
+        10;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP DEFAULT;
     `);
   });
 });

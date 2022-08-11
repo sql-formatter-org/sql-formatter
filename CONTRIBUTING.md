@@ -41,6 +41,7 @@ For those who have admin access on the repo, the new release publish flow is as 
 - Martin Nowak <code@dawg.eu>
 - Matheus Salmi <mathsalmi@gmail.com>
 - Matheus Teixeira <matheus.mtxr@gmail.com>
+- Michael Giannakopoulos <mgiannakopoulos@singlestore.com>
 - Nicolas Dermine <nicolas.dermine@gmail.com>
 - Offir Baron <ofir@panoply.io>
 - Olexandr Sydorchuk <olexandr.syd@gmail.com>
