@@ -1,8 +1,21 @@
 import { flatKeywordList } from '../../utils';
 
 export const functions = flatKeywordList({
-  // https://docs.singlestore.com/managed-service/en/reference/sql-reference.html
-  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/restricted-keywords/list-of-restricted-keywords.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/vector-functions/vector-functions.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/window-functions/window-functions.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/string-functions/string-functions.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/conditional-functions/conditional-functions.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/numeric-functions/numeric-functions.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/geospatial-functions/geospatial-functions.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/json-functions/json-functions.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/information-functions/information-functions.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/aggregate-functions/aggregate-functions.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/time-series-functions/time-series-functions.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/identifier-generation-functions.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/date-and-time-functions/date-and-time-functions.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/distinct-count-estimation-functions.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/full-text-search-functions/full-text-search-functions.html
+  // https://docs.singlestore.com/managed-service/en/reference/sql-reference/regular-expression-functions.html
   all: [
     'ABS',
     'ACOS',
