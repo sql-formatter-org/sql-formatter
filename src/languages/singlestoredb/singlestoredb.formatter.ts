@@ -247,8 +247,8 @@ export default class SingleStoreDbFormatter extends Formatter {
       reservedFunctionNames: functions,
       // TODO: support _ char set prefixes such as _utf8, _latin1, _binary, _utf8mb4, etc.
       stringTypes: [
-        { quote: "''", prefixes: ['B', 'N', 'X'] },
-        { quote: '""', prefixes: ['B', 'N', 'X'] },
+        { quote: "''", prefixes: ['B', 'X'] },
+        { quote: '""', prefixes: ['B', 'X'] },
       ],
       identTypes: ['``'],
       identChars: { first: '$', rest: '$', allowFirstCharNumber: true },
