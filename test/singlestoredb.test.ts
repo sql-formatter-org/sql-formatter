@@ -4,7 +4,6 @@ import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
-import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
 import supportsCreateTable from './features/createTable';
@@ -30,7 +29,6 @@ describe('SingleStoreDbFormatter', () => {
     'MINUS',
   ]);
   supportsOperators(format, SingleStoreDbFormatter.operators, ['AND', 'OR']);
-  supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsCreateView(format);

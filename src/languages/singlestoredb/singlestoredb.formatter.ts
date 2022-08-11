@@ -13,8 +13,6 @@ const reservedCommands = expandPhrases([
   'WHERE',
   'GROUP BY',
   'HAVING',
-  'WINDOW',
-  'PARTITION BY',
   'ORDER BY',
   'LIMIT',
   'OFFSET',
