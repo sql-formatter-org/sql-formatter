@@ -30,6 +30,7 @@ describe('Parser', () => {
             Object {
               "token": Object {
                 "end": 3,
+                "precedingWhitespace": undefined,
                 "raw": "foo",
                 "start": 0,
                 "text": "foo",
@@ -46,6 +47,7 @@ describe('Parser', () => {
             Object {
               "token": Object {
                 "end": 8,
+                "precedingWhitespace": " ",
                 "raw": "bar",
                 "start": 5,
                 "text": "bar",
@@ -71,6 +73,7 @@ describe('Parser', () => {
                 Object {
                   "nameToken": Object {
                     "end": 11,
+                    "precedingWhitespace": " ",
                     "raw": "SQRT",
                     "start": 7,
                     "text": "SQRT",
@@ -81,6 +84,7 @@ describe('Parser', () => {
                       Object {
                         "token": Object {
                           "end": 13,
+                          "precedingWhitespace": undefined,
                           "raw": "2",
                           "start": 12,
                           "text": "2",
@@ -98,6 +102,7 @@ describe('Parser', () => {
               ],
               "nameToken": Object {
                 "end": 6,
+                "precedingWhitespace": undefined,
                 "raw": "SELECT",
                 "start": 0,
                 "text": "SELECT",
@@ -123,6 +128,7 @@ describe('Parser', () => {
                 Object {
                   "arrayToken": Object {
                     "end": 15,
+                    "precedingWhitespace": " ",
                     "raw": "my_array",
                     "start": 7,
                     "text": "my_array",
@@ -133,6 +139,7 @@ describe('Parser', () => {
                       Object {
                         "nameToken": Object {
                           "end": 22,
+                          "precedingWhitespace": undefined,
                           "raw": "OFFSET",
                           "start": 16,
                           "text": "OFFSET",
@@ -143,6 +150,7 @@ describe('Parser', () => {
                             Object {
                               "token": Object {
                                 "end": 24,
+                                "precedingWhitespace": undefined,
                                 "raw": "5",
                                 "start": 23,
                                 "text": "5",
@@ -167,6 +175,7 @@ describe('Parser', () => {
               ],
               "nameToken": Object {
                 "end": 6,
+                "precedingWhitespace": undefined,
                 "raw": "SELECT",
                 "start": 0,
                 "text": "SELECT",
@@ -194,6 +203,7 @@ describe('Parser', () => {
                     Object {
                       "token": Object {
                         "end": 18,
+                        "precedingWhitespace": undefined,
                         "raw": "birth_year",
                         "start": 8,
                         "text": "birth_year",
@@ -204,6 +214,7 @@ describe('Parser', () => {
                     Object {
                       "token": Object {
                         "end": 20,
+                        "precedingWhitespace": " ",
                         "raw": "-",
                         "start": 19,
                         "text": "-",
@@ -216,6 +227,7 @@ describe('Parser', () => {
                         Object {
                           "token": Object {
                             "end": 34,
+                            "precedingWhitespace": undefined,
                             "raw": "CURRENT_DATE",
                             "start": 22,
                             "text": "CURRENT_DATE",
@@ -226,6 +238,7 @@ describe('Parser', () => {
                         Object {
                           "token": Object {
                             "end": 36,
+                            "precedingWhitespace": " ",
                             "raw": "+",
                             "start": 35,
                             "text": "+",
@@ -236,6 +249,7 @@ describe('Parser', () => {
                         Object {
                           "token": Object {
                             "end": 38,
+                            "precedingWhitespace": " ",
                             "raw": "1",
                             "start": 37,
                             "text": "1",
@@ -256,6 +270,7 @@ describe('Parser', () => {
               ],
               "nameToken": Object {
                 "end": 6,
+                "precedingWhitespace": undefined,
                 "raw": "SELECT",
                 "start": 0,
                 "text": "SELECT",
@@ -281,6 +296,7 @@ describe('Parser', () => {
                 Object {
                   "token": Object {
                     "end": 9,
+                    "precedingWhitespace": " ",
                     "raw": "age",
                     "start": 6,
                     "text": "age",
@@ -291,6 +307,7 @@ describe('Parser', () => {
                 Object {
                   "andToken": Object {
                     "end": 24,
+                    "precedingWhitespace": " ",
                     "raw": "and",
                     "start": 21,
                     "text": "AND",
@@ -298,6 +315,7 @@ describe('Parser', () => {
                   },
                   "betweenToken": Object {
                     "end": 17,
+                    "precedingWhitespace": " ",
                     "raw": "BETWEEN",
                     "start": 10,
                     "text": "BETWEEN",
@@ -305,6 +323,7 @@ describe('Parser', () => {
                   },
                   "expr1": Object {
                     "end": 20,
+                    "precedingWhitespace": " ",
                     "raw": "10",
                     "start": 18,
                     "text": "10",
@@ -312,6 +331,7 @@ describe('Parser', () => {
                   },
                   "expr2": Object {
                     "end": 27,
+                    "precedingWhitespace": " ",
                     "raw": "15",
                     "start": 25,
                     "text": "15",
@@ -322,6 +342,7 @@ describe('Parser', () => {
               ],
               "nameToken": Object {
                 "end": 5,
+                "precedingWhitespace": undefined,
                 "raw": "WHERE",
                 "start": 0,
                 "text": "WHERE",
@@ -347,6 +368,7 @@ describe('Parser', () => {
                 Object {
                   "token": Object {
                     "end": 8,
+                    "precedingWhitespace": " ",
                     "raw": "10",
                     "start": 6,
                     "text": "10",
@@ -357,6 +379,7 @@ describe('Parser', () => {
               ],
               "limitToken": Object {
                 "end": 5,
+                "precedingWhitespace": undefined,
                 "raw": "LIMIT",
                 "start": 0,
                 "text": "LIMIT",
@@ -382,6 +405,7 @@ describe('Parser', () => {
                 Object {
                   "token": Object {
                     "end": 13,
+                    "precedingWhitespace": " ",
                     "raw": "10",
                     "start": 11,
                     "text": "10",
@@ -392,6 +416,7 @@ describe('Parser', () => {
               ],
               "limitToken": Object {
                 "end": 5,
+                "precedingWhitespace": undefined,
                 "raw": "LIMIT",
                 "start": 0,
                 "text": "LIMIT",
@@ -401,6 +426,7 @@ describe('Parser', () => {
                 Object {
                   "token": Object {
                     "end": 9,
+                    "precedingWhitespace": " ",
                     "raw": "200",
                     "start": 6,
                     "text": "200",
@@ -432,6 +458,7 @@ describe('Parser', () => {
               ],
               "nameToken": Object {
                 "end": 6,
+                "precedingWhitespace": undefined,
                 "raw": "SELECT",
                 "start": 0,
                 "text": "SELECT",
@@ -460,6 +487,7 @@ describe('Parser', () => {
               ],
               "nameToken": Object {
                 "end": 15,
+                "precedingWhitespace": undefined,
                 "raw": "SELECT DISTINCT",
                 "start": 0,
                 "text": "SELECT DISTINCT",

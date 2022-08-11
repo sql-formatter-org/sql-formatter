@@ -37,6 +37,7 @@ export interface Token {
   key?: string;
   start: number; // 0-based index of the token in the whole query string
   end: number; // 0-based index of where the token ends in the query string
+  precedingWhitespace?: string; // Whitespace before this token, if any
 }
 
 /**
