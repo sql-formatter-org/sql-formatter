@@ -59,8 +59,7 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
   it('formats line comments followed by semicolon', () => {
     expect(
       format(`
-      SELECT a FROM b
-      --comment
+      SELECT a FROM b --comment
       ;
     `)
     ).toBe(dedent`
@@ -100,6 +99,48 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
       SELECT
         a --comment
         ()
+    `);
+  });
+
+  it('preserves single-line comments at the end of lines', () => {
+    expect(
+      format(`
+        SELECT
+          a, --comment1
+          b --comment2
+        FROM --comment3
+          my_table;
+      `)
+    ).toBe(dedent`
+      SELECT
+        a, --comment1
+        b --comment2
+      FROM --comment3
+        my_table;
+    `);
+  });
+
+  it('preserves single-line comments on separate lines', () => {
+    expect(
+      format(`
+        SELECT
+          --comment1
+          a,
+          --comment2
+          b
+        FROM
+          --comment3
+          my_table;
+      `)
+    ).toBe(dedent`
+      SELECT
+        --comment1
+        a,
+        --comment2
+        b
+      FROM
+        --comment3
+        my_table;
     `);
   });
 
