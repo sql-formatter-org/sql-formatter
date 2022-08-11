@@ -80,6 +80,29 @@ WHERE
   AND age = 27
 ```
 
+### Quoted placeholders
+
+Some dialects (BigQuery, Transact SQL) also support quoted names for placeholders:
+
+```js
+format('SELECT * FROM persons WHERE fname = @`first name` AND age = @`age`', {
+  params: { 'first name': "'John'", 'age': '27' },
+  language: 'bigquery',
+});
+```
+
+Results in:
+
+```sql
+SELECT
+  *
+FROM
+  persons
+WHERE
+  fname = 'John'
+  AND age = 27
+```
+
 ## Available placeholder types
 
 The placeholder types available by default depend on SQL dialect used:
@@ -99,6 +122,7 @@ The placeholder types available by default depend on SQL dialect used:
 - tsql - `@name`, `@"name"`, `@[name]`
 - trino - _no support_
 
-You can also configure the supported placeholder types using the [paramTypes][] config option.
+If you need to use a different placeholder syntax than the builtin one,
+you can configure the supported placeholder types using the [paramTypes][] config option.
 
 [paramtypes]: ./paramTypes.md
