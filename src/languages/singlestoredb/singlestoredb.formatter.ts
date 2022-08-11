@@ -205,9 +205,6 @@ const reservedCommands = expandPhrases([
   'WHILE',
 ]);
 
-// https://docs.singlestore.com/managed-service/en/reference/sql-reference/data-manipulation-language-dml/union.html
-// https://docs.singlestore.com/managed-service/en/reference/sql-reference/data-manipulation-language-dml/intersect.html
-// https://docs.singlestore.com/managed-service/en/reference/sql-reference/data-manipulation-language-dml/except-and-minus.html
 const reservedSetOperations = expandPhrases([
   'UNION [ALL | DISTINCT]',
   'EXCEPT',
@@ -226,7 +223,6 @@ const reservedJoins = expandPhrases([
 
 const reservedPhrases = ['ON DELETE', 'ON UPDATE', 'CHARACTER SET'];
 
-// https://docs.singlestore.com/managed-service/en/reference/sql-reference/comparison-operators-and-functions.html
 export default class SingleStoreDbFormatter extends Formatter {
   static operators = ['~', ':=', '<=>', '<<', '>>', '&&', '||'];
 
