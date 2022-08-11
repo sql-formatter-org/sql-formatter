@@ -89,6 +89,9 @@ function validateConfig(cfg: FormatOptions): FormatOptions {
   if ('newlineBeforeCloseParen' in cfg) {
     throw new ConfigError('newlineBeforeCloseParen config is no more supported.');
   }
+  if ('aliasAs' in cfg) {
+    throw new ConfigError('aliasAs config is no more supported.');
+  }
 
   if (cfg.expressionWidth <= 0) {
     throw new ConfigError(
