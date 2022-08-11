@@ -230,7 +230,7 @@ const reservedPhrases = ['ON DELETE', 'ON UPDATE', 'CHARACTER SET'];
 
 // https://docs.singlestore.com/managed-service/en/reference/sql-reference/comparison-operators-and-functions.html
 export default class SingleStoreDbFormatter extends Formatter {
-  static operators = ['=', '<=>', '>', '<'];
+  static operators = ['~', '<=>', '<<', '>>', '&&', '||'];
 
   tokenizer() {
     return new Tokenizer({
