@@ -26,12 +26,11 @@ describe('SingleStoreDbFormatter', () => {
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
   supportsCreateTable(format, { ifNotExists: true });
-  supportsCreateView(format, { orReplace: false });
+  supportsCreateView(format);
   supportsAlterTable(format, {
     addColumn: true,
     dropColumn: true,
     modify: true,
     renameTo: true,
-    renameColumn: false,
   });
 });
