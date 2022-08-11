@@ -21,7 +21,14 @@ describe('SingleStoreDbFormatter', () => {
     without: ['NATURAL INNER JOIN', 'NATURAL FULL', 'NATURAL JOIN'],
     additionally: ['STRAIGHT_JOIN'],
   });
-  supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT']);
+  supportsSetOperations(format, [
+    'UNION',
+    'UNION ALL',
+    'UNION DISTINCT',
+    'EXCEPT',
+    'INTERSECT',
+    'MINUS',
+  ]);
   supportsOperators(format, SingleStoreDbFormatter.operators, ['AND', 'OR']);
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
