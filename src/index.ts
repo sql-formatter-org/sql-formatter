@@ -6,3 +6,5 @@ export type {
   LogicalOperatorNewline,
   FormatOptions,
 } from './FormatOptions';
+export { default as Formatter } from './formatter/Formatter';
+export { default as Tokenizer } from './lexer/Tokenizer';
