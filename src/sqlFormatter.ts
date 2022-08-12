@@ -69,14 +69,16 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
     ...cfg,
   });
 
-  const Formatter = formatters[options.language];
-  return new Formatter(options).format(query);
+  const FormatterCls =
+    typeof options.language === 'string' ? formatters[options.language] : options.language;
+
+  return new FormatterCls(options).format(query);
 };
 
 export class ConfigError extends Error {}
 
 function validateConfig(cfg: FormatOptions): FormatOptions {
-  if (!supportedDialects.includes(cfg.language)) {
+  if (typeof cfg.language === 'string' && !supportedDialects.includes(cfg.language)) {
     throw new ConfigError(`Unsupported SQL dialect: ${cfg.language}`);
   }
 
