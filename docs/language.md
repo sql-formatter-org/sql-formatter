@@ -19,11 +19,35 @@ Specifies the SQL dialect to use.
 - `"sqlite"` - [SQLite][sqlite]
 - `"trino"` - [Trino][] / [Presto][]
 - `"tsql"` - [SQL Server Transact-SQL][tsql]
+- custom formatter class (see below)
 
 The default `"sql"` dialect is meant for cases where you don't know which dialect of SQL you're about to format.
 It's not an auto-detection, it just supports a subset of features common enough in many SQL implementations.
 This might or might not work for your specific dialect.
 Better to always pick something more specific if possible.
+
+### Custom formatter class (experimental)
+
+The language parameter can also be used to specify a custom formatter implementation:
+
+```ts
+import { format, Formatter, Tokenizer } from 'sql-formatter';
+
+class MyFormatter extends Formatter {
+  tokenizer() {
+    return new Tokenizer({
+      // See source code for examples of tokenizer config options
+      // For example: src/languages/sqlite/sqlite.formatter.ts
+    });
+  }
+}
+
+const result = format('SELECT * FROM tbl', { language: MyFormatter });
+```
+
+**NB!** This functionality is experimental and there are no stability guarantees for this API.
+The API of Formatter and Tokenizer classes can (and likely will) change in non-major releases.
+You likely only want to use this if your other alternative is to fork SQL Formatter.
 
 [standard sql]: https://en.wikipedia.org/wiki/SQL:2011
 [gcp bigquery]: https://cloud.google.com/bigquery
