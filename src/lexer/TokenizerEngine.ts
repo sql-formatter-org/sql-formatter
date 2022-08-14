@@ -34,7 +34,7 @@ export default class TokenizerEngine {
     // Keep processing the string until end is reached
     while (this.index < this.input.length) {
       // skip any preceding whitespace
-      this.skipWhitespace();
+      const precedingWhitespace = this.getWhitespace();
 
       if (this.index < this.input.length) {
         // Get the next token and the token type
@@ -43,20 +43,22 @@ export default class TokenizerEngine {
           throw new Error(`Parse error: Unexpected "${input.slice(this.index, 100)}"`);
         }
 
-        tokens.push(token);
+        tokens.push({ ...token, precedingWhitespace });
       }
     }
     return tokens;
   }
 
-  private skipWhitespace(): void {
+  private getWhitespace(): string | undefined {
     WHITESPACE_REGEX.lastIndex = this.index;
 
     const matches = WHITESPACE_REGEX.exec(this.input);
     if (matches) {
       // Advance current position by matched whitespace length
       this.index += matches[0].length;
+      return matches[0];
     }
+    return undefined;
   }
 
   private getNextToken(previousToken?: Token): Token | undefined {

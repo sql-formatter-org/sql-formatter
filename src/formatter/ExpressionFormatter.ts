@@ -230,7 +230,11 @@ export default class ExpressionFormatter {
 
   /** Formats a line comment onto query */
   private formatLineComment(token: Token) {
-    this.layout.add(this.show(token), WS.MANDATORY_NEWLINE, WS.INDENT);
+    if (/\n/.test(token.precedingWhitespace || '')) {
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.MANDATORY_NEWLINE, WS.INDENT);
+    } else {
+      this.layout.add(WS.NO_NEWLINE, WS.SPACE, this.show(token), WS.MANDATORY_NEWLINE, WS.INDENT);
+    }
   }
 
   /** Formats a block comment onto query */
