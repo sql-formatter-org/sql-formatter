@@ -111,6 +111,7 @@ const buildQStringPatterns = () => {
 // 6. BigQuery '''triple-quoted'''
 // 7. BigQuery """triple-quoted"""
 // 8. Hive and Spark variables: ${name}
+// 9. Oracle q'' strings: q'<text>' q'|text|' ...
 export const quotePatterns = {
   '``': '(?:`[^`]*(?:$|`))+',
   '[]': String.raw`(?:\[[^\]]*(?:$|\]))(?:\][^\]]*(?:$|\]))*`,
