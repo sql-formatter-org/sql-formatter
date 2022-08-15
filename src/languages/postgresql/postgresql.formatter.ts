@@ -329,7 +329,7 @@ export default class PostgreSqlFormatter extends Formatter {
       stringTypes: ['$$', { quote: "''", prefixes: ['B', 'E', 'X', 'U&'] }],
       identTypes: [{ quote: '""', prefixes: ['U&'] }],
       identChars: { rest: '$' },
-      numberedParamTypes: ['$'],
+      paramTypes: { numbered: ['$'] },
       operators: PostgreSqlFormatter.operators,
     });
   }

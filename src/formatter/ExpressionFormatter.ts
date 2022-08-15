@@ -215,7 +215,7 @@ export default class ExpressionFormatter {
       case TokenType.VARIABLE:
       case TokenType.NAMED_PARAMETER:
       case TokenType.QUOTED_PARAMETER:
-      case TokenType.INDEXED_PARAMETER:
+      case TokenType.NUMBERED_PARAMETER:
       case TokenType.POSITIONAL_PARAMETER:
         return this.formatLiteral(token);
       default:

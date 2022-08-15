@@ -137,7 +137,7 @@ export default class TrinoFormatter extends Formatter {
       stringTypes: [{ quote: "''", prefixes: ['X', 'U&'] }],
       // https://trino.io/docs/current/language/reserved.html
       identTypes: ['""'],
-      positionalParams: true,
+      paramTypes: { positional: true },
       operators: TrinoFormatter.operators,
     });
   }

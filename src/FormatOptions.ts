@@ -1,6 +1,7 @@
 import type { SqlLanguage } from './sqlFormatter';
 import { type ParamItems } from './formatter/Params';
 import Formatter from './formatter/Formatter';
+import { ParamTypes } from './lexer/TokenizerOptions';
 
 export type IndentStyle = 'standard' | 'tabularLeft' | 'tabularRight';
 
@@ -24,4 +25,5 @@ export interface FormatOptions {
   denseOperators: boolean;
   newlineBeforeSemicolon: boolean;
   params?: ParamItems | string[];
+  paramTypes?: ParamTypes;
 }
