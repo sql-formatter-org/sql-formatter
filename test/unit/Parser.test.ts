@@ -319,7 +319,7 @@ describe('Parser', () => {
                     "raw": "BETWEEN",
                     "start": 10,
                     "text": "BETWEEN",
-                    "type": "RESERVED_KEYWORD",
+                    "type": "RESERVED_BETWEEN",
                   },
                   "expr1": Object {
                     "end": 20,

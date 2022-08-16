@@ -15,6 +15,7 @@ export enum TokenType {
   RESERVED_CASE_START = 'RESERVED_CASE_START',
   RESERVED_CASE_END = 'RESERVED_CASE_END',
   RESERVED_LIMIT = 'RESERVED_LIMIT',
+  RESERVED_BETWEEN = 'RESERVED_BETWEEN',
   OPERATOR = 'OPERATOR',
   COMMA = 'COMMA',
   OPEN_PAREN = 'OPEN_PAREN',
@@ -64,7 +65,6 @@ export const isToken = {
   AS: testToken({ text: 'AS', type: TokenType.RESERVED_KEYWORD }),
   AND: testToken({ text: 'AND', type: TokenType.RESERVED_LOGICAL_OPERATOR }),
   ARRAY: testToken({ text: 'ARRAY', type: TokenType.RESERVED_KEYWORD }),
-  BETWEEN: testToken({ text: 'BETWEEN', type: TokenType.RESERVED_KEYWORD }),
   CASE: testToken({ text: 'CASE', type: TokenType.RESERVED_CASE_START }),
   CAST: testToken({ text: 'CAST', type: TokenType.RESERVED_FUNCTION_NAME }),
   BY: testToken({ text: 'BY', type: TokenType.RESERVED_KEYWORD }),
@@ -91,7 +91,8 @@ export const isReserved = (token: Token): boolean =>
   token.type === TokenType.RESERVED_JOIN ||
   token.type === TokenType.RESERVED_CASE_START ||
   token.type === TokenType.RESERVED_CASE_END ||
-  token.type === TokenType.RESERVED_LIMIT;
+  token.type === TokenType.RESERVED_LIMIT ||
+  token.type === TokenType.RESERVED_BETWEEN;
 
 /** checks if token is one of the parameter tokens */
 export const isParameter = (token: Token): boolean =>

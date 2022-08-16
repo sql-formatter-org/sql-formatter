@@ -45,6 +45,10 @@ export default class Tokenizer {
         regex: /[Ee][Nn][Dd]\b/uy,
         value: v => equalizeWhitespace(v.toUpperCase()),
       },
+      [TokenType.RESERVED_BETWEEN]: {
+        regex: /BETWEEN\b/iuy,
+        value: v => equalizeWhitespace(v.toUpperCase()),
+      },
       [TokenType.RESERVED_LIMIT]: {
         regex: cfg.reservedCommands.includes('LIMIT') ? /LIMIT\b/iuy : undefined,
         value: v => equalizeWhitespace(v.toUpperCase()),
