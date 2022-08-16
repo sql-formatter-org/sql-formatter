@@ -38,11 +38,11 @@ export default class Tokenizer {
           /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)(?!\w)/uy,
       },
       [TokenType.RESERVED_CASE_START]: {
-        regex: /[Cc][Aa][Ss][Ee]\b/uy,
+        regex: /CASE\b/iuy,
         value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.RESERVED_CASE_END]: {
-        regex: /[Ee][Nn][Dd]\b/uy,
+        regex: /END\b/iuy,
         value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.RESERVED_COMMAND]: {

@@ -6,7 +6,6 @@ import {
   escapeRegExp,
   patternToRegex,
   prefixesPattern,
-  toCaseInsensitivePattern,
   withDashes,
 } from './regexUtil';
 
@@ -55,7 +54,6 @@ export const reservedWord = (reservedKeywords: string[], identChars: IdentChars 
   const avoidIdentChars = rejectIdentCharsPattern(identChars);
 
   const reservedKeywordsPattern = sortByLengthDesc(reservedKeywords)
-    .map(toCaseInsensitivePattern)
     .join('|')
     .replace(/ /gu, '\\s+');
 
