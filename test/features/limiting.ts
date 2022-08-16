@@ -44,8 +44,7 @@ export default function supportsLimiting(format: FormatFn, types: LimitingTypes)
             *
           FROM
             tbl
-          LIMIT
-            --comment
+          LIMIT --comment
             5, --comment
             6;
       `);

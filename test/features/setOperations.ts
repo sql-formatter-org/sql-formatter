@@ -32,5 +32,25 @@ export default function supportsSetOperations(
           bar;
       `);
     });
+
+    it(`formats ${op} inside subquery`, () => {
+      expect(format(`SELECT * FROM (SELECT * FROM foo ${op} SELECT * FROM bar) AS tbl;`))
+        .toBe(dedent`
+        SELECT
+          *
+        FROM
+          (
+            SELECT
+              *
+            FROM
+              foo
+            ${op}
+            SELECT
+              *
+            FROM
+              bar
+          ) AS tbl;
+      `);
+    });
   });
 }

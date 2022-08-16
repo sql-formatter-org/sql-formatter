@@ -10,10 +10,9 @@ export interface TokenRule {
 export default class TokenizerEngine {
   private rules: Partial<Record<TokenType, TokenRule>>;
 
-  // The input SQL string to process
-  private input = '';
-  // Current position in string
-  private index = 0;
+  private input = ''; // The input SQL string to process
+
+  private index = 0; // Current position in string
 
   constructor(rules: Partial<Record<TokenType, TokenRule>>) {
     this.rules = rules;
@@ -35,7 +34,7 @@ export default class TokenizerEngine {
     // Keep processing the string until end is reached
     while (this.index < this.input.length) {
       // skip any preceding whitespace
-      this.skipWhitespace();
+      const precedingWhitespace = this.getWhitespace();
 
       if (this.index < this.input.length) {
         // Get the next token and the token type
@@ -44,19 +43,22 @@ export default class TokenizerEngine {
           throw new Error(`Parse error: Unexpected "${input.slice(this.index, 100)}"`);
         }
 
-        tokens.push(token);
+        tokens.push({ ...token, precedingWhitespace });
       }
     }
     return tokens;
   }
 
-  private skipWhitespace(): void {
+  private getWhitespace(): string | undefined {
     WHITESPACE_REGEX.lastIndex = this.index;
+
     const matches = WHITESPACE_REGEX.exec(this.input);
     if (matches) {
       // Advance current position by matched whitespace length
       this.index += matches[0].length;
+      return matches[0];
     }
+    return undefined;
   }
 
   private getNextToken(previousToken?: Token): Token | undefined {
@@ -71,7 +73,7 @@ export default class TokenizerEngine {
       this.matchReservedWordToken(previousToken) ||
       this.matchPlaceholderToken(TokenType.NAMED_PARAMETER) ||
       this.matchPlaceholderToken(TokenType.QUOTED_PARAMETER) ||
-      this.matchPlaceholderToken(TokenType.INDEXED_PARAMETER) ||
+      this.matchPlaceholderToken(TokenType.NUMBERED_PARAMETER) ||
       this.matchPlaceholderToken(TokenType.POSITIONAL_PARAMETER) ||
       this.matchToken(TokenType.VARIABLE) ||
       this.matchToken(TokenType.STRING) ||
@@ -145,13 +147,17 @@ export default class TokenizerEngine {
     if (matches) {
       const matchedToken = matches[0];
 
-      // Advance current position by matched token length
-      this.index += matchedToken.length;
-      return {
+      const outToken = {
         type,
         raw: matchedToken,
         text: transform ? transform(matchedToken) : matchedToken,
+        start: this.index,
+        end: this.index + matchedToken.length,
       };
+
+      // Advance current position by matched token length
+      this.index += matchedToken.length;
+      return outToken;
     }
     return undefined;
   }

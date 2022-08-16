@@ -14,7 +14,7 @@ describe('Parser', () => {
       closeParens: [')', ']'],
       stringTypes: ["''"],
       identTypes: ['""'],
-    }).tokenize(sql);
+    }).tokenize(sql, {});
     return new Parser(tokens).parse();
   };
 
@@ -29,7 +29,10 @@ describe('Parser', () => {
           "children": Array [
             Object {
               "token": Object {
+                "end": 3,
+                "precedingWhitespace": undefined,
                 "raw": "foo",
+                "start": 0,
                 "text": "foo",
                 "type": "IDENTIFIER",
               },
@@ -43,7 +46,10 @@ describe('Parser', () => {
           "children": Array [
             Object {
               "token": Object {
+                "end": 8,
+                "precedingWhitespace": " ",
                 "raw": "bar",
+                "start": 5,
                 "text": "bar",
                 "type": "IDENTIFIER",
               },
@@ -66,7 +72,10 @@ describe('Parser', () => {
               "children": Array [
                 Object {
                   "nameToken": Object {
+                    "end": 11,
+                    "precedingWhitespace": " ",
                     "raw": "SQRT",
+                    "start": 7,
                     "text": "SQRT",
                     "type": "RESERVED_FUNCTION_NAME",
                   },
@@ -74,7 +83,10 @@ describe('Parser', () => {
                     "children": Array [
                       Object {
                         "token": Object {
+                          "end": 13,
+                          "precedingWhitespace": undefined,
                           "raw": "2",
+                          "start": 12,
                           "text": "2",
                           "type": "NUMBER",
                         },
@@ -89,7 +101,10 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
+                "end": 6,
+                "precedingWhitespace": undefined,
                 "raw": "SELECT",
+                "start": 0,
                 "text": "SELECT",
                 "type": "RESERVED_COMMAND",
               },
@@ -112,7 +127,10 @@ describe('Parser', () => {
               "children": Array [
                 Object {
                   "arrayToken": Object {
+                    "end": 15,
+                    "precedingWhitespace": " ",
                     "raw": "my_array",
+                    "start": 7,
                     "text": "my_array",
                     "type": "IDENTIFIER",
                   },
@@ -120,7 +138,10 @@ describe('Parser', () => {
                     "children": Array [
                       Object {
                         "nameToken": Object {
+                          "end": 22,
+                          "precedingWhitespace": undefined,
                           "raw": "OFFSET",
+                          "start": 16,
                           "text": "OFFSET",
                           "type": "RESERVED_FUNCTION_NAME",
                         },
@@ -128,7 +149,10 @@ describe('Parser', () => {
                           "children": Array [
                             Object {
                               "token": Object {
+                                "end": 24,
+                                "precedingWhitespace": undefined,
                                 "raw": "5",
+                                "start": 23,
                                 "text": "5",
                                 "type": "NUMBER",
                               },
@@ -150,7 +174,10 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
+                "end": 6,
+                "precedingWhitespace": undefined,
                 "raw": "SELECT",
+                "start": 0,
                 "text": "SELECT",
                 "type": "RESERVED_COMMAND",
               },
@@ -175,7 +202,10 @@ describe('Parser', () => {
                   "children": Array [
                     Object {
                       "token": Object {
+                        "end": 18,
+                        "precedingWhitespace": undefined,
                         "raw": "birth_year",
+                        "start": 8,
                         "text": "birth_year",
                         "type": "IDENTIFIER",
                       },
@@ -183,7 +213,10 @@ describe('Parser', () => {
                     },
                     Object {
                       "token": Object {
+                        "end": 20,
+                        "precedingWhitespace": " ",
                         "raw": "-",
+                        "start": 19,
                         "text": "-",
                         "type": "OPERATOR",
                       },
@@ -193,7 +226,10 @@ describe('Parser', () => {
                       "children": Array [
                         Object {
                           "token": Object {
+                            "end": 34,
+                            "precedingWhitespace": undefined,
                             "raw": "CURRENT_DATE",
+                            "start": 22,
                             "text": "CURRENT_DATE",
                             "type": "IDENTIFIER",
                           },
@@ -201,7 +237,10 @@ describe('Parser', () => {
                         },
                         Object {
                           "token": Object {
+                            "end": 36,
+                            "precedingWhitespace": " ",
                             "raw": "+",
+                            "start": 35,
                             "text": "+",
                             "type": "OPERATOR",
                           },
@@ -209,7 +248,10 @@ describe('Parser', () => {
                         },
                         Object {
                           "token": Object {
+                            "end": 38,
+                            "precedingWhitespace": " ",
                             "raw": "1",
+                            "start": 37,
                             "text": "1",
                             "type": "NUMBER",
                           },
@@ -227,7 +269,10 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
+                "end": 6,
+                "precedingWhitespace": undefined,
                 "raw": "SELECT",
+                "start": 0,
                 "text": "SELECT",
                 "type": "RESERVED_COMMAND",
               },
@@ -250,7 +295,10 @@ describe('Parser', () => {
               "children": Array [
                 Object {
                   "token": Object {
+                    "end": 9,
+                    "precedingWhitespace": " ",
                     "raw": "age",
+                    "start": 6,
                     "text": "age",
                     "type": "IDENTIFIER",
                   },
@@ -258,22 +306,34 @@ describe('Parser', () => {
                 },
                 Object {
                   "andToken": Object {
+                    "end": 24,
+                    "precedingWhitespace": " ",
                     "raw": "and",
+                    "start": 21,
                     "text": "AND",
                     "type": "RESERVED_LOGICAL_OPERATOR",
                   },
                   "betweenToken": Object {
+                    "end": 17,
+                    "precedingWhitespace": " ",
                     "raw": "BETWEEN",
+                    "start": 10,
                     "text": "BETWEEN",
                     "type": "RESERVED_KEYWORD",
                   },
                   "expr1": Object {
+                    "end": 20,
+                    "precedingWhitespace": " ",
                     "raw": "10",
+                    "start": 18,
                     "text": "10",
                     "type": "NUMBER",
                   },
                   "expr2": Object {
+                    "end": 27,
+                    "precedingWhitespace": " ",
                     "raw": "15",
+                    "start": 25,
                     "text": "15",
                     "type": "NUMBER",
                   },
@@ -281,7 +341,10 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
+                "end": 5,
+                "precedingWhitespace": undefined,
                 "raw": "WHERE",
+                "start": 0,
                 "text": "WHERE",
                 "type": "RESERVED_COMMAND",
               },
@@ -304,7 +367,10 @@ describe('Parser', () => {
               "count": Array [
                 Object {
                   "token": Object {
+                    "end": 8,
+                    "precedingWhitespace": " ",
                     "raw": "10",
+                    "start": 6,
                     "text": "10",
                     "type": "NUMBER",
                   },
@@ -312,7 +378,10 @@ describe('Parser', () => {
                 },
               ],
               "limitToken": Object {
+                "end": 5,
+                "precedingWhitespace": undefined,
                 "raw": "LIMIT",
+                "start": 0,
                 "text": "LIMIT",
                 "type": "RESERVED_COMMAND",
               },
@@ -335,7 +404,10 @@ describe('Parser', () => {
               "count": Array [
                 Object {
                   "token": Object {
+                    "end": 13,
+                    "precedingWhitespace": " ",
                     "raw": "10",
+                    "start": 11,
                     "text": "10",
                     "type": "NUMBER",
                   },
@@ -343,14 +415,20 @@ describe('Parser', () => {
                 },
               ],
               "limitToken": Object {
+                "end": 5,
+                "precedingWhitespace": undefined,
                 "raw": "LIMIT",
+                "start": 0,
                 "text": "LIMIT",
                 "type": "RESERVED_COMMAND",
               },
               "offset": Array [
                 Object {
                   "token": Object {
+                    "end": 9,
+                    "precedingWhitespace": " ",
                     "raw": "200",
+                    "start": 6,
                     "text": "200",
                     "type": "NUMBER",
                   },
@@ -379,7 +457,10 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
+                "end": 6,
+                "precedingWhitespace": undefined,
                 "raw": "SELECT",
+                "start": 0,
                 "text": "SELECT",
                 "type": "RESERVED_COMMAND",
               },
@@ -405,7 +486,10 @@ describe('Parser', () => {
                 },
               ],
               "nameToken": Object {
+                "end": 15,
+                "precedingWhitespace": undefined,
                 "raw": "SELECT DISTINCT",
+                "start": 0,
                 "text": "SELECT DISTINCT",
                 "type": "RESERVED_COMMAND",
               },

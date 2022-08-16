@@ -1,4 +1,7 @@
+import dedent from 'dedent-js';
+
 import { format, SqlLanguage } from 'src/sqlFormatter';
+import SqliteFormatter from 'src/languages/sqlite/sqlite.formatter';
 
 describe('sqlFormatter', () => {
   it('throws error when unsupported language parameter specified', () => {
@@ -41,5 +44,19 @@ describe('sqlFormatter', () => {
     expect(() => {
       format('SELECT *', { newlineBeforeCloseParen: true } as any);
     }).toThrow('newlineBeforeCloseParen config is no more supported.');
+  });
+
+  it('throws error when aliasAs config option used', () => {
+    expect(() => {
+      format('SELECT *', { aliasAs: 'always' } as any);
+    }).toThrow('aliasAs config is no more supported.');
+  });
+
+  it('allows passing Formatter class as a language parameter', () => {
+    expect(format('SELECT [foo], `bar`;', { language: SqliteFormatter })).toBe(dedent`
+      SELECT
+        [foo],
+        \`bar\`;
+    `);
   });
 });

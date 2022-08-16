@@ -54,12 +54,6 @@ describe('HiveFormatter', () => {
   supportsWindow(format);
   supportsLimiting(format, { limit: true });
 
-  it('throws error when params option used', () => {
-    expect(() => format('SELECT *', { params: ['1', '2', '3'] })).toThrow(
-      'Unexpected "params" option. Prepared statement placeholders not supported for Hive.'
-    );
-  });
-
   // eslint-disable-next-line no-template-curly-in-string
   it('recognizes ${hivevar:name} substitution variables', () => {
     const result = format(

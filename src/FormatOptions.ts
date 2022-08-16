@@ -1,5 +1,7 @@
 import type { SqlLanguage } from './sqlFormatter';
 import { type ParamItems } from './formatter/Params';
+import Formatter from './formatter/Formatter';
+import { ParamTypes } from './lexer/TokenizerOptions';
 
 export type IndentStyle = 'standard' | 'tabularLeft' | 'tabularRight';
 
@@ -10,7 +12,7 @@ export type CommaPosition = 'before' | 'after' | 'tabular';
 export type LogicalOperatorNewline = 'before' | 'after';
 
 export interface FormatOptions {
-  language: SqlLanguage;
+  language: SqlLanguage | typeof Formatter;
   tabWidth: number;
   useTabs: boolean;
   keywordCase: KeywordCase;
@@ -23,4 +25,5 @@ export interface FormatOptions {
   denseOperators: boolean;
   newlineBeforeSemicolon: boolean;
   params?: ParamItems | string[];
+  paramTypes?: ParamTypes;
 }

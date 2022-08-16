@@ -1,4 +1,4 @@
-import type { CommaPosition } from 'src/types';
+import type { CommaPosition } from 'src/FormatOptions';
 import { maxLength } from 'src/utils';
 
 const PRECEDING_WHITESPACE_REGEX = /^\s+/u;

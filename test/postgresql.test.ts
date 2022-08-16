@@ -132,7 +132,7 @@ describe('PostgreSqlFormatter', () => {
          ALTER TABLE t ALTER COLUMN foo SET DEFAULT 5;
          ALTER TABLE t ALTER COLUMN foo DROP DEFAULT;
          ALTER TABLE t ALTER COLUMN foo SET NOT NULL;
-         ALTER TABLE t ALTER COLUMN foo DROP NOT NULL`
+         ALTER TABLE t ALTER COLUMN foo DROP NOT NULL;`
       )
     ).toBe(dedent`
       ALTER TABLE
@@ -153,21 +153,19 @@ describe('PostgreSqlFormatter', () => {
         t
       ALTER COLUMN
         foo
-      DROP DEFAULT
-      ;
+      DROP DEFAULT;
 
       ALTER TABLE
         t
       ALTER COLUMN
         foo
-      SET NOT NULL
-      ;
+      SET NOT NULL;
 
       ALTER TABLE
         t
       ALTER COLUMN
         foo
-      DROP NOT NULL
+      DROP NOT NULL;
     `);
   });
 });

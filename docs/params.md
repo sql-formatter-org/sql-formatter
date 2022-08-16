@@ -80,19 +80,49 @@ WHERE
   AND age = 27
 ```
 
+### Quoted placeholders
+
+Some dialects (BigQuery, Transact SQL) also support quoted names for placeholders:
+
+```js
+format('SELECT * FROM persons WHERE fname = @`first name` AND age = @`age`', {
+  params: { 'first name': "'John'", 'age': '27' },
+  language: 'bigquery',
+});
+```
+
+Results in:
+
+```sql
+SELECT
+  *
+FROM
+  persons
+WHERE
+  fname = 'John'
+  AND age = 27
+```
+
 ## Available placeholder types
 
-The placeholder types available depend on SQL dialect used:
+The placeholder types available by default depend on SQL dialect used:
 
-- sql - `?`, `?1`
-- bigquery - `?`, `?1`
-- db2 - `?`, `?1`, `:name`
-- hive - `?`, `?1`
-- mariadb - `?`, `?1`
-- mysql - `?`, `?1`
-- n1ql - `$name`
-- plsql - `?`, `?1`, `:name`
-- postgresql - `$`, `$1`, `:name`
-- redshift - `?`, `?1`, `@name`, `#name`, `$name`
-- sparksql - `?`, `?1`, `$name`
-- tsql - `@name`
+- sql - `?`
+- bigquery - `?`, `@name`, `` @`name` ``
+- db2 - `?`, `:name`
+- hive - _no support_
+- mariadb - `?`
+- mysql - `?`
+- n1ql - `?`, `$1`, `$name`
+- plsql - `:1`, `:name`
+- postgresql - `$1`
+- redshift - `$1`
+- sqlite - `?`, `?1`, `:name`, `@name`, `$name`
+- spark - _no support_
+- tsql - `@name`, `@"name"`, `@[name]`
+- trino - _no support_
+
+If you need to use a different placeholder syntax than the builtin one,
+you can configure the supported placeholder types using the [paramTypes][] config option.
+
+[paramtypes]: ./paramTypes.md

@@ -150,7 +150,7 @@ export default class RedshiftFormatter extends Formatter {
       stringTypes: ["''"],
       identTypes: [`""`],
       identChars: { first: '#' },
-      numberedParamTypes: ['$'],
+      paramTypes: { numbered: ['$'] },
       operators: RedshiftFormatter.operators,
     });
   }

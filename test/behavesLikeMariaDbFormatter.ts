@@ -4,18 +4,15 @@ import { FormatFn } from 'src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsDropTable from './features/dropTable';
-import supportsAlterTable from './features/alterTable';
 import supportsBetween from './features/between';
 import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
 import supportsStrings from './features/strings';
 import supportsIdentifiers from './features/identifiers';
-import supportsParams from './options/param';
 import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
 import supportsTruncateTable from './features/truncateTable';
-import supportsCreateView from './features/createView';
 
 /**
  * Shared tests for MySQL and MariaDB
@@ -25,22 +22,13 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   supportsComments(format, { hashComments: true });
   supportsStrings(format, ["''", '""', "X''"]);
   supportsIdentifiers(format, ['``']);
-  supportsCreateView(format, { orReplace: true });
   supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);
-  supportsAlterTable(format, {
-    addColumn: true,
-    dropColumn: true,
-    modify: true,
-    renameTo: true,
-    renameColumn: true,
-  });
   supportsDeleteFrom(format);
   supportsInsertInto(format, { withoutInto: true });
   supportsUpdate(format);
   supportsTruncateTable(format, { withoutTable: true });
   supportsBetween(format);
-  supportsParams(format, { positional: true });
 
   it('allows $ character as part of identifiers', () => {
     expect(format('SELECT $foo, some$$ident')).toBe(dedent`
@@ -73,6 +61,15 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
     `);
   });
 
+  it('supports @`name` variables', () => {
+    expect(format('SELECT @`baz zaz` FROM tbl;')).toBe(dedent`
+      SELECT
+        @\`baz zaz\`
+      FROM
+        tbl;
+    `);
+  });
+
   it('supports setting variables: @var :=', () => {
     expect(format('SET @foo := 10;')).toBe(dedent`
       SET
@@ -80,21 +77,10 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
     `);
   });
 
-  it('supports @"name", @\'name\', @`name` variables', () => {
-    expect(format(`SELECT @"foo fo", @'bar ar', @\`baz zaz\` FROM tbl;`)).toBe(dedent`
-      SELECT
-        @"foo fo",
-        @'bar ar',
-        @\`baz zaz\`
-      FROM
-        tbl;
-    `);
-  });
-
-  it('supports setting variables: @"var" :=', () => {
-    expect(format('SET @"foo" := (SELECT * FROM tbl);')).toBe(dedent`
+  it('supports setting variables: @`var` :=', () => {
+    expect(format('SET @`foo` := (SELECT * FROM tbl);')).toBe(dedent`
       SET
-        @"foo" := (
+        @\`foo\` := (
           SELECT
             *
           FROM
@@ -120,28 +106,6 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
       VALUES
         (1, 'Leopard'),
         (2, 'Dog');
-    `);
-  });
-
-  it('formats ALTER TABLE ... ALTER COLUMN', () => {
-    expect(
-      format(
-        `ALTER TABLE t ALTER COLUMN foo SET DEFAULT 10;
-         ALTER TABLE t ALTER COLUMN foo DROP DEFAULT`
-      )
-    ).toBe(dedent`
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
-      SET DEFAULT
-        10;
-
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
-      DROP DEFAULT
     `);
   });
 }

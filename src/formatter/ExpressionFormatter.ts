@@ -1,4 +1,4 @@
-import type { FormatOptions } from 'src/types';
+import type { FormatOptions } from 'src/FormatOptions';
 import { equalizeWhitespace } from 'src/utils';
 
 import Params from 'src/formatter/Params';
@@ -149,7 +149,6 @@ export default class ExpressionFormatter {
   }
 
   private formatSetOperation(node: SetOperation) {
-    this.layout.indentation.decreaseTopLevel();
     this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
 
     this.layout.add(WS.INDENT);
@@ -216,7 +215,7 @@ export default class ExpressionFormatter {
       case TokenType.VARIABLE:
       case TokenType.NAMED_PARAMETER:
       case TokenType.QUOTED_PARAMETER:
-      case TokenType.INDEXED_PARAMETER:
+      case TokenType.NUMBERED_PARAMETER:
       case TokenType.POSITIONAL_PARAMETER:
         return this.formatLiteral(token);
       default:
@@ -231,7 +230,11 @@ export default class ExpressionFormatter {
 
   /** Formats a line comment onto query */
   private formatLineComment(token: Token) {
-    this.layout.add(this.show(token), WS.NEWLINE, WS.INDENT);
+    if (/\n/.test(token.precedingWhitespace || '')) {
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.MANDATORY_NEWLINE, WS.INDENT);
+    } else {
+      this.layout.add(WS.NO_NEWLINE, WS.SPACE, this.show(token), WS.MANDATORY_NEWLINE, WS.INDENT);
+    }
   }
 
   /** Formats a block comment onto query */

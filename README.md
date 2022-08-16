@@ -7,7 +7,7 @@
 It started as a port of a [PHP Library][], but has since considerably diverged.
 
 It supports various SQL dialects:
-GCP BigQuery, IBM DB2, Apache Hive, MariaDB, MySQL, Couchbase N1QL, Oracle PL/SQL, PostgreSQL, Amazon Redshift, Spark, SQL Server Transact-SQL, Trino/Presto.
+GCP BigQuery, IBM DB2, Apache Hive, MariaDB, MySQL, Couchbase N1QL, Oracle PL/SQL, PostgreSQL, Amazon Redshift, SingleStoreDB, Spark, SQL Server Transact-SQL, Trino/Presto.
 See [language option docs](docs/language.md) for more details.
 
 It does not support:
@@ -95,7 +95,7 @@ sql-formatter -h
 
 ```
 usage: sql-formatter [-h] [-o OUTPUT] \
-[-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,trino,tsql}] [-c CONFIG] [--version] [FILE]
+[-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,singlestoredb,spark,sql,sqlite,trino,tsql}] [-c CONFIG] [--version] [FILE]
 
 SQL Formatter
 
@@ -106,8 +106,8 @@ optional arguments:
   -h, --help      show this help message and exit
   -o, --output    OUTPUT
                     File to write SQL output (defaults to stdout)
-  -l, --language  {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,spark,sql,sqlite,trino,tsql}
-                    SQL dialect (defaults to standard sql)
+  -l, --language  {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,singlestoredb,spark,sql,sqlite,trino,tsql}
+                    SQL dialect (defaults to basic sql)
   -c, --config    CONFIG
                     Path to config json file (will use default configs if unspecified)
   --version       show program's version number and exit
@@ -157,6 +157,7 @@ All fields are optional and all fields that are not specified will be filled wit
 - [**`denseOperators`**](docs/denseOperators.md) packs operators densely without spaces.
 - [**`newlineBeforeSemicolon`**](docs/newlineBeforeSemicolon.md) places semicolon on separate line.
 - [**`params`**](docs/params.md) collection of values for placeholder replacement.
+- [**`paramsTypes`**](docs/paramTypes.md) specifies parameter placeholders types to support.
 
 ### Usage without NPM
 

@@ -12,8 +12,9 @@ import SqliteFormatter from 'src/languages/sqlite/sqlite.formatter';
 import SqlFormatter from 'src/languages/sql/sql.formatter';
 import TrinoFormatter from 'src/languages/trino/trino.formatter';
 import TSqlFormatter from 'src/languages/tsql/tsql.formatter';
+import SingleStoreDbFormatter from './languages/singlestoredb/singlestoredb.formatter';
 
-import type { FormatOptions } from './types';
+import type { FormatOptions } from './FormatOptions';
 import { ParamItems } from './formatter/Params';
 
 export const formatters = {
@@ -26,6 +27,7 @@ export const formatters = {
   plsql: PlSqlFormatter,
   postgresql: PostgreSqlFormatter,
   redshift: RedshiftFormatter,
+  singlestoredb: SingleStoreDbFormatter,
   spark: SparkFormatter,
   sql: SqlFormatter,
   sqlite: SqliteFormatter,
@@ -67,14 +69,16 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
     ...cfg,
   });
 
-  const Formatter = formatters[options.language];
-  return new Formatter(options).format(query);
+  const FormatterCls =
+    typeof options.language === 'string' ? formatters[options.language] : options.language;
+
+  return new FormatterCls(options).format(query);
 };
 
 export class ConfigError extends Error {}
 
 function validateConfig(cfg: FormatOptions): FormatOptions {
-  if (!supportedDialects.includes(cfg.language)) {
+  if (typeof cfg.language === 'string' && !supportedDialects.includes(cfg.language)) {
     throw new ConfigError(`Unsupported SQL dialect: ${cfg.language}`);
   }
 
@@ -87,6 +91,9 @@ function validateConfig(cfg: FormatOptions): FormatOptions {
   if ('newlineBeforeCloseParen' in cfg) {
     throw new ConfigError('newlineBeforeCloseParen config is no more supported.');
   }
+  if ('aliasAs' in cfg) {
+    throw new ConfigError('aliasAs config is no more supported.');
+  }
 
   if (cfg.expressionWidth <= 0) {
     throw new ConfigError(
@@ -97,18 +104,6 @@ function validateConfig(cfg: FormatOptions): FormatOptions {
   if (cfg.commaPosition === 'before' && cfg.useTabs) {
     throw new ConfigError(
       'commaPosition: before does not work when tabs are used for indentation.'
-    );
-  }
-
-  if (cfg.language === 'hive' && cfg.params !== undefined) {
-    throw new ConfigError(
-      'Unexpected "params" option. Prepared statement placeholders not supported for Hive.'
-    );
-  }
-
-  if (cfg.language === 'spark' && cfg.params !== undefined) {
-    throw new ConfigError(
-      'Unexpected "params" option. Prepared statement placeholders not supported for Spark.'
     );
   }
 

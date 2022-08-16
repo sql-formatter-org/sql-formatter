@@ -91,15 +91,13 @@ describe('SqlFormatter', () => {
         t
       ALTER COLUMN
         foo
-      DROP DEFAULT
-      ;
+      DROP DEFAULT;
 
       ALTER TABLE
         t
       ALTER COLUMN
         foo
-      DROP SCOPE CASCADE
-      ;
+      DROP SCOPE CASCADE;
 
       ALTER TABLE
         t

@@ -1,6 +1,6 @@
 {
   "name": "sql-formatter",
-  "version": "9.0.0-beta.6",
+  "version": "9.2.0",
   "description": "Format whitespace in a SQL query to make it more readable",
   "license": "MIT",
   "main": "lib/index.js",
@@ -14,6 +14,7 @@
     "format",
     "n1ql",
     "redshift",
+    "singlestoredb",
     "spark",
     "whitespace",
     "mysql",
@@ -48,6 +49,7 @@
     "Martin Nowak <code@dawg.eu>",
     "Matheus Salmi <mathsalmi@gmail.com>",
     "Matheus Teixeira <matheus.mtxr@gmail.com>",
+    "Michael Giannakopoulos <mgiannakopoulos@singlestore.com>",
     "Nicolas Dermine <nicolas.dermine@gmail.com>",
     "Offir Baron <ofir@panoply.io>",
     "Olexandr Sydorchuk <olexandr.syd@gmail.com>",
