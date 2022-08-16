@@ -37,19 +37,19 @@ export default class Tokenizer {
         regex:
           /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)(?!\w)/uy,
       },
-      [TokenType.RESERVED_CASE_START]: {
+      [TokenType.CASE]: {
         regex: /[Cc][Aa][Ss][Ee]\b/uy,
         value: v => equalizeWhitespace(v.toUpperCase()),
       },
-      [TokenType.RESERVED_CASE_END]: {
+      [TokenType.END]: {
         regex: /[Ee][Nn][Dd]\b/uy,
         value: v => equalizeWhitespace(v.toUpperCase()),
       },
-      [TokenType.RESERVED_BETWEEN]: {
+      [TokenType.BETWEEN]: {
         regex: /BETWEEN\b/iuy,
         value: v => equalizeWhitespace(v.toUpperCase()),
       },
-      [TokenType.RESERVED_LIMIT]: {
+      [TokenType.LIMIT]: {
         regex: cfg.reservedCommands.includes('LIMIT') ? /LIMIT\b/iuy : undefined,
         value: v => equalizeWhitespace(v.toUpperCase()),
       },

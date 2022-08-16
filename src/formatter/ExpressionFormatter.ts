@@ -200,9 +200,9 @@ export default class ExpressionFormatter {
       case TokenType.RESERVED_FUNCTION_NAME:
       case TokenType.RESERVED_PHRASE:
         return this.formatKeyword(token);
-      case TokenType.RESERVED_CASE_START:
+      case TokenType.CASE:
         return this.formatCaseStart(token);
-      case TokenType.RESERVED_CASE_END:
+      case TokenType.END:
         return this.formatCaseEnd(token);
       case TokenType.COMMA:
         return this.formatComma(token);

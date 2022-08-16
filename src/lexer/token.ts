@@ -12,10 +12,10 @@ export enum TokenType {
   RESERVED_SET_OPERATION = 'RESERVED_SET_OPERATION',
   RESERVED_COMMAND = 'RESERVED_COMMAND',
   RESERVED_JOIN = 'RESERVED_JOIN',
-  RESERVED_CASE_START = 'RESERVED_CASE_START',
-  RESERVED_CASE_END = 'RESERVED_CASE_END',
-  RESERVED_LIMIT = 'RESERVED_LIMIT',
-  RESERVED_BETWEEN = 'RESERVED_BETWEEN',
+  CASE = 'CASE',
+  END = 'END',
+  LIMIT = 'LIMIT',
+  BETWEEN = 'BETWEEN',
   OPERATOR = 'OPERATOR',
   COMMA = 'COMMA',
   OPEN_PAREN = 'OPEN_PAREN',
@@ -65,10 +65,10 @@ export const isToken = {
   AS: testToken({ text: 'AS', type: TokenType.RESERVED_KEYWORD }),
   AND: testToken({ text: 'AND', type: TokenType.RESERVED_LOGICAL_OPERATOR }),
   ARRAY: testToken({ text: 'ARRAY', type: TokenType.RESERVED_KEYWORD }),
-  CASE: testToken({ text: 'CASE', type: TokenType.RESERVED_CASE_START }),
+  CASE: testToken({ text: 'CASE', type: TokenType.CASE }),
   CAST: testToken({ text: 'CAST', type: TokenType.RESERVED_FUNCTION_NAME }),
   BY: testToken({ text: 'BY', type: TokenType.RESERVED_KEYWORD }),
-  END: testToken({ text: 'END', type: TokenType.RESERVED_CASE_END }),
+  END: testToken({ text: 'END', type: TokenType.END }),
   FROM: testToken({ text: 'FROM', type: TokenType.RESERVED_COMMAND }),
   SELECT: (token: Token) =>
     /^SELECT\b/.test(token.text) && token.type === TokenType.RESERVED_COMMAND,
@@ -89,10 +89,10 @@ export const isReserved = (token: Token): boolean =>
   token.type === TokenType.RESERVED_COMMAND ||
   token.type === TokenType.RESERVED_SET_OPERATION ||
   token.type === TokenType.RESERVED_JOIN ||
-  token.type === TokenType.RESERVED_CASE_START ||
-  token.type === TokenType.RESERVED_CASE_END ||
-  token.type === TokenType.RESERVED_LIMIT ||
-  token.type === TokenType.RESERVED_BETWEEN;
+  token.type === TokenType.CASE ||
+  token.type === TokenType.END ||
+  token.type === TokenType.LIMIT ||
+  token.type === TokenType.BETWEEN;
 
 /** checks if token is one of the parameter tokens */
 export const isParameter = (token: Token): boolean =>

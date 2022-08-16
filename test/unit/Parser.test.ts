@@ -319,7 +319,7 @@ describe('Parser', () => {
                     "raw": "BETWEEN",
                     "start": 10,
                     "text": "BETWEEN",
-                    "type": "RESERVED_BETWEEN",
+                    "type": "BETWEEN",
                   },
                   "expr1": Object {
                     "end": 20,
@@ -383,7 +383,7 @@ describe('Parser', () => {
                 "raw": "LIMIT",
                 "start": 0,
                 "text": "LIMIT",
-                "type": "RESERVED_LIMIT",
+                "type": "LIMIT",
               },
               "type": "limit_clause",
             },
@@ -420,7 +420,7 @@ describe('Parser', () => {
                 "raw": "LIMIT",
                 "start": 0,
                 "text": "LIMIT",
-                "type": "RESERVED_LIMIT",
+                "type": "LIMIT",
               },
               "offset": Array [
                 Object {
