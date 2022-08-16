@@ -74,7 +74,10 @@ export default class Tokenizer {
         value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.RESERVED_LOGICAL_OPERATOR]: {
-        regex: regex.reservedWord(cfg.reservedLogicalOperators ?? ['AND', 'OR'], cfg.identChars),
+        regex: regex.reservedWord(
+          cfg.supportsXor ? ['AND', 'OR', 'XOR'] : ['AND', 'OR'],
+          cfg.identChars
+        ),
         value: v => equalizeWhitespace(v.toUpperCase()),
       },
       [TokenType.RESERVED_FUNCTION_NAME]: {

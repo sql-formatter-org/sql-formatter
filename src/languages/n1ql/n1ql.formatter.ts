@@ -84,7 +84,7 @@ export default class N1qlFormatter extends Formatter {
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
-      reservedLogicalOperators: ['AND', 'OR', 'XOR'],
+      supportsXor: true,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       // NOTE: single quotes are actually not supported in N1QL,

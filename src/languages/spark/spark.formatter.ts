@@ -119,7 +119,7 @@ export default class SparkFormatter extends Formatter {
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedPhrases,
-      reservedLogicalOperators: ['AND', 'OR', 'XOR'],
+      supportsXor: true,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       openParens: ['(', '['],

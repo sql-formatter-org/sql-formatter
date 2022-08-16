@@ -233,7 +233,7 @@ export default class MySqlFormatter extends Formatter {
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF'],
       reservedPhrases,
-      reservedLogicalOperators: ['AND', 'OR', 'XOR'],
+      supportsXor: true,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       // TODO: support _ char set prefixes such as _utf8, _latin1, _binary, _utf8mb4, etc.
