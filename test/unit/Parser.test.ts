@@ -311,7 +311,7 @@ describe('Parser', () => {
                     "raw": "and",
                     "start": 21,
                     "text": "AND",
-                    "type": "RESERVED_LOGICAL_OPERATOR",
+                    "type": "AND",
                   },
                   "betweenToken": Object {
                     "end": 17,

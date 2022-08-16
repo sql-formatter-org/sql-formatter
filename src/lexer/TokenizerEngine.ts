@@ -115,7 +115,9 @@ export default class TokenizerEngine {
       this.matchToken(TokenType.RESERVED_DEPENDENT_CLAUSE) ||
       this.matchToken(TokenType.RESERVED_JOIN) ||
       this.matchToken(TokenType.RESERVED_PHRASE) ||
-      this.matchToken(TokenType.RESERVED_LOGICAL_OPERATOR) ||
+      this.matchToken(TokenType.AND) ||
+      this.matchToken(TokenType.OR) ||
+      this.matchToken(TokenType.XOR) ||
       this.matchToken(TokenType.RESERVED_FUNCTION_NAME) ||
       this.matchToken(TokenType.RESERVED_KEYWORD)
     );

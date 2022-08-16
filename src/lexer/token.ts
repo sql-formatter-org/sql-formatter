@@ -6,7 +6,6 @@ export enum TokenType {
   VARIABLE = 'VARIABLE',
   RESERVED_KEYWORD = 'RESERVED_KEYWORD',
   RESERVED_FUNCTION_NAME = 'RESERVED_FUNCTION_NAME',
-  RESERVED_LOGICAL_OPERATOR = 'RESERVED_LOGICAL_OPERATOR',
   RESERVED_PHRASE = 'RESERVED_PHRASE',
   RESERVED_DEPENDENT_CLAUSE = 'RESERVED_DEPENDENT_CLAUSE',
   RESERVED_SET_OPERATION = 'RESERVED_SET_OPERATION',
@@ -16,6 +15,9 @@ export enum TokenType {
   END = 'END',
   LIMIT = 'LIMIT',
   BETWEEN = 'BETWEEN',
+  AND = 'AND',
+  OR = 'OR',
+  XOR = 'XOR',
   OPERATOR = 'OPERATOR',
   COMMA = 'COMMA',
   OPEN_PAREN = 'OPEN_PAREN',
@@ -62,7 +64,6 @@ export const testToken =
 
 /** Util object that allows for easy checking of Reserved Keywords */
 export const isToken = {
-  AND: testToken({ text: 'AND', type: TokenType.RESERVED_LOGICAL_OPERATOR }),
   ARRAY: testToken({ text: 'ARRAY', type: TokenType.RESERVED_KEYWORD }),
   BY: testToken({ text: 'BY', type: TokenType.RESERVED_KEYWORD }),
   SELECT: (token: Token) =>
@@ -76,7 +77,6 @@ export const isToken = {
 export const isReserved = (token: Token): boolean =>
   token.type === TokenType.RESERVED_KEYWORD ||
   token.type === TokenType.RESERVED_FUNCTION_NAME ||
-  token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
   token.type === TokenType.RESERVED_PHRASE ||
   token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
   token.type === TokenType.RESERVED_COMMAND ||
@@ -85,7 +85,10 @@ export const isReserved = (token: Token): boolean =>
   token.type === TokenType.CASE ||
   token.type === TokenType.END ||
   token.type === TokenType.LIMIT ||
-  token.type === TokenType.BETWEEN;
+  token.type === TokenType.BETWEEN ||
+  token.type === TokenType.AND ||
+  token.type === TokenType.OR ||
+  token.type === TokenType.XOR;
 
 /** checks if token is one of the parameter tokens */
 export const isParameter = (token: Token): boolean =>
@@ -93,3 +96,6 @@ export const isParameter = (token: Token): boolean =>
   token.type === TokenType.NAMED_PARAMETER ||
   token.type === TokenType.POSITIONAL_PARAMETER ||
   token.type === TokenType.QUOTED_PARAMETER;
+
+export const isLogicalOperator = (token: Token): boolean =>
+  token.type === TokenType.AND || token.type === TokenType.OR || token.type === TokenType.XOR;

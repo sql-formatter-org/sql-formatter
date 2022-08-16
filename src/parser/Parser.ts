@@ -126,7 +126,7 @@ export default class Parser {
   }
 
   private betweenPredicate(): BetweenPredicate | undefined {
-    if (this.look().type === TokenType.BETWEEN && isToken.AND(this.look(2))) {
+    if (this.look().type === TokenType.BETWEEN && this.look(2).type === TokenType.AND) {
       return {
         type: NodeType.between_predicate,
         betweenToken: this.next(),

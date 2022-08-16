@@ -194,7 +194,9 @@ export default class ExpressionFormatter {
         return this.formatJoin(token);
       case TokenType.RESERVED_DEPENDENT_CLAUSE:
         return this.formatDependentClause(token);
-      case TokenType.RESERVED_LOGICAL_OPERATOR:
+      case TokenType.AND:
+      case TokenType.OR:
+      case TokenType.XOR:
         return this.formatLogicalOperator(token);
       case TokenType.RESERVED_KEYWORD:
       case TokenType.RESERVED_FUNCTION_NAME:
