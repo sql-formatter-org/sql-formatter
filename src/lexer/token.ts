@@ -64,9 +64,7 @@ export const testToken =
 export const isToken = {
   AND: testToken({ text: 'AND', type: TokenType.RESERVED_LOGICAL_OPERATOR }),
   ARRAY: testToken({ text: 'ARRAY', type: TokenType.RESERVED_KEYWORD }),
-  CASE: testToken({ text: 'CASE', type: TokenType.CASE }),
   BY: testToken({ text: 'BY', type: TokenType.RESERVED_KEYWORD }),
-  END: testToken({ text: 'END', type: TokenType.END }),
   SELECT: (token: Token) =>
     /^SELECT\b/.test(token.text) && token.type === TokenType.RESERVED_COMMAND,
   SET: testToken({ text: 'SET', type: TokenType.RESERVED_COMMAND }),
