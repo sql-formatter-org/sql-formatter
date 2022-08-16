@@ -108,6 +108,7 @@ export default class TokenizerEngine {
     return (
       this.matchToken(TokenType.RESERVED_CASE_START) ||
       this.matchToken(TokenType.RESERVED_CASE_END) ||
+      this.matchToken(TokenType.RESERVED_LIMIT) ||
       this.matchToken(TokenType.RESERVED_COMMAND) ||
       this.matchToken(TokenType.RESERVED_SET_OPERATION) ||
       this.matchToken(TokenType.RESERVED_DEPENDENT_CLAUSE) ||

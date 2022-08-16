@@ -383,7 +383,7 @@ describe('Parser', () => {
                 "raw": "LIMIT",
                 "start": 0,
                 "text": "LIMIT",
-                "type": "RESERVED_COMMAND",
+                "type": "RESERVED_LIMIT",
               },
               "type": "limit_clause",
             },
@@ -420,7 +420,7 @@ describe('Parser', () => {
                 "raw": "LIMIT",
                 "start": 0,
                 "text": "LIMIT",
-                "type": "RESERVED_COMMAND",
+                "type": "RESERVED_LIMIT",
               },
               "offset": Array [
                 Object {
