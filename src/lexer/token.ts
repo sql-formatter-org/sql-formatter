@@ -62,21 +62,16 @@ export const testToken =
 
 /** Util object that allows for easy checking of Reserved Keywords */
 export const isToken = {
-  AS: testToken({ text: 'AS', type: TokenType.RESERVED_KEYWORD }),
   AND: testToken({ text: 'AND', type: TokenType.RESERVED_LOGICAL_OPERATOR }),
   ARRAY: testToken({ text: 'ARRAY', type: TokenType.RESERVED_KEYWORD }),
   CASE: testToken({ text: 'CASE', type: TokenType.CASE }),
-  CAST: testToken({ text: 'CAST', type: TokenType.RESERVED_FUNCTION_NAME }),
   BY: testToken({ text: 'BY', type: TokenType.RESERVED_KEYWORD }),
   END: testToken({ text: 'END', type: TokenType.END }),
-  FROM: testToken({ text: 'FROM', type: TokenType.RESERVED_COMMAND }),
   SELECT: (token: Token) =>
     /^SELECT\b/.test(token.text) && token.type === TokenType.RESERVED_COMMAND,
   SET: testToken({ text: 'SET', type: TokenType.RESERVED_COMMAND }),
   STRUCT: testToken({ text: 'STRUCT', type: TokenType.RESERVED_KEYWORD }),
-  TABLE: testToken({ text: 'TABLE', type: TokenType.RESERVED_KEYWORD }),
   WINDOW: testToken({ text: 'WINDOW', type: TokenType.RESERVED_COMMAND }),
-  WITH: testToken({ text: 'WITH', type: TokenType.RESERVED_COMMAND }),
 };
 
 /** Checks if token is any Reserved Keyword or Command */
