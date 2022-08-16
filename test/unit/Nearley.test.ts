@@ -19,7 +19,7 @@ describe('Nearley integration', () => {
       identTypes: ['""'],
     });
 
-    const lexer = new LexerAdapter(chunk => tokenizer.tokenize(chunk));
+    const lexer = new LexerAdapter(chunk => tokenizer.tokenize(chunk, {}));
     const parser = new Parser(Grammar.fromCompiled(grammar), { lexer });
     const { results } = parser.feed(sql);
 
@@ -41,7 +41,10 @@ describe('Nearley integration', () => {
           "children": Array [
             Object {
               "token": Object {
+                "end": 3,
+                "precedingWhitespace": undefined,
                 "raw": "foo",
+                "start": 0,
                 "text": "foo",
                 "type": "IDENTIFIER",
               },
@@ -55,7 +58,10 @@ describe('Nearley integration', () => {
           "children": Array [
             Object {
               "token": Object {
+                "end": 8,
+                "precedingWhitespace": " ",
                 "raw": "bar",
+                "start": 5,
                 "text": "bar",
                 "type": "IDENTIFIER",
               },
@@ -78,7 +84,10 @@ describe('Nearley integration', () => {
               "children": Array [
                 Object {
                   "arrayToken": Object {
+                    "end": 15,
+                    "precedingWhitespace": " ",
                     "raw": "my_array",
+                    "start": 7,
                     "text": "my_array",
                     "type": "IDENTIFIER",
                   },
@@ -86,7 +95,10 @@ describe('Nearley integration', () => {
                     "children": Array [
                       Object {
                         "token": Object {
+                          "end": 17,
+                          "precedingWhitespace": undefined,
                           "raw": "5",
+                          "start": 16,
                           "text": "5",
                           "type": "NUMBER",
                         },
@@ -101,7 +113,10 @@ describe('Nearley integration', () => {
                 },
               ],
               "nameToken": Object {
+                "end": 6,
+                "precedingWhitespace": undefined,
                 "raw": "SELECT",
+                "start": 0,
                 "text": "SELECT",
                 "type": "RESERVED_COMMAND",
               },
@@ -126,7 +141,10 @@ describe('Nearley integration', () => {
                   "children": Array [
                     Object {
                       "token": Object {
+                        "end": 18,
+                        "precedingWhitespace": undefined,
                         "raw": "birth_year",
+                        "start": 8,
                         "text": "birth_year",
                         "type": "IDENTIFIER",
                       },
@@ -134,7 +152,10 @@ describe('Nearley integration', () => {
                     },
                     Object {
                       "token": Object {
+                        "end": 20,
+                        "precedingWhitespace": " ",
                         "raw": "-",
+                        "start": 19,
                         "text": "-",
                         "type": "OPERATOR",
                       },
@@ -144,7 +165,10 @@ describe('Nearley integration', () => {
                       "children": Array [
                         Object {
                           "token": Object {
+                            "end": 34,
+                            "precedingWhitespace": undefined,
                             "raw": "CURRENT_DATE",
+                            "start": 22,
                             "text": "CURRENT_DATE",
                             "type": "IDENTIFIER",
                           },
@@ -152,7 +176,10 @@ describe('Nearley integration', () => {
                         },
                         Object {
                           "token": Object {
+                            "end": 36,
+                            "precedingWhitespace": " ",
                             "raw": "+",
+                            "start": 35,
                             "text": "+",
                             "type": "OPERATOR",
                           },
@@ -160,7 +187,10 @@ describe('Nearley integration', () => {
                         },
                         Object {
                           "token": Object {
+                            "end": 38,
+                            "precedingWhitespace": " ",
                             "raw": "1",
+                            "start": 37,
                             "text": "1",
                             "type": "NUMBER",
                           },
@@ -178,7 +208,10 @@ describe('Nearley integration', () => {
                 },
               ],
               "nameToken": Object {
+                "end": 6,
+                "precedingWhitespace": undefined,
                 "raw": "SELECT",
+                "start": 0,
                 "text": "SELECT",
                 "type": "RESERVED_COMMAND",
               },
@@ -201,7 +234,10 @@ describe('Nearley integration', () => {
               "children": Array [
                 Object {
                   "nameToken": Object {
+                    "end": 11,
+                    "precedingWhitespace": " ",
                     "raw": "sqrt",
+                    "start": 7,
                     "text": "SQRT",
                     "type": "RESERVED_FUNCTION_NAME",
                   },
@@ -209,7 +245,10 @@ describe('Nearley integration', () => {
                     "children": Array [
                       Object {
                         "token": Object {
+                          "end": 13,
+                          "precedingWhitespace": undefined,
                           "raw": "2",
+                          "start": 12,
                           "text": "2",
                           "type": "NUMBER",
                         },
@@ -224,7 +263,10 @@ describe('Nearley integration', () => {
                 },
               ],
               "nameToken": Object {
+                "end": 6,
+                "precedingWhitespace": undefined,
                 "raw": "SELECT",
+                "start": 0,
                 "text": "SELECT",
                 "type": "RESERVED_COMMAND",
               },
