@@ -39,59 +39,59 @@ export default class Tokenizer {
       },
       [TokenType.CASE]: {
         regex: /[Cc][Aa][Ss][Ee]\b/uy,
-        value: v => equalizeWhitespace(v.toUpperCase()),
+        value: toCanonical,
       },
       [TokenType.END]: {
         regex: /[Ee][Nn][Dd]\b/uy,
-        value: v => equalizeWhitespace(v.toUpperCase()),
+        value: toCanonical,
       },
       [TokenType.BETWEEN]: {
         regex: /BETWEEN\b/iuy,
-        value: v => equalizeWhitespace(v.toUpperCase()),
+        value: toCanonical,
       },
       [TokenType.LIMIT]: {
         regex: cfg.reservedCommands.includes('LIMIT') ? /LIMIT\b/iuy : undefined,
-        value: v => equalizeWhitespace(v.toUpperCase()),
+        value: toCanonical,
       },
       [TokenType.RESERVED_COMMAND]: {
         regex: regex.reservedWord(cfg.reservedCommands, cfg.identChars),
-        value: v => equalizeWhitespace(v.toUpperCase()),
+        value: toCanonical,
       },
       [TokenType.RESERVED_SET_OPERATION]: {
         regex: regex.reservedWord(cfg.reservedSetOperations, cfg.identChars),
-        value: v => equalizeWhitespace(v.toUpperCase()),
+        value: toCanonical,
       },
       [TokenType.RESERVED_DEPENDENT_CLAUSE]: {
         regex: regex.reservedWord(cfg.reservedDependentClauses, cfg.identChars),
-        value: v => equalizeWhitespace(v.toUpperCase()),
+        value: toCanonical,
       },
       [TokenType.RESERVED_JOIN]: {
         regex: regex.reservedWord(cfg.reservedJoins, cfg.identChars),
-        value: v => equalizeWhitespace(v.toUpperCase()),
+        value: toCanonical,
       },
       [TokenType.RESERVED_PHRASE]: {
         regex: regex.reservedWord(cfg.reservedPhrases ?? [], cfg.identChars),
-        value: v => equalizeWhitespace(v.toUpperCase()),
+        value: toCanonical,
       },
       [TokenType.AND]: {
         regex: /AND\b/iuy,
-        value: v => equalizeWhitespace(v.toUpperCase()),
+        value: toCanonical,
       },
       [TokenType.OR]: {
         regex: /OR\b/iuy,
-        value: v => equalizeWhitespace(v.toUpperCase()),
+        value: toCanonical,
       },
       [TokenType.XOR]: {
         regex: cfg.supportsXor ? /XOR\b/iuy : undefined,
-        value: v => equalizeWhitespace(v.toUpperCase()),
+        value: toCanonical,
       },
       [TokenType.RESERVED_FUNCTION_NAME]: {
         regex: regex.reservedWord(cfg.reservedFunctionNames, cfg.identChars),
-        value: v => equalizeWhitespace(v.toUpperCase()),
+        value: toCanonical,
       },
       [TokenType.RESERVED_KEYWORD]: {
         regex: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
-        value: v => equalizeWhitespace(v.toUpperCase()),
+        value: toCanonical,
       },
       [TokenType.VARIABLE]: {
         regex: cfg.variableTypes ? regex.variable(cfg.variableTypes) : undefined,
@@ -165,3 +165,10 @@ export default class Tokenizer {
     return Object.fromEntries(Object.entries(rules).filter(([_, rule]) => rule.regex));
   }
 }
+
+/**
+ * Converts keywords (and keyword sequences) to canonical form:
+ * - in uppercase
+ * - single spaces between words
+ */
+const toCanonical = (v: string) => equalizeWhitespace(v.toUpperCase());
