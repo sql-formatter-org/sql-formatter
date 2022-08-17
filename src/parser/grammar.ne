@@ -118,6 +118,7 @@ simple_expression ->
   ( array_subscript
   | function_call
   | parenthesis
+  | curly_braces
   | between_predicate
   | expression_token ) {% unwrap %}
 
@@ -148,6 +149,15 @@ parenthesis -> "(" expressions_or_clauses ")" {%
     children: children,
     openParen: "(",
     closeParen: ")",
+  })
+%}
+
+curly_braces -> "{" expressions_or_clauses "}" {%
+  ([open, children, close]) => ({
+    type: NodeType.parenthesis,
+    children: children,
+    openParen: "{",
+    closeParen: "}",
   })
 %}
 

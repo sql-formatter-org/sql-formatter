@@ -11,8 +11,8 @@ describe('Nearley integration', () => {
       reservedJoins: ['JOIN'],
       reservedFunctionNames: ['SQRT', 'CURRENT_TIME'],
       reservedKeywords: ['BETWEEN', 'LIKE', 'ON', 'USING'],
-      openParens: ['(', '['],
-      closeParens: [')', ']'],
+      openParens: ['(', '[', '{'],
+      closeParens: [')', ']', '}'],
       stringTypes: ["''"],
       identTypes: ['""'],
     });
@@ -70,5 +70,9 @@ describe('Nearley integration', () => {
 
   it('parses function name with and without parameters', () => {
     expect(parse('SELECT CURRENT_TIME a, CURRENT_TIME() b;')).toMatchSnapshot();
+  });
+
+  it('parses curly braces', () => {
+    expect(parse('SELECT {foo: bar};')).toMatchSnapshot();
   });
 });

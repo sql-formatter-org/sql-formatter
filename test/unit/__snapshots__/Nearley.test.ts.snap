@@ -335,6 +335,70 @@ Array [
 ]
 `;
 
+exports[`Nearley integration parses curly braces 1`] = `
+Array [
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "children": Array [
+              Object {
+                "token": Object {
+                  "end": 11,
+                  "precedingWhitespace": undefined,
+                  "raw": "foo",
+                  "start": 8,
+                  "text": "foo",
+                  "type": "IDENTIFIER",
+                },
+                "type": "token",
+              },
+              Object {
+                "token": Object {
+                  "end": 12,
+                  "precedingWhitespace": undefined,
+                  "raw": ":",
+                  "start": 11,
+                  "text": ":",
+                  "type": "OPERATOR",
+                },
+                "type": "token",
+              },
+              Object {
+                "token": Object {
+                  "end": 16,
+                  "precedingWhitespace": " ",
+                  "raw": "bar",
+                  "start": 13,
+                  "text": "bar",
+                  "type": "IDENTIFIER",
+                },
+                "type": "token",
+              },
+            ],
+            "closeParen": "}",
+            "openParen": "{",
+            "type": "parenthesis",
+          },
+        ],
+        "nameToken": Object {
+          "end": 6,
+          "precedingWhitespace": undefined,
+          "raw": "SELECT",
+          "start": 0,
+          "text": "SELECT",
+          "type": "RESERVED_SELECT",
+        },
+        "type": "clause",
+      },
+    ],
+    "hasSemicolon": true,
+    "type": "statement",
+  },
+]
+`;
+
 exports[`Nearley integration parses function call 1`] = `
 Array [
   Object {
