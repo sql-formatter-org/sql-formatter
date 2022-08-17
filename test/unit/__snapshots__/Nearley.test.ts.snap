@@ -388,6 +388,91 @@ Array [
 ]
 `;
 
+exports[`Nearley integration parses function name with and without parameters 1`] = `
+Array [
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "token": Object {
+              "end": 19,
+              "precedingWhitespace": " ",
+              "raw": "CURRENT_TIME",
+              "start": 7,
+              "text": "CURRENT_TIME",
+              "type": "RESERVED_KEYWORD",
+            },
+            "type": "token",
+          },
+          Object {
+            "token": Object {
+              "end": 21,
+              "precedingWhitespace": " ",
+              "raw": "a",
+              "start": 20,
+              "text": "a",
+              "type": "IDENTIFIER",
+            },
+            "type": "token",
+          },
+          Object {
+            "token": Object {
+              "end": 22,
+              "precedingWhitespace": undefined,
+              "raw": ",",
+              "start": 21,
+              "text": ",",
+              "type": "COMMA",
+            },
+            "type": "token",
+          },
+          Object {
+            "nameToken": Object {
+              "end": 35,
+              "precedingWhitespace": " ",
+              "raw": "CURRENT_TIME",
+              "start": 23,
+              "text": "CURRENT_TIME",
+              "type": "RESERVED_FUNCTION_NAME",
+            },
+            "parenthesis": Object {
+              "children": Array [],
+              "closeParen": ")",
+              "openParen": "(",
+              "type": "parenthesis",
+            },
+            "type": "function_call",
+          },
+          Object {
+            "token": Object {
+              "end": 39,
+              "precedingWhitespace": " ",
+              "raw": "b",
+              "start": 38,
+              "text": "b",
+              "type": "IDENTIFIER",
+            },
+            "type": "token",
+          },
+        ],
+        "nameToken": Object {
+          "end": 6,
+          "precedingWhitespace": undefined,
+          "raw": "SELECT",
+          "start": 0,
+          "text": "SELECT",
+          "type": "RESERVED_SELECT",
+        },
+        "type": "clause",
+      },
+    ],
+    "hasSemicolon": true,
+    "type": "statement",
+  },
+]
+`;
+
 exports[`Nearley integration parses list of statements 1`] = `
 Array [
   Object {

@@ -1,4 +1,5 @@
 import Tokenizer from 'src/lexer/Tokenizer';
+import { correctFunctionNameTokens } from 'src/lexer/correctFunctionNameTokens';
 import { Parser, Grammar } from 'nearley';
 
 import grammar from 'src/parser/grammar';
@@ -12,7 +13,7 @@ describe('Nearley integration', () => {
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedSetOperations: ['UNION', 'UNION ALL'],
       reservedJoins: ['JOIN'],
-      reservedFunctionNames: ['SQRT'],
+      reservedFunctionNames: ['SQRT', 'CURRENT_TIME'],
       reservedKeywords: ['BETWEEN', 'LIKE', 'ON', 'USING'],
       openParens: ['(', '['],
       closeParens: [')', ']'],
@@ -20,7 +21,9 @@ describe('Nearley integration', () => {
       identTypes: ['""'],
     });
 
-    const lexer = new LexerAdapter(chunk => tokenizer.tokenize(chunk, {}));
+    const lexer = new LexerAdapter(chunk =>
+      correctFunctionNameTokens(tokenizer.tokenize(chunk, {}))
+    );
     const parser = new Parser(Grammar.fromCompiled(grammar), { lexer });
     const { results } = parser.feed(sql);
 
@@ -73,5 +76,9 @@ describe('Nearley integration', () => {
 
   it('parses SELECT *', () => {
     expect(parse('SELECT *')).toMatchSnapshot();
+  });
+
+  it('parses function name with and without parameters', () => {
+    expect(parse('SELECT CURRENT_TIME a, CURRENT_TIME() b;')).toMatchSnapshot();
   });
 });
