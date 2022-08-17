@@ -1,7 +1,7 @@
 import { Parser as NearleyParser, Grammar } from 'nearley';
 
 import Tokenizer from 'src/lexer/Tokenizer';
-import { correctFunctionNameTokens } from 'src/lexer/correctFunctionNameTokens';
+import { disambiguateTokens } from 'src/lexer/disambiguateTokens';
 import { ParamTypes } from 'src/lexer/TokenizerOptions';
 import { Statement } from 'src/parser/ast';
 import grammar from 'src/parser/grammar';
@@ -17,7 +17,7 @@ export interface Parser {
 export function createParser(tokenizer: Tokenizer): Parser {
   let paramTypesOverrides: ParamTypes = {};
   const lexer = new LexerAdapter(chunk =>
-    correctFunctionNameTokens(tokenizer.tokenize(chunk, paramTypesOverrides))
+    disambiguateTokens(tokenizer.tokenize(chunk, paramTypesOverrides))
   );
   const parser = new NearleyParser(Grammar.fromCompiled(grammar), { lexer });
 
