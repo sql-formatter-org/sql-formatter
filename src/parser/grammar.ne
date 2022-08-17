@@ -122,16 +122,11 @@ simple_expression ->
   | between_predicate
   | expression_token ) {% unwrap %}
 
-array_subscript -> (%IDENTIFIER | %RESERVED_KEYWORD) "[" expression:* "]" {%
-  ([[arrayToken], open, children, close]) => ({
+array_subscript -> (%IDENTIFIER | %RESERVED_KEYWORD) square_brackets {%
+  ([[arrayToken], brackets]) => ({
     type: NodeType.array_subscript,
     arrayToken,
-    parenthesis: {
-      type: NodeType.parenthesis,
-      children: flatten(children),
-      openParen: "[",
-      closeParen: "]",
-    },
+    parenthesis: brackets,
   })
 %}
 
@@ -158,6 +153,15 @@ curly_braces -> "{" expressions_or_clauses "}" {%
     children: children,
     openParen: "{",
     closeParen: "}",
+  })
+%}
+
+square_brackets -> "[" expressions_or_clauses "]" {%
+  ([open, children, close]) => ({
+    type: NodeType.parenthesis,
+    children: children,
+    openParen: "[",
+    closeParen: "]",
   })
 %}
 
