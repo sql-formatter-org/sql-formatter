@@ -85,7 +85,9 @@ other_clause -> %RESERVED_COMMAND expression:* {%
   })
 %}
 
-expression -> ( array_subscript | function_call | parenthesis | expression_token ) {% unwrap %}
+expression -> ( commaless_expression | comma ) {% unwrap %}
+
+commaless_expression -> ( array_subscript | function_call | parenthesis | expression_token ) {% unwrap %}
 
 array_subscript -> (%IDENTIFIER | %RESERVED_KEYWORD) "[" expression:* "]" {%
   ([[arrayToken], open, children, close]) => ({
@@ -117,16 +119,15 @@ parenthesis -> "(" expressions_or_clauses ")" {%
   })
 %}
 
+comma -> ( %COMMA ) {% createTokenNode %}
+
 expression_token ->
-  ( comma
-  | operator
+  ( operator
   | identifier
   | parameter
   | literal
   | keyword
   | comment ) {% unwrap %}
-
-comma -> ( %COMMA ) {% createTokenNode %}
 
 operator -> ( %OPERATOR ) {% createTokenNode %}
 
