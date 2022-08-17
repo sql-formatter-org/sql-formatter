@@ -46,12 +46,16 @@ export default class Formatter {
    * @return {string} The formatter query
    */
   public format(query: string): string {
-    const tokens = this.cachedTokenizer().tokenize(query, this.cfg.paramTypes || {});
-    const ast = new Parser(tokens).parse();
+    const ast = this.parse(query);
     const formattedQuery = this.formatAst(ast);
     const finalQuery = this.postFormat(formattedQuery);
 
     return finalQuery.trimEnd();
+  }
+
+  private parse(query: string): Statement[] {
+    const tokens = this.cachedTokenizer().tokenize(query, this.cfg.paramTypes || {});
+    return new Parser(tokens).parse();
   }
 
   private formatAst(statements: Statement[]): string {
