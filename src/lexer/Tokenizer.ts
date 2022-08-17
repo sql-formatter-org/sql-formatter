@@ -57,6 +57,10 @@ export default class Tokenizer {
         regex: regex.reservedWord(cfg.reservedCommands, cfg.identChars),
         value: toCanonical,
       },
+      [TokenType.RESERVED_SELECT]: {
+        regex: regex.reservedWord(cfg.reservedSelect, cfg.identChars),
+        value: toCanonical,
+      },
       [TokenType.RESERVED_SET_OPERATION]: {
         regex: regex.reservedWord(cfg.reservedSetOperations, cfg.identChars),
         value: toCanonical,
@@ -102,7 +106,7 @@ export default class Tokenizer {
       },
       [TokenType.DELIMITER]: { regex: /[;]/uy },
       [TokenType.OPERATOR]: {
-        regex: regex.operator('+-/*%&|^><=.:$@#?~![]{}', [
+        regex: regex.operator('+-/%&|^><=.:$@#?~![]{}', [
           '<>',
           '<=',
           '>=',
@@ -110,6 +114,7 @@ export default class Tokenizer {
           ...(cfg.operators ?? []),
         ]),
       },
+      [TokenType.ASTERISK]: { regex: /[*]/uy },
     });
   }
 

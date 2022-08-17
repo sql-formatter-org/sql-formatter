@@ -5,10 +5,11 @@ import { expandPhrases } from 'src/expandPhrases';
 import { keywords } from './bigquery.keywords';
 import { functions } from './bigquery.functions';
 
+const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT] [AS STRUCT | AS VALUE]']);
+
 const reservedCommands = expandPhrases([
   // Queries: https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax
   'WITH [RECURSIVE]',
-  'SELECT [ALL | DISTINCT] [AS STRUCT | AS VALUE]',
   'FROM',
   'WHERE',
   'GROUP BY',
@@ -143,6 +144,7 @@ export default class BigQueryFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
+      reservedSelect,
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],

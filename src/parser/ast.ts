@@ -61,9 +61,9 @@ export type Parenthesis = {
 export type BetweenPredicate = {
   type: NodeType.between_predicate;
   betweenToken: Token;
-  expr1: Token;
+  expr1: AstNode[];
   andToken: Token;
-  expr2: Token;
+  expr2: AstNode[];
 };
 
 // LIMIT <count>
