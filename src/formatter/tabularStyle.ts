@@ -1,5 +1,5 @@
 import type { IndentStyle } from 'src/FormatOptions';
-import { Token, TokenType } from 'src/lexer/token';
+import { isLogicalOperator, Token, TokenType } from 'src/lexer/token';
 
 /**
  * When tabular style enabled,
@@ -30,7 +30,7 @@ export default function toTabularFormat(tokenText: string, indentStyle: IndentSt
  */
 export function isTabularToken(token: Token): boolean {
   return (
-    token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
+    isLogicalOperator(token) ||
     token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
     token.type === TokenType.RESERVED_COMMAND ||
     token.type === TokenType.RESERVED_SET_OPERATION ||

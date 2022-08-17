@@ -1,5 +1,5 @@
 import { sum } from 'src/utils';
-import { isToken, type Token, TokenType } from 'src/lexer/token';
+import { type Token, TokenType, isLogicalOperator } from 'src/lexer/token';
 import { BetweenPredicate, NodeType, Parenthesis } from 'src/parser/ast';
 
 /**
@@ -70,10 +70,10 @@ export default class InlineBlock {
   // are not allowed inside inline parentheses block
   private isForbiddenToken(token: Token) {
     return (
-      token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
+      isLogicalOperator(token) ||
       token.type === TokenType.LINE_COMMENT ||
       token.type === TokenType.BLOCK_COMMENT ||
-      isToken.CASE(token) // CASE cannot have inline blocks
+      token.type === TokenType.CASE // CASE cannot have inline blocks
     );
   }
 }

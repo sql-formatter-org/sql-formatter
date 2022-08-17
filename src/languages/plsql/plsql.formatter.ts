@@ -90,7 +90,7 @@ export default class PlSqlFormatter extends Formatter {
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedPhrases,
-      reservedLogicalOperators: ['AND', 'OR', 'XOR'],
+      supportsXor: true,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       stringTypes: [

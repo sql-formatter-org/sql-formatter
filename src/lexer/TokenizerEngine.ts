@@ -106,14 +106,18 @@ export default class TokenizerEngine {
 
     // prioritised list of Reserved token types
     return (
-      this.matchToken(TokenType.RESERVED_CASE_START) ||
-      this.matchToken(TokenType.RESERVED_CASE_END) ||
+      this.matchToken(TokenType.CASE) ||
+      this.matchToken(TokenType.END) ||
+      this.matchToken(TokenType.BETWEEN) ||
+      this.matchToken(TokenType.LIMIT) ||
       this.matchToken(TokenType.RESERVED_COMMAND) ||
       this.matchToken(TokenType.RESERVED_SET_OPERATION) ||
       this.matchToken(TokenType.RESERVED_DEPENDENT_CLAUSE) ||
       this.matchToken(TokenType.RESERVED_JOIN) ||
       this.matchToken(TokenType.RESERVED_PHRASE) ||
-      this.matchToken(TokenType.RESERVED_LOGICAL_OPERATOR) ||
+      this.matchToken(TokenType.AND) ||
+      this.matchToken(TokenType.OR) ||
+      this.matchToken(TokenType.XOR) ||
       this.matchToken(TokenType.RESERVED_FUNCTION_NAME) ||
       this.matchToken(TokenType.RESERVED_KEYWORD)
     );
