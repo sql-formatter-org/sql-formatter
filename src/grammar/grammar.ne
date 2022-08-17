@@ -118,16 +118,17 @@ parenthesis -> "(" expressions_or_clauses ")" {%
 %}
 
 plain_token ->
-  (  operator
+  ( comma
+  | operator
   | identifier
   | parameter
   | literal
   | keyword
   | comment ) {% unwrap %}
 
-operator ->
-  ( %COMMA
-  | %OPERATOR ) {% createTokenNode %}
+comma -> ( %COMMA ) {% createTokenNode %}
+
+operator -> ( %OPERATOR ) {% createTokenNode %}
 
 identifier ->
   ( %IDENTIFIER
