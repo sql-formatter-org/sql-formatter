@@ -1,5 +1,5 @@
 /* eslint-disable no-cond-assign */
-import { EOF_TOKEN, type Token, TokenType, isToken } from 'src/lexer/token';
+import { EOF_TOKEN, type Token, TokenType } from 'src/lexer/token';
 import {
   AllColumnsAsterisk,
   ArraySubscript,
@@ -65,7 +65,10 @@ export default class Parser {
   }
 
   private clause(): Clause | undefined {
-    if (this.look().type === TokenType.RESERVED_COMMAND) {
+    if (
+      this.look().type === TokenType.RESERVED_COMMAND ||
+      this.look().type === TokenType.RESERVED_SELECT
+    ) {
       const name = this.next();
       const children = this.expressionsUntilClauseEnd();
       return { type: NodeType.clause, nameToken: name, children };
@@ -163,7 +166,10 @@ export default class Parser {
   }
 
   private allColumnsAsterisk(): AllColumnsAsterisk | undefined {
-    if (this.look().text === '*' && isToken.SELECT(this.look(-1))) {
+    if (
+      this.look().type === TokenType.ASTERISK &&
+      this.look(-1).type === TokenType.RESERVED_SELECT
+    ) {
       this.next();
       return { type: NodeType.all_columns_asterisk };
     }
@@ -176,6 +182,7 @@ export default class Parser {
     const children: AstNode[] = [];
     while (
       this.look().type !== TokenType.RESERVED_COMMAND &&
+      this.look().type !== TokenType.RESERVED_SELECT &&
       this.look().type !== TokenType.LIMIT &&
       this.look().type !== TokenType.RESERVED_SET_OPERATION &&
       this.look().type !== TokenType.EOF &&

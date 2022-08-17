@@ -79,7 +79,8 @@ export default class TokenizerEngine {
       this.matchToken(TokenType.STRING) ||
       this.matchToken(TokenType.IDENTIFIER) ||
       this.matchToken(TokenType.DELIMITER) ||
-      this.matchToken(TokenType.OPERATOR)
+      this.matchToken(TokenType.OPERATOR) ||
+      this.matchToken(TokenType.ASTERISK)
     );
   }
 
@@ -111,6 +112,7 @@ export default class TokenizerEngine {
       this.matchToken(TokenType.BETWEEN) ||
       this.matchToken(TokenType.LIMIT) ||
       this.matchToken(TokenType.RESERVED_COMMAND) ||
+      this.matchToken(TokenType.RESERVED_SELECT) ||
       this.matchToken(TokenType.RESERVED_SET_OPERATION) ||
       this.matchToken(TokenType.RESERVED_DEPENDENT_CLAUSE) ||
       this.matchToken(TokenType.RESERVED_JOIN) ||

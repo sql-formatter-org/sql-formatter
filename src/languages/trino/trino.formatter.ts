@@ -4,11 +4,12 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './trino.functions';
 import { keywords } from './trino.keywords';
 
+const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
+
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L41
 const reservedCommands = expandPhrases([
   // queries
   'WITH [RECURSIVE]',
-  'SELECT [ALL | DISTINCT]',
   'FROM',
   'WHERE',
   'GROUP BY [ALL | DISTINCT]',
@@ -124,6 +125,7 @@ export default class TrinoFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
+      reservedSelect,
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],

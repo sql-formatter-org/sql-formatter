@@ -4,10 +4,11 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './tsql.functions';
 import { keywords } from './tsql.keywords';
 
+const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
+
 const reservedCommands = expandPhrases([
   // queries
   'WITH',
-  'SELECT [ALL | DISTINCT]',
   'FROM',
   'WHERE',
   'GROUP BY',
@@ -218,6 +219,7 @@ export default class TSqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
+      reservedSelect,
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],

@@ -5,10 +5,11 @@ import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
 import { keywords } from './mysql.keywords';
 import { functions } from './mysql.functions';
 
+const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT | DISTINCTROW]']);
+
 const reservedCommands = expandPhrases([
   // queries
   'WITH [RECURSIVE]',
-  'SELECT [ALL | DISTINCT | DISTINCTROW]',
   'FROM',
   'WHERE',
   'GROUP BY',
@@ -229,6 +230,7 @@ export default class MySqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
+      reservedSelect,
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF'],
