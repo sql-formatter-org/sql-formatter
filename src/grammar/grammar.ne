@@ -2,6 +2,7 @@
 @{%
 import LexerAdapter from 'src/grammar/LexerAdapter';
 import { NodeType } from 'src/parser/ast';
+import { Token } from 'src/lexer/token';
 
 // The lexer here is only to provide the has() method,
 // that's used inside the generated grammar definition.
@@ -9,6 +10,15 @@ import { NodeType } from 'src/parser/ast';
 const lexer = new LexerAdapter(chunk => []);
 
 const flatten = (arr: any[]) => arr.flat(Infinity);
+
+// Used for unwrapping grammar rules like:
+//
+//   rule -> ( foo | bar | baz )
+//
+// which otherwise produce single element nested inside two arrays
+const unwrap = <T>([[el]]: T[][]): T => el;
+
+const createTokenNode = ([[token]]: Token[][]) => ({ type: NodeType.token, token });
 %}
 @lexer lexer
 
@@ -108,11 +118,34 @@ parenthesis -> "(" expressions_or_clauses ")" {%
 %}
 
 plain_token ->
+  (  operator
+  | identifier
+  | parameter
+  | literal
+  | keyword
+  | comment ) {% unwrap %}
+
+operator ->
+  ( %COMMA
+  | %OPERATOR ) {% createTokenNode %}
+
+identifier ->
   ( %IDENTIFIER
   | %QUOTED_IDENTIFIER
-  | %STRING
-  | %VARIABLE
-  | %RESERVED_KEYWORD
+  | %VARIABLE ) {% createTokenNode %}
+
+parameter ->
+  ( %NAMED_PARAMETER
+  | %QUOTED_PARAMETER
+  | %NUMBERED_PARAMETER
+  | %POSITIONAL_PARAMETER ) {% createTokenNode %}
+
+literal ->
+  ( %NUMBER
+  | %STRING ) {% createTokenNode %}
+
+keyword ->
+  ( %RESERVED_KEYWORD
   | %RESERVED_PHRASE
   | %RESERVED_DEPENDENT_CLAUSE
   | %RESERVED_SET_OPERATION
@@ -122,15 +155,8 @@ plain_token ->
   | %BETWEEN
   | %AND
   | %OR
-  | %XOR
-  | %LINE_COMMENT
-  | %BLOCK_COMMENT
-  | %NUMBER
-  | %NAMED_PARAMETER
-  | %QUOTED_PARAMETER
-  | %NUMBERED_PARAMETER
-  | %POSITIONAL_PARAMETER
-  | %COMMA
-  | %OPERATOR ) {%
-  ([[token]]) => ({ type: NodeType.token, token })
-%}
+  | %XOR ) {% createTokenNode %}
+
+comment ->
+  ( %LINE_COMMENT
+  | %BLOCK_COMMENT ) {% createTokenNode %}
