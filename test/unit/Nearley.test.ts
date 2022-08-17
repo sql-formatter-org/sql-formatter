@@ -279,4 +279,91 @@ describe('Nearley integration', () => {
       ]
     `);
   });
+
+  it('parses LIMIT clause with count', () => {
+    expect(parse('LIMIT 15;')).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "count": Array [
+                Object {
+                  "token": Object {
+                    "end": 8,
+                    "precedingWhitespace": " ",
+                    "raw": "15",
+                    "start": 6,
+                    "text": "15",
+                    "type": "NUMBER",
+                  },
+                  "type": "token",
+                },
+              ],
+              "limitToken": Object {
+                "end": 5,
+                "precedingWhitespace": undefined,
+                "raw": "LIMIT",
+                "start": 0,
+                "text": "LIMIT",
+                "type": "LIMIT",
+              },
+              "type": "limit_clause",
+            },
+          ],
+          "hasSemicolon": true,
+          "type": "statement",
+        },
+      ]
+    `);
+  });
+
+  it('parses LIMIT clause with offset and count', () => {
+    expect(parse('LIMIT 100, 15;')).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "count": Array [
+                Object {
+                  "token": Object {
+                    "end": 13,
+                    "precedingWhitespace": " ",
+                    "raw": "15",
+                    "start": 11,
+                    "text": "15",
+                    "type": "NUMBER",
+                  },
+                  "type": "token",
+                },
+              ],
+              "limitToken": Object {
+                "end": 5,
+                "precedingWhitespace": undefined,
+                "raw": "LIMIT",
+                "start": 0,
+                "text": "LIMIT",
+                "type": "LIMIT",
+              },
+              "offset": Array [
+                Object {
+                  "token": Object {
+                    "end": 9,
+                    "precedingWhitespace": " ",
+                    "raw": "100",
+                    "start": 6,
+                    "text": "100",
+                    "type": "NUMBER",
+                  },
+                  "type": "token",
+                },
+              ],
+              "type": "limit_clause",
+            },
+          ],
+          "hasSemicolon": true,
+          "type": "statement",
+        },
+      ]
+    `);
+  });
 });

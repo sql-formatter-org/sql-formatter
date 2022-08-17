@@ -44,7 +44,30 @@ statement -> expressions_or_clauses {%
 # To avoid ambiguity, plain expressions can only come before clauses
 expressions_or_clauses -> expression:* clause:*
 
-clause -> %RESERVED_COMMAND expression:* {%
+clause -> limit_clause | other_clause
+
+limit_clause -> %LIMIT expression (%COMMA expression):? {%
+  // TODO: allow more than single node for exp1 & exp2
+  ([limitToken, exp1, optional]) => {
+    if (optional) {
+      const [comma, exp2] = optional;
+      return {
+        type: NodeType.limit_clause,
+        limitToken,
+        offset: exp1,
+        count: exp2,
+      };
+    } else {
+      return {
+        type: NodeType.limit_clause,
+        limitToken,
+        count: exp1,
+      };
+    }
+  }
+%}
+
+other_clause -> %RESERVED_COMMAND expression:* {%
   ([nameToken, children]) => ({
     type: NodeType.clause,
     nameToken,
@@ -96,7 +119,6 @@ plain_token ->
   | %RESERVED_JOIN
   | %CASE
   | %END
-  | %LIMIT
   | %BETWEEN
   | %AND
   | %OR
