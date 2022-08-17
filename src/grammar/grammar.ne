@@ -80,12 +80,16 @@ limit_clause -> %LIMIT commaless_expression:+ (%COMMA expression:+):? {%
   }
 %}
 
-select_clause -> %RESERVED_SELECT expression:* {%
+select_clause -> %RESERVED_SELECT (all_columns_asterisk expression:* | asteriskless_expression expression:*) {%
   ([nameToken, children]) => ({
     type: NodeType.clause,
     nameToken,
     children: flatten(children),
   })
+%}
+
+all_columns_asterisk -> %ASTERISK {%
+  () => ({ type: NodeType.all_columns_asterisk })
 %}
 
 other_clause -> %RESERVED_COMMAND expression:* {%
@@ -104,9 +108,13 @@ set_operation -> %RESERVED_SET_OPERATION expression:* {%
   })
 %}
 
-expression -> ( commaless_expression | comma ) {% unwrap %}
+expression -> ( simple_expression | asterisk | comma ) {% unwrap %}
 
-commaless_expression ->
+asteriskless_expression -> ( simple_expression | comma ) {% unwrap %}
+
+commaless_expression -> ( simple_expression | asterisk ) {% unwrap %}
+
+simple_expression ->
   ( array_subscript
   | function_call
   | parenthesis
@@ -155,6 +163,8 @@ between_predicate -> %BETWEEN commaless_expression %AND commaless_expression {%
 
 comma -> ( %COMMA ) {% createTokenNode %}
 
+asterisk -> ( %ASTERISK ) {% createTokenNode %}
+
 expression_token ->
   ( operator
   | identifier
@@ -163,7 +173,7 @@ expression_token ->
   | keyword
   | comment ) {% unwrap %}
 
-operator -> ( %OPERATOR | %ASTERISK ) {% createTokenNode %}
+operator -> ( %OPERATOR ) {% createTokenNode %}
 
 identifier ->
   ( %IDENTIFIER

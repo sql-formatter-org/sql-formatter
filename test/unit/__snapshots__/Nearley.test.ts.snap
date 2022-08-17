@@ -262,15 +262,7 @@ Array [
       Object {
         "children": Array [
           Object {
-            "token": Object {
-              "end": 8,
-              "precedingWhitespace": " ",
-              "raw": "*",
-              "start": 7,
-              "text": "*",
-              "type": "ASTERISK",
-            },
-            "type": "token",
+            "type": "all_columns_asterisk",
           },
         ],
         "nameToken": Object {
