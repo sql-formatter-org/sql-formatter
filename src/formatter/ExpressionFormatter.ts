@@ -209,6 +209,7 @@ export default class ExpressionFormatter {
       case TokenType.COMMA:
         return this.formatComma(token);
       case TokenType.OPERATOR:
+      case TokenType.ASTERISK:
         return this.formatOperator(token);
       case TokenType.IDENTIFIER:
       case TokenType.QUOTED_IDENTIFIER:

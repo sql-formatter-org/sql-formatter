@@ -106,7 +106,7 @@ export default class Tokenizer {
       },
       [TokenType.DELIMITER]: { regex: /[;]/uy },
       [TokenType.OPERATOR]: {
-        regex: regex.operator('+-/*%&|^><=.:$@#?~![]{}', [
+        regex: regex.operator('+-/%&|^><=.:$@#?~![]{}', [
           '<>',
           '<=',
           '>=',
@@ -114,6 +114,7 @@ export default class Tokenizer {
           ...(cfg.operators ?? []),
         ]),
       },
+      [TokenType.ASTERISK]: { regex: /[*]/uy },
     });
   }
 

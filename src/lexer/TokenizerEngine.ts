@@ -79,7 +79,8 @@ export default class TokenizerEngine {
       this.matchToken(TokenType.STRING) ||
       this.matchToken(TokenType.IDENTIFIER) ||
       this.matchToken(TokenType.DELIMITER) ||
-      this.matchToken(TokenType.OPERATOR)
+      this.matchToken(TokenType.OPERATOR) ||
+      this.matchToken(TokenType.ASTERISK)
     );
   }
 

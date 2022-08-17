@@ -166,7 +166,10 @@ export default class Parser {
   }
 
   private allColumnsAsterisk(): AllColumnsAsterisk | undefined {
-    if (this.look().text === '*' && this.look(-1).type === TokenType.RESERVED_SELECT) {
+    if (
+      this.look().type === TokenType.ASTERISK &&
+      this.look(-1).type === TokenType.RESERVED_SELECT
+    ) {
       this.next();
       return { type: NodeType.all_columns_asterisk };
     }
