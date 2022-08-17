@@ -233,7 +233,6 @@ export default class SingleStoreDbFormatter extends Formatter {
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF'],
       reservedPhrases,
-      reservedLogicalOperators: ['AND', 'OR'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       // TODO: support _binary"some string" prefix

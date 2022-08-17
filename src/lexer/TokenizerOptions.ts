@@ -45,8 +45,8 @@ export interface ParamTypes {
 export interface TokenizerOptions {
   // Main clauses that start new block, like: SELECT, FROM, WHERE, ORDER BY
   reservedCommands: string[];
-  // Logical operator keywords, defaults to: [AND, OR]
-  reservedLogicalOperators?: string[];
+  // True to support XOR in addition to AND and OR
+  supportsXor?: boolean;
   // Keywords in CASE expressions that begin new line, like: WHEN, ELSE
   reservedDependentClauses: string[];
   // Keywords that create newline but no indentaion of their body.

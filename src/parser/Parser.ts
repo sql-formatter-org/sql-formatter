@@ -126,7 +126,7 @@ export default class Parser {
   }
 
   private betweenPredicate(): BetweenPredicate | undefined {
-    if (isToken.BETWEEN(this.look()) && isToken.AND(this.look(2))) {
+    if (this.look().type === TokenType.BETWEEN && this.look(2).type === TokenType.AND) {
       return {
         type: NodeType.between_predicate,
         betweenToken: this.next(),
@@ -139,7 +139,7 @@ export default class Parser {
   }
 
   private limitClause(): LimitClause | undefined {
-    if (isToken.LIMIT(this.look())) {
+    if (this.look().type === TokenType.LIMIT) {
       const limitToken = this.next();
       const expr1 = this.expressionsUntilClauseEnd(t => t.type === TokenType.COMMA);
       if (this.look().type === TokenType.COMMA) {
@@ -176,6 +176,7 @@ export default class Parser {
     const children: AstNode[] = [];
     while (
       this.look().type !== TokenType.RESERVED_COMMAND &&
+      this.look().type !== TokenType.LIMIT &&
       this.look().type !== TokenType.RESERVED_SET_OPERATION &&
       this.look().type !== TokenType.EOF &&
       this.look().type !== TokenType.CLOSE_PAREN &&

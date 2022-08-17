@@ -6,14 +6,18 @@ export enum TokenType {
   VARIABLE = 'VARIABLE',
   RESERVED_KEYWORD = 'RESERVED_KEYWORD',
   RESERVED_FUNCTION_NAME = 'RESERVED_FUNCTION_NAME',
-  RESERVED_LOGICAL_OPERATOR = 'RESERVED_LOGICAL_OPERATOR',
   RESERVED_PHRASE = 'RESERVED_PHRASE',
   RESERVED_DEPENDENT_CLAUSE = 'RESERVED_DEPENDENT_CLAUSE',
   RESERVED_SET_OPERATION = 'RESERVED_SET_OPERATION',
   RESERVED_COMMAND = 'RESERVED_COMMAND',
   RESERVED_JOIN = 'RESERVED_JOIN',
-  RESERVED_CASE_START = 'RESERVED_CASE_START',
-  RESERVED_CASE_END = 'RESERVED_CASE_END',
+  CASE = 'CASE',
+  END = 'END',
+  LIMIT = 'LIMIT',
+  BETWEEN = 'BETWEEN',
+  AND = 'AND',
+  OR = 'OR',
+  XOR = 'XOR',
   OPERATOR = 'OPERATOR',
   COMMA = 'COMMA',
   OPEN_PAREN = 'OPEN_PAREN',
@@ -60,37 +64,31 @@ export const testToken =
 
 /** Util object that allows for easy checking of Reserved Keywords */
 export const isToken = {
-  AS: testToken({ text: 'AS', type: TokenType.RESERVED_KEYWORD }),
-  AND: testToken({ text: 'AND', type: TokenType.RESERVED_LOGICAL_OPERATOR }),
   ARRAY: testToken({ text: 'ARRAY', type: TokenType.RESERVED_KEYWORD }),
-  BETWEEN: testToken({ text: 'BETWEEN', type: TokenType.RESERVED_KEYWORD }),
-  CASE: testToken({ text: 'CASE', type: TokenType.RESERVED_CASE_START }),
-  CAST: testToken({ text: 'CAST', type: TokenType.RESERVED_FUNCTION_NAME }),
   BY: testToken({ text: 'BY', type: TokenType.RESERVED_KEYWORD }),
-  END: testToken({ text: 'END', type: TokenType.RESERVED_CASE_END }),
-  FROM: testToken({ text: 'FROM', type: TokenType.RESERVED_COMMAND }),
-  LIMIT: testToken({ text: 'LIMIT', type: TokenType.RESERVED_COMMAND }),
   SELECT: (token: Token) =>
     /^SELECT\b/.test(token.text) && token.type === TokenType.RESERVED_COMMAND,
   SET: testToken({ text: 'SET', type: TokenType.RESERVED_COMMAND }),
   STRUCT: testToken({ text: 'STRUCT', type: TokenType.RESERVED_KEYWORD }),
-  TABLE: testToken({ text: 'TABLE', type: TokenType.RESERVED_KEYWORD }),
   WINDOW: testToken({ text: 'WINDOW', type: TokenType.RESERVED_COMMAND }),
-  WITH: testToken({ text: 'WITH', type: TokenType.RESERVED_COMMAND }),
 };
 
 /** Checks if token is any Reserved Keyword or Command */
 export const isReserved = (token: Token): boolean =>
   token.type === TokenType.RESERVED_KEYWORD ||
   token.type === TokenType.RESERVED_FUNCTION_NAME ||
-  token.type === TokenType.RESERVED_LOGICAL_OPERATOR ||
   token.type === TokenType.RESERVED_PHRASE ||
   token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
   token.type === TokenType.RESERVED_COMMAND ||
   token.type === TokenType.RESERVED_SET_OPERATION ||
   token.type === TokenType.RESERVED_JOIN ||
-  token.type === TokenType.RESERVED_CASE_START ||
-  token.type === TokenType.RESERVED_CASE_END;
+  token.type === TokenType.CASE ||
+  token.type === TokenType.END ||
+  token.type === TokenType.LIMIT ||
+  token.type === TokenType.BETWEEN ||
+  token.type === TokenType.AND ||
+  token.type === TokenType.OR ||
+  token.type === TokenType.XOR;
 
 /** checks if token is one of the parameter tokens */
 export const isParameter = (token: Token): boolean =>
@@ -98,3 +96,6 @@ export const isParameter = (token: Token): boolean =>
   token.type === TokenType.NAMED_PARAMETER ||
   token.type === TokenType.POSITIONAL_PARAMETER ||
   token.type === TokenType.QUOTED_PARAMETER;
+
+export const isLogicalOperator = (token: Token): boolean =>
+  token.type === TokenType.AND || token.type === TokenType.OR || token.type === TokenType.XOR;
