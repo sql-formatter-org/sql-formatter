@@ -45,16 +45,16 @@ main -> statement (%DELIMITER statement):* {%
 %}
 
 statement -> expressions_or_clauses {%
-  (children) => ({
+  ([children]) => ({
     type: NodeType.statement,
-    children: flatten(children),
+    children,
   })
 %}
 
 # To avoid ambiguity, plain expressions can only come before clauses
-expressions_or_clauses -> expression:* clause:*
+expressions_or_clauses -> expression:* clause:* {% flatten %}
 
-clause -> limit_clause | other_clause
+clause -> ( limit_clause | other_clause ) {% unwrap %}
 
 limit_clause -> %LIMIT expression (%COMMA expression):? {%
   // TODO: allow more than single node for exp1 & exp2
@@ -64,14 +64,14 @@ limit_clause -> %LIMIT expression (%COMMA expression):? {%
       return {
         type: NodeType.limit_clause,
         limitToken,
-        offset: exp1,
-        count: exp2,
+        offset: [exp1],
+        count: [exp2],
       };
     } else {
       return {
         type: NodeType.limit_clause,
         limitToken,
-        count: exp1,
+        count: [exp1],
       };
     }
   }
@@ -85,7 +85,7 @@ other_clause -> %RESERVED_COMMAND expression:* {%
   })
 %}
 
-expression -> array_subscript | function_call| parenthesis | plain_token
+expression -> ( array_subscript | function_call | parenthesis | plain_token ) {% unwrap %}
 
 array_subscript -> (%IDENTIFIER | %RESERVED_KEYWORD) "[" expression:* "]" {%
   ([[arrayToken], open, children, close]) => ({
@@ -111,7 +111,7 @@ function_call -> %RESERVED_FUNCTION_NAME parenthesis {%
 parenthesis -> "(" expressions_or_clauses ")" {%
   ([open, children, close]) => ({
     type: NodeType.parenthesis,
-    children: flatten(children),
+    children: children,
     openParen: "(",
     closeParen: ")",
   })
