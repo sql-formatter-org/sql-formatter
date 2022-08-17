@@ -15,8 +15,22 @@ export function correctFunctionNameTokens(tokens: Token[]): Token[] {
         return { ...token, type: TokenType.RESERVED_KEYWORD };
       }
     }
+    if (token.type === TokenType.IDENTIFIER) {
+      const nextToken = tokens[i + 1];
+      if (nextToken && isOpenBracket(nextToken)) {
+        return { ...token, type: TokenType.ARRAY_IDENTIFIER };
+      }
+    }
+    if (token.type === TokenType.RESERVED_KEYWORD) {
+      const nextToken = tokens[i + 1];
+      if (nextToken && isOpenBracket(nextToken)) {
+        return { ...token, type: TokenType.ARRAY_KEYWORD };
+      }
+    }
     return token;
   });
 }
 
 const isOpenParen = (t: Token): boolean => t.type === TokenType.OPEN_PAREN && t.text === '(';
+
+const isOpenBracket = (t: Token): boolean => t.type === TokenType.OPEN_PAREN && t.text === '[';

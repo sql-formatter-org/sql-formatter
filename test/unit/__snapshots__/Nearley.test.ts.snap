@@ -295,7 +295,7 @@ Array [
               "raw": "my_array",
               "start": 7,
               "text": "my_array",
-              "type": "IDENTIFIER",
+              "type": "ARRAY_IDENTIFIER",
             },
             "parenthesis": Object {
               "children": Array [

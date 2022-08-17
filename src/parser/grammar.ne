@@ -122,7 +122,7 @@ simple_expression ->
   | between_predicate
   | expression_token ) {% unwrap %}
 
-array_subscript -> (%IDENTIFIER | %RESERVED_KEYWORD) square_brackets {%
+array_subscript -> (%ARRAY_IDENTIFIER | %ARRAY_KEYWORD) square_brackets {%
   ([[arrayToken], brackets]) => ({
     type: NodeType.array_subscript,
     arrayToken,
