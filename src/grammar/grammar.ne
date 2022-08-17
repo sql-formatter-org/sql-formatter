@@ -85,7 +85,7 @@ other_clause -> %RESERVED_COMMAND expression:* {%
   })
 %}
 
-expression -> ( array_subscript | function_call | parenthesis | plain_token ) {% unwrap %}
+expression -> ( array_subscript | function_call | parenthesis | expression_token ) {% unwrap %}
 
 array_subscript -> (%IDENTIFIER | %RESERVED_KEYWORD) "[" expression:* "]" {%
   ([[arrayToken], open, children, close]) => ({
@@ -117,7 +117,7 @@ parenthesis -> "(" expressions_or_clauses ")" {%
   })
 %}
 
-plain_token ->
+expression_token ->
   ( comma
   | operator
   | identifier
