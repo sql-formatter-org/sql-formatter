@@ -1,9 +1,5 @@
 import Tokenizer from 'src/lexer/Tokenizer';
-import { correctFunctionNameTokens } from 'src/lexer/correctFunctionNameTokens';
-import { Parser, Grammar } from 'nearley';
-
-import grammar from 'src/parser/grammar';
-import LexerAdapter from 'src/parser/LexerAdapter';
+import { createParser } from 'src/parser/createParser';
 
 describe('Nearley integration', () => {
   const parse = (sql: string) => {
@@ -21,27 +17,13 @@ describe('Nearley integration', () => {
       identTypes: ['""'],
     });
 
-    const lexer = new LexerAdapter(chunk =>
-      correctFunctionNameTokens(tokenizer.tokenize(chunk, {}))
-    );
-    const parser = new Parser(Grammar.fromCompiled(grammar), { lexer });
-    const { results } = parser.feed(sql);
-
-    if (results.length === 1) {
-      return results[0];
-    } else if (results.length === 0) {
-      throw new Error('Parse error: Invalid SQL');
-    } else {
-      throw new Error('Ambiguous grammar');
-    }
+    return createParser(tokenizer).parse(sql, {});
   };
 
   it('parses empty list of tokens', () => {
     expect(parse('')).toEqual([]);
   });
 
-  // Ideally we would report a line number where the parser failed,
-  // but I haven't found a way to get this info from Nearley :(
   it('throws error when parsing invalid SQL expression', () => {
     expect(() => parse('SELECT (')).toThrow('Parse error: Invalid SQL');
   });
