@@ -9,7 +9,7 @@ describe('Nearley integration', () => {
     const tokenizer = new Tokenizer({
       reservedCommands: ['SELECT', 'FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
       reservedDependentClauses: ['WHEN', 'ELSE'],
-      reservedSetOperations: ['UNION'],
+      reservedSetOperations: ['UNION', 'UNION ALL'],
       reservedJoins: ['JOIN'],
       reservedFunctionNames: ['SQRT'],
       reservedKeywords: ['BETWEEN', 'LIKE', 'ON', 'USING'],
@@ -527,6 +527,127 @@ describe('Nearley integration', () => {
                 "raw": "WHERE",
                 "start": 0,
                 "text": "WHERE",
+                "type": "RESERVED_COMMAND",
+              },
+              "type": "clause",
+            },
+          ],
+          "hasSemicolon": false,
+          "type": "statement",
+        },
+      ]
+    `);
+  });
+
+  it('parses set operations', () => {
+    expect(parse('SELECT foo FROM bar UNION ALL SELECT foo FROM baz')).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "token": Object {
+                    "end": 10,
+                    "precedingWhitespace": " ",
+                    "raw": "foo",
+                    "start": 7,
+                    "text": "foo",
+                    "type": "IDENTIFIER",
+                  },
+                  "type": "token",
+                },
+              ],
+              "nameToken": Object {
+                "end": 6,
+                "precedingWhitespace": undefined,
+                "raw": "SELECT",
+                "start": 0,
+                "text": "SELECT",
+                "type": "RESERVED_COMMAND",
+              },
+              "type": "clause",
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "token": Object {
+                    "end": 19,
+                    "precedingWhitespace": " ",
+                    "raw": "bar",
+                    "start": 16,
+                    "text": "bar",
+                    "type": "IDENTIFIER",
+                  },
+                  "type": "token",
+                },
+              ],
+              "nameToken": Object {
+                "end": 15,
+                "precedingWhitespace": " ",
+                "raw": "FROM",
+                "start": 11,
+                "text": "FROM",
+                "type": "RESERVED_COMMAND",
+              },
+              "type": "clause",
+            },
+            Object {
+              "children": Array [],
+              "nameToken": Object {
+                "end": 29,
+                "precedingWhitespace": " ",
+                "raw": "UNION ALL",
+                "start": 20,
+                "text": "UNION ALL",
+                "type": "RESERVED_SET_OPERATION",
+              },
+              "type": "set_operation",
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "token": Object {
+                    "end": 40,
+                    "precedingWhitespace": " ",
+                    "raw": "foo",
+                    "start": 37,
+                    "text": "foo",
+                    "type": "IDENTIFIER",
+                  },
+                  "type": "token",
+                },
+              ],
+              "nameToken": Object {
+                "end": 36,
+                "precedingWhitespace": " ",
+                "raw": "SELECT",
+                "start": 30,
+                "text": "SELECT",
+                "type": "RESERVED_COMMAND",
+              },
+              "type": "clause",
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "token": Object {
+                    "end": 49,
+                    "precedingWhitespace": " ",
+                    "raw": "baz",
+                    "start": 46,
+                    "text": "baz",
+                    "type": "IDENTIFIER",
+                  },
+                  "type": "token",
+                },
+              ],
+              "nameToken": Object {
+                "end": 45,
+                "precedingWhitespace": " ",
+                "raw": "FROM",
+                "start": 41,
+                "text": "FROM",
                 "type": "RESERVED_COMMAND",
               },
               "type": "clause",
