@@ -86,7 +86,11 @@ other_clause -> %RESERVED_COMMAND expression:* {%
 
 expression -> ( commaless_expression | comma ) {% unwrap %}
 
-commaless_expression -> ( array_subscript | function_call | parenthesis | expression_token ) {% unwrap %}
+commaless_expression ->
+  ( array_subscript
+  | function_call
+  | parenthesis
+  | expression_token ) {% unwrap %}
 
 array_subscript -> (%IDENTIFIER | %RESERVED_KEYWORD) "[" expression:* "]" {%
   ([[arrayToken], open, children, close]) => ({
