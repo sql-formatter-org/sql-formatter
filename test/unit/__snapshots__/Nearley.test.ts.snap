@@ -787,3 +787,89 @@ Array [
   },
 ]
 `;
+
+exports[`Nearley integration parses square brackets 1`] = `
+Array [
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "children": Array [
+              Object {
+                "token": Object {
+                  "end": 9,
+                  "precedingWhitespace": undefined,
+                  "raw": "1",
+                  "start": 8,
+                  "text": "1",
+                  "type": "NUMBER",
+                },
+                "type": "token",
+              },
+              Object {
+                "token": Object {
+                  "end": 10,
+                  "precedingWhitespace": undefined,
+                  "raw": ",",
+                  "start": 9,
+                  "text": ",",
+                  "type": "COMMA",
+                },
+                "type": "token",
+              },
+              Object {
+                "token": Object {
+                  "end": 12,
+                  "precedingWhitespace": " ",
+                  "raw": "2",
+                  "start": 11,
+                  "text": "2",
+                  "type": "NUMBER",
+                },
+                "type": "token",
+              },
+              Object {
+                "token": Object {
+                  "end": 13,
+                  "precedingWhitespace": undefined,
+                  "raw": ",",
+                  "start": 12,
+                  "text": ",",
+                  "type": "COMMA",
+                },
+                "type": "token",
+              },
+              Object {
+                "token": Object {
+                  "end": 15,
+                  "precedingWhitespace": " ",
+                  "raw": "3",
+                  "start": 14,
+                  "text": "3",
+                  "type": "NUMBER",
+                },
+                "type": "token",
+              },
+            ],
+            "closeParen": "]",
+            "openParen": "[",
+            "type": "parenthesis",
+          },
+        ],
+        "nameToken": Object {
+          "end": 6,
+          "precedingWhitespace": undefined,
+          "raw": "SELECT",
+          "start": 0,
+          "text": "SELECT",
+          "type": "RESERVED_SELECT",
+        },
+        "type": "clause",
+      },
+    ],
+    "hasSemicolon": true,
+    "type": "statement",
+  },
+]
+`;

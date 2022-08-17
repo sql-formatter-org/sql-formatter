@@ -119,6 +119,7 @@ simple_expression ->
   | function_call
   | parenthesis
   | curly_braces
+  | square_brackets
   | between_predicate
   | expression_token ) {% unwrap %}
 

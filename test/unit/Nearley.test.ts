@@ -75,4 +75,8 @@ describe('Nearley integration', () => {
   it('parses curly braces', () => {
     expect(parse('SELECT {foo: bar};')).toMatchSnapshot();
   });
+
+  it('parses square brackets', () => {
+    expect(parse('SELECT [1, 2, 3];')).toMatchSnapshot();
+  });
 });
