@@ -56,22 +56,21 @@ expressions_or_clauses -> expression:* clause:* {% flatten %}
 
 clause -> ( limit_clause | other_clause ) {% unwrap %}
 
-limit_clause -> %LIMIT expression (%COMMA expression):? {%
-  // TODO: allow more than single node for exp1 & exp2
+limit_clause -> %LIMIT commaless_expression:+ (%COMMA expression:+):? {%
   ([limitToken, exp1, optional]) => {
     if (optional) {
       const [comma, exp2] = optional;
       return {
         type: NodeType.limit_clause,
         limitToken,
-        offset: [exp1],
-        count: [exp2],
+        offset: exp1,
+        count: exp2,
       };
     } else {
       return {
         type: NodeType.limit_clause,
         limitToken,
-        count: [exp1],
+        count: exp1,
       };
     }
   }

@@ -366,4 +366,98 @@ describe('Nearley integration', () => {
       ]
     `);
   });
+
+  it('parses LIMIT clause with longer expressions', () => {
+    expect(parse('LIMIT 50 + 50, 3 * 2;')).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "count": Array [
+                Object {
+                  "token": Object {
+                    "end": 16,
+                    "precedingWhitespace": " ",
+                    "raw": "3",
+                    "start": 15,
+                    "text": "3",
+                    "type": "NUMBER",
+                  },
+                  "type": "token",
+                },
+                Object {
+                  "token": Object {
+                    "end": 18,
+                    "precedingWhitespace": " ",
+                    "raw": "*",
+                    "start": 17,
+                    "text": "*",
+                    "type": "OPERATOR",
+                  },
+                  "type": "token",
+                },
+                Object {
+                  "token": Object {
+                    "end": 20,
+                    "precedingWhitespace": " ",
+                    "raw": "2",
+                    "start": 19,
+                    "text": "2",
+                    "type": "NUMBER",
+                  },
+                  "type": "token",
+                },
+              ],
+              "limitToken": Object {
+                "end": 5,
+                "precedingWhitespace": undefined,
+                "raw": "LIMIT",
+                "start": 0,
+                "text": "LIMIT",
+                "type": "LIMIT",
+              },
+              "offset": Array [
+                Object {
+                  "token": Object {
+                    "end": 8,
+                    "precedingWhitespace": " ",
+                    "raw": "50",
+                    "start": 6,
+                    "text": "50",
+                    "type": "NUMBER",
+                  },
+                  "type": "token",
+                },
+                Object {
+                  "token": Object {
+                    "end": 10,
+                    "precedingWhitespace": " ",
+                    "raw": "+",
+                    "start": 9,
+                    "text": "+",
+                    "type": "OPERATOR",
+                  },
+                  "type": "token",
+                },
+                Object {
+                  "token": Object {
+                    "end": 13,
+                    "precedingWhitespace": " ",
+                    "raw": "50",
+                    "start": 11,
+                    "text": "50",
+                    "type": "NUMBER",
+                  },
+                  "type": "token",
+                },
+              ],
+              "type": "limit_clause",
+            },
+          ],
+          "hasSemicolon": true,
+          "type": "statement",
+        },
+      ]
+    `);
+  });
 });
