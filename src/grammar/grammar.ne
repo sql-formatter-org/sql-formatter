@@ -90,6 +90,7 @@ commaless_expression ->
   ( array_subscript
   | function_call
   | parenthesis
+  | between_predicate
   | expression_token ) {% unwrap %}
 
 array_subscript -> (%IDENTIFIER | %RESERVED_KEYWORD) "[" expression:* "]" {%
@@ -119,6 +120,18 @@ parenthesis -> "(" expressions_or_clauses ")" {%
     children: children,
     openParen: "(",
     closeParen: ")",
+  })
+%}
+
+between_predicate -> %BETWEEN commaless_expression %AND commaless_expression {%
+  // TODO: expr1 & expr2 should be of type Token according to our AST types,
+  // but that's not correct, we should instead allow any expression in there
+  ([betweenToken, expr1, andToken, expr2]) => ({
+    type: NodeType.between_predicate,
+    betweenToken,
+    expr1,
+    andToken,
+    expr2,
   })
 %}
 
@@ -157,7 +170,6 @@ keyword ->
   | %RESERVED_JOIN
   | %CASE
   | %END
-  | %BETWEEN
   | %AND
   | %OR
   | %XOR ) {% createTokenNode %}

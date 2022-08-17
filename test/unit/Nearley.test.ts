@@ -460,4 +460,82 @@ describe('Nearley integration', () => {
       ]
     `);
   });
+
+  it('parses BETWEEN expression', () => {
+    expect(parse('WHERE age BETWEEN 18 AND 63')).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "token": Object {
+                    "end": 9,
+                    "precedingWhitespace": " ",
+                    "raw": "age",
+                    "start": 6,
+                    "text": "age",
+                    "type": "IDENTIFIER",
+                  },
+                  "type": "token",
+                },
+                Object {
+                  "andToken": Object {
+                    "end": 24,
+                    "precedingWhitespace": " ",
+                    "raw": "AND",
+                    "start": 21,
+                    "text": "AND",
+                    "type": "AND",
+                  },
+                  "betweenToken": Object {
+                    "end": 17,
+                    "precedingWhitespace": " ",
+                    "raw": "BETWEEN",
+                    "start": 10,
+                    "text": "BETWEEN",
+                    "type": "BETWEEN",
+                  },
+                  "expr1": Object {
+                    "token": Object {
+                      "end": 20,
+                      "precedingWhitespace": " ",
+                      "raw": "18",
+                      "start": 18,
+                      "text": "18",
+                      "type": "NUMBER",
+                    },
+                    "type": "token",
+                  },
+                  "expr2": Object {
+                    "token": Object {
+                      "end": 27,
+                      "precedingWhitespace": " ",
+                      "raw": "63",
+                      "start": 25,
+                      "text": "63",
+                      "type": "NUMBER",
+                    },
+                    "type": "token",
+                  },
+                  "type": "between_predicate",
+                },
+              ],
+              "nameToken": Object {
+                "end": 5,
+                "precedingWhitespace": undefined,
+                "raw": "WHERE",
+                "start": 0,
+                "text": "WHERE",
+                "type": "RESERVED_COMMAND",
+              },
+              "type": "clause",
+            },
+          ],
+          "hasSemicolon": false,
+          "type": "statement",
+        },
+      ]
+    `);
+  });
 });
