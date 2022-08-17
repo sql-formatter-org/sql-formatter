@@ -1,6 +1,6 @@
 @preprocessor typescript
 @{%
-import LexerAdapter from 'src/grammar/LexerAdapter';
+import LexerAdapter from 'src/parser/LexerAdapter';
 import { NodeType } from 'src/parser/ast';
 import { Token } from 'src/lexer/token';
 

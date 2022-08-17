@@ -1,8 +1,8 @@
 import Tokenizer from 'src/lexer/Tokenizer';
 import { Parser, Grammar } from 'nearley';
 
-import grammar from 'src/grammar/grammar';
-import LexerAdapter from 'src/grammar/LexerAdapter';
+import grammar from 'src/parser/grammar';
+import LexerAdapter from 'src/parser/LexerAdapter';
 
 describe('Nearley integration', () => {
   const parse = (sql: string) => {

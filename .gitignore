@@ -4,4 +4,4 @@ node_modules
 .DS_Store
 coverage
 .eslintcache
-src/grammar/grammar.ts
+src/parser/grammar.ts

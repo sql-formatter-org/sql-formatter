@@ -4,4 +4,4 @@
 /coverage
 /vscode
 webpack.*.js
-/src/grammar/grammar.ts
+/src/parser/grammar.ts
