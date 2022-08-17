@@ -147,7 +147,7 @@ parenthesis -> "(" expressions_or_clauses ")" {%
   })
 %}
 
-curly_braces -> "{" expressions_or_clauses "}" {%
+curly_braces -> "{" expression:* "}" {%
   ([open, children, close]) => ({
     type: NodeType.parenthesis,
     children: children,
@@ -156,7 +156,7 @@ curly_braces -> "{" expressions_or_clauses "}" {%
   })
 %}
 
-square_brackets -> "[" expressions_or_clauses "]" {%
+square_brackets -> "[" expression:* "]" {%
   ([open, children, close]) => ({
     type: NodeType.parenthesis,
     children: children,
