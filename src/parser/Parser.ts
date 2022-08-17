@@ -130,9 +130,9 @@ export default class Parser {
       return {
         type: NodeType.between_predicate,
         betweenToken: this.next(),
-        expr1: this.next(),
+        expr1: [this.nextTokenNode()],
         andToken: this.next(),
-        expr2: this.next(),
+        expr2: [this.nextTokenNode()],
       };
     }
     return undefined;

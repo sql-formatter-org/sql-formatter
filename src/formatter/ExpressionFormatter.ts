@@ -120,16 +120,11 @@ export default class ExpressionFormatter {
   }
 
   private formatBetweenPredicate(node: BetweenPredicate) {
-    this.layout.add(
-      this.show(node.betweenToken),
-      WS.SPACE,
-      this.show(node.expr1),
-      WS.SPACE,
-      this.showNonTabular(node.andToken),
-      WS.SPACE,
-      this.show(node.expr2),
-      WS.SPACE
-    );
+    this.layout.add(this.show(node.betweenToken), WS.SPACE);
+    this.layout = this.formatSubExpression(node.expr1);
+    this.layout.add(WS.NO_SPACE, WS.SPACE, this.showNonTabular(node.andToken), WS.SPACE);
+    this.layout = this.formatSubExpression(node.expr2);
+    this.layout.add(WS.SPACE);
   }
 
   private formatClause(node: Clause) {

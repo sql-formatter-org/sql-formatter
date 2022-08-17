@@ -1,6 +1,5 @@
-import { sum } from 'src/utils';
 import { type Token, TokenType, isLogicalOperator } from 'src/lexer/token';
-import { BetweenPredicate, NodeType, Parenthesis } from 'src/parser/ast';
+import { AstNode, BetweenPredicate, NodeType, Parenthesis } from 'src/parser/ast';
 
 /**
  * Bookkeeper for inline blocks.
@@ -17,22 +16,27 @@ export default class InlineBlock {
    * Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
    */
   public isInlineBlock(parenthesis: Parenthesis): boolean {
-    return this.inlineWidth(parenthesis) <= this.expressionWidth;
+    return this.inlineParenthesisWidth(parenthesis) <= this.expressionWidth;
   }
 
-  private inlineWidth(parenthesis: Parenthesis): number {
-    let length = 2; // two parenthesis
+  private inlineParenthesisWidth(parenthesis: Parenthesis): number {
+    // +2 for the two parenthesis
+    return this.inlineWidth(parenthesis.children) + 2;
+  }
 
-    for (const node of parenthesis.children) {
+  private inlineWidth(nodes: AstNode[]): number {
+    let length = 0;
+
+    for (const node of nodes) {
       switch (node.type) {
         case NodeType.function_call:
-          length += node.nameToken.text.length + this.inlineWidth(node.parenthesis);
+          length += node.nameToken.text.length + this.inlineParenthesisWidth(node.parenthesis);
           break;
         case NodeType.array_subscript:
-          length += node.arrayToken.text.length + this.inlineWidth(node.parenthesis);
+          length += node.arrayToken.text.length + this.inlineParenthesisWidth(node.parenthesis);
           break;
         case NodeType.parenthesis:
-          length += this.inlineWidth(node);
+          length += this.inlineParenthesisWidth(node);
           break;
         case NodeType.between_predicate:
           length += this.betweenWidth(node);
@@ -61,8 +65,11 @@ export default class InlineBlock {
   }
 
   private betweenWidth(node: BetweenPredicate): number {
-    return sum(
-      [node.betweenToken, node.expr1, node.andToken, node.expr2].map(token => token.text.length)
+    return (
+      node.betweenToken.text.length +
+      this.inlineWidth(node.expr1) +
+      node.andToken.text.length +
+      this.inlineWidth(node.expr2)
     );
   }
 

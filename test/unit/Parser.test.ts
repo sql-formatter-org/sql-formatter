@@ -321,22 +321,32 @@ describe('Parser', () => {
                     "text": "BETWEEN",
                     "type": "BETWEEN",
                   },
-                  "expr1": Object {
-                    "end": 20,
-                    "precedingWhitespace": " ",
-                    "raw": "10",
-                    "start": 18,
-                    "text": "10",
-                    "type": "NUMBER",
-                  },
-                  "expr2": Object {
-                    "end": 27,
-                    "precedingWhitespace": " ",
-                    "raw": "15",
-                    "start": 25,
-                    "text": "15",
-                    "type": "NUMBER",
-                  },
+                  "expr1": Array [
+                    Object {
+                      "token": Object {
+                        "end": 20,
+                        "precedingWhitespace": " ",
+                        "raw": "10",
+                        "start": 18,
+                        "text": "10",
+                        "type": "NUMBER",
+                      },
+                      "type": "token",
+                    },
+                  ],
+                  "expr2": Array [
+                    Object {
+                      "token": Object {
+                        "end": 27,
+                        "precedingWhitespace": " ",
+                        "raw": "15",
+                        "start": 25,
+                        "text": "15",
+                        "type": "NUMBER",
+                      },
+                      "type": "token",
+                    },
+                  ],
                   "type": "between_predicate",
                 },
               ],
