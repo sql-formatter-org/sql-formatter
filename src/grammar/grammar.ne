@@ -84,8 +84,8 @@ set_operation -> %RESERVED_SET_OPERATION expression:* {%
   })
 %}
 
-other_clause -> %RESERVED_COMMAND expression:* {%
-  ([nameToken, children]) => ({
+other_clause -> (%RESERVED_COMMAND | %RESERVED_SELECT) expression:* {%
+  ([[nameToken], children]) => ({
     type: NodeType.clause,
     nameToken,
     children: flatten(children),
@@ -132,14 +132,12 @@ parenthesis -> "(" expressions_or_clauses ")" {%
 %}
 
 between_predicate -> %BETWEEN commaless_expression %AND commaless_expression {%
-  // TODO: expr1 & expr2 should be of type Token according to our AST types,
-  // but that's not correct, we should instead allow any expression in there
   ([betweenToken, expr1, andToken, expr2]) => ({
     type: NodeType.between_predicate,
     betweenToken,
-    expr1,
+    expr1: [expr1],
     andToken,
-    expr2,
+    expr2: [expr2],
   })
 %}
 
@@ -153,7 +151,7 @@ expression_token ->
   | keyword
   | comment ) {% unwrap %}
 
-operator -> ( %OPERATOR ) {% createTokenNode %}
+operator -> ( %OPERATOR | %ASTERISK ) {% createTokenNode %}
 
 identifier ->
   ( %IDENTIFIER
