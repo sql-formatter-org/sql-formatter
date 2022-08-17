@@ -6,10 +6,11 @@ import { keywords } from './spark.keywords';
 import { functions } from './spark.functions';
 
 // http://spark.apache.org/docs/latest/sql-ref-syntax.html
+const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
+
 const reservedCommands = expandPhrases([
   // queries
   'WITH',
-  'SELECT [ALL | DISTINCT]',
   'FROM',
   'WHERE',
   'GROUP BY',
@@ -115,6 +116,7 @@ export default class SparkFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
+      reservedSelect,
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],

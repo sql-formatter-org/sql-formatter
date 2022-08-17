@@ -10,6 +10,7 @@ export enum TokenType {
   RESERVED_DEPENDENT_CLAUSE = 'RESERVED_DEPENDENT_CLAUSE',
   RESERVED_SET_OPERATION = 'RESERVED_SET_OPERATION',
   RESERVED_COMMAND = 'RESERVED_COMMAND',
+  RESERVED_SELECT = 'RESERVED_SELECT',
   RESERVED_JOIN = 'RESERVED_JOIN',
   CASE = 'CASE',
   END = 'END',
@@ -66,8 +67,6 @@ export const testToken =
 export const isToken = {
   ARRAY: testToken({ text: 'ARRAY', type: TokenType.RESERVED_KEYWORD }),
   BY: testToken({ text: 'BY', type: TokenType.RESERVED_KEYWORD }),
-  SELECT: (token: Token) =>
-    /^SELECT\b/.test(token.text) && token.type === TokenType.RESERVED_COMMAND,
   SET: testToken({ text: 'SET', type: TokenType.RESERVED_COMMAND }),
   STRUCT: testToken({ text: 'STRUCT', type: TokenType.RESERVED_KEYWORD }),
   WINDOW: testToken({ text: 'WINDOW', type: TokenType.RESERVED_COMMAND }),
@@ -80,6 +79,7 @@ export const isReserved = (token: Token): boolean =>
   token.type === TokenType.RESERVED_PHRASE ||
   token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
   token.type === TokenType.RESERVED_COMMAND ||
+  token.type === TokenType.RESERVED_SELECT ||
   token.type === TokenType.RESERVED_SET_OPERATION ||
   token.type === TokenType.RESERVED_JOIN ||
   token.type === TokenType.CASE ||

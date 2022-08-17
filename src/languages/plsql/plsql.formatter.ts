@@ -5,10 +5,11 @@ import { EOF_TOKEN, isReserved, isToken, type Token, TokenType } from 'src/lexer
 import { keywords } from './plsql.keywords';
 import { functions } from './plsql.functions';
 
+const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT | UNIQUE]']);
+
 const reservedCommands = expandPhrases([
   // queries
   'WITH',
-  'SELECT [ALL | DISTINCT | UNIQUE]',
   'FROM',
   'WHERE',
   'GROUP BY',
@@ -86,6 +87,7 @@ export default class PlSqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
+      reservedSelect,
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],

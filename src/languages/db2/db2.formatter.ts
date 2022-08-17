@@ -4,10 +4,11 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './db2.functions';
 import { keywords } from './db2.keywords';
 
+const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
+
 const reservedCommands = expandPhrases([
   // queries
   'WITH',
-  'SELECT [ALL | DISTINCT]',
   'FROM',
   'WHERE',
   'GROUP BY',
@@ -173,6 +174,7 @@ export default class Db2Formatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
+      reservedSelect,
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF'],

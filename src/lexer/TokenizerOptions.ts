@@ -43,8 +43,10 @@ export interface ParamTypes {
 }
 
 export interface TokenizerOptions {
-  // Main clauses that start new block, like: SELECT, FROM, WHERE, ORDER BY
+  // Main clauses that start new block, like: WITH, FROM, WHERE, ORDER BY
   reservedCommands: string[];
+  // SELECT clause and its variations
+  reservedSelect: string[];
   // True to support XOR in addition to AND and OR
   supportsXor?: boolean;
   // Keywords in CASE expressions that begin new line, like: WHEN, ELSE

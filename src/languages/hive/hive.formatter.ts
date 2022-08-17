@@ -4,10 +4,11 @@ import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './hive.functions';
 import { keywords } from './hive.keywords';
 
+const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
+
 const reservedCommands = expandPhrases([
   // queries
   'WITH',
-  'SELECT [ALL | DISTINCT]',
   'FROM',
   'WHERE',
   'GROUP BY',
@@ -84,6 +85,7 @@ export default class HiveFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
+      reservedSelect,
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
