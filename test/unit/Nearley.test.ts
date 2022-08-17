@@ -70,4 +70,8 @@ describe('Nearley integration', () => {
   it('parses set operations', () => {
     expect(parse('SELECT foo FROM bar UNION ALL SELECT foo FROM baz')).toMatchSnapshot();
   });
+
+  it('parses SELECT *', () => {
+    expect(parse('SELECT *')).toMatchSnapshot();
+  });
 });

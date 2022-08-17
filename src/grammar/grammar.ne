@@ -54,7 +54,11 @@ statement -> expressions_or_clauses {%
 # To avoid ambiguity, plain expressions can only come before clauses
 expressions_or_clauses -> expression:* clause:* {% flatten %}
 
-clause -> ( limit_clause | set_operation | other_clause ) {% unwrap %}
+clause ->
+  ( limit_clause
+  | select_clause
+  | other_clause
+  | set_operation ) {% unwrap %}
 
 limit_clause -> %LIMIT commaless_expression:+ (%COMMA expression:+):? {%
   ([limitToken, exp1, optional]) => {
@@ -76,17 +80,25 @@ limit_clause -> %LIMIT commaless_expression:+ (%COMMA expression:+):? {%
   }
 %}
 
-set_operation -> %RESERVED_SET_OPERATION expression:* {%
+select_clause -> %RESERVED_SELECT expression:* {%
   ([nameToken, children]) => ({
-    type: NodeType.set_operation,
+    type: NodeType.clause,
     nameToken,
     children: flatten(children),
   })
 %}
 
-other_clause -> (%RESERVED_COMMAND | %RESERVED_SELECT) expression:* {%
-  ([[nameToken], children]) => ({
+other_clause -> %RESERVED_COMMAND expression:* {%
+  ([nameToken, children]) => ({
     type: NodeType.clause,
+    nameToken,
+    children: flatten(children),
+  })
+%}
+
+set_operation -> %RESERVED_SET_OPERATION expression:* {%
+  ([nameToken, children]) => ({
+    type: NodeType.set_operation,
     nameToken,
     children: flatten(children),
   })
