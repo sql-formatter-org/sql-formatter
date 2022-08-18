@@ -60,15 +60,23 @@ describe('SqlFormatter', () => {
   it('does not crash when encountering characters or operators it does not recognize', () => {
     expect(
       format(`
-        SELECT @name, :bar FROM {foo};
+        SELECT @name, :bar FROM foo;
       `)
     ).toBe(dedent`
       SELECT
         @ name,
       : bar
       FROM
-        { foo };
+        foo;
     `);
+  });
+
+  it('crashes when encountering unsupported curly braces', () => {
+    expect(() =>
+      format(`
+        SELECT {foo};
+      `)
+    ).toThrowError('Parse error: Unexpected "{foo};');
   });
 
   it('formats ALTER TABLE ... ALTER COLUMN', () => {
