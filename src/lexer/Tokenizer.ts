@@ -106,7 +106,7 @@ export default class Tokenizer {
       },
       [TokenType.DELIMITER]: { regex: /[;]/uy },
       [TokenType.OPERATOR]: {
-        regex: regex.operator('+-/%&|^><=.:$@#?~![]{}', [
+        regex: regex.operator('+-/%&|^><=.:$@#?~!', [
           '<>',
           '<=',
           '>=',
