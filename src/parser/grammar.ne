@@ -2,7 +2,7 @@
 @{%
 import LexerAdapter from 'src/parser/LexerAdapter';
 import { NodeType } from 'src/parser/ast';
-import { Token } from 'src/lexer/token';
+import { Token, TokenType } from 'src/lexer/token';
 
 // The lexer here is only to provide the has() method,
 // that's used inside the generated grammar definition.
@@ -22,32 +22,18 @@ const createTokenNode = ([[token]]: Token[][]) => ({ type: NodeType.token, token
 %}
 @lexer lexer
 
-# This postprocessor is quite complex.
-# Might be better to eliminate hasSemicolon field
-# and allow for empty statement in the end,
-# so semicolons could then be placed between each statement.
-main -> statement (%DELIMITER statement):* {%
-  (items) => {
-    return flatten(items)
-      // skip semicolons
-      .filter(item => item.type === NodeType.statement)
-      // mark all statements except the last as having a semicolon
-      .map((statement, i, allStatements) => {
-        if (i === allStatements.length - 1) {
-          return { ...statement, hasSemicolon: false };
-        } else {
-          return { ...statement, hasSemicolon: true };
-        }
-      })
-      // throw away last statement if it's empty
-      .filter(({children, hasSemicolon}) => hasSemicolon || children.length > 0);
-  }
+main -> statement:* {%
+  ([statements]) =>
+    flatten(statements)
+    // throw away last statement if it's empty
+    .filter(({children, hasSemicolon}) => hasSemicolon || children.length > 0)
 %}
 
-statement -> expressions_or_clauses {%
-  ([children]) => ({
+statement -> expressions_or_clauses (%DELIMITER | %EOF) {%
+  ([children, [delimiter]]) => ({
     type: NodeType.statement,
     children,
+    hasSemicolon: delimiter.type === TokenType.DELIMITER,
   })
 %}
 

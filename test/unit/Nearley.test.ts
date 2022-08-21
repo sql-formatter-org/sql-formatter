@@ -25,7 +25,7 @@ describe('Nearley integration', () => {
   });
 
   it('throws error when parsing invalid SQL expression', () => {
-    expect(() => parse('SELECT (')).toThrow('Parse error: Invalid SQL');
+    expect(() => parse('SELECT (')).toThrow('Parse error at token: «EOF»');
   });
 
   it('parses list of statements', () => {
