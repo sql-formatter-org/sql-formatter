@@ -1,7 +1,7 @@
 import Tokenizer from 'src/lexer/Tokenizer';
 import { createParser } from 'src/parser/createParser';
 
-describe('Nearley integration', () => {
+describe('Parser', () => {
   const parse = (sql: string) => {
     const tokenizer = new Tokenizer({
       reservedCommands: ['FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
