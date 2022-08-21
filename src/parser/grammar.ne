@@ -23,10 +23,18 @@ const createTokenNode = ([[token]]: Token[][]) => ({ type: NodeType.token, token
 @lexer lexer
 
 main -> statement:* {%
-  ([statements]) =>
-    flatten(statements)
-    // throw away last statement if it's empty
-    .filter(({children, hasSemicolon}) => hasSemicolon || children.length > 0)
+  ([statements]) => {
+    const last = statements[statements.length - 1];
+    if (last && !last.hasSemicolon) {
+      // we have fully parsed the whole file
+      statements = flatten(statements);
+      // discard the last statement when it's empty
+      return last.children.length > 0 ? statements : statements.slice(0, -1);
+    } else {
+      // parsing still in progress, do nothing
+      return statements;
+    }
+  }
 %}
 
 statement -> expressions_or_clauses (%DELIMITER | %EOF) {%
