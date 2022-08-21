@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Nearley integration parses BETWEEN expression 1`] = `
+exports[`Parser parses BETWEEN expression 1`] = `
 Array [
   Object {
     "children": Array [
@@ -80,7 +80,7 @@ Array [
 ]
 `;
 
-exports[`Nearley integration parses LIMIT clause with count 1`] = `
+exports[`Parser parses LIMIT clause with count 1`] = `
 Array [
   Object {
     "children": Array [
@@ -115,7 +115,7 @@ Array [
 ]
 `;
 
-exports[`Nearley integration parses LIMIT clause with longer expressions 1`] = `
+exports[`Parser parses LIMIT clause with longer expressions 1`] = `
 Array [
   Object {
     "children": Array [
@@ -207,7 +207,7 @@ Array [
 ]
 `;
 
-exports[`Nearley integration parses LIMIT clause with offset and count 1`] = `
+exports[`Parser parses LIMIT clause with offset and count 1`] = `
 Array [
   Object {
     "children": Array [
@@ -255,7 +255,7 @@ Array [
 ]
 `;
 
-exports[`Nearley integration parses SELECT * 1`] = `
+exports[`Parser parses SELECT * 1`] = `
 Array [
   Object {
     "children": Array [
@@ -282,7 +282,7 @@ Array [
 ]
 `;
 
-exports[`Nearley integration parses array subscript 1`] = `
+exports[`Parser parses array subscript 1`] = `
 Array [
   Object {
     "children": Array [
@@ -335,7 +335,7 @@ Array [
 ]
 `;
 
-exports[`Nearley integration parses curly braces 1`] = `
+exports[`Parser parses curly braces 1`] = `
 Array [
   Object {
     "children": Array [
@@ -399,7 +399,7 @@ Array [
 ]
 `;
 
-exports[`Nearley integration parses function call 1`] = `
+exports[`Parser parses function call 1`] = `
 Array [
   Object {
     "children": Array [
@@ -452,7 +452,7 @@ Array [
 ]
 `;
 
-exports[`Nearley integration parses function name with and without parameters 1`] = `
+exports[`Parser parses function name with and without parameters 1`] = `
 Array [
   Object {
     "children": Array [
@@ -537,7 +537,7 @@ Array [
 ]
 `;
 
-exports[`Nearley integration parses list of statements 1`] = `
+exports[`Parser parses list of statements 1`] = `
 Array [
   Object {
     "children": Array [
@@ -576,7 +576,7 @@ Array [
 ]
 `;
 
-exports[`Nearley integration parses parenthesized expressions 1`] = `
+exports[`Parser parses parenthesized expressions 1`] = `
 Array [
   Object {
     "children": Array [
@@ -669,7 +669,7 @@ Array [
 ]
 `;
 
-exports[`Nearley integration parses set operations 1`] = `
+exports[`Parser parses set operations 1`] = `
 Array [
   Object {
     "children": Array [
@@ -788,7 +788,7 @@ Array [
 ]
 `;
 
-exports[`Nearley integration parses square brackets 1`] = `
+exports[`Parser parses square brackets 1`] = `
 Array [
   Object {
     "children": Array [
