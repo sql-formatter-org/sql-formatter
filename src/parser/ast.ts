@@ -10,6 +10,7 @@ export enum NodeType {
   between_predicate = 'between_predicate',
   limit_clause = 'limit_clause',
   all_columns_asterisk = 'all_columns_asterisk',
+  literal = 'literal',
   token = 'token',
 }
 
@@ -80,6 +81,11 @@ export type AllColumnsAsterisk = {
   type: NodeType.all_columns_asterisk;
 };
 
+export type Literal = {
+  type: NodeType.literal;
+  text: string;
+};
+
 export type AstNode =
   | Clause
   | SetOperation
@@ -89,6 +95,7 @@ export type AstNode =
   | BetweenPredicate
   | LimitClause
   | AllColumnsAsterisk
+  | Literal
   | TokenNode;
 
 export const isTokenNode = (node: AstNode): node is TokenNode => node.type === 'token';

@@ -15,6 +15,7 @@ import {
   LimitClause,
   NodeType,
   Parenthesis,
+  Literal,
 } from 'src/parser/ast';
 
 import InlineBlock from './InlineBlock';
@@ -76,6 +77,9 @@ export default class ExpressionFormatter {
           break;
         case NodeType.all_columns_asterisk:
           this.formatAllColumnsAsterisk(node);
+          break;
+        case NodeType.literal:
+          this.formatLiteral(node);
           break;
         case NodeType.token:
           this.formatToken(node.token);
@@ -170,6 +174,10 @@ export default class ExpressionFormatter {
     this.layout.add('*', WS.SPACE);
   }
 
+  private formatLiteral(node: Literal) {
+    this.layout.add(node.text, WS.SPACE);
+  }
+
   private formatSubExpression(nodes: AstNode[], inline = this.inline): Layout {
     return new ExpressionFormatter({
       cfg: this.cfg,
@@ -208,21 +216,19 @@ export default class ExpressionFormatter {
         return this.formatOperator(token);
       case TokenType.IDENTIFIER:
       case TokenType.QUOTED_IDENTIFIER:
-      case TokenType.STRING:
-      case TokenType.NUMBER:
       case TokenType.VARIABLE:
       case TokenType.NAMED_PARAMETER:
       case TokenType.QUOTED_PARAMETER:
       case TokenType.NUMBERED_PARAMETER:
       case TokenType.POSITIONAL_PARAMETER:
-        return this.formatLiteral(token);
+        return this.formatDefaultToken(token);
       default:
         throw new Error(`Unexpected token type: ${token.type}`);
     }
   }
 
   /** Default formatting for most token types */
-  private formatLiteral(token: Token) {
+  private formatDefaultToken(token: Token) {
     this.layout.add(this.show(token), WS.SPACE);
   }
 

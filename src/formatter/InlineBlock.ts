@@ -48,6 +48,9 @@ export default class InlineBlock {
         case NodeType.all_columns_asterisk:
           length += 1;
           break;
+        case NodeType.literal:
+          length += node.text.length;
+          break;
         case NodeType.token:
           length += node.token.text.length;
           if (this.isForbiddenToken(node.token)) {

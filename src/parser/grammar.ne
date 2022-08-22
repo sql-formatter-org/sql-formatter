@@ -196,7 +196,7 @@ parameter ->
 
 literal ->
   ( %NUMBER
-  | %STRING ) {% createTokenNode %}
+  | %STRING ) {% ([[token]]) => ({ type: NodeType.literal, text: token.text }) %}
 
 keyword ->
   ( %RESERVED_KEYWORD

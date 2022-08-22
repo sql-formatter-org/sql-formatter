@@ -36,28 +36,14 @@ Array [
             },
             "expr1": Array [
               Object {
-                "token": Object {
-                  "end": 20,
-                  "precedingWhitespace": " ",
-                  "raw": "18",
-                  "start": 18,
-                  "text": "18",
-                  "type": "NUMBER",
-                },
-                "type": "token",
+                "text": "18",
+                "type": "literal",
               },
             ],
             "expr2": Array [
               Object {
-                "token": Object {
-                  "end": 27,
-                  "precedingWhitespace": " ",
-                  "raw": "63",
-                  "start": 25,
-                  "text": "63",
-                  "type": "NUMBER",
-                },
-                "type": "token",
+                "text": "63",
+                "type": "literal",
               },
             ],
             "type": "between_predicate",
@@ -87,15 +73,8 @@ Array [
       Object {
         "count": Array [
           Object {
-            "token": Object {
-              "end": 8,
-              "precedingWhitespace": " ",
-              "raw": "15",
-              "start": 6,
-              "text": "15",
-              "type": "NUMBER",
-            },
-            "type": "token",
+            "text": "15",
+            "type": "literal",
           },
         ],
         "limitToken": Object {
@@ -122,15 +101,8 @@ Array [
       Object {
         "count": Array [
           Object {
-            "token": Object {
-              "end": 16,
-              "precedingWhitespace": " ",
-              "raw": "3",
-              "start": 15,
-              "text": "3",
-              "type": "NUMBER",
-            },
-            "type": "token",
+            "text": "3",
+            "type": "literal",
           },
           Object {
             "token": Object {
@@ -144,15 +116,8 @@ Array [
             "type": "token",
           },
           Object {
-            "token": Object {
-              "end": 20,
-              "precedingWhitespace": " ",
-              "raw": "2",
-              "start": 19,
-              "text": "2",
-              "type": "NUMBER",
-            },
-            "type": "token",
+            "text": "2",
+            "type": "literal",
           },
         ],
         "limitToken": Object {
@@ -165,15 +130,8 @@ Array [
         },
         "offset": Array [
           Object {
-            "token": Object {
-              "end": 8,
-              "precedingWhitespace": " ",
-              "raw": "50",
-              "start": 6,
-              "text": "50",
-              "type": "NUMBER",
-            },
-            "type": "token",
+            "text": "50",
+            "type": "literal",
           },
           Object {
             "token": Object {
@@ -187,15 +145,8 @@ Array [
             "type": "token",
           },
           Object {
-            "token": Object {
-              "end": 13,
-              "precedingWhitespace": " ",
-              "raw": "50",
-              "start": 11,
-              "text": "50",
-              "type": "NUMBER",
-            },
-            "type": "token",
+            "text": "50",
+            "type": "literal",
           },
         ],
         "type": "limit_clause",
@@ -214,15 +165,8 @@ Array [
       Object {
         "count": Array [
           Object {
-            "token": Object {
-              "end": 13,
-              "precedingWhitespace": " ",
-              "raw": "15",
-              "start": 11,
-              "text": "15",
-              "type": "NUMBER",
-            },
-            "type": "token",
+            "text": "15",
+            "type": "literal",
           },
         ],
         "limitToken": Object {
@@ -235,15 +179,8 @@ Array [
         },
         "offset": Array [
           Object {
-            "token": Object {
-              "end": 9,
-              "precedingWhitespace": " ",
-              "raw": "100",
-              "start": 6,
-              "text": "100",
-              "type": "NUMBER",
-            },
-            "type": "token",
+            "text": "100",
+            "type": "literal",
           },
         ],
         "type": "limit_clause",
@@ -300,15 +237,8 @@ Array [
             "parenthesis": Object {
               "children": Array [
                 Object {
-                  "token": Object {
-                    "end": 17,
-                    "precedingWhitespace": undefined,
-                    "raw": "5",
-                    "start": 16,
-                    "text": "5",
-                    "type": "NUMBER",
-                  },
-                  "type": "token",
+                  "text": "5",
+                  "type": "literal",
                 },
               ],
               "closeParen": "]",
@@ -417,15 +347,8 @@ Array [
             "parenthesis": Object {
               "children": Array [
                 Object {
-                  "token": Object {
-                    "end": 13,
-                    "precedingWhitespace": undefined,
-                    "raw": "2",
-                    "start": 12,
-                    "text": "2",
-                    "type": "NUMBER",
-                  },
-                  "type": "token",
+                  "text": "2",
+                  "type": "literal",
                 },
               ],
               "closeParen": ")",
@@ -631,15 +554,8 @@ Array [
                     "type": "token",
                   },
                   Object {
-                    "token": Object {
-                      "end": 38,
-                      "precedingWhitespace": " ",
-                      "raw": "1",
-                      "start": 37,
-                      "text": "1",
-                      "type": "NUMBER",
-                    },
-                    "type": "token",
+                    "text": "1",
+                    "type": "literal",
                   },
                 ],
                 "closeParen": ")",
@@ -797,15 +713,8 @@ Array [
           Object {
             "children": Array [
               Object {
-                "token": Object {
-                  "end": 9,
-                  "precedingWhitespace": undefined,
-                  "raw": "1",
-                  "start": 8,
-                  "text": "1",
-                  "type": "NUMBER",
-                },
-                "type": "token",
+                "text": "1",
+                "type": "literal",
               },
               Object {
                 "token": Object {
@@ -819,15 +728,8 @@ Array [
                 "type": "token",
               },
               Object {
-                "token": Object {
-                  "end": 12,
-                  "precedingWhitespace": " ",
-                  "raw": "2",
-                  "start": 11,
-                  "text": "2",
-                  "type": "NUMBER",
-                },
-                "type": "token",
+                "text": "2",
+                "type": "literal",
               },
               Object {
                 "token": Object {
@@ -841,15 +743,8 @@ Array [
                 "type": "token",
               },
               Object {
-                "token": Object {
-                  "end": 15,
-                  "precedingWhitespace": " ",
-                  "raw": "3",
-                  "start": 14,
-                  "text": "3",
-                  "type": "NUMBER",
-                },
-                "type": "token",
+                "text": "3",
+                "type": "literal",
               },
             ],
             "closeParen": "]",
