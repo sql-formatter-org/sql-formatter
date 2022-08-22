@@ -9,8 +9,6 @@ import { Token, TokenType } from 'src/lexer/token';
 // A proper lexer gets passed to Nearley Parser constructor.
 const lexer = new LexerAdapter(chunk => []);
 
-const flatten = (arr: any[]) => arr.flat(Infinity);
-
 // Used for unwrapping grammar rules like:
 //
 //   rule -> ( foo | bar | baz )
@@ -45,7 +43,9 @@ statement -> expressions_or_clauses (%DELIMITER | %EOF) {%
 %}
 
 # To avoid ambiguity, plain expressions can only come before clauses
-expressions_or_clauses -> expression:* clause:* {% flatten %}
+expressions_or_clauses -> expression:* clause:* {%
+  ([expressions, clauses]) => [...expressions, ...clauses]
+%}
 
 clause ->
   ( limit_clause
@@ -74,10 +74,10 @@ limit_clause -> %LIMIT commaless_expression:+ (%COMMA expression:+):? {%
 %}
 
 select_clause -> %RESERVED_SELECT (all_columns_asterisk expression:* | asteriskless_expression expression:*) {%
-  ([nameToken, children]) => ({
+  ([nameToken, [exp, expressions]]) => ({
     type: NodeType.clause,
     nameToken,
-    children: flatten(children),
+    children: [exp, ...expressions],
   })
 %}
 
@@ -89,7 +89,7 @@ other_clause -> %RESERVED_COMMAND expression:* {%
   ([nameToken, children]) => ({
     type: NodeType.clause,
     nameToken,
-    children: flatten(children),
+    children,
   })
 %}
 
@@ -97,7 +97,7 @@ set_operation -> %RESERVED_SET_OPERATION expression:* {%
   ([nameToken, children]) => ({
     type: NodeType.set_operation,
     nameToken,
-    children: flatten(children),
+    children,
   })
 %}
 
