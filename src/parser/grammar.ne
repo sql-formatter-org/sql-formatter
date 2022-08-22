@@ -27,7 +27,6 @@ main -> statement:* {%
     const last = statements[statements.length - 1];
     if (last && !last.hasSemicolon) {
       // we have fully parsed the whole file
-      statements = flatten(statements);
       // discard the last statement when it's empty
       return last.children.length > 0 ? statements : statements.slice(0, -1);
     } else {
