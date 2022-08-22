@@ -3,7 +3,7 @@ import { equalizeWhitespace } from 'src/utils';
 
 import Params from 'src/formatter/Params';
 import { isTabularStyle } from 'src/formatter/config';
-import { isReserved, type Token, TokenType, isParameter } from 'src/lexer/token';
+import { isReserved, type Token, TokenType } from 'src/lexer/token';
 import {
   AllColumnsAsterisk,
   ArraySubscript,
@@ -17,6 +17,7 @@ import {
   Parenthesis,
   Literal,
   Identifier,
+  Parameter,
 } from 'src/parser/ast';
 
 import InlineBlock from './InlineBlock';
@@ -82,6 +83,9 @@ export default class ExpressionFormatter {
         case NodeType.literal:
         case NodeType.identifier:
           this.formatLiteral(node);
+          break;
+        case NodeType.parameter:
+          this.formatParameter(node);
           break;
         case NodeType.token:
           this.formatToken(node.token);
@@ -180,6 +184,10 @@ export default class ExpressionFormatter {
     this.layout.add(node.text, WS.SPACE);
   }
 
+  private formatParameter(node: Parameter) {
+    this.layout.add(this.params.get(node), WS.SPACE);
+  }
+
   private formatSubExpression(nodes: AstNode[], inline = this.inline): Layout {
     return new ExpressionFormatter({
       cfg: this.cfg,
@@ -216,19 +224,9 @@ export default class ExpressionFormatter {
       case TokenType.OPERATOR:
       case TokenType.ASTERISK:
         return this.formatOperator(token);
-      case TokenType.NAMED_PARAMETER:
-      case TokenType.QUOTED_PARAMETER:
-      case TokenType.NUMBERED_PARAMETER:
-      case TokenType.POSITIONAL_PARAMETER:
-        return this.formatDefaultToken(token);
       default:
         throw new Error(`Unexpected token type: ${token.type}`);
     }
-  }
-
-  /** Default formatting for most token types */
-  private formatDefaultToken(token: Token) {
-    this.layout.add(this.show(token), WS.SPACE);
   }
 
   /** Formats a line comment onto query */
@@ -392,8 +390,6 @@ export default class ExpressionFormatter {
         case 'lower':
           return token.text.toLowerCase();
       }
-    } else if (isParameter(token)) {
-      return this.params.get(token);
     } else {
       return token.text;
     }

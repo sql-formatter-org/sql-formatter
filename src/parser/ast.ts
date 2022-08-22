@@ -12,6 +12,7 @@ export enum NodeType {
   all_columns_asterisk = 'all_columns_asterisk',
   literal = 'literal',
   identifier = 'identifier',
+  parameter = 'parameter',
   token = 'token',
 }
 
@@ -92,6 +93,12 @@ export type Identifier = {
   text: string;
 };
 
+export type Parameter = {
+  type: NodeType.parameter;
+  key?: string;
+  text: string;
+};
+
 export type AstNode =
   | Clause
   | SetOperation
@@ -103,6 +110,7 @@ export type AstNode =
   | AllColumnsAsterisk
   | Literal
   | Identifier
+  | Parameter
   | TokenNode;
 
 export const isTokenNode = (node: AstNode): node is TokenNode => node.type === 'token';

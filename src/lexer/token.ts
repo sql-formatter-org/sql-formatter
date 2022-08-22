@@ -94,12 +94,5 @@ export const isReserved = (token: Token): boolean =>
   token.type === TokenType.OR ||
   token.type === TokenType.XOR;
 
-/** checks if token is one of the parameter tokens */
-export const isParameter = (token: Token): boolean =>
-  token.type === TokenType.NUMBERED_PARAMETER ||
-  token.type === TokenType.NAMED_PARAMETER ||
-  token.type === TokenType.POSITIONAL_PARAMETER ||
-  token.type === TokenType.QUOTED_PARAMETER;
-
 export const isLogicalOperator = (token: Token): boolean =>
   token.type === TokenType.AND || token.type === TokenType.OR || token.type === TokenType.XOR;

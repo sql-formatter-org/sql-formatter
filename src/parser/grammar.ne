@@ -192,7 +192,7 @@ parameter ->
   ( %NAMED_PARAMETER
   | %QUOTED_PARAMETER
   | %NUMBERED_PARAMETER
-  | %POSITIONAL_PARAMETER ) {% createTokenNode %}
+  | %POSITIONAL_PARAMETER ) {% ([[token]]) => ({ type: NodeType.parameter, key: token.key, text: token.text }) %}
 
 literal ->
   ( %NUMBER
