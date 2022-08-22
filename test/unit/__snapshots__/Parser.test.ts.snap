@@ -7,15 +7,8 @@ Array [
       Object {
         "children": Array [
           Object {
-            "token": Object {
-              "end": 9,
-              "precedingWhitespace": " ",
-              "raw": "age",
-              "start": 6,
-              "text": "age",
-              "type": "IDENTIFIER",
-            },
-            "type": "token",
+            "text": "age",
+            "type": "identifier",
           },
           Object {
             "andToken": Object {
@@ -274,15 +267,8 @@ Array [
           Object {
             "children": Array [
               Object {
-                "token": Object {
-                  "end": 11,
-                  "precedingWhitespace": undefined,
-                  "raw": "foo",
-                  "start": 8,
-                  "text": "foo",
-                  "type": "IDENTIFIER",
-                },
-                "type": "token",
+                "text": "foo",
+                "type": "identifier",
               },
               Object {
                 "token": Object {
@@ -296,15 +282,8 @@ Array [
                 "type": "token",
               },
               Object {
-                "token": Object {
-                  "end": 16,
-                  "precedingWhitespace": " ",
-                  "raw": "bar",
-                  "start": 13,
-                  "text": "bar",
-                  "type": "IDENTIFIER",
-                },
-                "type": "token",
+                "text": "bar",
+                "type": "identifier",
               },
             ],
             "closeParen": "}",
@@ -393,15 +372,8 @@ Array [
             "type": "token",
           },
           Object {
-            "token": Object {
-              "end": 21,
-              "precedingWhitespace": " ",
-              "raw": "a",
-              "start": 20,
-              "text": "a",
-              "type": "IDENTIFIER",
-            },
-            "type": "token",
+            "text": "a",
+            "type": "identifier",
           },
           Object {
             "token": Object {
@@ -432,15 +404,8 @@ Array [
             "type": "function_call",
           },
           Object {
-            "token": Object {
-              "end": 39,
-              "precedingWhitespace": " ",
-              "raw": "b",
-              "start": 38,
-              "text": "b",
-              "type": "IDENTIFIER",
-            },
-            "type": "token",
+            "text": "b",
+            "type": "identifier",
           },
         ],
         "nameToken": Object {
@@ -465,15 +430,8 @@ Array [
   Object {
     "children": Array [
       Object {
-        "token": Object {
-          "end": 3,
-          "precedingWhitespace": undefined,
-          "raw": "foo",
-          "start": 0,
-          "text": "foo",
-          "type": "IDENTIFIER",
-        },
-        "type": "token",
+        "text": "foo",
+        "type": "identifier",
       },
     ],
     "hasSemicolon": true,
@@ -482,15 +440,8 @@ Array [
   Object {
     "children": Array [
       Object {
-        "token": Object {
-          "end": 8,
-          "precedingWhitespace": " ",
-          "raw": "bar",
-          "start": 5,
-          "text": "bar",
-          "type": "IDENTIFIER",
-        },
-        "type": "token",
+        "text": "bar",
+        "type": "identifier",
       },
     ],
     "hasSemicolon": false,
@@ -508,15 +459,8 @@ Array [
           Object {
             "children": Array [
               Object {
-                "token": Object {
-                  "end": 18,
-                  "precedingWhitespace": undefined,
-                  "raw": "birth_year",
-                  "start": 8,
-                  "text": "birth_year",
-                  "type": "IDENTIFIER",
-                },
-                "type": "token",
+                "text": "birth_year",
+                "type": "identifier",
               },
               Object {
                 "token": Object {
@@ -532,15 +476,8 @@ Array [
               Object {
                 "children": Array [
                   Object {
-                    "token": Object {
-                      "end": 34,
-                      "precedingWhitespace": undefined,
-                      "raw": "CURRENT_DATE",
-                      "start": 22,
-                      "text": "CURRENT_DATE",
-                      "type": "IDENTIFIER",
-                    },
-                    "type": "token",
+                    "text": "CURRENT_DATE",
+                    "type": "identifier",
                   },
                   Object {
                     "token": Object {
@@ -592,15 +529,8 @@ Array [
       Object {
         "children": Array [
           Object {
-            "token": Object {
-              "end": 10,
-              "precedingWhitespace": " ",
-              "raw": "foo",
-              "start": 7,
-              "text": "foo",
-              "type": "IDENTIFIER",
-            },
-            "type": "token",
+            "text": "foo",
+            "type": "identifier",
           },
         ],
         "nameToken": Object {
@@ -616,15 +546,8 @@ Array [
       Object {
         "children": Array [
           Object {
-            "token": Object {
-              "end": 19,
-              "precedingWhitespace": " ",
-              "raw": "bar",
-              "start": 16,
-              "text": "bar",
-              "type": "IDENTIFIER",
-            },
-            "type": "token",
+            "text": "bar",
+            "type": "identifier",
           },
         ],
         "nameToken": Object {
@@ -652,15 +575,8 @@ Array [
       Object {
         "children": Array [
           Object {
-            "token": Object {
-              "end": 40,
-              "precedingWhitespace": " ",
-              "raw": "foo",
-              "start": 37,
-              "text": "foo",
-              "type": "IDENTIFIER",
-            },
-            "type": "token",
+            "text": "foo",
+            "type": "identifier",
           },
         ],
         "nameToken": Object {
@@ -676,15 +592,8 @@ Array [
       Object {
         "children": Array [
           Object {
-            "token": Object {
-              "end": 49,
-              "precedingWhitespace": " ",
-              "raw": "baz",
-              "start": 46,
-              "text": "baz",
-              "type": "IDENTIFIER",
-            },
-            "type": "token",
+            "text": "baz",
+            "type": "identifier",
           },
         ],
         "nameToken": Object {

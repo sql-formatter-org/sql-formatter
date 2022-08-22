@@ -49,6 +49,7 @@ export default class InlineBlock {
           length += 1;
           break;
         case NodeType.literal:
+        case NodeType.identifier:
           length += node.text.length;
           break;
         case NodeType.token:

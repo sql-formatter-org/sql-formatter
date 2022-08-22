@@ -186,7 +186,7 @@ operator -> ( %OPERATOR ) {% createTokenNode %}
 identifier ->
   ( %IDENTIFIER
   | %QUOTED_IDENTIFIER
-  | %VARIABLE ) {% createTokenNode %}
+  | %VARIABLE ) {% ([[token]]) => ({ type: NodeType.identifier, text: token.text }) %}
 
 parameter ->
   ( %NAMED_PARAMETER

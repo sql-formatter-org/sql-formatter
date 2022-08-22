@@ -16,6 +16,7 @@ import {
   NodeType,
   Parenthesis,
   Literal,
+  Identifier,
 } from 'src/parser/ast';
 
 import InlineBlock from './InlineBlock';
@@ -79,6 +80,7 @@ export default class ExpressionFormatter {
           this.formatAllColumnsAsterisk(node);
           break;
         case NodeType.literal:
+        case NodeType.identifier:
           this.formatLiteral(node);
           break;
         case NodeType.token:
@@ -174,7 +176,7 @@ export default class ExpressionFormatter {
     this.layout.add('*', WS.SPACE);
   }
 
-  private formatLiteral(node: Literal) {
+  private formatLiteral(node: Literal | Identifier) {
     this.layout.add(node.text, WS.SPACE);
   }
 
@@ -214,9 +216,6 @@ export default class ExpressionFormatter {
       case TokenType.OPERATOR:
       case TokenType.ASTERISK:
         return this.formatOperator(token);
-      case TokenType.IDENTIFIER:
-      case TokenType.QUOTED_IDENTIFIER:
-      case TokenType.VARIABLE:
       case TokenType.NAMED_PARAMETER:
       case TokenType.QUOTED_PARAMETER:
       case TokenType.NUMBERED_PARAMETER:

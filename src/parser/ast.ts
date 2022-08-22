@@ -11,6 +11,7 @@ export enum NodeType {
   limit_clause = 'limit_clause',
   all_columns_asterisk = 'all_columns_asterisk',
   literal = 'literal',
+  identifier = 'identifier',
   token = 'token',
 }
 
@@ -86,6 +87,11 @@ export type Literal = {
   text: string;
 };
 
+export type Identifier = {
+  type: NodeType.identifier;
+  text: string;
+};
+
 export type AstNode =
   | Clause
   | SetOperation
@@ -96,6 +102,7 @@ export type AstNode =
   | LimitClause
   | AllColumnsAsterisk
   | Literal
+  | Identifier
   | TokenNode;
 
 export const isTokenNode = (node: AstNode): node is TokenNode => node.type === 'token';
