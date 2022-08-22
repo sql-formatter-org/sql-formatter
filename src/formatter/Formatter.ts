@@ -3,7 +3,7 @@ import { indentString } from 'src/formatter/config';
 import Params from 'src/formatter/Params';
 import Tokenizer from 'src/lexer/Tokenizer';
 
-import Parser from 'src/parser/Parser';
+import { createParser } from 'src/parser/createParser';
 import { Statement } from 'src/parser/ast';
 
 import formatCommaPositions from './formatCommaPositions';
@@ -54,8 +54,7 @@ export default class Formatter {
   }
 
   private parse(query: string): Statement[] {
-    const tokens = this.cachedTokenizer().tokenize(query, this.cfg.paramTypes || {});
-    return new Parser(tokens).parse();
+    return createParser(this.cachedTokenizer()).parse(query, this.cfg.paramTypes || {});
   }
 
   private formatAst(statements: Statement[]): string {

@@ -4,3 +4,4 @@
 /node_modules
 yarn.lock
 LICENSE
+/src/parser/grammar.ts

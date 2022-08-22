@@ -213,14 +213,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     `);
   });
 
-  it('formats incomplete query', () => {
-    const result = format('SELECT count(');
-    expect(result).toBe(dedent`
-      SELECT
-        count(
-    `);
-  });
-
   it('formats top-level and newline multi-word reserved words with inconsistent spacing', () => {
     const result = format('SELECT * FROM foo LEFT \t   \n JOIN mycol ORDER \n BY blah');
     expect(result).toBe(dedent`

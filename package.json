@@ -82,15 +82,16 @@
     "pretty": "prettier --write .",
     "pretty:check": "prettier --check .",
     "fix": "yarn pretty && eslint --fix .",
-    "test": "jest",
+    "test": "yarn grammar && jest",
     "test:watch": "yarn test -- --watch",
     "check": "yarn ts:check && yarn pretty:check && yarn lint && yarn test",
-    "prepare": "yarn clean && yarn fix && yarn check && yarn build",
+    "prepare": "yarn clean && yarn grammar && yarn fix && yarn check && yarn build",
     "pre-commit": "npm-run-all --parallel ts:changes lint:changes",
+    "grammar": "nearleyc src/parser/grammar.ne -o src/parser/grammar.ts",
     "build:babel": "babel src --out-dir lib --extensions .ts --source-maps",
     "build:types": "ttsc --module commonjs --emitDeclarationOnly --isolatedModules",
     "build:minified": "webpack --config webpack.prod.js",
-    "build": "npm-run-all --parallel build:babel build:types build:minified",
+    "build": "yarn grammar && npm-run-all --parallel build:babel build:types build:minified",
     "release": "release-it"
   },
   "repository": {
@@ -101,7 +102,8 @@
     "url": "https://github.com/sql-formatter-org/sql-formatter/issues"
   },
   "dependencies": {
-    "argparse": "^2.0.1"
+    "argparse": "^2.0.1",
+    "nearley": "^2.20.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.4",
@@ -112,6 +114,7 @@
     "@jest/globals": "^28.1.2",
     "@types/babel__core": "^7.1.15",
     "@types/jest": "^28.1.4",
+    "@types/nearley": "^2.11.2",
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "@typescript-eslint/parser": "^5.21.0",
     "@zerollup/ts-transform-paths": "^1.7.18",
