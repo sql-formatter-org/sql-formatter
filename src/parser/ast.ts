@@ -14,6 +14,7 @@ export enum NodeType {
   identifier = 'identifier',
   parameter = 'parameter',
   operator = 'operator',
+  comma = 'comma',
   line_comment = 'line_comment',
   block_comment = 'block_comment',
   token = 'token',
@@ -107,6 +108,10 @@ export type Operator = {
   text: string;
 };
 
+export type Comma = {
+  type: NodeType.comma;
+};
+
 export type LineComment = {
   type: NodeType.line_comment;
   text: string;
@@ -131,6 +136,7 @@ export type AstNode =
   | Identifier
   | Parameter
   | Operator
+  | Comma
   | LineComment
   | BlockComment
   | TokenNode;

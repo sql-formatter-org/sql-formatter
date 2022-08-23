@@ -355,15 +355,7 @@ Array [
             "type": "identifier",
           },
           Object {
-            "token": Object {
-              "end": 22,
-              "precedingWhitespace": undefined,
-              "raw": ",",
-              "start": 21,
-              "text": ",",
-              "type": "COMMA",
-            },
-            "type": "token",
+            "type": "comma",
           },
           Object {
             "nameToken": Object {
@@ -591,30 +583,14 @@ Array [
                 "type": "literal",
               },
               Object {
-                "token": Object {
-                  "end": 10,
-                  "precedingWhitespace": undefined,
-                  "raw": ",",
-                  "start": 9,
-                  "text": ",",
-                  "type": "COMMA",
-                },
-                "type": "token",
+                "type": "comma",
               },
               Object {
                 "text": "2",
                 "type": "literal",
               },
               Object {
-                "token": Object {
-                  "end": 13,
-                  "precedingWhitespace": undefined,
-                  "raw": ",",
-                  "start": 12,
-                  "text": ",",
-                  "type": "COMMA",
-                },
-                "type": "token",
+                "type": "comma",
               },
               Object {
                 "text": "3",

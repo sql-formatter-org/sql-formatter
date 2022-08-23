@@ -169,7 +169,7 @@ between_predicate -> %BETWEEN commaless_expression %AND commaless_expression {%
   })
 %}
 
-comma -> ( %COMMA ) {% createTokenNode %}
+comma -> ( %COMMA ) {% ([[token]]) => ({ type: NodeType.comma }) %}
 
 asterisk -> ( %ASTERISK ) {% ([[token]]) => ({ type: NodeType.operator, text: token.text }) %}
 

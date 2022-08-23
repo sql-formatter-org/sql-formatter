@@ -21,6 +21,7 @@ import {
   Operator,
   LineComment,
   BlockComment,
+  Comma,
 } from 'src/parser/ast';
 
 import InlineBlock from './InlineBlock';
@@ -94,6 +95,9 @@ export default class ExpressionFormatter {
           break;
         case NodeType.operator:
           this.formatOperator(node);
+          break;
+        case NodeType.comma:
+          this.formatComma(node);
           break;
         case NodeType.line_comment:
           this.formatLineComment(node);
@@ -232,6 +236,14 @@ export default class ExpressionFormatter {
     }
   }
 
+  private formatComma(_node: Comma) {
+    if (!this.inline) {
+      this.layout.add(WS.NO_SPACE, ',', WS.NEWLINE, WS.INDENT);
+    } else {
+      this.layout.add(WS.NO_SPACE, ',', WS.SPACE);
+    }
+  }
+
   private formatLineComment(node: LineComment) {
     if (/\n/.test(node.precedingWhitespace || '')) {
       this.layout.add(WS.NEWLINE, WS.INDENT, node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
@@ -299,8 +311,6 @@ export default class ExpressionFormatter {
         return this.formatCaseStart(token);
       case TokenType.END:
         return this.formatCaseEnd(token);
-      case TokenType.COMMA:
-        return this.formatComma(token);
       default:
         throw new Error(`Unexpected token type: ${token.type}`);
     }
@@ -362,17 +372,6 @@ export default class ExpressionFormatter {
     this.layout.indentation.decreaseBlockLevel();
 
     this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
-  }
-
-  /**
-   * Formats a comma Operator onto query, ending line unless in an Inline Block
-   */
-  private formatComma(token: Token) {
-    if (!this.inline) {
-      this.layout.add(WS.NO_SPACE, this.show(token), WS.NEWLINE, WS.INDENT);
-    } else {
-      this.layout.add(WS.NO_SPACE, this.show(token), WS.SPACE);
-    }
   }
 
   private show(token: Token): string {

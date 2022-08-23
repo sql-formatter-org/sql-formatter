@@ -48,6 +48,7 @@ export default class InlineBlock {
         case NodeType.block_comment:
           return Infinity;
         case NodeType.all_columns_asterisk:
+        case NodeType.comma:
           length += 1;
           break;
         case NodeType.literal:
