@@ -3,7 +3,7 @@ import { equalizeWhitespace } from 'src/utils';
 
 import Params from 'src/formatter/Params';
 import { isTabularStyle } from 'src/formatter/config';
-import { isReserved, type Token, TokenType } from 'src/lexer/token';
+import { TokenType } from 'src/lexer/token';
 import {
   AllColumnsAsterisk,
   ArraySubscript,
@@ -353,36 +353,23 @@ export default class ExpressionFormatter {
     this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node), WS.SPACE);
   }
 
-  private showKw({ tokenType, text, raw }: Keyword): string {
-    return this.show({ type: tokenType, text, raw, start: 0, end: Infinity });
-  }
-
-  private show(token: Token): string {
-    if (isTabularToken(token.type)) {
-      return toTabularFormat(this.showToken(token), this.cfg.indentStyle);
+  private showKw(node: Keyword): string {
+    if (isTabularToken(node.tokenType)) {
+      return toTabularFormat(this.showNonTabularKw(node), this.cfg.indentStyle);
     } else {
-      return this.showToken(token);
+      return this.showNonTabularKw(node);
     }
   }
 
   // Like showKw(), but skips tabular formatting
-  private showNonTabularKw({ tokenType, text, raw }: Keyword): string {
-    return this.showToken({ type: tokenType, text, raw, start: 0, end: Infinity });
-  }
-
-  // don't call this directly, always use show() or showNonTabular() instead.
-  private showToken(token: Token): string {
-    if (isReserved(token.type)) {
-      switch (this.cfg.keywordCase) {
-        case 'preserve':
-          return equalizeWhitespace(token.raw);
-        case 'upper':
-          return token.text;
-        case 'lower':
-          return token.text.toLowerCase();
-      }
-    } else {
-      return token.text;
+  private showNonTabularKw(node: Keyword): string {
+    switch (this.cfg.keywordCase) {
+      case 'preserve':
+        return equalizeWhitespace(node.raw);
+      case 'upper':
+        return node.text;
+      case 'lower':
+        return node.text.toLowerCase();
     }
   }
 }
