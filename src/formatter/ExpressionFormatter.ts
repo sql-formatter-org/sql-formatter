@@ -22,6 +22,7 @@ import {
   LineComment,
   BlockComment,
   Comma,
+  Keyword,
 } from 'src/parser/ast';
 
 import InlineBlock from './InlineBlock';
@@ -105,8 +106,8 @@ export default class ExpressionFormatter {
         case NodeType.block_comment:
           this.formatBlockComment(node);
           break;
-        case NodeType.token:
-          this.formatToken(node.token);
+        case NodeType.keyword:
+          this.formatKeywordNode(node);
           break;
       }
     }
@@ -293,85 +294,80 @@ export default class ExpressionFormatter {
     }).format(nodes);
   }
 
-  private formatToken(token: Token): void {
-    switch (token.type) {
+  private formatKeywordNode(node: Keyword): void {
+    switch (node.tokenType) {
       case TokenType.RESERVED_JOIN:
-        return this.formatJoin(token);
+        return this.formatJoin(node);
       case TokenType.RESERVED_DEPENDENT_CLAUSE:
-        return this.formatDependentClause(token);
+        return this.formatDependentClause(node);
       case TokenType.AND:
       case TokenType.OR:
       case TokenType.XOR:
-        return this.formatLogicalOperator(token);
+        return this.formatLogicalOperator(node);
       case TokenType.RESERVED_KEYWORD:
       case TokenType.RESERVED_FUNCTION_NAME:
       case TokenType.RESERVED_PHRASE:
-        return this.formatKeyword(token);
+        return this.formatKeyword(node);
       case TokenType.CASE:
-        return this.formatCaseStart(token);
+        return this.formatCaseStart(node);
       case TokenType.END:
-        return this.formatCaseEnd(token);
+        return this.formatCaseEnd(node);
       default:
-        throw new Error(`Unexpected token type: ${token.type}`);
+        throw new Error(`Unexpected token type: ${node.tokenType}`);
     }
   }
 
-  private formatJoin(token: Token) {
+  private formatJoin(node: Keyword) {
     if (isTabularStyle(this.cfg)) {
       // in tabular style JOINs are at the same level as clauses
       this.layout.indentation.decreaseTopLevel();
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node), WS.SPACE);
       this.layout.indentation.increaseTopLevel();
     } else {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node), WS.SPACE);
     }
   }
 
-  /**
-   * Formats a Reserved Keyword onto query
-   */
-  private formatKeyword(token: Token) {
-    this.layout.add(this.show(token), WS.SPACE);
+  private formatKeyword(node: Keyword) {
+    this.layout.add(this.showKw(node), WS.SPACE);
   }
 
-  /**
-   * Formats a Reserved Dependent Clause token onto query, supporting the keyword that precedes it
-   */
-  private formatDependentClause(token: Token) {
-    this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+  private formatDependentClause(node: Keyword) {
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node), WS.SPACE);
   }
 
-  /**
-   * Formats a Logical Operator onto query, joining boolean conditions
-   */
-  private formatLogicalOperator(token: Token) {
+  private formatLogicalOperator(node: Keyword) {
     if (this.cfg.logicalOperatorNewline === 'before') {
       if (isTabularStyle(this.cfg)) {
         // In tabular style AND/OR is placed on the same level as clauses
         this.layout.indentation.decreaseTopLevel();
-        this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+        this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node), WS.SPACE);
         this.layout.indentation.increaseTopLevel();
       } else {
-        this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+        this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node), WS.SPACE);
       }
     } else {
-      this.layout.add(this.show(token), WS.NEWLINE, WS.INDENT);
+      this.layout.add(this.showKw(node), WS.NEWLINE, WS.INDENT);
     }
   }
 
-  private formatCaseStart(token: Token) {
+  private formatCaseStart(node: Keyword) {
     this.layout.indentation.increaseBlockLevel();
-    this.layout.add(this.show(token), WS.NEWLINE, WS.INDENT);
+    this.layout.add(this.showKw(node), WS.NEWLINE, WS.INDENT);
   }
 
-  private formatCaseEnd(token: Token) {
-    this.formatMultilineBlockEnd(token);
+  private formatCaseEnd(node: Keyword) {
+    this.formatMultilineBlockEnd(node);
   }
 
-  private formatMultilineBlockEnd(token: Token) {
+  private formatMultilineBlockEnd(node: Keyword) {
     this.layout.indentation.decreaseBlockLevel();
 
-    this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node), WS.SPACE);
+  }
+
+  private showKw({ tokenType, text, raw }: Keyword): string {
+    return this.show({ type: tokenType, text, raw, start: 0, end: Infinity });
   }
 
   private show(token: Token): string {

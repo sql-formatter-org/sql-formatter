@@ -340,15 +340,10 @@ Array [
       Object {
         "children": Array [
           Object {
-            "token": Object {
-              "end": 19,
-              "precedingWhitespace": " ",
-              "raw": "CURRENT_TIME",
-              "start": 7,
-              "text": "CURRENT_TIME",
-              "type": "RESERVED_KEYWORD",
-            },
-            "type": "token",
+            "raw": "CURRENT_TIME",
+            "text": "CURRENT_TIME",
+            "tokenType": "RESERVED_KEYWORD",
+            "type": "keyword",
           },
           Object {
             "text": "a",

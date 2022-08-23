@@ -1,5 +1,5 @@
-import { type Token, TokenType, isLogicalOperator } from 'src/lexer/token';
-import { AstNode, BetweenPredicate, NodeType, Parenthesis } from 'src/parser/ast';
+import { TokenType, isLogicalOperator } from 'src/lexer/token';
+import { AstNode, BetweenPredicate, Keyword, NodeType, Parenthesis } from 'src/parser/ast';
 
 /**
  * Bookkeeper for inline blocks.
@@ -57,9 +57,9 @@ export default class InlineBlock {
         case NodeType.operator:
           length += node.text.length;
           break;
-        case NodeType.token:
-          length += node.token.text.length;
-          if (this.isForbiddenToken(node.token)) {
+        case NodeType.keyword:
+          length += node.text.length;
+          if (this.isForbiddenKeyword(node)) {
             return Infinity;
           }
           break;
@@ -83,7 +83,7 @@ export default class InlineBlock {
   }
 
   // Reserved words that cause newlines are not allowed inside inline parentheses block
-  private isForbiddenToken(token: Token) {
-    return isLogicalOperator(token) || token.type === TokenType.CASE;
+  private isForbiddenKeyword(node: Keyword) {
+    return isLogicalOperator({ type: node.tokenType }) || node.tokenType === TokenType.CASE;
   }
 }

@@ -1,4 +1,4 @@
-import { Token } from 'src/lexer/token';
+import { Token, TokenType } from 'src/lexer/token';
 
 export enum NodeType {
   statement = 'statement',
@@ -12,12 +12,12 @@ export enum NodeType {
   all_columns_asterisk = 'all_columns_asterisk',
   literal = 'literal',
   identifier = 'identifier',
+  keyword = 'keyword',
   parameter = 'parameter',
   operator = 'operator',
   comma = 'comma',
   line_comment = 'line_comment',
   block_comment = 'block_comment',
-  token = 'token',
 }
 
 export type Statement = {
@@ -36,12 +36,6 @@ export type SetOperation = {
   type: NodeType.set_operation;
   nameToken: Token;
   children: AstNode[];
-};
-
-// Wrapper for plain nodes inside AST
-export type TokenNode = {
-  type: NodeType.token;
-  token: Token;
 };
 
 export type FunctionCall = {
@@ -97,6 +91,13 @@ export type Identifier = {
   text: string;
 };
 
+export type Keyword = {
+  type: NodeType.keyword;
+  tokenType: TokenType;
+  text: string;
+  raw: string;
+};
+
 export type Parameter = {
   type: NodeType.parameter;
   key?: string;
@@ -134,11 +135,9 @@ export type AstNode =
   | AllColumnsAsterisk
   | Literal
   | Identifier
+  | Keyword
   | Parameter
   | Operator
   | Comma
   | LineComment
-  | BlockComment
-  | TokenNode;
-
-export const isTokenNode = (node: AstNode): node is TokenNode => node.type === 'token';
+  | BlockComment;
