@@ -358,7 +358,7 @@ export default class ExpressionFormatter {
   }
 
   private show(token: Token): string {
-    if (isTabularToken(token)) {
+    if (isTabularToken(token.type)) {
       return toTabularFormat(this.showToken(token), this.cfg.indentStyle);
     } else {
       return this.showToken(token);
