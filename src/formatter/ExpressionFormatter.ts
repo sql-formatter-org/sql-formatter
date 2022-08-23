@@ -136,9 +136,9 @@ export default class ExpressionFormatter {
   }
 
   private formatBetweenPredicate(node: BetweenPredicate) {
-    this.layout.add(this.show(node.betweenToken), WS.SPACE);
+    this.layout.add(this.showKw(node.between), WS.SPACE);
     this.layout = this.formatSubExpression(node.expr1);
-    this.layout.add(WS.NO_SPACE, WS.SPACE, this.showNonTabular(node.andToken), WS.SPACE);
+    this.layout.add(WS.NO_SPACE, WS.SPACE, this.showNonTabularKw(node.and), WS.SPACE);
     this.layout = this.formatSubExpression(node.expr2);
     this.layout.add(WS.SPACE);
   }
@@ -365,9 +365,9 @@ export default class ExpressionFormatter {
     }
   }
 
-  // Like show(), but skips tabular formatting
-  private showNonTabular(token: Token): string {
-    return this.showToken(token);
+  // Like showKw(), but skips tabular formatting
+  private showNonTabularKw({ tokenType, text, raw }: Keyword): string {
+    return this.showToken({ type: tokenType, text, raw, start: 0, end: Infinity });
   }
 
   // don't call this directly, always use show() or showNonTabular() instead.

@@ -75,9 +75,9 @@ export default class InlineBlock {
 
   private betweenWidth(node: BetweenPredicate): number {
     return (
-      node.betweenToken.text.length +
+      node.between.text.length +
       this.inlineWidth(node.expr1) +
-      node.andToken.text.length +
+      node.and.text.length +
       this.inlineWidth(node.expr2)
     );
   }

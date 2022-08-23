@@ -11,21 +11,17 @@ Array [
             "type": "identifier",
           },
           Object {
-            "andToken": Object {
-              "end": 24,
-              "precedingWhitespace": " ",
+            "and": Object {
               "raw": "AND",
-              "start": 21,
               "text": "AND",
-              "type": "AND",
+              "tokenType": "AND",
+              "type": "keyword",
             },
-            "betweenToken": Object {
-              "end": 17,
-              "precedingWhitespace": " ",
+            "between": Object {
               "raw": "BETWEEN",
-              "start": 10,
               "text": "BETWEEN",
-              "type": "BETWEEN",
+              "tokenType": "BETWEEN",
+              "type": "keyword",
             },
             "expr1": Array [
               Object {

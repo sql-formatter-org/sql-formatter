@@ -174,9 +174,9 @@ square_brackets -> "[" expression:* "]" {%
 between_predicate -> %BETWEEN commaless_expression %AND commaless_expression {%
   ([betweenToken, expr1, andToken, expr2]) => ({
     type: NodeType.between_predicate,
-    betweenToken,
+    between: toKeywordNode(betweenToken),
     expr1: [expr1],
-    andToken,
+    and: toKeywordNode(andToken),
     expr2: [expr2],
   })
 %}
