@@ -372,7 +372,7 @@ export default class ExpressionFormatter {
 
   // don't call this directly, always use show() or showNonTabular() instead.
   private showToken(token: Token): string {
-    if (isReserved(token)) {
+    if (isReserved(token.type)) {
       switch (this.cfg.keywordCase) {
         case 'preserve':
           return equalizeWhitespace(token.raw);

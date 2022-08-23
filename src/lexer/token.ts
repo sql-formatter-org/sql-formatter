@@ -76,23 +76,23 @@ export const isToken = {
 };
 
 /** Checks if token is any Reserved Keyword or Command */
-export const isReserved = (token: Token): boolean =>
-  token.type === TokenType.RESERVED_KEYWORD ||
-  token.type === TokenType.RESERVED_FUNCTION_NAME ||
-  token.type === TokenType.RESERVED_PHRASE ||
-  token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
-  token.type === TokenType.RESERVED_COMMAND ||
-  token.type === TokenType.RESERVED_SELECT ||
-  token.type === TokenType.RESERVED_SET_OPERATION ||
-  token.type === TokenType.RESERVED_JOIN ||
-  token.type === TokenType.ARRAY_KEYWORD ||
-  token.type === TokenType.CASE ||
-  token.type === TokenType.END ||
-  token.type === TokenType.LIMIT ||
-  token.type === TokenType.BETWEEN ||
-  token.type === TokenType.AND ||
-  token.type === TokenType.OR ||
-  token.type === TokenType.XOR;
+export const isReserved = (type: TokenType): boolean =>
+  type === TokenType.RESERVED_KEYWORD ||
+  type === TokenType.RESERVED_FUNCTION_NAME ||
+  type === TokenType.RESERVED_PHRASE ||
+  type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
+  type === TokenType.RESERVED_COMMAND ||
+  type === TokenType.RESERVED_SELECT ||
+  type === TokenType.RESERVED_SET_OPERATION ||
+  type === TokenType.RESERVED_JOIN ||
+  type === TokenType.ARRAY_KEYWORD ||
+  type === TokenType.CASE ||
+  type === TokenType.END ||
+  type === TokenType.LIMIT ||
+  type === TokenType.BETWEEN ||
+  type === TokenType.AND ||
+  type === TokenType.OR ||
+  type === TokenType.XOR;
 
 export const isLogicalOperator = (token: { type: TokenType }): boolean =>
   token.type === TokenType.AND || token.type === TokenType.OR || token.type === TokenType.XOR;
