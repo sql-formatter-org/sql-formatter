@@ -198,9 +198,6 @@ export default class ExpressionFormatter {
     this.layout.add(this.params.get(node), WS.SPACE);
   }
 
-  /**
-   * Formats an Operator onto query, following rules for specific characters
-   */
   private formatOperator({ text }: OperatorNode) {
     // special operator
     if (text === ':') {
