@@ -496,13 +496,11 @@ Array [
       },
       Object {
         "children": Array [],
-        "nameToken": Object {
-          "end": 29,
-          "precedingWhitespace": " ",
+        "name": Object {
           "raw": "UNION ALL",
-          "start": 20,
           "text": "UNION ALL",
-          "type": "RESERVED_SET_OPERATION",
+          "tokenType": "RESERVED_SET_OPERATION",
+          "type": "keyword",
         },
         "type": "set_operation",
       },

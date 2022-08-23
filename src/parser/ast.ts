@@ -34,7 +34,7 @@ export type Clause = {
 
 export type SetOperation = {
   type: NodeType.set_operation;
-  nameToken: Token;
+  name: Keyword;
   children: AstNode[];
 };
 

@@ -160,7 +160,7 @@ export default class ExpressionFormatter {
   }
 
   private formatSetOperation(node: SetOperation) {
-    this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name), WS.NEWLINE);
 
     this.layout.add(WS.INDENT);
     this.layout = this.formatSubExpression(node.children);

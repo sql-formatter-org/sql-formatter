@@ -101,7 +101,7 @@ other_clause -> %RESERVED_COMMAND expression:* {%
 set_operation -> %RESERVED_SET_OPERATION expression:* {%
   ([nameToken, children]) => ({
     type: NodeType.set_operation,
-    nameToken,
+    name: toKeywordNode(nameToken),
     children,
   })
 %}
