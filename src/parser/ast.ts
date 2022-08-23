@@ -28,7 +28,7 @@ export type Statement = {
 
 export type Clause = {
   type: NodeType.clause;
-  nameToken: Token;
+  name: Keyword;
   children: AstNode[];
 };
 

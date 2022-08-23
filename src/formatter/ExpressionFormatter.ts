@@ -145,9 +145,9 @@ export default class ExpressionFormatter {
 
   private formatClause(node: Clause) {
     if (isTabularStyle(this.cfg)) {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.SPACE);
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name), WS.SPACE);
     } else {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.nameToken), WS.NEWLINE);
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name), WS.NEWLINE);
     }
     this.layout.indentation.increaseTopLevel();
 

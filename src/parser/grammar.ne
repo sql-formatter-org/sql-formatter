@@ -81,7 +81,7 @@ limit_clause -> %LIMIT commaless_expression:+ (%COMMA expression:+):? {%
 select_clause -> %RESERVED_SELECT (all_columns_asterisk expression:* | asteriskless_expression expression:*) {%
   ([nameToken, [exp, expressions]]) => ({
     type: NodeType.clause,
-    nameToken,
+    name: toKeywordNode(nameToken),
     children: [exp, ...expressions],
   })
 %}
@@ -93,7 +93,7 @@ all_columns_asterisk -> %ASTERISK {%
 other_clause -> %RESERVED_COMMAND expression:* {%
   ([nameToken, children]) => ({
     type: NodeType.clause,
-    nameToken,
+    name: toKeywordNode(nameToken),
     children,
   })
 %}
