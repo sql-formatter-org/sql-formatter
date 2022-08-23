@@ -2,7 +2,7 @@
 @{%
 import LexerAdapter from 'src/parser/LexerAdapter';
 import { NodeType } from 'src/parser/ast';
-import { TokenType } from 'src/lexer/token';
+import { Token, TokenType } from 'src/lexer/token';
 
 // The lexer here is only to provide the has() method,
 // that's used inside the generated grammar definition.
@@ -15,6 +15,13 @@ const lexer = new LexerAdapter(chunk => []);
 //
 // which otherwise produce single element nested inside two arrays
 const unwrap = <T>([[el]]: T[][]): T => el;
+
+const toKeywordNode = (token: Token) => ({
+  type: NodeType.keyword,
+  tokenType: token.type,
+  text: token.text,
+  raw: token.raw,
+});
 %}
 @lexer lexer
 
@@ -206,12 +213,7 @@ keyword ->
   | %AND
   | %OR
   | %XOR ) {%
-  ([[token]]) => ({
-    type: NodeType.keyword,
-    tokenType: token.type,
-    text: token.text,
-    raw: token.raw,
-  })
+  ([[token]]) => toKeywordNode(token)
 %}
 
 comment -> %LINE_COMMENT {%
