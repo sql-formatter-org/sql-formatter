@@ -98,15 +98,8 @@ Array [
             "type": "literal",
           },
           Object {
-            "token": Object {
-              "end": 18,
-              "precedingWhitespace": " ",
-              "raw": "*",
-              "start": 17,
-              "text": "*",
-              "type": "ASTERISK",
-            },
-            "type": "token",
+            "text": "*",
+            "type": "operator",
           },
           Object {
             "text": "2",
@@ -127,15 +120,8 @@ Array [
             "type": "literal",
           },
           Object {
-            "token": Object {
-              "end": 10,
-              "precedingWhitespace": " ",
-              "raw": "+",
-              "start": 9,
-              "text": "+",
-              "type": "OPERATOR",
-            },
-            "type": "token",
+            "text": "+",
+            "type": "operator",
           },
           Object {
             "text": "50",
@@ -271,15 +257,8 @@ Array [
                 "type": "identifier",
               },
               Object {
-                "token": Object {
-                  "end": 12,
-                  "precedingWhitespace": undefined,
-                  "raw": ":",
-                  "start": 11,
-                  "text": ":",
-                  "type": "OPERATOR",
-                },
-                "type": "token",
+                "text": ":",
+                "type": "operator",
               },
               Object {
                 "text": "bar",
@@ -463,15 +442,8 @@ Array [
                 "type": "identifier",
               },
               Object {
-                "token": Object {
-                  "end": 20,
-                  "precedingWhitespace": " ",
-                  "raw": "-",
-                  "start": 19,
-                  "text": "-",
-                  "type": "OPERATOR",
-                },
-                "type": "token",
+                "text": "-",
+                "type": "operator",
               },
               Object {
                 "children": Array [
@@ -480,15 +452,8 @@ Array [
                     "type": "identifier",
                   },
                   Object {
-                    "token": Object {
-                      "end": 36,
-                      "precedingWhitespace": " ",
-                      "raw": "+",
-                      "start": 35,
-                      "text": "+",
-                      "type": "OPERATOR",
-                    },
-                    "type": "token",
+                    "text": "+",
+                    "type": "operator",
                   },
                   Object {
                     "text": "1",

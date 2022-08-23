@@ -13,6 +13,7 @@ export enum NodeType {
   literal = 'literal',
   identifier = 'identifier',
   parameter = 'parameter',
+  operator = 'operator',
   token = 'token',
 }
 
@@ -99,6 +100,11 @@ export type Parameter = {
   text: string;
 };
 
+export type Operator = {
+  type: NodeType.operator;
+  text: string;
+};
+
 export type AstNode =
   | Clause
   | SetOperation
@@ -111,6 +117,7 @@ export type AstNode =
   | Literal
   | Identifier
   | Parameter
+  | Operator
   | TokenNode;
 
 export const isTokenNode = (node: AstNode): node is TokenNode => node.type === 'token';

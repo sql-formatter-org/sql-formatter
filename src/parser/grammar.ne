@@ -171,7 +171,7 @@ between_predicate -> %BETWEEN commaless_expression %AND commaless_expression {%
 
 comma -> ( %COMMA ) {% createTokenNode %}
 
-asterisk -> ( %ASTERISK ) {% createTokenNode %}
+asterisk -> ( %ASTERISK ) {% ([[token]]) => ({ type: NodeType.operator, text: token.text }) %}
 
 expression_token ->
   ( operator
@@ -181,7 +181,7 @@ expression_token ->
   | keyword
   | comment ) {% unwrap %}
 
-operator -> ( %OPERATOR ) {% createTokenNode %}
+operator -> ( %OPERATOR ) {% ([[token]]) => ({ type: NodeType.operator, text: token.text }) %}
 
 identifier ->
   ( %IDENTIFIER

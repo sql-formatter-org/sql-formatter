@@ -18,6 +18,7 @@ import {
   Literal,
   Identifier,
   Parameter,
+  Operator,
 } from 'src/parser/ast';
 
 import InlineBlock from './InlineBlock';
@@ -86,6 +87,9 @@ export default class ExpressionFormatter {
           break;
         case NodeType.parameter:
           this.formatParameter(node);
+          break;
+        case NodeType.operator:
+          this.formatOperator(node);
           break;
         case NodeType.token:
           this.formatToken(node.token);
@@ -188,6 +192,32 @@ export default class ExpressionFormatter {
     this.layout.add(this.params.get(node), WS.SPACE);
   }
 
+  /**
+   * Formats an Operator onto query, following rules for specific characters
+   */
+  private formatOperator({ text }: Operator) {
+    // special operator
+    if (text === ':') {
+      this.layout.add(WS.NO_SPACE, text, WS.SPACE);
+      return;
+    } else if (text === '.' || text === '::') {
+      this.layout.add(WS.NO_SPACE, text);
+      return;
+    }
+    // special case for PLSQL @ dblink syntax
+    else if (text === '@' && this.cfg.language === 'plsql') {
+      this.layout.add(WS.NO_SPACE, text);
+      return;
+    }
+
+    // other operators
+    if (this.cfg.denseOperators) {
+      this.layout.add(WS.NO_SPACE, text);
+    } else {
+      this.layout.add(text, WS.SPACE);
+    }
+  }
+
   private formatSubExpression(nodes: AstNode[], inline = this.inline): Layout {
     return new ExpressionFormatter({
       cfg: this.cfg,
@@ -221,9 +251,6 @@ export default class ExpressionFormatter {
         return this.formatCaseEnd(token);
       case TokenType.COMMA:
         return this.formatComma(token);
-      case TokenType.OPERATOR:
-      case TokenType.ASTERISK:
-        return this.formatOperator(token);
       default:
         throw new Error(`Unexpected token type: ${token.type}`);
     }
@@ -294,32 +321,6 @@ export default class ExpressionFormatter {
    */
   private formatDependentClause(token: Token) {
     this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
-  }
-
-  /**
-   * Formats an Operator onto query, following rules for specific characters
-   */
-  private formatOperator(token: Token) {
-    // special operator
-    if (token.text === ':') {
-      this.layout.add(WS.NO_SPACE, this.show(token), WS.SPACE);
-      return;
-    } else if (token.text === '.' || token.text === '::') {
-      this.layout.add(WS.NO_SPACE, this.show(token));
-      return;
-    }
-    // special case for PLSQL @ dblink syntax
-    else if (token.text === '@' && this.cfg.language === 'plsql') {
-      this.layout.add(WS.NO_SPACE, this.show(token));
-      return;
-    }
-
-    // other operators
-    if (this.cfg.denseOperators) {
-      this.layout.add(WS.NO_SPACE, this.show(token));
-    } else {
-      this.layout.add(this.show(token), WS.SPACE);
-    }
   }
 
   /**
