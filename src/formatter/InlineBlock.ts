@@ -44,6 +44,8 @@ export default class InlineBlock {
         case NodeType.clause:
         case NodeType.limit_clause:
         case NodeType.set_operation:
+        case NodeType.line_comment:
+        case NodeType.block_comment:
           return Infinity;
         case NodeType.all_columns_asterisk:
           length += 1;
@@ -79,14 +81,8 @@ export default class InlineBlock {
     );
   }
 
-  // Reserved words that cause newlines, comments and semicolons
-  // are not allowed inside inline parentheses block
+  // Reserved words that cause newlines are not allowed inside inline parentheses block
   private isForbiddenToken(token: Token) {
-    return (
-      isLogicalOperator(token) ||
-      token.type === TokenType.LINE_COMMENT ||
-      token.type === TokenType.BLOCK_COMMENT ||
-      token.type === TokenType.CASE // CASE cannot have inline blocks
-    );
+    return isLogicalOperator(token) || token.type === TokenType.CASE;
   }
 }

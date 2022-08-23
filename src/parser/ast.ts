@@ -14,6 +14,8 @@ export enum NodeType {
   identifier = 'identifier',
   parameter = 'parameter',
   operator = 'operator',
+  line_comment = 'line_comment',
+  block_comment = 'block_comment',
   token = 'token',
 }
 
@@ -105,6 +107,17 @@ export type Operator = {
   text: string;
 };
 
+export type LineComment = {
+  type: NodeType.line_comment;
+  text: string;
+  precedingWhitespace: string;
+};
+
+export type BlockComment = {
+  type: NodeType.block_comment;
+  text: string;
+};
+
 export type AstNode =
   | Clause
   | SetOperation
@@ -118,6 +131,8 @@ export type AstNode =
   | Identifier
   | Parameter
   | Operator
+  | LineComment
+  | BlockComment
   | TokenNode;
 
 export const isTokenNode = (node: AstNode): node is TokenNode => node.type === 'token';

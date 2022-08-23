@@ -19,6 +19,8 @@ import {
   Identifier,
   Parameter,
   Operator,
+  LineComment,
+  BlockComment,
 } from 'src/parser/ast';
 
 import InlineBlock from './InlineBlock';
@@ -90,6 +92,12 @@ export default class ExpressionFormatter {
           break;
         case NodeType.operator:
           this.formatOperator(node);
+          break;
+        case NodeType.line_comment:
+          this.formatLineComment(node);
+          break;
+        case NodeType.block_comment:
+          this.formatBlockComment(node);
           break;
         case NodeType.token:
           this.formatToken(node.token);
@@ -218,56 +226,16 @@ export default class ExpressionFormatter {
     }
   }
 
-  private formatSubExpression(nodes: AstNode[], inline = this.inline): Layout {
-    return new ExpressionFormatter({
-      cfg: this.cfg,
-      params: this.params,
-      layout: this.layout,
-      inline,
-    }).format(nodes);
-  }
-
-  private formatToken(token: Token): void {
-    switch (token.type) {
-      case TokenType.LINE_COMMENT:
-        return this.formatLineComment(token);
-      case TokenType.BLOCK_COMMENT:
-        return this.formatBlockComment(token);
-      case TokenType.RESERVED_JOIN:
-        return this.formatJoin(token);
-      case TokenType.RESERVED_DEPENDENT_CLAUSE:
-        return this.formatDependentClause(token);
-      case TokenType.AND:
-      case TokenType.OR:
-      case TokenType.XOR:
-        return this.formatLogicalOperator(token);
-      case TokenType.RESERVED_KEYWORD:
-      case TokenType.RESERVED_FUNCTION_NAME:
-      case TokenType.RESERVED_PHRASE:
-        return this.formatKeyword(token);
-      case TokenType.CASE:
-        return this.formatCaseStart(token);
-      case TokenType.END:
-        return this.formatCaseEnd(token);
-      case TokenType.COMMA:
-        return this.formatComma(token);
-      default:
-        throw new Error(`Unexpected token type: ${token.type}`);
-    }
-  }
-
-  /** Formats a line comment onto query */
-  private formatLineComment(token: Token) {
-    if (/\n/.test(token.precedingWhitespace || '')) {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.MANDATORY_NEWLINE, WS.INDENT);
+  private formatLineComment(node: LineComment) {
+    if (/\n/.test(node.precedingWhitespace || '')) {
+      this.layout.add(WS.NEWLINE, WS.INDENT, node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
     } else {
-      this.layout.add(WS.NO_NEWLINE, WS.SPACE, this.show(token), WS.MANDATORY_NEWLINE, WS.INDENT);
+      this.layout.add(WS.NO_NEWLINE, WS.SPACE, node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
     }
   }
 
-  /** Formats a block comment onto query */
-  private formatBlockComment(token: Token) {
-    this.splitBlockComment(token.text).forEach(line => {
+  private formatBlockComment(node: BlockComment) {
+    this.splitBlockComment(node.text).forEach(line => {
       this.layout.add(WS.NEWLINE, WS.INDENT, line);
     });
     this.layout.add(WS.NEWLINE, WS.INDENT);
@@ -296,6 +264,40 @@ export default class ExpressionFormatter {
         return line.replace(/^\s*/, '');
       }
     });
+  }
+
+  private formatSubExpression(nodes: AstNode[], inline = this.inline): Layout {
+    return new ExpressionFormatter({
+      cfg: this.cfg,
+      params: this.params,
+      layout: this.layout,
+      inline,
+    }).format(nodes);
+  }
+
+  private formatToken(token: Token): void {
+    switch (token.type) {
+      case TokenType.RESERVED_JOIN:
+        return this.formatJoin(token);
+      case TokenType.RESERVED_DEPENDENT_CLAUSE:
+        return this.formatDependentClause(token);
+      case TokenType.AND:
+      case TokenType.OR:
+      case TokenType.XOR:
+        return this.formatLogicalOperator(token);
+      case TokenType.RESERVED_KEYWORD:
+      case TokenType.RESERVED_FUNCTION_NAME:
+      case TokenType.RESERVED_PHRASE:
+        return this.formatKeyword(token);
+      case TokenType.CASE:
+        return this.formatCaseStart(token);
+      case TokenType.END:
+        return this.formatCaseEnd(token);
+      case TokenType.COMMA:
+        return this.formatComma(token);
+      default:
+        throw new Error(`Unexpected token type: ${token.type}`);
+    }
   }
 
   private formatJoin(token: Token) {
