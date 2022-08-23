@@ -84,6 +84,6 @@ export default class InlineBlock {
 
   // Reserved words that cause newlines are not allowed inside inline parentheses block
   private isForbiddenKeyword(node: Keyword) {
-    return isLogicalOperator({ type: node.tokenType }) || node.tokenType === TokenType.CASE;
+    return isLogicalOperator(node.tokenType) || node.tokenType === TokenType.CASE;
   }
 }

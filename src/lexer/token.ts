@@ -94,5 +94,5 @@ export const isReserved = (type: TokenType): boolean =>
   type === TokenType.OR ||
   type === TokenType.XOR;
 
-export const isLogicalOperator = (token: { type: TokenType }): boolean =>
-  token.type === TokenType.AND || token.type === TokenType.OR || token.type === TokenType.XOR;
+export const isLogicalOperator = (type: TokenType): boolean =>
+  type === TokenType.AND || type === TokenType.OR || type === TokenType.XOR;

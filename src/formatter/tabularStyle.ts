@@ -30,7 +30,7 @@ export default function toTabularFormat(tokenText: string, indentStyle: IndentSt
  */
 export function isTabularToken(token: Token): boolean {
   return (
-    isLogicalOperator(token) ||
+    isLogicalOperator(token.type) ||
     token.type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
     token.type === TokenType.RESERVED_COMMAND ||
     token.type === TokenType.RESERVED_SELECT ||
