@@ -5,24 +5,24 @@ import Params from 'src/formatter/Params';
 import { isTabularStyle } from 'src/formatter/config';
 import { TokenType } from 'src/lexer/token';
 import {
-  AllColumnsAsterisk,
-  ArraySubscript,
+  AllColumnsAsteriskNode,
+  ArraySubscriptNode,
   AstNode,
-  BetweenPredicate,
-  SetOperation,
-  Clause,
-  FunctionCall,
-  LimitClause,
+  BetweenPredicateNode,
+  SetOperationNode,
+  ClauseNode,
+  FunctionCallNode,
+  LimitClauseNode,
   NodeType,
-  Parenthesis,
-  Literal,
-  Identifier,
-  Parameter,
-  Operator,
-  LineComment,
-  BlockComment,
-  Comma,
-  Keyword,
+  ParenthesisNode,
+  LiteralNode,
+  IdentifierNode,
+  ParameterNode,
+  OperatorNode,
+  LineCommentNode,
+  BlockCommentNode,
+  CommaNode,
+  KeywordNode,
 } from 'src/parser/ast';
 
 import InlineBlock from './InlineBlock';
@@ -101,17 +101,17 @@ export default class ExpressionFormatter {
     }
   }
 
-  private formatFunctionCall(node: FunctionCall) {
+  private formatFunctionCall(node: FunctionCallNode) {
     this.layout.add(this.showKw(node.name));
     this.formatParenthesis(node.parenthesis);
   }
 
-  private formatArraySubscript({ array, parenthesis }: ArraySubscript) {
+  private formatArraySubscript({ array, parenthesis }: ArraySubscriptNode) {
     this.layout.add(array.type === NodeType.keyword ? this.showKw(array) : array.text);
     this.formatParenthesis(parenthesis);
   }
 
-  private formatParenthesis(node: Parenthesis) {
+  private formatParenthesis(node: ParenthesisNode) {
     const inline = this.inlineBlock.isInlineBlock(node);
 
     if (inline) {
@@ -135,7 +135,7 @@ export default class ExpressionFormatter {
     }
   }
 
-  private formatBetweenPredicate(node: BetweenPredicate) {
+  private formatBetweenPredicate(node: BetweenPredicateNode) {
     this.layout.add(this.showKw(node.between), WS.SPACE);
     this.layout = this.formatSubExpression(node.expr1);
     this.layout.add(WS.NO_SPACE, WS.SPACE, this.showNonTabularKw(node.and), WS.SPACE);
@@ -143,7 +143,7 @@ export default class ExpressionFormatter {
     this.layout.add(WS.SPACE);
   }
 
-  private formatClause(node: Clause) {
+  private formatClause(node: ClauseNode) {
     if (isTabularStyle(this.cfg)) {
       this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name), WS.SPACE);
     } else {
@@ -159,14 +159,14 @@ export default class ExpressionFormatter {
     this.layout.indentation.decreaseTopLevel();
   }
 
-  private formatSetOperation(node: SetOperation) {
+  private formatSetOperation(node: SetOperationNode) {
     this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name), WS.NEWLINE);
 
     this.layout.add(WS.INDENT);
     this.layout = this.formatSubExpression(node.children);
   }
 
-  private formatLimitClause(node: LimitClause) {
+  private formatLimitClause(node: LimitClauseNode) {
     this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name));
     this.layout.indentation.increaseTopLevel();
 
@@ -182,26 +182,26 @@ export default class ExpressionFormatter {
     this.layout.indentation.decreaseTopLevel();
   }
 
-  private formatAllColumnsAsterisk(_node: AllColumnsAsterisk) {
+  private formatAllColumnsAsterisk(_node: AllColumnsAsteriskNode) {
     this.layout.add('*', WS.SPACE);
   }
 
-  private formatLiteral(node: Literal) {
+  private formatLiteral(node: LiteralNode) {
     this.layout.add(node.text, WS.SPACE);
   }
 
-  private formatIdentifier(node: Identifier) {
+  private formatIdentifier(node: IdentifierNode) {
     this.layout.add(node.text, WS.SPACE);
   }
 
-  private formatParameter(node: Parameter) {
+  private formatParameter(node: ParameterNode) {
     this.layout.add(this.params.get(node), WS.SPACE);
   }
 
   /**
    * Formats an Operator onto query, following rules for specific characters
    */
-  private formatOperator({ text }: Operator) {
+  private formatOperator({ text }: OperatorNode) {
     // special operator
     if (text === ':') {
       this.layout.add(WS.NO_SPACE, text, WS.SPACE);
@@ -224,7 +224,7 @@ export default class ExpressionFormatter {
     }
   }
 
-  private formatComma(_node: Comma) {
+  private formatComma(_node: CommaNode) {
     if (!this.inline) {
       this.layout.add(WS.NO_SPACE, ',', WS.NEWLINE, WS.INDENT);
     } else {
@@ -232,7 +232,7 @@ export default class ExpressionFormatter {
     }
   }
 
-  private formatLineComment(node: LineComment) {
+  private formatLineComment(node: LineCommentNode) {
     if (/\n/.test(node.precedingWhitespace || '')) {
       this.layout.add(WS.NEWLINE, WS.INDENT, node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
     } else {
@@ -240,7 +240,7 @@ export default class ExpressionFormatter {
     }
   }
 
-  private formatBlockComment(node: BlockComment) {
+  private formatBlockComment(node: BlockCommentNode) {
     this.splitBlockComment(node.text).forEach(line => {
       this.layout.add(WS.NEWLINE, WS.INDENT, line);
     });
@@ -281,7 +281,7 @@ export default class ExpressionFormatter {
     }).format(nodes);
   }
 
-  private formatKeywordNode(node: Keyword): void {
+  private formatKeywordNode(node: KeywordNode): void {
     switch (node.tokenType) {
       case TokenType.RESERVED_JOIN:
         return this.formatJoin(node);
@@ -304,7 +304,7 @@ export default class ExpressionFormatter {
     }
   }
 
-  private formatJoin(node: Keyword) {
+  private formatJoin(node: KeywordNode) {
     if (isTabularStyle(this.cfg)) {
       // in tabular style JOINs are at the same level as clauses
       this.layout.indentation.decreaseTopLevel();
@@ -315,15 +315,15 @@ export default class ExpressionFormatter {
     }
   }
 
-  private formatKeyword(node: Keyword) {
+  private formatKeyword(node: KeywordNode) {
     this.layout.add(this.showKw(node), WS.SPACE);
   }
 
-  private formatDependentClause(node: Keyword) {
+  private formatDependentClause(node: KeywordNode) {
     this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node), WS.SPACE);
   }
 
-  private formatLogicalOperator(node: Keyword) {
+  private formatLogicalOperator(node: KeywordNode) {
     if (this.cfg.logicalOperatorNewline === 'before') {
       if (isTabularStyle(this.cfg)) {
         // In tabular style AND/OR is placed on the same level as clauses
@@ -338,22 +338,22 @@ export default class ExpressionFormatter {
     }
   }
 
-  private formatCaseStart(node: Keyword) {
+  private formatCaseStart(node: KeywordNode) {
     this.layout.indentation.increaseBlockLevel();
     this.layout.add(this.showKw(node), WS.NEWLINE, WS.INDENT);
   }
 
-  private formatCaseEnd(node: Keyword) {
+  private formatCaseEnd(node: KeywordNode) {
     this.formatMultilineBlockEnd(node);
   }
 
-  private formatMultilineBlockEnd(node: Keyword) {
+  private formatMultilineBlockEnd(node: KeywordNode) {
     this.layout.indentation.decreaseBlockLevel();
 
     this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node), WS.SPACE);
   }
 
-  private showKw(node: Keyword): string {
+  private showKw(node: KeywordNode): string {
     if (isTabularToken(node.tokenType)) {
       return toTabularFormat(this.showNonTabularKw(node), this.cfg.indentStyle);
     } else {
@@ -362,7 +362,7 @@ export default class ExpressionFormatter {
   }
 
   // Like showKw(), but skips tabular formatting
-  private showNonTabularKw(node: Keyword): string {
+  private showNonTabularKw(node: KeywordNode): string {
     switch (this.cfg.keywordCase) {
       case 'preserve':
         return equalizeWhitespace(node.raw);

@@ -1,5 +1,11 @@
 import { TokenType, isLogicalOperator } from 'src/lexer/token';
-import { AstNode, BetweenPredicate, Keyword, NodeType, Parenthesis } from 'src/parser/ast';
+import {
+  AstNode,
+  BetweenPredicateNode,
+  KeywordNode,
+  NodeType,
+  ParenthesisNode,
+} from 'src/parser/ast';
 
 /**
  * Bookkeeper for inline blocks.
@@ -15,11 +21,11 @@ export default class InlineBlock {
    * Check if this should be an inline parentheses block
    * Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
    */
-  public isInlineBlock(parenthesis: Parenthesis): boolean {
+  public isInlineBlock(parenthesis: ParenthesisNode): boolean {
     return this.inlineParenthesisWidth(parenthesis) <= this.expressionWidth;
   }
 
-  private inlineParenthesisWidth(parenthesis: Parenthesis): number {
+  private inlineParenthesisWidth(parenthesis: ParenthesisNode): number {
     // +2 for the two parenthesis
     return this.inlineWidth(parenthesis.children) + 2;
   }
@@ -73,7 +79,7 @@ export default class InlineBlock {
     return length;
   }
 
-  private betweenWidth(node: BetweenPredicate): number {
+  private betweenWidth(node: BetweenPredicateNode): number {
     return (
       node.between.text.length +
       this.inlineWidth(node.expr1) +
@@ -83,7 +89,7 @@ export default class InlineBlock {
   }
 
   // Reserved words that cause newlines are not allowed inside inline parentheses block
-  private isForbiddenKeyword(node: Keyword) {
+  private isForbiddenKeyword(node: KeywordNode) {
     return isLogicalOperator(node.tokenType) || node.tokenType === TokenType.CASE;
   }
 }

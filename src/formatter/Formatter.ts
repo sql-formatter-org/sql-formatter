@@ -4,7 +4,7 @@ import Params from 'src/formatter/Params';
 import Tokenizer from 'src/lexer/Tokenizer';
 
 import { createParser } from 'src/parser/createParser';
-import { Statement } from 'src/parser/ast';
+import { StatementNode } from 'src/parser/ast';
 
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
@@ -53,17 +53,17 @@ export default class Formatter {
     return finalQuery.trimEnd();
   }
 
-  private parse(query: string): Statement[] {
+  private parse(query: string): StatementNode[] {
     return createParser(this.cachedTokenizer()).parse(query, this.cfg.paramTypes || {});
   }
 
-  private formatAst(statements: Statement[]): string {
+  private formatAst(statements: StatementNode[]): string {
     return statements
       .map(stat => this.formatStatement(stat))
       .join('\n'.repeat(this.cfg.linesBetweenQueries + 1));
   }
 
-  private formatStatement(statement: Statement): string {
+  private formatStatement(statement: StatementNode): string {
     const layout = new ExpressionFormatter({
       cfg: this.cfg,
       params: this.params,
