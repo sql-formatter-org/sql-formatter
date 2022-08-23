@@ -1,7 +1,7 @@
 import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
-import { EOF_TOKEN, isToken, type Token, TokenType } from 'src/lexer/token';
+import { EOF_TOKEN, isToken, Token, TokenType } from 'src/lexer/token';
 import { keywords } from './mysql.keywords';
 import { functions } from './mysql.functions';
 

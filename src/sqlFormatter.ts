@@ -14,7 +14,7 @@ import TrinoFormatter from 'src/languages/trino/trino.formatter';
 import TSqlFormatter from 'src/languages/tsql/tsql.formatter';
 import SingleStoreDbFormatter from './languages/singlestoredb/singlestoredb.formatter';
 
-import type { FormatOptions } from './FormatOptions';
+import { FormatOptions } from './FormatOptions';
 import { ParamItems } from './formatter/Params';
 
 export const formatters = {

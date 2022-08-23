@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { format } from 'sql-formatter';
-import type {
+import {
   SqlLanguage,
   KeywordCase,
   IndentStyle,

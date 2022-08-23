@@ -1,5 +1,6 @@
+// import only type to avoid ESLint no-cycle rule producing an error
 import type { SqlLanguage } from './sqlFormatter';
-import { type ParamItems } from './formatter/Params';
+import { ParamItems } from './formatter/Params';
 import Formatter from './formatter/Formatter';
 import { ParamTypes } from './lexer/TokenizerOptions';
 
