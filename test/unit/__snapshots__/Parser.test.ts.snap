@@ -201,13 +201,9 @@ Array [
       Object {
         "children": Array [
           Object {
-            "arrayToken": Object {
-              "end": 15,
-              "precedingWhitespace": " ",
-              "raw": "my_array",
-              "start": 7,
+            "array": Object {
               "text": "my_array",
-              "type": "ARRAY_IDENTIFIER",
+              "type": "identifier",
             },
             "parenthesis": Object {
               "children": Array [

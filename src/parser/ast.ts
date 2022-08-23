@@ -47,7 +47,7 @@ export type FunctionCall = {
 // <ident>[<expr>]
 export type ArraySubscript = {
   type: NodeType.array_subscript;
-  arrayToken: Token;
+  array: Identifier | Keyword;
   parenthesis: Parenthesis;
 };
 

@@ -33,7 +33,7 @@ export default class InlineBlock {
           length += node.name.text.length + this.inlineParenthesisWidth(node.parenthesis);
           break;
         case NodeType.array_subscript:
-          length += node.arrayToken.text.length + this.inlineParenthesisWidth(node.parenthesis);
+          length += node.array.text.length + this.inlineParenthesisWidth(node.parenthesis);
           break;
         case NodeType.parenthesis:
           length += this.inlineParenthesisWidth(node);

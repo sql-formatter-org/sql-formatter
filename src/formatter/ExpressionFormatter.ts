@@ -106,9 +106,9 @@ export default class ExpressionFormatter {
     this.formatParenthesis(node.parenthesis);
   }
 
-  private formatArraySubscript(node: ArraySubscript) {
-    this.layout.add(this.show(node.arrayToken));
-    this.formatParenthesis(node.parenthesis);
+  private formatArraySubscript({ array, parenthesis }: ArraySubscript) {
+    this.layout.add(array.type === NodeType.keyword ? this.showKw(array) : array.text);
+    this.formatParenthesis(parenthesis);
   }
 
   private formatParenthesis(node: Parenthesis) {
