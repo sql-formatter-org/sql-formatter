@@ -157,7 +157,7 @@ All fields are optional and all fields that are not specified will be filled wit
 - [**`denseOperators`**](docs/denseOperators.md) packs operators densely without spaces.
 - [**`newlineBeforeSemicolon`**](docs/newlineBeforeSemicolon.md) places semicolon on separate line.
 - [**`params`**](docs/params.md) collection of values for placeholder replacement.
-- [**`paramsTypes`**](docs/paramTypes.md) specifies parameter placeholders types to support.
+- [**`paramTypes`**](docs/paramTypes.md) specifies parameter placeholders types to support.
 
 ### Usage without NPM
 
