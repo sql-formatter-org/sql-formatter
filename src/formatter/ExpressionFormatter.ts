@@ -59,59 +59,46 @@ export default class ExpressionFormatter {
     this.nodes = nodes;
 
     for (this.index = 0; this.index < this.nodes.length; this.index++) {
-      const node = this.nodes[this.index];
-      switch (node.type) {
-        case NodeType.function_call:
-          this.formatFunctionCall(node);
-          break;
-        case NodeType.array_subscript:
-          this.formatArraySubscript(node);
-          break;
-        case NodeType.parenthesis:
-          this.formatParenthesis(node);
-          break;
-        case NodeType.between_predicate:
-          this.formatBetweenPredicate(node);
-          break;
-        case NodeType.clause:
-          this.formatClause(node);
-          break;
-        case NodeType.set_operation:
-          this.formatSetOperation(node);
-          break;
-        case NodeType.limit_clause:
-          this.formatLimitClause(node);
-          break;
-        case NodeType.all_columns_asterisk:
-          this.formatAllColumnsAsterisk(node);
-          break;
-        case NodeType.literal:
-          this.formatLiteral(node);
-          break;
-        case NodeType.identifier:
-          this.formatIdentifier(node);
-          break;
-        case NodeType.parameter:
-          this.formatParameter(node);
-          break;
-        case NodeType.operator:
-          this.formatOperator(node);
-          break;
-        case NodeType.comma:
-          this.formatComma(node);
-          break;
-        case NodeType.line_comment:
-          this.formatLineComment(node);
-          break;
-        case NodeType.block_comment:
-          this.formatBlockComment(node);
-          break;
-        case NodeType.keyword:
-          this.formatKeywordNode(node);
-          break;
-      }
+      this.formatNode(this.nodes[this.index]);
     }
     return this.layout;
+  }
+
+  private formatNode(node: AstNode) {
+    switch (node.type) {
+      case NodeType.function_call:
+        return this.formatFunctionCall(node);
+      case NodeType.array_subscript:
+        return this.formatArraySubscript(node);
+      case NodeType.parenthesis:
+        return this.formatParenthesis(node);
+      case NodeType.between_predicate:
+        return this.formatBetweenPredicate(node);
+      case NodeType.clause:
+        return this.formatClause(node);
+      case NodeType.set_operation:
+        return this.formatSetOperation(node);
+      case NodeType.limit_clause:
+        return this.formatLimitClause(node);
+      case NodeType.all_columns_asterisk:
+        return this.formatAllColumnsAsterisk(node);
+      case NodeType.literal:
+        return this.formatLiteral(node);
+      case NodeType.identifier:
+        return this.formatIdentifier(node);
+      case NodeType.parameter:
+        return this.formatParameter(node);
+      case NodeType.operator:
+        return this.formatOperator(node);
+      case NodeType.comma:
+        return this.formatComma(node);
+      case NodeType.line_comment:
+        return this.formatLineComment(node);
+      case NodeType.block_comment:
+        return this.formatBlockComment(node);
+      case NodeType.keyword:
+        return this.formatKeywordNode(node);
+    }
   }
 
   private formatFunctionCall(node: FunctionCall) {
