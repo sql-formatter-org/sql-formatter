@@ -209,6 +209,13 @@ keyword ->
   | %OR
   | %XOR ) {% createTokenNode %}
 
-comment ->
-    %LINE_COMMENT {% ([token]) => ({ type: NodeType.line_comment, text: token.text, precedingWhitespace: token.precedingWhitespace }) %}
-  | %BLOCK_COMMENT {% ([token]) => ({ type: NodeType.block_comment, text: token.text }) %}
+comment -> %LINE_COMMENT {%
+  ([token]) => ({
+    type: NodeType.line_comment,
+    text: token.text,
+    precedingWhitespace: token.precedingWhitespace,
+  })
+%}
+comment -> %BLOCK_COMMENT {%
+  ([token]) => ({ type: NodeType.block_comment, text: token.text })
+%}
