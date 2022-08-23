@@ -130,9 +130,9 @@ array_subscript -> (%ARRAY_IDENTIFIER | %ARRAY_KEYWORD) square_brackets {%
 %}
 
 function_call -> %RESERVED_FUNCTION_NAME parenthesis {%
-  ([name, parens]) => ({
+  ([nameToken, parens]) => ({
     type: NodeType.function_call,
-    nameToken: name,
+    name: toKeywordNode(nameToken),
     parenthesis: parens,
   })
 %}

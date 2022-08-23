@@ -40,7 +40,7 @@ export type SetOperation = {
 
 export type FunctionCall = {
   type: NodeType.function_call;
-  nameToken: Token;
+  name: Keyword;
   parenthesis: Parenthesis;
 };
 

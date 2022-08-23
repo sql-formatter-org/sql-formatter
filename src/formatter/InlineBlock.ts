@@ -30,7 +30,7 @@ export default class InlineBlock {
     for (const node of nodes) {
       switch (node.type) {
         case NodeType.function_call:
-          length += node.nameToken.text.length + this.inlineParenthesisWidth(node.parenthesis);
+          length += node.name.text.length + this.inlineParenthesisWidth(node.parenthesis);
           break;
         case NodeType.array_subscript:
           length += node.arrayToken.text.length + this.inlineParenthesisWidth(node.parenthesis);

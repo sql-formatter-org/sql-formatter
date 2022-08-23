@@ -102,7 +102,7 @@ export default class ExpressionFormatter {
   }
 
   private formatFunctionCall(node: FunctionCall) {
-    this.layout.add(this.show(node.nameToken));
+    this.layout.add(this.showKw(node.name));
     this.formatParenthesis(node.parenthesis);
   }
 

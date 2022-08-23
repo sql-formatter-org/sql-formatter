@@ -286,13 +286,11 @@ Array [
       Object {
         "children": Array [
           Object {
-            "nameToken": Object {
-              "end": 11,
-              "precedingWhitespace": " ",
+            "name": Object {
               "raw": "sqrt",
-              "start": 7,
               "text": "SQRT",
-              "type": "RESERVED_FUNCTION_NAME",
+              "tokenType": "RESERVED_FUNCTION_NAME",
+              "type": "keyword",
             },
             "parenthesis": Object {
               "children": Array [
@@ -343,13 +341,11 @@ Array [
             "type": "comma",
           },
           Object {
-            "nameToken": Object {
-              "end": 35,
-              "precedingWhitespace": " ",
+            "name": Object {
               "raw": "CURRENT_TIME",
-              "start": 23,
               "text": "CURRENT_TIME",
-              "type": "RESERVED_FUNCTION_NAME",
+              "tokenType": "RESERVED_FUNCTION_NAME",
+              "type": "keyword",
             },
             "parenthesis": Object {
               "children": Array [],
