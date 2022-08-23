@@ -64,13 +64,11 @@ Array [
             "type": "literal",
           },
         ],
-        "limitToken": Object {
-          "end": 5,
-          "precedingWhitespace": undefined,
+        "name": Object {
           "raw": "LIMIT",
-          "start": 0,
           "text": "LIMIT",
-          "type": "LIMIT",
+          "tokenType": "LIMIT",
+          "type": "keyword",
         },
         "type": "limit_clause",
       },
@@ -100,13 +98,11 @@ Array [
             "type": "literal",
           },
         ],
-        "limitToken": Object {
-          "end": 5,
-          "precedingWhitespace": undefined,
+        "name": Object {
           "raw": "LIMIT",
-          "start": 0,
           "text": "LIMIT",
-          "type": "LIMIT",
+          "tokenType": "LIMIT",
+          "type": "keyword",
         },
         "offset": Array [
           Object {
@@ -142,13 +138,11 @@ Array [
             "type": "literal",
           },
         ],
-        "limitToken": Object {
-          "end": 5,
-          "precedingWhitespace": undefined,
+        "name": Object {
           "raw": "LIMIT",
-          "start": 0,
           "text": "LIMIT",
-          "type": "LIMIT",
+          "tokenType": "LIMIT",
+          "type": "keyword",
         },
         "offset": Array [
           Object {

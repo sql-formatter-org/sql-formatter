@@ -1,4 +1,4 @@
-import { Token, TokenType } from 'src/lexer/token';
+import { TokenType } from 'src/lexer/token';
 
 export enum NodeType {
   statement = 'statement',
@@ -71,7 +71,7 @@ export type BetweenPredicate = {
 // LIMIT <offset>, <count>
 export type LimitClause = {
   type: NodeType.limit_clause;
-  limitToken: Token;
+  name: Keyword;
   count: AstNode[];
   offset?: AstNode[];
 };

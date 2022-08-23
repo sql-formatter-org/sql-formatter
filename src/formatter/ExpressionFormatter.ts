@@ -167,7 +167,7 @@ export default class ExpressionFormatter {
   }
 
   private formatLimitClause(node: LimitClause) {
-    this.layout.add(WS.NEWLINE, WS.INDENT, this.show(node.limitToken));
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name));
     this.layout.indentation.increaseTopLevel();
 
     if (node.offset) {

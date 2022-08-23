@@ -64,14 +64,14 @@ limit_clause -> %LIMIT commaless_expression:+ (%COMMA expression:+):? {%
       const [comma, exp2] = optional;
       return {
         type: NodeType.limit_clause,
-        limitToken,
+        name: toKeywordNode(limitToken),
         offset: exp1,
         count: exp2,
       };
     } else {
       return {
         type: NodeType.limit_clause,
-        limitToken,
+        name: toKeywordNode(limitToken),
         count: exp1,
       };
     }
