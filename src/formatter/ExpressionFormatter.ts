@@ -84,8 +84,10 @@ export default class ExpressionFormatter {
           this.formatAllColumnsAsterisk(node);
           break;
         case NodeType.literal:
-        case NodeType.identifier:
           this.formatLiteral(node);
+          break;
+        case NodeType.identifier:
+          this.formatIdentifier(node);
           break;
         case NodeType.parameter:
           this.formatParameter(node);
@@ -192,7 +194,11 @@ export default class ExpressionFormatter {
     this.layout.add('*', WS.SPACE);
   }
 
-  private formatLiteral(node: Literal | Identifier) {
+  private formatLiteral(node: Literal) {
+    this.layout.add(node.text, WS.SPACE);
+  }
+
+  private formatIdentifier(node: Identifier) {
     this.layout.add(node.text, WS.SPACE);
   }
 
