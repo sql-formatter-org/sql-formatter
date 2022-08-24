@@ -65,9 +65,6 @@ export default class TokenizerEngine {
     return (
       this.matchToken(TokenType.BLOCK_COMMENT) ||
       this.matchToken(TokenType.LINE_COMMENT) ||
-      this.matchToken(TokenType.COMMA) ||
-      this.matchToken(TokenType.OPEN_PAREN) ||
-      this.matchToken(TokenType.CLOSE_PAREN) ||
       this.matchToken(TokenType.QUOTED_IDENTIFIER) ||
       this.matchToken(TokenType.NUMBER) ||
       this.matchReservedWordToken(previousToken) ||
@@ -79,6 +76,9 @@ export default class TokenizerEngine {
       this.matchToken(TokenType.STRING) ||
       this.matchToken(TokenType.IDENTIFIER) ||
       this.matchToken(TokenType.DELIMITER) ||
+      this.matchToken(TokenType.COMMA) ||
+      this.matchToken(TokenType.OPEN_PAREN) ||
+      this.matchToken(TokenType.CLOSE_PAREN) ||
       this.matchToken(TokenType.OPERATOR) ||
       this.matchToken(TokenType.ASTERISK)
     );
