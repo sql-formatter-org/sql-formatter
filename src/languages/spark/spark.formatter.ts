@@ -124,8 +124,7 @@ export default class SparkFormatter extends Formatter {
       supportsXor: true,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      openParens: ['(', '['],
-      closeParens: [')', ']'],
+      extraParens: ['[]'],
       stringTypes: [
         { quote: "''", prefixes: ['R', 'X'] },
         { quote: '""', prefixes: ['R', 'X'] },

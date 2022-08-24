@@ -11,8 +11,7 @@ describe('Parser', () => {
       reservedJoins: ['JOIN'],
       reservedFunctionNames: ['SQRT', 'CURRENT_TIME'],
       reservedKeywords: ['BETWEEN', 'LIKE', 'ON', 'USING'],
-      openParens: ['(', '[', '{'],
-      closeParens: [')', ']', '}'],
+      extraParens: ['[]', '{}'],
       stringTypes: ["''"],
       identTypes: ['""'],
     });

@@ -151,8 +151,7 @@ export default class BigQueryFormatter extends Formatter {
       reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      openParens: ['(', '['],
-      closeParens: [')', ']'],
+      extraParens: ['[]'],
       stringTypes: [
         // The triple-quoted strings are listed first, so they get matched first.
         // Otherwise the first two quotes of """ will get matched as an empty "" string.

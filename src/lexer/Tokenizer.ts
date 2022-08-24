@@ -30,8 +30,8 @@ export default class Tokenizer {
         regex: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
       },
       [TokenType.COMMA]: { regex: /[,]/y },
-      [TokenType.OPEN_PAREN]: { regex: regex.parenthesis(cfg.openParens ?? ['(']) },
-      [TokenType.CLOSE_PAREN]: { regex: regex.parenthesis(cfg.closeParens ?? [')']) },
+      [TokenType.OPEN_PAREN]: { regex: regex.parenthesis('open', cfg.extraParens) },
+      [TokenType.CLOSE_PAREN]: { regex: regex.parenthesis('close', cfg.extraParens) },
       [TokenType.QUOTED_IDENTIFIER]: { regex: regex.string(cfg.identTypes) },
       [TokenType.NUMBER]: {
         regex:
