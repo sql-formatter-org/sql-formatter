@@ -29,9 +29,6 @@ export default class Tokenizer {
       [TokenType.LINE_COMMENT]: {
         regex: regex.lineComment(cfg.lineCommentTypes ?? ['--']),
       },
-      [TokenType.COMMA]: { regex: /[,]/y },
-      [TokenType.OPEN_PAREN]: { regex: regex.parenthesis(cfg.openParens ?? ['(']) },
-      [TokenType.CLOSE_PAREN]: { regex: regex.parenthesis(cfg.closeParens ?? [')']) },
       [TokenType.QUOTED_IDENTIFIER]: { regex: regex.string(cfg.identTypes) },
       [TokenType.NUMBER]: {
         regex:
@@ -105,6 +102,9 @@ export default class Tokenizer {
         regex: regex.identifier(cfg.identChars),
       },
       [TokenType.DELIMITER]: { regex: /[;]/uy },
+      [TokenType.COMMA]: { regex: /[,]/y },
+      [TokenType.OPEN_PAREN]: { regex: regex.parenthesis('open', cfg.extraParens) },
+      [TokenType.CLOSE_PAREN]: { regex: regex.parenthesis('close', cfg.extraParens) },
       [TokenType.OPERATOR]: {
         regex: regex.operator('+-/%&|^><=.:$@#?~!', [
           '<>',

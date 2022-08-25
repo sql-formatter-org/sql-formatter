@@ -1,13 +1,7 @@
 import { sortByLengthDesc } from 'src/utils';
 
 import type { IdentChars, QuoteType, VariableType } from './TokenizerOptions';
-import {
-  escapeParen,
-  escapeRegExp,
-  patternToRegex,
-  prefixesPattern,
-  withDashes,
-} from './regexUtil';
+import { escapeRegExp, patternToRegex, prefixesPattern, withDashes } from './regexUtil';
 
 /**
  * Builds a RegExp for valid line comments in a SQL dialect
@@ -17,11 +11,13 @@ export const lineComment = (lineCommentTypes: string[]) =>
   new RegExp(`(?:${lineCommentTypes.map(escapeRegExp).join('|')}).*?(?=\r\n|\r|\n|$)`, 'uy');
 
 /**
- * Builds a RegExp for matching parenthesis patterns, escaping them with `escapeParen`
- * @param {string[]} parens - list of strings that denote parenthesis patterns
+ * Builds a RegExp for matching either open- or close-parenthesis patterns
  */
-export const parenthesis = (parens: string[]): RegExp =>
-  patternToRegex(parens.map(escapeParen).join('|'));
+export const parenthesis = (kind: 'open' | 'close', extraParens: ('[]' | '{}')[] = []): RegExp => {
+  const index = kind === 'open' ? 0 : 1;
+  const parens = ['()', ...extraParens].map(pair => pair[index]);
+  return patternToRegex(parens.map(escapeRegExp).join('|'));
+};
 
 /**
  * Builds a RegExp containing all operators for a SQL dialect

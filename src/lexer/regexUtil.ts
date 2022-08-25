@@ -14,17 +14,6 @@ export const toCaseInsensitivePattern = (prefix: string): string =>
     .map(char => (/ /gu.test(char) ? '\\s+' : `[${char.toUpperCase()}${char.toLowerCase()}]`))
     .join('');
 
-/** Escapes paren characters for RegExp patterns */
-export const escapeParen = (paren: string): string => {
-  if (paren.length === 1) {
-    // A single punctuation character
-    return escapeRegExp(paren);
-  } else {
-    // longer word
-    return '\\b' + escapeRegExp(paren) + '\\b';
-  }
-};
-
 export const withDashes = (pattern: string): string => pattern + '(?:-' + pattern + ')*';
 
 // Converts ["a", "b"] to "(?:[Aa]|[Bb]|)" or "(?:[Aa]|[Bb])" when required = true

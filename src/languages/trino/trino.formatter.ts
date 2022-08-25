@@ -131,9 +131,11 @@ export default class TrinoFormatter extends Formatter {
       reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
+      // Trino also supports {- ... -} parenthesis.
+      // The formatting of these currently works out as a result of { and -
+      // not getting a space added in-between.
       // https://trino.io/docs/current/sql/match-recognize.html#row-pattern-syntax
-      openParens: ['(', '[', '{', '{-'],
-      closeParens: [')', ']', '}', '-}'],
+      extraParens: ['[]', '{}'],
       // https://trino.io/docs/current/language/types.html#string
       // https://trino.io/docs/current/language/types.html#varbinary
       stringTypes: [{ quote: "''", prefixes: ['X', 'U&'] }],

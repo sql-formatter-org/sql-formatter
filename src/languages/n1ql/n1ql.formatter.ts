@@ -94,8 +94,7 @@ export default class N1qlFormatter extends Formatter {
       // which simplifies writing tests that are shared between all dialects.
       stringTypes: ['""', "''"],
       identTypes: ['``'],
-      openParens: ['(', '[', '{'],
-      closeParens: [')', ']', '}'],
+      extraParens: ['[]', '{}'],
       paramTypes: { positional: true, numbered: ['$'], named: ['$'] },
       lineCommentTypes: ['#', '--'],
       operators: N1qlFormatter.operators,

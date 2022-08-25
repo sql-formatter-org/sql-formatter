@@ -69,10 +69,8 @@ export interface TokenizerOptions {
   identTypes: QuoteType[];
   // Types of quotes to use for variables
   variableTypes?: VariableType[];
-  // Open-parenthesis characters
-  openParens?: ('(' | '[' | '{' | '{-')[];
-  // Close-parenthesis characters
-  closeParens?: (')' | ']' | '}' | '-}')[];
+  // Types of additional parenthesis types to support
+  extraParens?: ('[]' | '{}')[];
   // Types of parameter placeholders supported with prepared statements
   paramTypes?: ParamTypes;
   // Line comment types to support, defaults to --
