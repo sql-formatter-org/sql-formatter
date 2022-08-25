@@ -36,7 +36,7 @@ describe('SparkFormatter', () => {
   });
   supportsInsertInto(format, { withoutInto: true });
   supportsTruncateTable(format);
-  supportsStrings(format, ["''", "X''"]);
+  supportsStrings(format, ["''", '""', "X''", "R''"]);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
   supportsOperators(format, SparkFormatter.operators, ['AND', 'OR', 'XOR']);

@@ -48,7 +48,7 @@ describe('PostgreSqlFormatter', () => {
   supportsInsertInto(format);
   supportsUpdate(format, { whereCurrentOf: true });
   supportsTruncateTable(format, { withoutTable: true });
-  supportsStrings(format, ["''", "U&''", "X''"]);
+  supportsStrings(format, ["''", "U&''", "X''", "B''"]);
   supportsIdentifiers(format, [`""`, 'U&""']);
   supportsBetween(format);
   supportsSchema(format);
@@ -72,14 +72,6 @@ describe('PostgreSqlFormatter', () => {
   });
 
   // Postgres-specific string types
-  it('supports bit strings', () => {
-    expect(format(`SELECT B'0110010', B'1101000';`)).toBe(dedent`
-      SELECT
-        B'0110010',
-        B'1101000';
-    `);
-  });
-
   it("supports E'' strings with C-style escapes", () => {
     expect(format("E'blah blah'")).toBe("E'blah blah'");
     expect(format("E'some \\' FROM escapes'")).toBe("E'some \\' FROM escapes'");

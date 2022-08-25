@@ -9,12 +9,16 @@ import supportsLimiting from './features/limiting';
 import supportsCreateTable from './features/createTable';
 import supportsCreateView from './features/createView';
 import supportsAlterTable from './features/alterTable';
+import supportsStrings from './features/strings';
 
 describe('SingleStoreDbFormatter', () => {
   const language = 'singlestoredb';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeMariaDbFormatter(format);
+
+  // in addition to string types listed in behavesLikeMariaDbFormatter
+  supportsStrings(format, ["B''"]);
 
   supportsJoin(format, {
     without: ['NATURAL INNER JOIN', 'NATURAL FULL', 'NATURAL JOIN'],

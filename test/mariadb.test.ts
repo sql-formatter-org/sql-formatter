@@ -13,12 +13,16 @@ import supportsCreateTable from './features/createTable';
 import supportsParams from './options/param';
 import supportsCreateView from './features/createView';
 import supportsAlterTable from './features/alterTable';
+import supportsStrings from './features/strings';
 
 describe('MariaDbFormatter', () => {
   const language = 'mariadb';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeMariaDbFormatter(format);
+
+  // in addition to string types listed in behavesLikeMariaDbFormatter
+  supportsStrings(format, ["B''"]);
 
   supportsJoin(format, {
     without: ['FULL', 'NATURAL INNER JOIN'],
