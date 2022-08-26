@@ -49,8 +49,7 @@ describe('MySqlFormatter', () => {
     `);
   });
 
-  // TODO: disabled for now
-  it.skip('supports @@ system variables', () => {
+  it('supports @@ system variables', () => {
     const result = format('SELECT @@GLOBAL.time, @@SYSTEM.date, @@hour FROM foo;');
     expect(result).toBe(dedent`
       SELECT

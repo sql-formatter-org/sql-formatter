@@ -246,7 +246,7 @@ export default class MySqlFormatter extends Formatter {
       identTypes: ['``'],
       identChars: { first: '$', rest: '$', allowFirstCharNumber: true },
       variableTypes: [
-        { regex: '@[A-Za-z0-9_.$]+' },
+        { regex: '@@?[A-Za-z0-9_.$]+' },
         { quote: '""', prefixes: ['@'], requirePrefix: true },
         { quote: "''", prefixes: ['@'], requirePrefix: true },
         { quote: '``', prefixes: ['@'], requirePrefix: true },
