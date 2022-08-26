@@ -49,18 +49,6 @@ describe('MySqlFormatter', () => {
     `);
   });
 
-  it('supports @@ system variables', () => {
-    const result = format('SELECT @@GLOBAL.time, @@SYSTEM.date, @@hour FROM foo;');
-    expect(result).toBe(dedent`
-      SELECT
-        @@GLOBAL.time,
-        @@SYSTEM.date,
-        @@hour
-      FROM
-        foo;
-    `);
-  });
-
   it('formats ALTER TABLE ... ALTER COLUMN', () => {
     expect(
       format(
