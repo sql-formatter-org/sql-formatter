@@ -89,6 +89,18 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
     `);
   });
 
+  it('supports @@ system variables', () => {
+    const result = format('SELECT @@GLOBAL.time, @@SYSTEM.date, @@hour FROM foo;');
+    expect(result).toBe(dedent`
+      SELECT
+        @@GLOBAL.time,
+        @@SYSTEM.date,
+        @@hour
+      FROM
+        foo;
+    `);
+  });
+
   // Issue #181
   it('does not wrap CHARACTER SET to multiple lines', () => {
     expect(format('ALTER TABLE t MODIFY col1 VARCHAR(50) CHARACTER SET greek')).toBe(dedent`
