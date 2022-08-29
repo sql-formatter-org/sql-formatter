@@ -86,7 +86,7 @@ describe('RedshiftFormatter', () => {
     );
   });
 
-  it.skip('formats DISTKEY and SORTKEY after CREATE TABLE', () => {
+  it('formats DISTKEY and SORTKEY after CREATE TABLE', () => {
     expect(
       format(
         'CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL, e INT NOT NULL) DISTKEY(created_at) SORTKEY(created_at);'
@@ -99,13 +99,12 @@ describe('RedshiftFormatter', () => {
           c INT NOT NULL,
           d INT NOT NULL,
           e INT NOT NULL
-        )
-        DISTKEY(created_at)
-        SORTKEY(created_at);
+        ) DISTKEY (created_at) SORTKEY (created_at);
     `);
   });
 
-  it.skip('formats COPY', () => {
+  // This is far from ideal, but at least the formatter doesn't crash :P
+  it('formats COPY', () => {
     expect(
       format(`
         COPY schema.table
@@ -118,15 +117,7 @@ describe('RedshiftFormatter', () => {
       COPY
         schema.table
       FROM
-        's3://bucket/file.csv'
-      IAM_ROLE
-        'arn:aws:iam::123456789:role/rolename'
-      FORMAT
-        AS CSV
-      DELIMITER
-        ',' QUOTE '"'
-      REGION
-        AS 'us-east-1'
+        's3://bucket/file.csv' IAM_ROLE 'arn:aws:iam::123456789:role/rolename' FORMAT AS CSV DELIMITER ',' QUOTE '"' REGION AS 'us-east-1'
     `);
   });
 
