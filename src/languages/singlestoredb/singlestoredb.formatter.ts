@@ -238,10 +238,7 @@ export default class SingleStoreDbFormatter extends Formatter {
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       // TODO: support _binary"some string" prefix
-      stringTypes: [
-        { quote: "''", prefixes: ['B', 'X'] },
-        { quote: '""', prefixes: ['B', 'X'] },
-      ],
+      stringTypes: [{ quote: "''", prefixes: ['B', 'X'] }, '""'],
       identTypes: ['``'],
       identChars: { first: '$', rest: '$', allowFirstCharNumber: true },
       variableTypes: [
