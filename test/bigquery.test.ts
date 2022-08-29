@@ -45,7 +45,7 @@ describe('BigQueryFormatter', () => {
   supportsUpdate(format);
   supportsTruncateTable(format);
   supportsMergeInto(format);
-  supportsStrings(format, ['""', "''"]);
+  supportsStrings(format, ['""', "''", "R''", 'R""', "B''", 'B""']);
   supportsIdentifiers(format, ['``']);
   supportsArrayLiterals(format);
   supportsBetween(format);
@@ -77,15 +77,11 @@ describe('BigQueryFormatter', () => {
   });
 
   // BigQuery-specific string types
-  it('supports strings with r, b and rb prefixes', () => {
-    expect(format(`SELECT R'blah', B'sah', rb"huh", br'bulu bulu', r"haha", BR'la la' FROM foo`))
-      .toBe(dedent`
+  it('supports strings with rb prefixes', () => {
+    expect(format(`SELECT rb"huh", br'bulu bulu', BR'la la' FROM foo`)).toBe(dedent`
       SELECT
-        R'blah',
-        B'sah',
         rb"huh",
         br'bulu bulu',
-        r"haha",
         BR'la la'
       FROM
         foo

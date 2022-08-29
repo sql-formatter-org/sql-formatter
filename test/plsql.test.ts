@@ -108,14 +108,6 @@ describe('PlSqlFormatter', () => {
     expect(format("Q'Stest string S'S''")).toBe("Q'Stest string S' S ''");
   });
 
-  it('formats simple SELECT with national characters', () => {
-    const result = format("SELECT N'value'");
-    expect(result).toBe(dedent`
-      SELECT
-        N'value'
-    `);
-  });
-
   it('formats Oracle recursive sub queries', () => {
     const result = format(`
       WITH t1 AS (
