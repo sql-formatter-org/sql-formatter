@@ -17,6 +17,7 @@ import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
 import supportsParams from './options/param';
 import supportsWindow from './features/window';
+import supportsWindowFunctions from './features/windowFunctions';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
@@ -59,6 +60,7 @@ describe('BigQueryFormatter', () => {
   supportsOperators(format, BigQueryFormatter.operators);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
   supportsWindow(format);
+  supportsWindowFunctions(format);
   supportsLimiting(format, { limit: true, offset: true });
 
   // Note: BigQuery supports single dashes inside identifiers, so my-ident would be

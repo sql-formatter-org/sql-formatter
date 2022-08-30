@@ -127,14 +127,16 @@ const reservedJoins = expandPhrases([
   '{INNER | CROSS} JOIN',
 ]);
 
-const reservedPhrases = [
+const reservedPhrases = expandPhrases([
   // https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax#tablesample_operator
   'TABLESAMPLE SYSTEM',
   // From DDL: https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
   'ANY TYPE',
   'ALL COLUMNS',
   'NOT DETERMINISTIC',
-];
+  // https://cloud.google.com/bigquery/docs/reference/standard-sql/window-function-calls#def_over_clause
+  '{ROWS | RANGE} BETWEEN',
+]);
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
 export default class BigQueryFormatter extends Formatter {
