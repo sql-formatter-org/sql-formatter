@@ -2,6 +2,7 @@ import { Token, TokenType } from 'src/lexer/token';
 import { WHITESPACE_REGEX } from './regexUtil';
 
 export interface TokenRule {
+  type: TokenType;
   regex: RegExp;
   // Called with the raw string that was matched
   text?: (rawText: string) => string;
@@ -105,18 +106,18 @@ export default class TokenizerEngine {
     if (!rule) {
       return undefined;
     }
-    return this.match(tokenType, rule);
+    return this.match(rule);
   }
 
   // Attempts to match RegExp at current position in input
-  private match(type: TokenType, rule: TokenRule): Token | undefined {
+  private match(rule: TokenRule): Token | undefined {
     rule.regex.lastIndex = this.index;
     const matches = rule.regex.exec(this.input);
     if (matches) {
       const matchedText = matches[0];
 
       const token: Token = {
-        type,
+        type: rule.type,
         raw: matchedText,
         text: rule.text ? rule.text(matchedText) : matchedText,
         start: this.index,
