@@ -129,7 +129,7 @@ export default class TokenizerEngine {
     if (matches) {
       const matchedToken = matches[0];
 
-      const outToken: Token = {
+      const token: Token = {
         type,
         raw: matchedToken,
         text: transform ? transform(matchedToken) : matchedToken,
@@ -138,12 +138,12 @@ export default class TokenizerEngine {
       };
 
       if (transformKey) {
-        outToken.key = transformKey(outToken.text);
+        token.key = transformKey(token.text);
       }
 
       // Advance current position by matched token length
       this.index += matchedToken.length;
-      return outToken;
+      return token;
     }
     return undefined;
   }
