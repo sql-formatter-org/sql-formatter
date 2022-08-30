@@ -35,6 +35,7 @@ export function isTabularToken(type: TokenType): boolean {
     type === TokenType.RESERVED_COMMAND ||
     type === TokenType.RESERVED_SELECT ||
     type === TokenType.RESERVED_SET_OPERATION ||
-    type === TokenType.RESERVED_JOIN
+    type === TokenType.RESERVED_JOIN ||
+    type === TokenType.LIMIT
   );
 }

@@ -49,6 +49,16 @@ export default function supportsLimiting(format: FormatFn, types: LimitingTypes)
             6;
       `);
     });
+
+    // Regression test for #412
+    it('formats LIMIT in tabular style', () => {
+      const result = format('SELECT * FROM tbl LIMIT 5, 6;', { indentStyle: 'tabularLeft' });
+      expect(result).toBe(dedent`
+        SELECT    *
+        FROM      tbl
+        LIMIT     5, 6;
+      `);
+    });
   }
 
   if (types.limit && types.offset) {
