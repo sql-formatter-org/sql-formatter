@@ -3,8 +3,9 @@ import { WHITESPACE_REGEX } from './regexUtil';
 
 export interface TokenRule {
   regex: RegExp;
-  key?: (token: string) => string;
-  text?: (token: string) => string;
+  // Called with the raw string that was matched
+  text?: (rawText: string) => string;
+  key?: (rawText: string) => string;
 }
 
 export default class TokenizerEngine {
@@ -123,7 +124,7 @@ export default class TokenizerEngine {
       };
 
       if (rule.key) {
-        token.key = rule.key(token.text);
+        token.key = rule.key(matchedText);
       }
 
       // Advance current position by matched token length
