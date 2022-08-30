@@ -4,7 +4,7 @@ import { WHITESPACE_REGEX } from './regexUtil';
 export interface TokenRule {
   regex: RegExp;
   key?: (token: string) => string;
-  value?: (token: string) => string;
+  text?: (token: string) => string;
 }
 
 export default class TokenizerEngine {
@@ -117,7 +117,7 @@ export default class TokenizerEngine {
       const token: Token = {
         type,
         raw: matchedText,
-        text: rule.value ? rule.value(matchedText) : matchedText,
+        text: rule.text ? rule.text(matchedText) : matchedText,
         start: this.index,
         end: this.index + matchedText.length,
       };

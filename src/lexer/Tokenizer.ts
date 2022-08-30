@@ -36,63 +36,63 @@ export default class Tokenizer {
       },
       [TokenType.CASE]: {
         regex: /CASE\b/iuy,
-        value: toCanonical,
+        text: toCanonical,
       },
       [TokenType.END]: {
         regex: /END\b/iuy,
-        value: toCanonical,
+        text: toCanonical,
       },
       [TokenType.BETWEEN]: {
         regex: /BETWEEN\b/iuy,
-        value: toCanonical,
+        text: toCanonical,
       },
       [TokenType.LIMIT]: {
         regex: cfg.reservedCommands.includes('LIMIT') ? /LIMIT\b/iuy : undefined,
-        value: toCanonical,
+        text: toCanonical,
       },
       [TokenType.RESERVED_COMMAND]: {
         regex: regex.reservedWord(cfg.reservedCommands, cfg.identChars),
-        value: toCanonical,
+        text: toCanonical,
       },
       [TokenType.RESERVED_SELECT]: {
         regex: regex.reservedWord(cfg.reservedSelect, cfg.identChars),
-        value: toCanonical,
+        text: toCanonical,
       },
       [TokenType.RESERVED_SET_OPERATION]: {
         regex: regex.reservedWord(cfg.reservedSetOperations, cfg.identChars),
-        value: toCanonical,
+        text: toCanonical,
       },
       [TokenType.RESERVED_DEPENDENT_CLAUSE]: {
         regex: regex.reservedWord(cfg.reservedDependentClauses, cfg.identChars),
-        value: toCanonical,
+        text: toCanonical,
       },
       [TokenType.RESERVED_JOIN]: {
         regex: regex.reservedWord(cfg.reservedJoins, cfg.identChars),
-        value: toCanonical,
+        text: toCanonical,
       },
       [TokenType.RESERVED_PHRASE]: {
         regex: regex.reservedWord(cfg.reservedPhrases ?? [], cfg.identChars),
-        value: toCanonical,
+        text: toCanonical,
       },
       [TokenType.AND]: {
         regex: /AND\b/iuy,
-        value: toCanonical,
+        text: toCanonical,
       },
       [TokenType.OR]: {
         regex: /OR\b/iuy,
-        value: toCanonical,
+        text: toCanonical,
       },
       [TokenType.XOR]: {
         regex: cfg.supportsXor ? /XOR\b/iuy : undefined,
-        value: toCanonical,
+        text: toCanonical,
       },
       [TokenType.RESERVED_FUNCTION_NAME]: {
         regex: regex.reservedWord(cfg.reservedFunctionNames, cfg.identChars),
-        value: toCanonical,
+        text: toCanonical,
       },
       [TokenType.RESERVED_KEYWORD]: {
         regex: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
-        value: toCanonical,
+        text: toCanonical,
       },
       [TokenType.VARIABLE]: {
         regex: cfg.variableTypes ? regex.variable(cfg.variableTypes) : undefined,
