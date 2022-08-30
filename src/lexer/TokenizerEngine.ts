@@ -67,7 +67,21 @@ export default class TokenizerEngine {
       this.matchToken(TokenType.LINE_COMMENT) ||
       this.matchToken(TokenType.QUOTED_IDENTIFIER) ||
       this.matchToken(TokenType.NUMBER) ||
-      this.matchReservedWordToken() ||
+      this.matchToken(TokenType.CASE) ||
+      this.matchToken(TokenType.END) ||
+      this.matchToken(TokenType.BETWEEN) ||
+      this.matchToken(TokenType.LIMIT) ||
+      this.matchToken(TokenType.RESERVED_COMMAND) ||
+      this.matchToken(TokenType.RESERVED_SELECT) ||
+      this.matchToken(TokenType.RESERVED_SET_OPERATION) ||
+      this.matchToken(TokenType.RESERVED_DEPENDENT_CLAUSE) ||
+      this.matchToken(TokenType.RESERVED_JOIN) ||
+      this.matchToken(TokenType.RESERVED_PHRASE) ||
+      this.matchToken(TokenType.AND) ||
+      this.matchToken(TokenType.OR) ||
+      this.matchToken(TokenType.XOR) ||
+      this.matchToken(TokenType.RESERVED_FUNCTION_NAME) ||
+      this.matchToken(TokenType.RESERVED_KEYWORD) ||
       this.matchPlaceholderToken(TokenType.NAMED_PARAMETER) ||
       this.matchPlaceholderToken(TokenType.QUOTED_PARAMETER) ||
       this.matchPlaceholderToken(TokenType.NUMBERED_PARAMETER) ||
@@ -96,27 +110,6 @@ export default class TokenizerEngine {
       }
     }
     return undefined;
-  }
-
-  private matchReservedWordToken(): Token | undefined {
-    // prioritised list of Reserved token types
-    return (
-      this.matchToken(TokenType.CASE) ||
-      this.matchToken(TokenType.END) ||
-      this.matchToken(TokenType.BETWEEN) ||
-      this.matchToken(TokenType.LIMIT) ||
-      this.matchToken(TokenType.RESERVED_COMMAND) ||
-      this.matchToken(TokenType.RESERVED_SELECT) ||
-      this.matchToken(TokenType.RESERVED_SET_OPERATION) ||
-      this.matchToken(TokenType.RESERVED_DEPENDENT_CLAUSE) ||
-      this.matchToken(TokenType.RESERVED_JOIN) ||
-      this.matchToken(TokenType.RESERVED_PHRASE) ||
-      this.matchToken(TokenType.AND) ||
-      this.matchToken(TokenType.OR) ||
-      this.matchToken(TokenType.XOR) ||
-      this.matchToken(TokenType.RESERVED_FUNCTION_NAME) ||
-      this.matchToken(TokenType.RESERVED_KEYWORD)
-    );
   }
 
   // Shorthand for `match` that looks up regex from rules
