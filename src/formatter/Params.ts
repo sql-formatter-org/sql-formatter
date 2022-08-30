@@ -1,5 +1,3 @@
-import { type Token } from '../lexer/token';
-
 export type ParamItems = { [k: string]: string };
 
 /**
@@ -19,10 +17,8 @@ export default class Params {
 
   /**
    * Returns param value that matches given placeholder with param key.
-   * @param {Token} token
-   * @return {string} param or token.text when params are missing
    */
-  get({ key, text }: Token): string {
+  get({ key, text }: { key?: string; text: string }): string {
     if (!this.params) {
       return text;
     }

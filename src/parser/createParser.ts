@@ -3,13 +3,13 @@ import { Parser as NearleyParser, Grammar } from 'nearley';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { disambiguateTokens } from 'src/lexer/disambiguateTokens';
 import { ParamTypes } from 'src/lexer/TokenizerOptions';
-import { Statement } from 'src/parser/ast';
+import { StatementNode } from 'src/parser/ast';
 import grammar from 'src/parser/grammar';
 import LexerAdapter from 'src/parser/LexerAdapter';
 import { EOF_TOKEN } from 'src/lexer/token';
 
 export interface Parser {
-  parse(sql: string, paramTypesOverrides: ParamTypes): Statement[];
+  parse(sql: string, paramTypesOverrides: ParamTypes): StatementNode[];
 }
 
 /**

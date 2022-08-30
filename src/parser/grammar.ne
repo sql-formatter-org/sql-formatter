@@ -16,7 +16,12 @@ const lexer = new LexerAdapter(chunk => []);
 // which otherwise produce single element nested inside two arrays
 const unwrap = <T>([[el]]: T[][]): T => el;
 
-const createTokenNode = ([[token]]: Token[][]) => ({ type: NodeType.token, token });
+const toKeywordNode = (token: Token) => ({
+  type: NodeType.keyword,
+  tokenType: token.type,
+  text: token.text,
+  raw: token.raw,
+});
 %}
 @lexer lexer
 
@@ -59,14 +64,14 @@ limit_clause -> %LIMIT commaless_expression:+ (%COMMA expression:+):? {%
       const [comma, exp2] = optional;
       return {
         type: NodeType.limit_clause,
-        limitToken,
+        name: toKeywordNode(limitToken),
         offset: exp1,
         count: exp2,
       };
     } else {
       return {
         type: NodeType.limit_clause,
-        limitToken,
+        name: toKeywordNode(limitToken),
         count: exp1,
       };
     }
@@ -76,7 +81,7 @@ limit_clause -> %LIMIT commaless_expression:+ (%COMMA expression:+):? {%
 select_clause -> %RESERVED_SELECT (all_columns_asterisk expression:* | asteriskless_expression expression:*) {%
   ([nameToken, [exp, expressions]]) => ({
     type: NodeType.clause,
-    nameToken,
+    name: toKeywordNode(nameToken),
     children: [exp, ...expressions],
   })
 %}
@@ -88,7 +93,7 @@ all_columns_asterisk -> %ASTERISK {%
 other_clause -> %RESERVED_COMMAND expression:* {%
   ([nameToken, children]) => ({
     type: NodeType.clause,
-    nameToken,
+    name: toKeywordNode(nameToken),
     children,
   })
 %}
@@ -96,7 +101,7 @@ other_clause -> %RESERVED_COMMAND expression:* {%
 set_operation -> %RESERVED_SET_OPERATION expression:* {%
   ([nameToken, children]) => ({
     type: NodeType.set_operation,
-    nameToken,
+    name: toKeywordNode(nameToken),
     children,
   })
 %}
@@ -116,18 +121,25 @@ simple_expression ->
   | between_predicate
   | expression_token ) {% unwrap %}
 
-array_subscript -> (%ARRAY_IDENTIFIER | %ARRAY_KEYWORD) square_brackets {%
-  ([[arrayToken], brackets]) => ({
+array_subscript -> %ARRAY_IDENTIFIER square_brackets {%
+  ([arrayToken, brackets]) => ({
     type: NodeType.array_subscript,
-    arrayToken,
+    array: { type: NodeType.identifier, text: arrayToken.text },
+    parenthesis: brackets,
+  })
+%}
+array_subscript -> %ARRAY_KEYWORD square_brackets {%
+  ([arrayToken, brackets]) => ({
+    type: NodeType.array_subscript,
+    array: toKeywordNode(arrayToken),
     parenthesis: brackets,
   })
 %}
 
 function_call -> %RESERVED_FUNCTION_NAME parenthesis {%
-  ([name, parens]) => ({
+  ([nameToken, parens]) => ({
     type: NodeType.function_call,
-    nameToken: name,
+    name: toKeywordNode(nameToken),
     parenthesis: parens,
   })
 %}
@@ -162,16 +174,16 @@ square_brackets -> "[" expression:* "]" {%
 between_predicate -> %BETWEEN commaless_expression %AND commaless_expression {%
   ([betweenToken, expr1, andToken, expr2]) => ({
     type: NodeType.between_predicate,
-    betweenToken,
+    between: toKeywordNode(betweenToken),
     expr1: [expr1],
-    andToken,
+    and: toKeywordNode(andToken),
     expr2: [expr2],
   })
 %}
 
-comma -> ( %COMMA ) {% createTokenNode %}
+comma -> ( %COMMA ) {% ([[token]]) => ({ type: NodeType.comma }) %}
 
-asterisk -> ( %ASTERISK ) {% createTokenNode %}
+asterisk -> ( %ASTERISK ) {% ([[token]]) => ({ type: NodeType.operator, text: token.text }) %}
 
 expression_token ->
   ( operator
@@ -181,22 +193,22 @@ expression_token ->
   | keyword
   | comment ) {% unwrap %}
 
-operator -> ( %OPERATOR ) {% createTokenNode %}
+operator -> ( %OPERATOR ) {% ([[token]]) => ({ type: NodeType.operator, text: token.text }) %}
 
 identifier ->
   ( %IDENTIFIER
   | %QUOTED_IDENTIFIER
-  | %VARIABLE ) {% createTokenNode %}
+  | %VARIABLE ) {% ([[token]]) => ({ type: NodeType.identifier, text: token.text }) %}
 
 parameter ->
   ( %NAMED_PARAMETER
   | %QUOTED_PARAMETER
   | %NUMBERED_PARAMETER
-  | %POSITIONAL_PARAMETER ) {% createTokenNode %}
+  | %POSITIONAL_PARAMETER ) {% ([[token]]) => ({ type: NodeType.parameter, key: token.key, text: token.text }) %}
 
 literal ->
   ( %NUMBER
-  | %STRING ) {% createTokenNode %}
+  | %STRING ) {% ([[token]]) => ({ type: NodeType.literal, text: token.text }) %}
 
 keyword ->
   ( %RESERVED_KEYWORD
@@ -207,8 +219,17 @@ keyword ->
   | %END
   | %AND
   | %OR
-  | %XOR ) {% createTokenNode %}
+  | %XOR ) {%
+  ([[token]]) => toKeywordNode(token)
+%}
 
-comment ->
-  ( %LINE_COMMENT
-  | %BLOCK_COMMENT ) {% createTokenNode %}
+comment -> %LINE_COMMENT {%
+  ([token]) => ({
+    type: NodeType.line_comment,
+    text: token.text,
+    precedingWhitespace: token.precedingWhitespace,
+  })
+%}
+comment -> %BLOCK_COMMENT {%
+  ([token]) => ({ type: NodeType.block_comment, text: token.text })
+%}

@@ -119,7 +119,7 @@ function postProcess(tokens: Token[]) {
       return { ...token, type: TokenType.RESERVED_KEYWORD };
     }
 
-    if (isReserved(token)) {
+    if (isReserved(token.type)) {
       previousReservedToken = token;
     }
 

@@ -1,5 +1,11 @@
-import { type Token, TokenType, isLogicalOperator } from 'src/lexer/token';
-import { AstNode, BetweenPredicate, NodeType, Parenthesis } from 'src/parser/ast';
+import { TokenType, isLogicalOperator } from 'src/lexer/token';
+import {
+  AstNode,
+  BetweenPredicateNode,
+  KeywordNode,
+  NodeType,
+  ParenthesisNode,
+} from 'src/parser/ast';
 
 /**
  * Bookkeeper for inline blocks.
@@ -15,11 +21,11 @@ export default class InlineBlock {
    * Check if this should be an inline parentheses block
    * Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
    */
-  public isInlineBlock(parenthesis: Parenthesis): boolean {
+  public isInlineBlock(parenthesis: ParenthesisNode): boolean {
     return this.inlineParenthesisWidth(parenthesis) <= this.expressionWidth;
   }
 
-  private inlineParenthesisWidth(parenthesis: Parenthesis): number {
+  private inlineParenthesisWidth(parenthesis: ParenthesisNode): number {
     // +2 for the two parenthesis
     return this.inlineWidth(parenthesis.children) + 2;
   }
@@ -30,10 +36,10 @@ export default class InlineBlock {
     for (const node of nodes) {
       switch (node.type) {
         case NodeType.function_call:
-          length += node.nameToken.text.length + this.inlineParenthesisWidth(node.parenthesis);
+          length += node.name.text.length + this.inlineParenthesisWidth(node.parenthesis);
           break;
         case NodeType.array_subscript:
-          length += node.arrayToken.text.length + this.inlineParenthesisWidth(node.parenthesis);
+          length += node.array.text.length + this.inlineParenthesisWidth(node.parenthesis);
           break;
         case NodeType.parenthesis:
           length += this.inlineParenthesisWidth(node);
@@ -44,13 +50,22 @@ export default class InlineBlock {
         case NodeType.clause:
         case NodeType.limit_clause:
         case NodeType.set_operation:
+        case NodeType.line_comment:
+        case NodeType.block_comment:
           return Infinity;
         case NodeType.all_columns_asterisk:
+        case NodeType.comma:
           length += 1;
           break;
-        case NodeType.token:
-          length += node.token.text.length;
-          if (this.isForbiddenToken(node.token)) {
+        case NodeType.literal:
+        case NodeType.identifier:
+        case NodeType.parameter:
+        case NodeType.operator:
+          length += node.text.length;
+          break;
+        case NodeType.keyword:
+          length += node.text.length;
+          if (this.isForbiddenKeyword(node)) {
             return Infinity;
           }
           break;
@@ -64,23 +79,17 @@ export default class InlineBlock {
     return length;
   }
 
-  private betweenWidth(node: BetweenPredicate): number {
+  private betweenWidth(node: BetweenPredicateNode): number {
     return (
-      node.betweenToken.text.length +
+      node.between.text.length +
       this.inlineWidth(node.expr1) +
-      node.andToken.text.length +
+      node.and.text.length +
       this.inlineWidth(node.expr2)
     );
   }
 
-  // Reserved words that cause newlines, comments and semicolons
-  // are not allowed inside inline parentheses block
-  private isForbiddenToken(token: Token) {
-    return (
-      isLogicalOperator(token) ||
-      token.type === TokenType.LINE_COMMENT ||
-      token.type === TokenType.BLOCK_COMMENT ||
-      token.type === TokenType.CASE // CASE cannot have inline blocks
-    );
+  // Reserved words that cause newlines are not allowed inside inline parentheses block
+  private isForbiddenKeyword(node: KeywordNode) {
+    return isLogicalOperator(node.tokenType) || node.tokenType === TokenType.CASE;
   }
 }

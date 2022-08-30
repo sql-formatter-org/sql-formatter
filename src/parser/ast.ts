@@ -1,4 +1,4 @@
-import { Token } from 'src/lexer/token';
+import { TokenType } from 'src/lexer/token';
 
 export enum NodeType {
   statement = 'statement',
@@ -10,47 +10,48 @@ export enum NodeType {
   between_predicate = 'between_predicate',
   limit_clause = 'limit_clause',
   all_columns_asterisk = 'all_columns_asterisk',
-  token = 'token',
+  literal = 'literal',
+  identifier = 'identifier',
+  keyword = 'keyword',
+  parameter = 'parameter',
+  operator = 'operator',
+  comma = 'comma',
+  line_comment = 'line_comment',
+  block_comment = 'block_comment',
 }
 
-export type Statement = {
+export type StatementNode = {
   type: NodeType.statement;
   children: AstNode[];
   hasSemicolon: boolean;
 };
 
-export type Clause = {
+export type ClauseNode = {
   type: NodeType.clause;
-  nameToken: Token;
+  name: KeywordNode;
   children: AstNode[];
 };
 
-export type SetOperation = {
+export type SetOperationNode = {
   type: NodeType.set_operation;
-  nameToken: Token;
+  name: KeywordNode;
   children: AstNode[];
 };
 
-// Wrapper for plain nodes inside AST
-export type TokenNode = {
-  type: NodeType.token;
-  token: Token;
-};
-
-export type FunctionCall = {
+export type FunctionCallNode = {
   type: NodeType.function_call;
-  nameToken: Token;
-  parenthesis: Parenthesis;
+  name: KeywordNode;
+  parenthesis: ParenthesisNode;
 };
 
 // <ident>[<expr>]
-export type ArraySubscript = {
+export type ArraySubscriptNode = {
   type: NodeType.array_subscript;
-  arrayToken: Token;
-  parenthesis: Parenthesis;
+  array: IdentifierNode | KeywordNode;
+  parenthesis: ParenthesisNode;
 };
 
-export type Parenthesis = {
+export type ParenthesisNode = {
   type: NodeType.parenthesis;
   children: AstNode[];
   openParen: string;
@@ -58,37 +59,85 @@ export type Parenthesis = {
 };
 
 // BETWEEN <expr1> AND <expr2>
-export type BetweenPredicate = {
+export type BetweenPredicateNode = {
   type: NodeType.between_predicate;
-  betweenToken: Token;
+  between: KeywordNode;
   expr1: AstNode[];
-  andToken: Token;
+  and: KeywordNode;
   expr2: AstNode[];
 };
 
 // LIMIT <count>
 // LIMIT <offset>, <count>
-export type LimitClause = {
+export type LimitClauseNode = {
   type: NodeType.limit_clause;
-  limitToken: Token;
+  name: KeywordNode;
   count: AstNode[];
   offset?: AstNode[];
 };
 
 // The "*" operator used in SELECT *
-export type AllColumnsAsterisk = {
+export type AllColumnsAsteriskNode = {
   type: NodeType.all_columns_asterisk;
 };
 
-export type AstNode =
-  | Clause
-  | SetOperation
-  | FunctionCall
-  | ArraySubscript
-  | Parenthesis
-  | BetweenPredicate
-  | LimitClause
-  | AllColumnsAsterisk
-  | TokenNode;
+export type LiteralNode = {
+  type: NodeType.literal;
+  text: string;
+};
 
-export const isTokenNode = (node: AstNode): node is TokenNode => node.type === 'token';
+export type IdentifierNode = {
+  type: NodeType.identifier;
+  text: string;
+};
+
+export type KeywordNode = {
+  type: NodeType.keyword;
+  tokenType: TokenType;
+  text: string;
+  raw: string;
+};
+
+export type ParameterNode = {
+  type: NodeType.parameter;
+  key?: string;
+  text: string;
+};
+
+export type OperatorNode = {
+  type: NodeType.operator;
+  text: string;
+};
+
+export type CommaNode = {
+  type: NodeType.comma;
+};
+
+export type LineCommentNode = {
+  type: NodeType.line_comment;
+  text: string;
+  precedingWhitespace: string;
+};
+
+export type BlockCommentNode = {
+  type: NodeType.block_comment;
+  text: string;
+};
+
+export type AstNode =
+  | ClauseNode
+  | SetOperationNode
+  | FunctionCallNode
+  | ArraySubscriptNode
+  | ParenthesisNode
+  | BetweenPredicateNode
+  | LimitClauseNode
+  | AllColumnsAsteriskNode
+  | LiteralNode
+  | IdentifierNode
+  | KeywordNode
+  | ParameterNode
+  | OperatorNode
+  | CommaNode
+  | LineCommentNode
+  | BlockCommentNode;
