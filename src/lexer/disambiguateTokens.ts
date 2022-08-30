@@ -18,25 +18,25 @@ export function disambiguateTokens(tokens: Token[]): Token[] {
     if (isReserved(token.type)) {
       const prevToken = tokens[i - 1];
       if (prevToken && prevToken.text === '.') {
-        return { ...token, type: TokenType.IDENTIFIER, text: token.raw };
+        token = { ...token, type: TokenType.IDENTIFIER, text: token.raw };
       }
     }
     if (token.type === TokenType.RESERVED_FUNCTION_NAME) {
       const nextToken = tokens[i + 1];
       if (!nextToken || !isOpenParen(nextToken)) {
-        return { ...token, type: TokenType.RESERVED_KEYWORD };
+        token = { ...token, type: TokenType.RESERVED_KEYWORD };
       }
     }
     if (token.type === TokenType.IDENTIFIER) {
       const nextToken = tokens[i + 1];
       if (nextToken && isOpenBracket(nextToken)) {
-        return { ...token, type: TokenType.ARRAY_IDENTIFIER };
+        token = { ...token, type: TokenType.ARRAY_IDENTIFIER };
       }
     }
     if (token.type === TokenType.RESERVED_KEYWORD) {
       const nextToken = tokens[i + 1];
       if (nextToken && isOpenBracket(nextToken)) {
-        return { ...token, type: TokenType.ARRAY_KEYWORD };
+        token = { ...token, type: TokenType.ARRAY_KEYWORD };
       }
     }
     return token;
