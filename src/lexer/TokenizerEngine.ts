@@ -127,14 +127,14 @@ export default class TokenizerEngine {
     regex.lastIndex = this.index;
     const matches = regex.exec(this.input);
     if (matches) {
-      const matchedToken = matches[0];
+      const matchedText = matches[0];
 
       const token: Token = {
         type,
-        raw: matchedToken,
-        text: transform ? transform(matchedToken) : matchedToken,
+        raw: matchedText,
+        text: transform ? transform(matchedText) : matchedText,
         start: this.index,
-        end: this.index + matchedToken.length,
+        end: this.index + matchedText.length,
       };
 
       if (transformKey) {
@@ -142,7 +142,7 @@ export default class TokenizerEngine {
       }
 
       // Advance current position by matched token length
-      this.index += matchedToken.length;
+      this.index += matchedText.length;
       return token;
     }
     return undefined;
