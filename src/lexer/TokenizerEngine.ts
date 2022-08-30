@@ -82,10 +82,10 @@ export default class TokenizerEngine {
       this.matchToken(TokenType.XOR) ||
       this.matchToken(TokenType.RESERVED_FUNCTION_NAME) ||
       this.matchToken(TokenType.RESERVED_KEYWORD) ||
-      this.matchPlaceholderToken(TokenType.NAMED_PARAMETER) ||
-      this.matchPlaceholderToken(TokenType.QUOTED_PARAMETER) ||
-      this.matchPlaceholderToken(TokenType.NUMBERED_PARAMETER) ||
-      this.matchPlaceholderToken(TokenType.POSITIONAL_PARAMETER) ||
+      this.matchToken(TokenType.NAMED_PARAMETER) ||
+      this.matchToken(TokenType.QUOTED_PARAMETER) ||
+      this.matchToken(TokenType.NUMBERED_PARAMETER) ||
+      this.matchToken(TokenType.POSITIONAL_PARAMETER) ||
       this.matchToken(TokenType.VARIABLE) ||
       this.matchToken(TokenType.STRING) ||
       this.matchToken(TokenType.IDENTIFIER) ||
@@ -98,20 +98,6 @@ export default class TokenizerEngine {
     );
   }
 
-  private matchPlaceholderToken(tokenType: TokenType): Token | undefined {
-    if (tokenType in this.rules) {
-      const token = this.matchToken(tokenType);
-      const tokenRule = this.rules[tokenType];
-      if (token) {
-        if (tokenRule?.key) {
-          return { ...token, key: tokenRule.key(token.text) };
-        }
-        return token; // POSITIONAL_PARAMETER does not have a key transform function
-      }
-    }
-    return undefined;
-  }
-
   // Shorthand for `match` that looks up regex from rules
   private matchToken(tokenType: TokenType): Token | undefined {
     const rule = this.rules[tokenType];
@@ -122,6 +108,7 @@ export default class TokenizerEngine {
       type: tokenType,
       regex: rule.regex,
       transform: rule.value,
+      transformKey: rule.key,
     });
   }
 
@@ -130,23 +117,29 @@ export default class TokenizerEngine {
     type,
     regex,
     transform,
+    transformKey,
   }: {
     type: TokenType;
     regex: RegExp;
     transform?: (s: string) => string;
+    transformKey?: (s: string) => string;
   }): Token | undefined {
     regex.lastIndex = this.index;
     const matches = regex.exec(this.input);
     if (matches) {
       const matchedToken = matches[0];
 
-      const outToken = {
+      const outToken: Token = {
         type,
         raw: matchedToken,
         text: transform ? transform(matchedToken) : matchedToken,
         start: this.index,
         end: this.index + matchedToken.length,
       };
+
+      if (transformKey) {
+        outToken.key = transformKey(outToken.text);
+      }
 
       // Advance current position by matched token length
       this.index += matchedToken.length;
