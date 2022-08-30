@@ -3,9 +3,7 @@ import * as regex from 'src/lexer/regexFactory';
 import { ParamTypes, TokenizerOptions } from 'src/lexer/TokenizerOptions';
 import TokenizerEngine, { type TokenRule } from 'src/lexer/TokenizerEngine';
 import { escapeRegExp } from 'src/lexer/regexUtil';
-import { equalizeWhitespace } from 'src/utils';
-
-type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+import { equalizeWhitespace, Optional } from 'src/utils';
 
 type OptionalTokenRule = Optional<TokenRule, 'regex'>;
 

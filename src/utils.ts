@@ -27,3 +27,12 @@ export const sum = (arr: number[]): number => {
 // Used for flattening keyword lists
 export const flatKeywordList = (obj: Record<string, string[]>): string[] =>
   dedupe(Object.values(obj).flat());
+
+// Given a type and a field name, returns a type where this field is optional
+//
+// For example, these two type definitions are equivalent:
+//
+//   type Foo = Optional<{ foo: string, bar: number }, 'foo'>;
+//   type Foo = { foo?: string, bar: number };
+//
+export type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
