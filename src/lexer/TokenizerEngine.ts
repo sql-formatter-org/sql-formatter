@@ -38,7 +38,7 @@ export default class TokenizerEngine {
 
       if (this.index < this.input.length) {
         // Get the next token and the token type
-        token = this.getNextToken(token);
+        token = this.getNextToken();
         if (!token) {
           throw new Error(`Parse error: Unexpected "${input.slice(this.index, 100)}"`);
         }
@@ -61,13 +61,13 @@ export default class TokenizerEngine {
     return undefined;
   }
 
-  private getNextToken(previousToken?: Token): Token | undefined {
+  private getNextToken(): Token | undefined {
     return (
       this.matchToken(TokenType.BLOCK_COMMENT) ||
       this.matchToken(TokenType.LINE_COMMENT) ||
       this.matchToken(TokenType.QUOTED_IDENTIFIER) ||
       this.matchToken(TokenType.NUMBER) ||
-      this.matchReservedWordToken(previousToken) ||
+      this.matchReservedWordToken() ||
       this.matchPlaceholderToken(TokenType.NAMED_PARAMETER) ||
       this.matchPlaceholderToken(TokenType.QUOTED_PARAMETER) ||
       this.matchPlaceholderToken(TokenType.NUMBERED_PARAMETER) ||
@@ -98,13 +98,7 @@ export default class TokenizerEngine {
     return undefined;
   }
 
-  private matchReservedWordToken(previousToken?: Token): Token | undefined {
-    // A reserved word cannot be preceded by a '.'
-    // this makes it so in "mytable.from", "from" is not considered a reserved word
-    if (previousToken?.text === '.') {
-      return undefined;
-    }
-
+  private matchReservedWordToken(): Token | undefined {
     // prioritised list of Reserved token types
     return (
       this.matchToken(TokenType.CASE) ||

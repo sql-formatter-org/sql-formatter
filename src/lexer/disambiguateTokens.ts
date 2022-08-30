@@ -1,6 +1,8 @@
-import { Token, TokenType } from 'src/lexer/token';
+import { isReserved, Token, TokenType } from 'src/lexer/token';
 
 /**
+ * Ensures that no keyword token (RESERVED_*) is preceded by dot (.).
+ *
  * Ensures that all RESERVED_FUNCTION_NAME tokens are followed by "(".
  * If they're not, converts the token to RESERVED_KEYWORD.
  *
@@ -13,6 +15,12 @@ import { Token, TokenType } from 'src/lexer/token';
  */
 export function disambiguateTokens(tokens: Token[]): Token[] {
   return tokens.map((token, i) => {
+    if (isReserved(token.type)) {
+      const prevToken = tokens[i - 1];
+      if (prevToken && prevToken.text === '.') {
+        return { ...token, type: TokenType.IDENTIFIER, text: token.raw };
+      }
+    }
     if (token.type === TokenType.RESERVED_FUNCTION_NAME) {
       const nextToken = tokens[i + 1];
       if (!nextToken || !isOpenParen(nextToken)) {
