@@ -10,15 +10,10 @@ export interface TokenRule {
 }
 
 export default class TokenizerEngine {
-  private rules: Partial<Record<TokenType, TokenRule>>;
-
   private input = ''; // The input SQL string to process
-
   private index = 0; // Current position in string
 
-  constructor(rules: Partial<Record<TokenType, TokenRule>>) {
-    this.rules = rules;
-  }
+  constructor(private rules: TokenRule[]) {}
 
   /**
    * Takes a SQL string and breaks it into tokens.
@@ -64,52 +59,16 @@ export default class TokenizerEngine {
   }
 
   private getNextToken(): Token | undefined {
-    return (
-      this.matchToken(TokenType.BLOCK_COMMENT) ||
-      this.matchToken(TokenType.LINE_COMMENT) ||
-      this.matchToken(TokenType.QUOTED_IDENTIFIER) ||
-      this.matchToken(TokenType.NUMBER) ||
-      this.matchToken(TokenType.CASE) ||
-      this.matchToken(TokenType.END) ||
-      this.matchToken(TokenType.BETWEEN) ||
-      this.matchToken(TokenType.LIMIT) ||
-      this.matchToken(TokenType.RESERVED_COMMAND) ||
-      this.matchToken(TokenType.RESERVED_SELECT) ||
-      this.matchToken(TokenType.RESERVED_SET_OPERATION) ||
-      this.matchToken(TokenType.RESERVED_DEPENDENT_CLAUSE) ||
-      this.matchToken(TokenType.RESERVED_JOIN) ||
-      this.matchToken(TokenType.RESERVED_PHRASE) ||
-      this.matchToken(TokenType.AND) ||
-      this.matchToken(TokenType.OR) ||
-      this.matchToken(TokenType.XOR) ||
-      this.matchToken(TokenType.RESERVED_FUNCTION_NAME) ||
-      this.matchToken(TokenType.RESERVED_KEYWORD) ||
-      this.matchToken(TokenType.NAMED_PARAMETER) ||
-      this.matchToken(TokenType.QUOTED_PARAMETER) ||
-      this.matchToken(TokenType.NUMBERED_PARAMETER) ||
-      this.matchToken(TokenType.POSITIONAL_PARAMETER) ||
-      this.matchToken(TokenType.VARIABLE) ||
-      this.matchToken(TokenType.STRING) ||
-      this.matchToken(TokenType.IDENTIFIER) ||
-      this.matchToken(TokenType.DELIMITER) ||
-      this.matchToken(TokenType.COMMA) ||
-      this.matchToken(TokenType.OPEN_PAREN) ||
-      this.matchToken(TokenType.CLOSE_PAREN) ||
-      this.matchToken(TokenType.OPERATOR) ||
-      this.matchToken(TokenType.ASTERISK)
-    );
-  }
-
-  // Shorthand for `match` that looks up regex from rules
-  private matchToken(tokenType: TokenType): Token | undefined {
-    const rule = this.rules[tokenType];
-    if (!rule) {
-      return undefined;
+    for (const rule of this.rules) {
+      const token = this.match(rule);
+      if (token) {
+        return token;
+      }
     }
-    return this.match(rule);
+    return undefined;
   }
 
-  // Attempts to match RegExp at current position in input
+  // Attempts to match token rule regex at current position in input
   private match(rule: TokenRule): Token | undefined {
     rule.regex.lastIndex = this.index;
     const matches = rule.regex.exec(this.input);
