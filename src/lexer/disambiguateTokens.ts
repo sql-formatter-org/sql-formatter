@@ -14,34 +14,52 @@ import { isReserved, Token, TokenType } from 'src/lexer/token';
  * array accessor `foo[1]` and array literal `[1, 2, 3]`.
  */
 export function disambiguateTokens(tokens: Token[]): Token[] {
-  return tokens.map((token, i) => {
-    if (isReserved(token.type)) {
-      const prevToken = tokens[i - 1];
-      if (prevToken && prevToken.text === '.') {
-        token = { ...token, type: TokenType.IDENTIFIER, text: token.raw };
-      }
-    }
-    if (token.type === TokenType.RESERVED_FUNCTION_NAME) {
-      const nextToken = tokens[i + 1];
-      if (!nextToken || !isOpenParen(nextToken)) {
-        token = { ...token, type: TokenType.RESERVED_KEYWORD };
-      }
-    }
-    if (token.type === TokenType.IDENTIFIER) {
-      const nextToken = tokens[i + 1];
-      if (nextToken && isOpenBracket(nextToken)) {
-        token = { ...token, type: TokenType.ARRAY_IDENTIFIER };
-      }
-    }
-    if (token.type === TokenType.RESERVED_KEYWORD) {
-      const nextToken = tokens[i + 1];
-      if (nextToken && isOpenBracket(nextToken)) {
-        token = { ...token, type: TokenType.ARRAY_KEYWORD };
-      }
-    }
-    return token;
-  });
+  return tokens
+    .map(dotKeywordToIdent)
+    .map(funcNameToKeyword)
+    .map(identToArrayIdent)
+    .map(keywordToArrayKeyword);
 }
+
+const dotKeywordToIdent = (token: Token, i: number, tokens: Token[]): Token => {
+  if (isReserved(token.type)) {
+    const prevToken = tokens[i - 1];
+    if (prevToken && prevToken.text === '.') {
+      return { ...token, type: TokenType.IDENTIFIER, text: token.raw };
+    }
+  }
+  return token;
+};
+
+const funcNameToKeyword = (token: Token, i: number, tokens: Token[]): Token => {
+  if (token.type === TokenType.RESERVED_FUNCTION_NAME) {
+    const nextToken = tokens[i + 1];
+    if (!nextToken || !isOpenParen(nextToken)) {
+      return { ...token, type: TokenType.RESERVED_KEYWORD };
+    }
+  }
+  return token;
+};
+
+const identToArrayIdent = (token: Token, i: number, tokens: Token[]): Token => {
+  if (token.type === TokenType.IDENTIFIER) {
+    const nextToken = tokens[i + 1];
+    if (nextToken && isOpenBracket(nextToken)) {
+      return { ...token, type: TokenType.ARRAY_IDENTIFIER };
+    }
+  }
+  return token;
+};
+
+const keywordToArrayKeyword = (token: Token, i: number, tokens: Token[]): Token => {
+  if (token.type === TokenType.RESERVED_KEYWORD) {
+    const nextToken = tokens[i + 1];
+    if (nextToken && isOpenBracket(nextToken)) {
+      return { ...token, type: TokenType.ARRAY_KEYWORD };
+    }
+  }
+  return token;
+};
 
 const isOpenParen = (t: Token): boolean => t.type === TokenType.OPEN_PAREN && t.text === '(';
 
