@@ -1,4 +1,4 @@
-import type { FormatOptions } from 'src/FormatOptions';
+import { FormatOptions } from 'src/FormatOptions';
 import { equalizeWhitespace } from 'src/utils';
 
 import Params from 'src/formatter/Params';

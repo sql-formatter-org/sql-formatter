@@ -1,4 +1,4 @@
-import type { IndentStyle } from 'src/FormatOptions';
+import { IndentStyle } from 'src/FormatOptions';
 import { isLogicalOperator, TokenType } from 'src/lexer/token';
 
 /**

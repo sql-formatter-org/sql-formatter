@@ -1,6 +1,6 @@
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
-import { EOF_TOKEN, isToken, TokenType, type Token } from 'src/lexer/token';
+import { EOF_TOKEN, isToken, TokenType, Token } from 'src/lexer/token';
 import { expandPhrases } from 'src/expandPhrases';
 import { keywords } from './bigquery.keywords';
 import { functions } from './bigquery.functions';

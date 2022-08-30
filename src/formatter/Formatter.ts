@@ -1,4 +1,4 @@
-import type { FormatOptions } from 'src/FormatOptions';
+import { FormatOptions } from 'src/FormatOptions';
 import { indentString } from 'src/formatter/config';
 import Params from 'src/formatter/Params';
 import Tokenizer from 'src/lexer/Tokenizer';
