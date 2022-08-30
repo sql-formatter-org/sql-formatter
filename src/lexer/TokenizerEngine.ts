@@ -104,41 +104,26 @@ export default class TokenizerEngine {
     if (!rule) {
       return undefined;
     }
-    return this.match({
-      type: tokenType,
-      regex: rule.regex,
-      transform: rule.value,
-      transformKey: rule.key,
-    });
+    return this.match(tokenType, rule);
   }
 
   // Attempts to match RegExp at current position in input
-  private match({
-    type,
-    regex,
-    transform,
-    transformKey,
-  }: {
-    type: TokenType;
-    regex: RegExp;
-    transform?: (s: string) => string;
-    transformKey?: (s: string) => string;
-  }): Token | undefined {
-    regex.lastIndex = this.index;
-    const matches = regex.exec(this.input);
+  private match(type: TokenType, rule: TokenRule): Token | undefined {
+    rule.regex.lastIndex = this.index;
+    const matches = rule.regex.exec(this.input);
     if (matches) {
       const matchedText = matches[0];
 
       const token: Token = {
         type,
         raw: matchedText,
-        text: transform ? transform(matchedText) : matchedText,
+        text: rule.value ? rule.value(matchedText) : matchedText,
         start: this.index,
         end: this.index + matchedText.length,
       };
 
-      if (transformKey) {
-        token.key = transformKey(token.text);
+      if (rule.key) {
+        token.key = rule.key(token.text);
       }
 
       // Advance current position by matched token length
