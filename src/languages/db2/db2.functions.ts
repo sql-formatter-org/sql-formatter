@@ -302,7 +302,20 @@ export const functions = flatKeywordList({
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=functions-row
   row: ['UNPACK'],
   // https://www.ibm.com/docs/en/db2-for-zos/12?topic=expressions-olap-specification
-  olap: ['FIRST_VALUE', 'LAG', 'LAST_VALUE', 'LEAD', 'NTH_VALUE', 'NTILE', 'RATIO_TO_REPORT'],
+  olap: [
+    'CUME_DIST',
+    'PERCENT_RANK',
+    'RANK',
+    'DENSE_RANK',
+    'NTILE',
+    'LAG',
+    'LEAD',
+    'ROW_NUMBER',
+    'FIRST_VALUE',
+    'LAST_VALUE',
+    'NTH_VALUE',
+    'RATIO_TO_REPORT',
+  ],
   // Type casting
   cast: ['CAST'],
 });
