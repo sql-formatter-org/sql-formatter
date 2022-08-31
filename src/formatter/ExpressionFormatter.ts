@@ -170,13 +170,17 @@ export default class ExpressionFormatter {
     this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name));
     this.layout.indentation.increaseTopLevel();
 
-    if (node.offset) {
+    if (isTabularStyle(this.cfg)) {
+      this.layout.add(WS.SPACE);
+    } else {
       this.layout.add(WS.NEWLINE, WS.INDENT);
+    }
+
+    if (node.offset) {
       this.layout = this.formatSubExpression(node.offset);
       this.layout.add(WS.NO_SPACE, ',', WS.SPACE);
       this.layout = this.formatSubExpression(node.count);
     } else {
-      this.layout.add(WS.NEWLINE, WS.INDENT);
       this.layout = this.formatSubExpression(node.count);
     }
     this.layout.indentation.decreaseTopLevel();
