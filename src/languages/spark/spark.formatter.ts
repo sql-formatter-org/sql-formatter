@@ -16,6 +16,7 @@ const reservedCommands = expandPhrases([
   'GROUP BY',
   'HAVING',
   'WINDOW',
+  'PARTITION BY',
   'ORDER BY',
   'SORT BY',
   'CLUSTER BY',
@@ -107,7 +108,12 @@ const reservedJoins = expandPhrases([
   'NATURAL [LEFT] {ANTI | SEMI} JOIN',
 ]);
 
-const reservedPhrases = ['ON DELETE', 'ON UPDATE', 'CURRENT ROW'];
+const reservedPhrases = expandPhrases([
+  'ON DELETE',
+  'ON UPDATE',
+  'CURRENT ROW',
+  '{ROWS | RANGE} BETWEEN',
+]);
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkFormatter extends Formatter {

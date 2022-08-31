@@ -14,6 +14,7 @@ const reservedCommands = expandPhrases([
   'WHERE',
   'GROUP BY',
   'HAVING',
+  'PARTITION BY',
   'ORDER BY',
   'LIMIT',
   'OFFSET',
@@ -252,7 +253,12 @@ const reservedJoins = expandPhrases([
   'STRAIGHT_JOIN',
 ]);
 
-const reservedPhrases = ['ON DELETE', 'ON UPDATE', 'CHARACTER SET'];
+const reservedPhrases = expandPhrases([
+  'ON DELETE',
+  'ON UPDATE',
+  'CHARACTER SET',
+  '{ROWS | RANGE} BETWEEN',
+]);
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {

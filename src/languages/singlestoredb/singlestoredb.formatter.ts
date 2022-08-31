@@ -14,6 +14,7 @@ const reservedCommands = expandPhrases([
   'WHERE',
   'GROUP BY',
   'HAVING',
+  'PARTITION BY',
   'ORDER BY',
   'LIMIT',
   'OFFSET',
@@ -222,7 +223,12 @@ const reservedJoins = expandPhrases([
   'STRAIGHT_JOIN',
 ]);
 
-const reservedPhrases = ['ON DELETE', 'ON UPDATE', 'CHARACTER SET'];
+const reservedPhrases = expandPhrases([
+  'ON DELETE',
+  'ON UPDATE',
+  'CHARACTER SET',
+  '{ROWS | RANGE} BETWEEN',
+]);
 
 export default class SingleStoreDbFormatter extends Formatter {
   static operators = ['~', ':=', '<=>', '<<', '>>', '&&', '||'];

@@ -7,7 +7,7 @@ export default function supportsWindowFunctions(format: FormatFn) {
     expect(
       format(`
         SELECT
-          AVG(amount) OVER (
+          RANK() OVER (
             PARTITION BY explosion
             ORDER BY day ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
           ) AS amount
@@ -16,7 +16,7 @@ export default function supportsWindowFunctions(format: FormatFn) {
       `)
     ).toBe(dedent`
       SELECT
-        AVG(amount) OVER (
+        RANK() OVER (
           PARTITION BY
             explosion
           ORDER BY

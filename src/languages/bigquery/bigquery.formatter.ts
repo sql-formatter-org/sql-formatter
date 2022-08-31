@@ -134,7 +134,7 @@ const reservedPhrases = expandPhrases([
   'ANY TYPE',
   'ALL COLUMNS',
   'NOT DETERMINISTIC',
-  // https://cloud.google.com/bigquery/docs/reference/standard-sql/window-function-calls#def_over_clause
+  // inside window definitions
   '{ROWS | RANGE} BETWEEN',
 ]);
 

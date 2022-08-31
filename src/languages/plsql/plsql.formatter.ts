@@ -14,6 +14,7 @@ const reservedCommands = expandPhrases([
   'WHERE',
   'GROUP BY',
   'HAVING',
+  'PARTITION BY',
   'ORDER [SIBLINGS] BY',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
@@ -69,7 +70,12 @@ const reservedJoins = expandPhrases([
   '{CROSS | OUTER} APPLY',
 ]);
 
-const reservedPhrases = ['ON DELETE', 'ON UPDATE', 'ON COMMIT'];
+const reservedPhrases = expandPhrases([
+  'ON DELETE',
+  'ON UPDATE',
+  'ON COMMIT',
+  '{ROWS | RANGE} BETWEEN',
+]);
 
 export default class PlSqlFormatter extends Formatter {
   static operators = [
