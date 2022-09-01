@@ -22,4 +22,12 @@ export default function supportsArrayAndMapAccessors(format: FormatFn) {
         yota['foo.bar-baz'];
     `);
   });
+
+  it('supports namespaced array identifiers', () => {
+    const result = format(`SELECT foo.coalesce['blah'];`);
+    expect(result).toBe(dedent`
+      SELECT
+        foo.coalesce['blah'];
+    `);
+  });
 }

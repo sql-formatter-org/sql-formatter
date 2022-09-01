@@ -2,21 +2,18 @@ import { Token, TokenType } from 'src/lexer/token';
 import { WHITESPACE_REGEX } from './regexUtil';
 
 export interface TokenRule {
+  type: TokenType;
   regex: RegExp;
-  key?: (token: string) => string;
-  value?: (token: string) => string;
+  // Called with the raw string that was matched
+  text?: (rawText: string) => string;
+  key?: (rawText: string) => string;
 }
 
 export default class TokenizerEngine {
-  private rules: Partial<Record<TokenType, TokenRule>>;
-
   private input = ''; // The input SQL string to process
-
   private index = 0; // Current position in string
 
-  constructor(rules: Partial<Record<TokenType, TokenRule>>) {
-    this.rules = rules;
-  }
+  constructor(private rules: TokenRule[]) {}
 
   /**
    * Takes a SQL string and breaks it into tokens.
@@ -38,7 +35,7 @@ export default class TokenizerEngine {
 
       if (this.index < this.input.length) {
         // Get the next token and the token type
-        token = this.getNextToken(token);
+        token = this.getNextToken();
         if (!token) {
           throw new Error(`Parse error: Unexpected "${input.slice(this.index, 100)}"`);
         }
@@ -61,109 +58,38 @@ export default class TokenizerEngine {
     return undefined;
   }
 
-  private getNextToken(previousToken?: Token): Token | undefined {
-    return (
-      this.matchToken(TokenType.BLOCK_COMMENT) ||
-      this.matchToken(TokenType.LINE_COMMENT) ||
-      this.matchToken(TokenType.QUOTED_IDENTIFIER) ||
-      this.matchToken(TokenType.NUMBER) ||
-      this.matchReservedWordToken(previousToken) ||
-      this.matchPlaceholderToken(TokenType.NAMED_PARAMETER) ||
-      this.matchPlaceholderToken(TokenType.QUOTED_PARAMETER) ||
-      this.matchPlaceholderToken(TokenType.NUMBERED_PARAMETER) ||
-      this.matchPlaceholderToken(TokenType.POSITIONAL_PARAMETER) ||
-      this.matchToken(TokenType.VARIABLE) ||
-      this.matchToken(TokenType.STRING) ||
-      this.matchToken(TokenType.IDENTIFIER) ||
-      this.matchToken(TokenType.DELIMITER) ||
-      this.matchToken(TokenType.COMMA) ||
-      this.matchToken(TokenType.OPEN_PAREN) ||
-      this.matchToken(TokenType.CLOSE_PAREN) ||
-      this.matchToken(TokenType.OPERATOR) ||
-      this.matchToken(TokenType.ASTERISK)
-    );
-  }
-
-  private matchPlaceholderToken(tokenType: TokenType): Token | undefined {
-    if (tokenType in this.rules) {
-      const token = this.matchToken(tokenType);
-      const tokenRule = this.rules[tokenType];
+  private getNextToken(): Token | undefined {
+    for (const rule of this.rules) {
+      const token = this.match(rule);
       if (token) {
-        if (tokenRule?.key) {
-          return { ...token, key: tokenRule.key(token.text) };
-        }
-        return token; // POSITIONAL_PARAMETER does not have a key transform function
+        return token;
       }
     }
     return undefined;
   }
 
-  private matchReservedWordToken(previousToken?: Token): Token | undefined {
-    // A reserved word cannot be preceded by a '.'
-    // this makes it so in "mytable.from", "from" is not considered a reserved word
-    if (previousToken?.text === '.') {
-      return undefined;
-    }
-
-    // prioritised list of Reserved token types
-    return (
-      this.matchToken(TokenType.CASE) ||
-      this.matchToken(TokenType.END) ||
-      this.matchToken(TokenType.BETWEEN) ||
-      this.matchToken(TokenType.LIMIT) ||
-      this.matchToken(TokenType.RESERVED_COMMAND) ||
-      this.matchToken(TokenType.RESERVED_SELECT) ||
-      this.matchToken(TokenType.RESERVED_SET_OPERATION) ||
-      this.matchToken(TokenType.RESERVED_DEPENDENT_CLAUSE) ||
-      this.matchToken(TokenType.RESERVED_JOIN) ||
-      this.matchToken(TokenType.RESERVED_PHRASE) ||
-      this.matchToken(TokenType.AND) ||
-      this.matchToken(TokenType.OR) ||
-      this.matchToken(TokenType.XOR) ||
-      this.matchToken(TokenType.RESERVED_FUNCTION_NAME) ||
-      this.matchToken(TokenType.RESERVED_KEYWORD)
-    );
-  }
-
-  // Shorthand for `match` that looks up regex from rules
-  private matchToken(tokenType: TokenType): Token | undefined {
-    const rule = this.rules[tokenType];
-    if (!rule) {
-      return undefined;
-    }
-    return this.match({
-      type: tokenType,
-      regex: rule.regex,
-      transform: rule.value,
-    });
-  }
-
-  // Attempts to match RegExp at current position in input
-  private match({
-    type,
-    regex,
-    transform,
-  }: {
-    type: TokenType;
-    regex: RegExp;
-    transform?: (s: string) => string;
-  }): Token | undefined {
-    regex.lastIndex = this.index;
-    const matches = regex.exec(this.input);
+  // Attempts to match token rule regex at current position in input
+  private match(rule: TokenRule): Token | undefined {
+    rule.regex.lastIndex = this.index;
+    const matches = rule.regex.exec(this.input);
     if (matches) {
-      const matchedToken = matches[0];
+      const matchedText = matches[0];
 
-      const outToken = {
-        type,
-        raw: matchedToken,
-        text: transform ? transform(matchedToken) : matchedToken,
+      const token: Token = {
+        type: rule.type,
+        raw: matchedText,
+        text: rule.text ? rule.text(matchedText) : matchedText,
         start: this.index,
-        end: this.index + matchedToken.length,
+        end: this.index + matchedText.length,
       };
 
+      if (rule.key) {
+        token.key = rule.key(matchedText);
+      }
+
       // Advance current position by matched token length
-      this.index += matchedToken.length;
-      return outToken;
+      this.index += matchedText.length;
+      return token;
     }
     return undefined;
   }
