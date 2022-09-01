@@ -117,6 +117,22 @@ describe('PostgreSqlFormatter', () => {
     `);
   });
 
+  // Regression test for issue #391
+  it('formats TIMESTAMP WITH TIME ZONE syntax', () => {
+    expect(
+      format(
+        'CREATE TABLE time_table (id INT, created_at TIMESTAMP WITH TIME ZONE, deleted_at TIME WITH TIME ZONE);'
+      )
+    ).toBe(dedent`
+      CREATE TABLE
+        time_table (
+          id INT,
+          created_at TIMESTAMP WITH TIME ZONE,
+          deleted_at TIME WITH TIME ZONE
+        );
+    `);
+  });
+
   it('formats ALTER TABLE ... ALTER COLUMN', () => {
     expect(
       format(
