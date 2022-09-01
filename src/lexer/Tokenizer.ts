@@ -1,7 +1,7 @@
 import { Token, TokenType } from 'src/lexer/token';
 import * as regex from 'src/lexer/regexFactory';
 import { ParamTypes, TokenizerOptions } from 'src/lexer/TokenizerOptions';
-import TokenizerEngine, { type TokenRule } from 'src/lexer/TokenizerEngine';
+import TokenizerEngine, { TokenRule } from 'src/lexer/TokenizerEngine';
 import { escapeRegExp } from 'src/lexer/regexUtil';
 import { equalizeWhitespace, Optional } from 'src/utils';
 
