@@ -237,7 +237,11 @@ const reservedJoins = expandPhrases([
   'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
 ]);
 
-const reservedPhrases = ['ON DELETE', 'ON UPDATE'];
+const reservedPhrases = expandPhrases([
+  'ON DELETE',
+  'ON UPDATE',
+  '{ROWS | RANGE | GROUPS} BETWEEN',
+]);
 
 const binaryOperators = [
   // Math Operators

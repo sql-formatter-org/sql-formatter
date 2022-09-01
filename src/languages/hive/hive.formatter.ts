@@ -78,6 +78,8 @@ const reservedJoins = expandPhrases([
   'LEFT SEMI JOIN',
 ]);
 
+const reservedPhrases = expandPhrases(['{ROWS | RANGE} BETWEEN']);
+
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export default class HiveFormatter extends Formatter {
   static operators = ['<=>', '==', '||'];
@@ -89,6 +91,7 @@ export default class HiveFormatter extends Formatter {
       reservedSetOperations,
       reservedJoins,
       reservedDependentClauses: ['WHEN', 'ELSE'],
+      reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       extraParens: ['[]'],

@@ -16,6 +16,7 @@ import supportsNewlineBeforeSemicolon from './options/newlineBeforeSemicolon';
 import supportsLogicalOperatorNewline from './options/logicalOperatorNewline';
 import supportsTabulateAlias from './options/tabulateAlias';
 import supportsParamTypes from './options/paramTypes';
+import supportsWindowFunctions from './features/windowFunctions';
 
 /**
  * Core tests for all SQL formatters
@@ -36,6 +37,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsCommaPosition(format);
   supportsLogicalOperatorNewline(format);
   supportsParamTypes(format);
+  supportsWindowFunctions(format);
 
   it('formats simple SELECT query', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;');

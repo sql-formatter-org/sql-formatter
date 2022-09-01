@@ -13,6 +13,7 @@ const reservedCommands = expandPhrases([
   'WHERE',
   'GROUP BY',
   'HAVING',
+  'PARTITION BY',
   'ORDER BY',
   'LIMIT',
   'OFFSET',
@@ -127,13 +128,15 @@ const reservedJoins = expandPhrases([
   'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
 ]);
 
-const reservedPhrases = [
+const reservedPhrases = expandPhrases([
   // https://docs.aws.amazon.com/redshift/latest/dg/copy-parameters-data-conversion.html
   'NULL AS',
   // https://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_EXTERNAL_SCHEMA.html
   'DATA CATALOG',
   'HIVE METASTORE',
-];
+  // in window specifications
+  '{ROWS | RANGE} BETWEEN',
+]);
 
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export default class RedshiftFormatter extends Formatter {

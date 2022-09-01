@@ -221,7 +221,12 @@ const reservedJoins = expandPhrases([
   'STRAIGHT_JOIN',
 ]);
 
-const reservedPhrases = ['ON DELETE', 'ON UPDATE', 'CHARACTER SET'];
+const reservedPhrases = expandPhrases([
+  'ON DELETE',
+  'ON UPDATE',
+  'CHARACTER SET',
+  '{ROWS | RANGE} BETWEEN',
+]);
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export default class MySqlFormatter extends Formatter {

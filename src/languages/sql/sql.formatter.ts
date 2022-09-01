@@ -65,7 +65,7 @@ const reservedJoins = expandPhrases([
   'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
 ]);
 
-const reservedPhrases = ['ON DELETE', 'ON UPDATE'];
+const reservedPhrases = expandPhrases(['ON DELETE', 'ON UPDATE', '{ROWS | RANGE} BETWEEN']);
 
 export default class SqlFormatter extends Formatter {
   static operators = [];
