@@ -75,6 +75,8 @@ export interface TokenizerOptions {
   paramTypes?: ParamTypes;
   // Line comment types to support, defaults to --
   lineCommentTypes?: string[];
+  // True to allow for nested /* /* block comments */ */
+  nestedBlockComments?: boolean;
   // Additional characters to support in identifiers
   identChars?: IdentChars;
   // Additional characters to support in named parameters
