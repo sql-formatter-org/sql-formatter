@@ -226,6 +226,7 @@ export default class TSqlFormatter extends Formatter {
       reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
+      nestedBlockComments: true,
       stringTypes: [{ quote: "''", prefixes: ['N'] }],
       identTypes: [`""`, '[]'],
       identChars: { first: '#@', rest: '#@$' },
