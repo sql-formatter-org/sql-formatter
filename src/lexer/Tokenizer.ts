@@ -33,7 +33,7 @@ export default class Tokenizer {
     return this.validRules([
       {
         type: TokenType.BLOCK_COMMENT,
-        regex: cfg.nestedBlockComments ? new NestedComment() : /(\/\*[^]*?(?:\*\/|$))/uy,
+        regex: cfg.nestedBlockComments ? new NestedComment() : /(\/\*[^]*?\*\/)/uy,
       },
       {
         type: TokenType.LINE_COMMENT,
