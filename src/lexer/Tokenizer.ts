@@ -1,7 +1,7 @@
 import { Token, TokenType } from 'src/lexer/token';
 import * as regex from 'src/lexer/regexFactory';
 import { ParamTypes, TokenizerOptions } from 'src/lexer/TokenizerOptions';
-import TokenizerEngine, { type TokenRule } from 'src/lexer/TokenizerEngine';
+import TokenizerEngine, { TokenRule } from 'src/lexer/TokenizerEngine';
 import { escapeRegExp } from 'src/lexer/regexUtil';
 import { equalizeWhitespace, Optional } from 'src/utils';
 
@@ -47,6 +47,13 @@ export default class Tokenizer {
         regex:
           /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)(?!\w)/uy,
       },
+      // RESERVED_PHRASE is matched before all other keyword tokens
+      // to e.g. prioritize matching "TIMESTAMP WITH TIME ZONE" phrase over "WITH" command.
+      {
+        type: TokenType.RESERVED_PHRASE,
+        regex: regex.reservedWord(cfg.reservedPhrases ?? [], cfg.identChars),
+        text: toCanonical,
+      },
       {
         type: TokenType.CASE,
         regex: /CASE\b/iuy,
@@ -90,11 +97,6 @@ export default class Tokenizer {
       {
         type: TokenType.RESERVED_JOIN,
         regex: regex.reservedWord(cfg.reservedJoins, cfg.identChars),
-        text: toCanonical,
-      },
-      {
-        type: TokenType.RESERVED_PHRASE,
-        regex: regex.reservedWord(cfg.reservedPhrases ?? [], cfg.identChars),
         text: toCanonical,
       },
       {
