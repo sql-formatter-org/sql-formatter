@@ -18,6 +18,7 @@ const reservedCommands = expandPhrases([
   'ORDER [SIBLINGS] BY',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  'FOR UPDATE',
   // Data manipulation
   // - insert:
   'INSERT [INTO | ALL INTO]',

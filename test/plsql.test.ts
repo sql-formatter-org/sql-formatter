@@ -142,4 +142,26 @@ describe('PlSqlFormatter', () => {
         id = 1;
     `);
   });
+
+  // regression test for #340
+  it('formats FOR UPDATE clause', () => {
+    const result = format(`
+      SELECT * FROM tbl FOR UPDATE;
+      SELECT * FROM tbl FOR UPDATE OF tbl.salary;
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        *
+      FROM
+        tbl
+      FOR UPDATE;
+
+      SELECT
+        *
+      FROM
+        tbl
+      FOR UPDATE
+        OF tbl.salary;
+    `);
+  });
 });
