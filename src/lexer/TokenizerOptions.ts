@@ -57,7 +57,7 @@ export interface TokenizerOptions {
   // Various joins like LEFT OUTER JOIN
   reservedJoins: string[];
   // These are essentially multi-word sequences of keywords,
-  // that we prioritize over normal keywords
+  // that we prioritize over all other keywords (RESERVED_* tokens)
   reservedPhrases?: string[];
   // built in function names
   reservedFunctionNames: string[];
