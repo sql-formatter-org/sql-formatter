@@ -20,13 +20,16 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
   if (stringTypes.includes('""')) {
     it('supports double-quoted strings', () => {
       expect(format('"foo JOIN bar"')).toBe('"foo JOIN bar"');
-      expect(format('"foo \\" JOIN bar"')).toBe('"foo \\" JOIN bar"');
       expect(format('SELECT "where" FROM "update"')).toBe(dedent`
         SELECT
           "where"
         FROM
           "update"
       `);
+    });
+
+    it('supports escaping double-quote with a backslash', () => {
+      expect(format('"foo \\" JOIN bar"')).toBe('"foo \\" JOIN bar"');
     });
 
     it('supports escaping double-quote by doubling it', () => {
@@ -37,13 +40,16 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
   if (stringTypes.includes("''")) {
     it('supports single-quoted strings', () => {
       expect(format("'foo JOIN bar'")).toBe("'foo JOIN bar'");
-      expect(format("'foo \\' JOIN bar'")).toBe("'foo \\' JOIN bar'");
       expect(format("SELECT 'where' FROM 'update'")).toBe(dedent`
         SELECT
           'where'
         FROM
           'update'
       `);
+    });
+
+    it('supports escaping single-quote with a backslash', () => {
+      expect(format("'foo \\' JOIN bar'")).toBe("'foo \\' JOIN bar'");
     });
 
     it('supports escaping single-quote by doubling it', () => {
@@ -54,7 +60,6 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
   if (stringTypes.includes('U&""')) {
     it('supports unicode double-quoted strings', () => {
       expect(format('U&"foo JOIN bar"')).toBe('U&"foo JOIN bar"');
-      expect(format('U&"foo \\" JOIN bar"')).toBe('U&"foo \\" JOIN bar"');
       expect(format('SELECT U&"where" FROM U&"update"')).toBe(dedent`
         SELECT
           U&"where"
@@ -63,15 +68,18 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
       `);
     });
 
+    it('supports escaping in U&"" strings with a backslash', () => {
+      expect(format('U&"foo \\" JOIN bar"')).toBe('U&"foo \\" JOIN bar"');
+    });
+
     it("detects consecutive U&'' strings as separate ones", () => {
       expect(format("U&'foo'U&'bar'")).toBe("U&'foo' U&'bar'");
     });
   }
 
   if (stringTypes.includes("U&''")) {
-    it('supports single-quoted strings', () => {
+    it('supports unicode single-quoted strings', () => {
       expect(format("U&'foo JOIN bar'")).toBe("U&'foo JOIN bar'");
-      expect(format("U&'foo \\' JOIN bar'")).toBe("U&'foo \\' JOIN bar'");
       expect(format("SELECT U&'where' FROM U&'update'")).toBe(dedent`
         SELECT
           U&'where'
@@ -79,18 +87,25 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
           U&'update'
       `);
     });
+
+    it("supports escaping in U&'' strings with a backslash", () => {
+      expect(format("U&'foo \\' JOIN bar'")).toBe("U&'foo \\' JOIN bar'");
+    });
   }
 
   if (stringTypes.includes("N''")) {
     it('supports T-SQL unicode strings', () => {
       expect(format("N'foo JOIN bar'")).toBe("N'foo JOIN bar'");
-      expect(format("N'foo \\' JOIN bar'")).toBe("N'foo \\' JOIN bar'");
       expect(format("SELECT N'where' FROM N'update'")).toBe(dedent`
         SELECT
           N'where'
         FROM
           N'update'
       `);
+    });
+
+    it("supports escaping in N'' strings with a backslash", () => {
+      expect(format("N'foo \\' JOIN bar'")).toBe("N'foo \\' JOIN bar'");
     });
 
     it("detects consecutive N'' strings as separate ones", () => {
