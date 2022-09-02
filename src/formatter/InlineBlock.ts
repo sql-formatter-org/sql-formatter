@@ -41,6 +41,10 @@ export default class InlineBlock {
         case NodeType.array_subscript:
           length += node.array.text.length + this.inlineParenthesisWidth(node.parenthesis);
           break;
+        case NodeType.property_access:
+          // +1 for the separating dot
+          length += this.inlineWidth([node.object]) + 1 + this.inlineWidth([node.property]);
+          break;
         case NodeType.parenthesis:
           length += this.inlineParenthesisWidth(node);
           break;

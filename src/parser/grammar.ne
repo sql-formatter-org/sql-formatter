@@ -115,6 +115,7 @@ commaless_expression -> ( simple_expression | asterisk ) {% unwrap %}
 simple_expression ->
   ( array_subscript
   | function_call
+  | property_access
   | parenthesis
   | curly_braces
   | square_brackets
@@ -169,6 +170,20 @@ square_brackets -> "[" expression:* "]" {%
     openParen: "[",
     closeParen: "]",
   })
+%}
+
+property_access -> simple_expression %DOT (identifier | array_subscript) {%
+  // Allowing property to be <array_subscript> is currently a hack.
+  // A better way would be to allow <property_access> on the left side of array_subscript,
+  // but we currently can't do that because of another hack that requires
+  // %ARRAY_IDENTIFIER on the left side of <array_subscript>.
+  ([object, dot, [property]]) => {
+    return {
+      type: NodeType.property_access,
+      object,
+      property,
+    };
+  }
 %}
 
 between_predicate -> %BETWEEN commaless_expression %AND commaless_expression {%

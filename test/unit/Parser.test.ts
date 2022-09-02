@@ -78,4 +78,8 @@ describe('Parser', () => {
   it('parses square brackets', () => {
     expect(parse('SELECT [1, 2, 3];')).toMatchSnapshot();
   });
+
+  it('parses qualified.identifier.sequence', () => {
+    expect(parse('SELECT foo.bar.baz;')).toMatchSnapshot();
+  });
 });

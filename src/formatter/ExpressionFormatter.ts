@@ -23,6 +23,7 @@ import {
   BlockCommentNode,
   CommaNode,
   KeywordNode,
+  PropertyAccessNode,
 } from 'src/parser/ast';
 
 import InlineBlock from './InlineBlock';
@@ -70,6 +71,8 @@ export default class ExpressionFormatter {
         return this.formatFunctionCall(node);
       case NodeType.array_subscript:
         return this.formatArraySubscript(node);
+      case NodeType.property_access:
+        return this.formatPropertyAccess(node);
       case NodeType.parenthesis:
         return this.formatParenthesis(node);
       case NodeType.between_predicate:
@@ -109,6 +112,12 @@ export default class ExpressionFormatter {
   private formatArraySubscript({ array, parenthesis }: ArraySubscriptNode) {
     this.layout.add(array.type === NodeType.keyword ? this.showKw(array) : array.text);
     this.formatParenthesis(parenthesis);
+  }
+
+  private formatPropertyAccess({ object, property }: PropertyAccessNode) {
+    this.formatNode(object);
+    this.layout.add(WS.NO_SPACE, '.');
+    this.formatNode(property);
   }
 
   private formatParenthesis(node: ParenthesisNode) {
@@ -207,7 +216,7 @@ export default class ExpressionFormatter {
     if (text === ':') {
       this.layout.add(WS.NO_SPACE, text, WS.SPACE);
       return;
-    } else if (text === '.' || text === '::') {
+    } else if (text === '::') {
       this.layout.add(WS.NO_SPACE, text);
       return;
     }
