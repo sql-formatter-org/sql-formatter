@@ -72,8 +72,8 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
       expect(format('U&"foo \\" JOIN bar"')).toBe('U&"foo \\" JOIN bar"');
     });
 
-    it("detects consecutive U&'' strings as separate ones", () => {
-      expect(format("U&'foo'U&'bar'")).toBe("U&'foo' U&'bar'");
+    it('detects consecutive U&"" strings as separate ones', () => {
+      expect(format(`U&"foo"U&"bar"`)).toBe(`U&"foo" U&"bar"`);
     });
   }
 
@@ -90,6 +90,10 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
 
     it("supports escaping in U&'' strings with a backslash", () => {
       expect(format("U&'foo \\' JOIN bar'")).toBe("U&'foo \\' JOIN bar'");
+    });
+
+    it("detects consecutive U&'' strings as separate ones", () => {
+      expect(format("U&'foo'U&'bar'")).toBe("U&'foo' U&'bar'");
     });
   }
 
