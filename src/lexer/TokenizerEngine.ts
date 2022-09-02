@@ -1,9 +1,17 @@
 import { Token, TokenType } from 'src/lexer/token';
 import { WHITESPACE_REGEX } from './regexUtil';
 
+export interface RegExpLike {
+  lastIndex: number;
+  exec(input: string): string[] | null;
+}
+
 export interface TokenRule {
   type: TokenType;
-  regex: RegExp;
+  // Normally a RegExp object.
+  // But to allow for more complex matching logic,
+  // an object can be given that implements a RegExpLike interface.
+  regex: RegExpLike;
   // Called with the raw string that was matched
   text?: (rawText: string) => string;
   key?: (rawText: string) => string;

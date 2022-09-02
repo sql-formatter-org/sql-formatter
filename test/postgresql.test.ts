@@ -32,7 +32,7 @@ describe('PostgreSqlFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
-  supportsComments(format);
+  supportsComments(format, { nestedBlockComments: true });
   supportsCreateView(format, { orReplace: true, materialized: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });

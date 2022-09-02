@@ -30,7 +30,7 @@ describe('TSqlFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
-  supportsComments(format);
+  supportsComments(format, { nestedBlockComments: true });
   supportsCreateView(format, { materialized: true });
   supportsCreateTable(format);
   supportsDropTable(format, { ifExists: true });
