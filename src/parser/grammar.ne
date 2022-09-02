@@ -106,11 +106,11 @@ set_operation -> %RESERVED_SET_OPERATION expression:* {%
   })
 %}
 
-expression -> ( simple_expression | asterisk | comma ) {% unwrap %}
+expression -> ( simple_expression | between_predicate | asterisk | comma ) {% unwrap %}
 
-asteriskless_expression -> ( simple_expression | comma ) {% unwrap %}
+asteriskless_expression -> ( simple_expression | between_predicate | comma ) {% unwrap %}
 
-commaless_expression -> ( simple_expression | asterisk ) {% unwrap %}
+commaless_expression -> ( simple_expression | between_predicate | asterisk ) {% unwrap %}
 
 simple_expression ->
   ( array_subscript
@@ -119,7 +119,6 @@ simple_expression ->
   | parenthesis
   | curly_braces
   | square_brackets
-  | between_predicate
   | expression_token ) {% unwrap %}
 
 array_subscript -> %ARRAY_IDENTIFIER square_brackets {%
