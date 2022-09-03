@@ -336,8 +336,9 @@ export default class PostgreSqlFormatter extends Formatter {
       extraParens: ['[]'],
       stringTypes: [
         '$$',
-        { quote: "''-qq", prefixes: ['B', 'X', 'U&'] },
+        { quote: "''-qq", prefixes: ['U&'] },
         { quote: "''-bs", prefixes: ['E'], requirePrefix: true },
+        { quote: "''-raw", prefixes: ['B', 'X'], requirePrefix: true },
       ],
       identTypes: [{ quote: '""-qq', prefixes: ['U&'] }],
       identChars: { rest: '$' },

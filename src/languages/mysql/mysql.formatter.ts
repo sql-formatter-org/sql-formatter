@@ -244,7 +244,11 @@ export default class MySqlFormatter extends Formatter {
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       // TODO: support _ char set prefixes such as _utf8, _latin1, _binary, _utf8mb4, etc.
-      stringTypes: [{ quote: "''-qq-bs", prefixes: ['B', 'N', 'X'] }, '""-qq-bs'],
+      stringTypes: [
+        '""-qq-bs',
+        { quote: "''-qq-bs", prefixes: ['N'] },
+        { quote: "''-raw", prefixes: ['B', 'X'], requirePrefix: true },
+      ],
       identTypes: ['``'],
       identChars: { first: '$', rest: '$', allowFirstCharNumber: true },
       variableTypes: [

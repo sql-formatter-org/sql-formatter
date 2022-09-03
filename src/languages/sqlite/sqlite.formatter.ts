@@ -75,7 +75,8 @@ export default class SqliteFormatter extends Formatter {
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       stringTypes: [
-        { quote: "''-qq", prefixes: ['X'] },
+        "''-qq",
+        { quote: "''-raw", prefixes: ['X'], requirePrefix: true },
         // Depending on context SQLite also supports double-quotes for strings,
         // and single-quotes for identifiers.
       ],

@@ -159,8 +159,10 @@ export default class BigQueryFormatter extends Formatter {
         // Otherwise the first two quotes of """ will get matched as an empty "" string.
         { quote: '""".."""', prefixes: ['R', 'B', 'RB', 'BR'] },
         { quote: "'''..'''", prefixes: ['R', 'B', 'RB', 'BR'] },
-        { quote: '""-bs', prefixes: ['R', 'B', 'RB', 'BR'] },
-        { quote: "''-bs", prefixes: ['R', 'B', 'RB', 'BR'] },
+        '""-bs',
+        "''-bs",
+        { quote: '""-raw', prefixes: ['R', 'B', 'RB', 'BR'], requirePrefix: true },
+        { quote: "''-raw", prefixes: ['R', 'B', 'RB', 'BR'], requirePrefix: true },
       ],
       identTypes: ['``'],
       identChars: { dashes: true },

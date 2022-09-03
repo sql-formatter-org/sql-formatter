@@ -206,12 +206,11 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
   }
 
   if (stringTypes.includes("R''")) {
-    it('supports raw strings', () => {
-      expect(format("r'abc'")).toBe("r'abc'");
-      expect(format("R'ha ha'")).toBe("R'ha ha'");
-      expect(format("SELECT r'some text' FROM foo")).toBe(dedent`
+    it('supports no escaping in raw strings', () => {
+      expect(format("SELECT r'some \\',R'text' FROM foo")).toBe(dedent`
         SELECT
-          r'some text'
+          r'some \\',
+          R'text'
         FROM
           foo
       `);
@@ -223,12 +222,11 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
   }
 
   if (stringTypes.includes('R""')) {
-    it('supports raw strings (with double-quotes)', () => {
-      expect(format(`r"abc"`)).toBe(`r"abc"`);
-      expect(format(`R"ha ha"`)).toBe(`R"ha ha"`);
-      expect(format(`SELECT r"some text" FROM foo`)).toBe(dedent`
+    it('supports no escaping in raw strings (with double-quotes)', () => {
+      expect(format(`SELECT r"some \\", R"text" FROM foo`)).toBe(dedent`
         SELECT
-          r"some text"
+          r"some \\",
+          R"text"
         FROM
           foo
       `);

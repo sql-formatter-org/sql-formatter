@@ -80,7 +80,10 @@ export default class SqlFormatter extends Formatter {
       reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: [{ quote: "''-qq-bs", prefixes: ['N', 'X', 'U&'] }],
+      stringTypes: [
+        { quote: "''-qq-bs", prefixes: ['N', 'U&'] },
+        { quote: "''-raw", prefixes: ['X'], requirePrefix: true },
+      ],
       identTypes: [`""-qq`, '``'],
       paramTypes: { positional: true },
     });

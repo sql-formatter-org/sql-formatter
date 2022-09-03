@@ -141,7 +141,10 @@ export default class TrinoFormatter extends Formatter {
       extraParens: ['[]', '{}'],
       // https://trino.io/docs/current/language/types.html#string
       // https://trino.io/docs/current/language/types.html#varbinary
-      stringTypes: [{ quote: "''-qq", prefixes: ['X', 'U&'] }],
+      stringTypes: [
+        { quote: "''-qq", prefixes: ['U&'] },
+        { quote: "''-raw", prefixes: ['X'], requirePrefix: true },
+      ],
       // https://trino.io/docs/current/language/reserved.html
       identTypes: ['""-qq'],
       paramTypes: { positional: true },

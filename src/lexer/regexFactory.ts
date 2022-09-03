@@ -112,9 +112,11 @@ export const quotePatterns = {
   '""-qq': String.raw`(?:"[^"]*")+`, // with repeated quote escapes
   '""-bs': String.raw`(?:"[^"\\]*(?:\\.[^"\\]*)*")`, // with backslash escapes
   '""-qq-bs': String.raw`(?:"[^"\\]*(?:\\.[^"\\]*)*")+`, // with repeated quote or backslash escapes
+  '""-raw': String.raw`(?:"[^"]*")`, // no escaping
   "''-qq": String.raw`(?:'[^']*')+`, // with repeated quote escapes
   "''-bs": String.raw`(?:'[^'\\]*(?:\\.[^'\\]*)*')`, // with backslash escapes
   "''-qq-bs": String.raw`(?:'[^'\\]*(?:\\.[^'\\]*)*')+`, // with repeated quote or backslash escapes
+  "''-raw": String.raw`(?:'[^']*')`, // no escaping
   '$$': String.raw`(?<tag>\$\w*\$)[\s\S]*?\k<tag>`,
   "'''..'''": String.raw`'''[^\\]*?(?:\\.[^\\]*?)*?'''`,
   '""".."""': String.raw`"""[^\\]*?(?:\\.[^\\]*?)*?"""`,
