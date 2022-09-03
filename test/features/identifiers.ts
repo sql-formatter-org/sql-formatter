@@ -24,12 +24,12 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: I
       `);
     });
 
-    it('supports escaping double-quote with a backslash', () => {
-      expect(format('"foo \\" JOIN bar"')).toBe('"foo \\" JOIN bar"');
-    });
-
     it('supports escaping double-quote by doubling it', () => {
       expect(format('"foo""bar"')).toBe('"foo""bar"');
+    });
+
+    it('does not support escaping double-quote with a backslash', () => {
+      expect(() => format('"foo \\" JOIN bar"')).toThrowError('Parse error: Unexpected "');
     });
   }
 
@@ -76,12 +76,16 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: I
       `);
     });
 
-    it('supports escaping in U&"" strings with a backslash', () => {
-      expect(format('U&"foo \\" JOIN bar"')).toBe('U&"foo \\" JOIN bar"');
+    it('supports escaping in U&"" strings by repeated quote', () => {
+      expect(format('U&"foo "" JOIN bar"')).toBe('U&"foo "" JOIN bar"');
     });
 
     it('detects consecuitive U&"" identifiers as separate ones', () => {
       expect(format('U&"foo"U&"bar"')).toBe('U&"foo" U&"bar"');
+    });
+
+    it('does not supports escaping in U&"" strings with a backslash', () => {
+      expect(() => format('U&"foo \\" JOIN bar"')).toThrowError('Parse error: Unexpected "');
     });
   }
 

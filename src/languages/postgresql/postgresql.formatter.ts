@@ -335,7 +335,7 @@ export default class PostgreSqlFormatter extends Formatter {
       nestedBlockComments: true,
       extraParens: ['[]'],
       stringTypes: ['$$', { quote: "''", prefixes: ['B', 'E', 'X', 'U&'] }],
-      identTypes: [{ quote: '""', prefixes: ['U&'] }],
+      identTypes: [{ quote: '""-qq', prefixes: ['U&'] }],
       identChars: { rest: '$' },
       paramTypes: { numbered: ['$'] },
       operators: PostgreSqlFormatter.operators,

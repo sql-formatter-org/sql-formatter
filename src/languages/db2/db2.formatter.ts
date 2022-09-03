@@ -183,7 +183,7 @@ export default class Db2Formatter extends Formatter {
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       stringTypes: [{ quote: "''", prefixes: ['G', 'N', 'X', 'BX', 'GX', 'UX', 'U&'] }],
-      identTypes: [`""`],
+      identTypes: [`""-qq`],
       paramTypes: { positional: true, named: [':'] },
       paramChars: { first: '@#$', rest: '@#$' },
       operators: Db2Formatter.operators,

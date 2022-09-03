@@ -106,7 +106,7 @@ export default class PlSqlFormatter extends Formatter {
         { quote: "''", prefixes: ['N'] },
         { quote: "q''", prefixes: ['N'] },
       ],
-      identTypes: [`""`],
+      identTypes: [`""-qq`],
       identChars: { rest: '$#' },
       variableTypes: [{ regex: '&{1,2}[A-Za-z][A-Za-z0-9_$#]*' }],
       paramTypes: { numbered: [':'], named: [':'] },

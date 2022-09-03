@@ -78,7 +78,7 @@ export default class SqliteFormatter extends Formatter {
         { quote: "''", prefixes: ['X'] },
         // { quote: '""', prefixes: ['X'] }, // currently conflict with "" identifiers
       ],
-      identTypes: [`""`, '``', '[]'],
+      identTypes: [`""-qq`, '``', '[]'],
       // https://www.sqlite.org/lang_expr.html#parameters
       paramTypes: { positional: true, numbered: ['?'], named: [':', '@', '$'] },
       operators: SqliteFormatter.operators,
