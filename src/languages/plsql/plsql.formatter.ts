@@ -106,6 +106,9 @@ export default class PlSqlFormatter extends Formatter {
         { quote: "''-qq", prefixes: ['N'] },
         { quote: "q''", prefixes: ['N'] },
       ],
+      // PL/SQL doesn't actually support escaping of quotes in identifiers,
+      // but for the sake of simpler testing we'll support this anyway
+      // as all other SQL dialects with "identifiers" do.
       identTypes: [`""-qq`],
       identChars: { rest: '$#' },
       variableTypes: [{ regex: '&{1,2}[A-Za-z][A-Za-z0-9_$#]*' }],
