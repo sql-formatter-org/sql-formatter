@@ -160,7 +160,7 @@ export default class BigQueryFormatter extends Formatter {
         { quote: '""".."""', prefixes: ['R', 'B', 'RB', 'BR'] },
         { quote: "'''..'''", prefixes: ['R', 'B', 'RB', 'BR'] },
         { quote: '""-bs', prefixes: ['R', 'B', 'RB', 'BR'] },
-        { quote: "''", prefixes: ['R', 'B', 'RB', 'BR'] },
+        { quote: "''-bs", prefixes: ['R', 'B', 'RB', 'BR'] },
       ],
       identTypes: ['``'],
       identChars: { dashes: true },

@@ -103,7 +103,7 @@ export default class PlSqlFormatter extends Formatter {
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       stringTypes: [
-        { quote: "''", prefixes: ['N'] },
+        { quote: "''-qq", prefixes: ['N'] },
         { quote: "q''", prefixes: ['N'] },
       ],
       identTypes: [`""-qq`],

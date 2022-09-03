@@ -42,7 +42,7 @@ describe('SqliteFormatter', () => {
   supportsDeleteFrom(format);
   supportsInsertInto(format);
   supportsUpdate(format);
-  supportsStrings(format, ["''", "X''"]);
+  supportsStrings(format, ["''-qq", "X''"]);
   supportsIdentifiers(format, [`""`, '``', '[]']);
   supportsBetween(format);
   supportsSchema(format);

@@ -47,7 +47,7 @@ describe('PlSqlFormatter', () => {
   supportsUpdate(format);
   supportsTruncateTable(format);
   supportsMergeInto(format);
-  supportsStrings(format, ["''", "N''"]);
+  supportsStrings(format, ["''-qq", "N''"]);
   supportsIdentifiers(format, [`""`]);
   supportsBetween(format);
   supportsSchema(format);

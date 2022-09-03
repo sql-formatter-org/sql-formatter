@@ -40,7 +40,7 @@ describe('RedshiftFormatter', () => {
   supportsInsertInto(format);
   supportsUpdate(format);
   supportsTruncateTable(format, { withoutTable: true });
-  supportsStrings(format, ["''"]);
+  supportsStrings(format, ["''-qq"]);
   supportsIdentifiers(format, [`""`]);
   supportsOperators(format, RedshiftFormatter.operators);
   supportsJoin(format);

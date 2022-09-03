@@ -276,7 +276,7 @@ export default class MariaDbFormatter extends Formatter {
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       // TODO: support _ char set prefixes such as _utf8, _latin1, _binary, _utf8mb4, etc.
-      stringTypes: [{ quote: "''", prefixes: ['B', 'X'] }, '""-qq-bs'],
+      stringTypes: [{ quote: "''-qq-bs", prefixes: ['B', 'X'] }, '""-qq-bs'],
       identTypes: ['``'],
       identChars: { first: '$', rest: '$', allowFirstCharNumber: true },
       variableTypes: [

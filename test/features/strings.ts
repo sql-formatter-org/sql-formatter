@@ -6,8 +6,8 @@ import { FormatFn } from 'src/sqlFormatter';
 type StringType =
   | '""-qq'
   | '""-bs'
-  | "''"
-  | 'U&""'
+  | "''-qq"
+  | "''-bs"
   | "U&''"
   | "N''"
   | "X''"
@@ -37,7 +37,7 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
 
     if (!stringTypes.includes('""-bs')) {
       it('does not support escaping double-quote with a backslash', () => {
-        expect(() => format('"foo \\" JOIN bar"')).toThrowError('Parse error: Unexpected "');
+        expect(() => format('"foo \\" JOIN bar"')).toThrowError('Parse error: Unexpected """');
       });
     }
   }
@@ -54,7 +54,7 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
     }
   }
 
-  if (stringTypes.includes("''")) {
+  if (stringTypes.includes("''-qq") || stringTypes.includes("''-bs")) {
     it('supports single-quoted strings', () => {
       expect(format("'foo JOIN bar'")).toBe("'foo JOIN bar'");
       expect(format("SELECT 'where' FROM 'update'")).toBe(dedent`
@@ -64,34 +64,30 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
           'update'
       `);
     });
+  }
 
+  if (stringTypes.includes("''-qq")) {
+    it('supports escaping single-quote by doubling it', () => {
+      expect(format("'foo''bar'")).toBe("'foo''bar'");
+    });
+
+    if (!stringTypes.includes("''-bs")) {
+      it('does not support escaping single-quote with a backslash', () => {
+        expect(() => format("'foo \\' JOIN bar'")).toThrowError(`Parse error: Unexpected "'"`);
+      });
+    }
+  }
+
+  if (stringTypes.includes("''-bs")) {
     it('supports escaping single-quote with a backslash', () => {
       expect(format("'foo \\' JOIN bar'")).toBe("'foo \\' JOIN bar'");
     });
 
-    it('supports escaping single-quote by doubling it', () => {
-      expect(format("'foo''bar'")).toBe("'foo''bar'");
-    });
-  }
-
-  if (stringTypes.includes('U&""')) {
-    it('supports unicode double-quoted strings', () => {
-      expect(format('U&"foo JOIN bar"')).toBe('U&"foo JOIN bar"');
-      expect(format('SELECT U&"where" FROM U&"update"')).toBe(dedent`
-        SELECT
-          U&"where"
-        FROM
-          U&"update"
-      `);
-    });
-
-    it('supports escaping in U&"" strings with a backslash', () => {
-      expect(format('U&"foo \\" JOIN bar"')).toBe('U&"foo \\" JOIN bar"');
-    });
-
-    it('detects consecutive U&"" strings as separate ones', () => {
-      expect(format(`U&"foo"U&"bar"`)).toBe(`U&"foo" U&"bar"`);
-    });
+    if (!stringTypes.includes("''-qq")) {
+      it('does not support escaping single-quote by doubling it', () => {
+        expect(format("'foo '' JOIN bar'")).toBe("'foo ' ' JOIN bar'");
+      });
+    }
   }
 
   if (stringTypes.includes("U&''")) {
@@ -105,8 +101,8 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
       `);
     });
 
-    it("supports escaping in U&'' strings with a backslash", () => {
-      expect(format("U&'foo \\' JOIN bar'")).toBe("U&'foo \\' JOIN bar'");
+    it("supports escaping in U&'' strings with repeated quote", () => {
+      expect(format("U&'foo '' JOIN bar'")).toBe("U&'foo '' JOIN bar'");
     });
 
     it("detects consecutive U&'' strings as separate ones", () => {
@@ -125,9 +121,16 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
       `);
     });
 
-    it("supports escaping in N'' strings with a backslash", () => {
-      expect(format("N'foo \\' JOIN bar'")).toBe("N'foo \\' JOIN bar'");
-    });
+    if (stringTypes.includes("''-qq")) {
+      it("supports escaping in N'' strings with repeated quote", () => {
+        expect(format("N'foo '' JOIN bar'")).toBe("N'foo '' JOIN bar'");
+      });
+    }
+    if (stringTypes.includes("''-bs")) {
+      it("supports escaping in N'' strings with a backslash", () => {
+        expect(format("N'foo \\' JOIN bar'")).toBe("N'foo \\' JOIN bar'");
+      });
+    }
 
     it("detects consecutive N'' strings as separate ones", () => {
       expect(format("N'foo'N'bar'")).toBe("N'foo' N'bar'");

@@ -48,7 +48,7 @@ describe('PostgreSqlFormatter', () => {
   supportsInsertInto(format);
   supportsUpdate(format, { whereCurrentOf: true });
   supportsTruncateTable(format, { withoutTable: true });
-  supportsStrings(format, ["''", "U&''", "X''", "B''"]);
+  supportsStrings(format, ["''-qq", "U&''", "X''", "B''"]);
   supportsIdentifiers(format, [`""`, 'U&""']);
   supportsBetween(format);
   supportsSchema(format);

@@ -95,7 +95,7 @@ export default class HiveFormatter extends Formatter {
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       extraParens: ['[]'],
-      stringTypes: ['""-bs', "''"],
+      stringTypes: ['""-bs', "''-bs"],
       identTypes: ['``'],
       variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
       operators: HiveFormatter.operators,

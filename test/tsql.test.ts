@@ -43,7 +43,7 @@ describe('TSqlFormatter', () => {
   supportsUpdate(format, { whereCurrentOf: true });
   supportsTruncateTable(format);
   supportsMergeInto(format);
-  supportsStrings(format, ["N''", "''"]);
+  supportsStrings(format, ["N''", "''-qq"]);
   supportsIdentifiers(format, [`""`, '[]']);
   supportsBetween(format);
   supportsOperators(
