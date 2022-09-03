@@ -110,7 +110,13 @@ export const quotePatterns = {
   '``': '(?:`[^`]*`)+',
   '[]': String.raw`(?:\[[^\]]*\])(?:\][^\]]*\])*`,
   '""': String.raw`(?:"[^"\\]*(?:\\.[^"\\]*)*")+`,
+  '""-qq': String.raw`(?:"[^"]*")+`, // with repeated quote escapes
+  '""-bs': String.raw`(?:"[^"\\]*(?:\\.[^"\\]*)*")`, // with backslash escapes
+  '""-qq-bs': String.raw`(?:"[^"\\]*(?:\\.[^"\\]*)*")+`, // with repeated quote or backslash escapes
   "''": String.raw`(?:'[^'\\]*(?:\\.[^'\\]*)*')+`,
+  "''-qq": String.raw`(?:'[^']*')+`, // with repeated quote escapes
+  "''-bs": String.raw`(?:'[^'\\]*(?:\\.[^'\\]*)*')`, // with backslash escapes
+  "''-qq-bs": String.raw`(?:'[^'\\]*(?:\\.[^'\\]*)*')+`, // with repeated quote or backslash escapes
   '$$': String.raw`(?<tag>\$\w*\$)[\s\S]*?\k<tag>`,
   "'''..'''": String.raw`'''[^\\]*?(?:\\.[^\\]*?)*?'''`,
   '""".."""': String.raw`"""[^\\]*?(?:\\.[^\\]*?)*?"""`,
