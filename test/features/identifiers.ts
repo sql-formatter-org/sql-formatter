@@ -3,13 +3,13 @@ import dedent from 'dedent-js';
 import { FormatFn } from 'src/sqlFormatter';
 
 type IdentType =
-  | '""' // with repeated-quote escaping
+  | '""-qq' // with repeated-quote escaping
   | '``' // with repeated-quote escaping
   | '[]' // with ]] escaping
   | 'U&""'; // with repeated-quote escaping
 
 export default function supportsIdentifiers(format: FormatFn, identifierTypes: IdentType[]) {
-  if (identifierTypes.includes('""')) {
+  if (identifierTypes.includes('""-qq')) {
     it('supports double-quoted identifiers', () => {
       expect(format('"foo JOIN bar"')).toBe('"foo JOIN bar"');
       expect(format('SELECT "where" FROM "update"')).toBe(dedent`

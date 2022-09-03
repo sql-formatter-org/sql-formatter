@@ -46,7 +46,7 @@ describe('SqlFormatter', () => {
   supportsUpdate(format, { whereCurrentOf: true });
   supportsTruncateTable(format);
   supportsStrings(format, ["''-qq", "''-bs", "X''", "N''", "U&''"]);
-  supportsIdentifiers(format, [`""`, '``']);
+  supportsIdentifiers(format, [`""-qq`, '``']);
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format);

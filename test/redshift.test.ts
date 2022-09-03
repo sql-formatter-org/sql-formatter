@@ -41,7 +41,7 @@ describe('RedshiftFormatter', () => {
   supportsUpdate(format);
   supportsTruncateTable(format, { withoutTable: true });
   supportsStrings(format, ["''-qq"]);
-  supportsIdentifiers(format, [`""`]);
+  supportsIdentifiers(format, [`""-qq`]);
   supportsOperators(format, RedshiftFormatter.operators);
   supportsJoin(format);
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT', 'MINUS']);

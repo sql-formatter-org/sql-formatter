@@ -44,7 +44,7 @@ describe('TSqlFormatter', () => {
   supportsTruncateTable(format);
   supportsMergeInto(format);
   supportsStrings(format, ["N''", "''-qq"]);
-  supportsIdentifiers(format, [`""`, '[]']);
+  supportsIdentifiers(format, [`""-qq`, '[]']);
   supportsBetween(format);
   supportsOperators(
     format,
