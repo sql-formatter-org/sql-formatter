@@ -20,7 +20,7 @@ import supportsTruncateTable from './features/truncateTable';
 export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   behavesLikeSqlFormatter(format);
   supportsComments(format, { hashComments: true });
-  supportsStrings(format, ["''", '""', "X''"]);
+  supportsStrings(format, ["''", '""-qq', '""-bs', "X''"]);
   supportsIdentifiers(format, ['``']);
   supportsDropTable(format, { ifExists: true });
   supportsConstraints(format);

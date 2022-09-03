@@ -4,7 +4,8 @@ import dedent from 'dedent-js';
 import { FormatFn } from 'src/sqlFormatter';
 
 type StringType =
-  | '""'
+  | '""-qq'
+  | '""-bs'
   | "''"
   | 'U&""'
   | "U&''"
@@ -17,7 +18,7 @@ type StringType =
   | 'R""';
 
 export default function supportsStrings(format: FormatFn, stringTypes: StringType[]) {
-  if (stringTypes.includes('""')) {
+  if (stringTypes.includes('""-qq') || stringTypes.includes('""-bs')) {
     it('supports double-quoted strings', () => {
       expect(format('"foo JOIN bar"')).toBe('"foo JOIN bar"');
       expect(format('SELECT "where" FROM "update"')).toBe(dedent`
@@ -27,14 +28,30 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
           "update"
       `);
     });
+  }
 
+  if (stringTypes.includes('""-qq')) {
+    it('supports escaping double-quote by doubling it', () => {
+      expect(format('"foo""bar"')).toBe('"foo""bar"');
+    });
+
+    if (!stringTypes.includes('""-bs')) {
+      it('does not support escaping double-quote with a backslash', () => {
+        expect(() => format('"foo \\" JOIN bar"')).toThrowError('Parse error: Unexpected "');
+      });
+    }
+  }
+
+  if (stringTypes.includes('""-bs')) {
     it('supports escaping double-quote with a backslash', () => {
       expect(format('"foo \\" JOIN bar"')).toBe('"foo \\" JOIN bar"');
     });
 
-    it('supports escaping double-quote by doubling it', () => {
-      expect(format('"foo""bar"')).toBe('"foo""bar"');
-    });
+    if (!stringTypes.includes('""-qq')) {
+      it('does not support escaping double-quote by doubling it', () => {
+        expect(format('"foo "" JOIN bar"')).toBe('"foo " " JOIN bar"');
+      });
+    }
   }
 
   if (stringTypes.includes("''")) {

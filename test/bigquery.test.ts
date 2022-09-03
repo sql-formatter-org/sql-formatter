@@ -45,7 +45,7 @@ describe('BigQueryFormatter', () => {
   supportsUpdate(format);
   supportsTruncateTable(format);
   supportsMergeInto(format);
-  supportsStrings(format, ['""', "''", "R''", 'R""', "B''", 'B""']);
+  supportsStrings(format, ['""-bs', "''", "R''", 'R""', "B''", 'B""']);
   supportsIdentifiers(format, ['``']);
   supportsArrayLiterals(format);
   supportsBetween(format);

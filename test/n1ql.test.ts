@@ -30,7 +30,7 @@ describe('N1qlFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format, { hashComments: true });
   supportsDeleteFrom(format);
-  supportsStrings(format, [`""`]);
+  supportsStrings(format, [`""-bs`]);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
   supportsSchema(format);
