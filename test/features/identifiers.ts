@@ -2,7 +2,11 @@ import { expect } from '@jest/globals';
 import dedent from 'dedent-js';
 import { FormatFn } from 'src/sqlFormatter';
 
-type IdentType = '""' | '``' | '[]' | 'U&""';
+type IdentType =
+  | '""' // with repeated-quote escaping
+  | '``' // with repeated-quote escaping
+  | '[]' // with ]] escaping
+  | 'U&""'; // with repeated-quote escaping
 
 export default function supportsIdentifiers(format: FormatFn, identifierTypes: IdentType[]) {
   if (identifierTypes.includes('""')) {

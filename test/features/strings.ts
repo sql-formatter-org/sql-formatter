@@ -4,18 +4,20 @@ import dedent from 'dedent-js';
 import { FormatFn } from 'src/sqlFormatter';
 
 type StringType =
-  | '""-qq'
-  | '""-bs'
-  | "''-qq"
-  | "''-bs"
-  | "U&''"
-  | "N''"
-  | "X''"
-  | 'X""'
-  | "B''"
-  | 'B""'
-  | "R''"
-  | 'R""';
+  // Note: ""-qq and ""-bs can be combined to allow for both types of escaping
+  | '""-qq' // with repeated-quote escaping
+  | '""-bs' // with backslash escaping
+  // Note: ''-qq and ''-bs can be combined to allow for both types of escaping
+  | "''-qq" // with repeated-quote escaping
+  | "''-bs" // with backslash escaping
+  | "U&''" // with repeated-quote escaping
+  | "N''" // with escaping style depending on whether also ''-qq or ''-bs was specified
+  | "X''" // no escaping
+  | 'X""' // no escaping
+  | "B''" // no escaping
+  | 'B""' // no escaping
+  | "R''" // no escaping
+  | 'R""'; // no escaping
 
 export default function supportsStrings(format: FormatFn, stringTypes: StringType[]) {
   if (stringTypes.includes('""-qq') || stringTypes.includes('""-bs')) {
