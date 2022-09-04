@@ -34,7 +34,11 @@ describe('N1qlFormatter', () => {
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
   supportsSchema(format);
-  supportsOperators(format, N1qlFormatter.operators, ['AND', 'OR', 'XOR']);
+  supportsOperators(
+    format,
+    N1qlFormatter.operators.filter(op => op !== ':'),
+    ['AND', 'OR', 'XOR']
+  );
   supportsArrayAndMapAccessors(format);
   supportsArrayLiterals(format);
   supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'], supportsUsing: false });

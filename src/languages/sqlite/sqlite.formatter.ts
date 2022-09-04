@@ -62,7 +62,7 @@ const reservedPhrases = expandPhrases([
 
 export default class SqliteFormatter extends Formatter {
   // https://www.sqlite.org/lang_expr.html
-  static operators = ['~', '->', '->>', '||', '<<', '>>', '=='];
+  static operators = ['%', '~', '&', '|', '<<', '>>', '==', '->', '->>', '||'];
 
   tokenizer() {
     return new Tokenizer({

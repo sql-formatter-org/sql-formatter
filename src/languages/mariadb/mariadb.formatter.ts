@@ -262,7 +262,7 @@ const reservedPhrases = expandPhrases([
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export default class MariaDbFormatter extends Formatter {
-  static operators = [':=', '<<', '>>', '<=>', '&&', '||'];
+  static operators = ['%', ':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||', '!'];
 
   tokenizer() {
     return new Tokenizer({

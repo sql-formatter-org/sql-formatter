@@ -47,7 +47,11 @@ describe('TrinoFormatter', () => {
   supportsStrings(format, ["''", "X''", "U&''"]);
   supportsIdentifiers(format, ['""']);
   supportsBetween(format);
-  supportsOperators(format, TrinoFormatter.operators, ['AND', 'OR']);
+  supportsOperators(
+    format,
+    TrinoFormatter.operators.filter(op => op !== ':'),
+    ['AND', 'OR']
+  );
   supportsArrayLiterals(format);
   supportsArrayAndMapAccessors(format);
   supportsJoin(format);

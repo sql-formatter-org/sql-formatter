@@ -214,7 +214,24 @@ const reservedPhrases = expandPhrases(['ON DELETE', 'ON UPDATE', '{ROWS | RANGE}
 
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export default class TSqlFormatter extends Formatter {
-  static operators = ['~', '!<', '!>', '+=', '-=', '*=', '/=', '%=', '|=', '&=', '^=', '::'];
+  static operators = [
+    '%',
+    '&',
+    '|',
+    '^',
+    '~',
+    '!<',
+    '!>',
+    '+=',
+    '-=',
+    '*=',
+    '/=',
+    '%=',
+    '|=',
+    '&=',
+    '^=',
+    '::',
+  ];
 
   tokenizer() {
     return new Tokenizer({

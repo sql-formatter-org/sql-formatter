@@ -80,15 +80,17 @@ const reservedPhrases = expandPhrases([
 
 export default class PlSqlFormatter extends Formatter {
   static operators = [
-    '||',
     '**',
     ':=',
+    '%',
     '~=',
     '^=',
+    //  '..' // breaks operator test, handled by .
     '>>',
     '<<',
     '=>',
-    //  '..' // breaks operator test, handled by .
+    '@',
+    '||',
   ];
 
   tokenizer() {

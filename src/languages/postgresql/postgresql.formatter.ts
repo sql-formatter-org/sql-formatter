@@ -246,38 +246,24 @@ const reservedPhrases = expandPhrases([
 ]);
 
 const binaryOperators = [
-  // Math Operators
-  '<<',
-  '>>',
+  // Arithmetic
+  '%',
+  '^',
   '|/',
   '||/',
-  '!!',
-  // String Operators
-  '||',
-  // Pattern Matching Operators
-  '~~',
-  '~~*',
-  '!~~',
-  '!~~*',
-  // POSIX RegExp operators
+  '@',
+  // Assignment
+  ':=',
+  // Bitwise
+  '&',
+  '|',
+  '#',
   '~',
-  '~*',
-  '!~',
-  '!~*',
-  // Similarity Operators
-  '<%',
-  '<<%',
-  '%>',
-  '%>>',
-  // Byte Comparison Operators
-  '~>~',
-  '~<~',
-  '~>=~',
-  '~<=~',
-  // Geometric operators
+  '<<',
+  '>>',
+  // Geometric
   '@-@',
   '@@',
-  '#',
   '##',
   '<->',
   '&&',
@@ -297,12 +283,7 @@ const binaryOperators = [
   '@>',
   '<@',
   '~=',
-  // Network Address operators
-  '>>=',
-  '<<=',
-  // Text Search Operators
-  '@@@',
-  // JSON Operators
+  // JSON
   '?',
   '@?',
   '?&',
@@ -311,11 +292,40 @@ const binaryOperators = [
   '#>',
   '#>>',
   '#-',
-  // Other Operators
-  ':=',
-  '::',
+  // Named function params
   '=>',
+  // Network address
+  '>>=',
+  '<<=',
+  // Pattern matching
+  '~~',
+  '~~*',
+  '!~~',
+  '!~~*',
+  // POSIX RegExp
+  '~',
+  '~*',
+  '!~',
+  '!~*',
+  // Range/multirange
   '-|-',
+  // Similarity (TODO: not in wiki)
+  '<%',
+  '<<%',
+  '%>',
+  '%>>',
+  // Byte comparison (TODO: not in wiki)
+  '~>~',
+  '~<~',
+  '~>=~',
+  '~<=~',
+  // String concatenation
+  '||',
+  // Text search
+  '@@@',
+  '!!',
+  // Type cast
+  '::',
 ];
 
 // https://www.postgresql.org/docs/14/index.html

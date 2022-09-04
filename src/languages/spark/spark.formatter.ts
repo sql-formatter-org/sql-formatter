@@ -117,7 +117,7 @@ const reservedPhrases = expandPhrases([
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export default class SparkFormatter extends Formatter {
-  static operators = ['~', '<=>', '&&', '||', '==', '->'];
+  static operators = ['%', '~', '^', '|', '&', '<=>', '==', '!', '||', '->'];
 
   tokenizer() {
     return new Tokenizer({

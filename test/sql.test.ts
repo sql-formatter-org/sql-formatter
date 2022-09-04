@@ -56,19 +56,10 @@ describe('SqlFormatter', () => {
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
 
-  // This is a crappy behavior, but at least we don't crash
-  it('does not crash when encountering characters or operators it does not recognize', () => {
-    expect(
-      format(`
-        SELECT @name, :bar FROM foo;
-      `)
-    ).toBe(dedent`
-      SELECT
-        @ name,
-      : bar
-      FROM
-        foo;
-    `);
+  it('throws error when encountering characters or operators it does not recognize', () => {
+    expect(() => format('SELECT @name, :bar FROM foo;')).toThrowError(
+      `Parse error: Unexpected "@name, :bar FROM foo;"`
+    );
   });
 
   it('crashes when encountering unsupported curly braces', () => {
