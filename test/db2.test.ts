@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import Db2Formatter from 'src/languages/db2/db2.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
@@ -49,7 +48,7 @@ describe('Db2Formatter', () => {
   supportsIdentifiers(format, [`""`]);
   supportsBetween(format);
   supportsSchema(format);
-  supportsOperators(format, Db2Formatter.operators);
+  supportsOperators(format, ['**', '¬=', '¬>', '¬<', '!>', '!<', '||']);
   supportsJoin(format, { without: ['NATURAL'], supportsUsing: false });
   supportsSetOperations(format, [
     'UNION',

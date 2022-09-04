@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import MariaDbFormatter from 'src/languages/mariadb/mariadb.formatter';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
 import supportsJoin from './features/join';
@@ -29,7 +28,11 @@ describe('MariaDbFormatter', () => {
     additionally: ['STRAIGHT_JOIN'],
   });
   supportsSetOperations(format, [...standardSetOperations, 'MINUS', 'MINUS ALL', 'MINUS DISTINCT']);
-  supportsOperators(format, MariaDbFormatter.operators, ['AND', 'OR', 'XOR']);
+  supportsOperators(
+    format,
+    ['%', ':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||', '!'],
+    ['AND', 'OR', 'XOR']
+  );
   supportsReturning(format);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
   supportsCreateTable(format, { orReplace: true, ifNotExists: true });

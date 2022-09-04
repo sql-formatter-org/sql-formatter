@@ -2,7 +2,6 @@ import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
 
-import HiveFormatter from 'src/languages/hive/hive.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
@@ -49,7 +48,7 @@ describe('HiveFormatter', () => {
     supportsUsing: false,
   });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT']);
-  supportsOperators(format, HiveFormatter.operators);
+  supportsOperators(format, ['%', '~', '^', '|', '&', '<=>', '==', '!', '||']);
   supportsArrayAndMapAccessors(format);
   supportsWindow(format);
   supportsLimiting(format, { limit: true });

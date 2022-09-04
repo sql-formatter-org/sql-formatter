@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import PostgreSqlFormatter from 'src/languages/postgresql/postgresql.formatter';
 
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
@@ -52,10 +51,86 @@ describe('PostgreSqlFormatter', () => {
   supportsIdentifiers(format, [`""`, 'U&""']);
   supportsBetween(format);
   supportsSchema(format);
-  supportsOperators(
-    format,
-    PostgreSqlFormatter.operators.filter(op => op !== '::')
-  );
+  supportsOperators(format, [
+    // Arithmetic
+    '%',
+    '^',
+    '|/',
+    '||/',
+    '@',
+    // Assignment
+    ':=',
+    // Bitwise
+    '&',
+    '|',
+    '#',
+    '~',
+    '<<',
+    '>>',
+    // Geometric
+    '@-@',
+    '@@',
+    '##',
+    '<->',
+    '&&',
+    '&<',
+    '&>',
+    '<<|',
+    '&<|',
+    '|>>',
+    '|&>',
+    '<^',
+    '^>',
+    '?#',
+    '?-',
+    '?|',
+    '?-|',
+    '?||',
+    '@>',
+    '<@',
+    '~=',
+    // JSON
+    '?',
+    '@?',
+    '?&',
+    '->',
+    '->>',
+    '#>',
+    '#>>',
+    '#-',
+    // Named function params
+    '=>',
+    // Network address
+    '>>=',
+    '<<=',
+    // Pattern matching
+    '~~',
+    '~~*',
+    '!~~',
+    '!~~*',
+    // POSIX RegExp
+    '~',
+    '~*',
+    '!~',
+    '!~*',
+    // Range/multirange
+    '-|-',
+    // Similarity (TODO: not in wiki)
+    '<%',
+    '<<%',
+    '%>',
+    '%>>',
+    // Byte comparison (TODO: not in wiki)
+    '~>~',
+    '~<~',
+    '~>=~',
+    '~<=~',
+    // String concatenation
+    '||',
+    // Text search
+    '@@@',
+    '!!',
+  ]);
   supportsJoin(format);
   supportsSetOperations(format);
   supportsReturning(format);

@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import TSqlFormatter from 'src/languages/tsql/tsql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
@@ -46,10 +45,23 @@ describe('TSqlFormatter', () => {
   supportsStrings(format, ["N''", "''"]);
   supportsIdentifiers(format, [`""`, '[]']);
   supportsBetween(format);
-  supportsOperators(
-    format,
-    TSqlFormatter.operators.filter(op => op !== '::')
-  );
+  supportsOperators(format, [
+    '%',
+    '&',
+    '|',
+    '^',
+    '~',
+    '!<',
+    '!>',
+    '+=',
+    '-=',
+    '*=',
+    '/=',
+    '%=',
+    '|=',
+    '&=',
+    '^=',
+  ]);
   supportsJoin(format, { without: ['NATURAL'], supportsUsing: false, supportsApply: true });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });

@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import MySqlFormatter from 'src/languages/mysql/mysql.formatter';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
 import supportsJoin from './features/join';
@@ -29,7 +28,11 @@ describe('MySqlFormatter', () => {
     additionally: ['STRAIGHT_JOIN'],
   });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT']);
-  supportsOperators(format, MySqlFormatter.operators, ['AND', 'OR', 'XOR']);
+  supportsOperators(
+    format,
+    ['%', ':=', '&', '|', '^', '~', '<<', '>>', '<=>', '->', '->>', '&&', '||', '!'],
+    ['AND', 'OR', 'XOR']
+  );
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
   supportsCreateTable(format, { ifNotExists: true });

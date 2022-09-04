@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import SparkFormatter from 'src/languages/spark/spark.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
@@ -39,7 +38,11 @@ describe('SparkFormatter', () => {
   supportsStrings(format, ["''", '""', "X''", 'X""', "R''", 'R""']);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
-  supportsOperators(format, SparkFormatter.operators, ['AND', 'OR', 'XOR']);
+  supportsOperators(
+    format,
+    ['%', '~', '^', '|', '&', '<=>', '==', '!', '||', '->'],
+    ['AND', 'OR', 'XOR']
+  );
   supportsArrayAndMapAccessors(format);
   supportsJoin(format, {
     additionally: [
