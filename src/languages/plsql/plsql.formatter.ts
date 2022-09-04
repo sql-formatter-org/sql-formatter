@@ -105,7 +105,7 @@ export default class PlSqlFormatter extends Formatter {
         '%',
         '~=',
         '^=',
-        //  '..' // breaks operator test, handled by .
+        // '..', // Conflicts with float followed by dot (so "2..3" gets parsed as ["2.", ".", "3"])
         '>>',
         '<<',
         '=>',
