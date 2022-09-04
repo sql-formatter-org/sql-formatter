@@ -245,93 +245,8 @@ const reservedPhrases = expandPhrases([
   '{TIMESTAMP | TIME} {WITH | WITHOUT} TIME ZONE',
 ]);
 
-const binaryOperators = [
-  // Arithmetic
-  '%',
-  '^',
-  '|/',
-  '||/',
-  '@',
-  // Assignment
-  ':=',
-  // Bitwise
-  '&',
-  '|',
-  '#',
-  '~',
-  '<<',
-  '>>',
-  // Geometric
-  '@-@',
-  '@@',
-  '##',
-  '<->',
-  '&&',
-  '&<',
-  '&>',
-  '<<|',
-  '&<|',
-  '|>>',
-  '|&>',
-  '<^',
-  '^>',
-  '?#',
-  '?-',
-  '?|',
-  '?-|',
-  '?||',
-  '@>',
-  '<@',
-  '~=',
-  // JSON
-  '?',
-  '@?',
-  '?&',
-  '->',
-  '->>',
-  '#>',
-  '#>>',
-  '#-',
-  // Named function params
-  '=>',
-  // Network address
-  '>>=',
-  '<<=',
-  // Pattern matching
-  '~~',
-  '~~*',
-  '!~~',
-  '!~~*',
-  // POSIX RegExp
-  '~',
-  '~*',
-  '!~',
-  '!~*',
-  // Range/multirange
-  '-|-',
-  // Similarity (TODO: not in wiki)
-  '<%',
-  '<<%',
-  '%>',
-  '%>>',
-  // Byte comparison (TODO: not in wiki)
-  '~>~',
-  '~<~',
-  '~>=~',
-  '~<=~',
-  // String concatenation
-  '||',
-  // Text search
-  '@@@',
-  '!!',
-  // Type cast
-  '::',
-];
-
 // https://www.postgresql.org/docs/14/index.html
 export default class PostgreSqlFormatter extends Formatter {
-  static operators = binaryOperators;
-
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
@@ -347,7 +262,88 @@ export default class PostgreSqlFormatter extends Formatter {
       identTypes: [{ quote: '""', prefixes: ['U&'] }],
       identChars: { rest: '$' },
       paramTypes: { numbered: ['$'] },
-      operators: PostgreSqlFormatter.operators,
+      operators: [
+        // Arithmetic
+        '%',
+        '^',
+        '|/',
+        '||/',
+        '@',
+        // Assignment
+        ':=',
+        // Bitwise
+        '&',
+        '|',
+        '#',
+        '~',
+        '<<',
+        '>>',
+        // Geometric
+        '@-@',
+        '@@',
+        '##',
+        '<->',
+        '&&',
+        '&<',
+        '&>',
+        '<<|',
+        '&<|',
+        '|>>',
+        '|&>',
+        '<^',
+        '^>',
+        '?#',
+        '?-',
+        '?|',
+        '?-|',
+        '?||',
+        '@>',
+        '<@',
+        '~=',
+        // JSON
+        '?',
+        '@?',
+        '?&',
+        '->',
+        '->>',
+        '#>',
+        '#>>',
+        '#-',
+        // Named function params
+        '=>',
+        // Network address
+        '>>=',
+        '<<=',
+        // Pattern matching
+        '~~',
+        '~~*',
+        '!~~',
+        '!~~*',
+        // POSIX RegExp
+        '~',
+        '~*',
+        '!~',
+        '!~*',
+        // Range/multirange
+        '-|-',
+        // Similarity (TODO: not in wiki)
+        '<%',
+        '<<%',
+        '%>',
+        '%>>',
+        // Byte comparison (TODO: not in wiki)
+        '~>~',
+        '~<~',
+        '~>=~',
+        '~<=~',
+        // String concatenation
+        '||',
+        // Text search
+        '@@@',
+        '!!',
+        // Type cast
+        '::',
+      ],
     });
   }
 }

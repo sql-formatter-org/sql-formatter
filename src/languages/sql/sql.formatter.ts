@@ -68,8 +68,6 @@ const reservedJoins = expandPhrases([
 const reservedPhrases = expandPhrases(['ON DELETE', 'ON UPDATE', '{ROWS | RANGE} BETWEEN']);
 
 export default class SqlFormatter extends Formatter {
-  static operators = [];
-
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
