@@ -6,6 +6,7 @@ export enum NodeType {
   set_operation = 'set_operation',
   function_call = 'function_call',
   array_subscript = 'array_subscript',
+  property_access = 'property_access',
   parenthesis = 'parenthesis',
   between_predicate = 'between_predicate',
   limit_clause = 'limit_clause',
@@ -86,6 +87,12 @@ export type LiteralNode = {
   text: string;
 };
 
+export type PropertyAccessNode = {
+  type: NodeType.property_access;
+  object: AstNode;
+  property: IdentifierNode;
+};
+
 export type IdentifierNode = {
   type: NodeType.identifier;
   text: string;
@@ -129,6 +136,7 @@ export type AstNode =
   | SetOperationNode
   | FunctionCallNode
   | ArraySubscriptNode
+  | PropertyAccessNode
   | ParenthesisNode
   | BetweenPredicateNode
   | LimitClauseNode

@@ -442,6 +442,46 @@ Array [
 ]
 `;
 
+exports[`Parser parses qualified.identifier.sequence 1`] = `
+Array [
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "object": Object {
+              "object": Object {
+                "text": "foo",
+                "type": "identifier",
+              },
+              "property": Object {
+                "text": "bar",
+                "type": "identifier",
+              },
+              "type": "property_access",
+            },
+            "property": Object {
+              "text": "baz",
+              "type": "identifier",
+            },
+            "type": "property_access",
+          },
+        ],
+        "name": Object {
+          "raw": "SELECT",
+          "text": "SELECT",
+          "tokenType": "RESERVED_SELECT",
+          "type": "keyword",
+        },
+        "type": "clause",
+      },
+    ],
+    "hasSemicolon": true,
+    "type": "statement",
+  },
+]
+`;
+
 exports[`Parser parses set operations 1`] = `
 Array [
   Object {

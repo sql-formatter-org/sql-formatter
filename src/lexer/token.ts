@@ -24,6 +24,7 @@ export enum TokenType {
   OPERATOR = 'OPERATOR',
   COMMA = 'COMMA',
   ASTERISK = 'ASTERISK', // *
+  DOT = 'DOT', // .
   OPEN_PAREN = 'OPEN_PAREN',
   CLOSE_PAREN = 'CLOSE_PAREN',
   LINE_COMMENT = 'LINE_COMMENT',

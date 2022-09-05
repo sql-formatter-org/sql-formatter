@@ -153,7 +153,7 @@ export default class Tokenizer {
       },
       {
         type: TokenType.OPERATOR,
-        regex: regex.operator('+-/%&|^><=.:$@#?~!', [
+        regex: regex.operator('-+/%&|^><=:$@#?~!', [
           '<>',
           '<=',
           '>=',
@@ -162,6 +162,7 @@ export default class Tokenizer {
         ]),
       },
       { type: TokenType.ASTERISK, regex: /[*]/uy },
+      { type: TokenType.DOT, regex: /[.]/uy },
     ]);
   }
 
