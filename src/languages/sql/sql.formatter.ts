@@ -84,6 +84,7 @@ export default class SqlFormatter extends Formatter {
       ],
       identTypes: [`""-qq`, '``'],
       paramTypes: { positional: true },
+      operators: ['||'],
     });
   }
 }
