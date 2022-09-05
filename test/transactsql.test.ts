@@ -25,7 +25,7 @@ import supportsMergeInto from './features/mergeInto';
 import supportsCreateView from './features/createView';
 
 describe('TransactSqlFormatter', () => {
-  const language = 'tsql';
+  const language = 'transactsql';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
@@ -68,6 +68,16 @@ describe('TransactSqlFormatter', () => {
   supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });
   supportsWindow(format);
   supportsLimiting(format, { offset: true, fetchFirst: true, fetchNext: true });
+
+  it('supports language:tsql alias', () => {
+    const result = originalFormat('SELECT [my column] FROM [my table];', { language: 'tsql' });
+    expect(result).toBe(dedent`
+      SELECT
+        [my column]
+      FROM
+        [my table];
+    `);
+  });
 
   // TODO: The following are duplicated from StandardSQLFormatter test
 

@@ -17,8 +17,8 @@ Specifies the SQL dialect to use.
 - `"singlestoredb"` - [SingleStoreDB][]
 - `"spark"` - [Spark][]
 - `"sqlite"` - [SQLite][sqlite]
+- `"transactsql"` or `"tsql"` - [SQL Server Transact-SQL][tsql]
 - `"trino"` - [Trino][] / [Presto][]
-- `"tsql"` - [SQL Server Transact-SQL][tsql]
 - custom formatter class (see below)
 
 The default `"sql"` dialect is meant for cases where you don't know which dialect of SQL you're about to format.

@@ -31,8 +31,9 @@ export const formatters = {
   spark: SparkFormatter,
   sql: SqlFormatter,
   sqlite: SqliteFormatter,
+  transactsql: TransactSqlFormatter,
   trino: TrinoFormatter,
-  tsql: TransactSqlFormatter,
+  tsql: TransactSqlFormatter, // alias for transactsql
 };
 export type SqlLanguage = keyof typeof formatters;
 export const supportedDialects = Object.keys(formatters);
