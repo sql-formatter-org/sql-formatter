@@ -51,23 +51,18 @@ export default function supportsExpressionWidth(format: FormatFn) {
     `);
   });
 
-  // BUG: Spaces should be considered when computing expression length
-  it('calculates parenthesized expression length without considering spaces', () => {
+  it('calculates parenthesized expression length (also considering spaces)', () => {
     const result = format('SELECT (price * tax) AS total FROM table_name WHERE (amount > 25);', {
       expressionWidth: 10,
       denseOperators: true,
     });
     expect(result).toBe(dedent`
     SELECT
-      (
-        price*tax
-      ) AS total
+      (price*tax) AS total
     FROM
       table_name
     WHERE
-      (
-        amount>25
-      );
+      (amount>25);
     `);
   });
 }

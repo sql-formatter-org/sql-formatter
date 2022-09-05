@@ -26,9 +26,9 @@ import {
   PropertyAccessNode,
 } from 'src/parser/ast';
 
-import InlineBlock from './InlineBlock';
 import Layout, { WS } from './Layout';
 import toTabularFormat, { isTabularToken } from './tabularStyle';
+import InlineLayout, { InlineLayoutError } from './InlineLayout';
 
 interface ExpressionFormatterParams {
   cfg: FormatOptions;
@@ -40,7 +40,6 @@ interface ExpressionFormatterParams {
 /** Formats a generic SQL expression */
 export default class ExpressionFormatter {
   private cfg: FormatOptions;
-  private inlineBlock: InlineBlock;
   private params: Params;
   private layout: Layout;
 
@@ -51,7 +50,6 @@ export default class ExpressionFormatter {
   constructor({ cfg, params, layout, inline = false }: ExpressionFormatterParams) {
     this.cfg = cfg;
     this.inline = inline;
-    this.inlineBlock = new InlineBlock(this.cfg.expressionWidth);
     this.params = params;
     this.layout = layout;
   }
@@ -121,22 +119,22 @@ export default class ExpressionFormatter {
   }
 
   private formatParenthesis(node: ParenthesisNode) {
-    const inline = this.inlineBlock.isInlineBlock(node);
+    const inlineLayout = this.formatInlineExpression(node.children);
 
-    if (inline) {
+    if (inlineLayout) {
       this.layout.add(node.openParen);
-      this.layout = this.formatSubExpression(node.children, inline);
+      this.layout.add(...inlineLayout.getLayoutItems());
       this.layout.add(WS.NO_SPACE, node.closeParen, WS.SPACE);
     } else {
       this.layout.add(node.openParen, WS.NEWLINE);
 
       if (isTabularStyle(this.cfg)) {
         this.layout.add(WS.INDENT);
-        this.layout = this.formatSubExpression(node.children, inline);
+        this.layout = this.formatSubExpression(node.children);
       } else {
         this.layout.indentation.increaseBlockLevel();
         this.layout.add(WS.INDENT);
-        this.layout = this.formatSubExpression(node.children, inline);
+        this.layout = this.formatSubExpression(node.children);
         this.layout.indentation.decreaseBlockLevel();
       }
 
@@ -170,7 +168,6 @@ export default class ExpressionFormatter {
 
   private formatSetOperation(node: SetOperationNode) {
     this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name), WS.NEWLINE);
-
     this.layout.add(WS.INDENT);
     this.layout = this.formatSubExpression(node.children);
   }
@@ -282,13 +279,31 @@ export default class ExpressionFormatter {
     });
   }
 
-  private formatSubExpression(nodes: AstNode[], inline = this.inline): Layout {
+  private formatSubExpression(nodes: AstNode[]): Layout {
     return new ExpressionFormatter({
       cfg: this.cfg,
       params: this.params,
       layout: this.layout,
-      inline,
+      inline: this.inline,
     }).format(nodes);
+  }
+
+  private formatInlineExpression(nodes: AstNode[]): Layout | undefined {
+    try {
+      return new ExpressionFormatter({
+        cfg: this.cfg,
+        params: this.params,
+        layout: new InlineLayout(this.cfg.expressionWidth),
+        inline: true,
+      }).format(nodes);
+    } catch (e) {
+      if (e instanceof InlineLayoutError) {
+        return undefined;
+      } else {
+        // forward all unexpected errors
+        throw e;
+      }
+    }
   }
 
   private formatKeywordNode(node: KeywordNode): void {

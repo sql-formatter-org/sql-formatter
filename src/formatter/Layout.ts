@@ -104,6 +104,13 @@ export default class Layout {
     return this.items.map(item => this.itemToString(item)).join('');
   }
 
+  /**
+   * Returns the internal layout data
+   */
+  public getLayoutItems(): LayoutItem[] {
+    return this.items;
+  }
+
   private itemToString(item: LayoutItem): string {
     switch (item) {
       case WS.SPACE:

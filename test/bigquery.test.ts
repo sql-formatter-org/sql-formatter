@@ -119,12 +119,10 @@ describe('BigQueryFormatter', () => {
   });
 
   it('supports STRUCT types', () => {
-    const result = format(
-      'SELECT STRUCT("Alpha" as name, [23.4, 26.3, 26.4, 26.1] as splits) FROM beta'
-    );
+    const result = format('SELECT STRUCT("Alpha" as name, [23.4, 26.3, 26.4] as splits) FROM beta');
     expect(result).toBe(dedent`
       SELECT
-        STRUCT ("Alpha" as name, [23.4, 26.3, 26.4, 26.1] as splits)
+        STRUCT ("Alpha" as name, [23.4, 26.3, 26.4] as splits)
       FROM
         beta
     `);
