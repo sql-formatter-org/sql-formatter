@@ -95,7 +95,7 @@ sql-formatter -h
 
 ```
 usage: sql-formatter [-h] [-o OUTPUT] \
-[-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,singlestoredb,spark,sql,sqlite,trino,tsql}] [-c CONFIG] [--version] [FILE]
+[-l {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,singlestoredb,spark,sql,sqlite,transactsql,trino,tsql}] [-c CONFIG] [--version] [FILE]
 
 SQL Formatter
 

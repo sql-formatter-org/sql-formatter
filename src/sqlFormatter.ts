@@ -11,7 +11,7 @@ import SparkFormatter from 'src/languages/spark/spark.formatter';
 import SqliteFormatter from 'src/languages/sqlite/sqlite.formatter';
 import SqlFormatter from 'src/languages/sql/sql.formatter';
 import TrinoFormatter from 'src/languages/trino/trino.formatter';
-import TSqlFormatter from 'src/languages/tsql/tsql.formatter';
+import TransactSqlFormatter from 'src/languages/transactsql/transactsql.formatter';
 import SingleStoreDbFormatter from './languages/singlestoredb/singlestoredb.formatter';
 
 import { FormatOptions } from './FormatOptions';
@@ -31,8 +31,9 @@ export const formatters = {
   spark: SparkFormatter,
   sql: SqlFormatter,
   sqlite: SqliteFormatter,
+  transactsql: TransactSqlFormatter,
   trino: TrinoFormatter,
-  tsql: TSqlFormatter,
+  tsql: TransactSqlFormatter, // alias for transactsql
 };
 export type SqlLanguage = keyof typeof formatters;
 export const supportedDialects = Object.keys(formatters);

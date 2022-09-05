@@ -24,8 +24,8 @@ import supportsTruncateTable from './features/truncateTable';
 import supportsMergeInto from './features/mergeInto';
 import supportsCreateView from './features/createView';
 
-describe('TSqlFormatter', () => {
-  const language = 'tsql';
+describe('TransactSqlFormatter', () => {
+  const language = 'transactsql';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
@@ -69,17 +69,13 @@ describe('TSqlFormatter', () => {
   supportsWindow(format);
   supportsLimiting(format, { offset: true, fetchFirst: true, fetchNext: true });
 
-  // TODO: The following are duplicated from StandardSQLFormatter test
-
-  it('formats INSERT without INTO', () => {
-    const result = format(
-      "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
-    );
+  it('supports language:tsql alias', () => {
+    const result = originalFormat('SELECT [my column] FROM [my table];', { language: 'tsql' });
     expect(result).toBe(dedent`
-      INSERT
-        Customers (ID, MoneyBalance, Address, City)
-      VALUES
-        (12, -123.4, 'Skagen 2111', 'Stv');
+      SELECT
+        [my column]
+      FROM
+        [my table];
     `);
   });
 
