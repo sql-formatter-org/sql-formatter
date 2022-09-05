@@ -79,20 +79,6 @@ describe('TransactSqlFormatter', () => {
     `);
   });
 
-  // TODO: The following are duplicated from StandardSQLFormatter test
-
-  it('formats INSERT without INTO', () => {
-    const result = format(
-      "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
-    );
-    expect(result).toBe(dedent`
-      INSERT
-        Customers (ID, MoneyBalance, Address, City)
-      VALUES
-        (12, -123.4, 'Skagen 2111', 'Stv');
-    `);
-  });
-
   it('recognizes @, $, # as part of identifiers', () => {
     const result = format('SELECT from@bar, where#to, join$me FROM tbl;');
     expect(result).toBe(dedent`
