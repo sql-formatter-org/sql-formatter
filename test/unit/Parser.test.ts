@@ -68,6 +68,10 @@ describe('Parser', () => {
     expect(parse('SELECT *')).toMatchSnapshot();
   });
 
+  it('parses SELECT ident.*', () => {
+    expect(parse('SELECT ident.*')).toMatchSnapshot();
+  });
+
   it('parses function name with and without parameters', () => {
     expect(parse('SELECT CURRENT_TIME a, CURRENT_TIME() b;')).toMatchSnapshot();
   });

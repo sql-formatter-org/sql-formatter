@@ -184,6 +184,38 @@ Array [
 ]
 `;
 
+exports[`Parser parses SELECT ident.* 1`] = `
+Array [
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "object": Object {
+              "text": "ident",
+              "type": "identifier",
+            },
+            "property": Object {
+              "type": "all_columns_asterisk",
+            },
+            "type": "property_access",
+          },
+        ],
+        "name": Object {
+          "raw": "SELECT",
+          "text": "SELECT",
+          "tokenType": "RESERVED_SELECT",
+          "type": "keyword",
+        },
+        "type": "clause",
+      },
+    ],
+    "hasSemicolon": false,
+    "type": "statement",
+  },
+]
+`;
+
 exports[`Parser parses array subscript 1`] = `
 Array [
   Object {
