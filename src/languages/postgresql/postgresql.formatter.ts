@@ -284,6 +284,11 @@ export default class PostgreSqlFormatter extends Formatter {
         '~',
         '<<',
         '>>',
+        // Byte comparison
+        '~>~',
+        '~<~',
+        '~>=~',
+        '~<=~',
         // Geometric
         '@-@',
         '@@',
@@ -332,21 +337,20 @@ export default class PostgreSqlFormatter extends Formatter {
         '!~*',
         // Range/multirange
         '-|-',
-        // Similarity (TODO: not in wiki)
-        '<%',
-        '<<%',
-        '%>',
-        '%>>',
-        // Byte comparison (TODO: not in wiki)
-        '~>~',
-        '~<~',
-        '~>=~',
-        '~<=~',
         // String concatenation
         '||',
         // Text search
         '@@@',
         '!!',
+        // Trigram/trigraph
+        '<%',
+        '%>',
+        '<<%',
+        '%>>',
+        '<<->',
+        '<->>',
+        '<<<->',
+        '<->>>',
         // Type cast
         '::',
       ],

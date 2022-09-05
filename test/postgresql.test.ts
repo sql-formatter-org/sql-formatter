@@ -51,6 +51,7 @@ describe('PostgreSqlFormatter', () => {
   supportsIdentifiers(format, [`""-qq`, 'U&""']);
   supportsBetween(format);
   supportsSchema(format);
+  // Missing: '::' type cast (tested separately)
   supportsOperators(format, [
     // Arithmetic
     '%',
@@ -67,6 +68,11 @@ describe('PostgreSqlFormatter', () => {
     '~',
     '<<',
     '>>',
+    // Byte comparison
+    '~>~',
+    '~<~',
+    '~>=~',
+    '~<=~',
     // Geometric
     '@-@',
     '@@',
@@ -115,21 +121,20 @@ describe('PostgreSqlFormatter', () => {
     '!~*',
     // Range/multirange
     '-|-',
-    // Similarity (TODO: not in wiki)
-    '<%',
-    '<<%',
-    '%>',
-    '%>>',
-    // Byte comparison (TODO: not in wiki)
-    '~>~',
-    '~<~',
-    '~>=~',
-    '~<=~',
     // String concatenation
     '||',
     // Text search
     '@@@',
     '!!',
+    // Trigram/trigraph
+    '<%',
+    '<<%',
+    '%>',
+    '%>>',
+    '<<->',
+    '<->>',
+    '<<<->',
+    '<->>>',
   ]);
   supportsJoin(format);
   supportsSetOperations(format);
