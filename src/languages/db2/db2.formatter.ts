@@ -170,8 +170,6 @@ const reservedPhrases = expandPhrases(['ON DELETE', 'ON UPDATE', '{ROWS | RANGE}
 
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {
-  static operators = ['**', '¬=', '¬>', '¬<', '!>', '!<', '||'];
-
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
@@ -189,7 +187,7 @@ export default class Db2Formatter extends Formatter {
       identTypes: [`""-qq`],
       paramTypes: { positional: true, named: [':'] },
       paramChars: { first: '@#$', rest: '@#$' },
-      operators: Db2Formatter.operators,
+      operators: ['**', '¬=', '¬>', '¬<', '!>', '!<', '||'],
     });
   }
 }

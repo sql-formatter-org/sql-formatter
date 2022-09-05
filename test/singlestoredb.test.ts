@@ -1,5 +1,4 @@
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import SingleStoreDbFormatter from 'src/languages/singlestoredb/singlestoredb.formatter';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
 
 import supportsJoin from './features/join';
@@ -32,7 +31,11 @@ describe('SingleStoreDbFormatter', () => {
     'INTERSECT',
     'MINUS',
   ]);
-  supportsOperators(format, SingleStoreDbFormatter.operators, ['AND', 'OR']);
+  supportsOperators(
+    format,
+    [':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||'],
+    ['AND', 'OR']
+  );
   supportsLimiting(format, { limit: true, offset: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsCreateView(format);

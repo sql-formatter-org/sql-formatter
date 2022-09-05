@@ -140,8 +140,6 @@ const reservedPhrases = expandPhrases([
 
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export default class RedshiftFormatter extends Formatter {
-  static operators = ['~', '|/', '||/', '<<', '>>', '||'];
-
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
@@ -156,7 +154,20 @@ export default class RedshiftFormatter extends Formatter {
       identTypes: [`""-qq`],
       identChars: { first: '#' },
       paramTypes: { numbered: ['$'] },
-      operators: RedshiftFormatter.operators,
+      operators: [
+        '^',
+        '%',
+        '@',
+        '|/',
+        '||/',
+        '&',
+        '|',
+        // '#', conflicts with first char of identifier
+        '~',
+        '<<',
+        '>>',
+        '||',
+      ],
     });
   }
 }

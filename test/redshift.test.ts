@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import RedshiftFormatter from 'src/languages/redshift/redshift.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
@@ -42,7 +41,8 @@ describe('RedshiftFormatter', () => {
   supportsTruncateTable(format, { withoutTable: true });
   supportsStrings(format, ["''-qq"]);
   supportsIdentifiers(format, [`""-qq`]);
-  supportsOperators(format, RedshiftFormatter.operators);
+  // Missing: '#' operator
+  supportsOperators(format, ['^', '%', '@', '|/', '||/', '&', '|', '~', '<<', '>>', '||']);
   supportsJoin(format);
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT', 'MINUS']);
   supportsParams(format, { numbered: ['$'] });

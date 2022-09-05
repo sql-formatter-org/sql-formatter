@@ -79,18 +79,6 @@ const reservedPhrases = expandPhrases([
 ]);
 
 export default class PlSqlFormatter extends Formatter {
-  static operators = [
-    '||',
-    '**',
-    ':=',
-    '~=',
-    '^=',
-    '>>',
-    '<<',
-    '=>',
-    //  '..' // breaks operator test, handled by .
-  ];
-
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
@@ -114,7 +102,19 @@ export default class PlSqlFormatter extends Formatter {
       variableTypes: [{ regex: '&{1,2}[A-Za-z][A-Za-z0-9_$#]*' }],
       paramTypes: { numbered: [':'], named: [':'] },
       paramChars: {}, // Empty object used on purpose to not allow $ and # chars as specified in identChars
-      operators: PlSqlFormatter.operators,
+      operators: [
+        '**',
+        ':=',
+        '%',
+        '~=',
+        '^=',
+        // '..', // Conflicts with float followed by dot (so "2..3" gets parsed as ["2.", ".", "3"])
+        '>>',
+        '<<',
+        '=>',
+        '@',
+        '||',
+      ],
       postProcess,
     });
   }

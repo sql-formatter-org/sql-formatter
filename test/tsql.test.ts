@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import TSqlFormatter from 'src/languages/tsql/tsql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
@@ -46,10 +45,24 @@ describe('TSqlFormatter', () => {
   supportsStrings(format, ["N''", "''-qq"]);
   supportsIdentifiers(format, [`""-qq`, '[]']);
   supportsBetween(format);
-  supportsOperators(
-    format,
-    TSqlFormatter.operators.filter(op => op !== '::')
-  );
+  // Missing: `::` scope resolution operator (tested separately)
+  supportsOperators(format, [
+    '%',
+    '&',
+    '|',
+    '^',
+    '~',
+    '!<',
+    '!>',
+    '+=',
+    '-=',
+    '*=',
+    '/=',
+    '%=',
+    '|=',
+    '&=',
+    '^=',
+  ]);
   supportsJoin(format, { without: ['NATURAL'], supportsUsing: false, supportsApply: true });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });
@@ -92,6 +105,13 @@ describe('TSqlFormatter', () => {
         ##flam
       FROM
         tbl;
+    `);
+  });
+
+  it('formats scope resolution operator without spaces', () => {
+    expect(format('SELECT hierarchyid :: GetRoot();')).toBe(dedent`
+      SELECT
+        hierarchyid::GetRoot ();
     `);
   });
 

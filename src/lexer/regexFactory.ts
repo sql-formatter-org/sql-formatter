@@ -21,14 +21,9 @@ export const parenthesis = (kind: 'open' | 'close', extraParens: ('[]' | '{}')[]
 
 /**
  * Builds a RegExp containing all operators for a SQL dialect
- * @param {string} monadOperators - concatenated string of all 1-length operators
- * @param {string[]} polyadOperators - list of strings of all >1-length operators
  */
-export const operator = (monadOperators: string, polyadOperators: string[]) =>
-  patternToRegex(
-    `${sortByLengthDesc(polyadOperators).map(escapeRegExp).join('|')}|` +
-      `[${monadOperators.split('').map(escapeRegExp).join('')}]`
-  );
+export const operator = (operators: string[]) =>
+  patternToRegex(`${sortByLengthDesc(operators).map(escapeRegExp).join('|')}`);
 
 // Negative lookahead to avoid matching a keyword that's actually part of identifier,
 // which can happen when identifier allows word-boundary characters inside it.

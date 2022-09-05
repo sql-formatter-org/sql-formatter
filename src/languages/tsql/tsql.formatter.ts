@@ -214,8 +214,6 @@ const reservedPhrases = expandPhrases(['ON DELETE', 'ON UPDATE', '{ROWS | RANGE}
 
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export default class TSqlFormatter extends Formatter {
-  static operators = ['~', '!<', '!>', '+=', '-=', '*=', '/=', '%=', '|=', '&=', '^=', '::'];
-
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
@@ -231,7 +229,24 @@ export default class TSqlFormatter extends Formatter {
       identTypes: [`""-qq`, '[]'],
       identChars: { first: '#@', rest: '#@$' },
       paramTypes: { named: ['@'], quoted: ['@'] },
-      operators: TSqlFormatter.operators,
+      operators: [
+        '%',
+        '&',
+        '|',
+        '^',
+        '~',
+        '!<',
+        '!>',
+        '+=',
+        '-=',
+        '*=',
+        '/=',
+        '%=',
+        '|=',
+        '&=',
+        '^=',
+        '::',
+      ],
       // TODO: Support for money constants
     });
   }

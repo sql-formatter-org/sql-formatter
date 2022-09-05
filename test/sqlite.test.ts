@@ -1,6 +1,5 @@
 import dedent from 'dedent-js';
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import SqliteFormatter from 'src/languages/sqlite/sqlite.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
@@ -48,7 +47,7 @@ describe('SqliteFormatter', () => {
   supportsSchema(format);
   supportsJoin(format);
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
-  supportsOperators(format, SqliteFormatter.operators);
+  supportsOperators(format, ['%', '~', '&', '|', '<<', '>>', '==', '->', '->>', '||']);
   supportsParams(format, { positional: true, numbered: ['?'], named: [':', '$', '@'] });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });

@@ -7,9 +7,16 @@ export default function supportsOperators(
   operators: string[],
   logicalOperators: string[] = ['AND', 'OR']
 ) {
+  // Always test for standard SQL operators
+  const standardOperators = ['+', '-', '*', '/', '>', '<', '=', '<>', '<=', '>=', '!='];
+  operators = [...standardOperators, ...operators];
+
   operators.forEach(op => {
     it(`supports ${op} operator`, () => {
-      expect(format(`foo${op}bar`)).toBe(`foo ${op} bar`);
+      // Would be simpler to test with "foo${op}bar"
+      // but this doesn't work with "-" operator in bigQuery,
+      // where foo-bar is detected as identifier
+      expect(format(`foo${op} bar ${op}zap`)).toBe(`foo ${op} bar ${op} zap`);
     });
   });
 

@@ -231,8 +231,6 @@ const reservedPhrases = expandPhrases([
 ]);
 
 export default class SingleStoreDbFormatter extends Formatter {
-  static operators = ['~', ':=', '<=>', '<<', '>>', '&&', '||'];
-
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
@@ -256,7 +254,7 @@ export default class SingleStoreDbFormatter extends Formatter {
         { quote: '``', prefixes: ['@'], requirePrefix: true },
       ],
       lineCommentTypes: ['--', '#'],
-      operators: SingleStoreDbFormatter.operators,
+      operators: [':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||'],
       postProcess,
     });
   }

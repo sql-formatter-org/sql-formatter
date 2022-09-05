@@ -120,10 +120,6 @@ const reservedJoins = expandPhrases([
 const reservedPhrases = expandPhrases(['{ROWS | RANGE | GROUPS} BETWEEN']);
 
 export default class TrinoFormatter extends Formatter {
-  // https://trino.io/docs/current/functions/list.html#id1
-  // https://trino.io/docs/current/sql/match-recognize.html#row-pattern-syntax
-  static operators = ['||', '->'];
-
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
@@ -148,7 +144,17 @@ export default class TrinoFormatter extends Formatter {
       // https://trino.io/docs/current/language/reserved.html
       identTypes: ['""-qq'],
       paramTypes: { positional: true },
-      operators: TrinoFormatter.operators,
+      operators: [
+        '%',
+        '->',
+        ':',
+        '||',
+        // Row pattern syntax
+        '|',
+        '^',
+        '$',
+        // '?', conflicts with positional placeholders
+      ],
     });
   }
 }

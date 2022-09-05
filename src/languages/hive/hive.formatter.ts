@@ -82,8 +82,6 @@ const reservedPhrases = expandPhrases(['{ROWS | RANGE} BETWEEN']);
 
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export default class HiveFormatter extends Formatter {
-  static operators = ['<=>', '==', '||'];
-
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
@@ -98,7 +96,7 @@ export default class HiveFormatter extends Formatter {
       stringTypes: ['""-bs', "''-bs"],
       identTypes: ['``'],
       variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
-      operators: HiveFormatter.operators,
+      operators: ['%', '~', '^', '|', '&', '<=>', '==', '!', '||'],
     });
   }
 }

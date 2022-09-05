@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import TrinoFormatter from 'src/languages/trino/trino.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsArrayLiterals from './features/arrayLiterals';
@@ -47,7 +46,8 @@ describe('TrinoFormatter', () => {
   supportsStrings(format, ["''-qq", "X''", "U&''"]);
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
-  supportsOperators(format, TrinoFormatter.operators, ['AND', 'OR']);
+  // Missing: '?' operator (for row patterns)
+  supportsOperators(format, ['%', '->', '||', '|', '^', '$'], ['AND', 'OR']);
   supportsArrayLiterals(format);
   supportsArrayAndMapAccessors(format);
   supportsJoin(format);

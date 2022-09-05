@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import PlSqlFormatter from 'src/languages/plsql/plsql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsAlterTable from './features/alterTable';
@@ -51,7 +50,12 @@ describe('PlSqlFormatter', () => {
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   supportsSchema(format);
-  supportsOperators(format, PlSqlFormatter.operators, ['AND', 'OR', 'XOR']);
+  supportsOperators(
+    format,
+    // Missing: '..' operator
+    ['**', ':=', '%', '~=', '^=', '>>', '<<', '=>', '||'],
+    ['AND', 'OR', 'XOR']
+  );
   supportsJoin(format, { supportsApply: true });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsReturning(format);
@@ -74,15 +78,9 @@ describe('PlSqlFormatter', () => {
 
   // Parameters don't allow the same characters as identifiers
   it('does not support #, $ in named parameters', () => {
-    expect(format('SELECT :col$foo')).toBe(dedent`
-      SELECT
-        :col $ foo
-    `);
+    expect(() => format('SELECT :col$foo')).toThrowError(`Parse error: Unexpected "$foo"`);
 
-    expect(format('SELECT :col#foo')).toBe(dedent`
-      SELECT
-        :col # foo
-    `);
+    expect(() => format('SELECT :col#foo')).toThrowError(`Parse error: Unexpected "#foo"`);
   });
 
   it('supports &name substitution variables', () => {
@@ -104,7 +102,7 @@ describe('PlSqlFormatter', () => {
     expect(format("nQ'{test string { } 'foo' bar }'")).toBe("nQ'{test string { } 'foo' bar }'");
     expect(format("Nq'%test string % % 'foo' bar %'")).toBe("Nq'%test string % % 'foo' bar %'");
     expect(format("Q'Xtest string X X 'foo' bar X'")).toBe("Q'Xtest string X X 'foo' bar X'");
-    expect(format("q'$test string $'$''")).toBe("q'$test string $' $ ''");
+    expect(() => format("q'$test string $'$''")).toThrowError(`Parse error: Unexpected "$''"`);
     expect(format("Q'Stest string S'S''")).toBe("Q'Stest string S' S ''");
   });
 

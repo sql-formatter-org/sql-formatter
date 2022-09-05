@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import PostgreSqlFormatter from 'src/languages/postgresql/postgresql.formatter';
 
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsAlterTable from './features/alterTable';
@@ -52,10 +51,91 @@ describe('PostgreSqlFormatter', () => {
   supportsIdentifiers(format, [`""-qq`, 'U&""']);
   supportsBetween(format);
   supportsSchema(format);
-  supportsOperators(
-    format,
-    PostgreSqlFormatter.operators.filter(op => op !== '::')
-  );
+  // Missing: '::' type cast (tested separately)
+  supportsOperators(format, [
+    // Arithmetic
+    '%',
+    '^',
+    '|/',
+    '||/',
+    '@',
+    // Assignment
+    ':=',
+    // Bitwise
+    '&',
+    '|',
+    '#',
+    '~',
+    '<<',
+    '>>',
+    // Byte comparison
+    '~>~',
+    '~<~',
+    '~>=~',
+    '~<=~',
+    // Geometric
+    '@-@',
+    '@@',
+    '##',
+    '<->',
+    '&&',
+    '&<',
+    '&>',
+    '<<|',
+    '&<|',
+    '|>>',
+    '|&>',
+    '<^',
+    '^>',
+    '?#',
+    '?-',
+    '?|',
+    '?-|',
+    '?||',
+    '@>',
+    '<@',
+    '~=',
+    // JSON
+    '?',
+    '@?',
+    '?&',
+    '->',
+    '->>',
+    '#>',
+    '#>>',
+    '#-',
+    // Named function params
+    '=>',
+    // Network address
+    '>>=',
+    '<<=',
+    // Pattern matching
+    '~~',
+    '~~*',
+    '!~~',
+    '!~~*',
+    // POSIX RegExp
+    '~',
+    '~*',
+    '!~',
+    '!~*',
+    // Range/multirange
+    '-|-',
+    // String concatenation
+    '||',
+    // Text search
+    '@@@',
+    '!!',
+    // Trigram/trigraph
+    '<%',
+    '<<%',
+    '%>',
+    '%>>',
+    '<<->',
+    '<->>',
+    '<<<->',
+    '<->>>',
+  ]);
   supportsJoin(format);
   supportsSetOperations(format);
   supportsReturning(format);
@@ -102,6 +182,13 @@ describe('PostgreSqlFormatter', () => {
     expect(format('SELECT ARRAY[1, 2, 3]')).toBe(dedent`
       SELECT
         ARRAY[1, 2, 3]
+    `);
+  });
+
+  it('formats type-cast operator without spaces', () => {
+    expect(format('SELECT 2 :: numeric AS foo;')).toBe(dedent`
+      SELECT
+        2::numeric AS foo;
     `);
   });
 

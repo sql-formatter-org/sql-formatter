@@ -140,9 +140,7 @@ const reservedPhrases = expandPhrases([
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
 export default class BigQueryFormatter extends Formatter {
-  static operators = ['~', '>>', '<<', '||'];
   // TODO: handle trailing comma in select clause
-
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
@@ -168,7 +166,7 @@ export default class BigQueryFormatter extends Formatter {
       identChars: { dashes: true },
       paramTypes: { positional: true, named: ['@'], quoted: ['@'] },
       lineCommentTypes: ['--', '#'],
-      operators: BigQueryFormatter.operators,
+      operators: ['&', '|', '^', '~', '>>', '<<', '||'],
       postProcess,
     });
   }

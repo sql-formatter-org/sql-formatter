@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import SqlFormatter from 'src/languages/sql/sql.formatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsCreateTable from './features/createTable';
@@ -51,24 +50,15 @@ describe('SqlFormatter', () => {
   supportsSchema(format);
   supportsJoin(format);
   supportsSetOperations(format);
-  supportsOperators(format, SqlFormatter.operators);
+  supportsOperators(format, []);
   supportsParams(format, { positional: true });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
 
-  // This is a crappy behavior, but at least we don't crash
-  it('does not crash when encountering characters or operators it does not recognize', () => {
-    expect(
-      format(`
-        SELECT @name, :bar FROM foo;
-      `)
-    ).toBe(dedent`
-      SELECT
-        @ name,
-      : bar
-      FROM
-        foo;
-    `);
+  it('throws error when encountering characters or operators it does not recognize', () => {
+    expect(() => format('SELECT @name, :bar FROM foo;')).toThrowError(
+      `Parse error: Unexpected "@name, :bar FROM foo;"`
+    );
   });
 
   it('crashes when encountering unsupported curly braces', () => {

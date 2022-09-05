@@ -153,7 +153,14 @@ export default class Tokenizer {
       },
       {
         type: TokenType.OPERATOR,
-        regex: regex.operator('-+/%&|^><=:$@#?~!', [
+        regex: regex.operator([
+          // standard operators
+          '+',
+          '-',
+          '/',
+          '>',
+          '<',
+          '=',
           '<>',
           '<=',
           '>=',

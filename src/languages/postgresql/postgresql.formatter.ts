@@ -245,83 +245,8 @@ const reservedPhrases = expandPhrases([
   '{TIMESTAMP | TIME} {WITH | WITHOUT} TIME ZONE',
 ]);
 
-const binaryOperators = [
-  // Math Operators
-  '<<',
-  '>>',
-  '|/',
-  '||/',
-  '!!',
-  // String Operators
-  '||',
-  // Pattern Matching Operators
-  '~~',
-  '~~*',
-  '!~~',
-  '!~~*',
-  // POSIX RegExp operators
-  '~',
-  '~*',
-  '!~',
-  '!~*',
-  // Similarity Operators
-  '<%',
-  '<<%',
-  '%>',
-  '%>>',
-  // Byte Comparison Operators
-  '~>~',
-  '~<~',
-  '~>=~',
-  '~<=~',
-  // Geometric operators
-  '@-@',
-  '@@',
-  '#',
-  '##',
-  '<->',
-  '&&',
-  '&<',
-  '&>',
-  '<<|',
-  '&<|',
-  '|>>',
-  '|&>',
-  '<^',
-  '^>',
-  '?#',
-  '?-',
-  '?|',
-  '?-|',
-  '?||',
-  '@>',
-  '<@',
-  '~=',
-  // Network Address operators
-  '>>=',
-  '<<=',
-  // Text Search Operators
-  '@@@',
-  // JSON Operators
-  '?',
-  '@?',
-  '?&',
-  '->',
-  '->>',
-  '#>',
-  '#>>',
-  '#-',
-  // Other Operators
-  ':=',
-  '::',
-  '=>',
-  '-|-',
-];
-
 // https://www.postgresql.org/docs/14/index.html
 export default class PostgreSqlFormatter extends Formatter {
-  static operators = binaryOperators;
-
   tokenizer() {
     return new Tokenizer({
       reservedCommands,
@@ -343,7 +268,92 @@ export default class PostgreSqlFormatter extends Formatter {
       identTypes: [{ quote: '""-qq', prefixes: ['U&'] }],
       identChars: { rest: '$' },
       paramTypes: { numbered: ['$'] },
-      operators: PostgreSqlFormatter.operators,
+      operators: [
+        // Arithmetic
+        '%',
+        '^',
+        '|/',
+        '||/',
+        '@',
+        // Assignment
+        ':=',
+        // Bitwise
+        '&',
+        '|',
+        '#',
+        '~',
+        '<<',
+        '>>',
+        // Byte comparison
+        '~>~',
+        '~<~',
+        '~>=~',
+        '~<=~',
+        // Geometric
+        '@-@',
+        '@@',
+        '##',
+        '<->',
+        '&&',
+        '&<',
+        '&>',
+        '<<|',
+        '&<|',
+        '|>>',
+        '|&>',
+        '<^',
+        '^>',
+        '?#',
+        '?-',
+        '?|',
+        '?-|',
+        '?||',
+        '@>',
+        '<@',
+        '~=',
+        // JSON
+        '?',
+        '@?',
+        '?&',
+        '->',
+        '->>',
+        '#>',
+        '#>>',
+        '#-',
+        // Named function params
+        '=>',
+        // Network address
+        '>>=',
+        '<<=',
+        // Pattern matching
+        '~~',
+        '~~*',
+        '!~~',
+        '!~~*',
+        // POSIX RegExp
+        '~',
+        '~*',
+        '!~',
+        '!~*',
+        // Range/multirange
+        '-|-',
+        // String concatenation
+        '||',
+        // Text search
+        '@@@',
+        '!!',
+        // Trigram/trigraph
+        '<%',
+        '%>',
+        '<<%',
+        '%>>',
+        '<<->',
+        '<->>',
+        '<<<->',
+        '<->>>',
+        // Type cast
+        '::',
+      ],
     });
   }
 }

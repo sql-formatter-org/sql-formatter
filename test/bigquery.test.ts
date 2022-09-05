@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import BigQueryFormatter from 'src/languages/bigquery/bigquery.formatter';
 import { flatKeywordList } from 'src/utils';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
@@ -56,7 +55,7 @@ describe('BigQueryFormatter', () => {
     'EXCEPT DISTINCT',
     'INTERSECT DISTINCT',
   ]);
-  supportsOperators(format, BigQueryFormatter.operators);
+  supportsOperators(format, ['&', '|', '^', '~', '>>', '<<', '||']);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
