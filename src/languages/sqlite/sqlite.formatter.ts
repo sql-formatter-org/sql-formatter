@@ -72,10 +72,12 @@ export default class SqliteFormatter extends Formatter {
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
       stringTypes: [
-        { quote: "''", prefixes: ['X'] },
-        // { quote: '""', prefixes: ['X'] }, // currently conflict with "" identifiers
+        "''-qq",
+        { quote: "''-raw", prefixes: ['X'], requirePrefix: true },
+        // Depending on context SQLite also supports double-quotes for strings,
+        // and single-quotes for identifiers.
       ],
-      identTypes: [`""`, '``', '[]'],
+      identTypes: [`""-qq`, '``', '[]'],
       // https://www.sqlite.org/lang_expr.html#parameters
       paramTypes: { positional: true, numbered: ['?'], named: [':', '@', '$'] },
       operators: ['%', '~', '&', '|', '<<', '>>', '==', '->', '->>', '||'],

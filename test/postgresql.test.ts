@@ -31,7 +31,7 @@ describe('PostgreSqlFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
-  supportsComments(format);
+  supportsComments(format, { nestedBlockComments: true });
   supportsCreateView(format, { orReplace: true, materialized: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
@@ -47,8 +47,8 @@ describe('PostgreSqlFormatter', () => {
   supportsInsertInto(format);
   supportsUpdate(format, { whereCurrentOf: true });
   supportsTruncateTable(format, { withoutTable: true });
-  supportsStrings(format, ["''", "U&''", "X''", "B''"]);
-  supportsIdentifiers(format, [`""`, 'U&""']);
+  supportsStrings(format, ["''-qq", "U&''", "X''", "B''"]);
+  supportsIdentifiers(format, [`""-qq`, 'U&""']);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, [

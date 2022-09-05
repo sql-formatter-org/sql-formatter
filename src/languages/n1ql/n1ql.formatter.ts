@@ -93,7 +93,7 @@ export default class N1qlFormatter extends Formatter {
       // NOTE: single quotes are actually not supported in N1QL,
       // but we support them anyway as all other SQL dialects do,
       // which simplifies writing tests that are shared between all dialects.
-      stringTypes: ['""', "''"],
+      stringTypes: ['""-bs', "''-bs"],
       identTypes: ['``'],
       extraParens: ['[]', '{}'],
       paramTypes: { positional: true, numbered: ['$'], named: ['$'] },

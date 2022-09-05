@@ -13,8 +13,8 @@ describe('Parser', () => {
       reservedKeywords: ['BETWEEN', 'LIKE', 'ON', 'USING'],
       operators: [':'],
       extraParens: ['[]', '{}'],
-      stringTypes: ["''"],
-      identTypes: ['""'],
+      stringTypes: ["''-qq"],
+      identTypes: ['""-qq'],
     });
 
     return createParser(tokenizer).parse(sql, {});

@@ -38,7 +38,7 @@ describe('HiveFormatter', () => {
   supportsDeleteFrom(format);
   supportsTruncateTable(format, { withoutTable: true });
   supportsMergeInto(format);
-  supportsStrings(format, ['""', "''"]);
+  supportsStrings(format, ['""-bs', "''-bs"]);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
   supportsSchema(format);

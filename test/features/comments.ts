@@ -4,6 +4,7 @@ import { FormatFn } from 'src/sqlFormatter';
 
 interface CommentsConfig {
   hashComments?: boolean;
+  nestedBlockComments?: boolean;
 }
 
 export default function supportsComments(format: FormatFn, opts: CommentsConfig = {}) {
@@ -149,15 +150,14 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     expect(result).toBe('SELECT\n  *\nFROM\n  -- line comment 1\n  MyTable -- line comment 2');
   });
 
-  it('formats query that ends with open comment', () => {
+  it('does not detect unclosed comment as a comment', () => {
     const result = format(`
       SELECT count(*)
-      /*Comment
+      /*SomeComment
     `);
     expect(result).toBe(dedent`
       SELECT
-        count(*)
-        /*Comment
+        count(*) / * SomeComment
     `);
   });
 
@@ -167,6 +167,19 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
       expect(result).toBe(dedent`
         SELECT
           alpha # commment
+        FROM
+          beta
+      `);
+    });
+  }
+
+  if (opts.nestedBlockComments) {
+    it('supports nested block comments', () => {
+      const result = format('SELECT alpha /* /* commment */ */ FROM beta');
+      expect(result).toBe(dedent`
+        SELECT
+          alpha
+          /* /* commment */ */
         FROM
           beta
       `);

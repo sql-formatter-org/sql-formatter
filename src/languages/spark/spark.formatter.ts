@@ -130,8 +130,10 @@ export default class SparkFormatter extends Formatter {
       reservedFunctionNames: functions,
       extraParens: ['[]'],
       stringTypes: [
-        { quote: "''", prefixes: ['R', 'X'] },
-        { quote: '""', prefixes: ['R', 'X'] },
+        "''-bs",
+        '""-bs',
+        { quote: "''-raw", prefixes: ['R', 'X'], requirePrefix: true },
+        { quote: '""-raw', prefixes: ['R', 'X'], requirePrefix: true },
       ],
       identTypes: ['``'],
       variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],

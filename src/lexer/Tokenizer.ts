@@ -4,6 +4,7 @@ import { ParamTypes, TokenizerOptions } from 'src/lexer/TokenizerOptions';
 import TokenizerEngine, { TokenRule } from 'src/lexer/TokenizerEngine';
 import { escapeRegExp } from 'src/lexer/regexUtil';
 import { equalizeWhitespace, Optional } from 'src/utils';
+import { NestedComment } from './NestedComment';
 
 type OptionalTokenRule = Optional<TokenRule, 'regex'>;
 
@@ -32,7 +33,7 @@ export default class Tokenizer {
     return this.validRules([
       {
         type: TokenType.BLOCK_COMMENT,
-        regex: /(\/\*[^]*?(?:\*\/|$))/uy,
+        regex: cfg.nestedBlockComments ? new NestedComment() : /(\/\*[^]*?\*\/)/uy,
       },
       {
         type: TokenType.LINE_COMMENT,

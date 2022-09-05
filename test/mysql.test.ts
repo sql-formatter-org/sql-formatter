@@ -46,11 +46,23 @@ describe('MySqlFormatter', () => {
     renameColumn: true,
   });
 
-  it(`supports @"name", @'name' variables`, () => {
-    expect(format(`SELECT @"foo fo", @'bar ar' FROM tbl;`)).toBe(dedent`
+  it(`supports @"name" variables`, () => {
+    expect(format(`SELECT @"foo fo", @"foo\\"x", @"foo""y" FROM tbl;`)).toBe(dedent`
       SELECT
         @"foo fo",
-        @'bar ar'
+        @"foo\\"x",
+        @"foo""y"
+      FROM
+        tbl;
+    `);
+  });
+
+  it(`supports @'name' variables`, () => {
+    expect(format(`SELECT @'bar ar', @'bar\\'x', @'bar''y' FROM tbl;`)).toBe(dedent`
+      SELECT
+        @'bar ar',
+        @'bar\\'x',
+        @'bar''y'
       FROM
         tbl;
     `);

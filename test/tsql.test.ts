@@ -29,7 +29,7 @@ describe('TSqlFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
-  supportsComments(format);
+  supportsComments(format, { nestedBlockComments: true });
   supportsCreateView(format, { materialized: true });
   supportsCreateTable(format);
   supportsDropTable(format, { ifExists: true });
@@ -42,8 +42,8 @@ describe('TSqlFormatter', () => {
   supportsUpdate(format, { whereCurrentOf: true });
   supportsTruncateTable(format);
   supportsMergeInto(format);
-  supportsStrings(format, ["N''", "''"]);
-  supportsIdentifiers(format, [`""`, '[]']);
+  supportsStrings(format, ["N''", "''-qq"]);
+  supportsIdentifiers(format, [`""-qq`, '[]']);
   supportsBetween(format);
   supportsOperators(format, [
     '%',

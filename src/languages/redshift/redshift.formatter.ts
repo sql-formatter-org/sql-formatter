@@ -150,8 +150,8 @@ export default class RedshiftFormatter extends Formatter {
       reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      stringTypes: ["''"],
-      identTypes: [`""`],
+      stringTypes: ["''-qq"],
+      identTypes: [`""-qq`],
       identChars: { first: '#' },
       paramTypes: { numbered: ['$'] },
       operators: [

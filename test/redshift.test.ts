@@ -39,8 +39,8 @@ describe('RedshiftFormatter', () => {
   supportsInsertInto(format);
   supportsUpdate(format);
   supportsTruncateTable(format, { withoutTable: true });
-  supportsStrings(format, ["''"]);
-  supportsIdentifiers(format, [`""`]);
+  supportsStrings(format, ["''-qq"]);
+  supportsIdentifiers(format, [`""-qq`]);
   // Missing: '#' operator
   supportsOperators(format, ['^', '%', '@', '|/', '||/', '&', '|', '~', '<<', '>>', '||']);
   supportsJoin(format);
