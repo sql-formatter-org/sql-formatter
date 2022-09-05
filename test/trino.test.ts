@@ -44,8 +44,8 @@ describe('TrinoFormatter', () => {
   supportsInsertInto(format);
   supportsUpdate(format);
   supportsTruncateTable(format);
-  supportsStrings(format, ["''", "X''", "U&''"]);
-  supportsIdentifiers(format, ['""']);
+  supportsStrings(format, ["''-qq", "X''", "U&''"]);
+  supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   supportsOperators(format, TrinoFormatter.operators, ['AND', 'OR']);
   supportsArrayLiterals(format);

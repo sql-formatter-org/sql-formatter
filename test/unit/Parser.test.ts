@@ -12,8 +12,8 @@ describe('Parser', () => {
       reservedFunctionNames: ['SQRT', 'CURRENT_TIME'],
       reservedKeywords: ['BETWEEN', 'LIKE', 'ON', 'USING'],
       extraParens: ['[]', '{}'],
-      stringTypes: ["''"],
-      identTypes: ['""'],
+      stringTypes: ["''-qq"],
+      identTypes: ['""-qq'],
     });
 
     return createParser(tokenizer).parse(sql, {});

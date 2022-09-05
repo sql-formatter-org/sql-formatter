@@ -45,8 +45,8 @@ describe('Db2Formatter', () => {
   supportsUpdate(format, { whereCurrentOf: true });
   supportsTruncateTable(format, { withoutTable: true });
   supportsMergeInto(format);
-  supportsStrings(format, ["''", "X''", "U&''", "N''"]);
-  supportsIdentifiers(format, [`""`]);
+  supportsStrings(format, ["''-qq", "X''", "U&''", "N''"]);
+  supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, Db2Formatter.operators);

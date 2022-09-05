@@ -96,25 +96,35 @@ const buildQStringPatterns = () => {
   return qStringPattern;
 };
 
-// This enables the following quote styles:
-// 1. backtick quoted using `` to escape
-// 2. square bracket quoted (SQL Server) using ]] to escape
-// 3. double quoted using "" or \" to escape
-// 4. single quoted using '' or \' to escape
-// 5. PostgreSQL dollar-quoted
-// 6. BigQuery '''triple-quoted'''
-// 7. BigQuery """triple-quoted"""
-// 8. Hive and Spark variables: ${name}
-// 9. Oracle q'' strings: q'<text>' q'|text|' ...
+// Regex patterns for all supported quote styles.
+//
+// Most of them have a single escaping-style built in,
+// but "" and '' support multiple versions of escapes,
+// which must be selected with suffixes: -qq, -bs, -qq-bs, -raw
 export const quotePatterns = {
-  '``': '(?:`[^`]*(?:$|`))+',
-  '[]': String.raw`(?:\[[^\]]*(?:$|\]))(?:\][^\]]*(?:$|\]))*`,
-  '""': String.raw`(?:"[^"\\]*(?:\\.[^"\\]*)*(?:"|$))+`,
-  "''": String.raw`(?:'[^'\\]*(?:\\.[^'\\]*)*(?:'|$))+`,
-  '$$': String.raw`(?<tag>\$\w*\$)[\s\S]*?(?:\k<tag>|$)`,
-  "'''..'''": String.raw`'''[^\\]*?(?:\\.[^\\]*?)*?(?:'''|$)`,
-  '""".."""': String.raw`"""[^\\]*?(?:\\.[^\\]*?)*?(?:"""|$)`,
-  '{}': String.raw`(?:\{[^\}]*(?:$|\}))`,
+  // - backtick quoted (using `` to escape)
+  '``': '(?:`[^`]*`)+',
+  // - Transact-SQL square bracket quoted (using ]] to escape)
+  '[]': String.raw`(?:\[[^\]]*\])(?:\][^\]]*\])*`,
+  // double-quoted
+  '""-qq': String.raw`(?:"[^"]*")+`, // with repeated quote escapes
+  '""-bs': String.raw`(?:"[^"\\]*(?:\\.[^"\\]*)*")`, // with backslash escapes
+  '""-qq-bs': String.raw`(?:"[^"\\]*(?:\\.[^"\\]*)*")+`, // with repeated quote or backslash escapes
+  '""-raw': String.raw`(?:"[^"]*")`, // no escaping
+  // single-quoted
+  "''-qq": String.raw`(?:'[^']*')+`, // with repeated quote escapes
+  "''-bs": String.raw`(?:'[^'\\]*(?:\\.[^'\\]*)*')`, // with backslash escapes
+  "''-qq-bs": String.raw`(?:'[^'\\]*(?:\\.[^'\\]*)*')+`, // with repeated quote or backslash escapes
+  "''-raw": String.raw`(?:'[^']*')`, // no escaping
+  // PostgreSQL dollar-quoted
+  '$$': String.raw`(?<tag>\$\w*\$)[\s\S]*?\k<tag>`,
+  // BigQuery '''triple-quoted''' (using \' to escape)
+  "'''..'''": String.raw`'''[^\\]*?(?:\\.[^\\]*?)*?'''`,
+  // BigQuery """triple-quoted""" (using \" to escape)
+  '""".."""': String.raw`"""[^\\]*?(?:\\.[^\\]*?)*?"""`,
+  // Hive and Spark variables: ${name}
+  '{}': String.raw`(?:\{[^\}]*\})`,
+  // Oracle q'' strings: q'<text>' q'|text|' ...
   "q''": buildQStringPatterns(),
 };
 

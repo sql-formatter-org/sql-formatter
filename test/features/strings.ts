@@ -4,23 +4,25 @@ import dedent from 'dedent-js';
 import { FormatFn } from 'src/sqlFormatter';
 
 type StringType =
-  | '""'
-  | "''"
-  | 'U&""'
-  | "U&''"
-  | "N''"
-  | "X''"
-  | 'X""'
-  | "B''"
-  | 'B""'
-  | "R''"
-  | 'R""';
+  // Note: ""-qq and ""-bs can be combined to allow for both types of escaping
+  | '""-qq' // with repeated-quote escaping
+  | '""-bs' // with backslash escaping
+  // Note: ''-qq and ''-bs can be combined to allow for both types of escaping
+  | "''-qq" // with repeated-quote escaping
+  | "''-bs" // with backslash escaping
+  | "U&''" // with repeated-quote escaping
+  | "N''" // with escaping style depending on whether also ''-qq or ''-bs was specified
+  | "X''" // no escaping
+  | 'X""' // no escaping
+  | "B''" // no escaping
+  | 'B""' // no escaping
+  | "R''" // no escaping
+  | 'R""'; // no escaping
 
 export default function supportsStrings(format: FormatFn, stringTypes: StringType[]) {
-  if (stringTypes.includes('""')) {
+  if (stringTypes.includes('""-qq') || stringTypes.includes('""-bs')) {
     it('supports double-quoted strings', () => {
       expect(format('"foo JOIN bar"')).toBe('"foo JOIN bar"');
-      expect(format('"foo \\" JOIN bar"')).toBe('"foo \\" JOIN bar"');
       expect(format('SELECT "where" FROM "update"')).toBe(dedent`
         SELECT
           "where"
@@ -28,16 +30,35 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
           "update"
       `);
     });
+  }
 
+  if (stringTypes.includes('""-qq')) {
     it('supports escaping double-quote by doubling it', () => {
       expect(format('"foo""bar"')).toBe('"foo""bar"');
     });
+
+    if (!stringTypes.includes('""-bs')) {
+      it('does not support escaping double-quote with a backslash', () => {
+        expect(() => format('"foo \\" JOIN bar"')).toThrowError('Parse error: Unexpected """');
+      });
+    }
   }
 
-  if (stringTypes.includes("''")) {
+  if (stringTypes.includes('""-bs')) {
+    it('supports escaping double-quote with a backslash', () => {
+      expect(format('"foo \\" JOIN bar"')).toBe('"foo \\" JOIN bar"');
+    });
+
+    if (!stringTypes.includes('""-qq')) {
+      it('does not support escaping double-quote by doubling it', () => {
+        expect(format('"foo "" JOIN bar"')).toBe('"foo " " JOIN bar"');
+      });
+    }
+  }
+
+  if (stringTypes.includes("''-qq") || stringTypes.includes("''-bs")) {
     it('supports single-quoted strings', () => {
       expect(format("'foo JOIN bar'")).toBe("'foo JOIN bar'");
-      expect(format("'foo \\' JOIN bar'")).toBe("'foo \\' JOIN bar'");
       expect(format("SELECT 'where' FROM 'update'")).toBe(dedent`
         SELECT
           'where'
@@ -45,33 +66,35 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
           'update'
       `);
     });
+  }
 
+  if (stringTypes.includes("''-qq")) {
     it('supports escaping single-quote by doubling it', () => {
       expect(format("'foo''bar'")).toBe("'foo''bar'");
     });
+
+    if (!stringTypes.includes("''-bs")) {
+      it('does not support escaping single-quote with a backslash', () => {
+        expect(() => format("'foo \\' JOIN bar'")).toThrowError(`Parse error: Unexpected "'"`);
+      });
+    }
   }
 
-  if (stringTypes.includes('U&""')) {
-    it('supports unicode double-quoted strings', () => {
-      expect(format('U&"foo JOIN bar"')).toBe('U&"foo JOIN bar"');
-      expect(format('U&"foo \\" JOIN bar"')).toBe('U&"foo \\" JOIN bar"');
-      expect(format('SELECT U&"where" FROM U&"update"')).toBe(dedent`
-        SELECT
-          U&"where"
-        FROM
-          U&"update"
-      `);
+  if (stringTypes.includes("''-bs")) {
+    it('supports escaping single-quote with a backslash', () => {
+      expect(format("'foo \\' JOIN bar'")).toBe("'foo \\' JOIN bar'");
     });
 
-    it("detects consecutive U&'' strings as separate ones", () => {
-      expect(format("U&'foo'U&'bar'")).toBe("U&'foo' U&'bar'");
-    });
+    if (!stringTypes.includes("''-qq")) {
+      it('does not support escaping single-quote by doubling it', () => {
+        expect(format("'foo '' JOIN bar'")).toBe("'foo ' ' JOIN bar'");
+      });
+    }
   }
 
   if (stringTypes.includes("U&''")) {
-    it('supports single-quoted strings', () => {
+    it('supports unicode single-quoted strings', () => {
       expect(format("U&'foo JOIN bar'")).toBe("U&'foo JOIN bar'");
-      expect(format("U&'foo \\' JOIN bar'")).toBe("U&'foo \\' JOIN bar'");
       expect(format("SELECT U&'where' FROM U&'update'")).toBe(dedent`
         SELECT
           U&'where'
@@ -79,12 +102,19 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
           U&'update'
       `);
     });
+
+    it("supports escaping in U&'' strings with repeated quote", () => {
+      expect(format("U&'foo '' JOIN bar'")).toBe("U&'foo '' JOIN bar'");
+    });
+
+    it("detects consecutive U&'' strings as separate ones", () => {
+      expect(format("U&'foo'U&'bar'")).toBe("U&'foo' U&'bar'");
+    });
   }
 
   if (stringTypes.includes("N''")) {
     it('supports T-SQL unicode strings', () => {
       expect(format("N'foo JOIN bar'")).toBe("N'foo JOIN bar'");
-      expect(format("N'foo \\' JOIN bar'")).toBe("N'foo \\' JOIN bar'");
       expect(format("SELECT N'where' FROM N'update'")).toBe(dedent`
         SELECT
           N'where'
@@ -92,6 +122,17 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
           N'update'
       `);
     });
+
+    if (stringTypes.includes("''-qq")) {
+      it("supports escaping in N'' strings with repeated quote", () => {
+        expect(format("N'foo '' JOIN bar'")).toBe("N'foo '' JOIN bar'");
+      });
+    }
+    if (stringTypes.includes("''-bs")) {
+      it("supports escaping in N'' strings with a backslash", () => {
+        expect(format("N'foo \\' JOIN bar'")).toBe("N'foo \\' JOIN bar'");
+      });
+    }
 
     it("detects consecutive N'' strings as separate ones", () => {
       expect(format("N'foo'N'bar'")).toBe("N'foo' N'bar'");
@@ -167,12 +208,11 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
   }
 
   if (stringTypes.includes("R''")) {
-    it('supports raw strings', () => {
-      expect(format("r'abc'")).toBe("r'abc'");
-      expect(format("R'ha ha'")).toBe("R'ha ha'");
-      expect(format("SELECT r'some text' FROM foo")).toBe(dedent`
+    it('supports no escaping in raw strings', () => {
+      expect(format("SELECT r'some \\',R'text' FROM foo")).toBe(dedent`
         SELECT
-          r'some text'
+          r'some \\',
+          R'text'
         FROM
           foo
       `);
@@ -184,12 +224,11 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
   }
 
   if (stringTypes.includes('R""')) {
-    it('supports raw strings (with double-quotes)', () => {
-      expect(format(`r"abc"`)).toBe(`r"abc"`);
-      expect(format(`R"ha ha"`)).toBe(`R"ha ha"`);
-      expect(format(`SELECT r"some text" FROM foo`)).toBe(dedent`
+    it('supports no escaping in raw strings (with double-quotes)', () => {
+      expect(format(`SELECT r"some \\", R"text" FROM foo`)).toBe(dedent`
         SELECT
-          r"some text"
+          r"some \\",
+          R"text"
         FROM
           foo
       `);

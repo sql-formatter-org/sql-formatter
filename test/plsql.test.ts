@@ -47,8 +47,8 @@ describe('PlSqlFormatter', () => {
   supportsUpdate(format);
   supportsTruncateTable(format);
   supportsMergeInto(format);
-  supportsStrings(format, ["''", "N''"]);
-  supportsIdentifiers(format, [`""`]);
+  supportsStrings(format, ["''-qq", "N''"]);
+  supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, PlSqlFormatter.operators, ['AND', 'OR', 'XOR']);
