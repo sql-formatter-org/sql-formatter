@@ -1,8 +1,8 @@
 import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
-import { functions } from './tsql.functions';
-import { keywords } from './tsql.keywords';
+import { functions } from './transactsql.functions';
+import { keywords } from './transactsql.keywords';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
@@ -213,7 +213,7 @@ const reservedJoins = expandPhrases([
 const reservedPhrases = expandPhrases(['ON DELETE', 'ON UPDATE', '{ROWS | RANGE} BETWEEN']);
 
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
-export default class TSqlFormatter extends Formatter {
+export default class TransactSqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
       reservedCommands,

@@ -24,7 +24,7 @@ import supportsTruncateTable from './features/truncateTable';
 import supportsMergeInto from './features/mergeInto';
 import supportsCreateView from './features/createView';
 
-describe('TSqlFormatter', () => {
+describe('TransactSqlFormatter', () => {
   const language = 'tsql';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
