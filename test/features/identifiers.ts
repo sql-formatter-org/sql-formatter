@@ -84,7 +84,7 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: I
       expect(format('U&"foo "" JOIN bar"')).toBe('U&"foo "" JOIN bar"');
     });
 
-    it('detects consecuitive U&"" identifiers as separate ones', () => {
+    it('detects consecutive U&"" identifiers as separate ones', () => {
       expect(format('U&"foo"U&"bar"')).toBe('U&"foo" U&"bar"');
     });
 
