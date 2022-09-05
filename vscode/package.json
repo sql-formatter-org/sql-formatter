@@ -47,6 +47,7 @@
     "sqlite",
     "sql server",
     "trino",
+    "transactsql",
     "tsql"
   ],
   "activationEvents": [
@@ -128,7 +129,7 @@
             "spark",
             "sqlite",
             "trino",
-            "tsql"
+            "transactsql"
           ],
           "default": "sql",
           "markdownDescription": "Formats `sql` files in another SQL Flavour when no VSCode Language exists, such as the Microsoft PostgreSQL & MSSQL Extensions"
