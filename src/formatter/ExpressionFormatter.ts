@@ -289,6 +289,7 @@ export default class ExpressionFormatter {
   }
 
   private formatInlineExpression(nodes: AstNode[]): Layout | undefined {
+    const oldParamIndex = this.params.index;
     try {
       return new ExpressionFormatter({
         cfg: this.cfg,
@@ -298,6 +299,11 @@ export default class ExpressionFormatter {
       }).format(nodes);
     } catch (e) {
       if (e instanceof InlineLayoutError) {
+        // While formatting, some of the positional parameters might have
+        // been consumed, which increased the current parameter index.
+        // We reset the index to an earlier state, so we can run the
+        // formatting again and re-consume these parameters in non-inline mode.
+        this.params.index = oldParamIndex;
         return undefined;
       } else {
         // forward all unexpected errors

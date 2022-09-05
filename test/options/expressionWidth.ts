@@ -65,4 +65,32 @@ export default function supportsExpressionWidth(format: FormatFn) {
       (amount>25);
     `);
   });
+
+  it('formats inline when length of substituted parameters < expressionWidth', () => {
+    const result = format('SELECT (?, ?, ?) AS total;', {
+      expressionWidth: 11,
+      paramTypes: { positional: true },
+      params: ['10', '20', '30'],
+    });
+    expect(result).toBe(dedent`
+      SELECT
+        (10, 20, 30) AS total;
+    `);
+  });
+
+  it('formats NOT-inline when length of substituted parameters > expressionWidth', () => {
+    const result = format('SELECT (?, ?, ?) AS total;', {
+      expressionWidth: 11,
+      paramTypes: { positional: true },
+      params: ['100', '200', '300'],
+    });
+    expect(result).toBe(dedent`
+      SELECT
+        (
+          100,
+          200,
+          300
+        ) AS total;
+    `);
+  });
 }
