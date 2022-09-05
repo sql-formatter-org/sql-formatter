@@ -289,7 +289,7 @@ export default class ExpressionFormatter {
   }
 
   private formatInlineExpression(nodes: AstNode[]): Layout | undefined {
-    const oldParamIndex = this.params.index;
+    const oldParamIndex = this.params.getPositionalParameterIndex();
     try {
       return new ExpressionFormatter({
         cfg: this.cfg,
@@ -303,7 +303,7 @@ export default class ExpressionFormatter {
         // been consumed, which increased the current parameter index.
         // We reset the index to an earlier state, so we can run the
         // formatting again and re-consume these parameters in non-inline mode.
-        this.params.index = oldParamIndex;
+        this.params.setPositionalParameterIndex(oldParamIndex);
         return undefined;
       } else {
         // forward all unexpected errors
