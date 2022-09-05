@@ -185,6 +185,13 @@ describe('PostgreSqlFormatter', () => {
     `);
   });
 
+  it('formats type-cast operator without spaces', () => {
+    expect(format('SELECT 2 :: numeric AS foo;')).toBe(dedent`
+      SELECT
+        2::numeric AS foo;
+    `);
+  });
+
   // issue #144 (unsolved)
   // This is currently far from ideal.
   it('formats SELECT DISTINCT ON () syntax', () => {

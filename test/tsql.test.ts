@@ -45,6 +45,7 @@ describe('TSqlFormatter', () => {
   supportsStrings(format, ["N''", "''-qq"]);
   supportsIdentifiers(format, [`""-qq`, '[]']);
   supportsBetween(format);
+  // Missing: `::` scope resolution operator (tested separately)
   supportsOperators(format, [
     '%',
     '&',
@@ -104,6 +105,13 @@ describe('TSqlFormatter', () => {
         ##flam
       FROM
         tbl;
+    `);
+  });
+
+  it('formats scope resolution operator without spaces', () => {
+    expect(format('SELECT hierarchyid :: GetRoot();')).toBe(dedent`
+      SELECT
+        hierarchyid::GetRoot ();
     `);
   });
 
