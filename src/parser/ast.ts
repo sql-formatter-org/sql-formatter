@@ -96,6 +96,7 @@ export type PropertyAccessNode = {
   type: NodeType.property_access;
   object: AstNode;
   property: IdentifierNode;
+  loc: Loc;
 };
 
 export type IdentifierNode = {

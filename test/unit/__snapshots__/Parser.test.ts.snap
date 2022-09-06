@@ -271,6 +271,10 @@ Array [
       Object {
         "children": Array [
           Object {
+            "loc": Object {
+              "end": 14,
+              "start": 7,
+            },
             "object": Object {
               "loc": Object {
                 "end": 12,
@@ -705,7 +709,15 @@ Array [
       Object {
         "children": Array [
           Object {
+            "loc": Object {
+              "end": 18,
+              "start": 7,
+            },
             "object": Object {
+              "loc": Object {
+                "end": 14,
+                "start": 7,
+              },
               "object": Object {
                 "loc": Object {
                   "end": 10,

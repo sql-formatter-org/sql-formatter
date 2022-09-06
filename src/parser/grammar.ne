@@ -188,6 +188,7 @@ property_access -> simple_expression %DOT (identifier | array_subscript | all_co
       type: NodeType.property_access,
       object,
       property,
+      loc: { start: object.loc.start, end: property.loc.end },
     };
   }
 %}
