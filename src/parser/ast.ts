@@ -31,12 +31,14 @@ export type ClauseNode = {
   type: NodeType.clause;
   name: KeywordNode;
   children: AstNode[];
+  loc: Loc;
 };
 
 export type SetOperationNode = {
   type: NodeType.set_operation;
   name: KeywordNode;
   children: AstNode[];
+  loc: Loc;
 };
 
 export type FunctionCallNode = {
@@ -79,6 +81,7 @@ export type LimitClauseNode = {
   name: KeywordNode;
   count: AstNode[];
   offset?: AstNode[];
+  loc: Loc;
 };
 
 // The "*" operator used in SELECT *

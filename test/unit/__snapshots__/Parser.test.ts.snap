@@ -96,6 +96,10 @@ Array [
             "type": "literal",
           },
         ],
+        "loc": Object {
+          "end": 8,
+          "start": 0,
+        },
         "name": Object {
           "loc": Object {
             "end": 5,
@@ -146,6 +150,10 @@ Array [
             "type": "literal",
           },
         ],
+        "loc": Object {
+          "end": 20,
+          "start": 0,
+        },
         "name": Object {
           "loc": Object {
             "end": 5,
@@ -206,6 +214,10 @@ Array [
             "type": "literal",
           },
         ],
+        "loc": Object {
+          "end": 13,
+          "start": 0,
+        },
         "name": Object {
           "loc": Object {
             "end": 5,

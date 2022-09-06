@@ -1,7 +1,7 @@
 @preprocessor typescript
 @{%
 import LexerAdapter from 'src/parser/LexerAdapter';
-import { NodeType } from 'src/parser/ast';
+import { NodeType, AstNode } from 'src/parser/ast';
 import { Token, TokenType } from 'src/lexer/token';
 
 // The lexer here is only to provide the has() method,
@@ -15,6 +15,9 @@ const lexer = new LexerAdapter(chunk => []);
 //
 // which otherwise produce single element nested inside two arrays
 const unwrap = <T>([[el]]: T[][]): T => el;
+
+// Last item in array
+const last = <T>(arr: T[]): T => arr[arr.length - 1];
 
 const toKeywordNode = (token: Token) => ({
   type: NodeType.keyword,
@@ -68,12 +71,14 @@ limit_clause -> %LIMIT commaless_expression:+ (%COMMA expression:+):? {%
         name: toKeywordNode(limitToken),
         offset: exp1,
         count: exp2,
+        loc: { start: limitToken.loc.start, end: last(exp2 as AstNode[]).loc.end },
       };
     } else {
       return {
         type: NodeType.limit_clause,
         name: toKeywordNode(limitToken),
         count: exp1,
+        loc: { start: limitToken.loc.start, end: last(exp1 as AstNode[]).loc.end },
       };
     }
   }
