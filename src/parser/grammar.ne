@@ -127,6 +127,7 @@ array_subscript -> %ARRAY_IDENTIFIER square_brackets {%
     type: NodeType.array_subscript,
     array: { type: NodeType.identifier, text: arrayToken.text, loc: arrayToken.loc },
     parenthesis: brackets,
+    loc: { start: arrayToken.loc.start, end: brackets.loc.end },
   })
 %}
 array_subscript -> %ARRAY_KEYWORD square_brackets {%
@@ -134,6 +135,7 @@ array_subscript -> %ARRAY_KEYWORD square_brackets {%
     type: NodeType.array_subscript,
     array: toKeywordNode(arrayToken),
     parenthesis: brackets,
+    loc: { start: arrayToken.loc.start, end: brackets.loc.end },
   })
 %}
 
@@ -142,6 +144,7 @@ function_call -> %RESERVED_FUNCTION_NAME parenthesis {%
     type: NodeType.function_call,
     name: toKeywordNode(nameToken),
     parenthesis: parens,
+    loc: { start: nameToken.loc.start, end: parens.loc.end },
   })
 %}
 

@@ -323,6 +323,10 @@ Array [
               "text": "my_array",
               "type": "identifier",
             },
+            "loc": Object {
+              "end": 18,
+              "start": 7,
+            },
             "parenthesis": Object {
               "children": Array [
                 Object {
@@ -432,6 +436,10 @@ Array [
       Object {
         "children": Array [
           Object {
+            "loc": Object {
+              "end": 14,
+              "start": 7,
+            },
             "name": Object {
               "loc": Object {
                 "end": 11,
@@ -515,6 +523,10 @@ Array [
             "type": "comma",
           },
           Object {
+            "loc": Object {
+              "end": 37,
+              "start": 23,
+            },
             "name": Object {
               "loc": Object {
                 "end": 35,

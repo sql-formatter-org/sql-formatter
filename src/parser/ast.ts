@@ -43,6 +43,7 @@ export type FunctionCallNode = {
   type: NodeType.function_call;
   name: KeywordNode;
   parenthesis: ParenthesisNode;
+  loc: Loc;
 };
 
 // <ident>[<expr>]
@@ -50,6 +51,7 @@ export type ArraySubscriptNode = {
   type: NodeType.array_subscript;
   array: IdentifierNode | KeywordNode;
   parenthesis: ParenthesisNode;
+  loc: Loc;
 };
 
 export type ParenthesisNode = {
