@@ -1,0 +1,91 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tokenizer tokenizes multiline SQL tokens 1`] = `
+Array [
+  Object {
+    "end": 6,
+    "precedingWhitespace": undefined,
+    "raw": "SELECT",
+    "start": 0,
+    "text": "SELECT",
+    "type": "RESERVED_SELECT",
+  },
+  Object {
+    "end": 17,
+    "precedingWhitespace": " ",
+    "raw": "\\"foo
+ bar\\"",
+    "start": 7,
+    "text": "\\"foo
+ bar\\"",
+    "type": "QUOTED_IDENTIFIER",
+  },
+  Object {
+    "end": 27,
+    "precedingWhitespace": " ",
+    "raw": "/* 
+
+
+ */",
+    "start": 18,
+    "text": "/* 
+
+
+ */",
+    "type": "BLOCK_COMMENT",
+  },
+  Object {
+    "end": 28,
+    "precedingWhitespace": undefined,
+    "raw": ";",
+    "start": 27,
+    "text": ";",
+    "type": "DELIMITER",
+  },
+]
+`;
+
+exports[`Tokenizer tokenizes single line SQL tokens 1`] = `
+Array [
+  Object {
+    "end": 6,
+    "precedingWhitespace": undefined,
+    "raw": "SELECT",
+    "start": 0,
+    "text": "SELECT",
+    "type": "RESERVED_SELECT",
+  },
+  Object {
+    "end": 8,
+    "precedingWhitespace": " ",
+    "raw": "*",
+    "start": 7,
+    "text": "*",
+    "type": "ASTERISK",
+  },
+  Object {
+    "end": 13,
+    "precedingWhitespace": " ",
+    "raw": "FROM",
+    "start": 9,
+    "text": "FROM",
+    "type": "RESERVED_COMMAND",
+  },
+  Object {
+    "end": 17,
+    "precedingWhitespace": " ",
+    "raw": "foo",
+    "start": 14,
+    "text": "foo",
+    "type": "IDENTIFIER",
+  },
+  Object {
+    "end": 18,
+    "precedingWhitespace": undefined,
+    "raw": ";",
+    "start": 17,
+    "text": ";",
+    "type": "DELIMITER",
+  },
+]
+`;
