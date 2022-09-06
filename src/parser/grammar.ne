@@ -109,6 +109,10 @@ set_operation -> %RESERVED_SET_OPERATION expression:* {%
     type: NodeType.set_operation,
     name: toKeywordNode(nameToken),
     children,
+    loc: {
+      start: nameToken.loc.start,
+      end: children.length > 0 ? last(children as AstNode[]).loc.end : nameToken.loc.end,
+    },
   })
 %}
 

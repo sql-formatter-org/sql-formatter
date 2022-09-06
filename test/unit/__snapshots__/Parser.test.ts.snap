@@ -834,6 +834,10 @@ Array [
       },
       Object {
         "children": Array [],
+        "loc": Object {
+          "end": 29,
+          "start": 20,
+        },
         "name": Object {
           "loc": Object {
             "end": 29,
