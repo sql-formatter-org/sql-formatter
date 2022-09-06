@@ -62,6 +62,10 @@ Array [
             "type": "between_predicate",
           },
         ],
+        "loc": Object {
+          "end": 27,
+          "start": 0,
+        },
         "name": Object {
           "loc": Object {
             "end": 5,
@@ -261,6 +265,10 @@ Array [
             "type": "all_columns_asterisk",
           },
         ],
+        "loc": Object {
+          "end": 8,
+          "start": 0,
+        },
         "name": Object {
           "loc": Object {
             "end": 6,
@@ -309,6 +317,10 @@ Array [
             "type": "property_access",
           },
         ],
+        "loc": Object {
+          "end": 14,
+          "start": 0,
+        },
         "name": Object {
           "loc": Object {
             "end": 6,
@@ -369,6 +381,10 @@ Array [
             "type": "array_subscript",
           },
         ],
+        "loc": Object {
+          "end": 18,
+          "start": 0,
+        },
         "name": Object {
           "loc": Object {
             "end": 6,
@@ -430,6 +446,10 @@ Array [
             "type": "parenthesis",
           },
         ],
+        "loc": Object {
+          "end": 17,
+          "start": 0,
+        },
         "name": Object {
           "loc": Object {
             "end": 6,
@@ -492,6 +512,10 @@ Array [
             "type": "function_call",
           },
         ],
+        "loc": Object {
+          "end": 14,
+          "start": 0,
+        },
         "name": Object {
           "loc": Object {
             "end": 6,
@@ -578,6 +602,10 @@ Array [
             "type": "identifier",
           },
         ],
+        "loc": Object {
+          "end": 39,
+          "start": 0,
+        },
         "name": Object {
           "loc": Object {
             "end": 6,
@@ -699,6 +727,10 @@ Array [
             "type": "parenthesis",
           },
         ],
+        "loc": Object {
+          "end": 40,
+          "start": 0,
+        },
         "name": Object {
           "loc": Object {
             "end": 6,
@@ -763,6 +795,10 @@ Array [
             "type": "property_access",
           },
         ],
+        "loc": Object {
+          "end": 18,
+          "start": 0,
+        },
         "name": Object {
           "loc": Object {
             "end": 6,
@@ -797,6 +833,10 @@ Array [
             "type": "identifier",
           },
         ],
+        "loc": Object {
+          "end": 10,
+          "start": 0,
+        },
         "name": Object {
           "loc": Object {
             "end": 6,
@@ -820,6 +860,10 @@ Array [
             "type": "identifier",
           },
         ],
+        "loc": Object {
+          "end": 19,
+          "start": 11,
+        },
         "name": Object {
           "loc": Object {
             "end": 15,
@@ -861,6 +905,10 @@ Array [
             "type": "identifier",
           },
         ],
+        "loc": Object {
+          "end": 40,
+          "start": 30,
+        },
         "name": Object {
           "loc": Object {
             "end": 36,
@@ -884,6 +932,10 @@ Array [
             "type": "identifier",
           },
         ],
+        "loc": Object {
+          "end": 49,
+          "start": 41,
+        },
         "name": Object {
           "loc": Object {
             "end": 45,
@@ -959,6 +1011,10 @@ Array [
             "type": "parenthesis",
           },
         ],
+        "loc": Object {
+          "end": 16,
+          "start": 0,
+        },
         "name": Object {
           "loc": Object {
             "end": 6,
