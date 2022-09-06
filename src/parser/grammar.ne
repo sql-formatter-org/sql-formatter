@@ -48,6 +48,10 @@ statement -> expressions_or_clauses (%DELIMITER | %EOF) {%
     type: NodeType.statement,
     children,
     hasSemicolon: delimiter.type === TokenType.DELIMITER,
+    loc: {
+      start: children.length > 0 ? children[0].loc.start : delimiter.loc.start,
+      end: delimiter.loc.end,
+    },
   })
 %}
 

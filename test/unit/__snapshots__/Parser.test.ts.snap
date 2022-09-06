@@ -80,6 +80,10 @@ Array [
       },
     ],
     "hasSemicolon": false,
+    "loc": Object {
+      "end": Infinity,
+      "start": 0,
+    },
     "type": "statement",
   },
 ]
@@ -118,6 +122,10 @@ Array [
       },
     ],
     "hasSemicolon": true,
+    "loc": Object {
+      "end": 9,
+      "start": 0,
+    },
     "type": "statement",
   },
 ]
@@ -198,6 +206,10 @@ Array [
       },
     ],
     "hasSemicolon": true,
+    "loc": Object {
+      "end": 21,
+      "start": 0,
+    },
     "type": "statement",
   },
 ]
@@ -246,6 +258,10 @@ Array [
       },
     ],
     "hasSemicolon": true,
+    "loc": Object {
+      "end": 14,
+      "start": 0,
+    },
     "type": "statement",
   },
 ]
@@ -283,6 +299,10 @@ Array [
       },
     ],
     "hasSemicolon": false,
+    "loc": Object {
+      "end": Infinity,
+      "start": 0,
+    },
     "type": "statement",
   },
 ]
@@ -335,6 +355,10 @@ Array [
       },
     ],
     "hasSemicolon": false,
+    "loc": Object {
+      "end": Infinity,
+      "start": 0,
+    },
     "type": "statement",
   },
 ]
@@ -399,6 +423,10 @@ Array [
       },
     ],
     "hasSemicolon": false,
+    "loc": Object {
+      "end": Infinity,
+      "start": 0,
+    },
     "type": "statement",
   },
 ]
@@ -464,6 +492,10 @@ Array [
       },
     ],
     "hasSemicolon": true,
+    "loc": Object {
+      "end": 18,
+      "start": 0,
+    },
     "type": "statement",
   },
 ]
@@ -530,6 +562,10 @@ Array [
       },
     ],
     "hasSemicolon": false,
+    "loc": Object {
+      "end": Infinity,
+      "start": 0,
+    },
     "type": "statement",
   },
 ]
@@ -620,6 +656,10 @@ Array [
       },
     ],
     "hasSemicolon": true,
+    "loc": Object {
+      "end": 40,
+      "start": 0,
+    },
     "type": "statement",
   },
 ]
@@ -639,6 +679,10 @@ Array [
       },
     ],
     "hasSemicolon": true,
+    "loc": Object {
+      "end": 4,
+      "start": 0,
+    },
     "type": "statement",
   },
   Object {
@@ -653,6 +697,10 @@ Array [
       },
     ],
     "hasSemicolon": false,
+    "loc": Object {
+      "end": Infinity,
+      "start": 5,
+    },
     "type": "statement",
   },
 ]
@@ -745,6 +793,10 @@ Array [
       },
     ],
     "hasSemicolon": false,
+    "loc": Object {
+      "end": Infinity,
+      "start": 0,
+    },
     "type": "statement",
   },
 ]
@@ -813,6 +865,10 @@ Array [
       },
     ],
     "hasSemicolon": true,
+    "loc": Object {
+      "end": 19,
+      "start": 0,
+    },
     "type": "statement",
   },
 ]
@@ -950,6 +1006,10 @@ Array [
       },
     ],
     "hasSemicolon": false,
+    "loc": Object {
+      "end": Infinity,
+      "start": 0,
+    },
     "type": "statement",
   },
 ]
@@ -1029,6 +1089,10 @@ Array [
       },
     ],
     "hasSemicolon": true,
+    "loc": Object {
+      "end": 17,
+      "start": 0,
+    },
     "type": "statement",
   },
 ]

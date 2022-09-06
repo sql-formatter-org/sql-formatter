@@ -25,6 +25,7 @@ export type StatementNode = {
   type: NodeType.statement;
   children: AstNode[];
   hasSemicolon: boolean;
+  loc: Loc;
 };
 
 export type ClauseNode = {
