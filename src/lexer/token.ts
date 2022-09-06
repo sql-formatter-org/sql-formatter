@@ -54,16 +54,19 @@ export interface Loc {
   end: number; // 0-based index of where the token ends in the query string
 }
 
+/** Creates EOF token positioned at given location */
+export const createEofToken = (index: number) => ({
+  type: TokenType.EOF,
+  raw: '«EOF»',
+  text: '«EOF»',
+  loc: { start: index, end: index },
+});
+
 /**
  * For use as a "missing token"
  * e.g. in lookAhead and lookBehind to avoid dealing with null values
  */
-export const EOF_TOKEN: Token = {
-  type: TokenType.EOF,
-  raw: '«EOF»',
-  text: '«EOF»',
-  loc: { start: Infinity, end: Infinity },
-};
+export const EOF_TOKEN = createEofToken(Infinity);
 
 /** Checks if two tokens are equivalent */
 export const testToken =
