@@ -3,31 +3,37 @@
 exports[`Tokenizer tokenizes multiline SQL tokens 1`] = `
 Array [
   Object {
-    "end": 6,
+    "loc": Object {
+      "end": 6,
+      "start": 0,
+    },
     "precedingWhitespace": undefined,
     "raw": "SELECT",
-    "start": 0,
     "text": "SELECT",
     "type": "RESERVED_SELECT",
   },
   Object {
-    "end": 17,
+    "loc": Object {
+      "end": 17,
+      "start": 7,
+    },
     "precedingWhitespace": " ",
     "raw": "\\"foo
  bar\\"",
-    "start": 7,
     "text": "\\"foo
  bar\\"",
     "type": "QUOTED_IDENTIFIER",
   },
   Object {
-    "end": 27,
+    "loc": Object {
+      "end": 27,
+      "start": 18,
+    },
     "precedingWhitespace": " ",
     "raw": "/* 
 
 
  */",
-    "start": 18,
     "text": "/* 
 
 
@@ -35,10 +41,12 @@ Array [
     "type": "BLOCK_COMMENT",
   },
   Object {
-    "end": 28,
+    "loc": Object {
+      "end": 28,
+      "start": 27,
+    },
     "precedingWhitespace": undefined,
     "raw": ";",
-    "start": 27,
     "text": ";",
     "type": "DELIMITER",
   },
@@ -48,42 +56,52 @@ Array [
 exports[`Tokenizer tokenizes single line SQL tokens 1`] = `
 Array [
   Object {
-    "end": 6,
+    "loc": Object {
+      "end": 6,
+      "start": 0,
+    },
     "precedingWhitespace": undefined,
     "raw": "SELECT",
-    "start": 0,
     "text": "SELECT",
     "type": "RESERVED_SELECT",
   },
   Object {
-    "end": 8,
+    "loc": Object {
+      "end": 8,
+      "start": 7,
+    },
     "precedingWhitespace": " ",
     "raw": "*",
-    "start": 7,
     "text": "*",
     "type": "ASTERISK",
   },
   Object {
-    "end": 13,
+    "loc": Object {
+      "end": 13,
+      "start": 9,
+    },
     "precedingWhitespace": " ",
     "raw": "FROM",
-    "start": 9,
     "text": "FROM",
     "type": "RESERVED_COMMAND",
   },
   Object {
-    "end": 17,
+    "loc": Object {
+      "end": 17,
+      "start": 14,
+    },
     "precedingWhitespace": " ",
     "raw": "foo",
-    "start": 14,
     "text": "foo",
     "type": "IDENTIFIER",
   },
   Object {
-    "end": 18,
+    "loc": Object {
+      "end": 18,
+      "start": 17,
+    },
     "precedingWhitespace": undefined,
     "raw": ";",
-    "start": 17,
     "text": ";",
     "type": "DELIMITER",
   },

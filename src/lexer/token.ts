@@ -44,9 +44,14 @@ export interface Token {
   raw: string; // The raw original text that was matched
   text: string; // Cleaned up text e.g. keyword converted to uppercase and extra spaces removed
   key?: string;
+  loc: Loc;
+  precedingWhitespace?: string; // Whitespace before this token, if any
+}
+
+/** Describes location in source code */
+export interface Loc {
   start: number; // 0-based index of the token in the whole query string
   end: number; // 0-based index of where the token ends in the query string
-  precedingWhitespace?: string; // Whitespace before this token, if any
 }
 
 /**
@@ -57,8 +62,7 @@ export const EOF_TOKEN: Token = {
   type: TokenType.EOF,
   raw: '«EOF»',
   text: '«EOF»',
-  start: Infinity,
-  end: Infinity,
+  loc: { start: Infinity, end: Infinity },
 };
 
 /** Checks if two tokens are equivalent */
