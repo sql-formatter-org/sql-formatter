@@ -39,14 +39,15 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsParamTypes(format);
   supportsWindowFunctions(format);
 
-  it('formats simple SELECT query', () => {
-    const result = format('SELECT count(*),Column1 FROM Table1;');
+  it('formats SELECT with asterisks', () => {
+    const result = format('SELECT tbl.*, count(*), col1 * col2 FROM tbl;');
     expect(result).toBe(dedent`
       SELECT
+        tbl.*,
         count(*),
-        Column1
+        col1 * col2
       FROM
-        Table1;
+        tbl;
     `);
   });
 

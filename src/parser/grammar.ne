@@ -171,7 +171,7 @@ square_brackets -> "[" expression:* "]" {%
   })
 %}
 
-property_access -> simple_expression %DOT (identifier | array_subscript) {%
+property_access -> simple_expression %DOT (identifier | array_subscript | all_columns_asterisk) {%
   // Allowing property to be <array_subscript> is currently a hack.
   // A better way would be to allow <property_access> on the left side of array_subscript,
   // but we currently can't do that because of another hack that requires
