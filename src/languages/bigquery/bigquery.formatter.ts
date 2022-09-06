@@ -204,8 +204,10 @@ function combineParameterizedTypes(tokens: Token[]) {
         type: TokenType.IDENTIFIER,
         raw: typeDefTokens.map(formatTypeDefToken('raw')).join(''),
         text: typeDefTokens.map(formatTypeDefToken('text')).join(''),
-        start: token.start,
-        end: token.end + typeDefTokens.map(t => t.text.length).reduce((a, b) => a + b),
+        loc: {
+          start: token.loc.start,
+          end: token.loc.end + typeDefTokens.map(t => t.text.length).reduce((a, b) => a + b),
+        },
       });
       i = endIndex;
     } else {
