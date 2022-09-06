@@ -21,6 +21,7 @@ const toKeywordNode = (token: Token) => ({
   tokenType: token.type,
   text: token.text,
   raw: token.raw,
+  loc: token.loc,
 });
 %}
 @lexer lexer
@@ -87,7 +88,7 @@ select_clause -> %RESERVED_SELECT (all_columns_asterisk expression:* | asteriskl
 %}
 
 all_columns_asterisk -> %ASTERISK {%
-  () => ({ type: NodeType.all_columns_asterisk })
+  ([token]) => ({ type: NodeType.all_columns_asterisk, loc: token.loc })
 %}
 
 other_clause -> %RESERVED_COMMAND expression:* {%
@@ -124,7 +125,7 @@ simple_expression ->
 array_subscript -> %ARRAY_IDENTIFIER square_brackets {%
   ([arrayToken, brackets]) => ({
     type: NodeType.array_subscript,
-    array: { type: NodeType.identifier, text: arrayToken.text },
+    array: { type: NodeType.identifier, text: arrayToken.text, loc: arrayToken.loc },
     parenthesis: brackets,
   })
 %}
@@ -195,9 +196,9 @@ between_predicate -> %BETWEEN commaless_expression %AND commaless_expression {%
   })
 %}
 
-comma -> ( %COMMA ) {% ([[token]]) => ({ type: NodeType.comma }) %}
+comma -> ( %COMMA ) {% ([[token]]) => ({ type: NodeType.comma, loc: token.loc }) %}
 
-asterisk -> ( %ASTERISK ) {% ([[token]]) => ({ type: NodeType.operator, text: token.text }) %}
+asterisk -> ( %ASTERISK ) {% ([[token]]) => ({ type: NodeType.operator, text: token.text, loc: token.loc }) %}
 
 expression_token ->
   ( operator
@@ -207,22 +208,24 @@ expression_token ->
   | keyword
   | comment ) {% unwrap %}
 
-operator -> ( %OPERATOR ) {% ([[token]]) => ({ type: NodeType.operator, text: token.text }) %}
+operator -> ( %OPERATOR ) {% ([[token]]) => ({ type: NodeType.operator, text: token.text, loc: token.loc }) %}
 
 identifier ->
   ( %IDENTIFIER
   | %QUOTED_IDENTIFIER
-  | %VARIABLE ) {% ([[token]]) => ({ type: NodeType.identifier, text: token.text }) %}
+  | %VARIABLE ) {% ([[token]]) => ({ type: NodeType.identifier, text: token.text, loc: token.loc }) %}
 
 parameter ->
   ( %NAMED_PARAMETER
   | %QUOTED_PARAMETER
   | %NUMBERED_PARAMETER
-  | %POSITIONAL_PARAMETER ) {% ([[token]]) => ({ type: NodeType.parameter, key: token.key, text: token.text }) %}
+  | %POSITIONAL_PARAMETER ) {%
+  ([[token]]) => ({ type: NodeType.parameter, key: token.key, text: token.text, loc: token.loc })
+%}
 
 literal ->
   ( %NUMBER
-  | %STRING ) {% ([[token]]) => ({ type: NodeType.literal, text: token.text }) %}
+  | %STRING ) {% ([[token]]) => ({ type: NodeType.literal, text: token.text, loc: token.loc }) %}
 
 keyword ->
   ( %RESERVED_KEYWORD
@@ -242,8 +245,9 @@ comment -> %LINE_COMMENT {%
     type: NodeType.line_comment,
     text: token.text,
     precedingWhitespace: token.precedingWhitespace,
+    loc: token.loc,
   })
 %}
 comment -> %BLOCK_COMMENT {%
-  ([token]) => ({ type: NodeType.block_comment, text: token.text })
+  ([token]) => ({ type: NodeType.block_comment, text: token.text, loc: token.loc })
 %}

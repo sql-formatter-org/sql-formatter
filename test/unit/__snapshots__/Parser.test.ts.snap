@@ -7,17 +7,29 @@ Array [
       Object {
         "children": Array [
           Object {
+            "loc": Object {
+              "end": 9,
+              "start": 6,
+            },
             "text": "age",
             "type": "identifier",
           },
           Object {
             "and": Object {
+              "loc": Object {
+                "end": 24,
+                "start": 21,
+              },
               "raw": "AND",
               "text": "AND",
               "tokenType": "AND",
               "type": "keyword",
             },
             "between": Object {
+              "loc": Object {
+                "end": 17,
+                "start": 10,
+              },
               "raw": "BETWEEN",
               "text": "BETWEEN",
               "tokenType": "BETWEEN",
@@ -25,12 +37,20 @@ Array [
             },
             "expr1": Array [
               Object {
+                "loc": Object {
+                  "end": 20,
+                  "start": 18,
+                },
                 "text": "18",
                 "type": "literal",
               },
             ],
             "expr2": Array [
               Object {
+                "loc": Object {
+                  "end": 27,
+                  "start": 25,
+                },
                 "text": "63",
                 "type": "literal",
               },
@@ -39,6 +59,10 @@ Array [
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 5,
+            "start": 0,
+          },
           "raw": "WHERE",
           "text": "WHERE",
           "tokenType": "RESERVED_COMMAND",
@@ -60,11 +84,19 @@ Array [
       Object {
         "count": Array [
           Object {
+            "loc": Object {
+              "end": 8,
+              "start": 6,
+            },
             "text": "15",
             "type": "literal",
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 5,
+            "start": 0,
+          },
           "raw": "LIMIT",
           "text": "LIMIT",
           "tokenType": "LIMIT",
@@ -86,19 +118,35 @@ Array [
       Object {
         "count": Array [
           Object {
+            "loc": Object {
+              "end": 16,
+              "start": 15,
+            },
             "text": "3",
             "type": "literal",
           },
           Object {
+            "loc": Object {
+              "end": 18,
+              "start": 17,
+            },
             "text": "*",
             "type": "operator",
           },
           Object {
+            "loc": Object {
+              "end": 20,
+              "start": 19,
+            },
             "text": "2",
             "type": "literal",
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 5,
+            "start": 0,
+          },
           "raw": "LIMIT",
           "text": "LIMIT",
           "tokenType": "LIMIT",
@@ -106,14 +154,26 @@ Array [
         },
         "offset": Array [
           Object {
+            "loc": Object {
+              "end": 8,
+              "start": 6,
+            },
             "text": "50",
             "type": "literal",
           },
           Object {
+            "loc": Object {
+              "end": 10,
+              "start": 9,
+            },
             "text": "+",
             "type": "operator",
           },
           Object {
+            "loc": Object {
+              "end": 13,
+              "start": 11,
+            },
             "text": "50",
             "type": "literal",
           },
@@ -134,11 +194,19 @@ Array [
       Object {
         "count": Array [
           Object {
+            "loc": Object {
+              "end": 13,
+              "start": 11,
+            },
             "text": "15",
             "type": "literal",
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 5,
+            "start": 0,
+          },
           "raw": "LIMIT",
           "text": "LIMIT",
           "tokenType": "LIMIT",
@@ -146,6 +214,10 @@ Array [
         },
         "offset": Array [
           Object {
+            "loc": Object {
+              "end": 9,
+              "start": 6,
+            },
             "text": "100",
             "type": "literal",
           },
@@ -166,10 +238,18 @@ Array [
       Object {
         "children": Array [
           Object {
+            "loc": Object {
+              "end": 8,
+              "start": 7,
+            },
             "type": "all_columns_asterisk",
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 6,
+            "start": 0,
+          },
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -192,16 +272,28 @@ Array [
         "children": Array [
           Object {
             "object": Object {
+              "loc": Object {
+                "end": 12,
+                "start": 7,
+              },
               "text": "ident",
               "type": "identifier",
             },
             "property": Object {
+              "loc": Object {
+                "end": 14,
+                "start": 13,
+              },
               "type": "all_columns_asterisk",
             },
             "type": "property_access",
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 6,
+            "start": 0,
+          },
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -224,12 +316,20 @@ Array [
         "children": Array [
           Object {
             "array": Object {
+              "loc": Object {
+                "end": 15,
+                "start": 7,
+              },
               "text": "my_array",
               "type": "identifier",
             },
             "parenthesis": Object {
               "children": Array [
                 Object {
+                  "loc": Object {
+                    "end": 17,
+                    "start": 16,
+                  },
                   "text": "5",
                   "type": "literal",
                 },
@@ -242,6 +342,10 @@ Array [
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 6,
+            "start": 0,
+          },
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -265,14 +369,26 @@ Array [
           Object {
             "children": Array [
               Object {
+                "loc": Object {
+                  "end": 11,
+                  "start": 8,
+                },
                 "text": "foo",
                 "type": "identifier",
               },
               Object {
+                "loc": Object {
+                  "end": 12,
+                  "start": 11,
+                },
                 "text": ":",
                 "type": "operator",
               },
               Object {
+                "loc": Object {
+                  "end": 16,
+                  "start": 13,
+                },
                 "text": "bar",
                 "type": "identifier",
               },
@@ -283,6 +399,10 @@ Array [
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 6,
+            "start": 0,
+          },
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -305,6 +425,10 @@ Array [
         "children": Array [
           Object {
             "name": Object {
+              "loc": Object {
+                "end": 11,
+                "start": 7,
+              },
               "raw": "sqrt",
               "text": "SQRT",
               "tokenType": "RESERVED_FUNCTION_NAME",
@@ -313,6 +437,10 @@ Array [
             "parenthesis": Object {
               "children": Array [
                 Object {
+                  "loc": Object {
+                    "end": 13,
+                    "start": 12,
+                  },
                   "text": "2",
                   "type": "literal",
                 },
@@ -325,6 +453,10 @@ Array [
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 6,
+            "start": 0,
+          },
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -346,20 +478,36 @@ Array [
       Object {
         "children": Array [
           Object {
+            "loc": Object {
+              "end": 19,
+              "start": 7,
+            },
             "raw": "CURRENT_TIME",
             "text": "CURRENT_TIME",
             "tokenType": "RESERVED_KEYWORD",
             "type": "keyword",
           },
           Object {
+            "loc": Object {
+              "end": 21,
+              "start": 20,
+            },
             "text": "a",
             "type": "identifier",
           },
           Object {
+            "loc": Object {
+              "end": 22,
+              "start": 21,
+            },
             "type": "comma",
           },
           Object {
             "name": Object {
+              "loc": Object {
+                "end": 35,
+                "start": 23,
+              },
               "raw": "CURRENT_TIME",
               "text": "CURRENT_TIME",
               "tokenType": "RESERVED_FUNCTION_NAME",
@@ -374,11 +522,19 @@ Array [
             "type": "function_call",
           },
           Object {
+            "loc": Object {
+              "end": 39,
+              "start": 38,
+            },
             "text": "b",
             "type": "identifier",
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 6,
+            "start": 0,
+          },
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -398,6 +554,10 @@ Array [
   Object {
     "children": Array [
       Object {
+        "loc": Object {
+          "end": 3,
+          "start": 0,
+        },
         "text": "foo",
         "type": "identifier",
       },
@@ -408,6 +568,10 @@ Array [
   Object {
     "children": Array [
       Object {
+        "loc": Object {
+          "end": 8,
+          "start": 5,
+        },
         "text": "bar",
         "type": "identifier",
       },
@@ -427,24 +591,44 @@ Array [
           Object {
             "children": Array [
               Object {
+                "loc": Object {
+                  "end": 18,
+                  "start": 8,
+                },
                 "text": "birth_year",
                 "type": "identifier",
               },
               Object {
+                "loc": Object {
+                  "end": 20,
+                  "start": 19,
+                },
                 "text": "-",
                 "type": "operator",
               },
               Object {
                 "children": Array [
                   Object {
+                    "loc": Object {
+                      "end": 34,
+                      "start": 22,
+                    },
                     "text": "CURRENT_DATE",
                     "type": "identifier",
                   },
                   Object {
+                    "loc": Object {
+                      "end": 36,
+                      "start": 35,
+                    },
                     "text": "+",
                     "type": "operator",
                   },
                   Object {
+                    "loc": Object {
+                      "end": 38,
+                      "start": 37,
+                    },
                     "text": "1",
                     "type": "literal",
                   },
@@ -460,6 +644,10 @@ Array [
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 6,
+            "start": 0,
+          },
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -483,16 +671,28 @@ Array [
           Object {
             "object": Object {
               "object": Object {
+                "loc": Object {
+                  "end": 10,
+                  "start": 7,
+                },
                 "text": "foo",
                 "type": "identifier",
               },
               "property": Object {
+                "loc": Object {
+                  "end": 14,
+                  "start": 11,
+                },
                 "text": "bar",
                 "type": "identifier",
               },
               "type": "property_access",
             },
             "property": Object {
+              "loc": Object {
+                "end": 18,
+                "start": 15,
+              },
               "text": "baz",
               "type": "identifier",
             },
@@ -500,6 +700,10 @@ Array [
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 6,
+            "start": 0,
+          },
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -521,11 +725,19 @@ Array [
       Object {
         "children": Array [
           Object {
+            "loc": Object {
+              "end": 10,
+              "start": 7,
+            },
             "text": "foo",
             "type": "identifier",
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 6,
+            "start": 0,
+          },
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -536,11 +748,19 @@ Array [
       Object {
         "children": Array [
           Object {
+            "loc": Object {
+              "end": 19,
+              "start": 16,
+            },
             "text": "bar",
             "type": "identifier",
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 15,
+            "start": 11,
+          },
           "raw": "FROM",
           "text": "FROM",
           "tokenType": "RESERVED_COMMAND",
@@ -551,6 +771,10 @@ Array [
       Object {
         "children": Array [],
         "name": Object {
+          "loc": Object {
+            "end": 29,
+            "start": 20,
+          },
           "raw": "UNION ALL",
           "text": "UNION ALL",
           "tokenType": "RESERVED_SET_OPERATION",
@@ -561,11 +785,19 @@ Array [
       Object {
         "children": Array [
           Object {
+            "loc": Object {
+              "end": 40,
+              "start": 37,
+            },
             "text": "foo",
             "type": "identifier",
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 36,
+            "start": 30,
+          },
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -576,11 +808,19 @@ Array [
       Object {
         "children": Array [
           Object {
+            "loc": Object {
+              "end": 49,
+              "start": 46,
+            },
             "text": "baz",
             "type": "identifier",
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 45,
+            "start": 41,
+          },
           "raw": "FROM",
           "text": "FROM",
           "tokenType": "RESERVED_COMMAND",
@@ -604,20 +844,40 @@ Array [
           Object {
             "children": Array [
               Object {
+                "loc": Object {
+                  "end": 9,
+                  "start": 8,
+                },
                 "text": "1",
                 "type": "literal",
               },
               Object {
+                "loc": Object {
+                  "end": 10,
+                  "start": 9,
+                },
                 "type": "comma",
               },
               Object {
+                "loc": Object {
+                  "end": 12,
+                  "start": 11,
+                },
                 "text": "2",
                 "type": "literal",
               },
               Object {
+                "loc": Object {
+                  "end": 13,
+                  "start": 12,
+                },
                 "type": "comma",
               },
               Object {
+                "loc": Object {
+                  "end": 15,
+                  "start": 14,
+                },
                 "text": "3",
                 "type": "literal",
               },
@@ -628,6 +888,10 @@ Array [
           },
         ],
         "name": Object {
+          "loc": Object {
+            "end": 6,
+            "start": 0,
+          },
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",

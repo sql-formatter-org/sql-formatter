@@ -1,4 +1,4 @@
-import { TokenType } from 'src/lexer/token';
+import { TokenType, Loc } from 'src/lexer/token';
 
 export enum NodeType {
   statement = 'statement',
@@ -80,11 +80,13 @@ export type LimitClauseNode = {
 // The "*" operator used in SELECT *
 export type AllColumnsAsteriskNode = {
   type: NodeType.all_columns_asterisk;
+  loc: Loc;
 };
 
 export type LiteralNode = {
   type: NodeType.literal;
   text: string;
+  loc: Loc;
 };
 
 export type PropertyAccessNode = {
@@ -96,6 +98,7 @@ export type PropertyAccessNode = {
 export type IdentifierNode = {
   type: NodeType.identifier;
   text: string;
+  loc: Loc;
 };
 
 export type KeywordNode = {
@@ -103,32 +106,38 @@ export type KeywordNode = {
   tokenType: TokenType;
   text: string;
   raw: string;
+  loc: Loc;
 };
 
 export type ParameterNode = {
   type: NodeType.parameter;
   key?: string;
   text: string;
+  loc: Loc;
 };
 
 export type OperatorNode = {
   type: NodeType.operator;
   text: string;
+  loc: Loc;
 };
 
 export type CommaNode = {
   type: NodeType.comma;
+  loc: Loc;
 };
 
 export type LineCommentNode = {
   type: NodeType.line_comment;
   text: string;
   precedingWhitespace: string;
+  loc: Loc;
 };
 
 export type BlockCommentNode = {
   type: NodeType.block_comment;
   text: string;
+  loc: Loc;
 };
 
 export type AstNode =
