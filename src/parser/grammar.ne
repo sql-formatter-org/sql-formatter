@@ -151,6 +151,7 @@ parenthesis -> "(" expressions_or_clauses ")" {%
     children: children,
     openParen: "(",
     closeParen: ")",
+    loc: { start: open.loc.start, end: close.loc.end },
   })
 %}
 
@@ -160,6 +161,7 @@ curly_braces -> "{" expression:* "}" {%
     children: children,
     openParen: "{",
     closeParen: "}",
+    loc: { start: open.loc.start, end: close.loc.end },
   })
 %}
 
@@ -169,6 +171,7 @@ square_brackets -> "[" expression:* "]" {%
     children: children,
     openParen: "[",
     closeParen: "]",
+    loc: { start: open.loc.start, end: close.loc.end },
   })
 %}
 

@@ -57,6 +57,7 @@ export type ParenthesisNode = {
   children: AstNode[];
   openParen: string;
   closeParen: string;
+  loc: Loc;
 };
 
 // BETWEEN <expr1> AND <expr2>
