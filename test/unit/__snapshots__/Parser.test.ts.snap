@@ -55,6 +55,10 @@ Array [
                 "type": "literal",
               },
             ],
+            "loc": Object {
+              "end": 27,
+              "start": 10,
+            },
             "type": "between_predicate",
           },
         ],

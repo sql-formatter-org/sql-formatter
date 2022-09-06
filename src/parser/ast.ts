@@ -69,6 +69,7 @@ export type BetweenPredicateNode = {
   expr1: AstNode[];
   and: KeywordNode;
   expr2: AstNode[];
+  loc: Loc;
 };
 
 // LIMIT <count>

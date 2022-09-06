@@ -200,6 +200,7 @@ between_predicate -> %BETWEEN commaless_expression %AND commaless_expression {%
     expr1: [expr1],
     and: toKeywordNode(andToken),
     expr2: [expr2],
+    loc: { start: betweenToken.loc.start, end: expr2.loc.end },
   })
 %}
 
