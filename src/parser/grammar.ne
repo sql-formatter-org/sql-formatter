@@ -125,17 +125,17 @@ simple_expression ->
   | literal
   | keyword ) {% unwrap %}
 
-array_subscript -> %ARRAY_IDENTIFIER square_brackets {%
-  ([arrayToken, brackets]) => ({
+array_subscript -> %ARRAY_IDENTIFIER _ square_brackets {%
+  ([arrayToken, _, brackets]) => ({
     type: NodeType.array_subscript,
-    array: { type: NodeType.identifier, text: arrayToken.text },
+    array: { type: NodeType.identifier, text: arrayToken.text, trailingComments: _ },
     parenthesis: brackets,
   })
 %}
-array_subscript -> %ARRAY_KEYWORD square_brackets {%
-  ([arrayToken, brackets]) => ({
+array_subscript -> %ARRAY_KEYWORD _ square_brackets {%
+  ([arrayToken, _, brackets]) => ({
     type: NodeType.array_subscript,
-    array: toKeywordNode(arrayToken),
+    array: { ...toKeywordNode(arrayToken), trailingComments: _ },
     parenthesis: brackets,
   })
 %}
@@ -232,6 +232,8 @@ keyword ->
   | %XOR ) {%
   ([[token]]) => toKeywordNode(token)
 %}
+
+_ -> comment:* {% ([comments]) => comments %}
 
 comment -> %LINE_COMMENT {%
   ([token]) => ({

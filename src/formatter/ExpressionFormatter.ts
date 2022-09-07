@@ -24,6 +24,7 @@ import {
   CommaNode,
   KeywordNode,
   PropertyAccessNode,
+  CommentNode,
 } from 'src/parser/ast';
 
 import Layout, { WS } from './Layout';
@@ -108,7 +109,9 @@ export default class ExpressionFormatter {
   }
 
   private formatArraySubscript({ array, parenthesis }: ArraySubscriptNode) {
+    this.formatComments(array.leadingComments);
     this.layout.add(array.type === NodeType.keyword ? this.showKw(array) : array.text);
+    this.formatComments(array.trailingComments);
     this.formatParenthesis(parenthesis);
   }
 
@@ -237,6 +240,19 @@ export default class ExpressionFormatter {
     } else {
       this.layout.add(WS.NO_SPACE, ',', WS.SPACE);
     }
+  }
+
+  private formatComments(comments: CommentNode[] | undefined) {
+    if (!comments) {
+      return;
+    }
+    comments.forEach(com => {
+      if (com.type === NodeType.line_comment) {
+        this.formatLineComment(com);
+      } else {
+        this.formatBlockComment(com);
+      }
+    });
   }
 
   private formatLineComment(node: LineCommentNode) {

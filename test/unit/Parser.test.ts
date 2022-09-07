@@ -36,6 +36,10 @@ describe('Parser', () => {
     expect(parse('SELECT my_array[5]')).toMatchSnapshot();
   });
 
+  it('parses array subscript with comment', () => {
+    expect(parse('SELECT my_array /*haha*/ [5]')).toMatchSnapshot();
+  });
+
   it('parses parenthesized expressions', () => {
     expect(parse('SELECT (birth_year - (CURRENT_DATE + 1))')).toMatchSnapshot();
   });

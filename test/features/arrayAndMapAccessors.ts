@@ -30,4 +30,14 @@ export default function supportsArrayAndMapAccessors(format: FormatFn) {
         foo.coalesce['blah'];
     `);
   });
+
+  it('formats array accessor with comment in-between', () => {
+    const result = format(`SELECT arr /* comment */ [1];`);
+    expect(result).toBe(dedent`
+      SELECT
+        arr
+        /* comment */
+        [1];
+    `);
+  });
 }
