@@ -119,7 +119,12 @@ simple_expression ->
   | parenthesis
   | curly_braces
   | square_brackets
-  | expression_token ) {% unwrap %}
+  | operator
+  | identifier
+  | parameter
+  | literal
+  | keyword
+  | comment ) {% unwrap %}
 
 array_subscript -> %ARRAY_IDENTIFIER square_brackets {%
   ([arrayToken, brackets]) => ({
@@ -198,14 +203,6 @@ between_predicate -> %BETWEEN commaless_expression %AND commaless_expression {%
 comma -> ( %COMMA ) {% ([[token]]) => ({ type: NodeType.comma }) %}
 
 asterisk -> ( %ASTERISK ) {% ([[token]]) => ({ type: NodeType.operator, text: token.text }) %}
-
-expression_token ->
-  ( operator
-  | identifier
-  | parameter
-  | literal
-  | keyword
-  | comment ) {% unwrap %}
 
 operator -> ( %OPERATOR ) {% ([[token]]) => ({ type: NodeType.operator, text: token.text }) %}
 
