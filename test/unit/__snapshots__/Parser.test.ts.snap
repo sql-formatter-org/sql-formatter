@@ -196,6 +196,7 @@ Array [
               "type": "identifier",
             },
             "property": Object {
+              "leadingComments": Array [],
               "type": "all_columns_asterisk",
             },
             "type": "property_access",
@@ -536,12 +537,14 @@ Array [
                 "type": "identifier",
               },
               "property": Object {
+                "leadingComments": Array [],
                 "text": "bar",
                 "type": "identifier",
               },
               "type": "property_access",
             },
             "property": Object {
+              "leadingComments": Array [],
               "text": "baz",
               "type": "identifier",
             },

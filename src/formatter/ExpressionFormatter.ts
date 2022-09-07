@@ -110,11 +110,15 @@ export default class ExpressionFormatter {
     this.formatParenthesis(parenthesis);
   }
 
-  private formatArraySubscript({ array, parenthesis }: ArraySubscriptNode) {
-    this.formatComments(array.leadingComments);
-    this.layout.add(array.type === NodeType.keyword ? this.showKw(array) : array.text);
-    this.formatComments(array.trailingComments);
-    this.formatParenthesis(parenthesis);
+  private formatArraySubscript(node: ArraySubscriptNode) {
+    this.formatComments(node.leadingComments);
+    this.formatComments(node.array.leadingComments);
+    this.layout.add(
+      node.array.type === NodeType.keyword ? this.showKw(node.array) : node.array.text
+    );
+    this.formatComments(node.array.trailingComments);
+    this.formatParenthesis(node.parenthesis);
+    this.formatComments(node.trailingComments);
   }
 
   private formatPropertyAccess({ object, property }: PropertyAccessNode) {
@@ -197,8 +201,10 @@ export default class ExpressionFormatter {
     this.layout.indentation.decreaseTopLevel();
   }
 
-  private formatAllColumnsAsterisk(_node: AllColumnsAsteriskNode) {
+  private formatAllColumnsAsterisk(node: AllColumnsAsteriskNode) {
+    this.formatComments(node.leadingComments);
     this.layout.add('*', WS.SPACE);
+    this.formatComments(node.trailingComments);
   }
 
   private formatLiteral(node: LiteralNode) {
@@ -206,7 +212,9 @@ export default class ExpressionFormatter {
   }
 
   private formatIdentifier(node: IdentifierNode) {
+    this.formatComments(node.leadingComments);
     this.layout.add(node.text, WS.SPACE);
+    this.formatComments(node.trailingComments);
   }
 
   private formatParameter(node: ParameterNode) {

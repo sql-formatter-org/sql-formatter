@@ -175,16 +175,16 @@ square_brackets -> "[" expression:* "]" {%
   })
 %}
 
-property_access -> simple_expression %DOT (identifier | array_subscript | all_columns_asterisk) {%
+property_access -> simple_expression %DOT _ (identifier | array_subscript | all_columns_asterisk) {%
   // Allowing property to be <array_subscript> is currently a hack.
   // A better way would be to allow <property_access> on the left side of array_subscript,
   // but we currently can't do that because of another hack that requires
   // %ARRAY_IDENTIFIER on the left side of <array_subscript>.
-  ([object, dot, [property]]) => {
+  ([object, dot, _, [property]]) => {
     return {
       type: NodeType.property_access,
       object,
-      property,
+      property: { ...property, leadingComments: _ },
     };
   }
 %}

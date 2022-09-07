@@ -23,7 +23,7 @@ export function disambiguateTokens(tokens: Token[]): Token[] {
 
 const dotKeywordToIdent = (token: Token, i: number, tokens: Token[]): Token => {
   if (isReserved(token.type)) {
-    const prevToken = tokens[i - 1];
+    const prevToken = prevNonCommentToken(tokens, i);
     if (prevToken && prevToken.text === '.') {
       return { ...token, type: TokenType.IDENTIFIER, text: token.raw };
     }
@@ -61,12 +61,19 @@ const keywordToArrayKeyword = (token: Token, i: number, tokens: Token[]): Token 
   return token;
 };
 
-const nextNonCommentToken = (tokens: Token[], index: number): Token | undefined => {
+const prevNonCommentToken = (tokens: Token[], index: number): Token | undefined =>
+  nextNonCommentToken(tokens, index, -1);
+
+const nextNonCommentToken = (
+  tokens: Token[],
+  index: number,
+  dir: -1 | 1 = 1
+): Token | undefined => {
   let i = 1;
-  while (tokens[index + i] && isComment(tokens[index + i])) {
+  while (tokens[index + i * dir] && isComment(tokens[index + i * dir])) {
     i++;
   }
-  return tokens[index + i];
+  return tokens[index + i * dir];
 };
 
 const isOpenParen = (t: Token): boolean => t.type === TokenType.OPEN_PAREN && t.text === '(';

@@ -173,6 +173,21 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     `);
   });
 
+  it('formats comments between qualified.names', () => {
+    const result = format(`
+      SELECT foo. /* com1 */ bar, foo. /* com2 */ *;
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        foo.
+        /* com1 */
+        bar,
+        foo.
+        /* com2 */
+        *;
+    `);
+  });
+
   if (opts.hashComments) {
     it('supports # line comment', () => {
       const result = format('SELECT alpha # commment\nFROM beta');
