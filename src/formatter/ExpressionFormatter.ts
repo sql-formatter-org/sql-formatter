@@ -104,21 +104,21 @@ export default class ExpressionFormatter {
   }
 
   private formatFunctionCall({ name, parenthesis }: FunctionCallNode) {
-    this.formatComments(name.leadingComments);
-    this.layout.add(this.showKw(name));
-    this.formatComments(name.trailingComments);
+    this.withComments(name, () => {
+      this.layout.add(this.showKw(name));
+    });
     this.formatParenthesis(parenthesis);
   }
 
   private formatArraySubscript(node: ArraySubscriptNode) {
-    this.formatComments(node.leadingComments);
-    this.formatComments(node.array.leadingComments);
-    this.layout.add(
-      node.array.type === NodeType.keyword ? this.showKw(node.array) : node.array.text
-    );
-    this.formatComments(node.array.trailingComments);
-    this.formatParenthesis(node.parenthesis);
-    this.formatComments(node.trailingComments);
+    this.withComments(node, () => {
+      this.withComments(node.array, () => {
+        this.layout.add(
+          node.array.type === NodeType.keyword ? this.showKw(node.array) : node.array.text
+        );
+      });
+      this.formatParenthesis(node.parenthesis);
+    });
   }
 
   private formatPropertyAccess({ object, property }: PropertyAccessNode) {
@@ -202,9 +202,9 @@ export default class ExpressionFormatter {
   }
 
   private formatAllColumnsAsterisk(node: AllColumnsAsteriskNode) {
-    this.formatComments(node.leadingComments);
-    this.layout.add('*', WS.SPACE);
-    this.formatComments(node.trailingComments);
+    this.withComments(node, () => {
+      this.layout.add('*', WS.SPACE);
+    });
   }
 
   private formatLiteral(node: LiteralNode) {
@@ -212,9 +212,9 @@ export default class ExpressionFormatter {
   }
 
   private formatIdentifier(node: IdentifierNode) {
-    this.formatComments(node.leadingComments);
-    this.layout.add(node.text, WS.SPACE);
-    this.formatComments(node.trailingComments);
+    this.withComments(node, () => {
+      this.layout.add(node.text, WS.SPACE);
+    });
   }
 
   private formatParameter(node: ParameterNode) {
@@ -250,6 +250,12 @@ export default class ExpressionFormatter {
     } else {
       this.layout.add(WS.NO_SPACE, ',', WS.SPACE);
     }
+  }
+
+  private withComments(node: AstNode, fn: () => void) {
+    this.formatComments(node.leadingComments);
+    fn();
+    this.formatComments(node.trailingComments);
   }
 
   private formatComments(comments: CommentNode[] | undefined) {
