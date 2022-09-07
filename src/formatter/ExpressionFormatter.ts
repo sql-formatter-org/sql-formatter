@@ -65,6 +65,12 @@ export default class ExpressionFormatter {
   }
 
   private formatNode(node: AstNode) {
+    this.formatComments(node.leadingComments);
+    this.formatNodeWithoutComments(node);
+    this.formatComments(node.trailingComments);
+  }
+
+  private formatNodeWithoutComments(node: AstNode) {
     switch (node.type) {
       case NodeType.function_call:
         return this.formatFunctionCall(node);
@@ -103,28 +109,26 @@ export default class ExpressionFormatter {
     }
   }
 
-  private formatFunctionCall({ name, parenthesis }: FunctionCallNode) {
-    this.withComments(name, () => {
-      this.layout.add(this.showKw(name));
+  private formatFunctionCall(node: FunctionCallNode) {
+    this.withComments(node.name, () => {
+      this.layout.add(this.showKw(node.name));
     });
-    this.formatParenthesis(parenthesis);
+    this.formatNode(node.parenthesis);
   }
 
   private formatArraySubscript(node: ArraySubscriptNode) {
-    this.withComments(node, () => {
-      this.withComments(node.array, () => {
-        this.layout.add(
-          node.array.type === NodeType.keyword ? this.showKw(node.array) : node.array.text
-        );
-      });
-      this.formatParenthesis(node.parenthesis);
+    this.withComments(node.array, () => {
+      this.layout.add(
+        node.array.type === NodeType.keyword ? this.showKw(node.array) : node.array.text
+      );
     });
+    this.formatNode(node.parenthesis);
   }
 
-  private formatPropertyAccess({ object, property }: PropertyAccessNode) {
-    this.formatNode(object);
+  private formatPropertyAccess(node: PropertyAccessNode) {
+    this.formatNode(node.object);
     this.layout.add(WS.NO_SPACE, '.');
-    this.formatNode(property);
+    this.formatNode(node.property);
   }
 
   private formatParenthesis(node: ParenthesisNode) {
@@ -201,10 +205,8 @@ export default class ExpressionFormatter {
     this.layout.indentation.decreaseTopLevel();
   }
 
-  private formatAllColumnsAsterisk(node: AllColumnsAsteriskNode) {
-    this.withComments(node, () => {
-      this.layout.add('*', WS.SPACE);
-    });
+  private formatAllColumnsAsterisk(_node: AllColumnsAsteriskNode) {
+    this.layout.add('*', WS.SPACE);
   }
 
   private formatLiteral(node: LiteralNode) {
@@ -212,9 +214,7 @@ export default class ExpressionFormatter {
   }
 
   private formatIdentifier(node: IdentifierNode) {
-    this.withComments(node, () => {
-      this.layout.add(node.text, WS.SPACE);
-    });
+    this.layout.add(node.text, WS.SPACE);
   }
 
   private formatParameter(node: ParameterNode) {

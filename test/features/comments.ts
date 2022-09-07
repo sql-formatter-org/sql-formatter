@@ -173,7 +173,28 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     `);
   });
 
-  it('formats comments between qualified.names', () => {
+  it('formats comments between qualified.names (before dot)', () => {
+    const result = format(`
+      SELECT foo/* com1 */.bar, count()/* com2 */.bar, foo.bar/* com3 */.baz, (1, 2) /* com4 */.foo;
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        foo
+        /* com1 */
+      .bar,
+        count()
+        /* com2 */
+      .bar,
+        foo.bar
+        /* com3 */
+      .baz,
+        (1, 2)
+        /* com4 */
+      .foo;
+    `);
+  });
+
+  it('formats comments between qualified.names (after dot)', () => {
     const result = format(`
       SELECT foo. /* com1 */ bar, foo. /* com2 */ *;
     `);

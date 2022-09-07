@@ -193,6 +193,7 @@ Array [
           Object {
             "object": Object {
               "text": "ident",
+              "trailingComments": Array [],
               "type": "identifier",
             },
             "property": Object {
@@ -534,6 +535,7 @@ Array [
             "object": Object {
               "object": Object {
                 "text": "foo",
+                "trailingComments": Array [],
                 "type": "identifier",
               },
               "property": Object {
@@ -541,6 +543,7 @@ Array [
                 "text": "bar",
                 "type": "identifier",
               },
+              "trailingComments": Array [],
               "type": "property_access",
             },
             "property": Object {
