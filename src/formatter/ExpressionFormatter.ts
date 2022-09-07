@@ -103,9 +103,11 @@ export default class ExpressionFormatter {
     }
   }
 
-  private formatFunctionCall(node: FunctionCallNode) {
-    this.layout.add(this.showKw(node.name));
-    this.formatParenthesis(node.parenthesis);
+  private formatFunctionCall({ name, parenthesis }: FunctionCallNode) {
+    this.formatComments(name.leadingComments);
+    this.layout.add(this.showKw(name));
+    this.formatComments(name.trailingComments);
+    this.formatParenthesis(parenthesis);
   }
 
   private formatArraySubscript({ array, parenthesis }: ArraySubscriptNode) {

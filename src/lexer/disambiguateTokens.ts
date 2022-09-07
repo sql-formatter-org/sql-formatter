@@ -33,7 +33,7 @@ const dotKeywordToIdent = (token: Token, i: number, tokens: Token[]): Token => {
 
 const funcNameToKeyword = (token: Token, i: number, tokens: Token[]): Token => {
   if (token.type === TokenType.RESERVED_FUNCTION_NAME) {
-    const nextToken = tokens[i + 1];
+    const nextToken = nextNonCommentToken(tokens, i);
     if (!nextToken || !isOpenParen(nextToken)) {
       return { ...token, type: TokenType.RESERVED_KEYWORD };
     }

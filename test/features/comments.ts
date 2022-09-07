@@ -161,6 +161,18 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     `);
   });
 
+  it('formats comments between function name and parenthesis', () => {
+    const result = format(`
+      SELECT count /* comment */ (*);
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        count
+        /* comment */
+        (*);
+    `);
+  });
+
   if (opts.hashComments) {
     it('supports # line comment', () => {
       const result = format('SELECT alpha # commment\nFROM beta');

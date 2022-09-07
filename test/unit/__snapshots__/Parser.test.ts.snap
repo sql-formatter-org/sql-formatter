@@ -355,6 +355,7 @@ Array [
               "raw": "sqrt",
               "text": "SQRT",
               "tokenType": "RESERVED_FUNCTION_NAME",
+              "trailingComments": Array [],
               "type": "keyword",
             },
             "parenthesis": Object {
@@ -410,6 +411,7 @@ Array [
               "raw": "CURRENT_TIME",
               "text": "CURRENT_TIME",
               "tokenType": "RESERVED_FUNCTION_NAME",
+              "trailingComments": Array [],
               "type": "keyword",
             },
             "parenthesis": Object {

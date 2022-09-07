@@ -140,10 +140,10 @@ array_subscript -> %ARRAY_KEYWORD _ square_brackets {%
   })
 %}
 
-function_call -> %RESERVED_FUNCTION_NAME parenthesis {%
-  ([nameToken, parens]) => ({
+function_call -> %RESERVED_FUNCTION_NAME _ parenthesis {%
+  ([nameToken, _, parens]) => ({
     type: NodeType.function_call,
-    name: toKeywordNode(nameToken),
+    name: { ...toKeywordNode(nameToken), trailingComments: _ },
     parenthesis: parens,
   })
 %}
