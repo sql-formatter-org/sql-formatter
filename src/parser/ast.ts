@@ -90,7 +90,7 @@ export type LiteralNode = {
 export type PropertyAccessNode = {
   type: NodeType.property_access;
   object: AstNode;
-  property: IdentifierNode;
+  property: IdentifierNode | ArraySubscriptNode | AllColumnsAsteriskNode;
 };
 
 export type IdentifierNode = {
