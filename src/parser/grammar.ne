@@ -1,7 +1,7 @@
 @preprocessor typescript
 @{%
 import LexerAdapter from 'src/parser/LexerAdapter';
-import { NodeType } from 'src/parser/ast';
+import { NodeType, AstNode, CommentNode, KeywordNode } from 'src/parser/ast';
 import { Token, TokenType } from 'src/lexer/token';
 
 // The lexer here is only to provide the has() method,
@@ -16,12 +16,19 @@ const lexer = new LexerAdapter(chunk => []);
 // which otherwise produce single element nested inside two arrays
 const unwrap = <T>([[el]]: T[][]): T => el;
 
-const toKeywordNode = (token: Token) => ({
+const toKeywordNode = (token: Token): KeywordNode => ({
   type: NodeType.keyword,
   tokenType: token.type,
   text: token.text,
   raw: token.raw,
 });
+
+const addLeadingComments = (node: AstNode, comments: CommentNode[]): AstNode =>
+  comments.length > 0 ? { ...node, leadingComments: comments } : node;
+
+const addTrailingComments = (node: AstNode, comments: CommentNode[]): AstNode =>
+  comments.length > 0 ? { ...node, trailingComments: comments } : node;
+
 %}
 @lexer lexer
 
@@ -128,14 +135,14 @@ simple_expression ->
 array_subscript -> %ARRAY_IDENTIFIER _ square_brackets {%
   ([arrayToken, _, brackets]) => ({
     type: NodeType.array_subscript,
-    array: { type: NodeType.identifier, text: arrayToken.text, trailingComments: _ },
+    array: addTrailingComments({ type: NodeType.identifier, text: arrayToken.text}, _),
     parenthesis: brackets,
   })
 %}
 array_subscript -> %ARRAY_KEYWORD _ square_brackets {%
   ([arrayToken, _, brackets]) => ({
     type: NodeType.array_subscript,
-    array: { ...toKeywordNode(arrayToken), trailingComments: _ },
+    array: addTrailingComments(toKeywordNode(arrayToken), _),
     parenthesis: brackets,
   })
 %}
@@ -143,7 +150,7 @@ array_subscript -> %ARRAY_KEYWORD _ square_brackets {%
 function_call -> %RESERVED_FUNCTION_NAME _ parenthesis {%
   ([nameToken, _, parens]) => ({
     type: NodeType.function_call,
-    name: { ...toKeywordNode(nameToken), trailingComments: _ },
+    name: addTrailingComments(toKeywordNode(nameToken), _),
     parenthesis: parens,
   })
 %}
@@ -183,8 +190,8 @@ property_access -> simple_expression _ %DOT _ (identifier | array_subscript | al
   ([object, _1, dot, _2, [property]]) => {
     return {
       type: NodeType.property_access,
-      object: { ...object, trailingComments: _1 },
-      property: { ...property, leadingComments: _2 },
+      object: addTrailingComments(object, _1),
+      property: addLeadingComments(property, _2),
     };
   }
 %}

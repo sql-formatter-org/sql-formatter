@@ -193,11 +193,9 @@ Array [
           Object {
             "object": Object {
               "text": "ident",
-              "trailingComments": Array [],
               "type": "identifier",
             },
             "property": Object {
-              "leadingComments": Array [],
               "type": "all_columns_asterisk",
             },
             "type": "property_access",
@@ -227,7 +225,6 @@ Array [
           Object {
             "array": Object {
               "text": "my_array",
-              "trailingComments": Array [],
               "type": "identifier",
             },
             "parenthesis": Object {
@@ -357,7 +354,6 @@ Array [
               "raw": "sqrt",
               "text": "SQRT",
               "tokenType": "RESERVED_FUNCTION_NAME",
-              "trailingComments": Array [],
               "type": "keyword",
             },
             "parenthesis": Object {
@@ -413,7 +409,6 @@ Array [
               "raw": "CURRENT_TIME",
               "text": "CURRENT_TIME",
               "tokenType": "RESERVED_FUNCTION_NAME",
-              "trailingComments": Array [],
               "type": "keyword",
             },
             "parenthesis": Object {
@@ -535,19 +530,15 @@ Array [
             "object": Object {
               "object": Object {
                 "text": "foo",
-                "trailingComments": Array [],
                 "type": "identifier",
               },
               "property": Object {
-                "leadingComments": Array [],
                 "text": "bar",
                 "type": "identifier",
               },
-              "trailingComments": Array [],
               "type": "property_access",
             },
             "property": Object {
-              "leadingComments": Array [],
               "text": "baz",
               "type": "identifier",
             },
