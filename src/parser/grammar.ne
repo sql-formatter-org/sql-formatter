@@ -65,20 +65,20 @@ clause ->
   | other_clause
   | set_operation ) {% unwrap %}
 
-limit_clause -> %LIMIT commaless_expression:+ (%COMMA expression:+):? {%
-  ([limitToken, exp1, optional]) => {
+limit_clause -> %LIMIT _ expression_with_comments:+ (%COMMA expression:+):? {%
+  ([limitToken, _, exp1, optional]) => {
     if (optional) {
       const [comma, exp2] = optional;
       return {
         type: NodeType.limit_clause,
-        name: toKeywordNode(limitToken),
+        name: addTrailingComments(toKeywordNode(limitToken), _),
         offset: exp1,
         count: exp2,
       };
     } else {
       return {
         type: NodeType.limit_clause,
-        name: toKeywordNode(limitToken),
+        name: addTrailingComments(toKeywordNode(limitToken), _),
         count: exp1,
       };
     }
@@ -113,11 +113,13 @@ set_operation -> %RESERVED_SET_OPERATION expression:* {%
   })
 %}
 
+expression_with_comments -> (simple_expression | asterisk) _ {%
+  ([[expr], _]) => addTrailingComments(expr, _)
+%}
+
 expression -> ( simple_expression | between_predicate | asterisk | comma | comment ) {% unwrap %}
 
 asteriskless_expression -> ( simple_expression | between_predicate | comma | comment ) {% unwrap %}
-
-commaless_expression -> ( simple_expression | between_predicate | asterisk | comment ) {% unwrap %}
 
 simple_expression ->
   ( array_subscript

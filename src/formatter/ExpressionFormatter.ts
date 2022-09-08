@@ -186,7 +186,9 @@ export default class ExpressionFormatter {
   }
 
   private formatLimitClause(node: LimitClauseNode) {
-    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name));
+    this.withComments(node.name, () => {
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name));
+    });
     this.layout.indentation.increaseTopLevel();
 
     if (isTabularStyle(this.cfg)) {
