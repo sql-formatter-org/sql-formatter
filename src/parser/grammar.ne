@@ -196,13 +196,13 @@ property_access -> simple_expression _ %DOT _ (identifier | array_subscript | al
   }
 %}
 
-between_predicate -> %BETWEEN commaless_expression %AND commaless_expression {%
-  ([betweenToken, expr1, andToken, expr2]) => ({
+between_predicate -> %BETWEEN _ simple_expression _ %AND _ simple_expression {%
+  ([betweenToken, _1, expr1, _2, andToken, _3, expr2]) => ({
     type: NodeType.between_predicate,
     between: toKeywordNode(betweenToken),
-    expr1: [expr1],
+    expr1: [addTrailingComments(addLeadingComments(expr1, _1), _2)],
     and: toKeywordNode(andToken),
-    expr2: [expr2],
+    expr2: [addLeadingComments(expr2, _3)],
   })
 %}
 
