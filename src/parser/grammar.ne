@@ -113,15 +113,17 @@ set_operation -> %RESERVED_SET_OPERATION expression:* {%
   })
 %}
 
-expression_with_comments -> (simple_expression | asterisk) _ {%
-  ([[expr], _]) => addTrailingComments(expr, _)
+expression_with_comments -> simple_expression _ {%
+  ([expr, _]) => addTrailingComments(expr, _)
 %}
 
-expression -> ( simple_expression | between_predicate | asterisk | comma | comment ) {% unwrap %}
+expression -> ( simple_expression | between_predicate | comma | comment ) {% unwrap %}
 
-asteriskless_expression -> ( simple_expression | between_predicate | comma | comment ) {% unwrap %}
+asteriskless_expression -> ( simple_expression_without_asterisk | between_predicate | comma | comment ) {% unwrap %}
 
-simple_expression ->
+simple_expression -> ( simple_expression_without_asterisk | asterisk ) {% unwrap %}
+
+simple_expression_without_asterisk ->
   ( array_subscript
   | function_call
   | property_access
