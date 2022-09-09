@@ -13,7 +13,7 @@ describe('sqlFormatter', () => {
   it('throws error when encountering unsupported characters', () => {
     expect(() => {
       format('SELECT «weird-stuff»');
-    }).toThrow('Parse error: Unexpected "«weird-stuff»"');
+    }).toThrow('Parse error: Unexpected "«weird-stu" at line 1 column 8');
   });
 
   it('does nothing with empty input', () => {

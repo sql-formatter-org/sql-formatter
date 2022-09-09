@@ -57,16 +57,17 @@ describe('SqlFormatter', () => {
 
   it('throws error when encountering characters or operators it does not recognize', () => {
     expect(() => format('SELECT @name, :bar FROM foo;')).toThrowError(
-      `Parse error: Unexpected "@name, :bar FROM foo;"`
+      `Parse error: Unexpected "@name, :ba" at line 1 column 8`
     );
   });
 
   it('crashes when encountering unsupported curly braces', () => {
     expect(() =>
-      format(`
-        SELECT {foo};
+      format(dedent`
+        SELECT
+          {foo};
       `)
-    ).toThrowError('Parse error: Unexpected "{foo};');
+    ).toThrowError('Parse error: Unexpected "{foo};" at line 2 column 3');
   });
 
   it('formats ALTER TABLE ... ALTER COLUMN', () => {
