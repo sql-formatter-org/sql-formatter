@@ -45,13 +45,17 @@ export default class TokenizerEngine {
         // Get the next token and the token type
         token = this.getNextToken();
         if (!token) {
-          throw new Error(`Parse error: Unexpected "${input.slice(this.index, 100)}"`);
+          throw this.createParseError();
         }
 
         tokens.push({ ...token, precedingWhitespace });
       }
     }
     return tokens;
+  }
+
+  private createParseError(): Error {
+    return new Error(`Parse error: Unexpected "${this.input.slice(this.index, 100)}"`);
   }
 
   private getWhitespace(): string | undefined {
