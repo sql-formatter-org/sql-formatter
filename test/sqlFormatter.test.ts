@@ -16,6 +16,10 @@ describe('sqlFormatter', () => {
     }).toThrow('Parse error: Unexpected "«weird-stu" at line 1 column 8');
   });
 
+  it('throws error when encountering incorrect SQL grammar', () => {
+    expect(() => format('SELECT foo.+;')).toThrow('Parse error at token: + at line 1 column 12');
+  });
+
   it('does nothing with empty input', () => {
     const result = format('');
 
