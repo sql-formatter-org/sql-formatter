@@ -2,6 +2,24 @@
 
 Formats SQL files using the [`sql-formatter`](https://github.com/sql-formatter-org/sql-formatter) library
 
+Supports the following SQL Dialects:
+
+- Standard SQL
+- BigQuery
+- DB2
+- Hive
+- MariaDB
+- MySQL
+- N1QL
+- PL/SQL
+- PostgresQL
+- Amazon Redshift
+- SingleStoreDB
+- Spark
+- SQLite
+- Trino (Presto)
+- TransactSQL
+
 ## Issues
 
 Please report issues here: https://github.com/sql-formatter-org/sql-formatter/issues

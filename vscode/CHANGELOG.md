@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [1.3.1] - 2022-09-07
+
+- updated `sql-formatter` to v10.6.x
+
+## [1.3.0] - 2022-09-05
+
+- updated `sql-formatter` to v10.x
+- updated to Nearley parser
+- added `singlestoredb` as new supported dialect
+
 ## [1.2.0] - 2022-08-09
 
 - updated `sql-formatter` to v9.x

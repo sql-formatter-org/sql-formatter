@@ -2,7 +2,7 @@
   "name": "prettier-sql-vscode",
   "displayName": "Prettier SQL VSCode",
   "description": "VSCode Extension to format SQL files",
-  "version": "1.2.0",
+  "version": "1.3.1",
   "publisher": "inferrinizzard",
   "author": {
     "name": "inferrinizzard"
@@ -40,12 +40,14 @@
     "presto",
     "prettier",
     "redshift",
+    "singlestoredb",
     "spark",
     "sparksql",
     "sql",
     "sqlite",
     "sql server",
     "trino",
+    "transactsql",
     "tsql"
   ],
   "activationEvents": [
@@ -69,7 +71,7 @@
     "vsce:publish": "vsce publish"
   },
   "dependencies": {
-    "sql-formatter": "^9.0.0"
+    "sql-formatter": "^10.6.0"
   },
   "devDependencies": {
     "@types/glob": "^7.1.4",
@@ -84,7 +86,7 @@
     "glob": "^7.1.7",
     "mocha": "^9.1.3",
     "typescript": "^4.4.4",
-    "vsce": "^2.7.0"
+    "vsce": "^2.11.0"
   },
   "contributes": {
     "languages": [
@@ -123,10 +125,11 @@
             "plsql",
             "postgresql",
             "redshift",
+            "singlestoredb",
             "spark",
             "sqlite",
             "trino",
-            "tsql"
+            "transactsql"
           ],
           "default": "sql",
           "markdownDescription": "Formats `sql` files in another SQL Flavour when no VSCode Language exists, such as the Microsoft PostgreSQL & MSSQL Extensions"
