@@ -2378,7 +2378,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    PlSqlFormatter.prototype.decrementIndent = function decrementIndent() {
 	        this.lastIndentKey = this.indentsKeyWords.pop();
-	        this.indentCount = this.lastIndentKey.indent;
+	        this.indentCount = this.lastIndentKey ? this.lastIndentKey.indent : 0;
 	    };
 
 	    PlSqlFormatter.prototype.incrementIndent = function incrementIndent(key, name) {
