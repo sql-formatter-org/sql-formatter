@@ -7,7 +7,12 @@ assignees: ''
 ---
 
 **Input data**
+
 Which SQL and options did you provide as input?
+
+```sql
+-- ADD SQL HERE
+```
 
 **Expected Output**
 
