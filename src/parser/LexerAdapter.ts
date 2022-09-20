@@ -25,7 +25,7 @@ export default class LexerAdapter {
   save(): any {}
 
   formatError(token: NearleyToken) {
-    const { line, col } = lineColFromIndex(this.input, token.loc.start);
+    const { line, col } = lineColFromIndex(this.input, token.start);
     return `Parse error at token: ${token.text} at line ${line} column ${col}`;
   }
 
