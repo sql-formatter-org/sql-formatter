@@ -1,7 +1,7 @@
 @preprocessor typescript
 @{%
 import LexerAdapter from 'src/parser/LexerAdapter';
-import { NodeType } from 'src/parser/ast';
+import { NodeType, AstNode, CommentNode, KeywordNode } from 'src/parser/ast';
 import { Token, TokenType } from 'src/lexer/token';
 
 // The lexer here is only to provide the has() method,
@@ -16,12 +16,19 @@ const lexer = new LexerAdapter(chunk => []);
 // which otherwise produce single element nested inside two arrays
 const unwrap = <T>([[el]]: T[][]): T => el;
 
-const toKeywordNode = (token: Token) => ({
+const toKeywordNode = (token: Token): KeywordNode => ({
   type: NodeType.keyword,
   tokenType: token.type,
   text: token.text,
   raw: token.raw,
 });
+
+const addLeadingComments = (node: AstNode, comments: CommentNode[]): AstNode =>
+  comments.length > 0 ? { ...node, leadingComments: comments } : node;
+
+const addTrailingComments = (node: AstNode, comments: CommentNode[]): AstNode =>
+  comments.length > 0 ? { ...node, trailingComments: comments } : node;
+
 %}
 @lexer lexer
 
@@ -58,20 +65,20 @@ clause ->
   | other_clause
   | set_operation ) {% unwrap %}
 
-limit_clause -> %LIMIT commaless_expression:+ (%COMMA expression:+):? {%
-  ([limitToken, exp1, optional]) => {
+limit_clause -> %LIMIT _ expression_with_comments:+ (%COMMA expression:+):? {%
+  ([limitToken, _, exp1, optional]) => {
     if (optional) {
       const [comma, exp2] = optional;
       return {
         type: NodeType.limit_clause,
-        name: toKeywordNode(limitToken),
+        name: addTrailingComments(toKeywordNode(limitToken), _),
         offset: exp1,
         count: exp2,
       };
     } else {
       return {
         type: NodeType.limit_clause,
-        name: toKeywordNode(limitToken),
+        name: addTrailingComments(toKeywordNode(limitToken), _),
         count: exp1,
       };
     }
@@ -106,40 +113,48 @@ set_operation -> %RESERVED_SET_OPERATION expression:* {%
   })
 %}
 
-expression -> ( simple_expression | between_predicate | asterisk | comma ) {% unwrap %}
+expression_with_comments -> simple_expression _ {%
+  ([expr, _]) => addTrailingComments(expr, _)
+%}
 
-asteriskless_expression -> ( simple_expression | between_predicate | comma ) {% unwrap %}
+expression -> ( simple_expression | between_predicate | comma | comment ) {% unwrap %}
 
-commaless_expression -> ( simple_expression | between_predicate | asterisk ) {% unwrap %}
+asteriskless_expression -> ( simple_expression_without_asterisk | between_predicate | comma | comment ) {% unwrap %}
 
-simple_expression ->
+simple_expression -> ( simple_expression_without_asterisk | asterisk ) {% unwrap %}
+
+simple_expression_without_asterisk ->
   ( array_subscript
   | function_call
   | property_access
   | parenthesis
   | curly_braces
   | square_brackets
-  | expression_token ) {% unwrap %}
+  | operator
+  | identifier
+  | parameter
+  | literal
+  | keyword ) {% unwrap %}
 
-array_subscript -> %ARRAY_IDENTIFIER square_brackets {%
-  ([arrayToken, brackets]) => ({
+array_subscript -> %ARRAY_IDENTIFIER _ square_brackets {%
+  ([arrayToken, _, brackets]) => ({
     type: NodeType.array_subscript,
-    array: { type: NodeType.identifier, text: arrayToken.text },
+    array: addTrailingComments({ type: NodeType.identifier, text: arrayToken.text}, _),
     parenthesis: brackets,
   })
 %}
-array_subscript -> %ARRAY_KEYWORD square_brackets {%
-  ([arrayToken, brackets]) => ({
+array_subscript -> %ARRAY_KEYWORD _ square_brackets {%
+  ([arrayToken, _, brackets]) => ({
     type: NodeType.array_subscript,
-    array: toKeywordNode(arrayToken),
+    array: addTrailingComments(toKeywordNode(arrayToken), _),
     parenthesis: brackets,
   })
 %}
 
-function_call -> %RESERVED_FUNCTION_NAME parenthesis {%
-  ([nameToken, parens]) => ({
+function_call -> %RESERVED_FUNCTION_NAME _ parenthesis {%
+  ([nameToken, _, parens]) => ({
     type: NodeType.function_call,
-    name: toKeywordNode(nameToken),
+    name: addTrailingComments(toKeywordNode(nameToken), _),
     parenthesis: parens,
   })
 %}
@@ -171,41 +186,33 @@ square_brackets -> "[" expression:* "]" {%
   })
 %}
 
-property_access -> simple_expression %DOT (identifier | array_subscript | all_columns_asterisk) {%
+property_access -> simple_expression _ %DOT _ (identifier | array_subscript | all_columns_asterisk) {%
   // Allowing property to be <array_subscript> is currently a hack.
   // A better way would be to allow <property_access> on the left side of array_subscript,
   // but we currently can't do that because of another hack that requires
   // %ARRAY_IDENTIFIER on the left side of <array_subscript>.
-  ([object, dot, [property]]) => {
+  ([object, _1, dot, _2, [property]]) => {
     return {
       type: NodeType.property_access,
-      object,
-      property,
+      object: addTrailingComments(object, _1),
+      property: addLeadingComments(property, _2),
     };
   }
 %}
 
-between_predicate -> %BETWEEN commaless_expression %AND commaless_expression {%
-  ([betweenToken, expr1, andToken, expr2]) => ({
+between_predicate -> %BETWEEN _ simple_expression _ %AND _ simple_expression {%
+  ([betweenToken, _1, expr1, _2, andToken, _3, expr2]) => ({
     type: NodeType.between_predicate,
     between: toKeywordNode(betweenToken),
-    expr1: [expr1],
+    expr1: [addTrailingComments(addLeadingComments(expr1, _1), _2)],
     and: toKeywordNode(andToken),
-    expr2: [expr2],
+    expr2: [addLeadingComments(expr2, _3)],
   })
 %}
 
 comma -> ( %COMMA ) {% ([[token]]) => ({ type: NodeType.comma }) %}
 
 asterisk -> ( %ASTERISK ) {% ([[token]]) => ({ type: NodeType.operator, text: token.text }) %}
-
-expression_token ->
-  ( operator
-  | identifier
-  | parameter
-  | literal
-  | keyword
-  | comment ) {% unwrap %}
 
 operator -> ( %OPERATOR ) {% ([[token]]) => ({ type: NodeType.operator, text: token.text }) %}
 
@@ -236,6 +243,8 @@ keyword ->
   | %XOR ) {%
   ([[token]]) => toKeywordNode(token)
 %}
+
+_ -> comment:* {% ([comments]) => comments %}
 
 comment -> %LINE_COMMENT {%
   ([token]) => ({

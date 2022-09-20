@@ -23,7 +23,7 @@ export function disambiguateTokens(tokens: Token[]): Token[] {
 
 const dotKeywordToIdent = (token: Token, i: number, tokens: Token[]): Token => {
   if (isReserved(token.type)) {
-    const prevToken = tokens[i - 1];
+    const prevToken = prevNonCommentToken(tokens, i);
     if (prevToken && prevToken.text === '.') {
       return { ...token, type: TokenType.IDENTIFIER, text: token.raw };
     }
@@ -33,7 +33,7 @@ const dotKeywordToIdent = (token: Token, i: number, tokens: Token[]): Token => {
 
 const funcNameToKeyword = (token: Token, i: number, tokens: Token[]): Token => {
   if (token.type === TokenType.RESERVED_FUNCTION_NAME) {
-    const nextToken = tokens[i + 1];
+    const nextToken = nextNonCommentToken(tokens, i);
     if (!nextToken || !isOpenParen(nextToken)) {
       return { ...token, type: TokenType.RESERVED_KEYWORD };
     }
@@ -43,7 +43,7 @@ const funcNameToKeyword = (token: Token, i: number, tokens: Token[]): Token => {
 
 const identToArrayIdent = (token: Token, i: number, tokens: Token[]): Token => {
   if (token.type === TokenType.IDENTIFIER) {
-    const nextToken = tokens[i + 1];
+    const nextToken = nextNonCommentToken(tokens, i);
     if (nextToken && isOpenBracket(nextToken)) {
       return { ...token, type: TokenType.ARRAY_IDENTIFIER };
     }
@@ -53,7 +53,7 @@ const identToArrayIdent = (token: Token, i: number, tokens: Token[]): Token => {
 
 const keywordToArrayKeyword = (token: Token, i: number, tokens: Token[]): Token => {
   if (token.type === TokenType.RESERVED_KEYWORD) {
-    const nextToken = tokens[i + 1];
+    const nextToken = nextNonCommentToken(tokens, i);
     if (nextToken && isOpenBracket(nextToken)) {
       return { ...token, type: TokenType.ARRAY_KEYWORD };
     }
@@ -61,6 +61,24 @@ const keywordToArrayKeyword = (token: Token, i: number, tokens: Token[]): Token 
   return token;
 };
 
+const prevNonCommentToken = (tokens: Token[], index: number): Token | undefined =>
+  nextNonCommentToken(tokens, index, -1);
+
+const nextNonCommentToken = (
+  tokens: Token[],
+  index: number,
+  dir: -1 | 1 = 1
+): Token | undefined => {
+  let i = 1;
+  while (tokens[index + i * dir] && isComment(tokens[index + i * dir])) {
+    i++;
+  }
+  return tokens[index + i * dir];
+};
+
 const isOpenParen = (t: Token): boolean => t.type === TokenType.OPEN_PAREN && t.text === '(';
 
 const isOpenBracket = (t: Token): boolean => t.type === TokenType.OPEN_PAREN && t.text === '[';
+
+const isComment = (t: Token): boolean =>
+  t.type === TokenType.BLOCK_COMMENT || t.type === TokenType.LINE_COMMENT;

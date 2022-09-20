@@ -256,6 +256,52 @@ Array [
 ]
 `;
 
+exports[`Parser parses array subscript with comment 1`] = `
+Array [
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "array": Object {
+              "text": "my_array",
+              "trailingComments": Array [
+                Object {
+                  "text": "/*haha*/",
+                  "type": "block_comment",
+                },
+              ],
+              "type": "identifier",
+            },
+            "parenthesis": Object {
+              "children": Array [
+                Object {
+                  "text": "5",
+                  "type": "literal",
+                },
+              ],
+              "closeParen": "]",
+              "openParen": "[",
+              "type": "parenthesis",
+            },
+            "type": "array_subscript",
+          },
+        ],
+        "name": Object {
+          "raw": "SELECT",
+          "text": "SELECT",
+          "tokenType": "RESERVED_SELECT",
+          "type": "keyword",
+        },
+        "type": "clause",
+      },
+    ],
+    "hasSemicolon": false,
+    "type": "statement",
+  },
+]
+`;
+
 exports[`Parser parses curly braces 1`] = `
 Array [
   Object {

@@ -161,6 +161,54 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     `);
   });
 
+  it('formats comments between function name and parenthesis', () => {
+    const result = format(`
+      SELECT count /* comment */ (*);
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        count
+        /* comment */
+        (*);
+    `);
+  });
+
+  it('formats comments between qualified.names (before dot)', () => {
+    const result = format(`
+      SELECT foo/* com1 */.bar, count()/* com2 */.bar, foo.bar/* com3 */.baz, (1, 2) /* com4 */.foo;
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        foo
+        /* com1 */
+      .bar,
+        count()
+        /* com2 */
+      .bar,
+        foo.bar
+        /* com3 */
+      .baz,
+        (1, 2)
+        /* com4 */
+      .foo;
+    `);
+  });
+
+  it('formats comments between qualified.names (after dot)', () => {
+    const result = format(`
+      SELECT foo. /* com1 */ bar, foo. /* com2 */ *;
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        foo.
+        /* com1 */
+        bar,
+        foo.
+        /* com2 */
+        *;
+    `);
+  });
+
   if (opts.hashComments) {
     it('supports # line comment', () => {
       const result = format('SELECT alpha # commment\nFROM beta');

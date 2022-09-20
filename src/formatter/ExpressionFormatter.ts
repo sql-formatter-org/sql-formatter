@@ -24,6 +24,7 @@ import {
   CommaNode,
   KeywordNode,
   PropertyAccessNode,
+  CommentNode,
 } from 'src/parser/ast';
 
 import Layout, { WS } from './Layout';
@@ -64,6 +65,12 @@ export default class ExpressionFormatter {
   }
 
   private formatNode(node: AstNode) {
+    this.formatComments(node.leadingComments);
+    this.formatNodeWithoutComments(node);
+    this.formatComments(node.trailingComments);
+  }
+
+  private formatNodeWithoutComments(node: AstNode) {
     switch (node.type) {
       case NodeType.function_call:
         return this.formatFunctionCall(node);
@@ -103,19 +110,25 @@ export default class ExpressionFormatter {
   }
 
   private formatFunctionCall(node: FunctionCallNode) {
-    this.layout.add(this.showKw(node.name));
-    this.formatParenthesis(node.parenthesis);
+    this.withComments(node.name, () => {
+      this.layout.add(this.showKw(node.name));
+    });
+    this.formatNode(node.parenthesis);
   }
 
-  private formatArraySubscript({ array, parenthesis }: ArraySubscriptNode) {
-    this.layout.add(array.type === NodeType.keyword ? this.showKw(array) : array.text);
-    this.formatParenthesis(parenthesis);
+  private formatArraySubscript(node: ArraySubscriptNode) {
+    this.withComments(node.array, () => {
+      this.layout.add(
+        node.array.type === NodeType.keyword ? this.showKw(node.array) : node.array.text
+      );
+    });
+    this.formatNode(node.parenthesis);
   }
 
-  private formatPropertyAccess({ object, property }: PropertyAccessNode) {
-    this.formatNode(object);
+  private formatPropertyAccess(node: PropertyAccessNode) {
+    this.formatNode(node.object);
     this.layout.add(WS.NO_SPACE, '.');
-    this.formatNode(property);
+    this.formatNode(node.property);
   }
 
   private formatParenthesis(node: ParenthesisNode) {
@@ -173,7 +186,9 @@ export default class ExpressionFormatter {
   }
 
   private formatLimitClause(node: LimitClauseNode) {
-    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name));
+    this.withComments(node.name, () => {
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name));
+    });
     this.layout.indentation.increaseTopLevel();
 
     if (isTabularStyle(this.cfg)) {
@@ -237,6 +252,25 @@ export default class ExpressionFormatter {
     } else {
       this.layout.add(WS.NO_SPACE, ',', WS.SPACE);
     }
+  }
+
+  private withComments(node: AstNode, fn: () => void) {
+    this.formatComments(node.leadingComments);
+    fn();
+    this.formatComments(node.trailingComments);
+  }
+
+  private formatComments(comments: CommentNode[] | undefined) {
+    if (!comments) {
+      return;
+    }
+    comments.forEach(com => {
+      if (com.type === NodeType.line_comment) {
+        this.formatLineComment(com);
+      } else {
+        this.formatBlockComment(com);
+      }
+    });
   }
 
   private formatLineComment(node: LineCommentNode) {
