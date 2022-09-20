@@ -6,4 +6,7 @@ export function lineColFromIndex(source: string, index: number): LineCol {
   return { line: lines.length, col: lines[lines.length - 1].length + 1 };
 }
 
-export type LineCol = { line: number; col: number };
+export interface LineCol {
+  line: number;
+  col: number;
+}
