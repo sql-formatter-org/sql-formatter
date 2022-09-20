@@ -6,7 +6,7 @@ import { ParamTypes } from 'src/lexer/TokenizerOptions';
 import { StatementNode } from 'src/parser/ast';
 import grammar from 'src/parser/grammar';
 import LexerAdapter from 'src/parser/LexerAdapter';
-import { EOF_TOKEN } from 'src/lexer/token';
+import { createEofToken } from 'src/lexer/token';
 
 export interface Parser {
   parse(sql: string, paramTypesOverrides: ParamTypes): StatementNode[];
@@ -19,7 +19,7 @@ export function createParser(tokenizer: Tokenizer): Parser {
   let paramTypesOverrides: ParamTypes = {};
   const lexer = new LexerAdapter(chunk => [
     ...disambiguateTokens(tokenizer.tokenize(chunk, paramTypesOverrides)),
-    EOF_TOKEN,
+    createEofToken(chunk.length),
   ]);
   const parser = new NearleyParser(Grammar.fromCompiled(grammar), { lexer });
 

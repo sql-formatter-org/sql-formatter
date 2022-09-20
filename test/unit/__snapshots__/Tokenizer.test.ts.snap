@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tokenizer tokenizes multiline SQL tokens 1`] = `
+Array [
+  Object {
+    "loc": Object {
+      "end": 6,
+      "start": 0,
+    },
+    "precedingWhitespace": undefined,
+    "raw": "SELECT",
+    "text": "SELECT",
+    "type": "RESERVED_SELECT",
+  },
+  Object {
+    "loc": Object {
+      "end": 17,
+      "start": 7,
+    },
+    "precedingWhitespace": " ",
+    "raw": "\\"foo
+ bar\\"",
+    "text": "\\"foo
+ bar\\"",
+    "type": "QUOTED_IDENTIFIER",
+  },
+  Object {
+    "loc": Object {
+      "end": 27,
+      "start": 18,
+    },
+    "precedingWhitespace": " ",
+    "raw": "/* 
+
+
+ */",
+    "text": "/* 
+
+
+ */",
+    "type": "BLOCK_COMMENT",
+  },
+  Object {
+    "loc": Object {
+      "end": 28,
+      "start": 27,
+    },
+    "precedingWhitespace": undefined,
+    "raw": ";",
+    "text": ";",
+    "type": "DELIMITER",
+  },
+]
+`;
+
+exports[`Tokenizer tokenizes single line SQL tokens 1`] = `
+Array [
+  Object {
+    "loc": Object {
+      "end": 6,
+      "start": 0,
+    },
+    "precedingWhitespace": undefined,
+    "raw": "SELECT",
+    "text": "SELECT",
+    "type": "RESERVED_SELECT",
+  },
+  Object {
+    "loc": Object {
+      "end": 8,
+      "start": 7,
+    },
+    "precedingWhitespace": " ",
+    "raw": "*",
+    "text": "*",
+    "type": "ASTERISK",
+  },
+  Object {
+    "loc": Object {
+      "end": 13,
+      "start": 9,
+    },
+    "precedingWhitespace": " ",
+    "raw": "FROM",
+    "text": "FROM",
+    "type": "RESERVED_COMMAND",
+  },
+  Object {
+    "loc": Object {
+      "end": 17,
+      "start": 14,
+    },
+    "precedingWhitespace": " ",
+    "raw": "foo",
+    "text": "foo",
+    "type": "IDENTIFIER",
+  },
+  Object {
+    "loc": Object {
+      "end": 18,
+      "start": 17,
+    },
+    "precedingWhitespace": undefined,
+    "raw": ";",
+    "text": ";",
+    "type": "DELIMITER",
+  },
+]
+`;

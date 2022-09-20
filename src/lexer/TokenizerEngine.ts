@@ -87,8 +87,10 @@ export default class TokenizerEngine {
         type: rule.type,
         raw: matchedText,
         text: rule.text ? rule.text(matchedText) : matchedText,
-        start: this.index,
-        end: this.index + matchedText.length,
+        loc: {
+          start: this.index,
+          end: this.index + matchedText.length,
+        },
       };
 
       if (rule.key) {

@@ -44,22 +44,29 @@ export interface Token {
   raw: string; // The raw original text that was matched
   text: string; // Cleaned up text e.g. keyword converted to uppercase and extra spaces removed
   key?: string;
-  start: number; // 0-based index of the token in the whole query string
-  end: number; // 0-based index of where the token ends in the query string
+  loc: Loc;
   precedingWhitespace?: string; // Whitespace before this token, if any
 }
+
+/** Describes location in source code */
+export interface Loc {
+  start: number; // 0-based index of the token in the whole query string
+  end: number; // 0-based index of where the token ends in the query string
+}
+
+/** Creates EOF token positioned at given location */
+export const createEofToken = (index: number) => ({
+  type: TokenType.EOF,
+  raw: '«EOF»',
+  text: '«EOF»',
+  loc: { start: index, end: index },
+});
 
 /**
  * For use as a "missing token"
  * e.g. in lookAhead and lookBehind to avoid dealing with null values
  */
-export const EOF_TOKEN: Token = {
-  type: TokenType.EOF,
-  raw: '«EOF»',
-  text: '«EOF»',
-  start: Infinity,
-  end: Infinity,
-};
+export const EOF_TOKEN = createEofToken(Infinity);
 
 /** Checks if two tokens are equivalent */
 export const testToken =
