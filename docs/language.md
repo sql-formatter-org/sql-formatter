@@ -15,6 +15,7 @@ Specifies the SQL dialect to use.
 - `"postgresql"` - [PostgreSQL][]
 - `"redshift"` - [Amazon Redshift][]
 - `"singlestoredb"` - [SingleStoreDB][]
+- `"snowflake"` - [Snowflake][]
 - `"spark"` - [Spark][]
 - `"sqlite"` - [SQLite][sqlite]
 - `"transactsql"` or `"tsql"` - [SQL Server Transact-SQL][tsql]
@@ -61,6 +62,7 @@ You likely only want to use this if your other alternative is to fork SQL Format
 [presto]: https://prestodb.io/docs/current/
 [amazon redshift]: https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 [singlestoredb]: https://docs.singlestore.com/managed-service/en/reference.html
+[snowflake]: https://docs.snowflake.com/en/index.html
 [spark]: https://spark.apache.org/docs/latest/api/sql/index.html
 [sqlite]: https://sqlite.org/index.html
 [trino]: https://trino.io/docs/current/

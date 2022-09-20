@@ -13,6 +13,7 @@ import SqlFormatter from 'src/languages/sql/sql.formatter';
 import TrinoFormatter from 'src/languages/trino/trino.formatter';
 import TransactSqlFormatter from 'src/languages/transactsql/transactsql.formatter';
 import SingleStoreDbFormatter from './languages/singlestoredb/singlestoredb.formatter';
+import SnowflakeFormatter from './languages/snowflake/snowflake.formatter';
 
 import { FormatOptions } from './FormatOptions';
 import { ParamItems } from './formatter/Params';
@@ -28,6 +29,7 @@ export const formatters = {
   postgresql: PostgreSqlFormatter,
   redshift: RedshiftFormatter,
   singlestoredb: SingleStoreDbFormatter,
+  snowflake: SnowflakeFormatter,
   spark: SparkFormatter,
   sql: SqlFormatter,
   sqlite: SqliteFormatter,

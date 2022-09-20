@@ -37,7 +37,8 @@
     "sqlite",
     "trino",
     "presto",
-    "prestosql"
+    "prestosql",
+    "snowflake"
   ],
   "contributors": [
     "Adrien Pyke <adpyke@gmail.com>",
