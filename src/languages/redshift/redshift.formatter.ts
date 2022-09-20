@@ -167,6 +167,7 @@ export default class RedshiftFormatter extends Formatter {
         '<<',
         '>>',
         '||',
+        '::',
       ],
     });
   }

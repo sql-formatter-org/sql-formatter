@@ -41,12 +41,19 @@ describe('RedshiftFormatter', () => {
   supportsTruncateTable(format, { withoutTable: true });
   supportsStrings(format, ["''-qq"]);
   supportsIdentifiers(format, [`""-qq`]);
-  // Missing: '#' operator
+  // Missing: '#' and '::' operator (tested separately)
   supportsOperators(format, ['^', '%', '@', '|/', '||/', '&', '|', '~', '<<', '>>', '||']);
   supportsJoin(format);
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT', 'MINUS']);
   supportsParams(format, { numbered: ['$'] });
   supportsLimiting(format, { limit: true, offset: true });
+
+  it('formats type-cast operator without spaces', () => {
+    expect(format('SELECT 2 :: numeric AS foo;')).toBe(dedent`
+      SELECT
+        2::numeric AS foo;
+    `);
+  });
 
   it('formats LIMIT', () => {
     expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC LIMIT 10;')).toBe(dedent`
