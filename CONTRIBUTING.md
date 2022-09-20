@@ -32,6 +32,7 @@ To publish the VSCode Extension:
 - Adrien Pyke <adpyke@gmail.com>
 - Ahmad Khan <ahmad.khan@educative.io>
 - Alexandr Kozhevnikov <aedkozhevnikov@sberbank.ru>
+- Alexander Prinzhorn <alexander@prinzhorn.it>
 - Andrew
 - Benjamin Bellamy
 - bingou
