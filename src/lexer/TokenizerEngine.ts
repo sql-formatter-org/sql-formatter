@@ -1,4 +1,5 @@
 import { Token, TokenType } from 'src/lexer/token';
+import { lineColFromIndex } from './lineColFromIndex';
 import { WHITESPACE_REGEX } from './regexUtil';
 
 export interface RegExpLike {
@@ -45,13 +46,19 @@ export default class TokenizerEngine {
         // Get the next token and the token type
         token = this.getNextToken();
         if (!token) {
-          throw new Error(`Parse error: Unexpected "${input.slice(this.index, 100)}"`);
+          throw this.createParseError();
         }
 
         tokens.push({ ...token, precedingWhitespace });
       }
     }
     return tokens;
+  }
+
+  private createParseError(): Error {
+    const text = this.input.slice(this.index, this.index + 10);
+    const { line, col } = lineColFromIndex(this.input, this.index);
+    return new Error(`Parse error: Unexpected "${text}" at line ${line} column ${col}`);
   }
 
   private getWhitespace(): string | undefined {
