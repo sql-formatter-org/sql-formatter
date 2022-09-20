@@ -21,120 +21,120 @@ export enum NodeType {
   block_comment = 'block_comment',
 }
 
-type BaseNode = {
+interface BaseNode {
   leadingComments?: CommentNode[];
   trailingComments?: CommentNode[];
-};
+}
 
-export type StatementNode = BaseNode & {
+export interface StatementNode extends BaseNode {
   type: NodeType.statement;
   children: AstNode[];
   hasSemicolon: boolean;
-};
+}
 
-export type ClauseNode = BaseNode & {
+export interface ClauseNode extends BaseNode {
   type: NodeType.clause;
   name: KeywordNode;
   children: AstNode[];
-};
+}
 
-export type SetOperationNode = BaseNode & {
+export interface SetOperationNode extends BaseNode {
   type: NodeType.set_operation;
   name: KeywordNode;
   children: AstNode[];
-};
+}
 
-export type FunctionCallNode = BaseNode & {
+export interface FunctionCallNode extends BaseNode {
   type: NodeType.function_call;
   name: KeywordNode;
   parenthesis: ParenthesisNode;
-};
+}
 
 // <ident>[<expr>]
-export type ArraySubscriptNode = BaseNode & {
+export interface ArraySubscriptNode extends BaseNode {
   type: NodeType.array_subscript;
   array: IdentifierNode | KeywordNode;
   parenthesis: ParenthesisNode;
-};
+}
 
-export type ParenthesisNode = BaseNode & {
+export interface ParenthesisNode extends BaseNode {
   type: NodeType.parenthesis;
   children: AstNode[];
   openParen: string;
   closeParen: string;
-};
+}
 
 // BETWEEN <expr1> AND <expr2>
-export type BetweenPredicateNode = BaseNode & {
+export interface BetweenPredicateNode extends BaseNode {
   type: NodeType.between_predicate;
   between: KeywordNode;
   expr1: AstNode[];
   and: KeywordNode;
   expr2: AstNode[];
-};
+}
 
 // LIMIT <count>
 // LIMIT <offset>, <count>
-export type LimitClauseNode = BaseNode & {
+export interface LimitClauseNode extends BaseNode {
   type: NodeType.limit_clause;
   name: KeywordNode;
   count: AstNode[];
   offset?: AstNode[];
-};
+}
 
 // The "*" operator used in SELECT *
-export type AllColumnsAsteriskNode = BaseNode & {
+export interface AllColumnsAsteriskNode extends BaseNode {
   type: NodeType.all_columns_asterisk;
-};
+}
 
-export type LiteralNode = BaseNode & {
+export interface LiteralNode extends BaseNode {
   type: NodeType.literal;
   text: string;
-};
+}
 
-export type PropertyAccessNode = BaseNode & {
+export interface PropertyAccessNode extends BaseNode {
   type: NodeType.property_access;
   object: AstNode;
   property: IdentifierNode | ArraySubscriptNode | AllColumnsAsteriskNode;
-};
+}
 
-export type IdentifierNode = BaseNode & {
+export interface IdentifierNode extends BaseNode {
   type: NodeType.identifier;
   text: string;
-};
+}
 
-export type KeywordNode = BaseNode & {
+export interface KeywordNode extends BaseNode {
   type: NodeType.keyword;
   tokenType: TokenType;
   text: string;
   raw: string;
-};
+}
 
-export type ParameterNode = BaseNode & {
+export interface ParameterNode extends BaseNode {
   type: NodeType.parameter;
   key?: string;
   text: string;
-};
+}
 
-export type OperatorNode = BaseNode & {
+export interface OperatorNode extends BaseNode {
   type: NodeType.operator;
   text: string;
-};
+}
 
-export type CommaNode = BaseNode & {
+export interface CommaNode extends BaseNode {
   type: NodeType.comma;
-};
+}
 
-export type LineCommentNode = BaseNode & {
+export interface LineCommentNode extends BaseNode {
   type: NodeType.line_comment;
   text: string;
   precedingWhitespace: string;
-};
+}
 
-export type BlockCommentNode = BaseNode & {
+export interface BlockCommentNode extends BaseNode {
   type: NodeType.block_comment;
   text: string;
-};
+}
 
 export type CommentNode = LineCommentNode | BlockCommentNode;
 
