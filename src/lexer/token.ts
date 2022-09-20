@@ -44,14 +44,8 @@ export interface Token {
   raw: string; // The raw original text that was matched
   text: string; // Cleaned up text e.g. keyword converted to uppercase and extra spaces removed
   key?: string;
-  loc: Loc;
+  start: number;
   precedingWhitespace?: string; // Whitespace before this token, if any
-}
-
-/** Describes location in source code */
-export interface Loc {
-  start: number; // 0-based index of the token in the whole query string
-  end: number; // 0-based index of where the token ends in the query string
 }
 
 /** Creates EOF token positioned at given location */
@@ -59,7 +53,7 @@ export const createEofToken = (index: number) => ({
   type: TokenType.EOF,
   raw: '«EOF»',
   text: '«EOF»',
-  loc: { start: index, end: index },
+  start: index,
 });
 
 /**
