@@ -603,7 +603,7 @@ export default class PlSqlFormatter {
 
     decrementIndent() {
         this.lastIndentKey = this.indentsKeyWords.pop();
-        this.indentCount = this.lastIndentKey.indent;
+        this.indentCount = this.lastIndentKey ? this.lastIndentKey.indent : 0;
     }
 
     incrementIndent(key, name) {
