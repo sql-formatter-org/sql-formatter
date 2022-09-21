@@ -1,18 +1,15 @@
-const path = require('path');
+import path from 'path';
 
-module.exports = {
+export default {
   entry: './src/index.ts',
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join('', 'dist'),
     filename: 'sql-formatter.js',
     library: 'sqlFormatter',
-    libraryTarget: 'umd',
+    libraryTarget: 'esm',
   },
   resolve: {
     extensions: ['.js', '.ts'],
-    alias: {
-      src: path.resolve(__dirname, 'src/'),
-    },
   },
   module: {
     rules: [
