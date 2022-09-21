@@ -8,6 +8,8 @@
   "bin": {
     "sql-formatter": "./bin/sql-formatter-cli.js"
   },
+  "type": "module",
+  "sideEffects": false,
   "keywords": [
     "sql",
     "formatter",
