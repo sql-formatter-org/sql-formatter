@@ -19,14 +19,6 @@ For those who have admin access on the repo, the new release publish flow is as 
 - `npm run release` (bumps version, git tag, git release, npm release) (does not work with `yarn`).
 - `git subtree push --prefix static origin gh-pages` (pushes demo page to GH pages)
 
-To publish the VSCode Extension:
-
-- ensure that the CHANGELOG and `package.json` are up to date before bumping version
-- ensure that the version does not conflict with a previous extension version
-- run the following commands in the `vscode/` dir (requires auth with Microsoft Dev account + access to VSCode team)
-  - `yarn vsce:package`
-  - `yarn vsce:publish` (can also be done via browser)
-
 ## Contributors
 
 - Adrien Pyke <adpyke@gmail.com>
