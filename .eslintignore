@@ -2,6 +2,5 @@
 /lib
 /dist
 /coverage
-/vscode
 webpack.*.js
 /src/parser/grammar.ts

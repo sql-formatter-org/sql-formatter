@@ -16,7 +16,7 @@
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": ["test/**", "**/*.test.js", "**/*.test.ts", "vscode/src/test/**"],
+        "devDependencies": ["test/**", "**/*.test.js", "**/*.test.ts"],
         "packageDir": ["./"]
       }
     ],
