@@ -1,6 +1,6 @@
 <a href='https://github.com/sql-formatter-org/sql-formatter'><img src="static/prettier-sql-clean.svg" width="128"/></a>
 
-# SQL Formatter [![NPM version](https://img.shields.io/npm/v/sql-formatter.svg)](https://npmjs.com/package/sql-formatter) ![Build status](https://img.shields.io/github/workflow/status/sql-formatter-org/sql-formatter/coveralls/master?label=Build&logo=Github) ![Coverage status](https://img.shields.io/coveralls/github/sql-formatter-org/sql-formatter?branch=master&label=Coverage&logo=coveralls&style=plastic) [![VSCode](https://img.shields.io/visual-studio-marketplace/v/inferrinizzard.prettier-sql-vscode?label=vscode)](https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode)
+# SQL Formatter [![NPM version](https://img.shields.io/npm/v/sql-formatter.svg)](https://npmjs.com/package/sql-formatter) ![Build status](https://img.shields.io/github/workflow/status/sql-formatter-org/sql-formatter/coveralls/master?label=Build&logo=Github) ![Coverage status](https://img.shields.io/coveralls/github/sql-formatter-org/sql-formatter?branch=master&label=Coverage&logo=coveralls&style=plastic)
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 
