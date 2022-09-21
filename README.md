@@ -166,7 +166,7 @@ This makes SQL Formatter available as a global variable `window.sqlFormatter`.
 
 ### Usage in editors
 
-- [VSCode extension](https://github.com/sql-formatter-org/prettier-sql-vscode)
+- [VSCode extension](https://github.com/sql-formatter-org/sql-formatter-vscode)
 - [Vim extension](https://github.com/fannheyward/coc-sql/)
 - [Prettier plugin](https://github.com/un-ts/prettier/tree/master/packages/sql)
 
