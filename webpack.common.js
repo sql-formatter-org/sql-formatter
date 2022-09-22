@@ -3,10 +3,13 @@ import path from 'path';
 export default {
   entry: './src/index.ts',
   output: {
-    path: path.join('', 'dist'),
+    path: path.resolve('./dist'),
     filename: 'sql-formatter.js',
-    library: 'sqlFormatter',
-    libraryTarget: 'esm',
+    library: { type: 'module' },
+    module: true,
+  },
+  experiments: {
+    outputModule: true,
   },
   resolve: {
     extensions: ['.js', '.ts'],
