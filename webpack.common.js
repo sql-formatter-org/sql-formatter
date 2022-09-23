@@ -13,6 +13,9 @@ export default {
   },
   resolve: {
     extensions: ['.js', '.ts'],
+    alias: {
+      src: path.resolve('./src'),
+    },
   },
   module: {
     rules: [
