@@ -6,6 +6,10 @@
   "main": "dist/sql-formatter.min.js",
   "module": "lib/index.js",
   "types": "lib/src/index.d.ts",
+  "exports": {
+    ".": "./lib/index.js",
+    "./sql": "./lib/exports/StandardSQLFormatter.js"
+  },
   "bin": {
     "sql-formatter": "./bin/sql-formatter-cli.js"
   },
