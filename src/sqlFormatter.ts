@@ -7,12 +7,12 @@ import N1qlFormatter from 'src/languages/n1ql/n1ql.formatter';
 import PlSqlFormatter from 'src/languages/plsql/plsql.formatter';
 import PostgreSqlFormatter from 'src/languages/postgresql/postgresql.formatter';
 import RedshiftFormatter from 'src/languages/redshift/redshift.formatter';
+import SingleStoreDbFormatter from 'src/languages/singlestoredb/singlestoredb.formatter';
 import SparkFormatter from 'src/languages/spark/spark.formatter';
 import SqliteFormatter from 'src/languages/sqlite/sqlite.formatter';
 import SqlFormatter from 'src/languages/sql/sql.formatter';
 import TrinoFormatter from 'src/languages/trino/trino.formatter';
 import TransactSqlFormatter from 'src/languages/transactsql/transactsql.formatter';
-import SingleStoreDbFormatter from './languages/singlestoredb/singlestoredb.formatter';
 
 import { FormatOptions } from './FormatOptions';
 import { ParamItems } from './formatter/Params';

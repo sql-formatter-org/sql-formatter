@@ -8,7 +8,21 @@
   "types": "lib/src/index.d.ts",
   "exports": {
     ".": "./lib/index.js",
-    "./sql": "./lib/exports/StandardSQLFormatter.js"
+    "./bigquery": "./lib/exports/BigQuerySQLFormatter.js",
+    "./db2": "./lib/exports/Db2SQLFormatter.js",
+    "./hive": "./lib/exports/HiveSQLFormatter.js",
+    "./mariadb": "./lib/exports/MariaDbSQLFormatter.js",
+    "./mysql": "./lib/exports/MySqlSQLFormatter.js",
+    "./n1ql": "./lib/exports/N1qlSQLFormatter.js",
+    "./plsql": "./lib/exports/PlSqlSQLFormatter.js",
+    "./postgresql": "./lib/exports/PostgreSqlSQLFormatter.js",
+    "./redshift": "./lib/exports/RedshiftSQLFormatter.js",
+    "./singlestoredb": "./lib/exports/SingleStoreDbSQLFormatter.js",
+    "./spark": "./lib/exports/SparkSQLFormatter.js",
+    "./sql": "./lib/exports/StandardSQLFormatter.js",
+    "./sqlite": "./lib/exports/SqliteSQLFormatter.js",
+    "./transactsql": "./lib/exports/TransactSqlSQLFormatter.js",
+    "./trino": "./lib/exports/TrinoSQLFormatter.js"
   },
   "bin": {
     "sql-formatter": "./bin/sql-formatter-cli.js"
