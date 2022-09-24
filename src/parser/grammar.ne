@@ -92,6 +92,13 @@ select_clause -> %RESERVED_SELECT (all_columns_asterisk expression:* | asteriskl
     children: [exp, ...expressions],
   })
 %}
+select_clause -> %RESERVED_SELECT {%
+  ([nameToken]) => ({
+    type: NodeType.clause,
+    name: toKeywordNode(nameToken),
+    children: [],
+  })
+%}
 
 all_columns_asterisk -> %ASTERISK {%
   () => ({ type: NodeType.all_columns_asterisk })
