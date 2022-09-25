@@ -92,7 +92,7 @@ export default class Tokenizer {
       },
       {
         type: TokenType.RESERVED_DEPENDENT_CLAUSE,
-        regex: regex.reservedWord(cfg.reservedDependentClauses, cfg.identChars),
+        regex: regex.reservedWord(['WHEN', 'ELSE'], cfg.identChars),
         text: toCanonical,
       },
       {

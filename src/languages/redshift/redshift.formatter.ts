@@ -146,7 +146,6 @@ export default class RedshiftFormatter extends Formatter {
       reservedSelect,
       reservedSetOperations,
       reservedJoins,
-      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,

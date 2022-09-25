@@ -126,7 +126,6 @@ export default class TrinoFormatter extends Formatter {
       reservedSelect,
       reservedSetOperations,
       reservedJoins,
-      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,

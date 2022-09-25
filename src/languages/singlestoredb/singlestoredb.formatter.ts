@@ -237,7 +237,6 @@ export default class SingleStoreDbFormatter extends Formatter {
       reservedSelect,
       reservedSetOperations,
       reservedJoins,
-      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,

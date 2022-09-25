@@ -85,7 +85,6 @@ export default class N1qlFormatter extends Formatter {
       reservedSelect,
       reservedSetOperations,
       reservedJoins,
-      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedPhrases,
       supportsXor: true,
       reservedKeywords: keywords,

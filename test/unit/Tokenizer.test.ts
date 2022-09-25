@@ -5,7 +5,6 @@ describe('Tokenizer', () => {
     new Tokenizer({
       reservedCommands: ['FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
       reservedSelect: ['SELECT'],
-      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedSetOperations: ['UNION', 'UNION ALL'],
       reservedJoins: ['JOIN'],
       reservedFunctionNames: ['SQRT', 'CURRENT_TIME'],
