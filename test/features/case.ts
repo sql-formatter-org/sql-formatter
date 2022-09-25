@@ -123,4 +123,20 @@ export default function supportsCase(format: FormatFn) {
                 END;
     `);
   });
+
+  it('formats CASE with identStyle:tabularRight', () => {
+    const result = format('SELECT CASE foo WHEN 1 THEN bar ELSE baz END;', {
+      indentStyle: 'tabularRight',
+    });
+
+    expect(result).toBe(
+      [
+        '   SELECT CASE',
+        '                    foo',
+        '                    WHEN 1 THEN bar',
+        '                    ELSE baz',
+        '          END;',
+      ].join('\n')
+    );
+  });
 }
