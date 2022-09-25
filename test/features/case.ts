@@ -109,4 +109,18 @@ export default function supportsCase(format: FormatFn) {
         quaz
     `);
   });
+
+  it('formats CASE with identStyle:tabularLeft', () => {
+    const result = format('SELECT CASE foo WHEN 1 THEN bar ELSE baz END;', {
+      indentStyle: 'tabularLeft',
+    });
+
+    expect(result).toBe(dedent`
+      SELECT    CASE
+                          foo
+                          WHEN      1 THEN bar
+                          ELSE      baz
+                END;
+    `);
+  });
 }
