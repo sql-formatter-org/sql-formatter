@@ -204,6 +204,13 @@ describe('PostgreSqlFormatter', () => {
     `);
   });
 
+  // Regression test for issue #447
+  it('formats empty SELECT', () => {
+    expect(format('SELECT;')).toBe(dedent`
+      SELECT;
+    `);
+  });
+
   // Regression test for issue #391
   it('formats TIMESTAMP WITH TIME ZONE syntax', () => {
     expect(
