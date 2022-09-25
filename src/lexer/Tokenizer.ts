@@ -91,8 +91,13 @@ export default class Tokenizer {
         text: toCanonical,
       },
       {
-        type: TokenType.RESERVED_DEPENDENT_CLAUSE,
-        regex: regex.reservedWord(['WHEN', 'ELSE'], cfg.identChars),
+        type: TokenType.WHEN,
+        regex: /WHEN\b/iuy,
+        text: toCanonical,
+      },
+      {
+        type: TokenType.ELSE,
+        regex: /ELSE\b/iuy,
         text: toCanonical,
       },
       {

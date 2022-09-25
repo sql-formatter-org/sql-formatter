@@ -234,10 +234,11 @@ literal ->
 keyword ->
   ( %RESERVED_KEYWORD
   | %RESERVED_PHRASE
-  | %RESERVED_DEPENDENT_CLAUSE
   | %RESERVED_JOIN
   | %CASE
   | %END
+  | %WHEN
+  | %ELSE
   | %AND
   | %OR
   | %XOR ) {%

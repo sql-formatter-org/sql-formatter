@@ -350,7 +350,8 @@ export default class ExpressionFormatter {
     switch (node.tokenType) {
       case TokenType.RESERVED_JOIN:
         return this.formatJoin(node);
-      case TokenType.RESERVED_DEPENDENT_CLAUSE:
+      case TokenType.WHEN:
+      case TokenType.ELSE:
         return this.formatDependentClause(node);
       case TokenType.AND:
       case TokenType.OR:
