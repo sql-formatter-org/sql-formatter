@@ -101,6 +101,11 @@ export default class Tokenizer {
         text: toCanonical,
       },
       {
+        type: TokenType.THEN,
+        regex: /THEN\b/iuy,
+        text: toCanonical,
+      },
+      {
         type: TokenType.RESERVED_JOIN,
         regex: regex.reservedWord(cfg.reservedJoins, cfg.identChars),
         text: toCanonical,

@@ -239,6 +239,7 @@ keyword ->
   | %END
   | %WHEN
   | %ELSE
+  | %THEN
   | %AND
   | %OR
   | %XOR ) {%

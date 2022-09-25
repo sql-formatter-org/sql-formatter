@@ -17,6 +17,7 @@ export enum TokenType {
   END = 'END',
   WHEN = 'WHEN',
   ELSE = 'ELSE',
+  THEN = 'THEN',
   LIMIT = 'LIMIT',
   BETWEEN = 'BETWEEN',
   AND = 'AND',
@@ -92,6 +93,7 @@ export const isReserved = (type: TokenType): boolean =>
   type === TokenType.END ||
   type === TokenType.WHEN ||
   type === TokenType.ELSE ||
+  type === TokenType.THEN ||
   type === TokenType.LIMIT ||
   type === TokenType.BETWEEN ||
   type === TokenType.AND ||

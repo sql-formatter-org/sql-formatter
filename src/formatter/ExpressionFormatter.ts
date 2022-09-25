@@ -357,6 +357,7 @@ export default class ExpressionFormatter {
       case TokenType.RESERVED_KEYWORD:
       case TokenType.RESERVED_FUNCTION_NAME:
       case TokenType.RESERVED_PHRASE:
+      case TokenType.THEN:
         return this.formatKeyword(node);
       case TokenType.CASE:
         return this.formatCaseStart(node);
