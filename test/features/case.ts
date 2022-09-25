@@ -118,8 +118,8 @@ export default function supportsCase(format: FormatFn) {
     expect(result).toBe(dedent`
       SELECT    CASE
                           foo
-                          WHEN      1 THEN bar
-                          ELSE      baz
+                          WHEN 1 THEN bar
+                          ELSE baz
                 END;
     `);
   });
