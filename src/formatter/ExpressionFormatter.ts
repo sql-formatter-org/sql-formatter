@@ -25,6 +25,9 @@ import {
   KeywordNode,
   PropertyAccessNode,
   CommentNode,
+  CaseExpressionNode,
+  CaseWhenNode,
+  CaseElseNode,
 } from 'src/parser/ast';
 
 import Layout, { WS } from './Layout';
@@ -82,6 +85,12 @@ export default class ExpressionFormatter {
         return this.formatParenthesis(node);
       case NodeType.between_predicate:
         return this.formatBetweenPredicate(node);
+      case NodeType.case_expression:
+        return this.formatCaseExpression(node);
+      case NodeType.case_when:
+        return this.formatCaseWhen(node);
+      case NodeType.case_else:
+        return this.formatCaseElse(node);
       case NodeType.clause:
         return this.formatClause(node);
       case NodeType.set_operation:
@@ -161,6 +170,39 @@ export default class ExpressionFormatter {
     this.layout.add(WS.NO_SPACE, WS.SPACE, this.showNonTabularKw(node.and), WS.SPACE);
     this.layout = this.formatSubExpression(node.expr2);
     this.layout.add(WS.SPACE);
+  }
+
+  private formatCaseExpression(node: CaseExpressionNode) {
+    this.layout.indentation.increaseBlockLevel();
+    this.withComments(node.case, () => {
+      this.layout.add(this.showKw(node.case), WS.NEWLINE, WS.INDENT);
+    });
+
+    this.layout = this.formatSubExpression(node.expr);
+    this.layout = this.formatSubExpression(node.clauses);
+
+    this.layout.indentation.decreaseBlockLevel();
+    this.withComments(node.end, () => {
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.end), WS.SPACE);
+    });
+  }
+
+  private formatCaseWhen(node: CaseWhenNode) {
+    this.withComments(node.when, () => {
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.when), WS.SPACE);
+    });
+    this.layout = this.formatSubExpression(node.condition);
+    this.withComments(node.then, () => {
+      this.layout.add(this.showKw(node.then), WS.SPACE);
+    });
+    this.layout = this.formatSubExpression(node.result);
+  }
+
+  private formatCaseElse(node: CaseElseNode) {
+    this.withComments(node.else, () => {
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.else), WS.SPACE);
+    });
+    this.layout = this.formatSubExpression(node.result);
   }
 
   private formatClause(node: ClauseNode) {
@@ -357,15 +399,7 @@ export default class ExpressionFormatter {
       case TokenType.RESERVED_KEYWORD:
       case TokenType.RESERVED_FUNCTION_NAME:
       case TokenType.RESERVED_PHRASE:
-      case TokenType.THEN:
         return this.formatKeyword(node);
-      case TokenType.CASE:
-        return this.formatCaseStart(node);
-      case TokenType.END:
-        return this.formatCaseEnd(node);
-      case TokenType.WHEN:
-      case TokenType.ELSE:
-        return this.formatCaseWhenOrElse(node);
       default:
         throw new Error(`Unexpected token type: ${node.tokenType}`);
     }
@@ -386,10 +420,6 @@ export default class ExpressionFormatter {
     this.layout.add(this.showKw(node), WS.SPACE);
   }
 
-  private formatCaseWhenOrElse(node: KeywordNode) {
-    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node), WS.SPACE);
-  }
-
   private formatLogicalOperator(node: KeywordNode) {
     if (this.cfg.logicalOperatorNewline === 'before') {
       if (isTabularStyle(this.cfg)) {
@@ -403,21 +433,6 @@ export default class ExpressionFormatter {
     } else {
       this.layout.add(this.showKw(node), WS.NEWLINE, WS.INDENT);
     }
-  }
-
-  private formatCaseStart(node: KeywordNode) {
-    this.layout.indentation.increaseBlockLevel();
-    this.layout.add(this.showKw(node), WS.NEWLINE, WS.INDENT);
-  }
-
-  private formatCaseEnd(node: KeywordNode) {
-    this.formatMultilineBlockEnd(node);
-  }
-
-  private formatMultilineBlockEnd(node: KeywordNode) {
-    this.layout.indentation.decreaseBlockLevel();
-
-    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node), WS.SPACE);
   }
 
   private showKw(node: KeywordNode): string {

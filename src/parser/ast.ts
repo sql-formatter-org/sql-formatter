@@ -9,6 +9,9 @@ export enum NodeType {
   property_access = 'property_access',
   parenthesis = 'parenthesis',
   between_predicate = 'between_predicate',
+  case_expression = 'case_expression',
+  case_when = 'case_when',
+  case_else = 'case_else',
   limit_clause = 'limit_clause',
   all_columns_asterisk = 'all_columns_asterisk',
   literal = 'literal',
@@ -71,6 +74,28 @@ export interface BetweenPredicateNode extends BaseNode {
   expr1: AstNode[];
   and: KeywordNode;
   expr2: AstNode[];
+}
+
+export interface CaseExpressionNode extends BaseNode {
+  type: NodeType.case_expression;
+  case: KeywordNode;
+  end: KeywordNode;
+  expr: AstNode[];
+  clauses: (CaseWhenNode | CaseElseNode)[];
+}
+
+export interface CaseWhenNode extends BaseNode {
+  type: NodeType.case_when;
+  when: KeywordNode;
+  then: KeywordNode;
+  condition: AstNode[];
+  result: AstNode[];
+}
+
+export interface CaseElseNode extends BaseNode {
+  type: NodeType.case_else;
+  else: KeywordNode;
+  result: AstNode[];
 }
 
 // LIMIT <count>
@@ -146,6 +171,9 @@ export type AstNode =
   | PropertyAccessNode
   | ParenthesisNode
   | BetweenPredicateNode
+  | CaseExpressionNode
+  | CaseWhenNode
+  | CaseElseNode
   | LimitClauseNode
   | AllColumnsAsteriskNode
   | LiteralNode
