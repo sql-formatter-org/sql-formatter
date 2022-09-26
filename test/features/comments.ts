@@ -48,6 +48,18 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     expect(format(sql)).toBe(sql);
   });
 
+  it('keeps block comment on separate line when it is separate in original SQL', () => {
+    const sql = dedent`
+      SELECT
+        /* separate-line block comment */
+        foo,
+        bar /* inline block comment */
+      FROM
+        tbl;
+    `;
+    expect(format(sql)).toBe(sql);
+  });
+
   it('formats tricky line comments', () => {
     expect(format('SELECT a--comment, here\nFROM b--comment')).toBe(dedent`
       SELECT
