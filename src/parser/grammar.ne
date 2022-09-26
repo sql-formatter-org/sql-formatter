@@ -117,13 +117,7 @@ expression_with_comments -> simple_expression _ {%
   ([expr, _]) => addTrailingComments(expr, _)
 %}
 
-expression ->
-  ( simple_expression
-  | between_predicate
-  | case_expression
-  | comma
-  | comment
-  | other_keyword ) {% unwrap %}
+expression -> ( asteriskless_expression | asterisk ) {% unwrap %}
 
 asteriskless_expression ->
   ( simple_expression_without_asterisk
