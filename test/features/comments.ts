@@ -167,9 +167,7 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     `);
     expect(result).toBe(dedent`
       SELECT
-        count
-        /* comment */
-        (*);
+        count/* comment */ (*);
     `);
   });
 
@@ -179,18 +177,10 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     `);
     expect(result).toBe(dedent`
       SELECT
-        foo
-        /* com1 */
-      .bar,
-        count()
-        /* com2 */
-      .bar,
-        foo.bar
-        /* com3 */
-      .baz,
-        (1, 2)
-        /* com4 */
-      .foo;
+        foo /* com1 */.bar,
+        count() /* com2 */.bar,
+        foo.bar /* com3 */.baz,
+        (1, 2) /* com4 */.foo;
     `);
   });
 
@@ -200,12 +190,8 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     `);
     expect(result).toBe(dedent`
       SELECT
-        foo.
-        /* com1 */
-        bar,
-        foo.
-        /* com2 */
-        *;
+        foo./* com1 */ bar,
+        foo./* com2 */ *;
     `);
   });
 
@@ -226,8 +212,7 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
       const result = format('SELECT alpha /* /* commment */ */ FROM beta');
       expect(result).toBe(dedent`
         SELECT
-          alpha
-          /* /* commment */ */
+          alpha /* /* commment */ */
         FROM
           beta
       `);

@@ -116,23 +116,10 @@ export default function supportsCase(format: FormatFn) {
 
     expect(result).toBe(dedent`
       SELECT
-        CASE
-        /*c1*/
-        foo
-          /*c2*/
-          WHEN
-          /*c3*/
-          1
-          /*c4*/
-          THEN
-          /*c5*/
-          2
-          /*c6*/
-          ELSE
-          /*c7*/
-          3
-        /*c8*/
-        END;
+        CASE /*c1*/ foo
+          /*c2*/ WHEN /*c3*/ 1 /*c4*/ THEN /*c5*/ 2
+          /*c6*/ ELSE /*c7*/ 3
+        /*c8*/ END;
     `);
   });
 
