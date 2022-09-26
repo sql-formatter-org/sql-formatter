@@ -74,7 +74,7 @@ clause ->
   | other_clause
   | set_operation ) {% unwrap %}
 
-limit_clause -> %LIMIT _ expression_with_comments:+ (%COMMA free_form_sql:+):? {%
+limit_clause -> %LIMIT _ expression_chain (%COMMA free_form_sql:+):? {%
   ([limitToken, _, exp1, optional]) => {
     if (optional) {
       const [comma, exp2] = optional;
@@ -121,6 +121,8 @@ set_operation -> %RESERVED_SET_OPERATION free_form_sql:* {%
     children,
   })
 %}
+
+expression_chain -> expression_with_comments:+ {% id %}
 
 expression_with_comments -> expression _ {%
   ([expr, _]) => addComments(expr, { trailing: _ })
