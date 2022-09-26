@@ -221,8 +221,8 @@ export default class ExpressionFormatter {
   }
 
   private formatLimitClause(node: LimitClauseNode) {
-    this.withComments(node.nameKw, () => {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw));
+    this.withComments(node.limitKw, () => {
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.limitKw));
     });
     this.layout.indentation.increaseTopLevel();
 

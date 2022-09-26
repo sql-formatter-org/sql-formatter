@@ -159,7 +159,7 @@ Array [
             "type": "literal",
           },
         ],
-        "nameKw": Object {
+        "limitKw": Object {
           "raw": "LIMIT",
           "text": "LIMIT",
           "tokenType": "LIMIT",
@@ -193,7 +193,7 @@ Array [
             "type": "literal",
           },
         ],
-        "nameKw": Object {
+        "limitKw": Object {
           "raw": "LIMIT",
           "text": "LIMIT",
           "tokenType": "LIMIT",
@@ -233,7 +233,7 @@ Array [
             "type": "literal",
           },
         ],
-        "nameKw": Object {
+        "limitKw": Object {
           "raw": "LIMIT",
           "text": "LIMIT",
           "tokenType": "LIMIT",

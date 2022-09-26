@@ -102,7 +102,7 @@ export interface CaseElseNode extends BaseNode {
 // LIMIT <offset>, <count>
 export interface LimitClauseNode extends BaseNode {
   type: NodeType.limit_clause;
-  nameKw: KeywordNode;
+  limitKw: KeywordNode;
   count: AstNode[];
   offset?: AstNode[];
 }

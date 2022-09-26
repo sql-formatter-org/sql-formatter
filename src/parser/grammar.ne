@@ -71,14 +71,14 @@ limit_clause -> %LIMIT _ expression_with_comments:+ (%COMMA expression:+):? {%
       const [comma, exp2] = optional;
       return {
         type: NodeType.limit_clause,
-        nameKw: addTrailingComments(toKeywordNode(limitToken), _),
+        limitKw: addTrailingComments(toKeywordNode(limitToken), _),
         offset: exp1,
         count: exp2,
       };
     } else {
       return {
         type: NodeType.limit_clause,
-        nameKw: addTrailingComments(toKeywordNode(limitToken), _),
+        limitKw: addTrailingComments(toKeywordNode(limitToken), _),
         count: exp1,
       };
     }
