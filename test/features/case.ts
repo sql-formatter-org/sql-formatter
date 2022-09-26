@@ -106,6 +106,36 @@ export default function supportsCase(format: FormatFn) {
     `);
   });
 
+  it('formats CASE with comments', () => {
+    const result = format(`
+      SELECT CASE /*c1*/ foo /*c2*/
+      WHEN /*c3*/ 1 /*c4*/ THEN /*c5*/ 2 /*c6*/
+      ELSE /*c7*/ 3 /*c8*/
+      END;
+    `);
+
+    expect(result).toBe(dedent`
+      SELECT
+        CASE
+        /*c1*/
+        foo
+          /*c2*/
+          WHEN
+          /*c3*/
+          1
+          /*c4*/
+          THEN
+          /*c5*/
+          2
+          /*c6*/
+          ELSE
+          /*c7*/
+          3
+        /*c8*/
+        END;
+    `);
+  });
+
   it('formats CASE with identStyle:tabularLeft', () => {
     const result = format('SELECT CASE foo WHEN 1 THEN bar ELSE baz END;', {
       indentStyle: 'tabularLeft',
