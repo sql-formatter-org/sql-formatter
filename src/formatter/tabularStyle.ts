@@ -31,7 +31,6 @@ export default function toTabularFormat(tokenText: string, indentStyle: IndentSt
 export function isTabularToken(type: TokenType): boolean {
   return (
     isLogicalOperator(type) ||
-    type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
     type === TokenType.RESERVED_COMMAND ||
     type === TokenType.RESERVED_SELECT ||
     type === TokenType.RESERVED_SET_OPERATION ||

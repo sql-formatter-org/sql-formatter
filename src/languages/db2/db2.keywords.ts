@@ -65,6 +65,8 @@ export const keywords = flatKeywordList({
     'DSSIZE',
     'DYNAMIC',
     'EDITPROC',
+    'ELSE',
+    'ELSEIF',
     'ENCODING',
     'ENCRYPTION',
     'ENDING',

@@ -88,7 +88,6 @@ export default class HiveFormatter extends Formatter {
       reservedSelect,
       reservedSetOperations,
       reservedJoins,
-      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,

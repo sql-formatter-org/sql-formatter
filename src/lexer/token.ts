@@ -7,7 +7,6 @@ export enum TokenType {
   RESERVED_KEYWORD = 'RESERVED_KEYWORD',
   RESERVED_FUNCTION_NAME = 'RESERVED_FUNCTION_NAME',
   RESERVED_PHRASE = 'RESERVED_PHRASE',
-  RESERVED_DEPENDENT_CLAUSE = 'RESERVED_DEPENDENT_CLAUSE',
   RESERVED_SET_OPERATION = 'RESERVED_SET_OPERATION',
   RESERVED_COMMAND = 'RESERVED_COMMAND',
   RESERVED_SELECT = 'RESERVED_SELECT',
@@ -16,6 +15,9 @@ export enum TokenType {
   ARRAY_KEYWORD = 'ARRAY_KEYWORD', // RESERVED_KEYWORD token in front of [
   CASE = 'CASE',
   END = 'END',
+  WHEN = 'WHEN',
+  ELSE = 'ELSE',
+  THEN = 'THEN',
   LIMIT = 'LIMIT',
   BETWEEN = 'BETWEEN',
   AND = 'AND',
@@ -82,7 +84,6 @@ export const isReserved = (type: TokenType): boolean =>
   type === TokenType.RESERVED_KEYWORD ||
   type === TokenType.RESERVED_FUNCTION_NAME ||
   type === TokenType.RESERVED_PHRASE ||
-  type === TokenType.RESERVED_DEPENDENT_CLAUSE ||
   type === TokenType.RESERVED_COMMAND ||
   type === TokenType.RESERVED_SELECT ||
   type === TokenType.RESERVED_SET_OPERATION ||
@@ -90,6 +91,9 @@ export const isReserved = (type: TokenType): boolean =>
   type === TokenType.ARRAY_KEYWORD ||
   type === TokenType.CASE ||
   type === TokenType.END ||
+  type === TokenType.WHEN ||
+  type === TokenType.ELSE ||
+  type === TokenType.THEN ||
   type === TokenType.LIMIT ||
   type === TokenType.BETWEEN ||
   type === TokenType.AND ||

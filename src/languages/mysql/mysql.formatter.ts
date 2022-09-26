@@ -236,7 +236,6 @@ export default class MySqlFormatter extends Formatter {
       reservedSelect,
       reservedSetOperations,
       reservedJoins,
-      reservedDependentClauses: ['WHEN', 'ELSE', 'ELSEIF'],
       reservedPhrases,
       supportsXor: true,
       reservedKeywords: keywords,

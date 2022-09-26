@@ -49,8 +49,6 @@ export interface TokenizerOptions {
   reservedSelect: string[];
   // True to support XOR in addition to AND and OR
   supportsXor?: boolean;
-  // Keywords in CASE expressions that begin new line, like: WHEN, ELSE
-  reservedDependentClauses: string[];
   // Keywords that create newline but no indentaion of their body.
   // These contain set operations like UNION
   reservedSetOperations: string[];

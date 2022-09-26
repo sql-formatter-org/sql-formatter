@@ -350,8 +350,6 @@ export default class ExpressionFormatter {
     switch (node.tokenType) {
       case TokenType.RESERVED_JOIN:
         return this.formatJoin(node);
-      case TokenType.RESERVED_DEPENDENT_CLAUSE:
-        return this.formatDependentClause(node);
       case TokenType.AND:
       case TokenType.OR:
       case TokenType.XOR:
@@ -359,11 +357,15 @@ export default class ExpressionFormatter {
       case TokenType.RESERVED_KEYWORD:
       case TokenType.RESERVED_FUNCTION_NAME:
       case TokenType.RESERVED_PHRASE:
+      case TokenType.THEN:
         return this.formatKeyword(node);
       case TokenType.CASE:
         return this.formatCaseStart(node);
       case TokenType.END:
         return this.formatCaseEnd(node);
+      case TokenType.WHEN:
+      case TokenType.ELSE:
+        return this.formatCaseWhenOrElse(node);
       default:
         throw new Error(`Unexpected token type: ${node.tokenType}`);
     }
@@ -384,7 +386,7 @@ export default class ExpressionFormatter {
     this.layout.add(this.showKw(node), WS.SPACE);
   }
 
-  private formatDependentClause(node: KeywordNode) {
+  private formatCaseWhenOrElse(node: KeywordNode) {
     this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node), WS.SPACE);
   }
 

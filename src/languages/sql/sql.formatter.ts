@@ -74,7 +74,6 @@ export default class SqlFormatter extends Formatter {
       reservedSelect,
       reservedSetOperations,
       reservedJoins,
-      reservedDependentClauses: ['WHEN', 'ELSE'],
       reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
