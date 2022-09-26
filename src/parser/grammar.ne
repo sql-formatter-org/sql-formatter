@@ -64,7 +64,7 @@ statement -> expressions_or_clauses (%DELIMITER | %EOF) {%
 %}
 
 # To avoid ambiguity, plain expressions can only come before clauses
-expressions_or_clauses -> expression:* clause:* {%
+expressions_or_clauses -> free_form_sql:* clause:* {%
   ([expressions, clauses]) => [...expressions, ...clauses]
 %}
 
@@ -74,7 +74,7 @@ clause ->
   | other_clause
   | set_operation ) {% unwrap %}
 
-limit_clause -> %LIMIT _ expression_with_comments:+ (%COMMA expression:+):? {%
+limit_clause -> %LIMIT _ expression_with_comments:+ (%COMMA free_form_sql:+):? {%
   ([limitToken, _, exp1, optional]) => {
     if (optional) {
       const [comma, exp2] = optional;
@@ -94,7 +94,7 @@ limit_clause -> %LIMIT _ expression_with_comments:+ (%COMMA expression:+):? {%
   }
 %}
 
-select_clause -> %RESERVED_SELECT (all_columns_asterisk expression:* | asteriskless_expression expression:*) {%
+select_clause -> %RESERVED_SELECT (all_columns_asterisk free_form_sql:* | asteriskless_free_form_sql free_form_sql:*) {%
   ([nameToken, [exp, expressions]]) => ({
     type: NodeType.clause,
     nameKw: toKeywordNode(nameToken),
@@ -106,7 +106,7 @@ all_columns_asterisk -> %ASTERISK {%
   () => ({ type: NodeType.all_columns_asterisk })
 %}
 
-other_clause -> %RESERVED_COMMAND expression:* {%
+other_clause -> %RESERVED_COMMAND free_form_sql:* {%
   ([nameToken, children]) => ({
     type: NodeType.clause,
     nameKw: toKeywordNode(nameToken),
@@ -114,7 +114,7 @@ other_clause -> %RESERVED_COMMAND expression:* {%
   })
 %}
 
-set_operation -> %RESERVED_SET_OPERATION expression:* {%
+set_operation -> %RESERVED_SET_OPERATION free_form_sql:* {%
   ([nameToken, children]) => ({
     type: NodeType.set_operation,
     nameKw: toKeywordNode(nameToken),
@@ -126,9 +126,9 @@ expression_with_comments -> simple_expression _ {%
   ([expr, _]) => addComments(expr, { trailing: _ })
 %}
 
-expression -> ( asteriskless_expression | asterisk ) {% unwrap %}
+free_form_sql -> ( asteriskless_free_form_sql | asterisk ) {% unwrap %}
 
-asteriskless_expression ->
+asteriskless_free_form_sql ->
   ( simple_expression_without_asterisk
   | between_predicate
   | case_expression
@@ -183,7 +183,7 @@ parenthesis -> "(" expressions_or_clauses ")" {%
   })
 %}
 
-curly_braces -> "{" expression:* "}" {%
+curly_braces -> "{" free_form_sql:* "}" {%
   ([open, children, close]) => ({
     type: NodeType.parenthesis,
     children: children,
@@ -192,7 +192,7 @@ curly_braces -> "{" expression:* "}" {%
   })
 %}
 
-square_brackets -> "[" expression:* "]" {%
+square_brackets -> "[" free_form_sql:* "]" {%
   ([open, children, close]) => ({
     type: NodeType.parenthesis,
     children: children,
