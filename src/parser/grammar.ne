@@ -41,6 +41,12 @@ const addComments = (node: AstNode, { leading, trailing = [] }: CommentAttachmen
 %}
 @lexer lexer
 
+# Conventions:
+#
+# The _ rule matches optional comments.
+#
+# Similarly any rule name anding with _ (like "foo_") matches optional comments in the end.
+
 main -> statement:* {%
   ([statements]) => {
     const last = statements[statements.length - 1];
@@ -74,7 +80,7 @@ clause ->
   | other_clause
   | set_operation ) {% unwrap %}
 
-limit_clause -> %LIMIT _ expression_chain (%COMMA free_form_sql:+):? {%
+limit_clause -> %LIMIT _ expression_chain_ (%COMMA free_form_sql:+):? {%
   ([limitToken, _, exp1, optional]) => {
     if (optional) {
       const [comma, exp2] = optional;
@@ -122,9 +128,9 @@ set_operation -> %RESERVED_SET_OPERATION free_form_sql:* {%
   })
 %}
 
-expression_chain -> expression_with_comments:+ {% id %}
+expression_chain_ -> expression_with_comments_:+ {% id %}
 
-expression_with_comments -> expression _ {%
+expression_with_comments_ -> expression _ {%
   ([expr, _]) => addComments(expr, { trailing: _ })
 %}
 
@@ -227,7 +233,7 @@ between_predicate -> %BETWEEN _ expression _ %AND _ expression {%
   })
 %}
 
-case_expression -> %CASE _ expression_chain:? case_clause:* %END {%
+case_expression -> %CASE _ expression_chain_:? case_clause:* %END {%
   ([caseToken, _, expr, clauses, endToken]) => ({
     type: NodeType.case_expression,
     caseKw: addComments(toKeywordNode(caseToken), { trailing: _ }),
@@ -237,7 +243,7 @@ case_expression -> %CASE _ expression_chain:? case_clause:* %END {%
   })
 %}
 
-case_clause -> %WHEN _ expression_chain %THEN _ expression_chain {%
+case_clause -> %WHEN _ expression_chain_ %THEN _ expression_chain_ {%
   ([whenToken, _1, cond, thenToken, _2, expr]) => ({
     type: NodeType.case_when,
     whenKw: addComments(toKeywordNode(whenToken), { trailing: _1 }),
@@ -246,7 +252,7 @@ case_clause -> %WHEN _ expression_chain %THEN _ expression_chain {%
     result: expr,
   })
 %}
-case_clause -> %ELSE _ expression_chain {%
+case_clause -> %ELSE _ expression_chain_ {%
   ([elseToken, _, expr]) => ({
     type: NodeType.case_else,
     elseKw: addComments(toKeywordNode(elseToken), { trailing: _ }),
