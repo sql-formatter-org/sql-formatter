@@ -185,20 +185,16 @@ export default class ExpressionFormatter {
   }
 
   private formatCaseWhen(node: CaseWhenNode) {
-    this.withComments(node.when, () => {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.when), WS.SPACE);
-    });
+    this.layout.add(WS.NEWLINE, WS.INDENT);
+    this.formatNode(node.when);
     this.layout = this.formatSubExpression(node.condition);
-    this.withComments(node.then, () => {
-      this.layout.add(this.showKw(node.then), WS.SPACE);
-    });
+    this.formatNode(node.then);
     this.layout = this.formatSubExpression(node.result);
   }
 
   private formatCaseElse(node: CaseElseNode) {
-    this.withComments(node.else, () => {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.else), WS.SPACE);
-    });
+    this.layout.add(WS.NEWLINE, WS.INDENT);
+    this.formatNode(node.else);
     this.layout = this.formatSubExpression(node.result);
   }
 
