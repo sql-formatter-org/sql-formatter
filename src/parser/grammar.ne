@@ -301,5 +301,9 @@ comment -> %LINE_COMMENT {%
   })
 %}
 comment -> %BLOCK_COMMENT {%
-  ([token]) => ({ type: NodeType.block_comment, text: token.text })
+  ([token]) => ({
+    type: NodeType.block_comment,
+    text: token.text,
+    precedingWhitespace: token.precedingWhitespace,
+  })
 %}

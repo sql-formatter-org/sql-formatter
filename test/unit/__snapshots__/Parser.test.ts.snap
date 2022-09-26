@@ -362,6 +362,7 @@ Array [
               "text": "my_array",
               "trailingComments": Array [
                 Object {
+                  "precedingWhitespace": " ",
                   "text": "/*haha*/",
                   "type": "block_comment",
                 },
