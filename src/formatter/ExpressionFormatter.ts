@@ -396,12 +396,8 @@ export default class ExpressionFormatter {
       case TokenType.OR:
       case TokenType.XOR:
         return this.formatLogicalOperator(node);
-      case TokenType.RESERVED_KEYWORD:
-      case TokenType.RESERVED_FUNCTION_NAME:
-      case TokenType.RESERVED_PHRASE:
-        return this.formatKeyword(node);
       default:
-        throw new Error(`Unexpected token type: ${node.tokenType}`);
+        return this.formatKeyword(node);
     }
   }
 

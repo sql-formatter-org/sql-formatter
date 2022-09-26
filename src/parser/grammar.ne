@@ -122,14 +122,16 @@ expression ->
   | between_predicate
   | case_expression
   | comma
-  | comment ) {% unwrap %}
+  | comment
+  | other_keyword ) {% unwrap %}
 
 asteriskless_expression ->
   ( simple_expression_without_asterisk
   | between_predicate
   | case_expression
   | comma
-  | comment ) {% unwrap %}
+  | comment
+  | other_keyword ) {% unwrap %}
 
 simple_expression -> ( simple_expression_without_asterisk | asterisk ) {% unwrap %}
 
@@ -275,6 +277,14 @@ keyword ->
   | %AND
   | %OR
   | %XOR ) {%
+  ([[token]]) => toKeywordNode(token)
+%}
+
+other_keyword ->
+  ( %WHEN
+  | %THEN
+  | %ELSE
+  | %END ) {%
   ([[token]]) => toKeywordNode(token)
 %}
 
