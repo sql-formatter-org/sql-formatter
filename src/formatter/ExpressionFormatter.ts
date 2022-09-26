@@ -173,18 +173,15 @@ export default class ExpressionFormatter {
   }
 
   private formatCaseExpression(node: CaseExpressionNode) {
-    this.layout.indentation.increaseBlockLevel();
-    this.withComments(node.case, () => {
-      this.layout.add(this.showKw(node.case), WS.NEWLINE, WS.INDENT);
-    });
-
+    this.formatNode(node.case);
     this.layout = this.formatSubExpression(node.expr);
-    this.layout = this.formatSubExpression(node.clauses);
 
+    this.layout.indentation.increaseBlockLevel();
+    this.layout = this.formatSubExpression(node.clauses);
     this.layout.indentation.decreaseBlockLevel();
-    this.withComments(node.end, () => {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.end), WS.SPACE);
-    });
+
+    this.layout.add(WS.NEWLINE, WS.INDENT);
+    this.formatNode(node.end);
   }
 
   private formatCaseWhen(node: CaseWhenNode) {

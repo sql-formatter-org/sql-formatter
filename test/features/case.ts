@@ -24,8 +24,7 @@ export default function supportsCase(format: FormatFn) {
     );
 
     expect(result).toBe(dedent`
-      CASE
-        trim(sqrt(2))
+      CASE trim(sqrt(2))
         WHEN 'one' THEN 1
         WHEN 'two' THEN 2
         WHEN 'three' THEN 3
@@ -43,8 +42,7 @@ export default function supportsCase(format: FormatFn) {
       SELECT
         foo,
         bar,
-        CASE
-          baz
+        CASE baz
           WHEN 'one' THEN 1
           WHEN 'two' THEN 2
           ELSE 3
@@ -84,8 +82,7 @@ export default function supportsCase(format: FormatFn) {
       { keywordCase: 'upper' }
     );
     expect(result).toBe(dedent`
-      CASE
-        TRIM(SQRT(my_field))
+      CASE TRIM(SQRT(my_field))
         WHEN 'one' THEN 1
         WHEN 'two' THEN 2
         WHEN 'three' THEN 3
@@ -100,8 +97,7 @@ export default function supportsCase(format: FormatFn) {
     expect(result).toBe(dedent`
       select
         sum(
-          case
-            a
+          case a
             when foo then bar
           end
         )
@@ -116,8 +112,7 @@ export default function supportsCase(format: FormatFn) {
     });
 
     expect(result).toBe(dedent`
-      SELECT    CASE
-                          foo
+      SELECT    CASE foo
                           WHEN 1 THEN bar
                           ELSE baz
                 END;
@@ -131,8 +126,7 @@ export default function supportsCase(format: FormatFn) {
 
     expect(result).toBe(
       [
-        '   SELECT CASE',
-        '                    foo',
+        '   SELECT CASE foo',
         '                    WHEN 1 THEN bar',
         '                    ELSE baz',
         '          END;',
