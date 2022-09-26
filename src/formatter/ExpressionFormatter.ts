@@ -119,8 +119,8 @@ export default class ExpressionFormatter {
   }
 
   private formatFunctionCall(node: FunctionCallNode) {
-    this.withComments(node.name, () => {
-      this.layout.add(this.showKw(node.name));
+    this.withComments(node.nameKw, () => {
+      this.layout.add(this.showKw(node.nameKw));
     });
     this.formatNode(node.parenthesis);
   }
@@ -165,15 +165,15 @@ export default class ExpressionFormatter {
   }
 
   private formatBetweenPredicate(node: BetweenPredicateNode) {
-    this.layout.add(this.showKw(node.between), WS.SPACE);
+    this.layout.add(this.showKw(node.betweenKw), WS.SPACE);
     this.layout = this.formatSubExpression(node.expr1);
-    this.layout.add(WS.NO_SPACE, WS.SPACE, this.showNonTabularKw(node.and), WS.SPACE);
+    this.layout.add(WS.NO_SPACE, WS.SPACE, this.showNonTabularKw(node.andKw), WS.SPACE);
     this.layout = this.formatSubExpression(node.expr2);
     this.layout.add(WS.SPACE);
   }
 
   private formatCaseExpression(node: CaseExpressionNode) {
-    this.formatNode(node.case);
+    this.formatNode(node.caseKw);
     this.layout = this.formatSubExpression(node.expr);
 
     this.layout.indentation.increaseBlockLevel();
@@ -181,28 +181,28 @@ export default class ExpressionFormatter {
     this.layout.indentation.decreaseBlockLevel();
 
     this.layout.add(WS.NEWLINE, WS.INDENT);
-    this.formatNode(node.end);
+    this.formatNode(node.endKw);
   }
 
   private formatCaseWhen(node: CaseWhenNode) {
     this.layout.add(WS.NEWLINE, WS.INDENT);
-    this.formatNode(node.when);
+    this.formatNode(node.whenKw);
     this.layout = this.formatSubExpression(node.condition);
-    this.formatNode(node.then);
+    this.formatNode(node.thenKw);
     this.layout = this.formatSubExpression(node.result);
   }
 
   private formatCaseElse(node: CaseElseNode) {
     this.layout.add(WS.NEWLINE, WS.INDENT);
-    this.formatNode(node.else);
+    this.formatNode(node.elseKw);
     this.layout = this.formatSubExpression(node.result);
   }
 
   private formatClause(node: ClauseNode) {
     if (isTabularStyle(this.cfg)) {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name), WS.SPACE);
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.SPACE);
     } else {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name), WS.NEWLINE);
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.NEWLINE);
     }
     this.layout.indentation.increaseTopLevel();
 
@@ -215,14 +215,14 @@ export default class ExpressionFormatter {
   }
 
   private formatSetOperation(node: SetOperationNode) {
-    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name), WS.NEWLINE);
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.NEWLINE);
     this.layout.add(WS.INDENT);
     this.layout = this.formatSubExpression(node.children);
   }
 
   private formatLimitClause(node: LimitClauseNode) {
-    this.withComments(node.name, () => {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.name));
+    this.withComments(node.nameKw, () => {
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw));
     });
     this.layout.indentation.increaseTopLevel();
 
