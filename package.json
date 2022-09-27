@@ -8,9 +8,9 @@
   "types": "lib/src/index.d.ts",
   "exports": {
     ".": {
+      "types": "./lib/src/index.d.ts",
       "import": "./lib/index.js",
-      "require": "./dist/sql-formatter.min.cjs",
-      "types": "./lib/src/index.d.ts"
+      "require": "./dist/sql-formatter.min.cjs"
     }
   },
   "bin": {
