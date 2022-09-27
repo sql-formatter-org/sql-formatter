@@ -64,7 +64,7 @@ statement -> expressions_or_clauses (%DELIMITER | %EOF) {%
 %}
 
 # To avoid ambiguity, plain expressions can only come before clauses
-expressions_or_clauses -> expression:* clause:* {%
+expressions_or_clauses -> free_form_sql:* clause:* {%
   ([expressions, clauses]) => [...expressions, ...clauses]
 %}
 
@@ -74,7 +74,7 @@ clause ->
   | other_clause
   | set_operation ) {% unwrap %}
 
-limit_clause -> %LIMIT _ expression_with_comments:+ (%COMMA expression:+):? {%
+limit_clause -> %LIMIT _ expression_with_comments:+ (%COMMA free_form_sql:+):? {%
   ([limitToken, _, exp1, optional]) => {
     if (optional) {
       const [comma, exp2] = optional;
@@ -94,7 +94,7 @@ limit_clause -> %LIMIT _ expression_with_comments:+ (%COMMA expression:+):? {%
   }
 %}
 
-select_clause -> %RESERVED_SELECT (all_columns_asterisk expression:* | asteriskless_expression expression:*) {%
+select_clause -> %RESERVED_SELECT (all_columns_asterisk free_form_sql:* | asteriskless_free_form_sql free_form_sql:*) {%
   ([nameToken, [exp, expressions]]) => ({
     type: NodeType.clause,
     nameKw: toKeywordNode(nameToken),
@@ -113,7 +113,7 @@ all_columns_asterisk -> %ASTERISK {%
   () => ({ type: NodeType.all_columns_asterisk })
 %}
 
-other_clause -> %RESERVED_COMMAND expression:* {%
+other_clause -> %RESERVED_COMMAND free_form_sql:* {%
   ([nameToken, children]) => ({
     type: NodeType.clause,
     nameKw: toKeywordNode(nameToken),
@@ -121,7 +121,7 @@ other_clause -> %RESERVED_COMMAND expression:* {%
   })
 %}
 
-set_operation -> %RESERVED_SET_OPERATION expression:* {%
+set_operation -> %RESERVED_SET_OPERATION free_form_sql:* {%
   ([nameToken, children]) => ({
     type: NodeType.set_operation,
     nameKw: toKeywordNode(nameToken),
@@ -129,23 +129,23 @@ set_operation -> %RESERVED_SET_OPERATION expression:* {%
   })
 %}
 
-expression_with_comments -> simple_expression _ {%
+expression_with_comments -> expression _ {%
   ([expr, _]) => addComments(expr, { trailing: _ })
 %}
 
-expression -> ( asteriskless_expression | asterisk ) {% unwrap %}
+free_form_sql -> ( asteriskless_free_form_sql | asterisk ) {% unwrap %}
 
-asteriskless_expression ->
-  ( simple_expression_without_asterisk
+asteriskless_free_form_sql ->
+  ( asteriskless_expression
   | between_predicate
   | case_expression
   | comma
   | comment
   | other_keyword ) {% unwrap %}
 
-simple_expression -> ( simple_expression_without_asterisk | asterisk ) {% unwrap %}
+expression -> ( asteriskless_expression | asterisk ) {% unwrap %}
 
-simple_expression_without_asterisk ->
+asteriskless_expression ->
   ( array_subscript
   | function_call
   | property_access
@@ -190,7 +190,7 @@ parenthesis -> "(" expressions_or_clauses ")" {%
   })
 %}
 
-curly_braces -> "{" expression:* "}" {%
+curly_braces -> "{" free_form_sql:* "}" {%
   ([open, children, close]) => ({
     type: NodeType.parenthesis,
     children: children,
@@ -199,7 +199,7 @@ curly_braces -> "{" expression:* "}" {%
   })
 %}
 
-square_brackets -> "[" expression:* "]" {%
+square_brackets -> "[" free_form_sql:* "]" {%
   ([open, children, close]) => ({
     type: NodeType.parenthesis,
     children: children,
@@ -208,7 +208,7 @@ square_brackets -> "[" expression:* "]" {%
   })
 %}
 
-property_access -> simple_expression _ %DOT _ (identifier | array_subscript | all_columns_asterisk) {%
+property_access -> expression _ %DOT _ (identifier | array_subscript | all_columns_asterisk) {%
   // Allowing property to be <array_subscript> is currently a hack.
   // A better way would be to allow <property_access> on the left side of array_subscript,
   // but we currently can't do that because of another hack that requires
@@ -222,7 +222,7 @@ property_access -> simple_expression _ %DOT _ (identifier | array_subscript | al
   }
 %}
 
-between_predicate -> %BETWEEN _ simple_expression _ %AND _ simple_expression {%
+between_predicate -> %BETWEEN _ expression _ %AND _ expression {%
   ([betweenToken, _1, expr1, _2, andToken, _3, expr2]) => ({
     type: NodeType.between_predicate,
     betweenKw: toKeywordNode(betweenToken),
@@ -232,7 +232,7 @@ between_predicate -> %BETWEEN _ simple_expression _ %AND _ simple_expression {%
   })
 %}
 
-case_expression -> %CASE _ simple_expression:* case_clause:* _ %END {%
+case_expression -> %CASE _ expression:* case_clause:* _ %END {%
   ([caseToken, _1, expr, clauses, _2, endToken]) => ({
     type: NodeType.case_expression,
     caseKw: addComments(toKeywordNode(caseToken), { trailing: _1 }),
@@ -242,7 +242,7 @@ case_expression -> %CASE _ simple_expression:* case_clause:* _ %END {%
   })
 %}
 
-case_clause -> _ %WHEN _ simple_expression:+ _ %THEN _ simple_expression:+ {%
+case_clause -> _ %WHEN _ expression:+ _ %THEN _ expression:+ {%
   ([_1, whenToken, _2, cond, _3, thenToken, _4, expr]) => ({
     type: NodeType.case_when,
     whenKw: addComments(toKeywordNode(whenToken), { leading: _1, trailing: _2 }),
@@ -251,7 +251,7 @@ case_clause -> _ %WHEN _ simple_expression:+ _ %THEN _ simple_expression:+ {%
     result: expr,
   })
 %}
-case_clause -> _ %ELSE _ simple_expression:+ {%
+case_clause -> _ %ELSE _ expression:+ {%
   ([_1, elseToken, _2, expr]) => ({
     type: NodeType.case_else,
     elseKw: addComments(toKeywordNode(elseToken), { leading: _1, trailing: _2 }),
