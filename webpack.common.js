@@ -7,6 +7,7 @@ export default {
     filename: 'sql-formatter.cjs',
     library: 'sqlFormatter',
     libraryTarget: 'umd',
+    globalObject: 'this',
   },
   resolve: {
     extensions: ['.js', '.ts'],
