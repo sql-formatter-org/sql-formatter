@@ -23,11 +23,20 @@ const toKeywordNode = (token: Token): KeywordNode => ({
   raw: token.raw,
 });
 
-const addLeadingComments = (node: AstNode, comments: CommentNode[]): AstNode =>
-  comments.length > 0 ? { ...node, leadingComments: comments } : node;
+interface CommentAttachments {
+  leading?: CommentNode[];
+  trailing?: CommentNode[];
+}
 
-const addTrailingComments = (node: AstNode, comments: CommentNode[]): AstNode =>
-  comments.length > 0 ? { ...node, trailingComments: comments } : node;
+const addComments = (node: AstNode, { leading, trailing = [] }: CommentAttachments): AstNode => {
+  if (leading && leading.length > 0) {
+    node = { ...node, leadingComments: leading };
+  }
+  if (trailing && trailing.length > 0) {
+    node = { ...node, trailingComments: trailing };
+  }
+  return node;
+};
 
 %}
 @lexer lexer
@@ -71,14 +80,14 @@ limit_clause -> %LIMIT _ expression_with_comments:+ (%COMMA expression:+):? {%
       const [comma, exp2] = optional;
       return {
         type: NodeType.limit_clause,
-        limitKw: addTrailingComments(toKeywordNode(limitToken), _),
+        limitKw: addComments(toKeywordNode(limitToken), { trailing: _ }),
         offset: exp1,
         count: exp2,
       };
     } else {
       return {
         type: NodeType.limit_clause,
-        limitKw: addTrailingComments(toKeywordNode(limitToken), _),
+        limitKw: addComments(toKeywordNode(limitToken), { trailing: _ }),
         count: exp1,
       };
     }
@@ -121,7 +130,7 @@ set_operation -> %RESERVED_SET_OPERATION expression:* {%
 %}
 
 expression_with_comments -> simple_expression _ {%
-  ([expr, _]) => addTrailingComments(expr, _)
+  ([expr, _]) => addComments(expr, { trailing: _ })
 %}
 
 expression -> ( asteriskless_expression | asterisk ) {% unwrap %}
@@ -152,14 +161,14 @@ simple_expression_without_asterisk ->
 array_subscript -> %ARRAY_IDENTIFIER _ square_brackets {%
   ([arrayToken, _, brackets]) => ({
     type: NodeType.array_subscript,
-    array: addTrailingComments({ type: NodeType.identifier, text: arrayToken.text}, _),
+    array: addComments({ type: NodeType.identifier, text: arrayToken.text}, { trailing: _ }),
     parenthesis: brackets,
   })
 %}
 array_subscript -> %ARRAY_KEYWORD _ square_brackets {%
   ([arrayToken, _, brackets]) => ({
     type: NodeType.array_subscript,
-    array: addTrailingComments(toKeywordNode(arrayToken), _),
+    array: addComments(toKeywordNode(arrayToken), { trailing: _ }),
     parenthesis: brackets,
   })
 %}
@@ -167,7 +176,7 @@ array_subscript -> %ARRAY_KEYWORD _ square_brackets {%
 function_call -> %RESERVED_FUNCTION_NAME _ parenthesis {%
   ([nameToken, _, parens]) => ({
     type: NodeType.function_call,
-    nameKw: addTrailingComments(toKeywordNode(nameToken), _),
+    nameKw: addComments(toKeywordNode(nameToken), { trailing: _ }),
     parenthesis: parens,
   })
 %}
@@ -207,8 +216,8 @@ property_access -> simple_expression _ %DOT _ (identifier | array_subscript | al
   ([object, _1, dot, _2, [property]]) => {
     return {
       type: NodeType.property_access,
-      object: addTrailingComments(object, _1),
-      property: addLeadingComments(property, _2),
+      object: addComments(object, { trailing: _1 }),
+      property: addComments(property, { leading: _2 }),
     };
   }
 %}
@@ -217,17 +226,17 @@ between_predicate -> %BETWEEN _ simple_expression _ %AND _ simple_expression {%
   ([betweenToken, _1, expr1, _2, andToken, _3, expr2]) => ({
     type: NodeType.between_predicate,
     betweenKw: toKeywordNode(betweenToken),
-    expr1: [addTrailingComments(addLeadingComments(expr1, _1), _2)],
+    expr1: [addComments(expr1, { leading: _1, trailing: _2 })],
     andKw: toKeywordNode(andToken),
-    expr2: [addLeadingComments(expr2, _3)],
+    expr2: [addComments(expr2, { leading: _3 })],
   })
 %}
 
 case_expression -> %CASE _ simple_expression:* case_clause:* _ %END {%
   ([caseToken, _1, expr, clauses, _2, endToken]) => ({
     type: NodeType.case_expression,
-    caseKw: addTrailingComments(toKeywordNode(caseToken), _1),
-    endKw: addLeadingComments(toKeywordNode(endToken), _2),
+    caseKw: addComments(toKeywordNode(caseToken), { trailing: _1 }),
+    endKw: addComments(toKeywordNode(endToken), { leading: _2 }),
     expr,
     clauses,
   })
@@ -236,8 +245,8 @@ case_expression -> %CASE _ simple_expression:* case_clause:* _ %END {%
 case_clause -> _ %WHEN _ simple_expression:+ _ %THEN _ simple_expression:+ {%
   ([_1, whenToken, _2, cond, _3, thenToken, _4, expr]) => ({
     type: NodeType.case_when,
-    whenKw: addTrailingComments(addLeadingComments(toKeywordNode(whenToken), _1), _2),
-    thenKw: addTrailingComments(addLeadingComments(toKeywordNode(thenToken), _3), _4),
+    whenKw: addComments(toKeywordNode(whenToken), { leading: _1, trailing: _2 }),
+    thenKw: addComments(toKeywordNode(thenToken), { leading: _3, trailing: _4 }),
     condition: cond,
     result: expr,
   })
@@ -245,7 +254,7 @@ case_clause -> _ %WHEN _ simple_expression:+ _ %THEN _ simple_expression:+ {%
 case_clause -> _ %ELSE _ simple_expression:+ {%
   ([_1, elseToken, _2, expr]) => ({
     type: NodeType.case_else,
-    elseKw: addTrailingComments(addLeadingComments(toKeywordNode(elseToken), _1), _2),
+    elseKw: addComments(toKeywordNode(elseToken), { leading: _1, trailing: _2 }),
     result: expr,
   })
 %}
