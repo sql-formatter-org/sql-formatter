@@ -110,7 +110,7 @@ select_clause -> %RESERVED_SELECT (all_columns_asterisk free_form_sql:* | asteri
 select_clause -> %RESERVED_SELECT {%
   ([nameToken]) => ({
     type: NodeType.clause,
-    name: toKeywordNode(nameToken),
+    nameKw: toKeywordNode(nameToken),
     children: [],
   })
 %}
