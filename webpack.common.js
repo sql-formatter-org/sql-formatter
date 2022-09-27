@@ -4,12 +4,10 @@ export default {
   entry: './src/index.ts',
   output: {
     path: path.resolve('./dist'),
-    filename: 'sql-formatter.js',
-    library: { type: 'module' },
-    module: true,
-  },
-  experiments: {
-    outputModule: true,
+    filename: 'sql-formatter.cjs',
+    library: 'sqlFormatter',
+    libraryTarget: 'umd',
+    globalObject: 'this',
   },
   resolve: {
     extensions: ['.js', '.ts'],
