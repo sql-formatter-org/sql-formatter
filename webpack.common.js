@@ -5,11 +5,8 @@ export default {
   output: {
     path: path.resolve('./dist'),
     filename: 'sql-formatter.cjs',
-    library: { type: 'module' },
-    module: true,
-  },
-  experiments: {
-    outputModule: true,
+    library: 'sqlFormatter',
+    libraryTarget: 'umd',
   },
   resolve: {
     extensions: ['.js', '.ts'],
