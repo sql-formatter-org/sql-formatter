@@ -4,7 +4,7 @@ export default {
   entry: './src/index.ts',
   output: {
     path: path.resolve('./dist'),
-    filename: 'sql-formatter.js',
+    filename: 'sql-formatter.cjs',
     library: { type: 'module' },
     module: true,
   },
