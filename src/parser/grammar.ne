@@ -28,7 +28,7 @@ interface CommentAttachments {
   trailing?: CommentNode[];
 }
 
-const addComments = (node: AstNode, { leading, trailing = [] }: CommentAttachments): AstNode => {
+const addComments = (node: AstNode, { leading, trailing }: CommentAttachments): AstNode => {
   if (leading && leading.length > 0) {
     node = { ...node, leadingComments: leading };
   }
