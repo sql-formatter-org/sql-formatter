@@ -28,6 +28,9 @@ export const sum = (arr: number[]): number => {
 export const flatKeywordList = (obj: Record<string, string[]>): string[] =>
   dedupe(Object.values(obj).flat());
 
+// True when string contains multiple lines
+export const isMultiline = (text: string): boolean => /\n/.test(text);
+
 // Given a type and a field name, returns a type where this field is optional
 //
 // For example, these two type definitions are equivalent:

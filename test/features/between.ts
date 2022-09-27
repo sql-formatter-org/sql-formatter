@@ -13,13 +13,7 @@ export default function supportsBetween(format: FormatFn) {
   it('formats BETWEEN with comments inside', () => {
     expect(format('WHERE foo BETWEEN /*C1*/ t.bar /*C2*/ AND /*C3*/ t.baz')).toBe(dedent`
       WHERE
-        foo BETWEEN
-        /*C1*/
-        t.bar
-        /*C2*/
-       AND
-        /*C3*/
-        t.baz
+        foo BETWEEN /*C1*/ t.bar /*C2*/ AND /*C3*/ t.baz
     `);
   });
 }

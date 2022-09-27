@@ -1,5 +1,5 @@
 import { FormatOptions } from 'src/FormatOptions';
-import { equalizeWhitespace } from 'src/utils';
+import { equalizeWhitespace, isMultiline } from 'src/utils';
 
 import Params from 'src/formatter/Params';
 import { isTabularStyle } from 'src/formatter/config';
@@ -309,7 +309,7 @@ export default class ExpressionFormatter {
   }
 
   private formatLineComment(node: LineCommentNode) {
-    if (/\n/.test(node.precedingWhitespace || '')) {
+    if (isMultiline(node.precedingWhitespace || '')) {
       this.layout.add(WS.NEWLINE, WS.INDENT, node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
     } else {
       this.layout.add(WS.NO_NEWLINE, WS.SPACE, node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
@@ -317,10 +317,18 @@ export default class ExpressionFormatter {
   }
 
   private formatBlockComment(node: BlockCommentNode) {
-    this.splitBlockComment(node.text).forEach(line => {
-      this.layout.add(WS.NEWLINE, WS.INDENT, line);
-    });
-    this.layout.add(WS.NEWLINE, WS.INDENT);
+    if (this.isMultilineBlockComment(node)) {
+      this.splitBlockComment(node.text).forEach(line => {
+        this.layout.add(WS.NEWLINE, WS.INDENT, line);
+      });
+      this.layout.add(WS.NEWLINE, WS.INDENT);
+    } else {
+      this.layout.add(node.text, WS.SPACE);
+    }
+  }
+
+  private isMultilineBlockComment(node: BlockCommentNode): boolean {
+    return isMultiline(node.text) || isMultiline(node.precedingWhitespace || '');
   }
 
   // Breaks up block comment to multiple lines.

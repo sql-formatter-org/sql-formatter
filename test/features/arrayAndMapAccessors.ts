@@ -35,9 +35,7 @@ export default function supportsArrayAndMapAccessors(format: FormatFn) {
     const result = format(`SELECT arr /* comment */ [1];`);
     expect(result).toBe(dedent`
       SELECT
-        arr
-        /* comment */
-        [1];
+        arr/* comment */ [1];
     `);
   });
 
@@ -45,9 +43,7 @@ export default function supportsArrayAndMapAccessors(format: FormatFn) {
     const result = format(`SELECT foo./* comment */arr[1];`);
     expect(result).toBe(dedent`
       SELECT
-        foo.
-        /* comment */
-        arr[1];
+        foo./* comment */ arr[1];
     `);
   });
 }

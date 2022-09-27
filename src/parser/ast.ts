@@ -159,6 +159,7 @@ export interface LineCommentNode extends BaseNode {
 export interface BlockCommentNode extends BaseNode {
   type: NodeType.block_comment;
   text: string;
+  precedingWhitespace: string;
 }
 
 export type CommentNode = LineCommentNode | BlockCommentNode;
