@@ -3,11 +3,17 @@
   "version": "10.7.2",
   "description": "Format whitespace in a SQL query to make it more readable",
   "license": "MIT",
-  "main": "lib/index.js",
+  "main": "dist/sql-formatter.min.js",
+  "module": "lib/index.js",
   "types": "lib/src/index.d.ts",
+  "exports": {
+    ".": "./lib/index.js"
+  },
   "bin": {
     "sql-formatter": "./bin/sql-formatter-cli.js"
   },
+  "type": "module",
+  "sideEffects": false,
   "keywords": [
     "sql",
     "formatter",
