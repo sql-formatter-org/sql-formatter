@@ -124,9 +124,15 @@ expression_with_comments -> simple_expression _ {%
   ([expr, _]) => addTrailingComments(expr, _)
 %}
 
-expression -> ( simple_expression | between_predicate | comma | comment ) {% unwrap %}
+expression -> ( asteriskless_expression | asterisk ) {% unwrap %}
 
-asteriskless_expression -> ( simple_expression_without_asterisk | between_predicate | comma | comment ) {% unwrap %}
+asteriskless_expression ->
+  ( simple_expression_without_asterisk
+  | between_predicate
+  | case_expression
+  | comma
+  | comment
+  | other_keyword ) {% unwrap %}
 
 simple_expression -> ( simple_expression_without_asterisk | asterisk ) {% unwrap %}
 
@@ -217,6 +223,33 @@ between_predicate -> %BETWEEN _ simple_expression _ %AND _ simple_expression {%
   })
 %}
 
+case_expression -> %CASE _ simple_expression:* case_clause:* _ %END {%
+  ([caseToken, _1, expr, clauses, _2, endToken]) => ({
+    type: NodeType.case_expression,
+    case: addTrailingComments(toKeywordNode(caseToken), _1),
+    end: addLeadingComments(toKeywordNode(endToken), _2),
+    expr,
+    clauses,
+  })
+%}
+
+case_clause -> _ %WHEN _ simple_expression:+ _ %THEN _ simple_expression:+ {%
+  ([_1, whenToken, _2, cond, _3, thenToken, _4, expr]) => ({
+    type: NodeType.case_when,
+    when: addTrailingComments(addLeadingComments(toKeywordNode(whenToken), _1), _2),
+    then: addTrailingComments(addLeadingComments(toKeywordNode(thenToken), _3), _4),
+    condition: cond,
+    result: expr,
+  })
+%}
+case_clause -> _ %ELSE _ simple_expression:+ {%
+  ([_1, elseToken, _2, expr]) => ({
+    type: NodeType.case_else,
+    else: addTrailingComments(addLeadingComments(toKeywordNode(elseToken), _1), _2),
+    result: expr,
+  })
+%}
+
 comma -> ( %COMMA ) {% ([[token]]) => ({ type: NodeType.comma }) %}
 
 asterisk -> ( %ASTERISK ) {% ([[token]]) => ({ type: NodeType.operator, text: token.text }) %}
@@ -242,14 +275,17 @@ keyword ->
   ( %RESERVED_KEYWORD
   | %RESERVED_PHRASE
   | %RESERVED_JOIN
-  | %CASE
-  | %END
-  | %WHEN
-  | %ELSE
-  | %THEN
   | %AND
   | %OR
   | %XOR ) {%
+  ([[token]]) => toKeywordNode(token)
+%}
+
+other_keyword ->
+  ( %WHEN
+  | %THEN
+  | %ELSE
+  | %END ) {%
   ([[token]]) => toKeywordNode(token)
 %}
 

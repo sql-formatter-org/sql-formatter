@@ -90,4 +90,8 @@ describe('Parser', () => {
   it('parses qualified.identifier.sequence', () => {
     expect(parse('SELECT foo.bar.baz;')).toMatchSnapshot();
   });
+
+  it('parses CASE expression', () => {
+    expect(parse('SELECT CASE foo WHEN 1+1 THEN 10 ELSE 20 END;')).toMatchSnapshot();
+  });
 });

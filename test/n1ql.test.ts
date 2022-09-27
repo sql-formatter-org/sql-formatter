@@ -118,8 +118,7 @@ describe('N1qlFormatter', () => {
       USE KEYS
         'Elinor_33313792'
       NEST
-        orders_with_users orders ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history
-      END;
+        orders_with_users orders ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;
     `);
   });
 

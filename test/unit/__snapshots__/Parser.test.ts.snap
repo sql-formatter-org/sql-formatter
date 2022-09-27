@@ -53,6 +53,101 @@ Array [
 ]
 `;
 
+exports[`Parser parses CASE expression 1`] = `
+Array [
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "case": Object {
+              "raw": "CASE",
+              "text": "CASE",
+              "tokenType": "CASE",
+              "type": "keyword",
+            },
+            "clauses": Array [
+              Object {
+                "condition": Array [
+                  Object {
+                    "text": "1",
+                    "type": "literal",
+                  },
+                  Object {
+                    "text": "+",
+                    "type": "operator",
+                  },
+                  Object {
+                    "text": "1",
+                    "type": "literal",
+                  },
+                ],
+                "result": Array [
+                  Object {
+                    "text": "10",
+                    "type": "literal",
+                  },
+                ],
+                "then": Object {
+                  "raw": "THEN",
+                  "text": "THEN",
+                  "tokenType": "THEN",
+                  "type": "keyword",
+                },
+                "type": "case_when",
+                "when": Object {
+                  "raw": "WHEN",
+                  "text": "WHEN",
+                  "tokenType": "WHEN",
+                  "type": "keyword",
+                },
+              },
+              Object {
+                "else": Object {
+                  "raw": "ELSE",
+                  "text": "ELSE",
+                  "tokenType": "ELSE",
+                  "type": "keyword",
+                },
+                "result": Array [
+                  Object {
+                    "text": "20",
+                    "type": "literal",
+                  },
+                ],
+                "type": "case_else",
+              },
+            ],
+            "end": Object {
+              "raw": "END",
+              "text": "END",
+              "tokenType": "END",
+              "type": "keyword",
+            },
+            "expr": Array [
+              Object {
+                "text": "foo",
+                "type": "identifier",
+              },
+            ],
+            "type": "case_expression",
+          },
+        ],
+        "name": Object {
+          "raw": "SELECT",
+          "text": "SELECT",
+          "tokenType": "RESERVED_SELECT",
+          "type": "keyword",
+        },
+        "type": "clause",
+      },
+    ],
+    "hasSemicolon": true,
+    "type": "statement",
+  },
+]
+`;
+
 exports[`Parser parses LIMIT clause with count 1`] = `
 Array [
   Object {
