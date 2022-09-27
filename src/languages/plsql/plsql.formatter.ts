@@ -117,6 +117,10 @@ export default class PlSqlFormatter extends Formatter {
       postProcess,
     });
   }
+
+  formatOptions() {
+    return { denseAtOperator: true };
+  }
 }
 
 function postProcess(tokens: Token[]) {
