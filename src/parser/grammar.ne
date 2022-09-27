@@ -71,14 +71,14 @@ limit_clause -> %LIMIT _ expression_with_comments:+ (%COMMA expression:+):? {%
       const [comma, exp2] = optional;
       return {
         type: NodeType.limit_clause,
-        name: addTrailingComments(toKeywordNode(limitToken), _),
+        limitKw: addTrailingComments(toKeywordNode(limitToken), _),
         offset: exp1,
         count: exp2,
       };
     } else {
       return {
         type: NodeType.limit_clause,
-        name: addTrailingComments(toKeywordNode(limitToken), _),
+        limitKw: addTrailingComments(toKeywordNode(limitToken), _),
         count: exp1,
       };
     }
@@ -88,7 +88,7 @@ limit_clause -> %LIMIT _ expression_with_comments:+ (%COMMA expression:+):? {%
 select_clause -> %RESERVED_SELECT (all_columns_asterisk expression:* | asteriskless_expression expression:*) {%
   ([nameToken, [exp, expressions]]) => ({
     type: NodeType.clause,
-    name: toKeywordNode(nameToken),
+    nameKw: toKeywordNode(nameToken),
     children: [exp, ...expressions],
   })
 %}
@@ -107,7 +107,7 @@ all_columns_asterisk -> %ASTERISK {%
 other_clause -> %RESERVED_COMMAND expression:* {%
   ([nameToken, children]) => ({
     type: NodeType.clause,
-    name: toKeywordNode(nameToken),
+    nameKw: toKeywordNode(nameToken),
     children,
   })
 %}
@@ -115,7 +115,7 @@ other_clause -> %RESERVED_COMMAND expression:* {%
 set_operation -> %RESERVED_SET_OPERATION expression:* {%
   ([nameToken, children]) => ({
     type: NodeType.set_operation,
-    name: toKeywordNode(nameToken),
+    nameKw: toKeywordNode(nameToken),
     children,
   })
 %}
@@ -167,7 +167,7 @@ array_subscript -> %ARRAY_KEYWORD _ square_brackets {%
 function_call -> %RESERVED_FUNCTION_NAME _ parenthesis {%
   ([nameToken, _, parens]) => ({
     type: NodeType.function_call,
-    name: addTrailingComments(toKeywordNode(nameToken), _),
+    nameKw: addTrailingComments(toKeywordNode(nameToken), _),
     parenthesis: parens,
   })
 %}
@@ -216,9 +216,9 @@ property_access -> simple_expression _ %DOT _ (identifier | array_subscript | al
 between_predicate -> %BETWEEN _ simple_expression _ %AND _ simple_expression {%
   ([betweenToken, _1, expr1, _2, andToken, _3, expr2]) => ({
     type: NodeType.between_predicate,
-    between: toKeywordNode(betweenToken),
+    betweenKw: toKeywordNode(betweenToken),
     expr1: [addTrailingComments(addLeadingComments(expr1, _1), _2)],
-    and: toKeywordNode(andToken),
+    andKw: toKeywordNode(andToken),
     expr2: [addLeadingComments(expr2, _3)],
   })
 %}
@@ -226,8 +226,8 @@ between_predicate -> %BETWEEN _ simple_expression _ %AND _ simple_expression {%
 case_expression -> %CASE _ simple_expression:* case_clause:* _ %END {%
   ([caseToken, _1, expr, clauses, _2, endToken]) => ({
     type: NodeType.case_expression,
-    case: addTrailingComments(toKeywordNode(caseToken), _1),
-    end: addLeadingComments(toKeywordNode(endToken), _2),
+    caseKw: addTrailingComments(toKeywordNode(caseToken), _1),
+    endKw: addLeadingComments(toKeywordNode(endToken), _2),
     expr,
     clauses,
   })
@@ -236,8 +236,8 @@ case_expression -> %CASE _ simple_expression:* case_clause:* _ %END {%
 case_clause -> _ %WHEN _ simple_expression:+ _ %THEN _ simple_expression:+ {%
   ([_1, whenToken, _2, cond, _3, thenToken, _4, expr]) => ({
     type: NodeType.case_when,
-    when: addTrailingComments(addLeadingComments(toKeywordNode(whenToken), _1), _2),
-    then: addTrailingComments(addLeadingComments(toKeywordNode(thenToken), _3), _4),
+    whenKw: addTrailingComments(addLeadingComments(toKeywordNode(whenToken), _1), _2),
+    thenKw: addTrailingComments(addLeadingComments(toKeywordNode(thenToken), _3), _4),
     condition: cond,
     result: expr,
   })
@@ -245,7 +245,7 @@ case_clause -> _ %WHEN _ simple_expression:+ _ %THEN _ simple_expression:+ {%
 case_clause -> _ %ELSE _ simple_expression:+ {%
   ([_1, elseToken, _2, expr]) => ({
     type: NodeType.case_else,
-    else: addTrailingComments(addLeadingComments(toKeywordNode(elseToken), _1), _2),
+    elseKw: addTrailingComments(addLeadingComments(toKeywordNode(elseToken), _1), _2),
     result: expr,
   })
 %}

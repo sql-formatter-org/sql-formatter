@@ -37,19 +37,19 @@ export interface StatementNode extends BaseNode {
 
 export interface ClauseNode extends BaseNode {
   type: NodeType.clause;
-  name: KeywordNode;
+  nameKw: KeywordNode;
   children: AstNode[];
 }
 
 export interface SetOperationNode extends BaseNode {
   type: NodeType.set_operation;
-  name: KeywordNode;
+  nameKw: KeywordNode;
   children: AstNode[];
 }
 
 export interface FunctionCallNode extends BaseNode {
   type: NodeType.function_call;
-  name: KeywordNode;
+  nameKw: KeywordNode;
   parenthesis: ParenthesisNode;
 }
 
@@ -70,31 +70,31 @@ export interface ParenthesisNode extends BaseNode {
 // BETWEEN <expr1> AND <expr2>
 export interface BetweenPredicateNode extends BaseNode {
   type: NodeType.between_predicate;
-  between: KeywordNode;
+  betweenKw: KeywordNode;
   expr1: AstNode[];
-  and: KeywordNode;
+  andKw: KeywordNode;
   expr2: AstNode[];
 }
 
 export interface CaseExpressionNode extends BaseNode {
   type: NodeType.case_expression;
-  case: KeywordNode;
-  end: KeywordNode;
+  caseKw: KeywordNode;
+  endKw: KeywordNode;
   expr: AstNode[];
   clauses: (CaseWhenNode | CaseElseNode)[];
 }
 
 export interface CaseWhenNode extends BaseNode {
   type: NodeType.case_when;
-  when: KeywordNode;
-  then: KeywordNode;
+  whenKw: KeywordNode;
+  thenKw: KeywordNode;
   condition: AstNode[];
   result: AstNode[];
 }
 
 export interface CaseElseNode extends BaseNode {
   type: NodeType.case_else;
-  else: KeywordNode;
+  elseKw: KeywordNode;
   result: AstNode[];
 }
 
@@ -102,7 +102,7 @@ export interface CaseElseNode extends BaseNode {
 // LIMIT <offset>, <count>
 export interface LimitClauseNode extends BaseNode {
   type: NodeType.limit_clause;
-  name: KeywordNode;
+  limitKw: KeywordNode;
   count: AstNode[];
   offset?: AstNode[];
 }
