@@ -56,7 +56,7 @@ const reservedCommands = expandPhrases([
   'WHEN MATCHED [AND]',
   'THEN {UPDATE SET | DELETE}',
   'WHEN NOT MATCHED THEN INSERT',
-  'DROP TABLE [IF EXISTS] table_name [CASCADE | RESTRICT]',
+  'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE [IF EXISTS]',
   'RENAME TO',
@@ -71,7 +71,7 @@ const reservedCommands = expandPhrases([
   '{ALTER | MODIFY} [COLUMN]',
   'DROP [COLUMN]',
   '{SET | DROP} DEFAULT', // for alter column
-  '[SET] NOT NULL', // for alter column
+  'SET NOT NULL', // for alter column
   'DROP NOT NULL', // for alter column
   '[SET DATA] TYPE', // for alter column
   '[UNSET] COMMENT', // for alter column
@@ -305,7 +305,7 @@ const reservedSetOperations = expandPhrases(['UNION [ALL]', 'MINUS', 'EXCEPT', '
 const reservedJoins = expandPhrases([
   '[INNER] JOIN',
   '[NATURAL] {LEFT | RIGHT | FULL} [OUTER] JOIN',
-  '{CROSS, NATURAL} JOIN',
+  '{CROSS | NATURAL} JOIN',
 ]);
 
 const reservedPhrases = expandPhrases(['{ROWS | RANGE} BETWEEN']);

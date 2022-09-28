@@ -5,11 +5,12 @@ import { FormatFn } from 'src/sqlFormatter';
 interface CreateViewConfig {
   orReplace?: boolean;
   materialized?: boolean;
+  ifNotExists?: boolean;
 }
 
 export default function supportsCreateView(
   format: FormatFn,
-  { orReplace, materialized }: CreateViewConfig = {}
+  { orReplace, materialized, ifNotExists }: CreateViewConfig = {}
 ) {
   it('formats CREATE VIEW', () => {
     expect(format('CREATE VIEW my_view AS SELECT id, fname, lname FROM tbl;')).toBe(dedent`
@@ -53,6 +54,15 @@ export default function supportsCreateView(
           mat_view AS
         SELECT
           42;
+      `);
+    });
+  }
+
+  if (ifNotExists) {
+    it('formats short CREATE TABLE IF NOT EXISTS', () => {
+      expect(format('CREATE TABLE IF NOT EXISTS tbl (a INT PRIMARY KEY, b TEXT);')).toBe(dedent`
+        CREATE TABLE IF NOT EXISTS
+          tbl (a INT PRIMARY KEY, b TEXT);
       `);
     });
   }

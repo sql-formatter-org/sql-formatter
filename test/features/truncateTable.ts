@@ -3,12 +3,13 @@ import dedent from 'dedent-js';
 import { FormatFn } from 'src/sqlFormatter';
 
 interface TruncateTableConfig {
+  ifExists?: boolean;
   withoutTable?: boolean;
 }
 
 export default function supportsTruncateTable(
   format: FormatFn,
-  { withoutTable }: TruncateTableConfig = {}
+  { ifExists, withoutTable }: TruncateTableConfig = {}
 ) {
   it('formats TRUNCATE TABLE statement', () => {
     const result = format('TRUNCATE TABLE Customers;');
@@ -17,6 +18,16 @@ export default function supportsTruncateTable(
         Customers;
     `);
   });
+
+  if (ifExists) {
+    it('formats TRUNCATE TABLE IF EXISTS statments', () => {
+      const result = format('TRUNCATE TABLE IF EXISTS Customers;');
+      expect(result).toBe(dedent`
+        TRUNCATE TABLE IF EXISTS
+          Customers;
+`);
+    });
+  }
 
   if (withoutTable) {
     it('formats TRUNCATE statement (without TABLE)', () => {

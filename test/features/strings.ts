@@ -11,6 +11,7 @@ type StringType =
   | "''-qq" // with repeated-quote escaping
   | "''-bs" // with backslash escaping
   | "U&''" // with repeated-quote escaping
+  | '$$' // with repeated-quote escaping
   | "N''" // with escaping style depending on whether also ''-qq or ''-bs was specified
   | "X''" // no escaping
   | 'X""' // no escaping
@@ -112,6 +113,27 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
     });
   }
 
+  if (stringTypes.includes('$$')) {
+    it('supports unicode strings between $$', () => {
+      expect(format('$$foo JOIN bar$$')).toBe('$$foo JOIN bar$$');
+      expect(format(`SELECT $$where🍞$$`)).toBe(dedent`
+        SELECT
+          $$where🍞$$
+      `);
+    });
+
+    it('ignores single-quotes inside of the $$ string', () => {
+      expect(format("$$'foo' 'bar'$$")).toBe("$$'foo' 'bar'$$");
+    });
+
+    it('ignores double-quotes inside of the $$ string', () => {
+      expect(format('$$"foo" "bar"$$')).toBe('$$"foo" "bar"$$');
+    });
+
+    it('detects consecutive $$ strings as separate ones', () => {
+      expect(format('$$foo$$$$bar$$')).toBe('$$foo$$ $$bar$$');
+    });
+  }
   if (stringTypes.includes("N''")) {
     it('supports T-SQL unicode strings', () => {
       expect(format("N'foo JOIN bar'")).toBe("N'foo JOIN bar'");
