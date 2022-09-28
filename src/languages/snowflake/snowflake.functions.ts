@@ -8,13 +8,16 @@ export const functions = flatKeywordList({
   // 2. split all lines that contain ',' or '/' into multiple lines
   // 3. remove all '— Deprecated' parts from the strings
   // 4. delete all strings that end with '<object_type>', they are already covered in the list
-  // 5. fix all values that contain '*'
+  // 5. remove all strings that contain '[', they are operators not functions
+  // 6. fix all values that contain '*'
+  // 7. delete operatos ':', '::', '||'
   //
-  // Steps 1-4 can be combined by the following script in the developer console:
+  // Steps 1-5 can be combined by the following script in the developer console:
   // $x('//tbody/tr/*[1]//a/span/text()').map(x => x.nodeValue) // Step 1
   //   .map(x => x.split(x.includes(',') ? ',' : '/')).flat().map(x => x.trim()) // Step 2
   //   .map(x => x.replace('— Deprecated', '')) // Step 3
   //   .filter(x => !x.endsWith('<object_type>')) // Step 4
+  //   .filter(x => !x.includes('[')) // Step 5
   all: [
     'ABS',
     'ACOS',
@@ -78,7 +81,6 @@ export const functions = flatKeywordList({
     'BASE64_DECODE_BINARY',
     'BASE64_DECODE_STRING',
     'BASE64_ENCODE',
-    '[ NOT ] BETWEEN',
     'BIT_LENGTH',
     'BITAND',
     'BITAND_AGG',
@@ -105,7 +107,6 @@ export const functions = flatKeywordList({
     'BUILD_STAGE_FILE_URL',
     'CASE',
     'CAST',
-    '::', // this is an infix operator
     'CBRT',
     'CEIL',
     'CHARINDEX',
@@ -119,7 +120,6 @@ export const functions = flatKeywordList({
     'COMPLETE_TASK_GRAPHS',
     'COMPRESS',
     'CONCAT',
-    '||', // this is an operator like "a" || "b"
     'CONCAT_WS',
     'CONDITIONAL_CHANGE_EVENT',
     'CONDITIONAL_TRUE_EVENT',
@@ -198,7 +198,6 @@ export const functions = flatKeywordList({
     'GET_IGNORE_CASE',
     'GET_OBJECT_REFERENCES',
     'GET_PATH',
-    ':', // this is an infix operator AS WELL as a function
     'GET_PRESIGNED_URL',
     'GET_RELATIVE_PATH',
     'GET_STAGE_LOCATION',
@@ -225,14 +224,11 @@ export const functions = flatKeywordList({
     'IFNULL',
     'ILIKE',
     'ILIKE ANY',
-    '[ NOT ] IN',
     'INFER_SCHEMA',
     'INITCAP',
     'INSERT',
     'INVOKER_ROLE',
     'INVOKER_SHARE',
-    'IS [ NOT ] DISTINCT FROM',
-    'IS [ NOT ] NULL',
     'IS_ARRAY',
     'IS_BINARY',
     'IS_BOOLEAN',

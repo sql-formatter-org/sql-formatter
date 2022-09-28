@@ -16,9 +16,7 @@ import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
 import supportsIdentifiers from './features/identifiers';
-import supportsParams from './options/param';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
-import supportsWindow from './features/window';
 import supportsSetOperations from './features/setOperations';
 import supportsLimiting from './features/limiting';
 import supportsInsertInto from './features/insertInto';
@@ -31,7 +29,7 @@ describe('SnowflakeFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
-  supportsComments(format, { nestedBlockComments: true });
+  supportsComments(format, { nestedBlockComments: false });
   supportsCreateView(format, { orReplace: true, materialized: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
@@ -66,30 +64,12 @@ describe('SnowflakeFormatter', () => {
   supportsJoin(format);
   supportsSetOperations(format);
   supportsReturning(format);
-  supportsParams(format, { numbered: ['$'] });
-  supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
 
   it('allows $ character as part of identifiers if inclosed by "', () => {
-    expect(format('SELECT foo$')).toBe(dedent`
+    expect(format('SELECT "foo$"')).toBe(dedent`
       SELECT
-        foo$,
-    `);
-  });
-
-  it('allows number in identifier if enclosed by "', () => {
-    expect(format('SELECT "foo1"')).toBe(dedent`
-      SELECT
-        "foo1",
-    `);
-  });
-
-  it("supports '=>' operator", () => {
-    expect(format('SELECT 1 FROM foo(generator(rowcount => 10))')).toBe(dedent`
-      SELECT
-        1
-      FROM
-        foo(generator(rowcount => 10))
+        "foo$"
     `);
   });
 });

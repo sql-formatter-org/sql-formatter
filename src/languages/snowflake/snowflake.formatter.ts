@@ -1,4 +1,5 @@
 import { expandPhrases } from 'src/expandPhrases';
+import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './snowflake.functions';
@@ -94,6 +95,9 @@ const reservedCommands = expandPhrases([
   //   - CREATE VIEW
   //   - DROP TABLE
   //   - TRUNCATE TABLE
+  //   - SELECT
+  //   - UPDATE
+  //   - SET
   //
   // Steps 1-4 can be combined by the following script in the developer console:
   // $x('//tbody/tr/*[1]//a/span/text()').map(x => x.nodeValue) // Step 1
@@ -234,8 +238,6 @@ const reservedCommands = expandPhrases([
   'REMOVE',
   'REVOKE ROLE',
   'ROLLBACK',
-  'SELECT',
-  'SET',
   'SHOW COLUMNS',
   'SHOW CONNECTIONS',
   'SHOW DATABASES',
@@ -291,7 +293,6 @@ const reservedCommands = expandPhrases([
   'UNDROP TABLE',
   'UNDROP TAG',
   'UNSET',
-  'UPDATE',
   'USE DATABASE',
   'USE ROLE',
   'USE SCHEMA',
@@ -307,8 +308,7 @@ const reservedJoins = expandPhrases([
   '{CROSS, NATURAL} JOIN',
 ]);
 
-// TODO: unsure what belongs in here...
-const reservedPhrases = expandPhrases([]);
+const reservedPhrases = expandPhrases(['{ROWS | RANGE} BETWEEN']);
 
 export default class SnowflakeFormatter extends Formatter {
   tokenizer() {
@@ -320,14 +320,13 @@ export default class SnowflakeFormatter extends Formatter {
       reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      // TODO: add escaping for single ''
-      stringTypes: ['$$', `''-qq`],
+      stringTypes: ['$$', `''-qq-bs`],
       identTypes: ['""-qq'],
       variableTypes: [
         // for accessing columns at certain positons in the table
-        { regex: '$[1-9]d*' },
+        { regex: '[$][1-9]\\d*' },
         // identifier style syntax
-        { regex: '$([_a-zA-Z][_a-zA-Z0-9$]*)' },
+        { regex: '[$][_a-zA-Z][_a-zA-Z0-9$]*' },
       ],
       extraParens: ['[]'],
       identChars: { rest: '$' },
@@ -345,5 +344,9 @@ export default class SnowflakeFormatter extends Formatter {
         '=>',
       ],
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return { alwaysDenseOperators: [':'] };
   }
 }
