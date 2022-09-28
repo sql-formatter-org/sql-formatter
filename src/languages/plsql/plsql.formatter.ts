@@ -1,5 +1,6 @@
 import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
+import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { EOF_TOKEN, isReserved, isToken, Token, TokenType } from 'src/lexer/token';
 import { keywords } from './plsql.keywords';
@@ -118,8 +119,8 @@ export default class PlSqlFormatter extends Formatter {
     });
   }
 
-  formatOptions() {
-    return { denseAtOperator: true };
+  formatOptions(): DialectFormatOptions {
+    return { alwaysDenseOperators: ['@'] };
   }
 }
 

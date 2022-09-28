@@ -43,8 +43,8 @@ interface ExpressionFormatterParams {
 }
 
 export interface DialectFormatOptions {
-  // True to format "foo@bar" without spaces around @-operator
-  denseAtOperator?: boolean;
+  // List of operators that should always be formatted without surrounding spaces
+  alwaysDenseOperators?: string[];
 }
 
 /** Formats a generic SQL expression */
@@ -275,14 +275,9 @@ export default class ExpressionFormatter {
       this.layout.add(WS.NO_SPACE, text);
       return;
     }
-    // special case for PLSQL @ dblink syntax
-    else if (text === '@' && this.dialectCfg.denseAtOperator) {
-      this.layout.add(WS.NO_SPACE, text);
-      return;
-    }
 
     // other operators
-    if (this.cfg.denseOperators) {
+    if (this.cfg.denseOperators || this.dialectCfg.alwaysDenseOperators?.includes(text)) {
       this.layout.add(WS.NO_SPACE, text);
     } else {
       this.layout.add(text, WS.SPACE);
