@@ -8,7 +8,7 @@ import { StatementNode } from 'src/parser/ast';
 
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
-import ExpressionFormatter from './ExpressionFormatter';
+import ExpressionFormatter, { DialectFormatOptions } from './ExpressionFormatter';
 import Layout, { WS } from './Layout';
 import Indentation from './Indentation';
 
@@ -41,6 +41,13 @@ export default class Formatter {
   }
 
   /**
+   * Dialect-specific formatting configuration, optionally provided by subclass.
+   */
+  protected formatOptions(): DialectFormatOptions {
+    return {};
+  }
+
+  /**
    * Formats an SQL query.
    * @param {string} query - The SQL query string to be formatted
    * @return {string} The formatter query
@@ -66,6 +73,7 @@ export default class Formatter {
   private formatStatement(statement: StatementNode): string {
     const layout = new ExpressionFormatter({
       cfg: this.cfg,
+      dialectCfg: this.formatOptions(),
       params: this.params,
       layout: new Layout(new Indentation(indentString(this.cfg))),
     }).format(statement.children);
