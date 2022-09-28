@@ -18,6 +18,86 @@ const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 // $x('//tbody/tr/*[1]//a/span/text()').map(x => x.nodeValue) // Step 1
 //   filter(x => !x.match(/\(.*\)/) && !x.match(/…/) && !x.match(/<.*>/)) // Step 2-4
 const reservedCommands = expandPhrases([
+  // queries
+  'WITH [RECURSIVE]',
+  'FROM',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'PARTITION BY',
+  'ORDER BY',
+  'LIMIT',
+  'OFFSET',
+  'FETCH [FIRST | NEXT]',
+  // Data manipulation
+  // - insert:
+  'INSERT [OVERWRITE] [ALL INTO | INTO | ALL | FIRST]',
+  '[THEN | WHEN] INTO',
+  'VALUES',
+  // - update:
+  'UPDATE',
+  'SET',
+  // - delete:
+  'DELETE FROM',
+  // - truncate:
+  'TRUNCATE [TABLE] [IF EXISTS]',
+  // Data definition
+  // - view
+  'CREATE [OR REPLACE] [SECURE] [RECURSIVE] VIEW [IF NOT EXISTS]',
+  // - create/drop/merge table
+  'CREATE [OR REPLACE] [VOLATILE] TABLE [IF NOT EXISTS]',
+  'CREATE [OR REPLACE] [LOCAL | GLOBAL] TEMP[ORARY] TABLE [IF NOT EXISTS]',
+  'CLUSTER BY',
+  '[WITH] {MASKING POLICY | TAG | ROW ACCESS POLICY}',
+  'COPY GRANTS',
+  'USING TEMPLATE',
+  'MERGE INTO',
+  'WHEN MATCHED [AND]',
+  'THEN {UPDATE SET | DELETE}',
+  'WHEN NOT MATCHED THEN INSERT',
+  'DROP TABLE [IF EXISTS] table_name [CASCADE | RESTRICT]',
+  // - alter table:
+  'ALTER TABLE [IF EXISTS]',
+  'RENAME TO',
+  'SWAP WITH',
+  '{SET | UNSET} [TAG | DATA_RETENTION_TIME_IN_DAYS | MAX_DATA_EXTENSION_TIME_IN_DAYS | CHANGE_TRACKING | DEFAULT_DDL_COLLATION | COMMENT]',
+  '{ADD | DROP} ROW ACCESS POLICY',
+  'DROP ALL ROW ACCESS POLICIES',
+  '[SUSPEND | RESUME] RECLUSTER',
+  'DROP CLUSTERING KEY',
+  'ADD [COLUMN]',
+  'RENAME COLUMN',
+  '{ALTER | MODIFY} [COLUMN]',
+  'DROP [COLUMN]',
+  '{SET | DROP} DEFAULT', // for alter column
+  '[SET] NOT NULL', // for alter column
+  'DROP NOT NULL', // for alter column
+  '[SET DATA] TYPE', // for alter column
+  '[UNSET] COMMENT', // for alter column
+  '{SET | UNSET} {MASKING POLICY | TAG}', // for alter column
+  '[FOREIGN KEY] REFERENCES', // for alter column
+  '{ADD | RENAME | ALTER | MODIFY | DROP} CONSTRAINT', // for alter column
+  '{ADD | DROP} SEARCH OPTIMIZATION', // for alter column
+
+  // other
+  // https://docs.snowflake.com/en/sql-reference/sql-all.html
+  //
+  // 1. run in console on this page: $x('//tbody/tr/*[1]//a/span/text()').map(x => x.nodeValue)
+  // 2. delete all lines that contain a sting like '(.*)', they are already covered in the list
+  // 3. delete all lines that contain a sting like '<.*>', they are already covered in the list
+  // 4. delete all lines that contain '…', they are part of a regex statement that can't be covered here
+  // 5. Manually add 'COPY INTO'
+  // 6. Remove all lines that are already in the above definitions:
+  //   - ALTER TABLE
+  //   - COMMENT
+  //   - CREATE TABLE
+  //   - CREATE VIEW
+  //   - DROP TABLE
+  //   - TRUNCATE TABLE
+  //
+  // Steps 1-4 can be combined by the following script in the developer console:
+  // $x('//tbody/tr/*[1]//a/span/text()').map(x => x.nodeValue) // Step 1
+  //   filter(x => !x.match(/\(.*\)/) && !x.match(/…/) && !x.match(/<.*>/)) // Step 2-4
   'ALTER ACCOUNT',
   'ALTER API INTEGRATION',
   'ALTER CONNECTION',
@@ -46,7 +126,6 @@ const reservedCommands = expandPhrases([
   'ALTER STAGE',
   'ALTER STORAGE INTEGRATION',
   'ALTER STREAM',
-  'ALTER TABLE',
   'ALTER TAG',
   'ALTER TASK',
   'ALTER USER',
@@ -54,7 +133,6 @@ const reservedCommands = expandPhrases([
   'ALTER WAREHOUSE',
   'BEGIN',
   'CALL',
-  'COMMENT',
   'COMMIT',
   'COPY INTO',
   'CREATE ACCOUNT',
@@ -86,11 +164,9 @@ const reservedCommands = expandPhrases([
   'CREATE STAGE',
   'CREATE STORAGE INTEGRATION',
   'CREATE STREAM',
-  'CREATE TABLE',
   'CREATE TAG',
   'CREATE TASK',
   'CREATE USER',
-  'CREATE VIEW',
   'CREATE WAREHOUSE',
   'DELETE',
   'DESCRIBE DATABASE',
@@ -140,7 +216,6 @@ const reservedCommands = expandPhrases([
   'DROP SHARE',
   'DROP STAGE',
   'DROP STREAM',
-  'DROP TABLE',
   'DROP TAG',
   'DROP TASK',
   'DROP USER',
@@ -211,7 +286,6 @@ const reservedCommands = expandPhrases([
   'SHOW VIEWS',
   'SHOW WAREHOUSES',
   'TRUNCATE MATERIALIZED VIEW',
-  'TRUNCATE TABLE',
   'UNDROP DATABASE',
   'UNDROP SCHEMA',
   'UNDROP TABLE',
@@ -229,9 +303,8 @@ const reservedSetOperations = expandPhrases(['UNION [ALL]', 'MINUS', 'EXCEPT', '
 
 const reservedJoins = expandPhrases([
   '[INNER] JOIN',
-  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
+  '[NATURAL] {LEFT | RIGHT | FULL} [OUTER] JOIN',
   '{CROSS, NATURAL} JOIN',
-  'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
 ]);
 
 // TODO: unsure what belongs in here...
@@ -247,22 +320,18 @@ export default class SnowflakeFormatter extends Formatter {
       reservedPhrases,
       reservedKeywords: keywords,
       reservedFunctionNames: functions,
-      // TODO $$ is allowed, but also ' and ` how to achieve this?
-      // https://docs.snowflake.com/en/sql-reference/data-types-text.html#string-constants
-      // Backticks only allowed for inline Javascript:
-      // https://docs.snowflake.com/en/sql-reference/stored-procedures-javascript.html#line-continuation
-      stringTypes: ['$$', `'`, '`'],
-      // TODO identifieres are quoted with "
-      identTypes: ['"'],
-      // TODO variables have to be prefixed by single $
-      variableTypes: [],
-      // https://docs.snowflake.com/en/sql-reference/identifiers-syntax.html
-      // only quoted identifiers can have number as first char
-      identChars: { rest: '$', allowFirstCharNumber: true },
+      // TODO: add escaping for single ''
+      stringTypes: ['$$', `''-qq`],
+      identTypes: ['""-qq'],
+      variableTypes: [
+        // for accessing columns at certain positons in the table
+        { regex: '$[1-9]d*' },
+        // identifier style syntax
+        { regex: '$([_a-zA-Z][_a-zA-Z0-9$]*)' },
+      ],
+      extraParens: ['[]'],
+      identChars: { rest: '$' },
       lineCommentTypes: ['--', '//'],
-      nestedBlockComments: true,
-      // https://docs.snowflake.com/en/sql-reference/operators.html
-      // https://docs.snowflake.com/en/sql-reference/functions-all.html
       operators: [
         // Modulo
         '%',
