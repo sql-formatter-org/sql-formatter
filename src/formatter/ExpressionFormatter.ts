@@ -36,14 +36,21 @@ import InlineLayout, { InlineLayoutError } from './InlineLayout';
 
 interface ExpressionFormatterParams {
   cfg: FormatOptions;
+  dialectCfg: DialectFormatOptions;
   params: Params;
   layout: Layout;
   inline?: boolean;
 }
 
+export interface DialectFormatOptions {
+  // List of operators that should always be formatted without surrounding spaces
+  alwaysDenseOperators?: string[];
+}
+
 /** Formats a generic SQL expression */
 export default class ExpressionFormatter {
   private cfg: FormatOptions;
+  private dialectCfg: DialectFormatOptions;
   private params: Params;
   private layout: Layout;
 
@@ -51,8 +58,9 @@ export default class ExpressionFormatter {
   private nodes: AstNode[] = [];
   private index = -1;
 
-  constructor({ cfg, params, layout, inline = false }: ExpressionFormatterParams) {
+  constructor({ cfg, dialectCfg, params, layout, inline = false }: ExpressionFormatterParams) {
     this.cfg = cfg;
+    this.dialectCfg = dialectCfg;
     this.inline = inline;
     this.params = params;
     this.layout = layout;
@@ -267,14 +275,9 @@ export default class ExpressionFormatter {
       this.layout.add(WS.NO_SPACE, text);
       return;
     }
-    // special case for PLSQL @ dblink syntax
-    else if (text === '@' && this.cfg.language === 'plsql') {
-      this.layout.add(WS.NO_SPACE, text);
-      return;
-    }
 
     // other operators
-    if (this.cfg.denseOperators) {
+    if (this.cfg.denseOperators || this.dialectCfg.alwaysDenseOperators?.includes(text)) {
       this.layout.add(WS.NO_SPACE, text);
     } else {
       this.layout.add(text, WS.SPACE);
@@ -359,6 +362,7 @@ export default class ExpressionFormatter {
   private formatSubExpression(nodes: AstNode[]): Layout {
     return new ExpressionFormatter({
       cfg: this.cfg,
+      dialectCfg: this.dialectCfg,
       params: this.params,
       layout: this.layout,
       inline: this.inline,
@@ -370,6 +374,7 @@ export default class ExpressionFormatter {
     try {
       return new ExpressionFormatter({
         cfg: this.cfg,
+        dialectCfg: this.dialectCfg,
         params: this.params,
         layout: new InlineLayout(this.cfg.expressionWidth),
         inline: true,
