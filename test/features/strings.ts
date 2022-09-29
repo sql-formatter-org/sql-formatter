@@ -12,6 +12,7 @@ type StringType =
   | "''-bs" // with backslash escaping
   | "U&''" // with repeated-quote escaping
   | "N''" // with escaping style depending on whether also ''-qq or ''-bs was specified
+  | '$$' // no escaping
   | "X''" // no escaping
   | 'X""' // no escaping
   | "B''" // no escaping
@@ -112,6 +113,15 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
     });
   }
 
+  if (stringTypes.includes('$$')) {
+    it('supports quotes and dollar signs inside $$ string', () => {
+      expect(format(`$$foo' JOIN"$bar$$`)).toBe(`$$foo' JOIN"$bar$$`);
+    });
+
+    it('detects consecutive $$ strings as separate ones', () => {
+      expect(format('$$foo$$$$bar$$')).toBe('$$foo$$ $$bar$$');
+    });
+  }
   if (stringTypes.includes("N''")) {
     it('supports T-SQL unicode strings', () => {
       expect(format("N'foo JOIN bar'")).toBe("N'foo JOIN bar'");

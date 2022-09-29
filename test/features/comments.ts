@@ -4,6 +4,7 @@ import { FormatFn } from 'src/sqlFormatter';
 
 interface CommentsConfig {
   hashComments?: boolean;
+  doubleSlashComments?: boolean;
   nestedBlockComments?: boolean;
 }
 
@@ -213,6 +214,18 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
       expect(result).toBe(dedent`
         SELECT
           alpha # commment
+        FROM
+          beta
+      `);
+    });
+  }
+
+  if (opts.doubleSlashComments) {
+    it('supports // line comment', () => {
+      const result = format('SELECT alpha // commment\nFROM beta');
+      expect(result).toBe(dedent`
+        SELECT
+          alpha // commment
         FROM
           beta
       `);

@@ -117,6 +117,7 @@ The placeholder types available by default depend on SQL dialect used:
 - plsql - `:1`, `:name`
 - postgresql - `$1`
 - redshift - `$1`
+- snowflake - _no support_
 - sqlite - `?`, `?1`, `:name`, `@name`, `$name`
 - spark - _no support_
 - tsql - `@name`, `@"name"`, `@[name]`
