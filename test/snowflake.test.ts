@@ -89,4 +89,94 @@ describe('SnowflakeFormatter', () => {
         $$foo$$ $$bar$$
     `);
   });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(
+      format(
+        `ALTER TABLE t ALTER COLUMN foo SET DATA TYPE VARCHAR;
+         ALTER TABLE t ALTER COLUMN foo SET DEFAULT 5;
+         ALTER TABLE t ALTER COLUMN foo DROP DEFAULT;
+         ALTER TABLE t ALTER COLUMN foo SET NOT NULL;
+         ALTER TABLE t ALTER COLUMN foo DROP NOT NULL;
+         ALTER TABLE t ALTER COLUMN foo COMMENT 'blah';
+         ALTER TABLE t ALTER COLUMN foo UNSET COMMENT;
+         ALTER TABLE t ALTER COLUMN foo SET MASKING POLICY polis;
+         ALTER TABLE t ALTER COLUMN foo UNSET MASKING POLICY;
+         ALTER TABLE t ALTER COLUMN foo SET TAG tname = 10;
+         ALTER TABLE t ALTER COLUMN foo UNSET TAG tname;`
+      )
+    ).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DATA TYPE
+        VARCHAR;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DEFAULT
+        5;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP DEFAULT;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET NOT NULL;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP NOT NULL;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      COMMENT
+        'blah';
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      UNSET COMMENT;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET MASKING POLICY
+        polis;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      UNSET MASKING POLICY;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET TAG
+        tname = 10;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      UNSET TAG
+        tname;
+    `);
+  });
 });

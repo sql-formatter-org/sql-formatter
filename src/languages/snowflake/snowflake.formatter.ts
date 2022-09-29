@@ -61,24 +61,23 @@ const reservedCommands = expandPhrases([
   'ALTER TABLE [IF EXISTS]',
   'RENAME TO',
   'SWAP WITH',
-  '{SET | UNSET} [TAG | DATA_RETENTION_TIME_IN_DAYS | MAX_DATA_EXTENSION_TIME_IN_DAYS | CHANGE_TRACKING | DEFAULT_DDL_COLLATION | COMMENT]',
-  '{ADD | DROP} ROW ACCESS POLICY',
-  'DROP ALL ROW ACCESS POLICIES',
   '[SUSPEND | RESUME] RECLUSTER',
   'DROP CLUSTERING KEY',
   'ADD [COLUMN]',
   'RENAME COLUMN',
   '{ALTER | MODIFY} [COLUMN]',
   'DROP [COLUMN]',
+  '{ADD | ALTER | MODIFY | DROP} [CONSTRAINT]',
+  'RENAME CONSTRAINT',
+  '{ADD | DROP} SEARCH OPTIMIZATION',
+  '{SET | UNSET} [TAG]',
+  '{ADD | DROP} ROW ACCESS POLICY',
+  'DROP ALL ROW ACCESS POLICIES',
   '{SET | DROP} DEFAULT', // for alter column
-  'SET NOT NULL', // for alter column
-  'DROP NOT NULL', // for alter column
+  '{SET | DROP} NOT NULL', // for alter column
   '[SET DATA] TYPE', // for alter column
   '[UNSET] COMMENT', // for alter column
-  '{SET | UNSET} {MASKING POLICY | TAG}', // for alter column
-  '[FOREIGN KEY] REFERENCES', // for alter column
-  '{ADD | RENAME | ALTER | MODIFY | DROP} CONSTRAINT', // for alter column
-  '{ADD | DROP} SEARCH OPTIMIZATION', // for alter column
+  '{SET | UNSET} MASKING POLICY', // for alter column
 
   // other
   // https://docs.snowflake.com/en/sql-reference/sql-all.html
