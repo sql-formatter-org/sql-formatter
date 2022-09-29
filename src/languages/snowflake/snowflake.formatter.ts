@@ -347,6 +347,6 @@ export default class SnowflakeFormatter extends Formatter {
   }
 
   formatOptions(): DialectFormatOptions {
-    return { alwaysDenseOperators: [':'] };
+    return { alwaysDenseOperators: [':', '::'] };
   }
 }
