@@ -267,18 +267,10 @@ export default class ExpressionFormatter {
   }
 
   private formatOperator({ text }: OperatorNode) {
-    // special operator
-    if (text === ':') {
-      this.layout.add(WS.NO_SPACE, text, WS.SPACE);
-      return;
-    } else if (text === '::') {
-      this.layout.add(WS.NO_SPACE, text);
-      return;
-    }
-
-    // other operators
     if (this.cfg.denseOperators || this.dialectCfg.alwaysDenseOperators?.includes(text)) {
       this.layout.add(WS.NO_SPACE, text);
+    } else if (text === ':') {
+      this.layout.add(WS.NO_SPACE, text, WS.SPACE);
     } else {
       this.layout.add(text, WS.SPACE);
     }
