@@ -211,7 +211,10 @@ const reservedJoins = expandPhrases([
   '{CROSS | OUTER} APPLY',
 ]);
 
-const reservedPhrases = expandPhrases(['ON DELETE', 'ON UPDATE', '{ROWS | RANGE} BETWEEN']);
+const reservedPhrases = expandPhrases([
+  'ON {UPDATE | DELETE} [SET NULL | SET DEFAULT]',
+  '{ROWS | RANGE} BETWEEN',
+]);
 
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export default class TransactSqlFormatter extends Formatter {

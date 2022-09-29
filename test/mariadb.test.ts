@@ -13,6 +13,7 @@ import supportsParams from './options/param';
 import supportsCreateView from './features/createView';
 import supportsAlterTable from './features/alterTable';
 import supportsStrings from './features/strings';
+import supportsConstraints from './features/constraints';
 
 describe('MariaDbFormatter', () => {
   const language = 'mariadb';
@@ -36,6 +37,7 @@ describe('MariaDbFormatter', () => {
   supportsReturning(format);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
   supportsCreateTable(format, { orReplace: true, ifNotExists: true });
+  supportsConstraints(format, ['RESTRICT', 'CASCADE', 'SET NULL', 'NO ACTION', 'SET DEFAULT']);
   supportsParams(format, { positional: true });
   supportsCreateView(format, { orReplace: true });
   supportsAlterTable(format, {

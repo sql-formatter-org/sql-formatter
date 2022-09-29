@@ -33,7 +33,7 @@ describe('Db2Formatter', () => {
   supportsCreateView(format, { orReplace: true });
   supportsCreateTable(format);
   supportsDropTable(format);
-  supportsConstraints(format);
+  supportsConstraints(format, ['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL']);
   supportsAlterTable(format, {
     addColumn: true,
     dropColumn: true,

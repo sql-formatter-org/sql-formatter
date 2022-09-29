@@ -2,9 +2,7 @@ import dedent from 'dedent-js';
 
 import { FormatFn } from 'src/sqlFormatter';
 
-const standardActions = ['CURRENT_TIMESTAMP'];
-
-export default function supportsConstraints(format: FormatFn, actions: string[] = standardActions) {
+export default function supportsConstraints(format: FormatFn, actions: string[]) {
   actions.forEach(action => {
     it(`treats ON UPDATE & ON DELETE ${action} as distinct keywords from ON`, () => {
       expect(

@@ -30,6 +30,7 @@ describe('SnowflakeFormatter', () => {
   supportsComments(format, { doubleSlashComments: true });
   supportsCreateView(format, { orReplace: true, ifNotExists: true });
   supportsCreateTable(format, { orReplace: true, ifNotExists: true });
+  supportsConstraints(format, ['CASCADE', 'SET NULL', 'SET DEFAULT', 'RESTRICT', 'NO ACTION']);
   supportsDropTable(format, { ifExists: true });
   supportsArrayAndMapAccessors(format);
   supportsAlterTable(format, {
@@ -50,7 +51,6 @@ describe('SnowflakeFormatter', () => {
   supportsJoin(format, { without: ['NATURAL INNER JOIN'] });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'MINUS', 'EXCEPT', 'INTERSECT']);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
-  supportsConstraints(format, ['CASCADE', 'SET NULL', 'SET DEFAULT', 'RESTRICT', 'NO ACTION']);
 
   it('allows $ character as part of unquoted identifiers', () => {
     expect(format('SELECT foo$')).toBe(dedent`

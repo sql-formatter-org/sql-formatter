@@ -239,8 +239,7 @@ const reservedJoins = expandPhrases([
 ]);
 
 const reservedPhrases = expandPhrases([
-  'ON DELETE',
-  'ON UPDATE',
+  'ON {UPDATE | DELETE} [SET NULL | SET DEFAULT]',
   '{ROWS | RANGE | GROUPS} BETWEEN',
   // https://www.postgresql.org/docs/current/datatype-datetime.html
   '{TIMESTAMP | TIME} {WITH | WITHOUT} TIME ZONE',

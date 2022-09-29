@@ -222,8 +222,7 @@ const reservedJoins = expandPhrases([
 ]);
 
 const reservedPhrases = expandPhrases([
-  'ON DELETE',
-  'ON UPDATE',
+  'ON {UPDATE | DELETE} [SET NULL]',
   'CHARACTER SET',
   '{ROWS | RANGE} BETWEEN',
 ]);
