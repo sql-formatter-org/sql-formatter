@@ -42,7 +42,7 @@ describe('SnowflakeFormatter', () => {
   supportsDeleteFrom(format);
   supportsInsertInto(format);
   supportsUpdate(format);
-  supportsTruncateTable(format, { withoutTable: true, ifExists: true });
+  supportsTruncateTable(format, { withoutTable: true });
   supportsStrings(format, ['$$', "''-bs", "''-qq"]);
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
