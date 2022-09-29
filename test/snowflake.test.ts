@@ -40,7 +40,7 @@ describe('SnowflakeFormatter', () => {
     renameColumn: true,
   });
   supportsDeleteFrom(format);
-  supportsInsertInto(format, { withOverwrite: true });
+  supportsInsertInto(format);
   supportsUpdate(format);
   supportsTruncateTable(format, { withoutTable: true, ifExists: true });
   supportsStrings(format, ['$$', "''-bs", "''-qq"]);
