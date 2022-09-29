@@ -36,6 +36,7 @@ describe('SnowflakeFormatter', () => {
   supportsAlterTable(format, {
     addColumn: true,
     dropColumn: true,
+    modify: true,
     renameTo: true,
     renameColumn: true,
   });
