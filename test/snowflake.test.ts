@@ -9,7 +9,6 @@ import supportsCreateTable from './features/createTable';
 import supportsDropTable from './features/dropTable';
 import supportsJoin from './features/join';
 import supportsOperators from './features/operators';
-import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
@@ -45,31 +44,38 @@ describe('SnowflakeFormatter', () => {
   supportsStrings(format, ['$$', "''-bs", "''-qq"]);
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
-  supportsSchema(format, 'USE');
-  // ':' and '::' are tested later, since it is always dense
+  // ':' and '::' are tested later, since they should always be dense
   supportsOperators(format, ['%', '||', '=>']);
   supportsJoin(format, { without: ['NATURAL INNER JOIN'] });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'MINUS', 'EXCEPT', 'INTERSECT']);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
 
-  it('allows $ character as part of identifiers if inclosed by "', () => {
-    expect(format('SELECT "foo$"')).toBe(dedent`
+  it('allows $ character as part of unquoted identifiers', () => {
+    expect(format('SELECT foo$')).toBe(dedent`
       SELECT
-        "foo$"
+        foo$
     `);
   });
 
-  it(`formats ':' path-operator without spaces`, () => {
-    expect(format(`SELECT foo:bar FROM test`)).toBe(dedent`
-      SELECT
-        foo:bar
-      FROM
-        test
-    `);
-  });
-
-  it(`does not support ':' path-operator with spaces`, () => {
-    expect(format(`SELECT foo : bar FROM test`)).toThrowError('Parse error');
+  describe(`formats traversal of semi structured data`, () => {
+    it(`formats ':' path-operator without spaces`, () => {
+      expect(format(`SELECT foo : bar`)).toBe(dedent`
+        SELECT
+          foo:bar
+      `);
+    });
+    it(`formats ':' path-operator followed by dots without spaces`, () => {
+      expect(format(`SELECT foo : bar . baz`)).toBe(dedent`
+        SELECT
+          foo:bar.baz
+      `);
+    });
+    it(`formats brackets notation without spaces`, () => {
+      expect(format(`SELECT foo [ 'bar' ]`)).toBe(dedent`
+        SELECT
+          foo['bar']
+      `);
+    });
   });
 
   it('formats type-cast operator without spaces', () => {

@@ -33,7 +33,7 @@ const reservedCommands = expandPhrases([
   // Data manipulation
   // - insert:
   'INSERT [OVERWRITE] [ALL INTO | INTO | ALL | FIRST]',
-  '[THEN | WHEN] INTO',
+  '[THEN | ELSE] INTO',
   'VALUES',
   // - update:
   'UPDATE',
@@ -47,7 +47,7 @@ const reservedCommands = expandPhrases([
   'CREATE [OR REPLACE] [SECURE] [RECURSIVE] VIEW [IF NOT EXISTS]',
   // - create/drop/merge table
   'CREATE [OR REPLACE] [VOLATILE] TABLE [IF NOT EXISTS]',
-  'CREATE [OR REPLACE] [LOCAL | GLOBAL] TEMP[ORARY] TABLE [IF NOT EXISTS]',
+  'CREATE [OR REPLACE] [LOCAL | GLOBAL] {TEMP|TEMPORARY} TABLE [IF NOT EXISTS]',
   'CLUSTER BY',
   '[WITH] {MASKING POLICY | TAG | ROW ACCESS POLICY}',
   'COPY GRANTS',
