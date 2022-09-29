@@ -1,4 +1,5 @@
 import { expandPhrases } from 'src/expandPhrases';
+import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './transactsql.functions';
@@ -248,5 +249,9 @@ export default class TransactSqlFormatter extends Formatter {
       ],
       // TODO: Support for money constants
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return { alwaysDenseOperators: ['::'] };
   }
 }

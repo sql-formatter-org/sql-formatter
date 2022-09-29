@@ -271,9 +271,6 @@ export default class ExpressionFormatter {
     if (text === ':') {
       this.layout.add(WS.NO_SPACE, text, WS.SPACE);
       return;
-    } else if (text === '::') {
-      this.layout.add(WS.NO_SPACE, text);
-      return;
     }
 
     // other operators

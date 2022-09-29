@@ -1,4 +1,5 @@
 import { expandPhrases } from 'src/expandPhrases';
+import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './postgresql.functions';
@@ -354,5 +355,9 @@ export default class PostgreSqlFormatter extends Formatter {
         '::',
       ],
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return { alwaysDenseOperators: ['::'] };
   }
 }
