@@ -30,7 +30,7 @@ describe('HiveFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
-  supportsCreateView(format, { materialized: true });
+  supportsCreateView(format, { materialized: true, ifNotExists: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
   supportsAlterTable(format, { renameTo: true });

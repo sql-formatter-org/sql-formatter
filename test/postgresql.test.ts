@@ -32,7 +32,7 @@ describe('PostgreSqlFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format, { nestedBlockComments: true });
-  supportsCreateView(format, { orReplace: true, materialized: true });
+  supportsCreateView(format, { orReplace: true, materialized: true, ifNotExists: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
   supportsConstraints(format, ['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL', 'SET DEFAULT']);

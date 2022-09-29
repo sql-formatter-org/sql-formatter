@@ -36,14 +36,15 @@ describe('SnowflakeFormatter', () => {
   supportsAlterTable(format, {
     addColumn: true,
     dropColumn: true,
+    modify: true,
     renameTo: true,
     renameColumn: true,
   });
   supportsDeleteFrom(format);
-  supportsInsertInto(format, { withOverwrite: true });
+  supportsInsertInto(format);
   supportsUpdate(format);
-  supportsTruncateTable(format, { withoutTable: true, ifExists: true });
-  supportsStrings(format, ['$$', "''-bs", "''-qq"]);
+  supportsTruncateTable(format, { withoutTable: true });
+  supportsStrings(format, ["''-bs", "''-qq"]);
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   // ':' and '::' are tested later, since they should always be dense
@@ -78,6 +79,104 @@ describe('SnowflakeFormatter', () => {
     expect(format('SELECT 2 :: numeric AS foo;')).toBe(dedent`
       SELECT
         2::numeric AS foo;
+    `);
+  });
+
+  it('supports $$-quoted strings', () => {
+    expect(format(`SELECT $$foo' JOIN"$bar$$, $$foo$$$$bar$$`)).toBe(dedent`
+      SELECT
+        $$foo' JOIN"$bar$$,
+        $$foo$$ $$bar$$
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN', () => {
+    expect(
+      format(
+        `ALTER TABLE t ALTER COLUMN foo SET DATA TYPE VARCHAR;
+         ALTER TABLE t ALTER COLUMN foo SET DEFAULT 5;
+         ALTER TABLE t ALTER COLUMN foo DROP DEFAULT;
+         ALTER TABLE t ALTER COLUMN foo SET NOT NULL;
+         ALTER TABLE t ALTER COLUMN foo DROP NOT NULL;
+         ALTER TABLE t ALTER COLUMN foo COMMENT 'blah';
+         ALTER TABLE t ALTER COLUMN foo UNSET COMMENT;
+         ALTER TABLE t ALTER COLUMN foo SET MASKING POLICY polis;
+         ALTER TABLE t ALTER COLUMN foo UNSET MASKING POLICY;
+         ALTER TABLE t ALTER COLUMN foo SET TAG tname = 10;
+         ALTER TABLE t ALTER COLUMN foo UNSET TAG tname;`
+      )
+    ).toBe(dedent`
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DATA TYPE
+        VARCHAR;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET DEFAULT
+        5;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP DEFAULT;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET NOT NULL;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      DROP NOT NULL;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      COMMENT
+        'blah';
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      UNSET COMMENT;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET MASKING POLICY
+        polis;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      UNSET MASKING POLICY;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      SET TAG
+        tname = 10;
+
+      ALTER TABLE
+        t
+      ALTER COLUMN
+        foo
+      UNSET TAG
+        tname;
     `);
   });
 });
