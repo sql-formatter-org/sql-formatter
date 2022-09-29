@@ -25,7 +25,7 @@ export default function supportsTruncateTable(
       expect(result).toBe(dedent`
         TRUNCATE TABLE IF EXISTS
           Customers;
-`);
+      `);
     });
   }
 

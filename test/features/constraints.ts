@@ -2,21 +2,25 @@ import dedent from 'dedent-js';
 
 import { FormatFn } from 'src/sqlFormatter';
 
-export default function supportsConstraints(format: FormatFn) {
-  it('treats ON UPDATE & ON DELETE as distinct keywords from ON', () => {
-    expect(
-      format(`
-      CREATE TABLE foo (
-        update_time datetime ON UPDATE CURRENT_TIMESTAMP,
-        other_table_id int NOT NULL ON DELETE CASCADE
-      );
-    `)
-    ).toBe(dedent`
-      CREATE TABLE
-        foo (
-          update_time datetime ON UPDATE CURRENT_TIMESTAMP,
-          other_table_id int NOT NULL ON DELETE CASCADE
+const standardActions = ['CURRENT_TIMESTAMP'];
+
+export default function supportsConstraints(format: FormatFn, actions: string[] = standardActions) {
+  actions.forEach(action => {
+    it(`treats ON UPDATE & ON DELETE ${action} as distinct keywords from ON`, () => {
+      expect(
+        format(`
+        CREATE TABLE foo (
+          update_time datetime ON UPDATE ${action},
+          delete_time datetime ON DELETE ${action},
         );
-    `);
+      `)
+      ).toBe(dedent`
+        CREATE TABLE
+          foo (
+            update_time datetime ON UPDATE ${action},
+            delete_time datetime ON DELETE ${action},
+          );
+      `);
+    });
   });
 }

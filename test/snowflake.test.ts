@@ -20,6 +20,7 @@ import supportsInsertInto from './features/insertInto';
 import supportsUpdate from './features/update';
 import supportsTruncateTable from './features/truncateTable';
 import supportsCreateView from './features/createView';
+import supportsConstraints from './features/constraints';
 
 describe('SnowflakeFormatter', () => {
   const language = 'snowflake';
@@ -49,6 +50,7 @@ describe('SnowflakeFormatter', () => {
   supportsJoin(format, { without: ['NATURAL INNER JOIN'] });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'MINUS', 'EXCEPT', 'INTERSECT']);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
+  supportsConstraints(format, ['CASCADE', 'SET NULL', 'SET DEFAULT', 'RESTRICT', 'NO ACTION']);
 
   it('allows $ character as part of unquoted identifiers', () => {
     expect(format('SELECT foo$')).toBe(dedent`
@@ -68,12 +70,6 @@ describe('SnowflakeFormatter', () => {
       expect(format(`SELECT foo : bar . baz`)).toBe(dedent`
         SELECT
           foo:bar.baz
-      `);
-    });
-    it(`formats brackets notation without spaces`, () => {
-      expect(format(`SELECT foo [ 'bar' ]`)).toBe(dedent`
-        SELECT
-          foo['bar']
       `);
     });
   });

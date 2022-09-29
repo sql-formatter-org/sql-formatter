@@ -33,7 +33,7 @@ const reservedCommands = expandPhrases([
   // Data manipulation
   // - insert:
   'INSERT [OVERWRITE] [ALL INTO | INTO | ALL | FIRST]',
-  '[THEN | ELSE] INTO',
+  '{THEN | ELSE} INTO',
   'VALUES',
   // - update:
   'UPDATE',
@@ -308,7 +308,12 @@ const reservedJoins = expandPhrases([
   '{CROSS | NATURAL} JOIN',
 ]);
 
-const reservedPhrases = expandPhrases(['{ROWS | RANGE} BETWEEN']);
+const reservedPhrases = expandPhrases([
+  '{ROWS | RANGE} BETWEEN',
+  'MATCH {FULL | SIMPLE | PARTIAL}',
+  'ON {UPDATE | DELETE} {CASCADE | SET NULL | SET DEFAULT | RESTRICT | NO ACTION}',
+  'INITIALLY {DEFERRED | IMMEDIATE}',
+]);
 
 export default class SnowflakeFormatter extends Formatter {
   tokenizer() {
