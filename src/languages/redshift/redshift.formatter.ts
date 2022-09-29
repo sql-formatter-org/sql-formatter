@@ -1,4 +1,5 @@
 import { expandPhrases } from 'src/expandPhrases';
+import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter';
 import Formatter from 'src/formatter/Formatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './redshift.functions';
@@ -169,5 +170,9 @@ export default class RedshiftFormatter extends Formatter {
         '::',
       ],
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return { alwaysDenseOperators: ['::'] };
   }
 }
