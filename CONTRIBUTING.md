@@ -56,6 +56,7 @@ For those who have admin access on the repo, the new release publish flow is as 
 - Sergei Egorov <sergei.egorov@zeroturnaround.com>
 - Steven Yung <stevenyung@fastmail.com>
 - Toliver <teejae@gmail.com>
+- Toni Müller <toni.mueller@datameer.com>
 - Tyler Jones <tyler.jones@txwormhole.com>
 - Uku Pattak <ukupat@gmail.com>
 - Xin Hu <hoosin.git@gmail.com>
