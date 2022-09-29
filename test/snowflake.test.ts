@@ -43,7 +43,7 @@ describe('SnowflakeFormatter', () => {
   supportsInsertInto(format);
   supportsUpdate(format);
   supportsTruncateTable(format, { withoutTable: true });
-  supportsStrings(format, ['$$', "''-bs", "''-qq"]);
+  supportsStrings(format, ["''-bs", "''-qq"]);
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   // ':' and '::' are tested later, since they should always be dense
@@ -78,6 +78,14 @@ describe('SnowflakeFormatter', () => {
     expect(format('SELECT 2 :: numeric AS foo;')).toBe(dedent`
       SELECT
         2::numeric AS foo;
+    `);
+  });
+
+  it('supports $$-quoted strings', () => {
+    expect(format(`SELECT $$foo' JOIN"$bar$$, $$foo$$$$bar$$`)).toBe(dedent`
+      SELECT
+        $$foo' JOIN"$bar$$,
+        $$foo$$ $$bar$$
     `);
   });
 });
