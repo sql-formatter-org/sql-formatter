@@ -12,5 +12,8 @@
       }
     ],
     ["babel-plugin-inline-import", { "extensions": [".sql"] }]
-  ]
+  ],
+  "targets": {
+    "node": 14
+  }
 }
