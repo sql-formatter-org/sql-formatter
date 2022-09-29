@@ -31,7 +31,7 @@ describe('BigQueryFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format, { hashComments: true });
-  supportsCreateView(format, { orReplace: true, materialized: true });
+  supportsCreateView(format, { orReplace: true, materialized: true, ifNotExists: true });
   supportsCreateTable(format, { orReplace: true, ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
   supportsAlterTable(format, {

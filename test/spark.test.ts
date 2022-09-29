@@ -25,7 +25,7 @@ describe('SparkFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
-  supportsCreateView(format, { orReplace: true });
+  supportsCreateView(format, { orReplace: true, ifNotExists: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
   supportsAlterTable(format, {
