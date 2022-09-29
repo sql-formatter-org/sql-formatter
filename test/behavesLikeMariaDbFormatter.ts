@@ -5,7 +5,6 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 import supportsDropTable from './features/dropTable';
 import supportsBetween from './features/between';
-import supportsConstraints from './features/constraints';
 import supportsDeleteFrom from './features/deleteFrom';
 import supportsComments from './features/comments';
 import supportsStrings from './features/strings';
@@ -23,7 +22,6 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   supportsStrings(format, ["''-qq", "''-bs", '""-qq', '""-bs', "X''"]);
   supportsIdentifiers(format, ['``']);
   supportsDropTable(format, { ifExists: true });
-  supportsConstraints(format);
   supportsDeleteFrom(format);
   supportsInsertInto(format, { withoutInto: true });
   supportsUpdate(format);

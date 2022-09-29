@@ -33,7 +33,7 @@ describe('TransactSqlFormatter', () => {
   supportsCreateView(format, { materialized: true });
   supportsCreateTable(format);
   supportsDropTable(format, { ifExists: true });
-  supportsConstraints(format);
+  supportsConstraints(format, ['SET NULL', 'SET DEFAULT', 'CASCADE', 'NO ACTION']);
   supportsAlterTable(format, {
     dropColumn: true,
   });

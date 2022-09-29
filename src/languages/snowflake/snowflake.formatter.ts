@@ -310,9 +310,7 @@ const reservedJoins = expandPhrases([
 
 const reservedPhrases = expandPhrases([
   '{ROWS | RANGE} BETWEEN',
-  'MATCH {FULL | SIMPLE | PARTIAL}',
-  'ON {UPDATE | DELETE} {CASCADE | SET NULL | SET DEFAULT | RESTRICT | NO ACTION}',
-  'INITIALLY {DEFERRED | IMMEDIATE}',
+  'ON {UPDATE | DELETE} [SET NULL | SET DEFAULT]',
 ]);
 
 export default class SnowflakeFormatter extends Formatter {

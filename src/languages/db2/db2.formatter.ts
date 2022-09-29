@@ -166,7 +166,12 @@ const reservedJoins = expandPhrases([
   '{INNER | CROSS} JOIN',
 ]);
 
-const reservedPhrases = expandPhrases(['ON DELETE', 'ON UPDATE', '{ROWS | RANGE} BETWEEN']);
+const reservedPhrases = expandPhrases([
+  'ON DELETE',
+  'ON UPDATE',
+  'SET NULL',
+  '{ROWS | RANGE} BETWEEN',
+]);
 
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export default class Db2Formatter extends Formatter {

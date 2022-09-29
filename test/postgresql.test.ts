@@ -35,7 +35,7 @@ describe('PostgreSqlFormatter', () => {
   supportsCreateView(format, { orReplace: true, materialized: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
-  supportsConstraints(format);
+  supportsConstraints(format, ['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL', 'SET DEFAULT']);
   supportsArrayAndMapAccessors(format);
   supportsAlterTable(format, {
     addColumn: true,

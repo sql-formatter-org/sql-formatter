@@ -55,8 +55,7 @@ const reservedJoins = expandPhrases([
 ]);
 
 const reservedPhrases = expandPhrases([
-  'ON DELETE',
-  'ON UPDATE',
+  'ON {UPDATE | DELETE} [SET NULL | SET DEFAULT]',
   '{ROWS | RANGE | GROUPS} BETWEEN',
 ]);
 

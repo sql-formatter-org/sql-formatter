@@ -31,7 +31,7 @@ describe('SqliteFormatter', () => {
   supportsCreateView(format);
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
-  supportsConstraints(format);
+  supportsConstraints(format, ['SET NULL', 'SET DEFAULT', 'CASCADE', 'RESTRICT', 'NO ACTION']);
   supportsAlterTable(format, {
     addColumn: true,
     dropColumn: true,

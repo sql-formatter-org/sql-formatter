@@ -34,7 +34,8 @@ describe('PlSqlFormatter', () => {
   supportsCreateView(format, { orReplace: true, materialized: true });
   supportsCreateTable(format);
   supportsDropTable(format);
-  supportsConstraints(format);
+  // http://dba-oracle.com/bk_on_delete_restrict_on_delete_no_action_tips.htm
+  supportsConstraints(format, ['SET NULL', 'CASCADE', 'NO ACTION']);
   supportsAlterTable(format, {
     dropColumn: true,
     modify: true,

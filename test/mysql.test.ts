@@ -13,6 +13,7 @@ import supportsParams from './options/param';
 import supportsCreateView from './features/createView';
 import supportsAlterTable from './features/alterTable';
 import supportsStrings from './features/strings';
+import supportsConstraints from './features/constraints';
 
 describe('MySqlFormatter', () => {
   const language = 'mysql';
@@ -36,6 +37,14 @@ describe('MySqlFormatter', () => {
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
   supportsCreateTable(format, { ifNotExists: true });
+  supportsConstraints(format, [
+    'RESTRICT',
+    'CASCADE',
+    'SET NULL',
+    'NO ACTION',
+    'NOW',
+    'CURRENT_TIMESTAMP',
+  ]);
   supportsParams(format, { positional: true });
   supportsCreateView(format, { orReplace: true });
   supportsAlterTable(format, {

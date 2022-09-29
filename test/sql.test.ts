@@ -33,7 +33,7 @@ describe('SqlFormatter', () => {
   supportsCreateView(format);
   supportsCreateTable(format);
   supportsDropTable(format);
-  supportsConstraints(format);
+  supportsConstraints(format, ['CASCADE', 'SET NULL', 'SET DEFAULT', 'RESTRICT', 'NO ACTION']);
   supportsAlterTable(format, {
     addColumn: true,
     dropColumn: true,
