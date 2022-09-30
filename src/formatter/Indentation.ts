@@ -78,9 +78,4 @@ export default class Indentation {
       }
     }
   }
-
-  /** Clears all indentation */
-  resetIndentation() {
-    this.indentTypes = [];
-  }
 }
