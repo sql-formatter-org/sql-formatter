@@ -27,14 +27,6 @@ export default class Indentation {
   }
 
   /**
-   * Returns current indentation string.
-   * @return {string} indentation string based on indentTypes
-   */
-  getIndent(): string {
-    return this.indent.repeat(this.indentTypes.length);
-  }
-
-  /**
    * Returns current indentation level
    */
   getLevel(): number {
