@@ -19,7 +19,7 @@ import Formatter from './formatter/Formatter';
 import { FormatOptions } from './FormatOptions';
 import { ConfigError, validateConfig, validateQuery } from './validateConfigs';
 
-export const formatters = {
+const formatters = {
   bigquery: BigQueryFormatter,
   db2: Db2Formatter,
   hive: HiveFormatter,
