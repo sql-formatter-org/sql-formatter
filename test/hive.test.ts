@@ -7,7 +7,6 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import supportsCreateTable from './features/createTable';
 import supportsDropTable from './features/dropTable';
 import supportsAlterTable from './features/alterTable';
-import supportsSchema from './features/schema';
 import supportsStrings from './features/strings';
 import supportsBetween from './features/between';
 import supportsJoin from './features/join';
@@ -41,7 +40,6 @@ describe('HiveFormatter', () => {
   supportsStrings(format, ['""-bs', "''-bs"]);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
-  supportsSchema(format);
   supportsJoin(format, {
     without: ['NATURAL'],
     additionally: ['LEFT SEMI JOIN'],

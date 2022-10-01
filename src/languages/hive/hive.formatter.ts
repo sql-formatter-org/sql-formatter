@@ -60,7 +60,6 @@ const reservedClauses = expandPhrases([
   'DESCRIBE',
   'DROP',
   'FETCH',
-  'SET SCHEMA', // added
   'SHOW',
   // newline keywords
   'STORED AS',
