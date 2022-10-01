@@ -15,6 +15,7 @@ import TransactSqlFormatter from 'src/languages/transactsql/transactsql.formatte
 import SingleStoreDbFormatter from './languages/singlestoredb/singlestoredb.formatter';
 import SnowflakeFormatter from './languages/snowflake/snowflake.formatter';
 
+import Formatter from './formatter/Formatter';
 import { FormatOptions } from './FormatOptions';
 import { ConfigError, validateConfig, validateQuery } from './validateConfigs';
 
@@ -80,16 +81,32 @@ export const format = (query: string, cfg: Partial<FormatOptions> = defaultOptio
   return new FormatterCls(options).format(query);
 };
 
-export const formatStandardSQL: FormatFn = (
-  query: string,
-  cfg: Partial<Exclude<FormatOptions, 'language'>> = {}
-): string => {
-  validateQuery(query);
-  const options = validateConfig({
-    ...defaultOptions,
-    ...cfg,
-  });
-  return new SqlFormatter(options).format(query);
-};
+const languageFormat =
+  <Lang extends typeof Formatter>(FormatterCls: Lang) =>
+  (query: string, cfg: Partial<Exclude<FormatOptions, 'language'>> = {}) => {
+    validateQuery(query);
+    const options = validateConfig({
+      ...defaultOptions,
+      ...cfg,
+    });
+    return new FormatterCls(options).format(query);
+  };
 
 export type FormatFn = typeof format;
+
+export const formatBigQuery: FormatFn = languageFormat(BigQueryFormatter);
+export const formatDb2: FormatFn = languageFormat(Db2Formatter);
+export const formatHive: FormatFn = languageFormat(HiveFormatter);
+export const formatMariaDb: FormatFn = languageFormat(MariaDbFormatter);
+export const formatMySql: FormatFn = languageFormat(MySqlFormatter);
+export const formatN1ql: FormatFn = languageFormat(N1qlFormatter);
+export const formatPlSql: FormatFn = languageFormat(PlSqlFormatter);
+export const formatPostgreSql: FormatFn = languageFormat(PostgreSqlFormatter);
+export const formatRedshift: FormatFn = languageFormat(RedshiftFormatter);
+export const formatSpark: FormatFn = languageFormat(SparkFormatter);
+export const formatSqlite: FormatFn = languageFormat(SqliteFormatter);
+export const formatStandardSQL: FormatFn = languageFormat(SqlFormatter);
+export const formatTrino: FormatFn = languageFormat(TrinoFormatter);
+export const formatTransactSql: FormatFn = languageFormat(TransactSqlFormatter);
+export const formatSingleStoreDb: FormatFn = languageFormat(SingleStoreDbFormatter);
+export const formatSnowflake: FormatFn = languageFormat(SnowflakeFormatter);
