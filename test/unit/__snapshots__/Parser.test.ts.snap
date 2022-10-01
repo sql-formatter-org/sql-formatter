@@ -41,7 +41,7 @@ Array [
         "nameKw": Object {
           "raw": "WHERE",
           "text": "WHERE",
-          "tokenType": "RESERVED_COMMAND",
+          "tokenType": "RESERVED_CLAUSE",
           "type": "keyword",
         },
         "type": "clause",
@@ -685,7 +685,7 @@ Array [
         "nameKw": Object {
           "raw": "FROM",
           "text": "FROM",
-          "tokenType": "RESERVED_COMMAND",
+          "tokenType": "RESERVED_CLAUSE",
           "type": "keyword",
         },
         "type": "clause",
@@ -725,7 +725,7 @@ Array [
         "nameKw": Object {
           "raw": "FROM",
           "text": "FROM",
-          "tokenType": "RESERVED_COMMAND",
+          "tokenType": "RESERVED_CLAUSE",
           "type": "keyword",
         },
         "type": "clause",

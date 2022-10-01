@@ -8,7 +8,7 @@ export enum TokenType {
   RESERVED_FUNCTION_NAME = 'RESERVED_FUNCTION_NAME',
   RESERVED_PHRASE = 'RESERVED_PHRASE',
   RESERVED_SET_OPERATION = 'RESERVED_SET_OPERATION',
-  RESERVED_COMMAND = 'RESERVED_COMMAND',
+  RESERVED_CLAUSE = 'RESERVED_CLAUSE',
   RESERVED_SELECT = 'RESERVED_SELECT',
   RESERVED_JOIN = 'RESERVED_JOIN',
   ARRAY_IDENTIFIER = 'ARRAY_IDENTIFIER', // IDENTIFIER token in front of [
@@ -74,17 +74,17 @@ export const testToken =
 export const isToken = {
   ARRAY: testToken({ text: 'ARRAY', type: TokenType.RESERVED_KEYWORD }),
   BY: testToken({ text: 'BY', type: TokenType.RESERVED_KEYWORD }),
-  SET: testToken({ text: 'SET', type: TokenType.RESERVED_COMMAND }),
+  SET: testToken({ text: 'SET', type: TokenType.RESERVED_CLAUSE }),
   STRUCT: testToken({ text: 'STRUCT', type: TokenType.RESERVED_KEYWORD }),
-  WINDOW: testToken({ text: 'WINDOW', type: TokenType.RESERVED_COMMAND }),
+  WINDOW: testToken({ text: 'WINDOW', type: TokenType.RESERVED_CLAUSE }),
 };
 
-/** Checks if token is any Reserved Keyword or Command */
+/** Checks if token is any Reserved Keyword or Clause */
 export const isReserved = (type: TokenType): boolean =>
   type === TokenType.RESERVED_KEYWORD ||
   type === TokenType.RESERVED_FUNCTION_NAME ||
   type === TokenType.RESERVED_PHRASE ||
-  type === TokenType.RESERVED_COMMAND ||
+  type === TokenType.RESERVED_CLAUSE ||
   type === TokenType.RESERVED_SELECT ||
   type === TokenType.RESERVED_SET_OPERATION ||
   type === TokenType.RESERVED_JOIN ||

@@ -49,7 +49,7 @@ export default class Tokenizer {
           /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)(?!\w)/uy,
       },
       // RESERVED_PHRASE is matched before all other keyword tokens
-      // to e.g. prioritize matching "TIMESTAMP WITH TIME ZONE" phrase over "WITH" command.
+      // to e.g. prioritize matching "TIMESTAMP WITH TIME ZONE" phrase over "WITH" clause.
       {
         type: TokenType.RESERVED_PHRASE,
         regex: regex.reservedWord(cfg.reservedPhrases ?? [], cfg.identChars),
@@ -72,12 +72,12 @@ export default class Tokenizer {
       },
       {
         type: TokenType.LIMIT,
-        regex: cfg.reservedCommands.includes('LIMIT') ? /LIMIT\b/iuy : undefined,
+        regex: cfg.reservedClauses.includes('LIMIT') ? /LIMIT\b/iuy : undefined,
         text: toCanonical,
       },
       {
-        type: TokenType.RESERVED_COMMAND,
-        regex: regex.reservedWord(cfg.reservedCommands, cfg.identChars),
+        type: TokenType.RESERVED_CLAUSE,
+        regex: regex.reservedWord(cfg.reservedClauses, cfg.identChars),
         text: toCanonical,
       },
       {

@@ -6,7 +6,7 @@ import { keywords } from './n1ql.keywords';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
-const reservedCommands = expandPhrases([
+const reservedClauses = expandPhrases([
   // queries
   'WITH',
   'FROM',
@@ -81,7 +81,7 @@ const reservedPhrases = expandPhrases(['{ROWS | RANGE | GROUPS} BETWEEN']);
 export default class N1qlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedCommands,
+      reservedClauses,
       reservedSelect,
       reservedSetOperations,
       reservedJoins,

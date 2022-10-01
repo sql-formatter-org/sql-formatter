@@ -8,7 +8,7 @@ import { functions } from './plsql.functions';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT | UNIQUE]']);
 
-const reservedCommands = expandPhrases([
+const reservedClauses = expandPhrases([
   // queries
   'WITH',
   'FROM',
@@ -81,7 +81,7 @@ const reservedPhrases = expandPhrases([
 export default class PlSqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedCommands,
+      reservedClauses,
       reservedSelect,
       reservedSetOperations,
       reservedJoins,

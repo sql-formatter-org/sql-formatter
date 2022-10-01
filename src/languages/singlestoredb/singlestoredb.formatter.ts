@@ -7,7 +7,7 @@ import { functions } from './singlestoredb.functions';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT | DISTINCTROW]']);
 
-const reservedCommands = expandPhrases([
+const reservedClauses = expandPhrases([
   // queries
   'WITH',
   'FROM',
@@ -233,7 +233,7 @@ const reservedPhrases = expandPhrases([
 export default class SingleStoreDbFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedCommands,
+      reservedClauses,
       reservedSelect,
       reservedSetOperations,
       reservedJoins,

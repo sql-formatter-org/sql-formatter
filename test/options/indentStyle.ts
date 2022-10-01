@@ -36,7 +36,7 @@ export default function supportsIndentStyle(format: FormatFn) {
   });
 
   describe('indentStyle: tabularLeft', () => {
-    it('aligns command keywords to left', () => {
+    it('aligns clause keywords to left', () => {
       const result = format(baseQuery, { indentStyle: 'tabularLeft' });
       expect(result).toBe(dedent`
         SELECT    COUNT(a.column1),
@@ -154,7 +154,7 @@ export default function supportsIndentStyle(format: FormatFn) {
   });
 
   describe('indentStyle: tabularRight', () => {
-    it('aligns command keywords to right', () => {
+    it('aligns clause keywords to right', () => {
       const result = format(baseQuery, { indentStyle: 'tabularRight' });
       expect(result).toBe(
         [

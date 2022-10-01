@@ -6,7 +6,7 @@ import { keywords } from './sql.keywords';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
-const reservedCommands = expandPhrases([
+const reservedClauses = expandPhrases([
   // queries
   'WITH [RECURSIVE]',
   'FROM',
@@ -73,7 +73,7 @@ const reservedPhrases = expandPhrases([
 export default class SqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedCommands,
+      reservedClauses,
       reservedSelect,
       reservedSetOperations,
       reservedJoins,
