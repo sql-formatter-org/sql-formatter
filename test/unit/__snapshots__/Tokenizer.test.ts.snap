@@ -62,7 +62,7 @@ Array [
     "raw": "FROM",
     "start": 9,
     "text": "FROM",
-    "type": "RESERVED_COMMAND",
+    "type": "RESERVED_CLAUSE",
   },
   Object {
     "precedingWhitespace": " ",

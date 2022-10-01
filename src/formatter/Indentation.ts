@@ -9,7 +9,7 @@ const INDENT_TYPE_BLOCK_LEVEL = 'block-level';
  * There are two types of indentation levels:
  *
  * - BLOCK_LEVEL : increased by open-parenthesis
- * - TOP_LEVEL : increased by RESERVED_COMMAND words
+ * - TOP_LEVEL : increased by RESERVED_CLAUSE words
  */
 export default class Indentation {
   private indentTypes: string[] = [];

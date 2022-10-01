@@ -76,7 +76,7 @@ export default class Tokenizer {
         text: toCanonical,
       },
       {
-        type: TokenType.RESERVED_COMMAND,
+        type: TokenType.RESERVED_CLAUSE,
         regex: regex.reservedWord(cfg.reservedClauses, cfg.identChars),
         text: toCanonical,
       },

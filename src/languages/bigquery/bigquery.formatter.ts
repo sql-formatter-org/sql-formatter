@@ -175,7 +175,7 @@ function postProcess(tokens: Token[]): Token[] {
   return detectArraySubscripts(combineParameterizedTypes(tokens));
 }
 
-// Converts OFFSET token inside array from RESERVED_COMMAND to RESERVED_FUNCTION_NAME
+// Converts OFFSET token inside array from RESERVED_CLAUSE to RESERVED_FUNCTION_NAME
 // See: https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators#array_subscript_operator
 function detectArraySubscripts(tokens: Token[]) {
   let prevToken = EOF_TOKEN;
