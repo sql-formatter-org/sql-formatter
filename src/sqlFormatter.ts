@@ -62,9 +62,13 @@ const defaultOptions: FormatOptions = {
  * @param {FormatOptions} cfg Configuration options (see docs in README)
  * @return {string} formatted query
  */
-export const format = (query: string, cfg: Partial<FormatOptions> = {}): string => {
+export const format = (query: string, cfg: Partial<FormatOptions> = defaultOptions): string => {
   if (typeof query !== 'string') {
     throw new Error('Invalid query argument. Expected string, instead got ' + typeof query);
+  }
+
+  if (typeof cfg.language === 'string' && !supportedDialects.includes(cfg.language)) {
+    throw new ConfigError(`Unsupported SQL dialect: ${cfg.language}`);
   }
 
   const options = validateConfig({
@@ -80,11 +84,7 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
 
 export class ConfigError extends Error {}
 
-function validateConfig(cfg: FormatOptions): FormatOptions {
-  if (typeof cfg.language === 'string' && !supportedDialects.includes(cfg.language)) {
-    throw new ConfigError(`Unsupported SQL dialect: ${cfg.language}`);
-  }
-
+const validateConfig = (cfg: FormatOptions): FormatOptions => {
   if ('multilineLists' in cfg) {
     throw new ConfigError('multilineLists config is no more supported.');
   }
@@ -116,11 +116,11 @@ function validateConfig(cfg: FormatOptions): FormatOptions {
   }
 
   return cfg;
-}
+};
 
-function validateParams(params: ParamItems | string[]): boolean {
+const validateParams = (params: ParamItems | string[]): boolean => {
   const paramValues = params instanceof Array ? params : Object.values(params);
   return paramValues.every(p => typeof p === 'string');
-}
+};
 
 export type FormatFn = typeof format;
