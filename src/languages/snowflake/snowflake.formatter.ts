@@ -18,7 +18,7 @@ const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 // Steps 1-4 can be combined by the following script in the developer console:
 // $x('//tbody/tr/*[1]//a/span/text()').map(x => x.nodeValue) // Step 1
 //   filter(x => !x.match(/\(.*\)/) && !x.match(/…/) && !x.match(/<.*>/)) // Step 2-4
-const reservedCommands = expandPhrases([
+const reservedClauses = expandPhrases([
   // queries
   'WITH [RECURSIVE]',
   'FROM',
@@ -315,7 +315,7 @@ const reservedPhrases = expandPhrases([
 export default class SnowflakeFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedCommands,
+      reservedClauses,
       reservedSelect,
       reservedSetOperations,
       reservedJoins,

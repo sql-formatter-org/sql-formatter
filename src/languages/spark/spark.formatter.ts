@@ -8,7 +8,7 @@ import { functions } from './spark.functions';
 // http://spark.apache.org/docs/latest/sql-ref-syntax.html
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
-const reservedCommands = expandPhrases([
+const reservedClauses = expandPhrases([
   // queries
   'WITH',
   'FROM',
@@ -119,7 +119,7 @@ const reservedPhrases = expandPhrases([
 export default class SparkFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedCommands,
+      reservedClauses,
       reservedSelect,
       reservedSetOperations,
       reservedJoins,

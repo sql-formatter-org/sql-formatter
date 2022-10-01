@@ -7,7 +7,7 @@ import { functions } from './mariadb.functions';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT | DISTINCTROW]']);
 
-const reservedCommands = expandPhrases([
+const reservedClauses = expandPhrases([
   // queries
   'WITH [RECURSIVE]',
   'FROM',
@@ -263,7 +263,7 @@ const reservedPhrases = expandPhrases([
 export default class MariaDbFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedCommands,
+      reservedClauses,
       reservedSelect,
       reservedSetOperations,
       reservedJoins,

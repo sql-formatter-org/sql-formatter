@@ -7,7 +7,7 @@ import { functions } from './bigquery.functions';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT] [AS STRUCT | AS VALUE]']);
 
-const reservedCommands = expandPhrases([
+const reservedClauses = expandPhrases([
   // Queries: https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax
   'WITH [RECURSIVE]',
   'FROM',
@@ -143,7 +143,7 @@ export default class BigQueryFormatter extends Formatter {
   // TODO: handle trailing comma in select clause
   tokenizer() {
     return new Tokenizer({
-      reservedCommands,
+      reservedClauses,
       reservedSelect,
       reservedSetOperations,
       reservedJoins,

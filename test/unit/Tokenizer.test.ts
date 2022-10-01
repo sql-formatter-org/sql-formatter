@@ -3,7 +3,7 @@ import Tokenizer from 'src/lexer/Tokenizer';
 describe('Tokenizer', () => {
   const tokenize = (sql: string) =>
     new Tokenizer({
-      reservedCommands: ['FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
+      reservedClauses: ['FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
       reservedSelect: ['SELECT'],
       reservedSetOperations: ['UNION', 'UNION ALL'],
       reservedJoins: ['JOIN'],

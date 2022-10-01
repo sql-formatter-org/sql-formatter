@@ -72,12 +72,12 @@ export default class Tokenizer {
       },
       {
         type: TokenType.LIMIT,
-        regex: cfg.reservedCommands.includes('LIMIT') ? /LIMIT\b/iuy : undefined,
+        regex: cfg.reservedClauses.includes('LIMIT') ? /LIMIT\b/iuy : undefined,
         text: toCanonical,
       },
       {
         type: TokenType.RESERVED_COMMAND,
-        regex: regex.reservedWord(cfg.reservedCommands, cfg.identChars),
+        regex: regex.reservedWord(cfg.reservedClauses, cfg.identChars),
         text: toCanonical,
       },
       {

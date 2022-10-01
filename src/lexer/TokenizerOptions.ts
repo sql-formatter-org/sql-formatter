@@ -44,7 +44,7 @@ export interface ParamTypes {
 
 export interface TokenizerOptions {
   // Main clauses that start new block, like: WITH, FROM, WHERE, ORDER BY
-  reservedCommands: string[];
+  reservedClauses: string[];
   // SELECT clause and its variations
   reservedSelect: string[];
   // True to support XOR in addition to AND and OR

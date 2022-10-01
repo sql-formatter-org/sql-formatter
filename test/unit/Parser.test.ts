@@ -4,7 +4,7 @@ import { createParser } from 'src/parser/createParser';
 describe('Parser', () => {
   const parse = (sql: string) => {
     const tokenizer = new Tokenizer({
-      reservedCommands: ['FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
+      reservedClauses: ['FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
       reservedSelect: ['SELECT'],
       reservedSetOperations: ['UNION', 'UNION ALL'],
       reservedJoins: ['JOIN'],
