@@ -79,7 +79,7 @@ export const isToken = {
   WINDOW: testToken({ text: 'WINDOW', type: TokenType.RESERVED_CLAUSE }),
 };
 
-/** Checks if token is any Reserved Keyword or Command */
+/** Checks if token is any Reserved Keyword or Clause */
 export const isReserved = (type: TokenType): boolean =>
   type === TokenType.RESERVED_KEYWORD ||
   type === TokenType.RESERVED_FUNCTION_NAME ||

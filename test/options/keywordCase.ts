@@ -63,7 +63,7 @@ export default function supportsKeywordCase(format: FormatFn) {
   });
 
   // regression test for #356
-  it('formats multi-word reserved commands into single line', () => {
+  it('formats multi-word reserved clauses into single line', () => {
     const result = format(
       `select * from mytable
       inner
