@@ -57,7 +57,7 @@ export default class Formatter {
     if (!cls.cachedFormatOptions) {
       const opts = this.formatOptions();
       cls.cachedFormatOptions = {
-        alwaysDenseOperators: opts.alwaysDenseOperators,
+        alwaysDenseOperators: opts.alwaysDenseOperators || [],
         onelineClauses: Object.fromEntries(opts.onelineClauses.map(name => [name, true])),
       };
     }

@@ -52,7 +52,7 @@ export interface DialectFormatOptions {
 // Contains the same data as DialectFormatOptions,
 // but optimized for faster and more conventient lookup.
 export interface ProcessedDialectFormatOptions {
-  alwaysDenseOperators?: string[];
+  alwaysDenseOperators: string[];
   onelineClauses: Record<string, boolean>;
 }
 
@@ -278,7 +278,7 @@ export default class ExpressionFormatter {
   }
 
   private formatOperator({ text }: OperatorNode) {
-    if (this.cfg.denseOperators || this.dialectCfg.alwaysDenseOperators?.includes(text)) {
+    if (this.cfg.denseOperators || this.dialectCfg.alwaysDenseOperators.includes(text)) {
       this.layout.add(WS.NO_SPACE, text);
     } else if (text === ':') {
       this.layout.add(WS.NO_SPACE, text, WS.SPACE);
