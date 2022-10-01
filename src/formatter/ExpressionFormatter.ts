@@ -36,7 +36,7 @@ import InlineLayout, { InlineLayoutError } from './InlineLayout';
 
 interface ExpressionFormatterParams {
   cfg: FormatOptions;
-  dialectCfg: DialectFormatOptions;
+  dialectCfg: ProcessedDialectFormatOptions;
   params: Params;
   layout: Layout;
   inline?: boolean;
@@ -49,10 +49,17 @@ export interface DialectFormatOptions {
   onelineClauses: string[];
 }
 
+// Contains the same data as DialectFormatOptions,
+// but optimized for faster and more conventient lookup.
+export interface ProcessedDialectFormatOptions {
+  alwaysDenseOperators?: string[];
+  onelineClauses: Record<string, boolean>;
+}
+
 /** Formats a generic SQL expression */
 export default class ExpressionFormatter {
   private cfg: FormatOptions;
-  private dialectCfg: DialectFormatOptions;
+  private dialectCfg: ProcessedDialectFormatOptions;
   private params: Params;
   private layout: Layout;
 
@@ -209,7 +216,7 @@ export default class ExpressionFormatter {
   }
 
   private formatClause(node: ClauseNode) {
-    const isOnelineClause = this.dialectCfg.onelineClauses.includes(node.nameKw.text);
+    const isOnelineClause = this.dialectCfg.onelineClauses[node.nameKw.text];
 
     if (isTabularStyle(this.cfg) || isOnelineClause) {
       this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.SPACE);

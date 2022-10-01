@@ -8,7 +8,10 @@ import { StatementNode } from 'src/parser/ast';
 
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
-import ExpressionFormatter, { DialectFormatOptions } from './ExpressionFormatter';
+import ExpressionFormatter, {
+  DialectFormatOptions,
+  ProcessedDialectFormatOptions,
+} from './ExpressionFormatter';
 import Layout, { WS } from './Layout';
 import Indentation from './Indentation';
 
@@ -47,6 +50,20 @@ export default class Formatter {
     throw new Error('formatOptions() not implemented by sybclass');
   }
 
+  private cachedFormatOptions(): ProcessedDialectFormatOptions {
+    const cls: Function & { cachedFormatOptions?: ProcessedDialectFormatOptions } =
+      this.constructor;
+
+    if (!cls.cachedFormatOptions) {
+      const opts = this.formatOptions();
+      cls.cachedFormatOptions = {
+        alwaysDenseOperators: opts.alwaysDenseOperators,
+        onelineClauses: Object.fromEntries(opts.onelineClauses.map(name => [name, true])),
+      };
+    }
+    return cls.cachedFormatOptions;
+  }
+
   /**
    * Formats an SQL query.
    * @param {string} query - The SQL query string to be formatted
@@ -73,7 +90,7 @@ export default class Formatter {
   private formatStatement(statement: StatementNode): string {
     const layout = new ExpressionFormatter({
       cfg: this.cfg,
-      dialectCfg: this.formatOptions(),
+      dialectCfg: this.cachedFormatOptions(),
       params: this.params,
       layout: new Layout(new Indentation(indentString(this.cfg))),
     }).format(statement.children);
