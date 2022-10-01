@@ -30,3 +30,11 @@ export const isMultiline = (text: string): boolean => /\n/.test(text);
 //   type Foo = { foo?: string, bar: number };
 //
 export type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+
+// Caches return value of a function in specified field in class object/function
+export const cacheInClassField = <T>(cls: any, fieldName: string, fn: () => T): T => {
+  if (!cls[fieldName]) {
+    cls[fieldName] = fn();
+  }
+  return cls[fieldName];
+};

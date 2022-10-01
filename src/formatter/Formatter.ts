@@ -5,6 +5,7 @@ import Tokenizer from 'src/lexer/Tokenizer';
 
 import { createParser } from 'src/parser/createParser';
 import { StatementNode } from 'src/parser/ast';
+import { cacheInClassField } from 'src/utils';
 
 import formatCommaPositions from './formatCommaPositions';
 import formatAliasPositions from './formatAliasPositions';
@@ -36,11 +37,7 @@ export default class Formatter {
   // So we wouldn't need to recreate the tokenizer, which is kinda expensive,
   // for each call to format() function.
   private cachedTokenizer(): Tokenizer {
-    const cls: Function & { cachedTokenizer?: Tokenizer } = this.constructor;
-    if (!cls.cachedTokenizer) {
-      cls.cachedTokenizer = this.tokenizer();
-    }
-    return cls.cachedTokenizer;
+    return cacheInClassField(this.constructor, 'cachedTokenizer', () => this.tokenizer());
   }
 
   /**
@@ -51,17 +48,13 @@ export default class Formatter {
   }
 
   private cachedFormatOptions(): ProcessedDialectFormatOptions {
-    const cls: Function & { cachedFormatOptions?: ProcessedDialectFormatOptions } =
-      this.constructor;
-
-    if (!cls.cachedFormatOptions) {
+    return cacheInClassField(this.constructor, 'cachedFormatOptions', () => {
       const opts = this.formatOptions();
-      cls.cachedFormatOptions = {
+      return {
         alwaysDenseOperators: opts.alwaysDenseOperators || [],
         onelineClauses: Object.fromEntries(opts.onelineClauses.map(name => [name, true])),
       };
-    }
-    return cls.cachedFormatOptions;
+    });
   }
 
   /**
