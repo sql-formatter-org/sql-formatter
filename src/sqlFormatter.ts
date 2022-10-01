@@ -80,4 +80,16 @@ export const format = (query: string, cfg: Partial<FormatOptions> = defaultOptio
   return new FormatterCls(options).format(query);
 };
 
+export const formatStandardSQL: FormatFn = (
+  query: string,
+  cfg: Partial<Exclude<FormatOptions, 'language'>> = {}
+): string => {
+  validateQuery(query);
+  const options = validateConfig({
+    ...defaultOptions,
+    ...cfg,
+  });
+  return new SqlFormatter(options).format(query);
+};
+
 export type FormatFn = typeof format;
