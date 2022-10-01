@@ -27,8 +27,6 @@ const reservedClauses = expandPhrases([
   'SET',
   // - delete:
   'DELETE [FROM]',
-  // - truncate:
-  'TRUNCATE [TABLE]',
   // Data definition
   'CREATE [OR REPLACE | MATERIALIZED] VIEW',
   'CREATE [TEMPORARY | TEMP | LOCAL TEMPORARY | LOCAL TEMP] TABLE [IF NOT EXISTS]',
@@ -119,7 +117,10 @@ const reservedClauses = expandPhrases([
   'ALTER COLUMN',
 ]);
 
-const onelineClauses = expandPhrases([]);
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE [TABLE]',
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT', 'MINUS']);
 

@@ -30,8 +30,6 @@ const reservedClauses = expandPhrases([
   'SET',
   // - delete:
   'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
-  // - truncate:
-  'TRUNCATE [TABLE]',
   // Data definition
   'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY] TABLE [IF NOT EXISTS]',
@@ -210,7 +208,10 @@ const reservedClauses = expandPhrases([
   'WHILE',
 ]);
 
-const onelineClauses = expandPhrases([]);
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE [TABLE]',
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);
 

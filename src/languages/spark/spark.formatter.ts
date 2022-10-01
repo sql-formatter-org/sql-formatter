@@ -27,8 +27,6 @@ const reservedClauses = expandPhrases([
   // - insert:
   'INSERT [INTO | OVERWRITE] [TABLE]',
   'VALUES',
-  // - truncate:
-  'TRUNCATE TABLE',
   // - insert overwrite directory:
   //   https://spark.apache.org/docs/latest/sql-ref-syntax-dml-insert-overwrite-directory.html
   'INSERT OVERWRITE [LOCAL] DIRECTORY',
@@ -92,7 +90,10 @@ const reservedClauses = expandPhrases([
   'LATERAL VIEW',
 ]);
 
-const onelineClauses = expandPhrases([]);
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE TABLE',
+]);
 
 const reservedSetOperations = expandPhrases([
   'UNION [ALL | DISTINCT]',

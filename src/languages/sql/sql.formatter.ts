@@ -30,8 +30,6 @@ const reservedClauses = expandPhrases([
   'WHERE CURRENT OF',
   // - delete:
   'DELETE FROM',
-  // - truncate:
-  'TRUNCATE TABLE',
   // Data definition
   'CREATE [RECURSIVE] VIEW',
   'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
@@ -49,7 +47,12 @@ const reservedClauses = expandPhrases([
   'RESTART WITH', // for alter column
 ]);
 
-const onelineClauses = expandPhrases(['SET SCHEMA']);
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE TABLE',
+  // other
+  'SET SCHEMA',
+]);
 
 const reservedSetOperations = expandPhrases([
   'UNION [ALL | DISTINCT]',

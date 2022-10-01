@@ -29,8 +29,6 @@ const reservedClauses = expandPhrases([
   'SET',
   // - delete:
   'DELETE [FROM]',
-  // - truncate:
-  'TRUNCATE [TABLE]',
   // Data definition
   'CREATE VIEW',
   'CREATE [ROWSTORE] [REFERENCE | TEMPORARY | GLOBAL TEMPORARY] TABLE [IF NOT EXISTS]',
@@ -194,7 +192,6 @@ const reservedClauses = expandPhrases([
   'STOP REPLICATING',
   'STOP SLAVE',
   'TEST PIPELINE',
-  'TRUNCATE TABLE',
   'UNLOCK INSTANCE',
   'UNLOCK TABLES',
   'USE',
@@ -208,7 +205,10 @@ const reservedClauses = expandPhrases([
   'WHILE',
 ]);
 
-const onelineClauses = expandPhrases([]);
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE [TABLE]',
+]);
 
 const reservedSetOperations = expandPhrases([
   'UNION [ALL | DISTINCT]',

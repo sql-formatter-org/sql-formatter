@@ -31,8 +31,6 @@ const reservedClauses = expandPhrases([
   'SET',
   // - delete:
   'DELETE [FROM]',
-  // - truncate:
-  'TRUNCATE TABLE',
   // - merge:
   'MERGE [INTO]',
   'WHEN [NOT] MATCHED [BY SOURCE | BY TARGET] [THEN]',
@@ -116,7 +114,10 @@ const reservedClauses = expandPhrases([
   'EXPORT DATA',
 ]);
 
-const onelineClauses = expandPhrases([]);
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE TABLE',
+]);
 
 const reservedSetOperations = expandPhrases([
   'UNION {ALL | DISTINCT}',

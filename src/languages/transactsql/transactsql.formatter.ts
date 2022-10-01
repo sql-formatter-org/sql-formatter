@@ -29,8 +29,6 @@ const reservedClauses = expandPhrases([
   'WHERE CURRENT OF',
   // - delete:
   'DELETE [FROM]',
-  // - truncate:
-  'TRUNCATE TABLE',
   // - merge:
   'MERGE [INTO]',
   'WHEN [NOT] MATCHED [BY TARGET | BY SOURCE] [THEN]',
@@ -201,7 +199,10 @@ const reservedClauses = expandPhrases([
   'XML SCHEMA COLLECTION',
 ]);
 
-const onelineClauses = expandPhrases([]);
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE TABLE',
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 

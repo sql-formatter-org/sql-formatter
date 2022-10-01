@@ -29,8 +29,6 @@ const reservedClauses = expandPhrases([
   'SET',
   // - delete:
   'DELETE FROM [ONLY]',
-  // - truncate:
-  'TRUNCATE TABLE',
   // - merge:
   'MERGE [INTO]',
   'WHEN [NOT] MATCHED [THEN]',
@@ -59,7 +57,12 @@ const reservedClauses = expandPhrases([
   'START WITH',
 ]);
 
-const onelineClauses = expandPhrases(['SET SCHEMA']);
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE TABLE',
+  // other
+  'SET SCHEMA',
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 

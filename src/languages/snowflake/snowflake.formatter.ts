@@ -40,8 +40,6 @@ const reservedClauses = expandPhrases([
   'SET',
   // - delete:
   'DELETE FROM',
-  // - truncate:
-  'TRUNCATE [TABLE] [IF EXISTS]',
   // Data definition
   // - view
   'CREATE [OR REPLACE] [SECURE] [RECURSIVE] VIEW [IF NOT EXISTS]',
@@ -93,7 +91,6 @@ const reservedClauses = expandPhrases([
   //   - CREATE TABLE
   //   - CREATE VIEW
   //   - DROP TABLE
-  //   - TRUNCATE TABLE
   //   - SELECT
   //   - UPDATE
   //   - SET
@@ -299,7 +296,10 @@ const reservedClauses = expandPhrases([
   'USE WAREHOUSE',
 ]);
 
-const onelineClauses = expandPhrases([]);
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE [TABLE] [IF EXISTS]',
+]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'MINUS', 'EXCEPT', 'INTERSECT']);
 
