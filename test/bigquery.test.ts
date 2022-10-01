@@ -213,18 +213,12 @@ describe('BigQueryFormatter', () => {
       { linesBetweenQueries: 0 }
     );
     expect(result).toBe(dedent`
-      DECLARE
-        varString STRING(11) '11charswide';
-      DECLARE
-        varBytes BYTES(8);
-      DECLARE
-        varNumeric NUMERIC(1, 1);
-      DECLARE
-        varDecimal DECIMAL(1, 1);
-      DECLARE
-        varBignumeric BIGNUMERIC(1, 1);
-      DECLARE
-        varBigdecimal BIGDECIMAL(1, 1);
+      DECLARE varString STRING(11) '11charswide';
+      DECLARE varBytes BYTES(8);
+      DECLARE varNumeric NUMERIC(1, 1);
+      DECLARE varDecimal DECIMAL(1, 1);
+      DECLARE varBignumeric BIGNUMERIC(1, 1);
+      DECLARE varBigdecimal BIGDECIMAL(1, 1);
     `);
   });
 
@@ -268,8 +262,7 @@ describe('BigQueryFormatter', () => {
         FROM
           Produce PIVOT(
             sales
-            FOR
-              quarter IN (Q1, Q2, Q3, Q4)
+            FOR quarter IN (Q1, Q2, Q3, Q4)
           );
       `);
     });
@@ -282,8 +275,7 @@ describe('BigQueryFormatter', () => {
         FROM
           Produce UNPIVOT(
             sales
-            FOR
-              quarter IN (Q1, Q2, Q3, Q4)
+            FOR quarter IN (Q1, Q2, Q3, Q4)
           );
       `);
     });

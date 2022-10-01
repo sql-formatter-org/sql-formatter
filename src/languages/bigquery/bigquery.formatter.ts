@@ -83,6 +83,12 @@ const reservedClauses = expandPhrases([
   'DROP ASSIGNMENT [IF EXISTS]',
   'DROP SEARCH INDEX [IF EXISTS]',
   'DROP [IF EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE TABLE',
+
   // DCL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-control-language
   'GRANT',
   'REVOKE',
@@ -112,11 +118,6 @@ const reservedClauses = expandPhrases([
   'ASSERT',
   // Other, https://cloud.google.com/bigquery/docs/reference/standard-sql/other-statements
   'EXPORT DATA',
-]);
-
-const onelineClauses = expandPhrases([
-  // - truncate:
-  'TRUNCATE TABLE',
 ]);
 
 const reservedSetOperations = expandPhrases([
