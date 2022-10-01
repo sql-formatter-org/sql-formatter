@@ -45,7 +45,13 @@ const reservedClauses = expandPhrases([
   'RENAME TO',
   'RENAME COLUMN',
   'ALTER COLUMN',
+]);
 
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE TABLE',
+  // other
+  'LATERAL VIEW',
   'ALTER DATABASE',
   'ALTER VIEW',
   'CREATE DATABASE',
@@ -86,13 +92,6 @@ const reservedClauses = expandPhrases([
   'SHOW TBLPROPERTIES',
   'SHOW VIEWS',
   'UNCACHE TABLE',
-  // other
-  'LATERAL VIEW',
-]);
-
-const onelineClauses = expandPhrases([
-  // - truncate:
-  'TRUNCATE TABLE',
 ]);
 
 const reservedSetOperations = expandPhrases([

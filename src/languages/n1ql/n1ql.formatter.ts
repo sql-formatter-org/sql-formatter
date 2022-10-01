@@ -33,6 +33,15 @@ const reservedClauses = expandPhrases([
   'WHEN [NOT] MATCHED THEN',
   'UPDATE SET',
   'INSERT',
+  // other
+  'USE KEYS',
+  'NEST',
+  'UNNEST',
+  'RETURNING',
+]);
+
+const onelineClauses = expandPhrases([
+  'SET SCHEMA',
   // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html
   'ADVISE',
   'ALTER INDEX',
@@ -55,7 +64,6 @@ const reservedClauses = expandPhrases([
   'GRANT',
   'INFER',
   'PREPARE',
-  'RETURNING',
   'REVOKE',
   'ROLLBACK TRANSACTION',
   'SAVEPOINT',
@@ -64,14 +72,9 @@ const reservedClauses = expandPhrases([
   'UPSERT',
   // other
   'LET',
-  'NEST',
   'SET CURRENT SCHEMA',
   'SHOW',
-  'UNNEST',
-  'USE KEYS',
 ]);
-
-const onelineClauses = expandPhrases(['SET SCHEMA']);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);
 

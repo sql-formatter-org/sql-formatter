@@ -43,7 +43,11 @@ const reservedClauses = expandPhrases([
   'MODIFY [COLUMN]',
   'CHANGE',
   'RENAME [TO | AS]',
+]);
 
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // https://docs.singlestore.com/managed-service/en/reference/sql-reference.html
   'ADD AGGREGATOR',
   'ADD LEAF',
@@ -203,11 +207,6 @@ const reservedClauses = expandPhrases([
   'REPEAT',
   'RETURN',
   'WHILE',
-]);
-
-const onelineClauses = expandPhrases([
-  // - truncate:
-  'TRUNCATE [TABLE]',
 ]);
 
 const reservedSetOperations = expandPhrases([

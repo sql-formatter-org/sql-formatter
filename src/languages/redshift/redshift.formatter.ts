@@ -41,7 +41,11 @@ const reservedClauses = expandPhrases([
   'ALTER COLUMN',
   'TYPE', // for alter column
   'ENCODE', // for alter column
+]);
 
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
   'ABORT',
   'ALTER DATABASE',
@@ -113,13 +117,6 @@ const reservedClauses = expandPhrases([
   'START TRANSACTION',
   'UNLOAD',
   'VACUUM',
-  // other
-  'ALTER COLUMN',
-]);
-
-const onelineClauses = expandPhrases([
-  // - truncate:
-  'TRUNCATE [TABLE]',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT', 'MINUS']);

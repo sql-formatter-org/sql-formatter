@@ -42,7 +42,11 @@ const reservedClauses = expandPhrases([
   'ADD',
   'DROP COLUMN [IF EXISTS]',
   'ALTER COLUMN',
+]);
 
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE TABLE',
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',
   'ADD SIGNATURE',
@@ -197,11 +201,6 @@ const reservedClauses = expandPhrases([
   'XACT_ABORT',
   'XML INDEX',
   'XML SCHEMA COLLECTION',
-]);
-
-const onelineClauses = expandPhrases([
-  // - truncate:
-  'TRUNCATE TABLE',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

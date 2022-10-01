@@ -45,16 +45,8 @@ const reservedClauses = expandPhrases([
   'MODIFY',
   'RENAME TO',
   'RENAME COLUMN',
-
   // other
-  'BEGIN',
-  'CONNECT BY',
-  'DECLARE',
-  'EXCEPT',
-  'EXCEPTION',
-  'LOOP',
   'RETURNING',
-  'START WITH',
 ]);
 
 const onelineClauses = expandPhrases([
@@ -62,6 +54,13 @@ const onelineClauses = expandPhrases([
   'TRUNCATE TABLE',
   // other
   'SET SCHEMA',
+  'BEGIN',
+  'CONNECT BY',
+  'DECLARE',
+  'EXCEPT',
+  'EXCEPTION',
+  'LOOP',
+  'START WITH',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);

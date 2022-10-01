@@ -46,7 +46,15 @@ const reservedClauses = expandPhrases([
   'SET DATA TYPE', // for alter column
   'SET NOT NULL', // for alter column
   'DROP {IDENTITY | EXPRESSION | DEFAULT | NOT NULL}', // for alter column
+]);
 
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE [TABLE]',
+  // other
+  'SET [CURRENT] SCHEMA',
+  'AFTER',
+  'GO',
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
   'ALTER DATABASE',
@@ -150,17 +158,6 @@ const reservedClauses = expandPhrases([
   'SIGNAL',
   'VALUES INTO',
   'WHENEVER',
-  // other
-  'AFTER',
-  'GO',
-  'SET CURRENT SCHEMA',
-]);
-
-const onelineClauses = expandPhrases([
-  // - truncate:
-  'TRUNCATE [TABLE]',
-  // other
-  'SET SCHEMA',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);

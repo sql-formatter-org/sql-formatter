@@ -44,7 +44,13 @@ const reservedClauses = expandPhrases([
   'ALTER [COLUMN]',
   '{SET | DROP} DEFAULT', // for alter column
   'SET {VISIBLE | INVISIBLE}', // for alter column
+  // other
+  'RETURNING',
+]);
 
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // https://mariadb.com/docs/reference/mdb/sql-statements/
   'ALTER DATABASE',
   'ALTER DATABASE COMMENT',
@@ -128,7 +134,6 @@ const reservedClauses = expandPhrases([
   'RESET REPLICA',
   'RESET SLAVE',
   'RESIGNAL',
-  'RETURNING',
   'REVOKE',
   'ROLLBACK',
   'SAVEPOINT',
@@ -233,11 +238,6 @@ const reservedClauses = expandPhrases([
   'XA RECOVER',
   'XA ROLLBACK',
   'XA START',
-]);
-
-const onelineClauses = expandPhrases([
-  // - truncate:
-  'TRUNCATE [TABLE]',
 ]);
 
 const reservedSetOperations = expandPhrases([

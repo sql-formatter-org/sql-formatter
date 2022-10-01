@@ -59,8 +59,7 @@ describe('TrinoFormatter', () => {
   it('formats SET SESSION', () => {
     const result = format('SET SESSION foo = 444;');
     expect(result).toBe(dedent`
-      SET SESSION
-        foo = 444;
+      SET SESSION foo = 444;
     `);
   });
 

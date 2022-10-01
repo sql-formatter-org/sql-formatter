@@ -43,7 +43,11 @@ const reservedClauses = expandPhrases([
   'RENAME COLUMN',
   'ALTER [COLUMN]',
   '{SET | DROP} DEFAULT', // for alter column
+]);
 
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',
   'ALTER EVENT',
@@ -206,11 +210,6 @@ const reservedClauses = expandPhrases([
   'REPEAT',
   'RETURN',
   'WHILE',
-]);
-
-const onelineClauses = expandPhrases([
-  // - truncate:
-  'TRUNCATE [TABLE]',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);

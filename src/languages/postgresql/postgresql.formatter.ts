@@ -46,7 +46,16 @@ const reservedClauses = expandPhrases([
   '[SET DATA] TYPE', // for alter column
   '{SET | DROP} DEFAULT', // for alter column
   '{SET | DROP} NOT NULL', // for alter column
+  // other
+  'RETURNING',
+]);
 
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE [TABLE] [ONLY]',
+  // other
+  'SET SCHEMA',
+  'AFTER',
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
   'ALTER AGGREGATE',
@@ -201,7 +210,6 @@ const reservedClauses = expandPhrases([
   'REINDEX',
   'RELEASE SAVEPOINT',
   'RESET',
-  'RETURNING',
   'REVOKE',
   'ROLLBACK',
   'ROLLBACK PREPARED',
@@ -217,15 +225,6 @@ const reservedClauses = expandPhrases([
   'START TRANSACTION',
   'UNLISTEN',
   'VACUUM',
-  // other
-  'AFTER',
-]);
-
-const onelineClauses = expandPhrases([
-  // - truncate:
-  'TRUNCATE [TABLE] [ONLY]',
-  // other
-  'SET SCHEMA',
 ]);
 
 const reservedSetOperations = expandPhrases([

@@ -51,7 +51,11 @@ const reservedClauses = expandPhrases([
   // - alter table:
   'ALTER TABLE',
   'RENAME TO',
+]);
 
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // other
   'ALTER',
   'CREATE',
@@ -60,15 +64,9 @@ const reservedClauses = expandPhrases([
   'DROP',
   'FETCH',
   'SHOW',
-  // newline keywords
   'STORED AS',
   'STORED BY',
   'ROW FORMAT',
-]);
-
-const onelineClauses = expandPhrases([
-  // - truncate:
-  'TRUNCATE [TABLE]',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);

@@ -43,14 +43,28 @@ const reservedClauses = expandPhrases([
   'SET AUTHORIZATION [USER | ROLE]',
   'SET PROPERTIES',
   'EXECUTE',
+  // MATCH_RECOGNIZE
+  'MATCH_RECOGNIZE',
+  'MEASURES',
+  'ONE ROW PER MATCH',
+  'ALL ROWS PER MATCH',
+  'AFTER MATCH',
+  'PATTERN',
+  'SUBSET',
+  'DEFINE',
+]);
 
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE TABLE',
+
+  // other
   'ALTER SCHEMA',
   'ALTER MATERIALIZED VIEW',
   'ALTER VIEW',
   'CREATE SCHEMA',
   'CREATE ROLE',
   'DROP SCHEMA',
-  'DROP COLUMN',
   'DROP MATERIALIZED VIEW',
   'DROP VIEW',
   'DROP ROLE',
@@ -87,21 +101,6 @@ const reservedClauses = expandPhrases([
   'SHOW ROLE GRANTS',
   'SHOW FUNCTIONS',
   'SHOW SESSION',
-
-  // MATCH_RECOGNIZE
-  'MATCH_RECOGNIZE',
-  'MEASURES',
-  'ONE ROW PER MATCH',
-  'ALL ROWS PER MATCH',
-  'AFTER MATCH',
-  'PATTERN',
-  'SUBSET',
-  'DEFINE',
-]);
-
-const onelineClauses = expandPhrases([
-  // - truncate:
-  'TRUNCATE TABLE',
 ]);
 
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L231-L235

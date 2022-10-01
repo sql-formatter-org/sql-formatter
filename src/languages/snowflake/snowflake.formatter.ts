@@ -7,17 +7,6 @@ import { keywords } from './snowflake.keywords';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
-// https://docs.snowflake.com/en/sql-reference/sql-all.html
-//
-// 1. run in console on this page: $x('//tbody/tr/*[1]//a/span/text()').map(x => x.nodeValue)
-// 2. delete all lines that contain a sting like '(.*)', they are already covered in the list
-// 3. delete all lines that contain a sting like '<.*>', they are already covered in the list
-// 4. delete all lines that contain '…', they are part of a regex statement that can't be covered here
-// 5. Manually add 'COPY INTO'
-//
-// Steps 1-4 can be combined by the following script in the developer console:
-// $x('//tbody/tr/*[1]//a/span/text()').map(x => x.nodeValue) // Step 1
-//   filter(x => !x.match(/\(.*\)/) && !x.match(/…/) && !x.match(/<.*>/)) // Step 2-4
 const reservedClauses = expandPhrases([
   // queries
   'WITH [RECURSIVE]',
@@ -76,7 +65,11 @@ const reservedClauses = expandPhrases([
   '[SET DATA] TYPE', // for alter column
   '[UNSET] COMMENT', // for alter column
   '{SET | UNSET} MASKING POLICY', // for alter column
+]);
 
+const onelineClauses = expandPhrases([
+  // - truncate:
+  'TRUNCATE [TABLE] [IF EXISTS]',
   // other
   // https://docs.snowflake.com/en/sql-reference/sql-all.html
   //
@@ -85,15 +78,7 @@ const reservedClauses = expandPhrases([
   // 3. delete all lines that contain a sting like '<.*>', they are already covered in the list
   // 4. delete all lines that contain '…', they are part of a regex statement that can't be covered here
   // 5. Manually add 'COPY INTO'
-  // 6. Remove all lines that are already in the above definitions:
-  //   - ALTER TABLE
-  //   - COMMENT
-  //   - CREATE TABLE
-  //   - CREATE VIEW
-  //   - DROP TABLE
-  //   - SELECT
-  //   - UPDATE
-  //   - SET
+  // 6. Remove all lines that are already in `reservedClauses`
   //
   // Steps 1-4 can be combined by the following script in the developer console:
   // $x('//tbody/tr/*[1]//a/span/text()').map(x => x.nodeValue) // Step 1
@@ -294,11 +279,6 @@ const reservedClauses = expandPhrases([
   'USE SCHEMA',
   'USE SECONDARY ROLES',
   'USE WAREHOUSE',
-]);
-
-const onelineClauses = expandPhrases([
-  // - truncate:
-  'TRUNCATE [TABLE] [IF EXISTS]',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'MINUS', 'EXCEPT', 'INTERSECT']);
