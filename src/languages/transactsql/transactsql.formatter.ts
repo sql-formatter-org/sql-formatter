@@ -201,6 +201,8 @@ const reservedClauses = expandPhrases([
   'XML SCHEMA COLLECTION',
 ]);
 
+const onelineClauses = expandPhrases([]);
+
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 
 const reservedJoins = expandPhrases([
@@ -220,8 +222,8 @@ const reservedPhrases = expandPhrases([
 export default class TransactSqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -255,6 +257,9 @@ export default class TransactSqlFormatter extends Formatter {
   }
 
   formatOptions(): DialectFormatOptions {
-    return { alwaysDenseOperators: ['::'] };
+    return {
+      alwaysDenseOperators: ['::'],
+      onelineClauses,
+    };
   }
 }

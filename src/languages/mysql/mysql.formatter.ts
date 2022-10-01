@@ -1,5 +1,6 @@
 import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
+import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { EOF_TOKEN, isToken, Token, TokenType } from 'src/lexer/token';
 import { keywords } from './mysql.keywords';
@@ -209,6 +210,8 @@ const reservedClauses = expandPhrases([
   'WHILE',
 ]);
 
+const onelineClauses = expandPhrases([]);
+
 const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);
 
 const reservedJoins = expandPhrases([
@@ -231,8 +234,8 @@ const reservedPhrases = expandPhrases([
 export default class MySqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -258,6 +261,12 @@ export default class MySqlFormatter extends Formatter {
       operators: ['%', ':=', '&', '|', '^', '~', '<<', '>>', '<=>', '->', '->>', '&&', '||', '!'],
       postProcess,
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }
 

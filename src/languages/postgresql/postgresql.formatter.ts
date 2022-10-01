@@ -221,8 +221,9 @@ const reservedClauses = expandPhrases([
   'VACUUM',
   // other
   'AFTER',
-  'SET SCHEMA',
 ]);
+
+const onelineClauses = expandPhrases(['SET SCHEMA']);
 
 const reservedSetOperations = expandPhrases([
   'UNION [ALL | DISTINCT]',
@@ -249,8 +250,8 @@ const reservedPhrases = expandPhrases([
 export default class PostgreSqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -357,6 +358,9 @@ export default class PostgreSqlFormatter extends Formatter {
   }
 
   formatOptions(): DialectFormatOptions {
-    return { alwaysDenseOperators: ['::'] };
+    return {
+      alwaysDenseOperators: ['::'],
+      onelineClauses,
+    };
   }
 }

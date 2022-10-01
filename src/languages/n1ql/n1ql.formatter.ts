@@ -1,5 +1,6 @@
 import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
+import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './n1ql.functions';
 import { keywords } from './n1ql.keywords';
@@ -65,11 +66,12 @@ const reservedClauses = expandPhrases([
   'LET',
   'NEST',
   'SET CURRENT SCHEMA',
-  'SET SCHEMA',
   'SHOW',
   'UNNEST',
   'USE KEYS',
 ]);
+
+const onelineClauses = expandPhrases(['SET SCHEMA']);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);
 
@@ -81,8 +83,8 @@ const reservedPhrases = expandPhrases(['{ROWS | RANGE | GROUPS} BETWEEN']);
 export default class N1qlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -99,5 +101,11 @@ export default class N1qlFormatter extends Formatter {
       lineCommentTypes: ['#', '--'],
       operators: ['%', '==', ':', '||'],
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }

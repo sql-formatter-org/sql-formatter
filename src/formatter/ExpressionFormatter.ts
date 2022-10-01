@@ -45,6 +45,8 @@ interface ExpressionFormatterParams {
 export interface DialectFormatOptions {
   // List of operators that should always be formatted without surrounding spaces
   alwaysDenseOperators?: string[];
+  // List of clauses that should be formatted on a single line
+  onelineClauses: string[];
 }
 
 /** Formats a generic SQL expression */
@@ -207,14 +209,16 @@ export default class ExpressionFormatter {
   }
 
   private formatClause(node: ClauseNode) {
-    if (isTabularStyle(this.cfg)) {
+    const isOnelineClause = this.dialectCfg.onelineClauses.includes(node.nameKw.text);
+
+    if (isTabularStyle(this.cfg) || isOnelineClause) {
       this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.SPACE);
     } else {
       this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.NEWLINE);
     }
     this.layout.indentation.increaseTopLevel();
 
-    if (!isTabularStyle(this.cfg)) {
+    if (!isTabularStyle(this.cfg) && !isOnelineClause) {
       this.layout.add(WS.INDENT);
     }
     this.layout = this.formatSubExpression(node.children);

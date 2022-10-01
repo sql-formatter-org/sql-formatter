@@ -1,4 +1,5 @@
 import Formatter from 'src/formatter/Formatter';
+import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { EOF_TOKEN, isToken, TokenType, Token } from 'src/lexer/token';
 import { expandPhrases } from 'src/expandPhrases';
@@ -115,6 +116,8 @@ const reservedClauses = expandPhrases([
   'EXPORT DATA',
 ]);
 
+const onelineClauses = expandPhrases([]);
+
 const reservedSetOperations = expandPhrases([
   'UNION {ALL | DISTINCT}',
   'EXCEPT DISTINCT',
@@ -143,8 +146,8 @@ export default class BigQueryFormatter extends Formatter {
   // TODO: handle trailing comma in select clause
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -168,6 +171,12 @@ export default class BigQueryFormatter extends Formatter {
       operators: ['&', '|', '^', '~', '>>', '<<', '||'],
       postProcess,
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }
 

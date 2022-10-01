@@ -1,5 +1,6 @@
 import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
+import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './sql.functions';
 import { keywords } from './sql.keywords';
@@ -46,10 +47,9 @@ const reservedClauses = expandPhrases([
   'ADD SCOPE', // for alter column
   'DROP SCOPE {CASCADE | RESTRICT}', // for alter column
   'RESTART WITH', // for alter column
-
-  // other
-  'SET SCHEMA',
 ]);
+
+const onelineClauses = expandPhrases(['SET SCHEMA']);
 
 const reservedSetOperations = expandPhrases([
   'UNION [ALL | DISTINCT]',
@@ -73,8 +73,8 @@ const reservedPhrases = expandPhrases([
 export default class SqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -88,5 +88,11 @@ export default class SqlFormatter extends Formatter {
       paramTypes: { positional: true },
       operators: ['||'],
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }

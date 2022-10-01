@@ -41,10 +41,10 @@ export default class Formatter {
   }
 
   /**
-   * Dialect-specific formatting configuration, optionally provided by subclass.
+   * Dialect-specific formatting configuration, provided by subclass.
    */
   protected formatOptions(): DialectFormatOptions {
-    return {};
+    throw new Error('formatOptions() not implemented by sybclass');
   }
 
   /**

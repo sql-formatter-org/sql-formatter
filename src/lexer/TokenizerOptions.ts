@@ -43,10 +43,10 @@ export interface ParamTypes {
 }
 
 export interface TokenizerOptions {
-  // Main clauses that start new block, like: WITH, FROM, WHERE, ORDER BY
-  reservedClauses: string[];
   // SELECT clause and its variations
   reservedSelect: string[];
+  // Main clauses that start new block, like: WITH, FROM, WHERE, ORDER BY
+  reservedClauses: string[];
   // True to support XOR in addition to AND and OR
   supportsXor?: boolean;
   // Keywords that create newline but no indentaion of their body.

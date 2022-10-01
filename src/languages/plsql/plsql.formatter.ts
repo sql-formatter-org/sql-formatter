@@ -57,8 +57,9 @@ const reservedClauses = expandPhrases([
   'LOOP',
   'RETURNING',
   'START WITH',
-  'SET SCHEMA',
 ]);
+
+const onelineClauses = expandPhrases(['SET SCHEMA']);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 
@@ -81,8 +82,8 @@ const reservedPhrases = expandPhrases([
 export default class PlSqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -119,7 +120,10 @@ export default class PlSqlFormatter extends Formatter {
   }
 
   formatOptions(): DialectFormatOptions {
-    return { alwaysDenseOperators: ['@'] };
+    return {
+      alwaysDenseOperators: ['@'],
+      onelineClauses,
+    };
   }
 }
 

@@ -1,5 +1,6 @@
 import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
+import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './sqlite.functions';
 import { keywords } from './sqlite.keywords';
@@ -38,10 +39,9 @@ const reservedClauses = expandPhrases([
   'DROP [COLUMN]',
   'RENAME [COLUMN]',
   'RENAME TO',
-
-  // other
-  'SET SCHEMA',
 ]);
+
+const onelineClauses = expandPhrases(['SET SCHEMA']);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 
@@ -62,8 +62,8 @@ const reservedPhrases = expandPhrases([
 export default class SqliteFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -80,5 +80,11 @@ export default class SqliteFormatter extends Formatter {
       paramTypes: { positional: true, numbered: ['?'], named: [':', '@', '$'] },
       operators: ['%', '~', '&', '|', '<<', '>>', '==', '->', '->>', '||'],
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }

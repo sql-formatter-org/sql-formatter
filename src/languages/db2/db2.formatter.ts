@@ -1,5 +1,6 @@
 import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
+import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './db2.functions';
 import { keywords } from './db2.keywords';
@@ -147,7 +148,6 @@ const reservedClauses = expandPhrases([
   'SET CURRENT TEMPORAL SYSTEM_TIME',
   'SET ENCRYPTION PASSWORD',
   'SET PATH',
-  'SET SCHEMA',
   'SET SESSION TIME ZONE',
   'SIGNAL',
   'VALUES INTO',
@@ -157,6 +157,8 @@ const reservedClauses = expandPhrases([
   'GO',
   'SET CURRENT SCHEMA',
 ]);
+
+const onelineClauses = expandPhrases(['SET SCHEMA']);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);
 
@@ -177,8 +179,8 @@ const reservedPhrases = expandPhrases([
 export default class Db2Formatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -193,5 +195,11 @@ export default class Db2Formatter extends Formatter {
       paramChars: { first: '@#$', rest: '@#$' },
       operators: ['**', '¬=', '¬>', '¬<', '!>', '!<', '||'],
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }

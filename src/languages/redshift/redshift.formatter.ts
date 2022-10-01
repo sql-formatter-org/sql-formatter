@@ -119,6 +119,8 @@ const reservedClauses = expandPhrases([
   'ALTER COLUMN',
 ]);
 
+const onelineClauses = expandPhrases([]);
+
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT', 'MINUS']);
 
 const reservedJoins = expandPhrases([
@@ -143,8 +145,8 @@ const reservedPhrases = expandPhrases([
 export default class RedshiftFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -173,6 +175,9 @@ export default class RedshiftFormatter extends Formatter {
   }
 
   formatOptions(): DialectFormatOptions {
-    return { alwaysDenseOperators: ['::'] };
+    return {
+      alwaysDenseOperators: ['::'],
+      onelineClauses,
+    };
   }
 }

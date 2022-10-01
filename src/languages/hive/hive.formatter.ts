@@ -1,5 +1,6 @@
 import { expandPhrases } from 'src/expandPhrases';
 import Formatter from 'src/formatter/Formatter';
+import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter';
 import Tokenizer from 'src/lexer/Tokenizer';
 import { functions } from './hive.functions';
 import { keywords } from './hive.keywords';
@@ -67,6 +68,8 @@ const reservedClauses = expandPhrases([
   'ROW FORMAT',
 ]);
 
+const onelineClauses = expandPhrases([]);
+
 const reservedSetOperations = expandPhrases(['UNION [ALL | DISTINCT]']);
 
 const reservedJoins = expandPhrases([
@@ -83,8 +86,8 @@ const reservedPhrases = expandPhrases(['{ROWS | RANGE} BETWEEN']);
 export default class HiveFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -96,5 +99,11 @@ export default class HiveFormatter extends Formatter {
       variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
       operators: ['%', '~', '^', '|', '&', '<=>', '==', '!', '||'],
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }

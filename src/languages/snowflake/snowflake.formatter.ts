@@ -299,6 +299,8 @@ const reservedClauses = expandPhrases([
   'USE WAREHOUSE',
 ]);
 
+const onelineClauses = expandPhrases([]);
+
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'MINUS', 'EXCEPT', 'INTERSECT']);
 
 const reservedJoins = expandPhrases([
@@ -315,8 +317,8 @@ const reservedPhrases = expandPhrases([
 export default class SnowflakeFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -349,6 +351,9 @@ export default class SnowflakeFormatter extends Formatter {
   }
 
   formatOptions(): DialectFormatOptions {
-    return { alwaysDenseOperators: [':', '::'] };
+    return {
+      alwaysDenseOperators: [':', '::'],
+      onelineClauses,
+    };
   }
 }
