@@ -1,8 +1,8 @@
 @preprocessor typescript
 @{%
-import LexerAdapter from 'src/parser/LexerAdapter.js';
-import { NodeType, AstNode, CommentNode, KeywordNode } from 'src/parser/ast.js';
-import { Token, TokenType } from 'src/lexer/token.js';
+import LexerAdapter from './LexerAdapter.js';
+import { NodeType, AstNode, CommentNode, KeywordNode } from './ast.js';
+import { Token, TokenType } from '../lexer/token.js';
 
 // The lexer here is only to provide the has() method,
 // that's used inside the generated grammar definition.

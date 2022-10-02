@@ -1,7 +1,7 @@
-import { expandPhrases } from 'src/expandPhrases.js';
-import Formatter from 'src/formatter/Formatter.js';
-import Tokenizer from 'src/lexer/Tokenizer.js';
-import { EOF_TOKEN, isToken, Token, TokenType } from 'src/lexer/token.js';
+import { expandPhrases } from '../../expandPhrases.js';
+import Formatter from '../../formatter/Formatter.js';
+import Tokenizer from '../../lexer/Tokenizer.js';
+import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
 import { keywords } from './singlestoredb.keywords.js';
 import { functions } from './singlestoredb.functions.js';
 

@@ -6,9 +6,6 @@
     "rootDirs": ["src"],
     "outDir": "lib",
     "baseUrl": "./",
-    "paths": {
-      "src/*": ["./src/*"]
-    },
     "plugins": [
       {
         "transform": "@zerollup/ts-transform-paths",

@@ -1,9 +1,9 @@
-import { Token, TokenType } from 'src/lexer/token.js';
-import * as regex from 'src/lexer/regexFactory.js';
-import { ParamTypes, TokenizerOptions } from 'src/lexer/TokenizerOptions.js';
-import TokenizerEngine, { TokenRule } from 'src/lexer/TokenizerEngine.js';
-import { escapeRegExp } from 'src/lexer/regexUtil.js';
-import { equalizeWhitespace, Optional } from 'src/utils.js';
+import { Token, TokenType } from './token.js';
+import * as regex from './regexFactory.js';
+import { ParamTypes, TokenizerOptions } from './TokenizerOptions.js';
+import TokenizerEngine, { TokenRule } from './TokenizerEngine.js';
+import { escapeRegExp } from './regexUtil.js';
+import { equalizeWhitespace, Optional } from '../utils.js';
 import { NestedComment } from './NestedComment.js';
 
 type OptionalTokenRule = Optional<TokenRule, 'regex'>;

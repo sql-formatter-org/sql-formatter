@@ -1,7 +1,7 @@
-import { expandPhrases } from 'src/expandPhrases.js';
-import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter.js';
-import Formatter from 'src/formatter/Formatter.js';
-import Tokenizer from 'src/lexer/Tokenizer.js';
+import { expandPhrases } from '../../expandPhrases.js';
+import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
+import Formatter from '../../formatter/Formatter.js';
+import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './snowflake.functions.js';
 import { keywords } from './snowflake.keywords.js';
 

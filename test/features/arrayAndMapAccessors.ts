@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 
-import { FormatFn } from 'src/sqlFormatter.js';
+import { FormatFn } from '../../src/sqlFormatter.js';
 
 export default function supportsArrayAndMapAccessors(format: FormatFn) {
   it('supports square brackets for array indexing', () => {

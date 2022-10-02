@@ -1,6 +1,6 @@
-import { expandPhrases } from 'src/expandPhrases.js';
-import Formatter from 'src/formatter/Formatter.js';
-import Tokenizer from 'src/lexer/Tokenizer.js';
+import { expandPhrases } from '../../expandPhrases.js';
+import Formatter from '../../formatter/Formatter.js';
+import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './sql.functions.js';
 import { keywords } from './sql.keywords.js';
 

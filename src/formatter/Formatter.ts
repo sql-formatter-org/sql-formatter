@@ -1,10 +1,10 @@
-import { FormatOptions } from 'src/FormatOptions.js';
-import { indentString } from 'src/formatter/config.js';
-import Params from 'src/formatter/Params.js';
-import Tokenizer from 'src/lexer/Tokenizer.js';
+import { FormatOptions } from '../FormatOptions.js';
+import { indentString } from './config.js';
+import Params from './Params.js';
+import Tokenizer from '../lexer/Tokenizer.js';
 
-import { createParser } from 'src/parser/createParser.js';
-import { StatementNode } from 'src/parser/ast.js';
+import { createParser } from '../parser/createParser.js';
+import { StatementNode } from '../parser/ast.js';
 
 import formatCommaPositions from './formatCommaPositions.js';
 import formatAliasPositions from './formatAliasPositions.js';

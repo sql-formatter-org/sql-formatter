@@ -1,9 +1,9 @@
-import { FormatOptions } from 'src/FormatOptions.js';
-import { equalizeWhitespace, isMultiline } from 'src/utils.js';
+import { FormatOptions } from '../FormatOptions.js';
+import { equalizeWhitespace, isMultiline } from '../utils.js';
 
-import Params from 'src/formatter/Params.js';
-import { isTabularStyle } from 'src/formatter/config.js';
-import { TokenType } from 'src/lexer/token.js';
+import Params from './Params.js';
+import { isTabularStyle } from './config.js';
+import { TokenType } from '../lexer/token.js';
 import {
   AllColumnsAsteriskNode,
   ArraySubscriptNode,
@@ -28,7 +28,7 @@ import {
   CaseExpressionNode,
   CaseWhenNode,
   CaseElseNode,
-} from 'src/parser/ast.js';
+} from '../parser/ast.js';
 
 import Layout, { WS } from './Layout.js';
 import toTabularFormat, { isTabularToken } from './tabularStyle.js';

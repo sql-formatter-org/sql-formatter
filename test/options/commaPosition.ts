@@ -1,7 +1,7 @@
 import { expect } from '@jest/globals';
 import dedent from 'dedent-js';
 
-import { FormatFn } from 'src/sqlFormatter.js';
+import { FormatFn } from '../../src/sqlFormatter.js';
 
 export default function supportsCommaPosition(format: FormatFn) {
   it('defaults to comma after column', () => {

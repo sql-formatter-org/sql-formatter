@@ -1,4 +1,4 @@
-import { maxLength } from 'src/utils.js';
+import { maxLength } from '../utils.js';
 
 /**
  * Handles select alias placement - tabulates if enabled

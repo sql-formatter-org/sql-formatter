@@ -168,7 +168,6 @@
       "src/**/*.ts"
     ],
     "moduleNameMapper": {
-      "src/(.*)\\.js": "<rootDir>/src/$1",
       "^\\.(.+)\\.js": ".$1"
     }
   }

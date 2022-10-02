@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 
-import { FormatFn } from 'src/sqlFormatter.js';
+import { FormatFn } from '../src/sqlFormatter.js';
 
 import supportsCase from './features/case.js';
 import supportsNumbers from './features/numbers.js';

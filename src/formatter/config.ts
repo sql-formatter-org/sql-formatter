@@ -1,4 +1,4 @@
-import { FormatOptions } from 'src/FormatOptions.js';
+import { FormatOptions } from '../FormatOptions.js';
 
 // Utility functions for config options
 

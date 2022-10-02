@@ -1,4 +1,4 @@
-import { sortByLengthDesc } from 'src/utils.js';
+import { sortByLengthDesc } from '../utils.js';
 
 import { IdentChars, QuoteType, VariableType } from './TokenizerOptions.js';
 import { escapeRegExp, patternToRegex, prefixesPattern, withDashes } from './regexUtil.js';

@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 
-import { FormatFn } from 'src/sqlFormatter.js';
+import { FormatFn } from '../src/sqlFormatter.js';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter.js';
 
 import supportsDropTable from './features/dropTable.js';

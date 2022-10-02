@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 
-import { format as originalFormat, FormatFn } from 'src/sqlFormatter.js';
+import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
 
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter.js';
 

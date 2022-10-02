@@ -1,4 +1,4 @@
-import { last } from 'src/utils.js';
+import { last } from '../utils.js';
 
 import Indentation from './Indentation.js';
 

@@ -14,9 +14,6 @@ export default {
     extensionAlias: {
       '.js': ['.ts', '.js'],
     },
-    alias: {
-      src: path.resolve('./src'),
-    },
   },
   module: {
     rules: [
