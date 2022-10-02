@@ -306,45 +306,6 @@ describe('BigQueryFormatter', () => {
       expect(format(input)).toBe(expected);
     });
 
-    it(`Supports CREATE TABLE LIKE`, () => {
-      const input = `
-        CREATE TABLE mydataset.newtable
-        LIKE mydataset.sourcetable
-        AS (SELECT * FROM mydataset.myothertable)`;
-      const expected = dedent`
-        CREATE TABLE
-          mydataset.newtable LIKE mydataset.sourcetable AS (
-            SELECT
-              *
-            FROM
-              mydataset.myothertable
-          )`;
-
-      expect(format(input)).toBe(expected);
-    });
-
-    it(`Supports CREATE TABLE COPY`, () => {
-      const input = `
-        CREATE TABLE mydataset.newtable
-        COPY mydataset.sourcetable`;
-      const expected = dedent`
-        CREATE TABLE
-          mydataset.newtable COPY mydataset.sourcetable`;
-
-      expect(format(input)).toBe(expected);
-    });
-
-    it(`Supports CREATE TABLE CLONE`, () => {
-      const input = `
-        CREATE TABLE mydataset.newtable
-        CLONE mydataset.sourcetable`;
-      const expected = dedent`
-        CREATE TABLE
-          mydataset.newtable CLONE mydataset.sourcetable`;
-
-      expect(format(input)).toBe(expected);
-    });
-
     it(`Supports CREATE EXTERNAL TABLE ... WITH PARTITION COLUMN`, () => {
       const input = `
         CREATE EXTERNAL TABLE dataset.CsvTable
