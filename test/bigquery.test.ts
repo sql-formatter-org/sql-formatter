@@ -407,50 +407,27 @@ describe('BigQueryFormatter', () => {
       expect(format(input)).toBe(expected);
     });
 
-    it(`Supports CREATE CAPACITY`, () => {
-      const input = dedent`
-        CREATE CAPACITY admin_project.region-us.my-commitment
-        AS JSON """{
-            "slot_count": 100,
-            "plan": "FLEX"
-          }"""`;
-      const expected = dedent`
-        CREATE CAPACITY admin_project.region-us.my-commitment
-        AS JSON """{
-            "slot_count": 100,
-            "plan": "FLEX"
-          }"""`;
-      expect(format(input)).toBe(expected);
-    });
-
-    it(`Supports CREATE RESERVATION`, () => {
-      const input = dedent`
-        CREATE RESERVATION admin_project.region-us.prod
-        AS JSON """{
-            "slot_capacity": 100
-          }"""`;
-      const expected = dedent`
-        CREATE RESERVATION admin_project.region-us.prod
-        AS JSON """{
-            "slot_capacity": 100
-          }"""`;
-      expect(format(input)).toBe(expected);
-    });
-
-    it(`Supports CREATE ASSIGNMENT`, () => {
-      const input = dedent`
-        CREATE ASSIGNMENT admin_project.region-us.prod.my_assignment
-        AS JSON """{
-            "assignee": "projects/my_project",
-            "job_type": "QUERY"
-          }"""`;
-      const expected = dedent`
-        CREATE ASSIGNMENT admin_project.region-us.prod.my_assignment
-        AS JSON """{
-            "assignee": "projects/my_project",
-            "job_type": "QUERY"
-          }"""`;
-      expect(format(input)).toBe(expected);
+    [
+      // Create statements using "AS JSON"
+      'CREATE CAPACITY',
+      'CREATE RESERVATION',
+      'CREATE ASSIGNMENT',
+    ].forEach(create => {
+      it(`Supports ${create}`, () => {
+        const input = dedent`
+          ${create} admin_project.region-us.my-commitment
+          AS JSON """{
+              "slot_count": 100,
+              "plan": "FLEX"
+            }"""`;
+        const expected = dedent`
+          ${create} admin_project.region-us.my-commitment
+          AS JSON """{
+              "slot_count": 100,
+              "plan": "FLEX"
+            }"""`;
+        expect(format(input)).toBe(expected);
+      });
     });
 
     it(`Supports CREATE SEARCH INDEX`, () => {
