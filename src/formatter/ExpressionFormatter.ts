@@ -216,25 +216,37 @@ export default class ExpressionFormatter {
   }
 
   private formatClause(node: ClauseNode) {
-    const isOnelineClause = this.dialectCfg.onelineClauses[node.nameKw.text];
-
-    if (isTabularStyle(this.cfg) || isOnelineClause) {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.SPACE);
+    if (this.isOnelineClause(node)) {
+      this.formatClauseInOnelineStyle(node);
+    } else if (isTabularStyle(this.cfg)) {
+      this.formatClauseInTabularStyle(node);
     } else {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.NEWLINE);
+      this.formatClauseInIndentedStyle(node);
     }
-    if (!isOnelineClause) {
-      this.layout.indentation.increaseTopLevel();
-    }
+  }
 
-    if (!isTabularStyle(this.cfg) && !isOnelineClause) {
-      this.layout.add(WS.INDENT);
-    }
+  private isOnelineClause(node: ClauseNode): boolean {
+    return this.dialectCfg.onelineClauses[node.nameKw.text];
+  }
+
+  private formatClauseInIndentedStyle(node: ClauseNode) {
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.NEWLINE);
+    this.layout.indentation.increaseTopLevel();
+    this.layout.add(WS.INDENT);
     this.layout = this.formatSubExpression(node.children);
+    this.layout.indentation.decreaseTopLevel();
+  }
 
-    if (!isOnelineClause) {
-      this.layout.indentation.decreaseTopLevel();
-    }
+  private formatClauseInOnelineStyle(node: ClauseNode) {
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.SPACE);
+    this.layout = this.formatSubExpression(node.children);
+  }
+
+  private formatClauseInTabularStyle(node: ClauseNode) {
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.SPACE);
+    this.layout.indentation.increaseTopLevel();
+    this.layout = this.formatSubExpression(node.children);
+    this.layout.indentation.decreaseTopLevel();
   }
 
   private formatSetOperation(node: SetOperationNode) {
