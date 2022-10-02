@@ -55,7 +55,6 @@ const reservedClauses = expandPhrases([
   'WITH CONNECTION',
   'WITH PARTITION COLUMNS',
   'REMOTE WITH CONNECTION',
-  'CREATE SEARCH INDEX [IF NOT EXISTS]',
   'ALTER SCHEMA [IF EXISTS]',
 
   'ALTER [MATERIALIZED] VIEW [IF EXISTS]',
@@ -94,6 +93,8 @@ const onelineClauses = expandPhrases([
   'CREATE RESERVATION',
   // assignment
   'CREATE ASSIGNMENT',
+  // search index
+  'CREATE SEARCH INDEX [IF NOT EXISTS]',
   // DCL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-control-language
   'GRANT',
   'REVOKE',

@@ -538,8 +538,7 @@ describe('BigQueryFormatter', () => {
           ${createSearchIndex} my_index
           ON dataset.my_table(ALL COLUMNS);`;
         const expected = dedent`
-          ${createSearchIndex}
-            my_index ON dataset.my_table (ALL COLUMNS);`;
+          ${createSearchIndex} my_index ON dataset.my_table (ALL COLUMNS);`;
         expect(format(input)).toBe(expected);
       });
     });
