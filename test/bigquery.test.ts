@@ -591,22 +591,6 @@ describe('BigQueryFormatter', () => {
       });
     });
 
-    it(`Supports DROP SCHEMA - CASCADE`, () => {
-      const input = `
-        DROP SCHEMA mydataset CASCADE`;
-      const expected = dedent`
-        DROP SCHEMA mydataset CASCADE`;
-      expect(format(input)).toBe(expected);
-    });
-
-    it(`Supports DROP SCHEMA - RESTRICT`, () => {
-      const input = `
-        DROP SCHEMA mydataset RESTRICT`;
-      const expected = dedent`
-        DROP SCHEMA mydataset RESTRICT`;
-      expect(format(input)).toBe(expected);
-    });
-
     it(`Supports DROP SEARCH INDEX`, () => {
       const input = `
         DROP SEARCH INDEX index2 ON mydataset.mytable`;
