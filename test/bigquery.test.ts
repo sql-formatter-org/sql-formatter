@@ -403,8 +403,7 @@ describe('BigQueryFormatter', () => {
           RETURNS FLOAT64
           AS (x * y);`;
         const expected = dedent`
-          ${createFunction}
-            mydataset.myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 AS (x * y);`;
+          ${createFunction} mydataset.myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 AS (x * y);`;
         expect(format(input)).toBe(expected);
       });
     });
@@ -418,8 +417,7 @@ describe('BigQueryFormatter', () => {
             return x*y;
           """;`;
       const expected = dedent`
-        CREATE FUNCTION
-          myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 LANGUAGE js AS r"""
+        CREATE FUNCTION myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 LANGUAGE js AS r"""
             return x*y;
           """;`;
       expect(format(input)).toBe(expected);
@@ -438,19 +436,16 @@ describe('BigQueryFormatter', () => {
 
         // TODO: formatting for <name STRING, year INT64> can be improved
         const expected = dedent`
-          ${createTableFunc}
-            mydataset.names_by_year (y INT64)
-          RETURNS TABLE
-            < name STRING,
-            year INT64 > AS (
-              SELECT
-                year,
-                name
-              FROM
-                mydataset.mytable
-              WHERE
-                year = y
-            )`;
+          ${createTableFunc} mydataset.names_by_year (y INT64) RETURNS TABLE < name STRING,
+          year INT64 > AS (
+            SELECT
+              year,
+              name
+            FROM
+              mydataset.mytable
+            WHERE
+              year = y
+          )`;
         expect(format(input)).toBe(expected);
       });
     });
@@ -464,8 +459,7 @@ describe('BigQueryFormatter', () => {
             SELECT * FROM anotherDataset.myTable;
           END;`;
         const expected = dedent`
-          ${createProcedure}
-            myDataset.QueryTable ()
+          ${createProcedure} myDataset.QueryTable ()
           BEGIN
           SELECT
             *

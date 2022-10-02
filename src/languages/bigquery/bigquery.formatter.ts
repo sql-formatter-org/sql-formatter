@@ -54,10 +54,7 @@ const reservedClauses = expandPhrases([
   'FOR SYSTEM_TIME AS OF', // CREATE SNAPSHOT TABLE
   'WITH CONNECTION',
   'WITH PARTITION COLUMNS',
-  'CREATE [OR REPLACE] [TEMP|TEMPORARY|TABLE] FUNCTION [IF NOT EXISTS]',
   'REMOTE WITH CONNECTION',
-  'RETURNS TABLE',
-  'CREATE [OR REPLACE] PROCEDURE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] ROW ACCESS POLICY [IF NOT EXISTS]',
   'GRANT TO',
   'FILTER USING',
@@ -90,6 +87,9 @@ const onelineClauses = expandPhrases([
   'CREATE SCHEMA [IF NOT EXISTS]',
   'DEFAULT COLLATE',
 
+  // stored procedures
+  'CREATE [OR REPLACE] [TEMP|TEMPORARY|TABLE] FUNCTION [IF NOT EXISTS]',
+  'CREATE [OR REPLACE] PROCEDURE [IF NOT EXISTS]',
   // DCL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-control-language
   'GRANT',
   'REVOKE',
