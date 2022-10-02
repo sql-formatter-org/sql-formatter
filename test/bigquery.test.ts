@@ -200,25 +200,15 @@ describe('BigQueryFormatter', () => {
   });
 
   it('supports parameterised types', () => {
-    const result = format(
-      `
-      DECLARE varString STRING(11) '11charswide';
-      DECLARE varBytes BYTES(8);
-      DECLARE varNumeric NUMERIC(1,1);
-      DECLARE varDecimal DECIMAL(1,1);
-      DECLARE varBignumeric BIGNUMERIC(1,1);
-      DECLARE varBigdecimal BIGDECIMAL(1,1);
-    `,
-      { linesBetweenQueries: 0 }
-    );
-    expect(result).toBe(dedent`
+    const sql = dedent`
       DECLARE varString STRING(11) '11charswide';
       DECLARE varBytes BYTES(8);
       DECLARE varNumeric NUMERIC(1, 1);
       DECLARE varDecimal DECIMAL(1, 1);
       DECLARE varBignumeric BIGNUMERIC(1, 1);
       DECLARE varBigdecimal BIGDECIMAL(1, 1);
-    `);
+    `;
+    expect(format(sql, { linesBetweenQueries: 0 })).toBe(sql);
   });
 
   // Regression test for issue #243
