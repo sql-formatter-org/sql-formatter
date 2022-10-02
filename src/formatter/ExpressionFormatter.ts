@@ -223,14 +223,18 @@ export default class ExpressionFormatter {
     } else {
       this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.NEWLINE);
     }
-    this.layout.indentation.increaseTopLevel();
+    if (!isOnelineClause) {
+      this.layout.indentation.increaseTopLevel();
+    }
 
     if (!isTabularStyle(this.cfg) && !isOnelineClause) {
       this.layout.add(WS.INDENT);
     }
     this.layout = this.formatSubExpression(node.children);
 
-    this.layout.indentation.decreaseTopLevel();
+    if (!isOnelineClause) {
+      this.layout.indentation.decreaseTopLevel();
+    }
   }
 
   private formatSetOperation(node: SetOperationNode) {

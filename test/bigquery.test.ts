@@ -330,9 +330,9 @@ describe('BigQueryFormatter', () => {
         const expected = dedent`
           ${createSchema} mydataset
           DEFAULT COLLATE 'und:ci' OPTIONS(
-              location = "us",
-              labels = [("label1", "value1"), ("label2", "value2")]
-            )
+            location = "us",
+            labels = [("label1", "value1"), ("label2", "value2")]
+          )
         `;
         expect(format(input)).toBe(expected);
       });
