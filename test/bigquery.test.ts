@@ -573,46 +573,29 @@ describe('BigQueryFormatter', () => {
   });
 
   describe('BigQuery DDL Drop Statements', () => {
-    [
-      'DROP SCHEMA',
-      'DROP VIEW',
-      'DROP FUNCTION',
-      'DROP TABLE FUNCTION',
-      'DROP PROCEDURE',
-      'DROP RESERVATION',
-      'DROP ASSIGNMENT',
-    ].forEach(drop => {
-      it(`Supports ${drop}`, () => {
-        const input = `
-          ${drop} mydataset.name`;
-        const expected = dedent`
-          ${drop} mydataset.name`;
-        expect(format(input)).toBe(expected);
-      });
-    });
+    it(`Supports DROP clauses`, () => {
+      const input = dedent`
+        DROP SCHEMA mydataset.name;
 
-    it(`Supports DROP SEARCH INDEX`, () => {
-      const input = `
-        DROP SEARCH INDEX index2 ON mydataset.mytable`;
-      const expected = dedent`
-        DROP SEARCH INDEX index2 ON mydataset.mytable`;
-      expect(format(input)).toBe(expected);
-    });
+        DROP VIEW mydataset.name;
 
-    it(`Supports DROP ROW ACCESS POLICY`, () => {
-      const input = `
-        DROP mypolicy ON mydataset.mytable`;
-      const expected = dedent`
-        DROP mypolicy ON mydataset.mytable`;
-      expect(format(input)).toBe(expected);
-    });
+        DROP FUNCTION mydataset.name;
 
-    it(`Supports DROP ALL ROW ACCESS POLICIES`, () => {
-      const input = `
-        DROP ALL ROW ACCESS POLICIES ON table_name`;
-      const expected = dedent`
-        DROP ALL ROW ACCESS POLICIES ON table_name`;
-      expect(format(input)).toBe(expected);
+        DROP TABLE FUNCTION mydataset.name;
+
+        DROP PROCEDURE mydataset.name;
+
+        DROP RESERVATION mydataset.name;
+
+        DROP ASSIGNMENT mydataset.name;
+
+        DROP SEARCH INDEX index2 ON mydataset.mytable;
+
+        DROP mypolicy ON mydataset.mytable;
+
+        DROP ALL ROW ACCESS POLICIES ON table_name;
+      `;
+      expect(format(input)).toBe(input);
     });
   });
 });
