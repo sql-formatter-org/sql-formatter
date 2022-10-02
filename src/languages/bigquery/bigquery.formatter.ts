@@ -55,13 +55,6 @@ const reservedClauses = expandPhrases([
   'WITH CONNECTION',
   'WITH PARTITION COLUMNS',
   'REMOTE WITH CONNECTION',
-  'CREATE [OR REPLACE] ROW ACCESS POLICY [IF NOT EXISTS]',
-  'GRANT TO',
-  'FILTER USING',
-  'CREATE CAPACITY',
-  'AS JSON',
-  'CREATE RESERVATION',
-  'CREATE ASSIGNMENT',
   'CREATE SEARCH INDEX [IF NOT EXISTS]',
   'ALTER SCHEMA [IF EXISTS]',
 
@@ -90,6 +83,17 @@ const onelineClauses = expandPhrases([
   // stored procedures
   'CREATE [OR REPLACE] [TEMP|TEMPORARY|TABLE] FUNCTION [IF NOT EXISTS]',
   'CREATE [OR REPLACE] PROCEDURE [IF NOT EXISTS]',
+  // row access policy
+  'CREATE [OR REPLACE] ROW ACCESS POLICY [IF NOT EXISTS]',
+  'GRANT TO',
+  'FILTER USING',
+  // capacity
+  'CREATE CAPACITY',
+  'AS JSON',
+  // reservation
+  'CREATE RESERVATION',
+  // assignment
+  'CREATE ASSIGNMENT',
   // DCL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-control-language
   'GRANT',
   'REVOKE',

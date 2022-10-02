@@ -479,12 +479,9 @@ describe('BigQueryFormatter', () => {
           GRANT TO ("group:abc@example.com", "user:hello@example.com")
           FILTER USING (Region="US")`;
         const expected = dedent`
-          ${createRowAccessPolicy}
-            us_filter ON mydataset.table1
-          GRANT TO
-            ("group:abc@example.com", "user:hello@example.com")
-          FILTER USING
-            (Region = "US")`;
+          ${createRowAccessPolicy} us_filter ON mydataset.table1
+          GRANT TO ("group:abc@example.com", "user:hello@example.com")
+          FILTER USING (Region = "US")`;
         expect(format(input)).toBe(expected);
       });
     });
@@ -497,10 +494,8 @@ describe('BigQueryFormatter', () => {
             "plan": "FLEX"
           }"""`;
       const expected = dedent`
-        CREATE CAPACITY
-          admin_project.region-us.my-commitment
-        AS JSON
-          """{
+        CREATE CAPACITY admin_project.region-us.my-commitment
+        AS JSON """{
             "slot_count": 100,
             "plan": "FLEX"
           }"""`;
@@ -514,10 +509,8 @@ describe('BigQueryFormatter', () => {
             "slot_capacity": 100
           }"""`;
       const expected = dedent`
-        CREATE RESERVATION
-          admin_project.region-us.prod
-        AS JSON
-          """{
+        CREATE RESERVATION admin_project.region-us.prod
+        AS JSON """{
             "slot_capacity": 100
           }"""`;
       expect(format(input)).toBe(expected);
@@ -531,10 +524,8 @@ describe('BigQueryFormatter', () => {
             "job_type": "QUERY"
           }"""`;
       const expected = dedent`
-        CREATE ASSIGNMENT
-          admin_project.region-us.prod.my_assignment
-        AS JSON
-          """{
+        CREATE ASSIGNMENT admin_project.region-us.prod.my_assignment
+        AS JSON """{
             "assignee": "projects/my_project",
             "job_type": "QUERY"
           }"""`;
