@@ -1,4 +1,4 @@
-import { flatKeywordList } from '../../utils';
+import { flatKeywordList } from '../../utils.js';
 
 export const keywords = flatKeywordList({
   // https://deepkb.com/CO_000013/en/kb/IMPORT-fbfa59f0-2bf1-31fe-bb7b-0f9efe9932c6/spark-sql-keywords

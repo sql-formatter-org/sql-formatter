@@ -1,9 +1,9 @@
-import { expandPhrases } from 'src/expandPhrases';
-import Formatter from 'src/formatter/Formatter';
-import Tokenizer from 'src/lexer/Tokenizer';
-import { EOF_TOKEN, isToken, Token, TokenType } from 'src/lexer/token';
-import { keywords } from './mariadb.keywords';
-import { functions } from './mariadb.functions';
+import { expandPhrases } from 'src/expandPhrases.js';
+import Formatter from 'src/formatter/Formatter.js';
+import Tokenizer from 'src/lexer/Tokenizer.js';
+import { EOF_TOKEN, isToken, Token, TokenType } from 'src/lexer/token.js';
+import { keywords } from './mariadb.keywords.js';
+import { functions } from './mariadb.functions.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT | DISTINCTROW]']);
 

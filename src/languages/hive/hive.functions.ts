@@ -1,4 +1,4 @@
-import { flatKeywordList } from '../../utils';
+import { flatKeywordList } from '../../utils.js';
 
 export const functions = flatKeywordList({
   // https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF

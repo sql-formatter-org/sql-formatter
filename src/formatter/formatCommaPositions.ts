@@ -1,5 +1,5 @@
-import { CommaPosition } from 'src/FormatOptions';
-import { maxLength } from 'src/utils';
+import { CommaPosition } from 'src/FormatOptions.js';
+import { maxLength } from 'src/utils.js';
 
 const PRECEDING_WHITESPACE_REGEX = /^\s+/u;
 

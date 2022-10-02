@@ -1,4 +1,4 @@
-import { flatKeywordList } from '../../utils';
+import { flatKeywordList } from '../../utils.js';
 
 export const keywords = flatKeywordList({
   // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#reserved-word

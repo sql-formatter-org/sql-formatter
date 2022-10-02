@@ -1,8 +1,8 @@
 // import only type to avoid ESLint no-cycle rule producing an error
-import type { SqlLanguage } from './sqlFormatter';
-import { ParamItems } from './formatter/Params';
-import Formatter from './formatter/Formatter';
-import { ParamTypes } from './lexer/TokenizerOptions';
+import type { SqlLanguage } from './sqlFormatter.js';
+import { ParamItems } from './formatter/Params.js';
+import Formatter from './formatter/Formatter.js';
+import { ParamTypes } from './lexer/TokenizerOptions.js';
 
 export type IndentStyle = 'standard' | 'tabularLeft' | 'tabularRight';
 

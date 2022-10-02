@@ -1,4 +1,4 @@
-import { flatKeywordList } from '../../utils';
+import { flatKeywordList } from '../../utils.js';
 
 export const keywords = flatKeywordList({
   // https://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html

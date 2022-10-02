@@ -1,4 +1,4 @@
-import { flatKeywordList } from '../../utils';
+import { flatKeywordList } from '../../utils.js';
 
 export const functions = flatKeywordList({
   // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/functions.html

@@ -1,4 +1,4 @@
-import { flatKeywordList } from '../../utils';
+import { flatKeywordList } from '../../utils.js';
 
 export const functions = flatKeywordList({
   // https://docs.singlestore.com/managed-service/en/reference/sql-reference/vector-functions/vector-functions.html

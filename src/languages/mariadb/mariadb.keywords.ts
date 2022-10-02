@@ -1,4 +1,4 @@
-import { flatKeywordList } from '../../utils';
+import { flatKeywordList } from '../../utils.js';
 
 export const keywords = flatKeywordList({
   // https://mariadb.com/kb/en/information-schema-keywords-table/

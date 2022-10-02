@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 
-import { FormatFn } from 'src/sqlFormatter';
+import { FormatFn } from 'src/sqlFormatter.js';
 
 export const standardSetOperations = [
   'UNION',

@@ -1,7 +1,7 @@
 import { expect } from '@jest/globals';
 import dedent from 'dedent-js';
 
-import { FormatFn } from 'src/sqlFormatter';
+import { FormatFn } from 'src/sqlFormatter.js';
 
 type StringType =
   // Note: ""-qq and ""-bs can be combined to allow for both types of escaping

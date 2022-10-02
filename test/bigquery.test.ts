@@ -1,29 +1,29 @@
 import dedent from 'dedent-js';
 
-import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import { flatKeywordList } from 'src/utils';
-import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import { format as originalFormat, FormatFn } from 'src/sqlFormatter.js';
+import { flatKeywordList } from 'src/utils.js';
+import behavesLikeSqlFormatter from './behavesLikeSqlFormatter.js';
 
-import supportsCreateTable from './features/createTable';
-import supportsDropTable from './features/dropTable';
-import supportsStrings from './features/strings';
-import supportsArrayLiterals from './features/arrayLiterals';
-import supportsBetween from './features/between';
-import supportsJoin from './features/join';
-import supportsOperators from './features/operators';
-import supportsDeleteFrom from './features/deleteFrom';
-import supportsComments from './features/comments';
-import supportsIdentifiers from './features/identifiers';
-import supportsParams from './options/param';
-import supportsWindow from './features/window';
-import supportsSetOperations from './features/setOperations';
-import supportsLimiting from './features/limiting';
-import supportsInsertInto from './features/insertInto';
-import supportsUpdate from './features/update';
-import supportsTruncateTable from './features/truncateTable';
-import supportsMergeInto from './features/mergeInto';
-import supportsCreateView from './features/createView';
-import supportsAlterTable from './features/alterTable';
+import supportsCreateTable from './features/createTable.js';
+import supportsDropTable from './features/dropTable.js';
+import supportsStrings from './features/strings.js';
+import supportsArrayLiterals from './features/arrayLiterals.js';
+import supportsBetween from './features/between.js';
+import supportsJoin from './features/join.js';
+import supportsOperators from './features/operators.js';
+import supportsDeleteFrom from './features/deleteFrom.js';
+import supportsComments from './features/comments.js';
+import supportsIdentifiers from './features/identifiers.js';
+import supportsParams from './options/param.js';
+import supportsWindow from './features/window.js';
+import supportsSetOperations from './features/setOperations.js';
+import supportsLimiting from './features/limiting.js';
+import supportsInsertInto from './features/insertInto.js';
+import supportsUpdate from './features/update.js';
+import supportsTruncateTable from './features/truncateTable.js';
+import supportsMergeInto from './features/mergeInto.js';
+import supportsCreateView from './features/createView.js';
+import supportsAlterTable from './features/alterTable.js';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';

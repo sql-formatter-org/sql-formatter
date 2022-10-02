@@ -1,4 +1,4 @@
-import Tokenizer from 'src/lexer/Tokenizer';
+import Tokenizer from 'src/lexer/Tokenizer.js';
 
 describe('Tokenizer', () => {
   const tokenize = (sql: string) =>

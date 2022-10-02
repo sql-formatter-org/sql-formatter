@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 
-import { FormatFn } from 'src/sqlFormatter';
+import { FormatFn } from 'src/sqlFormatter.js';
 
 export default function supportsCase(format: FormatFn) {
   it('formats CASE ... WHEN with a blank expression', () => {

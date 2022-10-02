@@ -1,4 +1,4 @@
-import { isReserved, Token, TokenType } from 'src/lexer/token';
+import { isReserved, Token, TokenType } from 'src/lexer/token.js';
 
 /**
  * Ensures that no keyword token (RESERVED_*) is preceded by dot (.).

@@ -1,12 +1,12 @@
 import { Parser as NearleyParser, Grammar } from 'nearley';
 
-import Tokenizer from 'src/lexer/Tokenizer';
-import { disambiguateTokens } from 'src/lexer/disambiguateTokens';
-import { ParamTypes } from 'src/lexer/TokenizerOptions';
-import { StatementNode } from 'src/parser/ast';
-import grammar from 'src/parser/grammar';
-import LexerAdapter from 'src/parser/LexerAdapter';
-import { createEofToken } from 'src/lexer/token';
+import Tokenizer from 'src/lexer/Tokenizer.js';
+import { disambiguateTokens } from 'src/lexer/disambiguateTokens.js';
+import { ParamTypes } from 'src/lexer/TokenizerOptions.js';
+import { StatementNode } from 'src/parser/ast.js';
+import grammar from 'src/parser/grammar.js';
+import LexerAdapter from 'src/parser/LexerAdapter.js';
+import { createEofToken } from 'src/lexer/token.js';
 
 export interface Parser {
   parse(sql: string, paramTypesOverrides: ParamTypes): StatementNode[];

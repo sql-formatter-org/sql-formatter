@@ -1,9 +1,9 @@
-import { FormatOptions } from 'src/FormatOptions';
-import { equalizeWhitespace, isMultiline } from 'src/utils';
+import { FormatOptions } from 'src/FormatOptions.js';
+import { equalizeWhitespace, isMultiline } from 'src/utils.js';
 
-import Params from 'src/formatter/Params';
-import { isTabularStyle } from 'src/formatter/config';
-import { TokenType } from 'src/lexer/token';
+import Params from 'src/formatter/Params.js';
+import { isTabularStyle } from 'src/formatter/config.js';
+import { TokenType } from 'src/lexer/token.js';
 import {
   AllColumnsAsteriskNode,
   ArraySubscriptNode,
@@ -28,11 +28,11 @@ import {
   CaseExpressionNode,
   CaseWhenNode,
   CaseElseNode,
-} from 'src/parser/ast';
+} from 'src/parser/ast.js';
 
-import Layout, { WS } from './Layout';
-import toTabularFormat, { isTabularToken } from './tabularStyle';
-import InlineLayout, { InlineLayoutError } from './InlineLayout';
+import Layout, { WS } from './Layout.js';
+import toTabularFormat, { isTabularToken } from './tabularStyle.js';
+import InlineLayout, { InlineLayoutError } from './InlineLayout.js';
 
 interface ExpressionFormatterParams {
   cfg: FormatOptions;

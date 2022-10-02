@@ -1,26 +1,26 @@
 import dedent from 'dedent-js';
-import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import { format as originalFormat, FormatFn } from 'src/sqlFormatter.js';
+import behavesLikeSqlFormatter from './behavesLikeSqlFormatter.js';
 
-import supportsCreateTable from './features/createTable';
-import supportsDropTable from './features/dropTable';
-import supportsAlterTable from './features/alterTable';
-import supportsSchema from './features/schema';
-import supportsStrings from './features/strings';
-import supportsBetween from './features/between';
-import supportsJoin from './features/join';
-import supportsOperators from './features/operators';
-import supportsConstraints from './features/constraints';
-import supportsDeleteFrom from './features/deleteFrom';
-import supportsComments from './features/comments';
-import supportsIdentifiers from './features/identifiers';
-import supportsParams from './options/param';
-import supportsWindow from './features/window';
-import supportsSetOperations from './features/setOperations';
-import supportsLimiting from './features/limiting';
-import supportsInsertInto from './features/insertInto';
-import supportsUpdate from './features/update';
-import supportsCreateView from './features/createView';
+import supportsCreateTable from './features/createTable.js';
+import supportsDropTable from './features/dropTable.js';
+import supportsAlterTable from './features/alterTable.js';
+import supportsSchema from './features/schema.js';
+import supportsStrings from './features/strings.js';
+import supportsBetween from './features/between.js';
+import supportsJoin from './features/join.js';
+import supportsOperators from './features/operators.js';
+import supportsConstraints from './features/constraints.js';
+import supportsDeleteFrom from './features/deleteFrom.js';
+import supportsComments from './features/comments.js';
+import supportsIdentifiers from './features/identifiers.js';
+import supportsParams from './options/param.js';
+import supportsWindow from './features/window.js';
+import supportsSetOperations from './features/setOperations.js';
+import supportsLimiting from './features/limiting.js';
+import supportsInsertInto from './features/insertInto.js';
+import supportsUpdate from './features/update.js';
+import supportsCreateView from './features/createView.js';
 
 describe('SqliteFormatter', () => {
   const language = 'sqlite';

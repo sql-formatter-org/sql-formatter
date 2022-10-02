@@ -1,10 +1,10 @@
-import { expandPhrases } from 'src/expandPhrases';
-import Formatter from 'src/formatter/Formatter';
-import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter';
-import Tokenizer from 'src/lexer/Tokenizer';
-import { EOF_TOKEN, isReserved, isToken, Token, TokenType } from 'src/lexer/token';
-import { keywords } from './plsql.keywords';
-import { functions } from './plsql.functions';
+import { expandPhrases } from 'src/expandPhrases.js';
+import Formatter from 'src/formatter/Formatter.js';
+import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter.js';
+import Tokenizer from 'src/lexer/Tokenizer.js';
+import { EOF_TOKEN, isReserved, isToken, Token, TokenType } from 'src/lexer/token.js';
+import { keywords } from './plsql.keywords.js';
+import { functions } from './plsql.functions.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT | UNIQUE]']);
 

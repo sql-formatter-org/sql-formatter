@@ -1,28 +1,28 @@
 import dedent from 'dedent-js';
 
-import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import { format as originalFormat, FormatFn } from 'src/sqlFormatter.js';
+import behavesLikeSqlFormatter from './behavesLikeSqlFormatter.js';
 
-import supportsArrayLiterals from './features/arrayLiterals';
-import supportsBetween from './features/between';
-import supportsCreateTable from './features/createTable';
-import supportsDropTable from './features/dropTable';
-import supportsDeleteFrom from './features/deleteFrom';
-import supportsJoin from './features/join';
-import supportsOperators from './features/operators';
-import supportsStrings from './features/strings';
-import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
-import supportsComments from './features/comments';
-import supportsIdentifiers from './features/identifiers';
-import supportsParams from './options/param';
-import supportsSetOperations from './features/setOperations';
-import supportsWindow from './features/window';
-import supportsLimiting from './features/limiting';
-import supportsInsertInto from './features/insertInto';
-import supportsUpdate from './features/update';
-import supportsTruncateTable from './features/truncateTable';
-import supportsCreateView from './features/createView';
-import supportsAlterTable from './features/alterTable';
+import supportsArrayLiterals from './features/arrayLiterals.js';
+import supportsBetween from './features/between.js';
+import supportsCreateTable from './features/createTable.js';
+import supportsDropTable from './features/dropTable.js';
+import supportsDeleteFrom from './features/deleteFrom.js';
+import supportsJoin from './features/join.js';
+import supportsOperators from './features/operators.js';
+import supportsStrings from './features/strings.js';
+import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors.js';
+import supportsComments from './features/comments.js';
+import supportsIdentifiers from './features/identifiers.js';
+import supportsParams from './options/param.js';
+import supportsSetOperations from './features/setOperations.js';
+import supportsWindow from './features/window.js';
+import supportsLimiting from './features/limiting.js';
+import supportsInsertInto from './features/insertInto.js';
+import supportsUpdate from './features/update.js';
+import supportsTruncateTable from './features/truncateTable.js';
+import supportsCreateView from './features/createView.js';
+import supportsAlterTable from './features/alterTable.js';
 
 describe('TrinoFormatter', () => {
   const language = 'trino';

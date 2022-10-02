@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 
-import { FormatFn } from 'src/sqlFormatter';
+import { FormatFn } from 'src/sqlFormatter.js';
 
 interface DropTableConfig {
   ifExists?: boolean;
