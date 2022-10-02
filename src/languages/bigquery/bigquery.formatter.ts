@@ -59,17 +59,6 @@ const reservedClauses = expandPhrases([
 
   'ALTER [MATERIALIZED] VIEW [IF EXISTS]',
   'ALTER BI_CAPACITY',
-  'DROP SCHEMA [IF EXISTS]',
-  'DROP [MATERIALIZED] VIEW [IF EXISTS]',
-  'DROP [TABLE] FUNCTION [IF EXISTS]',
-  'DROP PROCEDURE [IF EXISTS]',
-  'DROP ROW ACCESS POLICY',
-  'DROP ALL ROW ACCESS POLICIES',
-  'DROP CAPACITY [IF EXISTS]',
-  'DROP RESERVATION [IF EXISTS]',
-  'DROP ASSIGNMENT [IF EXISTS]',
-  'DROP SEARCH INDEX [IF EXISTS]',
-  'DROP [IF EXISTS]',
 ]);
 
 const onelineClauses = expandPhrases([
@@ -95,6 +84,18 @@ const onelineClauses = expandPhrases([
   'CREATE ASSIGNMENT',
   // search index
   'CREATE SEARCH INDEX [IF NOT EXISTS]',
+  // drop
+  'DROP SCHEMA [IF EXISTS]',
+  'DROP [MATERIALIZED] VIEW [IF EXISTS]',
+  'DROP [TABLE] FUNCTION [IF EXISTS]',
+  'DROP PROCEDURE [IF EXISTS]',
+  'DROP ROW ACCESS POLICY',
+  'DROP ALL ROW ACCESS POLICIES',
+  'DROP CAPACITY [IF EXISTS]',
+  'DROP RESERVATION [IF EXISTS]',
+  'DROP ASSIGNMENT [IF EXISTS]',
+  'DROP SEARCH INDEX [IF EXISTS]',
+  'DROP [IF EXISTS]',
   // DCL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-control-language
   'GRANT',
   'REVOKE',

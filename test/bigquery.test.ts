@@ -693,8 +693,7 @@ describe('BigQueryFormatter', () => {
         const input = `
           ${drop} mydataset.name`;
         const expected = dedent`
-          ${drop}
-            mydataset.name`;
+          ${drop} mydataset.name`;
         expect(format(input)).toBe(expected);
       });
     });
@@ -703,8 +702,7 @@ describe('BigQueryFormatter', () => {
       const input = `
         DROP SCHEMA mydataset CASCADE`;
       const expected = dedent`
-        DROP SCHEMA
-          mydataset CASCADE`;
+        DROP SCHEMA mydataset CASCADE`;
       expect(format(input)).toBe(expected);
     });
 
@@ -712,8 +710,7 @@ describe('BigQueryFormatter', () => {
       const input = `
         DROP SCHEMA mydataset RESTRICT`;
       const expected = dedent`
-        DROP SCHEMA
-          mydataset RESTRICT`;
+        DROP SCHEMA mydataset RESTRICT`;
       expect(format(input)).toBe(expected);
     });
 
@@ -723,8 +720,7 @@ describe('BigQueryFormatter', () => {
         const input = `
           ${dropSearchIndex} index2 ON mydataset.mytable`;
         const expected = dedent`
-          ${dropSearchIndex}
-            index2 ON mydataset.mytable`;
+          ${dropSearchIndex} index2 ON mydataset.mytable`;
         expect(format(input)).toBe(expected);
       });
     });
@@ -733,8 +729,7 @@ describe('BigQueryFormatter', () => {
       const input = `
         DROP mypolicy ON mydataset.mytable`;
       const expected = dedent`
-        DROP
-          mypolicy ON mydataset.mytable`;
+        DROP mypolicy ON mydataset.mytable`;
       expect(format(input)).toBe(expected);
     });
 
@@ -742,8 +737,7 @@ describe('BigQueryFormatter', () => {
       const input = `
         DROP IF EXISTS mypolicy ON mydataset.mytable`;
       const expected = dedent`
-        DROP IF EXISTS
-          mypolicy ON mydataset.mytable`;
+        DROP IF EXISTS mypolicy ON mydataset.mytable`;
       expect(format(input)).toBe(expected);
     });
 
@@ -751,8 +745,7 @@ describe('BigQueryFormatter', () => {
       const input = `
         DROP ALL ROW ACCESS POLICIES ON table_name`;
       const expected = dedent`
-        DROP ALL ROW ACCESS POLICIES
-          ON table_name`;
+        DROP ALL ROW ACCESS POLICIES ON table_name`;
       expect(format(input)).toBe(expected);
     });
   });
