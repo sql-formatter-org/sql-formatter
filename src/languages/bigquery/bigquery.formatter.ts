@@ -50,8 +50,6 @@ const reservedClauses = expandPhrases([
   'DROP NOT NULL', // for alter column
   'SET DATA TYPE', // for alter column
 
-  'CREATE SCHEMA [IF NOT EXISTS]',
-  'DEFAULT COLLATE',
   'CLUSTER BY',
   'FOR SYSTEM_TIME AS OF', // CREATE SNAPSHOT TABLE
   'WITH CONNECTION',
@@ -88,6 +86,9 @@ const reservedClauses = expandPhrases([
 const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE TABLE',
+  // - create schema
+  'CREATE SCHEMA [IF NOT EXISTS]',
+  'DEFAULT COLLATE',
 
   // DCL, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-control-language
   'GRANT',

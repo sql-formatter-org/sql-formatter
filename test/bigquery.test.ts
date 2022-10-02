@@ -328,10 +328,8 @@ describe('BigQueryFormatter', () => {
             OPTIONS(
               location="us", labels=[("label1","value1"),("label2","value2")])`;
         const expected = dedent`
-          ${createSchema}
-            mydataset
-          DEFAULT COLLATE
-            'und:ci' OPTIONS(
+          ${createSchema} mydataset
+          DEFAULT COLLATE 'und:ci' OPTIONS(
               location = "us",
               labels = [("label1", "value1"), ("label2", "value2")]
             )
