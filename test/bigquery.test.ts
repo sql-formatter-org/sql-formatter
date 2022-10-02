@@ -566,26 +566,17 @@ describe('BigQueryFormatter', () => {
     it(`Supports DROP clauses`, () => {
       const input = dedent`
         DROP SCHEMA mydataset.name;
-
         DROP VIEW mydataset.name;
-
         DROP FUNCTION mydataset.name;
-
         DROP TABLE FUNCTION mydataset.name;
-
         DROP PROCEDURE mydataset.name;
-
         DROP RESERVATION mydataset.name;
-
         DROP ASSIGNMENT mydataset.name;
-
         DROP SEARCH INDEX index2 ON mydataset.mytable;
-
         DROP mypolicy ON mydataset.mytable;
-
         DROP ALL ROW ACCESS POLICIES ON table_name;
       `;
-      expect(format(input)).toBe(input);
+      expect(format(input, { linesBetweenQueries: 0 })).toBe(input);
     });
   });
 });
