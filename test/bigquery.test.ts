@@ -607,14 +607,6 @@ describe('BigQueryFormatter', () => {
       expect(format(input)).toBe(expected);
     });
 
-    it(`Supports DROP ROW ACCESS POLICY IF EXISTS`, () => {
-      const input = `
-        DROP IF EXISTS mypolicy ON mydataset.mytable`;
-      const expected = dedent`
-        DROP IF EXISTS mypolicy ON mydataset.mytable`;
-      expect(format(input)).toBe(expected);
-    });
-
     it(`Supports DROP ALL ROW ACCESS POLICIES`, () => {
       const input = `
         DROP ALL ROW ACCESS POLICIES ON table_name`;
