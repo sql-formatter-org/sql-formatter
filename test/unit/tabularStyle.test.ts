@@ -1,4 +1,4 @@
-import toTabularFormat from 'src/formatter/tabularStyle';
+import toTabularFormat from '../../src/formatter/tabularStyle.js';
 
 describe('toTabularFormat()', () => {
   it('does nothing in standard style', () => {

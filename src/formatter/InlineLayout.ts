@@ -1,6 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
-import Indentation from './Indentation';
-import Layout, { WS } from './Layout';
+import Indentation from './Indentation.js';
+import Layout, { WS } from './Layout.js';
 
 /**
  * Like Layout, but only formats single-line expressions.

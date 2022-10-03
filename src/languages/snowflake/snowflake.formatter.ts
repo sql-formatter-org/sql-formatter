@@ -1,9 +1,9 @@
-import { expandPhrases } from 'src/expandPhrases';
-import { DialectFormatOptions } from 'src/formatter/ExpressionFormatter';
-import Formatter from 'src/formatter/Formatter';
-import Tokenizer from 'src/lexer/Tokenizer';
-import { functions } from './snowflake.functions';
-import { keywords } from './snowflake.keywords';
+import { expandPhrases } from '../../expandPhrases.js';
+import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
+import Formatter from '../../formatter/Formatter.js';
+import Tokenizer from '../../lexer/Tokenizer.js';
+import { functions } from './snowflake.functions.js';
+import { keywords } from './snowflake.keywords.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 

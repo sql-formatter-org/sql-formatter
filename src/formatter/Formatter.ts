@@ -1,16 +1,16 @@
-import { FormatOptions } from 'src/FormatOptions';
-import { indentString } from 'src/formatter/config';
-import Params from 'src/formatter/Params';
-import Tokenizer from 'src/lexer/Tokenizer';
+import { FormatOptions } from '../FormatOptions.js';
+import { indentString } from './config.js';
+import Params from './Params.js';
+import Tokenizer from '../lexer/Tokenizer.js';
 
-import { createParser } from 'src/parser/createParser';
-import { StatementNode } from 'src/parser/ast';
+import { createParser } from '../parser/createParser.js';
+import { StatementNode } from '../parser/ast.js';
 
-import formatCommaPositions from './formatCommaPositions';
-import formatAliasPositions from './formatAliasPositions';
-import ExpressionFormatter, { DialectFormatOptions } from './ExpressionFormatter';
-import Layout, { WS } from './Layout';
-import Indentation from './Indentation';
+import formatCommaPositions from './formatCommaPositions.js';
+import formatAliasPositions from './formatAliasPositions.js';
+import ExpressionFormatter, { DialectFormatOptions } from './ExpressionFormatter.js';
+import Layout, { WS } from './Layout.js';
+import Indentation from './Indentation.js';
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {

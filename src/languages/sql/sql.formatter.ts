@@ -1,8 +1,8 @@
-import { expandPhrases } from 'src/expandPhrases';
-import Formatter from 'src/formatter/Formatter';
-import Tokenizer from 'src/lexer/Tokenizer';
-import { functions } from './sql.functions';
-import { keywords } from './sql.keywords';
+import { expandPhrases } from '../../expandPhrases.js';
+import Formatter from '../../formatter/Formatter.js';
+import Tokenizer from '../../lexer/Tokenizer.js';
+import { functions } from './sql.functions.js';
+import { keywords } from './sql.keywords.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 

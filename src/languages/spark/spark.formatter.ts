@@ -1,9 +1,9 @@
-import { expandPhrases } from 'src/expandPhrases';
-import Formatter from 'src/formatter/Formatter';
-import Tokenizer from 'src/lexer/Tokenizer';
-import { EOF_TOKEN, isToken, Token, TokenType } from 'src/lexer/token';
-import { keywords } from './spark.keywords';
-import { functions } from './spark.functions';
+import { expandPhrases } from '../../expandPhrases.js';
+import Formatter from '../../formatter/Formatter.js';
+import Tokenizer from '../../lexer/Tokenizer.js';
+import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
+import { keywords } from './spark.keywords.js';
+import { functions } from './spark.functions.js';
 
 // http://spark.apache.org/docs/latest/sql-ref-syntax.html
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);

@@ -1,9 +1,9 @@
-import { expandPhrases } from 'src/expandPhrases';
-import Formatter from 'src/formatter/Formatter';
-import Tokenizer from 'src/lexer/Tokenizer';
-import { EOF_TOKEN, isToken, Token, TokenType } from 'src/lexer/token';
-import { keywords } from './singlestoredb.keywords';
-import { functions } from './singlestoredb.functions';
+import { expandPhrases } from '../../expandPhrases.js';
+import Formatter from '../../formatter/Formatter.js';
+import Tokenizer from '../../lexer/Tokenizer.js';
+import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
+import { keywords } from './singlestoredb.keywords.js';
+import { functions } from './singlestoredb.functions.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT | DISTINCTROW]']);
 

@@ -1,5 +1,5 @@
-import { IndentStyle } from 'src/FormatOptions';
-import { isLogicalOperator, TokenType } from 'src/lexer/token';
+import { IndentStyle } from '../FormatOptions.js';
+import { isLogicalOperator, TokenType } from '../lexer/token.js';
 
 /**
  * When tabular style enabled,

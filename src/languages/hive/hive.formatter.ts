@@ -1,8 +1,8 @@
-import { expandPhrases } from 'src/expandPhrases';
-import Formatter from 'src/formatter/Formatter';
-import Tokenizer from 'src/lexer/Tokenizer';
-import { functions } from './hive.functions';
-import { keywords } from './hive.keywords';
+import { expandPhrases } from '../../expandPhrases.js';
+import Formatter from '../../formatter/Formatter.js';
+import Tokenizer from '../../lexer/Tokenizer.js';
+import { functions } from './hive.functions.js';
+import { keywords } from './hive.keywords.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 

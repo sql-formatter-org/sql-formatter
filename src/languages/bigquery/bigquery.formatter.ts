@@ -1,9 +1,9 @@
-import Formatter from 'src/formatter/Formatter';
-import Tokenizer from 'src/lexer/Tokenizer';
-import { EOF_TOKEN, isToken, TokenType, Token } from 'src/lexer/token';
-import { expandPhrases } from 'src/expandPhrases';
-import { keywords } from './bigquery.keywords';
-import { functions } from './bigquery.functions';
+import Formatter from '../../formatter/Formatter.js';
+import Tokenizer from '../../lexer/Tokenizer.js';
+import { EOF_TOKEN, isToken, TokenType, Token } from '../../lexer/token.js';
+import { expandPhrases } from '../../expandPhrases.js';
+import { keywords } from './bigquery.keywords.js';
+import { functions } from './bigquery.functions.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT] [AS STRUCT | AS VALUE]']);
 

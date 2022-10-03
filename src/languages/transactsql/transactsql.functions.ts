@@ -1,4 +1,4 @@
-import { flatKeywordList } from '../../utils';
+import { flatKeywordList } from '../../utils.js';
 
 export const functions = flatKeywordList({
   // https://docs.microsoft.com/en-us/sql/t-sql/functions/functions?view=sql-server-ver15

@@ -1,28 +1,28 @@
 import dedent from 'dedent-js';
 
-import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
+import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
 
-import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import behavesLikeSqlFormatter from './behavesLikeSqlFormatter.js';
 
-import supportsCreateTable from './features/createTable';
-import supportsDropTable from './features/dropTable';
-import supportsAlterTable from './features/alterTable';
-import supportsSchema from './features/schema';
-import supportsStrings from './features/strings';
-import supportsBetween from './features/between';
-import supportsJoin from './features/join';
-import supportsOperators from './features/operators';
-import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors';
-import supportsComments from './features/comments';
-import supportsIdentifiers from './features/identifiers';
-import supportsWindow from './features/window';
-import supportsSetOperations from './features/setOperations';
-import supportsLimiting from './features/limiting';
-import supportsUpdate from './features/update';
-import supportsDeleteFrom from './features/deleteFrom';
-import supportsTruncateTable from './features/truncateTable';
-import supportsMergeInto from './features/mergeInto';
-import supportsCreateView from './features/createView';
+import supportsCreateTable from './features/createTable.js';
+import supportsDropTable from './features/dropTable.js';
+import supportsAlterTable from './features/alterTable.js';
+import supportsSchema from './features/schema.js';
+import supportsStrings from './features/strings.js';
+import supportsBetween from './features/between.js';
+import supportsJoin from './features/join.js';
+import supportsOperators from './features/operators.js';
+import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors.js';
+import supportsComments from './features/comments.js';
+import supportsIdentifiers from './features/identifiers.js';
+import supportsWindow from './features/window.js';
+import supportsSetOperations from './features/setOperations.js';
+import supportsLimiting from './features/limiting.js';
+import supportsUpdate from './features/update.js';
+import supportsDeleteFrom from './features/deleteFrom.js';
+import supportsTruncateTable from './features/truncateTable.js';
+import supportsMergeInto from './features/mergeInto.js';
+import supportsCreateView from './features/createView.js';
 
 describe('HiveFormatter', () => {
   const language = 'hive';

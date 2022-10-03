@@ -1,22 +1,22 @@
-import BigQueryFormatter from 'src/languages/bigquery/bigquery.formatter';
-import Db2Formatter from 'src/languages/db2/db2.formatter';
-import HiveFormatter from 'src/languages/hive/hive.formatter';
-import MariaDbFormatter from 'src/languages/mariadb/mariadb.formatter';
-import MySqlFormatter from 'src/languages/mysql/mysql.formatter';
-import N1qlFormatter from 'src/languages/n1ql/n1ql.formatter';
-import PlSqlFormatter from 'src/languages/plsql/plsql.formatter';
-import PostgreSqlFormatter from 'src/languages/postgresql/postgresql.formatter';
-import RedshiftFormatter from 'src/languages/redshift/redshift.formatter';
-import SparkFormatter from 'src/languages/spark/spark.formatter';
-import SqliteFormatter from 'src/languages/sqlite/sqlite.formatter';
-import SqlFormatter from 'src/languages/sql/sql.formatter';
-import TrinoFormatter from 'src/languages/trino/trino.formatter';
-import TransactSqlFormatter from 'src/languages/transactsql/transactsql.formatter';
-import SingleStoreDbFormatter from './languages/singlestoredb/singlestoredb.formatter';
-import SnowflakeFormatter from './languages/snowflake/snowflake.formatter';
+import BigQueryFormatter from './languages/bigquery/bigquery.formatter.js';
+import Db2Formatter from './languages/db2/db2.formatter.js';
+import HiveFormatter from './languages/hive/hive.formatter.js';
+import MariaDbFormatter from './languages/mariadb/mariadb.formatter.js';
+import MySqlFormatter from './languages/mysql/mysql.formatter.js';
+import N1qlFormatter from './languages/n1ql/n1ql.formatter.js';
+import PlSqlFormatter from './languages/plsql/plsql.formatter.js';
+import PostgreSqlFormatter from './languages/postgresql/postgresql.formatter.js';
+import RedshiftFormatter from './languages/redshift/redshift.formatter.js';
+import SparkFormatter from './languages/spark/spark.formatter.js';
+import SqliteFormatter from './languages/sqlite/sqlite.formatter.js';
+import SqlFormatter from './languages/sql/sql.formatter.js';
+import TrinoFormatter from './languages/trino/trino.formatter.js';
+import TransactSqlFormatter from './languages/transactsql/transactsql.formatter.js';
+import SingleStoreDbFormatter from './languages/singlestoredb/singlestoredb.formatter.js';
+import SnowflakeFormatter from './languages/snowflake/snowflake.formatter.js';
 
-import { FormatOptions } from './FormatOptions';
-import { ParamItems } from './formatter/Params';
+import { FormatOptions } from './FormatOptions.js';
+import { ParamItems } from './formatter/Params.js';
 
 export const formatters = {
   bigquery: BigQueryFormatter,
