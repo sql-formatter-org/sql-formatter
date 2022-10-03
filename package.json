@@ -89,8 +89,8 @@
   "scripts": {
     "clean": "rimraf lib dist coverage",
     "git:changes": "git diff --name-only --diff-filter d | xargs",
-    "ts:check": "ttsc --noEmit",
-    "ts:changes": "ttsc --noEmit --incremental",
+    "ts:check": "tsc --noEmit",
+    "ts:changes": "tsc --noEmit --incremental",
     "lint": "eslint --cache .",
     "lint:changes": "sh -c eslint --cache $(yarn git:changes)",
     "pretty": "prettier --write .",
@@ -103,7 +103,7 @@
     "pre-commit": "npm-run-all --parallel ts:changes lint:changes",
     "grammar": "nearleyc src/parser/grammar.ne -o src/parser/grammar.ts",
     "build:babel": "babel src --out-dir lib --extensions .ts --source-maps",
-    "build:types": "ttsc --module commonjs --emitDeclarationOnly --isolatedModules",
+    "build:types": "tsc --module commonjs --emitDeclarationOnly --isolatedModules",
     "build:minified": "webpack --config webpack.prod.js && cp dist/sql-formatter.min.cjs dist/sql-formatter.min.js",
     "build": "yarn grammar && npm-run-all --parallel build:babel build:types build:minified",
     "release": "release-it"
@@ -151,7 +151,6 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.5",
     "ts-loader": "^9.3.1",
-    "ttypescript": "^1.5.13",
     "typescript": "^4.7.4",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.9.1",
