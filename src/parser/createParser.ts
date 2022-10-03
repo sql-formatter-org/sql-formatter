@@ -1,4 +1,4 @@
-import { Parser as NearleyParser, Grammar } from 'nearley';
+import nearley from 'nearley';
 
 import Tokenizer from '../lexer/Tokenizer.js';
 import { disambiguateTokens } from '../lexer/disambiguateTokens.js';
@@ -7,6 +7,8 @@ import { StatementNode } from './ast.js';
 import grammar from './grammar.js';
 import LexerAdapter from './LexerAdapter.js';
 import { createEofToken } from '../lexer/token.js';
+
+const { Parser: NearleyParser, Grammar } = nearley;
 
 export interface Parser {
   parse(sql: string, paramTypesOverrides: ParamTypes): StatementNode[];
