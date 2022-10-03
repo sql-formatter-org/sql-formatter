@@ -6,12 +6,6 @@
     "rootDirs": ["src"],
     "outDir": "lib",
     "baseUrl": "./",
-    "plugins": [
-      {
-        "transform": "@zerollup/ts-transform-paths",
-        "exclude": ["*"]
-      }
-    ],
     "sourceMap": true,
     "declaration": true,
     "esModuleInterop": true,
