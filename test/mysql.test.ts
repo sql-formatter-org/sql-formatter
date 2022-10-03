@@ -1,19 +1,19 @@
 import dedent from 'dedent-js';
 
-import { format as originalFormat, FormatFn } from 'src/sqlFormatter';
-import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter';
+import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
+import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter.js';
 
-import supportsJoin from './features/join';
-import supportsOperators from './features/operators';
-import supportsWindow from './features/window';
-import supportsSetOperations from './features/setOperations';
-import supportsLimiting from './features/limiting';
-import supportsCreateTable from './features/createTable';
-import supportsParams from './options/param';
-import supportsCreateView from './features/createView';
-import supportsAlterTable from './features/alterTable';
-import supportsStrings from './features/strings';
-import supportsConstraints from './features/constraints';
+import supportsJoin from './features/join.js';
+import supportsOperators from './features/operators.js';
+import supportsWindow from './features/window.js';
+import supportsSetOperations from './features/setOperations.js';
+import supportsLimiting from './features/limiting.js';
+import supportsCreateTable from './features/createTable.js';
+import supportsParams from './options/param.js';
+import supportsCreateView from './features/createView.js';
+import supportsAlterTable from './features/alterTable.js';
+import supportsStrings from './features/strings.js';
+import supportsConstraints from './features/constraints.js';
 
 describe('MySqlFormatter', () => {
   const language = 'mysql';

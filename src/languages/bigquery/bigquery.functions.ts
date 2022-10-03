@@ -1,4 +1,4 @@
-import { flatKeywordList } from '../../utils';
+import { flatKeywordList } from '../../utils.js';
 
 export const functions = flatKeywordList({
   // https://cloud.google.com/bigquery/docs/reference/standard-sql/aead_encryption_functions

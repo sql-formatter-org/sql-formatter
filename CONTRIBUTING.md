@@ -25,6 +25,7 @@ For those who have admin access on the repo, the new release publish flow is as 
 - Ahmad Khan <ahmad.khan@educative.io>
 - Alexandr Kozhevnikov <aedkozhevnikov@sberbank.ru>
 - Alexander Prinzhorn <alexander@prinzhorn.it>
+- An Phi <aphi@skidmore.edu>
 - Andrew
 - Benjamin Bellamy
 - bingou

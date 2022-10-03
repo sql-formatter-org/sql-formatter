@@ -31,6 +31,7 @@
     "prefer-template": "off",
     "default-case": "off",
     "import/prefer-default-export": "off",
+    "import/extensions": ["error", "always"],
     "prettier/prettier": ["error"],
     "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/comma-dangle": "off",

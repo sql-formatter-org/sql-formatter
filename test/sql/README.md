@@ -7,7 +7,7 @@ SQL files can be imported into test files as text files, allowing them to be use
 Example:
 
 ```ts
-import testSql from './test.sql';
+import testSql from './test.sql.js';
 ```
 
 or using the `fs` library:

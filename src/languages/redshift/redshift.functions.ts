@@ -1,4 +1,4 @@
-import { flatKeywordList } from '../../utils';
+import { flatKeywordList } from '../../utils.js';
 
 export const functions = flatKeywordList({
   // https://docs.aws.amazon.com/redshift/latest/dg/c_Aggregate_Functions.html

@@ -1,17 +1,17 @@
 import dedent from 'dedent-js';
 
-import { FormatFn } from 'src/sqlFormatter';
-import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
+import { FormatFn } from '../src/sqlFormatter.js';
+import behavesLikeSqlFormatter from './behavesLikeSqlFormatter.js';
 
-import supportsDropTable from './features/dropTable';
-import supportsBetween from './features/between';
-import supportsDeleteFrom from './features/deleteFrom';
-import supportsComments from './features/comments';
-import supportsStrings from './features/strings';
-import supportsIdentifiers from './features/identifiers';
-import supportsInsertInto from './features/insertInto';
-import supportsUpdate from './features/update';
-import supportsTruncateTable from './features/truncateTable';
+import supportsDropTable from './features/dropTable.js';
+import supportsBetween from './features/between.js';
+import supportsDeleteFrom from './features/deleteFrom.js';
+import supportsComments from './features/comments.js';
+import supportsStrings from './features/strings.js';
+import supportsIdentifiers from './features/identifiers.js';
+import supportsInsertInto from './features/insertInto.js';
+import supportsUpdate from './features/update.js';
+import supportsTruncateTable from './features/truncateTable.js';
 
 /**
  * Shared tests for MySQL and MariaDB

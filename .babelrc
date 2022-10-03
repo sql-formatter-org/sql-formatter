@@ -1,18 +1,6 @@
 {
   "presets": [["@babel/preset-env", { "modules": false }], "@babel/preset-typescript"],
-  "plugins": [
-    "add-module-exports",
-    [
-      "module-resolver",
-      {
-        "root": ["./"],
-        "alias": {
-          "src": "./src"
-        }
-      }
-    ],
-    ["babel-plugin-inline-import", { "extensions": [".sql"] }]
-  ],
+  "plugins": ["add-module-exports", ["babel-plugin-inline-import", { "extensions": [".sql"] }]],
   "targets": {
     "node": 14
   }

@@ -1,6 +1,6 @@
-import { Token, TokenType } from 'src/lexer/token';
-import { lineColFromIndex } from './lineColFromIndex';
-import { WHITESPACE_REGEX } from './regexUtil';
+import { Token, TokenType } from './token.js';
+import { lineColFromIndex } from './lineColFromIndex.js';
+import { WHITESPACE_REGEX } from './regexUtil.js';
 
 export interface RegExpLike {
   lastIndex: number;

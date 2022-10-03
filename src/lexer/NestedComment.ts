@@ -1,5 +1,5 @@
 /* eslint-disable no-cond-assign */
-import { RegExpLike } from 'src/lexer/TokenizerEngine';
+import { RegExpLike } from './TokenizerEngine.js';
 
 const START = /\/\*/uy; // matches: /*
 const MIDDLE = /([^/*]|\*[^/]|\/[^*])+/uy; // matches text NOT containing /* or */
