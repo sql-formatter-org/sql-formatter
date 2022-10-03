@@ -136,7 +136,6 @@
     "babel-loader": "^8.1.0",
     "babel-plugin-add-module-exports": "^1.0.2",
     "babel-plugin-inline-import": "^3.0.0",
-    "babel-plugin-module-resolver": "^4.1.0",
     "dedent-js": "^1.0.1",
     "eslint": "^8.14.0",
     "eslint-config-airbnb-base": "^15.0.0",
