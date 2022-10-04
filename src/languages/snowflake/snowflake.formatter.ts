@@ -25,10 +25,7 @@ const reservedClauses = expandPhrases([
   '{THEN | ELSE} INTO',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  // - delete:
-  'DELETE FROM',
   // Data definition
   // - view
   'CREATE [OR REPLACE] [SECURE] [RECURSIVE] VIEW [IF NOT EXISTS]',
@@ -43,6 +40,14 @@ const reservedClauses = expandPhrases([
   'WHEN MATCHED [AND]',
   'THEN {UPDATE SET | DELETE}',
   'WHEN NOT MATCHED THEN INSERT',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  // - delete:
+  'DELETE FROM',
+  // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE [IF EXISTS]',
@@ -57,7 +62,7 @@ const reservedClauses = expandPhrases([
   '{ADD | ALTER | MODIFY | DROP} [CONSTRAINT]',
   'RENAME CONSTRAINT',
   '{ADD | DROP} SEARCH OPTIMIZATION',
-  '{SET | UNSET} [TAG]',
+  '{SET | UNSET} TAG', // Actually TAG is optional, but that conflicts with UPDATE..SET statement
   '{ADD | DROP} ROW ACCESS POLICY',
   'DROP ALL ROW ACCESS POLICIES',
   '{SET | DROP} DEFAULT', // for alter column
@@ -65,9 +70,6 @@ const reservedClauses = expandPhrases([
   '[SET DATA] TYPE', // for alter column
   '[UNSET] COMMENT', // for alter column
   '{SET | UNSET} MASKING POLICY', // for alter column
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE] [IF EXISTS]',
   // other

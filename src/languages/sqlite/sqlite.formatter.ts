@@ -25,13 +25,18 @@ const reservedClauses = expandPhrases([
   'REPLACE INTO',
   'VALUES',
   // - update:
-  'UPDATE [OR ABORT | OR FAIL | OR IGNORE | OR REPLACE | OR ROLLBACK]',
   'SET',
-  // - delete:
-  'DELETE FROM',
   // Data definition
   'CREATE [TEMPORARY | TEMP] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY | TEMP] TABLE [IF NOT EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE [OR ABORT | OR FAIL | OR IGNORE | OR REPLACE | OR ROLLBACK]',
+  // - delete:
+  'DELETE FROM',
+  // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE',
@@ -39,9 +44,9 @@ const reservedClauses = expandPhrases([
   'DROP [COLUMN]',
   'RENAME [COLUMN]',
   'RENAME TO',
+  // - set schema
+  'SET SCHEMA',
 ]);
-
-const onelineClauses = expandPhrases(['SET SCHEMA']);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 

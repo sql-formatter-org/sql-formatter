@@ -28,10 +28,7 @@ const reservedClauses = expandPhrases([
   'INSERT INTO [TABLE]',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  // - delete:
-  'DELETE FROM',
   // - merge:
   'MERGE INTO',
   'WHEN [NOT] MATCHED [THEN]',
@@ -47,13 +44,18 @@ const reservedClauses = expandPhrases([
   // Data definition
   'CREATE [MATERIALIZED] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY] [EXTERNAL] TABLE [IF NOT EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  // - delete:
+  'DELETE FROM',
+  // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE',
   'RENAME TO',
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE]',
   // other

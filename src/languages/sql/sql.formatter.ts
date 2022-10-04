@@ -25,14 +25,19 @@ const reservedClauses = expandPhrases([
   'INSERT INTO',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  'WHERE CURRENT OF',
-  // - delete:
-  'DELETE FROM',
   // Data definition
   'CREATE [RECURSIVE] VIEW',
   'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  'WHERE CURRENT OF',
+  // - delete:
+  'DELETE FROM',
+  // - drop table:
   'DROP TABLE',
   // - alter table:
   'ALTER TABLE',
@@ -45,9 +50,6 @@ const reservedClauses = expandPhrases([
   'ADD SCOPE', // for alter column
   'DROP SCOPE {CASCADE | RESTRICT}', // for alter column
   'RESTART WITH', // for alter column
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE TABLE',
   // other

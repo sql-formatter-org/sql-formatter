@@ -22,12 +22,7 @@ const reservedClauses = expandPhrases([
   'INSERT INTO',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  'WHERE CURRENT OF',
-  'WITH {RR | RS | CS | UR}',
-  // - delete:
-  'DELETE FROM',
   // - merge:
   'MERGE INTO',
   'WHEN [NOT] MATCHED [THEN]',
@@ -36,6 +31,16 @@ const reservedClauses = expandPhrases([
   // Data definition
   'CREATE [OR REPLACE] VIEW',
   'CREATE [GLOBAL TEMPORARY] TABLE',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  'WHERE CURRENT OF',
+  'WITH {RR | RS | CS | UR}',
+  // - delete:
+  'DELETE FROM',
+  // - drop table:
   'DROP TABLE [HIERARCHY]',
   // alter table:
   'ALTER TABLE',
@@ -46,9 +51,6 @@ const reservedClauses = expandPhrases([
   'SET DATA TYPE', // for alter column
   'SET NOT NULL', // for alter column
   'DROP {IDENTITY | EXPRESSION | DEFAULT | NOT NULL}', // for alter column
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE]',
   // other

@@ -24,11 +24,7 @@ const reservedClauses = expandPhrases([
   'INSERT [INTO]',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  'WHERE CURRENT OF',
-  // - delete:
-  'DELETE [FROM]',
   // - merge:
   'MERGE [INTO]',
   'WHEN [NOT] MATCHED [BY TARGET | BY SOURCE] [THEN]',
@@ -36,15 +32,21 @@ const reservedClauses = expandPhrases([
   // Data definition
   'CREATE [OR ALTER] [MATERIALIZED] VIEW',
   'CREATE TABLE',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  'WHERE CURRENT OF',
+  // - delete:
+  'DELETE [FROM]',
+  // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE',
   'ADD',
   'DROP COLUMN [IF EXISTS]',
   'ALTER COLUMN',
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE TABLE',
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15

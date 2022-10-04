@@ -25,10 +25,7 @@ const reservedClauses = expandPhrases([
   'INSERT [INTO | ALL INTO]',
   'VALUES',
   // - update:
-  'UPDATE [ONLY]',
   'SET',
-  // - delete:
-  'DELETE FROM [ONLY]',
   // - merge:
   'MERGE [INTO]',
   'WHEN [NOT] MATCHED [THEN]',
@@ -37,6 +34,16 @@ const reservedClauses = expandPhrases([
   'CREATE [OR REPLACE] [NO FORCE | FORCE] [EDITIONING | EDITIONABLE | EDITIONABLE EDITIONING | NONEDITIONABLE] VIEW',
   'CREATE MATERIALIZED VIEW',
   'CREATE [GLOBAL TEMPORARY | PRIVATE TEMPORARY | SHARDED | DUPLICATED | IMMUTABLE BLOCKCHAIN | BLOCKCHAIN | IMMUTABLE] TABLE',
+  // other
+  'RETURNING',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE [ONLY]',
+  // - delete:
+  'DELETE FROM [ONLY]',
+  // - drop table:
   'DROP TABLE',
   // - alter table:
   'ALTER TABLE',
@@ -45,11 +52,6 @@ const reservedClauses = expandPhrases([
   'MODIFY',
   'RENAME TO',
   'RENAME COLUMN',
-  // other
-  'RETURNING',
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE TABLE',
   // other

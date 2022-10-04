@@ -15,10 +15,8 @@ export default function supportsAlterTable(format: FormatFn, cfg: AlterTableConf
     it('formats ALTER TABLE ... ADD COLUMN query', () => {
       const result = format('ALTER TABLE supplier ADD COLUMN unit_price DECIMAL NOT NULL;');
       expect(result).toBe(dedent`
-        ALTER TABLE
-          supplier
-        ADD COLUMN
-          unit_price DECIMAL NOT NULL;
+        ALTER TABLE supplier
+        ADD COLUMN unit_price DECIMAL NOT NULL;
       `);
     });
   }
@@ -27,10 +25,8 @@ export default function supportsAlterTable(format: FormatFn, cfg: AlterTableConf
     it('formats ALTER TABLE ... DROP COLUMN query', () => {
       const result = format('ALTER TABLE supplier DROP COLUMN unit_price;');
       expect(result).toBe(dedent`
-        ALTER TABLE
-          supplier
-        DROP COLUMN
-          unit_price;
+        ALTER TABLE supplier
+        DROP COLUMN unit_price;
       `);
     });
   }
@@ -39,10 +35,8 @@ export default function supportsAlterTable(format: FormatFn, cfg: AlterTableConf
     it('formats ALTER TABLE ... MODIFY statement', () => {
       const result = format('ALTER TABLE supplier MODIFY supplier_id DECIMAL NULL;');
       expect(result).toBe(dedent`
-        ALTER TABLE
-          supplier
-        MODIFY
-          supplier_id DECIMAL NULL;
+        ALTER TABLE supplier
+        MODIFY supplier_id DECIMAL NULL;
       `);
     });
   }
@@ -51,10 +45,8 @@ export default function supportsAlterTable(format: FormatFn, cfg: AlterTableConf
     it('formats ALTER TABLE ... RENAME TO statement', () => {
       const result = format('ALTER TABLE supplier RENAME TO the_one_who_supplies;');
       expect(result).toBe(dedent`
-        ALTER TABLE
-          supplier
-        RENAME TO
-          the_one_who_supplies;
+        ALTER TABLE supplier
+        RENAME TO the_one_who_supplies;
       `);
     });
   }
@@ -63,10 +55,8 @@ export default function supportsAlterTable(format: FormatFn, cfg: AlterTableConf
     it('formats ALTER TABLE ... RENAME COLUMN statement', () => {
       const result = format('ALTER TABLE supplier RENAME COLUMN supplier_id TO id;');
       expect(result).toBe(dedent`
-        ALTER TABLE
-          supplier
-        RENAME COLUMN
-          supplier_id TO id;
+        ALTER TABLE supplier
+        RENAME COLUMN supplier_id TO id;
       `);
     });
   }

@@ -25,15 +25,22 @@ const reservedClauses = expandPhrases([
   'INSERT INTO',
   'VALUES',
   // - update:
-  'UPDATE [ONLY]',
   'SET',
-  'WHERE CURRENT OF',
-  // - delete:
-  'DELETE FROM [ONLY]',
   // Data definition
   'CREATE [OR REPLACE] [TEMP | TEMPORARY] [RECURSIVE] VIEW',
   'CREATE MATERIALIZED VIEW [IF NOT EXISTS]',
   'CREATE [GLOBAL | LOCAL] [TEMPORARY | TEMP | UNLOGGED] TABLE [IF NOT EXISTS]',
+  // other
+  'RETURNING',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE [ONLY]',
+  'WHERE CURRENT OF',
+  // - delete:
+  'DELETE FROM [ONLY]',
+  // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE [IF EXISTS] [ONLY]',
@@ -46,11 +53,6 @@ const reservedClauses = expandPhrases([
   '[SET DATA] TYPE', // for alter column
   '{SET | DROP} DEFAULT', // for alter column
   '{SET | DROP} NOT NULL', // for alter column
-  // other
-  'RETURNING',
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE] [ONLY]',
   // other

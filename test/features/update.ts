@@ -12,8 +12,7 @@ export default function supportsUpdate(format: FormatFn, { whereCurrentOf }: Upd
       "UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';"
     );
     expect(result).toBe(dedent`
-      UPDATE
-        Customers
+      UPDATE Customers
       SET
         ContactName = 'Alfred Schmidt',
         City = 'Hamburg'
@@ -27,8 +26,7 @@ export default function supportsUpdate(format: FormatFn, { whereCurrentOf }: Upd
       'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary'
     );
     expect(result).toBe(dedent`
-      UPDATE
-        customers
+      UPDATE customers
       SET
         total_orders = order_summary.total
       FROM
@@ -45,12 +43,10 @@ export default function supportsUpdate(format: FormatFn, { whereCurrentOf }: Upd
     it('formats UPDATE statement with cursor position', () => {
       const result = format("UPDATE Customers SET Name='John' WHERE CURRENT OF my_cursor;");
       expect(result).toBe(dedent`
-        UPDATE
-          Customers
+        UPDATE Customers
         SET
           Name = 'John'
-        WHERE CURRENT OF
-          my_cursor;
+        WHERE CURRENT OF my_cursor;
       `);
     });
   }

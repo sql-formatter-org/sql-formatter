@@ -115,8 +115,7 @@ describe('N1qlFormatter', () => {
         *
       FROM
         usr
-      USE KEYS
-        'Elinor_33313792'
+      USE KEYS 'Elinor_33313792'
       NEST
         orders_with_users orders ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;
     `);
@@ -126,20 +125,16 @@ describe('N1qlFormatter', () => {
     const result = format("EXPLAIN DELETE FROM tutorial t USE KEYS 'baldwin'");
     expect(result).toBe(dedent`
       EXPLAIN
-      DELETE FROM
-        tutorial t
-      USE KEYS
-        'baldwin'
+      DELETE FROM tutorial t
+      USE KEYS 'baldwin'
     `);
   });
 
   it('formats UPDATE query with USE KEYS', () => {
     const result = format("UPDATE tutorial USE KEYS 'baldwin' SET type = 'actor'");
     expect(result).toBe(dedent`
-      UPDATE
-        tutorial
-      USE KEYS
-        'baldwin'
+      UPDATE tutorial
+      USE KEYS 'baldwin'
       SET
         type = 'actor'
     `);

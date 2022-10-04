@@ -25,15 +25,20 @@ const reservedClauses = expandPhrases([
   'VALUES',
   'REPLACE [INTO]',
   // - update:
-  'UPDATE',
   'SET',
-  // - delete:
-  'DELETE [FROM]',
   // Data definition
   'CREATE VIEW',
   'CREATE [ROWSTORE] [REFERENCE | TEMPORARY | GLOBAL TEMPORARY] TABLE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [TEMPORARY] PROCEDURE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [EXTERNAL] FUNCTION',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  // - delete:
+  'DELETE [FROM]',
+  // - drop table:
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
   // - alter table:
   'ALTER [ONLINE] TABLE',
@@ -43,9 +48,6 @@ const reservedClauses = expandPhrases([
   'MODIFY [COLUMN]',
   'CHANGE',
   'RENAME [TO | AS]',
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE]',
   // https://docs.singlestore.com/managed-service/en/reference/sql-reference.html

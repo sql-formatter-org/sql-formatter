@@ -26,13 +26,20 @@ const reservedClauses = expandPhrases([
   'REPLACE [LOW_PRIORITY | DELAYED] [INTO]',
   'VALUES',
   // - update:
-  'UPDATE [LOW_PRIORITY] [IGNORE]',
   'SET',
-  // - delete:
-  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
   // Data definition
   'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [TEMPORARY] TABLE [IF NOT EXISTS]',
+  // other
+  'RETURNING',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE [LOW_PRIORITY] [IGNORE]',
+  // - delete:
+  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
+  // - drop table:
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
   // - alter table:
   'ALTER [ONLINE] [IGNORE] TABLE [IF EXISTS]',
@@ -44,11 +51,6 @@ const reservedClauses = expandPhrases([
   'ALTER [COLUMN]',
   '{SET | DROP} DEFAULT', // for alter column
   'SET {VISIBLE | INVISIBLE}', // for alter column
-  // other
-  'RETURNING',
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE]',
   // https://mariadb.com/docs/reference/mdb/sql-statements/

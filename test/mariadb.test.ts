@@ -77,17 +77,12 @@ describe('MariaDbFormatter', () => {
          ALTER TABLE t ALTER COLUMN foo DROP DEFAULT;`
       )
     ).toBe(dedent`
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
-      SET DEFAULT
-        10;
+      ALTER TABLE t
+      ALTER COLUMN foo
+      SET DEFAULT 10;
 
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
+      ALTER TABLE t
+      ALTER COLUMN foo
       DROP DEFAULT;
     `);
   });

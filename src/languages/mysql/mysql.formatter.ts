@@ -26,13 +26,18 @@ const reservedClauses = expandPhrases([
   'REPLACE [LOW_PRIORITY | DELAYED] [INTO]',
   'VALUES',
   // - update:
-  'UPDATE [LOW_PRIORITY] [IGNORE]',
   'SET',
-  // - delete:
-  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
   // Data definition
   'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY] TABLE [IF NOT EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE [LOW_PRIORITY] [IGNORE]',
+  // - delete:
+  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
+  // - drop table:
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE',
@@ -43,9 +48,6 @@ const reservedClauses = expandPhrases([
   'RENAME COLUMN',
   'ALTER [COLUMN]',
   '{SET | DROP} DEFAULT', // for alter column
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE]',
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html

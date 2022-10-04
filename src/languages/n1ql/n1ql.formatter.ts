@@ -24,23 +24,24 @@ const reservedClauses = expandPhrases([
   'INSERT INTO',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  // - delete:
-  'DELETE FROM',
   // - merge:
   'MERGE INTO',
   'WHEN [NOT] MATCHED THEN',
   'UPDATE SET',
   'INSERT',
   // other
-  'USE KEYS',
   'NEST',
   'UNNEST',
   'RETURNING',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  // - delete:
+  'DELETE FROM',
+  // - set schema:
   'SET SCHEMA',
   // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html
   'ADVISE',
@@ -74,6 +75,7 @@ const onelineClauses = expandPhrases([
   'LET',
   'SET CURRENT SCHEMA',
   'SHOW',
+  'USE [PRIMARY] KEYS',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);

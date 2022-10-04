@@ -23,13 +23,18 @@ const reservedClauses = expandPhrases([
   'INSERT INTO',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  // - delete:
-  'DELETE [FROM]',
   // Data definition
   'CREATE [OR REPLACE | MATERIALIZED] VIEW',
   'CREATE [TEMPORARY | TEMP | LOCAL TEMPORARY | LOCAL TEMP] TABLE [IF NOT EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  // - delete:
+  'DELETE [FROM]',
+  // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE',
@@ -41,9 +46,6 @@ const reservedClauses = expandPhrases([
   'ALTER COLUMN',
   'TYPE', // for alter column
   'ENCODE', // for alter column
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE]',
   // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
