@@ -37,12 +37,13 @@ const reservedClauses = expandPhrases([
   'CREATE [OR REPLACE] [NO FORCE | FORCE] [EDITIONING | EDITIONABLE | EDITIONABLE EDITIONING | NONEDITIONABLE] VIEW',
   'CREATE MATERIALIZED VIEW',
   'CREATE [GLOBAL TEMPORARY | PRIVATE TEMPORARY | SHARDED | DUPLICATED | IMMUTABLE BLOCKCHAIN | BLOCKCHAIN | IMMUTABLE] TABLE',
-  'DROP TABLE',
   // other
   'RETURNING',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - drop table:
+  'DROP TABLE',
   // - alter table:
   'ALTER TABLE',
   'ADD',

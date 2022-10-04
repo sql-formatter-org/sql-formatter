@@ -33,7 +33,6 @@ const reservedClauses = expandPhrases([
   // Data definition
   'CREATE [OR REPLACE] [MATERIALIZED] VIEW',
   'CREATE TABLE [IF NOT EXISTS]',
-  'DROP TABLE [IF EXISTS]',
   // MATCH_RECOGNIZE
   'MATCH_RECOGNIZE',
   'MEASURES',
@@ -46,6 +45,8 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - drop table:
+  'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE [IF EXISTS]',
   'ADD COLUMN [IF NOT EXISTS]',

@@ -43,10 +43,11 @@ const reservedClauses = expandPhrases([
   'WHEN MATCHED [AND]',
   'THEN {UPDATE SET | DELETE}',
   'WHEN NOT MATCHED THEN INSERT',
-  'DROP TABLE [IF EXISTS]',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - drop table:
+  'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE [IF EXISTS]',
   'RENAME TO',

@@ -34,12 +34,13 @@ const reservedClauses = expandPhrases([
   'CREATE [OR REPLACE] [TEMP | TEMPORARY] [RECURSIVE] VIEW',
   'CREATE MATERIALIZED VIEW [IF NOT EXISTS]',
   'CREATE [GLOBAL | LOCAL] [TEMPORARY | TEMP | UNLOGGED] TABLE [IF NOT EXISTS]',
-  'DROP TABLE [IF EXISTS]',
   // other
   'RETURNING',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - drop table:
+  'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE [IF EXISTS] [ONLY]',
   'ALTER TABLE ALL IN TABLESPACE',

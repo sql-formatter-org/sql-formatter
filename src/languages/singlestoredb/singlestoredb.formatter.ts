@@ -34,10 +34,11 @@ const reservedClauses = expandPhrases([
   'CREATE [ROWSTORE] [REFERENCE | TEMPORARY | GLOBAL TEMPORARY] TABLE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [TEMPORARY] PROCEDURE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [EXTERNAL] FUNCTION',
-  'DROP [TEMPORARY] TABLE [IF EXISTS]',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - drop table:
+  'DROP [TEMPORARY] TABLE [IF EXISTS]',
   // - alter table:
   'ALTER [ONLINE] TABLE',
   'ADD [COLUMN]',

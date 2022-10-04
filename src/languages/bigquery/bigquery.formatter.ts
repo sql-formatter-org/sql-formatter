@@ -38,7 +38,6 @@ const reservedClauses = expandPhrases([
   // Data definition, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
   'CREATE [OR REPLACE] [MATERIALIZED] VIEW [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [TEMP|TEMPORARY|SNAPSHOT|EXTERNAL] TABLE [IF NOT EXISTS]',
-  'DROP [SNAPSHOT | EXTERNAL] TABLE [IF EXISTS]',
 
   'CLUSTER BY',
   'FOR SYSTEM_TIME AS OF', // CREATE SNAPSHOT TABLE
@@ -48,6 +47,8 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - drop table:
+  'DROP [SNAPSHOT | EXTERNAL] TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE [IF EXISTS]',
   'ADD COLUMN [IF NOT EXISTS]',

@@ -33,10 +33,11 @@ const reservedClauses = expandPhrases([
   // Data definition
   'CREATE [RECURSIVE] VIEW',
   'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
-  'DROP TABLE',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - drop table:
+  'DROP TABLE',
   // - alter table:
   'ALTER TABLE',
   'ADD COLUMN',

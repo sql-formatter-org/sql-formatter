@@ -36,10 +36,11 @@ const reservedClauses = expandPhrases([
   // Data definition
   'CREATE [OR REPLACE] VIEW',
   'CREATE [GLOBAL TEMPORARY] TABLE',
-  'DROP TABLE [HIERARCHY]',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - drop table:
+  'DROP TABLE [HIERARCHY]',
   // alter table:
   'ALTER TABLE',
   'ADD [COLUMN]',

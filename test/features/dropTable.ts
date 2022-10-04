@@ -10,8 +10,7 @@ export default function supportsDropTable(format: FormatFn, { ifExists }: DropTa
   it('formats DROP TABLE statement', () => {
     const result = format('DROP TABLE admin_role;');
     expect(result).toBe(dedent`
-      DROP TABLE
-        admin_role;
+      DROP TABLE admin_role;
     `);
   });
 
@@ -19,8 +18,7 @@ export default function supportsDropTable(format: FormatFn, { ifExists }: DropTa
     it('formats DROP TABLE IF EXISTS statement', () => {
       const result = format('DROP TABLE IF EXISTS admin_role;');
       expect(result).toBe(dedent`
-        DROP TABLE IF EXISTS
-          admin_role;
+        DROP TABLE IF EXISTS admin_role;
       `);
     });
   }

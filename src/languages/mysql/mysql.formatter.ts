@@ -33,10 +33,11 @@ const reservedClauses = expandPhrases([
   // Data definition
   'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY] TABLE [IF NOT EXISTS]',
-  'DROP [TEMPORARY] TABLE [IF EXISTS]',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - drop table:
+  'DROP [TEMPORARY] TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE',
   'ADD [COLUMN]',
