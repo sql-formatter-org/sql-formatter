@@ -33,15 +33,18 @@ const reservedClauses = expandPhrases([
   'CREATE [TEMPORARY | TEMP] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY | TEMP] TABLE [IF NOT EXISTS]',
   'DROP TABLE [IF EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
   // - alter table:
   'ALTER TABLE',
   'ADD [COLUMN]',
   'DROP [COLUMN]',
   'RENAME [COLUMN]',
   'RENAME TO',
+  // - set schema
+  'SET SCHEMA',
 ]);
-
-const onelineClauses = expandPhrases(['SET SCHEMA']);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
 

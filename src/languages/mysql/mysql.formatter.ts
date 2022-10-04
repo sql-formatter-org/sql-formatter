@@ -34,6 +34,9 @@ const reservedClauses = expandPhrases([
   'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY] TABLE [IF NOT EXISTS]',
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
   // - alter table:
   'ALTER TABLE',
   'ADD [COLUMN]',
@@ -43,9 +46,6 @@ const reservedClauses = expandPhrases([
   'RENAME COLUMN',
   'ALTER [COLUMN]',
   '{SET | DROP} DEFAULT', // for alter column
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE]',
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html

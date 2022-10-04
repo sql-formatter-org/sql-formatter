@@ -38,6 +38,11 @@ const reservedClauses = expandPhrases([
   'CREATE MATERIALIZED VIEW',
   'CREATE [GLOBAL TEMPORARY | PRIVATE TEMPORARY | SHARDED | DUPLICATED | IMMUTABLE BLOCKCHAIN | BLOCKCHAIN | IMMUTABLE] TABLE',
   'DROP TABLE',
+  // other
+  'RETURNING',
+]);
+
+const onelineClauses = expandPhrases([
   // - alter table:
   'ALTER TABLE',
   'ADD',
@@ -45,11 +50,6 @@ const reservedClauses = expandPhrases([
   'MODIFY',
   'RENAME TO',
   'RENAME COLUMN',
-  // other
-  'RETURNING',
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE TABLE',
   // other

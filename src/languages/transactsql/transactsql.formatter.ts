@@ -37,14 +37,14 @@ const reservedClauses = expandPhrases([
   'CREATE [OR ALTER] [MATERIALIZED] VIEW',
   'CREATE TABLE',
   'DROP TABLE [IF EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
   // - alter table:
   'ALTER TABLE',
   'ADD',
   'DROP COLUMN [IF EXISTS]',
   'ALTER COLUMN',
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE TABLE',
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15

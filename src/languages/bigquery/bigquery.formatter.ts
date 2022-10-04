@@ -39,6 +39,15 @@ const reservedClauses = expandPhrases([
   'CREATE [OR REPLACE] [MATERIALIZED] VIEW [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [TEMP|TEMPORARY|SNAPSHOT|EXTERNAL] TABLE [IF NOT EXISTS]',
   'DROP [SNAPSHOT | EXTERNAL] TABLE [IF EXISTS]',
+
+  'CLUSTER BY',
+  'FOR SYSTEM_TIME AS OF', // CREATE SNAPSHOT TABLE
+  'WITH CONNECTION',
+  'WITH PARTITION COLUMNS',
+  'REMOTE WITH CONNECTION',
+]);
+
+const onelineClauses = expandPhrases([
   // - alter table:
   'ALTER TABLE [IF EXISTS]',
   'ADD COLUMN [IF NOT EXISTS]',
@@ -49,19 +58,12 @@ const reservedClauses = expandPhrases([
   'SET OPTIONS', // for alter column
   'DROP NOT NULL', // for alter column
   'SET DATA TYPE', // for alter column
-
-  'CLUSTER BY',
-  'FOR SYSTEM_TIME AS OF', // CREATE SNAPSHOT TABLE
-  'WITH CONNECTION',
-  'WITH PARTITION COLUMNS',
-  'REMOTE WITH CONNECTION',
+  // - alter schema
   'ALTER SCHEMA [IF EXISTS]',
-
+  // - alter view
   'ALTER [MATERIALIZED] VIEW [IF EXISTS]',
+  // - alter bi_capacity
   'ALTER BI_CAPACITY',
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE TABLE',
   // - create schema

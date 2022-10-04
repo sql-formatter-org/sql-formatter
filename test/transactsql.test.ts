@@ -113,10 +113,8 @@ describe('TransactSqlFormatter', () => {
 
   it('formats ALTER TABLE ... ALTER COLUMN', () => {
     expect(format(`ALTER TABLE t ALTER COLUMN foo INT NOT NULL DEFAULT 5;`)).toBe(dedent`
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo INT NOT NULL DEFAULT 5;
+      ALTER TABLE t
+      ALTER COLUMN foo INT NOT NULL DEFAULT 5;
     `);
   });
 });

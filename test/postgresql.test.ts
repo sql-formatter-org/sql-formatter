@@ -237,36 +237,24 @@ describe('PostgreSqlFormatter', () => {
          ALTER TABLE t ALTER COLUMN foo DROP NOT NULL;`
       )
     ).toBe(dedent`
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
-      SET DATA TYPE
-        VARCHAR;
+      ALTER TABLE t
+      ALTER COLUMN foo
+      SET DATA TYPE VARCHAR;
 
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
-      SET DEFAULT
-        5;
+      ALTER TABLE t
+      ALTER COLUMN foo
+      SET DEFAULT 5;
 
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
+      ALTER TABLE t
+      ALTER COLUMN foo
       DROP DEFAULT;
 
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
+      ALTER TABLE t
+      ALTER COLUMN foo
       SET NOT NULL;
 
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
+      ALTER TABLE t
+      ALTER COLUMN foo
       DROP NOT NULL;
     `);
   });

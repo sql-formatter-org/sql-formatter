@@ -31,6 +31,9 @@ const reservedClauses = expandPhrases([
   'CREATE [OR REPLACE | MATERIALIZED] VIEW',
   'CREATE [TEMPORARY | TEMP | LOCAL TEMPORARY | LOCAL TEMP] TABLE [IF NOT EXISTS]',
   'DROP TABLE [IF EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
   // - alter table:
   'ALTER TABLE',
   'ALTER TABLE APPEND',
@@ -41,9 +44,6 @@ const reservedClauses = expandPhrases([
   'ALTER COLUMN',
   'TYPE', // for alter column
   'ENCODE', // for alter column
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE]',
   // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html

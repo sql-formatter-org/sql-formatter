@@ -38,6 +38,9 @@ const reservedClauses = expandPhrases([
   'CREATE [OR REPLACE] [GLOBAL TEMPORARY | TEMPORARY] VIEW [IF NOT EXISTS]',
   'CREATE [EXTERNAL] TABLE [IF NOT EXISTS]',
   'DROP TABLE [IF EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
   // - alter table:
   'ALTER TABLE',
   'ADD COLUMNS',
@@ -45,9 +48,6 @@ const reservedClauses = expandPhrases([
   'RENAME TO',
   'RENAME COLUMN',
   'ALTER COLUMN',
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE TABLE',
   // other

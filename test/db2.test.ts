@@ -118,17 +118,12 @@ describe('Db2Formatter', () => {
          ALTER TABLE t ALTER COLUMN foo SET NOT NULL;`
       )
     ).toBe(dedent`
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
-      SET DATA TYPE
-        VARCHAR;
+      ALTER TABLE t
+      ALTER COLUMN foo
+      SET DATA TYPE VARCHAR;
 
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
+      ALTER TABLE t
+      ALTER COLUMN foo
       SET NOT NULL;
     `);
   });

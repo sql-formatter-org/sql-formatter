@@ -34,6 +34,9 @@ const reservedClauses = expandPhrases([
   'CREATE [RECURSIVE] VIEW',
   'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
   'DROP TABLE',
+]);
+
+const onelineClauses = expandPhrases([
   // - alter table:
   'ALTER TABLE',
   'ADD COLUMN',
@@ -45,9 +48,6 @@ const reservedClauses = expandPhrases([
   'ADD SCOPE', // for alter column
   'DROP SCOPE {CASCADE | RESTRICT}', // for alter column
   'RESTART WITH', // for alter column
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE TABLE',
   // other

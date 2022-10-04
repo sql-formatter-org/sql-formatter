@@ -79,31 +79,21 @@ describe('SqlFormatter', () => {
          ALTER TABLE t ALTER COLUMN foo RESTART WITH 10;`
       )
     ).toBe(dedent`
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
-      SET DEFAULT
-        5;
+      ALTER TABLE t
+      ALTER COLUMN foo
+      SET DEFAULT 5;
 
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
+      ALTER TABLE t
+      ALTER COLUMN foo
       DROP DEFAULT;
 
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
+      ALTER TABLE t
+      ALTER COLUMN foo
       DROP SCOPE CASCADE;
 
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
-      RESTART WITH
-        10;
+      ALTER TABLE t
+      ALTER COLUMN foo
+      RESTART WITH 10;
     `);
   });
 });

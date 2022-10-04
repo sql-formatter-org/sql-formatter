@@ -35,6 +35,11 @@ const reservedClauses = expandPhrases([
   'CREATE MATERIALIZED VIEW [IF NOT EXISTS]',
   'CREATE [GLOBAL | LOCAL] [TEMPORARY | TEMP | UNLOGGED] TABLE [IF NOT EXISTS]',
   'DROP TABLE [IF EXISTS]',
+  // other
+  'RETURNING',
+]);
+
+const onelineClauses = expandPhrases([
   // - alter table:
   'ALTER TABLE [IF EXISTS] [ONLY]',
   'ALTER TABLE ALL IN TABLESPACE',
@@ -46,11 +51,6 @@ const reservedClauses = expandPhrases([
   '[SET DATA] TYPE', // for alter column
   '{SET | DROP} DEFAULT', // for alter column
   '{SET | DROP} NOT NULL', // for alter column
-  // other
-  'RETURNING',
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE] [ONLY]',
   // other

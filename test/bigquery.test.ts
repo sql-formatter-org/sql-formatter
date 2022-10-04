@@ -436,10 +436,8 @@ describe('BigQueryFormatter', () => {
         ALTER SCHEMA mydataset
         SET DEFAULT COLLATE 'und:ci'`;
       const expected = dedent`
-        ALTER SCHEMA
-          mydataset
-        SET DEFAULT COLLATE
-          'und:ci'`;
+        ALTER SCHEMA mydataset
+        SET DEFAULT COLLATE 'und:ci'`;
       expect(format(input)).toBe(expected);
     });
 
@@ -450,10 +448,8 @@ describe('BigQueryFormatter', () => {
           default_table_expiration_days=3.75
           )`;
       const expected = dedent`
-        ALTER SCHEMA
-          mydataset
-        SET OPTIONS
-          (default_table_expiration_days = 3.75)`;
+        ALTER SCHEMA mydataset
+        SET OPTIONS (default_table_expiration_days = 3.75)`;
       expect(format(input)).toBe(expected);
     });
 
@@ -464,12 +460,10 @@ describe('BigQueryFormatter', () => {
           expiration_timestamp=TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
         )`;
       const expected = dedent`
-        ALTER TABLE
-          mydataset.mytable
-        SET OPTIONS
-          (
-            expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
-          )`;
+        ALTER TABLE mydataset.mytable
+        SET OPTIONS (
+          expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+        )`;
       expect(format(input)).toBe(expected);
     });
 
@@ -478,10 +472,8 @@ describe('BigQueryFormatter', () => {
         ALTER TABLE mydataset.mytable
         SET DEFAULT COLLATE 'und:ci'`;
       const expected = dedent`
-        ALTER TABLE
-          mydataset.mytable
-        SET DEFAULT COLLATE
-          'und:ci'`;
+        ALTER TABLE mydataset.mytable
+        SET DEFAULT COLLATE 'und:ci'`;
       expect(format(input)).toBe(expected);
     });
 
@@ -493,12 +485,9 @@ describe('BigQueryFormatter', () => {
           description="Price per unit"
         )`;
       const expected = dedent`
-        ALTER TABLE
-          mydataset.mytable
-        ALTER COLUMN
-          price
-        SET OPTIONS
-          (description = "Price per unit")`;
+        ALTER TABLE mydataset.mytable
+        ALTER COLUMN price
+        SET OPTIONS (description = "Price per unit")`;
       expect(format(input)).toBe(expected);
     });
 
@@ -508,10 +497,8 @@ describe('BigQueryFormatter', () => {
         ALTER COLUMN price
         DROP NOT NULL`;
       const expected = dedent`
-        ALTER TABLE
-          mydataset.mytable
-        ALTER COLUMN
-          price
+        ALTER TABLE mydataset.mytable
+        ALTER COLUMN price
         DROP NOT NULL`;
       expect(format(input)).toBe(expected);
     });
@@ -522,12 +509,9 @@ describe('BigQueryFormatter', () => {
         ALTER COLUMN price
         SET DATA TYPE NUMERIC`;
       const expected = dedent`
-        ALTER TABLE
-          mydataset.mytable
-        ALTER COLUMN
-          price
-        SET DATA TYPE
-          NUMERIC`;
+        ALTER TABLE mydataset.mytable
+        ALTER COLUMN price
+        SET DATA TYPE NUMERIC`;
       expect(format(input)).toBe(expected);
     });
 
@@ -538,12 +522,10 @@ describe('BigQueryFormatter', () => {
           expiration_timestamp=TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
         )`;
       const expected = dedent`
-        ALTER VIEW
-          mydataset.myview
-        SET OPTIONS
-          (
-            expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
-          )`;
+        ALTER VIEW mydataset.myview
+        SET OPTIONS (
+          expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+        )`;
       expect(format(input)).toBe(expected);
     });
 
@@ -554,10 +536,8 @@ describe('BigQueryFormatter', () => {
           size_gb = 250
         )`;
       const expected = dedent`
-        ALTER BI_CAPACITY
-          my-project.region-us.default
-        SET OPTIONS
-          (size_gb = 250)`;
+        ALTER BI_CAPACITY my-project.region-us.default
+        SET OPTIONS (size_gb = 250)`;
       expect(format(input)).toBe(expected);
     });
   });

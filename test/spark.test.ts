@@ -128,10 +128,8 @@ describe('SparkFormatter', () => {
   it('formats ALTER TABLE ... ALTER COLUMN', () => {
     expect(format(`ALTER TABLE StudentInfo ALTER COLUMN FirstName COMMENT "new comment";`))
       .toBe(dedent`
-      ALTER TABLE
-        StudentInfo
-      ALTER COLUMN
-        FirstName COMMENT "new comment";
+      ALTER TABLE StudentInfo
+      ALTER COLUMN FirstName COMMENT "new comment";
     `);
   });
 });

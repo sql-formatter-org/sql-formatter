@@ -134,19 +134,13 @@ describe('RedshiftFormatter', () => {
          ALTER TABLE t ALTER COLUMN foo ENCODE my_encoding;`
       )
     ).toBe(dedent`
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
-      TYPE
-        VARCHAR;
+      ALTER TABLE t
+      ALTER COLUMN foo
+      TYPE VARCHAR;
 
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
-      ENCODE
-        my_encoding;
+      ALTER TABLE t
+      ALTER COLUMN foo
+      ENCODE my_encoding;
     `);
   });
 });

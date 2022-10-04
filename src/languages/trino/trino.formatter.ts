@@ -34,15 +34,6 @@ const reservedClauses = expandPhrases([
   'CREATE [OR REPLACE] [MATERIALIZED] VIEW',
   'CREATE TABLE [IF NOT EXISTS]',
   'DROP TABLE [IF EXISTS]',
-  // - alter table:
-  'ALTER TABLE [IF EXISTS]',
-  'ADD COLUMN [IF NOT EXISTS]',
-  'DROP COLUMN [IF EXISTS]',
-  'RENAME COLUMN [IF EXISTS]',
-  'RENAME TO',
-  'SET AUTHORIZATION [USER | ROLE]',
-  'SET PROPERTIES',
-  'EXECUTE',
   // MATCH_RECOGNIZE
   'MATCH_RECOGNIZE',
   'MEASURES',
@@ -55,6 +46,15 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - alter table:
+  'ALTER TABLE [IF EXISTS]',
+  'ADD COLUMN [IF NOT EXISTS]',
+  'DROP COLUMN [IF EXISTS]',
+  'RENAME COLUMN [IF EXISTS]',
+  'RENAME TO',
+  'SET AUTHORIZATION [USER | ROLE]',
+  'SET PROPERTIES',
+  'EXECUTE',
   // - truncate:
   'TRUNCATE TABLE',
 

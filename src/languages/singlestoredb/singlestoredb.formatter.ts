@@ -35,6 +35,9 @@ const reservedClauses = expandPhrases([
   'CREATE [OR REPLACE] [TEMPORARY] PROCEDURE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [EXTERNAL] FUNCTION',
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
   // - alter table:
   'ALTER [ONLINE] TABLE',
   'ADD [COLUMN]',
@@ -43,9 +46,6 @@ const reservedClauses = expandPhrases([
   'MODIFY [COLUMN]',
   'CHANGE',
   'RENAME [TO | AS]',
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE]',
   // https://docs.singlestore.com/managed-service/en/reference/sql-reference.html

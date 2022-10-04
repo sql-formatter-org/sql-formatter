@@ -37,6 +37,9 @@ const reservedClauses = expandPhrases([
   'CREATE [OR REPLACE] VIEW',
   'CREATE [GLOBAL TEMPORARY] TABLE',
   'DROP TABLE [HIERARCHY]',
+]);
+
+const onelineClauses = expandPhrases([
   // alter table:
   'ALTER TABLE',
   'ADD [COLUMN]',
@@ -46,9 +49,6 @@ const reservedClauses = expandPhrases([
   'SET DATA TYPE', // for alter column
   'SET NOT NULL', // for alter column
   'DROP {IDENTITY | EXPRESSION | DEFAULT | NOT NULL}', // for alter column
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE]',
   // other

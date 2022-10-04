@@ -34,6 +34,11 @@ const reservedClauses = expandPhrases([
   'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [TEMPORARY] TABLE [IF NOT EXISTS]',
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
+  // other
+  'RETURNING',
+]);
+
+const onelineClauses = expandPhrases([
   // - alter table:
   'ALTER [ONLINE] [IGNORE] TABLE [IF EXISTS]',
   'ADD [COLUMN] [IF NOT EXISTS]',
@@ -44,11 +49,6 @@ const reservedClauses = expandPhrases([
   'ALTER [COLUMN]',
   '{SET | DROP} DEFAULT', // for alter column
   'SET {VISIBLE | INVISIBLE}', // for alter column
-  // other
-  'RETURNING',
-]);
-
-const onelineClauses = expandPhrases([
   // - truncate:
   'TRUNCATE [TABLE]',
   // https://mariadb.com/docs/reference/mdb/sql-statements/
