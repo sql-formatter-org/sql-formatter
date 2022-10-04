@@ -26,8 +26,6 @@ const reservedClauses = expandPhrases([
   // - update:
   'UPDATE',
   'SET',
-  // - delete:
-  'DELETE FROM',
   // - merge:
   'MERGE INTO',
   'WHEN [NOT] MATCHED THEN',
@@ -41,6 +39,8 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - delete:
+  'DELETE FROM',
   // - set schema:
   'SET SCHEMA',
   // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html

@@ -27,8 +27,6 @@ const reservedClauses = expandPhrases([
   // - update:
   'UPDATE [ONLY]',
   'SET',
-  // - delete:
-  'DELETE FROM [ONLY]',
   // - merge:
   'MERGE [INTO]',
   'WHEN [NOT] MATCHED [THEN]',
@@ -42,6 +40,8 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - delete:
+  'DELETE FROM [ONLY]',
   // - drop table:
   'DROP TABLE',
   // - alter table:

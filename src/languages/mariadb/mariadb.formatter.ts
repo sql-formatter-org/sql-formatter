@@ -28,8 +28,6 @@ const reservedClauses = expandPhrases([
   // - update:
   'UPDATE [LOW_PRIORITY] [IGNORE]',
   'SET',
-  // - delete:
-  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
   // Data definition
   'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [TEMPORARY] TABLE [IF NOT EXISTS]',
@@ -38,6 +36,8 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - delete:
+  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
   // - drop table:
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
   // - alter table:

@@ -28,8 +28,6 @@ const reservedClauses = expandPhrases([
   // - update:
   'UPDATE',
   'SET',
-  // - delete:
-  'DELETE FROM',
   // Data definition
   'CREATE [OR REPLACE] [MATERIALIZED] VIEW',
   'CREATE TABLE [IF NOT EXISTS]',
@@ -45,6 +43,8 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - delete:
+  'DELETE FROM',
   // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:

@@ -26,8 +26,6 @@ const reservedClauses = expandPhrases([
   'SET',
   'WHERE CURRENT OF',
   'WITH {RR | RS | CS | UR}',
-  // - delete:
-  'DELETE FROM',
   // - merge:
   'MERGE INTO',
   'WHEN [NOT] MATCHED [THEN]',
@@ -39,6 +37,8 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - delete:
+  'DELETE FROM',
   // - drop table:
   'DROP TABLE [HIERARCHY]',
   // alter table:

@@ -28,8 +28,6 @@ const reservedClauses = expandPhrases([
   'UPDATE [ONLY]',
   'SET',
   'WHERE CURRENT OF',
-  // - delete:
-  'DELETE FROM [ONLY]',
   // Data definition
   'CREATE [OR REPLACE] [TEMP | TEMPORARY] [RECURSIVE] VIEW',
   'CREATE MATERIALIZED VIEW [IF NOT EXISTS]',
@@ -39,6 +37,8 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - delete:
+  'DELETE FROM [ONLY]',
   // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:

@@ -126,8 +126,7 @@ describe('N1qlFormatter', () => {
     const result = format("EXPLAIN DELETE FROM tutorial t USE KEYS 'baldwin'");
     expect(result).toBe(dedent`
       EXPLAIN
-      DELETE FROM
-        tutorial t
+      DELETE FROM tutorial t
       USE KEYS
         'baldwin'
     `);

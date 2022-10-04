@@ -28,14 +28,14 @@ const reservedClauses = expandPhrases([
   'UPDATE',
   'SET',
   'WHERE CURRENT OF',
-  // - delete:
-  'DELETE FROM',
   // Data definition
   'CREATE [RECURSIVE] VIEW',
   'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - delete:
+  'DELETE FROM',
   // - drop table:
   'DROP TABLE',
   // - alter table:

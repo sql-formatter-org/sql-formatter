@@ -27,8 +27,6 @@ const reservedClauses = expandPhrases([
   // - update:
   'UPDATE',
   'SET',
-  // - delete:
-  'DELETE [FROM]',
   // Data definition
   'CREATE VIEW',
   'CREATE [ROWSTORE] [REFERENCE | TEMPORARY | GLOBAL TEMPORARY] TABLE [IF NOT EXISTS]',
@@ -37,6 +35,8 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - delete:
+  'DELETE [FROM]',
   // - drop table:
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
   // - alter table:

@@ -25,14 +25,14 @@ const reservedClauses = expandPhrases([
   // - update:
   'UPDATE',
   'SET',
-  // - delete:
-  'DELETE [FROM]',
   // Data definition
   'CREATE [OR REPLACE | MATERIALIZED] VIEW',
   'CREATE [TEMPORARY | TEMP | LOCAL TEMPORARY | LOCAL TEMP] TABLE [IF NOT EXISTS]',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - delete:
+  'DELETE [FROM]',
   // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:
