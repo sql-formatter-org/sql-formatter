@@ -25,7 +25,6 @@ const reservedClauses = expandPhrases([
   'REPLACE INTO',
   'VALUES',
   // - update:
-  'UPDATE [OR ABORT | OR FAIL | OR IGNORE | OR REPLACE | OR ROLLBACK]',
   'SET',
   // Data definition
   'CREATE [TEMPORARY | TEMP] VIEW [IF NOT EXISTS]',
@@ -33,6 +32,8 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE [OR ABORT | OR FAIL | OR IGNORE | OR REPLACE | OR ROLLBACK]',
   // - delete:
   'DELETE FROM',
   // - drop table:

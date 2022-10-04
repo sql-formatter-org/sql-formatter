@@ -25,7 +25,6 @@ const reservedClauses = expandPhrases([
   '{THEN | ELSE} INTO',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
   // Data definition
   // - view
@@ -44,6 +43,8 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
   // - delete:
   'DELETE FROM',
   // - drop table:

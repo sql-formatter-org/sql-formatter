@@ -24,7 +24,6 @@ const reservedClauses = expandPhrases([
   'INSERT INTO',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
   // - merge:
   'MERGE INTO',
@@ -39,6 +38,8 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
   // - delete:
   'DELETE FROM',
   // - set schema:

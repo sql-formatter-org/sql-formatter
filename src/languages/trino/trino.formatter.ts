@@ -26,7 +26,6 @@ const reservedClauses = expandPhrases([
   'INSERT INTO',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
   // Data definition
   'CREATE [OR REPLACE] [MATERIALIZED] VIEW',
@@ -43,6 +42,8 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
   // - delete:
   'DELETE FROM',
   // - drop table:

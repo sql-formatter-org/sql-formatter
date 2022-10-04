@@ -135,8 +135,7 @@ describe('N1qlFormatter', () => {
   it('formats UPDATE query with USE KEYS', () => {
     const result = format("UPDATE tutorial USE KEYS 'baldwin' SET type = 'actor'");
     expect(result).toBe(dedent`
-      UPDATE
-        tutorial
+      UPDATE tutorial
       USE KEYS
         'baldwin'
       SET

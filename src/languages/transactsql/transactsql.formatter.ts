@@ -24,9 +24,7 @@ const reservedClauses = expandPhrases([
   'INSERT [INTO]',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  'WHERE CURRENT OF',
   // - merge:
   'MERGE [INTO]',
   'WHEN [NOT] MATCHED [BY TARGET | BY SOURCE] [THEN]',
@@ -37,6 +35,9 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  'WHERE CURRENT OF',
   // - delete:
   'DELETE [FROM]',
   // - drop table:

@@ -25,7 +25,6 @@ const reservedClauses = expandPhrases([
   'INSERT [INTO | ALL INTO]',
   'VALUES',
   // - update:
-  'UPDATE [ONLY]',
   'SET',
   // - merge:
   'MERGE [INTO]',
@@ -40,6 +39,8 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE [ONLY]',
   // - delete:
   'DELETE FROM [ONLY]',
   // - drop table:

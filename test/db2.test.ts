@@ -103,8 +103,7 @@ describe('Db2Formatter', () => {
 
   it('supports WITH isolation level modifiers for UPDATE statement', () => {
     expect(format('UPDATE foo SET x = 10 WITH CS')).toBe(dedent`
-      UPDATE
-        foo
+      UPDATE foo
       SET
         x = 10
       WITH CS
