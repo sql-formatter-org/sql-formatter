@@ -116,6 +116,20 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     `);
   });
 
+  // Regression test for #481
+  it('formats first line comment in a file', () => {
+    expect(format('-- comment1\n-- comment2\n')).toBe(dedent`
+      -- comment1
+      -- comment2
+    `);
+  });
+  it('formats first block comment in a file', () => {
+    expect(format('/*comment1*/\n/*comment2*/\n')).toBe(dedent`
+      /*comment1*/
+      /*comment2*/
+    `);
+  });
+
   it('preserves single-line comments at the end of lines', () => {
     expect(
       format(`
