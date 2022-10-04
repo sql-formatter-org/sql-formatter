@@ -31,7 +31,6 @@ const reservedClauses = expandPhrases([
   'UPDATE SET',
   'INSERT',
   // other
-  'USE KEYS',
   'NEST',
   'UNNEST',
   'RETURNING',
@@ -76,6 +75,7 @@ const onelineClauses = expandPhrases([
   'LET',
   'SET CURRENT SCHEMA',
   'SHOW',
+  'USE [PRIMARY] KEYS',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);
