@@ -6,5 +6,5 @@ export type {
   LogicalOperatorNewline,
   FormatOptions,
 } from './FormatOptions.js';
-export { DialectOptions } from './dialect.js';
+export type { DialectOptions } from './dialect.js';
 export { expandPhrases } from './expandPhrases.js';
