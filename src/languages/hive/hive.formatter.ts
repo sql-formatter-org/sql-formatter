@@ -1,7 +1,5 @@
+import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import Formatter from '../../formatter/Formatter.js';
-import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
-import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './hive.functions.js';
 import { keywords } from './hive.keywords.js';
 
@@ -84,27 +82,22 @@ const reservedJoins = expandPhrases([
 const reservedPhrases = expandPhrases(['{ROWS | RANGE} BETWEEN']);
 
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
-export default class HiveFormatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      reservedSelect,
-      reservedClauses: [...reservedClauses, ...onelineClauses],
-      reservedSetOperations,
-      reservedJoins,
-      reservedPhrases,
-      reservedKeywords: keywords,
-      reservedFunctionNames: functions,
-      extraParens: ['[]'],
-      stringTypes: ['""-bs', "''-bs"],
-      identTypes: ['``'],
-      variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
-      operators: ['%', '~', '^', '|', '&', '<=>', '==', '!', '||'],
-    });
-  }
-
-  formatOptions(): DialectFormatOptions {
-    return {
-      onelineClauses,
-    };
-  }
-}
+export const hive: DialectOptions = {
+  tokenizer: {
+    reservedSelect,
+    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedSetOperations,
+    reservedJoins,
+    reservedPhrases,
+    reservedKeywords: keywords,
+    reservedFunctionNames: functions,
+    extraParens: ['[]'],
+    stringTypes: ['""-bs', "''-bs"],
+    identTypes: ['``'],
+    variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
+    operators: ['%', '~', '^', '|', '&', '<=>', '==', '!', '||'],
+  },
+  formatOptions: {
+    onelineClauses,
+  },
+};

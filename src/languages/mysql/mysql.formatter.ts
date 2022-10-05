@@ -1,7 +1,5 @@
+import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import Formatter from '../../formatter/Formatter.js';
-import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
-import Tokenizer from '../../lexer/Tokenizer.js';
 import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
 import { keywords } from './mysql.keywords.js';
 import { functions } from './mysql.functions.js';
@@ -233,44 +231,39 @@ const reservedPhrases = expandPhrases([
 ]);
 
 // https://dev.mysql.com/doc/refman/8.0/en/
-export default class MySqlFormatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      reservedSelect,
-      reservedClauses: [...reservedClauses, ...onelineClauses],
-      reservedSetOperations,
-      reservedJoins,
-      reservedPhrases,
-      supportsXor: true,
-      reservedKeywords: keywords,
-      reservedFunctionNames: functions,
-      // TODO: support _ char set prefixes such as _utf8, _latin1, _binary, _utf8mb4, etc.
-      stringTypes: [
-        '""-qq-bs',
-        { quote: "''-qq-bs", prefixes: ['N'] },
-        { quote: "''-raw", prefixes: ['B', 'X'], requirePrefix: true },
-      ],
-      identTypes: ['``'],
-      identChars: { first: '$', rest: '$', allowFirstCharNumber: true },
-      variableTypes: [
-        { regex: '@@?[A-Za-z0-9_.$]+' },
-        { quote: '""-qq-bs', prefixes: ['@'], requirePrefix: true },
-        { quote: "''-qq-bs", prefixes: ['@'], requirePrefix: true },
-        { quote: '``', prefixes: ['@'], requirePrefix: true },
-      ],
-      paramTypes: { positional: true },
-      lineCommentTypes: ['--', '#'],
-      operators: ['%', ':=', '&', '|', '^', '~', '<<', '>>', '<=>', '->', '->>', '&&', '||', '!'],
-      postProcess,
-    });
-  }
-
-  formatOptions(): DialectFormatOptions {
-    return {
-      onelineClauses,
-    };
-  }
-}
+export const mysql: DialectOptions = {
+  tokenizer: {
+    reservedSelect,
+    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedSetOperations,
+    reservedJoins,
+    reservedPhrases,
+    supportsXor: true,
+    reservedKeywords: keywords,
+    reservedFunctionNames: functions,
+    // TODO: support _ char set prefixes such as _utf8, _latin1, _binary, _utf8mb4, etc.
+    stringTypes: [
+      '""-qq-bs',
+      { quote: "''-qq-bs", prefixes: ['N'] },
+      { quote: "''-raw", prefixes: ['B', 'X'], requirePrefix: true },
+    ],
+    identTypes: ['``'],
+    identChars: { first: '$', rest: '$', allowFirstCharNumber: true },
+    variableTypes: [
+      { regex: '@@?[A-Za-z0-9_.$]+' },
+      { quote: '""-qq-bs', prefixes: ['@'], requirePrefix: true },
+      { quote: "''-qq-bs", prefixes: ['@'], requirePrefix: true },
+      { quote: '``', prefixes: ['@'], requirePrefix: true },
+    ],
+    paramTypes: { positional: true },
+    lineCommentTypes: ['--', '#'],
+    operators: ['%', ':=', '&', '|', '^', '~', '<<', '>>', '<=>', '->', '->>', '&&', '||', '!'],
+    postProcess,
+  },
+  formatOptions: {
+    onelineClauses,
+  },
+};
 
 function postProcess(tokens: Token[]) {
   return tokens.map((token, i) => {

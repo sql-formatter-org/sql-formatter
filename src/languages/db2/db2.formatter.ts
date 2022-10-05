@@ -1,7 +1,5 @@
+import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import Formatter from '../../formatter/Formatter.js';
-import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
-import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './db2.functions.js';
 import { keywords } from './db2.keywords.js';
 
@@ -178,30 +176,25 @@ const reservedPhrases = expandPhrases([
 ]);
 
 // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
-export default class Db2Formatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      reservedSelect,
-      reservedClauses: [...reservedClauses, ...onelineClauses],
-      reservedSetOperations,
-      reservedJoins,
-      reservedPhrases,
-      reservedKeywords: keywords,
-      reservedFunctionNames: functions,
-      stringTypes: [
-        { quote: "''-qq", prefixes: ['G', 'N', 'U&'] },
-        { quote: "''-raw", prefixes: ['X', 'BX', 'GX', 'UX'], requirePrefix: true },
-      ],
-      identTypes: [`""-qq`],
-      paramTypes: { positional: true, named: [':'] },
-      paramChars: { first: '@#$', rest: '@#$' },
-      operators: ['**', '¬=', '¬>', '¬<', '!>', '!<', '||'],
-    });
-  }
-
-  formatOptions(): DialectFormatOptions {
-    return {
-      onelineClauses,
-    };
-  }
-}
+export const db2: DialectOptions = {
+  tokenizer: {
+    reservedSelect,
+    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedSetOperations,
+    reservedJoins,
+    reservedPhrases,
+    reservedKeywords: keywords,
+    reservedFunctionNames: functions,
+    stringTypes: [
+      { quote: "''-qq", prefixes: ['G', 'N', 'U&'] },
+      { quote: "''-raw", prefixes: ['X', 'BX', 'GX', 'UX'], requirePrefix: true },
+    ],
+    identTypes: [`""-qq`],
+    paramTypes: { positional: true, named: [':'] },
+    paramChars: { first: '@#$', rest: '@#$' },
+    operators: ['**', '¬=', '¬>', '¬<', '!>', '!<', '||'],
+  },
+  formatOptions: {
+    onelineClauses,
+  },
+};

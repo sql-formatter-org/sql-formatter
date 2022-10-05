@@ -1,7 +1,7 @@
 import dedent from 'dedent-js';
 
 import { format, SqlLanguage } from '../src/sqlFormatter.js';
-import SqliteFormatter from '../src/languages/sqlite/sqlite.formatter.js';
+import { sqlite } from '../src/languages/sqlite/sqlite.formatter.js';
 
 describe('sqlFormatter', () => {
   it('throws error when unsupported language parameter specified', () => {
@@ -56,8 +56,8 @@ describe('sqlFormatter', () => {
     }).toThrow('aliasAs config is no more supported.');
   });
 
-  it('allows passing Formatter class as a language parameter', () => {
-    expect(format('SELECT [foo], `bar`;', { language: SqliteFormatter })).toBe(dedent`
+  it('allows passing Dialect config object as a language parameter', () => {
+    expect(format('SELECT [foo], `bar`;', { language: sqlite })).toBe(dedent`
       SELECT
         [foo],
         \`bar\`;

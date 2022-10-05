@@ -1,7 +1,5 @@
+import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
-import Formatter from '../../formatter/Formatter.js';
-import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './transactsql.functions.js';
 import { keywords } from './transactsql.keywords.js';
 
@@ -221,47 +219,42 @@ const reservedPhrases = expandPhrases([
 ]);
 
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
-export default class TransactSqlFormatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      reservedSelect,
-      reservedClauses: [...reservedClauses, ...onelineClauses],
-      reservedSetOperations,
-      reservedJoins,
-      reservedPhrases,
-      reservedKeywords: keywords,
-      reservedFunctionNames: functions,
-      nestedBlockComments: true,
-      stringTypes: [{ quote: "''-qq", prefixes: ['N'] }],
-      identTypes: [`""-qq`, '[]'],
-      identChars: { first: '#@', rest: '#@$' },
-      paramTypes: { named: ['@'], quoted: ['@'] },
-      operators: [
-        '%',
-        '&',
-        '|',
-        '^',
-        '~',
-        '!<',
-        '!>',
-        '+=',
-        '-=',
-        '*=',
-        '/=',
-        '%=',
-        '|=',
-        '&=',
-        '^=',
-        '::',
-      ],
-      // TODO: Support for money constants
-    });
-  }
-
-  formatOptions(): DialectFormatOptions {
-    return {
-      alwaysDenseOperators: ['::'],
-      onelineClauses,
-    };
-  }
-}
+export const transactsql: DialectOptions = {
+  tokenizer: {
+    reservedSelect,
+    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedSetOperations,
+    reservedJoins,
+    reservedPhrases,
+    reservedKeywords: keywords,
+    reservedFunctionNames: functions,
+    nestedBlockComments: true,
+    stringTypes: [{ quote: "''-qq", prefixes: ['N'] }],
+    identTypes: [`""-qq`, '[]'],
+    identChars: { first: '#@', rest: '#@$' },
+    paramTypes: { named: ['@'], quoted: ['@'] },
+    operators: [
+      '%',
+      '&',
+      '|',
+      '^',
+      '~',
+      '!<',
+      '!>',
+      '+=',
+      '-=',
+      '*=',
+      '/=',
+      '%=',
+      '|=',
+      '&=',
+      '^=',
+      '::',
+    ],
+    // TODO: Support for money constants
+  },
+  formatOptions: {
+    alwaysDenseOperators: ['::'],
+    onelineClauses,
+  },
+};

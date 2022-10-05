@@ -1,7 +1,5 @@
+import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
-import Formatter from '../../formatter/Formatter.js';
-import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './snowflake.functions.js';
 import { keywords } from './snowflake.keywords.js';
 
@@ -296,46 +294,41 @@ const reservedPhrases = expandPhrases([
   'ON {UPDATE | DELETE} [SET NULL | SET DEFAULT]',
 ]);
 
-export default class SnowflakeFormatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      reservedSelect,
-      reservedClauses: [...reservedClauses, ...onelineClauses],
-      reservedSetOperations,
-      reservedJoins,
-      reservedPhrases,
-      reservedKeywords: keywords,
-      reservedFunctionNames: functions,
-      stringTypes: ['$$', `''-qq-bs`],
-      identTypes: ['""-qq'],
-      variableTypes: [
-        // for accessing columns at certain positons in the table
-        { regex: '[$][1-9]\\d*' },
-        // identifier style syntax
-        { regex: '[$][_a-zA-Z][_a-zA-Z0-9$]*' },
-      ],
-      extraParens: ['[]'],
-      identChars: { rest: '$' },
-      lineCommentTypes: ['--', '//'],
-      operators: [
-        // Modulo
-        '%',
-        // Type cast
-        '::',
-        // String concat
-        '||',
-        // Get Path
-        ':',
-        // Generators: https://docs.snowflake.com/en/sql-reference/functions/generator.html#generator
-        '=>',
-      ],
-    });
-  }
-
-  formatOptions(): DialectFormatOptions {
-    return {
-      alwaysDenseOperators: [':', '::'],
-      onelineClauses,
-    };
-  }
-}
+export const snowflake: DialectOptions = {
+  tokenizer: {
+    reservedSelect,
+    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedSetOperations,
+    reservedJoins,
+    reservedPhrases,
+    reservedKeywords: keywords,
+    reservedFunctionNames: functions,
+    stringTypes: ['$$', `''-qq-bs`],
+    identTypes: ['""-qq'],
+    variableTypes: [
+      // for accessing columns at certain positons in the table
+      { regex: '[$][1-9]\\d*' },
+      // identifier style syntax
+      { regex: '[$][_a-zA-Z][_a-zA-Z0-9$]*' },
+    ],
+    extraParens: ['[]'],
+    identChars: { rest: '$' },
+    lineCommentTypes: ['--', '//'],
+    operators: [
+      // Modulo
+      '%',
+      // Type cast
+      '::',
+      // String concat
+      '||',
+      // Get Path
+      ':',
+      // Generators: https://docs.snowflake.com/en/sql-reference/functions/generator.html#generator
+      '=>',
+    ],
+  },
+  formatOptions: {
+    alwaysDenseOperators: [':', '::'],
+    onelineClauses,
+  },
+};

@@ -1,7 +1,5 @@
+import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
-import Formatter from '../../formatter/Formatter.js';
-import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './postgresql.functions.js';
 import { keywords } from './postgresql.keywords.js';
 
@@ -251,120 +249,115 @@ const reservedPhrases = expandPhrases([
 ]);
 
 // https://www.postgresql.org/docs/14/index.html
-export default class PostgreSqlFormatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      reservedSelect,
-      reservedClauses: [...reservedClauses, ...onelineClauses],
-      reservedSetOperations,
-      reservedJoins,
-      reservedPhrases,
-      reservedKeywords: keywords,
-      reservedFunctionNames: functions,
-      nestedBlockComments: true,
-      extraParens: ['[]'],
-      stringTypes: [
-        '$$',
-        { quote: "''-qq", prefixes: ['U&'] },
-        { quote: "''-bs", prefixes: ['E'], requirePrefix: true },
-        { quote: "''-raw", prefixes: ['B', 'X'], requirePrefix: true },
-      ],
-      identTypes: [{ quote: '""-qq', prefixes: ['U&'] }],
-      identChars: { rest: '$' },
-      paramTypes: { numbered: ['$'] },
-      operators: [
-        // Arithmetic
-        '%',
-        '^',
-        '|/',
-        '||/',
-        '@',
-        // Assignment
-        ':=',
-        // Bitwise
-        '&',
-        '|',
-        '#',
-        '~',
-        '<<',
-        '>>',
-        // Byte comparison
-        '~>~',
-        '~<~',
-        '~>=~',
-        '~<=~',
-        // Geometric
-        '@-@',
-        '@@',
-        '##',
-        '<->',
-        '&&',
-        '&<',
-        '&>',
-        '<<|',
-        '&<|',
-        '|>>',
-        '|&>',
-        '<^',
-        '^>',
-        '?#',
-        '?-',
-        '?|',
-        '?-|',
-        '?||',
-        '@>',
-        '<@',
-        '~=',
-        // JSON
-        '?',
-        '@?',
-        '?&',
-        '->',
-        '->>',
-        '#>',
-        '#>>',
-        '#-',
-        // Named function params
-        '=>',
-        // Network address
-        '>>=',
-        '<<=',
-        // Pattern matching
-        '~~',
-        '~~*',
-        '!~~',
-        '!~~*',
-        // POSIX RegExp
-        '~',
-        '~*',
-        '!~',
-        '!~*',
-        // Range/multirange
-        '-|-',
-        // String concatenation
-        '||',
-        // Text search
-        '@@@',
-        '!!',
-        // Trigram/trigraph
-        '<%',
-        '%>',
-        '<<%',
-        '%>>',
-        '<<->',
-        '<->>',
-        '<<<->',
-        '<->>>',
-        // Type cast
-        '::',
-      ],
-    });
-  }
-
-  formatOptions(): DialectFormatOptions {
-    return {
-      alwaysDenseOperators: ['::'],
-      onelineClauses,
-    };
-  }
-}
+export const postgresql: DialectOptions = {
+  tokenizer: {
+    reservedSelect,
+    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedSetOperations,
+    reservedJoins,
+    reservedPhrases,
+    reservedKeywords: keywords,
+    reservedFunctionNames: functions,
+    nestedBlockComments: true,
+    extraParens: ['[]'],
+    stringTypes: [
+      '$$',
+      { quote: "''-qq", prefixes: ['U&'] },
+      { quote: "''-bs", prefixes: ['E'], requirePrefix: true },
+      { quote: "''-raw", prefixes: ['B', 'X'], requirePrefix: true },
+    ],
+    identTypes: [{ quote: '""-qq', prefixes: ['U&'] }],
+    identChars: { rest: '$' },
+    paramTypes: { numbered: ['$'] },
+    operators: [
+      // Arithmetic
+      '%',
+      '^',
+      '|/',
+      '||/',
+      '@',
+      // Assignment
+      ':=',
+      // Bitwise
+      '&',
+      '|',
+      '#',
+      '~',
+      '<<',
+      '>>',
+      // Byte comparison
+      '~>~',
+      '~<~',
+      '~>=~',
+      '~<=~',
+      // Geometric
+      '@-@',
+      '@@',
+      '##',
+      '<->',
+      '&&',
+      '&<',
+      '&>',
+      '<<|',
+      '&<|',
+      '|>>',
+      '|&>',
+      '<^',
+      '^>',
+      '?#',
+      '?-',
+      '?|',
+      '?-|',
+      '?||',
+      '@>',
+      '<@',
+      '~=',
+      // JSON
+      '?',
+      '@?',
+      '?&',
+      '->',
+      '->>',
+      '#>',
+      '#>>',
+      '#-',
+      // Named function params
+      '=>',
+      // Network address
+      '>>=',
+      '<<=',
+      // Pattern matching
+      '~~',
+      '~~*',
+      '!~~',
+      '!~~*',
+      // POSIX RegExp
+      '~',
+      '~*',
+      '!~',
+      '!~*',
+      // Range/multirange
+      '-|-',
+      // String concatenation
+      '||',
+      // Text search
+      '@@@',
+      '!!',
+      // Trigram/trigraph
+      '<%',
+      '%>',
+      '<<%',
+      '%>>',
+      '<<->',
+      '<->>',
+      '<<<->',
+      '<->>>',
+      // Type cast
+      '::',
+    ],
+  },
+  formatOptions: {
+    alwaysDenseOperators: ['::'],
+    onelineClauses,
+  },
+};

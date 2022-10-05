@@ -1,6 +1,4 @@
-import Formatter from '../../formatter/Formatter.js';
-import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
-import Tokenizer from '../../lexer/Tokenizer.js';
+import { DialectOptions } from '../../dialect.js';
 import { EOF_TOKEN, isToken, TokenType, Token } from '../../lexer/token.js';
 import { expandPhrases } from '../../expandPhrases.js';
 import { keywords } from './bigquery.keywords.js';
@@ -155,42 +153,37 @@ const reservedPhrases = expandPhrases([
 ]);
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
-export default class BigQueryFormatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      reservedSelect,
-      reservedClauses: [...reservedClauses, ...onelineClauses],
-      reservedSetOperations,
-      reservedJoins,
-      reservedPhrases,
-      reservedKeywords: keywords,
-      reservedFunctionNames: functions,
-      extraParens: ['[]'],
-      stringTypes: [
-        // The triple-quoted strings are listed first, so they get matched first.
-        // Otherwise the first two quotes of """ will get matched as an empty "" string.
-        { quote: '""".."""', prefixes: ['R', 'B', 'RB', 'BR'] },
-        { quote: "'''..'''", prefixes: ['R', 'B', 'RB', 'BR'] },
-        '""-bs',
-        "''-bs",
-        { quote: '""-raw', prefixes: ['R', 'B', 'RB', 'BR'], requirePrefix: true },
-        { quote: "''-raw", prefixes: ['R', 'B', 'RB', 'BR'], requirePrefix: true },
-      ],
-      identTypes: ['``'],
-      identChars: { dashes: true },
-      paramTypes: { positional: true, named: ['@'], quoted: ['@'] },
-      lineCommentTypes: ['--', '#'],
-      operators: ['&', '|', '^', '~', '>>', '<<', '||'],
-      postProcess,
-    });
-  }
-
-  formatOptions(): DialectFormatOptions {
-    return {
-      onelineClauses,
-    };
-  }
-}
+export const bigquery: DialectOptions = {
+  tokenizer: {
+    reservedSelect,
+    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedSetOperations,
+    reservedJoins,
+    reservedPhrases,
+    reservedKeywords: keywords,
+    reservedFunctionNames: functions,
+    extraParens: ['[]'],
+    stringTypes: [
+      // The triple-quoted strings are listed first, so they get matched first.
+      // Otherwise the first two quotes of """ will get matched as an empty "" string.
+      { quote: '""".."""', prefixes: ['R', 'B', 'RB', 'BR'] },
+      { quote: "'''..'''", prefixes: ['R', 'B', 'RB', 'BR'] },
+      '""-bs',
+      "''-bs",
+      { quote: '""-raw', prefixes: ['R', 'B', 'RB', 'BR'], requirePrefix: true },
+      { quote: "''-raw", prefixes: ['R', 'B', 'RB', 'BR'], requirePrefix: true },
+    ],
+    identTypes: ['``'],
+    identChars: { dashes: true },
+    paramTypes: { positional: true, named: ['@'], quoted: ['@'] },
+    lineCommentTypes: ['--', '#'],
+    operators: ['&', '|', '^', '~', '>>', '<<', '||'],
+    postProcess,
+  },
+  formatOptions: {
+    onelineClauses,
+  },
+};
 
 function postProcess(tokens: Token[]): Token[] {
   return detectArraySubscripts(combineParameterizedTypes(tokens));

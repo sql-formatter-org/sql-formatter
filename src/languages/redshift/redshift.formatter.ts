@@ -1,7 +1,5 @@
+import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
-import Formatter from '../../formatter/Formatter.js';
-import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './redshift.functions.js';
 import { keywords } from './redshift.keywords.js';
 
@@ -142,42 +140,37 @@ const reservedPhrases = expandPhrases([
 ]);
 
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
-export default class RedshiftFormatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      reservedSelect,
-      reservedClauses: [...reservedClauses, ...onelineClauses],
-      reservedSetOperations,
-      reservedJoins,
-      reservedPhrases,
-      reservedKeywords: keywords,
-      reservedFunctionNames: functions,
-      stringTypes: ["''-qq"],
-      identTypes: [`""-qq`],
-      identChars: { first: '#' },
-      paramTypes: { numbered: ['$'] },
-      operators: [
-        '^',
-        '%',
-        '@',
-        '|/',
-        '||/',
-        '&',
-        '|',
-        // '#', conflicts with first char of identifier
-        '~',
-        '<<',
-        '>>',
-        '||',
-        '::',
-      ],
-    });
-  }
-
-  formatOptions(): DialectFormatOptions {
-    return {
-      alwaysDenseOperators: ['::'],
-      onelineClauses,
-    };
-  }
-}
+export const redshift: DialectOptions = {
+  tokenizer: {
+    reservedSelect,
+    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedSetOperations,
+    reservedJoins,
+    reservedPhrases,
+    reservedKeywords: keywords,
+    reservedFunctionNames: functions,
+    stringTypes: ["''-qq"],
+    identTypes: [`""-qq`],
+    identChars: { first: '#' },
+    paramTypes: { numbered: ['$'] },
+    operators: [
+      '^',
+      '%',
+      '@',
+      '|/',
+      '||/',
+      '&',
+      '|',
+      // '#', conflicts with first char of identifier
+      '~',
+      '<<',
+      '>>',
+      '||',
+      '::',
+    ],
+  },
+  formatOptions: {
+    alwaysDenseOperators: ['::'],
+    onelineClauses,
+  },
+};
