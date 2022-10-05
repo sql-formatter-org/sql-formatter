@@ -1,7 +1,5 @@
+import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import Formatter from '../../formatter/Formatter.js';
-import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
-import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './sql.functions.js';
 import { keywords } from './sql.keywords.js';
 
@@ -75,29 +73,24 @@ const reservedPhrases = expandPhrases([
   '{ROWS | RANGE} BETWEEN',
 ]);
 
-export default class SqlFormatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      reservedSelect,
-      reservedClauses: [...reservedClauses, ...onelineClauses],
-      reservedSetOperations,
-      reservedJoins,
-      reservedPhrases,
-      reservedKeywords: keywords,
-      reservedFunctionNames: functions,
-      stringTypes: [
-        { quote: "''-qq-bs", prefixes: ['N', 'U&'] },
-        { quote: "''-raw", prefixes: ['X'], requirePrefix: true },
-      ],
-      identTypes: [`""-qq`, '``'],
-      paramTypes: { positional: true },
-      operators: ['||'],
-    });
-  }
-
-  formatOptions(): DialectFormatOptions {
-    return {
-      onelineClauses,
-    };
-  }
-}
+export const sql: DialectOptions = {
+  tokenizer: {
+    reservedSelect,
+    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedSetOperations,
+    reservedJoins,
+    reservedPhrases,
+    reservedKeywords: keywords,
+    reservedFunctionNames: functions,
+    stringTypes: [
+      { quote: "''-qq-bs", prefixes: ['N', 'U&'] },
+      { quote: "''-raw", prefixes: ['X'], requirePrefix: true },
+    ],
+    identTypes: [`""-qq`, '``'],
+    paramTypes: { positional: true },
+    operators: ['||'],
+  },
+  formatOptions: {
+    onelineClauses,
+  },
+};

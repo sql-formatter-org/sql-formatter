@@ -1,7 +1,5 @@
 // import only type to avoid ESLint no-cycle rule producing an error
-import type { SqlLanguage } from './sqlFormatter.js';
 import { ParamItems } from './formatter/Params.js';
-import Formatter from './formatter/Formatter.js';
 import { ParamTypes } from './lexer/TokenizerOptions.js';
 
 export type IndentStyle = 'standard' | 'tabularLeft' | 'tabularRight';
@@ -13,7 +11,6 @@ export type CommaPosition = 'before' | 'after' | 'tabular';
 export type LogicalOperatorNewline = 'before' | 'after';
 
 export interface FormatOptions {
-  language: SqlLanguage | typeof Formatter;
   tabWidth: number;
   useTabs: boolean;
   keywordCase: KeywordCase;

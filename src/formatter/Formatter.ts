@@ -1,60 +1,27 @@
 import { FormatOptions } from '../FormatOptions.js';
 import { indentString } from './config.js';
 import Params from './Params.js';
-import Tokenizer from '../lexer/Tokenizer.js';
 
 import { createParser } from '../parser/createParser.js';
 import { StatementNode } from '../parser/ast.js';
-import { cacheInClassField } from '../utils.js';
+import { Dialect } from '../dialect.js';
 
 import formatCommaPositions from './formatCommaPositions.js';
 import formatAliasPositions from './formatAliasPositions.js';
-import ExpressionFormatter, {
-  DialectFormatOptions,
-  ProcessedDialectFormatOptions,
-} from './ExpressionFormatter.js';
+import ExpressionFormatter from './ExpressionFormatter.js';
 import Layout, { WS } from './Layout.js';
 import Indentation from './Indentation.js';
 
 /** Main formatter class that produces a final output string from list of tokens */
 export default class Formatter {
+  private dialect: Dialect;
   private cfg: FormatOptions;
   private params: Params;
 
-  constructor(cfg: FormatOptions) {
+  constructor(dialect: Dialect, cfg: FormatOptions) {
+    this.dialect = dialect;
     this.cfg = cfg;
     this.params = new Params(this.cfg.params);
-  }
-
-  /**
-   * SQL Tokenizer for this formatter, provided by subclasses.
-   */
-  protected tokenizer(): Tokenizer {
-    throw new Error('tokenizer() not implemented by subclass');
-  }
-
-  // Cache the tokenizer for each class (each SQL dialect)
-  // So we wouldn't need to recreate the tokenizer, which is kinda expensive,
-  // for each call to format() function.
-  private cachedTokenizer(): Tokenizer {
-    return cacheInClassField(this.constructor, 'cachedTokenizer', () => this.tokenizer());
-  }
-
-  /**
-   * Dialect-specific formatting configuration, provided by subclass.
-   */
-  protected formatOptions(): DialectFormatOptions {
-    throw new Error('formatOptions() not implemented by sybclass');
-  }
-
-  private cachedFormatOptions(): ProcessedDialectFormatOptions {
-    return cacheInClassField(this.constructor, 'cachedFormatOptions', () => {
-      const opts = this.formatOptions();
-      return {
-        alwaysDenseOperators: opts.alwaysDenseOperators || [],
-        onelineClauses: Object.fromEntries(opts.onelineClauses.map(name => [name, true])),
-      };
-    });
   }
 
   /**
@@ -71,7 +38,7 @@ export default class Formatter {
   }
 
   private parse(query: string): StatementNode[] {
-    return createParser(this.cachedTokenizer()).parse(query, this.cfg.paramTypes || {});
+    return createParser(this.dialect.tokenizer).parse(query, this.cfg.paramTypes || {});
   }
 
   private formatAst(statements: StatementNode[]): string {
@@ -83,7 +50,7 @@ export default class Formatter {
   private formatStatement(statement: StatementNode): string {
     const layout = new ExpressionFormatter({
       cfg: this.cfg,
-      dialectCfg: this.cachedFormatOptions(),
+      dialectCfg: this.dialect.formatOptions,
       params: this.params,
       layout: new Layout(new Indentation(indentString(this.cfg))),
     }).format(statement.children);
