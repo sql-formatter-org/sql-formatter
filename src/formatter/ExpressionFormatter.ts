@@ -191,9 +191,9 @@ export default class ExpressionFormatter {
 
   private formatCaseExpression(node: CaseExpressionNode) {
     this.formatNode(node.caseKw);
-    this.layout = this.formatSubExpression(node.expr);
 
     this.layout.indentation.increaseBlockLevel();
+    this.layout = this.formatSubExpression(node.expr);
     this.layout = this.formatSubExpression(node.clauses);
     this.layout.indentation.decreaseBlockLevel();
 

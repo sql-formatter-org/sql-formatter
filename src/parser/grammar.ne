@@ -146,7 +146,6 @@ free_form_sql -> ( asteriskless_free_form_sql | asterisk ) {% unwrap %}
 asteriskless_free_form_sql ->
   ( asteriskless_expression
   | between_predicate
-  | case_expression
   | comma
   | comment
   | other_keyword ) {% unwrap %}
@@ -155,6 +154,7 @@ expression -> ( asteriskless_expression | asterisk ) {% unwrap %}
 
 asteriskless_expression ->
   ( array_subscript
+  | case_expression
   | function_call
   | property_access
   | parenthesis

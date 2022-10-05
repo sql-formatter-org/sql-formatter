@@ -167,4 +167,34 @@ export default function supportsCase(format: FormatFn) {
       ].join('\n')
     );
   });
+
+  // Not a pretty result.
+  // This test is more to ensure we don't crash on this code.
+  it('formats nested case expressions', () => {
+    const result = format(`
+      SELECT
+        CASE
+          CASE foo WHEN 1 THEN 11 ELSE 22 END
+          WHEN 11 THEN 110
+          WHEN 22 THEN 220
+          ELSE 123
+        END
+      FROM
+        tbl;
+    `);
+
+    expect(result).toBe(dedent`
+      SELECT
+        CASE CASE foo
+            WHEN 1 THEN 11
+            ELSE 22
+          END
+          WHEN 11 THEN 110
+          WHEN 22 THEN 220
+          ELSE 123
+        END
+      FROM
+        tbl;
+    `);
+  });
 }
