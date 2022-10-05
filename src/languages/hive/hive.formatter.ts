@@ -1,5 +1,6 @@
 import { expandPhrases } from '../../expandPhrases.js';
 import Formatter from '../../formatter/Formatter.js';
+import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
 import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './hive.functions.js';
 import { keywords } from './hive.keywords.js';
@@ -27,12 +28,7 @@ const reservedClauses = expandPhrases([
   'INSERT INTO [TABLE]',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  // - delete:
-  'DELETE FROM',
-  // - truncate:
-  'TRUNCATE [TABLE]',
   // - merge:
   'MERGE INTO',
   'WHEN [NOT] MATCHED [THEN]',
@@ -48,11 +44,20 @@ const reservedClauses = expandPhrases([
   // Data definition
   'CREATE [MATERIALIZED] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY] [EXTERNAL] TABLE [IF NOT EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  // - delete:
+  'DELETE FROM',
+  // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE',
   'RENAME TO',
-
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // other
   'ALTER',
   'CREATE',
@@ -60,9 +65,7 @@ const reservedClauses = expandPhrases([
   'DESCRIBE',
   'DROP',
   'FETCH',
-  'SET SCHEMA', // added
   'SHOW',
-  // newline keywords
   'STORED AS',
   'STORED BY',
   'ROW FORMAT',
@@ -84,8 +87,8 @@ const reservedPhrases = expandPhrases(['{ROWS | RANGE} BETWEEN']);
 export default class HiveFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -97,5 +100,11 @@ export default class HiveFormatter extends Formatter {
       variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
       operators: ['%', '~', '^', '|', '&', '<=>', '==', '!', '||'],
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }

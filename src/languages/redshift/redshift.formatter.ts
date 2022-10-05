@@ -23,15 +23,18 @@ const reservedClauses = expandPhrases([
   'INSERT INTO',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  // - delete:
-  'DELETE [FROM]',
-  // - truncate:
-  'TRUNCATE [TABLE]',
   // Data definition
   'CREATE [OR REPLACE | MATERIALIZED] VIEW',
   'CREATE [TEMPORARY | TEMP | LOCAL TEMPORARY | LOCAL TEMP] TABLE [IF NOT EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  // - delete:
+  'DELETE [FROM]',
+  // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE',
@@ -43,7 +46,8 @@ const reservedClauses = expandPhrases([
   'ALTER COLUMN',
   'TYPE', // for alter column
   'ENCODE', // for alter column
-
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // https://docs.aws.amazon.com/redshift/latest/dg/c_SQL_commands.html
   'ABORT',
   'ALTER DATABASE',
@@ -115,8 +119,6 @@ const reservedClauses = expandPhrases([
   'START TRANSACTION',
   'UNLOAD',
   'VACUUM',
-  // other
-  'ALTER COLUMN',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT', 'MINUS']);
@@ -143,8 +145,8 @@ const reservedPhrases = expandPhrases([
 export default class RedshiftFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -173,6 +175,9 @@ export default class RedshiftFormatter extends Formatter {
   }
 
   formatOptions(): DialectFormatOptions {
-    return { alwaysDenseOperators: ['::'] };
+    return {
+      alwaysDenseOperators: ['::'],
+      onelineClauses,
+    };
   }
 }

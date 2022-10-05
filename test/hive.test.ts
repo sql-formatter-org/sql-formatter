@@ -7,7 +7,6 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter.js';
 import supportsCreateTable from './features/createTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsAlterTable from './features/alterTable.js';
-import supportsSchema from './features/schema.js';
 import supportsStrings from './features/strings.js';
 import supportsBetween from './features/between.js';
 import supportsJoin from './features/join.js';
@@ -41,7 +40,6 @@ describe('HiveFormatter', () => {
   supportsStrings(format, ['""-bs', "''-bs"]);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
-  supportsSchema(format);
   supportsJoin(format, {
     without: ['NATURAL'],
     additionally: ['LEFT SEMI JOIN'],

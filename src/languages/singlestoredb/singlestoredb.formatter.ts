@@ -1,5 +1,6 @@
 import { expandPhrases } from '../../expandPhrases.js';
 import Formatter from '../../formatter/Formatter.js';
+import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
 import Tokenizer from '../../lexer/Tokenizer.js';
 import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
 import { keywords } from './singlestoredb.keywords.js';
@@ -24,17 +25,20 @@ const reservedClauses = expandPhrases([
   'VALUES',
   'REPLACE [INTO]',
   // - update:
-  'UPDATE',
   'SET',
-  // - delete:
-  'DELETE [FROM]',
-  // - truncate:
-  'TRUNCATE [TABLE]',
   // Data definition
   'CREATE VIEW',
   'CREATE [ROWSTORE] [REFERENCE | TEMPORARY | GLOBAL TEMPORARY] TABLE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [TEMPORARY] PROCEDURE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [EXTERNAL] FUNCTION',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  // - delete:
+  'DELETE [FROM]',
+  // - drop table:
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
   // - alter table:
   'ALTER [ONLINE] TABLE',
@@ -44,7 +48,8 @@ const reservedClauses = expandPhrases([
   'MODIFY [COLUMN]',
   'CHANGE',
   'RENAME [TO | AS]',
-
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // https://docs.singlestore.com/managed-service/en/reference/sql-reference.html
   'ADD AGGREGATOR',
   'ADD LEAF',
@@ -193,7 +198,6 @@ const reservedClauses = expandPhrases([
   'STOP REPLICATING',
   'STOP SLAVE',
   'TEST PIPELINE',
-  'TRUNCATE TABLE',
   'UNLOCK INSTANCE',
   'UNLOCK TABLES',
   'USE',
@@ -233,8 +237,8 @@ const reservedPhrases = expandPhrases([
 export default class SingleStoreDbFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -256,6 +260,12 @@ export default class SingleStoreDbFormatter extends Formatter {
       operators: [':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||'],
       postProcess,
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }
 

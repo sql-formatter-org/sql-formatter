@@ -5,10 +5,14 @@ import Tokenizer from '../lexer/Tokenizer.js';
 
 import { createParser } from '../parser/createParser.js';
 import { StatementNode } from '../parser/ast.js';
+import { cacheInClassField } from '../utils.js';
 
 import formatCommaPositions from './formatCommaPositions.js';
 import formatAliasPositions from './formatAliasPositions.js';
-import ExpressionFormatter, { DialectFormatOptions } from './ExpressionFormatter.js';
+import ExpressionFormatter, {
+  DialectFormatOptions,
+  ProcessedDialectFormatOptions,
+} from './ExpressionFormatter.js';
 import Layout, { WS } from './Layout.js';
 import Indentation from './Indentation.js';
 
@@ -33,18 +37,24 @@ export default class Formatter {
   // So we wouldn't need to recreate the tokenizer, which is kinda expensive,
   // for each call to format() function.
   private cachedTokenizer(): Tokenizer {
-    const cls: Function & { cachedTokenizer?: Tokenizer } = this.constructor;
-    if (!cls.cachedTokenizer) {
-      cls.cachedTokenizer = this.tokenizer();
-    }
-    return cls.cachedTokenizer;
+    return cacheInClassField(this.constructor, 'cachedTokenizer', () => this.tokenizer());
   }
 
   /**
-   * Dialect-specific formatting configuration, optionally provided by subclass.
+   * Dialect-specific formatting configuration, provided by subclass.
    */
   protected formatOptions(): DialectFormatOptions {
-    return {};
+    throw new Error('formatOptions() not implemented by sybclass');
+  }
+
+  private cachedFormatOptions(): ProcessedDialectFormatOptions {
+    return cacheInClassField(this.constructor, 'cachedFormatOptions', () => {
+      const opts = this.formatOptions();
+      return {
+        alwaysDenseOperators: opts.alwaysDenseOperators || [],
+        onelineClauses: Object.fromEntries(opts.onelineClauses.map(name => [name, true])),
+      };
+    });
   }
 
   /**
@@ -73,7 +83,7 @@ export default class Formatter {
   private formatStatement(statement: StatementNode): string {
     const layout = new ExpressionFormatter({
       cfg: this.cfg,
-      dialectCfg: this.formatOptions(),
+      dialectCfg: this.cachedFormatOptions(),
       params: this.params,
       layout: new Layout(new Indentation(indentString(this.cfg))),
     }).format(statement.children);

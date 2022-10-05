@@ -25,17 +25,22 @@ const reservedClauses = expandPhrases([
   'INSERT INTO',
   'VALUES',
   // - update:
-  'UPDATE [ONLY]',
   'SET',
-  'WHERE CURRENT OF',
-  // - delete:
-  'DELETE FROM [ONLY]',
-  // - truncate:
-  'TRUNCATE [TABLE] [ONLY]',
   // Data definition
   'CREATE [OR REPLACE] [TEMP | TEMPORARY] [RECURSIVE] VIEW',
   'CREATE MATERIALIZED VIEW [IF NOT EXISTS]',
   'CREATE [GLOBAL | LOCAL] [TEMPORARY | TEMP | UNLOGGED] TABLE [IF NOT EXISTS]',
+  // other
+  'RETURNING',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE [ONLY]',
+  'WHERE CURRENT OF',
+  // - delete:
+  'DELETE FROM [ONLY]',
+  // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE [IF EXISTS] [ONLY]',
@@ -48,7 +53,11 @@ const reservedClauses = expandPhrases([
   '[SET DATA] TYPE', // for alter column
   '{SET | DROP} DEFAULT', // for alter column
   '{SET | DROP} NOT NULL', // for alter column
-
+  // - truncate:
+  'TRUNCATE [TABLE] [ONLY]',
+  // other
+  'SET SCHEMA',
+  'AFTER',
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
   'ALTER AGGREGATE',
@@ -203,7 +212,6 @@ const reservedClauses = expandPhrases([
   'REINDEX',
   'RELEASE SAVEPOINT',
   'RESET',
-  'RETURNING',
   'REVOKE',
   'ROLLBACK',
   'ROLLBACK PREPARED',
@@ -219,9 +227,6 @@ const reservedClauses = expandPhrases([
   'START TRANSACTION',
   'UNLISTEN',
   'VACUUM',
-  // other
-  'AFTER',
-  'SET SCHEMA',
 ]);
 
 const reservedSetOperations = expandPhrases([
@@ -249,8 +254,8 @@ const reservedPhrases = expandPhrases([
 export default class PostgreSqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -357,6 +362,9 @@ export default class PostgreSqlFormatter extends Formatter {
   }
 
   formatOptions(): DialectFormatOptions {
-    return { alwaysDenseOperators: ['::'] };
+    return {
+      alwaysDenseOperators: ['::'],
+      onelineClauses,
+    };
   }
 }

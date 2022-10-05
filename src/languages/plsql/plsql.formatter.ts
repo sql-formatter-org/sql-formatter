@@ -25,12 +25,7 @@ const reservedClauses = expandPhrases([
   'INSERT [INTO | ALL INTO]',
   'VALUES',
   // - update:
-  'UPDATE [ONLY]',
   'SET',
-  // - delete:
-  'DELETE FROM [ONLY]',
-  // - truncate:
-  'TRUNCATE TABLE',
   // - merge:
   'MERGE [INTO]',
   'WHEN [NOT] MATCHED [THEN]',
@@ -39,6 +34,16 @@ const reservedClauses = expandPhrases([
   'CREATE [OR REPLACE] [NO FORCE | FORCE] [EDITIONING | EDITIONABLE | EDITIONABLE EDITIONING | NONEDITIONABLE] VIEW',
   'CREATE MATERIALIZED VIEW',
   'CREATE [GLOBAL TEMPORARY | PRIVATE TEMPORARY | SHARDED | DUPLICATED | IMMUTABLE BLOCKCHAIN | BLOCKCHAIN | IMMUTABLE] TABLE',
+  // other
+  'RETURNING',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE [ONLY]',
+  // - delete:
+  'DELETE FROM [ONLY]',
+  // - drop table:
   'DROP TABLE',
   // - alter table:
   'ALTER TABLE',
@@ -47,17 +52,17 @@ const reservedClauses = expandPhrases([
   'MODIFY',
   'RENAME TO',
   'RENAME COLUMN',
-
+  // - truncate:
+  'TRUNCATE TABLE',
   // other
+  'SET SCHEMA',
   'BEGIN',
   'CONNECT BY',
   'DECLARE',
   'EXCEPT',
   'EXCEPTION',
   'LOOP',
-  'RETURNING',
   'START WITH',
-  'SET SCHEMA',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
@@ -81,8 +86,8 @@ const reservedPhrases = expandPhrases([
 export default class PlSqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -119,7 +124,10 @@ export default class PlSqlFormatter extends Formatter {
   }
 
   formatOptions(): DialectFormatOptions {
-    return { alwaysDenseOperators: ['@'] };
+    return {
+      alwaysDenseOperators: ['@'],
+      onelineClauses,
+    };
   }
 }
 

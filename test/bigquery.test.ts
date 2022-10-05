@@ -1,7 +1,6 @@
 import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
-import { flatKeywordList } from '../src/utils.js';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter.js';
 
 import supportsCreateTable from './features/createTable.js';
@@ -201,31 +200,15 @@ describe('BigQueryFormatter', () => {
   });
 
   it('supports parameterised types', () => {
-    const result = format(
-      `
+    const sql = dedent`
       DECLARE varString STRING(11) '11charswide';
       DECLARE varBytes BYTES(8);
-      DECLARE varNumeric NUMERIC(1,1);
-      DECLARE varDecimal DECIMAL(1,1);
-      DECLARE varBignumeric BIGNUMERIC(1,1);
-      DECLARE varBigdecimal BIGDECIMAL(1,1);
-    `,
-      { linesBetweenQueries: 0 }
-    );
-    expect(result).toBe(dedent`
-      DECLARE
-        varString STRING(11) '11charswide';
-      DECLARE
-        varBytes BYTES(8);
-      DECLARE
-        varNumeric NUMERIC(1, 1);
-      DECLARE
-        varDecimal DECIMAL(1, 1);
-      DECLARE
-        varBignumeric BIGNUMERIC(1, 1);
-      DECLARE
-        varBigdecimal BIGDECIMAL(1, 1);
-    `);
+      DECLARE varNumeric NUMERIC(1, 1);
+      DECLARE varDecimal DECIMAL(1, 1);
+      DECLARE varBignumeric BIGNUMERIC(1, 1);
+      DECLARE varBigdecimal BIGDECIMAL(1, 1);
+    `;
+    expect(format(sql, { linesBetweenQueries: 0 })).toBe(sql);
   });
 
   // Regression test for issue #243
@@ -268,8 +251,7 @@ describe('BigQueryFormatter', () => {
         FROM
           Produce PIVOT(
             sales
-            FOR
-              quarter IN (Q1, Q2, Q3, Q4)
+            FOR quarter IN (Q1, Q2, Q3, Q4)
           );
       `);
     });
@@ -282,8 +264,7 @@ describe('BigQueryFormatter', () => {
         FROM
           Produce UNPIVOT(
             sales
-            FOR
-              quarter IN (Q1, Q2, Q3, Q4)
+            FOR quarter IN (Q1, Q2, Q3, Q4)
           );
       `);
     });
@@ -299,91 +280,19 @@ describe('BigQueryFormatter', () => {
   });
 
   describe('BigQuery DDL Create Statements', () => {
-    const createCmds = {
-      schema: ['CREATE SCHEMA', 'CREATE SCHEMA IF NOT EXISTS'],
-      function: ['CREATE FUNCTION', 'CREATE OR REPLACE FUNCTION', 'CREATE FUNCTION IF NOT EXISTS'],
-      tempFunction: [
-        'CREATE TEMP FUNCTION',
-        'CREATE OR REPLACE TEMP FUNCTION',
-        'CREATE TEMP FUNCTION IF NOT EXISTS',
-        'CREATE TEMPORARY FUNCTION',
-        'CREATE OR REPLACE TEMPORARY FUNCTION',
-        'CREATE TEMPORARY FUNCTION IF NOT EXISTS',
-      ],
-      tableFunction: [
-        'CREATE TABLE FUNCTION',
-        'CREATE OR REPLACE TABLE FUNCTION',
-        'CREATE TABLE FUNCTION IF NOT EXISTS',
-      ],
-      procedure: [
-        'CREATE PROCEDURE',
-        'CREATE OR REPLACE PROCEDURE',
-        'CREATE PROCEDURE IF NOT EXISTS',
-      ],
-      rowAccessPolicy: [
-        'CREATE ROW ACCESS POLICY',
-        'CREATE ROW ACCESS POLICY IF NOT EXISTS',
-        'CREATE OR REPLACE ROW ACCESS POLICY',
-      ],
-      searchIndex: ['CREATE SEARCH INDEX', 'CREATE SEARCH INDEX IF NOT EXISTS'],
-    };
-
-    createCmds.schema.forEach(createSchema => {
-      it(`Supports ${createSchema}`, () => {
-        const input = `
-          ${createSchema} mydataset
-            DEFAULT COLLATE 'und:ci'
-            OPTIONS(
-              location="us", labels=[("label1","value1"),("label2","value2")])`;
-        const expected = dedent`
-          ${createSchema}
-            mydataset
-          DEFAULT COLLATE
-            'und:ci' OPTIONS(
-              location = "us",
-              labels = [("label1", "value1"), ("label2", "value2")]
-            )
-        `;
-        expect(format(input)).toBe(expected);
-      });
-    });
-
-    it(`Supports CREATE TABLE LIKE`, () => {
+    it(`Supports CREATE SCHEMA`, () => {
       const input = `
-        CREATE TABLE mydataset.newtable
-        LIKE mydataset.sourcetable
-        AS (SELECT * FROM mydataset.myothertable)`;
+        CREATE SCHEMA mydataset
+          DEFAULT COLLATE 'und:ci'
+          OPTIONS(
+            location="us", labels=[("label1","value1"),("label2","value2")])`;
       const expected = dedent`
-        CREATE TABLE
-          mydataset.newtable LIKE mydataset.sourcetable AS (
-            SELECT
-              *
-            FROM
-              mydataset.myothertable
-          )`;
-
-      expect(format(input)).toBe(expected);
-    });
-
-    it(`Supports CREATE TABLE COPY`, () => {
-      const input = `
-        CREATE TABLE mydataset.newtable
-        COPY mydataset.sourcetable`;
-      const expected = dedent`
-        CREATE TABLE
-          mydataset.newtable COPY mydataset.sourcetable`;
-
-      expect(format(input)).toBe(expected);
-    });
-
-    it(`Supports CREATE TABLE CLONE`, () => {
-      const input = `
-        CREATE TABLE mydataset.newtable
-        CLONE mydataset.sourcetable`;
-      const expected = dedent`
-        CREATE TABLE
-          mydataset.newtable CLONE mydataset.sourcetable`;
-
+        CREATE SCHEMA mydataset
+        DEFAULT COLLATE 'und:ci' OPTIONS(
+          location = "us",
+          labels = [("label1", "value1"), ("label2", "value2")]
+        )
+      `;
       expect(format(input)).toBe(expected);
     });
 
@@ -406,17 +315,14 @@ describe('BigQueryFormatter', () => {
       expect(format(input)).toBe(expected);
     });
 
-    createCmds.function.concat(createCmds.tempFunction).forEach(createFunction => {
-      it(`Supports ${createFunction}`, () => {
-        const input = `
-          ${createFunction} mydataset.myFunc(x FLOAT64, y FLOAT64)
-          RETURNS FLOAT64
-          AS (x * y);`;
-        const expected = dedent`
-          ${createFunction}
-            mydataset.myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 AS (x * y);`;
-        expect(format(input)).toBe(expected);
-      });
+    it(`Supports CREATE FUNCTION`, () => {
+      const input = `
+        CREATE FUNCTION mydataset.myFunc(x FLOAT64, y FLOAT64)
+        RETURNS FLOAT64
+        AS (x * y);`;
+      const expected = dedent`
+        CREATE FUNCTION mydataset.myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 AS (x * y);`;
+      expect(format(input)).toBe(expected);
     });
 
     it(`Supports CREATE FUNCTION - LANGUAGE js`, () => {
@@ -428,145 +334,99 @@ describe('BigQueryFormatter', () => {
             return x*y;
           """;`;
       const expected = dedent`
-        CREATE FUNCTION
-          myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 LANGUAGE js AS r"""
+        CREATE FUNCTION myFunc (x FLOAT64, y FLOAT64) RETURNS FLOAT64 LANGUAGE js AS r"""
             return x*y;
           """;`;
       expect(format(input)).toBe(expected);
     });
 
-    createCmds.tableFunction.forEach(createTableFunc => {
-      it(`Supports ${createTableFunc}`, () => {
-        const input = `
-          ${createTableFunc} mydataset.names_by_year(y INT64)
-          RETURNS TABLE<name STRING, year INT64>
-          AS (
-            SELECT year, name
-            FROM mydataset.mytable
-            WHERE year = y
-          )`;
+    it(`Supports CREATE TABLE FUNCTION`, () => {
+      const input = `
+        CREATE TABLE FUNCTION mydataset.names_by_year(y INT64)
+        RETURNS TABLE<name STRING, year INT64>
+        AS (
+          SELECT year, name
+          FROM mydataset.mytable
+          WHERE year = y
+        )`;
 
-        // TODO: formatting for <name STRING, year INT64> can be improved
-        const expected = dedent`
-          ${createTableFunc}
-            mydataset.names_by_year (y INT64)
-          RETURNS TABLE
-            < name STRING,
-            year INT64 > AS (
-              SELECT
-                year,
-                name
-              FROM
-                mydataset.mytable
-              WHERE
-                year = y
-            )`;
-        expect(format(input)).toBe(expected);
-      });
+      // TODO: formatting for <name STRING, year INT64> can be improved
+      const expected = dedent`
+        CREATE TABLE FUNCTION mydataset.names_by_year (y INT64) RETURNS TABLE < name STRING,
+        year INT64 > AS (
+          SELECT
+            year,
+            name
+          FROM
+            mydataset.mytable
+          WHERE
+            year = y
+        )`;
+      expect(format(input)).toBe(expected);
     });
 
     // not correctly supported yet
-    createCmds.procedure.forEach(createProcedure => {
-      it(`Supports ${createProcedure}`, () => {
-        const input = `
-          ${createProcedure} myDataset.QueryTable()
-          BEGIN
-            SELECT * FROM anotherDataset.myTable;
-          END;`;
-        const expected = dedent`
-          ${createProcedure}
-            myDataset.QueryTable ()
-          BEGIN
-          SELECT
-            *
-          FROM
-            anotherDataset.myTable;
+    it(`Supports CREATE PROCEDURE`, () => {
+      const input = `
+        CREATE PROCEDURE myDataset.QueryTable()
+        BEGIN
+          SELECT * FROM anotherDataset.myTable;
+        END;`;
+      const expected = dedent`
+        CREATE PROCEDURE myDataset.QueryTable ()
+        BEGIN
+        SELECT
+          *
+        FROM
+          anotherDataset.myTable;
 
-          END;`;
+        END;`;
+      expect(format(input)).toBe(expected);
+    });
+
+    it(`Supports CREATE ROW ACCESS POLICY`, () => {
+      const input = `
+        CREATE ROW ACCESS POLICY us_filter
+        ON mydataset.table1
+        GRANT TO ("group:abc@example.com", "user:hello@example.com")
+        FILTER USING (Region="US")`;
+      const expected = dedent`
+        CREATE ROW ACCESS POLICY us_filter ON mydataset.table1
+        GRANT TO ("group:abc@example.com", "user:hello@example.com")
+        FILTER USING (Region = "US")`;
+      expect(format(input)).toBe(expected);
+    });
+
+    [
+      // Create statements using "AS JSON"
+      'CREATE CAPACITY',
+      'CREATE RESERVATION',
+      'CREATE ASSIGNMENT',
+    ].forEach(create => {
+      it(`Supports ${create}`, () => {
+        const input = dedent`
+          ${create} admin_project.region-us.my-commitment
+          AS JSON """{
+              "slot_count": 100,
+              "plan": "FLEX"
+            }"""`;
+        const expected = dedent`
+          ${create} admin_project.region-us.my-commitment
+          AS JSON """{
+              "slot_count": 100,
+              "plan": "FLEX"
+            }"""`;
         expect(format(input)).toBe(expected);
       });
     });
 
-    createCmds.rowAccessPolicy.forEach(createRowAccessPolicy => {
-      it(`Supports ${createRowAccessPolicy}`, () => {
-        const input = `
-          ${createRowAccessPolicy} us_filter
-          ON mydataset.table1
-          GRANT TO ("group:abc@example.com", "user:hello@example.com")
-          FILTER USING (Region="US")`;
-        const expected = dedent`
-          ${createRowAccessPolicy}
-            us_filter ON mydataset.table1
-          GRANT TO
-            ("group:abc@example.com", "user:hello@example.com")
-          FILTER USING
-            (Region = "US")`;
-        expect(format(input)).toBe(expected);
-      });
-    });
-
-    it(`Supports CREATE CAPACITY`, () => {
-      const input = dedent`
-        CREATE CAPACITY admin_project.region-us.my-commitment
-        AS JSON """{
-            "slot_count": 100,
-            "plan": "FLEX"
-          }"""`;
+    it(`Supports CREATE SEARCH INDEX`, () => {
+      const input = `
+        CREATE SEARCH INDEX my_index
+        ON dataset.my_table(ALL COLUMNS);`;
       const expected = dedent`
-        CREATE CAPACITY
-          admin_project.region-us.my-commitment
-        AS JSON
-          """{
-            "slot_count": 100,
-            "plan": "FLEX"
-          }"""`;
+        CREATE SEARCH INDEX my_index ON dataset.my_table (ALL COLUMNS);`;
       expect(format(input)).toBe(expected);
-    });
-
-    it(`Supports CREATE RESERVATION`, () => {
-      const input = dedent`
-        CREATE RESERVATION admin_project.region-us.prod
-        AS JSON """{
-            "slot_capacity": 100
-          }"""`;
-      const expected = dedent`
-        CREATE RESERVATION
-          admin_project.region-us.prod
-        AS JSON
-          """{
-            "slot_capacity": 100
-          }"""`;
-      expect(format(input)).toBe(expected);
-    });
-
-    it(`Supports CREATE ASSIGNMENT`, () => {
-      const input = dedent`
-        CREATE ASSIGNMENT admin_project.region-us.prod.my_assignment
-        AS JSON """{
-            "assignee": "projects/my_project",
-            "job_type": "QUERY"
-          }"""`;
-      const expected = dedent`
-        CREATE ASSIGNMENT
-          admin_project.region-us.prod.my_assignment
-        AS JSON
-          """{
-            "assignee": "projects/my_project",
-            "job_type": "QUERY"
-          }"""`;
-      expect(format(input)).toBe(expected);
-    });
-
-    createCmds.searchIndex.forEach(createSearchIndex => {
-      it(`Supports ${createSearchIndex}`, () => {
-        const input = `
-          ${createSearchIndex} my_index
-          ON dataset.my_table(ALL COLUMNS);`;
-        const expected = dedent`
-          ${createSearchIndex}
-            my_index ON dataset.my_table (ALL COLUMNS);`;
-        expect(format(input)).toBe(expected);
-      });
     });
   });
 
@@ -576,10 +436,8 @@ describe('BigQueryFormatter', () => {
         ALTER SCHEMA mydataset
         SET DEFAULT COLLATE 'und:ci'`;
       const expected = dedent`
-        ALTER SCHEMA
-          mydataset
-        SET DEFAULT COLLATE
-          'und:ci'`;
+        ALTER SCHEMA mydataset
+        SET DEFAULT COLLATE 'und:ci'`;
       expect(format(input)).toBe(expected);
     });
 
@@ -590,10 +448,8 @@ describe('BigQueryFormatter', () => {
           default_table_expiration_days=3.75
           )`;
       const expected = dedent`
-        ALTER SCHEMA
-          mydataset
-        SET OPTIONS
-          (default_table_expiration_days = 3.75)`;
+        ALTER SCHEMA mydataset
+        SET OPTIONS (default_table_expiration_days = 3.75)`;
       expect(format(input)).toBe(expected);
     });
 
@@ -604,12 +460,10 @@ describe('BigQueryFormatter', () => {
           expiration_timestamp=TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
         )`;
       const expected = dedent`
-        ALTER TABLE
-          mydataset.mytable
-        SET OPTIONS
-          (
-            expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
-          )`;
+        ALTER TABLE mydataset.mytable
+        SET OPTIONS (
+          expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+        )`;
       expect(format(input)).toBe(expected);
     });
 
@@ -618,10 +472,8 @@ describe('BigQueryFormatter', () => {
         ALTER TABLE mydataset.mytable
         SET DEFAULT COLLATE 'und:ci'`;
       const expected = dedent`
-        ALTER TABLE
-          mydataset.mytable
-        SET DEFAULT COLLATE
-          'und:ci'`;
+        ALTER TABLE mydataset.mytable
+        SET DEFAULT COLLATE 'und:ci'`;
       expect(format(input)).toBe(expected);
     });
 
@@ -633,12 +485,9 @@ describe('BigQueryFormatter', () => {
           description="Price per unit"
         )`;
       const expected = dedent`
-        ALTER TABLE
-          mydataset.mytable
-        ALTER COLUMN
-          price
-        SET OPTIONS
-          (description = "Price per unit")`;
+        ALTER TABLE mydataset.mytable
+        ALTER COLUMN price
+        SET OPTIONS (description = "Price per unit")`;
       expect(format(input)).toBe(expected);
     });
 
@@ -648,10 +497,8 @@ describe('BigQueryFormatter', () => {
         ALTER COLUMN price
         DROP NOT NULL`;
       const expected = dedent`
-        ALTER TABLE
-          mydataset.mytable
-        ALTER COLUMN
-          price
+        ALTER TABLE mydataset.mytable
+        ALTER COLUMN price
         DROP NOT NULL`;
       expect(format(input)).toBe(expected);
     });
@@ -662,12 +509,9 @@ describe('BigQueryFormatter', () => {
         ALTER COLUMN price
         SET DATA TYPE NUMERIC`;
       const expected = dedent`
-        ALTER TABLE
-          mydataset.mytable
-        ALTER COLUMN
-          price
-        SET DATA TYPE
-          NUMERIC`;
+        ALTER TABLE mydataset.mytable
+        ALTER COLUMN price
+        SET DATA TYPE NUMERIC`;
       expect(format(input)).toBe(expected);
     });
 
@@ -678,12 +522,10 @@ describe('BigQueryFormatter', () => {
           expiration_timestamp=TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
         )`;
       const expected = dedent`
-        ALTER VIEW
-          mydataset.myview
-        SET OPTIONS
-          (
-            expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
-          )`;
+        ALTER VIEW mydataset.myview
+        SET OPTIONS (
+          expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+        )`;
       expect(format(input)).toBe(expected);
     });
 
@@ -694,92 +536,27 @@ describe('BigQueryFormatter', () => {
           size_gb = 250
         )`;
       const expected = dedent`
-        ALTER BI_CAPACITY
-          my-project.region-us.default
-        SET OPTIONS
-          (size_gb = 250)`;
+        ALTER BI_CAPACITY my-project.region-us.default
+        SET OPTIONS (size_gb = 250)`;
       expect(format(input)).toBe(expected);
     });
   });
 
   describe('BigQuery DDL Drop Statements', () => {
-    const dropCmds = {
-      schema: ['DROP SCHEMA', 'DROP SCHEMA IF EXISTS'],
-      view: ['DROP VIEW', 'DROP VIEW IF EXISTS'],
-      materializedViews: ['DROP MATERIALIZED VIEW', 'DROP MATERIALIZED VIEW IF EXISTS'],
-      function: ['DROP FUNCTION', 'DROP FUNCTION IF EXISTS'],
-      tableFunction: ['DROP TABLE FUNCTION', 'DROP TABLE FUNCTION IF EXISTS'],
-      procedure: ['DROP PROCEDURE', 'DROP PROCEDURE IF EXISTS'],
-      reservation: ['DROP RESERVATION', 'DROP RESERVATION IF EXISTS'],
-      assignment: ['DROP ASSIGNMENT', 'DROP ASSIGNMENT IF EXISTS'],
-    };
-
-    flatKeywordList(dropCmds).forEach(drop => {
-      it(`Supports ${drop}`, () => {
-        const input = `
-          ${drop} mydataset.name`;
-        const expected = dedent`
-          ${drop}
-            mydataset.name`;
-        expect(format(input)).toBe(expected);
-      });
-    });
-
-    it(`Supports DROP SCHEMA - CASCADE`, () => {
-      const input = `
-        DROP SCHEMA mydataset CASCADE`;
-      const expected = dedent`
-        DROP SCHEMA
-          mydataset CASCADE`;
-      expect(format(input)).toBe(expected);
-    });
-
-    it(`Supports DROP SCHEMA - RESTRICT`, () => {
-      const input = `
-        DROP SCHEMA mydataset RESTRICT`;
-      const expected = dedent`
-        DROP SCHEMA
-          mydataset RESTRICT`;
-      expect(format(input)).toBe(expected);
-    });
-
-    const dropSearchIndices = ['DROP SEARCH INDEX', 'DROP SEARCH INDEX IF EXISTS'];
-    dropSearchIndices.forEach(dropSearchIndex => {
-      it(`Supports ${dropSearchIndex}`, () => {
-        const input = `
-          ${dropSearchIndex} index2 ON mydataset.mytable`;
-        const expected = dedent`
-          ${dropSearchIndex}
-            index2 ON mydataset.mytable`;
-        expect(format(input)).toBe(expected);
-      });
-    });
-
-    it(`Supports DROP ROW ACCESS POLICY`, () => {
-      const input = `
-        DROP mypolicy ON mydataset.mytable`;
-      const expected = dedent`
-        DROP
-          mypolicy ON mydataset.mytable`;
-      expect(format(input)).toBe(expected);
-    });
-
-    it(`Supports DROP ROW ACCESS POLICY IF EXISTS`, () => {
-      const input = `
-        DROP IF EXISTS mypolicy ON mydataset.mytable`;
-      const expected = dedent`
-        DROP IF EXISTS
-          mypolicy ON mydataset.mytable`;
-      expect(format(input)).toBe(expected);
-    });
-
-    it(`Supports DROP ALL ROW ACCESS POLICIES`, () => {
-      const input = `
-        DROP ALL ROW ACCESS POLICIES ON table_name`;
-      const expected = dedent`
-        DROP ALL ROW ACCESS POLICIES
-          ON table_name`;
-      expect(format(input)).toBe(expected);
+    it(`Supports DROP clauses`, () => {
+      const input = dedent`
+        DROP SCHEMA mydataset.name;
+        DROP VIEW mydataset.name;
+        DROP FUNCTION mydataset.name;
+        DROP TABLE FUNCTION mydataset.name;
+        DROP PROCEDURE mydataset.name;
+        DROP RESERVATION mydataset.name;
+        DROP ASSIGNMENT mydataset.name;
+        DROP SEARCH INDEX index2 ON mydataset.mytable;
+        DROP mypolicy ON mydataset.mytable;
+        DROP ALL ROW ACCESS POLICIES ON table_name;
+      `;
+      expect(format(input, { linesBetweenQueries: 0 })).toBe(input);
     });
   });
 });

@@ -1,5 +1,6 @@
 import { expandPhrases } from '../../expandPhrases.js';
 import Formatter from '../../formatter/Formatter.js';
+import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
 import Tokenizer from '../../lexer/Tokenizer.js';
 import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
 import { keywords } from './mariadb.keywords.js';
@@ -25,15 +26,20 @@ const reservedClauses = expandPhrases([
   'REPLACE [LOW_PRIORITY | DELAYED] [INTO]',
   'VALUES',
   // - update:
-  'UPDATE [LOW_PRIORITY] [IGNORE]',
   'SET',
-  // - delete:
-  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
-  // - truncate:
-  'TRUNCATE [TABLE]',
   // Data definition
   'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [TEMPORARY] TABLE [IF NOT EXISTS]',
+  // other
+  'RETURNING',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE [LOW_PRIORITY] [IGNORE]',
+  // - delete:
+  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
+  // - drop table:
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
   // - alter table:
   'ALTER [ONLINE] [IGNORE] TABLE [IF EXISTS]',
@@ -45,7 +51,8 @@ const reservedClauses = expandPhrases([
   'ALTER [COLUMN]',
   '{SET | DROP} DEFAULT', // for alter column
   'SET {VISIBLE | INVISIBLE}', // for alter column
-
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // https://mariadb.com/docs/reference/mdb/sql-statements/
   'ALTER DATABASE',
   'ALTER DATABASE COMMENT',
@@ -129,7 +136,6 @@ const reservedClauses = expandPhrases([
   'RESET REPLICA',
   'RESET SLAVE',
   'RESIGNAL',
-  'RETURNING',
   'REVOKE',
   'ROLLBACK',
   'SAVEPOINT',
@@ -263,8 +269,8 @@ const reservedPhrases = expandPhrases([
 export default class MariaDbFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -290,6 +296,12 @@ export default class MariaDbFormatter extends Formatter {
       operators: ['%', ':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||', '!'],
       postProcess,
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }
 

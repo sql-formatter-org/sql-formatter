@@ -1,5 +1,6 @@
 import { expandPhrases } from '../../expandPhrases.js';
 import Formatter from '../../formatter/Formatter.js';
+import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
 import Tokenizer from '../../lexer/Tokenizer.js';
 import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
 import { keywords } from './spark.keywords.js';
@@ -26,8 +27,6 @@ const reservedClauses = expandPhrases([
   // - insert:
   'INSERT [INTO | OVERWRITE] [TABLE]',
   'VALUES',
-  // - truncate:
-  'TRUNCATE TABLE',
   // - insert overwrite directory:
   //   https://spark.apache.org/docs/latest/sql-ref-syntax-dml-insert-overwrite-directory.html
   'INSERT OVERWRITE [LOCAL] DIRECTORY',
@@ -38,6 +37,10 @@ const reservedClauses = expandPhrases([
   // Data definition
   'CREATE [OR REPLACE] [GLOBAL TEMPORARY | TEMPORARY] VIEW [IF NOT EXISTS]',
   'CREATE [EXTERNAL] TABLE [IF NOT EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
+  // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE',
@@ -46,7 +49,10 @@ const reservedClauses = expandPhrases([
   'RENAME TO',
   'RENAME COLUMN',
   'ALTER COLUMN',
-
+  // - truncate:
+  'TRUNCATE TABLE',
+  // other
+  'LATERAL VIEW',
   'ALTER DATABASE',
   'ALTER VIEW',
   'CREATE DATABASE',
@@ -87,8 +93,6 @@ const reservedClauses = expandPhrases([
   'SHOW TBLPROPERTIES',
   'SHOW VIEWS',
   'UNCACHE TABLE',
-  // other
-  'LATERAL VIEW',
 ]);
 
 const reservedSetOperations = expandPhrases([
@@ -119,8 +123,8 @@ const reservedPhrases = expandPhrases([
 export default class SparkFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -139,6 +143,12 @@ export default class SparkFormatter extends Formatter {
       operators: ['%', '~', '^', '|', '&', '<=>', '==', '!', '||', '->'],
       postProcess,
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }
 

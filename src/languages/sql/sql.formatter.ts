@@ -1,5 +1,6 @@
 import { expandPhrases } from '../../expandPhrases.js';
 import Formatter from '../../formatter/Formatter.js';
+import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
 import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './sql.functions.js';
 import { keywords } from './sql.keywords.js';
@@ -24,16 +25,19 @@ const reservedClauses = expandPhrases([
   'INSERT INTO',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  'WHERE CURRENT OF',
-  // - delete:
-  'DELETE FROM',
-  // - truncate:
-  'TRUNCATE TABLE',
   // Data definition
   'CREATE [RECURSIVE] VIEW',
   'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  'WHERE CURRENT OF',
+  // - delete:
+  'DELETE FROM',
+  // - drop table:
   'DROP TABLE',
   // - alter table:
   'ALTER TABLE',
@@ -46,7 +50,8 @@ const reservedClauses = expandPhrases([
   'ADD SCOPE', // for alter column
   'DROP SCOPE {CASCADE | RESTRICT}', // for alter column
   'RESTART WITH', // for alter column
-
+  // - truncate:
+  'TRUNCATE TABLE',
   // other
   'SET SCHEMA',
 ]);
@@ -73,8 +78,8 @@ const reservedPhrases = expandPhrases([
 export default class SqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -88,5 +93,11 @@ export default class SqlFormatter extends Formatter {
       paramTypes: { positional: true },
       operators: ['||'],
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }

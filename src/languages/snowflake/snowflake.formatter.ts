@@ -7,17 +7,6 @@ import { keywords } from './snowflake.keywords.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
-// https://docs.snowflake.com/en/sql-reference/sql-all.html
-//
-// 1. run in console on this page: $x('//tbody/tr/*[1]//a/span/text()').map(x => x.nodeValue)
-// 2. delete all lines that contain a sting like '(.*)', they are already covered in the list
-// 3. delete all lines that contain a sting like '<.*>', they are already covered in the list
-// 4. delete all lines that contain '…', they are part of a regex statement that can't be covered here
-// 5. Manually add 'COPY INTO'
-//
-// Steps 1-4 can be combined by the following script in the developer console:
-// $x('//tbody/tr/*[1]//a/span/text()').map(x => x.nodeValue) // Step 1
-//   filter(x => !x.match(/\(.*\)/) && !x.match(/…/) && !x.match(/<.*>/)) // Step 2-4
 const reservedClauses = expandPhrases([
   // queries
   'WITH [RECURSIVE]',
@@ -36,12 +25,7 @@ const reservedClauses = expandPhrases([
   '{THEN | ELSE} INTO',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  // - delete:
-  'DELETE FROM',
-  // - truncate:
-  'TRUNCATE [TABLE] [IF EXISTS]',
   // Data definition
   // - view
   'CREATE [OR REPLACE] [SECURE] [RECURSIVE] VIEW [IF NOT EXISTS]',
@@ -56,6 +40,14 @@ const reservedClauses = expandPhrases([
   'WHEN MATCHED [AND]',
   'THEN {UPDATE SET | DELETE}',
   'WHEN NOT MATCHED THEN INSERT',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  // - delete:
+  'DELETE FROM',
+  // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE [IF EXISTS]',
@@ -70,7 +62,7 @@ const reservedClauses = expandPhrases([
   '{ADD | ALTER | MODIFY | DROP} [CONSTRAINT]',
   'RENAME CONSTRAINT',
   '{ADD | DROP} SEARCH OPTIMIZATION',
-  '{SET | UNSET} [TAG]',
+  '{SET | UNSET} TAG', // Actually TAG is optional, but that conflicts with UPDATE..SET statement
   '{ADD | DROP} ROW ACCESS POLICY',
   'DROP ALL ROW ACCESS POLICIES',
   '{SET | DROP} DEFAULT', // for alter column
@@ -78,7 +70,8 @@ const reservedClauses = expandPhrases([
   '[SET DATA] TYPE', // for alter column
   '[UNSET] COMMENT', // for alter column
   '{SET | UNSET} MASKING POLICY', // for alter column
-
+  // - truncate:
+  'TRUNCATE [TABLE] [IF EXISTS]',
   // other
   // https://docs.snowflake.com/en/sql-reference/sql-all.html
   //
@@ -87,16 +80,7 @@ const reservedClauses = expandPhrases([
   // 3. delete all lines that contain a sting like '<.*>', they are already covered in the list
   // 4. delete all lines that contain '…', they are part of a regex statement that can't be covered here
   // 5. Manually add 'COPY INTO'
-  // 6. Remove all lines that are already in the above definitions:
-  //   - ALTER TABLE
-  //   - COMMENT
-  //   - CREATE TABLE
-  //   - CREATE VIEW
-  //   - DROP TABLE
-  //   - TRUNCATE TABLE
-  //   - SELECT
-  //   - UPDATE
-  //   - SET
+  // 6. Remove all lines that are already in `reservedClauses`
   //
   // Steps 1-4 can be combined by the following script in the developer console:
   // $x('//tbody/tr/*[1]//a/span/text()').map(x => x.nodeValue) // Step 1
@@ -315,8 +299,8 @@ const reservedPhrases = expandPhrases([
 export default class SnowflakeFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -349,6 +333,9 @@ export default class SnowflakeFormatter extends Formatter {
   }
 
   formatOptions(): DialectFormatOptions {
-    return { alwaysDenseOperators: [':', '::'] };
+    return {
+      alwaysDenseOperators: [':', '::'],
+      onelineClauses,
+    };
   }
 }

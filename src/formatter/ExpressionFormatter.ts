@@ -36,7 +36,7 @@ import InlineLayout, { InlineLayoutError } from './InlineLayout.js';
 
 interface ExpressionFormatterParams {
   cfg: FormatOptions;
-  dialectCfg: DialectFormatOptions;
+  dialectCfg: ProcessedDialectFormatOptions;
   params: Params;
   layout: Layout;
   inline?: boolean;
@@ -45,12 +45,21 @@ interface ExpressionFormatterParams {
 export interface DialectFormatOptions {
   // List of operators that should always be formatted without surrounding spaces
   alwaysDenseOperators?: string[];
+  // List of clauses that should be formatted on a single line
+  onelineClauses: string[];
+}
+
+// Contains the same data as DialectFormatOptions,
+// but optimized for faster and more conventient lookup.
+export interface ProcessedDialectFormatOptions {
+  alwaysDenseOperators: string[];
+  onelineClauses: Record<string, boolean>;
 }
 
 /** Formats a generic SQL expression */
 export default class ExpressionFormatter {
   private cfg: FormatOptions;
-  private dialectCfg: DialectFormatOptions;
+  private dialectCfg: ProcessedDialectFormatOptions;
   private params: Params;
   private layout: Layout;
 
@@ -207,18 +216,36 @@ export default class ExpressionFormatter {
   }
 
   private formatClause(node: ClauseNode) {
-    if (isTabularStyle(this.cfg)) {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.SPACE);
+    if (this.isOnelineClause(node)) {
+      this.formatClauseInOnelineStyle(node);
+    } else if (isTabularStyle(this.cfg)) {
+      this.formatClauseInTabularStyle(node);
     } else {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.NEWLINE);
+      this.formatClauseInIndentedStyle(node);
     }
+  }
+
+  private isOnelineClause(node: ClauseNode): boolean {
+    return this.dialectCfg.onelineClauses[node.nameKw.text];
+  }
+
+  private formatClauseInIndentedStyle(node: ClauseNode) {
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.NEWLINE);
     this.layout.indentation.increaseTopLevel();
-
-    if (!isTabularStyle(this.cfg)) {
-      this.layout.add(WS.INDENT);
-    }
+    this.layout.add(WS.INDENT);
     this.layout = this.formatSubExpression(node.children);
+    this.layout.indentation.decreaseTopLevel();
+  }
 
+  private formatClauseInOnelineStyle(node: ClauseNode) {
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.SPACE);
+    this.layout = this.formatSubExpression(node.children);
+  }
+
+  private formatClauseInTabularStyle(node: ClauseNode) {
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.SPACE);
+    this.layout.indentation.increaseTopLevel();
+    this.layout = this.formatSubExpression(node.children);
     this.layout.indentation.decreaseTopLevel();
   }
 
@@ -267,7 +294,7 @@ export default class ExpressionFormatter {
   }
 
   private formatOperator({ text }: OperatorNode) {
-    if (this.cfg.denseOperators || this.dialectCfg.alwaysDenseOperators?.includes(text)) {
+    if (this.cfg.denseOperators || this.dialectCfg.alwaysDenseOperators.includes(text)) {
       this.layout.add(WS.NO_SPACE, text);
     } else if (text === ':') {
       this.layout.add(WS.NO_SPACE, text, WS.SPACE);

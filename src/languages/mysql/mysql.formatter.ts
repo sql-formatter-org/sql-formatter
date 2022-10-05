@@ -1,5 +1,6 @@
 import { expandPhrases } from '../../expandPhrases.js';
 import Formatter from '../../formatter/Formatter.js';
+import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
 import Tokenizer from '../../lexer/Tokenizer.js';
 import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
 import { keywords } from './mysql.keywords.js';
@@ -25,15 +26,18 @@ const reservedClauses = expandPhrases([
   'REPLACE [LOW_PRIORITY | DELAYED] [INTO]',
   'VALUES',
   // - update:
-  'UPDATE [LOW_PRIORITY] [IGNORE]',
   'SET',
-  // - delete:
-  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
-  // - truncate:
-  'TRUNCATE [TABLE]',
   // Data definition
   'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY] TABLE [IF NOT EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE [LOW_PRIORITY] [IGNORE]',
+  // - delete:
+  'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
+  // - drop table:
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE',
@@ -44,7 +48,8 @@ const reservedClauses = expandPhrases([
   'RENAME COLUMN',
   'ALTER [COLUMN]',
   '{SET | DROP} DEFAULT', // for alter column
-
+  // - truncate:
+  'TRUNCATE [TABLE]',
   // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
   'ALTER DATABASE',
   'ALTER EVENT',
@@ -231,8 +236,8 @@ const reservedPhrases = expandPhrases([
 export default class MySqlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -258,6 +263,12 @@ export default class MySqlFormatter extends Formatter {
       operators: ['%', ':=', '&', '|', '^', '~', '<<', '>>', '<=>', '->', '->>', '&&', '||', '!'],
       postProcess,
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }
 

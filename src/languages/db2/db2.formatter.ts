@@ -1,5 +1,6 @@
 import { expandPhrases } from '../../expandPhrases.js';
 import Formatter from '../../formatter/Formatter.js';
+import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
 import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './db2.functions.js';
 import { keywords } from './db2.keywords.js';
@@ -21,14 +22,7 @@ const reservedClauses = expandPhrases([
   'INSERT INTO',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  'WHERE CURRENT OF',
-  'WITH {RR | RS | CS | UR}',
-  // - delete:
-  'DELETE FROM',
-  // - truncate:
-  'TRUNCATE [TABLE]',
   // - merge:
   'MERGE INTO',
   'WHEN [NOT] MATCHED [THEN]',
@@ -37,6 +31,16 @@ const reservedClauses = expandPhrases([
   // Data definition
   'CREATE [OR REPLACE] VIEW',
   'CREATE [GLOBAL TEMPORARY] TABLE',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  'WHERE CURRENT OF',
+  'WITH {RR | RS | CS | UR}',
+  // - delete:
+  'DELETE FROM',
+  // - drop table:
   'DROP TABLE [HIERARCHY]',
   // alter table:
   'ALTER TABLE',
@@ -47,7 +51,12 @@ const reservedClauses = expandPhrases([
   'SET DATA TYPE', // for alter column
   'SET NOT NULL', // for alter column
   'DROP {IDENTITY | EXPRESSION | DEFAULT | NOT NULL}', // for alter column
-
+  // - truncate:
+  'TRUNCATE [TABLE]',
+  // other
+  'SET [CURRENT] SCHEMA',
+  'AFTER',
+  'GO',
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=statements-list-supported
   'ALLOCATE CURSOR',
   'ALTER DATABASE',
@@ -147,15 +156,10 @@ const reservedClauses = expandPhrases([
   'SET CURRENT TEMPORAL SYSTEM_TIME',
   'SET ENCRYPTION PASSWORD',
   'SET PATH',
-  'SET SCHEMA',
   'SET SESSION TIME ZONE',
   'SIGNAL',
   'VALUES INTO',
   'WHENEVER',
-  // other
-  'AFTER',
-  'GO',
-  'SET CURRENT SCHEMA',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);
@@ -177,8 +181,8 @@ const reservedPhrases = expandPhrases([
 export default class Db2Formatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -193,5 +197,11 @@ export default class Db2Formatter extends Formatter {
       paramChars: { first: '@#$', rest: '@#$' },
       operators: ['**', '¬=', '¬>', '¬<', '!>', '!<', '||'],
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }

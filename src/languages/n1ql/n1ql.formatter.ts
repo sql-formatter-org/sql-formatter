@@ -1,5 +1,6 @@
 import { expandPhrases } from '../../expandPhrases.js';
 import Formatter from '../../formatter/Formatter.js';
+import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
 import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './n1ql.functions.js';
 import { keywords } from './n1ql.keywords.js';
@@ -23,15 +24,25 @@ const reservedClauses = expandPhrases([
   'INSERT INTO',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  // - delete:
-  'DELETE FROM',
   // - merge:
   'MERGE INTO',
   'WHEN [NOT] MATCHED THEN',
   'UPDATE SET',
   'INSERT',
+  // other
+  'NEST',
+  'UNNEST',
+  'RETURNING',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  // - delete:
+  'DELETE FROM',
+  // - set schema:
+  'SET SCHEMA',
   // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html
   'ADVISE',
   'ALTER INDEX',
@@ -54,7 +65,6 @@ const reservedClauses = expandPhrases([
   'GRANT',
   'INFER',
   'PREPARE',
-  'RETURNING',
   'REVOKE',
   'ROLLBACK TRANSACTION',
   'SAVEPOINT',
@@ -63,12 +73,9 @@ const reservedClauses = expandPhrases([
   'UPSERT',
   // other
   'LET',
-  'NEST',
   'SET CURRENT SCHEMA',
-  'SET SCHEMA',
   'SHOW',
-  'UNNEST',
-  'USE KEYS',
+  'USE [PRIMARY] KEYS',
 ]);
 
 const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INTERSECT [ALL]']);
@@ -81,8 +88,8 @@ const reservedPhrases = expandPhrases(['{ROWS | RANGE | GROUPS} BETWEEN']);
 export default class N1qlFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -99,5 +106,11 @@ export default class N1qlFormatter extends Formatter {
       lineCommentTypes: ['#', '--'],
       operators: ['%', '==', ':', '||'],
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }

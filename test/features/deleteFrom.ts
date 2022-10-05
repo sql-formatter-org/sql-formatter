@@ -13,8 +13,7 @@ export default function supportsDeleteFrom(
   it('formats DELETE FROM statement', () => {
     const result = format("DELETE FROM Customers WHERE CustomerName='Alfred' AND Phone=5002132;");
     expect(result).toBe(dedent`
-      DELETE FROM
-        Customers
+      DELETE FROM Customers
       WHERE
         CustomerName = 'Alfred'
         AND Phone = 5002132;
@@ -25,8 +24,7 @@ export default function supportsDeleteFrom(
     it('formats DELETE statement (without FROM)', () => {
       const result = format("DELETE Customers WHERE CustomerName='Alfred';");
       expect(result).toBe(dedent`
-        DELETE
-          Customers
+        DELETE Customers
         WHERE
           CustomerName = 'Alfred';
       `);

@@ -1,5 +1,6 @@
 import { expandPhrases } from '../../expandPhrases.js';
 import Formatter from '../../formatter/Formatter.js';
+import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
 import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './sqlite.functions.js';
 import { keywords } from './sqlite.keywords.js';
@@ -24,13 +25,18 @@ const reservedClauses = expandPhrases([
   'REPLACE INTO',
   'VALUES',
   // - update:
-  'UPDATE [OR ABORT | OR FAIL | OR IGNORE | OR REPLACE | OR ROLLBACK]',
   'SET',
-  // - delete:
-  'DELETE FROM',
   // Data definition
   'CREATE [TEMPORARY | TEMP] VIEW [IF NOT EXISTS]',
   'CREATE [TEMPORARY | TEMP] TABLE [IF NOT EXISTS]',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE [OR ABORT | OR FAIL | OR IGNORE | OR REPLACE | OR ROLLBACK]',
+  // - delete:
+  'DELETE FROM',
+  // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE',
@@ -38,8 +44,7 @@ const reservedClauses = expandPhrases([
   'DROP [COLUMN]',
   'RENAME [COLUMN]',
   'RENAME TO',
-
-  // other
+  // - set schema
   'SET SCHEMA',
 ]);
 
@@ -62,8 +67,8 @@ const reservedPhrases = expandPhrases([
 export default class SqliteFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -80,5 +85,11 @@ export default class SqliteFormatter extends Formatter {
       paramTypes: { positional: true, numbered: ['?'], named: [':', '@', '$'] },
       operators: ['%', '~', '&', '|', '<<', '>>', '==', '->', '->>', '||'],
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }

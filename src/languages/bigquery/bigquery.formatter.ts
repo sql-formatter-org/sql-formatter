@@ -1,4 +1,5 @@
 import Formatter from '../../formatter/Formatter.js';
+import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
 import Tokenizer from '../../lexer/Tokenizer.js';
 import { EOF_TOKEN, isToken, TokenType, Token } from '../../lexer/token.js';
 import { expandPhrases } from '../../expandPhrases.js';
@@ -26,12 +27,7 @@ const reservedClauses = expandPhrases([
   'INSERT [INTO]',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  // - delete:
-  'DELETE [FROM]',
-  // - truncate:
-  'TRUNCATE TABLE',
   // - merge:
   'MERGE [INTO]',
   'WHEN [NOT] MATCHED [BY SOURCE | BY TARGET] [THEN]',
@@ -39,6 +35,20 @@ const reservedClauses = expandPhrases([
   // Data definition, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
   'CREATE [OR REPLACE] [MATERIALIZED] VIEW [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [TEMP|TEMPORARY|SNAPSHOT|EXTERNAL] TABLE [IF NOT EXISTS]',
+
+  'CLUSTER BY',
+  'FOR SYSTEM_TIME AS OF', // CREATE SNAPSHOT TABLE
+  'WITH CONNECTION',
+  'WITH PARTITION COLUMNS',
+  'REMOTE WITH CONNECTION',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  // - delete:
+  'DELETE [FROM]',
+  // - drop table:
   'DROP [SNAPSHOT | EXTERNAL] TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE [IF EXISTS]',
@@ -50,29 +60,35 @@ const reservedClauses = expandPhrases([
   'SET OPTIONS', // for alter column
   'DROP NOT NULL', // for alter column
   'SET DATA TYPE', // for alter column
-
+  // - alter schema
+  'ALTER SCHEMA [IF EXISTS]',
+  // - alter view
+  'ALTER [MATERIALIZED] VIEW [IF EXISTS]',
+  // - alter bi_capacity
+  'ALTER BI_CAPACITY',
+  // - truncate:
+  'TRUNCATE TABLE',
+  // - create schema
   'CREATE SCHEMA [IF NOT EXISTS]',
   'DEFAULT COLLATE',
-  'CLUSTER BY',
-  'FOR SYSTEM_TIME AS OF', // CREATE SNAPSHOT TABLE
-  'WITH CONNECTION',
-  'WITH PARTITION COLUMNS',
+
+  // stored procedures
   'CREATE [OR REPLACE] [TEMP|TEMPORARY|TABLE] FUNCTION [IF NOT EXISTS]',
-  'REMOTE WITH CONNECTION',
-  'RETURNS TABLE',
   'CREATE [OR REPLACE] PROCEDURE [IF NOT EXISTS]',
+  // row access policy
   'CREATE [OR REPLACE] ROW ACCESS POLICY [IF NOT EXISTS]',
   'GRANT TO',
   'FILTER USING',
+  // capacity
   'CREATE CAPACITY',
   'AS JSON',
+  // reservation
   'CREATE RESERVATION',
+  // assignment
   'CREATE ASSIGNMENT',
+  // search index
   'CREATE SEARCH INDEX [IF NOT EXISTS]',
-  'ALTER SCHEMA [IF EXISTS]',
-
-  'ALTER [MATERIALIZED] VIEW [IF EXISTS]',
-  'ALTER BI_CAPACITY',
+  // drop
   'DROP SCHEMA [IF EXISTS]',
   'DROP [MATERIALIZED] VIEW [IF EXISTS]',
   'DROP [TABLE] FUNCTION [IF EXISTS]',
@@ -143,8 +159,8 @@ export default class BigQueryFormatter extends Formatter {
   // TODO: handle trailing comma in select clause
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -168,6 +184,12 @@ export default class BigQueryFormatter extends Formatter {
       operators: ['&', '|', '^', '~', '>>', '<<', '||'],
       postProcess,
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }
 

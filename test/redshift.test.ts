@@ -121,8 +121,7 @@ describe('RedshiftFormatter', () => {
         REGION AS 'us-east-1'
       `)
     ).toBe(dedent`
-      COPY
-        schema.table
+      COPY schema.table
       FROM
         's3://bucket/file.csv' IAM_ROLE 'arn:aws:iam::123456789:role/rolename' FORMAT AS CSV DELIMITER ',' QUOTE '"' REGION AS 'us-east-1'
     `);
@@ -135,19 +134,13 @@ describe('RedshiftFormatter', () => {
          ALTER TABLE t ALTER COLUMN foo ENCODE my_encoding;`
       )
     ).toBe(dedent`
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
-      TYPE
-        VARCHAR;
+      ALTER TABLE t
+      ALTER COLUMN foo
+      TYPE VARCHAR;
 
-      ALTER TABLE
-        t
-      ALTER COLUMN
-        foo
-      ENCODE
-        my_encoding;
+      ALTER TABLE t
+      ALTER COLUMN foo
+      ENCODE my_encoding;
     `);
   });
 });

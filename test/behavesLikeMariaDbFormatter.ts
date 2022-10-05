@@ -102,10 +102,8 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   // Issue #181
   it('does not wrap CHARACTER SET to multiple lines', () => {
     expect(format('ALTER TABLE t MODIFY col1 VARCHAR(50) CHARACTER SET greek')).toBe(dedent`
-      ALTER TABLE
-        t
-      MODIFY
-        col1 VARCHAR(50) CHARACTER SET greek
+      ALTER TABLE t
+      MODIFY col1 VARCHAR(50) CHARACTER SET greek
     `);
   });
 

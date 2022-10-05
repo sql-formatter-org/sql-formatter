@@ -1,5 +1,6 @@
 import { expandPhrases } from '../../expandPhrases.js';
 import Formatter from '../../formatter/Formatter.js';
+import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
 import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './trino.functions.js';
 import { keywords } from './trino.keywords.js';
@@ -25,15 +26,27 @@ const reservedClauses = expandPhrases([
   'INSERT INTO',
   'VALUES',
   // - update:
-  'UPDATE',
   'SET',
-  // - delete:
-  'DELETE FROM',
-  // - truncate:
-  'TRUNCATE TABLE',
   // Data definition
   'CREATE [OR REPLACE] [MATERIALIZED] VIEW',
   'CREATE TABLE [IF NOT EXISTS]',
+  // MATCH_RECOGNIZE
+  'MATCH_RECOGNIZE',
+  'MEASURES',
+  'ONE ROW PER MATCH',
+  'ALL ROWS PER MATCH',
+  'AFTER MATCH',
+  'PATTERN',
+  'SUBSET',
+  'DEFINE',
+]);
+
+const onelineClauses = expandPhrases([
+  // - update:
+  'UPDATE',
+  // - delete:
+  'DELETE FROM',
+  // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:
   'ALTER TABLE [IF EXISTS]',
@@ -44,14 +57,16 @@ const reservedClauses = expandPhrases([
   'SET AUTHORIZATION [USER | ROLE]',
   'SET PROPERTIES',
   'EXECUTE',
+  // - truncate:
+  'TRUNCATE TABLE',
 
+  // other
   'ALTER SCHEMA',
   'ALTER MATERIALIZED VIEW',
   'ALTER VIEW',
   'CREATE SCHEMA',
   'CREATE ROLE',
   'DROP SCHEMA',
-  'DROP COLUMN',
   'DROP MATERIALIZED VIEW',
   'DROP VIEW',
   'DROP ROLE',
@@ -88,16 +103,6 @@ const reservedClauses = expandPhrases([
   'SHOW ROLE GRANTS',
   'SHOW FUNCTIONS',
   'SHOW SESSION',
-
-  // MATCH_RECOGNIZE
-  'MATCH_RECOGNIZE',
-  'MEASURES',
-  'ONE ROW PER MATCH',
-  'ALL ROWS PER MATCH',
-  'AFTER MATCH',
-  'PATTERN',
-  'SUBSET',
-  'DEFINE',
 ]);
 
 // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-parser/src/main/antlr4/io/trino/sql/parser/SqlBase.g4#L231-L235
@@ -122,8 +127,8 @@ const reservedPhrases = expandPhrases(['{ROWS | RANGE | GROUPS} BETWEEN']);
 export default class TrinoFormatter extends Formatter {
   tokenizer() {
     return new Tokenizer({
-      reservedClauses,
       reservedSelect,
+      reservedClauses: [...reservedClauses, ...onelineClauses],
       reservedSetOperations,
       reservedJoins,
       reservedPhrases,
@@ -155,5 +160,11 @@ export default class TrinoFormatter extends Formatter {
         // '?', conflicts with positional placeholders
       ],
     });
+  }
+
+  formatOptions(): DialectFormatOptions {
+    return {
+      onelineClauses,
+    };
   }
 }
