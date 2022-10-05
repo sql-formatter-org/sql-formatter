@@ -141,7 +141,7 @@ const reservedPhrases = expandPhrases([
 
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export const redshift: DialectOptions = {
-  tokenizer: {
+  tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],
     reservedSetOperations,

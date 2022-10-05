@@ -232,7 +232,7 @@ const reservedPhrases = expandPhrases([
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export const mysql: DialectOptions = {
-  tokenizer: {
+  tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],
     reservedSetOperations,

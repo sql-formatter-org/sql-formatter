@@ -250,7 +250,7 @@ const reservedPhrases = expandPhrases([
 
 // https://www.postgresql.org/docs/14/index.html
 export const postgresql: DialectOptions = {
-  tokenizer: {
+  tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],
     reservedSetOperations,

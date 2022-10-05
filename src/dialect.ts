@@ -6,7 +6,7 @@ import Tokenizer from './lexer/Tokenizer.js';
 import { TokenizerOptions } from './lexer/TokenizerOptions.js';
 
 export interface DialectOptions {
-  tokenizer: TokenizerOptions;
+  tokenizerOptions: TokenizerOptions;
   formatOptions: DialectFormatOptions;
 }
 
@@ -32,7 +32,7 @@ export const createDialect = (options: DialectOptions): Dialect => {
 };
 
 const dialectFromOptions = (dialectOptions: DialectOptions): Dialect => ({
-  tokenizer: new Tokenizer(dialectOptions.tokenizer),
+  tokenizer: new Tokenizer(dialectOptions.tokenizerOptions),
   formatOptions: processDialectFormatOptions(dialectOptions.formatOptions),
 });
 

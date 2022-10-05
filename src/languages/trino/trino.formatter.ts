@@ -123,7 +123,7 @@ const reservedJoins = expandPhrases([
 const reservedPhrases = expandPhrases(['{ROWS | RANGE | GROUPS} BETWEEN']);
 
 export const trino: DialectOptions = {
-  tokenizer: {
+  tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],
     reservedSetOperations,

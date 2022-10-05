@@ -154,7 +154,7 @@ const reservedPhrases = expandPhrases([
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
 export const bigquery: DialectOptions = {
-  tokenizer: {
+  tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],
     reservedSetOperations,

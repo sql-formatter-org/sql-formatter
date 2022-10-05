@@ -83,7 +83,7 @@ const reservedPhrases = expandPhrases(['{ROWS | RANGE} BETWEEN']);
 
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export const hive: DialectOptions = {
-  tokenizer: {
+  tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],
     reservedSetOperations,
