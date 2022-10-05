@@ -156,7 +156,6 @@ const reservedPhrases = expandPhrases([
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
 export default class BigQueryFormatter extends Formatter {
-  // TODO: handle trailing comma in select clause
   tokenizer() {
     return new Tokenizer({
       reservedSelect,

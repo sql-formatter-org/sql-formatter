@@ -279,6 +279,16 @@ describe('BigQueryFormatter', () => {
     });
   });
 
+  it('supports trailing comma in SELECT clause', () => {
+    expect(format(`SELECT foo, bar, FROM tbl;`)).toBe(dedent`
+      SELECT
+        foo,
+        bar,
+      FROM
+        tbl;
+    `);
+  });
+
   describe('BigQuery DDL Create Statements', () => {
     it(`Supports CREATE SCHEMA`, () => {
       const input = `
