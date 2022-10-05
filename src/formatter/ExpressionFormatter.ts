@@ -306,8 +306,11 @@ export default class ExpressionFormatter {
   private formatLineComment(node: LineCommentNode) {
     if (isMultiline(node.precedingWhitespace || '')) {
       this.layout.add(WS.NEWLINE, WS.INDENT, node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
-    } else {
+    } else if (this.layout.getLayoutItems().length > 0) {
       this.layout.add(WS.NO_NEWLINE, WS.SPACE, node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
+    } else {
+      // comment is the first item in code - no need to add preceding spaces
+      this.layout.add(node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
     }
   }
 
