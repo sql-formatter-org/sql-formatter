@@ -1,7 +1,5 @@
+import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import Formatter from '../../formatter/Formatter.js';
-import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
-import Tokenizer from '../../lexer/Tokenizer.js';
 import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
 import { keywords } from './spark.keywords.js';
 import { functions } from './spark.functions.js';
@@ -120,37 +118,32 @@ const reservedPhrases = expandPhrases([
 ]);
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
-export default class SparkFormatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      reservedSelect,
-      reservedClauses: [...reservedClauses, ...onelineClauses],
-      reservedSetOperations,
-      reservedJoins,
-      reservedPhrases,
-      supportsXor: true,
-      reservedKeywords: keywords,
-      reservedFunctionNames: functions,
-      extraParens: ['[]'],
-      stringTypes: [
-        "''-bs",
-        '""-bs',
-        { quote: "''-raw", prefixes: ['R', 'X'], requirePrefix: true },
-        { quote: '""-raw', prefixes: ['R', 'X'], requirePrefix: true },
-      ],
-      identTypes: ['``'],
-      variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
-      operators: ['%', '~', '^', '|', '&', '<=>', '==', '!', '||', '->'],
-      postProcess,
-    });
-  }
-
-  formatOptions(): DialectFormatOptions {
-    return {
-      onelineClauses,
-    };
-  }
-}
+export const spark: DialectOptions = {
+  tokenizerOptions: {
+    reservedSelect,
+    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedSetOperations,
+    reservedJoins,
+    reservedPhrases,
+    supportsXor: true,
+    reservedKeywords: keywords,
+    reservedFunctionNames: functions,
+    extraParens: ['[]'],
+    stringTypes: [
+      "''-bs",
+      '""-bs',
+      { quote: "''-raw", prefixes: ['R', 'X'], requirePrefix: true },
+      { quote: '""-raw', prefixes: ['R', 'X'], requirePrefix: true },
+    ],
+    identTypes: ['``'],
+    variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
+    operators: ['%', '~', '^', '|', '&', '<=>', '==', '!', '||', '->'],
+    postProcess,
+  },
+  formatOptions: {
+    onelineClauses,
+  },
+};
 
 function postProcess(tokens: Token[]) {
   return tokens.map((token, i) => {

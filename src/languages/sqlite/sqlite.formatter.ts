@@ -1,7 +1,5 @@
+import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import Formatter from '../../formatter/Formatter.js';
-import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
-import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './sqlite.functions.js';
 import { keywords } from './sqlite.keywords.js';
 
@@ -64,32 +62,27 @@ const reservedPhrases = expandPhrases([
   '{ROWS | RANGE | GROUPS} BETWEEN',
 ]);
 
-export default class SqliteFormatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      reservedSelect,
-      reservedClauses: [...reservedClauses, ...onelineClauses],
-      reservedSetOperations,
-      reservedJoins,
-      reservedPhrases,
-      reservedKeywords: keywords,
-      reservedFunctionNames: functions,
-      stringTypes: [
-        "''-qq",
-        { quote: "''-raw", prefixes: ['X'], requirePrefix: true },
-        // Depending on context SQLite also supports double-quotes for strings,
-        // and single-quotes for identifiers.
-      ],
-      identTypes: [`""-qq`, '``', '[]'],
-      // https://www.sqlite.org/lang_expr.html#parameters
-      paramTypes: { positional: true, numbered: ['?'], named: [':', '@', '$'] },
-      operators: ['%', '~', '&', '|', '<<', '>>', '==', '->', '->>', '||'],
-    });
-  }
-
-  formatOptions(): DialectFormatOptions {
-    return {
-      onelineClauses,
-    };
-  }
-}
+export const sqlite: DialectOptions = {
+  tokenizerOptions: {
+    reservedSelect,
+    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedSetOperations,
+    reservedJoins,
+    reservedPhrases,
+    reservedKeywords: keywords,
+    reservedFunctionNames: functions,
+    stringTypes: [
+      "''-qq",
+      { quote: "''-raw", prefixes: ['X'], requirePrefix: true },
+      // Depending on context SQLite also supports double-quotes for strings,
+      // and single-quotes for identifiers.
+    ],
+    identTypes: [`""-qq`, '``', '[]'],
+    // https://www.sqlite.org/lang_expr.html#parameters
+    paramTypes: { positional: true, numbered: ['?'], named: [':', '@', '$'] },
+    operators: ['%', '~', '&', '|', '<<', '>>', '==', '->', '->>', '||'],
+  },
+  formatOptions: {
+    onelineClauses,
+  },
+};

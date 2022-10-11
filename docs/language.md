@@ -20,34 +20,35 @@ Specifies the SQL dialect to use.
 - `"sqlite"` - [SQLite][sqlite]
 - `"transactsql"` or `"tsql"` - [SQL Server Transact-SQL][tsql]
 - `"trino"` - [Trino][] / [Presto][]
-- custom formatter class (see below)
+- custom SQL dialect configuration object (see below)
 
 The default `"sql"` dialect is meant for cases where you don't know which dialect of SQL you're about to format.
 It's not an auto-detection, it just supports a subset of features common enough in many SQL implementations.
 This might or might not work for your specific dialect.
 Better to always pick something more specific if possible.
 
-### Custom formatter class (experimental)
+### Custom dialect configuration (experimental)
 
-The language parameter can also be used to specify a custom formatter implementation:
+The language parameter can also be used to specify a custom SQL dialect configuration:
 
 ```ts
-import { format, Formatter, Tokenizer } from 'sql-formatter';
+import { format, DialectOptions } from 'sql-formatter';
 
-class MyFormatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      // See source code for examples of tokenizer config options
-      // For example: src/languages/sqlite/sqlite.formatter.ts
-    });
-  }
-}
+const myDialect: DialectOptions {
+  tokenizerOptions: {
+    // See source code for examples of tokenizer config options
+    // For example: src/languages/sqlite/sqlite.formatter.ts
+  },
+  formatOptions: {
+    // ...
+  },
+};
 
-const result = format('SELECT * FROM tbl', { language: MyFormatter });
+const result = format('SELECT * FROM tbl', { language: myDialect });
 ```
 
 **NB!** This functionality is experimental and there are no stability guarantees for this API.
-The API of Formatter and Tokenizer classes can (and likely will) change in non-major releases.
+The DialectOptions interface can (and likely will) change in non-major releases.
 You likely only want to use this if your other alternative is to fork SQL Formatter.
 
 [standard sql]: https://en.wikipedia.org/wiki/SQL:2011

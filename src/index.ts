@@ -6,6 +6,5 @@ export type {
   LogicalOperatorNewline,
   FormatOptions,
 } from './FormatOptions.js';
-export { default as Formatter } from './formatter/Formatter.js';
-export { default as Tokenizer } from './lexer/Tokenizer.js';
+export type { DialectOptions } from './dialect.js';
 export { expandPhrases } from './expandPhrases.js';

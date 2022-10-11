@@ -1,7 +1,5 @@
+import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import Formatter from '../../formatter/Formatter.js';
-import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
-import Tokenizer from '../../lexer/Tokenizer.js';
 import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
 import { keywords } from './singlestoredb.keywords.js';
 import { functions } from './singlestoredb.functions.js';
@@ -234,40 +232,35 @@ const reservedPhrases = expandPhrases([
   '{ROWS | RANGE} BETWEEN',
 ]);
 
-export default class SingleStoreDbFormatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      reservedSelect,
-      reservedClauses: [...reservedClauses, ...onelineClauses],
-      reservedSetOperations,
-      reservedJoins,
-      reservedPhrases,
-      reservedKeywords: keywords,
-      reservedFunctionNames: functions,
-      // TODO: support _binary"some string" prefix
-      stringTypes: [
-        '""-qq-bs',
-        "''-qq-bs",
-        { quote: "''-raw", prefixes: ['B', 'X'], requirePrefix: true },
-      ],
-      identTypes: ['``'],
-      identChars: { first: '$', rest: '$', allowFirstCharNumber: true },
-      variableTypes: [
-        { regex: '@@?[A-Za-z0-9_$]+' },
-        { quote: '``', prefixes: ['@'], requirePrefix: true },
-      ],
-      lineCommentTypes: ['--', '#'],
-      operators: [':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||'],
-      postProcess,
-    });
-  }
-
-  formatOptions(): DialectFormatOptions {
-    return {
-      onelineClauses,
-    };
-  }
-}
+export const singlestoredb: DialectOptions = {
+  tokenizerOptions: {
+    reservedSelect,
+    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedSetOperations,
+    reservedJoins,
+    reservedPhrases,
+    reservedKeywords: keywords,
+    reservedFunctionNames: functions,
+    // TODO: support _binary"some string" prefix
+    stringTypes: [
+      '""-qq-bs',
+      "''-qq-bs",
+      { quote: "''-raw", prefixes: ['B', 'X'], requirePrefix: true },
+    ],
+    identTypes: ['``'],
+    identChars: { first: '$', rest: '$', allowFirstCharNumber: true },
+    variableTypes: [
+      { regex: '@@?[A-Za-z0-9_$]+' },
+      { quote: '``', prefixes: ['@'], requirePrefix: true },
+    ],
+    lineCommentTypes: ['--', '#'],
+    operators: [':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||'],
+    postProcess,
+  },
+  formatOptions: {
+    onelineClauses,
+  },
+};
 
 function postProcess(tokens: Token[]) {
   return tokens.map((token, i) => {

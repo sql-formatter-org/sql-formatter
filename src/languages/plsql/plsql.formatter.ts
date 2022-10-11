@@ -1,7 +1,5 @@
+import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import Formatter from '../../formatter/Formatter.js';
-import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
-import Tokenizer from '../../lexer/Tokenizer.js';
 import { EOF_TOKEN, isReserved, isToken, Token, TokenType } from '../../lexer/token.js';
 import { keywords } from './plsql.keywords.js';
 import { functions } from './plsql.functions.js';
@@ -83,53 +81,48 @@ const reservedPhrases = expandPhrases([
   '{ROWS | RANGE} BETWEEN',
 ]);
 
-export default class PlSqlFormatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      reservedSelect,
-      reservedClauses: [...reservedClauses, ...onelineClauses],
-      reservedSetOperations,
-      reservedJoins,
-      reservedPhrases,
-      supportsXor: true,
-      reservedKeywords: keywords,
-      reservedFunctionNames: functions,
-      stringTypes: [
-        { quote: "''-qq", prefixes: ['N'] },
-        { quote: "q''", prefixes: ['N'] },
-      ],
-      // PL/SQL doesn't actually support escaping of quotes in identifiers,
-      // but for the sake of simpler testing we'll support this anyway
-      // as all other SQL dialects with "identifiers" do.
-      identTypes: [`""-qq`],
-      identChars: { rest: '$#' },
-      variableTypes: [{ regex: '&{1,2}[A-Za-z][A-Za-z0-9_$#]*' }],
-      paramTypes: { numbered: [':'], named: [':'] },
-      paramChars: {}, // Empty object used on purpose to not allow $ and # chars as specified in identChars
-      operators: [
-        '**',
-        ':=',
-        '%',
-        '~=',
-        '^=',
-        // '..', // Conflicts with float followed by dot (so "2..3" gets parsed as ["2.", ".", "3"])
-        '>>',
-        '<<',
-        '=>',
-        '@',
-        '||',
-      ],
-      postProcess,
-    });
-  }
-
-  formatOptions(): DialectFormatOptions {
-    return {
-      alwaysDenseOperators: ['@'],
-      onelineClauses,
-    };
-  }
-}
+export const plsql: DialectOptions = {
+  tokenizerOptions: {
+    reservedSelect,
+    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedSetOperations,
+    reservedJoins,
+    reservedPhrases,
+    supportsXor: true,
+    reservedKeywords: keywords,
+    reservedFunctionNames: functions,
+    stringTypes: [
+      { quote: "''-qq", prefixes: ['N'] },
+      { quote: "q''", prefixes: ['N'] },
+    ],
+    // PL/SQL doesn't actually support escaping of quotes in identifiers,
+    // but for the sake of simpler testing we'll support this anyway
+    // as all other SQL dialects with "identifiers" do.
+    identTypes: [`""-qq`],
+    identChars: { rest: '$#' },
+    variableTypes: [{ regex: '&{1,2}[A-Za-z][A-Za-z0-9_$#]*' }],
+    paramTypes: { numbered: [':'], named: [':'] },
+    paramChars: {}, // Empty object used on purpose to not allow $ and # chars as specified in identChars
+    operators: [
+      '**',
+      ':=',
+      '%',
+      '~=',
+      '^=',
+      // '..', // Conflicts with float followed by dot (so "2..3" gets parsed as ["2.", ".", "3"])
+      '>>',
+      '<<',
+      '=>',
+      '@',
+      '||',
+    ],
+    postProcess,
+  },
+  formatOptions: {
+    alwaysDenseOperators: ['@'],
+    onelineClauses,
+  },
+};
 
 function postProcess(tokens: Token[]) {
   let previousReservedToken: Token = EOF_TOKEN;

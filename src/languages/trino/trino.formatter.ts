@@ -1,7 +1,5 @@
+import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import Formatter from '../../formatter/Formatter.js';
-import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
-import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './trino.functions.js';
 import { keywords } from './trino.keywords.js';
 
@@ -124,47 +122,42 @@ const reservedJoins = expandPhrases([
 
 const reservedPhrases = expandPhrases(['{ROWS | RANGE | GROUPS} BETWEEN']);
 
-export default class TrinoFormatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      reservedSelect,
-      reservedClauses: [...reservedClauses, ...onelineClauses],
-      reservedSetOperations,
-      reservedJoins,
-      reservedPhrases,
-      reservedKeywords: keywords,
-      reservedFunctionNames: functions,
-      // Trino also supports {- ... -} parenthesis.
-      // The formatting of these currently works out as a result of { and -
-      // not getting a space added in-between.
-      // https://trino.io/docs/current/sql/match-recognize.html#row-pattern-syntax
-      extraParens: ['[]', '{}'],
-      // https://trino.io/docs/current/language/types.html#string
-      // https://trino.io/docs/current/language/types.html#varbinary
-      stringTypes: [
-        { quote: "''-qq", prefixes: ['U&'] },
-        { quote: "''-raw", prefixes: ['X'], requirePrefix: true },
-      ],
-      // https://trino.io/docs/current/language/reserved.html
-      identTypes: ['""-qq'],
-      paramTypes: { positional: true },
-      operators: [
-        '%',
-        '->',
-        ':',
-        '||',
-        // Row pattern syntax
-        '|',
-        '^',
-        '$',
-        // '?', conflicts with positional placeholders
-      ],
-    });
-  }
-
-  formatOptions(): DialectFormatOptions {
-    return {
-      onelineClauses,
-    };
-  }
-}
+export const trino: DialectOptions = {
+  tokenizerOptions: {
+    reservedSelect,
+    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedSetOperations,
+    reservedJoins,
+    reservedPhrases,
+    reservedKeywords: keywords,
+    reservedFunctionNames: functions,
+    // Trino also supports {- ... -} parenthesis.
+    // The formatting of these currently works out as a result of { and -
+    // not getting a space added in-between.
+    // https://trino.io/docs/current/sql/match-recognize.html#row-pattern-syntax
+    extraParens: ['[]', '{}'],
+    // https://trino.io/docs/current/language/types.html#string
+    // https://trino.io/docs/current/language/types.html#varbinary
+    stringTypes: [
+      { quote: "''-qq", prefixes: ['U&'] },
+      { quote: "''-raw", prefixes: ['X'], requirePrefix: true },
+    ],
+    // https://trino.io/docs/current/language/reserved.html
+    identTypes: ['""-qq'],
+    paramTypes: { positional: true },
+    operators: [
+      '%',
+      '->',
+      ':',
+      '||',
+      // Row pattern syntax
+      '|',
+      '^',
+      '$',
+      // '?', conflicts with positional placeholders
+    ],
+  },
+  formatOptions: {
+    onelineClauses,
+  },
+};

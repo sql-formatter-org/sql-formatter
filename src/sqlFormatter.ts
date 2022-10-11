@@ -1,46 +1,52 @@
-import BigQueryFormatter from './languages/bigquery/bigquery.formatter.js';
-import Db2Formatter from './languages/db2/db2.formatter.js';
-import HiveFormatter from './languages/hive/hive.formatter.js';
-import MariaDbFormatter from './languages/mariadb/mariadb.formatter.js';
-import MySqlFormatter from './languages/mysql/mysql.formatter.js';
-import N1qlFormatter from './languages/n1ql/n1ql.formatter.js';
-import PlSqlFormatter from './languages/plsql/plsql.formatter.js';
-import PostgreSqlFormatter from './languages/postgresql/postgresql.formatter.js';
-import RedshiftFormatter from './languages/redshift/redshift.formatter.js';
-import SparkFormatter from './languages/spark/spark.formatter.js';
-import SqliteFormatter from './languages/sqlite/sqlite.formatter.js';
-import SqlFormatter from './languages/sql/sql.formatter.js';
-import TrinoFormatter from './languages/trino/trino.formatter.js';
-import TransactSqlFormatter from './languages/transactsql/transactsql.formatter.js';
-import SingleStoreDbFormatter from './languages/singlestoredb/singlestoredb.formatter.js';
-import SnowflakeFormatter from './languages/snowflake/snowflake.formatter.js';
+import { bigquery } from './languages/bigquery/bigquery.formatter.js';
+import { db2 } from './languages/db2/db2.formatter.js';
+import { hive } from './languages/hive/hive.formatter.js';
+import { mariadb } from './languages/mariadb/mariadb.formatter.js';
+import { mysql } from './languages/mysql/mysql.formatter.js';
+import { n1ql } from './languages/n1ql/n1ql.formatter.js';
+import { plsql } from './languages/plsql/plsql.formatter.js';
+import { postgresql } from './languages/postgresql/postgresql.formatter.js';
+import { redshift } from './languages/redshift/redshift.formatter.js';
+import { spark } from './languages/spark/spark.formatter.js';
+import { sqlite } from './languages/sqlite/sqlite.formatter.js';
+import { sql } from './languages/sql/sql.formatter.js';
+import { trino } from './languages/trino/trino.formatter.js';
+import { transactsql } from './languages/transactsql/transactsql.formatter.js';
+import { singlestoredb } from './languages/singlestoredb/singlestoredb.formatter.js';
+import { snowflake } from './languages/snowflake/snowflake.formatter.js';
 
 import { FormatOptions } from './FormatOptions.js';
 import { ParamItems } from './formatter/Params.js';
+import { createDialect, DialectOptions } from './dialect.js';
+import Formatter from './formatter/Formatter.js';
 
 export const formatters = {
-  bigquery: BigQueryFormatter,
-  db2: Db2Formatter,
-  hive: HiveFormatter,
-  mariadb: MariaDbFormatter,
-  mysql: MySqlFormatter,
-  n1ql: N1qlFormatter,
-  plsql: PlSqlFormatter,
-  postgresql: PostgreSqlFormatter,
-  redshift: RedshiftFormatter,
-  singlestoredb: SingleStoreDbFormatter,
-  snowflake: SnowflakeFormatter,
-  spark: SparkFormatter,
-  sql: SqlFormatter,
-  sqlite: SqliteFormatter,
-  transactsql: TransactSqlFormatter,
-  trino: TrinoFormatter,
-  tsql: TransactSqlFormatter, // alias for transactsql
+  bigquery,
+  db2,
+  hive,
+  mariadb,
+  mysql,
+  n1ql,
+  plsql,
+  postgresql,
+  redshift,
+  singlestoredb,
+  snowflake,
+  spark,
+  sql,
+  sqlite,
+  transactsql,
+  trino,
+  tsql: transactsql, // alias for transactsql
 };
 export type SqlLanguage = keyof typeof formatters;
 export const supportedDialects = Object.keys(formatters);
 
-const defaultOptions: FormatOptions = {
+export interface FormatOptionsWithLanguage extends FormatOptions {
+  language: SqlLanguage | DialectOptions;
+}
+
+const defaultOptions: FormatOptionsWithLanguage = {
   language: 'sql',
   tabWidth: 2,
   useTabs: false,
@@ -59,10 +65,10 @@ const defaultOptions: FormatOptions = {
  * Format whitespace in a query to make it easier to read.
  *
  * @param {string} query - input SQL query string
- * @param {FormatOptions} cfg Configuration options (see docs in README)
+ * @param {Partial<FormatOptionsWithLanguage>} cfg Configuration options (see docs in README)
  * @return {string} formatted query
  */
-export const format = (query: string, cfg: Partial<FormatOptions> = {}): string => {
+export const format = (query: string, cfg: Partial<FormatOptionsWithLanguage> = {}): string => {
   if (typeof query !== 'string') {
     throw new Error('Invalid query argument. Expected string, instead got ' + typeof query);
   }
@@ -72,15 +78,15 @@ export const format = (query: string, cfg: Partial<FormatOptions> = {}): string 
     ...cfg,
   });
 
-  const FormatterCls =
+  const dialectOptions: DialectOptions =
     typeof options.language === 'string' ? formatters[options.language] : options.language;
 
-  return new FormatterCls(options).format(query);
+  return new Formatter(createDialect(dialectOptions), options).format(query);
 };
 
 export class ConfigError extends Error {}
 
-function validateConfig(cfg: FormatOptions): FormatOptions {
+function validateConfig(cfg: FormatOptionsWithLanguage): FormatOptionsWithLanguage {
   if (typeof cfg.language === 'string' && !supportedDialects.includes(cfg.language)) {
     throw new ConfigError(`Unsupported SQL dialect: ${cfg.language}`);
   }

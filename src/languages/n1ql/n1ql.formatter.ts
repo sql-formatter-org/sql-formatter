@@ -1,7 +1,5 @@
+import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import Formatter from '../../formatter/Formatter.js';
-import { DialectFormatOptions } from '../../formatter/ExpressionFormatter.js';
-import Tokenizer from '../../lexer/Tokenizer.js';
 import { functions } from './n1ql.functions.js';
 import { keywords } from './n1ql.keywords.js';
 
@@ -85,32 +83,27 @@ const reservedJoins = expandPhrases(['JOIN', '{LEFT | RIGHT} [OUTER] JOIN', 'INN
 const reservedPhrases = expandPhrases(['{ROWS | RANGE | GROUPS} BETWEEN']);
 
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html
-export default class N1qlFormatter extends Formatter {
-  tokenizer() {
-    return new Tokenizer({
-      reservedSelect,
-      reservedClauses: [...reservedClauses, ...onelineClauses],
-      reservedSetOperations,
-      reservedJoins,
-      reservedPhrases,
-      supportsXor: true,
-      reservedKeywords: keywords,
-      reservedFunctionNames: functions,
-      // NOTE: single quotes are actually not supported in N1QL,
-      // but we support them anyway as all other SQL dialects do,
-      // which simplifies writing tests that are shared between all dialects.
-      stringTypes: ['""-bs', "''-bs"],
-      identTypes: ['``'],
-      extraParens: ['[]', '{}'],
-      paramTypes: { positional: true, numbered: ['$'], named: ['$'] },
-      lineCommentTypes: ['#', '--'],
-      operators: ['%', '==', ':', '||'],
-    });
-  }
-
-  formatOptions(): DialectFormatOptions {
-    return {
-      onelineClauses,
-    };
-  }
-}
+export const n1ql: DialectOptions = {
+  tokenizerOptions: {
+    reservedSelect,
+    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedSetOperations,
+    reservedJoins,
+    reservedPhrases,
+    supportsXor: true,
+    reservedKeywords: keywords,
+    reservedFunctionNames: functions,
+    // NOTE: single quotes are actually not supported in N1QL,
+    // but we support them anyway as all other SQL dialects do,
+    // which simplifies writing tests that are shared between all dialects.
+    stringTypes: ['""-bs', "''-bs"],
+    identTypes: ['``'],
+    extraParens: ['[]', '{}'],
+    paramTypes: { positional: true, numbered: ['$'], named: ['$'] },
+    lineCommentTypes: ['#', '--'],
+    operators: ['%', '==', ':', '||'],
+  },
+  formatOptions: {
+    onelineClauses,
+  },
+};
