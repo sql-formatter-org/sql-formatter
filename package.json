@@ -8,6 +8,7 @@
   "module": "lib/index.js",
   "types": "lib/src/index.d.ts",
   "exports": {
+    "./package.json": "./package.json",
     ".": {
       "types": "./lib/src/index.d.ts",
       "import": "./lib/index.js",
