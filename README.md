@@ -150,8 +150,8 @@ All fields are optional and all fields that are not specified will be filled wit
 - [**`keywordCase`**](docs/keywordCase.md) uppercases or lowercases keywords.
 - [**`indentStyle`**](docs/indentStyle.md) defines overall indentation style.
 - [**`logicalOperatorNewline`**](docs/logicalOperatorNewline.md) newline before or after boolean operator (AND, OR, XOR).
-- [**`tabulateAlias`**](docs/tabulateAlias.md) aligns column aliases vertically.
-- [**`commaPosition`**](docs/commaPosition.md) where to place the comma in column lists.
+- [**`tabulateAlias`**](docs/tabulateAlias.md) aligns column aliases vertically (**unstable!**).
+- [**`commaPosition`**](docs/commaPosition.md) where to place the comma in column lists (**unstable!**).
 - [**`expressionWidth`**](docs/expressionWidth.md) maximum number of characters in parenthesized expressions to be kept on single line.
 - [**`linesBetweenQueries`**](docs/linesBetweenQueries.md) how many newlines to insert between queries.
 - [**`denseOperators`**](docs/denseOperators.md) packs operators densely without spaces.

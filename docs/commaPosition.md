@@ -1,6 +1,8 @@
-# commaPosition
+# commaPosition (unstable)
 
 Defines where to place commas in lists of columns.
+
+**Warning:** This feature is known to be buggy. Use at your own risk. See [#505][bug].
 
 ## Options
 
@@ -59,3 +61,5 @@ GROUP BY
   fname,
   lname
 ```
+
+[bug]: https://github.com/sql-formatter-org/sql-formatter/issues/505

@@ -1,7 +1,9 @@
-# tabulateAlias
+# tabulateAlias (unstable)
 
 Aligns column aliases into a single column.
 Does not effect table name aliases.
+
+**Warning:** This feature is known to be buggy. Use at your own risk. See [#236][bug].
 
 ## Options
 
@@ -40,3 +42,5 @@ SELECT
 FROM
   persons
 ```
+
+[bug]: https://github.com/sql-formatter-org/sql-formatter/issues/236
