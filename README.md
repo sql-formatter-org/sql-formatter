@@ -38,7 +38,7 @@ yarn add sql-formatter
 ```js
 import { format } from 'sql-formatter';
 
-console.log(format('SELECT * FROM tbl'));
+console.log(format('SELECT * FROM tbl', { language: 'mysql' }));
 ```
 
 This will output:
@@ -169,6 +169,26 @@ This makes SQL Formatter available as a global variable `window.sqlFormatter`.
 - [VSCode extension](https://github.com/sql-formatter-org/sql-formatter-vscode)
 - [Vim extension](https://github.com/fannheyward/coc-sql/)
 - [Prettier plugin](https://github.com/un-ts/prettier/tree/master/packages/sql)
+
+## Frequently Asked Questions
+
+### Parse error: Unexpected ... at line ...
+
+The most common cause is that you haven't specified an SQL dialect.
+Instead of calling the library simply:
+
+```js
+format('select [col] from tbl');
+// Throws: Parse error: Unexpected "[col] from" at line 1 column 8
+```
+
+pick the proper dialect, like:
+
+```js
+format('select [col] from tbl', { language: 'transactsql' });
+```
+
+Or when using the VSCode extension: Settings -> Prettier-SQL: SQLFlavourOverride.
 
 ## Contributing
 
