@@ -16,3 +16,4 @@ export type {
 export type { DialectOptions } from './dialect.js';
 export { ConfigError } from './validateConfig.js';
 export { expandPhrases } from './expandPhrases.js';
+export * from './allDialects.js';
