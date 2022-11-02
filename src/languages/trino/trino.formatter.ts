@@ -148,6 +148,7 @@ export const trino: DialectOptions = {
     operators: [
       '%',
       '->',
+      '=>',
       ':',
       '||',
       // Row pattern syntax
