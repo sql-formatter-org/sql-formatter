@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 
-import { format, SqlLanguage } from '../src/sqlFormatter.js';
+import { format, formatDialect, SqlLanguage } from '../src/sqlFormatter.js';
 import { sqlite } from '../src/languages/sqlite/sqlite.formatter.js';
 
 describe('sqlFormatter', () => {
@@ -56,11 +56,13 @@ describe('sqlFormatter', () => {
     }).toThrow('aliasAs config is no more supported.');
   });
 
-  it('allows passing Dialect config object as a language parameter', () => {
-    expect(format('SELECT [foo], `bar`;', { language: sqlite })).toBe(dedent`
-      SELECT
-        [foo],
-        \`bar\`;
-    `);
+  describe('formatDialect()', () => {
+    it('allows passing Dialect config object as a dialect parameter', () => {
+      expect(formatDialect('SELECT [foo], `bar`;', { dialect: sqlite })).toBe(dedent`
+        SELECT
+          [foo],
+          \`bar\`;
+      `);
+    });
   });
 });

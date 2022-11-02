@@ -42,12 +42,15 @@ export const formatters = {
 export type SqlLanguage = keyof typeof formatters;
 export const supportedDialects = Object.keys(formatters);
 
-export interface FormatOptionsWithLanguage extends FormatOptions {
-  language: SqlLanguage | DialectOptions;
-}
+export type FormatOptionsWithLanguage = Partial<FormatOptions> & {
+  language?: SqlLanguage;
+};
 
-const defaultOptions: FormatOptionsWithLanguage = {
-  language: 'sql',
+export type FormatOptionsWithDialect = Partial<FormatOptions> & {
+  dialect: DialectOptions;
+};
+
+const defaultOptions: FormatOptions = {
   tabWidth: 2,
   useTabs: false,
   keywordCase: 'preserve',
@@ -65,10 +68,32 @@ const defaultOptions: FormatOptionsWithLanguage = {
  * Format whitespace in a query to make it easier to read.
  *
  * @param {string} query - input SQL query string
- * @param {Partial<FormatOptionsWithLanguage>} cfg Configuration options (see docs in README)
+ * @param {FormatOptionsWithLanguage} cfg Configuration options (see docs in README)
  * @return {string} formatted query
  */
-export const format = (query: string, cfg: Partial<FormatOptionsWithLanguage> = {}): string => {
+export const format = (query: string, cfg: FormatOptionsWithLanguage = {}): string => {
+  if (typeof cfg.language === 'string' && !supportedDialects.includes(cfg.language)) {
+    throw new ConfigError(`Unsupported SQL dialect: ${cfg.language}`);
+  }
+
+  return formatDialect(query, {
+    ...cfg,
+    dialect: formatters[cfg.language || 'sql'],
+  });
+};
+
+/**
+ * Like the above format(), but language parameter is mandatory
+ * and must be a Dialect object instead of a string.
+ *
+ * @param {string} query - input SQL query string
+ * @param {FormatOptionsWithDialect} cfg Configuration options (see docs in README)
+ * @return {string} formatted query
+ */
+export const formatDialect = (
+  query: string,
+  { dialect, ...cfg }: FormatOptionsWithDialect
+): string => {
   if (typeof query !== 'string') {
     throw new Error('Invalid query argument. Expected string, instead got ' + typeof query);
   }
@@ -78,19 +103,12 @@ export const format = (query: string, cfg: Partial<FormatOptionsWithLanguage> = 
     ...cfg,
   });
 
-  const dialectOptions: DialectOptions =
-    typeof options.language === 'string' ? formatters[options.language] : options.language;
-
-  return new Formatter(createDialect(dialectOptions), options).format(query);
+  return new Formatter(createDialect(dialect), options).format(query);
 };
 
 export class ConfigError extends Error {}
 
-function validateConfig(cfg: FormatOptionsWithLanguage): FormatOptionsWithLanguage {
-  if (typeof cfg.language === 'string' && !supportedDialects.includes(cfg.language)) {
-    throw new ConfigError(`Unsupported SQL dialect: ${cfg.language}`);
-  }
-
+function validateConfig(cfg: FormatOptions): FormatOptions {
   if ('multilineLists' in cfg) {
     throw new ConfigError('multilineLists config is no more supported.');
   }
