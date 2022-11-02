@@ -1,19 +1,20 @@
-export {
+export { supportedDialects, format, formatDialect } from './sqlFormatter.js';
+export { expandPhrases } from './expandPhrases.js';
+export * from './allDialects.js';
+
+// NB! To re-export types the "export type" syntax is required by webpack.
+// Otherwise webpack build will fail.
+export type {
   SqlLanguage,
-  supportedDialects,
   FormatOptionsWithLanguage,
   FormatOptionsWithDialect,
-  format,
-  formatDialect,
 } from './sqlFormatter.js';
-export {
+export type {
   IndentStyle,
   KeywordCase,
   CommaPosition,
   LogicalOperatorNewline,
   FormatOptions,
 } from './FormatOptions.js';
-export { DialectOptions } from './dialect.js';
-export { ConfigError } from './validateConfig.js';
-export { expandPhrases } from './expandPhrases.js';
-export * from './allDialects.js';
+export type { DialectOptions } from './dialect.js';
+export type { ConfigError } from './validateConfig.js';
