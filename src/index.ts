@@ -5,7 +5,6 @@ export {
   FormatOptionsWithDialect,
   format,
   formatDialect,
-  ConfigError,
 } from './sqlFormatter.js';
 export type {
   IndentStyle,
@@ -15,4 +14,5 @@ export type {
   FormatOptions,
 } from './FormatOptions.js';
 export type { DialectOptions } from './dialect.js';
+export { ConfigError } from './validateConfig.js';
 export { expandPhrases } from './expandPhrases.js';
