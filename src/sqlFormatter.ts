@@ -20,7 +20,7 @@ import { ParamItems } from './formatter/Params.js';
 import { createDialect, DialectOptions } from './dialect.js';
 import Formatter from './formatter/Formatter.js';
 
-export const formatters = {
+const formatters = {
   bigquery,
   db2,
   hive,

@@ -1,4 +1,12 @@
-export * from './sqlFormatter.js';
+export {
+  SqlLanguage,
+  supportedDialects,
+  FormatOptionsWithLanguage,
+  FormatOptionsWithDialect,
+  format,
+  formatDialect,
+  ConfigError,
+} from './sqlFormatter.js';
 export type {
   IndentStyle,
   KeywordCase,
