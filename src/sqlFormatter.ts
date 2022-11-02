@@ -1,19 +1,4 @@
-import { bigquery } from './languages/bigquery/bigquery.formatter.js';
-import { db2 } from './languages/db2/db2.formatter.js';
-import { hive } from './languages/hive/hive.formatter.js';
-import { mariadb } from './languages/mariadb/mariadb.formatter.js';
-import { mysql } from './languages/mysql/mysql.formatter.js';
-import { n1ql } from './languages/n1ql/n1ql.formatter.js';
-import { plsql } from './languages/plsql/plsql.formatter.js';
-import { postgresql } from './languages/postgresql/postgresql.formatter.js';
-import { redshift } from './languages/redshift/redshift.formatter.js';
-import { spark } from './languages/spark/spark.formatter.js';
-import { sqlite } from './languages/sqlite/sqlite.formatter.js';
-import { sql } from './languages/sql/sql.formatter.js';
-import { trino } from './languages/trino/trino.formatter.js';
-import { transactsql } from './languages/transactsql/transactsql.formatter.js';
-import { singlestoredb } from './languages/singlestoredb/singlestoredb.formatter.js';
-import { snowflake } from './languages/snowflake/snowflake.formatter.js';
+import * as allDialects from './allDialects.js';
 
 import { FormatOptions } from './FormatOptions.js';
 import { createDialect, DialectOptions } from './dialect.js';
@@ -21,23 +6,8 @@ import Formatter from './formatter/Formatter.js';
 import { ConfigError, validateConfig } from './validateConfig.js';
 
 const formatters = {
-  bigquery,
-  db2,
-  hive,
-  mariadb,
-  mysql,
-  n1ql,
-  plsql,
-  postgresql,
-  redshift,
-  singlestoredb,
-  snowflake,
-  spark,
-  sql,
-  sqlite,
-  transactsql,
-  trino,
-  tsql: transactsql, // alias for transactsql
+  ...allDialects,
+  tsql: allDialects.transactsql, // alias for transactsql
 };
 export type SqlLanguage = keyof typeof formatters;
 export const supportedDialects = Object.keys(formatters);
