@@ -2,6 +2,14 @@
 
 Specifies the SQL dialect to use.
 
+## Usage
+
+```ts
+import { format } from 'sql-formatter';
+
+const result = format('SELECT * FROM tbl', { dialect: 'sqlite' });
+```
+
 ## Options
 
 - `"sql"` - (default) [Standard SQL][]
@@ -20,36 +28,21 @@ Specifies the SQL dialect to use.
 - `"sqlite"` - [SQLite][sqlite]
 - `"transactsql"` or `"tsql"` - [SQL Server Transact-SQL][tsql]
 - `"trino"` - [Trino][] / [Presto][]
-- custom SQL dialect configuration object (see below)
 
 The default `"sql"` dialect is meant for cases where you don't know which dialect of SQL you're about to format.
 It's not an auto-detection, it just supports a subset of features common enough in many SQL implementations.
 This might or might not work for your specific dialect.
 Better to always pick something more specific if possible.
 
-### Custom dialect configuration (experimental)
+## Impact on bundle size
 
-The language parameter can also be used to specify a custom SQL dialect configuration:
+Using the `language` option has the downside that the used dialects are determined at runtime
+and therefore they all have to be bundled when e.g. building a bundle with Webpack.
+This can result in significant overhead when you only need to format one or two dialects.
 
-```ts
-import { format, DialectOptions } from 'sql-formatter';
-
-const myDialect: DialectOptions {
-  tokenizerOptions: {
-    // See source code for examples of tokenizer config options
-    // For example: src/languages/sqlite/sqlite.formatter.ts
-  },
-  formatOptions: {
-    // ...
-  },
-};
-
-const result = format('SELECT * FROM tbl', { language: myDialect });
-```
-
-**NB!** This functionality is experimental and there are no stability guarantees for this API.
-The DialectOptions interface can (and likely will) change in non-major releases.
-You likely only want to use this if your other alternative is to fork SQL Formatter.
+To solve this problem, version 12 of SQL Formatter introduces a new API,
+that allows explicitly importing the dialects.
+See docs for [dialect][] option.
 
 [standard sql]: https://en.wikipedia.org/wiki/SQL:2011
 [gcp bigquery]: https://cloud.google.com/bigquery
@@ -68,3 +61,4 @@ You likely only want to use this if your other alternative is to fork SQL Format
 [sqlite]: https://sqlite.org/index.html
 [trino]: https://trino.io/docs/current/
 [tsql]: https://docs.microsoft.com/en-us/sql/sql-server/
+[dialect]: ./dialect.md

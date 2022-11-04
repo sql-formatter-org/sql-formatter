@@ -144,7 +144,8 @@ All fields are optional and all fields that are not specified will be filled wit
 
 ### Configuration options
 
-- [**`language`**](docs/language.md) the SQL dialect to use.
+- [**`language`**](docs/language.md) the SQL dialect to use (when using `format()`).
+- [**`dialect`**](docs/dialect.md) the SQL dialect to use (when using `formatDialect()` since version 12).
 - [**`tabWidth`**](docs/tabWidth.md) amount of indentation to use.
 - [**`useTabs`**](docs/useTabs.md) to use tabs for indentation.
 - [**`keywordCase`**](docs/keywordCase.md) uppercases or lowercases keywords.
