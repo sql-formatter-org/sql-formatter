@@ -127,6 +127,8 @@ export const quotePatterns = {
 const singleQuotePattern = (quoteTypes: QuoteType): string => {
   if (typeof quoteTypes === 'string') {
     return quotePatterns[quoteTypes];
+  } else if ('regex' in quoteTypes) {
+    return quoteTypes.regex;
   } else {
     return prefixesPattern(quoteTypes) + quotePatterns[quoteTypes.quote];
   }

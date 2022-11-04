@@ -22,13 +22,13 @@ export interface PrefixedQuoteType {
   requirePrefix?: boolean; // True when prefix is required
 }
 
-export type QuoteType = PlainQuoteType | PrefixedQuoteType;
-
-export interface VariableRegex {
+export interface RegexPattern {
   regex: string;
 }
 
-export type VariableType = VariableRegex | PrefixedQuoteType;
+export type QuoteType = PlainQuoteType | PrefixedQuoteType | RegexPattern;
+
+export type VariableType = RegexPattern | PrefixedQuoteType;
 
 export interface ParamTypes {
   // True to allow for positional "?" parameter placeholders

@@ -1,6 +1,6 @@
 import dedent from 'dedent-js';
 
-import { format, formatDialect, SqlLanguage, sqlite } from '../src/index.js';
+import { format, formatDialect, SqlLanguage, sqlite, DialectOptions } from '../src/index.js';
 
 describe('sqlFormatter', () => {
   it('throws error when unsupported language parameter specified', () => {
@@ -61,6 +61,29 @@ describe('sqlFormatter', () => {
         SELECT
           [foo],
           \`bar\`;
+      `);
+    });
+
+    it('allows use of regex-based custom string type', () => {
+      // Extend SQLite dialect with additional string type
+      const sqliteWithTemplates: DialectOptions = {
+        tokenizerOptions: {
+          ...sqlite.tokenizerOptions,
+          stringTypes: [...sqlite.tokenizerOptions.stringTypes, { regex: String.raw`\{\{.*?\}\}` }],
+        },
+        formatOptions: sqlite.formatOptions,
+      };
+
+      expect(
+        formatDialect(`SELECT {{template item}}, 'normal string' FROM {{tbl}};`, {
+          dialect: sqliteWithTemplates,
+        })
+      ).toBe(dedent`
+        SELECT
+          {{template item}},
+          'normal string'
+        FROM
+          {{tbl}};
       `);
     });
   });
