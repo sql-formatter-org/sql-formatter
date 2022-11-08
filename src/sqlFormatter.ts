@@ -5,12 +5,28 @@ import { createDialect, DialectOptions } from './dialect.js';
 import Formatter from './formatter/Formatter.js';
 import { ConfigError, validateConfig } from './validateConfig.js';
 
-const formatters = {
-  ...allDialects,
-  tsql: allDialects.transactsql, // alias for transactsql
+const dialectNameMap: Record<string, keyof typeof allDialects> = {
+  bigquery: 'bigquery',
+  db2: 'db2',
+  hive: 'hive',
+  mariadb: 'mariadb',
+  mysql: 'mysql',
+  n1ql: 'n1ql',
+  plsql: 'plsql',
+  postgresql: 'postgresql',
+  redshift: 'redshift',
+  spark: 'spark',
+  sqlite: 'sqlite',
+  sql: 'sql',
+  trino: 'trino',
+  transactsql: 'transactsql',
+  tsql: 'transactsql', // alias for transactsq
+  singlestoredb: 'singlestoredb',
+  snowflake: 'snowflake',
 };
-export type SqlLanguage = keyof typeof formatters;
-export const supportedDialects = Object.keys(formatters);
+
+export const supportedDialects = Object.keys(dialectNameMap);
+export type SqlLanguage = keyof typeof dialectNameMap;
 
 export type FormatOptionsWithLanguage = Partial<FormatOptions> & {
   language?: SqlLanguage;
@@ -46,9 +62,11 @@ export const format = (query: string, cfg: FormatOptionsWithLanguage = {}): stri
     throw new ConfigError(`Unsupported SQL dialect: ${cfg.language}`);
   }
 
+  const canonicalDialectName = dialectNameMap[cfg.language || 'sql'];
+
   return formatDialect(query, {
     ...cfg,
-    dialect: formatters[cfg.language || 'sql'],
+    dialect: allDialects[canonicalDialectName],
   });
 };
 
