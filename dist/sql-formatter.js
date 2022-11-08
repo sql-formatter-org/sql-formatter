@@ -403,7 +403,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    SqlUtils.formatTextCase = function formatTextCase(token) {
-	        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null || token.type == _tokenTypes2["default"].BLOCK_COMMENT || token.type == _tokenTypes2["default"].LINE_COMMENT || token.value.includes("'")) {
+	        if (token.value.match("^'.*'$|^\".*\"$|^util.*|^pkg_.*") != null || token.type == _tokenTypes2["default"].BLOCK_COMMENT || token.type == _tokenTypes2["default"].LINE_COMMENT || token.value.includes("'")) {
 	            return token.value;
 	        } else {
 	            return token.value.toLowerCase();

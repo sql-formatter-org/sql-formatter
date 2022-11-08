@@ -50,7 +50,7 @@ export default class SqlUtils {
     }
 
     static formatTextCase(token) {
-        if (token.value.match("^'.*'$|^util.*|^pkg_.*") != null ||
+        if (token.value.match("^'.*'$|^\".*\"$|^util.*|^pkg_.*") != null ||
             token.type == tokenTypes.BLOCK_COMMENT ||
             token.type == tokenTypes.LINE_COMMENT || token.value.includes("'")) {
             return token.value;
