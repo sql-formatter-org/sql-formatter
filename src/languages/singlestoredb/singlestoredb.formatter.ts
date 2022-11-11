@@ -254,10 +254,11 @@ export const singlestoredb: DialectOptions = {
       { quote: '``', prefixes: ['@'], requirePrefix: true },
     ],
     lineCommentTypes: ['--', '#'],
-    operators: [':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||'],
+    operators: [':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||', '::', '::$', '::%', ':>', '!:>'],
     postProcess,
   },
   formatOptions: {
+    alwaysDenseOperators: ['::', '::$', '::%'],
     onelineClauses,
   },
 };
