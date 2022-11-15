@@ -1,5 +1,6 @@
 export { supportedDialects, format, formatDialect } from './sqlFormatter.js';
 export { expandPhrases } from './expandPhrases.js';
+export { ConfigError } from './validateConfig.js';
 
 // Intentionally use "export *" syntax here to make sure when adding a new SQL dialect
 // we wouldn't forget to expose it in our public API.
@@ -20,4 +21,3 @@ export type {
   FormatOptions,
 } from './FormatOptions.js';
 export type { DialectOptions } from './dialect.js';
-export type { ConfigError } from './validateConfig.js';
