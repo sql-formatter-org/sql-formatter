@@ -21,4 +21,12 @@ export default function supportsBetween(format: FormatFn) {
     // Not ideal, but better than crashing
     expect(format('foo BETWEEN 1+2 AND 3+4')).toBe('foo BETWEEN 1 + 2 AND 3  + 4');
   });
+
+  it('supports CASE inside BETWEEN', () => {
+    expect(format('foo BETWEEN CASE x WHEN 1 THEN 2 END AND 3')).toBe(dedent`
+      foo BETWEEN CASE x
+        WHEN 1 THEN 2
+      END AND 3
+    `);
+  });
 }
