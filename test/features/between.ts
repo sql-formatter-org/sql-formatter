@@ -16,4 +16,9 @@ export default function supportsBetween(format: FormatFn) {
         foo BETWEEN /*C1*/ t.bar /*C2*/ AND /*C3*/ t.baz
     `);
   });
+
+  it('supports complex expressions inside BETWEEN', () => {
+    // Not ideal, but better than crashing
+    expect(format('foo BETWEEN 1+2 AND 3+4')).toBe('foo BETWEEN 1 + 2 AND 3  + 4');
+  });
 }
