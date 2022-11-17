@@ -39,7 +39,7 @@ export function createParser(tokenizer: Tokenizer): Parser {
         // but I haven't found a way to get this info from Nearley :(
         throw new Error('Parse error: Invalid SQL');
       } else {
-        throw new Error('Parse error: Ambiguous grammar');
+        throw new Error(`Parse error: Ambiguous grammar\n${JSON.stringify(results, undefined, 2)}`);
       }
     },
   };

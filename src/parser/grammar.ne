@@ -38,6 +38,19 @@ const addComments = (node: AstNode, { leading, trailing }: CommentAttachments): 
   return node;
 };
 
+const addCommentsToArray = (nodes: AstNode[], { leading, trailing }: CommentAttachments): AstNode[] => {
+  if (leading?.length) {
+    const [first, ...rest] = nodes;
+    nodes = [addComments(first, { leading }), ...rest];
+  }
+  if (trailing?.length) {
+    const lead = nodes.slice(0, -1);
+    const last = nodes[nodes.length-1];
+    nodes = [...lead, addComments(last, { trailing })];
+  }
+  return nodes;
+};
+
 %}
 @lexer lexer
 
@@ -137,8 +150,16 @@ set_operation -> %RESERVED_SET_OPERATION free_form_sql:* {%
 
 expression_chain_ -> expression_with_comments_:+ {% id %}
 
+expression_chain -> expression _expression_with_comments:* {%
+  ([expr, chain]) => [expr, ...chain]
+%}
+
 expression_with_comments_ -> expression _ {%
   ([expr, _]) => addComments(expr, { trailing: _ })
+%}
+
+_expression_with_comments -> _ expression {%
+  ([_, expr]) => addComments(expr, { leading: _ })
 %}
 
 free_form_sql -> ( asteriskless_free_form_sql | asterisk ) {% unwrap %}
@@ -230,11 +251,11 @@ property_access -> expression _ %DOT _ (identifier | array_subscript | all_colum
   }
 %}
 
-between_predicate -> %BETWEEN _ expression _ %AND _ expression {%
+between_predicate -> %BETWEEN _ expression_chain _ %AND _ expression {%
   ([betweenToken, _1, expr1, _2, andToken, _3, expr2]) => ({
     type: NodeType.between_predicate,
     betweenKw: toKeywordNode(betweenToken),
-    expr1: [addComments(expr1, { leading: _1, trailing: _2 })],
+    expr1: addCommentsToArray(expr1, { leading: _1, trailing: _2 }),
     andKw: toKeywordNode(andToken),
     expr2: [addComments(expr2, { leading: _3 })],
   })
