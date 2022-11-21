@@ -1,3 +1,4 @@
+import dedent from 'dedent-js';
 import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter.js';
 
@@ -9,7 +10,7 @@ import supportsCreateTable from './features/createTable.js';
 import supportsCreateView from './features/createView.js';
 import supportsAlterTable from './features/alterTable.js';
 import supportsStrings from './features/strings.js';
-import dedent from 'dedent-js';
+import supportsBetween from './features/between.js';
 
 describe('SingleStoreDbFormatter', () => {
   const language = 'singlestoredb';
@@ -46,16 +47,6 @@ describe('SingleStoreDbFormatter', () => {
     modify: true,
     renameTo: true,
   });
-  // it('allows operations in BETWEEN ranges', () => {
-  //   expect(format('SELECT SUM(extendedprice * discount) AS revenue FROM item WHERE discount BETWEEN 0.06 - 0.01 AND 0.06 + 0.01')).toBe(dedent`
-  //   SELECT
-  //     SUM(extendedprice * discount) AS revenue
-  //   FROM
-  //     item
-  //   WHERE
-  //     discount BETWEEN 0.06 - 0.01 AND 0.06  + 0.01
-  //   `);
-  // });
   describe(`formats traversal of semi structured data`, () => {
     it(`formats '.' path-operator without spaces`, () => {
       expect(format(`SELECT TO_JSON(foo.*) AS foo_json FROM foo`)).toBe(dedent`
@@ -108,5 +99,4 @@ describe('SingleStoreDbFormatter', () => {
       `);
     });
   });
-
 });
