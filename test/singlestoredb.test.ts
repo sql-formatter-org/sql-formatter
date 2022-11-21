@@ -94,6 +94,8 @@ describe('SingleStoreDbFormatter', () => {
         SELECT
           1 :> DOUBLE AS foo
       `);
+    }); 
+    it(`formats '!:>' type-cast operator`, () => {
       expect(format(`SELECT 1 !:> DOUBLE AS foo`)).toBe(dedent`
         SELECT
           1 !:> DOUBLE AS foo
