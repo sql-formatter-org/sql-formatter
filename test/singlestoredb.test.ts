@@ -35,7 +35,7 @@ describe('SingleStoreDbFormatter', () => {
   ]);
   supportsOperators(
     format,
-    [':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||'],
+    [':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||', ':>', '!:>'],
     ['AND', 'OR']
   );
   supportsLimiting(format, { limit: true, offset: true });
@@ -78,21 +78,6 @@ describe('SingleStoreDbFormatter', () => {
           foo
         WHERE
           json_foo::%bar = 'foobar'
-      `);
-    });
-  });
-
-  describe(`formats custom type-cast operators`, () => {
-    it(`formats ':>' type-cast operator`, () => {
-      expect(format(`SELECT 1 :> DOUBLE AS foo`)).toBe(dedent`
-        SELECT
-          1 :> DOUBLE AS foo
-      `);
-    });
-    it(`formats '!:>' type-cast operator`, () => {
-      expect(format(`SELECT 1 !:> DOUBLE AS foo`)).toBe(dedent`
-        SELECT
-          1 !:> DOUBLE AS foo
       `);
     });
   });
