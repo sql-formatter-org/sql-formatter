@@ -48,15 +48,8 @@ describe('SingleStoreDbFormatter', () => {
     modify: true,
     renameTo: true,
   });
+
   describe(`formats traversal of semi structured data`, () => {
-    it(`formats '.' path-operator without spaces`, () => {
-      expect(format(`SELECT TO_JSON(foo.*) AS foo_json FROM foo`)).toBe(dedent`
-        SELECT
-          TO_JSON(foo.*) AS foo_json
-        FROM
-          foo
-      `);
-    });
     it(`formats '::' path-operator without spaces`, () => {
       expect(format(`SELECT * FROM foo WHERE json_foo::bar = 'foobar'`)).toBe(dedent`
         SELECT
@@ -88,13 +81,14 @@ describe('SingleStoreDbFormatter', () => {
       `);
     });
   });
+
   describe(`formats custom type-cast operators`, () => {
     it(`formats ':>' type-cast operator`, () => {
       expect(format(`SELECT 1 :> DOUBLE AS foo`)).toBe(dedent`
         SELECT
           1 :> DOUBLE AS foo
       `);
-    }); 
+    });
     it(`formats '!:>' type-cast operator`, () => {
       expect(format(`SELECT 1 !:> DOUBLE AS foo`)).toBe(dedent`
         SELECT
