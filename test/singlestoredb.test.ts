@@ -1,3 +1,4 @@
+import dedent from 'dedent-js';
 import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter.js';
 
@@ -33,7 +34,7 @@ describe('SingleStoreDbFormatter', () => {
   ]);
   supportsOperators(
     format,
-    [':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||'],
+    [':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||', ':>', '!:>'],
     ['AND', 'OR']
   );
   supportsLimiting(format, { limit: true, offset: true });
@@ -44,5 +45,38 @@ describe('SingleStoreDbFormatter', () => {
     dropColumn: true,
     modify: true,
     renameTo: true,
+  });
+
+  describe(`formats traversal of semi structured data`, () => {
+    it(`formats '::' path-operator without spaces`, () => {
+      expect(format(`SELECT * FROM foo WHERE json_foo::bar = 'foobar'`)).toBe(dedent`
+        SELECT
+          *
+        FROM
+          foo
+        WHERE
+          json_foo::bar = 'foobar'
+      `);
+    });
+    it(`formats '::$' conversion path-operator without spaces`, () => {
+      expect(format(`SELECT * FROM foo WHERE json_foo::$bar = 'foobar'`)).toBe(dedent`
+        SELECT
+          *
+        FROM
+          foo
+        WHERE
+          json_foo::$bar = 'foobar'
+      `);
+    });
+    it(`formats '::%' conversion path-operator without spaces`, () => {
+      expect(format(`SELECT * FROM foo WHERE json_foo::%bar = 'foobar'`)).toBe(dedent`
+        SELECT
+          *
+        FROM
+          foo
+        WHERE
+          json_foo::%bar = 'foobar'
+      `);
+    });
   });
 });
