@@ -10,7 +10,6 @@ import supportsCreateTable from './features/createTable.js';
 import supportsCreateView from './features/createView.js';
 import supportsAlterTable from './features/alterTable.js';
 import supportsStrings from './features/strings.js';
-import supportsBetween from './features/between.js';
 
 describe('SingleStoreDbFormatter', () => {
   const language = 'singlestoredb';
@@ -41,7 +40,6 @@ describe('SingleStoreDbFormatter', () => {
   supportsLimiting(format, { limit: true, offset: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsCreateView(format);
-  supportsBetween(format);
   supportsAlterTable(format, {
     addColumn: true,
     dropColumn: true,
