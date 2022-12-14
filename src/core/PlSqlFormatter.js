@@ -620,7 +620,10 @@ export default class PlSqlFormatter {
         else {
             for (let i = this.indentsKeyWords.length - 1; i >= 0; i--) {
                 const current = this.indentsKeyWords[i];
-                if (current.name == next) {
+                if (current.key == 'begin' && current.name == next) {
+                    this.decrementIndent();
+                    break;
+                } else if (current.name == next) {
                     this.indentCount = current.indent;
                     break;
                 }
