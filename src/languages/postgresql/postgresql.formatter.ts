@@ -36,6 +36,8 @@ const onelineClauses = expandPhrases([
   // - update:
   'UPDATE [ONLY]',
   'WHERE CURRENT OF',
+  // - insert:
+  'ON CONFLICT',
   // - delete:
   'DELETE FROM [ONLY]',
   // - drop table:

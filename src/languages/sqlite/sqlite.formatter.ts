@@ -32,6 +32,8 @@ const reservedClauses = expandPhrases([
 const onelineClauses = expandPhrases([
   // - update:
   'UPDATE [OR ABORT | OR FAIL | OR IGNORE | OR REPLACE | OR ROLLBACK]',
+  // - insert:
+  'ON CONFLICT',
   // - delete:
   'DELETE FROM',
   // - drop table:

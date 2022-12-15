@@ -116,14 +116,4 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
         (2, 'Dog');
     `);
   });
-
-  // Regression test for issue #535
-  it('gracefully handles ON CONFLICT .. DO syntax', () => {
-    expect(format(`INSERT INTO tbl VALUES (1,'Blah') ON CONFLICT DO NOTHING;`)).toBe(dedent`
-      INSERT INTO
-        tbl
-      VALUES
-        (1, 'Blah') ON CONFLICT DO NOTHING;
-    `);
-  });
 }
