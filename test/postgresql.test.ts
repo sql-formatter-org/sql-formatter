@@ -25,6 +25,7 @@ import supportsInsertInto from './features/insertInto.js';
 import supportsUpdate from './features/update.js';
 import supportsTruncateTable from './features/truncateTable.js';
 import supportsCreateView from './features/createView.js';
+import supportsOnConflict from './features/onConflict.js';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -45,6 +46,7 @@ describe('PostgreSqlFormatter', () => {
   });
   supportsDeleteFrom(format);
   supportsInsertInto(format);
+  supportsOnConflict(format);
   supportsUpdate(format, { whereCurrentOf: true });
   supportsTruncateTable(format, { withoutTable: true });
   supportsStrings(format, ["''-qq", "U&''", "X''", "B''"]);

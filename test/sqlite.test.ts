@@ -21,6 +21,7 @@ import supportsLimiting from './features/limiting.js';
 import supportsInsertInto from './features/insertInto.js';
 import supportsUpdate from './features/update.js';
 import supportsCreateView from './features/createView.js';
+import supportsOnConflict from './features/onConflict.js';
 
 describe('SqliteFormatter', () => {
   const language = 'sqlite';
@@ -40,6 +41,7 @@ describe('SqliteFormatter', () => {
   });
   supportsDeleteFrom(format);
   supportsInsertInto(format);
+  supportsOnConflict(format);
   supportsUpdate(format);
   supportsStrings(format, ["''-qq", "X''"]);
   supportsIdentifiers(format, [`""-qq`, '``', '[]']);

@@ -36,6 +36,8 @@ const onelineClauses = expandPhrases([
   // - update:
   'UPDATE [ONLY]',
   'WHERE CURRENT OF',
+  // - insert:
+  'ON CONFLICT',
   // - delete:
   'DELETE FROM [ONLY]',
   // - drop table:
@@ -150,7 +152,6 @@ const onelineClauses = expandPhrases([
   'DEALLOCATE',
   'DECLARE',
   'DISCARD',
-  'DO',
   'DROP ACCESS METHOD',
   'DROP AGGREGATE',
   'DROP CAST',
