@@ -89,7 +89,6 @@ const onelineClauses = expandPhrases([
   'DESCRIBE',
   'DETACH DATABASE',
   'DETACH PIPELINE',
-  'DO',
   'DROP DATABASE',
   'DROP FUNCTION',
   'DROP INDEX',

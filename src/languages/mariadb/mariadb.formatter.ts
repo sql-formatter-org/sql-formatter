@@ -92,7 +92,6 @@ const onelineClauses = expandPhrases([
   'CREATE USER',
   'DEALLOCATE PREPARE',
   'DESCRIBE',
-  'DO',
   'DROP DATABASE',
   'DROP EVENT',
   'DROP FUNCTION',

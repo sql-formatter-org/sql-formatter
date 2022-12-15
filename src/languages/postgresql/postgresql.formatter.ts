@@ -150,7 +150,6 @@ const onelineClauses = expandPhrases([
   'DEALLOCATE',
   'DECLARE',
   'DISCARD',
-  'DO',
   'DROP ACCESS METHOD',
   'DROP AGGREGATE',
   'DROP CAST',
