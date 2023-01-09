@@ -32,7 +32,7 @@ export default function formatCommaPositions(
  *     [
  *       'SELECT',
  *       '  foo,',
- *       '  bar,',
+ *       '  bar, --comment',
  *       '  baz',
  *       'FROM'
  *     ]
@@ -41,7 +41,7 @@ export default function formatCommaPositions(
  *
  *     [
  *       ['SELECT'],
- *       ['  foo,', '  bar,', '  baz'],
+ *       ['  foo,', '  bar, --comment', '  baz'],
  *       ['FROM']
  *     ]
  */
@@ -52,7 +52,7 @@ function groupCommaDelimitedLines(lines: string[]): string[][] {
     // when line ends with comma,
     // gather together all following lines that also end with comma,
     // plus one (which doesn't end with comma)
-    while (lines[i].match(/.*,$/)) {
+    while (lines[i].match(/.*,((\s*--.+)|$)/)) {
       i++;
       group.push(lines[i]);
     }
@@ -68,7 +68,11 @@ function formatTabular(commaLines: string[]): string[] {
     if (i === commaLines.length - 1) {
       return line; // do not add comma for last item
     }
-    return line + ' '.repeat(maxLineLength - line.length - 1) + ',';
+    const commentMatch = /\s*--/.exec(line);
+    const endOfLinePosition = commentMatch ? commentMatch.index : line.length;
+    return `${line.slice(0, endOfLinePosition)}${' '.repeat(
+      maxLineLength - line.length - 1
+    )},${line.slice(endOfLinePosition + 1)}`;
   });
 }
 
@@ -91,5 +95,5 @@ function removeLastIndent(whitespace: string, indent: string): string {
 }
 
 function trimTrailingCommas(lines: string[]): string[] {
-  return lines.map(line => line.replace(/,$/, ''));
+  return lines.map(line => line.replace(/,((\s*--.+)|$)/, '$1'));
 }

@@ -48,6 +48,31 @@ export default function supportsCommaPosition(format: FormatFn) {
       );
     });
 
+    it('adds comma before column in case with comment', () => {
+      const result = format(
+        `SELECT alpha,
+            MAX(beta), --comment
+              delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon
+          `,
+        { commaPosition: 'before' }
+      );
+      expect(result).toBe(
+        dedent(`
+          SELECT
+            alpha
+          , MAX(beta) --comment
+          , delta AS d
+          , epsilon
+          FROM
+            gamma
+          GROUP BY
+            alpha
+          , delta
+          , epsilon
+        `)
+      );
+    });
+
     it('works with larger indent', () => {
       const result = format(
         'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon',
