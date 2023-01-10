@@ -128,8 +128,8 @@ export default function supportsCommaPosition(format: FormatFn) {
       const result = format(
         `SELECT alpha, --comment1
         beta,--comment2
-        delta, epsilon,--comm
-        iota --comment3`,
+        delta, epsilon,--comment3
+        iota --comment4`,
         { commaPosition: 'tabular' }
       );
       expect(result).toBe(
@@ -138,8 +138,8 @@ export default function supportsCommaPosition(format: FormatFn) {
             alpha  , --comment1
             beta   , --comment2
             delta  ,
-            epsilon, --comm
-            iota --comment3
+            epsilon, --comment3
+            iota --comment4
         `
       );
     });
