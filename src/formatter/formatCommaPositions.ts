@@ -64,23 +64,20 @@ function groupCommaDelimitedLines(lines: string[]): string[][] {
 // makes all lines the same length by appending spaces before comma
 function formatTabular(commaLines: string[]): string[] {
   const commaLinesWithoutComments = commaLines.map(line => line.replace(/--.*/, ''));
-  const maxLineLength = maxLength(commaLinesWithoutComments);
-  return trimTrailingCommas(commaLines).map((line, i) => {
+  const commaPosition = maxLength(commaLinesWithoutComments) - 1;
+  return commaLines.map((line, i) => {
     if (i === commaLines.length - 1) {
       return line; // do not add comma for last item
     }
-    // find comment match in string
-    const commentMatch = /\s*--/.exec(line);
-    // if comment found, get its start index to slice string by it
-    // if comment not found, get line.length so slice will return whole line
-    const endOfContentWithoutCommentPosition = commentMatch ? commentMatch.index : line.length;
-    const lineContentWithoutComment = line.slice(0, endOfContentWithoutCommentPosition).trimEnd();
-    const spaces = ' '.repeat(maxLineLength - lineContentWithoutComment.length - 1);
-    const comment = line.slice(endOfContentWithoutCommentPosition + 1);
-
-    // trim end will handle case without comment
-    return `${lineContentWithoutComment}${spaces}, ${comment}`.trimEnd();
+    return indentComma(line, commaPosition);
   });
+}
+
+function indentComma(line: string, commaPosition: number) {
+  const [, code, comment] = line.match(/^(.*?),(\s*--.*)?$/) || [];
+
+  const spaces = ' '.repeat(commaPosition - code.length);
+  return `${code}${spaces},${comment ?? ''}`;
 }
 
 function formatBefore(commaLines: string[], indent: string): string[] {
