@@ -102,5 +102,5 @@ function trimTrailingCommas(lines: string[]): string[] {
 }
 
 function trimTrailingComments(lines: string[]): string[] {
-  return lines.map(line => line.replace(/--.*/, ''));
+  return lines.map(line => line.replace(/\s*--.*/, ''));
 }
