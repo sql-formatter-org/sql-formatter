@@ -32,7 +32,7 @@ export default function formatCommaPositions(
  *     [
  *       'SELECT',
  *       '  foo,',
- *       '  bar,',
+ *       '  bar, --comment',
  *       '  baz',
  *       'FROM'
  *     ]
@@ -41,7 +41,7 @@ export default function formatCommaPositions(
  *
  *     [
  *       ['SELECT'],
- *       ['  foo,', '  bar,', '  baz'],
+ *       ['  foo,', '  bar, --comment', '  baz'],
  *       ['FROM']
  *     ]
  */
@@ -52,7 +52,7 @@ function groupCommaDelimitedLines(lines: string[]): string[][] {
     // when line ends with comma,
     // gather together all following lines that also end with comma,
     // plus one (which doesn't end with comma)
-    while (lines[i].match(/.*,$/)) {
+    while (lines[i].match(/.*,(\s*(--.*)?$)/)) {
       i++;
       group.push(lines[i]);
     }
@@ -63,13 +63,20 @@ function groupCommaDelimitedLines(lines: string[]): string[][] {
 
 // makes all lines the same length by appending spaces before comma
 function formatTabular(commaLines: string[]): string[] {
-  const maxLineLength = maxLength(commaLines);
-  return trimTrailingCommas(commaLines).map((line, i) => {
+  const commaPosition = maxLength(trimTrailingComments(commaLines)) - 1;
+  return commaLines.map((line, i) => {
     if (i === commaLines.length - 1) {
       return line; // do not add comma for last item
     }
-    return line + ' '.repeat(maxLineLength - line.length - 1) + ',';
+    return indentComma(line, commaPosition);
   });
+}
+
+function indentComma(line: string, commaPosition: number) {
+  const [, code, comment] = line.match(/^(.*?),(\s*--.*)?$/) || [];
+
+  const spaces = ' '.repeat(commaPosition - code.length);
+  return `${code}${spaces},${comment ?? ''}`;
 }
 
 function formatBefore(commaLines: string[], indent: string): string[] {
@@ -91,5 +98,9 @@ function removeLastIndent(whitespace: string, indent: string): string {
 }
 
 function trimTrailingCommas(lines: string[]): string[] {
-  return lines.map(line => line.replace(/,$/, ''));
+  return lines.map(line => line.replace(/,(\s*(--.*)?$)/, '$1'));
+}
+
+function trimTrailingComments(lines: string[]): string[] {
+  return lines.map(line => line.replace(/--.*/, ''));
 }

@@ -48,6 +48,24 @@ export default function supportsCommaPosition(format: FormatFn) {
       );
     });
 
+    it('handles comments after commas', () => {
+      const result = format(
+        `SELECT alpha, --comment1
+        MAX(beta), --comment2
+        delta AS d, epsilon --comment3`,
+        { commaPosition: 'before' }
+      );
+      expect(result).toBe(
+        dedent(`
+          SELECT
+            alpha --comment1
+          , MAX(beta) --comment2
+          , delta AS d
+          , epsilon --comment3
+        `)
+      );
+    });
+
     it('works with larger indent', () => {
       const result = format(
         'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon',
@@ -102,6 +120,25 @@ export default function supportsCommaPosition(format: FormatFn) {
             alpha  ,
             delta  ,
             epsilon
+        `)
+      );
+    });
+
+    it('handles comments after commas', () => {
+      const result = format(
+        `SELECT alpha, --comment1
+        beta,--comment2
+        delta, epsilon, iota --comment3`,
+        { commaPosition: 'tabular' }
+      );
+      expect(result).toBe(
+        dedent(`
+          SELECT
+            alpha  , --comment1
+            beta   , --comment2
+            delta  ,
+            epsilon,
+            iota --comment3
         `)
       );
     });
