@@ -73,30 +73,6 @@ export default function supportsCommaPosition(format: FormatFn) {
       );
     });
 
-    it('should work with comma position tabular and comment', () => {
-      const result = format(
-        `
-        SELECT
-          alpha         ,
-          beta,--comment
-          delta         ,
-          epsilon       ,
-          iota
-      `,
-        { commaPosition: 'tabular' }
-      );
-      expect(result).toBe(
-        dedent(`
-          SELECT
-            alpha  ,
-            beta   , --comment
-            delta  ,
-            epsilon,
-            iota
-        `)
-      );
-    });
-
     it('works with larger indent', () => {
       const result = format(
         'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon',
@@ -151,6 +127,25 @@ export default function supportsCommaPosition(format: FormatFn) {
             alpha  ,
             delta  ,
             epsilon
+        `)
+      );
+    });
+
+    it('handles comments after commas', () => {
+      const result = format(
+        `SELECT alpha, beta,--comment1
+          delta, epsilon, iota --comment2
+      `,
+        { commaPosition: 'tabular' }
+      );
+      expect(result).toBe(
+        dedent(`
+          SELECT
+            alpha  ,
+            beta   , --comment1
+            delta  ,
+            epsilon,
+            iota --comment2
         `)
       );
     });
