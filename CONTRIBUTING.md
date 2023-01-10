@@ -56,6 +56,7 @@ For those who have admin access on the repo, the new release publish flow is as 
 - Sasha Aliashkevich <olsender@gmail.com>
 - Sean Song <mail@seansong.dev>
 - Sergei Egorov <sergei.egorov@zeroturnaround.com>
+- Stanislav Germanovskii <s.germanovskiy@tinkoff.ru>
 - Steven Yung <stevenyung@fastmail.com>
 - Tito Griné <tgrine@singlestore.com>
 - Toliver <teejae@gmail.com>
