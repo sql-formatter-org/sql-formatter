@@ -48,27 +48,20 @@ export default function supportsCommaPosition(format: FormatFn) {
       );
     });
 
-    it('adds comma before column in case with comment', () => {
+    it('handles comments after commas', () => {
       const result = format(
-        `SELECT alpha,
-            MAX(beta), --comment
-              delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon
-          `,
+        `SELECT alpha, --comment1
+        MAX(beta), --comment2
+        delta AS d, epsilon --comment3`,
         { commaPosition: 'before' }
       );
       expect(result).toBe(
         dedent(`
           SELECT
-            alpha
-          , MAX(beta) --comment
+            alpha --comment1
+          , MAX(beta) --comment2
           , delta AS d
-          , epsilon
-          FROM
-            gamma
-          GROUP BY
-            alpha
-          , delta
-          , epsilon
+          , epsilon --comment3
         `)
       );
     });
@@ -133,19 +126,19 @@ export default function supportsCommaPosition(format: FormatFn) {
 
     it('handles comments after commas', () => {
       const result = format(
-        `SELECT alpha, beta,--comment1
-          delta, epsilon, iota --comment2
-      `,
+        `SELECT alpha, --comment1
+        beta,--comment2
+        delta, epsilon, iota --comment3`,
         { commaPosition: 'tabular' }
       );
       expect(result).toBe(
         dedent(`
           SELECT
-            alpha  ,
-            beta   , --comment1
+            alpha  , --comment1
+            beta   , --comment2
             delta  ,
             epsilon,
-            iota --comment2
+            iota --comment3
         `)
       );
     });
