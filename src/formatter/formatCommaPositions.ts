@@ -52,7 +52,7 @@ function groupCommaDelimitedLines(lines: string[]): string[][] {
     // when line ends with comma,
     // gather together all following lines that also end with comma,
     // plus one (which doesn't end with comma)
-    while (lines[i].match(/.*,((\s*--.+)|$)/)) {
+    while (lines[i].match(/.*,(\s*(--.*)?$)/)) {
       i++;
       group.push(lines[i]);
     }
@@ -63,16 +63,23 @@ function groupCommaDelimitedLines(lines: string[]): string[][] {
 
 // makes all lines the same length by appending spaces before comma
 function formatTabular(commaLines: string[]): string[] {
-  const maxLineLength = maxLength(commaLines);
+  const commaLinesWithoutComments = commaLines.map(line => line.replace(/--.*/, ''));
+  const maxLineLength = maxLength(commaLinesWithoutComments);
   return trimTrailingCommas(commaLines).map((line, i) => {
     if (i === commaLines.length - 1) {
       return line; // do not add comma for last item
     }
+    // find comment match in string
     const commentMatch = /\s*--/.exec(line);
-    const endOfLinePosition = commentMatch ? commentMatch.index : line.length;
-    return `${line.slice(0, endOfLinePosition)}${' '.repeat(
-      maxLineLength - line.length - 1
-    )},${line.slice(endOfLinePosition + 1)}`;
+    // if comment found, get its start index to slice string by it
+    // if comment not found, get line.length so slice will return whole line
+    const endOfContentWithoutCommentPosition = commentMatch ? commentMatch.index : line.length;
+    const lineContentWithoutComment = line.slice(0, endOfContentWithoutCommentPosition).trimEnd();
+    const spaces = ' '.repeat(maxLineLength - lineContentWithoutComment.length - 1);
+    const comment = line.slice(endOfContentWithoutCommentPosition + 1);
+
+    // trim end will handle case without comment
+    return `${lineContentWithoutComment}${spaces}, ${comment}`.trimEnd();
   });
 }
 
@@ -95,5 +102,5 @@ function removeLastIndent(whitespace: string, indent: string): string {
 }
 
 function trimTrailingCommas(lines: string[]): string[] {
-  return lines.map(line => line.replace(/,((\s*--.+)|$)/, '$1'));
+  return lines.map(line => line.replace(/,(\s*(--.*)?$)/, '$1'));
 }
