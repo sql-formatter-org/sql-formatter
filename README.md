@@ -106,6 +106,7 @@ optional arguments:
   -h, --help      show this help message and exit
   -o, --output    OUTPUT
                     File to write SQL output (defaults to stdout)
+  --fix           Update the file in-place
   -l, --language  {bigquery,db2,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,singlestoredb,snowflake,spark,sql,sqlite,trino,tsql}
                     SQL dialect (defaults to basic sql)
   -c, --config    CONFIG
