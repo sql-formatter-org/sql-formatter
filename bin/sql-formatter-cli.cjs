@@ -16,7 +16,7 @@ class PrettierSQLArgs {
 
     this.query = this.getInput();
     const formattedQuery = format(this.query, this.cfg).trim() + '\n';
-    this.writeOutput(this.args.output, formattedQuery);
+    this.writeOutput(this.getOutputFile(this.args), formattedQuery);
   }
 
   getParser() {
@@ -33,6 +33,12 @@ class PrettierSQLArgs {
 
     parser.add_argument('-o', '--output', {
       help: 'File to write SQL output (defaults to stdout)',
+    });
+
+    parser.add_argument('--fix', {
+      help: 'Update the file in-place',
+      action: 'store_const',
+      const: true,
     });
 
     parser.add_argument('-l', '--language', {
@@ -101,6 +107,22 @@ class PrettierSQLArgs {
       console.error('An unknown error has occurred, please file a bug report at:');
       console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
       throw e;
+    }
+  }
+
+  getOutputFile(args) {
+    if (args.output && args.fix) {
+      console.error('Error: Cannot use both --output and --fix options simultaneously');
+      process.exit(1);
+    }
+    if (args.fix && !args.file) {
+      console.error('Error: The --fix option cannot be used without a filename');
+      process.exit(1);
+    }
+    if (args.fix) {
+      return args.file;
+    } else {
+      return args.output;
     }
   }
 
