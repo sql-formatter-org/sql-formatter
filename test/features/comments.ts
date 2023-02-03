@@ -211,6 +211,23 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     `);
   });
 
+  // Regression test for #558
+  it('indents multiline block comment that is not a doc-comment', () => {
+    const result = format(dedent`
+      SELECT 1
+      /*
+      comment line
+      */
+    `);
+    expect(result).toBe(dedent`
+      SELECT
+        1
+        /*
+        comment line
+        */
+    `);
+  });
+
   it('formats comments between qualified.names (after dot)', () => {
     const result = format(`
       SELECT foo. /* com1 */ bar, foo. /* com2 */ *;
