@@ -1,5 +1,5 @@
 import { FormatOptions } from '../FormatOptions.js';
-import { equalizeWhitespace, isMultiline } from '../utils.js';
+import { equalizeWhitespace, isMultiline, last } from '../utils.js';
 
 import Params from './Params.js';
 import { isTabularStyle } from './config.js';
@@ -356,8 +356,20 @@ export default class ExpressionFormatter {
     return isMultiline(node.text) || isMultiline(node.precedingWhitespace || '');
   }
 
+  private isDocComment(comment: string): boolean {
+    const lines = comment.split(/\n/);
+    return (
+      // first line starts with /* or /**
+      /^\/\*\*?$/.test(lines[0]) &&
+      // intermediate lines start with *
+      lines.slice(1, lines.length - 1).every(line => /^\s*\*/.test(line)) &&
+      // last line ends with */
+      /^\s*\*\/$/.test(last(lines) as string)
+    );
+  }
+
   // Breaks up block comment to multiple lines.
-  // For example this comment (dots representing leading whitespace):
+  // For example this doc-comment (dots representing leading whitespace):
   //
   //   ..../**
   //   .....* Some description here
@@ -371,14 +383,30 @@ export default class ExpressionFormatter {
   //     '.* and here too',
   //     '.*/' ]
   //
+  // However, a normal comment (non-doc-comment) like this:
+  //
+  //   ..../*
+  //   ....Some description here
+  //   ....*/
+  //
+  // gets broken to this array (no leading spaces):
+  //
+  //   [ '/*',
+  //     'Some description here',
+  //     '*/' ]
+  //
   private splitBlockComment(comment: string): string[] {
-    return comment.split(/\n/).map(line => {
-      if (/^\s*\*/.test(line)) {
-        return ' ' + line.replace(/^\s*/, '');
-      } else {
-        return line.replace(/^\s*/, '');
-      }
-    });
+    if (this.isDocComment(comment)) {
+      return comment.split(/\n/).map(line => {
+        if (/^\s*\*/.test(line)) {
+          return ' ' + line.replace(/^\s*/, '');
+        } else {
+          return line;
+        }
+      });
+    } else {
+      return comment.split(/\n/).map(line => line.replace(/^\s*/, ''));
+    }
   }
 
   private formatSubExpression(nodes: AstNode[]): Layout {
