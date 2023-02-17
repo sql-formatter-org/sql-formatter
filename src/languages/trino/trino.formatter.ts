@@ -120,7 +120,11 @@ const reservedJoins = expandPhrases([
   'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
 ]);
 
-const reservedPhrases = expandPhrases(['{ROWS | RANGE | GROUPS} BETWEEN']);
+const reservedPhrases = expandPhrases([
+  '{ROWS | RANGE | GROUPS} BETWEEN',
+  // comparison operator
+  'IS [NOT] DISTINCT FROM',
+]);
 
 export const trino: DialectOptions = {
   tokenizerOptions: {

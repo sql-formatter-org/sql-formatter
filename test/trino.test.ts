@@ -23,6 +23,7 @@ import supportsUpdate from './features/update.js';
 import supportsTruncateTable from './features/truncateTable.js';
 import supportsCreateView from './features/createView.js';
 import supportsAlterTable from './features/alterTable.js';
+import supportsIsDistinctFrom from './features/isDistinctFrom.js';
 
 describe('TrinoFormatter', () => {
   const language = 'trino';
@@ -48,6 +49,7 @@ describe('TrinoFormatter', () => {
   supportsBetween(format);
   // Missing: '?' operator (for row patterns)
   supportsOperators(format, ['%', '->', '=>', '||', '|', '^', '$'], ['AND', 'OR']);
+  supportsIsDistinctFrom(format);
   supportsArrayLiterals(format);
   supportsArrayAndMapAccessors(format);
   supportsJoin(format);

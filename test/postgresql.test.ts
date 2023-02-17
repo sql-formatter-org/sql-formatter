@@ -26,6 +26,7 @@ import supportsUpdate from './features/update.js';
 import supportsTruncateTable from './features/truncateTable.js';
 import supportsCreateView from './features/createView.js';
 import supportsOnConflict from './features/onConflict.js';
+import supportsIsDistinctFrom from './features/isDistinctFrom.js';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -138,6 +139,7 @@ describe('PostgreSqlFormatter', () => {
     '<<<->',
     '<->>>',
   ]);
+  supportsIsDistinctFrom(format);
   supportsJoin(format);
   supportsSetOperations(format);
   supportsReturning(format);
