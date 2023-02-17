@@ -23,6 +23,7 @@ import supportsTruncateTable from './features/truncateTable.js';
 import supportsMergeInto from './features/mergeInto.js';
 import supportsCreateView from './features/createView.js';
 import supportsAlterTable from './features/alterTable.js';
+import supportsIsDistinctFrom from './features/isDistinctFrom.js';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';
@@ -55,6 +56,7 @@ describe('BigQueryFormatter', () => {
     'INTERSECT DISTINCT',
   ]);
   supportsOperators(format, ['&', '|', '^', '~', '>>', '<<', '||']);
+  supportsIsDistinctFrom(format);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });

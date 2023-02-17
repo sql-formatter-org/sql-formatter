@@ -150,6 +150,8 @@ const reservedPhrases = expandPhrases([
   'NOT DETERMINISTIC',
   // inside window definitions
   '{ROWS | RANGE} BETWEEN',
+  // comparison operator
+  'IS [NOT] DISTINCT FROM',
 ]);
 
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference

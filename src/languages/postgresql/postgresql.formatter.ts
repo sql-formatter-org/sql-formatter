@@ -247,6 +247,8 @@ const reservedPhrases = expandPhrases([
   '{ROWS | RANGE | GROUPS} BETWEEN',
   // https://www.postgresql.org/docs/current/datatype-datetime.html
   '{TIMESTAMP | TIME} {WITH | WITHOUT} TIME ZONE',
+  // comparison operator
+  'IS [NOT] DISTINCT FROM',
 ]);
 
 // https://www.postgresql.org/docs/14/index.html
