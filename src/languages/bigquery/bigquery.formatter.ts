@@ -178,6 +178,7 @@ export const bigquery: DialectOptions = {
     identTypes: ['``'],
     identChars: { dashes: true },
     paramTypes: { positional: true, named: ['@'], quoted: ['@'] },
+    variableTypes: [{ regex: String.raw`@@\w+` }],
     lineCommentTypes: ['--', '#'],
     operators: ['&', '|', '^', '~', '>>', '<<', '||'],
     postProcess,
