@@ -76,6 +76,14 @@ describe('BigQueryFormatter', () => {
     `);
   });
 
+  it('supports @@variables', () => {
+    expect(format('SELECT @@error.message, @@time_zone')).toBe(dedent`
+      SELECT
+        @@error.message,
+        @@time_zone
+    `);
+  });
+
   // BigQuery-specific string types
   it('supports strings with rb prefixes', () => {
     expect(format(`SELECT rb"huh", br'bulu bulu', BR'la la' FROM foo`)).toBe(dedent`
