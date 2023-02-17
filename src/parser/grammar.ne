@@ -154,6 +154,10 @@ expression_chain -> expression _expression_with_comments:* {%
   ([expr, chain]) => [expr, ...chain]
 %}
 
+andless_expression_chain -> andless_expression _andless_expression_with_comments:* {%
+  ([expr, chain]) => [expr, ...chain]
+%}
+
 expression_with_comments_ -> expression _ {%
   ([expr, _]) => addComments(expr, { trailing: _ })
 %}
@@ -162,18 +166,25 @@ _expression_with_comments -> _ expression {%
   ([_, expr]) => addComments(expr, { leading: _ })
 %}
 
+_andless_expression_with_comments -> _ andless_expression {%
+  ([_, expr]) => addComments(expr, { leading: _ })
+%}
+
 free_form_sql -> ( asteriskless_free_form_sql | asterisk ) {% unwrap %}
 
 asteriskless_free_form_sql ->
-  ( asteriskless_expression
+  ( asteriskless_andless_expression
+  | logic_operator
   | between_predicate
   | comma
   | comment
   | other_keyword ) {% unwrap %}
 
-expression -> ( asteriskless_expression | asterisk ) {% unwrap %}
+expression -> ( andless_expression | logic_operator ) {% unwrap %}
 
-asteriskless_expression ->
+andless_expression -> ( asteriskless_andless_expression | asterisk ) {% unwrap %}
+
+asteriskless_andless_expression ->
   ( array_subscript
   | case_expression
   | function_call
@@ -251,7 +262,7 @@ property_access -> expression _ %DOT _ (identifier | array_subscript | all_colum
   }
 %}
 
-between_predicate -> %BETWEEN _ expression_chain _ %AND _ expression {%
+between_predicate -> %BETWEEN _ andless_expression_chain _ %AND _ andless_expression {%
   ([betweenToken, _1, expr1, _2, andToken, _3, expr2]) => ({
     type: NodeType.between_predicate,
     betweenKw: toKeywordNode(betweenToken),
@@ -312,8 +323,12 @@ literal ->
 keyword ->
   ( %RESERVED_KEYWORD
   | %RESERVED_PHRASE
-  | %RESERVED_JOIN
-  | %AND
+  | %RESERVED_JOIN ) {%
+  ([[token]]) => toKeywordNode(token)
+%}
+
+logic_operator ->
+  ( %AND
   | %OR
   | %XOR ) {%
   ([[token]]) => toKeywordNode(token)

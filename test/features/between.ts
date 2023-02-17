@@ -29,4 +29,13 @@ export default function supportsBetween(format: FormatFn) {
       END AND 3
     `);
   });
+
+  // Regression test for #534
+  it('supports AND after BETWEEN', () => {
+    expect(format('SELECT foo BETWEEN 1 AND 2 AND x > 10')).toBe(dedent`
+      SELECT
+        foo BETWEEN 1 AND 2
+        AND x > 10
+    `);
+  });
 }
