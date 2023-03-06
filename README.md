@@ -193,6 +193,26 @@ format('select [col] from tbl', { language: 'transactsql' });
 
 Or when using the VSCode extension: Settings -> Prettier-SQL: SQLFlavourOverride.
 
+### Module parse failed: Unexpected token
+
+This typically happens when bundling an appication with Webpack.
+The cause is that Babel (through `babel-loader`) is not configured
+to support class properties syntax:
+
+```
+    | export default class ExpressionFormatter {
+    >   inline = false;
+```
+
+This syntax is widely supported in all major browsers (except old IE)
+and support for it is included to the default `@babel/preset-env`.
+
+Possible fixes:
+
+- Update to newer Babel / Webpack
+- Switch to `@babel/preset-env`
+- Include plugin `@babel/plugin-proposal-class-properties`
+
 ## Contributing
 
 Please see [CONTRIBUTING.md](CONTRIBUTING.md)
