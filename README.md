@@ -213,6 +213,24 @@ Possible fixes:
 - Switch to `@babel/preset-env`
 - Include plugin `@babel/plugin-proposal-class-properties`
 
+## The future
+
+The development of this formatter is currently in maintenance mode.
+Bugs will get fixed if feasible, but new features will likely not be added.
+
+I have started a new SQL formatting tool: [prettier-plugin-sql-cst][].
+
+- It solves several problems which can't be fixed in SQL Formatter because
+  of fundamental problems in its arhictecture.
+- It makes use of the Prettier layout algorithm,
+  doing a better job of splitting long expressions to multiple lines.
+- It takes much more opinionated approach to SQL formatting,
+  giving only a very limited set of options to adjust the code style.
+- It already has full support for SQLite and BigQuery syntax.
+  It should work for the most common SQL code in various other dialects.
+
+Give it a try if you'd like to take your SQL auto-formatting to the next level.
+
 ## Contributing
 
 Please see [CONTRIBUTING.md](CONTRIBUTING.md)
@@ -222,3 +240,4 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md)
 [MIT](LICENSE)
 
 [php library]: https://github.com/jdorn/sql-formatter
+[prettier-plugin-sql-cst]: https://github.com/nene/prettier-plugin-sql-cst
