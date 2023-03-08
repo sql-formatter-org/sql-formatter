@@ -263,7 +263,7 @@ describe('PostgreSqlFormatter', () => {
     `);
   });
 
-  it('formats FOR UPDATE clauses', () => {
+  it('formats FOR UPDATE clause', () => {
     expect(
       format(`
         SELECT * FROM tbl FOR UPDATE;
