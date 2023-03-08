@@ -267,7 +267,7 @@ describe('PostgreSqlFormatter', () => {
     expect(
       format(`
         SELECT * FROM tbl FOR UPDATE;
-        SELECT * FROM tbl FOR UPDATE OF tbl.a;
+        SELECT * FROM tbl FOR UPDATE OF tbl.salary;
       `)
     ).toBe(dedent`
       SELECT
@@ -281,7 +281,7 @@ describe('PostgreSqlFormatter', () => {
       FROM
         tbl
       FOR UPDATE OF
-        tbl.a;
+        tbl.salary;
     `);
   });
 });
