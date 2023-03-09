@@ -262,4 +262,26 @@ describe('PostgreSqlFormatter', () => {
       DROP NOT NULL;
     `);
   });
+
+  it('formats FOR UPDATE clause', () => {
+    expect(
+      format(`
+        SELECT * FROM tbl FOR UPDATE;
+        SELECT * FROM tbl FOR UPDATE OF tbl.salary;
+      `)
+    ).toBe(dedent`
+      SELECT
+        *
+      FROM
+        tbl
+      FOR UPDATE;
+
+      SELECT
+        *
+      FROM
+        tbl
+      FOR UPDATE OF
+        tbl.salary;
+    `);
+  });
 });

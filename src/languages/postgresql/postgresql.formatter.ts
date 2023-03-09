@@ -18,6 +18,7 @@ const reservedClauses = expandPhrases([
   'LIMIT',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  'FOR {UPDATE | NO KEY UPDATE | SHARE | KEY SHARE} [OF]',
   // Data manipulation
   // - insert:
   'INSERT INTO',

@@ -17,7 +17,7 @@ const reservedClauses = expandPhrases([
   'ORDER [SIBLINGS] BY',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
-  'FOR UPDATE',
+  'FOR UPDATE [OF]',
   // Data manipulation
   // - insert:
   'INSERT [INTO | ALL INTO]',

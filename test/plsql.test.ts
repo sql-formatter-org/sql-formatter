@@ -159,8 +159,8 @@ describe('PlSqlFormatter', () => {
         *
       FROM
         tbl
-      FOR UPDATE
-        OF tbl.salary;
+      FOR UPDATE OF
+        tbl.salary;
     `);
   });
 });
