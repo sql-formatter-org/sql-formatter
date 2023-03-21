@@ -20,4 +20,6 @@ export type {
   LogicalOperatorNewline,
   FormatOptions,
 } from './FormatOptions.js';
+export type { ParamItems } from './formatter/Params.js';
+export type { ParamTypes } from './lexer/TokenizerOptions.js';
 export type { DialectOptions } from './dialect.js';
