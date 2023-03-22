@@ -2,7 +2,7 @@ import { Token, TokenType } from './token.js';
 import * as regex from './regexFactory.js';
 import { ParamTypes, TokenizerOptions } from './TokenizerOptions.js';
 import TokenizerEngine, { TokenRule } from './TokenizerEngine.js';
-import { escapeRegExp } from './regexUtil.js';
+import { escapeRegExp, patternToRegex } from './regexUtil.js';
 import { equalizeWhitespace, Optional } from '../utils.js';
 import { NestedComment } from './NestedComment.js';
 
@@ -227,11 +227,13 @@ export default class Tokenizer {
         type: TokenType.POSITIONAL_PARAMETER,
         regex: paramTypes.positional ? /[?]/y : undefined,
       },
-      {
-        type: TokenType.CUSTOM_PARAMETER,
-        regex: regex.customParameter(paramTypes.custom),
-        key: v => v,
-      },
+      ...paramTypes.custom.map(
+        (customParam): TokenRule => ({
+          type: TokenType.CUSTOM_PARAMETER,
+          regex: patternToRegex(customParam.regex),
+          key: customParam.key ?? (v => v),
+        })
+      ),
     ]);
   }
 

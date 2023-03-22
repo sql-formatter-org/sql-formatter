@@ -40,8 +40,16 @@ export interface ParamTypes {
   // Prefixes for quoted parameter placeholders to support, e.g. :"name"
   // The type of quotes will depend on `identifierTypes` option.
   quoted?: (':' | '@' | '$')[];
-  // Array of regular expressions
-  custom?: RegexPattern[];
+  // Custom parameter type definitions
+  custom?: CustomParameter[];
+}
+
+export interface CustomParameter {
+  // Regex pattern for matching the parameter
+  regex: string;
+  // Takes the matched parameter string and returns the name of the parameter
+  // For example we might match "{foo}" and the name would be "foo".
+  key?: (text: string) => string;
 }
 
 export interface TokenizerOptions {
