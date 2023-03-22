@@ -56,4 +56,19 @@ export default function supportsParamTypes(format: FormatFn) {
   //
   // - it likely works when the other paramTypes tests work
   // - it's the config that's least likely to be actually used in practice.
+
+  describe('when paramTypes.custom=[regex]', () => {
+    it('replaces %blah% numbered placeholders with param values', () => {
+      const result = format('SELECT %1%, %2%, %3%;', {
+        paramTypes: { custom: [{ regex: '%[0-9]+%' }] },
+        params: { '%1%': 'first', '%2%': 'second', '%3%': 'third' },
+      });
+      expect(result).toBe(dedent`
+        SELECT
+          first,
+          second,
+          third;
+      `);
+    });
+  });
 }

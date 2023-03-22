@@ -40,6 +40,8 @@ export interface ParamTypes {
   // Prefixes for quoted parameter placeholders to support, e.g. :"name"
   // The type of quotes will depend on `identifierTypes` option.
   quoted?: (':' | '@' | '$')[];
+  // Array of regular expressions
+  custom?: RegexPattern[];
 }
 
 export interface TokenizerOptions {

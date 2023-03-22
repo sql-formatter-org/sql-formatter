@@ -196,6 +196,7 @@ export default class Tokenizer {
         typeof paramTypesOverrides?.positional === 'boolean'
           ? paramTypesOverrides.positional
           : cfg.paramTypes?.positional,
+      custom: paramTypesOverrides?.custom || cfg.paramTypes?.custom || [],
     };
 
     return this.validRules([
@@ -225,6 +226,11 @@ export default class Tokenizer {
       {
         type: TokenType.POSITIONAL_PARAMETER,
         regex: paramTypes.positional ? /[?]/y : undefined,
+      },
+      {
+        type: TokenType.CUSTOM_PARAMETER,
+        regex: regex.customParameter(paramTypes.custom),
+        key: v => v,
       },
     ]);
   }

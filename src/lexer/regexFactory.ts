@@ -1,6 +1,6 @@
 import { sortByLengthDesc } from '../utils.js';
 
-import { IdentChars, QuoteType, VariableType } from './TokenizerOptions.js';
+import { IdentChars, QuoteType, RegexPattern, VariableType } from './TokenizerOptions.js';
 import { escapeRegExp, patternToRegex, prefixesPattern, withDashes } from './regexUtil.js';
 
 /**
@@ -64,6 +64,13 @@ export const parameter = (paramTypes: string[], pattern: string): RegExp | undef
   const typesRegex = paramTypes.map(escapeRegExp).join('|');
 
   return patternToRegex(`(?:${typesRegex})(?:${pattern})`);
+};
+
+export const customParameter = (patterns: RegexPattern[]): RegExp | undefined => {
+  if (!patterns.length) {
+    return undefined;
+  }
+  return patternToRegex(patterns.map(p => p.regex).join('|'));
 };
 
 const buildQStringPatterns = () => {
