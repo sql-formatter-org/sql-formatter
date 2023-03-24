@@ -114,10 +114,10 @@ export default function supportsCommaPosition(format: FormatFn) {
       );
     });
 
-    it('should work with multiline comment and with strings with --', () => {
+    it('should work with multiline comment and with strings with -- and ,', () => {
       const q = `
       SELECT
-        "5 -- 6" as col1, /*
+        "5 -- 6," as col1, /*
         as mycol
         */ 8 as col2,
         --, b
@@ -131,7 +131,7 @@ export default function supportsCommaPosition(format: FormatFn) {
       expect(result).toBe(
         dedent`
           SELECT
-              "5 -- 6" as col1
+              "5 -- 6," as col1
               /*
               as mycol
               */
