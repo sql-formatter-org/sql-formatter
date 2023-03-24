@@ -52,7 +52,7 @@ function groupCommaDelimitedLines(lines: string[]): string[][] {
     // when line ends with comma,
     // gather together all following lines that also end with comma,
     // plus one (which doesn't end with comma)
-    while (lines[i].match(/.*,(\s*(--.*)?$)/)) {
+    while (lines[i].match(/^[^--]*,(\s*(--.*)?$)/)) {
       i++;
       group.push(lines[i]);
     }
@@ -80,17 +80,19 @@ function indentComma(line: string, commaPosition: number) {
 }
 
 function formatBefore(commaLines: string[], indent: string): string[] {
-  return trimTrailingCommas(commaLines).map((line, i) => {
-    if (i === 0) {
-      return line; // do not add comma for first item
-    }
-    const [whitespace] = line.match(PRECEDING_WHITESPACE_REGEX) || [''];
-    return (
-      removeLastIndent(whitespace, indent) +
-      indent.replace(/ {2}$/, ', ') + // add comma to the end of last indent
-      line.trimStart()
-    );
-  });
+  return trimTrailingCommas(commaLines)
+    .map((line, i) => {
+      if (i === 0) {
+        return line; // do not add comma for first item
+      }
+      const [whitespace] = line.match(PRECEDING_WHITESPACE_REGEX) || [''];
+      return (
+        removeLastIndent(whitespace, indent) +
+        indent.replace(/ {2}$/, ', ') + // add comma to the end of last indent
+        line.trimStart()
+      );
+    })
+    .filter(line => line !== '');
 }
 
 function removeLastIndent(whitespace: string, indent: string): string {
