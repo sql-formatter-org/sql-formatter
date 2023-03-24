@@ -1,16 +1,17 @@
-import { expect } from "@jest/globals";
-import dedent from "dedent-js";
+import { expect } from '@jest/globals';
+import dedent from 'dedent-js';
 
-import { FormatFn } from "../../src/sqlFormatter.js";
+import { FormatFn } from '../../src/sqlFormatter.js';
 import {
   getCommentsRanges,
-  queryToLinesWithIndexes, splitContentAndComments
+  queryToLinesWithIndexes,
+  splitContentAndComments,
 } from '../../src/formatter/formatCommaPositions.js';
 
 export default function supportsCommaPosition(format: FormatFn) {
-  it("defaults to comma after column", () => {
+  it('defaults to comma after column', () => {
     const result = format(
-      "SELECT alpha , MAX(beta) , delta AS d ,epsilon FROM gamma GROUP BY alpha , delta, epsilon"
+      'SELECT alpha , MAX(beta) , delta AS d ,epsilon FROM gamma GROUP BY alpha , delta, epsilon'
     );
     expect(result).toBe(
       dedent`
@@ -29,11 +30,11 @@ export default function supportsCommaPosition(format: FormatFn) {
     );
   });
 
-  describe("commaPosition: before", () => {
-    it("adds comma before column", () => {
+  describe('commaPosition: before', () => {
+    it('adds comma before column', () => {
       const result = format(
-        "SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon",
-        { commaPosition: "before" }
+        'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon',
+        { commaPosition: 'before' }
       );
       expect(result).toBe(
         dedent`
@@ -52,12 +53,12 @@ export default function supportsCommaPosition(format: FormatFn) {
       );
     });
 
-    it("handles comments after commas", () => {
+    it('handles comments after commas', () => {
       const result = format(
         `SELECT alpha, --comment1
         MAX(beta), --comment2
         delta AS d, epsilon --comment3`,
-        { commaPosition: "before" }
+        { commaPosition: 'before' }
       );
       expect(result).toBe(
         dedent`
@@ -70,10 +71,10 @@ export default function supportsCommaPosition(format: FormatFn) {
       );
     });
 
-    it("works with larger indent", () => {
+    it('works with larger indent', () => {
       const result = format(
-        "SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon",
-        { commaPosition: "before", tabWidth: 4 }
+        'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon',
+        { commaPosition: 'before', tabWidth: 4 }
       );
       expect(result).toBe(
         dedent`
@@ -150,11 +151,11 @@ export default function supportsCommaPosition(format: FormatFn) {
     });
 
     // This style is fundamentally incompatible with tabs
-    it("throws error when tabs used for indentation", () => {
+    it('throws error when tabs used for indentation', () => {
       expect(() => {
-        format("SELECT alpha, MAX(beta), delta AS d, epsilon", {
-          commaPosition: "before",
-          useTabs: true
+        format('SELECT alpha, MAX(beta), delta AS d, epsilon', {
+          commaPosition: 'before',
+          useTabs: true,
         });
       }).toThrowErrorMatchingInlineSnapshot(
         `"commaPosition: before does not work when tabs are used for indentation."`
@@ -162,11 +163,11 @@ export default function supportsCommaPosition(format: FormatFn) {
     });
   });
 
-  describe("commaPosition: tabular", () => {
-    it("aligns commas to a column", () => {
+  describe('commaPosition: tabular', () => {
+    it('aligns commas to a column', () => {
       const result = format(
-        "SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon",
-        { commaPosition: "tabular" }
+        'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon',
+        { commaPosition: 'tabular' }
       );
       expect(result).toBe(
         dedent`
@@ -185,13 +186,13 @@ export default function supportsCommaPosition(format: FormatFn) {
       );
     });
 
-    it("handles comments after commas", () => {
+    it('handles comments after commas', () => {
       const result = format(
         `SELECT alpha, --comment1
         beta,--comment2
         delta, epsilon,--comment3
         iota --comment4`,
-        { commaPosition: "tabular" }
+        { commaPosition: 'tabular' }
       );
       expect(result).toBe(
         dedent`
@@ -205,10 +206,10 @@ export default function supportsCommaPosition(format: FormatFn) {
       );
     });
 
-    it("is not effected by indent size", () => {
+    it('is not effected by indent size', () => {
       const result = format(
-        "SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon",
-        { commaPosition: "tabular", tabWidth: 6 }
+        'SELECT alpha, MAX(beta), delta AS d, epsilon FROM gamma GROUP BY alpha, delta, epsilon',
+        { commaPosition: 'tabular', tabWidth: 6 }
       );
       expect(result).toBe(
         dedent`
@@ -227,10 +228,10 @@ export default function supportsCommaPosition(format: FormatFn) {
       );
     });
 
-    it("handles tabs", () => {
-      const result = format("SELECT alpha, MAX(beta), delta AS d, epsilon", {
-        commaPosition: "tabular",
-        useTabs: true
+    it('handles tabs', () => {
+      const result = format('SELECT alpha, MAX(beta), delta AS d, epsilon', {
+        commaPosition: 'tabular',
+        useTabs: true,
       });
       expect(result).toBe(
         dedent`
