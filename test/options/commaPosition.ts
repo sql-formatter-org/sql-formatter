@@ -361,5 +361,27 @@ export default function supportsCommaPosition(format: FormatFn) {
         },
       ]);
     });
+
+    it('should handle comma in comments with comaPosition:before', () => {
+      const result = format(
+        `
+        SELECT
+          a, -- comment with -- ,
+          --, b
+          c
+        FROM
+          T1
+    `,
+        { commaPosition: 'before' }
+      );
+      expect(result).toBe(dedent`
+      SELECT
+        a -- comment with -- ,
+        --, b
+      , c
+      FROM
+        T1
+    `);
+    });
   });
 }
