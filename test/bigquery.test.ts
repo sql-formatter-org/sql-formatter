@@ -55,7 +55,7 @@ describe('BigQueryFormatter', () => {
     'EXCEPT DISTINCT',
     'INTERSECT DISTINCT',
   ]);
-  supportsOperators(format, ['&', '|', '^', '~', '>>', '<<', '||']);
+  supportsOperators(format, ['&', '|', '^', '~', '>>', '<<', '||', '=>']);
   supportsIsDistinctFrom(format);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
   supportsWindow(format);
@@ -239,6 +239,17 @@ describe('BigQueryFormatter', () => {
         item_array[SAFE_ORDINAL(6)] AS item_safe_ordinal
       FROM
         Items;
+    `);
+  });
+
+  it('supports named arguments', () => {
+    expect(
+      format(`
+      SELECT MAKE_INTERVAL(1, day=>2, minute => 3)
+      `)
+    ).toBe(dedent`
+      SELECT
+        MAKE_INTERVAL(1, day => 2, minute => 3)
     `);
   });
 
