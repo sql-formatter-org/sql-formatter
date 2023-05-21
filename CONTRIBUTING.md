@@ -49,6 +49,7 @@ For those who have admin access on the repo, the new release publish flow is as 
 - Offir Baron <ofir@panoply.io>
 - Olexandr Sydorchuk <olexandr.syd@gmail.com>
 - Pavel Djundik <xPaw@users.noreply.github.com>
+- pokutuna <mail@pokutuna.com>
 - Rafael Pinto <raprp@posteo.de>
 - Rahel Rjadnev-Meristo <rahelini@gmail.com>
 - Rene Saarsoo <nene@triin.net>
