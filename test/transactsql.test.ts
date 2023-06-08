@@ -117,4 +117,41 @@ describe('TransactSqlFormatter', () => {
       ALTER COLUMN foo INT NOT NULL DEFAULT 5;
     `);
   });
+
+  it('formats SET NOCOUNT ON; GO CREATE OR ALTER TABLE', () => {
+    const result = format('SET NOCOUNT ON; GO CREATE OR ALTER TABLE t');
+    expect(result).toBe(dedent`
+    SET
+    NOCOUNT ON;
+
+    GO
+    CREATE OR ALTER TABLE
+      t
+    `);
+  });
+
+  it('formats SET NOCOUNT ON; GO CREATE OR ALTER PROCEDURE', () => {
+    const result = format('SET NOCOUNT ON; GO CREATE OR ALTER PROCEDURE p');
+    expect(result).toBe(dedent`
+    SET
+    NOCOUNT ON;
+
+    GO
+    CREATE OR ALTER PROCEDURE
+      p
+    `);
+  });
+
+  it('formats AS BEING', () => {
+    const result = format('SET NOCOUNT ON; GO CREATE OR ALTER PROCEDURE p AS BEGIN');
+    expect(result).toBe(dedent`
+    SET
+    NOCOUNT ON;
+
+    GO
+    CREATE OR ALTER PROCEDURE
+      p
+    AS BEGIN
+    `);
+  });
 });
