@@ -29,7 +29,8 @@ const reservedClauses = expandPhrases([
   'UPDATE SET',
   // Data definition
   'CREATE [OR ALTER] [MATERIALIZED] VIEW',
-  'CREATE TABLE',
+  'CREATE [OR ALTER] TABLE',
+  'CREATE [OR ALTER] PROCEDURE',
 ]);
 
 const onelineClauses = expandPhrases([
