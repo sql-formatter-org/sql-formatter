@@ -129,4 +129,26 @@ describe('TransactSqlFormatter', () => {
       p
     `);
   });
+
+  it('formats SELECT ... INTO clause', () => {
+    const result = format('SELECT col INTO #temp FROM tbl');
+    expect(result).toBe(dedent`
+    SELECT
+      col
+    INTO
+      #temp
+    FROM
+      tbl
+    `);
+  });
+
+  it('formats INSERT INTO', () => {
+    const result = format("INSERT INTO tbl(firstName, lastName) VALUES('George', 'Orwell')");
+    expect(result).toBe(dedent`
+    INSERT INTO
+      tbl (firstName, lastName)
+    VALUES
+      ('George', 'Orwell')
+    `);
+  });
 });
