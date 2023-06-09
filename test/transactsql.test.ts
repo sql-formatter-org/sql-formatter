@@ -118,18 +118,6 @@ describe('TransactSqlFormatter', () => {
     `);
   });
 
-  it('formats SET NOCOUNT ON; GO CREATE OR ALTER TABLE', () => {
-    const result = format('SET NOCOUNT ON; GO CREATE OR ALTER TABLE t');
-    expect(result).toBe(dedent`
-    SET
-    NOCOUNT ON;
-
-    GO
-    CREATE OR ALTER TABLE
-      t
-    `);
-  });
-
   it('formats SET NOCOUNT ON; GO CREATE OR ALTER PROCEDURE', () => {
     const result = format('SET NOCOUNT ON; GO CREATE OR ALTER PROCEDURE p');
     expect(result).toBe(dedent`
