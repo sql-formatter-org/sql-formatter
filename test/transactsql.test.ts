@@ -133,12 +133,12 @@ describe('TransactSqlFormatter', () => {
   it('formats SELECT ... INTO clause', () => {
     const result = format('SELECT col INTO #temp FROM tbl');
     expect(result).toBe(dedent`
-    SELECT
-      col
-    INTO
-      #temp
-    FROM
-      tbl
+      SELECT
+        col
+      INTO
+        #temp
+      FROM
+        tbl
     `);
   });
 });
