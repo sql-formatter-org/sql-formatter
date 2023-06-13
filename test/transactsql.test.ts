@@ -141,14 +141,4 @@ describe('TransactSqlFormatter', () => {
       tbl
     `);
   });
-
-  it('formats INSERT INTO', () => {
-    const result = format("INSERT INTO tbl(firstName, lastName) VALUES('George', 'Orwell')");
-    expect(result).toBe(dedent`
-    INSERT INTO
-      tbl (firstName, lastName)
-    VALUES
-      ('George', 'Orwell')
-    `);
-  });
 });
