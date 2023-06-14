@@ -118,27 +118,24 @@ describe('TransactSqlFormatter', () => {
     `);
   });
 
-  it('formats SET NOCOUNT ON; GO CREATE OR ALTER TABLE', () => {
-    const result = format('SET NOCOUNT ON; GO CREATE OR ALTER TABLE t');
+  it('formats GO CREATE OR ALTER PROCEDURE', () => {
+    const result = format('GO CREATE OR ALTER PROCEDURE p');
     expect(result).toBe(dedent`
-    SET
-    NOCOUNT ON;
-
-    GO
-    CREATE OR ALTER TABLE
-      t
+      GO
+      CREATE OR ALTER PROCEDURE
+        p
     `);
   });
 
-  it('formats SET NOCOUNT ON; GO CREATE OR ALTER PROCEDURE', () => {
-    const result = format('SET NOCOUNT ON; GO CREATE OR ALTER PROCEDURE p');
+  it('formats SELECT ... INTO clause', () => {
+    const result = format('SELECT col INTO #temp FROM tbl');
     expect(result).toBe(dedent`
-    SET
-    NOCOUNT ON;
-
-    GO
-    CREATE OR ALTER PROCEDURE
-      p
+      SELECT
+        col
+      INTO
+        #temp
+      FROM
+        tbl
     `);
   });
 });

@@ -8,6 +8,7 @@ const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 const reservedClauses = expandPhrases([
   // queries
   'WITH',
+  'INTO',
   'FROM',
   'WHERE',
   'GROUP BY',
@@ -29,8 +30,8 @@ const reservedClauses = expandPhrases([
   'UPDATE SET',
   // Data definition
   'CREATE [OR ALTER] [MATERIALIZED] VIEW',
-  'CREATE [OR ALTER] TABLE',
-  'CREATE [OR ALTER] PROCEDURE',
+  'CREATE TABLE',
+  'CREATE [OR ALTER] {PROC | PROCEDURE}',
 ]);
 
 const onelineClauses = expandPhrases([
