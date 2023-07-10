@@ -7,6 +7,7 @@ const fs = require('fs');
 const tty = require('tty');
 const { version } = require('../package.json');
 const { ArgumentParser } = require('argparse');
+const { promisify } = require('util');
 
 class PrettierSQLArgs {
   constructor() {
@@ -14,9 +15,12 @@ class PrettierSQLArgs {
     this.args = this.parser.parse_args();
     this.cfg = this.readConfig();
 
-    this.query = this.getInput();
-    const formattedQuery = format(this.query, this.cfg).trim() + '\n';
-    this.writeOutput(this.getOutputFile(this.args), formattedQuery);
+    this.readFile = promisify(fs.readFile);
+    this.getInput().then(input => {
+      this.query = input;
+      const formattedQuery = format(this.query, this.cfg).trim() + '\n';
+      this.writeOutput(this.getOutputFile(this.args), formattedQuery);
+    });
   }
 
   getParser() {
@@ -91,10 +95,10 @@ class PrettierSQLArgs {
     };
   }
 
-  getInput() {
+  async getInput() {
     const infile = this.args.file || process.stdin.fd;
     try {
-      return fs.readFileSync(infile, 'utf-8');
+      return await this.readFile(infile, { encoding: 'utf-8' });
     } catch (e) {
       if (e.code === 'EAGAIN') {
         console.error('Error: no file specified and no data in stdin');
