@@ -23,6 +23,22 @@ class PrettierSQLArgs {
     });
   }
 
+  async getStdin() {
+    if (process.stdin.isTTY) {
+      return Buffer.alloc(0);
+    }
+
+    const result = [];
+    let length = 0;
+
+    for await (const chunk of process.stdin) {
+      result.push(chunk);
+      length += chunk.length;
+    }
+
+    return Buffer.concat(result, length).toString();
+  }
+
   getParser() {
     const parser = new ArgumentParser({
       add_help: true,
@@ -97,20 +113,24 @@ class PrettierSQLArgs {
 
   async getInput() {
     const infile = this.args.file || process.stdin.fd;
-    try {
-      return await this.readFile(infile, { encoding: 'utf-8' });
-    } catch (e) {
-      if (e.code === 'EAGAIN') {
-        console.error('Error: no file specified and no data in stdin');
-        process.exit(1);
+    if (this.args.file) {
+      try {
+        return await this.readFile(infile, { encoding: 'utf-8' });
+      } catch (e) {
+        if (e.code === 'EAGAIN') {
+          console.error('Error: no file specified and no data in stdin');
+          process.exit(1);
+        }
+        if (e.code === 'ENOENT') {
+          console.error(`Error: could not open file ${infile}`);
+          process.exit(1);
+        }
+        console.error('An unknown error has occurred, please file a bug report at:');
+        console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
+        throw e;
       }
-      if (e.code === 'ENOENT') {
-        console.error(`Error: could not open file ${infile}`);
-        process.exit(1);
-      }
-      console.error('An unknown error has occurred, please file a bug report at:');
-      console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
-      throw e;
+    } else {
+      return await this.getStdin();
     }
   }
 
