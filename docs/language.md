@@ -27,7 +27,7 @@ const result = format('SELECT * FROM tbl', { dialect: 'sqlite' });
 - `"spark"` - [Spark][]
 - `"sqlite"` - [SQLite][sqlite]
 - `"transactsql"` or `"tsql"` - [SQL Server Transact-SQL][tsql]
-- `"trino"` - [Trino][] / [Presto][]
+- `"trino"` - [Trino][] (should also work for [Presto][], which is very similar dialect, though technically different)
 
 The default `"sql"` dialect is meant for cases where you don't know which dialect of SQL you're about to format.
 It's not an auto-detection, it just supports a subset of features common enough in many SQL implementations.
