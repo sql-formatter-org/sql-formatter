@@ -7,14 +7,18 @@ const fs = require('fs');
 const tty = require('tty');
 const { version } = require('../package.json');
 const { ArgumentParser } = require('argparse');
+const { promisify } = require('util');
+const getStdin = require('get-stdin');
 
-class PrettierSQLArgs {
+class SqlFormatterCli {
   constructor() {
     this.parser = this.getParser();
     this.args = this.parser.parse_args();
-    this.cfg = this.readConfig();
+  }
 
-    this.query = this.getInput();
+  async run() {
+    this.cfg = await this.readConfig();
+    this.query = await this.getInput();
     const formattedQuery = format(this.query, this.cfg).trim() + '\n';
     this.writeOutput(this.getOutputFile(this.args), formattedQuery);
   }
@@ -59,7 +63,7 @@ class PrettierSQLArgs {
     return parser;
   }
 
-  readConfig() {
+  async readConfig() {
     if (
       tty.isatty(0) &&
       Object.entries(this.args).every(([k, v]) => k === 'language' || v === undefined)
@@ -68,9 +72,9 @@ class PrettierSQLArgs {
       process.exit(0);
     }
 
-    if (this.args.config)
+    if (this.args.config) {
       try {
-        const configFile = fs.readFileSync(this.args.config);
+        const configFile = await this.readFile(this.args.config);
         const configJson = JSON.parse(configFile);
         return { language: this.args.language, ...configJson };
       } catch (e) {
@@ -78,35 +82,45 @@ class PrettierSQLArgs {
           console.error(`Error: unable to parse JSON at file ${this.args.config}`);
           process.exit(1);
         }
-        if (e.code === 'ENOENT') {
-          console.error(`Error: could not open file ${this.args.config}`);
-          process.exit(1);
-        }
+        this.exitWhenIOError(e);
         console.error('An unknown error has occurred, please file a bug report at:');
         console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
         throw e;
       }
+    }
     return {
       language: this.args.language,
     };
   }
 
-  getInput() {
+  async getInput() {
     const infile = this.args.file || process.stdin.fd;
-    try {
-      return fs.readFileSync(infile, 'utf-8');
-    } catch (e) {
-      if (e.code === 'EAGAIN') {
-        console.error('Error: no file specified and no data in stdin');
-        process.exit(1);
+    if (this.args.file) {
+      try {
+        return await this.readFile(infile, { encoding: 'utf-8' });
+      } catch (e) {
+        this.exitWhenIOError(e);
+        console.error('An unknown error has occurred, please file a bug report at:');
+        console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
+        throw e;
       }
-      if (e.code === 'ENOENT') {
-        console.error(`Error: could not open file ${infile}`);
-        process.exit(1);
-      }
-      console.error('An unknown error has occurred, please file a bug report at:');
-      console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
-      throw e;
+    } else {
+      return await getStdin();
+    }
+  }
+
+  async readFile(filename) {
+    return promisify(fs.readFile)(filename, { encoding: 'utf-8' });
+  }
+
+  exitWhenIOError(e) {
+    if (e.code === 'EAGAIN') {
+      console.error('Error: no file specified and no data in stdin');
+      process.exit(1);
+    }
+    if (e.code === 'ENOENT') {
+      console.error(`Error: could not open file ${infile}`);
+      process.exit(1);
     }
   }
 
@@ -136,4 +150,5 @@ class PrettierSQLArgs {
   }
 }
 
-new PrettierSQLArgs();
+const cli = new SqlFormatterCli();
+cli.run();

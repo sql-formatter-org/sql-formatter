@@ -58,6 +58,7 @@ For those who have admin access on the repo, the new release publish flow is as 
 - Romain Rigaux <hello@getromain.com>
 - Sasha Aliashkevich <olsender@gmail.com>
 - Sean Song <mail@seansong.dev>
+- Sebastian Lyng Johansen <seblyng98@gmail.com>
 - Sergei Egorov <sergei.egorov@zeroturnaround.com>
 - Stanislav Germanovskii <s.germanovskiy@tinkoff.ru>
 - Steven Yung <stevenyung@fastmail.com>
