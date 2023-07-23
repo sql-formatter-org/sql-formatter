@@ -97,7 +97,7 @@ class PrettierSQLArgs {
     const infile = this.args.file || process.stdin.fd;
     if (this.args.file) {
       try {
-        return await promisify(fs.readFile)(infile, { encoding: 'utf-8' });
+        return await this.readFile(infile, { encoding: 'utf-8' });
       } catch (e) {
         this.exitWhenIOError(e);
         console.error('An unknown error has occurred, please file a bug report at:');
@@ -107,6 +107,10 @@ class PrettierSQLArgs {
     } else {
       return await getStdin();
     }
+  }
+
+  async readFile(filename) {
+    return promisify(fs.readFile)(filename, { encoding: 'utf-8' });
   }
 
   exitWhenIOError(e) {
