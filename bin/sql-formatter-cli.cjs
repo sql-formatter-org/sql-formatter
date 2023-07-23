@@ -73,7 +73,7 @@ class PrettierSQLArgs {
       process.exit(0);
     }
 
-    if (this.args.config)
+    if (this.args.config) {
       try {
         const configFile = fs.readFileSync(this.args.config);
         const configJson = JSON.parse(configFile);
@@ -91,6 +91,7 @@ class PrettierSQLArgs {
         console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
         throw e;
       }
+    }
     return {
       language: this.args.language,
     };
