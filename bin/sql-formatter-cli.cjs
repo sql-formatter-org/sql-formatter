@@ -10,7 +10,7 @@ const { ArgumentParser } = require('argparse');
 const { promisify } = require('util');
 const getStdin = require('get-stdin');
 
-class PrettierSQLArgs {
+class SqlFormatterCli {
   constructor() {
     this.parser = this.getParser();
     this.args = this.parser.parse_args();
@@ -150,4 +150,4 @@ class PrettierSQLArgs {
   }
 }
 
-new PrettierSQLArgs();
+new SqlFormatterCli();
