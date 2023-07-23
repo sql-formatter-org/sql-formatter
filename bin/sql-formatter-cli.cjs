@@ -16,7 +16,6 @@ class PrettierSQLArgs {
     this.args = this.parser.parse_args();
     this.cfg = this.readConfig();
 
-    this.readFile = promisify(fs.readFile);
     this.getInput().then(input => {
       this.query = input;
       const formattedQuery = format(this.query, this.cfg).trim() + '\n';
@@ -98,7 +97,7 @@ class PrettierSQLArgs {
     const infile = this.args.file || process.stdin.fd;
     if (this.args.file) {
       try {
-        return await this.readFile(infile, { encoding: 'utf-8' });
+        return await promisify(fs.readFile)(infile, { encoding: 'utf-8' });
       } catch (e) {
         this.exitWhenIOError(e);
         console.error('An unknown error has occurred, please file a bug report at:');
