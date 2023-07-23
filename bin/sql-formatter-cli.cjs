@@ -17,7 +17,7 @@ class SqlFormatterCli {
   }
 
   async run() {
-    this.cfg = this.readConfig();
+    this.cfg = await this.readConfig();
     this.query = await this.getInput();
     const formattedQuery = format(this.query, this.cfg).trim() + '\n';
     this.writeOutput(this.getOutputFile(this.args), formattedQuery);
@@ -63,7 +63,7 @@ class SqlFormatterCli {
     return parser;
   }
 
-  readConfig() {
+  async readConfig() {
     if (
       tty.isatty(0) &&
       Object.entries(this.args).every(([k, v]) => k === 'language' || v === undefined)
@@ -74,7 +74,7 @@ class SqlFormatterCli {
 
     if (this.args.config) {
       try {
-        const configFile = fs.readFileSync(this.args.config);
+        const configFile = await this.readFile(this.args.config);
         const configJson = JSON.parse(configFile);
         return { language: this.args.language, ...configJson };
       } catch (e) {
