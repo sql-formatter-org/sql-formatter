@@ -14,13 +14,13 @@ class SqlFormatterCli {
   constructor() {
     this.parser = this.getParser();
     this.args = this.parser.parse_args();
-    this.cfg = this.readConfig();
+  }
 
-    this.getInput().then(input => {
-      this.query = input;
-      const formattedQuery = format(this.query, this.cfg).trim() + '\n';
-      this.writeOutput(this.getOutputFile(this.args), formattedQuery);
-    });
+  async run() {
+    this.cfg = this.readConfig();
+    this.query = await this.getInput();
+    const formattedQuery = format(this.query, this.cfg).trim() + '\n';
+    this.writeOutput(this.getOutputFile(this.args), formattedQuery);
   }
 
   getParser() {
@@ -150,4 +150,5 @@ class SqlFormatterCli {
   }
 }
 
-new SqlFormatterCli();
+const cli = new SqlFormatterCli();
+cli.run();
