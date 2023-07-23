@@ -125,6 +125,7 @@
   },
   "dependencies": {
     "argparse": "^2.0.1",
+    "get-stdin": "=8.0.0",
     "nearley": "^2.20.1"
   },
   "devDependencies": {

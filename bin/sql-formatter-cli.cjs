@@ -8,6 +8,7 @@ const tty = require('tty');
 const { version } = require('../package.json');
 const { ArgumentParser } = require('argparse');
 const { promisify } = require('util');
+const getStdin = require('get-stdin');
 
 class PrettierSQLArgs {
   constructor() {
@@ -21,22 +22,6 @@ class PrettierSQLArgs {
       const formattedQuery = format(this.query, this.cfg).trim() + '\n';
       this.writeOutput(this.getOutputFile(this.args), formattedQuery);
     });
-  }
-
-  async getStdin() {
-    if (process.stdin.isTTY) {
-      return Buffer.alloc(0);
-    }
-
-    const result = [];
-    let length = 0;
-
-    for await (const chunk of process.stdin) {
-      result.push(chunk);
-      length += chunk.length;
-    }
-
-    return Buffer.concat(result, length).toString();
   }
 
   getParser() {
@@ -130,7 +115,7 @@ class PrettierSQLArgs {
         throw e;
       }
     } else {
-      return await this.getStdin();
+      return await getStdin();
     }
   }
 
