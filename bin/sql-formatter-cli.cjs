@@ -83,10 +83,7 @@ class PrettierSQLArgs {
           console.error(`Error: unable to parse JSON at file ${this.args.config}`);
           process.exit(1);
         }
-        if (e.code === 'ENOENT') {
-          console.error(`Error: could not open file ${this.args.config}`);
-          process.exit(1);
-        }
+        this.exitWhenIOError(e);
         console.error('An unknown error has occurred, please file a bug report at:');
         console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
         throw e;
@@ -103,20 +100,24 @@ class PrettierSQLArgs {
       try {
         return await this.readFile(infile, { encoding: 'utf-8' });
       } catch (e) {
-        if (e.code === 'EAGAIN') {
-          console.error('Error: no file specified and no data in stdin');
-          process.exit(1);
-        }
-        if (e.code === 'ENOENT') {
-          console.error(`Error: could not open file ${infile}`);
-          process.exit(1);
-        }
+        this.exitWhenIOError(e);
         console.error('An unknown error has occurred, please file a bug report at:');
         console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
         throw e;
       }
     } else {
       return await getStdin();
+    }
+  }
+
+  exitWhenIOError(e) {
+    if (e.code === 'EAGAIN') {
+      console.error('Error: no file specified and no data in stdin');
+      process.exit(1);
+    }
+    if (e.code === 'ENOENT') {
+      console.error(`Error: could not open file ${infile}`);
+      process.exit(1);
     }
   }
 
