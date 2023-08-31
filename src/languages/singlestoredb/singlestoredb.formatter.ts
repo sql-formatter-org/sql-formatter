@@ -1,6 +1,6 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
+import { postProcess } from '../mariadb/likeMariaDb.js';
 import { keywords } from './singlestoredb.keywords.js';
 import { functions } from './singlestoredb.functions.js';
 
@@ -278,19 +278,3 @@ export const singlestoredb: DialectOptions = {
     onelineClauses,
   },
 };
-
-function postProcess(tokens: Token[]) {
-  return tokens.map((token, i) => {
-    const nextToken = tokens[i + 1] || EOF_TOKEN;
-    if (isToken.SET(token) && nextToken.text === '(') {
-      // This is SET datatype, not SET statement
-      return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
-    }
-    const prevToken = tokens[i - 1] || EOF_TOKEN;
-    if (isToken.VALUES(token) && prevToken.text === '=') {
-      // This is VALUES() function, not VALUES clause
-      return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
-    }
-    return token;
-  });
-}
