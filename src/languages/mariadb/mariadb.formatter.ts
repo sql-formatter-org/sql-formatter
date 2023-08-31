@@ -23,6 +23,7 @@ const reservedClauses = expandPhrases([
   'INSERT [LOW_PRIORITY | DELAYED | HIGH_PRIORITY] [IGNORE] [INTO]',
   'REPLACE [LOW_PRIORITY | DELAYED] [INTO]',
   'VALUES',
+  'ON DUPLICATE KEY UPDATE',
   // - update:
   'SET',
   // Data definition

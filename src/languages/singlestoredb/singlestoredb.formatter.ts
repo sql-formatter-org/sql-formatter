@@ -22,6 +22,7 @@ const reservedClauses = expandPhrases([
   'INSERT [IGNORE] [INTO]',
   'VALUES',
   'REPLACE [INTO]',
+  'ON DUPLICATE KEY UPDATE',
   // - update:
   'SET',
   // Data definition

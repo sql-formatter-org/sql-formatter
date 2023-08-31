@@ -116,4 +116,18 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
         (2, 'Dog');
     `);
   });
+
+  // Issue #605
+  it('supports INSERT ... ON DUPLICATE KEY UPDATE', () => {
+    expect(
+      format(`INSERT INTO customer VALUES ('John','Doe') ON DUPLICATE KEY UPDATE fname='Untitled';`)
+    ).toBe(dedent`
+      INSERT INTO
+        customer
+      VALUES
+        ('John', 'Doe')
+      ON DUPLICATE KEY UPDATE
+        fname = 'Untitled';
+    `);
+  });
 }
