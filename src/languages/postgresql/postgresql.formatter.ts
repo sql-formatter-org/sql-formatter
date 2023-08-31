@@ -108,7 +108,6 @@ const onelineClauses = expandPhrases([
   'CHECKPOINT',
   'CLOSE',
   'CLUSTER',
-  'COMMENT',
   'COMMIT',
   'COMMIT PREPARED',
   'COPY',

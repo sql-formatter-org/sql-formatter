@@ -75,8 +75,6 @@ const onelineClauses = expandPhrases([
   'EXPLAIN ANALYZE VERBOSE',
   'USE',
 
-  'COMMENT ON TABLE',
-  'COMMENT ON COLUMN',
   'DESCRIBE INPUT',
   'DESCRIBE OUTPUT',
 

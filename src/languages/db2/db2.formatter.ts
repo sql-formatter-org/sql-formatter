@@ -73,7 +73,6 @@ const onelineClauses = expandPhrases([
   'BEGIN DECLARE SECTION',
   'CALL',
   'CLOSE',
-  'COMMENT',
   'COMMIT',
   'CONNECT',
   'CREATE ALIAS',
