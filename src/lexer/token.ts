@@ -78,6 +78,7 @@ export const isToken = {
   SET: testToken({ text: 'SET', type: TokenType.RESERVED_CLAUSE }),
   STRUCT: testToken({ text: 'STRUCT', type: TokenType.RESERVED_KEYWORD }),
   WINDOW: testToken({ text: 'WINDOW', type: TokenType.RESERVED_CLAUSE }),
+  VALUES: testToken({ text: 'VALUES', type: TokenType.RESERVED_CLAUSE }),
 };
 
 /** Checks if token is any Reserved Keyword or Clause */

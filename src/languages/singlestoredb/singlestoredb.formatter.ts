@@ -286,6 +286,11 @@ function postProcess(tokens: Token[]) {
       // This is SET datatype, not SET statement
       return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
     }
+    const prevToken = tokens[i - 1] || EOF_TOKEN;
+    if (isToken.VALUES(token) && prevToken.text === '=') {
+      // This is VALUES() function, not VALUES clause
+      return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
+    }
     return token;
   });
 }
