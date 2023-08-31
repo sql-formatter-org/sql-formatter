@@ -64,7 +64,6 @@ const onelineClauses = expandPhrases([
   'CALL',
   'CANCEL',
   'CLOSE',
-  'COMMENT',
   'COMMIT',
   'COPY',
   'CREATE DATABASE',

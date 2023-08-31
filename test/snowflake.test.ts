@@ -29,7 +29,12 @@ describe('SnowflakeFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format, { doubleSlashComments: true });
   supportsCreateView(format, { orReplace: true, ifNotExists: true });
-  supportsCreateTable(format, { orReplace: true, ifNotExists: true });
+  supportsCreateTable(format, {
+    orReplace: true,
+    ifNotExists: true,
+    columnComment: true,
+    tableComment: true,
+  });
   supportsConstraints(format, ['CASCADE', 'SET NULL', 'SET DEFAULT', 'RESTRICT', 'NO ACTION']);
   supportsDropTable(format, { ifExists: true });
   supportsArrayAndMapAccessors(format);
@@ -138,8 +143,7 @@ describe('SnowflakeFormatter', () => {
       DROP NOT NULL;
 
       ALTER TABLE t
-      ALTER COLUMN foo
-      COMMENT 'blah';
+      ALTER COLUMN foo COMMENT 'blah';
 
       ALTER TABLE t
       ALTER COLUMN foo

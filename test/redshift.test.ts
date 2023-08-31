@@ -11,6 +11,7 @@ import supportsOperators from './features/operators.js';
 import supportsStrings from './features/strings.js';
 import supportsDeleteFrom from './features/deleteFrom.js';
 import supportsComments from './features/comments.js';
+import supportsCommentOn from './features/commentOn.js';
 import supportsIdentifiers from './features/identifiers.js';
 import supportsParams from './options/param.js';
 import supportsSetOperations from './features/setOperations.js';
@@ -26,6 +27,7 @@ describe('RedshiftFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCommentOn(format);
   supportsCreateView(format, { orReplace: true, materialized: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });

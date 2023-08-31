@@ -67,7 +67,7 @@ const onelineClauses = expandPhrases([
   '{SET | DROP} DEFAULT', // for alter column
   '{SET | DROP} NOT NULL', // for alter column
   '[SET DATA] TYPE', // for alter column
-  '[UNSET] COMMENT', // for alter column
+  'UNSET COMMENT', // for alter column
   '{SET | UNSET} MASKING POLICY', // for alter column
   // - truncate:
   'TRUNCATE [TABLE] [IF EXISTS]',

@@ -238,4 +238,6 @@ export const keywords = flatKeywordList({
     'YEARS',
     'ZONE',
   ],
+  // These are definitely keywords, but haven't found a definite list in the docs
+  additional: ['COMMENT'],
 });

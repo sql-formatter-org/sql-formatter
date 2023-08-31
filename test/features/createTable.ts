@@ -5,11 +5,13 @@ import { FormatFn } from '../../src/sqlFormatter.js';
 interface CreateTableConfig {
   orReplace?: boolean;
   ifNotExists?: boolean;
+  columnComment?: boolean;
+  tableComment?: boolean;
 }
 
 export default function supportsCreateTable(
   format: FormatFn,
-  { orReplace, ifNotExists }: CreateTableConfig = {}
+  { orReplace, ifNotExists, columnComment, tableComment }: CreateTableConfig = {}
 ) {
   it('formats short CREATE TABLE', () => {
     expect(format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);')).toBe(dedent`
@@ -48,6 +50,29 @@ export default function supportsCreateTable(
       expect(format('CREATE TABLE IF NOT EXISTS tbl (a INT PRIMARY KEY, b TEXT);')).toBe(dedent`
         CREATE TABLE IF NOT EXISTS
           tbl (a INT PRIMARY KEY, b TEXT);
+      `);
+    });
+  }
+
+  if (columnComment) {
+    it('formats short CREATE TABLE with column comments', () => {
+      expect(
+        format(`CREATE TABLE tbl (a INT COMMENT 'Hello world!', b TEXT COMMENT 'Here we are!');`)
+      ).toBe(dedent`
+        CREATE TABLE
+          tbl (
+            a INT COMMENT 'Hello world!',
+            b TEXT COMMENT 'Here we are!'
+          );
+      `);
+    });
+  }
+
+  if (tableComment) {
+    it('formats short CREATE TABLE with comment', () => {
+      expect(format(`CREATE TABLE tbl (a INT, b TEXT) COMMENT = 'Hello, world!';`)).toBe(dedent`
+        CREATE TABLE
+          tbl (a INT, b TEXT) COMMENT = 'Hello, world!';
       `);
     });
   }

@@ -38,7 +38,7 @@ describe('SingleStoreDbFormatter', () => {
     ['AND', 'OR']
   );
   supportsLimiting(format, { limit: true, offset: true });
-  supportsCreateTable(format, { ifNotExists: true });
+  supportsCreateTable(format, { ifNotExists: true, columnComment: true, tableComment: true });
   supportsCreateView(format);
   supportsAlterTable(format, {
     addColumn: true,
