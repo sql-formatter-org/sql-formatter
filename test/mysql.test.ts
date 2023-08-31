@@ -36,7 +36,7 @@ describe('MySqlFormatter', () => {
   );
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
-  supportsCreateTable(format, { ifNotExists: true });
+  supportsCreateTable(format, { ifNotExists: true, columnComment: true, tableComment: true });
   supportsConstraints(format, [
     'RESTRICT',
     'CASCADE',

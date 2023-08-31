@@ -36,7 +36,12 @@ describe('MariaDbFormatter', () => {
   );
   supportsReturning(format);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
-  supportsCreateTable(format, { orReplace: true, ifNotExists: true });
+  supportsCreateTable(format, {
+    orReplace: true,
+    ifNotExists: true,
+    columnComment: true,
+    tableComment: true,
+  });
   supportsConstraints(format, ['RESTRICT', 'CASCADE', 'SET NULL', 'NO ACTION', 'SET DEFAULT']);
   supportsParams(format, { positional: true });
   supportsCreateView(format, { orReplace: true, ifNotExists: true });
