@@ -15,6 +15,7 @@ import supportsReturning from './features/returning.js';
 import supportsConstraints from './features/constraints.js';
 import supportsDeleteFrom from './features/deleteFrom.js';
 import supportsComments from './features/comments.js';
+import supportsCommentOn from './features/commentOn.js';
 import supportsIdentifiers from './features/identifiers.js';
 import supportsParams from './options/param.js';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors.js';
@@ -34,6 +35,7 @@ describe('PostgreSqlFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format, { nestedBlockComments: true });
+  supportsCommentOn(format);
   supportsCreateView(format, { orReplace: true, materialized: true, ifNotExists: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });

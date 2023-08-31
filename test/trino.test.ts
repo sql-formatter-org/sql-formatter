@@ -13,6 +13,7 @@ import supportsOperators from './features/operators.js';
 import supportsStrings from './features/strings.js';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors.js';
 import supportsComments from './features/comments.js';
+import supportsCommentOn from './features/commentOn.js';
 import supportsIdentifiers from './features/identifiers.js';
 import supportsParams from './options/param.js';
 import supportsSetOperations from './features/setOperations.js';
@@ -31,6 +32,7 @@ describe('TrinoFormatter', () => {
 
   behavesLikeSqlFormatter(format);
   supportsComments(format);
+  supportsCommentOn(format);
   supportsCreateView(format, { orReplace: true, materialized: true });
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
