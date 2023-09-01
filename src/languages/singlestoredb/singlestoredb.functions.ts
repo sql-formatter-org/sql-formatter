@@ -266,7 +266,7 @@ export const functions = flatKeywordList({
     'UNIX_TIMESTAMP',
     'UPDATEXML',
     'UPPER',
-    'USER',
+    // 'USER',
     'UTC_DATE',
     'UTC_TIME',
     'UTC_TIMESTAMP',

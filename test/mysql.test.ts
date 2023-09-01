@@ -93,4 +93,28 @@ describe('MySqlFormatter', () => {
       DROP DEFAULT;
     `);
   });
+
+  it('uppercases only reserved keywords', () => {
+    expect(
+      format(
+        `create table account (id int comment 'the most important column');
+        select * from mysql.user;
+        insert into user (id, name) values (1, 'Blah');`,
+        { keywordCase: 'upper' }
+      )
+    ).toBe(dedent`
+      CREATE TABLE
+        account (id INT comment 'the most important column');
+
+      SELECT
+        *
+      FROM
+        mysql.user;
+
+      INSERT INTO
+        user (id, name)
+      VALUES
+        (1, 'Blah');
+    `);
+  });
 });
