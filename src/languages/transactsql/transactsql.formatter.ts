@@ -252,6 +252,7 @@ export const transactsql: DialectOptions = {
       '&=',
       '^=',
       '::',
+      ':',
     ],
     // TODO: Support for money constants
   },

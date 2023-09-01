@@ -138,4 +138,19 @@ describe('TransactSqlFormatter', () => {
         tbl
     `);
   });
+
+  it('formats goto labels', () => {
+    const result = format(
+      `InfiniLoop:
+      SELECT 'Hello.';
+      GOTO InfiniLoop;`
+    );
+    expect(result).toBe(dedent`
+      InfiniLoop:
+      SELECT
+        'Hello.';
+
+      GOTO InfiniLoop;
+    `);
+  });
 });
