@@ -191,7 +191,7 @@ pick the proper dialect, like:
 format('select [col] from tbl', { language: 'transactsql' });
 ```
 
-Or when using the VSCode extension: Settings -> Prettier-SQL: SQLFlavourOverride.
+Or when using the VSCode extension: Settings -> SQL-Formatter-VSCode: SQLFlavourOverride.
 
 ### Module parse failed: Unexpected token
 
