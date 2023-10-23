@@ -357,10 +357,11 @@ export const postgresql: DialectOptions = {
       '<->>>',
       // Type cast
       '::',
+      ':',
     ],
   },
   formatOptions: {
-    alwaysDenseOperators: ['::'],
+    alwaysDenseOperators: ['::', ':'],
     onelineClauses,
   },
 };

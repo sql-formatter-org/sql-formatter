@@ -233,6 +233,17 @@ describe('PostgreSqlFormatter', () => {
     `);
   });
 
+  // Regression test for issue #624
+  it('supports array slice operator', () => {
+    expect(format('SELECT foo[:5], bar[1:], baz[1:5], zap[:];')).toBe(dedent`
+      SELECT
+        foo[:5],
+        bar[1:],
+        baz[1:5],
+        zap[:];
+    `);
+  });
+
   it('formats ALTER TABLE ... ALTER COLUMN', () => {
     expect(
       format(
