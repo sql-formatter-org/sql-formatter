@@ -51,6 +51,18 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
     );
   });
 
+  // regression test for sql-formatter#651
+  it('supports unicode identifiers that start with numbers', () => {
+    expect(format('SELECT 1ä FROM tbl')).toBe(
+      dedent`
+        SELECT
+          1ä
+        FROM
+          tbl
+      `
+    );
+  });
+
   it('supports @variables', () => {
     expect(format('SELECT @foo, @some_long.var$with$special.chars')).toBe(dedent`
       SELECT
