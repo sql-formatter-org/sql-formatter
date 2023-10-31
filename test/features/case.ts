@@ -197,4 +197,17 @@ export default function supportsCase(format: FormatFn) {
         tbl;
     `);
   });
+
+  it('formats between inside case expression', () => {
+    const result = format(`
+    SELECT CASE WHEN x1 BETWEEN 1 AND 12 THEN '' END c1;
+  `);
+
+    expect(result).toBe(dedent`
+    SELECT
+      CASE
+        WHEN x1 BETWEEN 1 AND 12  THEN ''
+      END c1;
+  `);
+  });
 }
