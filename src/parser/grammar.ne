@@ -184,9 +184,10 @@ expression -> ( andless_expression | logic_operator ) {% unwrap %}
 andless_expression -> ( asteriskless_andless_expression | asterisk ) {% unwrap %}
 
 asteriskless_andless_expression ->
+  ( atomic_expression | between_predicate | case_expression ) {% unwrap %}
+
+atomic_expression ->
   ( array_subscript
-  | between_predicate
-  | case_expression
   | function_call
   | property_access
   | parenthesis
@@ -248,7 +249,7 @@ square_brackets -> "[" free_form_sql:* "]" {%
   })
 %}
 
-property_access -> property_access_prefix _ %DOT _ (identifier | array_subscript | all_columns_asterisk) {%
+property_access -> atomic_expression _ %DOT _ (identifier | array_subscript | all_columns_asterisk) {%
   // Allowing property to be <array_subscript> is currently a hack.
   // A better way would be to allow <property_access> on the left side of array_subscript,
   // but we currently can't do that because of another hack that requires
@@ -261,19 +262,6 @@ property_access -> property_access_prefix _ %DOT _ (identifier | array_subscript
     };
   }
 %}
-
-property_access_prefix ->
-  ( array_subscript
-  | function_call
-  | property_access
-  | parenthesis
-  | curly_braces
-  | square_brackets
-  | operator
-  | identifier
-  | parameter
-  | literal
-  | keyword ) {% unwrap %}
 
 between_predicate -> %BETWEEN _ andless_expression_chain _ %AND _ andless_expression {%
   ([betweenToken, _1, expr1, _2, andToken, _3, expr2]) => ({
