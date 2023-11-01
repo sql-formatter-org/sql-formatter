@@ -52,7 +52,7 @@ describe('PostgreSqlFormatter', () => {
   supportsOnConflict(format);
   supportsUpdate(format, { whereCurrentOf: true });
   supportsTruncateTable(format, { withoutTable: true });
-  supportsStrings(format, ["''-qq", "U&''", "X''", "B''", "E''"]);
+  supportsStrings(format, ["''-qq", "U&''", "X''", "B''"]);
   supportsIdentifiers(format, [`""-qq`, 'U&""']);
   supportsBetween(format);
   supportsSchema(format);
@@ -167,6 +167,7 @@ describe('PostgreSqlFormatter', () => {
       FROM
         foo
     `);
+    expect(format("E'blah''blah'")).toBe("E'blah''blah'");
   });
 
   it('supports dollar-quoted strings', () => {

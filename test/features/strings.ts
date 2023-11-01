@@ -12,7 +12,6 @@ type StringType =
   | "''-bs" // with backslash escaping
   | "U&''" // with repeated-quote escaping
   | "N''" // with escaping style depending on whether also ''-qq or ''-bs was specified
-  | "E''" // with escaping style depending on whether also ''-qq or ''-bs was specified
   | "X''" // no escaping
   | 'X""' // no escaping
   | "B''" // no escaping
@@ -137,32 +136,6 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
 
     it("detects consecutive N'' strings as separate ones", () => {
       expect(format("N'foo'N'bar'")).toBe("N'foo' N'bar'");
-    });
-  }
-
-  if (stringTypes.includes("E''")) {
-    it('supports unicode strings', () => {
-      expect(format("SELECT E'where' FROM E'update'")).toBe(dedent`
-        SELECT
-          E'where'
-        FROM
-          E'update'
-      `);
-    });
-
-    if (stringTypes.includes("''-qq")) {
-      it("supports escaping in E'' strings with repeated quote", () => {
-        expect(format("E'foo '' JOIN bar'")).toBe("E'foo '' JOIN bar'");
-      });
-    }
-    if (stringTypes.includes("''-bs")) {
-      it("supports escaping in E'' strings with a backslash", () => {
-        expect(format("E'foo \\' JOIN bar'")).toBe("E'foo \\' JOIN bar'");
-      });
-    }
-
-    it("detects consecutive E'' strings as separate ones", () => {
-      expect(format("E'foo'E'bar'")).toBe("E'foo' E'bar'");
     });
   }
 
