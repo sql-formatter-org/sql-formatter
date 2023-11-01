@@ -52,7 +52,7 @@ describe('PostgreSqlFormatter', () => {
   supportsOnConflict(format);
   supportsUpdate(format, { whereCurrentOf: true });
   supportsTruncateTable(format, { withoutTable: true });
-  supportsStrings(format, ["''-qq", "U&''", "X''", "B''"]);
+  supportsStrings(format, ["''-qq", "U&''", "X''", "B''", "E''"]);
   supportsIdentifiers(format, [`""-qq`, 'U&""']);
   supportsBetween(format);
   supportsSchema(format);

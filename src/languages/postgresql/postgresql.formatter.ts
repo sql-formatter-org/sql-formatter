@@ -266,7 +266,7 @@ export const postgresql: DialectOptions = {
     stringTypes: [
       '$$',
       { quote: "''-qq", prefixes: ['U&'] },
-      { quote: "''-bs", prefixes: ['E'], requirePrefix: true },
+      { quote: "''-qq-bs", prefixes: ['E'], requirePrefix: true },
       { quote: "''-raw", prefixes: ['B', 'X'], requirePrefix: true },
     ],
     identTypes: [{ quote: '""-qq', prefixes: ['U&'] }],
