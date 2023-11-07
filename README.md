@@ -213,6 +213,14 @@ Possible fixes:
 - Switch to `@babel/preset-env`
 - Include plugin `@babel/plugin-proposal-class-properties`
 
+### I'm having a problem with Prettier SQL VSCode extension
+
+The [Prettier SQL VSCode](https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode)
+extension is no more maintained by its author.
+
+Please use the official [SQL Formatter VSCode](https://marketplace.visualstudio.com/items?itemName=ReneSaarsoo.sql-formatter-vsc)
+extension to get the latest fixes from SQL Formatter library.
+
 ## The future
 
 The development of this formatter is currently in maintenance mode.
