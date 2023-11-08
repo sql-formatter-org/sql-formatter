@@ -23,6 +23,7 @@ The following dialects can be imported from `"sql-formatter"` module:
 - `sql` - [Standard SQL][]
 - `bigquery` - [GCP BigQuery][]
 - `db2` - [IBM DB2][]
+- `db2i` - [IBM DB2i][]
 - `hive` - [Apache Hive][]
 - `mariadb` - [MariaDB][]
 - `mysql` - [MySQL][]
@@ -69,6 +70,7 @@ You likely only want to use this if your other alternative is to fork SQL Format
 [standard sql]: https://en.wikipedia.org/wiki/SQL:2011
 [gcp bigquery]: https://cloud.google.com/bigquery
 [ibm db2]: https://www.ibm.com/analytics/us/en/technology/db2/
+[ibm db2i]: https://www.ibm.com/docs/en/i/7.5?topic=overview-db2-i
 [apache hive]: https://hive.apache.org/
 [mariadb]: https://mariadb.com/
 [mysql]: https://www.mysql.com/

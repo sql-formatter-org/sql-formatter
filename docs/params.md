@@ -110,6 +110,7 @@ The placeholder types available by default depend on SQL dialect used:
 - sql - `?`
 - bigquery - `?`, `@name`, `` @`name` ``
 - db2 - `?`, `:name`
+- db2i - `?`, `:name`
 - hive - _no support_
 - mariadb - `?`
 - mysql - `?`
