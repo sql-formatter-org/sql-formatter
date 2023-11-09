@@ -221,6 +221,27 @@ extension is no more maintained by its author.
 Please use the official [SQL Formatter VSCode](https://marketplace.visualstudio.com/items?itemName=ReneSaarsoo.sql-formatter-vsc)
 extension to get the latest fixes from SQL Formatter library.
 
+### My SQL contains templating syntax which SQL Formatter fails to parse
+
+For example, you might have an SQL like:
+
+```sql
+SELECT {col1}, {col2} FROM {tablename}
+```
+
+While templating is not directly supported by SQL Formatter, the workaround
+is to use [paramTypes](docs/paramTypes.md) config option to treat these
+occurances of templating constructs as prepared-statement parameter-placeholders:
+
+```js
+format('SELECT {col1}, {col2} FROM {tablename};', {
+  paramTypes: { custom: [{ regex: String.raw`\{\w+\}` }] },
+});
+```
+
+This won't work for all possible templating constructs,
+but should solve the most common use cases.
+
 ## The future
 
 The development of this formatter is currently in maintenance mode.
