@@ -3,7 +3,7 @@ import { flatKeywordList } from '../../utils.js';
 export const functions = flatKeywordList({
   // https://www.ibm.com/docs/en/i/7.5?topic=functions-aggregate
   aggregate: [
-    'ANY',
+    // TODO: 'ANY', - conflicts with test for ANY predicate in 'operators.ys'!!
     'ARRAY_AGG',
     'AVG',
     'CORR',
