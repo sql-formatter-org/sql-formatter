@@ -33,8 +33,8 @@ describe('Db2iFormatter', () => {
   supportsComments(format);
   supportsCommentOn(format);
   supportsCreateView(format, { orReplace: true });
-  supportsCreateTable(format);
-  supportsDropTable(format);
+  supportsCreateTable(format, { orReplace: true });
+  supportsDropTable(format, { ifExists: true });
   supportsConstraints(format, ['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL']);
   supportsAlterTable(format, {
     addColumn: true,
