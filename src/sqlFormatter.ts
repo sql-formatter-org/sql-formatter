@@ -8,6 +8,7 @@ import { ConfigError, validateConfig } from './validateConfig.js';
 const dialectNameMap: Record<string, keyof typeof allDialects> = {
   bigquery: 'bigquery',
   db2: 'db2',
+  db2i: 'db2i',
   hive: 'hive',
   mariadb: 'mariadb',
   mysql: 'mysql',

@@ -35,6 +35,7 @@
     "pl/sql",
     "transact-sql",
     "db2",
+    "db2i",
     "sqlite",
     "trino",
     "presto",
