@@ -2,6 +2,8 @@ import { flatKeywordList } from '../../utils.js';
 
 export const keywords = flatKeywordList({
   // https://www.ibm.com/docs/en/i/7.5?topic=words-reserved
+  // TODO: This list likely contains all keywords, not only the reserved ones,
+  // try to filter it down to just the reserved keywords.
   standard: [
     'ABSENT',
     'ACCORDING',
@@ -189,7 +191,7 @@ export const keywords = flatKeywordList({
     'HOLD',
     'HOUR',
     'HOURS',
-    'ID',
+    // 'ID', Not actually a reserved keyword
     'IDENTITY',
     'IF',
     'IGNORE',
