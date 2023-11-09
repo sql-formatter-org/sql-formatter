@@ -95,5 +95,20 @@ export default function supportsParamTypes(format: FormatFn) {
           second;
       `);
     });
+
+    // Normal SQL prepared statement parameters cannot really occur like this,
+    // but we support this to facilitate using the paramTypes config for
+    // working around SQL templating.
+    it('supports parameterizing schema.table.column syntax', () => {
+      const result = format('SELECT {schema}.{table}.{column} FROM {schema}.{table}', {
+        paramTypes: { custom: [{ regex: String.raw`\{\w+\}` }] },
+      });
+      expect(result).toBe(dedent`
+        SELECT
+          {schema}.{table}.{column}
+        FROM
+          {schema}.{table}
+      `);
+    });
   });
 }
