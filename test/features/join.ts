@@ -42,7 +42,7 @@ export default function supportsJoin(
         const result = format(`
           SELECT * FROM customers
           ${join} orders ON customers.customer_id = orders.customer_id
-          ${join} items ON items.id = orders.id;
+          ${join} items ON items.col1 = orders.col1;
         `);
         expect(result).toBe(dedent`
           SELECT
@@ -50,13 +50,13 @@ export default function supportsJoin(
           FROM
             customers
             ${join} orders ON customers.customer_id = orders.customer_id
-            ${join} items ON items.id = orders.id;
+            ${join} items ON items.col1 = orders.col1;
         `);
       });
     });
 
   it('properly uppercases JOIN ... ON', () => {
-    const result = format(`select * from customers join foo on foo.id = customers.id;`, {
+    const result = format(`select * from customers join foo on foo.col1 = customers.col1;`, {
       keywordCase: 'upper',
     });
     expect(result).toBe(dedent`
@@ -64,13 +64,13 @@ export default function supportsJoin(
         *
       FROM
         customers
-        JOIN foo ON foo.id = customers.id;
+        JOIN foo ON foo.col1 = customers.col1;
     `);
   });
 
   if (supportsUsing) {
     it('properly uppercases JOIN ... USING', () => {
-      const result = format(`select * from customers join foo using (id);`, {
+      const result = format(`select * from customers join foo using (col1);`, {
         keywordCase: 'upper',
       });
       expect(result).toBe(dedent`
@@ -78,7 +78,7 @@ export default function supportsJoin(
           *
         FROM
           customers
-          JOIN foo USING (id);
+          JOIN foo USING (col1);
       `);
     });
   }
@@ -87,13 +87,13 @@ export default function supportsJoin(
     ['CROSS APPLY', 'OUTER APPLY'].forEach(apply => {
       // TODO: improve formatting of custom functions
       it(`supports ${apply}`, () => {
-        const result = format(`SELECT * FROM customers ${apply} fn(customers.id)`);
+        const result = format(`SELECT * FROM customers ${apply} fn(customers.col1)`);
         expect(result).toBe(dedent`
           SELECT
             *
           FROM
             customers
-            ${apply} fn (customers.id)
+            ${apply} fn (customers.col1)
         `);
       });
     });
