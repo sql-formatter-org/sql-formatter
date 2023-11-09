@@ -51,7 +51,7 @@ describe('Db2iFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsOperators(format, ['**', '¬=', '¬>', '¬<', '!>', '!<', '||']);
-  supportsJoin(format, { without: ['NATURAL'], supportsUsing: false });
+  supportsJoin(format, { without: ['NATURAL'], supportsUsing: true });
   supportsSetOperations(format, [
     'UNION',
     'UNION ALL',
