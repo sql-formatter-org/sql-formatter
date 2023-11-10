@@ -13,7 +13,6 @@ import supportsDeleteFrom from './features/deleteFrom.js';
 import supportsComments from './features/comments.js';
 import supportsCommentOn from './features/commentOn.js';
 import supportsIdentifiers from './features/identifiers.js';
-import supportsParams from './options/param.js';
 import supportsSetOperations from './features/setOperations.js';
 import supportsLimiting from './features/limiting.js';
 import supportsInsertInto from './features/insertInto.js';
@@ -54,7 +53,6 @@ export default function behavesLikeDb2Formatter(format: FormatFn) {
     'INTERSECT',
     'INTERSECT ALL',
   ]);
-  supportsParams(format, { positional: true, named: [':'] });
   supportsLimiting(format, { fetchFirst: true });
 
   it('formats only -- as a line comment', () => {
@@ -91,18 +89,6 @@ export default function behavesLikeDb2Formatter(format: FormatFn) {
         @foo,
         #bar,
         $zap
-    `);
-  });
-
-  it('supports @, #, $ characters in named parameters', () => {
-    expect(format(`SELECT :foo@bar, :foo#bar, :foo$bar, :@zip, :#zap, :$zop`)).toBe(dedent`
-      SELECT
-        :foo@bar,
-        :foo#bar,
-        :foo$bar,
-        :@zip,
-        :#zap,
-        :$zop
     `);
   });
 

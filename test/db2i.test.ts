@@ -4,6 +4,7 @@ import behavesLikeDb2Formatter from './behavesLikeDb2Formatter.js';
 import supportsCreateTable from './features/createTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
+import supportsParams from './options/param.js';
 
 describe('Db2iFormatter', () => {
   const language = 'db2i';
@@ -14,4 +15,5 @@ describe('Db2iFormatter', () => {
   supportsCreateTable(format, { orReplace: true });
   supportsDropTable(format, { ifExists: true });
   supportsJoin(format, { without: ['NATURAL'], supportsUsing: true });
+  supportsParams(format, { positional: true });
 });

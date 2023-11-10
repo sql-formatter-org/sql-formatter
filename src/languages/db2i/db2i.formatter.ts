@@ -169,8 +169,7 @@ export const db2i: DialectOptions = {
     ],
     identTypes: [`""-qq`],
     identChars: { first: '@#$' },
-    paramTypes: { positional: true, named: [':'] },
-    paramChars: { first: '@#$', rest: '@#$' },
+    paramTypes: { positional: true },
     operators: ['**', '¬=', '¬>', '¬<', '!>', '!<', '||'],
   },
   formatOptions: {

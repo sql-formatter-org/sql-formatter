@@ -1,9 +1,12 @@
+import dedent from 'dedent-js';
+
 import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
 import behavesLikeDb2Formatter from './behavesLikeDb2Formatter.js';
 
 import supportsCreateTable from './features/createTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
+import supportsParams from './options/param.js';
 
 describe('Db2Formatter', () => {
   const language = 'db2';
@@ -14,4 +17,17 @@ describe('Db2Formatter', () => {
   supportsCreateTable(format);
   supportsDropTable(format);
   supportsJoin(format, { without: ['NATURAL'], supportsUsing: false });
+  supportsParams(format, { positional: true, named: [':'] });
+
+  it('supports @, #, $ characters in named parameters', () => {
+    expect(format(`SELECT :foo@bar, :foo#bar, :foo$bar, :@zip, :#zap, :$zop`)).toBe(dedent`
+      SELECT
+        :foo@bar,
+        :foo#bar,
+        :foo$bar,
+        :@zip,
+        :#zap,
+        :$zop
+    `);
+  });
 });
