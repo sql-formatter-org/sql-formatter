@@ -7,6 +7,7 @@ import supportsCreateTable from './features/createTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
 import supportsParams from './options/param.js';
+import supportsStrings from './features/strings.js';
 
 describe('Db2Formatter', () => {
   const language = 'db2';
@@ -18,6 +19,8 @@ describe('Db2Formatter', () => {
   supportsDropTable(format);
   supportsJoin(format, { without: ['NATURAL'], supportsUsing: false });
   supportsParams(format, { positional: true, named: [':'] });
+  // Additional U& string type in addition to others shared by all DB2 implementations
+  supportsStrings(format, ["U&''"]);
 
   it('supports @, #, $ characters in named parameters', () => {
     expect(format(`SELECT :foo@bar, :foo#bar, :foo$bar, :@zip, :#zap, :$zop`)).toBe(dedent`

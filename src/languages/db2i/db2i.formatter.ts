@@ -164,7 +164,7 @@ export const db2i: DialectOptions = {
     reservedKeywords: keywords,
     reservedFunctionNames: functions,
     stringTypes: [
-      { quote: "''-qq", prefixes: ['G', 'N', 'U&'] },
+      { quote: "''-qq", prefixes: ['G', 'N'] },
       { quote: "''-raw", prefixes: ['X', 'BX', 'GX', 'UX'], requirePrefix: true },
     ],
     identTypes: [`""-qq`],

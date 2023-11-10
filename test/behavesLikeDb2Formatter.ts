@@ -40,7 +40,7 @@ export default function behavesLikeDb2Formatter(format: FormatFn) {
   supportsUpdate(format, { whereCurrentOf: true });
   supportsTruncateTable(format, { withoutTable: true });
   supportsMergeInto(format);
-  supportsStrings(format, ["''-qq", "X''", "U&''", "N''"]);
+  supportsStrings(format, ["''-qq", "X''", "N''"]);
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   supportsSchema(format);
