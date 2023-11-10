@@ -8,6 +8,7 @@ import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
 import supportsParams from './options/param.js';
 import supportsStrings from './features/strings.js';
+import supportsComments from './features/comments.js';
 
 describe('Db2Formatter', () => {
   const language = 'db2';
@@ -15,6 +16,7 @@ describe('Db2Formatter', () => {
 
   behavesLikeDb2Formatter(format);
 
+  supportsComments(format);
   supportsCreateTable(format);
   supportsDropTable(format);
   supportsJoin(format, { without: ['NATURAL'], supportsUsing: false });

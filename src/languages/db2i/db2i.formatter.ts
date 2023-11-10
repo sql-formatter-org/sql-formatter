@@ -163,6 +163,7 @@ export const db2i: DialectOptions = {
     reservedPhrases,
     reservedKeywords: keywords,
     reservedFunctionNames: functions,
+    nestedBlockComments: true,
     stringTypes: [
       { quote: "''-qq", prefixes: ['G', 'N'] },
       { quote: "''-raw", prefixes: ['X', 'BX', 'GX', 'UX'], requirePrefix: true },

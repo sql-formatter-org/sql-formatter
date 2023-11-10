@@ -1,5 +1,6 @@
 import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
 import behavesLikeDb2Formatter from './behavesLikeDb2Formatter.js';
+import supportsComments from './features/comments.js';
 
 import supportsCreateTable from './features/createTable.js';
 import supportsDropTable from './features/dropTable.js';
@@ -12,6 +13,7 @@ describe('Db2iFormatter', () => {
 
   behavesLikeDb2Formatter(format);
 
+  supportsComments(format, { nestedBlockComments: true });
   supportsCreateTable(format, { orReplace: true });
   supportsDropTable(format, { ifExists: true });
   supportsJoin(format, { without: ['NATURAL'], supportsUsing: true });

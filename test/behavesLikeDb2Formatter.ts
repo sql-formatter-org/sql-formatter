@@ -10,7 +10,6 @@ import supportsSchema from './features/schema.js';
 import supportsStrings from './features/strings.js';
 import supportsConstraints from './features/constraints.js';
 import supportsDeleteFrom from './features/deleteFrom.js';
-import supportsComments from './features/comments.js';
 import supportsCommentOn from './features/commentOn.js';
 import supportsIdentifiers from './features/identifiers.js';
 import supportsSetOperations from './features/setOperations.js';
@@ -26,7 +25,6 @@ import supportsCreateView from './features/createView.js';
  */
 export default function behavesLikeDb2Formatter(format: FormatFn) {
   behavesLikeSqlFormatter(format);
-  supportsComments(format);
   supportsCommentOn(format);
   supportsCreateView(format, { orReplace: true });
   supportsConstraints(format, ['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL']);
