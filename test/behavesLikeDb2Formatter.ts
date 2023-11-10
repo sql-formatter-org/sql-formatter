@@ -83,12 +83,15 @@ export default function behavesLikeDb2Formatter(format: FormatFn) {
     `);
   });
 
-  it('supports @, #, $ characters at the start of identifiers', () => {
-    expect(format(`SELECT @foo, #bar, $zap`)).toBe(dedent`
+  it('supports @, #, $ characters anywhere inside identifiers', () => {
+    expect(format(`SELECT @foo, #bar, $zap, fo@o, ba#2, za$3`)).toBe(dedent`
       SELECT
         @foo,
         #bar,
-        $zap
+        $zap,
+        fo@o,
+        ba#2,
+        za$3
     `);
   });
 

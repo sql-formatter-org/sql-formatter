@@ -189,7 +189,7 @@ export const db2: DialectOptions = {
       { quote: "''-raw", prefixes: ['X', 'BX', 'GX', 'UX'], requirePrefix: true },
     ],
     identTypes: [`""-qq`],
-    identChars: { first: '@#$' },
+    identChars: { first: '@#$', rest: '@#$' },
     paramTypes: { positional: true, named: [':'] },
     paramChars: { first: '@#$', rest: '@#$' },
     operators: ['**', '¬=', '¬>', '¬<', '!>', '!<', '||'],
