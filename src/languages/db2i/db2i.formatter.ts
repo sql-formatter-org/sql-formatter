@@ -7,7 +7,7 @@ const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
 const reservedClauses = expandPhrases([
   // queries
-  'WITH',
+  'WITH [RECURSIVE]',
   'INTO',
   'FROM',
   'WHERE',
