@@ -6,7 +6,6 @@ import supportsCreateTable from './features/createTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
 import supportsOperators from './features/operators.js';
-import supportsParams from './options/param.js';
 
 describe('Db2iFormatter', () => {
   const language = 'db2i';
@@ -21,6 +20,5 @@ describe('Db2iFormatter', () => {
     without: ['NATURAL'],
     additionally: ['EXCEPTION JOIN', 'LEFT EXCEPTION JOIN', 'RIGHT EXCEPTION JOIN'],
   });
-  supportsParams(format, { positional: true });
   supportsOperators(format, ['**', '¬=', '¬>', '¬<', '!>', '!<', '||']);
 });

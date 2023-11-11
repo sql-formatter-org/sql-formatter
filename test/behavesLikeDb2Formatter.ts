@@ -11,6 +11,7 @@ import supportsConstraints from './features/constraints.js';
 import supportsDeleteFrom from './features/deleteFrom.js';
 import supportsCommentOn from './features/commentOn.js';
 import supportsIdentifiers from './features/identifiers.js';
+import supportsParams from './options/param.js';
 import supportsSetOperations from './features/setOperations.js';
 import supportsLimiting from './features/limiting.js';
 import supportsInsertInto from './features/insertInto.js';
@@ -51,6 +52,7 @@ export default function behavesLikeDb2Formatter(format: FormatFn) {
     'INTERSECT',
     'INTERSECT ALL',
   ]);
+  supportsParams(format, { positional: true, named: [':'] });
   supportsLimiting(format, { fetchFirst: true });
   supportsArrayLiterals(format, { withArrayPrefix: true });
   supportsArrayAndMapAccessors(format);
@@ -92,6 +94,18 @@ export default function behavesLikeDb2Formatter(format: FormatFn) {
         fo@o,
         ba#2,
         za$3
+    `);
+  });
+
+  it('supports @, #, $ characters in named parameters', () => {
+    expect(format(`SELECT :foo@bar, :foo#bar, :foo$bar, :@zip, :#zap, :$zop`)).toBe(dedent`
+      SELECT
+        :foo@bar,
+        :foo#bar,
+        :foo$bar,
+        :@zip,
+        :#zap,
+        :$zop
     `);
   });
 
