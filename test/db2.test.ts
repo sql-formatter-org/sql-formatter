@@ -20,7 +20,7 @@ describe('Db2Formatter', () => {
   supportsComments(format);
   supportsCreateTable(format);
   supportsDropTable(format);
-  supportsJoin(format, { without: ['NATURAL'], supportsUsing: false });
+  supportsJoin(format, { without: ['NATURAL'] });
   supportsParams(format, { positional: true, named: [':'] });
   supportsOperators(format, [
     '**',

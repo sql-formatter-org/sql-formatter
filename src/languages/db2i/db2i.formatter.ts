@@ -142,7 +142,7 @@ const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INT
 const reservedJoins = expandPhrases([
   'JOIN',
   '{LEFT | RIGHT | FULL} [OUTER] JOIN',
-  '{LEFT | RIGHT } EXCEPTION JOIN',
+  '[LEFT | RIGHT] EXCEPTION JOIN',
   '{INNER | CROSS} JOIN',
 ]);
 

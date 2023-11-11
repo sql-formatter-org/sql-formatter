@@ -17,7 +17,10 @@ describe('Db2iFormatter', () => {
   supportsComments(format, { nestedBlockComments: true });
   supportsCreateTable(format, { orReplace: true });
   supportsDropTable(format, { ifExists: true });
-  supportsJoin(format, { without: ['NATURAL'], supportsUsing: true });
+  supportsJoin(format, {
+    without: ['NATURAL'],
+    additionally: ['EXCEPTION JOIN', 'LEFT EXCEPTION JOIN', 'RIGHT EXCEPTION JOIN'],
+  });
   supportsParams(format, { positional: true });
   supportsOperators(format, ['**', '¬=', '¬>', '¬<', '!>', '!<', '||']);
 });
