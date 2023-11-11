@@ -3,7 +3,6 @@ import dedent from 'dedent-js';
 import { FormatFn } from '../src/sqlFormatter.js';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter.js';
 
-import supportsAlterTable from './features/alterTable.js';
 import supportsBetween from './features/between.js';
 import supportsSchema from './features/schema.js';
 import supportsStrings from './features/strings.js';
@@ -30,11 +29,6 @@ export default function behavesLikeDb2Formatter(format: FormatFn) {
   supportsCommentOn(format);
   supportsCreateView(format, { orReplace: true });
   supportsConstraints(format, ['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL']);
-  supportsAlterTable(format, {
-    addColumn: true,
-    dropColumn: true,
-    renameColumn: true,
-  });
   supportsDeleteFrom(format);
   supportsInsertInto(format);
   supportsUpdate(format, { whereCurrentOf: true });

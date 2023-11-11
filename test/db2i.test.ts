@@ -3,6 +3,7 @@ import behavesLikeDb2Formatter from './behavesLikeDb2Formatter.js';
 import supportsComments from './features/comments.js';
 
 import supportsCreateTable from './features/createTable.js';
+import supportsAlterTable from './features/alterTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
 import supportsOperators from './features/operators.js';
@@ -15,6 +16,11 @@ describe('Db2iFormatter', () => {
 
   supportsComments(format, { nestedBlockComments: true });
   supportsCreateTable(format, { orReplace: true });
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    renameColumn: false,
+  });
   supportsDropTable(format, { ifExists: true });
   supportsJoin(format, {
     without: ['NATURAL'],
