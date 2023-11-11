@@ -286,7 +286,7 @@ export default class ExpressionFormatter {
   }
 
   private formatIdentifier(node: IdentifierNode) {
-    this.layout.add(node.text, WS.SPACE);
+    this.layout.add(this.showIdentifier(node), WS.SPACE);
   }
 
   private formatParameter(node: ParameterNode) {
@@ -504,6 +504,21 @@ export default class ExpressionFormatter {
         return node.text;
       case 'lower':
         return node.text.toLowerCase();
+    }
+  }
+
+  private showIdentifier(node: IdentifierNode): string {
+    if (/['"\\`]/.test(node.text[0]) || node.text.startsWith(`U&`)) {
+      return node.text;
+    } else {
+      switch (this.cfg.identifierCase) {
+        case 'preserve':
+          return node.text;
+        case 'upper':
+          return node.text.toUpperCase();
+        case 'lower':
+          return node.text.toLowerCase();
+      }
     }
   }
 }

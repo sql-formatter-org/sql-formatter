@@ -41,6 +41,7 @@ const defaultOptions: FormatOptions = {
   tabWidth: 2,
   useTabs: false,
   keywordCase: 'preserve',
+  identifierCase: 'preserve',
   indentStyle: 'standard',
   logicalOperatorNewline: 'before',
   tabulateAlias: false,
