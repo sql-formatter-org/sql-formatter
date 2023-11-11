@@ -18,6 +18,8 @@ import supportsUpdate from './features/update.js';
 import supportsTruncateTable from './features/truncateTable.js';
 import supportsMergeInto from './features/mergeInto.js';
 import supportsCreateView from './features/createView.js';
+import supportsArrayLiterals from './features/arrayLiterals.js';
+import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors.js';
 
 /**
  * Shared tests for DB2 and DB2i
@@ -50,6 +52,8 @@ export default function behavesLikeDb2Formatter(format: FormatFn) {
     'INTERSECT ALL',
   ]);
   supportsLimiting(format, { fetchFirst: true });
+  supportsArrayLiterals(format, { withArrayPrefix: true });
+  supportsArrayAndMapAccessors(format);
 
   it('formats only -- as a line comment', () => {
     const result = format(`

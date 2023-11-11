@@ -184,6 +184,7 @@ export const db2: DialectOptions = {
     reservedPhrases,
     reservedKeywords: keywords,
     reservedFunctionNames: functions,
+    extraParens: ['[]'],
     stringTypes: [
       { quote: "''-qq", prefixes: ['G', 'N', 'U&'] },
       { quote: "''-raw", prefixes: ['X', 'BX', 'GX', 'UX'], requirePrefix: true },
