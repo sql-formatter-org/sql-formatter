@@ -5,6 +5,7 @@ import supportsComments from './features/comments.js';
 import supportsCreateTable from './features/createTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
+import supportsOperators from './features/operators.js';
 import supportsParams from './options/param.js';
 
 describe('Db2iFormatter', () => {
@@ -18,4 +19,5 @@ describe('Db2iFormatter', () => {
   supportsDropTable(format, { ifExists: true });
   supportsJoin(format, { without: ['NATURAL'], supportsUsing: true });
   supportsParams(format, { positional: true });
+  supportsOperators(format, ['**', '¬=', '¬>', '¬<', '!>', '!<', '||']);
 });

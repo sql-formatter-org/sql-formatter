@@ -5,7 +5,6 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter.js';
 
 import supportsAlterTable from './features/alterTable.js';
 import supportsBetween from './features/between.js';
-import supportsOperators from './features/operators.js';
 import supportsSchema from './features/schema.js';
 import supportsStrings from './features/strings.js';
 import supportsConstraints from './features/constraints.js';
@@ -42,7 +41,6 @@ export default function behavesLikeDb2Formatter(format: FormatFn) {
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   supportsSchema(format);
-  supportsOperators(format, ['**', '¬=', '¬>', '¬<', '!>', '!<', '||']);
   supportsSetOperations(format, [
     'UNION',
     'UNION ALL',

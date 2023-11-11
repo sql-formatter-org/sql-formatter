@@ -9,6 +9,7 @@ import supportsJoin from './features/join.js';
 import supportsParams from './options/param.js';
 import supportsStrings from './features/strings.js';
 import supportsComments from './features/comments.js';
+import supportsOperators from './features/operators.js';
 
 describe('Db2Formatter', () => {
   const language = 'db2';
@@ -21,6 +22,25 @@ describe('Db2Formatter', () => {
   supportsDropTable(format);
   supportsJoin(format, { without: ['NATURAL'], supportsUsing: false });
   supportsParams(format, { positional: true, named: [':'] });
+  supportsOperators(format, [
+    '**',
+    '%',
+    '&',
+    '|',
+    '^',
+    '~',
+    '¬=',
+    '¬>',
+    '¬<',
+    '!>',
+    '!<',
+    '^=',
+    '^>',
+    '^<',
+    '||',
+    '->',
+    '=>',
+  ]);
   // Additional U& string type in addition to others shared by all DB2 implementations
   supportsStrings(format, ["U&''"]);
 
