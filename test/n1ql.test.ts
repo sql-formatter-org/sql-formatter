@@ -35,7 +35,7 @@ describe('N1qlFormatter', () => {
   supportsSchema(format);
   supportsOperators(format, ['%', '==', '||'], ['AND', 'OR', 'XOR']);
   supportsArrayAndMapAccessors(format);
-  supportsArrayLiterals(format);
+  supportsArrayLiterals(format, { withoutArrayPrefix: true });
   supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'], supportsUsing: false });
   supportsSetOperations(format, [
     'UNION',

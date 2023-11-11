@@ -28,6 +28,7 @@ import supportsTruncateTable from './features/truncateTable.js';
 import supportsCreateView from './features/createView.js';
 import supportsOnConflict from './features/onConflict.js';
 import supportsIsDistinctFrom from './features/isDistinctFrom.js';
+import supportsArrayLiterals from './features/arrayLiterals.js';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -40,6 +41,7 @@ describe('PostgreSqlFormatter', () => {
   supportsCreateTable(format, { ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
   supportsConstraints(format, ['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL', 'SET DEFAULT']);
+  supportsArrayLiterals(format, { withArrayPrefix: true });
   supportsArrayAndMapAccessors(format);
   supportsAlterTable(format, {
     addColumn: true,
@@ -182,13 +184,6 @@ describe('PostgreSqlFormatter', () => {
         $$where$$
       FROM
         $$update$$
-    `);
-  });
-
-  it('supports ARRAY literals', () => {
-    expect(format('SELECT ARRAY[1, 2, 3]')).toBe(dedent`
-      SELECT
-        ARRAY[1, 2, 3]
     `);
   });
 

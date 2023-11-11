@@ -52,7 +52,7 @@ describe('TrinoFormatter', () => {
   // Missing: '?' operator (for row patterns)
   supportsOperators(format, ['%', '->', '=>', '||', '|', '^', '$'], ['AND', 'OR']);
   supportsIsDistinctFrom(format);
-  supportsArrayLiterals(format);
+  supportsArrayLiterals(format, { withArrayPrefix: true });
   supportsArrayAndMapAccessors(format);
   supportsJoin(format);
   supportsSetOperations(format);

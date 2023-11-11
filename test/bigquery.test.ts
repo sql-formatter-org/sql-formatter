@@ -46,7 +46,7 @@ describe('BigQueryFormatter', () => {
   supportsMergeInto(format);
   supportsStrings(format, ['""-bs', "''-bs", "R''", 'R""', "B''", 'B""']);
   supportsIdentifiers(format, ['``']);
-  supportsArrayLiterals(format);
+  supportsArrayLiterals(format, { withArrayPrefix: true, withoutArrayPrefix: true });
   supportsBetween(format);
   supportsJoin(format, { without: ['NATURAL'] });
   supportsSetOperations(format, [
