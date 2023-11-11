@@ -4,6 +4,7 @@ import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
 import behavesLikeDb2Formatter from './behavesLikeDb2Formatter.js';
 
 import supportsCreateTable from './features/createTable.js';
+import supportsAlterTable from './features/alterTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
 import supportsParams from './options/param.js';
@@ -19,6 +20,11 @@ describe('Db2Formatter', () => {
 
   supportsComments(format);
   supportsCreateTable(format);
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    renameColumn: true,
+  });
   supportsDropTable(format);
   supportsJoin(format, { without: ['NATURAL'] });
   supportsParams(format, { positional: true, named: [':'] });
