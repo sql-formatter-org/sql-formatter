@@ -19,7 +19,6 @@ describe('Db2iFormatter', () => {
   supportsAlterTable(format, {
     addColumn: true,
     dropColumn: true,
-    renameColumn: false,
   });
   supportsDropTable(format, { ifExists: true });
   supportsJoin(format, {
