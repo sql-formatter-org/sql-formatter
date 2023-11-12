@@ -16,6 +16,7 @@ export type {
 export type {
   IndentStyle,
   KeywordCase,
+  IdentifierCase,
   CommaPosition,
   LogicalOperatorNewline,
   FormatOptions,
