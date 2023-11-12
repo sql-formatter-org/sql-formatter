@@ -17,7 +17,6 @@ const reservedClauses = expandPhrases([
   'ORDER [SIBLINGS] BY [INPUT SEQUENCE]',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
-  'LIMIT',
   'FOR UPDATE [OF]',
   'FOR READ ONLY',
   'OPTIMIZE FOR',
