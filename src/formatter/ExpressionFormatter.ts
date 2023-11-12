@@ -508,7 +508,7 @@ export default class ExpressionFormatter {
   }
 
   private showIdentifier(node: IdentifierNode): string {
-    if (/['"\\`]/.test(node.text[0]) || node.text.startsWith(`U&`)) {
+    if (!(node.tokenType === TokenType.IDENTIFIER)) {
       return node.text;
     } else {
       switch (this.cfg.identifierCase) {
