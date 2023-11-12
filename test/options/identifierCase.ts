@@ -4,10 +4,14 @@ import { FormatFn } from '../../src/sqlFormatter.js';
 
 export default function supportsIdentifierCase(format: FormatFn) {
   it('preserves identifier case by default', () => {
-    const result = format('select Abc from tBl1 left join Tbl2 where colA > 1 and colB = 3');
+    const result = format(
+      dedent`
+        select Abc, 'mytext' as MyText from tBl1 left join Tbl2 where colA > 1 and colB = 3`
+    );
     expect(result).toBe(dedent`
       select
-        Abc
+        Abc,
+        'mytext' as MyText
       from
         tBl1
         left join Tbl2
@@ -18,12 +22,15 @@ export default function supportsIdentifierCase(format: FormatFn) {
   });
 
   it('converts identifiers to uppercase', () => {
-    const result = format('select Abc from tBl1 left join Tbl2 where colA > 1 and colB = 3', {
-      identifierCase: 'upper',
-    });
+    const result = format(
+      dedent`
+        select Abc, 'mytext' as MyText from tBl1 left join Tbl2 where colA > 1 and colB = 3`,
+      { identifierCase: 'upper' }
+    );
     expect(result).toBe(dedent`
       select
-        ABC
+        ABC,
+        'mytext' as MYTEXT
       from
         TBL1
         left join TBL2
@@ -34,12 +41,15 @@ export default function supportsIdentifierCase(format: FormatFn) {
   });
 
   it('converts identifiers to lowercase', () => {
-    const result = format('select Abc from tBl1 left join Tbl2 where colA > 1 and colB = 3', {
-      identifierCase: 'lower',
-    });
+    const result = format(
+      dedent`
+        select Abc, 'mytext' as MyText from tBl1 left join Tbl2 where colA > 1 and colB = 3`,
+      { identifierCase: 'lower' }
+    );
     expect(result).toBe(dedent`
       select
-        abc
+        abc,
+        'mytext' as mytext
       from
         tbl1
         left join tbl2
@@ -49,23 +59,23 @@ export default function supportsIdentifierCase(format: FormatFn) {
     `);
   });
 
-  it('does not uppercase identifiers inside strings', () => {
-    const result = format(`select 'abc' as foo`, {
-      identifierCase: 'upper',
-    });
-    expect(result).toBe(dedent`
-      select
-        'abc' as FOO
-    `);
-  });
-
-  it('does not uppercase identifiers inside quotes', () => {
+  it('does not uppercase quoted identifiers', () => {
     const result = format(`select "abc" as foo`, {
       identifierCase: 'upper',
     });
     expect(result).toBe(dedent`
       select
         "abc" as FOO
+    `);
+  });
+
+  it('converts multi-part identifiers to uppercase', () => {
+    const result = format('select Abc from Part1.Part2.Part3', { identifierCase: 'upper' });
+    expect(result).toBe(dedent`
+      select
+        ABC
+      from
+        PART1.PART2.PART3
     `);
   });
 }
