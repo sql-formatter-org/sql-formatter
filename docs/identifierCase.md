@@ -2,6 +2,10 @@
 
 Converts identifiers to upper or lowercase.
 
+Note: An identifier is a name of a SQL object.
+There are two types of SQL identifiers: ordinary identifiers and quoted identifiers.
+Only ordinary identifiers are subject to be converted.
+
 ## Options
 
 - `"preserve"` (default) preserves the original case.
