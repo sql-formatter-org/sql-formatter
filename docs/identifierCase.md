@@ -31,11 +31,11 @@ group by Column4
 
 ```
 select
-  count(a.COLUMN1),
-  max(a.COLUMN2 + a.COLUMN3),
-  a.COLUMN4 AS MYCOL
+  count(A.COLUMN1),
+  max(A.COLUMN2 + A.COLUMN3),
+  A.COLUMN4 AS MYCOL
 from
-  TABLE1 as a
+  TABLE1 as A
 where
   COLUMN6
   and COLUMN7
