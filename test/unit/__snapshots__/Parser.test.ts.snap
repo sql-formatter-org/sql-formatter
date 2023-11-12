@@ -8,6 +8,7 @@ Array [
         "children": Array [
           Object {
             "text": "age",
+            "tokenType": "IDENTIFIER",
             "type": "identifier",
           },
           Object {
@@ -127,6 +128,7 @@ Array [
             "expr": Array [
               Object {
                 "text": "foo",
+                "tokenType": "IDENTIFIER",
                 "type": "identifier",
               },
             ],
@@ -288,6 +290,7 @@ Array [
           Object {
             "object": Object {
               "text": "ident",
+              "tokenType": "IDENTIFIER",
               "type": "identifier",
             },
             "property": Object {
@@ -320,6 +323,7 @@ Array [
           Object {
             "array": Object {
               "text": "my_array",
+              "tokenType": "ARRAY_IDENTIFIER",
               "type": "identifier",
             },
             "parenthesis": Object {
@@ -360,6 +364,7 @@ Array [
           Object {
             "array": Object {
               "text": "my_array",
+              "tokenType": "ARRAY_IDENTIFIER",
               "trailingComments": Array [
                 Object {
                   "precedingWhitespace": " ",
@@ -408,6 +413,7 @@ Array [
             "children": Array [
               Object {
                 "text": "foo",
+                "tokenType": "IDENTIFIER",
                 "type": "identifier",
               },
               Object {
@@ -416,6 +422,7 @@ Array [
               },
               Object {
                 "text": "bar",
+                "tokenType": "IDENTIFIER",
                 "type": "identifier",
               },
             ],
@@ -495,6 +502,7 @@ Array [
           },
           Object {
             "text": "a",
+            "tokenType": "IDENTIFIER",
             "type": "identifier",
           },
           Object {
@@ -517,6 +525,7 @@ Array [
           },
           Object {
             "text": "b",
+            "tokenType": "IDENTIFIER",
             "type": "identifier",
           },
         ],
@@ -541,6 +550,7 @@ Array [
     "children": Array [
       Object {
         "text": "foo",
+        "tokenType": "IDENTIFIER",
         "type": "identifier",
       },
     ],
@@ -551,6 +561,7 @@ Array [
     "children": Array [
       Object {
         "text": "bar",
+        "tokenType": "IDENTIFIER",
         "type": "identifier",
       },
     ],
@@ -570,6 +581,7 @@ Array [
             "children": Array [
               Object {
                 "text": "birth_year",
+                "tokenType": "IDENTIFIER",
                 "type": "identifier",
               },
               Object {
@@ -580,6 +592,7 @@ Array [
                 "children": Array [
                   Object {
                     "text": "CURRENT_DATE",
+                    "tokenType": "IDENTIFIER",
                     "type": "identifier",
                   },
                   Object {
@@ -626,16 +639,19 @@ Array [
             "object": Object {
               "object": Object {
                 "text": "foo",
+                "tokenType": "IDENTIFIER",
                 "type": "identifier",
               },
               "property": Object {
                 "text": "bar",
+                "tokenType": "IDENTIFIER",
                 "type": "identifier",
               },
               "type": "property_access",
             },
             "property": Object {
               "text": "baz",
+              "tokenType": "IDENTIFIER",
               "type": "identifier",
             },
             "type": "property_access",
@@ -664,6 +680,7 @@ Array [
         "children": Array [
           Object {
             "text": "foo",
+            "tokenType": "IDENTIFIER",
             "type": "identifier",
           },
         ],
@@ -679,6 +696,7 @@ Array [
         "children": Array [
           Object {
             "text": "bar",
+            "tokenType": "IDENTIFIER",
             "type": "identifier",
           },
         ],
@@ -704,6 +722,7 @@ Array [
         "children": Array [
           Object {
             "text": "foo",
+            "tokenType": "IDENTIFIER",
             "type": "identifier",
           },
         ],
@@ -719,6 +738,7 @@ Array [
         "children": Array [
           Object {
             "text": "baz",
+            "tokenType": "IDENTIFIER",
             "type": "identifier",
           },
         ],
