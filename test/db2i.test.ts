@@ -7,6 +7,7 @@ import supportsAlterTable from './features/alterTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
 import supportsOperators from './features/operators.js';
+import supportsLimiting from './features/limiting.js';
 
 describe('Db2iFormatter', () => {
   const language = 'db2i';
@@ -15,6 +16,7 @@ describe('Db2iFormatter', () => {
   behavesLikeDb2Formatter(format);
 
   supportsComments(format, { nestedBlockComments: true });
+  supportsLimiting(format, { fetchNext: true, fetchFirst: true, offset: true });
   supportsCreateTable(format, { orReplace: true });
   supportsAlterTable(format, {
     addColumn: true,

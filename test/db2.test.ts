@@ -8,6 +8,7 @@ import supportsJoin from './features/join.js';
 import supportsStrings from './features/strings.js';
 import supportsComments from './features/comments.js';
 import supportsOperators from './features/operators.js';
+import supportsLimiting from './features/limiting.js';
 
 describe('Db2Formatter', () => {
   const language = 'db2';
@@ -16,6 +17,7 @@ describe('Db2Formatter', () => {
   behavesLikeDb2Formatter(format);
 
   supportsComments(format);
+  supportsLimiting(format, { fetchNext: true, offset: true });
   supportsCreateTable(format);
   supportsAlterTable(format, {
     addColumn: true,

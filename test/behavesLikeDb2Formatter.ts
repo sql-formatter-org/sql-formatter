@@ -12,7 +12,6 @@ import supportsCommentOn from './features/commentOn.js';
 import supportsIdentifiers from './features/identifiers.js';
 import supportsParams from './options/param.js';
 import supportsSetOperations from './features/setOperations.js';
-import supportsLimiting from './features/limiting.js';
 import supportsInsertInto from './features/insertInto.js';
 import supportsUpdate from './features/update.js';
 import supportsTruncateTable from './features/truncateTable.js';
@@ -47,7 +46,6 @@ export default function behavesLikeDb2Formatter(format: FormatFn) {
     'INTERSECT ALL',
   ]);
   supportsParams(format, { positional: true, named: [':'] });
-  supportsLimiting(format, { fetchFirst: true });
   supportsArrayLiterals(format, { withArrayPrefix: true });
   supportsArrayAndMapAccessors(format);
 

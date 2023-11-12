@@ -120,4 +120,20 @@ export default function supportsLimiting(format: FormatFn, types: LimitingTypes)
       `);
     });
   }
+
+  if (types.fetchNext && types.offset) {
+    it('formats OFFSET ... FETCH FIRST', () => {
+      const result = format('SELECT * FROM tbl OFFSET 250 ROWS FETCH NEXT 5 ROWS ONLY;');
+      expect(result).toBe(dedent`
+        SELECT
+          *
+        FROM
+          tbl
+        OFFSET
+          250 ROWS
+        FETCH NEXT
+          5 ROWS ONLY;
+      `);
+    });
+  }
 }
