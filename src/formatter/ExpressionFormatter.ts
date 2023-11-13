@@ -510,7 +510,9 @@ export default class ExpressionFormatter {
   }
 
   private showIdentifier(node: IdentifierNode): string {
-    if (node.tokenType === TokenType.IDENTIFIER || node.tokenType === TokenType.ARRAY_IDENTIFIER) {
+    if (node.quoted) {
+      return node.text;
+    } else {
       switch (this.cfg.identifierCase) {
         case 'preserve':
           return node.text;
@@ -519,8 +521,6 @@ export default class ExpressionFormatter {
         case 'lower':
           return node.text.toLowerCase();
       }
-    } else {
-      return node.text;
     }
   }
 }

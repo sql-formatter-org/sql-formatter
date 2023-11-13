@@ -125,7 +125,7 @@ export interface PropertyAccessNode extends BaseNode {
 
 export interface IdentifierNode extends BaseNode {
   type: NodeType.identifier;
-  tokenType: TokenType;
+  quoted: boolean;
   text: string;
 }
 

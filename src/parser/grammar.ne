@@ -16,12 +16,6 @@ const lexer = new LexerAdapter(chunk => []);
 // which otherwise produce single element nested inside two arrays
 const unwrap = <T>([[el]]: T[][]): T => el;
 
-const toIdentifierNode = (token: Token): IdentifierNode => ({
-  type: NodeType.identifier,
-  tokenType: token.type,
-  text: token.text,
-});
-
 const toKeywordNode = (token: Token): KeywordNode => ({
   type: NodeType.keyword,
   tokenType: token.type,
@@ -208,7 +202,7 @@ atomic_expression ->
 array_subscript -> %ARRAY_IDENTIFIER _ square_brackets {%
   ([arrayToken, _, brackets]) => ({
     type: NodeType.array_subscript,
-    array: addComments({ type: NodeType.identifier, tokenType: TokenType.ARRAY_IDENTIFIER, text: arrayToken.text}, { trailing: _ }),
+    array: addComments({ type: NodeType.identifier, quoted: false, text: arrayToken.text}, { trailing: _ }),
     parenthesis: brackets,
   })
 %}
@@ -315,7 +309,7 @@ operator -> ( %OPERATOR ) {% ([[token]]) => ({ type: NodeType.operator, text: to
 identifier ->
   ( %IDENTIFIER
   | %QUOTED_IDENTIFIER
-  | %VARIABLE ) {% ([[token]]) => toIdentifierNode(token) %}
+  | %VARIABLE ) {% ([[token]]) => ({ type: NodeType.identifier, quoted: token.type !== "IDENTIFIER", text: token.text }) %}
 
 parameter ->
   ( %NAMED_PARAMETER

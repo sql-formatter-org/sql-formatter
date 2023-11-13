@@ -7,8 +7,8 @@ Array [
       Object {
         "children": Array [
           Object {
+            "quoted": false,
             "text": "age",
-            "tokenType": "IDENTIFIER",
             "type": "identifier",
           },
           Object {
@@ -127,8 +127,8 @@ Array [
             },
             "expr": Array [
               Object {
+                "quoted": false,
                 "text": "foo",
-                "tokenType": "IDENTIFIER",
                 "type": "identifier",
               },
             ],
@@ -289,8 +289,8 @@ Array [
         "children": Array [
           Object {
             "object": Object {
+              "quoted": false,
               "text": "ident",
-              "tokenType": "IDENTIFIER",
               "type": "identifier",
             },
             "property": Object {
@@ -322,8 +322,8 @@ Array [
         "children": Array [
           Object {
             "array": Object {
+              "quoted": false,
               "text": "my_array",
-              "tokenType": "ARRAY_IDENTIFIER",
               "type": "identifier",
             },
             "parenthesis": Object {
@@ -363,8 +363,8 @@ Array [
         "children": Array [
           Object {
             "array": Object {
+              "quoted": false,
               "text": "my_array",
-              "tokenType": "ARRAY_IDENTIFIER",
               "trailingComments": Array [
                 Object {
                   "precedingWhitespace": " ",
@@ -412,8 +412,8 @@ Array [
           Object {
             "children": Array [
               Object {
+                "quoted": false,
                 "text": "foo",
-                "tokenType": "IDENTIFIER",
                 "type": "identifier",
               },
               Object {
@@ -421,8 +421,8 @@ Array [
                 "type": "operator",
               },
               Object {
+                "quoted": false,
                 "text": "bar",
-                "tokenType": "IDENTIFIER",
                 "type": "identifier",
               },
             ],
@@ -501,8 +501,8 @@ Array [
             "type": "keyword",
           },
           Object {
+            "quoted": false,
             "text": "a",
-            "tokenType": "IDENTIFIER",
             "type": "identifier",
           },
           Object {
@@ -524,8 +524,8 @@ Array [
             "type": "function_call",
           },
           Object {
+            "quoted": false,
             "text": "b",
-            "tokenType": "IDENTIFIER",
             "type": "identifier",
           },
         ],
@@ -549,8 +549,8 @@ Array [
   Object {
     "children": Array [
       Object {
+        "quoted": false,
         "text": "foo",
-        "tokenType": "IDENTIFIER",
         "type": "identifier",
       },
     ],
@@ -560,8 +560,8 @@ Array [
   Object {
     "children": Array [
       Object {
+        "quoted": false,
         "text": "bar",
-        "tokenType": "IDENTIFIER",
         "type": "identifier",
       },
     ],
@@ -580,8 +580,8 @@ Array [
           Object {
             "children": Array [
               Object {
+                "quoted": false,
                 "text": "birth_year",
-                "tokenType": "IDENTIFIER",
                 "type": "identifier",
               },
               Object {
@@ -591,8 +591,8 @@ Array [
               Object {
                 "children": Array [
                   Object {
+                    "quoted": false,
                     "text": "CURRENT_DATE",
-                    "tokenType": "IDENTIFIER",
                     "type": "identifier",
                   },
                   Object {
@@ -638,20 +638,20 @@ Array [
           Object {
             "object": Object {
               "object": Object {
+                "quoted": false,
                 "text": "foo",
-                "tokenType": "IDENTIFIER",
                 "type": "identifier",
               },
               "property": Object {
+                "quoted": false,
                 "text": "bar",
-                "tokenType": "IDENTIFIER",
                 "type": "identifier",
               },
               "type": "property_access",
             },
             "property": Object {
+              "quoted": false,
               "text": "baz",
-              "tokenType": "IDENTIFIER",
               "type": "identifier",
             },
             "type": "property_access",
@@ -679,8 +679,8 @@ Array [
       Object {
         "children": Array [
           Object {
+            "quoted": false,
             "text": "foo",
-            "tokenType": "IDENTIFIER",
             "type": "identifier",
           },
         ],
@@ -695,8 +695,8 @@ Array [
       Object {
         "children": Array [
           Object {
+            "quoted": false,
             "text": "bar",
-            "tokenType": "IDENTIFIER",
             "type": "identifier",
           },
         ],
@@ -721,8 +721,8 @@ Array [
       Object {
         "children": Array [
           Object {
+            "quoted": false,
             "text": "foo",
-            "tokenType": "IDENTIFIER",
             "type": "identifier",
           },
         ],
@@ -737,8 +737,8 @@ Array [
       Object {
         "children": Array [
           Object {
+            "quoted": false,
             "text": "baz",
-            "tokenType": "IDENTIFIER",
             "type": "identifier",
           },
         ],
