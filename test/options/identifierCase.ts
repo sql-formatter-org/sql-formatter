@@ -78,4 +78,14 @@ export default function supportsIdentifierCase(format: FormatFn) {
         PART1.PART2.PART3
     `);
   });
+
+  it('function names are not effected by identifierCase option', () => {
+    const result = format('select count(*) from tbl', { identifierCase: 'upper' });
+    expect(result).toBe(dedent`
+      select
+        count(*)
+      from
+        TBL
+    `);
+  });
 }
