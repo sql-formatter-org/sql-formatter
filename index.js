@@ -9,7 +9,6 @@ const attachFormat = () => {
   const keywordCase = document.getElementById('keywordCase');
   const indentStyle = document.getElementById('indentStyle');
   const logicalOperatorNewline = document.getElementById('logicalOperatorNewline');
-  const commaPosition = document.getElementById('commaPosition');
   const expressionWidth = document.getElementById('expressionWidth');
   const lineBetweenQueries = document.getElementById('lineBetweenQueries');
   const denseOperators = document.getElementById('denseOperators');
@@ -37,7 +36,6 @@ const attachFormat = () => {
         indentStyle: indentStyle.options[indentStyle.selectedIndex].value,
         logicalOperatorNewline:
           logicalOperatorNewline.options[logicalOperatorNewline.selectedIndex].value,
-        commaPosition: commaPosition.options[commaPosition.selectedIndex].value,
         expressionWidth: expressionWidth.value,
         lineBetweenQueries: lineBetweenQueries.value,
         denseOperators: denseOperators.checked,
@@ -72,7 +70,6 @@ const attachFormat = () => {
     keywordCase,
     indentStyle,
     logicalOperatorNewline,
-    commaPosition,
     expressionWidth,
     lineBetweenQueries,
     denseOperators,
