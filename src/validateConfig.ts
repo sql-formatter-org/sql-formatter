@@ -4,23 +4,18 @@ import { ParamItems } from './formatter/Params.js';
 export class ConfigError extends Error {}
 
 export function validateConfig(cfg: FormatOptions): FormatOptions {
-  if ('multilineLists' in cfg) {
-    throw new ConfigError('multilineLists config is no more supported.');
-  }
-  if ('newlineBeforeOpenParen' in cfg) {
-    throw new ConfigError('newlineBeforeOpenParen config is no more supported.');
-  }
-  if ('newlineBeforeCloseParen' in cfg) {
-    throw new ConfigError('newlineBeforeCloseParen config is no more supported.');
-  }
-  if ('aliasAs' in cfg) {
-    throw new ConfigError('aliasAs config is no more supported.');
-  }
-  if ('commaPosition' in cfg) {
-    throw new ConfigError('commaPosition config is no more supported.');
-  }
-  if ('tabulateAlias' in cfg) {
-    throw new ConfigError('tabulateAlias config is no more supported.');
+  const removedOptions = [
+    'multilineLists',
+    'newlineBeforeOpenParen',
+    'newlineBeforeCloseParen',
+    'aliasAs',
+    'commaPosition',
+    'tabulateAlias',
+  ];
+  for (const optionName of removedOptions) {
+    if (optionName in cfg) {
+      throw new ConfigError(`${optionName} config is no more supported.`);
+    }
   }
 
   if (cfg.expressionWidth <= 0) {
