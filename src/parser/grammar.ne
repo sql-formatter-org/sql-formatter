@@ -1,7 +1,7 @@
 @preprocessor typescript
 @{%
 import LexerAdapter from './LexerAdapter.js';
-import { NodeType, AstNode, CommentNode, KeywordNode } from './ast.js';
+import { NodeType, AstNode, CommentNode, KeywordNode, IdentifierNode } from './ast.js';
 import { Token, TokenType } from '../lexer/token.js';
 
 // The lexer here is only to provide the has() method,
@@ -15,6 +15,12 @@ const lexer = new LexerAdapter(chunk => []);
 //
 // which otherwise produce single element nested inside two arrays
 const unwrap = <T>([[el]]: T[][]): T => el;
+
+const toIdentifierNode = (token: Token): IdentifierNode => ({
+  type: NodeType.identifier,
+  tokenType: token.type,
+  text: token.text,
+});
 
 const toKeywordNode = (token: Token): KeywordNode => ({
   type: NodeType.keyword,
@@ -202,7 +208,7 @@ atomic_expression ->
 array_subscript -> %ARRAY_IDENTIFIER _ square_brackets {%
   ([arrayToken, _, brackets]) => ({
     type: NodeType.array_subscript,
-    array: addComments({ type: NodeType.identifier, text: arrayToken.text}, { trailing: _ }),
+    array: addComments({ type: NodeType.identifier, tokenType: TokenType.ARRAY_IDENTIFIER, text: arrayToken.text}, { trailing: _ }),
     parenthesis: brackets,
   })
 %}
@@ -309,7 +315,7 @@ operator -> ( %OPERATOR ) {% ([[token]]) => ({ type: NodeType.operator, text: to
 identifier ->
   ( %IDENTIFIER
   | %QUOTED_IDENTIFIER
-  | %VARIABLE ) {% ([[token]]) => ({ type: NodeType.identifier, text: token.text }) %}
+  | %VARIABLE ) {% ([[token]]) => toIdentifierNode(token) %}
 
 parameter ->
   ( %NAMED_PARAMETER

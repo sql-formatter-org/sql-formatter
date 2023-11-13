@@ -1,0 +1,58 @@
+# identifierCase
+
+Converts identifiers to upper or lowercase.
+
+Note: An identifier is a name of a SQL object.
+There are two types of SQL identifiers: ordinary identifiers and quoted identifiers.
+Only ordinary identifiers are subject to be converted.
+
+## Options
+
+- `"preserve"` (default) preserves the original case.
+- `"upper"` converts to uppercase.
+- `"lower"` converts to lowercase.
+
+### preserve
+
+```
+select
+  count(a.Column1),
+  max(a.Column2 + a.Column3),
+  a.Column4 AS myCol
+from
+  Table1 as a
+where
+  Column6
+  and Column7
+group by Column4
+```
+
+### upper
+
+```
+select
+  count(A.COLUMN1),
+  max(A.COLUMN2 + A.COLUMN3),
+  A.COLUMN4 AS MYCOL
+from
+  TABLE1 as A
+where
+  COLUMN6
+  and COLUMN7
+group by COLUMN4
+```
+
+### lower
+
+```
+select
+  count(a.column1),
+  max(a.column2 + a.column3),
+  a.column4 AS mycol
+from
+  table1 as a
+where
+  column6
+  and column7
+group by column4
+```

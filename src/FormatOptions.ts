@@ -6,6 +6,8 @@ export type IndentStyle = 'standard' | 'tabularLeft' | 'tabularRight';
 
 export type KeywordCase = 'preserve' | 'upper' | 'lower';
 
+export type IdentifierCase = 'preserve' | 'upper' | 'lower';
+
 export type CommaPosition = 'before' | 'after' | 'tabular';
 
 export type LogicalOperatorNewline = 'before' | 'after';
@@ -14,6 +16,7 @@ export interface FormatOptions {
   tabWidth: number;
   useTabs: boolean;
   keywordCase: KeywordCase;
+  identifierCase: IdentifierCase;
   indentStyle: IndentStyle;
   logicalOperatorNewline: LogicalOperatorNewline;
   tabulateAlias: boolean;

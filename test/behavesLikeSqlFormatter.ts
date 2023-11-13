@@ -9,6 +9,7 @@ import supportsTabWidth from './options/tabWidth.js';
 import supportsUseTabs from './options/useTabs.js';
 import supportsExpressionWidth from './options/expressionWidth.js';
 import supportsKeywordCase from './options/keywordCase.js';
+import supportsIdentifierCase from './options/identifierCase.js';
 import supportsIndentStyle from './options/indentStyle.js';
 import supportsCommaPosition from './options/commaPosition.js';
 import supportsLinesBetweenQueries from './options/linesBetweenQueries.js';
@@ -30,6 +31,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsTabWidth(format);
   supportsUseTabs(format);
   supportsKeywordCase(format);
+  supportsIdentifierCase(format);
   supportsIndentStyle(format);
   supportsLinesBetweenQueries(format);
   supportsExpressionWidth(format);
