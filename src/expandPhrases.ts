@@ -16,72 +16,121 @@ export const expandPhrases = (phrases: string[]): string[] => phrases.flatMap(ex
  *       "CREATE OR REPLACE TABLE",
  *       "CREATE OR REPLACE TEMP TABLE",
  *       "CREATE OR REPLACE TEMPORARY TABLE" ]
+ *
+ * The [] and {} parenthesis can also be nested like
+ *
+ *     "FOR [OF {UNIQUE | MANDATORY} TABLES]"
+ *
+ * resulting in:
+ *
+ *     [ "FOR",
+ *       "FOR OF UNIQUE TABLES",
+ *       "FOR OF MANDATORY TABLES" ]
  */
 export const expandSinglePhrase = (phrase: string): string[] =>
-  buildCombinations(parsePhrase(phrase)).map(text => text.trim());
+  buildCombinations(parsePhrase(phrase)).map(stripExtraWhitespace);
 
-// This data type holds variants of a single part in whole phrase.
-// Corresponding to syntax as follows:
-//
-//   "TABLE"            --> ["TABLE"]
-//   "[TABLE]"          --> ["", "TABLE"]
-//   "[TEMP|TEMPORARY]" --> ["", "TEMP", "TEMPORARY"]
-//   "{TEMP|TEMPORARY}" --> ["TEMP", "TEMPORARY"]
-//
-type PhrasePart = string[];
+const stripExtraWhitespace = (text: string) => text.replace(/ +/g, ' ').trim();
 
-const REQUIRED_PART = /[^[\]{}]+/y;
-const REQUIRED_BLOCK = /\{.*?\}/y;
-const OPTIONAL_BLOCK = /\[.*?\]/y;
+const parsePhrase = (text: string): Phrase => ({
+  type: 'mandatory_block',
+  items: parseAlteration(text, 0)[0],
+});
 
-const parsePhrase = (text: string): PhrasePart[] => {
-  let index = 0;
-  const result: PhrasePart[] = [];
-  while (index < text.length) {
-    // Match everything else outside of "[...]" or "{...}" blocks
-    REQUIRED_PART.lastIndex = index;
-    const requiredMatch = REQUIRED_PART.exec(text);
-    if (requiredMatch) {
-      result.push([requiredMatch[0].trim()]);
-      index += requiredMatch[0].length;
-    }
+type Phrase = string | MandatoryBlock | OptionalBlock | Concatenation;
+type Concatenation = { type: 'concatenation'; items: Phrase[] };
+type MandatoryBlock = { type: 'mandatory_block'; items: Phrase[] };
+type OptionalBlock = { type: 'optional_block'; items: Phrase[] };
 
-    // Match "[...]" block
-    OPTIONAL_BLOCK.lastIndex = index;
-    const optionalBlockMatch = OPTIONAL_BLOCK.exec(text);
-    if (optionalBlockMatch) {
-      const choices = optionalBlockMatch[0]
-        .slice(1, -1)
-        .split('|')
-        .map(s => s.trim());
-      result.push(['', ...choices]);
-      index += optionalBlockMatch[0].length;
-    }
-
-    // Match "{...}" block
-    REQUIRED_BLOCK.lastIndex = index;
-    const requiredBlockMatch = REQUIRED_BLOCK.exec(text);
-    if (requiredBlockMatch) {
-      const choices = requiredBlockMatch[0]
-        .slice(1, -1)
-        .split('|')
-        .map(s => s.trim());
-      result.push(choices);
-      index += requiredBlockMatch[0].length;
-    }
-
-    if (!requiredMatch && !optionalBlockMatch && !requiredBlockMatch) {
-      throw new Error(`Unbalanced parenthesis in: ${text}`);
+const parseAlteration = (
+  text: string,
+  index: number,
+  expectClosing?: ']' | '}'
+): [Phrase[], number] => {
+  const alterations: Phrase[] = [];
+  while (text[index]) {
+    const [term, newIndex] = parseConcatenation(text, index);
+    alterations.push(term);
+    index = newIndex;
+    if (text[index] === '|') {
+      index++;
+    } else if (text[index] === '}' || text[index] === ']') {
+      if (expectClosing !== text[index]) {
+        throw new Error(`Unbalanced parenthesis in: ${text}`);
+      }
+      index++;
+      return [alterations, index];
+    } else if (index === text.length) {
+      if (expectClosing) {
+        throw new Error(`Unbalanced parenthesis in: ${text}`);
+      }
+      return [alterations, index];
+    } else {
+      throw new Error(`Unexpected "${text[index]}"`);
     }
   }
-  return result;
+  return [alterations, index];
 };
 
-const buildCombinations = ([first, ...rest]: PhrasePart[]): string[] => {
-  if (first === undefined) {
-    return [''];
+const parseConcatenation = (text: string, index: number): [Phrase, number] => {
+  const items: Phrase[] = [];
+  while (true) {
+    const [term, newIndex] = parseTerm(text, index);
+    if (term) {
+      items.push(term);
+      index = newIndex;
+    } else {
+      break;
+    }
   }
-  return buildCombinations(rest).flatMap(tail =>
-    first.map(head => head.trim() + ' ' + tail.trim())
-  );
+  return items.length === 1 ? [items[0], index] : [{ type: 'concatenation', items }, index];
+};
+
+const parseTerm = (text: string, index: number): [Phrase, number] => {
+  if (text[index] === '{') {
+    return parseMandatoryBlock(text, index + 1);
+  } else if (text[index] === '[') {
+    return parseOptionalBlock(text, index + 1);
+  } else {
+    let word = '';
+    while (text[index] && /[A-Za-z0-9_ ]/.test(text[index])) {
+      word += text[index];
+      index++;
+    }
+    return [word, index];
+  }
+};
+
+const parseMandatoryBlock = (text: string, index: number): [MandatoryBlock, number] => {
+  const [items, newIndex] = parseAlteration(text, index, '}');
+  return [{ type: 'mandatory_block', items }, newIndex];
+};
+
+const parseOptionalBlock = (text: string, index: number): [OptionalBlock, number] => {
+  const [items, newIndex] = parseAlteration(text, index, ']');
+  return [{ type: 'optional_block', items }, newIndex];
+};
+
+const buildCombinations = (node: Phrase): string[] => {
+  if (typeof node === 'string') {
+    return [node];
+  } else if (node.type === 'concatenation') {
+    return node.items.map(buildCombinations).reduce(stringCombinations, ['']);
+  } else if (node.type === 'mandatory_block') {
+    return node.items.flatMap(buildCombinations);
+  } else if (node.type === 'optional_block') {
+    return ['', ...node.items.flatMap(buildCombinations)];
+  } else {
+    throw new Error(`Unknown node type: ${node}`);
+  }
+};
+
+const stringCombinations = (xs: string[], ys: string[]): string[] => {
+  const results: string[] = [];
+  for (const x of xs) {
+    for (const y of ys) {
+      results.push(x + y);
+    }
+  }
+  return results;
 };

@@ -26,8 +26,8 @@ describe('expandSinglePhrase()', () => {
   it('expands multiple [optional] [blocks]', () => {
     expect(expandSinglePhrase('CREATE [OR REPLACE] [MATERIALIZED] VIEW')).toEqual([
       'CREATE VIEW',
-      'CREATE OR REPLACE VIEW',
       'CREATE MATERIALIZED VIEW',
+      'CREATE OR REPLACE VIEW',
       'CREATE OR REPLACE MATERIALIZED VIEW',
     ]);
   });
@@ -50,6 +50,26 @@ describe('expandSinglePhrase()', () => {
       'CREATE TEMP TABLE',
       'CREATE TEMPORARY TABLE',
       'CREATE VIRTUAL TABLE',
+    ]);
+  });
+
+  it('expands nested []-block inside []-block', () => {
+    expect(expandSinglePhrase('CREATE [[OR] REPLACE] TABLE')).toEqual([
+      'CREATE TABLE',
+      'CREATE REPLACE TABLE',
+      'CREATE OR REPLACE TABLE',
+    ]);
+  });
+
+  it('expands nested {}-block inside {}-block', () => {
+    expect(expandSinglePhrase('CREATE {{OR} REPLACE} TABLE')).toEqual(['CREATE OR REPLACE TABLE']);
+  });
+
+  it('expands nested {}-block inside []-block', () => {
+    expect(expandSinglePhrase('FOR RS [USE AND KEEP {UPDATE | EXCLUSIVE} LOCKS]')).toEqual([
+      'FOR RS',
+      'FOR RS USE AND KEEP UPDATE LOCKS',
+      'FOR RS USE AND KEEP EXCLUSIVE LOCKS',
     ]);
   });
 
