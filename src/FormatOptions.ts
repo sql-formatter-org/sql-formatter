@@ -8,8 +8,6 @@ export type KeywordCase = 'preserve' | 'upper' | 'lower';
 
 export type IdentifierCase = 'preserve' | 'upper' | 'lower';
 
-export type CommaPosition = 'before' | 'after' | 'tabular';
-
 export type LogicalOperatorNewline = 'before' | 'after';
 
 export interface FormatOptions {
@@ -19,7 +17,6 @@ export interface FormatOptions {
   identifierCase: IdentifierCase;
   indentStyle: IndentStyle;
   logicalOperatorNewline: LogicalOperatorNewline;
-  commaPosition: CommaPosition;
   expressionWidth: number;
   linesBetweenQueries: number;
   denseOperators: boolean;

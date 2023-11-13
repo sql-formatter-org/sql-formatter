@@ -153,7 +153,6 @@ All fields are optional and all fields that are not specified will be filled wit
 - [**`identifierCase`**](docs/identifierCase.md) uppercases or lowercases identifiers. (**experimental!**)
 - [**`indentStyle`**](docs/indentStyle.md) defines overall indentation style.
 - [**`logicalOperatorNewline`**](docs/logicalOperatorNewline.md) newline before or after boolean operator (AND, OR, XOR).
-- [**`commaPosition`**](docs/commaPosition.md) where to place the comma in column lists (**deprecated!**).
 - [**`expressionWidth`**](docs/expressionWidth.md) maximum number of characters in parenthesized expressions to be kept on single line.
 - [**`linesBetweenQueries`**](docs/linesBetweenQueries.md) how many newlines to insert between queries.
 - [**`denseOperators`**](docs/denseOperators.md) packs operators densely without spaces.

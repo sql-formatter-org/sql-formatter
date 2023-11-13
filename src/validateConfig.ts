@@ -16,16 +16,16 @@ export function validateConfig(cfg: FormatOptions): FormatOptions {
   if ('aliasAs' in cfg) {
     throw new ConfigError('aliasAs config is no more supported.');
   }
+  if ('commaPosition' in cfg) {
+    throw new ConfigError('commaPosition config is no more supported.');
+  }
+  if ('tabulateAlias' in cfg) {
+    throw new ConfigError('tabulateAlias config is no more supported.');
+  }
 
   if (cfg.expressionWidth <= 0) {
     throw new ConfigError(
       `expressionWidth config must be positive number. Received ${cfg.expressionWidth} instead.`
-    );
-  }
-
-  if (cfg.commaPosition === 'before' && cfg.useTabs) {
-    throw new ConfigError(
-      'commaPosition: before does not work when tabs are used for indentation.'
     );
   }
 

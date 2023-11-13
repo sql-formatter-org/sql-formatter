@@ -55,6 +55,18 @@ describe('sqlFormatter', () => {
     }).toThrow('aliasAs config is no more supported.');
   });
 
+  it('throws error when tabulateAlias config option used', () => {
+    expect(() => {
+      format('SELECT *', { tabulateAlias: false } as any);
+    }).toThrow('tabulateAlias config is no more supported.');
+  });
+
+  it('throws error when commaPosition config option used', () => {
+    expect(() => {
+      format('SELECT *', { commaPosition: 'before' } as any);
+    }).toThrow('commaPosition config is no more supported.');
+  });
+
   describe('formatDialect()', () => {
     it('allows passing Dialect config object as a dialect parameter', () => {
       expect(formatDialect('SELECT [foo], `bar`;', { dialect: sqlite })).toBe(dedent`

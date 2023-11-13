@@ -17,7 +17,6 @@ export type {
   IndentStyle,
   KeywordCase,
   IdentifierCase,
-  CommaPosition,
   LogicalOperatorNewline,
   FormatOptions,
 } from './FormatOptions.js';

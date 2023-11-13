@@ -11,7 +11,6 @@ import supportsExpressionWidth from './options/expressionWidth.js';
 import supportsKeywordCase from './options/keywordCase.js';
 import supportsIdentifierCase from './options/identifierCase.js';
 import supportsIndentStyle from './options/indentStyle.js';
-import supportsCommaPosition from './options/commaPosition.js';
 import supportsLinesBetweenQueries from './options/linesBetweenQueries.js';
 import supportsNewlineBeforeSemicolon from './options/newlineBeforeSemicolon.js';
 import supportsLogicalOperatorNewline from './options/logicalOperatorNewline.js';
@@ -34,7 +33,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsLinesBetweenQueries(format);
   supportsExpressionWidth(format);
   supportsNewlineBeforeSemicolon(format);
-  supportsCommaPosition(format);
   supportsLogicalOperatorNewline(format);
   supportsParamTypes(format);
   supportsWindowFunctions(format);
