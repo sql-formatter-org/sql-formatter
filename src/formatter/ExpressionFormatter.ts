@@ -145,7 +145,9 @@ export default class ExpressionFormatter {
   private formatArraySubscript(node: ArraySubscriptNode) {
     this.withComments(node.array, () => {
       this.layout.add(
-        node.array.type === NodeType.keyword ? this.showKw(node.array) : node.array.text
+        node.array.type === NodeType.keyword
+          ? this.showKw(node.array)
+          : this.showIdentifier(node.array)
       );
     });
     this.formatNode(node.parenthesis);
@@ -508,9 +510,7 @@ export default class ExpressionFormatter {
   }
 
   private showIdentifier(node: IdentifierNode): string {
-    if (!(node.tokenType === TokenType.IDENTIFIER)) {
-      return node.text;
-    } else {
+    if (node.tokenType === TokenType.IDENTIFIER || node.tokenType === TokenType.ARRAY_IDENTIFIER) {
       switch (this.cfg.identifierCase) {
         case 'preserve':
           return node.text;
@@ -519,6 +519,8 @@ export default class ExpressionFormatter {
         case 'lower':
           return node.text.toLowerCase();
       }
+    } else {
+      return node.text;
     }
   }
 }
