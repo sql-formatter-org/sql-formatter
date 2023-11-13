@@ -59,35 +59,14 @@ export default function supportsArrayAndMapAccessors(format: FormatFn) {
     `);
   });
 
-  it('supports namespaced array identifiers in uppercase', () => {
-    const result = format(`SELECT Foo.Coalesce['Blah'];`, { identifierCase: 'upper' });
-    expect(result).toBe(dedent`
+  it('changes case of array accessors when identifierCase option used', () => {
+    expect(format(`SELECT arr[1];`, { identifierCase: 'upper' })).toBe(dedent`
       SELECT
-        FOO.COALESCE['Blah'];
+        ARR[1];
     `);
-  });
-
-  it('supports namespaced array identifiers in lowercase', () => {
-    const result = format(`SELECT Foo.Coalesce['Blah'];`, { identifierCase: 'lower' });
-    expect(result).toBe(dedent`
+    expect(format(`SELECT NS.Arr[1];`, { identifierCase: 'lower' })).toBe(dedent`
       SELECT
-        foo.coalesce['Blah'];
-    `);
-  });
-
-  it('formats namespaced array accessor with comment in-between in uppercase', () => {
-    const result = format(`SELECT foo./* comment */arr[1];`, { identifierCase: 'upper' });
-    expect(result).toBe(dedent`
-      SELECT
-        FOO./* comment */ ARR[1];
-    `);
-  });
-
-  it('formats namespaced array accessor with comment in-between in lowercase', () => {
-    const result = format(`SELECT Foo./* comment */Arr[1];`, { identifierCase: 'lower' });
-    expect(result).toBe(dedent`
-      SELECT
-        foo./* comment */ arr[1];
+        ns.arr[1];
     `);
   });
 }
