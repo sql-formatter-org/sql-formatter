@@ -44,7 +44,6 @@ const defaultOptions: FormatOptions = {
   identifierCase: 'preserve',
   indentStyle: 'standard',
   logicalOperatorNewline: 'before',
-  tabulateAlias: false,
   commaPosition: 'after',
   expressionWidth: 50,
   linesBetweenQueries: 1,

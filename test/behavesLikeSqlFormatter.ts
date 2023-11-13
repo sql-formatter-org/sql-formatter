@@ -15,7 +15,6 @@ import supportsCommaPosition from './options/commaPosition.js';
 import supportsLinesBetweenQueries from './options/linesBetweenQueries.js';
 import supportsNewlineBeforeSemicolon from './options/newlineBeforeSemicolon.js';
 import supportsLogicalOperatorNewline from './options/logicalOperatorNewline.js';
-import supportsTabulateAlias from './options/tabulateAlias.js';
 import supportsParamTypes from './options/paramTypes.js';
 import supportsWindowFunctions from './features/windowFunctions.js';
 
@@ -27,7 +26,6 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsNumbers(format);
   supportsWith(format);
 
-  supportsTabulateAlias(format);
   supportsTabWidth(format);
   supportsUseTabs(format);
   supportsKeywordCase(format);

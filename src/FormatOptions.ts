@@ -19,7 +19,6 @@ export interface FormatOptions {
   identifierCase: IdentifierCase;
   indentStyle: IndentStyle;
   logicalOperatorNewline: LogicalOperatorNewline;
-  tabulateAlias: boolean;
   commaPosition: CommaPosition;
   expressionWidth: number;
   linesBetweenQueries: number;

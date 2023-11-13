@@ -7,7 +7,6 @@ import { StatementNode } from '../parser/ast.js';
 import { Dialect } from '../dialect.js';
 
 import formatCommaPositions from './formatCommaPositions.js';
-import formatAliasPositions from './formatAliasPositions.js';
 import ExpressionFormatter from './ExpressionFormatter.js';
 import Layout, { WS } from './Layout.js';
 import Indentation from './Indentation.js';
@@ -66,9 +65,6 @@ export default class Formatter {
   }
 
   private postFormat(query: string): string {
-    if (this.cfg.tabulateAlias) {
-      query = formatAliasPositions(query);
-    }
     if (this.cfg.commaPosition === 'before' || this.cfg.commaPosition === 'tabular') {
       query = formatCommaPositions(query, this.cfg.commaPosition, indentString(this.cfg));
     }
