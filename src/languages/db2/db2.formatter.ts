@@ -16,6 +16,11 @@ const reservedClauses = expandPhrases([
   'ORDER BY [INPUT SEQUENCE]',
   'OFFSET',
   'FETCH NEXT',
+  'FOR UPDATE [OF]',
+  'FOR {READ | FETCH} ONLY',
+  'FOR {RR | CS | UR | RS} [USE AND KEEP {SHARE | UPDATE | EXCLUSIVE} LOCKS]',
+  'WAIT FOR OUTCOME',
+  'SKIP LOCKED DATA',
   // Data modification
   // - insert:
   'INSERT INTO',

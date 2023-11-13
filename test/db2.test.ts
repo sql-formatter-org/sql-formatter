@@ -1,3 +1,5 @@
+import dedent from 'dedent-js';
+
 import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
 import behavesLikeDb2Formatter from './behavesLikeDb2Formatter.js';
 
@@ -47,4 +49,17 @@ describe('Db2Formatter', () => {
   ]);
   // Additional U& string type in addition to others shared by all DB2 implementations
   supportsStrings(format, ["U&''"]);
+
+  it('supports non-standard FOR clause', () => {
+    expect(format('SELECT * FROM tbl FOR UPDATE OF other_tbl FOR RS USE AND KEEP EXCLUSIVE LOCKS'))
+      .toBe(dedent`
+      SELECT
+        *
+      FROM
+        tbl
+      FOR UPDATE OF
+        other_tbl
+      FOR RS USE AND KEEP EXCLUSIVE LOCKS
+    `);
+  });
 });
