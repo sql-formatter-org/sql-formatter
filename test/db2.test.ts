@@ -19,7 +19,7 @@ describe('Db2Formatter', () => {
   behavesLikeDb2Formatter(format);
 
   supportsComments(format);
-  supportsLimiting(format, { fetchNext: true, offset: true });
+  supportsLimiting(format, { limit: true, fetchNext: true, offset: true });
   supportsCreateTable(format);
   supportsAlterTable(format, {
     addColumn: true,

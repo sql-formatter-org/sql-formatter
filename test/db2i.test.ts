@@ -16,7 +16,7 @@ describe('Db2iFormatter', () => {
   behavesLikeDb2Formatter(format);
 
   supportsComments(format, { nestedBlockComments: true });
-  supportsLimiting(format, { fetchNext: true, fetchFirst: true, offset: true });
+  supportsLimiting(format, { limit: true, fetchNext: true, fetchFirst: true, offset: true });
   supportsCreateTable(format, { orReplace: true });
   supportsAlterTable(format, {
     addColumn: true,

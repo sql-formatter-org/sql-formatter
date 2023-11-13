@@ -15,6 +15,7 @@ const reservedClauses = expandPhrases([
   'HAVING',
   'PARTITION BY',
   'ORDER [SIBLINGS] BY [INPUT SEQUENCE]',
+  'LIMIT',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
   'FOR UPDATE [OF]',
