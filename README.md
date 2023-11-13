@@ -150,6 +150,7 @@ All fields are optional and all fields that are not specified will be filled wit
 - [**`tabWidth`**](docs/tabWidth.md) amount of indentation to use.
 - [**`useTabs`**](docs/useTabs.md) to use tabs for indentation.
 - [**`keywordCase`**](docs/keywordCase.md) uppercases or lowercases keywords.
+- [**`identifierCase`**](docs/identifierCase.md) uppercases or lowercases identifiers. (**experimental!**)
 - [**`indentStyle`**](docs/indentStyle.md) defines overall indentation style.
 - [**`logicalOperatorNewline`**](docs/logicalOperatorNewline.md) newline before or after boolean operator (AND, OR, XOR).
 - [**`tabulateAlias`**](docs/tabulateAlias.md) aligns column aliases vertically (**deprecated!**).

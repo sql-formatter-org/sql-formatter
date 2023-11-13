@@ -1,10 +1,12 @@
-# identifierCase
+# identifierCase (experimental)
 
-Converts identifiers to upper or lowercase.
+Converts identifiers to upper- or lowercase. Only unquoted identifiers are converted.
 
-Note: An identifier is a name of a SQL object.
-There are two types of SQL identifiers: ordinary identifiers and quoted identifiers.
-Only ordinary identifiers are subject to be converted.
+This option doesn't yet support all types of identifiers:
+
+- prefixed variables like `@my_var` are not converted.
+- parameter placeholders like `:param` are not converted.
+- function names like `count(*)` are not converted (this are currently governed by `keywordCase` option instead.)
 
 ## Options
 
