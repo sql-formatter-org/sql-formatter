@@ -172,7 +172,7 @@ export const db2i: DialectOptions = {
     identChars: { first: '@#$', rest: '@#$' },
     paramTypes: { positional: true, named: [':'] },
     paramChars: { first: '@#$', rest: '@#$' },
-    operators: ['**', '¬=', '¬>', '¬<', '!>', '!<', '||'],
+    operators: ['**', '¬=', '¬>', '¬<', '!>', '!<', '||', '=>'],
   },
   formatOptions: {
     onelineClauses,
