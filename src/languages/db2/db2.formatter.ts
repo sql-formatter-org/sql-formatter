@@ -181,7 +181,6 @@ const reservedPhrases = expandPhrases([
   '{ROWS | RANGE} BETWEEN',
 ]);
 
-// https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_72/db2/rbafzintro.htm
 export const db2: DialectOptions = {
   tokenizerOptions: {
     reservedSelect,
