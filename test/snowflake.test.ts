@@ -166,4 +166,21 @@ describe('SnowflakeFormatter', () => {
       UNSET TAG tname;
     `);
   });
+
+  it('detects data types as keywords', () => {
+    expect(
+      format(
+        `CREATE TABLE tbl (first_column double Precision, second_column numBer (38, 0), third String);`,
+        {
+          keywordCase: 'upper',
+        }
+      )
+    ).toBe(dedent`
+    CREATE TABLE
+      tbl (
+        first_column DOUBLE PRECISION,
+        second_column NUMBER (38, 0),
+        third STRING
+      );`);
+  });
 });
