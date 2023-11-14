@@ -1,18 +1,14 @@
 import { flatKeywordList } from '../../utils.js';
 
 export const functions = flatKeywordList({
-  // https://www.ibm.com/docs/en/db2-for-zos/11?topic=functions-aggregate
+  // https://www.ibm.com/docs/en/db2/11.5?topic=bif-aggregate-functions
   aggregate: [
     'ARRAY_AGG',
     'AVG',
-    'CORR',
     'CORRELATION',
     'COUNT',
     'COUNT_BIG',
-    'COVAR_POP',
     'COVARIANCE',
-    'COVAR',
-    'COVAR_SAMP',
     'COVARIANCE_SAMP',
     'CUME_DIST',
     'GROUPING',
@@ -33,16 +29,13 @@ export const functions = flatKeywordList({
     'REGR_SXX',
     'REGR_SXY',
     'REGR_SYY',
-    'STDDEV_POP',
     'STDDEV',
     'STDDEV_SAMP',
     'SUM',
-    'VAR_POP',
     'VARIANCE',
-    'VAR',
-    'VAR_SAMP',
     'VARIANCE_SAMP',
     'XMLAGG',
+    'XMLGROUP',
   ],
   // https://www.ibm.com/docs/en/db2-for-zos/11?topic=functions-scalar
   scalar: [
