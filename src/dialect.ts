@@ -33,7 +33,7 @@ export const createDialect = (options: DialectOptions): Dialect => {
 };
 
 const dialectFromOptions = (dialectOptions: DialectOptions): Dialect => ({
-  tokenizer: new Tokenizer(dialectOptions.tokenizerOptions),
+  tokenizer: new Tokenizer(dialectOptions.tokenizerOptions, dialectOptions.name),
   formatOptions: processDialectFormatOptions(dialectOptions.formatOptions),
 });
 

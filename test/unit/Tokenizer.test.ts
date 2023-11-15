@@ -2,16 +2,19 @@ import Tokenizer from '../../src/lexer/Tokenizer.js';
 
 describe('Tokenizer', () => {
   const tokenize = (sql: string) =>
-    new Tokenizer({
-      reservedClauses: ['FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
-      reservedSelect: ['SELECT'],
-      reservedSetOperations: ['UNION', 'UNION ALL'],
-      reservedJoins: ['JOIN'],
-      reservedFunctionNames: ['SQRT', 'CURRENT_TIME'],
-      reservedKeywords: ['BETWEEN', 'LIKE', 'ON', 'USING'],
-      stringTypes: ["''-qq"],
-      identTypes: ['""-qq'],
-    }).tokenize(sql, {});
+    new Tokenizer(
+      {
+        reservedClauses: ['FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
+        reservedSelect: ['SELECT'],
+        reservedSetOperations: ['UNION', 'UNION ALL'],
+        reservedJoins: ['JOIN'],
+        reservedFunctionNames: ['SQRT', 'CURRENT_TIME'],
+        reservedKeywords: ['BETWEEN', 'LIKE', 'ON', 'USING'],
+        stringTypes: ["''-qq"],
+        identTypes: ['""-qq'],
+      },
+      'sql'
+    ).tokenize(sql, {});
 
   it('tokenizes whitespace to empty array', () => {
     expect(tokenize(' \t\n \n\r ')).toEqual([]);

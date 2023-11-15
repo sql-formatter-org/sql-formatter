@@ -12,7 +12,7 @@ export default class Tokenizer {
   private rulesBeforeParams: TokenRule[];
   private rulesAfterParams: TokenRule[];
 
-  constructor(private cfg: TokenizerOptions) {
+  constructor(private cfg: TokenizerOptions, private dialectName: string) {
     this.rulesBeforeParams = this.buildRulesBeforeParams(cfg);
     this.rulesAfterParams = this.buildRulesAfterParams(cfg);
   }
@@ -23,7 +23,7 @@ export default class Tokenizer {
       ...this.buildParamRules(this.cfg, paramTypesOverrides),
       ...this.rulesAfterParams,
     ];
-    const tokens = new TokenizerEngine(rules).tokenize(input);
+    const tokens = new TokenizerEngine(rules, this.dialectName).tokenize(input);
     return this.cfg.postProcess ? this.cfg.postProcess(tokens) : tokens;
   }
 

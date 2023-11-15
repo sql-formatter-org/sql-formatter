@@ -3,18 +3,21 @@ import { createParser } from '../../src/parser/createParser.js';
 
 describe('Parser', () => {
   const parse = (sql: string) => {
-    const tokenizer = new Tokenizer({
-      reservedClauses: ['FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
-      reservedSelect: ['SELECT'],
-      reservedSetOperations: ['UNION', 'UNION ALL'],
-      reservedJoins: ['JOIN'],
-      reservedFunctionNames: ['SQRT', 'CURRENT_TIME'],
-      reservedKeywords: ['BETWEEN', 'LIKE', 'ON', 'USING'],
-      operators: [':'],
-      extraParens: ['[]', '{}'],
-      stringTypes: ["''-qq"],
-      identTypes: ['""-qq'],
-    });
+    const tokenizer = new Tokenizer(
+      {
+        reservedClauses: ['FROM', 'WHERE', 'LIMIT', 'CREATE TABLE'],
+        reservedSelect: ['SELECT'],
+        reservedSetOperations: ['UNION', 'UNION ALL'],
+        reservedJoins: ['JOIN'],
+        reservedFunctionNames: ['SQRT', 'CURRENT_TIME'],
+        reservedKeywords: ['BETWEEN', 'LIKE', 'ON', 'USING'],
+        operators: [':'],
+        extraParens: ['[]', '{}'],
+        stringTypes: ["''-qq"],
+        identTypes: ['""-qq'],
+      },
+      'sql'
+    );
 
     return createParser(tokenizer).parse(sql, {});
   };

@@ -22,7 +22,7 @@ export default class TokenizerEngine {
   private input = ''; // The input SQL string to process
   private index = 0; // Current position in string
 
-  constructor(private rules: TokenRule[]) {}
+  constructor(private rules: TokenRule[], private dialectName: string) {}
 
   /**
    * Takes a SQL string and breaks it into tokens.
@@ -58,7 +58,20 @@ export default class TokenizerEngine {
   private createParseError(): Error {
     const text = this.input.slice(this.index, this.index + 10);
     const { line, col } = lineColFromIndex(this.input, this.index);
-    return new Error(`Parse error: Unexpected "${text}" at line ${line} column ${col}`);
+    return new Error(
+      `Parse error: Unexpected "${text}" at line ${line} column ${col}.\n${this.dialectInfo()}`
+    );
+  }
+
+  private dialectInfo(): string {
+    if (this.dialectName === 'sql') {
+      return (
+        `This likely happens because you're using the default "sql" dialect.\n` +
+        `If possible, please select a more specific dialect (like sqlite, postgresql, etc).`
+      );
+    } else {
+      return `SQL dialect used: "${this.dialectName}".`;
+    }
   }
 
   private getWhitespace(): string | undefined {
