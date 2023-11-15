@@ -66,7 +66,8 @@
     "build:babel": "babel src --out-dir lib --extensions .ts --source-maps",
     "build:types": "tsc --project tsconfig.prod.json --emitDeclarationOnly --isolatedModules",
     "build:minified": "webpack --config webpack.prod.js && cp dist/sql-formatter.min.cjs dist/sql-formatter.min.js",
-    "build": "yarn grammar && npm-run-all --parallel build:babel build:types build:minified",
+    "build:cleanup": "rm -rf lib/src/ lib/test/",
+    "build": "yarn grammar && npm-run-all --parallel build:babel build:types build:minified && yarn build:cleanup",
     "release": "release-it"
   },
   "repository": {
