@@ -82,6 +82,7 @@ const reservedPhrases = expandPhrases([
 ]);
 
 export const plsql: DialectOptions = {
+  name: 'plsql',
   tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],

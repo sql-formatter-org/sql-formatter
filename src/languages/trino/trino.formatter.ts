@@ -125,6 +125,7 @@ const reservedPhrases = expandPhrases([
 ]);
 
 export const trino: DialectOptions = {
+  name: 'trino',
   tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],

@@ -258,6 +258,7 @@ const reservedPhrases = expandPhrases([
 ]);
 
 export const db2: DialectOptions = {
+  name: 'db2',
   tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],

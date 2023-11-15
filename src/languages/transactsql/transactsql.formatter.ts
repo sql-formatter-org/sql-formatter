@@ -222,6 +222,7 @@ const reservedPhrases = expandPhrases([
 
 // https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15
 export const transactsql: DialectOptions = {
+  name: 'transactsql',
   tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],

@@ -296,6 +296,7 @@ const reservedPhrases = expandPhrases([
 ]);
 
 export const snowflake: DialectOptions = {
+  name: 'snowflake',
   tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],

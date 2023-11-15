@@ -79,6 +79,7 @@ describe('sqlFormatter', () => {
     it('allows use of regex-based custom string type', () => {
       // Extend SQLite dialect with additional string type
       const sqliteWithTemplates: DialectOptions = {
+        name: 'myCustomDialect',
         tokenizerOptions: {
           ...sqlite.tokenizerOptions,
           stringTypes: [...sqlite.tokenizerOptions.stringTypes, { regex: String.raw`\{\{.*?\}\}` }],

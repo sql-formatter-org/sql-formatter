@@ -233,6 +233,7 @@ const reservedPhrases = expandPhrases([
 ]);
 
 export const singlestoredb: DialectOptions = {
+  name: 'singlestoredb',
   tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],

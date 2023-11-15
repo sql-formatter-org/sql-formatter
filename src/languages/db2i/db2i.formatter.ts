@@ -154,6 +154,7 @@ const reservedPhrases = expandPhrases([
 
 // https://www.ibm.com/docs/en/i/7.5?topic=reference-sql
 export const db2i: DialectOptions = {
+  name: 'db2i',
   tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],

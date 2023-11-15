@@ -6,6 +6,7 @@ import Tokenizer from './lexer/Tokenizer.js';
 import { TokenizerOptions } from './lexer/TokenizerOptions.js';
 
 export interface DialectOptions {
+  name: string;
   tokenizerOptions: TokenizerOptions;
   formatOptions: DialectFormatOptions;
 }

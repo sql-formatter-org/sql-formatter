@@ -74,6 +74,7 @@ const reservedPhrases = expandPhrases([
 ]);
 
 export const sql: DialectOptions = {
+  name: 'sql',
   tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],

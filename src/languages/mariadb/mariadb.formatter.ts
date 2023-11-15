@@ -265,6 +265,7 @@ const reservedPhrases = expandPhrases([
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export const mariadb: DialectOptions = {
+  name: 'mariadb',
   tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],

@@ -51,6 +51,7 @@ The `dialect` parameter can also be used to specify a custom SQL dialect configu
 import { formatDialect, DialectOptions } from 'sql-formatter';
 
 const myDialect: DialectOptions {
+  name: 'my_dialect',
   tokenizerOptions: {
     // See source code for examples of tokenizer config options
     // For example: src/languages/sqlite/sqlite.formatter.ts

@@ -65,6 +65,7 @@ const reservedPhrases = expandPhrases([
 ]);
 
 export const sqlite: DialectOptions = {
+  name: 'sqlite',
   tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...onelineClauses],
