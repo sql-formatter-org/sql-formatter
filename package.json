@@ -64,7 +64,7 @@
     "pre-commit": "npm-run-all --parallel ts:changes lint:changes",
     "grammar": "nearleyc src/parser/grammar.ne -o src/parser/grammar.ts",
     "build:babel": "babel src --out-dir lib --extensions .ts --source-maps",
-    "build:types": "tsc --emitDeclarationOnly --isolatedModules",
+    "build:types": "tsc --project tsconfig.prod.json --emitDeclarationOnly --isolatedModules",
     "build:minified": "webpack --config webpack.prod.js && cp dist/sql-formatter.min.cjs dist/sql-formatter.min.js",
     "build": "yarn grammar && npm-run-all --parallel build:babel build:types build:minified",
     "release": "release-it"
