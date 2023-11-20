@@ -10,6 +10,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
+      "types": "./lib/src/index.d.ts",
       "import": "./lib/index.js",
       "require": "./dist/sql-formatter.min.cjs"
     }
