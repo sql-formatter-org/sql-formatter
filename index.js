@@ -7,6 +7,7 @@ const attachFormat = () => {
   const tabWidth = document.getElementById('tabWidth');
   const useTabs = document.getElementById('useTabs');
   const keywordCase = document.getElementById('keywordCase');
+  const identifierCase = document.getElementById('identifierCase');
   const indentStyle = document.getElementById('indentStyle');
   const logicalOperatorNewline = document.getElementById('logicalOperatorNewline');
   const expressionWidth = document.getElementById('expressionWidth');
@@ -33,6 +34,7 @@ const attachFormat = () => {
         tabWidth: tabWidth.value,
         useTabs: useTabs.checked,
         keywordCase: keywordCase.options[keywordCase.selectedIndex].value,
+        identifierCase: identifierCase.options[identifierCase.selectedIndex].value,
         indentStyle: indentStyle.options[indentStyle.selectedIndex].value,
         logicalOperatorNewline:
           logicalOperatorNewline.options[logicalOperatorNewline.selectedIndex].value,
@@ -68,6 +70,7 @@ const attachFormat = () => {
     tabWidth,
     useTabs,
     keywordCase,
+    identifierCase,
     indentStyle,
     logicalOperatorNewline,
     expressionWidth,
