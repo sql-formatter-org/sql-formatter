@@ -3,16 +3,14 @@
   "version": "14.0.0",
   "description": "Format whitespace in a SQL query to make it more readable",
   "license": "MIT",
-  "main": "dist/sql-formatter.min.cjs",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "unpkg": "dist/sql-formatter.min.js",
-  "module": "lib/index.js",
-  "types": "lib/src/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./lib/src/index.d.ts",
-      "import": "./lib/index.js",
-      "require": "./dist/sql-formatter.min.cjs"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "bin": {
@@ -64,10 +62,9 @@
     "prepare": "yarn clean && yarn grammar && yarn fix && yarn check && yarn build",
     "pre-commit": "npm-run-all --parallel ts:changes lint:changes",
     "grammar": "nearleyc src/parser/grammar.ne -o src/parser/grammar.ts",
-    "build:babel": "babel src --out-dir lib --extensions .ts --source-maps",
-    "build:types": "tsc --emitDeclarationOnly --isolatedModules",
-    "build:minified": "webpack --config webpack.prod.js && cp dist/sql-formatter.min.cjs dist/sql-formatter.min.js",
-    "build": "yarn grammar && npm-run-all --parallel build:babel build:types build:minified",
+    "build:tsup": "tsup src/index.ts --format cjs,esm --sourcemap --dts",
+    "build:webpack": "webpack --config webpack.prod.js && cp dist/sql-formatter.min.cjs dist/sql-formatter.min.js",
+    "build": "yarn grammar && npm-run-all --parallel build:tsup build:webpack",
     "release": "release-it"
   },
   "repository": {
@@ -113,6 +110,7 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.5",
     "ts-loader": "^9.3.1",
+    "tsup": "^8.0.1",
     "typescript": "^4.7.4",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.9.1",

@@ -2,7 +2,7 @@
 
 'use strict';
 
-const { format, supportedDialects } = require('../dist/sql-formatter.min.cjs');
+const { format, supportedDialects } = require('../dist/index.cjs');
 const fs = require('fs');
 const tty = require('tty');
 const { version } = require('../package.json');
