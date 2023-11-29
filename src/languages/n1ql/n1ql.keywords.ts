@@ -1,8 +1,5 @@
-import { flatKeywordList } from '../../utils.js';
-
-export const keywords = flatKeywordList({
+export const keywords: string[] = [
   // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/reservedwords.html
-  all: [
     'ADVISE',
     'ALL',
     'ALTER',
@@ -207,5 +204,4 @@ export const keywords = flatKeywordList({
     'WITHIN',
     'WORK',
     'XOR',
-  ],
-});
+];

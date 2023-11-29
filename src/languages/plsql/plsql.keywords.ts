@@ -1,8 +1,5 @@
-import { flatKeywordList } from '../../utils.js';
-
-export const keywords = flatKeywordList({
+export const keywords: string[] = [
   // https://docs.oracle.com/cd/B19306_01/appdev.102/b14261/reservewords.htm
-  all: [
     // 'A',
     'ADD',
     'AGENT',
@@ -327,5 +324,4 @@ export const keywords = flatKeywordList({
     'WRITE',
     'YEAR',
     'ZONE',
-  ],
-});
+];
