@@ -1,10 +1,8 @@
-# datatypeCase (experimental)
+# dataTypeCase (experimental)
 
-Converts datatypes to upper- or lowercase.
+Converts data types to upper- or lowercase.
 
-This option doesn't yet support all types of data types:
-
-- multi-word data types with non-datatype keywords like `timestamp with time zone` are not fully supported - the `WITH` will be cased as a normal keyword
+Note: Casing of function names like `VARCHAR(30)` are not modified - instead rely on the `functionCase` option for this.
 
 ## Options
 
@@ -18,7 +16,7 @@ This option doesn't yet support all types of data types:
 CREATE TABLE
   users (
     id InTeGeR PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    first_name VarChaR(30) NOT NULL,
+    first_name VARCHAR(30) NOT NULL,
     bio teXT,
     is_email_verified BooL NOT NULL DEFAULT FALSE,
     created_timestamp timestamPtz NOT NULL DEFAULT NOW()
@@ -44,7 +42,7 @@ CREATE TABLE
 CREATE TABLE
   users (
     id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    first_name varchar(30) NOT NULL,
+    first_name VARCHAR(30) NOT NULL,
     bio text,
     is_email_verified bool NOT NULL DEFAULT FALSE,
     created_timestamp timestamptz NOT NULL DEFAULT NOW()
