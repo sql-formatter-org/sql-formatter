@@ -322,7 +322,6 @@ export const functions: string[] = [
   'ZONED',
 
   // https://www.ibm.com/docs/en/i/7.5?topic=functions-table
-
   'BASE_TABLE',
   'HTTP_DELETE_BLOB_VERBOSE',
   'HTTP_DELETE_VERBOSE',
