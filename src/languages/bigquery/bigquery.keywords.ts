@@ -96,8 +96,9 @@ export const keywords: string[] = [
   'WINDOW',
   'WITH',
   'WITHIN',
+];
 
-  // datatypes
+export const dataTypes: string[] = [
   'ARRAY', // parametric, ARRAY<T>
   'BOOL',
   'BYTES', // parameterised, BYTES(Length)

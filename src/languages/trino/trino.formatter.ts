@@ -1,7 +1,7 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
 import { functions } from './trino.functions.js';
-import { keywords } from './trino.keywords.js';
+import { dataTypes, keywords } from './trino.keywords.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
@@ -132,7 +132,9 @@ export const trino: DialectOptions = {
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
-    reservedKeywords: keywords,
+    reservedKeywords:
+      // Temporary, will be replaced by reservedDataTypes
+      [...new Set(keywords.concat(dataTypes))],
     reservedFunctionNames: functions,
     // Trino also supports {- ... -} parenthesis.
     // The formatting of these currently works out as a result of { and -

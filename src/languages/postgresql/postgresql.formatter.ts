@@ -1,7 +1,7 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
 import { functions } from './postgresql.functions.js';
-import { keywords } from './postgresql.keywords.js';
+import { dataTypes, keywords } from './postgresql.keywords.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
@@ -260,7 +260,9 @@ export const postgresql: DialectOptions = {
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
-    reservedKeywords: keywords,
+    reservedKeywords:
+      // Temporary, will be replaced by reservedDataTypes
+      [...new Set(keywords.concat(dataTypes))],
     reservedFunctionNames: functions,
     nestedBlockComments: true,
     extraParens: ['[]'],

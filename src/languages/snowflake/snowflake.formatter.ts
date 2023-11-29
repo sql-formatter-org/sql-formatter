@@ -1,7 +1,7 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
 import { functions } from './snowflake.functions.js';
-import { keywords } from './snowflake.keywords.js';
+import { dataTypes, keywords } from './snowflake.keywords.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
@@ -303,7 +303,9 @@ export const snowflake: DialectOptions = {
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
-    reservedKeywords: keywords,
+    reservedKeywords:
+      // Temporary, will be replaced by reservedDataTypes
+      [...new Set(keywords.concat(dataTypes))],
     reservedFunctionNames: functions,
     stringTypes: ['$$', `''-qq-bs`],
     identTypes: ['""-qq'],

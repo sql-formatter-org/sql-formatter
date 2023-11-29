@@ -1,4 +1,4 @@
-export const keywords: string[] = [
+export const keywords = [
   // https://www.postgresql.org/docs/14/sql-keywords-appendix.html
   'ABORT',
   'ABSOLUTE',
@@ -32,10 +32,7 @@ export const keywords: string[] = [
   'BEFORE',
   'BEGIN',
   'BETWEEN', // (cannot be function or type)
-  'BIGINT', // (cannot be function or type)
   'BINARY', // reserved (can be function or type)
-  'BIT', // (cannot be function or type)
-  'BOOLEAN', // (cannot be function or type)
   'BOTH', // reserved
   'BREADTH',
   'BY',
@@ -48,8 +45,6 @@ export const keywords: string[] = [
   'CAST', // reserved
   'CATALOG',
   'CHAIN',
-  'CHAR', // (cannot be function or type), requires AS
-  'CHARACTER', // (cannot be function or type), requires AS
   'CHARACTERISTICS',
   'CHECK', // reserved
   'CHECKPOINT',
@@ -96,7 +91,6 @@ export const keywords: string[] = [
   'DAY', // requires AS
   'DEALLOCATE',
   'DEC', // (cannot be function or type)
-  'DECIMAL', // (cannot be function or type)
   'DECLARE',
   'DEFAULT', // reserved
   'DEFAULTS',
@@ -117,7 +111,6 @@ export const keywords: string[] = [
   'DO', // reserved
   'DOCUMENT',
   'DOMAIN',
-  'DOUBLE',
   'DROP',
   'EACH',
   'ELSE', // reserved
@@ -145,7 +138,6 @@ export const keywords: string[] = [
   'FILTER', // requires AS
   'FINALIZE',
   'FIRST',
-  'FLOAT', // (cannot be function or type)
   'FOLLOWING',
   'FOR', // reserved, requires AS
   'FORCE',
@@ -192,10 +184,7 @@ export const keywords: string[] = [
   'INSENSITIVE',
   'INSERT',
   'INSTEAD',
-  'INT', // (cannot be function or type)
-  'INTEGER', // (cannot be function or type)
   'INTERSECT', // reserved, requires AS
-  'INTERVAL', // (cannot be function or type)
   'INTO', // reserved, requires AS
   'INVOKER',
   'IS', // reserved (can be function or type)
@@ -257,7 +246,6 @@ export const keywords: string[] = [
   'NULL', // reserved
   'NULLIF', // (cannot be function or type)
   'NULLS',
-  'NUMERIC', // (cannot be function or type)
   'OBJECT',
   'OF',
   'OFF',
@@ -292,7 +280,6 @@ export const keywords: string[] = [
   'POLICY',
   'POSITION', // (cannot be function or type)
   'PRECEDING',
-  'PRECISION', // (cannot be function or type), requires AS
   'PREPARE',
   'PREPARED',
   'PRESERVE',
@@ -307,7 +294,6 @@ export const keywords: string[] = [
   'QUOTE',
   'RANGE',
   'READ',
-  'REAL', // (cannot be function or type)
   'REASSIGN',
   'RECHECK',
   'RECURSIVE',
@@ -360,7 +346,6 @@ export const keywords: string[] = [
   'SIMILAR', // reserved (can be function or type)
   'SIMPLE',
   'SKIP',
-  'SMALLINT', // (cannot be function or type)
   'SNAPSHOT',
   'SOME', // reserved
   'SQL',
@@ -388,11 +373,8 @@ export const keywords: string[] = [
   'TEMP',
   'TEMPLATE',
   'TEMPORARY',
-  'TEXT',
   'THEN', // reserved
   'TIES',
-  'TIME', // (cannot be function or type)
-  'TIMESTAMP', // (cannot be function or type)
   'TO', // reserved, requires AS
   'TRAILING', // reserved
   'TRANSACTION',
@@ -424,9 +406,7 @@ export const keywords: string[] = [
   'VALIDATOR',
   'VALUE',
   'VALUES', // (cannot be function or type)
-  'VARCHAR', // (cannot be function or type)
   'VARIADIC', // reserved
-  'VARYING', // requires AS
   'VERBOSE', // reserved (can be function or type)
   'VERSION',
   'VIEW',
@@ -442,7 +422,6 @@ export const keywords: string[] = [
   'WORK',
   'WRAPPER',
   'WRITE',
-  'XML',
   'XMLATTRIBUTES', // (cannot be function or type)
   'XMLCONCAT', // (cannot be function or type)
   'XMLELEMENT', // (cannot be function or type)
@@ -456,5 +435,32 @@ export const keywords: string[] = [
   'XMLTABLE', // (cannot be function or type)
   'YEAR', // requires AS
   'YES',
+];
+
+export const dataTypes: string[] = [
+  // https://www.postgresql.org/docs/current/datatype.html
+  'BIGINT', // (cannot be function or type)
+  'BIT', // (cannot be function or type)
+  'BOOL', // (cannot be function or type)
+  'BOOLEAN', // (cannot be function or type)
+  'CHAR', // (cannot be function or type), requires AS
+  'CHARACTER', // (cannot be function or type), requires AS
+  'DECIMAL', // (cannot be function or type)
+  'DOUBLE',
+  'FLOAT', // (cannot be function or type)
+  'INT', // (cannot be function or type)
+  'INTEGER', // (cannot be function or type)
+  'INTERVAL', // (cannot be function or type)
+  'NUMERIC', // (cannot be function or type)
+  'PRECISION', // (cannot be function or type), requires AS
+  'REAL', // (cannot be function or type)
+  'SMALLINT', // (cannot be function or type)
+  'TEXT',
+  'TIME', // (cannot be function or type)
+  'TIMESTAMP', // (cannot be function or type)
+  'TIMESTAMPTZ', // (cannot be function or type)
+  'VARCHAR', // (cannot be function or type)
+  'VARYING', // requires AS
+  'XML',
   'ZONE',
 ];
