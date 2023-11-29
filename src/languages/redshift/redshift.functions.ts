@@ -182,8 +182,6 @@ export const functions: string[] = [
   'HLL_CARDINALITY',
   'HLL_COMBINE',
 
-  // https://docs.aws.amazon.com/redshift/latest/dg/hash-functions.html
-  // https://docs.aws.amazon.com/redshift/latest/dg/hyperloglog-functions.html
   // https://docs.aws.amazon.com/redshift/latest/dg/json-functions.html
   'IS_VALID_JSON',
   'IS_VALID_JSON_ARRAY',
