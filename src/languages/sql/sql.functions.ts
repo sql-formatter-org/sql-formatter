@@ -52,8 +52,8 @@ export const functions: string[] = [
   // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#_6_38_multiset_value_function
   // SET serves multiple roles: a SET() function and a SET keyword e.g. in UPDATE table SET ...
   // multiset
-  // 'SET',
-  // (disabled for now)
+  // 'SET', (disabled for now)
+
   // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#_10_9_aggregate_function
   'COUNT',
   'AVG',
