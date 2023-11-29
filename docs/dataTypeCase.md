@@ -2,6 +2,8 @@
 
 Converts data types to upper- or lowercase.
 
+Caveat: Only supported by languages which export `dataTypes` from their `.keywords.ts` file (eg. `bigquery`, `postgresql` and others)
+
 Note: Casing of function names like `VARCHAR(30)` are not modified - instead rely on the `functionCase` option for this.
 
 ## Options
