@@ -24,6 +24,21 @@ export const functions: string[] = [
   'subarray',
 
   // https://docs.aws.amazon.com/redshift/latest/dg/c_bitwise_aggregate_functions.html
+  'BIT_AND',
+  'BIT_OR',
+  'BOOL_AND',
+  'BOOL_OR',
+
+  // https://docs.aws.amazon.com/redshift/latest/dg/c_conditional_expressions.html
+  'COALESCE',
+  'DECODE',
+  'GREATEST',
+  'LEAST',
+  'NVL',
+  'NVL2',
+  'NULLIF',
+
+  // https://docs.aws.amazon.com/redshift/latest/dg/c_bitwise_aggregate_functions.html
   // https://docs.aws.amazon.com/redshift/latest/dg/c_conditional_expressions.html
   // https://docs.aws.amazon.com/redshift/latest/dg/Date_functions_header.html
   'ADD_MONTHS',
@@ -155,6 +170,21 @@ export const functions: string[] = [
   'SupportsBBox',
 
   // https://docs.aws.amazon.com/redshift/latest/dg/hash-functions.html
+  'CHECKSUM',
+  'FUNC_SHA1',
+  'FNV_HASH',
+  'MD5',
+  'SHA',
+  'SHA1',
+  'SHA2',
+
+  // https://docs.aws.amazon.com/redshift/latest/dg/hyperloglog-functions.html
+  'HLL',
+  'HLL_CREATE_SKETCH',
+  'HLL_CARDINALITY',
+  'HLL_COMBINE',
+
+  // https://docs.aws.amazon.com/redshift/latest/dg/hash-functions.html
   // https://docs.aws.amazon.com/redshift/latest/dg/hyperloglog-functions.html
   // https://docs.aws.amazon.com/redshift/latest/dg/json-functions.html
   'IS_VALID_JSON',
@@ -198,6 +228,8 @@ export const functions: string[] = [
   'TRUNC',
 
   // https://docs.aws.amazon.com/redshift/latest/dg/ml-function.html
+  'EXPLAIN_MODEL',
+
   // https://docs.aws.amazon.com/redshift/latest/dg/String_functions_header.html
   'ASCII',
   'BPCHARCMP',
