@@ -38,8 +38,6 @@ export const functions: string[] = [
   'NVL2',
   'NULLIF',
 
-  // https://docs.aws.amazon.com/redshift/latest/dg/c_bitwise_aggregate_functions.html
-  // https://docs.aws.amazon.com/redshift/latest/dg/c_conditional_expressions.html
   // https://docs.aws.amazon.com/redshift/latest/dg/Date_functions_header.html
   'ADD_MONTHS',
   'AT TIME ZONE',
