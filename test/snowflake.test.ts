@@ -167,12 +167,12 @@ describe('SnowflakeFormatter', () => {
     `);
   });
 
-  it('detects data types as keywords', () => {
+  it('detects data types as data types', () => {
     expect(
       format(
         `CREATE TABLE tbl (first_column double Precision, second_column numBer (38, 0), third String);`,
         {
-          keywordCase: 'upper',
+          dataTypeCase: 'upper',
         }
       )
     ).toBe(dedent`

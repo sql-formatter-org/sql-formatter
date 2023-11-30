@@ -1,7 +1,7 @@
 @preprocessor typescript
 @{%
 import LexerAdapter from './LexerAdapter.js';
-import { NodeType, AstNode, CommentNode, KeywordNode, IdentifierNode } from './ast.js';
+import { NodeType, AstNode, CommentNode, KeywordNode, IdentifierNode, DataTypeNode } from './ast.js';
 import { Token, TokenType } from '../lexer/token.js';
 
 // The lexer here is only to provide the has() method,
@@ -19,6 +19,12 @@ const unwrap = <T>([[el]]: T[][]): T => el;
 const toKeywordNode = (token: Token): KeywordNode => ({
   type: NodeType.keyword,
   tokenType: token.type,
+  text: token.text,
+  raw: token.raw,
+});
+
+const toDataTypeNode = (token: Token): DataTypeNode => ({
+  type: NodeType.data_type,
   text: token.text,
   raw: token.raw,
 });
@@ -197,12 +203,20 @@ atomic_expression ->
   | identifier
   | parameter
   | literal
+  | data_type
   | keyword ) {% unwrap %}
 
 array_subscript -> %ARRAY_IDENTIFIER _ square_brackets {%
   ([arrayToken, _, brackets]) => ({
     type: NodeType.array_subscript,
     array: addComments({ type: NodeType.identifier, quoted: false, text: arrayToken.text}, { trailing: _ }),
+    parenthesis: brackets,
+  })
+%}
+array_subscript -> %ARRAY_DATA_TYPE _ square_brackets {%
+  ([arrayToken, _, brackets]) => ({
+    type: NodeType.array_subscript,
+    array: addComments(toDataTypeNode(arrayToken), { trailing: _ }),
     parenthesis: brackets,
   })
 %}
@@ -327,6 +341,11 @@ keyword ->
   | %RESERVED_PHRASE
   | %RESERVED_JOIN ) {%
   ([[token]]) => toKeywordNode(token)
+%}
+
+data_type ->
+  ( %RESERVED_DATA_TYPE ) {%
+  ([[token]]) => toDataTypeNode(token)
 %}
 
 logic_operator ->

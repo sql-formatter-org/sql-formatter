@@ -57,6 +57,11 @@ const keywordToArrayKeyword = (token: Token, i: number, tokens: Token[]): Token 
     if (nextToken && isOpenBracket(nextToken)) {
       return { ...token, type: TokenType.ARRAY_KEYWORD };
     }
+  } else if (token.type === TokenType.RESERVED_DATA_TYPE) {
+    const nextToken = nextNonCommentToken(tokens, i);
+    if (nextToken && isOpenBracket(nextToken)) {
+      return { ...token, type: TokenType.ARRAY_DATA_TYPE };
+    }
   }
   return token;
 };

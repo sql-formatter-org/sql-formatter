@@ -28,6 +28,7 @@ import {
   CaseExpressionNode,
   CaseWhenNode,
   CaseElseNode,
+  DataTypeNode,
 } from '../parser/ast.js';
 
 import Layout, { WS } from './Layout.js';
@@ -130,6 +131,8 @@ export default class ExpressionFormatter {
         return this.formatLineComment(node);
       case NodeType.block_comment:
         return this.formatBlockComment(node);
+      case NodeType.data_type:
+        return this.formatDataType(node);
       case NodeType.keyword:
         return this.formatKeywordNode(node);
     }
@@ -145,7 +148,9 @@ export default class ExpressionFormatter {
   private formatArraySubscript(node: ArraySubscriptNode) {
     this.withComments(node.array, () => {
       this.layout.add(
-        node.array.type === NodeType.keyword
+        node.array.type === NodeType.data_type
+          ? this.showDataType(node.array)
+          : node.array.type === NodeType.keyword
           ? this.showKw(node.array)
           : this.showIdentifier(node.array)
       );
@@ -489,6 +494,10 @@ export default class ExpressionFormatter {
     }
   }
 
+  private formatDataType(node: DataTypeNode) {
+    this.layout.add(this.showDataType(node), WS.SPACE);
+  }
+
   private showKw(node: KeywordNode): string {
     if (isTabularToken(node.tokenType)) {
       return toTabularFormat(this.showNonTabularKw(node), this.cfg.indentStyle);
@@ -521,6 +530,17 @@ export default class ExpressionFormatter {
         case 'lower':
           return node.text.toLowerCase();
       }
+    }
+  }
+
+  private showDataType(node: DataTypeNode): string {
+    switch (this.cfg.dataTypeCase) {
+      case 'preserve':
+        return equalizeWhitespace(node.raw);
+      case 'upper':
+        return node.text;
+      case 'lower':
+        return node.text.toLowerCase();
     }
   }
 }

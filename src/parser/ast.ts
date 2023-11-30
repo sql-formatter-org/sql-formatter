@@ -17,6 +17,7 @@ export enum NodeType {
   literal = 'literal',
   identifier = 'identifier',
   keyword = 'keyword',
+  data_type = 'data_type',
   parameter = 'parameter',
   operator = 'operator',
   comma = 'comma',
@@ -56,7 +57,7 @@ export interface FunctionCallNode extends BaseNode {
 // <ident>[<expr>]
 export interface ArraySubscriptNode extends BaseNode {
   type: NodeType.array_subscript;
-  array: IdentifierNode | KeywordNode;
+  array: IdentifierNode | KeywordNode | DataTypeNode;
   parenthesis: ParenthesisNode;
 }
 
@@ -129,6 +130,12 @@ export interface IdentifierNode extends BaseNode {
   text: string;
 }
 
+export interface DataTypeNode extends BaseNode {
+  type: NodeType.data_type;
+  text: string;
+  raw: string;
+}
+
 export interface KeywordNode extends BaseNode {
   type: NodeType.keyword;
   tokenType: TokenType;
@@ -180,6 +187,7 @@ export type AstNode =
   | AllColumnsAsteriskNode
   | LiteralNode
   | IdentifierNode
+  | DataTypeNode
   | KeywordNode
   | ParameterNode
   | OperatorNode

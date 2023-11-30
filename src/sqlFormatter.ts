@@ -1,7 +1,6 @@
 import * as allDialects from './allDialects.js';
-
-import { FormatOptions } from './FormatOptions.js';
 import { createDialect, DialectOptions } from './dialect.js';
+import { FormatOptions } from './FormatOptions.js';
 import Formatter from './formatter/Formatter.js';
 import { ConfigError, validateConfig } from './validateConfig.js';
 
@@ -42,6 +41,7 @@ const defaultOptions: FormatOptions = {
   useTabs: false,
   keywordCase: 'preserve',
   identifierCase: 'preserve',
+  dataTypeCase: 'preserve',
   indentStyle: 'standard',
   logicalOperatorNewline: 'before',
   expressionWidth: 50,

@@ -1,10 +1,10 @@
-import { Token, TokenType } from './token.js';
-import * as regex from './regexFactory.js';
-import { ParamTypes, TokenizerOptions } from './TokenizerOptions.js';
-import TokenizerEngine, { TokenRule } from './TokenizerEngine.js';
-import { escapeRegExp, patternToRegex } from './regexUtil.js';
 import { equalizeWhitespace, Optional } from '../utils.js';
 import { NestedComment } from './NestedComment.js';
+import * as regex from './regexFactory.js';
+import { escapeRegExp, patternToRegex } from './regexUtil.js';
+import { Token, TokenType } from './token.js';
+import TokenizerEngine, { TokenRule } from './TokenizerEngine.js';
+import { ParamTypes, TokenizerOptions } from './TokenizerOptions.js';
 
 type OptionalTokenRule = Optional<TokenRule, 'regex'>;
 
@@ -128,6 +128,11 @@ export default class Tokenizer {
       {
         type: TokenType.RESERVED_FUNCTION_NAME,
         regex: regex.reservedWord(cfg.reservedFunctionNames, cfg.identChars),
+        text: toCanonical,
+      },
+      {
+        type: TokenType.RESERVED_DATA_TYPE,
+        regex: regex.reservedWord(cfg.reservedDataTypes ?? [], cfg.identChars),
         text: toCanonical,
       },
       {
