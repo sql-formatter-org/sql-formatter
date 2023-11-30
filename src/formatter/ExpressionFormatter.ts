@@ -140,7 +140,7 @@ export default class ExpressionFormatter {
 
   private formatFunctionCall(node: FunctionCallNode) {
     this.withComments(node.nameKw, () => {
-      this.layout.add(this.showKw(node.nameKw));
+      this.layout.add(this.showFunctionKw(node.nameKw));
     });
     this.formatNode(node.parenthesis);
   }
@@ -509,6 +509,26 @@ export default class ExpressionFormatter {
   // Like showKw(), but skips tabular formatting
   private showNonTabularKw(node: KeywordNode): string {
     switch (this.cfg.keywordCase) {
+      case 'preserve':
+        return equalizeWhitespace(node.raw);
+      case 'upper':
+        return node.text;
+      case 'lower':
+        return node.text.toLowerCase();
+    }
+  }
+
+  private showFunctionKw(node: KeywordNode): string {
+    if (isTabularToken(node.tokenType)) {
+      return toTabularFormat(this.showNonTabularFunctionKw(node), this.cfg.indentStyle);
+    } else {
+      return this.showNonTabularFunctionKw(node);
+    }
+  }
+
+  // Like showFunctionKw(), but skips tabular formatting
+  private showNonTabularFunctionKw(node: KeywordNode): string {
+    switch (this.cfg.functionCase) {
       case 'preserve':
         return equalizeWhitespace(node.raw);
       case 'upper':

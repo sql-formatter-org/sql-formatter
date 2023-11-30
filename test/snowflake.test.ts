@@ -167,7 +167,7 @@ describe('SnowflakeFormatter', () => {
     `);
   });
 
-  it('detects data types as data types', () => {
+  it('detects data types', () => {
     expect(
       format(
         `CREATE TABLE tbl (first_column double Precision, second_column numBer (38, 0), third String);`,

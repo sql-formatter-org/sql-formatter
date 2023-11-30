@@ -10,6 +10,8 @@ export type IdentifierCase = 'preserve' | 'upper' | 'lower';
 
 export type DataTypeCase = 'preserve' | 'upper' | 'lower';
 
+export type FunctionCase = 'preserve' | 'upper' | 'lower';
+
 export type LogicalOperatorNewline = 'before' | 'after';
 
 export interface FormatOptions {
@@ -18,6 +20,7 @@ export interface FormatOptions {
   keywordCase: KeywordCase;
   identifierCase: IdentifierCase;
   dataTypeCase: DataTypeCase;
+  functionCase: FunctionCase;
   indentStyle: IndentStyle;
   logicalOperatorNewline: LogicalOperatorNewline;
   expressionWidth: number;

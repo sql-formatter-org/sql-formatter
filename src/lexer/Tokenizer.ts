@@ -1,10 +1,10 @@
+import { Token, TokenType } from './token.js';
+import * as regex from './regexFactory.js';
+import { ParamTypes, TokenizerOptions } from './TokenizerOptions.js';
+import TokenizerEngine, { TokenRule } from './TokenizerEngine.js';
+import { escapeRegExp, patternToRegex } from './regexUtil.js';
 import { equalizeWhitespace, Optional } from '../utils.js';
 import { NestedComment } from './NestedComment.js';
-import * as regex from './regexFactory.js';
-import { escapeRegExp, patternToRegex } from './regexUtil.js';
-import { Token, TokenType } from './token.js';
-import TokenizerEngine, { TokenRule } from './TokenizerEngine.js';
-import { ParamTypes, TokenizerOptions } from './TokenizerOptions.js';
 
 type OptionalTokenRule = Optional<TokenRule, 'regex'>;
 

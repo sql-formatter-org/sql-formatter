@@ -1,6 +1,7 @@
 import * as allDialects from './allDialects.js';
-import { createDialect, DialectOptions } from './dialect.js';
+
 import { FormatOptions } from './FormatOptions.js';
+import { createDialect, DialectOptions } from './dialect.js';
 import Formatter from './formatter/Formatter.js';
 import { ConfigError, validateConfig } from './validateConfig.js';
 
@@ -34,20 +35,6 @@ export type FormatOptionsWithLanguage = Partial<FormatOptions> & {
 
 export type FormatOptionsWithDialect = Partial<FormatOptions> & {
   dialect: DialectOptions;
-};
-
-const defaultOptions: FormatOptions = {
-  tabWidth: 2,
-  useTabs: false,
-  keywordCase: 'preserve',
-  identifierCase: 'preserve',
-  dataTypeCase: 'preserve',
-  indentStyle: 'standard',
-  logicalOperatorNewline: 'before',
-  expressionWidth: 50,
-  linesBetweenQueries: 1,
-  denseOperators: false,
-  newlineBeforeSemicolon: false,
 };
 
 /**
@@ -85,6 +72,21 @@ export const formatDialect = (
   if (typeof query !== 'string') {
     throw new Error('Invalid query argument. Expected string, instead got ' + typeof query);
   }
+
+  const defaultOptions: FormatOptions = {
+    tabWidth: 2,
+    useTabs: false,
+    keywordCase: 'preserve',
+    identifierCase: 'preserve',
+    dataTypeCase: cfg.keywordCase || 'preserve',
+    functionCase: cfg.keywordCase || 'preserve',
+    indentStyle: 'standard',
+    logicalOperatorNewline: 'before',
+    expressionWidth: 50,
+    linesBetweenQueries: 1,
+    denseOperators: false,
+    newlineBeforeSemicolon: false,
+  };
 
   const options = validateConfig({
     ...defaultOptions,
