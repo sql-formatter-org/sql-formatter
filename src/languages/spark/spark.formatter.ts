@@ -1,7 +1,7 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
 import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
-import { keywords } from './spark.keywords.js';
+import { dataTypes, keywords } from './spark.keywords.js';
 import { functions } from './spark.functions.js';
 
 // http://spark.apache.org/docs/latest/sql-ref-syntax.html
@@ -127,7 +127,9 @@ export const spark: DialectOptions = {
     reservedJoins,
     reservedPhrases,
     supportsXor: true,
-    reservedKeywords: keywords,
+    reservedKeywords:
+      // Temporary, will be replaced by reservedDataTypes
+      [...new Set(keywords.concat(dataTypes))],
     reservedFunctionNames: functions,
     extraParens: ['[]'],
     stringTypes: [

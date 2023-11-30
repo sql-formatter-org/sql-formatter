@@ -5,7 +5,6 @@ export const keywords: string[] = [
   'ALL',
   'ALLOWOVERWRITE',
   'ANY',
-  'ARRAY',
   'AS',
   'ASC',
   'AUTHORIZATION',
@@ -201,6 +200,7 @@ export const keywords: string[] = [
 
 export const dataTypes: string[] = [
   // https://docs.aws.amazon.com/redshift/latest/dg/r_Character_types.html#r_Character_types-text-and-bpchar-types
+  'ARRAY',
   'BPCHAR',
   'TEXT',
 ];

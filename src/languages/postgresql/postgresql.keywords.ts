@@ -16,7 +16,6 @@ export const keywords = [
   'ANALYZE', // reserved
   'AND', // reserved
   'ANY', // reserved
-  'ARRAY', // reserved, requires AS
   'AS', // reserved, requires AS
   'ASC', // reserved
   'ASENSITIVE',
@@ -439,6 +438,7 @@ export const keywords = [
 
 export const dataTypes: string[] = [
   // https://www.postgresql.org/docs/current/datatype.html
+  'ARRAY', // reserved, requires AS
   'BIGINT', // (cannot be function or type)
   'BIT', // (cannot be function or type)
   'BOOL', // (cannot be function or type)

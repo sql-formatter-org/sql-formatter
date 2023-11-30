@@ -7,9 +7,7 @@ export const keywords: string[] = [
   'ALL',
   'ALTER',
   'AND',
-  'ANY',
   'ARE',
-  'ARRAY',
   'ALWAYS',
   'ANALYZE',
   'AS',
@@ -152,4 +150,16 @@ export const keywords: string[] = [
   'WINDOW',
   'WITH',
   'WITHOUT',
+];
+
+export const dataTypes: string[] = [
+  // https://www.sqlite.org/stricttables.html
+  // https://www.sqlite.org/datatype3.html
+  'ANY',
+  'ARRAY',
+  'BLOB',
+  'INT',
+  'INTEGER',
+  'REAL',
+  'TEXT',
 ];

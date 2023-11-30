@@ -9,7 +9,6 @@ export const keywords: string[] = [
   'ANALYZE',
   'AND',
   'ANY',
-  'ARRAY',
   'AS',
   'ASC',
   'AT',
