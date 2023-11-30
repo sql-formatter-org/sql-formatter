@@ -163,9 +163,8 @@ export const bigquery: DialectOptions = {
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
-    reservedKeywords:
-      // Temporary, will be replaced by reservedDataTypes
-      [...new Set(keywords.concat(dataTypes))],
+    reservedKeywords: keywords,
+    reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
     extraParens: ['[]'],
     stringTypes: [

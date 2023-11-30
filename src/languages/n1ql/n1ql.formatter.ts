@@ -1,7 +1,7 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
 import { functions } from './n1ql.functions.js';
-import { keywords } from './n1ql.keywords.js';
+import { dataTypes, keywords } from './n1ql.keywords.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
@@ -93,6 +93,7 @@ export const n1ql: DialectOptions = {
     reservedPhrases,
     supportsXor: true,
     reservedKeywords: keywords,
+    reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
     // NOTE: single quotes are actually not supported in N1QL,
     // but we support them anyway as all other SQL dialects do,

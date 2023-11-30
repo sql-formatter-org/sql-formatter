@@ -1,7 +1,7 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
 import { functions } from './sql.functions.js';
-import { keywords } from './sql.keywords.js';
+import { dataTypes, keywords } from './sql.keywords.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
@@ -82,6 +82,7 @@ export const sql: DialectOptions = {
     reservedJoins,
     reservedPhrases,
     reservedKeywords: keywords,
+    reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
     stringTypes: [
       { quote: "''-qq-bs", prefixes: ['N', 'U&'] },

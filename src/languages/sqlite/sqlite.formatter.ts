@@ -1,7 +1,7 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
 import { functions } from './sqlite.functions.js';
-import { keywords } from './sqlite.keywords.js';
+import { dataTypes, keywords } from './sqlite.keywords.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
@@ -73,6 +73,7 @@ export const sqlite: DialectOptions = {
     reservedJoins,
     reservedPhrases,
     reservedKeywords: keywords,
+    reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
     stringTypes: [
       "''-qq",

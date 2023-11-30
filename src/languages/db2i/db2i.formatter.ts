@@ -1,7 +1,7 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
 import { functions } from './db2i.functions.js';
-import { keywords } from './db2i.keywords.js';
+import { dataTypes, keywords } from './db2i.keywords.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
@@ -162,6 +162,7 @@ export const db2i: DialectOptions = {
     reservedJoins,
     reservedPhrases,
     reservedKeywords: keywords,
+    reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
     nestedBlockComments: true,
     extraParens: ['[]'],

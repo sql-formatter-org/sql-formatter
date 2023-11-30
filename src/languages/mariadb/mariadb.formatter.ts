@@ -1,7 +1,7 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
 import { postProcess } from './likeMariaDb.js';
-import { keywords } from './mariadb.keywords.js';
+import { dataTypes, keywords } from './mariadb.keywords.js';
 import { functions } from './mariadb.functions.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT | DISTINCTROW]']);
@@ -274,6 +274,7 @@ export const mariadb: DialectOptions = {
     reservedPhrases,
     supportsXor: true,
     reservedKeywords: keywords,
+    reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
     // TODO: support _ char set prefixes such as _utf8, _latin1, _binary, _utf8mb4, etc.
     stringTypes: [

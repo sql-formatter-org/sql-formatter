@@ -1,7 +1,7 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
 import { EOF_TOKEN, isReserved, isToken, Token, TokenType } from '../../lexer/token.js';
-import { keywords } from './plsql.keywords.js';
+import { dataTypes, keywords } from './plsql.keywords.js';
 import { functions } from './plsql.functions.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT | UNIQUE]']);
@@ -91,6 +91,7 @@ export const plsql: DialectOptions = {
     reservedPhrases,
     supportsXor: true,
     reservedKeywords: keywords,
+    reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
     stringTypes: [
       { quote: "''-qq", prefixes: ['N'] },

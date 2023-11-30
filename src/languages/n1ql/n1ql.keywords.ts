@@ -6,14 +6,11 @@ export const keywords: string[] = [
   'ANALYZE',
   'AND',
   'ANY',
-  'ARRAY',
   'AS',
   'ASC',
   'AT',
   'BEGIN',
   'BETWEEN',
-  'BINARY',
-  'BOOLEAN',
   'BREAK',
   'BUCKET',
   'BUILD',
@@ -118,8 +115,6 @@ export const keywords: string[] = [
   'NTH_VALUE',
   'NULL',
   'NULLS',
-  'NUMBER',
-  'OBJECT',
   'OFFSET',
   'ON',
   'OPTION',
@@ -168,7 +163,6 @@ export const keywords: string[] = [
   'SOME',
   'START',
   'STATISTICS',
-  'STRING',
   'SYSTEM',
   'THEN',
   'TIES',
@@ -204,4 +198,14 @@ export const keywords: string[] = [
   'WITHIN',
   'WORK',
   'XOR',
+];
+
+export const dataTypes: string[] = [
+  // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/datatypes.html
+  'ARRAY',
+  'BINARY',
+  'BOOLEAN',
+  'NUMBER',
+  'OBJECT',
+  'STRING',
 ];

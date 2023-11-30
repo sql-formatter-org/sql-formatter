@@ -1,7 +1,7 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
 import { functions } from './hive.functions.js';
-import { keywords } from './hive.keywords.js';
+import { dataTypes, keywords } from './hive.keywords.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
@@ -91,6 +91,7 @@ export const hive: DialectOptions = {
     reservedJoins,
     reservedPhrases,
     reservedKeywords: keywords,
+    reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
     extraParens: ['[]'],
     stringTypes: ['""-bs', "''-bs"],
