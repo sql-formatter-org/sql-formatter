@@ -13,9 +13,9 @@ The default is either `options.keywordCase` (if you have set it) or `"preserve"`
 ### preserve
 
 ```sql
-CREATE TABLE
+CREATE tabLE
   users (
-    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id iNtegeR PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     first_name VarChaR(30) NOT NULL,
     bio TEXT,
     is_email_verified BOOL NOT NULL DEFAULT FALSE,
@@ -26,9 +26,9 @@ CREATE TABLE
 ### upper
 
 ```sql
-CREATE TABLE
+CREATE tabLE
   users (
-    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id iNtegeR PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     first_name VARCHAR(30) NOT NULL,
     bio TEXT,
     is_email_verified BOOL NOT NULL DEFAULT FALSE,
@@ -39,9 +39,9 @@ CREATE TABLE
 ### lower
 
 ```sql
-CREATE TABLE
+CREATE tabLE
   users (
-    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id iNtegeR PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     first_name varchar(30) NOT NULL,
     bio TEXT,
     is_email_verified BOOL NOT NULL DEFAULT FALSE,
