@@ -37,6 +37,21 @@ export type FormatOptionsWithDialect = Partial<FormatOptions> & {
   dialect: DialectOptions;
 };
 
+const defaultOptions: FormatOptions = {
+  tabWidth: 2,
+  useTabs: false,
+  keywordCase: 'preserve',
+  identifierCase: 'preserve',
+  dataTypeCase: 'preserve',
+  functionCase: 'preserve',
+  indentStyle: 'standard',
+  logicalOperatorNewline: 'before',
+  expressionWidth: 50,
+  linesBetweenQueries: 1,
+  denseOperators: false,
+  newlineBeforeSemicolon: false,
+};
+
 /**
  * Format whitespace in a query to make it easier to read.
  *
@@ -72,21 +87,6 @@ export const formatDialect = (
   if (typeof query !== 'string') {
     throw new Error('Invalid query argument. Expected string, instead got ' + typeof query);
   }
-
-  const defaultOptions: FormatOptions = {
-    tabWidth: 2,
-    useTabs: false,
-    keywordCase: 'preserve',
-    identifierCase: 'preserve',
-    dataTypeCase: cfg.keywordCase || 'preserve',
-    functionCase: cfg.keywordCase || 'preserve',
-    indentStyle: 'standard',
-    logicalOperatorNewline: 'before',
-    expressionWidth: 50,
-    linesBetweenQueries: 1,
-    denseOperators: false,
-    newlineBeforeSemicolon: false,
-  };
 
   const options = validateConfig({
     ...defaultOptions,

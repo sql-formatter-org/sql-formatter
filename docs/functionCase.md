@@ -4,11 +4,9 @@ Converts functions to upper- or lowercase.
 
 ## Options
 
-- `"preserve"` preserves the original case.
+- `"preserve"` (default) preserves the original case.
 - `"upper"` converts to uppercase.
 - `"lower"` converts to lowercase.
-
-The default is either `options.keywordCase` (if you have set it) or `"preserve"`.
 
 ### preserve
 
