@@ -229,9 +229,8 @@ export const transactsql: DialectOptions = {
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
-    reservedKeywords:
-      // Temporary, will be replaced by reservedDataTypes
-      [...new Set(keywords.concat(dataTypes))],
+    reservedKeywords: keywords,
+    reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
     nestedBlockComments: true,
     stringTypes: [{ quote: "''-qq", prefixes: ['N'] }],
