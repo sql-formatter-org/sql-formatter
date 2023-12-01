@@ -1,4 +1,4 @@
-export const keywords = [
+export const keywords: string[] = [
   // https://www.postgresql.org/docs/14/sql-keywords-appendix.html
   'ABORT',
   'ABSOLUTE',
