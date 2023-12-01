@@ -45,13 +45,11 @@ export const keywords: string[] = [
   'IN',
   'INNER',
   'INTERSECT',
-  'INTERVAL',
   'INTO',
   'IS',
   'JOIN',
   'LATERAL',
   'LEFT',
-  'LIKE',
   'LIMIT',
   'LOOKUP',
   'MERGE',
@@ -94,6 +92,22 @@ export const keywords: string[] = [
   'WINDOW',
   'WITH',
   'WITHIN',
+
+  // misc
+  'SAFE',
+
+  // https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
+  'LIKE', // CREATE TABLE LIKE
+  'COPY', // CREATE TABLE COPY
+  'CLONE', // CREATE TABLE CLONE
+  'IN',
+  'OUT',
+  'INOUT',
+  'RETURNS',
+  'LANGUAGE',
+  'CASCADE',
+  'RESTRICT',
+  'DETERMINISTIC',
 ];
 
 export const dataTypes: string[] = [
@@ -128,20 +142,4 @@ export const dataTypes: string[] = [
   'ASCII',
   'UTF-8',
   'UTF8',
-
-  // misc
-  'SAFE',
-
-  // https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
-  'LIKE', // CREATE TABLE LIKE
-  'COPY', // CREATE TABLE COPY
-  'CLONE', // CREATE TABLE CLONE
-  'IN',
-  'OUT',
-  'INOUT',
-  'RETURNS',
-  'LANGUAGE',
-  'CASCADE',
-  'RESTRICT',
-  'DETERMINISTIC',
 ];
