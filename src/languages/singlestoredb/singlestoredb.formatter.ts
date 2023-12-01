@@ -1,7 +1,7 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
 import { postProcess } from '../mariadb/likeMariaDb.js';
-import { keywords } from './singlestoredb.keywords.js';
+import { dataTypes, keywords } from './singlestoredb.keywords.js';
 import { functions } from './singlestoredb.functions.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT | DISTINCTROW]']);
@@ -240,7 +240,9 @@ export const singlestoredb: DialectOptions = {
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
-    reservedKeywords: keywords,
+    reservedKeywords:
+      // Temporary, will be replaced by reservedDataTypes
+      [...new Set(keywords.concat(dataTypes))],
     reservedFunctionNames: functions,
     // TODO: support _binary"some string" prefix
     stringTypes: [
