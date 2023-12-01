@@ -1,8 +1,8 @@
 import { DialectOptions } from '../../dialect.js';
-import { EOF_TOKEN, isToken, TokenType, Token } from '../../lexer/token.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import { keywords } from './bigquery.keywords.js';
+import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
 import { functions } from './bigquery.functions.js';
+import { dataTypes, keywords } from './bigquery.keywords.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT] [AS STRUCT | AS VALUE]']);
 
@@ -163,7 +163,9 @@ export const bigquery: DialectOptions = {
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
-    reservedKeywords: keywords,
+    reservedKeywords:
+      // Temporary, will be replaced by reservedDataTypes
+      [...new Set(keywords.concat(dataTypes))],
     reservedFunctionNames: functions,
     extraParens: ['[]'],
     stringTypes: [

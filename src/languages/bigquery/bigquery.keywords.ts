@@ -3,7 +3,6 @@ export const keywords: string[] = [
   'ALL',
   'AND',
   'ANY',
-  'ARRAY',
   'AS',
   'ASC',
   'ASSERT_ROWS_MODIFIED',
@@ -46,13 +45,11 @@ export const keywords: string[] = [
   'IN',
   'INNER',
   'INTERSECT',
-  'INTERVAL',
   'INTO',
   'IS',
   'JOIN',
   'LATERAL',
   'LEFT',
-  'LIKE',
   'LIMIT',
   'LOOKUP',
   'MERGE',
@@ -80,7 +77,6 @@ export const keywords: string[] = [
   'SELECT',
   'SET',
   'SOME',
-  'STRUCT',
   'TABLE',
   'TABLESAMPLE',
   'THEN',
@@ -97,7 +93,24 @@ export const keywords: string[] = [
   'WITH',
   'WITHIN',
 
-  // datatypes
+  // misc
+  'SAFE',
+
+  // https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
+  'LIKE', // CREATE TABLE LIKE
+  'COPY', // CREATE TABLE COPY
+  'CLONE', // CREATE TABLE CLONE
+  'IN',
+  'OUT',
+  'INOUT',
+  'RETURNS',
+  'LANGUAGE',
+  'CASCADE',
+  'RESTRICT',
+  'DETERMINISTIC',
+];
+
+export const dataTypes: string[] = [
   'ARRAY', // parametric, ARRAY<T>
   'BOOL',
   'BYTES', // parameterised, BYTES(Length)
@@ -129,20 +142,4 @@ export const keywords: string[] = [
   'ASCII',
   'UTF-8',
   'UTF8',
-
-  // misc
-  'SAFE',
-
-  // https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
-  'LIKE', // CREATE TABLE LIKE
-  'COPY', // CREATE TABLE COPY
-  'CLONE', // CREATE TABLE CLONE
-  'IN',
-  'OUT',
-  'INOUT',
-  'RETURNS',
-  'LANGUAGE',
-  'CASCADE',
-  'RESTRICT',
-  'DETERMINISTIC',
 ];

@@ -9,7 +9,6 @@ export const keywords: string[] = [
   'ANALYZE',
   'AND',
   'ANY',
-  'ARRAY',
   'AS',
   'ASC',
   'AT',
@@ -236,7 +235,9 @@ export const keywords: string[] = [
   'WRAPPER',
   'WRITE',
   'ZONE',
+];
 
+export const dataTypes: string[] = [
   // https://github.com/trinodb/trino/blob/432d2897bdef99388c1a47188743a061c4ac1f34/core/trino-main/src/main/java/io/trino/metadata/TypeRegistry.java#L131-L168
   // or https://trino.io/docs/current/language/types.html
   'BIGINT',
