@@ -31,6 +31,87 @@ export default function supportsArrayLiterals(format: FormatFn, cfg: ArrayLitera
           ];
       `);
     });
+
+    it('supports preserving ARRAY[] literals keywords casing', () => {
+      expect(
+        format(
+          `SELECT ArrAy[1, 2] FROM aRRAY['aaa', 'bbb', 'ccc', 'ddd', 'eee', 'fff', 'ggg', 'hhh', 'iii', 'jjj'];`,
+          {
+            dataTypeCase: 'preserve',
+          }
+        )
+      ).toBe(dedent`
+        SELECT
+          ArrAy[1, 2]
+        FROM
+          aRRAY[
+            'aaa',
+            'bbb',
+            'ccc',
+            'ddd',
+            'eee',
+            'fff',
+            'ggg',
+            'hhh',
+            'iii',
+            'jjj'
+          ];
+      `);
+    });
+
+    it('supports converting ARRAY[] literals keywords to uppercase', () => {
+      expect(
+        format(
+          `SELECT ArrAy[1, 2] FROM aRRAY['aaa', 'bbb', 'ccc', 'ddd', 'eee', 'fff', 'ggg', 'hhh', 'iii', 'jjj'];`,
+          {
+            dataTypeCase: 'upper',
+          }
+        )
+      ).toBe(dedent`
+        SELECT
+          ARRAY[1, 2]
+        FROM
+          ARRAY[
+            'aaa',
+            'bbb',
+            'ccc',
+            'ddd',
+            'eee',
+            'fff',
+            'ggg',
+            'hhh',
+            'iii',
+            'jjj'
+          ];
+      `);
+    });
+
+    it('supports converting ARRAY[] literals keywords to lowercase', () => {
+      expect(
+        format(
+          `SELECT ArrAy[1, 2] FROM aRRAY['aaa', 'bbb', 'ccc', 'ddd', 'eee', 'fff', 'ggg', 'hhh', 'iii', 'jjj'];`,
+          {
+            dataTypeCase: 'lower',
+          }
+        )
+      ).toBe(dedent`
+        SELECT
+          array[1, 2]
+        FROM
+          array[
+            'aaa',
+            'bbb',
+            'ccc',
+            'ddd',
+            'eee',
+            'fff',
+            'ggg',
+            'hhh',
+            'iii',
+            'jjj'
+          ];
+      `);
+    });
   }
 
   if (cfg.withoutArrayPrefix) {

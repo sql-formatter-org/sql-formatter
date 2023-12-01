@@ -498,6 +498,7 @@ export const keywords: string[] = [
 
 export const dataTypes: string[] = [
   // https://www.ibm.com/docs/en/i/7.2?topic=iaodsd-odbc-data-types-how-they-correspond-db2-i-database-types
+  'ARRAY',
   'BIGINT',
   'BINARY',
   'BIT',

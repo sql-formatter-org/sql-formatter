@@ -403,6 +403,7 @@ export const keywords: string[] = [
 
 export const dataTypes: string[] = [
   // https://www.ibm.com/docs/en/db2-for-zos/12?topic=columns-data-types
+  'ARRAY',
   'CCSID',
   'CHAR',
   'CHARACTER',
