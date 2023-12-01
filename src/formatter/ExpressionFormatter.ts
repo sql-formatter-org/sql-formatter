@@ -146,15 +146,24 @@ export default class ExpressionFormatter {
   }
 
   private formatArraySubscript(node: ArraySubscriptNode) {
+    let formattedArray: string;
+
+    switch (node.array.type) {
+      case NodeType.data_type:
+        formattedArray = this.showDataType(node.array);
+        break;
+      case NodeType.keyword:
+        formattedArray = this.showKw(node.array);
+        break;
+      default:
+        formattedArray = this.showIdentifier(node.array);
+        break;
+    }
+
     this.withComments(node.array, () => {
-      this.layout.add(
-        node.array.type === NodeType.data_type
-          ? this.showDataType(node.array)
-          : node.array.type === NodeType.keyword
-          ? this.showKw(node.array)
-          : this.showIdentifier(node.array)
-      );
+      this.layout.add(formattedArray);
     });
+
     this.formatNode(node.parenthesis);
   }
 
