@@ -18,6 +18,7 @@ import supportsLimiting from './features/limiting.js';
 import supportsInsertInto from './features/insertInto.js';
 import supportsTruncateTable from './features/truncateTable.js';
 import supportsCreateView from './features/createView.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('SparkFormatter', () => {
   const language = 'spark';
@@ -60,6 +61,7 @@ describe('SparkFormatter', () => {
   });
   supportsSetOperations(format);
   supportsLimiting(format, { limit: true });
+  supportsDataTypeCase(format);
 
   it('formats basic WINDOW clause', () => {
     const result = format(`SELECT * FROM tbl WINDOW win1, WINDOW win2, WINDOW win3;`);

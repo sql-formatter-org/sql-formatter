@@ -201,6 +201,13 @@ export const keywords: string[] = [
 export const dataTypes: string[] = [
   // https://docs.aws.amazon.com/redshift/latest/dg/r_Character_types.html#r_Character_types-text-and-bpchar-types
   'ARRAY',
+  'BIGINT',
   'BPCHAR',
+  'INT',
+  'INT2',
+  'INT4',
+  'INT8',
+  'INTEGER',
+  'SMALLINT',
   'TEXT',
 ];

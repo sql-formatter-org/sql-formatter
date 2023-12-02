@@ -517,6 +517,7 @@ export const dataTypes: string[] = [
   'DOUBLE',
   'FLOAT',
   'GRAPHIC',
+  'INT',
   'INTEGER',
   'LONG',
   'NUMERIC',

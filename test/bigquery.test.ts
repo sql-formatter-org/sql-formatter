@@ -24,6 +24,7 @@ import supportsMergeInto from './features/mergeInto.js';
 import supportsCreateView from './features/createView.js';
 import supportsAlterTable from './features/alterTable.js';
 import supportsIsDistinctFrom from './features/isDistinctFrom.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';
@@ -32,7 +33,11 @@ describe('BigQueryFormatter', () => {
   behavesLikeSqlFormatter(format);
   supportsComments(format, { hashComments: true });
   supportsCreateView(format, { orReplace: true, materialized: true, ifNotExists: true });
-  supportsCreateTable(format, { orReplace: true, ifNotExists: true });
+  supportsCreateTable(format, {
+    orReplace: true,
+    ifNotExists: true,
+    dialectDoesntHaveVarchar: true,
+  });
   supportsDropTable(format, { ifExists: true });
   supportsAlterTable(format, {
     addColumn: true,
@@ -60,6 +65,7 @@ describe('BigQueryFormatter', () => {
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
+  supportsDataTypeCase(format);
 
   // Note: BigQuery supports single dashes inside identifiers, so my-ident would be
   // detected as identifier, while other SQL dialects would detect it as

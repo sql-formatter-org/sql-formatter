@@ -21,6 +21,7 @@ import supportsUpdate from './features/update.js';
 import supportsTruncateTable from './features/truncateTable.js';
 import supportsCreateView from './features/createView.js';
 import supportsConstraints from './features/constraints.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('SnowflakeFormatter', () => {
   const language = 'snowflake';
@@ -57,6 +58,7 @@ describe('SnowflakeFormatter', () => {
   supportsJoin(format, { without: ['NATURAL INNER JOIN'] });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'MINUS', 'EXCEPT', 'INTERSECT']);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
+  supportsDataTypeCase(format);
 
   it('allows $ character as part of unquoted identifiers', () => {
     expect(format('SELECT foo$')).toBe(dedent`

@@ -23,6 +23,7 @@ import supportsUpdate from './features/update.js';
 import supportsTruncateTable from './features/truncateTable.js';
 import supportsMergeInto from './features/mergeInto.js';
 import supportsCreateView from './features/createView.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('TransactSqlFormatter', () => {
   const language = 'transactsql';
@@ -68,6 +69,7 @@ describe('TransactSqlFormatter', () => {
   supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });
   supportsWindow(format);
   supportsLimiting(format, { offset: true, fetchFirst: true, fetchNext: true });
+  supportsDataTypeCase(format);
 
   it('supports language:tsql alias', () => {
     const result = originalFormat('SELECT [my column] FROM [my table];', { language: 'tsql' });

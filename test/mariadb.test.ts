@@ -14,6 +14,7 @@ import supportsCreateView from './features/createView.js';
 import supportsAlterTable from './features/alterTable.js';
 import supportsStrings from './features/strings.js';
 import supportsConstraints from './features/constraints.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('MariaDbFormatter', () => {
   const language = 'mariadb';
@@ -52,6 +53,7 @@ describe('MariaDbFormatter', () => {
     renameTo: true,
     renameColumn: true,
   });
+  supportsDataTypeCase(format);
 
   it(`supports @"name" variables`, () => {
     expect(format(`SELECT @"foo fo", @"foo\\"x", @"foo""y" FROM tbl;`)).toBe(dedent`

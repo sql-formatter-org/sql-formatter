@@ -35,7 +35,39 @@ const funcNameToKeyword = (token: Token, i: number, tokens: Token[]): Token => {
   if (token.type === TokenType.RESERVED_FUNCTION_NAME) {
     const nextToken = nextNonCommentToken(tokens, i);
     if (!nextToken || !isOpenParen(nextToken)) {
-      return { ...token, type: TokenType.RESERVED_KEYWORD };
+      return {
+        ...token,
+        type:
+          // Function names which are also data types
+          [
+            'BIGINT',
+            'BINARY',
+            'BIT',
+            'BLOB',
+            'BOOLEAN',
+            'CHAR',
+            'DATE',
+            'DECIMAL',
+            'DOUBLE',
+            'FLOAT',
+            'INT',
+            'INTEGER',
+            'JSON',
+            'NCHAR',
+            'NUMBER',
+            'NVARCHAR',
+            'REAL',
+            'SMALLINT',
+            'TEXT',
+            'TIME',
+            'TIMESTAMP',
+            'TINYINT',
+            'VARCHAR',
+            'XML',
+          ].includes(token.text)
+            ? TokenType.RESERVED_DATA_TYPE
+            : TokenType.RESERVED_KEYWORD,
+      };
     }
   }
   return token;

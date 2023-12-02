@@ -22,6 +22,7 @@ import supportsInsertInto from './features/insertInto.js';
 import supportsUpdate from './features/update.js';
 import supportsCreateView from './features/createView.js';
 import supportsOnConflict from './features/onConflict.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('SqliteFormatter', () => {
   const language = 'sqlite';
@@ -53,6 +54,7 @@ describe('SqliteFormatter', () => {
   supportsParams(format, { positional: true, numbered: ['?'], named: [':', '$', '@'] });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
+  supportsDataTypeCase(format);
 
   it('supports REPLACE INTO syntax', () => {
     expect(format(`REPLACE INTO tbl VALUES (1,'Leopard'),(2,'Dog');`)).toBe(dedent`

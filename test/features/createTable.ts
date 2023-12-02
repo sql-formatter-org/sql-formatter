@@ -7,18 +7,29 @@ interface CreateTableConfig {
   ifNotExists?: boolean;
   columnComment?: boolean;
   tableComment?: boolean;
+  dialectDoesntHaveVarchar?: boolean;
 }
 
-export default function supportsCreateTable(
-  format: FormatFn,
-  { orReplace, ifNotExists, columnComment, tableComment }: CreateTableConfig = {}
-) {
+export default function supportsCreateTable(format: FormatFn, cfg: CreateTableConfig = {}) {
   it('formats short CREATE TABLE', () => {
     expect(format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);')).toBe(dedent`
       CREATE TABLE
         tbl (a INT PRIMARY KEY, b TEXT);
     `);
   });
+
+  if (!cfg.dialectDoesntHaveVarchar) {
+    it('formats short CREATE TABLE with lowercase data types', () => {
+      expect(
+        format('CREATE TABLE tbl (a INT PRIMARY KEY, b VARCHAR);', {
+          dataTypeCase: 'lower',
+        })
+      ).toBe(dedent`
+      CREATE TABLE
+        tbl (a int PRIMARY KEY, b varchar);
+    `);
+    });
+  }
 
   // The decision to place it to multiple lines is made based on the length of text inside braces
   // ignoring the whitespace. (Which is not quite right :P)
@@ -36,7 +47,7 @@ export default function supportsCreateTable(
     `);
   });
 
-  if (orReplace) {
+  if (cfg.orReplace) {
     it('formats short CREATE OR REPLACE TABLE', () => {
       expect(format('CREATE OR REPLACE TABLE tbl (a INT PRIMARY KEY, b TEXT);')).toBe(dedent`
         CREATE OR REPLACE TABLE
@@ -45,7 +56,7 @@ export default function supportsCreateTable(
     });
   }
 
-  if (ifNotExists) {
+  if (cfg.ifNotExists) {
     it('formats short CREATE TABLE IF NOT EXISTS', () => {
       expect(format('CREATE TABLE IF NOT EXISTS tbl (a INT PRIMARY KEY, b TEXT);')).toBe(dedent`
         CREATE TABLE IF NOT EXISTS
@@ -54,7 +65,7 @@ export default function supportsCreateTable(
     });
   }
 
-  if (columnComment) {
+  if (cfg.columnComment) {
     it('formats short CREATE TABLE with column comments', () => {
       expect(
         format(`CREATE TABLE tbl (a INT COMMENT 'Hello world!', b TEXT COMMENT 'Here we are!');`)
@@ -68,7 +79,7 @@ export default function supportsCreateTable(
     });
   }
 
-  if (tableComment) {
+  if (cfg.tableComment) {
     it('formats short CREATE TABLE with comment', () => {
       expect(format(`CREATE TABLE tbl (a INT, b TEXT) COMMENT = 'Hello, world!';`)).toBe(dedent`
         CREATE TABLE

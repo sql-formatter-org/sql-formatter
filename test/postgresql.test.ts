@@ -29,6 +29,7 @@ import supportsCreateView from './features/createView.js';
 import supportsOnConflict from './features/onConflict.js';
 import supportsIsDistinctFrom from './features/isDistinctFrom.js';
 import supportsArrayLiterals from './features/arrayLiterals.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -150,6 +151,7 @@ describe('PostgreSqlFormatter', () => {
   supportsParams(format, { numbered: ['$'] });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
+  supportsDataTypeCase(format);
 
   it('allows $ character as part of identifiers', () => {
     expect(format('SELECT foo$, some$$ident')).toBe(dedent`

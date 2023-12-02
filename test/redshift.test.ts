@@ -20,6 +20,7 @@ import supportsInsertInto from './features/insertInto.js';
 import supportsUpdate from './features/update.js';
 import supportsTruncateTable from './features/truncateTable.js';
 import supportsCreateView from './features/createView.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('RedshiftFormatter', () => {
   const language = 'redshift';
@@ -49,6 +50,7 @@ describe('RedshiftFormatter', () => {
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT', 'MINUS']);
   supportsParams(format, { numbered: ['$'] });
   supportsLimiting(format, { limit: true, offset: true });
+  supportsDataTypeCase(format);
 
   it('formats type-cast operator without spaces', () => {
     expect(format('SELECT 2 :: numeric AS foo;')).toBe(dedent`
