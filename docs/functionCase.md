@@ -1,6 +1,6 @@
 # functionCase (experimental)
 
-Converts functions to upper- or lowercase.
+Converts function names to upper- or lowercase.
 
 ## Options
 
@@ -11,7 +11,7 @@ Converts functions to upper- or lowercase.
 ### preserve
 
 ```sql
-CREATE tabLE
+CREATE TABLE
   users (
     id iNtegeR PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     first_name VarChaR(30) NOT NULL,
@@ -24,7 +24,7 @@ CREATE tabLE
 ### upper
 
 ```sql
-CREATE tabLE
+CREATE TABLE
   users (
     id iNtegeR PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     first_name VARCHAR(30) NOT NULL,
@@ -37,7 +37,7 @@ CREATE tabLE
 ### lower
 
 ```sql
-CREATE tabLE
+CREATE TABLE
   users (
     id iNtegeR PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     first_name varchar(30) NOT NULL,

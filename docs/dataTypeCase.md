@@ -18,7 +18,7 @@ Note: Casing of function names like `VARCHAR(30)` are not modified - instead rel
 CREATE TABLE
   users (
     id InTeGeR PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    first_name VARCHAR(30) NOT NULL,
+    first_name VarChaR(30) NOT NULL,
     bio teXT,
     is_email_verified BooL NOT NULL DEFAULT FALSE,
     created_timestamp timestamPtz NOT NULL DEFAULT NOW()
@@ -31,7 +31,7 @@ CREATE TABLE
 CREATE TABLE
   users (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    first_name VARCHAR(30) NOT NULL,
+    first_name VarChaR(30) NOT NULL,
     bio TEXT,
     is_email_verified BOOL NOT NULL DEFAULT FALSE,
     created_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -44,7 +44,7 @@ CREATE TABLE
 CREATE TABLE
   users (
     id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    first_name VARCHAR(30) NOT NULL,
+    first_name VarChaR(30) NOT NULL,
     bio text,
     is_email_verified bool NOT NULL DEFAULT FALSE,
     created_timestamp timestamptz NOT NULL DEFAULT NOW()
