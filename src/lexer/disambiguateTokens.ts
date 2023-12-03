@@ -55,6 +55,7 @@ const funcNameToKeyword = (token: Token, i: number, tokens: Token[]): Token => {
             'JSON',
             'NCHAR',
             'NUMBER',
+            'NUMERIC',
             'NVARCHAR',
             'REAL',
             'SMALLINT',
