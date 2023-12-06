@@ -274,6 +274,7 @@ export const dataTypes: string[] = [
   'BINARY',
   'BOOLEAN',
   'BYTE',
+  'CHAR',
   'DATE',
   'DEC',
   'DECIMAL',
