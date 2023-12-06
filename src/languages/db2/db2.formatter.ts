@@ -36,10 +36,11 @@ const reservedClauses = expandPhrases([
   'INSERT',
   // Data definition
   'CREATE [OR REPLACE] VIEW',
-  'CREATE [GLOBAL TEMPORARY | EXTERNAL] TABLE [IF NOT EXISTS]',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - create:
+  'CREATE [GLOBAL TEMPORARY | EXTERNAL] TABLE [IF NOT EXISTS]',
   // - update:
   'UPDATE',
   'WHERE CURRENT OF',

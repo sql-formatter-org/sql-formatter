@@ -28,12 +28,13 @@ const reservedClauses = expandPhrases([
   // Data definition
   'CREATE [OR REPLACE] [TEMP | TEMPORARY] [RECURSIVE] VIEW',
   'CREATE MATERIALIZED VIEW [IF NOT EXISTS]',
-  'CREATE [GLOBAL | LOCAL] [TEMPORARY | TEMP | UNLOGGED] TABLE [IF NOT EXISTS]',
   // other
   'RETURNING',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - create
+  'CREATE [GLOBAL | LOCAL] [TEMPORARY | TEMP | UNLOGGED] TABLE [IF NOT EXISTS]',
   // - update:
   'UPDATE [ONLY]',
   'WHERE CURRENT OF',

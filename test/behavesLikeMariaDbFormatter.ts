@@ -166,8 +166,7 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
         { keywordCase: 'upper' }
       )
     ).toBe(dedent`
-      CREATE TABLE
-        account (id INT comment 'the most important column');
+      CREATE TABLE account (id INT comment 'the most important column');
 
       SELECT
         *
