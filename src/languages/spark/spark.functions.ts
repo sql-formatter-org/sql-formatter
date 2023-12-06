@@ -340,12 +340,4 @@ export const functions: string[] = [
   // Shorthand functions to use in place of CASE expression
   'COALESCE',
   'NULLIF',
-
-  // Parameterized data types
-  // https://spark.apache.org/docs/latest/sql-ref-datatypes.html
-  'DECIMAL',
-  'DEC',
-  'NUMERIC',
-  // No varchar type in Spark, only STRING. Added for the sake of tests
-  'VARCHAR',
 ];

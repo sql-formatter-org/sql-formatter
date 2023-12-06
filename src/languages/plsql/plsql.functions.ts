@@ -281,33 +281,4 @@ export const functions: string[] = [
   'PRESENTNNV',
   'PRESENTV',
   'PREVIOUS',
-
-  // Parameterized data types
-  // https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/Data-Types.html
-  // Oracle builtin data types
-  'VARCHAR2',
-  'NVARCHAR2',
-  'NUMBER',
-  'FLOAT',
-  'TIMESTAMP',
-  'INTERVAL YEAR',
-  'INTERVAL DAY',
-  'RAW',
-  'UROWID',
-  'NCHAR',
-  // ANSI Data Types
-  'CHARACTER',
-  'CHAR',
-  'CHARACTER VARYING',
-  'CHAR VARYING',
-  'NATIONAL CHARACTER',
-  'NATIONAL CHAR',
-  'NATIONAL CHARACTER VARYING',
-  'NATIONAL CHAR VARYING',
-  'NCHAR VARYING',
-  'NUMERIC',
-  'DECIMAL',
-  'FLOAT',
-  // SQL/DS and DB2 Data Types
-  'VARCHAR',
 ];

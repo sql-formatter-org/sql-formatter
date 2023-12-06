@@ -236,36 +236,4 @@ export const functions: string[] = [
   // CASE expression shorthands
   'COALESCE',
   'NULLIF',
-  // Data types with parameters
-  // https://mariadb.com/kb/en/data-types/
-  'TINYINT',
-  'SMALLINT',
-  'MEDIUMINT',
-  'INT',
-  'INTEGER',
-  'BIGINT',
-  'DECIMAL',
-  'DEC',
-  'NUMERIC',
-  'FIXED',
-  // 'NUMBER', // ?? In oracle mode only
-  'FLOAT',
-  'DOUBLE',
-  'DOUBLE PRECISION',
-  'REAL',
-  'BIT',
-  'BINARY',
-  'BLOB',
-  'CHAR',
-  'NATIONAL CHAR',
-  'CHAR BYTE',
-  'ENUM',
-  'VARBINARY',
-  'VARCHAR',
-  'NATIONAL VARCHAR',
-  // 'SET' // handled as special-case in postProcess
-  'TIME',
-  'DATETIME',
-  'TIMESTAMP',
-  'YEAR',
 ];

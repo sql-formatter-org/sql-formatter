@@ -321,21 +321,4 @@ export const functions: string[] = [
   // Shorthand functions to use in place of CASE expression
   'COALESCE',
   'NULLIF',
-
-  // Parameterized types
-  // https://docs.microsoft.com/en-us/sql/t-sql/data-types/data-types-transact-sql?view=sql-server-ver15
-
-  'DECIMAL',
-  'NUMERIC',
-  'FLOAT',
-  'REAL',
-  'DATETIME2',
-  'DATETIMEOFFSET',
-  'TIME',
-  'CHAR',
-  'VARCHAR',
-  'NCHAR',
-  'NVARCHAR',
-  'BINARY',
-  'VARBINARY',
 ];

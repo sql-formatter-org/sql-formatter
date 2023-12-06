@@ -234,6 +234,7 @@ export const dataTypes: string[] = [
   // https://dev.mysql.com/doc/refman/8.0/en/data-types.html
   'BIGINT', // (R)
   'BINARY', // (R)
+  'BIT',
   'BLOB', // (R)
   'BOOL', // (R)
   'BOOLEAN', // (R)
@@ -243,7 +244,10 @@ export const dataTypes: string[] = [
   'DATETIME', // (R)
   'DEC', // (R)
   'DECIMAL', // (R)
+  'DOUBLE PRECISION',
   'DOUBLE', // (R)
+  'ENUM',
+  'FIXED',
   'FLOAT', // (R)
   'FLOAT4', // (R)
   'FLOAT8', // (R)
@@ -260,10 +264,14 @@ export const dataTypes: string[] = [
   'MEDIUMINT', // (R)
   'MEDIUMTEXT', // (R)
   'MIDDLEINT', // (R)
+  'NATIONAL CHAR', // (R)
+  'NATIONAL VARCHAR', // (R)
   'NUMERIC', // (R)
   'PRECISION', // (R)
   'REAL', // (R)
   'SMALLINT', // (R)
+  'TEXT',
+  'TIME',
   'TIMESTAMP', // (R)
   'TINYBLOB', // (R)
   'TINYINT', // (R)
@@ -272,4 +280,6 @@ export const dataTypes: string[] = [
   'VARCHAR', // (R)
   'VARCHARACTER', // (R)
   'VARYING', // (R)
+  'YEAR',
+  // 'SET' // handled as special-case in postProcess
 ];

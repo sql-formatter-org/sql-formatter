@@ -360,15 +360,4 @@ export const functions: string[] = [
   'SLICE_NUM',
   'USER',
   'VERSION',
-
-  // dataTypes
-  'DECIMAL',
-  'NUMERIC',
-  'CHAR',
-  'CHARACTER',
-  'VARCHAR',
-  'CHARACTER VARYING',
-  'NCHAR',
-  'NVARCHAR',
-  'VARBYTE',
 ];

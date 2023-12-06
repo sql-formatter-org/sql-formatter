@@ -128,16 +128,4 @@ export const functions: string[] = [
 
   // cast
   'CAST',
-
-  // SQLite allows parameters for all data types
-  // Well, in fact it allows any word as a data type, e.g. CREATE TABLE foo (col1 madeupname(123));
-  // https://www.sqlite.org/datatype3.html
-  'CHARACTER',
-  'VARCHAR',
-  'VARYING CHARACTER',
-  'NCHAR',
-  'NATIVE CHARACTER',
-  'NVARCHAR',
-  'NUMERIC',
-  'DECIMAL',
 ];

@@ -293,10 +293,14 @@ export const keywords: string[] = [
 
 export const dataTypes: string[] = [
   // https://learn.microsoft.com/en-us/sql/t-sql/data-types/data-types-transact-sql?view=sql-server-ver15
+  'BINARY',
   'BIT',
+  'CHAR',
   'CHAR',
   'CHARACTER',
   'DATE',
+  'DATETIME2',
+  'DATETIMEOFFSET',
   'DEC',
   'DECIMAL',
   'DOUBLE',
@@ -306,11 +310,12 @@ export const dataTypes: string[] = [
   'NATIONAL',
   'NCHAR',
   'NUMERIC',
+  'NVARCHAR',
   'PRECISION',
   'REAL',
   'SMALLINT',
   'TIME',
   'TIMESTAMP',
+  'VARBINARY',
   'VARCHAR',
-  'VARYING',
 ];

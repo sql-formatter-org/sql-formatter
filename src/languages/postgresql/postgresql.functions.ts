@@ -708,18 +708,4 @@ export const functions: string[] = [
 
   // cast
   'CAST',
-
-  // Parameterized data types
-  // https://www.postgresql.org/docs/current/datatype.html
-  'BIT',
-  'BIT VARYING',
-  'CHARACTER',
-  'CHARACTER VARYING',
-  'VARCHAR',
-  'CHAR',
-  'DECIMAL',
-  'NUMERIC',
-  'TIME',
-  'TIMESTAMP',
-  'ENUM',
 ];

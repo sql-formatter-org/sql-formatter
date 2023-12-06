@@ -153,13 +153,24 @@ export const keywords: string[] = [
 ];
 
 export const dataTypes: string[] = [
+  // SQLite allows any word as a data type, e.g. CREATE TABLE foo (col1 madeupname(123));
+  // Here we just list some common ones as SQL Formatter
+  // is only able to detect a predefined list of data types.
   // https://www.sqlite.org/stricttables.html
   // https://www.sqlite.org/datatype3.html
   'ANY',
   'ARRAY',
   'BLOB',
+  'CHARACTER',
+  'DECIMAL',
   'INT',
   'INTEGER',
+  'NATIVE CHARACTER',
+  'NCHAR',
+  'NUMERIC',
+  'NVARCHAR',
   'REAL',
   'TEXT',
+  'VARCHAR',
+  'VARYING CHARACTER',
 ];
