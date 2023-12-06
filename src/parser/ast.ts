@@ -5,6 +5,7 @@ export enum NodeType {
   clause = 'clause',
   set_operation = 'set_operation',
   function_call = 'function_call',
+  parameterized_data_type = 'parameterized_data_type',
   array_subscript = 'array_subscript',
   property_access = 'property_access',
   parenthesis = 'parenthesis',
@@ -51,6 +52,12 @@ export interface SetOperationNode extends BaseNode {
 export interface FunctionCallNode extends BaseNode {
   type: NodeType.function_call;
   nameKw: KeywordNode;
+  parenthesis: ParenthesisNode;
+}
+
+export interface ParameterizedDataTypeNode extends BaseNode {
+  type: NodeType.parameterized_data_type;
+  dataType: DataTypeNode;
   parenthesis: ParenthesisNode;
 }
 
@@ -176,6 +183,7 @@ export type AstNode =
   | ClauseNode
   | SetOperationNode
   | FunctionCallNode
+  | ParameterizedDataTypeNode
   | ArraySubscriptNode
   | PropertyAccessNode
   | ParenthesisNode

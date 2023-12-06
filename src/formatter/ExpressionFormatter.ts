@@ -29,6 +29,7 @@ import {
   CaseWhenNode,
   CaseElseNode,
   DataTypeNode,
+  ParameterizedDataTypeNode,
 } from '../parser/ast.js';
 
 import Layout, { WS } from './Layout.js';
@@ -95,6 +96,8 @@ export default class ExpressionFormatter {
     switch (node.type) {
       case NodeType.function_call:
         return this.formatFunctionCall(node);
+      case NodeType.parameterized_data_type:
+        return this.formatParameterizedDataType(node);
       case NodeType.array_subscript:
         return this.formatArraySubscript(node);
       case NodeType.property_access:
@@ -141,6 +144,13 @@ export default class ExpressionFormatter {
   private formatFunctionCall(node: FunctionCallNode) {
     this.withComments(node.nameKw, () => {
       this.layout.add(this.showFunctionKw(node.nameKw));
+    });
+    this.formatNode(node.parenthesis);
+  }
+
+  private formatParameterizedDataType(node: ParameterizedDataTypeNode) {
+    this.withComments(node.dataType, () => {
+      this.layout.add(this.showDataType(node.dataType));
     });
     this.formatNode(node.parenthesis);
   }

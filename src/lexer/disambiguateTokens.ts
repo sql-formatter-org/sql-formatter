@@ -6,6 +6,8 @@ import { isReserved, Token, TokenType } from './token.js';
  * Ensures that all RESERVED_FUNCTION_NAME tokens are followed by "(".
  * If they're not, converts the token to RESERVED_KEYWORD.
  *
+ * Converts RESERVED_DATA_TYPE tokens followed by "(" to RESERVED_PARAMETERIZED_DATA_TYPE.
+ *
  * When IDENTIFIER and RESERVED_KEYWORD token is followed by "["
  * converts it to ARRAY_IDENTIFIER or ARRAY_KEYWORD accordingly.
  *
@@ -17,6 +19,7 @@ export function disambiguateTokens(tokens: Token[]): Token[] {
   return tokens
     .map(dotKeywordToIdent)
     .map(funcNameToKeyword)
+    .map(dataTypeToParameterizedDataType)
     .map(identToArrayIdent)
     .map(keywordToArrayKeyword);
 }
@@ -36,6 +39,16 @@ const funcNameToKeyword = (token: Token, i: number, tokens: Token[]): Token => {
     const nextToken = nextNonCommentToken(tokens, i);
     if (!nextToken || !isOpenParen(nextToken)) {
       return { ...token, type: TokenType.RESERVED_KEYWORD };
+    }
+  }
+  return token;
+};
+
+const dataTypeToParameterizedDataType = (token: Token, i: number, tokens: Token[]): Token => {
+  if (token.type === TokenType.RESERVED_DATA_TYPE) {
+    const nextToken = nextNonCommentToken(tokens, i);
+    if (nextToken && isOpenParen(nextToken)) {
+      return { ...token, type: TokenType.RESERVED_PARAMETERIZED_DATA_TYPE };
     }
   }
   return token;

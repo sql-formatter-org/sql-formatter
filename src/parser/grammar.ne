@@ -347,6 +347,13 @@ data_type ->
   ( %RESERVED_DATA_TYPE ) {%
   ([[token]]) => toDataTypeNode(token)
 %}
+data_type -> %RESERVED_PARAMETERIZED_DATA_TYPE _ parenthesis {%
+  ([nameToken, _, parens]) => ({
+    type: NodeType.parameterized_data_type,
+    dataType: addComments(toDataTypeNode(nameToken), { trailing: _ }),
+    parenthesis: parens,
+  })
+%}
 
 logic_operator ->
   ( %AND

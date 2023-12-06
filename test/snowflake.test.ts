@@ -181,7 +181,7 @@ describe('SnowflakeFormatter', () => {
     CREATE TABLE
       tbl (
         first_column DOUBLE PRECISION,
-        second_column NUMBER (38, 0),
+        second_column NUMBER(38, 0),
         third STRING
       );`);
   });
