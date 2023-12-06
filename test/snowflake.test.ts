@@ -176,11 +176,10 @@ describe('SnowflakeFormatter', () => {
         }
       )
     ).toBe(dedent`
-    CREATE TABLE
-      tbl (
-        first_column DOUBLE PRECISION,
-        second_column NUMBER (38, 0),
-        third STRING
-      );`);
+    CREATE TABLE tbl (
+      first_column DOUBLE PRECISION,
+      second_column NUMBER (38, 0),
+      third STRING
+    );`);
   });
 });

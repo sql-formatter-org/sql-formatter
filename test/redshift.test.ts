@@ -2,24 +2,23 @@ import dedent from 'dedent-js';
 
 import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter.js';
-
 import supportsAlterTable from './features/alterTable.js';
-import supportsCreateTable from './features/createTable.js';
-import supportsDropTable from './features/dropTable.js';
-import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
-import supportsStrings from './features/strings.js';
-import supportsDeleteFrom from './features/deleteFrom.js';
-import supportsComments from './features/comments.js';
 import supportsCommentOn from './features/commentOn.js';
-import supportsIdentifiers from './features/identifiers.js';
-import supportsParams from './options/param.js';
-import supportsSetOperations from './features/setOperations.js';
-import supportsLimiting from './features/limiting.js';
-import supportsInsertInto from './features/insertInto.js';
-import supportsUpdate from './features/update.js';
-import supportsTruncateTable from './features/truncateTable.js';
+import supportsComments from './features/comments.js';
+import supportsCreateTable from './features/createTable.js';
 import supportsCreateView from './features/createView.js';
+import supportsDeleteFrom from './features/deleteFrom.js';
+import supportsDropTable from './features/dropTable.js';
+import supportsIdentifiers from './features/identifiers.js';
+import supportsInsertInto from './features/insertInto.js';
+import supportsJoin from './features/join.js';
+import supportsLimiting from './features/limiting.js';
+import supportsOperators from './features/operators.js';
+import supportsSetOperations from './features/setOperations.js';
+import supportsStrings from './features/strings.js';
+import supportsTruncateTable from './features/truncateTable.js';
+import supportsUpdate from './features/update.js';
+import supportsParams from './options/param.js';
 
 describe('RedshiftFormatter', () => {
   const language = 'redshift';
@@ -89,8 +88,7 @@ describe('RedshiftFormatter', () => {
   it('formats temp table name starting with #', () => {
     expect(format(`CREATE TABLE #tablename AS tbl;`)).toBe(
       dedent`
-        CREATE TABLE
-          #tablename AS tbl;
+        CREATE TABLE #tablename AS tbl;
       `
     );
   });
@@ -101,14 +99,13 @@ describe('RedshiftFormatter', () => {
         'CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL, e INT NOT NULL) DISTKEY(created_at) SORTKEY(created_at);'
       )
     ).toBe(dedent`
-      CREATE TABLE
-        items (
-          a INT PRIMARY KEY,
-          b TEXT,
-          c INT NOT NULL,
-          d INT NOT NULL,
-          e INT NOT NULL
-        ) DISTKEY (created_at) SORTKEY (created_at);
+      CREATE TABLE items (
+        a INT PRIMARY KEY,
+        b TEXT,
+        c INT NOT NULL,
+        d INT NOT NULL,
+        e INT NOT NULL
+      ) DISTKEY (created_at) SORTKEY (created_at);
     `);
   });
 

@@ -15,8 +15,7 @@ export default function supportsCreateTable(
 ) {
   it('formats short CREATE TABLE', () => {
     expect(format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);')).toBe(dedent`
-      CREATE TABLE
-        tbl (a INT PRIMARY KEY, b TEXT);
+      CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT);
     `);
   });
 
@@ -26,21 +25,19 @@ export default function supportsCreateTable(
     expect(
       format('CREATE TABLE tbl (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, doggie INT NOT NULL);')
     ).toBe(dedent`
-      CREATE TABLE
-        tbl (
-          a INT PRIMARY KEY,
-          b TEXT,
-          c INT NOT NULL,
-          doggie INT NOT NULL
-        );
+      CREATE TABLE tbl (
+        a INT PRIMARY KEY,
+        b TEXT,
+        c INT NOT NULL,
+        doggie INT NOT NULL
+      );
     `);
   });
 
   if (orReplace) {
     it('formats short CREATE OR REPLACE TABLE', () => {
       expect(format('CREATE OR REPLACE TABLE tbl (a INT PRIMARY KEY, b TEXT);')).toBe(dedent`
-        CREATE OR REPLACE TABLE
-          tbl (a INT PRIMARY KEY, b TEXT);
+        CREATE OR REPLACE TABLE tbl (a INT PRIMARY KEY, b TEXT);
       `);
     });
   }
@@ -48,8 +45,7 @@ export default function supportsCreateTable(
   if (ifNotExists) {
     it('formats short CREATE TABLE IF NOT EXISTS', () => {
       expect(format('CREATE TABLE IF NOT EXISTS tbl (a INT PRIMARY KEY, b TEXT);')).toBe(dedent`
-        CREATE TABLE IF NOT EXISTS
-          tbl (a INT PRIMARY KEY, b TEXT);
+        CREATE TABLE IF NOT EXISTS tbl (a INT PRIMARY KEY, b TEXT);
       `);
     });
   }
@@ -59,11 +55,10 @@ export default function supportsCreateTable(
       expect(
         format(`CREATE TABLE tbl (a INT COMMENT 'Hello world!', b TEXT COMMENT 'Here we are!');`)
       ).toBe(dedent`
-        CREATE TABLE
-          tbl (
-            a INT COMMENT 'Hello world!',
-            b TEXT COMMENT 'Here we are!'
-          );
+        CREATE TABLE tbl (
+          a INT COMMENT 'Hello world!',
+          b TEXT COMMENT 'Here we are!'
+        );
       `);
     });
   }
@@ -71,8 +66,7 @@ export default function supportsCreateTable(
   if (tableComment) {
     it('formats short CREATE TABLE with comment', () => {
       expect(format(`CREATE TABLE tbl (a INT, b TEXT) COMMENT = 'Hello, world!';`)).toBe(dedent`
-        CREATE TABLE
-          tbl (a INT, b TEXT) COMMENT = 'Hello, world!';
+        CREATE TABLE tbl (a INT, b TEXT) COMMENT = 'Hello, world!';
       `);
     });
   }
