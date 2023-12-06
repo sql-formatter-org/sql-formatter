@@ -39,11 +39,10 @@ describe('SparkFormatter', () => {
   supportsStrings(format, ["''-bs", '""-bs', "X''", 'X""', "R''", 'R""']);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
-  supportsOperators(
-    format,
-    ['%', '~', '^', '|', '&', '<=>', '==', '!', '||', '->'],
-    ['AND', 'OR', 'XOR']
-  );
+  supportsOperators(format, ['%', '~', '^', '|', '&', '<=>', '==', '!', '||', '->'], {
+    logicalOperators: ['AND', 'OR', 'XOR'],
+    any: true,
+  });
   supportsArrayAndMapAccessors(format);
   supportsJoin(format, {
     additionally: [

@@ -47,23 +47,11 @@ describe('TransactSqlFormatter', () => {
   supportsIdentifiers(format, [`""-qq`, '[]']);
   supportsBetween(format);
   // Missing: `::` scope resolution operator (tested separately)
-  supportsOperators(format, [
-    '%',
-    '&',
-    '|',
-    '^',
-    '~',
-    '!<',
-    '!>',
-    '+=',
-    '-=',
-    '*=',
-    '/=',
-    '%=',
-    '|=',
-    '&=',
-    '^=',
-  ]);
+  supportsOperators(
+    format,
+    ['%', '&', '|', '^', '~', '!<', '!>', '+=', '-=', '*=', '/=', '%=', '|=', '&=', '^='],
+    { any: true }
+  );
   supportsJoin(format, { without: ['NATURAL'], supportsUsing: false, supportsApply: true });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });

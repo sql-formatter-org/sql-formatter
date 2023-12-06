@@ -36,7 +36,7 @@ describe('SingleStoreDbFormatter', () => {
   supportsOperators(
     format,
     [':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||', ':>', '!:>'],
-    ['AND', 'OR']
+    { any: true }
   );
   supportsLimiting(format, { limit: true, offset: true });
   supportsCreateTable(format, { ifNotExists: true, columnComment: true, tableComment: true });

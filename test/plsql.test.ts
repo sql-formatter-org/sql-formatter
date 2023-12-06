@@ -58,7 +58,10 @@ describe('PlSqlFormatter', () => {
     format,
     // Missing: '..' operator
     ['**', ':=', '%', '~=', '^=', '>>', '<<', '=>', '||'],
-    ['AND', 'OR', 'XOR']
+    {
+      logicalOperators: ['AND', 'OR', 'XOR'],
+      any: true,
+    }
   );
   supportsJoin(format, { supportsApply: true });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);

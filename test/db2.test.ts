@@ -29,25 +29,29 @@ describe('Db2Formatter', () => {
   });
   supportsDropTable(format);
   supportsJoin(format, { without: ['NATURAL'] });
-  supportsOperators(format, [
-    '**',
-    '%',
-    '&',
-    '|',
-    '^',
-    '~',
-    '¬=',
-    '¬>',
-    '¬<',
-    '!>',
-    '!<',
-    '^=',
-    '^>',
-    '^<',
-    '||',
-    '->',
-    '=>',
-  ]);
+  supportsOperators(
+    format,
+    [
+      '**',
+      '%',
+      '&',
+      '|',
+      '^',
+      '~',
+      '¬=',
+      '¬>',
+      '¬<',
+      '!>',
+      '!<',
+      '^=',
+      '^>',
+      '^<',
+      '||',
+      '->',
+      '=>',
+    ],
+    { any: true }
+  );
   // Additional U& string type in addition to others shared by all DB2 implementations
   supportsStrings(format, ["U&''"]);
   supportsDataTypeCase(format);

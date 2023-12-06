@@ -28,6 +28,6 @@ describe('Db2iFormatter', () => {
     without: ['NATURAL'],
     additionally: ['EXCEPTION JOIN', 'LEFT EXCEPTION JOIN', 'RIGHT EXCEPTION JOIN'],
   });
-  supportsOperators(format, ['**', '¬=', '¬>', '¬<', '!>', '!<', '||', '=>']);
+  supportsOperators(format, ['**', '¬=', '¬>', '¬<', '!>', '!<', '||', '=>'], { any: true });
   supportsDataTypeCase(format);
 });

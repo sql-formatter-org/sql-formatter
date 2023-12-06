@@ -33,7 +33,10 @@ describe('MySqlFormatter', () => {
   supportsOperators(
     format,
     ['%', ':=', '&', '|', '^', '~', '<<', '>>', '<=>', '->', '->>', '&&', '||', '!'],
-    ['AND', 'OR', 'XOR']
+    {
+      logicalOperators: ['AND', 'OR', 'XOR'],
+      any: true,
+    }
   );
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });

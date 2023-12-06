@@ -45,7 +45,9 @@ describe('RedshiftFormatter', () => {
   supportsStrings(format, ["''-qq"]);
   supportsIdentifiers(format, [`""-qq`]);
   // Missing: '#' and '::' operator (tested separately)
-  supportsOperators(format, ['^', '%', '@', '|/', '||/', '&', '|', '~', '<<', '>>', '||']);
+  supportsOperators(format, ['^', '%', '@', '|/', '||/', '&', '|', '~', '<<', '>>', '||'], {
+    any: true,
+  });
   supportsJoin(format);
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT', 'MINUS']);
   supportsParams(format, { numbered: ['$'] });

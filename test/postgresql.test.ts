@@ -60,90 +60,94 @@ describe('PostgreSqlFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   // Missing: '::' type cast (tested separately)
-  supportsOperators(format, [
-    // Arithmetic
-    '%',
-    '^',
-    '|/',
-    '||/',
-    '@',
-    // Assignment
-    ':=',
-    // Bitwise
-    '&',
-    '|',
-    '#',
-    '~',
-    '<<',
-    '>>',
-    // Byte comparison
-    '~>~',
-    '~<~',
-    '~>=~',
-    '~<=~',
-    // Geometric
-    '@-@',
-    '@@',
-    '##',
-    '<->',
-    '&&',
-    '&<',
-    '&>',
-    '<<|',
-    '&<|',
-    '|>>',
-    '|&>',
-    '<^',
-    '^>',
-    '?#',
-    '?-',
-    '?|',
-    '?-|',
-    '?||',
-    '@>',
-    '<@',
-    '~=',
-    // JSON
-    '?',
-    '@?',
-    '?&',
-    '->',
-    '->>',
-    '#>',
-    '#>>',
-    '#-',
-    // Named function params
-    '=>',
-    // Network address
-    '>>=',
-    '<<=',
-    // Pattern matching
-    '~~',
-    '~~*',
-    '!~~',
-    '!~~*',
-    // POSIX RegExp
-    '~',
-    '~*',
-    '!~',
-    '!~*',
-    // Range/multirange
-    '-|-',
-    // String concatenation
-    '||',
-    // Text search
-    '@@@',
-    '!!',
-    // Trigram/trigraph
-    '<%',
-    '<<%',
-    '%>',
-    '%>>',
-    '<<->',
-    '<->>',
-    '<<<->',
-    '<->>>',
-  ]);
+  supportsOperators(
+    format,
+    [
+      // Arithmetic
+      '%',
+      '^',
+      '|/',
+      '||/',
+      '@',
+      // Assignment
+      ':=',
+      // Bitwise
+      '&',
+      '|',
+      '#',
+      '~',
+      '<<',
+      '>>',
+      // Byte comparison
+      '~>~',
+      '~<~',
+      '~>=~',
+      '~<=~',
+      // Geometric
+      '@-@',
+      '@@',
+      '##',
+      '<->',
+      '&&',
+      '&<',
+      '&>',
+      '<<|',
+      '&<|',
+      '|>>',
+      '|&>',
+      '<^',
+      '^>',
+      '?#',
+      '?-',
+      '?|',
+      '?-|',
+      '?||',
+      '@>',
+      '<@',
+      '~=',
+      // JSON
+      '?',
+      '@?',
+      '?&',
+      '->',
+      '->>',
+      '#>',
+      '#>>',
+      '#-',
+      // Named function params
+      '=>',
+      // Network address
+      '>>=',
+      '<<=',
+      // Pattern matching
+      '~~',
+      '~~*',
+      '!~~',
+      '!~~*',
+      // POSIX RegExp
+      '~',
+      '~*',
+      '!~',
+      '!~*',
+      // Range/multirange
+      '-|-',
+      // String concatenation
+      '||',
+      // Text search
+      '@@@',
+      '!!',
+      // Trigram/trigraph
+      '<%',
+      '<<%',
+      '%>',
+      '%>>',
+      '<<->',
+      '<->>',
+      '<<<->',
+      '<->>>',
+    ],
+    { any: true }
+  );
   supportsIsDistinctFrom(format);
   supportsJoin(format);
   supportsSetOperations(format);

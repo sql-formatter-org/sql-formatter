@@ -47,7 +47,7 @@ describe('HiveFormatter', () => {
     supportsUsing: false,
   });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT']);
-  supportsOperators(format, ['%', '~', '^', '|', '&', '<=>', '==', '!', '||']);
+  supportsOperators(format, ['%', '~', '^', '|', '&', '<=>', '==', '!', '||'], { any: true });
   supportsArrayAndMapAccessors(format);
   supportsWindow(format);
   supportsLimiting(format, { limit: true });

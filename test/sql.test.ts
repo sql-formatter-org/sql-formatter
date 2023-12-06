@@ -51,7 +51,7 @@ describe('SqlFormatter', () => {
   supportsSchema(format);
   supportsJoin(format);
   supportsSetOperations(format);
-  supportsOperators(format, ['||']);
+  supportsOperators(format, ['||'], { any: true });
   supportsParams(format, { positional: true });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });

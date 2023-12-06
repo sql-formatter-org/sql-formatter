@@ -54,7 +54,7 @@ describe('SnowflakeFormatter', () => {
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   // ':' and '::' are tested later, since they should always be dense
-  supportsOperators(format, ['%', '||', '=>']);
+  supportsOperators(format, ['%', '||', '=>'], { any: true });
   supportsJoin(format, { without: ['NATURAL INNER JOIN'] });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'MINUS', 'EXCEPT', 'INTERSECT']);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });

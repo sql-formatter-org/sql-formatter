@@ -60,7 +60,7 @@ describe('BigQueryFormatter', () => {
     'EXCEPT DISTINCT',
     'INTERSECT DISTINCT',
   ]);
-  supportsOperators(format, ['&', '|', '^', '~', '>>', '<<', '||', '=>']);
+  supportsOperators(format, ['&', '|', '^', '~', '>>', '<<', '||', '=>'], { any: true });
   supportsIsDistinctFrom(format);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
   supportsWindow(format);

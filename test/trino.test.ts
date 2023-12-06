@@ -51,7 +51,7 @@ describe('TrinoFormatter', () => {
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   // Missing: '?' operator (for row patterns)
-  supportsOperators(format, ['%', '->', '=>', '||', '|', '^', '$'], ['AND', 'OR']);
+  supportsOperators(format, ['%', '->', '=>', '||', '|', '^', '$'], { any: true });
   supportsIsDistinctFrom(format);
   supportsArrayLiterals(format, { withArrayPrefix: true });
   supportsArrayAndMapAccessors(format);
