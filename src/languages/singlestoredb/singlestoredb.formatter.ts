@@ -27,12 +27,13 @@ const reservedClauses = expandPhrases([
   'SET',
   // Data definition
   'CREATE VIEW',
-  'CREATE [ROWSTORE] [REFERENCE | TEMPORARY | GLOBAL TEMPORARY] TABLE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [TEMPORARY] PROCEDURE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [EXTERNAL] FUNCTION',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - create:
+  'CREATE [ROWSTORE] [REFERENCE | TEMPORARY | GLOBAL TEMPORARY] TABLE [IF NOT EXISTS]',
   // - update:
   'UPDATE',
   // - delete:

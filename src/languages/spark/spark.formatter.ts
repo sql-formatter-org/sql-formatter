@@ -34,10 +34,11 @@ const reservedClauses = expandPhrases([
   '[OVERWRITE] INTO TABLE',
   // Data definition
   'CREATE [OR REPLACE] [GLOBAL TEMPORARY | TEMPORARY] VIEW [IF NOT EXISTS]',
-  'CREATE [EXTERNAL] TABLE [IF NOT EXISTS]',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - create:
+  'CREATE [EXTERNAL] TABLE [IF NOT EXISTS]',
   // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:

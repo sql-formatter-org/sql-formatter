@@ -26,10 +26,11 @@ const reservedClauses = expandPhrases([
   'SET',
   // Data definition
   'CREATE [RECURSIVE] VIEW',
-  'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - create:
+  'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
   // - update:
   'UPDATE',
   'WHERE CURRENT OF',

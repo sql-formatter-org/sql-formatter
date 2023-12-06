@@ -30,11 +30,12 @@ const reservedClauses = expandPhrases([
   'UPDATE SET',
   // Data definition
   'CREATE [OR ALTER] [MATERIALIZED] VIEW',
-  'CREATE TABLE',
   'CREATE [OR ALTER] {PROC | PROCEDURE}',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - create:
+  'CREATE TABLE',
   // - update:
   'UPDATE',
   'WHERE CURRENT OF',
