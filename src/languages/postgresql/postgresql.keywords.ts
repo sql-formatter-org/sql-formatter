@@ -191,7 +191,6 @@ export const keywords: string[] = [
   'ISOLATION',
   'JOIN', // reserved (can be function or type)
   'KEY',
-  'LABEL',
   'LANGUAGE',
   'LARGE',
   'LAST',
@@ -208,7 +207,6 @@ export const keywords: string[] = [
   'LOCAL',
   'LOCALTIME', // reserved
   'LOCALTIMESTAMP', // reserved
-  'LOCATION',
   'LOCK',
   'LOCKED',
   'LOGGED',
@@ -222,8 +220,6 @@ export const keywords: string[] = [
   'MODE',
   'MONTH', // requires AS
   'MOVE',
-  'NAME',
-  'NAMES',
   'NATIONAL', // (cannot be function or type)
   'NATURAL', // reserved (can be function or type)
   'NCHAR', // (cannot be function or type)
@@ -302,7 +298,6 @@ export const keywords: string[] = [
   'REFRESH',
   'REINDEX',
   'RELATIVE',
-  'RELEASE',
   'RENAME',
   'REPEATABLE',
   'REPLACE',
@@ -384,8 +379,6 @@ export const keywords: string[] = [
   'TRUE', // reserved
   'TRUNCATE',
   'TRUSTED',
-  'TYPE',
-  'TYPES',
   'UESCAPE',
   'UNBOUNDED',
   'UNCOMMITTED',
