@@ -11,38 +11,35 @@ Converts function names to upper- or lowercase.
 ### preserve
 
 ```sql
-CREATE TABLE
-  users (
-    id iNtegeR PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    first_name VarChaR(30) NOT NULL,
-    bio TEXT,
-    is_email_verified BOOL NOT NULL DEFAULT FALSE,
-    created_timestamp TIMESTAMPTZ NOT NULL DEFAULT NoW()
-  )
+SELECT
+  Concat(Trim(first_name), ' ', Trim(last_name)) AS name,
+  Max(salary) AS max_pay
+FROM
+  employee
+WHERE
+  expires_at > Now()
 ```
 
 ### upper
 
 ```sql
-CREATE TABLE
-  users (
-    id iNtegeR PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    first_name VARCHAR(30) NOT NULL,
-    bio TEXT,
-    is_email_verified BOOL NOT NULL DEFAULT FALSE,
-    created_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW()
-  )
+SELECT
+  CONCAT(TRIM(first_name), ' ', TRIM(last_name)) AS name,
+  MAX(salary) AS max_pay
+FROM
+  employee
+WHERE
+  expires_at > NOW()
 ```
 
 ### lower
 
 ```sql
-CREATE TABLE
-  users (
-    id iNtegeR PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    first_name varchar(30) NOT NULL,
-    bio TEXT,
-    is_email_verified BOOL NOT NULL DEFAULT FALSE,
-    created_timestamp TIMESTAMPTZ NOT NULL DEFAULT now()
-  )
+SELECT
+  concat(trim(first_name), ' ', trim(last_name)) AS name,
+  max(salary) AS max_pay
+FROM
+  employee
+WHERE
+  expires_at > now()
 ```
