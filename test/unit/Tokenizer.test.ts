@@ -10,6 +10,7 @@ describe('Tokenizer', () => {
         reservedJoins: ['JOIN'],
         reservedFunctionNames: ['SQRT', 'CURRENT_TIME'],
         reservedKeywords: ['BETWEEN', 'LIKE', 'ON', 'USING'],
+        reservedDataTypes: [],
         stringTypes: ["''-qq"],
         identTypes: ['""-qq'],
       },

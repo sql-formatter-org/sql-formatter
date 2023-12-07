@@ -70,7 +70,7 @@ export interface TokenizerOptions {
   // built in function names
   reservedFunctionNames: string[];
   // data types
-  reservedDataTypes?: string[];
+  reservedDataTypes: string[];
   // all other reserved words (not included to any of the above lists)
   reservedKeywords: string[];
   // Types of quotes to use for strings
