@@ -213,13 +213,6 @@ array_subscript -> %ARRAY_IDENTIFIER _ square_brackets {%
     parenthesis: brackets,
   })
 %}
-array_subscript -> %ARRAY_DATA_TYPE _ square_brackets {%
-  ([arrayToken, _, brackets]) => ({
-    type: NodeType.array_subscript,
-    array: addComments(toDataTypeNode(arrayToken), { trailing: _ }),
-    parenthesis: brackets,
-  })
-%}
 array_subscript -> %ARRAY_KEYWORD _ square_brackets {%
   ([arrayToken, _, brackets]) => ({
     type: NodeType.array_subscript,

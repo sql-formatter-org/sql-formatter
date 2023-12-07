@@ -8,7 +8,7 @@ import { isReserved, Token, TokenType } from './token.js';
  *
  * Converts RESERVED_DATA_TYPE tokens followed by "(" to RESERVED_PARAMETERIZED_DATA_TYPE.
  *
- * When IDENTIFIER and RESERVED_KEYWORD token is followed by "["
+ * When IDENTIFIER or RESERVED_DATA_TYPE token is followed by "["
  * converts it to ARRAY_IDENTIFIER or ARRAY_KEYWORD accordingly.
  *
  * This is needed to avoid ambiguity in parser which expects function names
@@ -21,7 +21,7 @@ export function disambiguateTokens(tokens: Token[]): Token[] {
     .map(funcNameToKeyword)
     .map(dataTypeToParameterizedDataType)
     .map(identToArrayIdent)
-    .map(keywordToArrayKeyword);
+    .map(dataTypeToArrayKeyword);
 }
 
 const dotKeywordToIdent = (token: Token, i: number, tokens: Token[]): Token => {
@@ -64,16 +64,11 @@ const identToArrayIdent = (token: Token, i: number, tokens: Token[]): Token => {
   return token;
 };
 
-const keywordToArrayKeyword = (token: Token, i: number, tokens: Token[]): Token => {
-  if (token.type === TokenType.RESERVED_KEYWORD) {
+const dataTypeToArrayKeyword = (token: Token, i: number, tokens: Token[]): Token => {
+  if (token.type === TokenType.RESERVED_DATA_TYPE) {
     const nextToken = nextNonCommentToken(tokens, i);
     if (nextToken && isOpenBracket(nextToken)) {
       return { ...token, type: TokenType.ARRAY_KEYWORD };
-    }
-  } else if (token.type === TokenType.RESERVED_DATA_TYPE) {
-    const nextToken = nextNonCommentToken(tokens, i);
-    if (nextToken && isOpenBracket(nextToken)) {
-      return { ...token, type: TokenType.ARRAY_DATA_TYPE };
     }
   }
   return token;

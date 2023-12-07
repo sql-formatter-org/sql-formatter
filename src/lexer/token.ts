@@ -14,8 +14,7 @@ export enum TokenType {
   RESERVED_SELECT = 'RESERVED_SELECT',
   RESERVED_JOIN = 'RESERVED_JOIN',
   ARRAY_IDENTIFIER = 'ARRAY_IDENTIFIER', // IDENTIFIER token in front of [
-  ARRAY_DATA_TYPE = 'ARRAY_DATA_TYPE', // RESERVED_DATA_TYPE token in front of [
-  ARRAY_KEYWORD = 'ARRAY_KEYWORD', // RESERVED_KEYWORD token in front of [
+  ARRAY_KEYWORD = 'ARRAY_KEYWORD', // RESERVED_DATA_TYPE token in front of [
   CASE = 'CASE',
   END = 'END',
   WHEN = 'WHEN',
@@ -94,7 +93,6 @@ export const isReserved = (type: TokenType): boolean =>
   type === TokenType.RESERVED_SELECT ||
   type === TokenType.RESERVED_SET_OPERATION ||
   type === TokenType.RESERVED_JOIN ||
-  type === TokenType.ARRAY_DATA_TYPE ||
   type === TokenType.ARRAY_KEYWORD ||
   type === TokenType.CASE ||
   type === TokenType.END ||

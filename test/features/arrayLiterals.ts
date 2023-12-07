@@ -32,14 +32,35 @@ export default function supportsArrayLiterals(format: FormatFn, cfg: ArrayLitera
       `);
     });
 
-    it('dataTypeCase option affects ARRAY[] literal case', () => {
+    it('dataTypeCase option does NOT affect ARRAY[] literal case', () => {
       expect(
         format(`SELECT ArrAy[1, 2]`, {
           dataTypeCase: 'upper',
         })
       ).toBe(dedent`
         SELECT
+          ArrAy[1, 2]
+      `);
+    });
+
+    it('keywordCase option affects ARRAY[] literal case', () => {
+      expect(
+        format(`SELECT ArrAy[1, 2]`, {
+          keywordCase: 'upper',
+        })
+      ).toBe(dedent`
+        SELECT
           ARRAY[1, 2]
+      `);
+    });
+
+    it('dataTypeCase option affects ARRAY type case', () => {
+      expect(
+        format(`CREATE TABLE foo ( items ArrAy )`, {
+          dataTypeCase: 'upper',
+        })
+      ).toBe(dedent`
+        CREATE TABLE foo (items ARRAY)
       `);
     });
   }
