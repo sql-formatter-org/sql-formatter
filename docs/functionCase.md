@@ -13,7 +13,8 @@ Converts function names to upper- or lowercase.
 ```sql
 SELECT
   Concat(Trim(first_name), ' ', Trim(last_name)) AS name,
-  Max(salary) AS max_pay
+  Max(salary) AS max_pay,
+  Cast(ssid AS INT)
 FROM
   employee
 WHERE
@@ -25,7 +26,8 @@ WHERE
 ```sql
 SELECT
   CONCAT(TRIM(first_name), ' ', TRIM(last_name)) AS name,
-  MAX(salary) AS max_pay
+  MAX(salary) AS max_pay,
+  CAST(ssid AS INT)
 FROM
   employee
 WHERE
@@ -37,7 +39,8 @@ WHERE
 ```sql
 SELECT
   concat(trim(first_name), ' ', trim(last_name)) AS name,
-  max(salary) AS max_pay
+  max(salary) AS max_pay,
+  cast(ssid AS INT)
 FROM
   employee
 WHERE
