@@ -293,7 +293,21 @@ export const mariadb: DialectOptions = {
     ],
     paramTypes: { positional: true },
     lineCommentTypes: ['--', '#'],
-    operators: ['%', ':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||', '!'],
+    operators: [
+      '%',
+      ':=',
+      '&',
+      '|',
+      '^',
+      '~',
+      '<<',
+      '>>',
+      '<=>',
+      '&&',
+      '||',
+      '!',
+      '*.*', // Not actually an operator
+    ],
     postProcess,
   },
   formatOptions: {

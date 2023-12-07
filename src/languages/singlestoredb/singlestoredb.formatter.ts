@@ -273,6 +273,7 @@ export const singlestoredb: DialectOptions = {
       '::%',
       ':>',
       '!:>',
+      '*.*', // Not actually an operator
     ],
     postProcess,
   },

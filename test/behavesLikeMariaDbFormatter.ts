@@ -182,4 +182,11 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
         (1, 'Blah');
     `);
   });
+
+  // Issue #674
+  it('supports *.* syntax in GRANT statement', () => {
+    expect(format(`GRANT ALL ON *.* TO user2;`)).toBe(dedent`
+      GRANT ALL ON *.* TO user2;
+    `);
+  });
 }
