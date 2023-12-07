@@ -29,8 +29,6 @@ const reservedClauses = expandPhrases([
   // - view
   'CREATE [OR REPLACE] [SECURE] [RECURSIVE] VIEW [IF NOT EXISTS]',
   // - create/drop/merge table
-  'CREATE [OR REPLACE] [VOLATILE] TABLE [IF NOT EXISTS]',
-  'CREATE [OR REPLACE] [LOCAL | GLOBAL] {TEMP|TEMPORARY} TABLE [IF NOT EXISTS]',
   'CLUSTER BY',
   '[WITH] {MASKING POLICY | TAG | ROW ACCESS POLICY}',
   'COPY GRANTS',
@@ -42,6 +40,9 @@ const reservedClauses = expandPhrases([
 ]);
 
 const onelineClauses = expandPhrases([
+  // - create:
+  'CREATE [OR REPLACE] [VOLATILE] TABLE [IF NOT EXISTS]',
+  'CREATE [OR REPLACE] [LOCAL | GLOBAL] {TEMP|TEMPORARY} TABLE [IF NOT EXISTS]',
   // - update:
   'UPDATE',
   // - delete:

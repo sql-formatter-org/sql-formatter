@@ -41,10 +41,11 @@ const reservedClauses = expandPhrases([
   '[OVERWRITE] INTO TABLE',
   // Data definition
   'CREATE [MATERIALIZED] VIEW [IF NOT EXISTS]',
-  'CREATE [TEMPORARY] [EXTERNAL] TABLE [IF NOT EXISTS]',
 ]);
 
 const onelineClauses = expandPhrases([
+  // - create:
+  'CREATE [TEMPORARY] [EXTERNAL] TABLE [IF NOT EXISTS]',
   // - update:
   'UPDATE',
   // - delete:

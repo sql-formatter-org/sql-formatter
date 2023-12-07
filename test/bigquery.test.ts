@@ -341,8 +341,7 @@ describe('BigQueryFormatter', () => {
           uris = ['gs://bucket/path1.csv']
         )`;
       const expected = dedent`
-        CREATE EXTERNAL TABLE
-          dataset.CsvTable
+        CREATE EXTERNAL TABLE dataset.CsvTable
         WITH PARTITION COLUMNS
           (field_1 STRING, field_2 INT64) OPTIONS(format = 'CSV', uris = ['gs://bucket/path1.csv'])`;
       expect(format(input)).toBe(expected);

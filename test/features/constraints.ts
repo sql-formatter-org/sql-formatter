@@ -13,11 +13,10 @@ export default function supportsConstraints(format: FormatFn, actions: string[])
         );
       `)
       ).toBe(dedent`
-        CREATE TABLE
-          foo (
-            update_time datetime ON UPDATE ${action},
-            delete_time datetime ON DELETE ${action},
-          );
+        CREATE TABLE foo (
+          update_time datetime ON UPDATE ${action},
+          delete_time datetime ON DELETE ${action},
+        );
       `);
     });
   });

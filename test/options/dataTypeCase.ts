@@ -6,8 +6,7 @@ export default function supportsDataTypeCase(format: FormatFn) {
   it('preserves data type keyword case by default', () => {
     const result = format('CREATE TABLE users ( id iNt PRIMARY KEY )');
     expect(result).toBe(dedent`
-      CREATE TABLE
-        users (id iNt PRIMARY KEY)
+      CREATE TABLE users (id iNt PRIMARY KEY)
     `);
   });
 
@@ -16,8 +15,7 @@ export default function supportsDataTypeCase(format: FormatFn) {
       dataTypeCase: 'upper',
     });
     expect(result).toBe(dedent`
-      CREATE TABLE
-        users (id INT PRIMARY KEY)
+      CREATE TABLE users (id INT PRIMARY KEY)
     `);
   });
 
@@ -26,8 +24,7 @@ export default function supportsDataTypeCase(format: FormatFn) {
       dataTypeCase: 'lower',
     });
     expect(result).toBe(dedent`
-      CREATE TABLE
-        users (id int PRIMARY KEY)
+      CREATE TABLE users (id int PRIMARY KEY)
     `);
   });
 
