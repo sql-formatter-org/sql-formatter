@@ -146,6 +146,14 @@ describe('BigQueryFormatter', () => {
     `);
   });
 
+  it('STRUCT and ARRAY type case is affected by dataTypeCase option', () => {
+    expect(format('SELECT array<struct<y int64, z string>>[(1, "foo")]', { dataTypeCase: 'upper' }))
+      .toBe(dedent`
+      SELECT
+        ARRAY<STRUCT<y INT64, z STRING>>[(1, "foo")]
+    `);
+  });
+
   // TODO: Possibly incorrect formatting of STRUCT<>() and ARRAY<>()
   it('supports parametric STRUCT', () => {
     expect(format('SELECT STRUCT<ARRAY<INT64>>([])')).toBe(dedent`
