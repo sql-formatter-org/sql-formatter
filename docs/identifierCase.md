@@ -6,7 +6,6 @@ This option doesn't yet support all types of identifiers:
 
 - prefixed variables like `@my_var` are not converted.
 - parameter placeholders like `:param` are not converted.
-- function names like `count(*)` are not converted (this are currently governed by `keywordCase` option instead.)
 
 ## Options
 
