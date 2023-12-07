@@ -301,4 +301,15 @@ describe('PostgreSqlFormatter', () => {
         tbl.salary;
     `);
   });
+
+  // Issue #685
+  it('allows TYPE to be used as an identifier', () => {
+    expect(format(`SELECT type, modified_at FROM items;`)).toBe(dedent`
+      SELECT
+        type,
+        modified_at
+      FROM
+        items;
+    `);
+  });
 });

@@ -52,7 +52,7 @@ const onelineClauses = expandPhrases([
   'ADD [COLUMN] [IF NOT EXISTS]',
   'DROP [COLUMN] [IF EXISTS]',
   'ALTER [COLUMN]',
-  '[SET DATA] TYPE', // for alter column
+  'SET DATA TYPE', // for alter column
   '{SET | DROP} DEFAULT', // for alter column
   '{SET | DROP} NOT NULL', // for alter column
   // - truncate:
