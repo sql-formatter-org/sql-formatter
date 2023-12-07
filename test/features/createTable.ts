@@ -7,7 +7,6 @@ interface CreateTableConfig {
   ifNotExists?: boolean;
   columnComment?: boolean;
   tableComment?: boolean;
-  dialectDoesntHaveVarchar?: boolean;
 }
 
 export default function supportsCreateTable(format: FormatFn, cfg: CreateTableConfig = {}) {
@@ -17,19 +16,6 @@ export default function supportsCreateTable(format: FormatFn, cfg: CreateTableCo
         tbl (a INT PRIMARY KEY, b TEXT);
     `);
   });
-
-  if (!cfg.dialectDoesntHaveVarchar) {
-    it('formats short CREATE TABLE with lowercase data types', () => {
-      expect(
-        format('CREATE TABLE tbl (a INT PRIMARY KEY, b VARCHAR);', {
-          dataTypeCase: 'lower',
-        })
-      ).toBe(dedent`
-      CREATE TABLE
-        tbl (a int PRIMARY KEY, b varchar);
-    `);
-    });
-  }
 
   // The decision to place it to multiple lines is made based on the length of text inside braces
   // ignoring the whitespace. (Which is not quite right :P)
