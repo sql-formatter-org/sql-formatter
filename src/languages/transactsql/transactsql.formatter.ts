@@ -29,13 +29,13 @@ const reservedClauses = expandPhrases([
   'WHEN [NOT] MATCHED [BY TARGET | BY SOURCE] [THEN]',
   'UPDATE SET',
   // Data definition
-  'CREATE [OR ALTER] [MATERIALIZED] VIEW',
   'CREATE [OR ALTER] {PROC | PROCEDURE}',
 ]);
 
 const onelineClauses = expandPhrases([
   // - create:
   'CREATE TABLE',
+  'CREATE [OR ALTER] [MATERIALIZED] VIEW',
   // - update:
   'UPDATE',
   'WHERE CURRENT OF',

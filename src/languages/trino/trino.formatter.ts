@@ -25,8 +25,6 @@ const reservedClauses = expandPhrases([
   'VALUES',
   // - update:
   'SET',
-  // Data definition
-  'CREATE [OR REPLACE] [MATERIALIZED] VIEW',
   // MATCH_RECOGNIZE
   'MATCH_RECOGNIZE',
   'MEASURES',
@@ -41,6 +39,7 @@ const reservedClauses = expandPhrases([
 const onelineClauses = expandPhrases([
   // - create:
   'CREATE TABLE [IF NOT EXISTS]',
+  'CREATE [OR REPLACE] [MATERIALIZED] VIEW',
   // - update:
   'UPDATE',
   // - delete:

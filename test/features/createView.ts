@@ -14,8 +14,7 @@ export default function supportsCreateView(
 ) {
   it('formats CREATE VIEW', () => {
     expect(format('CREATE VIEW my_view AS SELECT id, fname, lname FROM tbl;')).toBe(dedent`
-      CREATE VIEW
-        my_view AS
+      CREATE VIEW my_view AS
       SELECT
         id,
         fname,
@@ -27,8 +26,7 @@ export default function supportsCreateView(
 
   it('formats CREATE VIEW with columns', () => {
     expect(format('CREATE VIEW my_view (id, fname, lname) AS SELECT * FROM tbl;')).toBe(dedent`
-      CREATE VIEW
-        my_view (id, fname, lname) AS
+      CREATE VIEW my_view (id, fname, lname) AS
       SELECT
         *
       FROM
@@ -39,8 +37,7 @@ export default function supportsCreateView(
   if (orReplace) {
     it('formats CREATE OR REPLACE VIEW', () => {
       expect(format('CREATE OR REPLACE VIEW v1 AS SELECT 42;')).toBe(dedent`
-        CREATE OR REPLACE VIEW
-          v1 AS
+        CREATE OR REPLACE VIEW v1 AS
         SELECT
           42;
       `);
@@ -50,8 +47,7 @@ export default function supportsCreateView(
   if (materialized) {
     it('formats CREATE MATERIALIZED VIEW', () => {
       expect(format('CREATE MATERIALIZED VIEW mat_view AS SELECT 42;')).toBe(dedent`
-        CREATE MATERIALIZED VIEW
-          mat_view AS
+        CREATE MATERIALIZED VIEW mat_view AS
         SELECT
           42;
       `);
@@ -61,8 +57,7 @@ export default function supportsCreateView(
   if (ifNotExists) {
     it('formats short CREATE VIEW IF NOT EXISTS', () => {
       expect(format('CREATE VIEW IF NOT EXISTS my_view AS SELECT 42;')).toBe(dedent`
-        CREATE VIEW IF NOT EXISTS
-          my_view AS
+        CREATE VIEW IF NOT EXISTS my_view AS
         SELECT
           42;
       `);

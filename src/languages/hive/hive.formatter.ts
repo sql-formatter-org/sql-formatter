@@ -39,13 +39,12 @@ const reservedClauses = expandPhrases([
   //   https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML#LanguageManualDML-Loadingfilesintotables
   'LOAD DATA [LOCAL] INPATH',
   '[OVERWRITE] INTO TABLE',
-  // Data definition
-  'CREATE [MATERIALIZED] VIEW [IF NOT EXISTS]',
 ]);
 
 const onelineClauses = expandPhrases([
   // - create:
   'CREATE [TEMPORARY] [EXTERNAL] TABLE [IF NOT EXISTS]',
+  'CREATE [MATERIALIZED] VIEW [IF NOT EXISTS]',
   // - update:
   'UPDATE',
   // - delete:

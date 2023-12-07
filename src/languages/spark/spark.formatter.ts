@@ -32,13 +32,12 @@ const reservedClauses = expandPhrases([
   //   https://spark.apache.org/docs/latest/sql-ref-syntax-dml-load.html
   'LOAD DATA [LOCAL] INPATH',
   '[OVERWRITE] INTO TABLE',
-  // Data definition
-  'CREATE [OR REPLACE] [GLOBAL TEMPORARY | TEMPORARY] VIEW [IF NOT EXISTS]',
 ]);
 
 const onelineClauses = expandPhrases([
   // - create:
   'CREATE [EXTERNAL] TABLE [IF NOT EXISTS]',
+  'CREATE [OR REPLACE] [GLOBAL TEMPORARY | TEMPORARY] VIEW [IF NOT EXISTS]',
   // - drop table:
   'DROP TABLE [IF EXISTS]',
   // - alter table:

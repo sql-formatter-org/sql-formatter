@@ -22,13 +22,12 @@ const reservedClauses = expandPhrases([
   'VALUES',
   // - update:
   'SET',
-  // Data definition
-  'CREATE [OR REPLACE | MATERIALIZED] VIEW',
 ]);
 
 const onelineClauses = expandPhrases([
   // - create:
   'CREATE [TEMPORARY | TEMP | LOCAL TEMPORARY | LOCAL TEMP] TABLE [IF NOT EXISTS]',
+  'CREATE [OR REPLACE | MATERIALIZED] VIEW',
   // - update:
   'UPDATE',
   // - delete:

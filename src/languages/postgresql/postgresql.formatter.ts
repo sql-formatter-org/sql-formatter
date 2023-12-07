@@ -25,9 +25,6 @@ const reservedClauses = expandPhrases([
   'VALUES',
   // - update:
   'SET',
-  // Data definition
-  'CREATE [OR REPLACE] [TEMP | TEMPORARY] [RECURSIVE] VIEW',
-  'CREATE [MATERIALIZED] VIEW [IF NOT EXISTS]',
   // other
   'RETURNING',
 ]);
@@ -35,6 +32,8 @@ const reservedClauses = expandPhrases([
 const onelineClauses = expandPhrases([
   // - create
   'CREATE [GLOBAL | LOCAL] [TEMPORARY | TEMP | UNLOGGED] TABLE [IF NOT EXISTS]',
+  'CREATE [OR REPLACE] [TEMP | TEMPORARY] [RECURSIVE] VIEW',
+  'CREATE [MATERIALIZED] VIEW [IF NOT EXISTS]',
   // - update:
   'UPDATE [ONLY]',
   'WHERE CURRENT OF',

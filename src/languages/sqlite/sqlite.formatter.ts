@@ -24,13 +24,12 @@ const reservedClauses = expandPhrases([
   'VALUES',
   // - update:
   'SET',
-  // Data definition
-  'CREATE [TEMPORARY | TEMP] VIEW [IF NOT EXISTS]',
 ]);
 
 const onelineClauses = expandPhrases([
   // - create:
   'CREATE [TEMPORARY | TEMP] TABLE [IF NOT EXISTS]',
+  'CREATE [TEMPORARY | TEMP] VIEW [IF NOT EXISTS]',
   // - update:
   'UPDATE [OR ABORT | OR FAIL | OR IGNORE | OR REPLACE | OR ROLLBACK]',
   // - insert:

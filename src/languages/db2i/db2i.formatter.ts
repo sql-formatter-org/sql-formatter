@@ -35,13 +35,12 @@ const reservedClauses = expandPhrases([
   'INSERT',
   // Data definition - table
   'FOR SYSTEM NAME',
-  // Data definition - view
-  'CREATE [OR REPLACE] [RECURSIVE] VIEW',
 ]);
 
 const onelineClauses = expandPhrases([
   // - create:
   'CREATE [OR REPLACE] TABLE',
+  'CREATE [OR REPLACE] [RECURSIVE] VIEW',
   // - update:
   'UPDATE',
   'WHERE CURRENT OF',

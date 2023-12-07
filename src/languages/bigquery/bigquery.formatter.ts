@@ -30,8 +30,6 @@ const reservedClauses = expandPhrases([
   'MERGE [INTO]',
   'WHEN [NOT] MATCHED [BY SOURCE | BY TARGET] [THEN]',
   'UPDATE SET',
-  // Data definition, https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
-  'CREATE [OR REPLACE] [MATERIALIZED] VIEW [IF NOT EXISTS]',
 
   'CLUSTER BY',
   'FOR SYSTEM_TIME AS OF', // CREATE SNAPSHOT TABLE
@@ -42,7 +40,9 @@ const reservedClauses = expandPhrases([
 
 const onelineClauses = expandPhrases([
   // - create:
+  // https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
   'CREATE [OR REPLACE] [TEMP|TEMPORARY|SNAPSHOT|EXTERNAL] TABLE [IF NOT EXISTS]',
+  'CREATE [OR REPLACE] [MATERIALIZED] VIEW [IF NOT EXISTS]',
   // - update:
   'UPDATE',
   // - delete:

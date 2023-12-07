@@ -24,13 +24,12 @@ const reservedClauses = expandPhrases([
   'VALUES',
   // - update:
   'SET',
-  // Data definition
-  'CREATE [RECURSIVE] VIEW',
 ]);
 
 const onelineClauses = expandPhrases([
   // - create:
   'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
+  'CREATE [RECURSIVE] VIEW',
   // - update:
   'UPDATE',
   'WHERE CURRENT OF',

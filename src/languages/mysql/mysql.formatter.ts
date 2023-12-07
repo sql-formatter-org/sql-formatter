@@ -26,13 +26,12 @@ const reservedClauses = expandPhrases([
   'ON DUPLICATE KEY UPDATE',
   // - update:
   'SET',
-  // Data definition
-  'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
 ]);
 
 const onelineClauses = expandPhrases([
   // - create:
   'CREATE [TEMPORARY] TABLE [IF NOT EXISTS]',
+  'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   // - update:
   'UPDATE [LOW_PRIORITY] [IGNORE]',
   // - delete:

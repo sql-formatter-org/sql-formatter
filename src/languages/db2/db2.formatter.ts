@@ -34,13 +34,12 @@ const reservedClauses = expandPhrases([
   'WHEN [NOT] MATCHED [THEN]',
   'UPDATE SET',
   'INSERT',
-  // Data definition
-  'CREATE [OR REPLACE] VIEW',
 ]);
 
 const onelineClauses = expandPhrases([
   // - create:
   'CREATE [GLOBAL TEMPORARY | EXTERNAL] TABLE [IF NOT EXISTS]',
+  'CREATE [OR REPLACE] VIEW',
   // - update:
   'UPDATE',
   'WHERE CURRENT OF',

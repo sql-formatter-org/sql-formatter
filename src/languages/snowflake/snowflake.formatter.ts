@@ -25,10 +25,7 @@ const reservedClauses = expandPhrases([
   'VALUES',
   // - update:
   'SET',
-  // Data definition
-  // - view
-  'CREATE [OR REPLACE] [SECURE] [RECURSIVE] VIEW [IF NOT EXISTS]',
-  // - create/drop/merge table
+
   'CLUSTER BY',
   '[WITH] {MASKING POLICY | TAG | ROW ACCESS POLICY}',
   'COPY GRANTS',
@@ -43,6 +40,7 @@ const onelineClauses = expandPhrases([
   // - create:
   'CREATE [OR REPLACE] [VOLATILE] TABLE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [LOCAL | GLOBAL] {TEMP|TEMPORARY} TABLE [IF NOT EXISTS]',
+  'CREATE [OR REPLACE] [SECURE] [RECURSIVE] VIEW [IF NOT EXISTS]',
   // - update:
   'UPDATE',
   // - delete:
