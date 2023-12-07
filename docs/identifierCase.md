@@ -25,7 +25,8 @@ from
 where
   Column6
   and Column7
-group by Column4
+group by
+  Column4
 ```
 
 ### upper
@@ -40,7 +41,8 @@ from
 where
   COLUMN6
   and COLUMN7
-group by COLUMN4
+group by
+  COLUMN4
 ```
 
 ### lower
@@ -55,5 +57,6 @@ from
 where
   column6
   and column7
-group by column4
+group by
+  column4
 ```
