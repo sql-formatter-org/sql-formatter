@@ -6,11 +6,14 @@ export const keywords: string[] = [
   'ANALYZE',
   'AND',
   'ANY',
+  'ARRAY',
   'AS',
   'ASC',
   'AT',
   'BEGIN',
   'BETWEEN',
+  'BINARY',
+  'BOOLEAN',
   'BREAK',
   'BUCKET',
   'BUILD',
@@ -71,7 +74,6 @@ export const keywords: string[] = [
   'HASH',
   'HAVING',
   'IF',
-  'ISOLATION',
   'IGNORE',
   'ILIKE',
   'IN',
@@ -85,6 +87,7 @@ export const keywords: string[] = [
   'INTERSECT',
   'INTO',
   'IS',
+  'ISOLATION',
   'JAVASCRIPT',
   'JOIN',
   'KEY',
@@ -115,6 +118,8 @@ export const keywords: string[] = [
   'NTH_VALUE',
   'NULL',
   'NULLS',
+  'NUMBER',
+  'OBJECT',
   'OFFSET',
   'ON',
   'OPTION',
@@ -163,6 +168,7 @@ export const keywords: string[] = [
   'SOME',
   'START',
   'STATISTICS',
+  'STRING',
   'SYSTEM',
   'THEN',
   'TIES',
@@ -201,11 +207,12 @@ export const keywords: string[] = [
 ];
 
 export const dataTypes: string[] = [
+  // N1QL does not support any way of declaring types for columns.
+  // It does not support the CREATE TABLE statement nor the CAST() expression.
+  //
+  // It does have several keywords like ARRAY and OBJECT, which seem to refer to types,
+  // but they are used as operators. It also reserves several words like STRING and NUMBER,
+  // which it actually doesn't use.
+  //
   // https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/datatypes.html
-  'ARRAY',
-  'BINARY',
-  'BOOLEAN',
-  'NUMBER',
-  'OBJECT',
-  'STRING',
 ];
