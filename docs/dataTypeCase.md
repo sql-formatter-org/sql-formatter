@@ -1,4 +1,4 @@
-# dataTypeCase (experimental)
+# dataTypeCase
 
 Converts data types to upper- or lowercase.
 

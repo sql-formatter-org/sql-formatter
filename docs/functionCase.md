@@ -1,4 +1,4 @@
-# functionCase (experimental)
+# functionCase
 
 Converts function names to upper- or lowercase.
 
