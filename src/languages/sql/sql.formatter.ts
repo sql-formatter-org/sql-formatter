@@ -82,9 +82,8 @@ export const sql: DialectOptions = {
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
-    reservedKeywords:
-      // Temporary, will be replaced by reservedDataTypes
-      [...new Set(keywords.concat(dataTypes))],
+    reservedKeywords: keywords,
+    reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
     stringTypes: [
       { quote: "''-qq-bs", prefixes: ['N', 'U&'] },

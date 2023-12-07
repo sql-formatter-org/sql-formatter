@@ -4,6 +4,8 @@ export enum TokenType {
   IDENTIFIER = 'IDENTIFIER',
   STRING = 'STRING',
   VARIABLE = 'VARIABLE',
+  RESERVED_DATA_TYPE = 'RESERVED_DATA_TYPE',
+  RESERVED_PARAMETERIZED_DATA_TYPE = 'RESERVED_PARAMETERIZED_DATA_TYPE',
   RESERVED_KEYWORD = 'RESERVED_KEYWORD',
   RESERVED_FUNCTION_NAME = 'RESERVED_FUNCTION_NAME',
   RESERVED_PHRASE = 'RESERVED_PHRASE',
@@ -12,7 +14,7 @@ export enum TokenType {
   RESERVED_SELECT = 'RESERVED_SELECT',
   RESERVED_JOIN = 'RESERVED_JOIN',
   ARRAY_IDENTIFIER = 'ARRAY_IDENTIFIER', // IDENTIFIER token in front of [
-  ARRAY_KEYWORD = 'ARRAY_KEYWORD', // RESERVED_KEYWORD token in front of [
+  ARRAY_KEYWORD = 'ARRAY_KEYWORD', // RESERVED_DATA_TYPE token in front of [
   CASE = 'CASE',
   END = 'END',
   WHEN = 'WHEN',
@@ -73,16 +75,17 @@ export const testToken =
 
 /** Util object that allows for easy checking of Reserved Keywords */
 export const isToken = {
-  ARRAY: testToken({ text: 'ARRAY', type: TokenType.RESERVED_KEYWORD }),
+  ARRAY: testToken({ text: 'ARRAY', type: TokenType.RESERVED_DATA_TYPE }),
   BY: testToken({ text: 'BY', type: TokenType.RESERVED_KEYWORD }),
   SET: testToken({ text: 'SET', type: TokenType.RESERVED_CLAUSE }),
-  STRUCT: testToken({ text: 'STRUCT', type: TokenType.RESERVED_KEYWORD }),
+  STRUCT: testToken({ text: 'STRUCT', type: TokenType.RESERVED_DATA_TYPE }),
   WINDOW: testToken({ text: 'WINDOW', type: TokenType.RESERVED_CLAUSE }),
   VALUES: testToken({ text: 'VALUES', type: TokenType.RESERVED_CLAUSE }),
 };
 
 /** Checks if token is any Reserved Keyword or Clause */
 export const isReserved = (type: TokenType): boolean =>
+  type === TokenType.RESERVED_DATA_TYPE ||
   type === TokenType.RESERVED_KEYWORD ||
   type === TokenType.RESERVED_FUNCTION_NAME ||
   type === TokenType.RESERVED_PHRASE ||

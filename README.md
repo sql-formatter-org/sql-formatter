@@ -151,6 +151,8 @@ All fields are optional and all fields that are not specified will be filled wit
 - [**`useTabs`**](docs/useTabs.md) to use tabs for indentation.
 - [**`keywordCase`**](docs/keywordCase.md) uppercases or lowercases keywords.
 - [**`identifierCase`**](docs/identifierCase.md) uppercases or lowercases identifiers. (**experimental!**)
+- [**`dataTypeCase`**](docs/dataTypeCase.md) uppercases or lowercases data types. (**experimental!**)
+- [**`functionCase`**](docs/functionCase.md) uppercases or lowercases function names. (**experimental!**)
 - [**`indentStyle`**](docs/indentStyle.md) defines overall indentation style.
 - [**`logicalOperatorNewline`**](docs/logicalOperatorNewline.md) newline before or after boolean operator (AND, OR, XOR).
 - [**`expressionWidth`**](docs/expressionWidth.md) maximum number of characters in parenthesized expressions to be kept on single line.

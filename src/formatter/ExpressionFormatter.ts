@@ -28,6 +28,8 @@ import {
   CaseExpressionNode,
   CaseWhenNode,
   CaseElseNode,
+  DataTypeNode,
+  ParameterizedDataTypeNode,
 } from '../parser/ast.js';
 
 import Layout, { WS } from './Layout.js';
@@ -94,6 +96,8 @@ export default class ExpressionFormatter {
     switch (node.type) {
       case NodeType.function_call:
         return this.formatFunctionCall(node);
+      case NodeType.parameterized_data_type:
+        return this.formatParameterizedDataType(node);
       case NodeType.array_subscript:
         return this.formatArraySubscript(node);
       case NodeType.property_access:
@@ -130,6 +134,8 @@ export default class ExpressionFormatter {
         return this.formatLineComment(node);
       case NodeType.block_comment:
         return this.formatBlockComment(node);
+      case NodeType.data_type:
+        return this.formatDataType(node);
       case NodeType.keyword:
         return this.formatKeywordNode(node);
     }
@@ -137,19 +143,37 @@ export default class ExpressionFormatter {
 
   private formatFunctionCall(node: FunctionCallNode) {
     this.withComments(node.nameKw, () => {
-      this.layout.add(this.showKw(node.nameKw));
+      this.layout.add(this.showFunctionKw(node.nameKw));
+    });
+    this.formatNode(node.parenthesis);
+  }
+
+  private formatParameterizedDataType(node: ParameterizedDataTypeNode) {
+    this.withComments(node.dataType, () => {
+      this.layout.add(this.showDataType(node.dataType));
     });
     this.formatNode(node.parenthesis);
   }
 
   private formatArraySubscript(node: ArraySubscriptNode) {
+    let formattedArray: string;
+
+    switch (node.array.type) {
+      case NodeType.data_type:
+        formattedArray = this.showDataType(node.array);
+        break;
+      case NodeType.keyword:
+        formattedArray = this.showKw(node.array);
+        break;
+      default:
+        formattedArray = this.showIdentifier(node.array);
+        break;
+    }
+
     this.withComments(node.array, () => {
-      this.layout.add(
-        node.array.type === NodeType.keyword
-          ? this.showKw(node.array)
-          : this.showIdentifier(node.array)
-      );
+      this.layout.add(formattedArray);
     });
+
     this.formatNode(node.parenthesis);
   }
 
@@ -489,6 +513,10 @@ export default class ExpressionFormatter {
     }
   }
 
+  private formatDataType(node: DataTypeNode) {
+    this.layout.add(this.showDataType(node), WS.SPACE);
+  }
+
   private showKw(node: KeywordNode): string {
     if (isTabularToken(node.tokenType)) {
       return toTabularFormat(this.showNonTabularKw(node), this.cfg.indentStyle);
@@ -500,6 +528,26 @@ export default class ExpressionFormatter {
   // Like showKw(), but skips tabular formatting
   private showNonTabularKw(node: KeywordNode): string {
     switch (this.cfg.keywordCase) {
+      case 'preserve':
+        return equalizeWhitespace(node.raw);
+      case 'upper':
+        return node.text;
+      case 'lower':
+        return node.text.toLowerCase();
+    }
+  }
+
+  private showFunctionKw(node: KeywordNode): string {
+    if (isTabularToken(node.tokenType)) {
+      return toTabularFormat(this.showNonTabularFunctionKw(node), this.cfg.indentStyle);
+    } else {
+      return this.showNonTabularFunctionKw(node);
+    }
+  }
+
+  // Like showFunctionKw(), but skips tabular formatting
+  private showNonTabularFunctionKw(node: KeywordNode): string {
+    switch (this.cfg.functionCase) {
       case 'preserve':
         return equalizeWhitespace(node.raw);
       case 'upper':
@@ -521,6 +569,17 @@ export default class ExpressionFormatter {
         case 'lower':
           return node.text.toLowerCase();
       }
+    }
+  }
+
+  private showDataType(node: DataTypeNode): string {
+    switch (this.cfg.dataTypeCase) {
+      case 'preserve':
+        return equalizeWhitespace(node.raw);
+      case 'upper':
+        return node.text;
+      case 'lower':
+        return node.text.toLowerCase();
     }
   }
 }

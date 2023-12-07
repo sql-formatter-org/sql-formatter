@@ -23,6 +23,7 @@ import supportsInsertInto from './features/insertInto.js';
 import supportsUpdate from './features/update.js';
 import supportsTruncateTable from './features/truncateTable.js';
 import supportsCreateView from './features/createView.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('SqlFormatter', () => {
   const language = 'sql';
@@ -50,10 +51,11 @@ describe('SqlFormatter', () => {
   supportsSchema(format);
   supportsJoin(format);
   supportsSetOperations(format);
-  supportsOperators(format, ['||']);
+  supportsOperators(format, ['||'], { any: true });
   supportsParams(format, { positional: true });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
+  supportsDataTypeCase(format);
 
   it('throws error when encountering characters or operators it does not recognize', () => {
     expect(() => format('SELECT @name, :bar FROM foo;')).toThrowError(

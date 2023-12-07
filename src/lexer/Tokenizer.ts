@@ -131,6 +131,11 @@ export default class Tokenizer {
         text: toCanonical,
       },
       {
+        type: TokenType.RESERVED_DATA_TYPE,
+        regex: regex.reservedWord(cfg.reservedDataTypes ?? [], cfg.identChars),
+        text: toCanonical,
+      },
+      {
         type: TokenType.RESERVED_KEYWORD,
         regex: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
         text: toCanonical,

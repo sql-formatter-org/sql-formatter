@@ -25,6 +25,7 @@ import supportsTruncateTable from './features/truncateTable.js';
 import supportsCreateView from './features/createView.js';
 import supportsAlterTable from './features/alterTable.js';
 import supportsIsDistinctFrom from './features/isDistinctFrom.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('TrinoFormatter', () => {
   const language = 'trino';
@@ -50,7 +51,7 @@ describe('TrinoFormatter', () => {
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   // Missing: '?' operator (for row patterns)
-  supportsOperators(format, ['%', '->', '=>', '||', '|', '^', '$'], ['AND', 'OR']);
+  supportsOperators(format, ['%', '->', '=>', '||', '|', '^', '$'], { any: true });
   supportsIsDistinctFrom(format);
   supportsArrayLiterals(format, { withArrayPrefix: true });
   supportsArrayAndMapAccessors(format);
@@ -59,6 +60,7 @@ describe('TrinoFormatter', () => {
   supportsParams(format, { positional: true });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
+  supportsDataTypeCase(format);
 
   it('formats SET SESSION', () => {
     const result = format('SET SESSION foo = 444;');

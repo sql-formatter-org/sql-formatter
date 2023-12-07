@@ -585,13 +585,4 @@ export const functions: string[] = [
   // pivot
   'PIVOT',
   'UNPIVOT',
-
-  // Data types with parameters like VARCHAR(100)
-  // https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#parameterized_data_types
-  'BYTES',
-  'NUMERIC',
-  'DECIMAL',
-  'BIGNUMERIC',
-  'BIGDECIMAL',
-  'STRING',
 ];

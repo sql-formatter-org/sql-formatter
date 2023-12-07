@@ -79,7 +79,10 @@ export default function supportsCase(format: FormatFn) {
   it('properly converts to uppercase in case statements', () => {
     const result = format(
       "case trim(sqrt(my_field)) when 'one' then 1 when 'two' then 2 when 'three' then 3 else 4 end;",
-      { keywordCase: 'upper' }
+      {
+        keywordCase: 'upper',
+        functionCase: 'upper',
+      }
     );
     expect(result).toBe(dedent`
       CASE TRIM(SQRT(my_field))

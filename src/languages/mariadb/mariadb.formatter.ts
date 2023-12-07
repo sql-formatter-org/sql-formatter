@@ -274,9 +274,8 @@ export const mariadb: DialectOptions = {
     reservedJoins,
     reservedPhrases,
     supportsXor: true,
-    reservedKeywords:
-      // Temporary, will be replaced by reservedDataTypes
-      [...new Set(keywords.concat(dataTypes))],
+    reservedKeywords: keywords,
+    reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
     // TODO: support _ char set prefixes such as _utf8, _latin1, _binary, _utf8mb4, etc.
     stringTypes: [

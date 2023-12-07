@@ -163,7 +163,10 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
         `create table account (id int comment 'the most important column');
         select * from mysql.user;
         insert into user (id, name) values (1, 'Blah');`,
-        { keywordCase: 'upper' }
+        {
+          keywordCase: 'upper',
+          dataTypeCase: 'upper',
+        }
       )
     ).toBe(dedent`
       CREATE TABLE account (id INT comment 'the most important column');

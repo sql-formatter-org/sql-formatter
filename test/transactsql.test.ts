@@ -23,6 +23,7 @@ import supportsUpdate from './features/update.js';
 import supportsTruncateTable from './features/truncateTable.js';
 import supportsMergeInto from './features/mergeInto.js';
 import supportsCreateView from './features/createView.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('TransactSqlFormatter', () => {
   const language = 'transactsql';
@@ -46,28 +47,17 @@ describe('TransactSqlFormatter', () => {
   supportsIdentifiers(format, [`""-qq`, '[]']);
   supportsBetween(format);
   // Missing: `::` scope resolution operator (tested separately)
-  supportsOperators(format, [
-    '%',
-    '&',
-    '|',
-    '^',
-    '~',
-    '!<',
-    '!>',
-    '+=',
-    '-=',
-    '*=',
-    '/=',
-    '%=',
-    '|=',
-    '&=',
-    '^=',
-  ]);
+  supportsOperators(
+    format,
+    ['%', '&', '|', '^', '~', '!<', '!>', '+=', '-=', '*=', '/=', '%=', '|=', '&=', '^='],
+    { any: true }
+  );
   supportsJoin(format, { without: ['NATURAL'], supportsUsing: false, supportsApply: true });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });
   supportsWindow(format);
   supportsLimiting(format, { offset: true, fetchFirst: true, fetchNext: true });
+  supportsDataTypeCase(format);
 
   it('supports language:tsql alias', () => {
     const result = originalFormat('SELECT [my column] FROM [my table];', { language: 'tsql' });

@@ -21,6 +21,7 @@ import supportsUpdate from './features/update.js';
 import supportsTruncateTable from './features/truncateTable.js';
 import supportsCreateView from './features/createView.js';
 import supportsConstraints from './features/constraints.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('SnowflakeFormatter', () => {
   const language = 'snowflake';
@@ -53,10 +54,11 @@ describe('SnowflakeFormatter', () => {
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   // ':' and '::' are tested later, since they should always be dense
-  supportsOperators(format, ['%', '||', '=>']);
+  supportsOperators(format, ['%', '||', '=>'], { any: true });
   supportsJoin(format, { without: ['NATURAL INNER JOIN'] });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'MINUS', 'EXCEPT', 'INTERSECT']);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
+  supportsDataTypeCase(format);
 
   it('allows $ character as part of unquoted identifiers', () => {
     expect(format('SELECT foo$')).toBe(dedent`
@@ -167,18 +169,18 @@ describe('SnowflakeFormatter', () => {
     `);
   });
 
-  it('detects data types as keywords', () => {
+  it('detects data types', () => {
     expect(
       format(
         `CREATE TABLE tbl (first_column double Precision, second_column numBer (38, 0), third String);`,
         {
-          keywordCase: 'upper',
+          dataTypeCase: 'upper',
         }
       )
     ).toBe(dedent`
     CREATE TABLE tbl (
       first_column DOUBLE PRECISION,
-      second_column NUMBER (38, 0),
+      second_column NUMBER(38, 0),
       third STRING
     );`);
   });

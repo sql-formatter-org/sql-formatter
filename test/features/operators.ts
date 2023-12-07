@@ -2,10 +2,15 @@ import dedent from 'dedent-js';
 
 import { FormatFn } from '../../src/sqlFormatter.js';
 
+type OperatorsConfig = {
+  logicalOperators?: string[];
+  any?: boolean;
+};
+
 export default function supportsOperators(
   format: FormatFn,
   operators: string[],
-  logicalOperators: string[] = ['AND', 'OR']
+  cfg: OperatorsConfig = {}
 ) {
   // Always test for standard SQL operators
   const standardOperators = ['+', '-', '*', '/', '>', '<', '=', '<>', '<=', '>=', '!='];
@@ -26,7 +31,7 @@ export default function supportsOperators(
     });
   });
 
-  logicalOperators.forEach(op => {
+  (cfg.logicalOperators || ['AND', 'OR']).forEach(op => {
     it(`supports ${op} operator`, () => {
       const result = format(`SELECT true ${op} false AS foo;`);
       expect(result).toBe(dedent`
@@ -39,11 +44,16 @@ export default function supportsOperators(
 
   it('supports set operators', () => {
     expect(format('foo ALL bar')).toBe('foo ALL bar');
-    expect(format('foo = ANY (1, 2, 3)')).toBe('foo = ANY (1, 2, 3)');
     expect(format('EXISTS bar')).toBe('EXISTS bar');
     expect(format('foo IN (1, 2, 3)')).toBe('foo IN (1, 2, 3)');
     expect(format("foo LIKE 'hello%'")).toBe("foo LIKE 'hello%'");
     expect(format('foo IS NULL')).toBe('foo IS NULL');
     expect(format('UNIQUE foo')).toBe('UNIQUE foo');
   });
+
+  if (cfg.any) {
+    it('supports ANY set-operator', () => {
+      expect(format('foo = ANY (1, 2, 3)')).toBe('foo = ANY (1, 2, 3)');
+    });
+  }
 }

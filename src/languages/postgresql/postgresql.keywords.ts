@@ -441,12 +441,15 @@ export const dataTypes: string[] = [
   'ARRAY', // reserved, requires AS
   'BIGINT', // (cannot be function or type)
   'BIT', // (cannot be function or type)
+  'BIT VARYING',
   'BOOL', // (cannot be function or type)
   'BOOLEAN', // (cannot be function or type)
   'CHAR', // (cannot be function or type), requires AS
   'CHARACTER', // (cannot be function or type), requires AS
+  'CHARACTER VARYING',
   'DECIMAL', // (cannot be function or type)
   'DOUBLE',
+  'ENUM',
   'FLOAT', // (cannot be function or type)
   'INT', // (cannot be function or type)
   'INTEGER', // (cannot be function or type)
@@ -460,7 +463,6 @@ export const dataTypes: string[] = [
   'TIMESTAMP', // (cannot be function or type)
   'TIMESTAMPTZ', // (cannot be function or type)
   'VARCHAR', // (cannot be function or type)
-  'VARYING', // requires AS
   'XML',
   'ZONE',
 ];

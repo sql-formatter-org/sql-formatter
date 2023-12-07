@@ -25,6 +25,7 @@ import supportsUpdate from './features/update.js';
 import supportsTruncateTable from './features/truncateTable.js';
 import supportsMergeInto from './features/mergeInto.js';
 import supportsCreateView from './features/createView.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('PlSqlFormatter', () => {
   const language = 'plsql';
@@ -57,13 +58,17 @@ describe('PlSqlFormatter', () => {
     format,
     // Missing: '..' operator
     ['**', ':=', '%', '~=', '^=', '>>', '<<', '=>', '||'],
-    ['AND', 'OR', 'XOR']
+    {
+      logicalOperators: ['AND', 'OR', 'XOR'],
+      any: true,
+    }
   );
   supportsJoin(format, { supportsApply: true });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsReturning(format);
   supportsParams(format, { numbered: [':'], named: [':'] });
   supportsLimiting(format, { offset: true, fetchFirst: true, fetchNext: true });
+  supportsDataTypeCase(format);
 
   it('recognizes _, $, # as part of identifiers', () => {
     const result = format('SELECT my_col$1#, col.a$, type#, procedure$, user# FROM tbl;');

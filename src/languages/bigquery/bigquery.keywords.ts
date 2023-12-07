@@ -111,6 +111,7 @@ export const keywords: string[] = [
 ];
 
 export const dataTypes: string[] = [
+  // https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types
   'ARRAY', // parametric, ARRAY<T>
   'BOOL',
   'BYTES', // parameterised, BYTES(Length)
@@ -134,12 +135,4 @@ export const dataTypes: string[] = [
   'STRUCT', // parametric, STRUCT<T>
   'TIME',
   'TIMEZONE',
-
-  // https://cloud.google.com/bigquery/docs/reference/standard-sql/conversion_functions#formatting_syntax
-  'HEX',
-  'BASEX',
-  'BASE64M',
-  'ASCII',
-  'UTF-8',
-  'UTF8',
 ];

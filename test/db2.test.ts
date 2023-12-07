@@ -11,6 +11,7 @@ import supportsStrings from './features/strings.js';
 import supportsComments from './features/comments.js';
 import supportsOperators from './features/operators.js';
 import supportsLimiting from './features/limiting.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('Db2Formatter', () => {
   const language = 'db2';
@@ -28,27 +29,32 @@ describe('Db2Formatter', () => {
   });
   supportsDropTable(format);
   supportsJoin(format, { without: ['NATURAL'] });
-  supportsOperators(format, [
-    '**',
-    '%',
-    '&',
-    '|',
-    '^',
-    '~',
-    '¬=',
-    '¬>',
-    '¬<',
-    '!>',
-    '!<',
-    '^=',
-    '^>',
-    '^<',
-    '||',
-    '->',
-    '=>',
-  ]);
+  supportsOperators(
+    format,
+    [
+      '**',
+      '%',
+      '&',
+      '|',
+      '^',
+      '~',
+      '¬=',
+      '¬>',
+      '¬<',
+      '!>',
+      '!<',
+      '^=',
+      '^>',
+      '^<',
+      '||',
+      '->',
+      '=>',
+    ],
+    { any: true }
+  );
   // Additional U& string type in addition to others shared by all DB2 implementations
   supportsStrings(format, ["U&''"]);
+  supportsDataTypeCase(format);
 
   it('supports non-standard FOR clause', () => {
     expect(format('SELECT * FROM tbl FOR UPDATE OF other_tbl FOR RS USE AND KEEP EXCLUSIVE LOCKS'))

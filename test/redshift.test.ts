@@ -19,6 +19,7 @@ import supportsStrings from './features/strings.js';
 import supportsTruncateTable from './features/truncateTable.js';
 import supportsUpdate from './features/update.js';
 import supportsParams from './options/param.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('RedshiftFormatter', () => {
   const language = 'redshift';
@@ -43,11 +44,14 @@ describe('RedshiftFormatter', () => {
   supportsStrings(format, ["''-qq"]);
   supportsIdentifiers(format, [`""-qq`]);
   // Missing: '#' and '::' operator (tested separately)
-  supportsOperators(format, ['^', '%', '@', '|/', '||/', '&', '|', '~', '<<', '>>', '||']);
+  supportsOperators(format, ['^', '%', '@', '|/', '||/', '&', '|', '~', '<<', '>>', '||'], {
+    any: true,
+  });
   supportsJoin(format);
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT', 'MINUS']);
   supportsParams(format, { numbered: ['$'] });
   supportsLimiting(format, { limit: true, offset: true });
+  supportsDataTypeCase(format);
 
   it('formats type-cast operator without spaces', () => {
     expect(format('SELECT 2 :: numeric AS foo;')).toBe(dedent`

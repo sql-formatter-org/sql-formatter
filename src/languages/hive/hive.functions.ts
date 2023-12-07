@@ -216,13 +216,4 @@ export const functions: string[] = [
   'CUME_DIST',
   'PERCENT_RANK',
   'NTILE',
-
-  // Parameterized data types
-  // https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=82706456
-  // Though in reality Hive only supports parameters for DECIMAL(),
-  // it doesn't hurt to allow others in here as well.
-  'DECIMAL',
-  'NUMERIC',
-  'VARCHAR',
-  'CHAR',
 ];

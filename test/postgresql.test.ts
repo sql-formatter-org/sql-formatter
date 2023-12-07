@@ -29,6 +29,7 @@ import supportsCreateView from './features/createView.js';
 import supportsOnConflict from './features/onConflict.js';
 import supportsIsDistinctFrom from './features/isDistinctFrom.js';
 import supportsArrayLiterals from './features/arrayLiterals.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
@@ -59,90 +60,94 @@ describe('PostgreSqlFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   // Missing: '::' type cast (tested separately)
-  supportsOperators(format, [
-    // Arithmetic
-    '%',
-    '^',
-    '|/',
-    '||/',
-    '@',
-    // Assignment
-    ':=',
-    // Bitwise
-    '&',
-    '|',
-    '#',
-    '~',
-    '<<',
-    '>>',
-    // Byte comparison
-    '~>~',
-    '~<~',
-    '~>=~',
-    '~<=~',
-    // Geometric
-    '@-@',
-    '@@',
-    '##',
-    '<->',
-    '&&',
-    '&<',
-    '&>',
-    '<<|',
-    '&<|',
-    '|>>',
-    '|&>',
-    '<^',
-    '^>',
-    '?#',
-    '?-',
-    '?|',
-    '?-|',
-    '?||',
-    '@>',
-    '<@',
-    '~=',
-    // JSON
-    '?',
-    '@?',
-    '?&',
-    '->',
-    '->>',
-    '#>',
-    '#>>',
-    '#-',
-    // Named function params
-    '=>',
-    // Network address
-    '>>=',
-    '<<=',
-    // Pattern matching
-    '~~',
-    '~~*',
-    '!~~',
-    '!~~*',
-    // POSIX RegExp
-    '~',
-    '~*',
-    '!~',
-    '!~*',
-    // Range/multirange
-    '-|-',
-    // String concatenation
-    '||',
-    // Text search
-    '@@@',
-    '!!',
-    // Trigram/trigraph
-    '<%',
-    '<<%',
-    '%>',
-    '%>>',
-    '<<->',
-    '<->>',
-    '<<<->',
-    '<->>>',
-  ]);
+  supportsOperators(
+    format,
+    [
+      // Arithmetic
+      '%',
+      '^',
+      '|/',
+      '||/',
+      '@',
+      // Assignment
+      ':=',
+      // Bitwise
+      '&',
+      '|',
+      '#',
+      '~',
+      '<<',
+      '>>',
+      // Byte comparison
+      '~>~',
+      '~<~',
+      '~>=~',
+      '~<=~',
+      // Geometric
+      '@-@',
+      '@@',
+      '##',
+      '<->',
+      '&&',
+      '&<',
+      '&>',
+      '<<|',
+      '&<|',
+      '|>>',
+      '|&>',
+      '<^',
+      '^>',
+      '?#',
+      '?-',
+      '?|',
+      '?-|',
+      '?||',
+      '@>',
+      '<@',
+      '~=',
+      // JSON
+      '?',
+      '@?',
+      '?&',
+      '->',
+      '->>',
+      '#>',
+      '#>>',
+      '#-',
+      // Named function params
+      '=>',
+      // Network address
+      '>>=',
+      '<<=',
+      // Pattern matching
+      '~~',
+      '~~*',
+      '!~~',
+      '!~~*',
+      // POSIX RegExp
+      '~',
+      '~*',
+      '!~',
+      '!~*',
+      // Range/multirange
+      '-|-',
+      // String concatenation
+      '||',
+      // Text search
+      '@@@',
+      '!!',
+      // Trigram/trigraph
+      '<%',
+      '<<%',
+      '%>',
+      '%>>',
+      '<<->',
+      '<->>',
+      '<<<->',
+      '<->>>',
+    ],
+    { any: true }
+  );
   supportsIsDistinctFrom(format);
   supportsJoin(format);
   supportsSetOperations(format);
@@ -150,6 +155,7 @@ describe('PostgreSqlFormatter', () => {
   supportsParams(format, { numbered: ['$'] });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
+  supportsDataTypeCase(format);
 
   it('allows $ character as part of identifiers', () => {
     expect(format('SELECT foo$, some$$ident')).toBe(dedent`

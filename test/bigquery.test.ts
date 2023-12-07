@@ -24,6 +24,7 @@ import supportsMergeInto from './features/mergeInto.js';
 import supportsCreateView from './features/createView.js';
 import supportsAlterTable from './features/alterTable.js';
 import supportsIsDistinctFrom from './features/isDistinctFrom.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('BigQueryFormatter', () => {
   const language = 'bigquery';
@@ -55,11 +56,12 @@ describe('BigQueryFormatter', () => {
     'EXCEPT DISTINCT',
     'INTERSECT DISTINCT',
   ]);
-  supportsOperators(format, ['&', '|', '^', '~', '>>', '<<', '||', '=>']);
+  supportsOperators(format, ['&', '|', '^', '~', '>>', '<<', '||', '=>'], { any: true });
   supportsIsDistinctFrom(format);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
+  supportsDataTypeCase(format);
 
   // Note: BigQuery supports single dashes inside identifiers, so my-ident would be
   // detected as identifier, while other SQL dialects would detect it as
@@ -131,7 +133,7 @@ describe('BigQueryFormatter', () => {
     const result = format('SELECT STRUCT("Alpha" as name, [23.4, 26.3, 26.4] as splits) FROM beta');
     expect(result).toBe(dedent`
       SELECT
-        STRUCT ("Alpha" as name, [23.4, 26.3, 26.4] as splits)
+        STRUCT("Alpha" as name, [23.4, 26.3, 26.4] as splits)
       FROM
         beta
     `);
@@ -141,6 +143,14 @@ describe('BigQueryFormatter', () => {
     expect(format('SELECT ARRAY<FLOAT>[1]')).toBe(dedent`
       SELECT
         ARRAY<FLOAT>[1]
+    `);
+  });
+
+  it('STRUCT and ARRAY type case is affected by dataTypeCase option', () => {
+    expect(format('SELECT array<struct<y int64, z string>>[(1, "foo")]', { dataTypeCase: 'upper' }))
+      .toBe(dedent`
+      SELECT
+        ARRAY<STRUCT<y INT64, z STRING>>[(1, "foo")]
     `);
   });
 

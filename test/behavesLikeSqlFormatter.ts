@@ -16,6 +16,7 @@ import supportsNewlineBeforeSemicolon from './options/newlineBeforeSemicolon.js'
 import supportsLogicalOperatorNewline from './options/logicalOperatorNewline.js';
 import supportsParamTypes from './options/paramTypes.js';
 import supportsWindowFunctions from './features/windowFunctions.js';
+import supportsFunctionCase from './options/functionCase.js';
 
 /**
  * Core tests for all SQL formatters
@@ -29,6 +30,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsUseTabs(format);
   supportsKeywordCase(format);
   supportsIdentifierCase(format);
+  supportsFunctionCase(format);
   supportsIndentStyle(format);
   supportsLinesBetweenQueries(format);
   supportsExpressionWidth(format);

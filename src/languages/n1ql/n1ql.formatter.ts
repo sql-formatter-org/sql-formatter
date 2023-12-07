@@ -92,9 +92,8 @@ export const n1ql: DialectOptions = {
     reservedJoins,
     reservedPhrases,
     supportsXor: true,
-    reservedKeywords:
-      // Temporary, will be replaced by reservedDataTypes
-      [...new Set(keywords.concat(dataTypes))],
+    reservedKeywords: keywords,
+    reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
     // NOTE: single quotes are actually not supported in N1QL,
     // but we support them anyway as all other SQL dialects do,

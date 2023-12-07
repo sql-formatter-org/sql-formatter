@@ -22,6 +22,7 @@ import supportsDeleteFrom from './features/deleteFrom.js';
 import supportsTruncateTable from './features/truncateTable.js';
 import supportsMergeInto from './features/mergeInto.js';
 import supportsCreateView from './features/createView.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('HiveFormatter', () => {
   const language = 'hive';
@@ -46,10 +47,11 @@ describe('HiveFormatter', () => {
     supportsUsing: false,
   });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT']);
-  supportsOperators(format, ['%', '~', '^', '|', '&', '<=>', '==', '!', '||']);
+  supportsOperators(format, ['%', '~', '^', '|', '&', '<=>', '==', '!', '||'], { any: true });
   supportsArrayAndMapAccessors(format);
   supportsWindow(format);
   supportsLimiting(format, { limit: true });
+  supportsDataTypeCase(format);
 
   // eslint-disable-next-line no-template-curly-in-string
   it('recognizes ${hivevar:name} substitution variables', () => {

@@ -10,6 +10,7 @@ import supportsCreateTable from './features/createTable.js';
 import supportsCreateView from './features/createView.js';
 import supportsAlterTable from './features/alterTable.js';
 import supportsStrings from './features/strings.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 describe('SingleStoreDbFormatter', () => {
   const language = 'singlestoredb';
@@ -35,7 +36,7 @@ describe('SingleStoreDbFormatter', () => {
   supportsOperators(
     format,
     [':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||', ':>', '!:>'],
-    ['AND', 'OR']
+    { any: true }
   );
   supportsLimiting(format, { limit: true, offset: true });
   supportsCreateTable(format, { ifNotExists: true, columnComment: true, tableComment: true });
@@ -46,6 +47,7 @@ describe('SingleStoreDbFormatter', () => {
     modify: true,
     renameTo: true,
   });
+  supportsDataTypeCase(format);
 
   describe(`formats traversal of semi structured data`, () => {
     it(`formats '::' path-operator without spaces`, () => {
