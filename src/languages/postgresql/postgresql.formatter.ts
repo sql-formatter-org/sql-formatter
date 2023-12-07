@@ -27,7 +27,7 @@ const reservedClauses = expandPhrases([
   'SET',
   // Data definition
   'CREATE [OR REPLACE] [TEMP | TEMPORARY] [RECURSIVE] VIEW',
-  'CREATE MATERIALIZED VIEW [IF NOT EXISTS]',
+  'CREATE [MATERIALIZED] VIEW [IF NOT EXISTS]',
   // other
   'RETURNING',
 ]);

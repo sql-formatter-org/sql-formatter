@@ -59,9 +59,12 @@ export default function supportsCreateView(
   }
 
   if (ifNotExists) {
-    it('formats short CREATE TABLE IF NOT EXISTS', () => {
-      expect(format('CREATE TABLE IF NOT EXISTS tbl (a INT PRIMARY KEY, b TEXT);')).toBe(dedent`
-        CREATE TABLE IF NOT EXISTS tbl (a INT PRIMARY KEY, b TEXT);
+    it('formats short CREATE VIEW IF NOT EXISTS', () => {
+      expect(format('CREATE VIEW IF NOT EXISTS my_view AS SELECT 42;')).toBe(dedent`
+        CREATE VIEW IF NOT EXISTS
+          my_view AS
+        SELECT
+          42;
       `);
     });
   }
