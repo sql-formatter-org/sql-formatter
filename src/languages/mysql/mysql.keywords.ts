@@ -82,6 +82,7 @@ export const keywords: string[] = [
   'HOUR_MICROSECOND', // (R)
   'HOUR_MINUTE', // (R)
   'HOUR_SECOND', // (R)
+  'IDENTIFIED',
   'IF', // (R)
   'IGNORE', // (R)
   'IN', // (R)
