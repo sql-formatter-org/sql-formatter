@@ -1,6 +1,6 @@
 # keywordCase
 
-Converts reserved keywords and builtin function names to upper or lowercase.
+Converts reserved keywords to upper- or lowercase.
 
 ## Options
 
