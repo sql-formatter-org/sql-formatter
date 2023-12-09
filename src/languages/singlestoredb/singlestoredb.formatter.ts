@@ -231,6 +231,7 @@ const reservedPhrases = expandPhrases([
   'ON UPDATE',
   'CHARACTER SET',
   '{ROWS | RANGE} BETWEEN',
+  'IDENTIFIED BY',
 ]);
 
 export const singlestoredb: DialectOptions = {

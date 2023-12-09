@@ -261,6 +261,7 @@ const reservedPhrases = expandPhrases([
   'ON {UPDATE | DELETE} [SET NULL | SET DEFAULT]',
   'CHARACTER SET',
   '{ROWS | RANGE} BETWEEN',
+  'IDENTIFIED BY',
 ]);
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/

@@ -228,6 +228,7 @@ const reservedPhrases = expandPhrases([
   'ON {UPDATE | DELETE} [SET NULL]',
   'CHARACTER SET',
   '{ROWS | RANGE} BETWEEN',
+  'IDENTIFIED BY',
 ]);
 
 // https://dev.mysql.com/doc/refman/8.0/en/
