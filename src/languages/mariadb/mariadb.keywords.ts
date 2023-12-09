@@ -76,7 +76,6 @@ export const keywords: string[] = [
   'HOUR_MICROSECOND',
   'HOUR_MINUTE',
   'HOUR_SECOND',
-  'IDENTIFIED',
   'IF',
   'IGNORE',
   'IGNORE_DOMAIN_IDS',
