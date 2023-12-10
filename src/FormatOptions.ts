@@ -5,12 +5,9 @@ import { ParamTypes } from './lexer/TokenizerOptions.js';
 export type IndentStyle = 'standard' | 'tabularLeft' | 'tabularRight';
 
 export type KeywordCase = 'preserve' | 'upper' | 'lower';
-
-export type IdentifierCase = 'preserve' | 'upper' | 'lower';
-
-export type DataTypeCase = 'preserve' | 'upper' | 'lower';
-
-export type FunctionCase = 'preserve' | 'upper' | 'lower';
+export type IdentifierCase = KeywordCase;
+export type DataTypeCase = KeywordCase;
+export type FunctionCase = KeywordCase;
 
 export type LogicalOperatorNewline = 'before' | 'after';
 
