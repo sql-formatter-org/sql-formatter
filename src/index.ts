@@ -31,6 +31,8 @@ export type {
 export type {
   IndentStyle,
   KeywordCase,
+  DataTypeCase,
+  FunctionCase,
   IdentifierCase,
   LogicalOperatorNewline,
   FormatOptions,
