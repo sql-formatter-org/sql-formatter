@@ -18,6 +18,7 @@ const reservedClauses = expandPhrases([
   'ORDER BY',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  'OPTION',
   // Data manipulation
   // - insert:
   'INSERT [INTO]',

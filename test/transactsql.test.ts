@@ -138,6 +138,16 @@ describe('TransactSqlFormatter', () => {
     `);
   });
 
+  it('formats SELECT ... OPTIONS ()', () => {
+    const result = format('SELECT col OPTIONS (MAXRECURSION 5)');
+    expect(result).toBe(dedent`
+      SELECT
+        col
+      OPTION
+        (MAXRECURSION 5)
+    `);
+  });
+
   it('formats goto labels', () => {
     const result = format(
       `InfiniLoop:
