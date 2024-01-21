@@ -17,11 +17,13 @@ import supportsLogicalOperatorNewline from './options/logicalOperatorNewline.js'
 import supportsParamTypes from './options/paramTypes.js';
 import supportsWindowFunctions from './features/windowFunctions.js';
 import supportsFunctionCase from './options/functionCase.js';
+import supportsDisableComment from './features/disableComment.js';
 
 /**
  * Core tests for all SQL formatters
  */
 export default function behavesLikeSqlFormatter(format: FormatFn) {
+  supportsDisableComment(format);
   supportsCase(format);
   supportsNumbers(format);
   supportsWith(format);

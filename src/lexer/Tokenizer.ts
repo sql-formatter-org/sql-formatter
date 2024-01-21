@@ -33,6 +33,11 @@ export default class Tokenizer {
     return this.validRules([
       {
         type: TokenType.BLOCK_COMMENT,
+        regex:
+          /(\/\* *sql-formatter-disable *\*\/[\s\S]*?(?:\/\* *sql-formatter-enable *\*\/|$))/uy,
+      },
+      {
+        type: TokenType.BLOCK_COMMENT,
         regex: cfg.nestedBlockComments ? new NestedComment() : /(\/\*[^]*?\*\/)/uy,
       },
       {

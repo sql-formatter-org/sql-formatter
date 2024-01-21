@@ -380,3 +380,10 @@ comment -> %BLOCK_COMMENT {%
     precedingWhitespace: token.precedingWhitespace,
   })
 %}
+comment -> %DISABLE_COMMENT {%
+  ([token]) => ({
+    type: NodeType.disable_comment,
+    text: token.text,
+    precedingWhitespace: token.precedingWhitespace,
+  })
+%}

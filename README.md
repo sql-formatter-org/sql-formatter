@@ -61,6 +61,34 @@ format('SELECT * FROM tbl', {
 });
 ```
 
+### Disabling the formatter
+
+You can disable the formatter for a section of SQL by surrounding it with disable/enable comments:
+
+```sql
+/* sql-formatter-disable */
+SELECT * FROM tbl1;
+/* sql-formatter-enable */
+SELECT * FROM tbl2;
+```
+
+which produces:
+
+```sql
+/* sql-formatter-disable */
+SELECT * FROM tbl1;
+/* sql-formatter-enable */
+SELECT
+  *
+FROM
+  tbl2;
+```
+
+The formatter doesn't even parse the code between these comments.
+So in case there's some SQL that happens to crash SQL Formatter,
+you can at comment the culprit out (at least until the issue gets
+fixed in SQL Formatter).
+
 ### Placeholders replacement
 
 In addition to formatting, this library can also perform placeholder replacement in prepared SQL statements:

@@ -30,6 +30,7 @@ import {
   CaseElseNode,
   DataTypeNode,
   ParameterizedDataTypeNode,
+  DisableCommentNode,
 } from '../parser/ast.js';
 
 import Layout, { WS } from './Layout.js';
@@ -133,6 +134,8 @@ export default class ExpressionFormatter {
       case NodeType.line_comment:
         return this.formatLineComment(node);
       case NodeType.block_comment:
+        return this.formatBlockComment(node);
+      case NodeType.disable_comment:
         return this.formatBlockComment(node);
       case NodeType.data_type:
         return this.formatDataType(node);
@@ -367,8 +370,8 @@ export default class ExpressionFormatter {
     }
   }
 
-  private formatBlockComment(node: BlockCommentNode) {
-    if (this.isMultilineBlockComment(node)) {
+  private formatBlockComment(node: BlockCommentNode | DisableCommentNode) {
+    if (node.type === NodeType.block_comment && this.isMultilineBlockComment(node)) {
       this.splitBlockComment(node.text).forEach(line => {
         this.layout.add(WS.NEWLINE, WS.INDENT, line);
       });

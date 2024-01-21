@@ -24,6 +24,7 @@ export enum NodeType {
   comma = 'comma',
   line_comment = 'line_comment',
   block_comment = 'block_comment',
+  disable_comment = 'disable_comment',
 }
 
 interface BaseNode {
@@ -178,7 +179,13 @@ export interface BlockCommentNode extends BaseNode {
   precedingWhitespace: string;
 }
 
-export type CommentNode = LineCommentNode | BlockCommentNode;
+export interface DisableCommentNode extends BaseNode {
+  type: NodeType.disable_comment;
+  text: string;
+  precedingWhitespace: string;
+}
+
+export type CommentNode = LineCommentNode | BlockCommentNode | DisableCommentNode;
 
 export type AstNode =
   | ClauseNode
@@ -202,4 +209,5 @@ export type AstNode =
   | OperatorNode
   | CommaNode
   | LineCommentNode
-  | BlockCommentNode;
+  | BlockCommentNode
+  | DisableCommentNode;
