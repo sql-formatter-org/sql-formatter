@@ -52,7 +52,7 @@ class SqlFormatterCli {
     });
 
     parser.add_argument('-c', '--config', {
-      help: 'Path to config json file (will use default configs if unspecified)',
+      help: 'Path to config JSON file or json string (will use default configs if unspecified)',
     });
 
     parser.add_argument('--version', {
@@ -73,19 +73,28 @@ class SqlFormatterCli {
     }
 
     if (this.args.config) {
+      // First, try to parse --config value as a JSON string
       try {
-        const configFile = await this.readFile(this.args.config);
-        const configJson = JSON.parse(configFile);
+        const configJson = JSON.parse(this.args.config);
         return { language: this.args.language, ...configJson };
       } catch (e) {
-        if (e instanceof SyntaxError) {
-          console.error(`Error: unable to parse JSON at file ${this.args.config}`);
-          process.exit(1);
+        // If that fails, try to read the --config value as a file
+        try {
+          const configFile = await this.readFile(this.args.config);
+          const configJson = JSON.parse(configFile);
+          return { language: this.args.language, ...configJson };
+        } catch (e) {
+          if (e instanceof SyntaxError) {
+            console.error(
+              `Error: unable to parse as JSON or treat as JSON file: ${this.args.config}`
+            );
+            process.exit(1);
+          }
+          this.exitWhenIOError(e);
+          console.error('An unknown error has occurred, please file a bug report at:');
+          console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
+          throw e;
         }
-        this.exitWhenIOError(e);
-        console.error('An unknown error has occurred, please file a bug report at:');
-        console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
-        throw e;
       }
     }
     return {
