@@ -18,6 +18,7 @@ const reservedClauses = expandPhrases([
   'ORDER BY',
   'OFFSET',
   'FETCH {FIRST | NEXT}',
+  'FOR {BROWSE | XML | JSON}',
   'OPTION',
   // Data manipulation
   // - insert:

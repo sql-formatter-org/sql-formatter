@@ -148,6 +148,34 @@ describe('TransactSqlFormatter', () => {
     `);
   });
 
+  it('formats SELECT ... FOR BROWSE', () => {
+    expect(format('SELECT col FOR BROWSE')).toBe(dedent`
+      SELECT
+        col
+      FOR BROWSE
+    `);
+  });
+
+  it('formats SELECT ... FOR XML', () => {
+    expect(format("SELECT col FOR XML PATH('Employee'), ROOT('Employees')")).toBe(dedent`
+      SELECT
+        col
+      FOR XML
+        PATH ('Employee'),
+        ROOT ('Employees')
+    `);
+  });
+
+  it('formats SELECT ... FOR JSON', () => {
+    expect(format('SELECT col FOR JSON PATH, WITHOUT_ARRAY_WRAPPER')).toBe(dedent`
+      SELECT
+        col
+      FOR JSON
+        PATH,
+        WITHOUT_ARRAY_WRAPPER
+    `);
+  });
+
   it('formats goto labels', () => {
     const result = format(
       `InfiniLoop:
