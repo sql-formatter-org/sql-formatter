@@ -128,6 +128,7 @@ export interface LiteralNode extends BaseNode {
 export interface PropertyAccessNode extends BaseNode {
   type: NodeType.property_access;
   object: AstNode;
+  operator: string;
   property: IdentifierNode | ArraySubscriptNode | AllColumnsAsteriskNode;
 }
 

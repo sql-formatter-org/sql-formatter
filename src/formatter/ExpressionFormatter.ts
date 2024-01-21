@@ -179,7 +179,7 @@ export default class ExpressionFormatter {
 
   private formatPropertyAccess(node: PropertyAccessNode) {
     this.formatNode(node.object);
-    this.layout.add(WS.NO_SPACE, '.');
+    this.layout.add(WS.NO_SPACE, node.operator);
     this.formatNode(node.property);
   }
 

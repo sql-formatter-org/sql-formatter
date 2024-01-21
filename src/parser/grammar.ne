@@ -265,6 +265,7 @@ property_access -> atomic_expression _ %DOT _ (identifier | array_subscript | al
     return {
       type: NodeType.property_access,
       object: addComments(object, { trailing: _1 }),
+      operator: dot.text,
       property: addComments(property, { leading: _2 }),
     };
   }

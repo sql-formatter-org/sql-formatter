@@ -293,6 +293,7 @@ Array [
               "text": "ident",
               "type": "identifier",
             },
+            "operator": ".",
             "property": Object {
               "type": "all_columns_asterisk",
             },
@@ -642,6 +643,7 @@ Array [
                 "text": "foo",
                 "type": "identifier",
               },
+              "operator": ".",
               "property": Object {
                 "quoted": false,
                 "text": "bar",
@@ -649,6 +651,7 @@ Array [
               },
               "type": "property_access",
             },
+            "operator": ".",
             "property": Object {
               "quoted": false,
               "text": "baz",
