@@ -6,6 +6,7 @@ export const keywords: string[] = [
   'ANY', // <- moved over from functions
   'ARE',
   'AS',
+  'ASC', // Not reserved in SQL-2008, but commonly reserved in most dialects
   'ASENSITIVE',
   'ASYMMETRIC',
   'AT',
@@ -48,6 +49,7 @@ export const keywords: string[] = [
   'DEFAULT',
   'DELETE',
   'DEREF',
+  'DESC', // Not reserved in SQL-2008, but commonly reserved in most dialects
   'DESCRIBE',
   'DETERMINISTIC',
   'DISCONNECT',

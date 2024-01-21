@@ -72,6 +72,20 @@ describe('SqlFormatter', () => {
     ).toThrowError('Parse error: Unexpected "{foo};" at line 2 column 3');
   });
 
+  // Issue #702
+  it('treats ASC and DESC as reserved keywords', () => {
+    expect(format(`SELECT foo FROM bar ORDER BY foo asc, zap desc`, { keywordCase: 'upper' }))
+      .toBe(dedent`
+        SELECT
+          foo
+        FROM
+          bar
+        ORDER BY
+          foo ASC,
+          zap DESC
+      `);
+  });
+
   it('formats ALTER TABLE ... ALTER COLUMN', () => {
     expect(
       format(
