@@ -32,9 +32,12 @@ const reservedClauses = expandPhrases([
   'RETURNING',
 ]);
 
-const onelineClauses = expandPhrases([
-  // - create:
+const standardOnelineClauses = expandPhrases([
   'CREATE [GLOBAL TEMPORARY | PRIVATE TEMPORARY | SHARDED | DUPLICATED | IMMUTABLE BLOCKCHAIN | BLOCKCHAIN | IMMUTABLE] TABLE',
+]);
+
+const tabularOnelineClauses = expandPhrases([
+  // - create:
   'CREATE [OR REPLACE] [NO FORCE | FORCE] [EDITIONING | EDITIONABLE | EDITIONABLE EDITIONING | NONEDITIONABLE] VIEW',
   'CREATE MATERIALIZED VIEW',
   // - update:
@@ -85,7 +88,7 @@ export const plsql: DialectOptions = {
   name: 'plsql',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -122,7 +125,8 @@ export const plsql: DialectOptions = {
   },
   formatOptions: {
     alwaysDenseOperators: ['@'],
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };
 

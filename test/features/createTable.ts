@@ -67,4 +67,21 @@ export default function supportsCreateTable(format: FormatFn, cfg: CreateTableCo
       `);
     });
   }
+
+  it('correctly indents CREATE TABLE in tabular style', () => {
+    expect(
+      format(
+        `CREATE TABLE foo (
+          id INT PRIMARY KEY NOT NULL,
+          fname VARCHAR NOT NULL
+        );`,
+        { indentStyle: 'tabularLeft' }
+      )
+    ).toBe(dedent`
+      CREATE    TABLE foo (
+                id INT PRIMARY KEY NOT NULL,
+                fname VARCHAR NOT NULL
+                );
+    `);
+  });
 }

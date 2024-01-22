@@ -42,4 +42,7 @@ const processDialectFormatOptions = (
 ): ProcessedDialectFormatOptions => ({
   alwaysDenseOperators: options.alwaysDenseOperators || [],
   onelineClauses: Object.fromEntries(options.onelineClauses.map(name => [name, true])),
+  tabularOnelineClauses: Object.fromEntries(
+    (options.tabularOnelineClauses ?? options.onelineClauses).map(name => [name, true])
+  ),
 });

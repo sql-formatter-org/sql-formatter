@@ -26,9 +26,10 @@ const reservedClauses = expandPhrases([
   'SET',
 ]);
 
-const onelineClauses = expandPhrases([
+const standardOnelineClauses = expandPhrases(['CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE']);
+
+const tabularOnelineClauses = expandPhrases([
   // - create:
-  'CREATE [GLOBAL TEMPORARY | LOCAL TEMPORARY] TABLE',
   'CREATE [RECURSIVE] VIEW',
   // - update:
   'UPDATE',
@@ -77,7 +78,7 @@ export const sql: DialectOptions = {
   name: 'sql',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -93,6 +94,7 @@ export const sql: DialectOptions = {
     operators: ['||'],
   },
   formatOptions: {
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };

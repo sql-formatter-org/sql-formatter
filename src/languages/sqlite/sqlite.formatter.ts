@@ -26,9 +26,10 @@ const reservedClauses = expandPhrases([
   'SET',
 ]);
 
-const onelineClauses = expandPhrases([
+const standardOnelineClauses = expandPhrases(['CREATE [TEMPORARY | TEMP] TABLE [IF NOT EXISTS]']);
+
+const tabularOnelineClauses = expandPhrases([
   // - create:
-  'CREATE [TEMPORARY | TEMP] TABLE [IF NOT EXISTS]',
   'CREATE [TEMPORARY | TEMP] VIEW [IF NOT EXISTS]',
   // - update:
   'UPDATE [OR ABORT | OR FAIL | OR IGNORE | OR REPLACE | OR ROLLBACK]',
@@ -68,7 +69,7 @@ export const sqlite: DialectOptions = {
   name: 'sqlite',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -87,6 +88,7 @@ export const sqlite: DialectOptions = {
     operators: ['%', '~', '&', '|', '<<', '>>', '==', '->', '->>', '||'],
   },
   formatOptions: {
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };

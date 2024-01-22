@@ -34,9 +34,10 @@ const reservedClauses = expandPhrases([
   'CREATE [OR ALTER] {PROC | PROCEDURE}',
 ]);
 
-const onelineClauses = expandPhrases([
+const standardOnelineClauses = expandPhrases(['CREATE TABLE']);
+
+const tabularOnelineClauses = expandPhrases([
   // - create:
-  'CREATE TABLE',
   'CREATE [OR ALTER] [MATERIALIZED] VIEW',
   // - update:
   'UPDATE',
@@ -228,7 +229,7 @@ export const transactsql: DialectOptions = {
   name: 'transactsql',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -263,6 +264,7 @@ export const transactsql: DialectOptions = {
   },
   formatOptions: {
     alwaysDenseOperators: ['::'],
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };

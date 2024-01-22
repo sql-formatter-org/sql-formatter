@@ -41,9 +41,12 @@ const reservedClauses = expandPhrases([
   '[OVERWRITE] INTO TABLE',
 ]);
 
-const onelineClauses = expandPhrases([
-  // - create:
+const standardOnelineClauses = expandPhrases([
   'CREATE [TEMPORARY] [EXTERNAL] TABLE [IF NOT EXISTS]',
+]);
+
+const tabularOnelineClauses = expandPhrases([
+  // - create:
   'CREATE [MATERIALIZED] VIEW [IF NOT EXISTS]',
   // - update:
   'UPDATE',
@@ -86,7 +89,7 @@ export const hive: DialectOptions = {
   name: 'hive',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -100,6 +103,7 @@ export const hive: DialectOptions = {
     operators: ['%', '~', '^', '|', '&', '<=>', '==', '!', '||'],
   },
   formatOptions: {
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };

@@ -24,9 +24,12 @@ const reservedClauses = expandPhrases([
   'SET',
 ]);
 
-const onelineClauses = expandPhrases([
-  // - create:
+const standardOnelineClauses = expandPhrases([
   'CREATE [TEMPORARY | TEMP | LOCAL TEMPORARY | LOCAL TEMP] TABLE [IF NOT EXISTS]',
+]);
+
+const tabularOnelineClauses = expandPhrases([
+  // - create:
   'CREATE [OR REPLACE | MATERIALIZED] VIEW',
   // - update:
   'UPDATE',
@@ -143,7 +146,7 @@ export const redshift: DialectOptions = {
   name: 'redshift',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -172,6 +175,7 @@ export const redshift: DialectOptions = {
   },
   formatOptions: {
     alwaysDenseOperators: ['::'],
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };

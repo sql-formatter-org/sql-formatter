@@ -34,9 +34,10 @@ const reservedClauses = expandPhrases([
   '[OVERWRITE] INTO TABLE',
 ]);
 
-const onelineClauses = expandPhrases([
+const standardOnelineClauses = expandPhrases(['CREATE [EXTERNAL] TABLE [IF NOT EXISTS]']);
+
+const tabularOnelineClauses = expandPhrases([
   // - create:
-  'CREATE [EXTERNAL] TABLE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [GLOBAL TEMPORARY | TEMPORARY] VIEW [IF NOT EXISTS]',
   // - drop table:
   'DROP TABLE [IF EXISTS]',
@@ -122,7 +123,7 @@ export const spark: DialectOptions = {
   name: 'spark',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -143,7 +144,8 @@ export const spark: DialectOptions = {
     postProcess,
   },
   formatOptions: {
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };
 

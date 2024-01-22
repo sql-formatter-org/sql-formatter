@@ -29,9 +29,12 @@ const reservedClauses = expandPhrases([
   'RETURNING',
 ]);
 
-const onelineClauses = expandPhrases([
-  // - create
+const standardOnelineClauses = expandPhrases([
   'CREATE [GLOBAL | LOCAL] [TEMPORARY | TEMP | UNLOGGED] TABLE [IF NOT EXISTS]',
+]);
+
+const tabularOnelineClauses = expandPhrases([
+  // - create
   'CREATE [OR REPLACE] [TEMP | TEMPORARY] [RECURSIVE] VIEW',
   'CREATE [MATERIALIZED] VIEW [IF NOT EXISTS]',
   // - update:
@@ -256,7 +259,7 @@ export const postgresql: DialectOptions = {
   name: 'postgresql',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -364,6 +367,7 @@ export const postgresql: DialectOptions = {
   },
   formatOptions: {
     alwaysDenseOperators: ['::', ':'],
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };

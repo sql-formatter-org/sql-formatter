@@ -30,9 +30,12 @@ const reservedClauses = expandPhrases([
   'RETURNING',
 ]);
 
-const onelineClauses = expandPhrases([
-  // - create:
+const standardOnelineClauses = expandPhrases([
   'CREATE [OR REPLACE] [TEMPORARY] TABLE [IF NOT EXISTS]',
+]);
+
+const tabularOnelineClauses = expandPhrases([
+  // - create:
   'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   // - update:
   'UPDATE [LOW_PRIORITY] [IGNORE]',
@@ -269,7 +272,7 @@ export const mariadb: DialectOptions = {
   name: 'mariadb',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -311,6 +314,7 @@ export const mariadb: DialectOptions = {
     postProcess,
   },
   formatOptions: {
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };

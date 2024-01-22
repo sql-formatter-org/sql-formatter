@@ -36,10 +36,13 @@ const reservedClauses = expandPhrases([
   'WHEN NOT MATCHED THEN INSERT',
 ]);
 
-const onelineClauses = expandPhrases([
-  // - create:
+const standardOnelineClauses = expandPhrases([
   'CREATE [OR REPLACE] [VOLATILE] TABLE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [LOCAL | GLOBAL] {TEMP|TEMPORARY} TABLE [IF NOT EXISTS]',
+]);
+
+const tabularOnelineClauses = expandPhrases([
+  // - create:
   'CREATE [OR REPLACE] [SECURE] [RECURSIVE] VIEW [IF NOT EXISTS]',
   // - update:
   'UPDATE',
@@ -298,7 +301,7 @@ export const snowflake: DialectOptions = {
   name: 'snowflake',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -331,6 +334,7 @@ export const snowflake: DialectOptions = {
   },
   formatOptions: {
     alwaysDenseOperators: [':', '::'],
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };

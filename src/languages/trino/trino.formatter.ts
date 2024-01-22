@@ -36,9 +36,10 @@ const reservedClauses = expandPhrases([
   'DEFINE',
 ]);
 
-const onelineClauses = expandPhrases([
+const standardOnelineClauses = expandPhrases(['CREATE TABLE [IF NOT EXISTS]']);
+
+const tabularOnelineClauses = expandPhrases([
   // - create:
-  'CREATE TABLE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [MATERIALIZED] VIEW',
   // - update:
   'UPDATE',
@@ -128,7 +129,7 @@ export const trino: DialectOptions = {
   name: 'trino',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -163,6 +164,7 @@ export const trino: DialectOptions = {
     ],
   },
   formatOptions: {
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };

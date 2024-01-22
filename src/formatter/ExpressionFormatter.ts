@@ -50,6 +50,8 @@ export interface DialectFormatOptions {
   alwaysDenseOperators?: string[];
   // List of clauses that should be formatted on a single line
   onelineClauses: string[];
+  // List of clauses that should be formatted on a single line in tabular style
+  tabularOnelineClauses?: string[];
 }
 
 // Contains the same data as DialectFormatOptions,
@@ -57,6 +59,7 @@ export interface DialectFormatOptions {
 export interface ProcessedDialectFormatOptions {
   alwaysDenseOperators: string[];
   onelineClauses: Record<string, boolean>;
+  tabularOnelineClauses: Record<string, boolean>;
 }
 
 /** Formats a generic SQL expression */
@@ -255,7 +258,11 @@ export default class ExpressionFormatter {
   }
 
   private isOnelineClause(node: ClauseNode): boolean {
-    return this.dialectCfg.onelineClauses[node.nameKw.text];
+    if (isTabularStyle(this.cfg)) {
+      return this.dialectCfg.tabularOnelineClauses[node.nameKw.text];
+    } else {
+      return this.dialectCfg.onelineClauses[node.nameKw.text];
+    }
   }
 
   private formatClauseInIndentedStyle(node: ClauseNode) {

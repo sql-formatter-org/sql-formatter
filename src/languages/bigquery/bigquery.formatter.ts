@@ -38,10 +38,13 @@ const reservedClauses = expandPhrases([
   'REMOTE WITH CONNECTION',
 ]);
 
-const onelineClauses = expandPhrases([
+const standardOnelineClauses = expandPhrases([
+  'CREATE [OR REPLACE] [TEMP|TEMPORARY|SNAPSHOT|EXTERNAL] TABLE [IF NOT EXISTS]',
+]);
+
+const tabularOnelineClauses = expandPhrases([
   // - create:
   // https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
-  'CREATE [OR REPLACE] [TEMP|TEMPORARY|SNAPSHOT|EXTERNAL] TABLE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [MATERIALIZED] VIEW [IF NOT EXISTS]',
   // - update:
   'UPDATE',
@@ -160,7 +163,7 @@ export const bigquery: DialectOptions = {
   name: 'bigquery',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...tabularOnelineClauses, ...standardOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -187,7 +190,8 @@ export const bigquery: DialectOptions = {
     postProcess,
   },
   formatOptions: {
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };
 

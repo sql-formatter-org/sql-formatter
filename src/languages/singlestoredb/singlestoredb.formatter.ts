@@ -30,9 +30,12 @@ const reservedClauses = expandPhrases([
   'CREATE [OR REPLACE] [EXTERNAL] FUNCTION',
 ]);
 
-const onelineClauses = expandPhrases([
-  // - create:
+const standardOnelineClauses = expandPhrases([
   'CREATE [ROWSTORE] [REFERENCE | TEMPORARY | GLOBAL TEMPORARY] TABLE [IF NOT EXISTS]',
+]);
+
+const tabularOnelineClauses = expandPhrases([
+  // - create:
   'CREATE VIEW',
   // - update:
   'UPDATE',
@@ -238,7 +241,7 @@ export const singlestoredb: DialectOptions = {
   name: 'singlestoredb',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -280,6 +283,7 @@ export const singlestoredb: DialectOptions = {
   },
   formatOptions: {
     alwaysDenseOperators: ['::', '::$', '::%'],
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };

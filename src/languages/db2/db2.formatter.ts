@@ -36,9 +36,12 @@ const reservedClauses = expandPhrases([
   'INSERT',
 ]);
 
-const onelineClauses = expandPhrases([
-  // - create:
+const standardOnelineClauses = expandPhrases([
   'CREATE [GLOBAL TEMPORARY | EXTERNAL] TABLE [IF NOT EXISTS]',
+]);
+
+const tabularOnelineClauses = expandPhrases([
+  // - create:
   'CREATE [OR REPLACE] VIEW',
   // - update:
   'UPDATE',
@@ -261,7 +264,7 @@ export const db2: DialectOptions = {
   name: 'db2',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -298,6 +301,7 @@ export const db2: DialectOptions = {
     ],
   },
   formatOptions: {
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };

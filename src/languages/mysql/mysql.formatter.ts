@@ -28,9 +28,10 @@ const reservedClauses = expandPhrases([
   'SET',
 ]);
 
-const onelineClauses = expandPhrases([
+const standardOnelineClauses = expandPhrases(['CREATE [TEMPORARY] TABLE [IF NOT EXISTS]']);
+
+const tabularOnelineClauses = expandPhrases([
   // - create:
-  'CREATE [TEMPORARY] TABLE [IF NOT EXISTS]',
   'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
   // - update:
   'UPDATE [LOW_PRIORITY] [IGNORE]',
@@ -236,7 +237,7 @@ export const mysql: DialectOptions = {
   name: 'mysql',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -280,6 +281,7 @@ export const mysql: DialectOptions = {
     postProcess,
   },
   formatOptions: {
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };

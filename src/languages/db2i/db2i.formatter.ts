@@ -37,9 +37,10 @@ const reservedClauses = expandPhrases([
   'FOR SYSTEM NAME',
 ]);
 
-const onelineClauses = expandPhrases([
+const standardOnelineClauses = expandPhrases(['CREATE [OR REPLACE] TABLE']);
+
+const tabularOnelineClauses = expandPhrases([
   // - create:
-  'CREATE [OR REPLACE] TABLE',
   'CREATE [OR REPLACE] [RECURSIVE] VIEW',
   // - update:
   'UPDATE',
@@ -157,7 +158,7 @@ export const db2i: DialectOptions = {
   name: 'db2i',
   tokenizerOptions: {
     reservedSelect,
-    reservedClauses: [...reservedClauses, ...onelineClauses],
+    reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
     reservedPhrases,
@@ -177,6 +178,7 @@ export const db2i: DialectOptions = {
     operators: ['**', '¬=', '¬>', '¬<', '!>', '!<', '||', '=>'],
   },
   formatOptions: {
-    onelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
+    tabularOnelineClauses,
   },
 };
