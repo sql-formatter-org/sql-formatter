@@ -181,7 +181,7 @@ All fields are optional and all fields that are not specified will be filled wit
 - [**`dataTypeCase`**](docs/dataTypeCase.md) uppercases or lowercases data types.
 - [**`functionCase`**](docs/functionCase.md) uppercases or lowercases function names.
 - [**`identifierCase`**](docs/identifierCase.md) uppercases or lowercases identifiers. (**experimental!**)
-- [**`indentStyle`**](docs/indentStyle.md) defines overall indentation style.
+- [**`indentStyle`**](docs/indentStyle.md) defines overall indentation style. (**deprecated!**)
 - [**`logicalOperatorNewline`**](docs/logicalOperatorNewline.md) newline before or after boolean operator (AND, OR, XOR).
 - [**`expressionWidth`**](docs/expressionWidth.md) maximum number of characters in parenthesized expressions to be kept on single line.
 - [**`linesBetweenQueries`**](docs/linesBetweenQueries.md) how many newlines to insert between queries.

@@ -1,4 +1,4 @@
-# indentStyle
+# indentStyle (DEPRECATED!)
 
 Switches between different indentation styles.
 
@@ -11,6 +11,7 @@ Switches between different indentation styles.
 Caveats of using `"tabularLeft"` and `"tabularRight"`:
 
 - `tabWidth` option is ignored. Indentation will always be 10 spaces, regardless of what is specified by `tabWidth`.
+- The implementation of these styles is more of a bolted-on feature which has never worked quite as well as the `"standard"` style.
 
 ### standard
 
