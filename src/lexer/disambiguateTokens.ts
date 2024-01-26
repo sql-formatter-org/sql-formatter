@@ -1,7 +1,8 @@
 import { isReserved, Token, TokenType } from './token.js';
 
 /**
- * Ensures that no keyword token (RESERVED_*) is preceded by dot (.).
+ * Ensures that no keyword token (RESERVED_*) is preceded by dot (.)
+ * or any other property-access operator.
  *
  * Ensures that all RESERVED_FUNCTION_NAME tokens are followed by "(".
  * If they're not, converts the token to RESERVED_KEYWORD.
@@ -17,17 +18,17 @@ import { isReserved, Token, TokenType } from './token.js';
  */
 export function disambiguateTokens(tokens: Token[]): Token[] {
   return tokens
-    .map(dotKeywordToIdent)
+    .map(propertyNameKeywordToIdent)
     .map(funcNameToKeyword)
     .map(dataTypeToParameterizedDataType)
     .map(identToArrayIdent)
     .map(dataTypeToArrayKeyword);
 }
 
-const dotKeywordToIdent = (token: Token, i: number, tokens: Token[]): Token => {
+const propertyNameKeywordToIdent = (token: Token, i: number, tokens: Token[]): Token => {
   if (isReserved(token.type)) {
     const prevToken = prevNonCommentToken(tokens, i);
-    if (prevToken && prevToken.text === '.') {
+    if (prevToken && prevToken.type === TokenType.PROPERTY_ACCESS_OPERATOR) {
       return { ...token, type: TokenType.IDENTIFIER, text: token.raw };
     }
   }
