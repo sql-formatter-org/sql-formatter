@@ -80,6 +80,12 @@ describe('SnowflakeFormatter', () => {
           foo:bar.baz
       `);
     });
+    it(`formats ':' path-operator when followed by reserved keyword`, () => {
+      expect(format(`SELECT foo : from`)).toBe(dedent`
+        SELECT
+          foo:from
+      `);
+    });
   });
 
   it('formats type-cast operator without spaces', () => {

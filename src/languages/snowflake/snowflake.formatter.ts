@@ -326,11 +326,10 @@ export const snowflake: DialectOptions = {
       '::',
       // String concat
       '||',
-      // Get Path
-      ':',
       // Generators: https://docs.snowflake.com/en/sql-reference/functions/generator.html#generator
       '=>',
     ],
+    propertyAccessOperators: [':'],
   },
   formatOptions: {
     alwaysDenseOperators: [':', '::'],
