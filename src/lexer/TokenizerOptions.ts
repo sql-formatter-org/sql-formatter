@@ -95,6 +95,9 @@ export interface TokenizerOptions {
   paramChars?: IdentChars;
   // Additional multi-character operators to support, in addition to <=, >=, <>, !=
   operators?: string[];
+  // Additional operators for property access, in addition to .
+  // Like in table.column
+  propertyAccessOperators?: string[];
   // Allows custom modifications on the token array.
   // Called after the whole input string has been split into tokens.
   // The result of this will be the output of the tokenizer.

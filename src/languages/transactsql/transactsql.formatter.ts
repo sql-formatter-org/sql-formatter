@@ -260,6 +260,7 @@ export const transactsql: DialectOptions = {
       '::',
       ':',
     ],
+    propertyAccessOperators: ['..'],
     // TODO: Support for money constants
   },
   formatOptions: {
