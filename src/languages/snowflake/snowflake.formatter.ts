@@ -332,7 +332,7 @@ export const snowflake: DialectOptions = {
     propertyAccessOperators: [':'],
   },
   formatOptions: {
-    alwaysDenseOperators: [':', '::'],
+    alwaysDenseOperators: ['::'],
     onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
     tabularOnelineClauses,
   },
