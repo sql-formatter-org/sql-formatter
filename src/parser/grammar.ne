@@ -256,7 +256,7 @@ square_brackets -> "[" free_form_sql:* "]" {%
   })
 %}
 
-property_access -> atomic_expression _ %DOT _ (identifier | array_subscript | all_columns_asterisk | parameter) {%
+property_access -> atomic_expression _ %PROPERTY_ACCESS_OPERATOR _ (identifier | array_subscript | all_columns_asterisk | parameter) {%
   // Allowing property to be <array_subscript> is currently a hack.
   // A better way would be to allow <property_access> on the left side of array_subscript,
   // but we currently can't do that because of another hack that requires

@@ -28,7 +28,7 @@ export enum TokenType {
   OPERATOR = 'OPERATOR',
   COMMA = 'COMMA',
   ASTERISK = 'ASTERISK', // *
-  DOT = 'DOT', // . (or .. in Transact-SQL)
+  PROPERTY_ACCESS_OPERATOR = 'PROPERTY_ACCESS_OPERATOR', // Usually "."
   OPEN_PAREN = 'OPEN_PAREN',
   CLOSE_PAREN = 'CLOSE_PAREN',
   LINE_COMMENT = 'LINE_COMMENT',

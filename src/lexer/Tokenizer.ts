@@ -189,7 +189,10 @@ export default class Tokenizer {
         ]),
       },
       { type: TokenType.ASTERISK, regex: /[*]/uy },
-      { type: TokenType.DOT, regex: regex.operator(['.', ...(cfg.propertyAccessOperators ?? [])]) },
+      {
+        type: TokenType.PROPERTY_ACCESS_OPERATOR,
+        regex: regex.operator(['.', ...(cfg.propertyAccessOperators ?? [])]),
+      },
     ]);
   }
 
