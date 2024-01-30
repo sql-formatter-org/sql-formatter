@@ -313,16 +313,20 @@ describe('PostgreSqlFormatter', () => {
     `);
   });
 
-  // Issue #156
+  // Issue #156, #709
   it('does not recognize common fields names as keywords', () => {
-    expect(format(`SELECT id, type, name, location, label FROM release;`, { keywordCase: 'upper' }))
-      .toBe(dedent`
+    expect(
+      format(`SELECT id, type, name, location, label, password FROM release;`, {
+        keywordCase: 'upper',
+      })
+    ).toBe(dedent`
       SELECT
         id,
         type,
         name,
         location,
-        label
+        label,
+        password
       FROM
         release;
     `);
