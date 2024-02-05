@@ -246,6 +246,8 @@ const reservedJoins = expandPhrases([
 ]);
 
 const reservedPhrases = expandPhrases([
+  'PRIMARY KEY',
+  'GENERATED {ALWAYS | BY DEFAULT} AS IDENTITY',
   'ON {UPDATE | DELETE} [SET NULL | SET DEFAULT]',
   '{ROWS | RANGE | GROUPS} BETWEEN',
   // https://www.postgresql.org/docs/current/datatype-datetime.html
