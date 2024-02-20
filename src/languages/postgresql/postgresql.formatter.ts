@@ -23,6 +23,7 @@ const reservedClauses = expandPhrases([
   // - insert:
   'INSERT INTO',
   'VALUES',
+  'DEFAULT VALUES',
   // - update:
   'SET',
   // other

@@ -331,4 +331,18 @@ describe('PostgreSqlFormatter', () => {
         release;
     `);
   });
+
+  it('formats DEFAULT VALUES clause', () => {
+    expect(
+      format(`INSERT INTO items default values RETURNING id;`, {
+        keywordCase: 'upper',
+      })
+    ).toBe(dedent`
+      INSERT INTO
+        items
+      DEFAULT VALUES
+      RETURNING
+        id;
+    `);
+  });
 });
