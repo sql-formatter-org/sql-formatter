@@ -121,6 +121,7 @@ The placeholder types available by default depend on SQL dialect used:
 - snowflake - _no support_
 - sqlite - `?`, `?1`, `:name`, `@name`, `$name`
 - spark - _no support_
+- tidb - `?`
 - tsql - `@name`, `@"name"`, `@[name]`
 - trino - _no support_
 
