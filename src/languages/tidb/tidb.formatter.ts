@@ -31,15 +31,15 @@ const reservedClauses = expandPhrases([
 const standardOnelineClauses = expandPhrases(['CREATE [TEMPORARY] TABLE [IF NOT EXISTS]']);
 
 const tabularOnelineClauses = expandPhrases([
-  // - create:
+  // https://docs.pingcap.com/tidb/stable/sql-statement-create-view
   'CREATE [OR REPLACE] [SQL SECURITY DEFINER | SQL SECURITY INVOKER] VIEW [IF NOT EXISTS]',
-  // - update:
+  // https://docs.pingcap.com/tidb/stable/sql-statement-update
   'UPDATE [LOW_PRIORITY] [IGNORE]',
-  // - delete:
+  // https://docs.pingcap.com/tidb/stable/sql-statement-delete
   'DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM',
-  // - drop table:
+  // https://docs.pingcap.com/tidb/stable/sql-statement-drop-table
   'DROP [TEMPORARY] TABLE [IF EXISTS]',
-  // - alter table:
+  // https://docs.pingcap.com/tidb/stable/sql-statement-alter-table
   'ALTER TABLE',
   'ADD [COLUMN]',
   '{CHANGE | MODIFY} [COLUMN]',
@@ -48,13 +48,15 @@ const tabularOnelineClauses = expandPhrases([
   'RENAME COLUMN',
   'ALTER [COLUMN]',
   '{SET | DROP} DEFAULT', // for alter column
-  // - truncate:
+  // https://docs.pingcap.com/tidb/stable/sql-statement-truncate
   'TRUNCATE [TABLE]',
-  // https://dev.mysql.com/doc/refman/8.0/en/sql-statements.html
+  // https://docs.pingcap.com/tidb/stable/sql-statement-alter-database
   'ALTER DATABASE',
+  // https://docs.pingcap.com/tidb/stable/sql-statement-alter-instance
   'ALTER INSTANCE',
   'ALTER RESOURCE GROUP',
   'ALTER SEQUENCE',
+  // https://docs.pingcap.com/tidb/stable/sql-statement-alter-user
   'ALTER USER',
   'ALTER VIEW',
   'ANALYZE TABLE',
@@ -78,6 +80,7 @@ const tabularOnelineClauses = expandPhrases([
   'DROP VIEW',
   'EXPLAIN',
   'FLUSH',
+  // https://docs.pingcap.com/tidb/stable/sql-statement-grant-privileges
   'GRANT',
   'IMPORT TABLE',
   'INSTALL COMPONENT',
@@ -134,11 +137,13 @@ const tabularOnelineClauses = expandPhrases([
   'SHOW TRIGGERS',
   'SHOW VARIABLES',
   'SHOW WARNINGS',
+  // https://docs.pingcap.com/tidb/stable/sql-statement-table
   'TABLE',
   'UNINSTALL COMPONENT',
   'UNINSTALL PLUGIN',
   'UNLOCK INSTANCE',
   'UNLOCK TABLES',
+  // https://docs.pingcap.com/tidb/stable/sql-statement-use
   'USE',
 ]);
 
@@ -161,7 +166,7 @@ const reservedPhrases = expandPhrases([
   'IDENTIFIED BY',
 ]);
 
-// https://dev.mysql.com/doc/refman/8.0/en/
+// https://docs.pingcap.com/tidb/stable/basic-features
 export const tidb: DialectOptions = {
   name: 'tidb',
   tokenizerOptions: {
