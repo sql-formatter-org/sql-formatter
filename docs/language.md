@@ -19,6 +19,7 @@ const result = format('SELECT * FROM tbl', { dialect: 'sqlite' });
 - `"hive"` - [Apache Hive][]
 - `"mariadb"` - [MariaDB][]
 - `"mysql"` - [MySQL][]
+- `"tidb"` - [TiDB][]
 - `"n1ql"` - [Couchbase N1QL][]
 - `"plsql"` - [Oracle PL/SQL][]
 - `"postgresql"` - [PostgreSQL][]
@@ -52,6 +53,7 @@ See docs for [dialect][] option.
 [apache hive]: https://hive.apache.org/
 [mariadb]: https://mariadb.com/
 [mysql]: https://www.mysql.com/
+[tidb]: https://github.com/pingcap/tidb/
 [couchbase n1ql]: http://www.couchbase.com/n1ql
 [oracle pl/sql]: http://www.oracle.com/technetwork/database/features/plsql/index.html
 [postgresql]: https://www.postgresql.org/

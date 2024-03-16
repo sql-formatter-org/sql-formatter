@@ -4,6 +4,7 @@ export { db2i } from './languages/db2i/db2i.formatter.js';
 export { hive } from './languages/hive/hive.formatter.js';
 export { mariadb } from './languages/mariadb/mariadb.formatter.js';
 export { mysql } from './languages/mysql/mysql.formatter.js';
+export { tidb } from './languages/tidb/tidb.formatter.js';
 export { n1ql } from './languages/n1ql/n1ql.formatter.js';
 export { plsql } from './languages/plsql/plsql.formatter.js';
 export { postgresql } from './languages/postgresql/postgresql.formatter.js';

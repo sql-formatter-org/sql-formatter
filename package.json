@@ -35,6 +35,7 @@
     "db2",
     "db2i",
     "sqlite",
+    "tidb",
     "trino",
     "presto",
     "prestosql",

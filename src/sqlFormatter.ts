@@ -19,6 +19,7 @@ const dialectNameMap: Record<keyof typeof allDialects | 'tsql', keyof typeof all
   spark: 'spark',
   sqlite: 'sqlite',
   sql: 'sql',
+  tidb: 'tidb',
   trino: 'trino',
   transactsql: 'transactsql',
   tsql: 'transactsql', // alias for transactsq
