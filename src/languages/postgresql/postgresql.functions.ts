@@ -232,7 +232,7 @@ export const functions: string[] = [
   'NETMASK',
   'NETWORK',
   'SET_MASKLEN',
-  'TEXT',
+  // 'TEXT', // excluded because it's also a data type name
   'TRUNC',
 
   // https://www.postgresql.org/docs/14/functions-textsearch.html

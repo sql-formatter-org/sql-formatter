@@ -345,4 +345,23 @@ describe('PostgreSqlFormatter', () => {
         id;
     `);
   });
+
+  // Issue #726
+  it('treats TEXT as data-type (not as plain keyword)', () => {
+    expect(
+      format(`CREATE TABLE foo (items text);`, {
+        dataTypeCase: 'upper',
+      })
+    ).toBe(dedent`
+      CREATE TABLE foo (items TEXT);
+    `);
+
+    expect(
+      format(`CREATE TABLE foo (text VARCHAR(100));`, {
+        keywordCase: 'upper',
+      })
+    ).toBe(dedent`
+      CREATE TABLE foo (text VARCHAR(100));
+    `);
+  });
 });
