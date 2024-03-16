@@ -16,6 +16,7 @@ import supportsStrings from './features/strings.js';
 import supportsConstraints from './features/constraints.js';
 import supportsDataTypeCase from './options/dataTypeCase.js';
 
+// For now these tests are exactly the same as for MySQL
 describe('TiDBFormatter', () => {
   const language = 'tidb';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
