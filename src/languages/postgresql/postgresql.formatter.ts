@@ -354,6 +354,7 @@ export const postgresql: DialectOptions = {
       // Text search
       '@@@',
       '!!',
+      '^@',
       // Trigram/trigraph
       '<%',
       '%>',

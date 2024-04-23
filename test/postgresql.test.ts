@@ -136,6 +136,7 @@ describe('PostgreSqlFormatter', () => {
       // Text search
       '@@@',
       '!!',
+      '^@',
       // Trigram/trigraph
       '<%',
       '<<%',
