@@ -659,5 +659,4 @@ export const functions: string[] = [
   'NULL',
   'RANK',
   'ROW_NUMBER',
-  'INT',
 ];
