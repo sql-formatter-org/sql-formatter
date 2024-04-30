@@ -3,7 +3,9 @@ import { expandPhrases } from '../../expandPhrases.js';
 import { functions } from './duckdb.functions.js';
 import { dataTypes, keywords } from './duckdb.keywords.js';
 
-const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
+const reservedSelect = expandPhrases([  
+  'SELECT [ALL | DISTINCT | EXCLUDE | REPLACE]',  
+]);  
 
 const reservedClauses = expandPhrases([
   // queries
@@ -201,6 +203,7 @@ const tabularOnelineClauses = expandPhrases([
   'EXPLAIN',
   'FETCH',
   'GRANT',
+  'INSTALL',
   'IMPORT FOREIGN SCHEMA',
   'LISTEN',
   'LOAD',
@@ -231,19 +234,17 @@ const tabularOnelineClauses = expandPhrases([
   'VACUUM',
 ]);
 
-const reservedSetOperations = expandPhrases([
-  'UNION [ALL | DISTINCT]',
-  'EXCEPT [ALL | DISTINCT]',
-  'INTERSECT [ALL | DISTINCT]',
-]);
-
-const reservedJoins = expandPhrases([
-  'JOIN',
-  '{LEFT | RIGHT | FULL} [OUTER] JOIN',
-  '{INNER | CROSS} JOIN',
-  'NATURAL [INNER] JOIN',
-  'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
-]);
+const reservedJoins = expandPhrases([  
+  'ASOF {LEFT} JOIN',  
+  'JOIN',  
+  'NATURAL [INNER] JOIN',  
+  'NATURAL [LEFT] {ANTI | SEMI} JOIN',  
+  'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',  
+  'POSITIONAL JOIN',  
+  '[LEFT] {ANTI | SEMI} JOIN',  
+  '{INNER | CROSS} JOIN',  
+  '{LEFT | RIGHT | FULL} [OUTER] JOIN',  
+]); 
 
 const reservedPhrases = expandPhrases([
   'PRIMARY KEY',
