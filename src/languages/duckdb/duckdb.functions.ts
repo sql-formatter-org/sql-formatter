@@ -651,4 +651,13 @@ export const functions: string[] = [
   'XOR',
   'YEAR',
   'YEARWEEK',
+
+  // Keywords that also need to be listed as functions
+  'ARRAY',
+  'CAST',
+  'COALESCE',
+  'NULL',
+  'RANK',
+  'ROW_NUMBER',
+  'INT',
 ];

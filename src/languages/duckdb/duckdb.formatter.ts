@@ -63,7 +63,6 @@ const tabularOnelineClauses = expandPhrases([
   // other
   'SET SCHEMA',
   'AFTER',
-  // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
   'ALTER AGGREGATE',
   'ALTER COLLATION',
@@ -251,15 +250,13 @@ const reservedPhrases = expandPhrases([
   'GENERATED {ALWAYS | BY DEFAULT} AS IDENTITY',
   'ON {UPDATE | DELETE} [SET NULL | SET DEFAULT]',
   '{ROWS | RANGE | GROUPS} BETWEEN',
-  // https://www.postgresql.org/docs/current/datatype-datetime.html
   '[TIMESTAMP | TIME] {WITH | WITHOUT} TIME ZONE',
   // comparison operator
   'IS [NOT] DISTINCT FROM',
 ]);
 
-// https://www.postgresql.org/docs/14/index.html
-export const postgresql: DialectOptions = {
-  name: 'postgresql',
+export const duckdb: DialectOptions = {
+  name: 'duckdb',
   tokenizerOptions: {
     reservedSelect,
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],

@@ -475,7 +475,6 @@ export const keywords: string[] = [
   'YEARS',
   'YES',
   'ZONE',
-
 ];
 
 export const dataTypes: string[] = [
@@ -512,5 +511,4 @@ export const dataTypes: string[] = [
   'UTINYINT',
   'UUID',
   'VARCHAR',
-
 ];
