@@ -16,6 +16,7 @@ const result = format('SELECT * FROM tbl', { dialect: 'sqlite' });
 - `"bigquery"` - [GCP BigQuery][]
 - `"db2"` - [IBM DB2][]
 - `"db2i"` - [IBM DB2i][] (experimental)
+- `"duckdb"` - [duckdb][]
 - `"hive"` - [Apache Hive][]
 - `"mariadb"` - [MariaDB][]
 - `"mysql"` - [MySQL][]
@@ -55,6 +56,7 @@ See docs for [dialect][] option.
 [mysql]: https://www.mysql.com/
 [tidb]: https://github.com/pingcap/tidb/
 [couchbase n1ql]: http://www.couchbase.com/n1ql
+[duckdb]: https://duckdb.org/
 [oracle pl/sql]: http://www.oracle.com/technetwork/database/features/plsql/index.html
 [postgresql]: https://www.postgresql.org/
 [presto]: https://prestodb.io/docs/current/
