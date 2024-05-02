@@ -24,7 +24,7 @@ The following dialects can be imported from `"sql-formatter"` module:
 - `bigquery` - [GCP BigQuery][]
 - `db2` - [IBM DB2][]
 - `db2i` - [IBM DB2i][] (experimental)
-- `"duckdb"` - [duckdb][]
+- `duckdb` - [duckdb][]
 - `hive` - [Apache Hive][]
 - `mariadb` - [MariaDB][]
 - `mysql` - [MySQL][]

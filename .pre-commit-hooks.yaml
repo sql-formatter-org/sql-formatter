@@ -1,6 +1,6 @@
-- id: sql-formatter
-  name: sql-formatter
-  description: 'Reformat SQL files with sql-formatter'
-  entry: sql-formatter --fix
-  language: node
-  types: [sql]
+-   id: sql-formatter
+    name: sql-formatter
+    description: "Reformat SQL files with sql-formatter"
+    entry: sql-formatter --fix
+    language: node
+    types: [sql]
