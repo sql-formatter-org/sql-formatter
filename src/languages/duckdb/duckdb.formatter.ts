@@ -3,9 +3,7 @@ import { expandPhrases } from '../../expandPhrases.js';
 import { functions } from './duckdb.functions.js';
 import { dataTypes, keywords } from './duckdb.keywords.js';
 
-const reservedSelect = expandPhrases([
-  'SELECT [ALL | DISTINCT | EXCLUDE | REPLACE]',
-]);
+const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT | EXCLUDE | REPLACE]']);
 
 const reservedClauses = expandPhrases([
   // queries

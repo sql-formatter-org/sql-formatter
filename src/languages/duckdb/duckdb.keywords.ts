@@ -73,7 +73,6 @@ export const keywords: string[] = [
   'WHERE',
   'WINDOW',
   'WITH',
-
 ];
 
 export const dataTypes: string[] = [
