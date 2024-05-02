@@ -68,7 +68,6 @@ export const functions: string[] = [
   'ATAN',
   'ATAN2',
   'AVG',
-  'BAR',
   'BASE64',
   'BIN',
   'BITSTRING',
@@ -653,7 +652,6 @@ export const functions: string[] = [
   'YEARWEEK',
 
   // Keywords that also need to be listed as functions
-  'ARRAY',
   'CAST',
   'COALESCE',
   'NULL',
