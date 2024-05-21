@@ -1,4 +1,9 @@
 export const functions: string[] = [
+  // Functions from DuckDB (excluding those that start with an underscore):
+  // SELECT DISTINCT upper(function_name) AS function_name
+  // FROM duckdb_functions()
+  // WHERE function_name SIMILAR TO '^[a-z].*'
+  // ORDER BY function_name
   'ABS',
   'ACOS',
   'ADD',

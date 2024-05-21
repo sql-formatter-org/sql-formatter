@@ -1,4 +1,9 @@
 export const keywords: string[] = [
+  // Keywords from DuckDB:
+  // SELECT upper(keyword_name)
+  // FROM duckdb_keywords()
+  // WHERE keyword_category = 'reserved'
+  // ORDER BY keyword_name
   'ALL',
   'ANALYSE',
   'ANALYZE',
@@ -76,6 +81,10 @@ export const keywords: string[] = [
 ];
 
 export const dataTypes: string[] = [
+  // Types from DuckDB:
+  // SELECT DISTINCT upper(type_name)
+  // FROM duckdb_types()
+  // ORDER BY type_name
   'ARRAY',
   'BIGINT',
   'BINARY',
