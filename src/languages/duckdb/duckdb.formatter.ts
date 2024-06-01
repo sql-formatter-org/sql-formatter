@@ -286,8 +286,6 @@ export const duckdb: DialectOptions = {
       // Arithmetic
       '%',
       '^',
-      '|/',
-      '||/',
       '@',
       // Assignment
       ':=',
