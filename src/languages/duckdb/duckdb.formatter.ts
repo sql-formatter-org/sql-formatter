@@ -233,9 +233,9 @@ const tabularOnelineClauses = expandPhrases([
 ]);
 
 const reservedSetOperations = expandPhrases([
-  'UNION [ALL | DISTINCT]',
-  'EXCEPT [ALL | DISTINCT]',
-  'INTERSECT [ALL | DISTINCT]',
+  'UNION [ALL] BY NAME',
+  'EXCEPT [ALL]',
+  'INTERSECT [ALL]',
 ]);
 
 const reservedJoins = expandPhrases([
