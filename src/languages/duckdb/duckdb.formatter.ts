@@ -342,11 +342,8 @@ export const duckdb: DialectOptions = {
       '~~*',
       '!~~',
       '!~~*',
-      // POSIX RegExp
       '~',
-      '~*',
       '!~',
-      '!~*',
       // Range/multirange
       '-|-',
       // String concatenation
