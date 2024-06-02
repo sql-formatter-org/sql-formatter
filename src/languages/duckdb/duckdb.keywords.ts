@@ -56,7 +56,6 @@ export const keywords: string[] = [
   'PIVOT_WIDER',
   'PLACING',
   'PRIMARY',
-  'QUALIFY',
   'REFERENCES',
   'RETURNING',
   'SELECT',
