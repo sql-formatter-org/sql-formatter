@@ -239,6 +239,12 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     `);
   });
 
+  // Regression test for https://github.com/sql-formatter-org/sql-formatter/issues/747
+  it('handles block comments with /** and **/ patterns', () => {
+    const sql = `/** This is a block comment **/`;
+    expect(format(sql)).toBe(sql);
+  });
+
   if (opts.hashComments) {
     it('supports # line comment', () => {
       const result = format('SELECT alpha # commment\nFROM beta');

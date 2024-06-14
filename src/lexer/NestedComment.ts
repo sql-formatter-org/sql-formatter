@@ -2,8 +2,6 @@
 import { RegExpLike } from './TokenizerEngine.js';
 
 const START = /\/\*/uy; // matches: /*
-const MIDDLE = /([^/*]|\*[^/]|\/[^*])+/uy; // matches text NOT containing /* or */
-const END = /\*\//uy; // matches: */
 
 /**
  * An object mimicking a regular expression,
@@ -15,29 +13,37 @@ export class NestedComment implements RegExpLike {
   public exec(input: string): string[] | null {
     let result = '';
     let match: string | null;
-    let nestLevel = 0;
 
     if ((match = this.matchSection(START, input))) {
       result += match;
-      nestLevel++;
     } else {
       return null;
     }
 
-    while (nestLevel > 0) {
-      if ((match = this.matchSection(START, input))) {
-        result += match;
-        nestLevel++;
-      } else if ((match = this.matchSection(END, input))) {
-        result += match;
+    let nestLevel = 1;
+    // start at the last index, break if we find a closing */ that matches
+    for (let i = this.lastIndex; i < input.length; i++) {
+      if (input[i] === '*' && input[i + 1] === '/') {
         nestLevel--;
-      } else if ((match = this.matchSection(MIDDLE, input))) {
-        result += match;
+        result += '*/';
+        i++;
+        if (nestLevel === 0) {
+          this.lastIndex = i;
+          return [result];
+        } else if (nestLevel < 0) {
+          return null;
+        }
+      } else if (input[i] === '/' && input[i + 1] === '*') {
+        nestLevel++;
+        result += '/*';
+        i++;
       } else {
-        return null;
+        result += input[i];
       }
     }
-
+    if (nestLevel > 0) {
+      return null;
+    }
     return [result];
   }
 
