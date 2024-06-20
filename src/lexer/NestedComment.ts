@@ -2,7 +2,7 @@
 import { RegExpLike } from './TokenizerEngine.js';
 
 const START = /\/\*/uy; // matches: /*
-const MIDDLE = /([^/*]|\*[^/]|\/[^*])+/uy; // matches text NOT containing /* or */
+const ANY_CHAR = /[\s\S]/uy; // matches single character
 const END = /\*\//uy; // matches: */
 
 /**
@@ -31,7 +31,7 @@ export class NestedComment implements RegExpLike {
       } else if ((match = this.matchSection(END, input))) {
         result += match;
         nestLevel--;
-      } else if ((match = this.matchSection(MIDDLE, input))) {
+      } else if ((match = this.matchSection(ANY_CHAR, input))) {
         result += match;
       } else {
         return null;
