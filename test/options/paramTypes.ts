@@ -110,5 +110,15 @@ export default function supportsParamTypes(format: FormatFn) {
           {schema}.{table}
       `);
     });
+
+    it('does not enter infinite loop when empty regex given', () => {
+      expect(() =>
+        format('SELECT foo FROM bar', {
+          paramTypes: { custom: [{ regex: '' }] },
+        })
+      ).toThrow(
+        'Empty regex given in custom paramTypes. That would result in matching infinite amount of parameters.'
+      );
+    });
   });
 }
