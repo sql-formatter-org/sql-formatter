@@ -200,6 +200,7 @@ export const functions: string[] = [
   'GET_STAGE_LOCATION',
   'GETBIT',
   'GREATEST',
+  'GREATEST_IGNORE_NULLS',
   'GROUPING',
   'GROUPING_ID',
   'HASH',
