@@ -53,7 +53,7 @@ class SqlFormatterCli {
     });
 
     parser.add_argument('-c', '--config', {
-      help: 'Path to config JSON file or json string (will find a file named \'.sql-formatter.json\' or use default configs if unspecified)',
+      help: "Path to config JSON file or json string (will find a file named '.sql-formatter.json' or use default configs if unspecified)",
     });
 
     parser.add_argument('--version', {
