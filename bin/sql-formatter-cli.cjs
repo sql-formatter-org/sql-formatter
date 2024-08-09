@@ -99,14 +99,14 @@ class SqlFormatterCli {
     return this.parseFile(localConfig);
   }
 
-  async findConfig(dir = __dirname) {
+  findConfig(dir = __dirname) {
     const filePath = path.join(dir, '.sql-formatter.json');
     if (!fs.existsSync(filePath)) {
       const parentDir = path.resolve(dir, '..');
       if (parentDir === dir) {
         return null;
       }
-      return await this.findConfig(parentDir);
+      return this.findConfig(parentDir);
     }
 
     return filePath;
@@ -131,12 +131,19 @@ class SqlFormatterCli {
   }
 
   async readFile(filename) {
-    return promisify(fs.readFile)(filename, { encoding: 'utf-8' }).catch(e => {
+    try {
+
+
+    return promisify(fs.readFile)(filename, { encoding: 'utf-8' })
+    }  catch (e) {
+
+
       this.exitWhenIOError(e, filename);
       console.error('An unknown error has occurred, please file a bug report at:');
       console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
       throw e;
-    });
+
+    }
   }
 
   exitWhenIOError(e, infile) {
