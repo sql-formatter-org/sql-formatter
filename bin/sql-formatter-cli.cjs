@@ -4,6 +4,7 @@
 
 const { format, supportedDialects } = require('../dist/index.cjs');
 const fs = require('fs');
+const path = require('path');
 const tty = require('tty');
 const { version } = require('../package.json');
 const { ArgumentParser } = require('argparse');
@@ -52,7 +53,7 @@ class SqlFormatterCli {
     });
 
     parser.add_argument('-c', '--config', {
-      help: 'Path to config JSON file or json string (will use default configs if unspecified)',
+      help: 'Path to config JSON file or json string (will find a file named \'.sql-formatter.json\' or use default configs if unspecified)',
     });
 
     parser.add_argument('--version', {
@@ -72,57 +73,75 @@ class SqlFormatterCli {
       process.exit(0);
     }
 
+    return {
+      language: this.args.language,
+      ...(await this.getConfig()),
+    };
+  }
+
+  async getConfig() {
     if (this.args.config) {
       // First, try to parse --config value as a JSON string
       try {
-        const configJson = JSON.parse(this.args.config);
-        return { language: this.args.language, ...configJson };
+        return JSON.parse(this.args.config);
       } catch (e) {
         // If that fails, try to read the --config value as a file
-        try {
-          const configFile = await this.readFile(this.args.config);
-          const configJson = JSON.parse(configFile);
-          return { language: this.args.language, ...configJson };
-        } catch (e) {
-          if (e instanceof SyntaxError) {
-            console.error(
-              `Error: unable to parse as JSON or treat as JSON file: ${this.args.config}`
-            );
-            process.exit(1);
-          }
-          this.exitWhenIOError(e);
-          console.error('An unknown error has occurred, please file a bug report at:');
-          console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
-          throw e;
-        }
+        return this.parseFile(this.args.config);
       }
     }
-    return {
-      language: this.args.language,
-    };
+
+    // Otherwise find a local config file
+    const localConfig = await this.findConfig();
+    if (!localConfig) {
+      return null;
+    }
+
+    return this.parseFile(localConfig);
+  }
+
+  findConfig(dir = __dirname) {
+    const filePath = path.join(dir, '.sql-formatter.json');
+    if (!fs.existsSync(filePath)) {
+      const parentDir = path.resolve(dir, '..');
+      if (parentDir === dir) {
+        return null;
+      }
+      return this.findConfig(parentDir);
+    }
+
+    return filePath;
   }
 
   async getInput() {
     const infile = this.args.file || process.stdin.fd;
     if (this.args.file) {
-      try {
-        return await this.readFile(infile, { encoding: 'utf-8' });
-      } catch (e) {
-        this.exitWhenIOError(e);
-        console.error('An unknown error has occurred, please file a bug report at:');
-        console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
-        throw e;
-      }
+      return await this.readFile(infile);
     } else {
       return await getStdin();
     }
   }
 
-  async readFile(filename) {
-    return promisify(fs.readFile)(filename, { encoding: 'utf-8' });
+  async parseFile(filename) {
+    try {
+      return JSON.parse(await this.readFile(filename));
+    } catch (e) {
+      console.error(`Error: unable to parse as JSON or treat as JSON file: ${filename}`);
+      process.exit(1);
+    }
   }
 
-  exitWhenIOError(e) {
+  async readFile(filename) {
+    try {
+      return promisify(fs.readFile)(filename, { encoding: 'utf-8' });
+    } catch (e) {
+      this.exitWhenIOError(e, filename);
+      console.error('An unknown error has occurred, please file a bug report at:');
+      console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
+      throw e;
+    }
+  }
+
+  exitWhenIOError(e, infile) {
     if (e.code === 'EAGAIN') {
       console.error('Error: no file specified and no data in stdin');
       process.exit(1);

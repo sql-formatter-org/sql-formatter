@@ -138,7 +138,7 @@ optional arguments:
   -l, --language  {bigquery,db2,db2i,hive,mariadb,mysql,n1ql,plsql,postgresql,redshift,singlestoredb,snowflake,spark,sql,sqlite,tidb,trino,tsql}
                     SQL dialect (defaults to basic sql)
   -c, --config    CONFIG
-                    Path to config JSON file or json string (will use default configs if unspecified)
+                    Path to config JSON file or json string (will find a file named '.sql-formatter.json' or use default configs if unspecified)
   --version       show program's version number and exit
 ```
 
@@ -158,7 +158,7 @@ where
   id = 3
 ```
 
-The tool also accepts a JSON config file with the `--config` option that takes this form:
+The tool also accepts a JSON config file named .sql-formatter.json in the current or any parent directory, or with the `--config` option that takes this form:
 
 ```json
 {
