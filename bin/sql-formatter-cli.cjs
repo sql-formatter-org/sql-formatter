@@ -132,17 +132,12 @@ class SqlFormatterCli {
 
   async readFile(filename) {
     try {
-
-
-    return promisify(fs.readFile)(filename, { encoding: 'utf-8' })
-    }  catch (e) {
-
-
+      return promisify(fs.readFile)(filename, { encoding: 'utf-8' });
+    } catch (e) {
       this.exitWhenIOError(e, filename);
       console.error('An unknown error has occurred, please file a bug report at:');
       console.log('https://github.com/sql-formatter-org/sql-formatter/issues\n');
       throw e;
-
     }
   }
 
