@@ -91,7 +91,7 @@ class SqlFormatterCli {
     }
 
     // Otherwise find a local config file
-    const localConfig = await this.findConfig();
+    const localConfig = this.findConfig();
     if (!localConfig) {
       return null;
     }
