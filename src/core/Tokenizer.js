@@ -166,6 +166,8 @@ export default class Tokenizer {
     }
 
     getBlockCommentToken(input) {
+        
+        
         return this.getTokenOnFirstMatch({
             input,
             type: tokenTypes.BLOCK_COMMENT,
@@ -300,8 +302,10 @@ export default class Tokenizer {
 
     getTokenOnFirstMatch({input, type, regex}) {
         const matches = input.match(regex);
-
+        
         if (matches) {
+        
+            
             return {type, value: matches[1]};
         }
     }

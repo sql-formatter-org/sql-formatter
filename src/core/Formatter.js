@@ -33,27 +33,46 @@ export default class Formatter {
         return this.hasError ? query.split("\n") : this.lines.join("\n").split("\n");
     }
 
+   
     formatQuery() {
         const originalQuery = this.query;
         for (let i = 0; i < this.tokens.length; i++) {
+            
             const token = this.tokens[i];
             token.value = SqlUtils.formatTextCase(token);
-            if (token.value.startsWith(".") && token.value != ".." ) {
+           
+            if (token.value.startsWith(".") && token.value !== ".." ) {
                 this.lines[this.lastIndex()] = trimEnd(this.getLastString());
             }
-            if (token.type == tokenTypes.WHITESPACE) {
+            if (token.type === tokenTypes.WHITESPACE) {
                 if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")) {
-                    this.lines[this.lastIndex()] += " ";
+                    
+                  this.lines[this.lastIndex()] += " ";
                 }
             }
-            else if (token.type == tokenTypes.LINE_COMMENT) {
+            else if (token.type === tokenTypes.LINE_COMMENT) {
                 this.formatLineComment(token);
             }
-            else if (token.type == tokenTypes.BLOCK_COMMENT) {
+            else if (token.type === tokenTypes.BLOCK_COMMENT) {
                 this.formatBlockComment(token);
+                
             }
-            else if (token.type == tokenTypes.RESERVED_TOPLEVEL) {
-                this.formatTopLeveleReservedWord(token);
+            else if (token.type === tokenTypes.RESERVED_TOPLEVEL) {
+                const startIndex = i - 1>0? i-1: 0;
+                for (let j = startIndex; j >=0; j--) {
+                   if (this.tokens[j].type===tokenTypes.WHITESPACE) {
+                        continue;
+                   }
+                   else if (this.tokens[j].type===tokenTypes.BLOCK_COMMENT) {
+                        this.formatTopLeveleReservedWord(token,false); 
+                        break;
+                   }
+                   else {
+                        this.formatTopLeveleReservedWord(token,true); 
+                        break;
+                   }
+                    
+                }
             }
             else if (token.type == tokenTypes.RESERVED_NEWLINE) {
                 this.formatNewlineReservedWord(token);
@@ -115,7 +134,7 @@ export default class Formatter {
             this.lines[this.lastIndex()] += token.value;
         }
         else {
-            this.formatTopLeveleReservedWord(token);
+            this.formatTopLeveleReservedWord(token,true);
         }
     }
 
@@ -222,10 +241,10 @@ export default class Formatter {
         }
     }
 
-    formatTopLeveleReservedWord(token) {
-        if (this.startBlock.includes(token.value.split(" ")[0])) {
+    formatTopLeveleReservedWord(token,prepereSpace) {
+        if (this.startBlock.includes(token.value.split(" ")[0]) && prepereSpace) {
             if (this.getLastString().includes("union")) {
-                this.indents.pop;
+                this.indents.pop();
                 this.addNewLine("right", token.value);
             }
             else if (this.getLastString().trim() != "" && this.getLastString().trim().endsWith(")")) {
@@ -328,7 +347,7 @@ export default class Formatter {
             comment += commentsLine[i].trim();
         }
         this.lines[this.lastIndex()] += comment;
-        this.addNewLine("left", token.value);
+        this.addNewLine("right", token.value);
     }
 
     resolveAddLineInCommentsBlock(token) {
@@ -341,9 +360,9 @@ export default class Formatter {
             }
         }
         else if (!this.reservedWords.includes(last.toUpperCase()) || last.endsWith(";")) {
-            this.addNewLine("left", token.value);
+            this.addNewLine("right", token.value);
         }
-        else if (this.getLastString().trim() != "") {
+        else if (this.getLastString().trim() != "") {            
             this.addNewLine("left", token.value);
         }
     }
@@ -402,7 +421,7 @@ export default class Formatter {
     }
 
     formatClosingParentheses(token) {
-        if (token.value == ")") {
+        if (token.value === ")") {
             if (this.getLastString().trim() != "") {
                 this.trimEndLastString();
             }
@@ -433,10 +452,10 @@ export default class Formatter {
                 if (line[j] == ")") {
                     bktCount++;
                 }
-                else if (line[j] == "(") {
+                else if (line[j] === "(") {
                     bktCount--;
                 }
-                if (bktCount == 0) {
+                if (bktCount === 0) {
                     start = j;
                     substring = line.substring(start);
                     for (let k = i + 1; k < this.lines.length; k++) {
@@ -446,7 +465,7 @@ export default class Formatter {
                     break;
                 }
             }
-            if (bktCount == 0) {
+            if (bktCount === 0) {
                 break;
             }
         }
@@ -455,7 +474,7 @@ export default class Formatter {
         if (this.startBlock.includes(first)) {
             this.indents.pop();
         }
-        else if (first == "with") {
+        else if (first === "with") {
             const match = substring.match(/(\s|\n)union(\s|\n)/);
             let popCount = 1;
             if (match != undefined) {
@@ -466,13 +485,13 @@ export default class Formatter {
             }
         }
         else {
-            if (firstInStartLine == "insert" || firstInStartLine == "values") {
-                if (firstInStartLine == "values") {
+            if (firstInStartLine === "insert" || firstInStartLine === "values") {
+                if (firstInStartLine === "values") {
                     this.lines[startIndex] = this.lines[startIndex].replace("values(", "values (");
                 }
                 if (substring.split(",").length > 3 || substring.length > 30) {
                     this.removeLines(startIndex);
-                    if (firstInStartLine == "values") {
+                    if (firstInStartLine === "values") {
                         const ll = this.lines[this.lastIndex() - 1];
                         this.lines[this.lastIndex() - 1] = ll.substring(0, ll.length - 1);
                         this.lines[startIndex] = this.lines[startIndex].replace("values", ") values");
@@ -494,7 +513,7 @@ export default class Formatter {
                 }
             }
             else if (!this.reservedWords.includes(first) &&
-                substring.match(/.* (and|or|xor|not) .*/) == null) {
+                substring.match(/.* (and|or|xor|not) .*/) === null) {
                 this.addSubstringInLine(start, startIndex, substring);
             }
         }
@@ -548,23 +567,23 @@ export default class Formatter {
     }
 
     trimTrailingWhitespace() {
-        if (this.getLastString().trim() != ""){
+        if (this.getLastString().trim() !== ""){
             this.trimEndLastString();
         }
-        if (this.previousNonWhitespaceToken.type == tokenTypes.LINE_COMMENT) {
+        if (this.previousNonWhitespaceToken.type === tokenTypes.LINE_COMMENT) {
             this.addNewLine("left", "");
         }
     }
 
     trimEndLastString() {
-        if (this.getLastString().trim() != "") {
+        if (this.getLastString().trim() !== "") {
             this.lines[this.lastIndex()] = trimEnd(this.getLastString());
         }
     }
 
     previousNonWhitespaceToken() {
         let n = 1;
-        while (this.previousToken(n).type == tokenTypes.WHITESPACE) {
+        while (this.previousToken(n).type === tokenTypes.WHITESPACE) {
             n++;
         }
         return this.previousToken(n);

@@ -703,6 +703,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Tokenizer.prototype.getBlockCommentToken = function getBlockCommentToken(input) {
+
 	        return this.getTokenOnFirstMatch({
 	            input: input,
 	            type: _tokenTypes2["default"].BLOCK_COMMENT,
@@ -860,6 +861,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var matches = input.match(regex);
 
 	        if (matches) {
+
 	            return { type: type, value: matches[1] };
 	        }
 	    };
@@ -1298,21 +1300,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Formatter.prototype.formatQuery = function formatQuery() {
 	        var originalQuery = this.query;
 	        for (var i = 0; i < this.tokens.length; i++) {
+
 	            var token = this.tokens[i];
 	            token.value = _SqlUtils2["default"].formatTextCase(token);
-	            if (token.value.startsWith(".") && token.value != "..") {
+
+	            if (token.value.startsWith(".") && token.value !== "..") {
 	                this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString());
 	            }
-	            if (token.type == _tokenTypes2["default"].WHITESPACE) {
+	            if (token.type === _tokenTypes2["default"].WHITESPACE) {
 	                if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(")) {
+
 	                    this.lines[this.lastIndex()] += " ";
 	                }
-	            } else if (token.type == _tokenTypes2["default"].LINE_COMMENT) {
+	            } else if (token.type === _tokenTypes2["default"].LINE_COMMENT) {
 	                this.formatLineComment(token);
-	            } else if (token.type == _tokenTypes2["default"].BLOCK_COMMENT) {
+	            } else if (token.type === _tokenTypes2["default"].BLOCK_COMMENT) {
 	                this.formatBlockComment(token);
-	            } else if (token.type == _tokenTypes2["default"].RESERVED_TOPLEVEL) {
-	                this.formatTopLeveleReservedWord(token);
+	            } else if (token.type === _tokenTypes2["default"].RESERVED_TOPLEVEL) {
+	                var startIndex = i - 1 > 0 ? i - 1 : 0;
+	                for (var j = startIndex; j >= 0; j--) {
+	                    if (this.tokens[j].type === _tokenTypes2["default"].WHITESPACE) {
+	                        continue;
+	                    } else if (this.tokens[j].type === _tokenTypes2["default"].BLOCK_COMMENT) {
+	                        this.formatTopLeveleReservedWord(token, false);
+	                        break;
+	                    } else {
+	                        this.formatTopLeveleReservedWord(token, true);
+	                        break;
+	                    }
+	                }
 	            } else if (token.type == _tokenTypes2["default"].RESERVED_NEWLINE) {
 	                this.formatNewlineReservedWord(token);
 	            } else if (this.logicalOperators.includes(token.value)) {
@@ -1360,7 +1376,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.getLastString().includes("insert") || this.getLastString().includes("returning") || this.getLastString().includes("merge")) {
 	            this.lines[this.lastIndex()] += token.value;
 	        } else {
-	            this.formatTopLeveleReservedWord(token);
+	            this.formatTopLeveleReservedWord(token, true);
 	        }
 	    };
 
@@ -1457,10 +1473,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    Formatter.prototype.formatTopLeveleReservedWord = function formatTopLeveleReservedWord(token) {
-	        if (this.startBlock.includes(token.value.split(" ")[0])) {
+	    Formatter.prototype.formatTopLeveleReservedWord = function formatTopLeveleReservedWord(token, prepereSpace) {
+	        if (this.startBlock.includes(token.value.split(" ")[0]) && prepereSpace) {
 	            if (this.getLastString().includes("union")) {
-	                this.indents.pop;
+	                this.indents.pop();
 	                this.addNewLine("right", token.value);
 	            } else if (this.getLastString().trim() != "" && this.getLastString().trim().endsWith(")")) {
 	                this.addNewLine("right", token.value);
@@ -1556,7 +1572,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            comment += commentsLine[i].trim();
 	        }
 	        this.lines[this.lastIndex()] += comment;
-	        this.addNewLine("left", token.value);
+	        this.addNewLine("right", token.value);
 	    };
 
 	    Formatter.prototype.resolveAddLineInCommentsBlock = function resolveAddLineInCommentsBlock(token) {
@@ -1568,7 +1584,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.lines.pop();
 	            }
 	        } else if (!this.reservedWords.includes(last.toUpperCase()) || last.endsWith(";")) {
-	            this.addNewLine("left", token.value);
+	            this.addNewLine("right", token.value);
 	        } else if (this.getLastString().trim() != "") {
 	            this.addNewLine("left", token.value);
 	        }
@@ -1621,7 +1637,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.formatClosingParentheses = function formatClosingParentheses(token) {
-	        if (token.value == ")") {
+	        if (token.value === ")") {
 	            if (this.getLastString().trim() != "") {
 	                this.trimEndLastString();
 	            } else {
@@ -1649,10 +1665,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            for (var j = line.length - 1; j >= 0; j--) {
 	                if (line[j] == ")") {
 	                    bktCount++;
-	                } else if (line[j] == "(") {
+	                } else if (line[j] === "(") {
 	                    bktCount--;
 	                }
-	                if (bktCount == 0) {
+	                if (bktCount === 0) {
 	                    start = j;
 	                    substring = line.substring(start);
 	                    for (var k = i + 1; k < this.lines.length; k++) {
@@ -1662,7 +1678,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    break;
 	                }
 	            }
-	            if (bktCount == 0) {
+	            if (bktCount === 0) {
 	                break;
 	            }
 	        }
@@ -1670,7 +1686,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var first = _SqlUtils2["default"].getFirstWord(substring);
 	        if (this.startBlock.includes(first)) {
 	            this.indents.pop();
-	        } else if (first == "with") {
+	        } else if (first === "with") {
 	            var match = substring.match(/(\s|\n)union(\s|\n)/);
 	            var popCount = 1;
 	            if (match != undefined) {
@@ -1680,13 +1696,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.indents.pop();
 	            }
 	        } else {
-	            if (firstInStartLine == "insert" || firstInStartLine == "values") {
-	                if (firstInStartLine == "values") {
+	            if (firstInStartLine === "insert" || firstInStartLine === "values") {
+	                if (firstInStartLine === "values") {
 	                    this.lines[startIndex] = this.lines[startIndex].replace("values(", "values (");
 	                }
 	                if (substring.split(",").length > 3 || substring.length > 30) {
 	                    this.removeLines(startIndex);
-	                    if (firstInStartLine == "values") {
+	                    if (firstInStartLine === "values") {
 	                        var ll = this.lines[this.lastIndex() - 1];
 	                        this.lines[this.lastIndex() - 1] = ll.substring(0, ll.length - 1);
 	                        this.lines[startIndex] = this.lines[startIndex].replace("values", ") values");
@@ -1704,7 +1720,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                } else {
 	                    this.addSubstringInLine(start, startIndex, substring);
 	                }
-	            } else if (!this.reservedWords.includes(first) && substring.match(/.* (and|or|xor|not) .*/) == null) {
+	            } else if (!this.reservedWords.includes(first) && substring.match(/.* (and|or|xor|not) .*/) === null) {
 	                this.addSubstringInLine(start, startIndex, substring);
 	            }
 	        }
@@ -1757,23 +1773,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Formatter.prototype.trimTrailingWhitespace = function trimTrailingWhitespace() {
-	        if (this.getLastString().trim() != "") {
+	        if (this.getLastString().trim() !== "") {
 	            this.trimEndLastString();
 	        }
-	        if (this.previousNonWhitespaceToken.type == _tokenTypes2["default"].LINE_COMMENT) {
+	        if (this.previousNonWhitespaceToken.type === _tokenTypes2["default"].LINE_COMMENT) {
 	            this.addNewLine("left", "");
 	        }
 	    };
 
 	    Formatter.prototype.trimEndLastString = function trimEndLastString() {
-	        if (this.getLastString().trim() != "") {
+	        if (this.getLastString().trim() !== "") {
 	            this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString());
 	        }
 	    };
 
 	    Formatter.prototype.previousNonWhitespaceToken = function previousNonWhitespaceToken() {
 	        var n = 1;
-	        while (this.previousToken(n).type == _tokenTypes2["default"].WHITESPACE) {
+	        while (this.previousToken(n).type === _tokenTypes2["default"].WHITESPACE) {
 	            n++;
 	        }
 	        return this.previousToken(n);
@@ -1856,7 +1872,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    PlSqlFormatter.prototype.format = function format(query) {
-	        if (query.trim() == "") {
+	        if (query.trim() === "") {
 	            return query;
 	        }
 	        this.query = query;
@@ -1868,58 +1884,60 @@ return /******/ (function(modules) { // webpackBootstrap
 	    PlSqlFormatter.prototype.formatQuery = function formatQuery() {
 	        this.cQuery = this.query;
 	        var originQuery = this.query;
+
 	        for (var i = 0; i < this.tokens.length; i++) {
 	            var token = this.tokens[i];
+
 	            token.value = _SqlUtils2["default"].formatTextCase(token);
-	            if (token.value.startsWith(".") && token.value != "..") {
+
+	            if (token.value.startsWith(".") && token.value !== "..") {
 	                this.lines[this.lastIndex()] = (0, _trimEnd2["default"])(this.getLastString());
 	            }
-	            if (token.type == _tokenTypes2["default"].WHITESPACE) {
-	                if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(") && this.getLastString().trim() != "") {
+	            if (token.type === _tokenTypes2["default"].WHITESPACE) {
+	                if (!this.getLastString().endsWith(" ") && !this.getLastString().endsWith("(") && this.getLastString().trim() !== "") {
 	                    this.lines[this.lastIndex()] += " ";
 	                }
-	            } else if (token.type == _tokenTypes2["default"].LINE_COMMENT) {
+	            } else if (token.type === _tokenTypes2["default"].LINE_COMMENT) {
 	                this.formatLineComment(token);
 	            } else if (token.type == _tokenTypes2["default"].BLOCK_COMMENT) {
 	                this.formatBlockComment(token);
-	            } else if (token.type == _tokenTypes2["default"].RESERVED_NEWLINE) {
-	                //new line token = start sql query
+	            } else if (token.type === _tokenTypes2["default"].RESERVED_NEWLINE) {
 	                i = this.formatSqlQuery(i);
-	            } else if (token.type == _tokenTypes2["default"].OPEN_PAREN) {
+	            } else if (token.type === _tokenTypes2["default"].OPEN_PAREN) {
 	                this.formatOpeningParentheses(token, i);
-	            } else if (token.type == _tokenTypes2["default"].CLOSE_PAREN) {
+	            } else if (token.type === _tokenTypes2["default"].CLOSE_PAREN) {
 	                this.formatClosingParentheses(token, i);
 	            } else if (token.value.startsWith(":") && token.value != ":=") {
 	                this.formatWithSpaces(token);
-	            } else if (token.type == _tokenTypes2["default"].PLACEHOLDER) {
+	            } else if (token.type === _tokenTypes2["default"].PLACEHOLDER) {
 	                this.formatPlaceholder();
-	            } else if (token.value == ")") {
+	            } else if (token.value === ")") {
 	                this.formatCloseBkt(token);
-	            } else if (token.value == "begin") {
+	            } else if (token.value === "begin") {
 	                this.formatBegin(token);
-	            } else if (token.value == "then") {
+	            } else if (token.value === "then") {
 	                this.formatThen(token);
-	            } else if (token.value == "loop") {
+	            } else if (token.value === "loop") {
 	                this.formatLoop(token, i);
-	            } else if (token.value == ",") {
+	            } else if (token.value === ",") {
 	                this.formatComma(token);
-	            } else if (token.value == ":") {
+	            } else if (token.value === ":") {
 	                this.formatWithSpaceAfter(token);
 	            } else if (this.withoutSpaces.includes(token.value)) {
 	                this.formatWithoutSpaces(token);
-	            } else if (token.value == ";") {
+	            } else if (token.value === ";") {
 	                this.formatQuerySeparator(token);
-	            } else if (token.value == "exception" || token.value == "exceptions") {
+	            } else if (token.value === "exception" || token.value === "exceptions") {
 	                this.formatException(token, i);
-	            } else if (token.value == "else") {
+	            } else if (token.value === "else") {
 	                this.formatElse(token);
-	            } else if (token.value == "elsif") {
+	            } else if (token.value === "elsif") {
 	                this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + token.value;
-	            } else if (token.value == "when") {
+	            } else if (token.value === "when") {
 	                this.formatWhen(token);
-	            } else if (token.value == "as" || token.value == "is") {
+	            } else if (token.value === "as" || token.value == "is") {
 	                this.formatAsIs(token);
-	            } else if (token.value == "return") {
+	            } else if (token.value === "return") {
 	                this.formatReturn(token);
 	            } else {
 	                this.formatWithSpaces(token);
@@ -1933,7 +1951,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    PlSqlFormatter.prototype.formatElse = function formatElse(token) {
 	        var last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
-	        if (last != undefined && last.key == "case") {
+	        if (last != undefined && last.key === "case") {
 	            this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1) + " " + token.value;
 	            this.addNewLine(this.indentCount);
 	            this.lines[this.lastIndex()] += " ";
@@ -1998,7 +2016,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var first = _SqlUtils2["default"].getFirstWord(this.getLastString());
 	        var last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
 	        if (this.openParens.includes(first) && this.getLastString().split(",").length > 1 || last != undefined) {
-	            if (this.getLastString().trim() != "") {
+	            if (this.getLastString().trim() !== "") {
 	                this.addNewLine(this.indentCount);
 	            }
 	        }
@@ -2009,7 +2027,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var format = "";
 	        var split = origin.split("\n");
 	        for (var i = 0; i < split.length; i++) {
-	            if (split[i].trim() == "") {
+	            if (split[i].trim() === "") {
 	                var spaceCount = 1;
 	                while (i < split.length && split[i].trim() == "") {
 	                    spaceCount++;
@@ -2026,7 +2044,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else {
 	                for (var j = 0; j < split[i].length; j++) {
 	                    var char = split[i][j];
-	                    if (char != " ") {
+	                    if (char !== " ") {
 	                        var index = query.indexOf(char);
 	                        var idx1 = query.indexOf(char.toLowerCase());
 	                        if (index < 0) {
@@ -2111,12 +2129,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var startBlock = ["cursor", "procedure", "function", "pragma", "declare"];
 	        if (lastIndent != undefined) {
 	            if (startBlock.includes(lastIndent.key)) {
-	                if (this.getLastString().trim() != "") {
+	                if (this.getLastString().trim() !== "") {
 	                    this.addNewLine(this.indentCount - 1);
 	                } else {
 	                    this.lines[this.lastIndex()] = (0, _repeat2["default"])(this.indent, this.indentCount - 1);
 	                }
-	                if (lastIndent.key != "procedure" && lastIndent.key != "function") {
+	                if (lastIndent.key !== "procedure" && lastIndent.key !== "function") {
 	                    this.indentsKeyWords.push({ key: token.value, name: "", indent: this.indentCount - 1 });
 	                } else {
 	                    this.indentsKeyWords[this.indentsKeyWords.length - 1].key = token.value;
@@ -2125,7 +2143,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.incrementIndent(token.value, "");
 	            }
 	        } else {
-	            if (this.getLastString().trim() != "" && !this.prevLineIsComment()) {
+	            if (this.getLastString().trim() !== "" && !this.prevLineIsComment()) {
 	                this.addNewLine(this.indentCount);
 	            }
 	            this.incrementIndent(token.value, "");
@@ -2417,6 +2435,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    PlSqlFormatter.prototype.formatSqlQuery = function formatSqlQuery(startIndex) {
 	        var startIndent = this.indentCount;
+
 	        var sql = "";
 	        var index = startIndex;
 	        var prev = this.getPrevValidTokenValue(startIndex);
@@ -2449,6 +2468,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        index--;
 	        var sqlArray = new _SqlFormatter2["default"](this.cfg).getFormatArray(sql);
+
 	        if (this.getLastString().trim().endsWith("(")) {
 	            while (sqlArray[sqlArray.length - 1].trim() == '' && sqlArray.length > 1) {
 	                sqlArray.pop();
@@ -2546,6 +2566,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.addNewLine(this.indentCount);
 	        }
 	        var comLines = token.value.split("\n");
+
 	        for (var i = 0; i < comLines.length; i++) {
 	            if (comLines[i].trim().startsWith("*")) {
 	                this.lines[this.lastIndex()] += " ";
@@ -2623,6 +2644,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    SqlFormatter.prototype.format = function format(query) {
+
 	        if (!tokenizer) {
 	            tokenizer = new _Tokenizer2["default"]({
 	                reservedWords: reservedWords,

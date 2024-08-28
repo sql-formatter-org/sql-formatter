@@ -28,7 +28,7 @@ export default class PlSqlFormatter {
     }
 
     format(query) {
-        if (query.trim() == "") {
+        if (query.trim() === "") {
             return query;
         }
         this.query = query;
@@ -40,81 +40,85 @@ export default class PlSqlFormatter {
     formatQuery() {
         this.cQuery = this.query;
         const originQuery = this.query;
+       
+        
         for (let i = 0; i < this.tokens.length; i++) {
             const token = this.tokens[i];
+        
+            
             token.value = SqlUtils.formatTextCase(token);
-            if (token.value.startsWith(".") && token.value != ".." ) {
+            
+            if (token.value.startsWith(".") && token.value !== ".." ) {
                 this.lines[this.lastIndex()] = trimEnd(this.getLastString());
             }
-            if (token.type == tokenTypes.WHITESPACE) {
+            if (token.type === tokenTypes.WHITESPACE) {    
                 if (!this.getLastString().endsWith(" ") &&
                     !this.getLastString().endsWith("(") &&
-                     this.getLastString().trim() != "") {
+                     this.getLastString().trim() !== "") {
                     this.lines[this.lastIndex()] += " ";
                 }
             }
-            else if (token.type == tokenTypes.LINE_COMMENT) {
+            else if (token.type === tokenTypes.LINE_COMMENT) {
                 this.formatLineComment(token);
             }
             else if (token.type == tokenTypes.BLOCK_COMMENT) {
                 this.formatBlockComment(token);
             }
-            else if (token.type == tokenTypes.RESERVED_NEWLINE) {
-                //new line token = start sql query
+            else if (token.type === tokenTypes.RESERVED_NEWLINE) {
                 i = this.formatSqlQuery(i);
             }
-            else if (token.type == tokenTypes.OPEN_PAREN) {
+            else if (token.type === tokenTypes.OPEN_PAREN) {
                 this.formatOpeningParentheses(token, i);
             }
-            else if (token.type == tokenTypes.CLOSE_PAREN) {
+            else if (token.type === tokenTypes.CLOSE_PAREN) {
                 this.formatClosingParentheses(token, i);
             }
             else if (token.value.startsWith(":") && token.value != ":="){
                 this.formatWithSpaces(token);
             }
-            else if (token.type == tokenTypes.PLACEHOLDER) {
+            else if (token.type === tokenTypes.PLACEHOLDER) {
                 this.formatPlaceholder();
             }
-            else if (token.value == ")") {
+            else if (token.value === ")") {
                 this.formatCloseBkt(token);
             }
-            else if (token.value == "begin") {
+            else if (token.value === "begin") {
                 this.formatBegin(token);
             }
-            else if (token.value == "then") {
+            else if (token.value === "then") {
                 this.formatThen(token);
             }
-            else if (token.value == "loop") {
+            else if (token.value === "loop") {
                 this.formatLoop(token, i);
             }
-            else if (token.value == ",") {
+            else if (token.value === ",") {
                 this.formatComma(token);
             }
-            else if (token.value == ":") {
+            else if (token.value === ":") {
                 this.formatWithSpaceAfter(token);
             }
             else if (this.withoutSpaces.includes(token.value)) {
                 this.formatWithoutSpaces(token);
             }
-            else if (token.value == ";") {
+            else if (token.value === ";") {
                 this.formatQuerySeparator(token);
             }
-            else if (token.value == "exception" || token.value == "exceptions") {
+            else if (token.value === "exception" || token.value === "exceptions") {
                 this.formatException(token, i);
             }
-            else if (token.value == "else") {
+            else if (token.value === "else") {
                 this.formatElse(token);
             }
-            else if (token.value == "elsif") {
+            else if (token.value === "elsif") {
                 this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1) + token.value;
             }
-            else if (token.value == "when") {
+            else if (token.value === "when") {
                 this.formatWhen(token);
             }
-            else if (token.value == "as" || token.value == "is") {
+            else if (token.value === "as" || token.value == "is") {
                 this.formatAsIs(token);
             }
-            else if (token.value == "return") {
+            else if (token.value === "return") {
                 this.formatReturn(token);
             }
             else {
@@ -129,7 +133,7 @@ export default class PlSqlFormatter {
 
     formatElse(token) {
         const last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
-        if (last != undefined && last.key == "case") {
+        if (last != undefined && last.key === "case") {
             this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1) + " " + token.value;
             this.addNewLine(this.indentCount);
             this.lines[this.lastIndex()] += " ";
@@ -196,7 +200,7 @@ export default class PlSqlFormatter {
         const first = SqlUtils.getFirstWord(this.getLastString());
         const last = this.indentsKeyWords[this.indentsKeyWords.length - 1];
         if ((this.openParens.includes(first) && this.getLastString().split(",").length > 1) || (last != undefined)) {
-            if (this.getLastString().trim() != "") {
+            if (this.getLastString().trim() !== "") {
                 this.addNewLine(this.indentCount);
             }
         }
@@ -207,7 +211,7 @@ export default class PlSqlFormatter {
         let format = "";
         const split = origin.split("\n");
         for (let i = 0; i < split.length; i++) {
-            if (split[i].trim() == "") {
+            if (split[i].trim() === "") {
                 let spaceCount = 1;
                 while (i < split.length && split[i].trim() == "") {
                     spaceCount++;
@@ -226,7 +230,7 @@ export default class PlSqlFormatter {
             else {
                 for (let j = 0; j < split[i].length; j++) {
                     let char = split[i][j];
-                    if (char != " ") {
+                    if (char !== " ") {
                         let index = query.indexOf(char);
                         let idx1 = query.indexOf(char.toLowerCase());
                         if (index < 0) {
@@ -314,13 +318,13 @@ export default class PlSqlFormatter {
         const startBlock = ["cursor", "procedure", "function", "pragma", "declare"];
         if (lastIndent != undefined) {
             if (startBlock.includes(lastIndent.key)) {
-                if (this.getLastString().trim() != "") {
+                if (this.getLastString().trim() !== "") {
                     this.addNewLine(this.indentCount - 1);
                 }
                 else {
                     this.lines[this.lastIndex()] = repeat(this.indent, this.indentCount - 1);
                 }
-                if (lastIndent.key != "procedure" && lastIndent.key != "function") {
+                if (lastIndent.key !== "procedure" && lastIndent.key !== "function") {
                     this.indentsKeyWords.push({key: token.value, name: "", indent: this.indentCount - 1});
                 }
                 else {
@@ -332,7 +336,7 @@ export default class PlSqlFormatter {
             }
         }
         else {
-            if (this.getLastString().trim() != "" && !this.prevLineIsComment()) {
+            if (this.getLastString().trim() !== "" && !this.prevLineIsComment()) {
                 this.addNewLine(this.indentCount);
             }
             this.incrementIndent(token.value, "");
@@ -645,6 +649,7 @@ export default class PlSqlFormatter {
 
     formatSqlQuery(startIndex) {
         const startIndent = this.indentCount;
+      
         let sql = "";
         let index = startIndex;
         const prev = this.getPrevValidTokenValue(startIndex);
@@ -674,6 +679,7 @@ export default class PlSqlFormatter {
                 if (word == ";") {
                     break;
                 }
+               
                 else {
                     sql += word;
                 }
@@ -681,6 +687,9 @@ export default class PlSqlFormatter {
         }
         index--;
         const sqlArray = new SqlFormatter(this.cfg).getFormatArray(sql);
+
+
+
         if (this.getLastString().trim().endsWith("(")) {
             while (sqlArray[sqlArray.length - 1].trim() == '' && sqlArray.length > 1) {
                 sqlArray.pop();
@@ -783,6 +792,7 @@ export default class PlSqlFormatter {
             this.addNewLine(this.indentCount);
         }
         const comLines = token.value.split("\n");
+        
         for (let i = 0; i < comLines.length; i++) {
             if (comLines[i].trim().startsWith("*")) {
                 this.lines[this.lastIndex()] += " ";

@@ -117,6 +117,9 @@ export default class SqlFormatter {
     }
 
     format(query) {
+
+
+
         if (!tokenizer) {
             tokenizer = new Tokenizer({
                 reservedWords,
