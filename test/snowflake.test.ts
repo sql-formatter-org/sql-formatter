@@ -190,4 +190,18 @@ describe('SnowflakeFormatter', () => {
       third STRING
     );`);
   });
+
+  // Issue #771
+  it('allows TYPE to be used as an identifier', () => {
+    expect(format(`SELECT CASE WHEN type = 'upgrade' THEN amount ELSE 0 END FROM items;`))
+      .toBe(dedent`
+      SELECT
+        CASE
+          WHEN type = 'upgrade' THEN amount
+          ELSE 0
+        END
+      FROM
+        items;
+    `);
+  });
 });
