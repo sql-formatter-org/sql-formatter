@@ -328,6 +328,8 @@ export const snowflake: DialectOptions = {
       '||',
       // Generators: https://docs.snowflake.com/en/sql-reference/functions/generator.html#generator
       '=>',
+      // Assignment https://docs.snowflake.com/en/sql-reference/snowflake-scripting/let
+      ':=',
     ],
     propertyAccessOperators: [':'],
   },
