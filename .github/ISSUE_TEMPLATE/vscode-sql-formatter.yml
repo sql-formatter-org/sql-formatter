@@ -1,6 +1,6 @@
 name: VSCode SQL Formatter extension bug report
-about: I have a problem with the SQL Formatter VSCode extension
-title: ''
+description: I have a problem with the SQL Formatter VSCode extension
+title: '[VSCode]:'
 labels: vscode
 body:
   - type: textarea
@@ -73,6 +73,6 @@ body:
     id: repoduces
     attributes:
       label: I have tried to reproduce this issue on the [demo page](https://sql-formatter-org.github.io/sql-formatter/), and it
-      items:
+      options:
         - label: Reproduces
         - label: Does not reproduce
