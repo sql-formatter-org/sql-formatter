@@ -11,3 +11,9 @@ body:
 
         Instead, consider switching to the official [SQL Formatter VSCode](https://marketplace.visualstudio.com/items?itemName=ReneSaarsoo.sql-formatter-vsc)
         extension, which uses the latest SQL Formatter library and is actively maintained.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Tell us why you regardless of the above still want to report an issue
+    validations:
+      required: true
