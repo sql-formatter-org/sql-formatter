@@ -1,0 +1,78 @@
+name: VSCode SQL Formatter extension bug report
+about: I have a problem with the SQL Formatter VSCode extension
+title: ''
+labels: vscode
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Describe your problem
+    validations:
+      required: true
+  - type: dropdown
+    id: dialect
+    attributes:
+      label: Which SQL dialect does this apply to?
+      multiple: true
+      options:
+        - Google BigQuery
+        - IBM DB2 for LUW (Linux, Unix, Windows)
+        - IBM DB2 for iSystem
+        - Apache Hive
+        - MariaDB
+        - MySQL
+        - Couchbase N1QL
+        - Oracle PL/SQL
+        - PostgreSQL
+        - Amazon Redshift
+        - SingleStoreDB
+        - Snowflake
+        - Spark
+        - SQLite
+        - TiDB
+        - Trino
+        - Presto
+        - Microsoft SQL Server Transact-SQL
+        - A dialect not supported by SQL Formatter
+    validations:
+      required: true
+  - type: dropdown
+    id: configured_dialect
+    attributes:
+      label: Which SQL dialect is configured in your VSCode extension settings?
+      description: Go to Settings -> SQL Formatter VSCode -> dialect.
+      options:
+        - Rely on VSCode to detect the relevant SQL dialect
+        - Google BigQuery
+        - IBM DB2 for LUW (Linux, Unix, Windows)
+        - IBM DB2 for iSystem
+        - Apache Hive
+        - MariaDB
+        - MySQL
+        - Couchbase N1QL
+        - Oracle PL/SQL
+        - PostgreSQL
+        - Amazon Redshift
+        - SingleStoreDB
+        - Snowflake
+        - Spark
+        - SQLite
+        - TiDB
+        - Trino (should also work for Presto)
+        - Microsoft SQL Server Transact-SQL
+        - Basic SQL - generally not recommended
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version of the VSCode extension
+    validations:
+      required: true
+  - type: checkboxes
+    id: repoduces
+    attributes:
+      label: I have tried to reproduce this issue on the [demo page](https://sql-formatter-org.github.io/sql-formatter/), and it
+      items:
+        - label: Reproduces
+        - label: Does not reproduce

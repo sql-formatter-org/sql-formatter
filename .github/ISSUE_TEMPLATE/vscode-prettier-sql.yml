@@ -1,5 +1,5 @@
 name: VSCode Prettier SQL extension bug report
-description: I have a problem with the VSCode Prettier SQL extension.
+description: I have a problem with the Prettier SQL VSCode extension.
 title: 'Problem with outdated Prettier SQL extension'
 labels: ['vscode']
 body:
