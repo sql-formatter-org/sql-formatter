@@ -1,0 +1,13 @@
+name: VSCode Prettier SQL extension bug report
+description: I have a problem with the VSCode Prettier SQL extension.
+title: 'Problem with outdated Prettier SQL extension'
+labels: ['vscode']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please don't report issues about the [Prettier SQL VSCode](https://marketplace.visualstudio.com/items?itemName=inferrinizzard.prettier-sql-vscode) extension here.
+        It is no more maintained by its author.
+
+        Instead, consider switching to the official [SQL Formatter VSCode](https://marketplace.visualstudio.com/items?itemName=ReneSaarsoo.sql-formatter-vsc)
+        extension, which uses the latest SQL Formatter library and is actively maintained.
