@@ -65,4 +65,17 @@ describe('SqliteFormatter', () => {
         (2, 'Dog');
     `);
   });
+
+  it('supports ON CONFLICT .. DO UPDATE syntax', () => {
+    expect(format(`INSERT INTO tbl VALUES (1,'Leopard') ON CONFLICT DO UPDATE SET foo=1;`))
+      .toBe(dedent`
+      INSERT INTO
+        tbl
+      VALUES
+        (1, 'Leopard')
+      ON CONFLICT DO UPDATE
+      SET
+        foo = 1;
+    `);
+  });
 });

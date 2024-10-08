@@ -63,6 +63,7 @@ const reservedJoins = expandPhrases([
 const reservedPhrases = expandPhrases([
   'ON {UPDATE | DELETE} [SET NULL | SET DEFAULT]',
   '{ROWS | RANGE | GROUPS} BETWEEN',
+  'DO UPDATE',
 ]);
 
 export const sqlite: DialectOptions = {
