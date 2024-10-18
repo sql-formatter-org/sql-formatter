@@ -99,7 +99,7 @@ class SqlFormatterCli {
     return this.parseFile(localConfig);
   }
 
-  findConfig(dir = __dirname) {
+  findConfig(dir = process.cwd()) {
     const filePath = path.join(dir, '.sql-formatter.json');
     if (!fs.existsSync(filePath)) {
       const parentDir = path.resolve(dir, '..');
