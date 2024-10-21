@@ -204,4 +204,12 @@ describe('SnowflakeFormatter', () => {
         items;
     `);
   });
+
+  // Issue #771
+  it('supports lambda expressions', () => {
+    expect(format(`SELECT FILTER(my_arr, a -> a:value >= 50);`)).toBe(dedent`
+      SELECT
+        FILTER(my_arr, a -> a:value >= 50);
+    `);
+  });
 });

@@ -184,6 +184,7 @@ export const functions: string[] = [
   'EXTRACT',
   'EXTRACT_SEMANTIC_CATEGORIES',
   'FACTORIAL',
+  'FILTER',
   'FIRST_VALUE',
   'FLATTEN',
   'FLOOR',

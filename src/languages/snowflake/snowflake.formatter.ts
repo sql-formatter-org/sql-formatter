@@ -330,6 +330,8 @@ export const snowflake: DialectOptions = {
       '=>',
       // Assignment https://docs.snowflake.com/en/sql-reference/snowflake-scripting/let
       ':=',
+      // Lambda: https://docs.snowflake.com/en/user-guide/querying-semistructured#lambda-expressions
+      '->',
     ],
     propertyAccessOperators: [':'],
   },
