@@ -7,7 +7,7 @@ Specifies the SQL dialect to use.
 ```ts
 import { format } from 'sql-formatter';
 
-const result = format('SELECT * FROM tbl', { dialect: 'sqlite' });
+const result = format('SELECT * FROM tbl', { language: 'sqlite' });
 ```
 
 ## Options
