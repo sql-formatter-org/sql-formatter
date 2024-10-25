@@ -279,19 +279,4 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
         tbl;
     `);
   });
-
-  it('supports decimal values without leading digits', () => {
-    const result = format(
-      `SELECT employee_id FROM employees WHERE salary > .456 * 1000000 AND bonus < .0000239 * salary;`
-    );
-    expect(result).toBe(dedent`
-      SELECT
-        employee_id
-      FROM
-        employees
-      WHERE
-        salary > .456 * 1000000
-        AND bonus < .0000239 * salary;
-    `);
-  });
 }

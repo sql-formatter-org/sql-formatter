@@ -51,4 +51,12 @@ export default function supportsNumbers(format: FormatFn) {
         100. * b / SUM(a_s);
     `);
   });
+
+  it('supports decimal values without leading digits', () => {
+    const result = format(`SELECT .456 AS foo;`);
+    expect(result).toBe(dedent`
+      SELECT
+        .456 AS foo;
+    `);
+  });
 }
