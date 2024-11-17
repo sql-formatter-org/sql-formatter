@@ -368,6 +368,7 @@ export const postgresql: DialectOptions = {
       '::',
       ':',
     ],
+    operatorKeyword: true,
   },
   formatOptions: {
     alwaysDenseOperators: ['::', ':'],

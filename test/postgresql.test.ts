@@ -365,4 +365,16 @@ describe('PostgreSqlFormatter', () => {
       CREATE TABLE foo (text VARCHAR(100));
     `);
   });
+
+  // Issue #711
+  it('supports OPERATOR() syntax', () => {
+    expect(format(`SELECT foo OPERATOR(public.===) bar;`)).toBe(dedent`
+      SELECT
+        foo OPERATOR(public.===) bar;
+    `);
+    expect(format(`SELECT foo operator ( !== ) bar;`)).toBe(dedent`
+      SELECT
+        foo operator ( !== ) bar;
+    `);
+  });
 });

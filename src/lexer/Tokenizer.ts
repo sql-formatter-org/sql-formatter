@@ -130,6 +130,14 @@ export default class Tokenizer {
         regex: cfg.supportsXor ? /XOR\b/iuy : undefined,
         text: toCanonical,
       },
+      ...(cfg.operatorKeyword
+        ? [
+            {
+              type: TokenType.OPERATOR,
+              regex: /OPERATOR *\([^)]+\)/iuy,
+            },
+          ]
+        : []),
       {
         type: TokenType.RESERVED_FUNCTION_NAME,
         regex: regex.reservedWord(cfg.reservedFunctionNames, cfg.identChars),

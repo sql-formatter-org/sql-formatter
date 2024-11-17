@@ -98,6 +98,8 @@ export interface TokenizerOptions {
   // Additional operators for property access, in addition to .
   // Like in table.column
   propertyAccessOperators?: string[];
+  // Enables PostgreSQL-specific OPERATOR(...) syntax
+  operatorKeyword?: boolean;
   // Allows custom modifications on the token array.
   // Called after the whole input string has been split into tokens.
   // The result of this will be the output of the tokenizer.
