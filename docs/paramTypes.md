@@ -103,7 +103,7 @@ You can define a regex pattern to match the custom parameters:
 
 ```js
 paramTypes: {
-  custom: [{ regex: '\\{[a-zA-Z0-9_]+\\}' }];
+  custom: [{ regex: '\\{[a-zA-Z0-9_]+\\}' }],
 }
 ```
 
@@ -111,7 +111,7 @@ Note the double backslashes. You can get around the double-escaping problem by u
 
 ```js
 paramTypes: {
-  custom: [{ regex: String.raw`\{[a-zA-Z0-9_]+\}` }];
+  custom: [{ regex: String.raw`\{[a-zA-Z0-9_]+\}` }],
 }
 ```
 
