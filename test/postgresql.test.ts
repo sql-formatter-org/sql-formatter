@@ -146,6 +146,12 @@ describe('PostgreSqlFormatter', () => {
       '<->>',
       '<<<->',
       '<->>>',
+      // Custom operators: from pgvector extension
+      '<#>',
+      '<=>',
+      '<+>',
+      '<~>',
+      '<%>',
     ],
     { any: true }
   );

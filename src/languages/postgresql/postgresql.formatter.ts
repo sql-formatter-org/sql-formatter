@@ -367,6 +367,13 @@ export const postgresql: DialectOptions = {
       // Type cast
       '::',
       ':',
+      // Custom operators defined by pgvector extension
+      // https://github.com/pgvector/pgvector#querying
+      '<#>',
+      '<=>',
+      '<+>',
+      '<~>',
+      '<%>',
     ],
     operatorKeyword: true,
   },
