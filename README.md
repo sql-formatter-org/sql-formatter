@@ -171,6 +171,10 @@ The tool also accepts a JSON config file named .sql-formatter.json in the curren
 
 All fields are optional and all fields that are not specified will be filled with their default values.
 
+## Usage as ESLint plugin
+
+`sql-formatter` can be utilized through the ESLint rule [eslint-plugin-sql#format](https://github.com/gajus/eslint-plugin-sql#format).
+
 ### Configuration options
 
 - [**`language`**](docs/language.md) the SQL dialect to use (when using `format()`).
