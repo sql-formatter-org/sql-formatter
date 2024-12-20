@@ -171,10 +171,6 @@ The tool also accepts a JSON config file named .sql-formatter.json in the curren
 
 All fields are optional and all fields that are not specified will be filled with their default values.
 
-## Usage as ESLint plugin
-
-`sql-formatter` can be utilized through the ESLint rule [eslint-plugin-sql#format](https://github.com/gajus/eslint-plugin-sql#format).
-
 ### Configuration options
 
 - [**`language`**](docs/language.md) the SQL dialect to use (when using `format()`).
@@ -205,6 +201,10 @@ This makes SQL Formatter available as a global variable `window.sqlFormatter`.
   - [Repo](https://github.com/sql-formatter-org/sql-formatter-vscode)
 - [Vim extension](https://github.com/fannheyward/coc-sql/)
 - [Prettier plugin](https://github.com/un-ts/prettier/tree/master/packages/sql)
+
+### Usage as ESLint plugin
+
+- Inside `eslint-plugin-sql` by using the rule [eslint-plugin-sql#format](https://github.com/gajus/eslint-plugin-sql#format).
 
 ## Frequently Asked Questions
 
