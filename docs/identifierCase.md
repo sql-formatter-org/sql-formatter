@@ -7,6 +7,15 @@ This option doesn't yet support all types of identifiers:
 - prefixed variables like `@my_var` are not converted.
 - parameter placeholders like `:param` are not converted.
 
+**NB!** The use of this option is generally not recommended,
+because SQL Formatter leans on the side of detecting as few keywords as possible
+(to avoid converting them to uppercase when `keywordCase: "upper"` is used),
+which on the flip side means that everything else will be labeled as identifiers.
+
+The only reasonable cases to use this option is when you want all your SQL to
+be either in uppercase or lowercase. But if you only want keywords to be in
+uppercase, only use the `keywordCase: "upper"` option.
+
 ## Options
 
 - `"preserve"` (default) preserves the original case.
