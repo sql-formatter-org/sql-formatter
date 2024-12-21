@@ -62,6 +62,18 @@ export default function supportsKeywordCase(format: FormatFn) {
     `);
   });
 
+  it('treats dot-seperated keywords as plain identifiers', () => {
+    const result = format('select table.and from set.select', {
+      keywordCase: 'upper',
+    });
+    expect(result).toBe(dedent`
+      SELECT
+        table.and
+      FROM
+        set.select
+    `);
+  });
+
   // regression test for #356
   it('formats multi-word reserved clauses into single line', () => {
     const result = format(

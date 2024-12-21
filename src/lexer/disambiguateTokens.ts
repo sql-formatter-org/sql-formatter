@@ -31,6 +31,10 @@ const propertyNameKeywordToIdent = (token: Token, i: number, tokens: Token[]): T
     if (prevToken && prevToken.type === TokenType.PROPERTY_ACCESS_OPERATOR) {
       return { ...token, type: TokenType.IDENTIFIER, text: token.raw };
     }
+    const nextToken = nextNonCommentToken(tokens, i);
+    if (nextToken && nextToken.type === TokenType.PROPERTY_ACCESS_OPERATOR) {
+      return { ...token, type: TokenType.IDENTIFIER, text: token.raw };
+    }
   }
   return token;
 };
