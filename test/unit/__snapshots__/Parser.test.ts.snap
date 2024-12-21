@@ -496,10 +496,9 @@ Array [
       Object {
         "children": Array [
           Object {
-            "raw": "CURRENT_TIME",
+            "quoted": false,
             "text": "CURRENT_TIME",
-            "tokenType": "RESERVED_KEYWORD",
-            "type": "keyword",
+            "type": "identifier",
           },
           Object {
             "quoted": false,
