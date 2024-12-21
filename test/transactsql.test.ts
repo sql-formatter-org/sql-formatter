@@ -197,4 +197,12 @@ describe('TransactSqlFormatter', () => {
       CREATE TABLE foo (name char(65));
     `);
   });
+
+  // Issue #810
+  it('supports special $ACTION keyword', () => {
+    expect(format(`MERGE INTO tbl OUTPUT $action AS act;`)).toBe(dedent`
+      MERGE INTO
+        tbl OUTPUT $action AS act;
+    `);
+  });
 });

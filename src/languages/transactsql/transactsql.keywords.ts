@@ -289,6 +289,8 @@ export const keywords: string[] = [
   'WRITE',
   'YEAR',
   'ZONE',
+  // https://learn.microsoft.com/en-us/sql/t-sql/queries/output-clause-transact-sql?view=sql-server-ver16#action
+  '$ACTION',
 ];
 
 export const dataTypes: string[] = [
