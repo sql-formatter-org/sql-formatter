@@ -190,4 +190,11 @@ describe('TransactSqlFormatter', () => {
       GOTO InfiniLoop;
     `);
   });
+
+  // Issue #811
+  it('does not detect CHAR() as function', () => {
+    expect(format(`CREATE TABLE foo (name char(65));`, { functionCase: 'upper' })).toBe(dedent`
+      CREATE TABLE foo (name char(65));
+    `);
+  });
 });

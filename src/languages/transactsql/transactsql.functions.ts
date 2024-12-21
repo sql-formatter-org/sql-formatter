@@ -233,7 +233,6 @@ export const functions: string[] = [
 
   // string
   'ASCII',
-  'CHAR',
   'CHARINDEX',
   'CONCAT',
   'CONCAT_WS',
@@ -243,7 +242,6 @@ export const functions: string[] = [
   'LEN',
   'LOWER',
   'LTRIM',
-  'NCHAR',
   'PATINDEX',
   'QUOTENAME',
   'REPLACE',
