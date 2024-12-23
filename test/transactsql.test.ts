@@ -205,4 +205,17 @@ describe('TransactSqlFormatter', () => {
         tbl OUTPUT $action AS act;
     `);
   });
+
+  // Issue #814
+  it('formats GO on a separate line', () => {
+    expect(format(`CREATE VIEW foo AS SELECT * FROM tbl GO CREATE INDEX bar`)).toBe(dedent`
+      CREATE VIEW foo AS
+      SELECT
+        *
+      FROM
+        tbl
+      GO
+      CREATE INDEX bar
+    `);
+  });
 });
