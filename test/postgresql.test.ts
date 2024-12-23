@@ -383,4 +383,11 @@ describe('PostgreSqlFormatter', () => {
         foo operator ( !== ) bar;
     `);
   });
+
+  // Issue #813
+  it('supports OR REPLACE in CREATE FUNCTION', () => {
+    expect(format(`CREATE OR REPLACE FUNCTION foo ();`)).toBe(dedent`
+      CREATE OR REPLACE FUNCTION foo ();
+    `);
+  });
 });
