@@ -218,4 +218,13 @@ describe('TransactSqlFormatter', () => {
       CREATE INDEX bar
     `);
   });
+
+  // Issue #819
+  it('does not recognize ODBC keywords as reserved keywords', () => {
+    expect(format(`SELECT Value, Zone`, { keywordCase: 'upper' })).toBe(dedent`
+      SELECT
+        Value,
+        Zone
+    `);
+  });
 });
