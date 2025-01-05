@@ -98,6 +98,7 @@ export const keywords: string[] = [
   'SYMMETRIC', // reserved
   'TABLE', // reserved
   'TABLESAMPLE', // reserved (can be function or type)
+  'TEMPLATE', // non-reserved, used in CREATE DATABASE to specify a template database
   'THEN', // reserved
   'TO', // reserved, requires AS
   'TRAILING', // reserved

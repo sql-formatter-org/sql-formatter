@@ -172,7 +172,7 @@ const tabularOnelineClauses = expandPhrases([
   'DROP IDENTITY',
   'DROP INDEX',
   'DROP LANGUAGE',
-  'DROP MATERIALIZED VIEW',
+  'DROP MATERIALIZED VIEW [IF EXISTS]',
   'DROP OPERATOR',
   'DROP OPERATOR CLASS',
   'DROP OPERATOR FAMILY',
@@ -216,7 +216,7 @@ const tabularOnelineClauses = expandPhrases([
   'REFRESH MATERIALIZED VIEW',
   'REINDEX',
   'RELEASE SAVEPOINT',
-  'RESET',
+  'RESET [ALL|ROLE|SESSION AUTHORIZATION]',
   'REVOKE',
   'ROLLBACK',
   'ROLLBACK PREPARED',
@@ -252,11 +252,15 @@ const reservedPhrases = expandPhrases([
   'PRIMARY KEY',
   'GENERATED {ALWAYS | BY DEFAULT} AS IDENTITY',
   'ON {UPDATE | DELETE} [SET NULL | SET DEFAULT]',
+  'DO {NOTHING | UPDATE}',
+  'AS MATERIALIZED',
   '{ROWS | RANGE | GROUPS} BETWEEN',
   // https://www.postgresql.org/docs/current/datatype-datetime.html
   '[TIMESTAMP | TIME] {WITH | WITHOUT} TIME ZONE',
   // comparison operator
   'IS [NOT] DISTINCT FROM',
+  'NULLS {FIRST | LAST}',
+  'WITH ORDINALITY',
 ]);
 
 // https://www.postgresql.org/docs/14/index.html
