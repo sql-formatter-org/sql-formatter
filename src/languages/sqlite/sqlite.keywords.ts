@@ -1,5 +1,7 @@
 export const keywords: string[] = [
   // https://www.sqlite.org/lang_keywords.html
+  // Note: The keywords listed on that URL are not all reserved keywords.
+  // We'll need to clean up this list to only include reserved keywords.
   'ABORT',
   'ACTION',
   'ADD',
@@ -63,7 +65,6 @@ export const keywords: string[] = [
   'GENERATED',
   'GLOB',
   'GROUP',
-  'GROUPS',
   'HAVING',
   'IF',
   'IGNORE',
