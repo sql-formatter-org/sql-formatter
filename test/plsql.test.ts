@@ -84,11 +84,13 @@ describe('PlSqlFormatter', () => {
     `);
   });
 
-  // Parameters don't allow the same characters as identifiers
-  it('does not support #, $ in named parameters', () => {
-    expect(() => format('SELECT :col$foo')).toThrowError(`Parse error: Unexpected "$foo"`);
-
-    expect(() => format('SELECT :col#foo')).toThrowError(`Parse error: Unexpected "#foo"`);
+  // Issue #822
+  it('supports #, $ in named parameters', () => {
+    expect(format('SELECT :col$foo, :col#foo')).toBe(dedent`
+      SELECT
+        :col$foo,
+        :col#foo
+    `);
   });
 
   it('supports &name substitution variables', () => {
