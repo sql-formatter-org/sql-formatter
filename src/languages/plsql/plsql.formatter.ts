@@ -66,7 +66,7 @@ const tabularOnelineClauses = expandPhrases([
   'START WITH',
 ]);
 
-const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT', 'INTERSECT']);
+const reservedSetOperations = expandPhrases(['UNION [ALL]', 'MINUS', 'INTERSECT']);
 
 const reservedJoins = expandPhrases([
   'JOIN',
