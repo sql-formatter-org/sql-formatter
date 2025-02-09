@@ -9,7 +9,7 @@ Decides newline placement before or after logical operators (AND, OR, XOR).
 
 ### before
 
-```
+```sql
 SELECT
   *
 FROM
@@ -22,7 +22,7 @@ WHERE
 
 ### after
 
-```
+```sql
 SELECT
   *
 FROM
