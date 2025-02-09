@@ -228,7 +228,7 @@ Or when using the VSCode extension: Settings -> SQL-Formatter-VSCode: SQLFlavour
 
 ### Module parse failed: Unexpected token
 
-This typically happens when bundling an appication with Webpack.
+This typically happens when bundling an application with Webpack.
 The cause is that Babel (through `babel-loader`) is not configured
 to support class properties syntax:
 
@@ -264,7 +264,7 @@ SELECT {col1}, {col2} FROM {tablename}
 
 While templating is not directly supported by SQL Formatter, the workaround
 is to use [paramTypes](docs/paramTypes.md) config option to treat these
-occurances of templating constructs as prepared-statement parameter-placeholders:
+occurrences of templating constructs as prepared-statement parameter-placeholders:
 
 ```js
 format('SELECT {col1}, {col2} FROM {tablename};', {
