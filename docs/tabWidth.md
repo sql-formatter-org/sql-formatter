@@ -11,7 +11,7 @@ This option is ignored when `useTabs` option is enabled.
 
 ### Indenting by 2 spaces (default)
 
-```
+```sql
 SELECT
   *,
 FROM
@@ -33,7 +33,7 @@ GROUP BY column4
 
 Using `indent: 4`:
 
-```
+```sql
 SELECT
     *,
 FROM
@@ -55,7 +55,7 @@ GROUP BY column4
 
 Using `indent: "\t"`:
 
-```
+```sql
 SELECT
         *,
 FROM
