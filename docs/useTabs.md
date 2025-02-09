@@ -11,7 +11,7 @@ Uses TAB characters for indentation.
 
 Using `useTabs: true`:
 
-```
+```sql
 SELECT
         *,
 FROM
