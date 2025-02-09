@@ -9,7 +9,7 @@ Whether to place query separator (`;`) on a separate line.
 
 ### newlineBeforeSemicolon: false (default)
 
-```
+```sql
 SELECT
   *
 FROM
@@ -18,7 +18,7 @@ FROM
 
 ### newlineBeforeSemicolon: true
 
-```
+```sql
 SELECT
   *
 FROM
