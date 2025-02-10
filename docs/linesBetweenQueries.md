@@ -11,7 +11,7 @@ A number of empty lines. Defaults to `1`. Must be positive.
 
 ### linesBetweenQueries: 1 (default)
 
-```
+```sql
 SELECT
   *
 FROM
@@ -25,7 +25,7 @@ FROM
 
 ### linesBetweenQueries: 0
 
-```
+```sql
 SELECT
   *
 FROM
@@ -38,7 +38,7 @@ FROM
 
 ### linesBetweenQueries: 2
 
-```
+```sql
 SELECT
   *
 FROM
