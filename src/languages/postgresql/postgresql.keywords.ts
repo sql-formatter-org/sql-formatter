@@ -139,6 +139,8 @@ export const dataTypes: string[] = [
   'INTERVAL', // (cannot be function or type)
   'NCHAR', // (cannot be function or type)
   'NUMERIC', // (cannot be function or type)
+  'JSON',
+  'JSONB',
   'PRECISION', // (cannot be function or type), requires AS
   'REAL', // (cannot be function or type)
   'SMALLINT', // (cannot be function or type)

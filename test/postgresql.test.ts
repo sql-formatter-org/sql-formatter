@@ -390,4 +390,12 @@ describe('PostgreSqlFormatter', () => {
       CREATE OR REPLACE FUNCTION foo ();
     `);
   });
+
+  it('formats JSON and JSONB data types', () => {
+    expect(
+      format(`CREATE TABLE foo (bar json, baz jsonb);`, {
+        dataTypeCase: 'upper',
+      })
+    ).toBe('CREATE TABLE foo (bar JSON, baz JSONB);');
+  });
 });
