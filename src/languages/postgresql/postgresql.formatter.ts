@@ -285,7 +285,7 @@ export const postgresql: DialectOptions = {
     ],
     identTypes: [{ quote: '""-qq', prefixes: ['U&'] }],
     identChars: { rest: '$' },
-    paramTypes: { numbered: ['$'] },
+    paramTypes: { numbered: ['$'], named: ['@'] },
     operators: [
       // Arithmetic
       '%',
