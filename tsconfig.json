@@ -13,6 +13,6 @@
     /* Additional Checks */
     "noImplicitReturns": true /* Report error when not all code paths in function return a value. */
   },
-  "include": ["src", "test", "static"],
+  "include": ["src", "test", "static", "tsup.config.ts"],
   "exclude": ["node_modules"]
 }

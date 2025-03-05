@@ -11,6 +11,14 @@
     ".": {
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./dialect": {
+      "import": "./dist/dialect.js",
+      "require": "./dist/dialect.cjs"
+    },
+    "./languages/*": {
+      "import": "./dist/languages/*/index.js",
+      "require": "./dist/languages/*/index.cjs"
     }
   },
   "bin": {
@@ -62,7 +70,7 @@
     "prepare": "yarn clean && yarn grammar && yarn fix && yarn check && yarn build",
     "pre-commit": "npm-run-all --parallel ts:changes lint:changes",
     "grammar": "nearleyc src/parser/grammar.ne -o src/parser/grammar.ts",
-    "build:tsup": "tsup src/index.ts --format cjs,esm --sourcemap --dts",
+    "build:tsup": "tsup",
     "build:webpack": "webpack --config webpack.prod.js && cp dist/sql-formatter.min.cjs dist/sql-formatter.min.js",
     "build": "yarn grammar && npm-run-all --parallel build:tsup build:webpack",
     "release": "release-it"

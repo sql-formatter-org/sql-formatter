@@ -1,9 +1,8 @@
 import * as allDialects from './allDialects.js';
 
+import { formatDialect } from './dialect.js';
 import { FormatOptions } from './FormatOptions.js';
-import { createDialect, DialectOptions } from './dialect.js';
-import Formatter from './formatter/Formatter.js';
-import { ConfigError, validateConfig } from './validateConfig.js';
+import { ConfigError } from './validateConfig.js';
 
 const dialectNameMap: Record<keyof typeof allDialects | 'tsql', keyof typeof allDialects> = {
   bigquery: 'bigquery',
@@ -31,70 +30,38 @@ export const supportedDialects = Object.keys(dialectNameMap);
 export type SqlLanguage = keyof typeof dialectNameMap;
 
 export type FormatOptionsWithLanguage = Partial<FormatOptions> & {
+  /**
+   * SQL dialect to use (e.g. 'postgresql', 'mysql'). Defaults to 'sql'
+   */
   language?: SqlLanguage;
 };
 
-export type FormatOptionsWithDialect = Partial<FormatOptions> & {
-  dialect: DialectOptions;
-};
-
-const defaultOptions: FormatOptions = {
-  tabWidth: 2,
-  useTabs: false,
-  keywordCase: 'preserve',
-  identifierCase: 'preserve',
-  dataTypeCase: 'preserve',
-  functionCase: 'preserve',
-  indentStyle: 'standard',
-  logicalOperatorNewline: 'before',
-  expressionWidth: 50,
-  linesBetweenQueries: 1,
-  denseOperators: false,
-  newlineBeforeSemicolon: false,
-};
-
 /**
- * Format whitespace in a query to make it easier to read.
+ * Formats an SQL query string with consistent whitespace and indentation.
  *
- * @param {string} query - input SQL query string
- * @param {FormatOptionsWithLanguage} cfg Configuration options (see docs in README)
- * @return {string} formatted query
+ * @param {string} query - The SQL query string to format
+ * @param {FormatOptionsWithLanguage} options - Configuration options
+ * @returns {string} The formatted SQL query
+ * @throws {ConfigError} If an unsupported SQL dialect is specified
+ *
+ * @example
+ * format('SELECT * FROM   users WHERE  id = 1');
+ * // Returns:
+ * // SELECT *
+ * // FROM users
+ * // WHERE id = 1
  */
-export const format = (query: string, cfg: FormatOptionsWithLanguage = {}): string => {
-  if (typeof cfg.language === 'string' && !supportedDialects.includes(cfg.language)) {
-    throw new ConfigError(`Unsupported SQL dialect: ${cfg.language}`);
+export const format = (query: string, options: FormatOptionsWithLanguage = {}): string => {
+  if (typeof options.language === 'string' && !supportedDialects.includes(options.language)) {
+    throw new ConfigError(`Unsupported SQL dialect: ${options.language}`);
   }
 
-  const canonicalDialectName = dialectNameMap[cfg.language || 'sql'];
+  const canonicalDialectName = dialectNameMap[options.language || 'sql'];
 
   return formatDialect(query, {
-    ...cfg,
+    ...options,
     dialect: allDialects[canonicalDialectName],
   });
-};
-
-/**
- * Like the above format(), but language parameter is mandatory
- * and must be a Dialect object instead of a string.
- *
- * @param {string} query - input SQL query string
- * @param {FormatOptionsWithDialect} cfg Configuration options (see docs in README)
- * @return {string} formatted query
- */
-export const formatDialect = (
-  query: string,
-  { dialect, ...cfg }: FormatOptionsWithDialect
-): string => {
-  if (typeof query !== 'string') {
-    throw new Error('Invalid query argument. Expected string, instead got ' + typeof query);
-  }
-
-  const options = validateConfig({
-    ...defaultOptions,
-    ...cfg,
-  });
-
-  return new Formatter(createDialect(dialect), options).format(query);
 };
 
 export type FormatFn = typeof format;
