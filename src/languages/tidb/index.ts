@@ -1,1 +1,3 @@
-export { tidb } from './tidb.formatter.js';
+import { tidb } from './tidb.formatter.js';
+
+export default tidb;

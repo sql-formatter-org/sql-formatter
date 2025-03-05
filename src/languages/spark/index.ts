@@ -1,1 +1,3 @@
-export { spark } from './spark.formatter.js';
+import { spark } from './spark.formatter.js';
+
+export default spark;

@@ -1,1 +1,3 @@
-export { snowflake } from './snowflake.formatter.js';
+import { snowflake } from './snowflake.formatter.js';
+
+export default snowflake;

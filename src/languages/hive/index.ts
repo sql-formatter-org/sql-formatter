@@ -1,1 +1,3 @@
-export { hive } from './hive.formatter.js';
+import { hive } from './hive.formatter.js';
+
+export default hive;

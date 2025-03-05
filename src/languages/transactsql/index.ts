@@ -1,1 +1,3 @@
-export { transactsql } from './transactsql.formatter.js';
+import { transactsql } from './transactsql.formatter.js';
+
+export default transactsql;

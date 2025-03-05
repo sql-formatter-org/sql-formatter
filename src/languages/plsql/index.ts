@@ -1,1 +1,3 @@
-export { plsql } from './plsql.formatter.js';
+import { plsql } from './plsql.formatter.js';
+
+export default plsql;

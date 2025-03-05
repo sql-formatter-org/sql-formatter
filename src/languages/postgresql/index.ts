@@ -1,1 +1,3 @@
-export { postgresql } from './postgresql.formatter.js';
+import { postgresql } from './postgresql.formatter.js';
+
+export default postgresql;

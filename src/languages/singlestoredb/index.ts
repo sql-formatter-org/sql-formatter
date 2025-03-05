@@ -1,1 +1,3 @@
-export { singlestoredb } from './singlestoredb.formatter.js';
+import { singlestoredb } from './singlestoredb.formatter.js';
+
+export default singlestoredb;

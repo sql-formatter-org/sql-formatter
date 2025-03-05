@@ -1,1 +1,3 @@
-export { trino } from './trino.formatter.js';
+import { trino } from './trino.formatter.js';
+
+export default trino;

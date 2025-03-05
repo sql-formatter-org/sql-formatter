@@ -1,1 +1,3 @@
-export { sqlite } from './sqlite.formatter.js';
+import { sqlite } from './sqlite.formatter.js';
+
+export default sqlite;

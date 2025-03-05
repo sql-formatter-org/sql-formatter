@@ -1,1 +1,3 @@
-export { mariadb } from './mariadb.formatter.js';
+import { mariadb } from './mariadb.formatter.js';
+
+export default mariadb;

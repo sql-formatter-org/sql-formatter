@@ -1,1 +1,3 @@
-export { mysql } from './mysql.formatter.js';
+import { mysql } from './mysql.formatter.js';
+
+export default mysql;

@@ -1,1 +1,3 @@
-export { sql } from './sql.formatter.js';
+import { sql } from './sql.formatter.js';
+
+export default sql;
