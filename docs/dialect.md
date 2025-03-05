@@ -5,7 +5,8 @@ Specifies the SQL dialect to use.
 ## Usage
 
 ```ts
-import { formatDialect, sqlite } from 'sql-formatter';
+import { formatDialect } from 'sql-formatter/dialect';
+import sqlite from 'sql-formatter/languages/sqlite';
 
 const result = formatDialect('SELECT * FROM tbl', { dialect: sqlite });
 ```
@@ -49,7 +50,7 @@ Better to always pick something more specific if possible.
 The `dialect` parameter can also be used to specify a custom SQL dialect configuration:
 
 ```ts
-import { formatDialect, DialectOptions } from 'sql-formatter';
+import { formatDialect, DialectOptions } from 'sql-formatter/dialect';
 
 const myDialect: DialectOptions {
   name: 'my_dialect',

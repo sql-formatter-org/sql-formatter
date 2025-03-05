@@ -1,3 +1,4 @@
+// When adding a new dialect, be sure to add it to the list of exports below.
 export { default as bigquery } from './languages/bigquery/index.js';
 export { default as db2 } from './languages/db2/index.js';
 export { default as db2i } from './languages/db2i/index.js';
