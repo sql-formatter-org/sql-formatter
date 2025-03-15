@@ -58,6 +58,7 @@
     "fix": "yarn pretty && eslint --fix .",
     "test": "yarn grammar && jest",
     "test:watch": "yarn test -- --watch",
+    "test:perf": "yarn grammar && jest --testMatch '<rootDir>/test/perftest.ts' --coverage=false",
     "check": "yarn ts:check && yarn pretty:check && yarn lint && yarn test",
     "prepare": "yarn clean && yarn grammar && yarn fix && yarn check && yarn build",
     "pre-commit": "npm-run-all --parallel ts:changes lint:changes",
