@@ -5,14 +5,14 @@
     "target": "es6",
     "lib": ["es6", "dom"],
     "rootDirs": ["src"],
-    "outDir": "lib",
     "baseUrl": "./",
     "sourceMap": true,
     "declaration": true,
     "esModuleInterop": true,
-    "strict": true /* enable all strict type-checking options */,
-    /* Additional Checks */
-    "noImplicitReturns": true /* Report error when not all code paths in function return a value. */
+    // Enable all strict type-checking options.
+    "strict": true,
+    // Report error when not all code paths in function return a value.
+    "noImplicitReturns": true
   },
   "include": ["src", "test", "static"],
   "exclude": ["node_modules"]

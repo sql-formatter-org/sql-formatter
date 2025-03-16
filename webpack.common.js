@@ -20,7 +20,18 @@ export default {
       {
         test: /\.ts$/u,
         exclude: /node_modules/u,
-        use: ['babel-loader', 'ts-loader'],
+        use: [
+          'babel-loader',
+          {
+            loader: 'ts-loader',
+            options: {
+              // Prevent `ts-loader` from emitting types to the `lib` directory.
+              // This also disables type-checking, which is already performed
+              // independently of the webpack build process.
+              transpileOnly: true,
+            },
+          },
+        ],
       },
       {
         test: /\.js$/u,
