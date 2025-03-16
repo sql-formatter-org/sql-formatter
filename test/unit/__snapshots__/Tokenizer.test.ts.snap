@@ -1,24 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Tokenizer tokenizes multiline SQL tokens 1`] = `
-Array [
-  Object {
+[
+  {
     "precedingWhitespace": undefined,
     "raw": "SELECT",
     "start": 0,
     "text": "SELECT",
     "type": "RESERVED_SELECT",
   },
-  Object {
+  {
     "precedingWhitespace": " ",
-    "raw": "\\"foo
- bar\\"",
+    "raw": ""foo
+ bar"",
     "start": 7,
-    "text": "\\"foo
- bar\\"",
+    "text": ""foo
+ bar"",
     "type": "QUOTED_IDENTIFIER",
   },
-  Object {
+  {
     "precedingWhitespace": " ",
     "raw": "/* 
 
@@ -31,7 +31,7 @@ Array [
  */",
     "type": "BLOCK_COMMENT",
   },
-  Object {
+  {
     "precedingWhitespace": undefined,
     "raw": ";",
     "start": 27,
@@ -42,36 +42,36 @@ Array [
 `;
 
 exports[`Tokenizer tokenizes single line SQL tokens 1`] = `
-Array [
-  Object {
+[
+  {
     "precedingWhitespace": undefined,
     "raw": "SELECT",
     "start": 0,
     "text": "SELECT",
     "type": "RESERVED_SELECT",
   },
-  Object {
+  {
     "precedingWhitespace": " ",
     "raw": "*",
     "start": 7,
     "text": "*",
     "type": "ASTERISK",
   },
-  Object {
+  {
     "precedingWhitespace": " ",
     "raw": "FROM",
     "start": 9,
     "text": "FROM",
     "type": "RESERVED_CLAUSE",
   },
-  Object {
+  {
     "precedingWhitespace": " ",
     "raw": "foo",
     "start": 14,
     "text": "foo",
     "type": "IDENTIFIER",
   },
-  Object {
+  {
     "precedingWhitespace": undefined,
     "raw": ";",
     "start": 17,

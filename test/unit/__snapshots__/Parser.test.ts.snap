@@ -1,37 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Parser parses BETWEEN expression 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "children": Array [
-          Object {
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
             "quoted": false,
             "text": "age",
             "type": "identifier",
           },
-          Object {
-            "andKw": Object {
+          {
+            "andKw": {
               "raw": "AND",
               "text": "AND",
               "tokenType": "AND",
               "type": "keyword",
             },
-            "betweenKw": Object {
+            "betweenKw": {
               "raw": "BETWEEN",
               "text": "BETWEEN",
               "tokenType": "BETWEEN",
               "type": "keyword",
             },
-            "expr1": Array [
-              Object {
+            "expr1": [
+              {
                 "text": "18",
                 "type": "literal",
               },
             ],
-            "expr2": Array [
-              Object {
+            "expr2": [
+              {
                 "text": "63",
                 "type": "literal",
               },
@@ -39,7 +39,7 @@ Array [
             "type": "between_predicate",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "WHERE",
           "text": "WHERE",
           "tokenType": "RESERVED_CLAUSE",
@@ -55,63 +55,63 @@ Array [
 `;
 
 exports[`Parser parses CASE expression 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "children": Array [
-          Object {
-            "caseKw": Object {
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "caseKw": {
               "raw": "CASE",
               "text": "CASE",
               "tokenType": "CASE",
               "type": "keyword",
             },
-            "clauses": Array [
-              Object {
-                "condition": Array [
-                  Object {
+            "clauses": [
+              {
+                "condition": [
+                  {
                     "text": "1",
                     "type": "literal",
                   },
-                  Object {
+                  {
                     "text": "+",
                     "type": "operator",
                   },
-                  Object {
+                  {
                     "text": "1",
                     "type": "literal",
                   },
                 ],
-                "result": Array [
-                  Object {
+                "result": [
+                  {
                     "text": "10",
                     "type": "literal",
                   },
                 ],
-                "thenKw": Object {
+                "thenKw": {
                   "raw": "THEN",
                   "text": "THEN",
                   "tokenType": "THEN",
                   "type": "keyword",
                 },
                 "type": "case_when",
-                "whenKw": Object {
+                "whenKw": {
                   "raw": "WHEN",
                   "text": "WHEN",
                   "tokenType": "WHEN",
                   "type": "keyword",
                 },
               },
-              Object {
-                "elseKw": Object {
+              {
+                "elseKw": {
                   "raw": "ELSE",
                   "text": "ELSE",
                   "tokenType": "ELSE",
                   "type": "keyword",
                 },
-                "result": Array [
-                  Object {
+                "result": [
+                  {
                     "text": "20",
                     "type": "literal",
                   },
@@ -119,14 +119,14 @@ Array [
                 "type": "case_else",
               },
             ],
-            "endKw": Object {
+            "endKw": {
               "raw": "END",
               "text": "END",
               "tokenType": "END",
               "type": "keyword",
             },
-            "expr": Array [
-              Object {
+            "expr": [
+              {
                 "quoted": false,
                 "text": "foo",
                 "type": "identifier",
@@ -135,7 +135,7 @@ Array [
             "type": "case_expression",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -151,17 +151,17 @@ Array [
 `;
 
 exports[`Parser parses LIMIT clause with count 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "count": Array [
-          Object {
+[
+  {
+    "children": [
+      {
+        "count": [
+          {
             "text": "15",
             "type": "literal",
           },
         ],
-        "limitKw": Object {
+        "limitKw": {
           "raw": "LIMIT",
           "text": "LIMIT",
           "tokenType": "LIMIT",
@@ -177,40 +177,40 @@ Array [
 `;
 
 exports[`Parser parses LIMIT clause with longer expressions 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "count": Array [
-          Object {
+[
+  {
+    "children": [
+      {
+        "count": [
+          {
             "text": "3",
             "type": "literal",
           },
-          Object {
+          {
             "text": "*",
             "type": "operator",
           },
-          Object {
+          {
             "text": "2",
             "type": "literal",
           },
         ],
-        "limitKw": Object {
+        "limitKw": {
           "raw": "LIMIT",
           "text": "LIMIT",
           "tokenType": "LIMIT",
           "type": "keyword",
         },
-        "offset": Array [
-          Object {
+        "offset": [
+          {
             "text": "50",
             "type": "literal",
           },
-          Object {
+          {
             "text": "+",
             "type": "operator",
           },
-          Object {
+          {
             "text": "50",
             "type": "literal",
           },
@@ -225,24 +225,24 @@ Array [
 `;
 
 exports[`Parser parses LIMIT clause with offset and count 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "count": Array [
-          Object {
+[
+  {
+    "children": [
+      {
+        "count": [
+          {
             "text": "15",
             "type": "literal",
           },
         ],
-        "limitKw": Object {
+        "limitKw": {
           "raw": "LIMIT",
           "text": "LIMIT",
           "tokenType": "LIMIT",
           "type": "keyword",
         },
-        "offset": Array [
-          Object {
+        "offset": [
+          {
             "text": "100",
             "type": "literal",
           },
@@ -257,16 +257,16 @@ Array [
 `;
 
 exports[`Parser parses SELECT * 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "children": Array [
-          Object {
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
             "type": "all_columns_asterisk",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -282,25 +282,25 @@ Array [
 `;
 
 exports[`Parser parses SELECT ident.* 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "children": Array [
-          Object {
-            "object": Object {
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "object": {
               "quoted": false,
               "text": "ident",
               "type": "identifier",
             },
             "operator": ".",
-            "property": Object {
+            "property": {
               "type": "all_columns_asterisk",
             },
             "type": "property_access",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -316,20 +316,20 @@ Array [
 `;
 
 exports[`Parser parses array subscript 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "children": Array [
-          Object {
-            "array": Object {
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "array": {
               "quoted": false,
               "text": "my_array",
               "type": "identifier",
             },
-            "parenthesis": Object {
-              "children": Array [
-                Object {
+            "parenthesis": {
+              "children": [
+                {
                   "text": "5",
                   "type": "literal",
                 },
@@ -341,7 +341,7 @@ Array [
             "type": "array_subscript",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -357,17 +357,17 @@ Array [
 `;
 
 exports[`Parser parses array subscript with comment 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "children": Array [
-          Object {
-            "array": Object {
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "array": {
               "quoted": false,
               "text": "my_array",
-              "trailingComments": Array [
-                Object {
+              "trailingComments": [
+                {
                   "precedingWhitespace": " ",
                   "text": "/*haha*/",
                   "type": "block_comment",
@@ -375,9 +375,9 @@ Array [
               ],
               "type": "identifier",
             },
-            "parenthesis": Object {
-              "children": Array [
-                Object {
+            "parenthesis": {
+              "children": [
+                {
                   "text": "5",
                   "type": "literal",
                 },
@@ -389,7 +389,7 @@ Array [
             "type": "array_subscript",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -405,23 +405,23 @@ Array [
 `;
 
 exports[`Parser parses curly braces 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "children": Array [
-          Object {
-            "children": Array [
-              Object {
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
                 "quoted": false,
                 "text": "foo",
                 "type": "identifier",
               },
-              Object {
+              {
                 "text": ":",
                 "type": "operator",
               },
-              Object {
+              {
                 "quoted": false,
                 "text": "bar",
                 "type": "identifier",
@@ -432,7 +432,7 @@ Array [
             "type": "parenthesis",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -448,21 +448,21 @@ Array [
 `;
 
 exports[`Parser parses function call 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "children": Array [
-          Object {
-            "nameKw": Object {
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "nameKw": {
               "raw": "sqrt",
               "text": "SQRT",
               "tokenType": "RESERVED_FUNCTION_NAME",
               "type": "keyword",
             },
-            "parenthesis": Object {
-              "children": Array [
-                Object {
+            "parenthesis": {
+              "children": [
+                {
                   "text": "2",
                   "type": "literal",
                 },
@@ -474,7 +474,7 @@ Array [
             "type": "function_call",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -490,46 +490,46 @@ Array [
 `;
 
 exports[`Parser parses function name with and without parameters 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "children": Array [
-          Object {
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
             "quoted": false,
             "text": "CURRENT_TIME",
             "type": "identifier",
           },
-          Object {
+          {
             "quoted": false,
             "text": "a",
             "type": "identifier",
           },
-          Object {
+          {
             "type": "comma",
           },
-          Object {
-            "nameKw": Object {
+          {
+            "nameKw": {
               "raw": "CURRENT_TIME",
               "text": "CURRENT_TIME",
               "tokenType": "RESERVED_FUNCTION_NAME",
               "type": "keyword",
             },
-            "parenthesis": Object {
-              "children": Array [],
+            "parenthesis": {
+              "children": [],
               "closeParen": ")",
               "openParen": "(",
               "type": "parenthesis",
             },
             "type": "function_call",
           },
-          Object {
+          {
             "quoted": false,
             "text": "b",
             "type": "identifier",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -545,10 +545,10 @@ Array [
 `;
 
 exports[`Parser parses list of statements 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
+[
+  {
+    "children": [
+      {
         "quoted": false,
         "text": "foo",
         "type": "identifier",
@@ -557,9 +557,9 @@ Array [
     "hasSemicolon": true,
     "type": "statement",
   },
-  Object {
-    "children": Array [
-      Object {
+  {
+    "children": [
+      {
         "quoted": false,
         "text": "bar",
         "type": "identifier",
@@ -572,34 +572,34 @@ Array [
 `;
 
 exports[`Parser parses parenthesized expressions 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "children": Array [
-          Object {
-            "children": Array [
-              Object {
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
                 "quoted": false,
                 "text": "birth_year",
                 "type": "identifier",
               },
-              Object {
+              {
                 "text": "-",
                 "type": "operator",
               },
-              Object {
-                "children": Array [
-                  Object {
+              {
+                "children": [
+                  {
                     "quoted": false,
                     "text": "CURRENT_DATE",
                     "type": "identifier",
                   },
-                  Object {
+                  {
                     "text": "+",
                     "type": "operator",
                   },
-                  Object {
+                  {
                     "text": "1",
                     "type": "literal",
                   },
@@ -614,7 +614,7 @@ Array [
             "type": "parenthesis",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -630,20 +630,20 @@ Array [
 `;
 
 exports[`Parser parses qualified.identifier.sequence 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "children": Array [
-          Object {
-            "object": Object {
-              "object": Object {
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "object": {
+              "object": {
                 "quoted": false,
                 "text": "foo",
                 "type": "identifier",
               },
               "operator": ".",
-              "property": Object {
+              "property": {
                 "quoted": false,
                 "text": "bar",
                 "type": "identifier",
@@ -651,7 +651,7 @@ Array [
               "type": "property_access",
             },
             "operator": ".",
-            "property": Object {
+            "property": {
               "quoted": false,
               "text": "baz",
               "type": "identifier",
@@ -659,7 +659,7 @@ Array [
             "type": "property_access",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -675,18 +675,18 @@ Array [
 `;
 
 exports[`Parser parses set operations 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "children": Array [
-          Object {
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
             "quoted": false,
             "text": "foo",
             "type": "identifier",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -694,15 +694,15 @@ Array [
         },
         "type": "clause",
       },
-      Object {
-        "children": Array [
-          Object {
+      {
+        "children": [
+          {
             "quoted": false,
             "text": "bar",
             "type": "identifier",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "FROM",
           "text": "FROM",
           "tokenType": "RESERVED_CLAUSE",
@@ -710,9 +710,9 @@ Array [
         },
         "type": "clause",
       },
-      Object {
-        "children": Array [],
-        "nameKw": Object {
+      {
+        "children": [],
+        "nameKw": {
           "raw": "UNION ALL",
           "text": "UNION ALL",
           "tokenType": "RESERVED_SET_OPERATION",
@@ -720,15 +720,15 @@ Array [
         },
         "type": "set_operation",
       },
-      Object {
-        "children": Array [
-          Object {
+      {
+        "children": [
+          {
             "quoted": false,
             "text": "foo",
             "type": "identifier",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
@@ -736,15 +736,15 @@ Array [
         },
         "type": "clause",
       },
-      Object {
-        "children": Array [
-          Object {
+      {
+        "children": [
+          {
             "quoted": false,
             "text": "baz",
             "type": "identifier",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "FROM",
           "text": "FROM",
           "tokenType": "RESERVED_CLAUSE",
@@ -760,28 +760,28 @@ Array [
 `;
 
 exports[`Parser parses square brackets 1`] = `
-Array [
-  Object {
-    "children": Array [
-      Object {
-        "children": Array [
-          Object {
-            "children": Array [
-              Object {
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
                 "text": "1",
                 "type": "literal",
               },
-              Object {
+              {
                 "type": "comma",
               },
-              Object {
+              {
                 "text": "2",
                 "type": "literal",
               },
-              Object {
+              {
                 "type": "comma",
               },
-              Object {
+              {
                 "text": "3",
                 "type": "literal",
               },
@@ -791,7 +791,7 @@ Array [
             "type": "parenthesis",
           },
         ],
-        "nameKw": Object {
+        "nameKw": {
           "raw": "SELECT",
           "text": "SELECT",
           "tokenType": "RESERVED_SELECT",
