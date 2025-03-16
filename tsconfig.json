@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "target": "es6",
     "lib": ["es6", "dom"],
     "rootDirs": ["src"],

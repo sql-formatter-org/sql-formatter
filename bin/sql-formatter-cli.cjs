@@ -2,7 +2,7 @@
 
 'use strict';
 
-const { format, supportedDialects } = require('../dist/index.cjs');
+const { format, supportedDialects } = require('../dist/cjs/index.js');
 const fs = require('fs');
 const path = require('path');
 const tty = require('tty');
