@@ -66,7 +66,7 @@
     "build:cjs": "tsc -p tsconfig.cjs.json && echo \"{\"type\": \"commonjs\"}\" > dist/cjs/package.json",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:webpack": "webpack --config webpack.prod.js && cp dist/sql-formatter.min.cjs dist/sql-formatter.min.js",
-    "build": "yarn grammar && npm-run-all --parallel build:cjs build:esm build:webpack",
+    "build": "yarn grammar && rm -rf dist && npm-run-all --parallel build:cjs build:esm build:webpack",
     "release": "release-it"
   },
   "repository": {
