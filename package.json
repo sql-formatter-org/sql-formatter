@@ -63,7 +63,7 @@
     "prepare": "yarn clean && yarn grammar && yarn fix && yarn check && yarn build",
     "pre-commit": "npm-run-all --parallel ts:changes lint:changes",
     "grammar": "nearleyc src/parser/grammar.ne -o src/parser/grammar.ts",
-    "build:cjs": "tsc -p tsconfig.cjs.json && echo \"{\"type\": \"commonjs\"}\" > dist/cjs/package.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:webpack": "webpack --config webpack.prod.js && cp dist/sql-formatter.min.cjs dist/sql-formatter.min.js",
     "build": "yarn grammar && npm-run-all --parallel build:cjs build:esm build:webpack",
