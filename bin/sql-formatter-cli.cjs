@@ -9,7 +9,7 @@ const tty = require('tty');
 const { version } = require('../package.json');
 const { ArgumentParser } = require('argparse');
 const { promisify } = require('util');
-const getStdin = require('get-stdin');
+const { text } = require('node:stream/consumers');
 
 class SqlFormatterCli {
   constructor() {
@@ -117,7 +117,7 @@ class SqlFormatterCli {
     if (this.args.file) {
       return await this.readFile(infile);
     } else {
-      return await getStdin();
+      return await text(process.stdin);
     }
   }
 
