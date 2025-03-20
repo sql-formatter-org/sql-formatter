@@ -3,14 +3,14 @@
   "version": "15.5.0",
   "description": "Format whitespace in a SQL query to make it more readable",
   "license": "MIT",
-  "main": "dist/cjs/index.cjs",
+  "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "unpkg": "dist/sql-formatter.min.js",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.cjs"
+      "require": "./dist/cjs/index.js"
     }
   },
   "bin": {
