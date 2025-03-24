@@ -251,7 +251,7 @@ const reservedJoins = expandPhrases([
 const reservedPhrases = expandPhrases([
   'PRIMARY KEY',
   'GENERATED {ALWAYS | BY DEFAULT} AS IDENTITY',
-  'ON {UPDATE | DELETE} [CASCADE | SET NULL | SET DEFAULT]',
+  'ON {UPDATE | DELETE} [NO ACTION | RESTRICT | CASCADE | SET NULL | SET DEFAULT]',
   'DO {NOTHING | UPDATE}',
   'AS MATERIALIZED',
   '{ROWS | RANGE | GROUPS} BETWEEN',
