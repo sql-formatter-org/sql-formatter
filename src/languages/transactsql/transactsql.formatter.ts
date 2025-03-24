@@ -55,8 +55,13 @@ const tabularOnelineClauses = expandPhrases([
   'TRUNCATE TABLE',
   // indexes
   'CREATE [UNIQUE] [CLUSTERED] INDEX',
+  // databases
+  'CREATE DATABASE',
+  'ALTER DATABASE',
+  'DROP DATABASE [IF EXISTS]',
   // other statements
   'GO',
+  'USE',
   // https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15
   'ADD SENSITIVITY CLASSIFICATION',
   'ADD SIGNATURE',
