@@ -398,4 +398,11 @@ describe('PostgreSqlFormatter', () => {
       })
     ).toBe('CREATE TABLE foo (bar JSON, baz JSONB);');
   });
+
+  // Issue #850
+  it('supports OR REPLACE in CREATE PROCEDURE', () => {
+    expect(format(`CREATE OR REPLACE PROCEDURE foo () LANGUAGE sql AS $$ BEGIN END $$;`)).toBe(
+      dedent`CREATE OR REPLACE PROCEDURE foo () LANGUAGE sql AS $$ BEGIN END $$;`
+    );
+  });
 });
