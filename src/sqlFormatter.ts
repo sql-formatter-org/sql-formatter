@@ -9,6 +9,7 @@ const dialectNameMap: Record<keyof typeof allDialects | 'tsql', keyof typeof all
   bigquery: 'bigquery',
   db2: 'db2',
   db2i: 'db2i',
+  duckdb: 'duckdb',
   hive: 'hive',
   mariadb: 'mariadb',
   mysql: 'mysql',
