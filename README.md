@@ -86,7 +86,7 @@ FROM
 
 The formatter doesn't even parse the code between these comments.
 So in case there's some SQL that happens to crash SQL Formatter,
-you can at comment the culprit out (at least until the issue gets
+you can comment the culprit out (at least until the issue gets
 fixed in SQL Formatter).
 
 ### Placeholders replacement
