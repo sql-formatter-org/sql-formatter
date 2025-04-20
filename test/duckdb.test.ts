@@ -101,6 +101,14 @@ describe('DuckDBFormatter', () => {
   supportsParams(format, { positional: true, numbered: ['$'], quoted: ['$""'] });
   supportsLimiting(format, { limit: true, offset: true });
 
+  it('formats prefix aliases', () => {
+    expect(format("SELECT foo:10, bar:'hello';")).toBe(dedent`
+      SELECT
+        foo: 10,
+        bar: 'hello';
+    `);
+  });
+
   it('formats {} struct literal (string keys)', () => {
     expect(format("SELECT {'id':1,'type':'Tarzan'} AS obj;")).toBe(dedent`
       SELECT
