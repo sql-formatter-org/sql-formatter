@@ -111,6 +111,10 @@ const tabularOnelineClauses = expandPhrases([
   'ABORT',
   'USE',
   'VACUUM [ANALYZE]',
+  // prepared statements
+  'PREPARE',
+  'EXECUTE',
+  'DEALLOCATE [PREPARE]',
 ]);
 
 const reservedSetOperations = expandPhrases([
