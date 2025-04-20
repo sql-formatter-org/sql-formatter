@@ -1,7 +1,7 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
 import { functions } from '../postgresql/postgresql.functions.js';
-import { dataTypes, keywords } from '../postgresql/postgresql.keywords.js';
+import { dataTypes, keywords } from './duckdb.keywords.js';
 
 const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 
