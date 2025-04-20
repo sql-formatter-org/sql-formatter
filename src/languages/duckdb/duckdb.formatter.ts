@@ -36,8 +36,7 @@ const standardOnelineClauses = expandPhrases([
 ]);
 
 const tabularOnelineClauses = expandPhrases([
-  // - create:
-  'CREATE [OR REPLACE] [TEMPORARY | TEMP] VIEW [IF NOT EXISTS]',
+  // TABLE
   // - update:
   'UPDATE',
   // - insert:
@@ -59,6 +58,30 @@ const tabularOnelineClauses = expandPhrases([
   'SET [DATA] TYPE', // for alter column
   '{SET | DROP} DEFAULT', // for alter column
   '{SET | DROP} NOT NULL', // for alter column
+
+  // MACRO / FUNCTION
+  'CREATE [OR REPLACE] [TEMPORARY | TEMP] {MACRO | FUNCTION}',
+  'DROP MACRO [TABLE] [IF EXISTS]',
+  'DROP FUNCTION [IF EXISTS]',
+  // INDEX
+  'CREATE [UNIQUE] INDEX [IF NOT EXISTS]',
+  'DROP INDEX [IF EXISTS]',
+  // SCHEMA
+  'CREATE [OR REPLACE] SCHEMA [IF NOT EXISTS]',
+  'DROP SCHEMA [IF EXISTS]',
+  // SECRET
+  'CREATE [OR REPLACE] [PERSISTENT | TEMPORARY] SECRET [IF NOT EXISTS]',
+  'DROP [PERSISTENT | TEMPORARY] SECRET [IF EXISTS]',
+  // SEQUENCE
+  'CREATE [OR REPLACE] [TEMPORARY | TEMP] SEQUENCE',
+  'DROP SEQUENCE [IF EXISTS]',
+  // VIEW
+  'CREATE [OR REPLACE] [TEMPORARY | TEMP] VIEW [IF NOT EXISTS]',
+  'DROP VIEW [IF EXISTS]',
+  'ALTER VIEW',
+  // TYPE
+  'CREATE TYPE',
+  'DROP TYPE [IF EXISTS]',
 ]);
 
 const reservedSetOperations = expandPhrases([
