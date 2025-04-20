@@ -74,6 +74,8 @@ const reservedJoins = expandPhrases([
   '{NATURAL | ASOF} [INNER] JOIN',
   '{NATURAL | ASOF} {LEFT | RIGHT | FULL} [OUTER] JOIN',
   'POSITIONAL JOIN',
+  'ANTI JOIN',
+  'SEMI JOIN',
 ]);
 
 const reservedPhrases = expandPhrases([

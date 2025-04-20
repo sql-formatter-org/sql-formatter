@@ -110,6 +110,8 @@ describe('DuckDBFormatter', () => {
       'ASOF FULL JOIN',
       'ASOF FULL OUTER JOIN',
       'POSITIONAL JOIN',
+      'SEMI JOIN',
+      'ANTI JOIN',
     ],
   });
   supportsSetOperations(format, [
