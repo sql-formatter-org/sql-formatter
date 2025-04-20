@@ -39,7 +39,8 @@
     "trino",
     "presto",
     "prestosql",
-    "snowflake"
+    "snowflake",
+    "duckdb"
   ],
   "files": [
     "dist",
