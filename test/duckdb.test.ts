@@ -27,6 +27,7 @@ import supportsOnConflict from './features/onConflict.js';
 import supportsIsDistinctFrom from './features/isDistinctFrom.js';
 import supportsArrayLiterals from './features/arrayLiterals.js';
 import supportsDataTypeCase from './options/dataTypeCase.js';
+import supportsTruncateTable from './features/truncateTable.js';
 
 describe('DuckDBFormatter', () => {
   const language = 'duckdb';
@@ -50,8 +51,7 @@ describe('DuckDBFormatter', () => {
   supportsInsertInto(format);
   supportsOnConflict(format);
   supportsUpdate(format);
-  // TODO: only without-TABLE is supported
-  // supportsTruncateTable(format, { withoutTable: true });
+  supportsTruncateTable(format, { withTable: false, withoutTable: true });
   supportsStrings(format, ["''-qq", "X''", "B''"]);
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
