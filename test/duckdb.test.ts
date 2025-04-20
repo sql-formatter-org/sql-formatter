@@ -101,6 +101,65 @@ describe('DuckDBFormatter', () => {
   supportsParams(format, { positional: true, numbered: ['$'], quoted: ['$""'] });
   supportsLimiting(format, { limit: true, offset: true });
 
+  it('formats {} struct literal (string keys)', () => {
+    expect(format("SELECT {'id':1,'type':'Tarzan'} AS obj;")).toBe(dedent`
+      SELECT
+        {'id': 1, 'type': 'Tarzan'} AS obj;
+    `);
+  });
+
+  it('formats {} struct literal (identifier keys)', () => {
+    expect(format("SELECT {id:1,type:'Tarzan'} AS obj;")).toBe(dedent`
+      SELECT
+        {id: 1, type: 'Tarzan'} AS obj;
+    `);
+  });
+
+  it('formats {} struct literal (quoted identifier keys)', () => {
+    expect(format(`SELECT {"id":1,"type":'Tarzan'} AS obj;`)).toBe(dedent`
+      SELECT
+        {"id": 1, "type": 'Tarzan'} AS obj;
+    `);
+  });
+
+  it('formats large struct and list literals', () => {
+    const result = format(`
+      INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id': 1, 'type': 'Tarzan',
+      'array': [123456789, 123456789, 123456789, 123456789, 123456789], 'hello': 'world'});
+    `);
+    expect(result).toBe(dedent`
+      INSERT INTO
+        heroes (KEY, VALUE)
+      VALUES
+        (
+          '123',
+          {
+            'id': 1,
+            'type': 'Tarzan',
+            'array': [
+              123456789,
+              123456789,
+              123456789,
+              123456789,
+              123456789
+            ],
+            'hello': 'world'
+          }
+        );
+    `);
+  });
+
+  // TODO: This currently conflicts with ":"-operator in struct literals
+  it.skip('supports array slice operator', () => {
+    expect(format('SELECT foo[:5], bar[1:], baz[1:5], zap[:];')).toBe(dedent`
+      SELECT
+        foo[:5],
+        bar[1:],
+        baz[1:5],
+        zap[:];
+    `);
+  });
+
   it('formats TIMESTAMP WITH TIME ZONE syntax', () => {
     expect(
       format(`

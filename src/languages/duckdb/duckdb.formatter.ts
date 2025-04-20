@@ -209,7 +209,7 @@ export const duckdb: DialectOptions = {
     ],
   },
   formatOptions: {
-    alwaysDenseOperators: ['::', ':'],
+    alwaysDenseOperators: ['::'],
     onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
     tabularOnelineClauses,
   },

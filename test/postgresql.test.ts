@@ -139,6 +139,17 @@ describe('PostgreSqlFormatter', () => {
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
   supportsDataTypeCase(format);
 
+  // Regression test for issue #624
+  it('supports array slice operator', () => {
+    expect(format('SELECT foo[:5], bar[1:], baz[1:5], zap[:];')).toBe(dedent`
+      SELECT
+        foo[:5],
+        bar[1:],
+        baz[1:5],
+        zap[:];
+    `);
+  });
+
   // Regression test for issue #447
   it('formats empty SELECT', () => {
     expect(format('SELECT;')).toBe(dedent`
