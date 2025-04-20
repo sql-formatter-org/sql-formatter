@@ -55,7 +55,7 @@ describe('PostgreSqlFormatter', () => {
   supportsOnConflict(format);
   supportsUpdate(format, { whereCurrentOf: true });
   supportsTruncateTable(format, { withoutTable: true });
-  supportsStrings(format, ["''-qq", "U&''", "X''", "B''"]);
+  supportsStrings(format, ["''-qq", "U&''", "X''", "B''", "E''"]);
   supportsIdentifiers(format, [`""-qq`, 'U&""']);
   supportsBetween(format);
   supportsSchema(format);
@@ -173,18 +173,6 @@ describe('PostgreSqlFormatter', () => {
   });
 
   // Postgres-specific string types
-  it("supports E'' strings with C-style escapes", () => {
-    expect(format("E'blah blah'")).toBe("E'blah blah'");
-    expect(format("E'some \\' FROM escapes'")).toBe("E'some \\' FROM escapes'");
-    expect(format("SELECT E'blah' FROM foo")).toBe(dedent`
-      SELECT
-        E'blah'
-      FROM
-        foo
-    `);
-    expect(format("E'blah''blah'")).toBe("E'blah''blah'");
-  });
-
   it('supports dollar-quoted strings', () => {
     expect(format('$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$')).toBe(
       '$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$'

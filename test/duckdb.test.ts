@@ -52,7 +52,7 @@ describe('DuckDBFormatter', () => {
   supportsOnConflict(format);
   supportsUpdate(format);
   supportsTruncateTable(format, { withTable: false, withoutTable: true });
-  supportsStrings(format, ["''-qq", "X''", "B''"]);
+  supportsStrings(format, ["''-qq", "X''", "B''", "E''"]);
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   // Missing: '::' type cast (tested separately)
@@ -138,18 +138,6 @@ describe('DuckDBFormatter', () => {
   });
 
   // DuckDB-specific string types
-  it("supports E'' strings with C-style escapes", () => {
-    expect(format("E'blah blah'")).toBe("E'blah blah'");
-    expect(format("E'some \\' FROM escapes'")).toBe("E'some \\' FROM escapes'");
-    expect(format("SELECT E'blah' FROM foo")).toBe(dedent`
-      SELECT
-        E'blah'
-      FROM
-        foo
-    `);
-    expect(format("E'blah''blah'")).toBe("E'blah''blah'");
-  });
-
   it('supports basic dollar-quoted strings', () => {
     expect(format('$$foo JOIN bar$$')).toBe('$$foo JOIN bar$$');
     expect(format('$$foo $ JOIN bar$$')).toBe('$$foo $ JOIN bar$$');

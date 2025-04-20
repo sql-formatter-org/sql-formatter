@@ -17,7 +17,8 @@ type StringType =
   | "B''" // no escaping
   | 'B""' // no escaping
   | "R''" // no escaping
-  | 'R""'; // no escaping
+  | 'R""' // no escaping
+  | "E''"; // with backslash escaping
 
 export default function supportsStrings(format: FormatFn, stringTypes: StringType[]) {
   if (stringTypes.includes('""-qq') || stringTypes.includes('""-bs')) {
@@ -236,6 +237,24 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
 
     it(`detects consecutive r"" strings as separate ones`, () => {
       expect(format(`r"a ha"r"hm mm"`)).toBe(`r"a ha" r"hm mm"`);
+    });
+  }
+
+  if (stringTypes.includes("E''")) {
+    it("supports E'' strings with C-style escapes", () => {
+      expect(format("E'blah blah'")).toBe("E'blah blah'");
+      expect(format("E'some \\' FROM escapes'")).toBe("E'some \\' FROM escapes'");
+      expect(format("SELECT E'blah' FROM foo")).toBe(dedent`
+        SELECT
+          E'blah'
+        FROM
+          foo
+      `);
+      expect(format("E'blah''blah'")).toBe("E'blah''blah'");
+    });
+
+    it(`detects consecutive E'' strings as separate ones`, () => {
+      expect(format(`e'a ha'e'hm mm'`)).toBe(`e'a ha' e'hm mm'`);
     });
   }
 }
