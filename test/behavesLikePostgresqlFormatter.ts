@@ -1,10 +1,42 @@
 import dedent from 'dedent-js';
 import { FormatFn } from '../src/sqlFormatter.js';
+import behavesLikeSqlFormatter from './behavesLikeSqlFormatter.js';
+import supportsComments from './features/comments.js';
+import supportsCommentOn from './features/commentOn.js';
+import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors.js';
+import supportsAlterTable from './features/alterTable.js';
+import supportsDeleteFrom from './features/deleteFrom.js';
+import supportsInsertInto from './features/insertInto.js';
+import supportsOnConflict from './features/onConflict.js';
+import supportsBetween from './features/between.js';
+import supportsIsDistinctFrom from './features/isDistinctFrom.js';
+import supportsReturning from './features/returning.js';
+import supportsWindow from './features/window.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
 
 /**
  * Shared tests for PostgreSQL and DuckDB
  */
 export default function behavesLikePostgresqlFormatter(format: FormatFn) {
+  behavesLikeSqlFormatter(format);
+  supportsComments(format, { nestedBlockComments: true });
+  supportsCommentOn(format);
+  supportsArrayAndMapAccessors(format);
+  supportsAlterTable(format, {
+    addColumn: true,
+    dropColumn: true,
+    renameTo: true,
+    renameColumn: true,
+  });
+  supportsDeleteFrom(format);
+  supportsInsertInto(format);
+  supportsOnConflict(format);
+  supportsBetween(format);
+  supportsIsDistinctFrom(format);
+  supportsReturning(format);
+  supportsWindow(format);
+  supportsDataTypeCase(format);
+
   it('allows $ character as part of identifiers', () => {
     expect(format('SELECT foo$, some$$ident')).toBe(dedent`
       SELECT
