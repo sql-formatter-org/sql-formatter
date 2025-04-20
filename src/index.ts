@@ -6,6 +6,7 @@ export { ConfigError } from './validateConfig.js';
 export { bigquery } from './languages/bigquery/bigquery.formatter.js';
 export { db2 } from './languages/db2/db2.formatter.js';
 export { db2i } from './languages/db2i/db2i.formatter.js';
+export { duckdb } from './languages/duckdb/duckdb.formatter.js';
 export { hive } from './languages/hive/hive.formatter.js';
 export { mariadb } from './languages/mariadb/mariadb.formatter.js';
 export { mysql } from './languages/mysql/mysql.formatter.js';

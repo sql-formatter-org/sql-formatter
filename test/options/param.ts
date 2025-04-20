@@ -6,7 +6,7 @@ interface ParamsTypes {
   positional?: boolean;
   numbered?: ('?' | '$' | ':')[];
   named?: (':' | '$' | '@')[];
-  quoted?: ('@""' | '@[]' | '@``')[];
+  quoted?: ('$""' | '@""' | '@[]' | '@``')[];
 }
 
 export default function supportsParams(format: FormatFn, params: ParamsTypes) {
@@ -189,6 +189,28 @@ export default function supportsParams(format: FormatFn, params: ParamsTypes) {
       expect(
         format(`WHERE name = @name AND age > @current_age;`, {
           params: { name: "'John'", current_age: '10' },
+        })
+      ).toBe(dedent`
+        WHERE
+          name = 'John'
+          AND age > 10;
+      `);
+    });
+  }
+
+  if (params.quoted?.includes('$""')) {
+    it(`recognizes $"name" placeholders`, () => {
+      expect(format(`SELECT $"foo", $"foo bar";`)).toBe(dedent`
+        SELECT
+          $"foo",
+          $"foo bar";
+      `);
+    });
+
+    it(`replaces $"name" placeholders with param values`, () => {
+      expect(
+        format(`WHERE name = $"name" AND age > $"current age";`, {
+          params: { 'name': "'John'", 'current age': '10' },
         })
       ).toBe(dedent`
         WHERE
