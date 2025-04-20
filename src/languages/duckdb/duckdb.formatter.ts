@@ -82,6 +82,35 @@ const tabularOnelineClauses = expandPhrases([
   // TYPE
   'CREATE TYPE',
   'DROP TYPE [IF EXISTS]',
+
+  // other
+  'ANALYZE',
+  'ATTACH [DATABASE] [IF NOT EXISTS]',
+  'DETACH [DATABASE] [IF EXISTS]',
+  'CALL',
+  '[FORCE] CHECKPOINT',
+  'COMMENT ON [TABLE | COLUMN | VIEW | INDEX | SEQUENCE | TYPE | MACRO | MACRO TABLE]',
+  'COPY [FROM DATABASE]',
+  'DESCRIBE',
+  'EXPORT DATABASE',
+  'IMPORT DATABASE',
+  'INSTALL',
+  'LOAD',
+  'PIVOT',
+  'PIVOT_WIDER',
+  'UNPIVOT',
+  'EXPLAIN [ANALYZE]',
+  // plain SET conflicts with SET clause in UPDATE
+  'SET {LOCAL | SESSION | GLOBAL}',
+  'RESET [LOCAL | SESSION | GLOBAL]',
+  '{SET | RESET} VARIABLE',
+  'SUMMARIZE',
+  'BEGIN TRANSACTION',
+  'ROLLBACK',
+  'COMMIT',
+  'ABORT',
+  'USE',
+  'VACUUM [ANALYZE]',
 ]);
 
 const reservedSetOperations = expandPhrases([
