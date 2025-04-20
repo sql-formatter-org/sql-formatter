@@ -168,6 +168,18 @@ describe('DuckDBFormatter', () => {
     `);
   });
 
+  // TODO: This currently conflicts with the modulo operator
+  it.skip('formats percentage value in LIMIT clause', () => {
+    expect(format('SELECT * FROM foo LIMIT 10%;')).toBe(dedent`
+      SELECT
+        *
+      FROM
+        foo
+      LIMIT
+        10%;
+    `);
+  });
+
   it('formats TIMESTAMP WITH TIME ZONE syntax', () => {
     expect(
       format(`
