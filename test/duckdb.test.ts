@@ -71,7 +71,7 @@ describe('DuckDBFormatter', () => {
       '>>=',
       '<<=',
     ],
-    { any: true }
+    { logicalOperators: ['AND', 'OR', 'XOR'], any: true }
   );
   supportsJoin(format, {
     additionally: [
