@@ -52,7 +52,7 @@ describe('DuckDBFormatter', () => {
   supportsOnConflict(format);
   supportsUpdate(format);
   supportsTruncateTable(format, { withTable: false, withoutTable: true });
-  supportsStrings(format, ["''-qq", "X''", "B''", "E''"]);
+  supportsStrings(format, ["''-qq", "X''", "B''", "E''", '$$']);
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   // Missing: '::' type cast (tested separately)
@@ -135,26 +135,6 @@ describe('DuckDBFormatter', () => {
         foo$,
         some$$ident
     `);
-  });
-
-  // DuckDB-specific string types
-  it('supports basic dollar-quoted strings', () => {
-    expect(format('$$foo JOIN bar$$')).toBe('$$foo JOIN bar$$');
-    expect(format('$$foo $ JOIN bar$$')).toBe('$$foo $ JOIN bar$$');
-    expect(format('$$foo \n bar$$')).toBe('$$foo \n bar$$');
-    expect(format('SELECT $$where$$ FROM $$update$$')).toBe(dedent`
-      SELECT
-        $$where$$
-      FROM
-        $$update$$
-    `);
-  });
-
-  // TODO: this conflicts with named parameter syntax: $foo
-  it.skip('supports tagged dollar-quoted strings', () => {
-    expect(format('$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$')).toBe(
-      '$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$'
-    );
   });
 
   it('formats type-cast operator without spaces', () => {

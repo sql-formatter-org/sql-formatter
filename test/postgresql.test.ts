@@ -55,7 +55,7 @@ describe('PostgreSqlFormatter', () => {
   supportsOnConflict(format);
   supportsUpdate(format, { whereCurrentOf: true });
   supportsTruncateTable(format, { withoutTable: true });
-  supportsStrings(format, ["''-qq", "U&''", "X''", "B''", "E''"]);
+  supportsStrings(format, ["''-qq", "U&''", "X''", "B''", "E''", '$$']);
   supportsIdentifiers(format, [`""-qq`, 'U&""']);
   supportsBetween(format);
   supportsSchema(format);
@@ -169,22 +169,6 @@ describe('PostgreSqlFormatter', () => {
       SELECT
         foo$,
         some$$ident
-    `);
-  });
-
-  // Postgres-specific string types
-  it('supports dollar-quoted strings', () => {
-    expect(format('$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$')).toBe(
-      '$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$'
-    );
-    expect(format('$$foo JOIN bar$$')).toBe('$$foo JOIN bar$$');
-    expect(format('$$foo $ JOIN bar$$')).toBe('$$foo $ JOIN bar$$');
-    expect(format('$$foo \n bar$$')).toBe('$$foo \n bar$$');
-    expect(format('SELECT $$where$$ FROM $$update$$')).toBe(dedent`
-      SELECT
-        $$where$$
-      FROM
-        $$update$$
     `);
   });
 

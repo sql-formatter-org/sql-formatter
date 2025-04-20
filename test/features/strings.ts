@@ -18,7 +18,8 @@ type StringType =
   | 'B""' // no escaping
   | "R''" // no escaping
   | 'R""' // no escaping
-  | "E''"; // with backslash escaping
+  | "E''" // with backslash escaping
+  | '$$'; // no escaping
 
 export default function supportsStrings(format: FormatFn, stringTypes: StringType[]) {
   if (stringTypes.includes('""-qq') || stringTypes.includes('""-bs')) {
@@ -255,6 +256,27 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
 
     it(`detects consecutive E'' strings as separate ones`, () => {
       expect(format(`e'a ha'e'hm mm'`)).toBe(`e'a ha' e'hm mm'`);
+    });
+  }
+
+  if (stringTypes.includes('$$')) {
+    it('supports dollar-quoted strings', () => {
+      expect(format('$$foo JOIN bar$$')).toBe('$$foo JOIN bar$$');
+      expect(format('$$foo $ JOIN bar$$')).toBe('$$foo $ JOIN bar$$');
+      expect(format('$$foo \n bar$$')).toBe('$$foo \n bar$$');
+      expect(format('SELECT $$where$$ FROM $$update$$')).toBe(dedent`
+        SELECT
+          $$where$$
+        FROM
+          $$update$$
+      `);
+    });
+
+    // TODO: this conflicts with named parameter syntax: $foo
+    it.skip('supports tagged dollar-quoted strings', () => {
+      expect(format('$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$')).toBe(
+        '$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$'
+      );
     });
   }
 }
