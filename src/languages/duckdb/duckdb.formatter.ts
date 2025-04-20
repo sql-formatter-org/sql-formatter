@@ -163,7 +163,8 @@ export const duckdb: DialectOptions = {
     ],
     identTypes: [`""-qq`],
     identChars: { rest: '$' },
-    paramTypes: { positional: true, numbered: ['$'], named: ['$'], quoted: ['$'] },
+    // TODO: named params $foo currently conflict with $$-quoted strings
+    paramTypes: { positional: true, numbered: ['$'], quoted: ['$'] },
     operators: [
       // Arithmetic:
       '//',

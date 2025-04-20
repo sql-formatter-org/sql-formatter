@@ -272,8 +272,7 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
       `);
     });
 
-    // TODO: this conflicts with named parameter syntax: $foo
-    it.skip('supports tagged dollar-quoted strings', () => {
+    it('supports tagged dollar-quoted strings', () => {
       expect(format('$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$')).toBe(
         '$xxx$foo $$ LEFT JOIN $yyy$ bar$xxx$'
       );
