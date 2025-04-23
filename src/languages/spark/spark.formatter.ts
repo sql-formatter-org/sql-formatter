@@ -139,6 +139,7 @@ export const spark: DialectOptions = {
       { quote: '""-raw', prefixes: ['R', 'X'], requirePrefix: true },
     ],
     identTypes: ['``'],
+    identChars: { allowFirstCharNumber: true },
     variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
     operators: ['%', '~', '^', '|', '&', '<=>', '==', '!', '||', '->'],
     postProcess,

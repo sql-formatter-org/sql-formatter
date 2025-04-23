@@ -62,6 +62,19 @@ describe('SparkFormatter', () => {
   supportsLimiting(format, { limit: true });
   supportsDataTypeCase(format);
 
+  // regression test for #859
+  it('supports identifiers that start with numbers', () => {
+    expect(format('SELECT 4four, 12345e FROM 5tbl')).toBe(
+      dedent`
+        SELECT
+          4four,
+          12345e
+        FROM
+          5tbl
+      `
+    );
+  });
+
   it('formats basic WINDOW clause', () => {
     const result = format(`SELECT * FROM tbl WINDOW win1, WINDOW win2, WINDOW win3;`);
     expect(result).toBe(dedent`
