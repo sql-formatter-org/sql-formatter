@@ -146,4 +146,15 @@ describe('RedshiftFormatter', () => {
       ENCODE my_encoding;
     `);
   });
+
+  it('supports QUALIFY clause', () => {
+    expect(format(`SELECT * FROM tbl QUALIFY ROW_NUMBER() OVER my_window = 1`)).toBe(dedent`
+      SELECT
+        *
+      FROM
+        tbl
+      QUALIFY
+        ROW_NUMBER() OVER my_window = 1
+    `);
+  });
 });

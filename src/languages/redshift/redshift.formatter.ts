@@ -12,6 +12,7 @@ const reservedClauses = expandPhrases([
   'WHERE',
   'GROUP BY',
   'HAVING',
+  'QUALIFY',
   'PARTITION BY',
   'ORDER BY',
   'LIMIT',
