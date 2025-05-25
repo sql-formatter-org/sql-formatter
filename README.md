@@ -283,7 +283,7 @@ Bugs will get fixed if feasible, but new features will likely not be added.
 I have started a new SQL formatting tool: [prettier-plugin-sql-cst][].
 
 - It solves several problems which can't be fixed in SQL Formatter because
-  of fundamental problems in its arhictecture.
+  of fundamental problems in its architecture.
 - It makes use of the Prettier layout algorithm,
   doing a better job of splitting long expressions to multiple lines.
 - It takes much more opinionated approach to SQL formatting,
