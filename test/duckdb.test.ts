@@ -50,6 +50,8 @@ describe('DuckDBFormatter', () => {
       '==',
       // Lambda:
       '->',
+      // JSON:
+      '->>',
       // Named function params:
       ':=',
       '=>',

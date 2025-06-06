@@ -182,8 +182,10 @@ export const duckdb: DialectOptions = {
       '::',
       // Comparison:
       '==',
-      // Lambda:
+      // Lambda & JSON:
       '->',
+      // JSON:
+      '->>',
       // key-value separator:
       ':',
       // Named function params:
