@@ -1,6 +1,6 @@
 {
   "name": "sql-formatter",
-  "version": "15.6.2",
+  "version": "15.6.3",
   "description": "Format whitespace in a SQL query to make it more readable",
   "license": "MIT",
   "main": "dist/cjs/index.js",
