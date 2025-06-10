@@ -43,6 +43,7 @@ export const keywords: string[] = [
   'INITIALLY',
   'INTERSECT',
   'INTO',
+  'IS', // additional
   'LATERAL',
   'LEADING',
   'LIMIT',

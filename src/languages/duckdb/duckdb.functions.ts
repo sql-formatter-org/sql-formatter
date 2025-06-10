@@ -659,7 +659,7 @@ export const functions: string[] = [
   // Keywords that also need to be listed as functions
   'CAST',
   'COALESCE',
-  'NULL',
+  // 'NULL', we really prefer treating it as keyword
   'RANK',
   'ROW_NUMBER',
 ];

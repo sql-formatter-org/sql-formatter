@@ -202,4 +202,16 @@ describe('DuckDBFormatter', () => {
       })
     ).toBe('CREATE TABLE foo (bar JSON, baz JSON);');
   });
+
+  // Issue #872
+  it('capitalizes IS NOT NULL', () => {
+    expect(
+      format(`SELECT 1 is not null;`, {
+        keywordCase: 'upper',
+      })
+    ).toBe(dedent`
+      SELECT
+        1 IS NOT NULL;
+    `);
+  });
 });
