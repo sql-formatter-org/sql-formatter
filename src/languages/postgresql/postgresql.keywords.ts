@@ -148,6 +148,7 @@ export const dataTypes: string[] = [
   'TIME', // (cannot be function or type)
   'TIMESTAMP', // (cannot be function or type)
   'TIMESTAMPTZ', // (cannot be function or type)
+  'UUID',
   'VARCHAR', // (cannot be function or type)
   'XML',
   'ZONE',

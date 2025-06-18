@@ -265,7 +265,7 @@ export const functions: string[] = [
   'WEBSEARCH_TO_TSQUERY',
 
   // https://www.postgresql.org/docs/14/functions-uuid.html
-  'UUID',
+  'GEN_RANDOM_UUID',
 
   // https://www.postgresql.org/docs/14/functions-xml.html
   'CURSOR_TO_XML',

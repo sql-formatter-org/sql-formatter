@@ -230,4 +230,14 @@ describe('PostgreSqlFormatter', () => {
       dedent`CREATE OR REPLACE PROCEDURE foo () LANGUAGE sql AS $$ BEGIN END $$;`
     );
   });
+
+  // Issue #876
+  it('supports UUID type and functions', () => {
+    expect(
+      format(`CREATE TABLE foo (id uuid DEFAULT Gen_Random_Uuid());`, {
+        dataTypeCase: 'upper',
+        functionCase: 'lower',
+      })
+    ).toBe(dedent`CREATE TABLE foo (id UUID DEFAULT gen_random_uuid());`);
+  });
 });
