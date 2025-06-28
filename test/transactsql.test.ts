@@ -227,4 +227,22 @@ describe('TransactSqlFormatter', () => {
         Zone
     `);
   });
+
+  // Issue #877
+  it('allows the use of the ODBC date format', () => {
+    const result = format(
+      `WITH [sales_query] AS (SELECT [customerId] FROM [segments].dbo.[sales] WHERE [salesdate] > {d'2024-01-01'})`
+    );
+    expect(result).toBe(dedent`
+      WITH
+        [sales_query] AS (
+          SELECT
+            [customerId]
+          FROM
+            [segments].dbo.[sales]
+          WHERE
+            [salesdate] > {d'2024-01-01'}
+        )
+    `);
+  });
 });
