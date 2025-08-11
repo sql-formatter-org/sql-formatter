@@ -51,6 +51,7 @@ export default class Tokenizer {
       {
         type: TokenType.NUMBER,
         regex:
+          cfg.numberRegex ??
           /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?(?:[0-9]*\.[0-9]+|[0-9]+(?:\.[0-9]*)?)(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)(?![\w\p{Alphabetic}])/uy,
       },
       // RESERVED_PHRASE is matched before all other keyword tokens
