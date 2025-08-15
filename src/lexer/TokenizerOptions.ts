@@ -100,6 +100,8 @@ export interface TokenizerOptions {
   propertyAccessOperators?: string[];
   // Enables PostgreSQL-specific OPERATOR(...) syntax
   operatorKeyword?: boolean;
+  // Custom regex pattern for number tokens (defaults to standard SQL number pattern)
+  numberRegex?: RegExp;
   // Allows custom modifications on the token array.
   // Called after the whole input string has been split into tokens.
   // The result of this will be the output of the tokenizer.
