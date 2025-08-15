@@ -24,6 +24,7 @@ import supportsCreateView from './features/createView.js';
 import supportsOnConflict from './features/onConflict.js';
 import supportsDataTypeCase from './options/dataTypeCase.js';
 import supportsNumbers from './features/numbers.js';
+import supportsReturning from './features/returning.js';
 
 describe('SqliteFormatter', () => {
   const language = 'sqlite';
@@ -44,6 +45,7 @@ describe('SqliteFormatter', () => {
   });
   supportsDeleteFrom(format);
   supportsInsertInto(format);
+  supportsReturning(format);
   supportsOnConflict(format);
   supportsUpdate(format);
   supportsStrings(format, ["''-qq", "X''"]);

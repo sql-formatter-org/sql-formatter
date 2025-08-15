@@ -24,6 +24,8 @@ const reservedClauses = expandPhrases([
   'VALUES',
   // - update:
   'SET',
+  // other:
+  'RETURNING',
 ]);
 
 const standardOnelineClauses = expandPhrases(['CREATE [TEMPORARY | TEMP] TABLE [IF NOT EXISTS]']);
