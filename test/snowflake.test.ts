@@ -214,4 +214,11 @@ describe('SnowflakeFormatter', () => {
         FILTER(my_arr, a -> a:value >= 50);
     `);
   });
+
+  // Issue #883
+  it('supports IDENTIFIER() syntax', () => {
+    expect(format(`CREATE TABLE identifier($foo);`)).toBe(dedent`
+      CREATE TABLE identifier($foo);
+    `);
+  });
 });

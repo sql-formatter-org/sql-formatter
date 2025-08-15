@@ -219,6 +219,7 @@ export const functions: string[] = [
   'HOUR',
   'MINUTE',
   'SECOND',
+  'IDENTIFIER', // Not technically a function, but works as one for formatting purposes
   'IFF',
   'IFNULL',
   'ILIKE',
