@@ -3,7 +3,6 @@ import dedent from 'dedent-js';
 import { FormatFn } from '../src/sqlFormatter.js';
 
 import supportsCase from './features/case.js';
-import supportsNumbers from './features/numbers.js';
 import supportsWith from './features/with.js';
 import supportsTabWidth from './options/tabWidth.js';
 import supportsUseTabs from './options/useTabs.js';
@@ -25,7 +24,6 @@ import supportsDisableComment from './features/disableComment.js';
 export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsDisableComment(format);
   supportsCase(format);
-  supportsNumbers(format);
   supportsWith(format);
 
   supportsTabWidth(format);

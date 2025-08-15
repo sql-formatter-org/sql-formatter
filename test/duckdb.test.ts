@@ -214,15 +214,4 @@ describe('DuckDBFormatter', () => {
         1 IS NOT NULL;
     `);
   });
-
-  it('supports underscore separators in numeric literals', () => {
-    expect(format('SELECT 1_000_000, 3.14_159, 0x1A_2B_3C, 0b1010_0001, 1.5e+1_0;')).toBe(dedent`
-      SELECT
-        1_000_000,
-        3.14_159,
-        0x1A_2B_3C,
-        0b1010_0001,
-        1.5e+1_0;
-    `);
-  });
 });

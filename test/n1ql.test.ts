@@ -21,12 +21,14 @@ import supportsLimiting from './features/limiting.js';
 import supportsInsertInto from './features/insertInto.js';
 import supportsUpdate from './features/update.js';
 import supportsMergeInto from './features/mergeInto.js';
+import supportsNumbers from './features/numbers.js';
 
 describe('N1qlFormatter', () => {
   const language = 'n1ql';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
+  supportsNumbers(format);
   supportsComments(format, { hashComments: true });
   supportsDeleteFrom(format);
   supportsStrings(format, [`""-bs`]);

@@ -13,12 +13,14 @@ import supportsIsDistinctFrom from './features/isDistinctFrom.js';
 import supportsReturning from './features/returning.js';
 import supportsWindow from './features/window.js';
 import supportsDataTypeCase from './options/dataTypeCase.js';
+import supportsNumbers from './features/numbers.js';
 
 /**
  * Shared tests for PostgreSQL and DuckDB
  */
 export default function behavesLikePostgresqlFormatter(format: FormatFn) {
   behavesLikeSqlFormatter(format);
+  supportsNumbers(format, { underscore: true });
   supportsComments(format, { nestedBlockComments: true });
   supportsCommentOn(format);
   supportsArrayAndMapAccessors(format);

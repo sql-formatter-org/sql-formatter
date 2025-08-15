@@ -12,12 +12,14 @@ import supportsIdentifiers from './features/identifiers.js';
 import supportsInsertInto from './features/insertInto.js';
 import supportsUpdate from './features/update.js';
 import supportsTruncateTable from './features/truncateTable.js';
+import supportsNumbers from './features/numbers.js';
 
 /**
  * Shared tests for MySQL and MariaDB
  */
 export default function behavesLikeMariaDbFormatter(format: FormatFn) {
   behavesLikeSqlFormatter(format);
+  supportsNumbers(format);
   supportsComments(format, { hashComments: true });
   supportsStrings(format, ["''-qq", "''-bs", '""-qq', '""-bs', "X''"]);
   supportsIdentifiers(format, ['``']);

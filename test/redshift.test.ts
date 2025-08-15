@@ -20,12 +20,14 @@ import supportsTruncateTable from './features/truncateTable.js';
 import supportsUpdate from './features/update.js';
 import supportsParams from './options/param.js';
 import supportsDataTypeCase from './options/dataTypeCase.js';
+import supportsNumbers from './features/numbers.js';
 
 describe('RedshiftFormatter', () => {
   const language = 'redshift';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
+  supportsNumbers(format);
   supportsComments(format);
   supportsCommentOn(format);
   supportsCreateView(format, { orReplace: true, materialized: true });

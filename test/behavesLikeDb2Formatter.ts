@@ -19,12 +19,14 @@ import supportsMergeInto from './features/mergeInto.js';
 import supportsCreateView from './features/createView.js';
 import supportsArrayLiterals from './features/arrayLiterals.js';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors.js';
+import supportsNumbers from './features/numbers.js';
 
 /**
  * Shared tests for DB2 and DB2i
  */
 export default function behavesLikeDb2Formatter(format: FormatFn) {
   behavesLikeSqlFormatter(format);
+  supportsNumbers(format);
   supportsCommentOn(format);
   supportsCreateView(format, { orReplace: true });
   supportsConstraints(format, ['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL']);

@@ -277,6 +277,9 @@ export const postgresql: DialectOptions = {
     reservedFunctionNames: functions,
     nestedBlockComments: true,
     extraParens: ['[]'],
+    // Support underscore separators in numeric literals (e.g., 1_000_000)
+    numberRegex:
+      /(?:0x[0-9a-fA-F_]+|0b[01_]+|(?:-\s*)?(?:[0-9_]*\.[0-9_]+|[0-9_]+(?:\.[0-9_]*)?)(?:[eE][-+]?[0-9_]+(?:\.[0-9_]+)?)?)(?![\w\p{Alphabetic}])/uy,
     stringTypes: [
       '$$',
       { quote: "''-qq", prefixes: ['U&'] },

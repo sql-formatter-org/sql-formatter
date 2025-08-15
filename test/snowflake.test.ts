@@ -22,12 +22,14 @@ import supportsTruncateTable from './features/truncateTable.js';
 import supportsCreateView from './features/createView.js';
 import supportsConstraints from './features/constraints.js';
 import supportsDataTypeCase from './options/dataTypeCase.js';
+import supportsNumbers from './features/numbers.js';
 
 describe('SnowflakeFormatter', () => {
   const language = 'snowflake';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
+  supportsNumbers(format);
   supportsComments(format, { doubleSlashComments: true });
   supportsCreateView(format, { orReplace: true, ifNotExists: true });
   supportsCreateTable(format, {

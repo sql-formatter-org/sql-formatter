@@ -2,7 +2,10 @@ import dedent from 'dedent-js';
 
 import { FormatFn } from '../../src/sqlFormatter.js';
 
-export default function supportsNumbers(format: FormatFn) {
+export default function supportsNumbers(
+  format: FormatFn,
+  { underscore }: { underscore?: boolean } = {}
+) {
   it('supports decimal numbers', () => {
     const result = format('SELECT 42, -35.04, 105., 2.53E+3, 1.085E-5;');
     expect(result).toBe(dedent`
@@ -59,4 +62,17 @@ export default function supportsNumbers(format: FormatFn) {
         .456 AS foo;
     `);
   });
+
+  if (underscore) {
+    it('supports underscore separators in numeric literals', () => {
+      expect(format('SELECT 1_000_000, 3.14_159, 0x1A_2B_3C, 0b1010_0001, 1.5e+1_0;')).toBe(dedent`
+        SELECT
+          1_000_000,
+          3.14_159,
+          0x1A_2B_3C,
+          0b1010_0001,
+          1.5e+1_0;
+      `);
+    });
+  }
 }

@@ -23,12 +23,14 @@ import supportsUpdate from './features/update.js';
 import supportsCreateView from './features/createView.js';
 import supportsOnConflict from './features/onConflict.js';
 import supportsDataTypeCase from './options/dataTypeCase.js';
+import supportsNumbers from './features/numbers.js';
 
 describe('SqliteFormatter', () => {
   const language = 'sqlite';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
+  supportsNumbers(format);
   supportsComments(format);
   supportsCreateView(format, { ifNotExists: true });
   supportsCreateTable(format, { ifNotExists: true });

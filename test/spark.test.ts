@@ -19,12 +19,14 @@ import supportsInsertInto from './features/insertInto.js';
 import supportsTruncateTable from './features/truncateTable.js';
 import supportsCreateView from './features/createView.js';
 import supportsDataTypeCase from './options/dataTypeCase.js';
+import supportsNumbers from './features/numbers.js';
 
 describe('SparkFormatter', () => {
   const language = 'spark';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
+  supportsNumbers(format);
   supportsComments(format);
   supportsCreateView(format, { orReplace: true, ifNotExists: true });
   supportsCreateTable(format, { ifNotExists: true, columnComment: true, tableComment: true });
