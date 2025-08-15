@@ -246,10 +246,7 @@ export const transactsql: DialectOptions = {
     reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
     nestedBlockComments: true,
-    stringTypes: [
-      { quote: "''-qq", prefixes: ['N'] },
-      '{}'
-    ],
+    stringTypes: [{ quote: "''-qq", prefixes: ['N'] }, '{}'],
     identTypes: [`""-qq`, '[]'],
     identChars: { first: '#@', rest: '#@$' },
     paramTypes: { named: ['@'], quoted: ['@'] },
