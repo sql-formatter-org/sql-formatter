@@ -84,6 +84,8 @@ const reservedJoins = expandPhrases([
 
 const reservedPhrases = expandPhrases(['{ROWS | RANGE} BETWEEN']);
 
+const reservedDataTypePhrases = expandPhrases([]);
+
 // https://cwiki.apache.org/confluence/display/Hive/LanguageManual
 export const hive: DialectOptions = {
   name: 'hive',
@@ -92,7 +94,8 @@ export const hive: DialectOptions = {
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases: reservedPhrases,
+    reservedDataTypePhrases,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,

@@ -111,12 +111,14 @@ const reservedJoins = expandPhrases([
   'NATURAL [LEFT] {ANTI | SEMI} JOIN',
 ]);
 
-const reservedPhrases = expandPhrases([
+const reservedKeywordPhrases = expandPhrases([
   'ON DELETE',
   'ON UPDATE',
   'CURRENT ROW',
   '{ROWS | RANGE} BETWEEN',
 ]);
+
+const reservedDataTypePhrases = expandPhrases([]);
 
 // http://spark.apache.org/docs/latest/sql-programming-guide.html
 export const spark: DialectOptions = {
@@ -126,7 +128,8 @@ export const spark: DialectOptions = {
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases,
+    reservedDataTypePhrases,
     supportsXor: true,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,

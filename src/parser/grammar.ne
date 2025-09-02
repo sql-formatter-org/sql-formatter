@@ -332,13 +332,14 @@ literal ->
 
 keyword ->
   ( %RESERVED_KEYWORD
-  | %RESERVED_PHRASE
+  | %RESERVED_KEYWORD_PHRASE
   | %RESERVED_JOIN ) {%
   ([[token]]) => toKeywordNode(token)
 %}
 
 data_type ->
-  ( %RESERVED_DATA_TYPE ) {%
+  ( %RESERVED_DATA_TYPE
+  | %RESERVED_DATA_TYPE_PHRASE ) {%
   ([[token]]) => toDataTypeNode(token)
 %}
 data_type -> %RESERVED_PARAMETERIZED_DATA_TYPE _ parenthesis {%

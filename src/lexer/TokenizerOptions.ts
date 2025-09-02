@@ -66,7 +66,10 @@ export interface TokenizerOptions {
   reservedJoins: string[];
   // These are essentially multi-word sequences of keywords,
   // that we prioritize over all other keywords (RESERVED_* tokens)
-  reservedPhrases?: string[];
+  reservedKeywordPhrases?: string[];
+   // These are essentially multi-word sequences of keywords,
+  // that we prioritize over all other keywords (RESERVED_* tokens)
+  reservedDataTypePhrases?: string[];
   // built in function names
   reservedFunctionNames: string[];
   // data types

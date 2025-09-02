@@ -134,12 +134,13 @@ const reservedJoins = expandPhrases([
   'SEMI JOIN',
 ]);
 
-const reservedPhrases = expandPhrases([
+const reservedKeywordPhrases = expandPhrases([
   '{ROWS | RANGE | GROUPS} BETWEEN',
   'SIMILAR TO',
   'IS [NOT] DISTINCT FROM',
-  'TIMESTAMP WITH TIME ZONE',
 ]);
+
+const reservedDataTypePhrases = expandPhrases(['TIMESTAMP WITH TIME ZONE']);
 
 export const duckdb: DialectOptions = {
   name: 'duckdb',
@@ -148,7 +149,8 @@ export const duckdb: DialectOptions = {
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases,
+    reservedDataTypePhrases,
     supportsXor: true,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,

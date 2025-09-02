@@ -78,11 +78,13 @@ const reservedJoins = expandPhrases([
   '{CROSS | OUTER} APPLY',
 ]);
 
-const reservedPhrases = expandPhrases([
+const reservedKeywordPhrases = expandPhrases([
   'ON {UPDATE | DELETE} [SET NULL]',
   'ON COMMIT',
   '{ROWS | RANGE} BETWEEN',
 ]);
+
+const reservedDataTypePhrases = expandPhrases([]);
 
 export const plsql: DialectOptions = {
   name: 'plsql',
@@ -91,7 +93,8 @@ export const plsql: DialectOptions = {
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases,
+    reservedDataTypePhrases,
     supportsXor: true,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,

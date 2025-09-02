@@ -253,12 +253,14 @@ const reservedJoins = expandPhrases([
   '{INNER | CROSS} JOIN',
 ]);
 
-const reservedPhrases = expandPhrases([
+const reservedKeywordPhrases = expandPhrases([
   'ON DELETE',
   'ON UPDATE',
   'SET NULL',
   '{ROWS | RANGE} BETWEEN',
 ]);
+
+const reservedDataTypePhrases = expandPhrases([]);
 
 export const db2: DialectOptions = {
   name: 'db2',
@@ -267,7 +269,8 @@ export const db2: DialectOptions = {
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases,
+    reservedDataTypePhrases,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
