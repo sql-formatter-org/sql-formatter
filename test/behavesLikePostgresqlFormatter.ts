@@ -160,4 +160,17 @@ export default function behavesLikePostgresqlFormatter(format: FormatFn) {
         CREATE TABLE foo (text VARCHAR(100));
       `);
   });
+
+  it('formats TIMESTAMP WITH TIMEZONE as data type', () => {
+    expect(
+      format(`create table time_table (id int primary key, created_at timestamp with time zone);`, {
+        dataTypeCase: 'upper',
+      })
+    ).toBe(dedent`
+      create table time_table (
+        id INT primary key,
+        created_at TIMESTAMP WITH TIME ZONE
+      );
+    `);
+  });
 }

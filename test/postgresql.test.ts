@@ -157,39 +157,21 @@ describe('PostgreSqlFormatter', () => {
     `);
   });
 
-  // Format timestamp as datatype
+  // Regression test for issues #391 and #618
+  // PostgreSQL-specific variations of WITH TIME ZONE syntax
   it('formats TIMESTAMP WITH TIME ZONE syntax', () => {
     expect(
       format(
-        `
-        CREATE TABLE time_table (id INT,
-          created_at TIMESTAMP WITH TIME ZONE,
-          deleted_at TIME WITH TIME ZONE,
-          modified_at TIMESTAMP(0) WITH TIME ZONE);`,
-        { dataTypeCase: 'lower' }
+        `create table time_table (id int,
+          created_at timestamp without time zone,
+          deleted_at time with time zone,
+          modified_at timestamp(0) with time zone);`,
+        { dataTypeCase: 'upper' }
       )
     ).toBe(dedent`
-      CREATE TABLE time_table (
-        id int,
-        created_at timestamp with time zone,
-        deleted_at time with time zone,
-        modified_at timestamp(0) with time zone
-      );
-    `);
-  });
-
-  // Regression test for issues #391 and #618
-  it('formats TIMESTAMP WITH TIME ZONE syntax', () => {
-    expect(
-      format(`
-        CREATE TABLE time_table (id INT,
-          created_at TIMESTAMP WITH TIME ZONE,
-          deleted_at TIME WITH TIME ZONE,
-          modified_at TIMESTAMP(0) WITH TIME ZONE);`)
-    ).toBe(dedent`
-      CREATE TABLE time_table (
+      create table time_table (
         id INT,
-        created_at TIMESTAMP WITH TIME ZONE,
+        created_at TIMESTAMP WITHOUT TIME ZONE,
         deleted_at TIME WITH TIME ZONE,
         modified_at TIMESTAMP(0) WITH TIME ZONE
       );
