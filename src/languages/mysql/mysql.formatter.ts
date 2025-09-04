@@ -225,12 +225,14 @@ const reservedJoins = expandPhrases([
   'STRAIGHT_JOIN',
 ]);
 
-const reservedPhrases = expandPhrases([
+const reservedKeywordPhrases = expandPhrases([
   'ON {UPDATE | DELETE} [SET NULL]',
   'CHARACTER SET',
   '{ROWS | RANGE} BETWEEN',
   'IDENTIFIED BY',
 ]);
+
+const reservedDataTypePhrases = expandPhrases([]);
 
 // https://dev.mysql.com/doc/refman/8.0/en/
 export const mysql: DialectOptions = {
@@ -240,7 +242,8 @@ export const mysql: DialectOptions = {
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases,
+    reservedDataTypePhrases,
     supportsXor: true,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,

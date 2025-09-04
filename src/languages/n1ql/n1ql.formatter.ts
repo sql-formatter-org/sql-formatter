@@ -80,7 +80,9 @@ const reservedSetOperations = expandPhrases(['UNION [ALL]', 'EXCEPT [ALL]', 'INT
 
 const reservedJoins = expandPhrases(['JOIN', '{LEFT | RIGHT} [OUTER] JOIN', 'INNER JOIN']);
 
-const reservedPhrases = expandPhrases(['{ROWS | RANGE | GROUPS} BETWEEN']);
+const reservedKeywordPhrases = expandPhrases(['{ROWS | RANGE | GROUPS} BETWEEN']);
+
+const reservedDataTypePhrases = expandPhrases([]);
 
 // For reference: http://docs.couchbase.com.s3-website-us-west-1.amazonaws.com/server/6.0/n1ql/n1ql-language-reference/index.html
 export const n1ql: DialectOptions = {
@@ -90,7 +92,8 @@ export const n1ql: DialectOptions = {
     reservedClauses: [...reservedClauses, ...onelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases,
+    reservedDataTypePhrases,
     supportsXor: true,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,

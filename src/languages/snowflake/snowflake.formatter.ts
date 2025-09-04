@@ -292,10 +292,12 @@ const reservedJoins = expandPhrases([
   '{CROSS | NATURAL} JOIN',
 ]);
 
-const reservedPhrases = expandPhrases([
+const reservedKeywordPhrases = expandPhrases([
   '{ROWS | RANGE} BETWEEN',
   'ON {UPDATE | DELETE} [SET NULL | SET DEFAULT]',
 ]);
+
+const reservedDataTypePhrases = expandPhrases([]);
 
 export const snowflake: DialectOptions = {
   name: 'snowflake',
@@ -304,7 +306,8 @@ export const snowflake: DialectOptions = {
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases,
+    reservedDataTypePhrases,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,

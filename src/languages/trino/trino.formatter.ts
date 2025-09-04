@@ -119,11 +119,13 @@ const reservedJoins = expandPhrases([
   'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
 ]);
 
-const reservedPhrases = expandPhrases([
+const reservedKeywordPhrases = expandPhrases([
   '{ROWS | RANGE | GROUPS} BETWEEN',
   // comparison operator
   'IS [NOT] DISTINCT FROM',
 ]);
+
+const reservedDataTypePhrases = expandPhrases([]);
 
 export const trino: DialectOptions = {
   name: 'trino',
@@ -132,7 +134,8 @@ export const trino: DialectOptions = {
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases,
+    reservedDataTypePhrases,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,

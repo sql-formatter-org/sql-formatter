@@ -54,11 +54,16 @@ export default class Tokenizer {
           ? /(?:0x[0-9a-fA-F_]+|0b[01_]+|(?:-\s*)?(?:[0-9_]*\.[0-9_]+|[0-9_]+(?:\.[0-9_]*)?)(?:[eE][-+]?[0-9_]+(?:\.[0-9_]+)?)?)(?![\w\p{Alphabetic}])/uy
           : /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?(?:[0-9]*\.[0-9]+|[0-9]+(?:\.[0-9]*)?)(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)(?![\w\p{Alphabetic}])/uy,
       },
-      // RESERVED_PHRASE is matched before all other keyword tokens
+      // RESERVED_KEYWORD_PHRASE and RESERVED_DATA_TYPE_PHRASE  is matched before all other keyword tokens
       // to e.g. prioritize matching "TIMESTAMP WITH TIME ZONE" phrase over "WITH" clause.
       {
-        type: TokenType.RESERVED_PHRASE,
-        regex: regex.reservedWord(cfg.reservedPhrases ?? [], cfg.identChars),
+        type: TokenType.RESERVED_KEYWORD_PHRASE,
+        regex: regex.reservedWord(cfg.reservedKeywordPhrases ?? [], cfg.identChars),
+        text: toCanonical,
+      },
+      {
+        type: TokenType.RESERVED_DATA_TYPE_PHRASE,
+        regex: regex.reservedWord(cfg.reservedDataTypePhrases ?? [], cfg.identChars),
         text: toCanonical,
       },
       {

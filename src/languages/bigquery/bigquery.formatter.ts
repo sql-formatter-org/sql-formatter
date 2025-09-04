@@ -145,7 +145,7 @@ const reservedJoins = expandPhrases([
   '{INNER | CROSS} JOIN',
 ]);
 
-const reservedPhrases = expandPhrases([
+const reservedKeywordPhrases = expandPhrases([
   // https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax#tablesample_operator
   'TABLESAMPLE SYSTEM',
   // From DDL: https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
@@ -158,6 +158,8 @@ const reservedPhrases = expandPhrases([
   'IS [NOT] DISTINCT FROM',
 ]);
 
+const reservedDataTypePhrases = expandPhrases([]);
+
 // https://cloud.google.com/bigquery/docs/reference/#standard-sql-reference
 export const bigquery: DialectOptions = {
   name: 'bigquery',
@@ -166,7 +168,8 @@ export const bigquery: DialectOptions = {
     reservedClauses: [...reservedClauses, ...tabularOnelineClauses, ...standardOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases,
+    reservedDataTypePhrases,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,

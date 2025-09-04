@@ -260,12 +260,14 @@ const reservedJoins = expandPhrases([
   'STRAIGHT_JOIN',
 ]);
 
-const reservedPhrases = expandPhrases([
+const reservedKeywordPhrases = expandPhrases([
   'ON {UPDATE | DELETE} [SET NULL | SET DEFAULT]',
   'CHARACTER SET',
   '{ROWS | RANGE} BETWEEN',
   'IDENTIFIED BY',
 ]);
+
+const reservedDataTypePhrases = expandPhrases([]);
 
 // For reference: https://mariadb.com/kb/en/sql-statements-structure/
 export const mariadb: DialectOptions = {
@@ -275,7 +277,8 @@ export const mariadb: DialectOptions = {
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases,
+    reservedDataTypePhrases,
     supportsXor: true,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,

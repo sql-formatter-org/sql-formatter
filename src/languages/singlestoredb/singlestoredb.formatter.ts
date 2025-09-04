@@ -229,13 +229,15 @@ const reservedJoins = expandPhrases([
   'STRAIGHT_JOIN',
 ]);
 
-const reservedPhrases = expandPhrases([
+const reservedKeywordPhrases = expandPhrases([
   'ON DELETE',
   'ON UPDATE',
   'CHARACTER SET',
   '{ROWS | RANGE} BETWEEN',
   'IDENTIFIED BY',
 ]);
+
+const reservedDataTypePhrases = expandPhrases([]);
 
 export const singlestoredb: DialectOptions = {
   name: 'singlestoredb',
@@ -244,7 +246,8 @@ export const singlestoredb: DialectOptions = {
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases,
+    reservedDataTypePhrases,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,

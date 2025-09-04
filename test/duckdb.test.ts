@@ -195,6 +195,22 @@ describe('DuckDBFormatter', () => {
     `);
   });
 
+  it('formats TIMESTAMP WITH TIME ZONE syntax lowercase', () => {
+    expect(
+      format(
+        `
+        CREATE TABLE time_table (id INT PRIMARY KEY NOT NULL,
+          created_at TIMESTAMP WITH TIME ZONE);`,
+        { dataTypeCase: 'lower' }
+      )
+    ).toBe(dedent`
+      CREATE TABLE time_table (
+        id int PRIMARY KEY NOT NULL,
+        created_at timestamp with time zone
+      );
+    `);
+  });
+
   it('formats JSON data type', () => {
     expect(
       format(`CREATE TABLE foo (bar json, baz json);`, {

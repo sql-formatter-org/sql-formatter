@@ -132,7 +132,7 @@ const reservedJoins = expandPhrases([
   'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
 ]);
 
-const reservedPhrases = expandPhrases([
+const reservedKeywordPhrases = expandPhrases([
   // https://docs.aws.amazon.com/redshift/latest/dg/copy-parameters-data-conversion.html
   'NULL AS',
   // https://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_EXTERNAL_SCHEMA.html
@@ -142,6 +142,8 @@ const reservedPhrases = expandPhrases([
   '{ROWS | RANGE} BETWEEN',
 ]);
 
+const reservedDataTypePhrases = expandPhrases([]);
+
 // https://docs.aws.amazon.com/redshift/latest/dg/cm_chap_SQLCommandRef.html
 export const redshift: DialectOptions = {
   name: 'redshift',
@@ -150,7 +152,8 @@ export const redshift: DialectOptions = {
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases,
+    reservedDataTypePhrases,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,

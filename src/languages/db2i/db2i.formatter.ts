@@ -146,12 +146,14 @@ const reservedJoins = expandPhrases([
   '{INNER | CROSS} JOIN',
 ]);
 
-const reservedPhrases = expandPhrases([
+const reservedKeywordPhrases = expandPhrases([
   'ON DELETE',
   'ON UPDATE',
   'SET NULL',
   '{ROWS | RANGE} BETWEEN',
 ]);
+
+const reservedDataTypePhrases = expandPhrases([]);
 
 // https://www.ibm.com/docs/en/i/7.5?topic=reference-sql
 export const db2i: DialectOptions = {
@@ -161,7 +163,8 @@ export const db2i: DialectOptions = {
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases,
+    reservedDataTypePhrases,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,

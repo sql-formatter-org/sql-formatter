@@ -248,19 +248,22 @@ const reservedJoins = expandPhrases([
   'NATURAL {LEFT | RIGHT | FULL} [OUTER] JOIN',
 ]);
 
-const reservedPhrases = expandPhrases([
+const reservedKeywordPhrases = expandPhrases([
   'PRIMARY KEY',
   'GENERATED {ALWAYS | BY DEFAULT} AS IDENTITY',
   'ON {UPDATE | DELETE} [NO ACTION | RESTRICT | CASCADE | SET NULL | SET DEFAULT]',
   'DO {NOTHING | UPDATE}',
   'AS MATERIALIZED',
   '{ROWS | RANGE | GROUPS} BETWEEN',
-  // https://www.postgresql.org/docs/current/datatype-datetime.html
-  '[TIMESTAMP | TIME] {WITH | WITHOUT} TIME ZONE',
   // comparison operator
   'IS [NOT] DISTINCT FROM',
   'NULLS {FIRST | LAST}',
   'WITH ORDINALITY',
+]);
+
+const reservedDataTypePhrases = expandPhrases([
+  // https://www.postgresql.org/docs/current/datatype-datetime.html
+  '[TIMESTAMP | TIME] {WITH | WITHOUT} TIME ZONE',
 ]);
 
 // https://www.postgresql.org/docs/14/index.html
@@ -271,7 +274,8 @@ export const postgresql: DialectOptions = {
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases,
+    reservedDataTypePhrases,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,

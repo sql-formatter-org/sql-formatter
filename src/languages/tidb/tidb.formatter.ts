@@ -159,12 +159,14 @@ const reservedJoins = expandPhrases([
   'STRAIGHT_JOIN',
 ]);
 
-const reservedPhrases = expandPhrases([
+const reservedKeywordPhrases = expandPhrases([
   'ON {UPDATE | DELETE} [SET NULL]',
   'CHARACTER SET',
   '{ROWS | RANGE} BETWEEN',
   'IDENTIFIED BY',
 ]);
+
+const reservedDataTypePhrases = expandPhrases([]);
 
 // https://docs.pingcap.com/tidb/stable/basic-features
 export const tidb: DialectOptions = {
@@ -174,7 +176,8 @@ export const tidb: DialectOptions = {
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedPhrases,
+    reservedKeywordPhrases,
+    reservedDataTypePhrases,
     supportsXor: true,
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,
