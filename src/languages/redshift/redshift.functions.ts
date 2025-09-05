@@ -16,7 +16,7 @@ export const functions: string[] = [
   'VAR_POP',
 
   // https://docs.aws.amazon.com/redshift/latest/dg/c_Array_Functions.html
-  'array',
+  // 'array',
   'array_concat',
   'array_flatten',
   'get_array_length',

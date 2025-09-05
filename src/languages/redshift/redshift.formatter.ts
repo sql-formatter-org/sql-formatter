@@ -157,6 +157,7 @@ export const redshift: DialectOptions = {
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
+    extraParens: ['[]'],
     stringTypes: ["''-qq"],
     identTypes: [`""-qq`],
     identChars: { first: '#' },

@@ -21,6 +21,7 @@ import supportsUpdate from './features/update.js';
 import supportsParams from './options/param.js';
 import supportsDataTypeCase from './options/dataTypeCase.js';
 import supportsNumbers from './features/numbers.js';
+import supportsArrayLiterals from './features/arrayLiterals.js';
 
 describe('RedshiftFormatter', () => {
   const language = 'redshift';
@@ -54,6 +55,7 @@ describe('RedshiftFormatter', () => {
   supportsParams(format, { numbered: ['$'] });
   supportsLimiting(format, { limit: true, offset: true });
   supportsDataTypeCase(format);
+  supportsArrayLiterals(format, { withArrayPrefix: true });
 
   it('formats type-cast operator without spaces', () => {
     expect(format('SELECT 2 :: numeric AS foo;')).toBe(dedent`
