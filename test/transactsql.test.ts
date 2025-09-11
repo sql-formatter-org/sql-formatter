@@ -221,6 +221,18 @@ describe('TransactSqlFormatter', () => {
     `);
   });
 
+  // Issue #903
+  it('supports ALTER PROCEDURE', () => {
+    expect(format(`GO ALTER PROCEDURE foo AS SELECT 1; GO`)).toBe(dedent`
+      GO
+      ALTER PROCEDURE foo AS
+      SELECT
+        1;
+
+      GO
+    `);
+  });
+
   // Issue #819
   it('does not recognize ODBC keywords as reserved keywords', () => {
     expect(format(`SELECT Value, Zone`, { keywordCase: 'upper' })).toBe(dedent`

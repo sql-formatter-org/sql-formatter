@@ -59,6 +59,8 @@ const tabularOnelineClauses = expandPhrases([
   'CREATE DATABASE',
   'ALTER DATABASE',
   'DROP DATABASE [IF EXISTS]',
+  // functions/procedures
+  'ALTER {FUNCTION | PROCEDURE | PROC}',
   // other statements
   'GO',
   'USE',
@@ -131,7 +133,6 @@ const tabularOnelineClauses = expandPhrases([
   'FULLTEXT CATALOG',
   'FULLTEXT INDEX',
   'FULLTEXT STOPLIST',
-  'FUNCTION',
   'GET CONVERSATION GROUP',
   'GET_TRANSMISSION_STATUS',
   'GRANT',
@@ -154,7 +155,6 @@ const tabularOnelineClauses = expandPhrases([
   'PARSEONLY',
   'PARTITION FUNCTION',
   'PARTITION SCHEME',
-  'PROCEDURE',
   'QUERY_GOVERNOR_COST_LIMIT',
   'QUEUE',
   'QUOTED_IDENTIFIER',
