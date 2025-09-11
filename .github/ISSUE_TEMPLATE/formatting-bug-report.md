@@ -30,4 +30,4 @@ Which SQL and options did you provide as input?
 
 - How are you calling / using the library?
 - What SQL language(s) does this apply to?
-- Which SQL Formatter version are you using?
+- Which SQL Formatter version are you using? (The exact version number.)
