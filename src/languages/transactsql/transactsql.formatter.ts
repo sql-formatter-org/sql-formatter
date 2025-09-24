@@ -92,7 +92,6 @@ const tabularOnelineClauses = expandPhrases([
   'CERTIFICATE',
   'CLOSE MASTER KEY',
   'CLOSE SYMMETRIC KEY',
-  'COLLATE',
   'COLUMN ENCRYPTION KEY',
   'COLUMN MASTER KEY',
   'COLUMNSTORE INDEX',
