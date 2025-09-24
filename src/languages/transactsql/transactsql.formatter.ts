@@ -30,8 +30,6 @@ const reservedClauses = expandPhrases([
   'MERGE [INTO]',
   'WHEN [NOT] MATCHED [BY TARGET | BY SOURCE] [THEN]',
   'UPDATE SET',
-  // Data definition
-  'CREATE [OR ALTER] {PROC | PROCEDURE}',
 ]);
 
 const standardOnelineClauses = expandPhrases(['CREATE TABLE']);

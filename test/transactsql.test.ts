@@ -123,8 +123,7 @@ describe('TransactSqlFormatter', () => {
     const result = format('GO CREATE OR ALTER PROCEDURE p');
     expect(result).toBe(dedent`
       GO
-      CREATE OR ALTER PROCEDURE
-        p
+      CREATE OR ALTER PROCEDURE p
     `);
   });
 
