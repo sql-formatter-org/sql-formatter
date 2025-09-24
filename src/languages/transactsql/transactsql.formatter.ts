@@ -60,7 +60,9 @@ const tabularOnelineClauses = expandPhrases([
   'ALTER DATABASE',
   'DROP DATABASE [IF EXISTS]',
   // functions/procedures
-  'ALTER {FUNCTION | PROCEDURE | PROC}',
+  'CREATE [OR ALTER] [PARTITION] {FUNCTION | PROCEDURE | PROC}',
+  'ALTER [PARTITION] {FUNCTION | PROCEDURE | PROC}',
+  'DROP [PARTITION] {FUNCTION | PROCEDURE | PROC} [IF EXISTS]',
   // other statements
   'GO',
   'USE',
@@ -152,7 +154,6 @@ const tabularOnelineClauses = expandPhrases([
   'OPEN MASTER KEY',
   'OPEN SYMMETRIC KEY',
   'PARSEONLY',
-  'PARTITION FUNCTION',
   'PARTITION SCHEME',
   'QUERY_GOVERNOR_COST_LIMIT',
   'QUEUE',
