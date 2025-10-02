@@ -28,6 +28,27 @@ export default function supportsDisableComment(format: FormatFn) {
     `);
   });
 
+  // Issue #906
+  it('preserves indentation between /* sql-formatter-disable */ and /* sql-formatter-enable */', () => {
+    const result = format(dedent`
+      /* sql-formatter-disable */
+      SELECT
+        foo
+          FROM
+            bar;
+      /* sql-formatter-enable */
+    `);
+
+    expect(result).toBe(dedent`
+      /* sql-formatter-disable */
+      SELECT
+        foo
+          FROM
+            bar;
+      /* sql-formatter-enable */
+    `);
+  });
+
   it('does not format text after /* sql-formatter-disable */ until end of file', () => {
     const result = format(dedent`
       SELECT foo FROM bar;

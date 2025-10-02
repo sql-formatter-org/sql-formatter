@@ -32,7 +32,7 @@ export default class Tokenizer {
   private buildRulesBeforeParams(cfg: TokenizerOptions): TokenRule[] {
     return this.validRules([
       {
-        type: TokenType.BLOCK_COMMENT,
+        type: TokenType.DISABLE_COMMENT,
         regex:
           /(\/\* *sql-formatter-disable *\*\/[\s\S]*?(?:\/\* *sql-formatter-enable *\*\/|$))/uy,
       },
