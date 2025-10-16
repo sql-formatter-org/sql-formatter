@@ -103,7 +103,7 @@
           }
         },
         "custom": {
-          "description": "To allow for :name, @name and/or $name syntax for named placholders.",
+          "description": "An option to implement custom syntax for parameter placeholders",
           "type": "array",
           "items": {
             "type": "object",
