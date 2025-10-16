@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "description": "Configuration files for sql-formatter",
+  "title": "SQL Formatter",
+  "additionalProperties": false,
+  "type": "object",
+  "properties": {
+    "dataTypeCase": {
+      "description": "Converts data types to upper- or lowercase.",
+      "$ref": "#/$defs/casing"
+    },
+    "denseOperators": {
+      "description": "Toggles spacing around SQL operators. (Does not apply to logical operators (AND, OR, XOR))",
+      "type": "boolean",
+      "default": false
+    },
+    "expressionWidth": {
+      "description": "Determines maximum length of parenthesized expressions.",
+      "type": "number",
+      "default": 50,
+      "exclusiveMinimum": 0
+    },
+    "functionCase": {
+      "description": "Converts function names to upper- or lowercase.",
+      "$ref": "#/$defs/casing"
+    },
+    "identifierCase": {
+      "description": "[Experimental] Converts identifiers to upper- or lowercase. Only unquoted identifiers are converted.",
+      "$ref": "#/$defs/casing"
+    },
+    "keywordCase": {
+      "description": "Converts reserved keywords to upper- or lowercase.",
+      "$ref": "#/$defs/casing"
+    },
+    "language": {
+      "description": "Specifies the SQL dialect to use.",
+      "enum": [
+        "sql",
+        "bigquery",
+        "db2",
+        "db2i",
+        "duckdb",
+        "hive",
+        "mariadb",
+        "mysql",
+        "tidb",
+        "n1ql",
+        "plsql",
+        "postgresql",
+        "redshift",
+        "singlestoredb",
+        "snowflake",
+        "spark",
+        "sqlite",
+        "transactsql",
+        "trino"
+      ]
+    },
+    "linesBetweenQueries": {
+      "description": "Decides how many empty lines to leave between SQL statements.",
+      "type": "number",
+      "default": 1,
+      "exclusiveMinimum": 0
+    },
+    "logicalOperatorNewline": {
+      "description": "Decides newline placement before or after logical operators (AND, OR, XOR).",
+      "enum": ["before", "after"],
+      "default": "before"
+    },
+    "newlineBeforeSemicolon": {
+      "description": "Whether to place query separator (;) on a separate line.",
+      "type": "boolean",
+      "default": false
+    },
+    "paramTypes": {
+      "description": "Specifies parameter types to support when parsing SQL prepared statements.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "positional": {
+          "description": "True to enable ? placeholders, false to disable them.",
+          "type": "boolean"
+        },
+        "numbered": {
+          "description": "To allow for ?1, :2 and/or $3 syntax for numbered placholders",
+          "type": "array",
+          "items": {
+            "enum": ["?", ":", "$"]
+          }
+        },
+        "named": {
+          "description": "To allow for :name, @name and/or $name syntax for named placholders.",
+          "type": "array",
+          "items": {
+            "enum": [":", "@", "$"]
+          }
+        },
+        "quoted": {
+          "description": "To allow for :\"name\", @\"name\" and/or $\"name\" syntax for quoted placholders.",
+          "type": "array",
+          "items": {
+            "enum": [":", "@", "$"]
+          }
+        },
+        "custom": {
+          "description": "An option to implement custom syntax for parameter placeholders",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "regex": {
+                "type": "string"
+              }
+            },
+            "required": ["regex"]
+          }
+        }
+      },
+      "examples": [{ "positional": true, "numbered": [], "named": [":", "@"] }]
+    },
+    "tabWidth": {
+      "description": "Specifies amount of spaces to be used for indentation.",
+      "type": "integer",
+      "exclusiveMinimum": 0
+    },
+    "useTabs": {
+      "description": "Uses TAB characters for indentation. `tabWidth` will be ignored",
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": ["language"],
+  "$defs": { "casing": { "enum": ["preserve", "upper", "lower"] } }
+}
