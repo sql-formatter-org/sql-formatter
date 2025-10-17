@@ -4,8 +4,7 @@ Specifies amount of spaces to be used for indentation.
 
 ## Option value
 
-A string containing the characters of one indentation step.
-Defaults to two spaces (`" \ "`).
+A number specifying the number of spaces per indentation level.
 
 This option is ignored when `useTabs` option is enabled.
 
@@ -31,7 +30,7 @@ GROUP BY column4
 
 ### Indenting by 4 spaces
 
-Using `indent: 4`:
+Using `tabWidth: 4`:
 
 ```sql
 SELECT
@@ -53,24 +52,4 @@ GROUP BY column4
 
 ### Indenting with tabs
 
-Using `indent: "\t"`:
-
-```sql
-SELECT
-        *,
-FROM
-        (
-                SELECT
-                        column1,
-                        column5
-                FROM
-                        table1
-        ) a
-        JOIN table2
-WHERE
-        column6
-        AND column7
-GROUP BY column4
-```
-
-Imagine that these long sequences of spaces are actually TAB characters :)
+See [`useTabs` option](useTabs.md).
