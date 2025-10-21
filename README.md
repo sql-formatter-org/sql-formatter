@@ -232,7 +232,7 @@ pick the proper dialect, like:
 format('select [col] from tbl', { language: 'transactsql' });
 ```
 
-Or when using the VSCode extension: Settings -> SQL-Formatter-VSCode: SQLFlavourOverride.
+Or when using the VSCode extension: Settings -> SQL-Formatter-VSCode -> Dialect.
 
 ### Module parse failed: Unexpected token
 
