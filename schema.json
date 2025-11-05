@@ -5,6 +5,10 @@
   "additionalProperties": false,
   "type": "object",
   "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "The schema to verify this document against."
+    },
     "dataTypeCase": {
       "description": "Converts data types to upper- or lowercase.",
       "$ref": "#/$defs/casing"
