@@ -209,7 +209,6 @@ We provide **JSON Schema** for `.sql-formatter.json` configuration file, enablin
   - [Using the schema in VSCode](https://code.visualstudio.com/docs/languages/json#_mapping-in-the-user-settings)
   - [Using the schema in Zed](https://zed.dev/docs/languages/json#schema-specification-via-settings)
 
-
 ### Usage as ESLint plugin
 
 - Inside `eslint-plugin-sql` by using the rule [eslint-plugin-sql#format](https://github.com/gajus/eslint-plugin-sql#format).
