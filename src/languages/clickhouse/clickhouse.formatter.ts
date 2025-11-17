@@ -1,23 +1,45 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
+import { EOF_TOKEN, Token, TokenType } from '../../lexer/token.js';
 import { functions } from './clickhouse.functions.js';
-import { dataTypes, keywords, keywordPhrases } from './clickhouse.keywords.js';
+import { dataTypes, keywords } from './clickhouse.keywords.js';
 
 const reservedSelect = expandPhrases(['SELECT [DISTINCT]']);
 
 const reservedClauses = expandPhrases([
-  // https://clickhouse.com/docs/sql-reference/statements/explain
-  'EXPLAIN [AST | SYNTAX | QUERY TREE | PLAN | PIPELINE | ESTIMATE | TABLE OVERRIDE]',
+  'SET',
+  // https://clickhouse.com/docs/sql-reference/statements/select
+  'WITH',
+  'FROM',
+  'SAMPLE',
+  'PREWHERE',
+  'WHERE',
+  'GROUP BY',
+  'HAVING',
+  'QUALIFY',
+  'ORDER BY',
+  'LIMIT', // Note: Clickhouse has no OFFSET clause
+  'SETTINGS',
+  'INTO OUTFILE',
+  'FORMAT',
+  // https://clickhouse.com/docs/sql-reference/window-functions
+  'WINDOW',
+  'PARTITION BY',
+  // https://clickhouse.com/docs/sql-reference/statements/insert-into
+  'INSERT INTO',
+  'VALUES',
 ]);
 
 const standardOnelineClauses = expandPhrases([
   // https://clickhouse.com/docs/sql-reference/statements/create
   'CREATE [OR REPLACE] [TEMPORARY] TABLE [IF NOT EXISTS]',
+]);
+const tabularOnelineClauses = expandPhrases([
   // https://clickhouse.com/docs/sql-reference/statements/update
   'UPDATE',
   // https://clickhouse.com/docs/sql-reference/statements/system
   'SYSTEM RELOAD {DICTIONARIES | DICTIONARY | FUNCTIONS | FUNCTION | ASYNCHRONOUS METRICS} [ON CLUSTER]',
-  'SYSTEM DROP {DNS CACHE | MARK CACHE | ICEBERG METADATA CACHE | TEXT INDEX DICTIONARY CACHE | TEXT INDEX HEADER CACHE | TEXT INDEX POSTINGS CACHE | REPLICA | DATABASE REPLICA | UNCOMPRESSED CACHE | COMPILED EXPRESSION CACHE | QUERY CONDITION CACHE | QUERY CACHE | FORMAT SCHEMA CACHE | DROP FILESYSTEM CACHE}',
+  'SYSTEM DROP {DNS CACHE | MARK CACHE | ICEBERG METADATA CACHE | TEXT INDEX DICTIONARY CACHE | TEXT INDEX HEADER CACHE | TEXT INDEX POSTINGS CACHE | REPLICA | DATABASE REPLICA | UNCOMPRESSED CACHE | COMPILED EXPRESSION CACHE | QUERY CONDITION CACHE | QUERY CACHE | FORMAT SCHEMA CACHE | FILESYSTEM CACHE}',
   'SYSTEM FLUSH LOGS',
   'SYSTEM RELOAD {CONFIG | USERS}',
   'SYSTEM SHUTDOWN',
@@ -56,8 +78,6 @@ const standardOnelineClauses = expandPhrases([
   'RENAME [TABLE | DICTIONARY | DATABASE]',
   // https://clickhouse.com/docs/sql-reference/statements/exchange
   'EXCHANGE {TABLES | DICTIONARIES}',
-  // https://clickhouse.com/docs/sql-reference/statements/set
-  'SET',
   // https://clickhouse.com/docs/sql-reference/statements/set-role
   'SET ROLE [DEFAULT | NONE | ALL | ALL EXCEPT]',
   'SET DEFAULT ROLE [NONE]',
@@ -73,8 +93,6 @@ const standardOnelineClauses = expandPhrases([
   'CHECK GRANT',
   // https://clickhouse.com/docs/sql-reference/statements/undrop
   'UNDROP TABLE',
-]);
-const tabularOnelineClauses = expandPhrases([
   // https://clickhouse.com/docs/sql-reference/statements/create
   'CREATE {DATABASE | NAMED COLLECTION} [IF NOT EXISTS]',
   'CREATE [OR REPLACE] {VIEW | DICTIONARY} [IF NOT EXISTS]',
@@ -89,8 +107,73 @@ const tabularOnelineClauses = expandPhrases([
   'ALTER {USER | ROLE | QUOTA | SETTINGS PROFILE} [IF EXISTS]',
   'ALTER [ROW] POLICY [IF EXISTS]',
   'ALTER NAMED COLLECTION [IF EXISTS]',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/user
+  'RENAME TO',
+  'DEFAULT ROLE [ALL [EXCEPT]]',
+  'GRANTEES',
+  'NOT IDENTIFIED',
+  'RESET AUTHENTICATION METHODS TO NEW',
+  '{IDENTIFIED | ADD IDENTIFIED} [WITH | BY]',
+  '[ADD | DROP] HOST {LOCAL | NAME | REGEXP | IP | LIKE}',
+  'VALID UNTIL',
+  'DROP [ALL] {PROFILES | SETTINGS}',
+  '{ADD | MODIFY} SETTINGS',
+  'ADD PROFILES',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/apply-deleted-mask
+  'APPLY DELETED MASK [IN PARTITION]',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/column
+  '{ADD | DROP | RENAME | CLEAR | COMMENT | MODIFY | ALTER | MATERIALIZE} COLUMN',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/partition
+  '{DETACH | DROP | ATTACH | FETCH | MOVE} {PART | PARTITION}',
+  'DROP DETACHED {PART | PARTITION}',
+  '{FORGET | REPLACE} PARTITION',
+  'CLEAR COLUMN',
+  '{FREEZE | UNFREEZE} [PARTITION]',
+  'CLEAR INDEX',
+  'TO {DISK | VOLUME}',
+  '[DELETE | REWRITE PARTS] IN PARTITION',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/setting
+  '{MODIFY | RESET} SETTING',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/delete
+  'DELETE WHERE',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/order-by
+  'MODIFY ORDER BY',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/sample-by
+  '{MODIFY | REMOVE} SAMPLE BY',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/skipping-index
+  '{ADD | MATERIALIZE | CLEAR} INDEX [IF NOT EXISTS]',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/constraint
+  'ADD CONSTRAINT [IF NOT EXISTS]',
+  'DROP CONSTRAINT [IF EXISTS]',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/ttl
+  'MODIFY TTL',
+  'REMOVE TTL',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/statistics
+  'ADD STATISTICS [IF NOT EXISTS]',
+  'MODIFY STATISTICS',
+  '{DROP | CLEAR} STATISTICS [IF EXISTS]',
+  'MATERIALIZE STATISTICS [ALL | IF EXISTS]',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/quota
+  'KEYED BY',
+  'NOT KEYED',
+  'FOR [RANDOMIZED] INTERVAL',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/row-policy
+  'AS {PERMISSIVE | RESTRICTIVE}',
+  'FOR SELECT',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/projection
+  'ADD PROJECTION [IF NOT EXISTS]',
+  '{DROP | MATERIALIZE | CLEAR} PROJECTION [IF EXISTS]',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/view
+  'MODIFY QUERY',
+  // https://clickhouse.com/docs/sql-reference/statements/create/view#refreshable-materialized-view
+  'REFRESH {EVERY | AFTER}',
+  'RANDOMIZE FOR',
+  'DEPENDS ON',
+  'APPEND TO',
   // https://clickhouse.com/docs/sql-reference/statements/delete
   'DELETE FROM',
+  // https://clickhouse.com/docs/sql-reference/statements/explain
+  'EXPLAIN [AST | SYNTAX | QUERY TREE | PLAN | PIPELINE | ESTIMATE | TABLE OVERRIDE]',
   // https://clickhouse.com/docs/sql-reference/statements/grant
   'GRANT [ON CLUSTER]',
   // https://clickhouse.com/docs/sql-reference/statements/revoke
@@ -102,7 +185,7 @@ const tabularOnelineClauses = expandPhrases([
 ]);
 
 const reservedSetOperations = expandPhrases([
-  // https://clickhouse.com/docs/sql-reference/statements/select/set-operations
+  // https://clickhouse.com/docs/sql-reference/statements/select/union
   'UNION [ALL | DISTINCT]',
   // https://clickhouse.com/docs/sql-reference/statements/parallel_with
   'PARALLEL WITH',
@@ -113,6 +196,8 @@ const reservedJoins = expandPhrases([
   '[GLOBAL] [INNER|LEFT|RIGHT|FULL|CROSS] [OUTER|SEMI|ANTI|ANY|ALL|ASOF] JOIN',
 ]);
 
+const reservedKeywordPhrases = expandPhrases(['{ROWS | RANGE} BETWEEN']);
+
 // https://clickhouse.com/docs/sql-reference/syntax
 export const clickhouse: DialectOptions = {
   name: 'clickhouse',
@@ -121,23 +206,25 @@ export const clickhouse: DialectOptions = {
     reservedClauses: [...reservedClauses, ...standardOnelineClauses, ...tabularOnelineClauses],
     reservedSetOperations,
     reservedJoins,
-    reservedKeywordPhrases: keywordPhrases,
+    reservedKeywordPhrases,
 
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
+    extraParens: ['[]'],
+    lineCommentTypes: ['#', '--'],
     nestedBlockComments: false,
     underscoresInNumbers: true,
-    stringTypes: ['$$', "''-qq", "''-qq-bs"],
-    identTypes: ['""-qq', '``'],
+    stringTypes: ['$$', "''-qq-bs"],
+    identTypes: ['""-qq-bs', '``'],
     paramTypes: {
       // https://clickhouse.com/docs/sql-reference/syntax#defining-and-using-query-parameters
       custom: [
         {
-          regex: String.raw`\{\s*[a-zA-Z0-9_]+\s*:\s*[a-zA-Z0-9_]+\s*\}`,
+          regex: String.raw`\{\s*[^:]+:[^}]+\}`,
           key: v => {
-            const [key] = v.split(':');
-            return key.trim();
+            const match = /\{([^:]+):/.exec(v);
+            return match ? match[1].trim() : v;
           },
         },
       ],
@@ -153,9 +240,59 @@ export const clickhouse: DialectOptions = {
       // Lambda creation
       '->',
     ],
+    postProcess,
   },
   formatOptions: {
-    onelineClauses: standardOnelineClauses,
+    onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
     tabularOnelineClauses,
   },
 };
+
+/**
+ * Converts IN and ANY from RESERVED_FUNCTION_NAME to RESERVED_KEYWORD
+ * when they are used as operators (not function calls).
+ *
+ * IN operator: foo IN (1, 2, 3) - IN comes after an identifier/expression
+ * IN function: IN(foo, 1, 2, 3) - IN comes at start or after operators/keywords
+ *
+ * ANY operator: foo = ANY (1, 2, 3) - ANY comes after an operator like =
+ * ANY function: ANY(foo, 1, 2, 3) - ANY comes at start or after operators/keywords
+ */
+function postProcess(tokens: Token[]): Token[] {
+  return tokens.map((token, i) => {
+    // Only process IN and ANY that are currently RESERVED_FUNCTION_NAME
+    // Check text (uppercase canonical form) for matching, but preserve raw (original casing)
+    if (
+      token.type === TokenType.RESERVED_FUNCTION_NAME &&
+      (token.text === 'IN' || token.text === 'ANY')
+    ) {
+      const nextToken = tokens[i + 1] || EOF_TOKEN;
+      const prevToken = tokens[i - 1] || EOF_TOKEN;
+
+      // Must be followed by ( to be a function
+      if (nextToken.text !== '(') {
+        // Not followed by ( means it's an operator/keyword, convert to uppercase
+        return { ...token, type: TokenType.RESERVED_KEYWORD, raw: token.text };
+      }
+
+      // For IN: convert to keyword if previous token is an expression token
+      // For ANY: convert to keyword if previous token is an operator
+      if (
+        (token.text === 'IN' &&
+          (prevToken.type === TokenType.IDENTIFIER ||
+            prevToken.type === TokenType.QUOTED_IDENTIFIER ||
+            prevToken.type === TokenType.NUMBER ||
+            prevToken.type === TokenType.STRING ||
+            prevToken.type === TokenType.CLOSE_PAREN ||
+            prevToken.type === TokenType.ASTERISK)) ||
+        (token.text === 'ANY' && prevToken.type === TokenType.OPERATOR)
+      ) {
+        // Convert to keyword (operator) - use uppercase for display
+        return { ...token, type: TokenType.RESERVED_KEYWORD, raw: token.text };
+      }
+      // Otherwise, keep as RESERVED_FUNCTION_NAME to preserve original casing via functionCase option
+    }
+
+    return token;
+  });
+}

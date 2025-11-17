@@ -4,12 +4,14 @@ import { FormatFn } from '../../src/sqlFormatter.js';
 
 type IdentType =
   | '""-qq' // with repeated-quote escaping
+  | '""-bs' // with backslash escaping
+  | '""-qq-bs' // with repeated-quote and backslash escaping
   | '``' // with repeated-quote escaping
   | '[]' // with ]] escaping
   | 'U&""'; // with repeated-quote escaping
 
 export default function supportsIdentifiers(format: FormatFn, identifierTypes: IdentType[]) {
-  if (identifierTypes.includes('""-qq')) {
+  if (identifierTypes.includes('""-qq') || identifierTypes.includes('""-bs')) {
     it('supports double-quoted identifiers', () => {
       expect(format('"foo JOIN bar"')).toBe('"foo JOIN bar"');
       expect(format('SELECT "where" FROM "update"')).toBe(dedent`
@@ -27,13 +29,35 @@ export default function supportsIdentifiers(format: FormatFn, identifierTypes: I
           "my table"."col name";
       `);
     });
+  }
 
+  if (identifierTypes.includes('""-qq')) {
     it('supports escaping double-quote by doubling it', () => {
       expect(format('"foo""bar"')).toBe('"foo""bar"');
     });
 
-    it('does not support escaping double-quote with a backslash', () => {
-      expect(() => format('"foo \\" JOIN bar"')).toThrowError('Parse error: Unexpected "');
+    if (!identifierTypes.includes('""-bs')) {
+      it('does not support escaping double-quote with a backslash', () => {
+        expect(() => format('"foo \\" JOIN bar"')).toThrowError('Parse error: Unexpected "');
+      });
+    }
+  }
+
+  if (identifierTypes.includes('""-bs')) {
+    it('supports escaping double-quote by escaping it with a backslash', () => {
+      expect(format('"foo\\"bar"')).toBe('"foo\\"bar"');
+    });
+
+    if (!identifierTypes.includes('""-qq')) {
+      it('does not support escaping double-quote by doubling it', () => {
+        expect(format('"foo "" JOIN bar"')).toBe('"foo " " JOIN bar"');
+      });
+    }
+  }
+
+  if (identifierTypes.includes('""-qq-bs')) {
+    it('supports escaping double-quote with a backslash and a repeated quote', () => {
+      expect(format('"foo \\" JOIN ""bar"')).toBe('"foo \\" JOIN ""bar"');
     });
   }
 
