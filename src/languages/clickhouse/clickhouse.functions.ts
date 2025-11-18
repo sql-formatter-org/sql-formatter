@@ -292,6 +292,7 @@ export const functions: string[] = [
   'atan',
   'atan2',
   'atanh',
+  'authenticatedUser',
   'avg',
   'avgWeighted',
   'bar',
@@ -1026,6 +1027,7 @@ export const functions: string[] = [
   'nullIf',
   'nullIn',
   'nullInIgnoreSet',
+  'numbers',
   'numericIndexedVectorAllValueSum',
   'numericIndexedVectorBuild',
   'numericIndexedVectorCardinality',
@@ -1282,6 +1284,7 @@ export const functions: string[] = [
   'serverTimeZone',
   'serverTimezone',
   'serverUUID',
+  'set',
   'shardCount',
   'shardNum',
   'showCertificate',
@@ -1721,4 +1724,28 @@ export const functions: string[] = [
   'yearweek',
   'yesterday',
   'zookeeperSessionUptime',
+
+  // Table Engines
+  // https://clickhouse.com/docs/engines/table-engines
+  'MergeTree',
+  'ReplacingMergeTree',
+  'SummingMergeTree',
+  'AggregatingMergeTree',
+  'CollapsingMergeTree',
+  'VersionedCollapsingMergeTree',
+  'GraphiteMergeTree',
+  'CoalescingMergeTree',
+
+  // Database Engines
+  // https://clickhouse.com/docs/engines/database-engines
+  'Atomic',
+  'Shared',
+  'Lazy',
+  'Replicated',
+  'PostgreSQL',
+  'MySQL',
+  'SQLite',
+  'Backup',
+  'MaterializedPostgreSQL',
+  'DataLakeCatalog',
 ];
