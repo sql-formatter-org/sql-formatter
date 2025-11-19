@@ -48,6 +48,13 @@ const reservedClauses = expandPhrases([
   // https://clickhouse.com/docs/sql-reference/statements/alter/statistics
   'MODIFY STATISTICS',
   'TYPE',
+
+  // https://clickhouse.com/docs/sql-reference/statements/alter
+  'ALTER USER [IF EXISTS]',
+  'ALTER [ROW] POLICY [IF EXISTS]',
+  // https://clickhouse.com/docs/sql-reference/statements/drop
+  'DROP {USER | ROLE | QUOTA | PROFILE | SETTINGS PROFILE | ROW POLICY | POLICY} [IF EXISTS]',
+  'DROP [TEMPORARY] TABLE [IF EXISTS] [IF EMPTY]',
 ]);
 
 const standardOnelineClauses = expandPhrases([
@@ -56,7 +63,7 @@ const standardOnelineClauses = expandPhrases([
 ]);
 const tabularOnelineClauses = expandPhrases([
   'ALL EXCEPT',
-  'ON CLUSTER',
+  // 'ON CLUSTER',
   // https://clickhouse.com/docs/sql-reference/statements/update
   'UPDATE',
   // https://clickhouse.com/docs/sql-reference/statements/system
@@ -91,8 +98,7 @@ const tabularOnelineClauses = expandPhrases([
   'PERMANENTLY',
   'SYNC',
   // https://clickhouse.com/docs/sql-reference/statements/drop
-  'DROP {DICTIONARY | DATABASE | USER | ROLE | QUOTA | PROFILE | SETTINGS PROFILE | VIEW | FUNCTION | NAMED COLLECTION | ROW POLICY | POLICY} [IF EXISTS]',
-  'DROP [TEMPORARY] TABLE [IF EXISTS] [IF EMPTY]',
+  'DROP {DICTIONARY | DATABASE | PROFILE | VIEW | FUNCTION | NAMED COLLECTION} [IF EXISTS]',
   // https://clickhouse.com/docs/sql-reference/statements/exists
   'EXISTS [TEMPORARY] {TABLE | DICTIONARY | DATABASE}',
   // https://clickhouse.com/docs/sql-reference/statements/kill
@@ -100,7 +106,7 @@ const tabularOnelineClauses = expandPhrases([
   // https://clickhouse.com/docs/sql-reference/statements/optimize
   'OPTIMIZE TABLE',
   // https://clickhouse.com/docs/sql-reference/statements/rename
-  'RENAME [TABLE | DICTIONARY | DATABASE]',
+  'RENAME {TABLE | DICTIONARY | DATABASE}',
   // https://clickhouse.com/docs/sql-reference/statements/exchange
   'EXCHANGE {TABLES | DICTIONARIES}',
   // https://clickhouse.com/docs/sql-reference/statements/truncate
@@ -122,12 +128,10 @@ const tabularOnelineClauses = expandPhrases([
   // https://clickhouse.com/docs/sql-reference/statements/create/table#replace-table
   'REPLACE [TEMPORARY] TABLE [IF NOT EXISTS]',
   // https://clickhouse.com/docs/sql-reference/statements/alter
+  'ALTER {ROLE | QUOTA | SETTINGS PROFILE} [IF EXISTS]',
   'ALTER [TEMPORARY] TABLE',
-  'ALTER {USER | ROLE | QUOTA | SETTINGS PROFILE} [IF EXISTS]',
-  'ALTER [ROW] POLICY [IF EXISTS]',
   'ALTER NAMED COLLECTION [IF EXISTS]',
   // https://clickhouse.com/docs/sql-reference/statements/alter/user
-  'RENAME TO',
   'GRANTEES',
   'NOT IDENTIFIED',
   'RESET AUTHENTICATION METHODS TO NEW',
@@ -165,7 +169,7 @@ const tabularOnelineClauses = expandPhrases([
   'GRANULARITY',
   'AFTER',
   'FIRST',
-  
+
   // https://clickhouse.com/docs/sql-reference/statements/alter/constraint
   'ADD CONSTRAINT [IF NOT EXISTS]',
   'DROP CONSTRAINT [IF EXISTS]',
@@ -224,6 +228,7 @@ const reservedJoins = expandPhrases([
 const reservedKeywordPhrases = expandPhrases([
   '{ROWS | RANGE} BETWEEN',
   'ALTER MATERIALIZE STATISTICS',
+  'RENAME TO',
 ]);
 
 // https://clickhouse.com/docs/sql-reference/syntax
