@@ -10,6 +10,7 @@ type StringType =
   // Note: ''-qq and ''-bs can be combined to allow for both types of escaping
   | "''-qq" // with repeated-quote escaping
   | "''-bs" // with backslash escaping
+  | "''-qq-bs" // with repeated-quote and backslash escaping
   | "U&''" // with repeated-quote escaping
   | "N''" // with escaping style depending on whether also ''-qq or ''-bs was specified
   | "X''" // no escaping
@@ -92,6 +93,12 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
         expect(format("'foo '' JOIN bar'")).toBe("'foo ' ' JOIN bar'");
       });
     }
+  }
+
+  if (stringTypes.includes("''-qq-bs")) {
+    it('supports escaping single-quote with a backslash and a repeated quote', () => {
+      expect(format("'foo \\' JOIN ''bar'")).toBe("'foo \\' JOIN ''bar'");
+    });
   }
 
   if (stringTypes.includes("U&''")) {
