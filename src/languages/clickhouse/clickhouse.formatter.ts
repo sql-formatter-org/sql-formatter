@@ -32,6 +32,7 @@ const reservedClauses = expandPhrases([
   // https://clickhouse.com/docs/sql-reference/statements/insert-into
   'INSERT INTO',
   'VALUES',
+  // https://clickhouse.com/docs/sql-reference/statements/create/view#refreshable-materialized-view
   'DEPENDS ON',
   // https://clickhouse.com/docs/sql-reference/statements/move
   'MOVE {USER | ROLE | QUOTA | SETTINGS PROFILE | ROW POLICY}',
@@ -47,8 +48,8 @@ const reservedClauses = expandPhrases([
   'DEDUPLICATE BY',
   // https://clickhouse.com/docs/sql-reference/statements/alter/statistics
   'MODIFY STATISTICS',
+  // Used for ALTER INDEX ... TYPE and ALTER STATISTICS ... TYPE
   'TYPE',
-
   // https://clickhouse.com/docs/sql-reference/statements/alter
   'ALTER USER [IF EXISTS]',
   'ALTER [ROW] POLICY [IF EXISTS]',
