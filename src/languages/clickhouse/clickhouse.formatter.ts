@@ -54,7 +54,6 @@ const reservedClauses = expandPhrases([
   'ALTER [ROW] POLICY [IF EXISTS]',
   // https://clickhouse.com/docs/sql-reference/statements/drop
   'DROP {USER | ROLE | QUOTA | PROFILE | SETTINGS PROFILE | ROW POLICY | POLICY} [IF EXISTS]',
-  'DROP [TEMPORARY] TABLE [IF EXISTS] [IF EMPTY]',
 ]);
 
 const standardOnelineClauses = expandPhrases([
@@ -63,7 +62,7 @@ const standardOnelineClauses = expandPhrases([
 ]);
 const tabularOnelineClauses = expandPhrases([
   'ALL EXCEPT',
-  // 'ON CLUSTER',
+  'ON CLUSTER',
   // https://clickhouse.com/docs/sql-reference/statements/update
   'UPDATE',
   // https://clickhouse.com/docs/sql-reference/statements/system
@@ -99,6 +98,9 @@ const tabularOnelineClauses = expandPhrases([
   'SYNC',
   // https://clickhouse.com/docs/sql-reference/statements/drop
   'DROP {DICTIONARY | DATABASE | PROFILE | VIEW | FUNCTION | NAMED COLLECTION} [IF EXISTS]',
+  'DROP [TEMPORARY] TABLE [IF EXISTS] [IF EMPTY]',
+  // https://clickhouse.com/docs/sql-reference/statements/alter/table#rename
+  'RENAME TO',
   // https://clickhouse.com/docs/sql-reference/statements/exists
   'EXISTS [TEMPORARY] {TABLE | DICTIONARY | DATABASE}',
   // https://clickhouse.com/docs/sql-reference/statements/kill
@@ -228,7 +230,6 @@ const reservedJoins = expandPhrases([
 const reservedKeywordPhrases = expandPhrases([
   '{ROWS | RANGE} BETWEEN',
   'ALTER MATERIALIZE STATISTICS',
-  'RENAME TO',
 ]);
 
 // https://clickhouse.com/docs/sql-reference/syntax

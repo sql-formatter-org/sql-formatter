@@ -435,7 +435,8 @@ describe('ClickhouseFormatter', () => {
         format("DELETE FROM db.table ON CLUSTER foo IN PARTITION '2025-01-01' WHERE x = 1;")
       ).toBe(
         dedent`
-          DELETE FROM db.table ON CLUSTER foo
+          DELETE FROM db.table
+          ON CLUSTER foo
           IN PARTITION '2025-01-01'
           WHERE
             x = 1;
@@ -534,8 +535,10 @@ describe('ClickhouseFormatter', () => {
         )
       ).toBe(dedent`
         ALTER USER IF EXISTS
-          user1 RENAME TO user1_new,
-          user2 RENAME TO user2_new
+          user1
+        RENAME TO user1_new,
+        user2
+        RENAME TO user2_new
         DROP ALL SETTINGS;
       `);
     });
@@ -584,22 +587,73 @@ describe('ClickhouseFormatter', () => {
 
   // https://clickhouse.com/docs/sql-reference/statements/alter/setting
   describe('ALTER SETTING statements', () => {
-    //
+    it('formats ALTER TABLE MODIFY SETTING', () => {
+      expect(
+        format(
+          'ALTER TABLE example_table MODIFY SETTING max_part_loading_threads=8, max_parts_in_total=50000;'
+        )
+      ).toBe(dedent`
+        ALTER TABLE example_table
+        MODIFY SETTING max_part_loading_threads = 8,
+        max_parts_in_total = 50000;
+      `);
+    });
+
+    it('formats ALTER TABLE RESET SETTING', () => {
+      expect(format('ALTER TABLE example_table RESET SETTING max_part_loading_threads;')).toBe(
+        dedent`
+          ALTER TABLE example_table
+          RESET SETTING max_part_loading_threads;
+        `
+      );
+    });
   });
 
   // https://clickhouse.com/docs/sql-reference/statements/alter/delete
   describe('ALTER DELETE statements', () => {
-    //
+    it('formats ALTER TABLE DELETE WHERE', () => {
+      expect(
+        format(
+          'ALTER TABLE db.events ON CLUSTER prod DELETE WHERE timestamp < now() - INTERVAL 30 DAY;'
+        )
+      ).toBe(dedent`
+        ALTER TABLE db.events
+        ON CLUSTER prod
+        DELETE WHERE timestamp < now() - INTERVAL 30 DAY;
+      `);
+    });
   });
 
   // https://clickhouse.com/docs/sql-reference/statements/alter/order-by
   describe('ALTER ORDER BY statements', () => {
-    //
+    it('formats ALTER TABLE MODIFY ORDER BY', () => {
+      expect(
+        format('ALTER TABLE db.events ON CLUSTER prod MODIFY ORDER BY (user_id, timestamp);')
+      ).toBe(dedent`
+        ALTER TABLE db.events
+        ON CLUSTER prod
+        MODIFY ORDER BY (user_id, timestamp);
+      `);
+    });
   });
 
   // https://clickhouse.com/docs/sql-reference/statements/alter/sample-by
   describe('ALTER SAMPLE BY statements', () => {
-    //
+    it('formats ALTER TABLE MODIFY SAMPLE BY', () => {
+      expect(format('ALTER TABLE db.events ON CLUSTER prod MODIFY SAMPLE BY user_id;')).toBe(dedent`
+        ALTER TABLE db.events
+        ON CLUSTER prod
+        MODIFY SAMPLE BY user_id;
+      `);
+    });
+
+    it('formats ALTER TABLE REMOVE SAMPLE BY', () => {
+      expect(format('ALTER TABLE db.events ON CLUSTER prod REMOVE SAMPLE BY;')).toBe(dedent`
+        ALTER TABLE db.events
+        ON CLUSTER prod
+        REMOVE SAMPLE BY;
+      `);
+    });
   });
 
   // https://clickhouse.com/docs/sql-reference/statements/alter/skipping-index
@@ -610,7 +664,8 @@ describe('ClickhouseFormatter', () => {
           "ALTER TABLE db.table_name ON CLUSTER 'my_cluster' ADD INDEX IF NOT EXISTS my_index (column1 + column2) TYPE set(100) GRANULARITY 2 AFTER another_column;"
         )
       ).toBe(dedent`
-        ALTER TABLE db.table_name ON CLUSTER 'my_cluster'
+        ALTER TABLE db.table_name
+        ON CLUSTER 'my_cluster'
         ADD INDEX IF NOT EXISTS my_index (column1 + column2)
         TYPE
           set(100)
@@ -634,7 +689,8 @@ describe('ClickhouseFormatter', () => {
       expect(
         format("ALTER TABLE db.table_name ON CLUSTER 'my_cluster' DROP INDEX IF EXISTS my_index;")
       ).toBe(dedent`
-        ALTER TABLE db.table_name ON CLUSTER 'my_cluster'
+        ALTER TABLE db.table_name
+        ON CLUSTER 'my_cluster'
         DROP INDEX IF EXISTS my_index;
       `);
     });
@@ -645,7 +701,8 @@ describe('ClickhouseFormatter', () => {
           "ALTER TABLE db.table_name ON CLUSTER 'my_cluster' MATERIALIZE INDEX IF EXISTS my_index IN PARTITION '202301';"
         )
       ).toBe(dedent`
-        ALTER TABLE db.table_name ON CLUSTER 'my_cluster'
+        ALTER TABLE db.table_name
+        ON CLUSTER 'my_cluster'
         MATERIALIZE INDEX IF EXISTS my_index
         IN PARTITION '202301';
       `);
@@ -657,7 +714,8 @@ describe('ClickhouseFormatter', () => {
           "ALTER TABLE db.table_name ON CLUSTER 'my_cluster' CLEAR INDEX IF EXISTS my_index IN PARTITION '202301';"
         )
       ).toBe(dedent`
-        ALTER TABLE db.table_name ON CLUSTER 'my_cluster'
+        ALTER TABLE db.table_name
+        ON CLUSTER 'my_cluster'
         CLEAR INDEX IF EXISTS my_index
         IN PARTITION '202301';
       `);
@@ -741,22 +799,14 @@ describe('ClickhouseFormatter', () => {
           'ALTER QUOTA IF EXISTS qB RENAME TO qC NOT KEYED FOR INTERVAL 30 minute MAX execution_time = 0.5 FOR INTERVAL 5 quarter MAX queries = 321, errors = 10 TO default;'
         )
       ).toBe(dedent`
-        ALTER QUOTA IF EXISTS qB RENAME TO qC
+        ALTER QUOTA IF EXISTS qB
+        RENAME TO qC
         NOT KEYED
         FOR INTERVAL 30 minute MAX execution_time = 0.5
         FOR INTERVAL 5 quarter MAX queries = 321,
         errors = 10
         TO default;
       `);
-      // NOTE: This is a little ugly because the commas separate parameters
-      // and not intervals. I'd prefer this to look like this:
-      //
-      //   ALTER QUOTA IF EXISTS qB
-      //   RENAME TO qC
-      //   NOT KEYED
-      //   FOR INTERVAL 30 minute MAX execution_time = 0.5,
-      //   FOR INTERVAL 5 quarter MAX queries = 321, errors = 10
-      //   TO default;
     });
   });
 
@@ -769,7 +819,9 @@ describe('ClickhouseFormatter', () => {
         )
       ).toBe(dedent`
         ALTER ROW POLICY IF EXISTS
-          policy1 ON CLUSTER cluster_name1 ON database1.table1 RENAME TO new_name1;
+          policy1
+        ON CLUSTER cluster_name1 ON database1.table1
+        RENAME TO new_name1;
       `);
     });
 
@@ -780,8 +832,12 @@ describe('ClickhouseFormatter', () => {
         )
       ).toBe(dedent`
         ALTER ROW POLICY IF EXISTS
-          policy1 ON CLUSTER cluster_name1 ON database1.table1 RENAME TO new_name1,
-          policy2 ON CLUSTER cluster_name2 ON database2.table2 RENAME TO new_name2;
+          policy1
+        ON CLUSTER cluster_name1 ON database1.table1
+        RENAME TO new_name1,
+        policy2
+        ON CLUSTER cluster_name2 ON database2.table2
+        RENAME TO new_name2;
       `);
     });
   });
@@ -846,7 +902,8 @@ describe('ClickhouseFormatter', () => {
       expect(
         format("ALTER TABLE visits ON CLUSTER prod APPLY DELETED MASK IN PARTITION '2025-01-01';")
       ).toBe(dedent`
-        ALTER TABLE visits ON CLUSTER prod
+        ALTER TABLE visits
+        ON CLUSTER prod
         APPLY DELETED MASK
         IN PARTITION '2025-01-01';
       `);
@@ -863,30 +920,28 @@ describe('ClickhouseFormatter', () => {
 
     it('formats DROP DATABASE IF EXISTS with ON CLUSTER and SYNC', () => {
       expect(format('DROP DATABASE IF EXISTS db ON CLUSTER my_cluster SYNC;')).toBe(dedent`
-        DROP DATABASE IF EXISTS db ON CLUSTER my_cluster
+        DROP DATABASE IF EXISTS db
+        ON CLUSTER my_cluster
         SYNC;
       `);
     });
 
     it('formats DROP TEMPORARY TABLE', () => {
       expect(format('DROP TEMPORARY TABLE temp_table;')).toBe(dedent`
-        DROP TEMPORARY TABLE
-          temp_table;
+        DROP TEMPORARY TABLE temp_table;
       `);
     });
 
     it('formats DROP TABLE IF EMPTY', () => {
       expect(format('DROP TABLE IF EMPTY mydb.my_table;')).toBe(dedent`
-        DROP TABLE IF EMPTY
-          mydb.my_table;
+        DROP TABLE IF EMPTY mydb.my_table;
       `);
     });
 
     it('formats DROP multiple tables', () => {
       expect(format('DROP TABLE mydb.tab1, mydb.tab2;')).toBe(dedent`
-        DROP TABLE
-          mydb.tab1,
-          mydb.tab2;
+        DROP TABLE mydb.tab1,
+        mydb.tab2;
       `);
     });
 
@@ -901,7 +956,8 @@ describe('ClickhouseFormatter', () => {
       expect(format('DROP USER IF EXISTS user1, user2 ON CLUSTER my_cluster;')).toBe(dedent`
         DROP USER IF EXISTS
           user1,
-          user2 ON CLUSTER my_cluster;
+          user2
+        ON CLUSTER my_cluster;
       `);
     });
 
@@ -909,7 +965,8 @@ describe('ClickhouseFormatter', () => {
       expect(format('DROP ROLE IF EXISTS role1, role2 ON CLUSTER my_cluster;')).toBe(dedent`
         DROP ROLE IF EXISTS
           role1,
-          role2 ON CLUSTER my_cluster;
+          role2
+        ON CLUSTER my_cluster;
       `);
     });
 
@@ -933,7 +990,8 @@ describe('ClickhouseFormatter', () => {
       expect(format('DROP QUOTA IF EXISTS quota1, quota2 ON CLUSTER my_cluster;')).toBe(dedent`
         DROP QUOTA IF EXISTS
           quota1,
-          quota2 ON CLUSTER my_cluster;
+          quota2
+        ON CLUSTER my_cluster;
       `);
     });
 
@@ -941,7 +999,8 @@ describe('ClickhouseFormatter', () => {
       expect(format('DROP SETTINGS PROFILE IF EXISTS profile1, profile2 ON CLUSTER my_cluster;')).toBe(dedent`
         DROP SETTINGS PROFILE IF EXISTS
           profile1,
-          profile2 ON CLUSTER my_cluster;
+          profile2
+        ON CLUSTER my_cluster;
       `);
     });
 
@@ -953,21 +1012,24 @@ describe('ClickhouseFormatter', () => {
 
     it('formats DROP VIEW with SYNC', () => {
       expect(format('DROP VIEW IF EXISTS mydb.my_view ON CLUSTER my_cluster SYNC;')).toBe(dedent`
-        DROP VIEW IF EXISTS mydb.my_view ON CLUSTER my_cluster
+        DROP VIEW IF EXISTS mydb.my_view
+        ON CLUSTER my_cluster
         SYNC;
       `);
     });
 
     it('formats DROP FUNCTION', () => {
       expect(format('DROP FUNCTION IF EXISTS my_function ON CLUSTER my_cluster;')).toBe(dedent`
-        DROP FUNCTION IF EXISTS my_function ON CLUSTER my_cluster;
+        DROP FUNCTION IF EXISTS my_function
+        ON CLUSTER my_cluster;
       `);
     });
 
     it('formats DROP NAMED COLLECTION', () => {
       expect(format('DROP NAMED COLLECTION IF EXISTS my_collection ON CLUSTER my_cluster;'))
         .toBe(dedent`
-        DROP NAMED COLLECTION IF EXISTS my_collection ON CLUSTER my_cluster;
+        DROP NAMED COLLECTION IF EXISTS my_collection
+        ON CLUSTER my_cluster;
       `);
     });
   });
@@ -976,7 +1038,8 @@ describe('ClickhouseFormatter', () => {
   describe('TRUNCATE statements', () => {
     it('formats TRUNCATE TABLE IF EXISTS with ON CLUSTER and SYNC', () => {
       expect(format('TRUNCATE TABLE IF EXISTS db.table ON CLUSTER prod SYNC;')).toBe(dedent`
-        TRUNCATE TABLE IF EXISTS db.table ON CLUSTER prod
+        TRUNCATE TABLE IF EXISTS db.table
+        ON CLUSTER prod
         SYNC;
       `);
     });
@@ -986,7 +1049,8 @@ describe('ClickhouseFormatter', () => {
   describe('SYSTEM statements', () => {
     it('formats SYSTEM STOP MERGES on cluster', () => {
       expect(format('SYSTEM STOP MERGES ON CLUSTER prod;')).toBe(dedent`
-        SYSTEM STOP MERGES ON CLUSTER prod;
+        SYSTEM STOP MERGES
+        ON CLUSTER prod;
       `);
     });
 
@@ -1011,7 +1075,8 @@ describe('ClickhouseFormatter', () => {
 
     it('formats SYSTEM STOP FETCHES on replicated table', () => {
       expect(format('SYSTEM STOP FETCHES ON CLUSTER prod db.replicated_table;')).toBe(dedent`
-        SYSTEM STOP FETCHES ON CLUSTER prod db.replicated_table;
+        SYSTEM STOP FETCHES
+        ON CLUSTER prod db.replicated_table;
       `);
     });
 
@@ -1023,13 +1088,15 @@ describe('ClickhouseFormatter', () => {
 
     it('formats SYSTEM FLUSH DISTRIBUTED on cluster', () => {
       expect(format('SYSTEM FLUSH DISTRIBUTED db.dist_table ON CLUSTER prod;')).toBe(dedent`
-        SYSTEM FLUSH DISTRIBUTED db.dist_table ON CLUSTER prod;
+        SYSTEM FLUSH DISTRIBUTED db.dist_table
+        ON CLUSTER prod;
       `);
     });
 
     it('formats SYSTEM STOP LISTEN with protocol', () => {
       expect(format('SYSTEM STOP LISTEN ON CLUSTER prod TCP SECURE;')).toBe(dedent`
-        SYSTEM STOP LISTEN ON CLUSTER prod TCP SECURE;
+        SYSTEM STOP LISTEN
+        ON CLUSTER prod TCP SECURE;
       `);
     });
 
@@ -1130,7 +1197,8 @@ describe('ClickhouseFormatter', () => {
   describe('ATTACH statements', () => {
     it('formats ATTACH DATABASE with ON CLUSTER and SYNC', () => {
       expect(format('ATTACH DATABASE IF NOT EXISTS test_db ON CLUSTER prod;')).toBe(dedent`
-        ATTACH DATABASE IF NOT EXISTS test_db ON CLUSTER prod;
+        ATTACH DATABASE IF NOT EXISTS test_db
+        ON CLUSTER prod;
       `);
     });
   });
@@ -1139,7 +1207,8 @@ describe('ClickhouseFormatter', () => {
   describe('DETACH statements', () => {
     it('formats DETACH DATABASE with ON CLUSTER and SYNC', () => {
       expect(format('DETACH DATABASE test_db ON CLUSTER prod PERMANENTLY SYNC;')).toBe(dedent`
-        DETACH DATABASE test_db ON CLUSTER prod
+        DETACH DATABASE test_db
+        ON CLUSTER prod
         PERMANENTLY
         SYNC;
       `);
@@ -1176,7 +1245,8 @@ describe('ClickhouseFormatter', () => {
 
     it('formats KILL QUERY with ON CLUSTER and FORMAT', () => {
       expect(format('KILL QUERY ON CLUSTER prod WHERE elapsed > 300 FORMAT JSON;')).toBe(dedent`
-        KILL QUERY ON CLUSTER prod
+        KILL QUERY
+        ON CLUSTER prod
         WHERE
           elapsed > 300
         FORMAT
@@ -1210,7 +1280,8 @@ describe('ClickhouseFormatter', () => {
     it('formats OPTIMIZE TABLE with ON CLUSTER and DEDUPLICATE BY', () => {
       expect(format('OPTIMIZE TABLE logs ON CLUSTER prod DEDUPLICATE BY user_id, timestamp;'))
         .toBe(dedent`
-          OPTIMIZE TABLE logs ON CLUSTER prod
+          OPTIMIZE TABLE logs
+          ON CLUSTER prod
           DEDUPLICATE BY
             user_id,
             timestamp;
@@ -1224,7 +1295,8 @@ describe('ClickhouseFormatter', () => {
       expect(format('RENAME DATABASE atomic_database1 TO atomic_database2 ON CLUSTER production;'))
         .toBe(dedent`
           RENAME DATABASE atomic_database1
-          TO atomic_database2 ON CLUSTER production;
+          TO atomic_database2
+          ON CLUSTER production;
         `);
     });
   });
@@ -1249,7 +1321,8 @@ describe('ClickhouseFormatter', () => {
       expect(format('EXCHANGE DICTIONARIES db1.dict_A AND db2.dict_B ON CLUSTER prod;'))
         .toBe(dedent`
           EXCHANGE DICTIONARIES db1.dict_A
-          AND db2.dict_B ON CLUSTER prod;
+          AND db2.dict_B
+          ON CLUSTER prod;
         `);
     });
   });
@@ -1406,7 +1479,8 @@ describe('ClickhouseFormatter', () => {
 
     it('formats UNDROP TABLE with database and ON CLUSTER', () => {
       expect(format('UNDROP TABLE db.my_table ON CLUSTER production;')).toBe(dedent`
-        UNDROP TABLE db.my_table ON CLUSTER production;
+        UNDROP TABLE db.my_table
+        ON CLUSTER production;
       `);
     });
   });
@@ -1520,7 +1594,8 @@ describe('ClickhouseFormatter', () => {
           "CREATE MATERIALIZED VIEW IF NOT EXISTS mv6 ON CLUSTER prod REFRESH EVERY 1 HOUR RANDOMIZE FOR 30 MINUTE DEPENDS ON table1 APPEND SETTINGS max_threads = 4 AS SELECT date, count() as cnt FROM events GROUP BY date COMMENT 'Hourly aggregation';"
         )
       ).toBe(dedent`
-        CREATE MATERIALIZED VIEW IF NOT EXISTS mv6 ON CLUSTER prod
+        CREATE MATERIALIZED VIEW IF NOT EXISTS mv6
+        ON CLUSTER prod
         REFRESH EVERY 1 HOUR
         RANDOMIZE FOR 30 MINUTE
         DEPENDS ON
