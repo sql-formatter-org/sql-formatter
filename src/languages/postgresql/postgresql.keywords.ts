@@ -18,6 +18,7 @@ export const keywords: string[] = [
   'COLLATE', // reserved
   'COLLATION', // reserved (can be function or type)
   'COLUMN', // reserved
+  'COMMENT', // reserved
   'CONCURRENTLY', // reserved (can be function or type)
   'CONSTRAINT', // reserved
   'CREATE', // reserved, requires AS
