@@ -112,6 +112,7 @@ const tabularOnelineClauses = expandPhrases([
   'CHECKPOINT',
   'CLOSE',
   'CLUSTER',
+  'COMMENT ON',
   'COMMIT',
   'COMMIT PREPARED',
   'COPY',

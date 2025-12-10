@@ -243,4 +243,11 @@ describe('PostgreSqlFormatter', () => {
       })
     ).toBe(dedent`CREATE TABLE foo (id UUID DEFAULT gen_random_uuid());`);
   });
+
+  // Issue #924
+  it('formats keywords in COMMENT ON', () => {
+    expect(format(`comment on table foo is 'Hello my table';`, { keywordCase: 'upper' })).toBe(
+      dedent`COMMENT ON TABLE foo IS 'Hello my table';`
+    );
+  });
 });
