@@ -157,6 +157,9 @@ describe('ClickhouseFormatter', () => {
       'ANY JOIN',
       'ALL JOIN',
       'ASOF JOIN',
+
+      'ARRAY JOIN',
+      'LEFT ARRAY JOIN',
     ],
   });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT', 'PARALLEL WITH']);

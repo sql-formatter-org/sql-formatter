@@ -13,7 +13,6 @@ export const functions: string[] = [
   'CRC32',
   'CRC32IEEE',
   'CRC64',
-  'DATABASE',
   'DATE',
   'DATE_DIFF',
   'DATE_FORMAT',
@@ -189,7 +188,6 @@ export const functions: string[] = [
   'aggThrow',
   'alphaTokens',
   'analysisOfVariance',
-  'and',
   'anova',
   'any',
   'anyHeavy',
@@ -603,7 +601,9 @@ export const functions: string[] = [
   'flatten',
   'flattenTuple',
   'floor',
-  'format',
+  // We do not include FORMAT as a function, because it's also a keyword.
+  // FORMAT clauses are fairly common: https://clickhouse.com/docs/sql-reference/statements/select/format
+  // 'format',
   'formatDateTime',
   'formatDateTimeInJodaSyntax',
   'formatQuery',
@@ -766,7 +766,8 @@ export const functions: string[] = [
   'ifNotFinite',
   'ifNull',
   'ignore',
-  'ilike',
+  // ilike() is a function, but the ILIKE keyword is very common in SQL.
+  // 'ilike',
   'inIgnoreSet',
   'indexHint',
   'indexOf',
@@ -843,7 +844,8 @@ export const functions: string[] = [
   'levenshteinDistance',
   'levenshteinDistanceUTF8',
   'lgamma',
-  'like',
+  // like() is a function, but the ILIKE keyword is very common in SQL.
+  // 'like',
   'ln',
   'locate',
   'log',
@@ -1005,7 +1007,8 @@ export const functions: string[] = [
   'normalizeUTF8NFKD',
   'normalizedQueryHash',
   'normalizedQueryHashKeepNames',
-  'not',
+  // not() is a function, but the NOT keyword is very common in SQL.
+  // 'not',
   'notEmpty',
   'notEquals',
   'notILike',
@@ -1043,7 +1046,6 @@ export const functions: string[] = [
   'numericIndexedVectorPointwiseSubtract',
   'numericIndexedVectorShortDebugString',
   'numericIndexedVectorToMap',
-  'or',
   'overlay',
   'overlayUTF8',
   'parseDateTime',
@@ -1185,7 +1187,8 @@ export const functions: string[] = [
   'randomPrintableASCII',
   'randomString',
   'randomStringUTF8',
-  'range',
+  // range() is a function, but the RANGE keyword is important for window functions.
+  // 'range',
   'rank',
   'rankCorr',
   'readWKBLineString',
@@ -1283,7 +1286,6 @@ export const functions: string[] = [
   'serverTimeZone',
   'serverTimezone',
   'serverUUID',
-  'set',
   'shardCount',
   'shardNum',
   'showCertificate',
@@ -1629,7 +1631,8 @@ export const functions: string[] = [
   'trimLeft',
   'trimRight',
   'trunc',
-  'truncate',
+  // truncate() is a function, but the TRUNCATE keyword is a statement type.
+  // 'truncate',
   'tryBase32Decode',
   'tryBase58Decode',
   'tryBase64Decode',
@@ -1744,7 +1747,8 @@ export const functions: string[] = [
   'PostgreSQL',
   'MySQL',
   'SQLite',
-  'Backup',
+  // Disabling this because it's more likely to be used in a GRANT statement as a permission.
+  // 'Backup',
   'MaterializedPostgreSQL',
   'DataLakeCatalog',
 ];

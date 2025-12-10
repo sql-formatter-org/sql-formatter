@@ -226,6 +226,8 @@ const reservedSetOperations = expandPhrases([
 const reservedJoins = expandPhrases([
   // https://clickhouse.com/docs/sql-reference/statements/select/join
   '[GLOBAL] [INNER|LEFT|RIGHT|FULL|CROSS] [OUTER|SEMI|ANTI|ANY|ALL|ASOF] JOIN',
+  // https://clickhouse.com/docs/sql-reference/statements/select/array-join
+  '[LEFT] ARRAY JOIN',
 ]);
 
 const reservedKeywordPhrases = expandPhrases([
