@@ -160,7 +160,7 @@ describe('ClickhouseFormatter', () => {
     ],
   });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT', 'PARALLEL WITH']);
-  supportsOperators(format, ['%'], { any: true });
+  supportsOperators(format, ['%'], { any: false });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: false });
   supportsArrayAndMapAccessors(format);
@@ -180,43 +180,24 @@ describe('ClickhouseFormatter', () => {
     );
   });
 
-  describe('in/any set operators', () => {
+  describe('IN set operator vs function', () => {
     it('should respect the IN operator as a keyword when used as an operator', () => {
       expect(format('SELECT 1 in foo;')).toBe(dedent`
         SELECT
-          1 IN foo;
+          1 in foo;
       `);
 
       expect(format('SELECT foo in (1,2,3);')).toBe(dedent`
         SELECT
-          foo IN (1, 2, 3);
+          foo in (1, 2, 3);
       `);
       expect(format('SELECT "foo" in (1,2,3);')).toBe(dedent`
         SELECT
-          "foo" IN (1, 2, 3);
+          "foo" in (1, 2, 3);
       `);
       expect(format('SELECT 1 in (1,2,3);')).toBe(dedent`
         SELECT
-          1 IN (1, 2, 3);
-      `);
-    });
-    it('should respect the ANY operator as a keyword when used as an operator', () => {
-      expect(format('SELECT 1 = any foo;')).toBe(dedent`
-        SELECT
-          1 = ANY foo;
-      `);
-
-      expect(format('SELECT foo = any (1,2,3);')).toBe(dedent`
-        SELECT
-          foo = ANY (1, 2, 3);
-      `);
-      expect(format('SELECT "foo" = any (1,2,3);')).toBe(dedent`
-        SELECT
-          "foo" = ANY (1, 2, 3);
-      `);
-      expect(format('SELECT 1 = any (1,2,3);')).toBe(dedent`
-        SELECT
-          1 = ANY (1, 2, 3);
+          1 in (1, 2, 3);
       `);
     });
 
@@ -228,16 +209,6 @@ describe('ClickhouseFormatter', () => {
       expect(format('SELECT in("foo", "bar");')).toBe(dedent`
         SELECT
           in("foo", "bar");
-      `);
-    });
-    it('should respect the ANY operator as a keyword when used as a function', () => {
-      expect(format('SELECT any(foo);')).toBe(dedent`
-        SELECT
-          any(foo);
-      `);
-      expect(format('SELECT any("foo");')).toBe(dedent`
-        SELECT
-          any("foo");
       `);
     });
   });

@@ -12,7 +12,6 @@ export const keywords: string[] = [
   'ALTER',
   'AND',
   'ANTI',
-  'ANY',
   'APPEND',
   'APPLY',
   'ARRAY',

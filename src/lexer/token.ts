@@ -80,6 +80,7 @@ export const testToken =
 export const isToken = {
   ARRAY: testToken({ text: 'ARRAY', type: TokenType.RESERVED_DATA_TYPE }),
   BY: testToken({ text: 'BY', type: TokenType.RESERVED_KEYWORD }),
+  IN: testToken({ text: 'IN', type: TokenType.RESERVED_KEYWORD }),
   SET: testToken({ text: 'SET', type: TokenType.RESERVED_CLAUSE }),
   STRUCT: testToken({ text: 'STRUCT', type: TokenType.RESERVED_DATA_TYPE }),
   WINDOW: testToken({ text: 'WINDOW', type: TokenType.RESERVED_CLAUSE }),

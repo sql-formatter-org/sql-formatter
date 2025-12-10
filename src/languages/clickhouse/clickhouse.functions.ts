@@ -767,7 +767,6 @@ export const functions: string[] = [
   'ifNull',
   'ignore',
   'ilike',
-  'in',
   'inIgnoreSet',
   'indexHint',
   'indexOf',

@@ -1,6 +1,6 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import { EOF_TOKEN, Token, TokenType } from '../../lexer/token.js';
+import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
 import { functions } from './clickhouse.functions.js';
 import { dataTypes, keywords } from './clickhouse.keywords.js';
 
@@ -298,34 +298,22 @@ function postProcess(tokens: Token[]): Token[] {
     const nextToken = tokens[i + 1] || EOF_TOKEN;
     const prevToken = tokens[i - 1] || EOF_TOKEN;
 
-    // Only process IN and ANY that are currently RESERVED_FUNCTION_NAME
-    // Check text (uppercase canonical form) for matching, but preserve raw (original casing)
+    // We want to convert IN from RESERVED_KEYWORD to RESERVED_FUNCTION_NAME
+    // when it's used as a function. Whether it's used as an operator depends on
+    // the previous token and whether the next token is an opening parenthesis.
     if (
-      token.type === TokenType.RESERVED_FUNCTION_NAME &&
-      (token.text === 'IN' || token.text === 'ANY')
+      isToken.IN(token) &&
+      !(
+        prevToken.type === TokenType.IDENTIFIER ||
+        prevToken.type === TokenType.QUOTED_IDENTIFIER ||
+        prevToken.type === TokenType.NUMBER ||
+        prevToken.type === TokenType.STRING ||
+        prevToken.type === TokenType.CLOSE_PAREN ||
+        prevToken.type === TokenType.ASTERISK
+      ) &&
+      nextToken.text === '('
     ) {
-      // Must be followed by ( to be a function
-      if (nextToken.text !== '(') {
-        // Not followed by ( means it's an operator/keyword, convert to uppercase
-        return { ...token, type: TokenType.RESERVED_KEYWORD, raw: token.text };
-      }
-
-      // For IN: convert to keyword if previous token is an expression token
-      // For ANY: convert to keyword if previous token is an operator
-      if (
-        (token.text === 'IN' &&
-          (prevToken.type === TokenType.IDENTIFIER ||
-            prevToken.type === TokenType.QUOTED_IDENTIFIER ||
-            prevToken.type === TokenType.NUMBER ||
-            prevToken.type === TokenType.STRING ||
-            prevToken.type === TokenType.CLOSE_PAREN ||
-            prevToken.type === TokenType.ASTERISK)) ||
-        (token.text === 'ANY' && prevToken.type === TokenType.OPERATOR)
-      ) {
-        // Convert to keyword (operator) - use uppercase for display
-        return { ...token, type: TokenType.RESERVED_KEYWORD, raw: token.text };
-      }
-      // Otherwise, keep as RESERVED_FUNCTION_NAME to preserve original casing via functionCase option
+      return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
     }
 
     // If we have queries like
@@ -351,12 +339,8 @@ function postProcess(tokens: Token[]): Token[] {
     }
 
     // We should format `set(100)` as-is rather than `SET (100)`
-    if (
-      token.type === TokenType.RESERVED_CLAUSE &&
-      token.text === 'SET' &&
-      nextToken.type === TokenType.OPEN_PAREN
-    ) {
-      return { ...token, type: TokenType.RESERVED_FUNCTION_NAME, text: token.raw };
+    if (isToken.SET(token) && nextToken.type === TokenType.OPEN_PAREN) {
+      return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
     }
 
     return token;
