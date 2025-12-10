@@ -62,8 +62,8 @@ describe('ClickhouseFormatter', () => {
   supportsInsertInto(format);
   supportsUpdate(format);
   supportsTruncateTable(format);
-  supportsStrings(format, ["''-qq-bs"]);
-  supportsIdentifiers(format, ['""-qq-bs', '``']);
+  supportsStrings(format, ["''-qq", "''-bs"]);
+  supportsIdentifiers(format, ['""-qq', '""-bs', '``']);
   supportsArrayLiterals(format, { withoutArrayPrefix: true });
   supportsBetween(format);
   supportsJoin(format, {

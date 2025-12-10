@@ -1,7 +1,5 @@
 export const keywords: string[] = [
   // Derived from https://github.com/ClickHouse/ClickHouse/blob/827a7ef9f6d727ef511fea7785a1243541509efb/tests/fuzz/dictionaries/keywords.dict#L4
-  // Clickhouse keywords can span multiple individual words (e.g., "ADD COLUMN"). See
-  // `keywordPhrases` below for all of these.
   'ACCESS',
   'ACTION',
   'ADD',

@@ -285,13 +285,13 @@ export const clickhouse: DialectOptions = {
 
 /**
  * Converts IN and ANY from RESERVED_FUNCTION_NAME to RESERVED_KEYWORD
- * when they are used as operators (not function calls).
+ * when they are used as operators/modifiers (not function calls).
  *
  * IN operator: foo IN (1, 2, 3) - IN comes after an identifier/expression
  * IN function: IN(foo, 1, 2, 3) - IN comes at start or after operators/keywords
  *
- * ANY operator: foo = ANY (1, 2, 3) - ANY comes after an operator like =
- * ANY function: ANY(foo, 1, 2, 3) - ANY comes at start or after operators/keywords
+ * ANY join modifier: ANY LEFT JOIN, ANY JOIN - ANY comes after an operator
+ * any() aggregate function: any(column) - selects first encountered value
  */
 function postProcess(tokens: Token[]): Token[] {
   return tokens.map((token, i) => {
