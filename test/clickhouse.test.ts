@@ -183,39 +183,6 @@ describe('ClickhouseFormatter', () => {
     );
   });
 
-  describe('IN set operator vs function', () => {
-    it('should respect the IN operator as a keyword when used as an operator', () => {
-      expect(format('SELECT 1 in foo;')).toBe(dedent`
-        SELECT
-          1 in foo;
-      `);
-
-      expect(format('SELECT foo in (1,2,3);')).toBe(dedent`
-        SELECT
-          foo in (1, 2, 3);
-      `);
-      expect(format('SELECT "foo" in (1,2,3);')).toBe(dedent`
-        SELECT
-          "foo" in (1, 2, 3);
-      `);
-      expect(format('SELECT 1 in (1,2,3);')).toBe(dedent`
-        SELECT
-          1 in (1, 2, 3);
-      `);
-    });
-
-    it('should respect the IN operator as a keyword when used as a function', () => {
-      expect(format('SELECT in(foo, [1,2,3]);')).toBe(dedent`
-        SELECT
-          in(foo, [1, 2, 3]);
-      `);
-      expect(format('SELECT in("foo", "bar");')).toBe(dedent`
-        SELECT
-          in("foo", "bar");
-      `);
-    });
-  });
-
   it('should support parameters', () => {
     expect(format('SELECT {foo:Uint64};', { params: { foo: "'123'" } })).toBe("SELECT\n  '123';");
     expect(format('SELECT {foo:Map(String, String)};', { params: { foo: "{'bar': 'baz'}" } })).toBe(

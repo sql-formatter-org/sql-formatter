@@ -300,24 +300,6 @@ function postProcess(tokens: Token[]): Token[] {
     const nextToken = tokens[i + 1] || EOF_TOKEN;
     const prevToken = tokens[i - 1] || EOF_TOKEN;
 
-    // We want to convert IN from RESERVED_KEYWORD to RESERVED_FUNCTION_NAME
-    // when it's used as a function. Whether it's used as an operator depends on
-    // the previous token and whether the next token is an opening parenthesis.
-    if (
-      isToken.IN(token) &&
-      !(
-        prevToken.type === TokenType.IDENTIFIER ||
-        prevToken.type === TokenType.QUOTED_IDENTIFIER ||
-        prevToken.type === TokenType.NUMBER ||
-        prevToken.type === TokenType.STRING ||
-        prevToken.type === TokenType.CLOSE_PAREN ||
-        prevToken.type === TokenType.ASTERISK
-      ) &&
-      nextToken.text === '('
-    ) {
-      return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
-    }
-
     // If we have queries like
     // > GRANT SELECT, INSERT ON db.table TO john
     // > GRANT SELECT(a, b), SELECT(c) ON db.table TO john
