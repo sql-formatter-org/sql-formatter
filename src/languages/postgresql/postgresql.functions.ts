@@ -264,8 +264,12 @@ export const functions: string[] = [
   'TS_TOKEN_TYPE',
   'WEBSEARCH_TO_TSQUERY',
 
-  // https://www.postgresql.org/docs/14/functions-uuid.html
+  // https://www.postgresql.org/docs/18/functions-uuid.html
   'GEN_RANDOM_UUID',
+  'UUIDV4',
+  'UUIDV7',
+  'UUID_EXTRACT_TIMESTAMP',
+  'UUID_EXTRACT_VERSION',
 
   // https://www.postgresql.org/docs/14/functions-xml.html
   'CURSOR_TO_XML',
