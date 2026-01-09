@@ -258,7 +258,7 @@ export const clickhouse: DialectOptions = {
       // https://clickhouse.com/docs/sql-reference/syntax#defining-and-using-query-parameters
       custom: [
         {
-          regex: String.raw`\{\s*[^:]+:[^}]+\}`,
+          regex: String.raw`\{[^:]+:[^}]+\}`,
           key: v => {
             const match = /\{([^:]+):/.exec(v);
             return match ? match[1].trim() : v;
@@ -267,12 +267,17 @@ export const clickhouse: DialectOptions = {
       ],
     },
     operators: [
-      // Arithmetic
+      // Strings, arithmetic
       '%', // modulo
+      '||', // string concatenation
 
       // Ternary
       '?',
       ':',
+
+      // Comparison
+      '==',
+      '<=>', // null-safe equal
 
       // Lambda creation
       '->',
@@ -286,14 +291,10 @@ export const clickhouse: DialectOptions = {
 };
 
 /**
- * Converts IN and ANY from RESERVED_FUNCTION_NAME to RESERVED_KEYWORD
- * when they are used as operators/modifiers (not function calls).
- *
- * IN operator: foo IN (1, 2, 3) - IN comes after an identifier/expression
- * IN function: IN(foo, 1, 2, 3) - IN comes at start or after operators/keywords
- *
- * ANY join modifier: ANY LEFT JOIN, ANY JOIN - ANY comes after an operator
- * any() aggregate function: any(column) - selects first encountered value
+ * 1. Formats GRANT statements to use RESERVED_KEYWORD instead of RESERVED_SELECT
+ *    for SELECT GRANTs
+ * 2. Formats SET(100) as RESERVED_FUNCTION_NAME instead of RESERVED_KEYWORD
+ *    so it appears as a function rather than a statement.
  */
 function postProcess(tokens: Token[]): Token[] {
   return tokens.map((token, i) => {

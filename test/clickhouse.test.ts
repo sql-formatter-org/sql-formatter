@@ -173,18 +173,25 @@ describe('ClickhouseFormatter', () => {
   it('supports the ternary operator', () => {
     // NOTE: Ternary operators have a missing space because
     // ExpressionFormatter's `formatOperator` method special-cases `:`.
-    expect(format('SELECT foo?bar: baz;')).toBe('SELECT\n  foo ? bar: baz;');
+    expect(format('SELECT foo?bar: baz;')).toBe(dedent`
+      SELECT
+        foo ? bar: baz;
+    `);
   });
 
   // Should support the lambda creation operator
   it('supports the lambda creation operator', () => {
-    expect(format('SELECT arrayMap(x->2*x, [1,2,3,4]) AS result;')).toBe(
-      'SELECT\n  arrayMap(x -> 2 * x, [1, 2, 3, 4]) AS result;'
-    );
+    expect(format('SELECT arrayMap(x->2*x, [1,2,3,4]) AS result;')).toBe(dedent`
+      SELECT
+        arrayMap(x -> 2 * x, [1, 2, 3, 4]) AS result;
+    `);
   });
 
   it('should support parameters', () => {
-    expect(format('SELECT {foo:Uint64};', { params: { foo: "'123'" } })).toBe("SELECT\n  '123';");
+    expect(format('SELECT {foo:Uint64};', { params: { foo: "'123'" } })).toBe(dedent`
+      SELECT
+        '123';
+    `);
     expect(format('SELECT {foo:Map(String, String)};', { params: { foo: "{'bar': 'baz'}" } })).toBe(
       dedent`
         SELECT
@@ -568,9 +575,8 @@ describe('ClickhouseFormatter', () => {
   // https://clickhouse.com/docs/sql-reference/statements/alter/order-by
   describe('ALTER ORDER BY statements', () => {
     it('formats ALTER TABLE MODIFY ORDER BY', () => {
-      expect(
-        format('ALTER TABLE db.events ON CLUSTER prod MODIFY ORDER BY (user_id, timestamp);')
-      ).toBe(dedent`
+      expect(format('ALTER TABLE db.events ON CLUSTER prod MODIFY ORDER BY (user_id, timestamp);'))
+        .toBe(dedent`
         ALTER TABLE db.events
         ON CLUSTER prod
         MODIFY ORDER BY (user_id, timestamp);
@@ -937,7 +943,8 @@ describe('ClickhouseFormatter', () => {
     });
 
     it('formats DROP SETTINGS PROFILE', () => {
-      expect(format('DROP SETTINGS PROFILE IF EXISTS profile1, profile2 ON CLUSTER my_cluster;')).toBe(dedent`
+      expect(format('DROP SETTINGS PROFILE IF EXISTS profile1, profile2 ON CLUSTER my_cluster;'))
+        .toBe(dedent`
         DROP SETTINGS PROFILE IF EXISTS
           profile1,
           profile2
