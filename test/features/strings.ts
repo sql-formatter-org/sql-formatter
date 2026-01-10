@@ -94,6 +94,12 @@ export default function supportsStrings(format: FormatFn, stringTypes: StringTyp
     }
   }
 
+  if (stringTypes.includes("''-qq") && stringTypes.includes("''-bs")) {
+    it('supports escaping single-quote with a backslash and a repeated quote', () => {
+      expect(format("'foo \\' JOIN ''bar'")).toBe("'foo \\' JOIN ''bar'");
+    });
+  }
+
   if (stringTypes.includes("U&''")) {
     it('supports unicode single-quoted strings', () => {
       expect(format("U&'foo JOIN bar'")).toBe("U&'foo JOIN bar'");
