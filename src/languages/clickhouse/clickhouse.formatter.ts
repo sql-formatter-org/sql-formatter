@@ -248,7 +248,7 @@ export const clickhouse: DialectOptions = {
     reservedKeywords: keywords,
     reservedDataTypes: dataTypes,
     reservedFunctionNames: functions,
-    extraParens: ['[]'],
+    extraParens: ['[]', '{}'],
     lineCommentTypes: ['#', '--'],
     nestedBlockComments: false,
     underscoresInNumbers: true,
@@ -258,7 +258,12 @@ export const clickhouse: DialectOptions = {
       // https://clickhouse.com/docs/sql-reference/syntax#defining-and-using-query-parameters
       custom: [
         {
-          regex: String.raw`\{[^:]+:[^}]+\}`,
+          // Parameters are like {foo:Uint64} or {foo:Map(String, String)}
+          // We include `'` in the negated character class to be a little sneaky:
+          // map literals have quoted keys, and we use this to avoid confusing
+          // them for named parameters. This means that the map literal `{'foo':1}`
+          // will be formatted as `{'foo': 1}` rather than `{foo: 1}`.
+          regex: String.raw`\{[^:']+:[^}]+\}`,
           key: v => {
             const match = /\{([^:]+):/.exec(v);
             return match ? match[1].trim() : v;

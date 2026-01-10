@@ -169,7 +169,13 @@ describe('ClickhouseFormatter', () => {
   supportsArrayAndMapAccessors(format);
   supportsDataTypeCase(format);
 
-  // Should support the ternary operator
+  it('supports map literals', () => {
+    expect(format(`SELECT {'foo':1,'bar':10,'baz':2,'zap':8};`)).toBe(dedent`
+      SELECT
+        {'foo': 1, 'bar': 10, 'baz': 2, 'zap': 8};
+    `);
+  });
+
   it('supports the ternary operator', () => {
     // NOTE: Ternary operators have a missing space because
     // ExpressionFormatter's `formatOperator` method special-cases `:`.
@@ -179,7 +185,6 @@ describe('ClickhouseFormatter', () => {
     `);
   });
 
-  // Should support the lambda creation operator
   it('supports the lambda creation operator', () => {
     expect(format('SELECT arrayMap(x->2*x, [1,2,3,4]) AS result;')).toBe(dedent`
       SELECT
