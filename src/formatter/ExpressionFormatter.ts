@@ -341,7 +341,11 @@ export default class ExpressionFormatter {
 
   private formatComma(_node: CommaNode) {
     if (!this.inline) {
-      this.layout.add(WS.NO_SPACE, ',', WS.NEWLINE, WS.INDENT);
+      if (this.cfg.commaNewline === 'before') {
+        this.layout.add(WS.NEWLINE, WS.INDENT, ',', WS.SPACE);
+      } else {
+        this.layout.add(WS.NO_SPACE, ',', WS.NEWLINE, WS.INDENT);
+      }
     } else {
       this.layout.add(WS.NO_SPACE, ',', WS.SPACE);
     }

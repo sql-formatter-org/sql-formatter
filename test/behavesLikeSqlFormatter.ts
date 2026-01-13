@@ -13,6 +13,7 @@ import supportsIndentStyle from './options/indentStyle.js';
 import supportsLinesBetweenQueries from './options/linesBetweenQueries.js';
 import supportsNewlineBeforeSemicolon from './options/newlineBeforeSemicolon.js';
 import supportsLogicalOperatorNewline from './options/logicalOperatorNewline.js';
+import supportsCommaNewline from './options/commaNewline.js';
 import supportsParamTypes from './options/paramTypes.js';
 import supportsWindowFunctions from './features/windowFunctions.js';
 import supportsFunctionCase from './options/functionCase.js';
@@ -36,6 +37,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsExpressionWidth(format);
   supportsNewlineBeforeSemicolon(format);
   supportsLogicalOperatorNewline(format);
+  supportsCommaNewline(format);
   supportsParamTypes(format);
   supportsWindowFunctions(format);
 
