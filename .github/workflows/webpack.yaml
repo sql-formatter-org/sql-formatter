@@ -22,6 +22,12 @@ jobs:
       - name: Install
         run: yarn install --ignore-scripts
 
+      - name: Format
+        run: yarn pretty:check
+
+      - name: Lint
+        run: yarn lint
+
       - name: Test
         run: yarn test
 
