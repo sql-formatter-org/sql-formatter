@@ -109,6 +109,7 @@ The placeholder types available by default depend on SQL dialect used:
 
 - sql - `?`
 - bigquery - `?`, `@name`, `` @`name` ``
+- clickhouse - `{name:Type}`
 - db2 - `?`, `:name`
 - db2i - `?`, `:name`
 - hive - _no support_

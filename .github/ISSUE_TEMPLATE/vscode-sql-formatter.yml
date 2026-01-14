@@ -16,6 +16,7 @@ body:
       multiple: true
       options:
         - Google BigQuery
+        - Clickhouse
         - IBM DB2 for LUW (Linux, Unix, Windows)
         - IBM DB2 for iSystem
         - Apache Hive
@@ -44,6 +45,7 @@ body:
       options:
         - Rely on VSCode to detect the relevant SQL dialect
         - Google BigQuery
+        - Clickhouse
         - IBM DB2 for LUW (Linux, Unix, Windows)
         - IBM DB2 for iSystem
         - Apache Hive

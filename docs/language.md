@@ -14,6 +14,7 @@ const result = format('SELECT * FROM tbl', { language: 'sqlite' });
 
 - `"sql"` - (default) [Standard SQL][]
 - `"bigquery"` - [GCP BigQuery][]
+- `"clickhouse"` - [Clickhouse][]
 - `"db2"` - [IBM DB2][]
 - `"db2i"` - [IBM DB2i][] (experimental)
 - `"duckdb"` - [DuckDB][]
@@ -49,6 +50,7 @@ See docs for [dialect][] option.
 
 [standard sql]: https://en.wikipedia.org/wiki/SQL:2011
 [gcp bigquery]: https://cloud.google.com/bigquery
+[clickhouse]: https://clickhouse.com/
 [ibm db2]: https://www.ibm.com/analytics/us/en/technology/db2/
 [ibm db2i]: https://www.ibm.com/docs/en/i/7.5?topic=overview-db2-i
 [duckdb]: https://duckdb.org/

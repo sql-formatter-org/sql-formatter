@@ -40,7 +40,8 @@
     "presto",
     "prestosql",
     "snowflake",
-    "duckdb"
+    "duckdb",
+    "clickhouse"
   ],
   "files": [
     "dist",

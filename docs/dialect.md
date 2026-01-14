@@ -22,6 +22,7 @@ The following dialects can be imported from `"sql-formatter"` module:
 
 - `sql` - [Standard SQL][]
 - `bigquery` - [GCP BigQuery][]
+- `clickhouse` - [Clickhouse][]
 - `db2` - [IBM DB2][]
 - `db2i` - [IBM DB2i][] (experimental)
 - `duckdb` - [DuckDB][]
@@ -72,6 +73,7 @@ You likely only want to use this if your other alternative is to fork SQL Format
 
 [standard sql]: https://en.wikipedia.org/wiki/SQL:2011
 [gcp bigquery]: https://cloud.google.com/bigquery
+[clickhouse]: https://clickhouse.com/
 [ibm db2]: https://www.ibm.com/analytics/us/en/technology/db2/
 [ibm db2i]: https://www.ibm.com/docs/en/i/7.5?topic=overview-db2-i
 [duckdb]: https://duckdb.org/

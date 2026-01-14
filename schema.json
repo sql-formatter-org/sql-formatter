@@ -41,6 +41,7 @@
       "enum": [
         "sql",
         "bigquery",
+        "clickhouse",
         "db2",
         "db2i",
         "duckdb",
