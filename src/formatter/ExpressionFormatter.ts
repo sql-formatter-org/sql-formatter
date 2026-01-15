@@ -341,14 +341,76 @@ export default class ExpressionFormatter {
 
   private formatComma(_node: CommaNode) {
     if (!this.inline) {
-      if (this.cfg.commaNewline === 'before') {
-        this.layout.add(WS.NEWLINE, WS.INDENT, ',', WS.SPACE);
+      if (this.cfg.commaPosition === 'leading' || this.cfg.commaPosition === 'leadingWithSpace') {
+        // Look ahead: check if next node is a line comment
+        this.formatLeadingComma();
       } else {
         this.layout.add(WS.NO_SPACE, ',', WS.NEWLINE, WS.INDENT);
       }
     } else {
       this.layout.add(WS.NO_SPACE, ',', WS.SPACE);
     }
+  }
+
+  private formatLeadingComma() {
+    const comments: AstNode[] = [];
+    let lookAheadIndex = this.index + 1;
+
+    while (lookAheadIndex < this.nodes.length) {
+      const nextNode = this.nodes[lookAheadIndex];
+      if (nextNode.type === NodeType.line_comment || nextNode.type === NodeType.block_comment) {
+        comments.push(nextNode);
+        lookAheadIndex++;
+      } else {
+        break;
+      }
+    }
+
+    if (comments.length === 0) {
+      // No comments - simple case
+      if (this.cfg.commaPosition === 'leadingWithSpace') {
+        this.layout.add(WS.NEWLINE, WS.INDENT, ',', WS.SPACE);
+      } else {
+        this.layout.add(WS.NEWLINE, WS.INDENT, ',');
+      }
+      return;
+    }
+
+    // First: output any line comment on the same line (belongs to previous item)
+    let lineCommentProcessed = false;
+    if (comments[0]?.type === NodeType.line_comment) {
+      this.layout.add((comments[0] as LineCommentNode).text);
+      lineCommentProcessed = true;
+    }
+
+    // Second: output all block comments on their own lines BEFORE the comma
+    const startIndex = lineCommentProcessed ? 1 : 0;
+    for (let i = startIndex; i < comments.length; i++) {
+      const comment = comments[i];
+      if (comment.type === NodeType.block_comment) {
+        const blockComment = comment as BlockCommentNode;
+        if (this.isMultilineBlockComment(blockComment)) {
+          this.splitBlockComment(blockComment.text).forEach(line => {
+            this.layout.add(WS.NEWLINE, WS.INDENT, line);
+          });
+        } else {
+          this.layout.add(WS.NEWLINE, WS.INDENT, blockComment.text);
+        }
+      } else if (comment.type === NodeType.line_comment) {
+        // Additional line comments (rare case) - treat like block comments
+        this.layout.add(WS.NEWLINE, WS.INDENT, (comment as LineCommentNode).text);
+      }
+    }
+
+    // Finally: add the comma
+    if (this.cfg.commaPosition === 'leadingWithSpace') {
+      this.layout.add(WS.NEWLINE, WS.INDENT, ',', WS.SPACE);
+    } else {
+      this.layout.add(WS.NEWLINE, WS.INDENT, ',');
+    }
+
+    // Skip all processed comments
+    this.index = lookAheadIndex - 1;
   }
 
   private withComments(node: AstNode, fn: () => void) {

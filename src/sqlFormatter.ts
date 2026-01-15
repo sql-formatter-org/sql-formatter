@@ -48,7 +48,7 @@ const defaultOptions: FormatOptions = {
   functionCase: 'preserve',
   indentStyle: 'standard',
   logicalOperatorNewline: 'before',
-  commaNewline: 'after',
+  commaPosition: 'trailing',
   expressionWidth: 50,
   linesBetweenQueries: 1,
   denseOperators: false,
