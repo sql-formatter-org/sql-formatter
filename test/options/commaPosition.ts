@@ -242,4 +242,31 @@ export default function supportsCommaPosition(format: FormatFn) {
     `
     );
   });
+
+  it('supports trailing comma with comments from a leading comma formatted query', () => {
+    const result = format(
+      `SELECT
+        id -- comment 1
+        ,first_name -- comment 2
+        /* block comment */
+        ,last_name
+        ,email
+      FROM
+        users;
+    `,
+      { commaPosition: 'trailing' }
+    );
+    expect(result).toBe(
+      dedent`
+    SELECT
+      id, -- comment 1
+      first_name, -- comment 2
+      /* block comment */
+      last_name,
+      email
+    FROM
+      users;
+    `
+    );
+  });
 }
