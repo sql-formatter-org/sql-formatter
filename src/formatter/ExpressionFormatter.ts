@@ -68,6 +68,7 @@ export default class ExpressionFormatter {
   private dialectCfg: ProcessedDialectFormatOptions;
   private params: Params;
   private layout: Layout;
+  private pendingLineComment: (LineCommentNode | BlockCommentNode | DisableCommentNode)[] = []; // Keeps track if any pending Line/Comment is remaining
 
   private inline = false;
   private nodes: AstNode[] = [];
@@ -184,9 +185,38 @@ export default class ExpressionFormatter {
   }
 
   private formatPropertyAccess(node: PropertyAccessNode) {
-    this.formatNode(node.object);
+    this.formatComments(node.object.leadingComments);
+    this.formatNodeWithoutComments(node.object);
+
+    // Handle trailing comments of object BEFORE the dot (inline)
+    if (node.object.trailingComments && node.object.trailingComments.length > 0) {
+      for (const comment of node.object.trailingComments) {
+        if (comment.type === NodeType.block_comment) {
+          this.layout.add(WS.NO_SPACE, WS.SPACE, (comment as BlockCommentNode).text);
+        } else if (comment.type === NodeType.line_comment) {
+          this.layout.add(WS.NO_SPACE, WS.SPACE, (comment as LineCommentNode).text);
+        }
+      }
+    }
+
+    // Add the dot operator
     this.layout.add(WS.NO_SPACE, node.operator);
-    this.formatNode(node.property);
+
+    // Handle leading comments of property AFTER the dot (inline)
+    if (node.property.leadingComments && node.property.leadingComments.length > 0) {
+      for (const comment of node.property.leadingComments) {
+        if (comment.type === NodeType.block_comment) {
+          this.layout.add((comment as BlockCommentNode).text, WS.SPACE);
+        } else if (comment.type === NodeType.line_comment) {
+          this.layout.add((comment as LineCommentNode).text, WS.SPACE);
+        }
+      }
+      // Format property without leading comments (already handled above)
+      this.formatNodeWithoutComments(node.property);
+      this.formatComments(node.property.trailingComments);
+    } else {
+      this.formatNode(node.property);
+    }
   }
 
   private formatParenthesis(node: ParenthesisNode) {
@@ -341,10 +371,99 @@ export default class ExpressionFormatter {
 
   private formatComma(_node: CommaNode) {
     if (!this.inline) {
-      this.layout.add(WS.NO_SPACE, ',', WS.NEWLINE, WS.INDENT);
+      if (this.cfg.commaPosition === 'leading' || this.cfg.commaPosition === 'leadingWithSpace') {
+        // Look ahead: check if next node is a line comment
+        this.formatLeadingComma();
+      } else {
+        this.formatTrailingComma();
+      }
     } else {
       this.layout.add(WS.NO_SPACE, ',', WS.SPACE);
     }
+  }
+  private formatTrailingComma() {
+    if (this.pendingLineComment && this.pendingLineComment.length > 0) {
+      // We have a line comment that should come after the comma
+      while (this.pendingLineComment.length > 0) {
+        const comment = this.pendingLineComment.shift();
+        if (comment) {
+          if (comment.type === NodeType.line_comment) {
+            this.layout.add(
+              WS.NO_SPACE,
+              ',',
+              WS.SPACE,
+              (comment as LineCommentNode).text,
+              WS.MANDATORY_NEWLINE,
+              WS.INDENT
+            );
+          } else {
+            this.layout.add((comment as BlockCommentNode).text, WS.MANDATORY_NEWLINE, WS.INDENT);
+          }
+        }
+      }
+    } else {
+      this.layout.add(WS.NO_SPACE, ',', WS.NEWLINE, WS.INDENT);
+    }
+  }
+  private formatLeadingComma() {
+    const comments: AstNode[] = [];
+    let lookAheadIndex = this.index + 1;
+
+    while (lookAheadIndex < this.nodes.length) {
+      const nextNode = this.nodes[lookAheadIndex];
+      if (nextNode.type === NodeType.line_comment || nextNode.type === NodeType.block_comment) {
+        comments.push(nextNode);
+        lookAheadIndex++;
+      } else {
+        break;
+      }
+    }
+
+    if (comments.length === 0) {
+      // No comments - simple case
+      if (this.cfg.commaPosition === 'leadingWithSpace') {
+        this.layout.add(WS.NEWLINE, WS.INDENT, ',', WS.SPACE);
+      } else {
+        this.layout.add(WS.NEWLINE, WS.INDENT, ',');
+      }
+      return;
+    }
+
+    // First: output any line comment on the same line (belongs to previous item)
+    let lineCommentProcessed = false;
+    if (comments[0]?.type === NodeType.line_comment) {
+      this.layout.add((comments[0] as LineCommentNode).text);
+      lineCommentProcessed = true;
+    }
+
+    // Second: output all block comments on their own lines BEFORE the comma
+    const startIndex = lineCommentProcessed ? 1 : 0;
+    for (let i = startIndex; i < comments.length; i++) {
+      const comment = comments[i];
+      if (comment.type === NodeType.block_comment) {
+        const blockComment = comment as BlockCommentNode;
+        if (this.isMultilineBlockComment(blockComment)) {
+          this.splitBlockComment(blockComment.text).forEach(line => {
+            this.layout.add(WS.NEWLINE, WS.INDENT, line);
+          });
+        } else {
+          this.layout.add(WS.NEWLINE, WS.INDENT, blockComment.text);
+        }
+      } else if (comment.type === NodeType.line_comment) {
+        // Additional line comments (rare case) - treat like block comments
+        this.layout.add(WS.NEWLINE, WS.INDENT, (comment as LineCommentNode).text);
+      }
+    }
+
+    // Finally: add the comma
+    if (this.cfg.commaPosition === 'leadingWithSpace') {
+      this.layout.add(WS.NEWLINE, WS.INDENT, ',', WS.SPACE);
+    } else {
+      this.layout.add(WS.NEWLINE, WS.INDENT, ',');
+    }
+
+    // Skip all processed comments
+    this.index = lookAheadIndex - 1;
   }
 
   private withComments(node: AstNode, fn: () => void) {
@@ -367,6 +486,11 @@ export default class ExpressionFormatter {
   }
 
   private formatLineComment(node: LineCommentNode) {
+    if (!this.inline && this.cfg.commaPosition === 'trailing' && this.isNextNonCommentNodeComma()) {
+      // Store the comment to be output after the comma
+      this.pendingLineComment.push(node);
+      return;
+    }
     if (isMultiline(node.precedingWhitespace || '')) {
       this.layout.add(WS.NEWLINE, WS.INDENT, node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
     } else if (this.layout.getLayoutItems().length > 0) {
@@ -376,8 +500,25 @@ export default class ExpressionFormatter {
       this.layout.add(node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
     }
   }
+  private isNextNonCommentNodeComma(): boolean {
+    let lookAheadIndex = this.index + 1;
+    while (lookAheadIndex < this.nodes.length) {
+      const nextNode = this.nodes[lookAheadIndex];
+      if (nextNode.type === NodeType.line_comment || nextNode.type === NodeType.block_comment) {
+        lookAheadIndex++;
+      } else {
+        return nextNode.type === NodeType.comma;
+      }
+    }
+    return false;
+  }
 
   private formatBlockComment(node: BlockCommentNode | DisableCommentNode) {
+    if (!this.inline && this.cfg.commaPosition === 'trailing' && this.isNextNonCommentNodeComma()) {
+      // Store the comment to be output after the comma
+      this.pendingLineComment.push(node);
+      return;
+    }
     if (node.type === NodeType.block_comment && this.isMultilineBlockComment(node)) {
       this.splitBlockComment(node.text).forEach(line => {
         this.layout.add(WS.NEWLINE, WS.INDENT, line);

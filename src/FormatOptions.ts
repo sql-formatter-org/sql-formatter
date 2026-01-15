@@ -10,6 +10,7 @@ export type DataTypeCase = KeywordCase;
 export type FunctionCase = KeywordCase;
 
 export type LogicalOperatorNewline = 'before' | 'after';
+export type CommaPosition = 'leading' | 'trailing' | 'leadingWithSpace';
 
 export interface FormatOptions {
   tabWidth: number;
@@ -20,6 +21,7 @@ export interface FormatOptions {
   functionCase: FunctionCase;
   indentStyle: IndentStyle;
   logicalOperatorNewline: LogicalOperatorNewline;
+  commaPosition: CommaPosition;
   expressionWidth: number;
   linesBetweenQueries: number;
   denseOperators: boolean;
