@@ -10,7 +10,6 @@ export function validateConfig(cfg: FormatOptions): FormatOptions {
     'newlineBeforeOpenParen',
     'newlineBeforeCloseParen',
     'aliasAs',
-    'commaPosition',
     'tabulateAlias',
   ];
   for (const optionName of removedOptions) {
