@@ -39,6 +39,7 @@ WHERE
 ```
 
 ### leadingWithSpace
+
 ```sql
 SELECT
   name
@@ -53,6 +54,7 @@ WHERE
 ```
 
 ### Other examples
+
 ```sql
 -- No effect on INSERT Statements
 INSERT INTO

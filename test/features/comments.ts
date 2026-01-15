@@ -93,8 +93,7 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     `)
     ).toBe(dedent`
       SELECT
-        a --comment
-      ,
+        a, --comment
         b
     `);
   });
