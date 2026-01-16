@@ -77,6 +77,14 @@ describe('sqlFormatter', () => {
     }).toThrow('tabulateAlias config is no more supported.');
   });
 
+  it('throws error when commaPosition config option used with old options', () => {
+    expect(() => {
+      format('SELECT *', { commaPosition: 'before' } as any);
+    }).toThrow(
+      'commaPosition config value "before" is no more supported. Use "leading", "trailing", "leadingWithSpace" values instead.'
+    );
+  });
+
   describe('formatDialect()', () => {
     it('allows passing Dialect config object as a dialect parameter', () => {
       expect(formatDialect('SELECT [foo], `bar`;', { dialect: sqlite })).toBe(dedent`

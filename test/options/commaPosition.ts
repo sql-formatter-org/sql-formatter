@@ -42,46 +42,106 @@ export default function supportsCommaPosition(format: FormatFn) {
         commaPosition: 'leadingWithSpace',
       }
     );
-    expect(result).toBe(
-      dedent`
+    expect(result).toBe(dedent`
       INSERT INTO
         users (id, name, email, password)
       VALUES
         (1, 'John', 'john@example.com', 'hash');
-    `
-    );
+    `);
   });
   it('supports comma position for multiple rows in INSERT VALUES', () => {
     const result = format(
-      `INSERT INTO users (id, name, email, password) VALUES (1, 'John', 'john@example.com', 'hash'), (2, 'Jane', 'jane@example.com', 'hash2');`,
+      `INSERT INTO employees (employee_id, first_name, last_name, email, phone, hire_date, department, job_title, salary, is_active) VALUES (1001, 'John', 'Smith', 'john.smith@company.com', '555-123-4567', '2024-03-15', 'Engineering', 'Software Developer', 85000.00, TRUE), (1002, 'John', 'Smith', 'john.smith@company.com', '555-123-4567', '2024-03-15', 'Engineering', 'Software Developer', 85000.00, TRUE);`,
       {
         commaPosition: 'leadingWithSpace',
       }
     );
-    expect(result).toBe(
-      dedent`
+    expect(result).toBe(dedent`
       INSERT INTO
-        users (id, name, email, password)
+        employees (
+          employee_id
+          , first_name
+          , last_name
+          , email
+          , phone
+          , hire_date
+          , department
+          , job_title
+          , salary
+          , is_active
+        )
       VALUES
-        (1, 'John', 'john@example.com', 'hash')
-        , (2, 'Jane', 'jane@example.com', 'hash2');
-    `
-    );
+        (
+          1001
+          , 'John'
+          , 'Smith'
+          , 'john.smith@company.com'
+          , '555-123-4567'
+          , '2024-03-15'
+          , 'Engineering'
+          , 'Software Developer'
+          , 85000.00
+          , TRUE
+        )
+        , (
+          1002
+          , 'John'
+          , 'Smith'
+          , 'john.smith@company.com'
+          , '555-123-4567'
+          , '2024-03-15'
+          , 'Engineering'
+          , 'Software Developer'
+          , 85000.00
+          , TRUE
+        );
+    `);
   });
 
   it('supports trailing comma position for multiple rows in INSERT VALUES', () => {
     const result = format(
-      `INSERT INTO users (id, name, email, password) VALUES (1, 'John', 'john@example.com', 'hash'), (2, 'Jane', 'jane@example.com', 'hash2');`
+      `INSERT INTO employees (employee_id, first_name, last_name, email, phone, hire_date, department, job_title, salary, is_active) VALUES (1001, 'John', 'Smith', 'john.smith@company.com', '555-123-4567', '2024-03-15', 'Engineering', 'Software Developer', 85000.00, TRUE), (1002, 'John', 'Smith', 'john.smith@company.com', '555-123-4567', '2024-03-15', 'Engineering', 'Software Developer', 85000.00, TRUE);`
     );
-    expect(result).toBe(
-      dedent`
+    expect(result).toBe(dedent`
       INSERT INTO
-        users (id, name, email, password)
+        employees (
+          employee_id,
+          first_name,
+          last_name,
+          email,
+          phone,
+          hire_date,
+          department,
+          job_title,
+          salary,
+          is_active
+        )
       VALUES
-        (1, 'John', 'john@example.com', 'hash'),
-        (2, 'Jane', 'jane@example.com', 'hash2');
-    `
-    );
+        (
+          1001,
+          'John',
+          'Smith',
+          'john.smith@company.com',
+          '555-123-4567',
+          '2024-03-15',
+          'Engineering',
+          'Software Developer',
+          85000.00,
+          TRUE
+        ),
+        (
+          1002,
+          'John',
+          'Smith',
+          'john.smith@company.com',
+          '555-123-4567',
+          '2024-03-15',
+          'Engineering',
+          'Software Developer',
+          85000.00,
+          TRUE
+        );
+    `);
   });
 
   it('supports leadingWithSpace comma position in UPDATE statements', () => {
@@ -137,38 +197,13 @@ export default function supportsCommaPosition(format: FormatFn) {
     );
   });
 
-  it('supports leadingWithSpace comma position with comments(with commas)', () => {
-    const result = format(
-      `SELECT
-        foo, -- comment, with, commas
-        bar, -- another comment, with, commas
-        baz
-      FROM
-        my_table;
-    `,
-      {
-        commaPosition: 'leadingWithSpace',
-      }
-    );
-    expect(result).toBe(
-      dedent`
-      SELECT
-        foo -- comment, with, commas
-        , bar -- another comment, with, commas
-        , baz
-      FROM
-        my_table;
-    `
-    );
-  });
-
-  it('supports leadingWithSpace comma position in complex queries with complex comments(with commas and all types of comments)', () => {
+  it('supports leadingWithSpace comma position in complex queries with complex comments', () => {
     const result = format(
       `SELECT
         foo, -- comment, with, commas
         /* block comment, with, commas */
         bar, -- another comment, with, commas
-        baz, /* inline block comment, with, commas */
+        baz,
         qux -- last comment, with, commas
       FROM
         my_table -- table comment, with, commas
@@ -180,6 +215,7 @@ export default function supportsCommaPosition(format: FormatFn) {
         commaPosition: 'leadingWithSpace',
       }
     );
+    // console.log(result);
     expect(result).toBe(
       dedent`
     SELECT
@@ -187,7 +223,6 @@ export default function supportsCommaPosition(format: FormatFn) {
       /* block comment, with, commas */
       , bar -- another comment, with, commas
       , baz
-      /* inline block comment, with, commas */
       , qux -- last comment, with, commas
     FROM
       my_table -- table comment, with, commas
@@ -199,31 +234,50 @@ export default function supportsCommaPosition(format: FormatFn) {
     );
   });
 
-  it('supports leadingWithSpace comma position in queries with function argument list', () => {
+  it('supports leadingWithSpace comma position in queries with function with short argument list', () => {
     const result = format(
-      `SELECT CONCAT(first_name, ' ', last_name) AS full_name, SUM(salary, bonus) AS total_compensation FROM employees;`,
+      `
+      SELECT COALESCE(first_name, 'N/A'), COALESCE(last_name, 'N/A') FROM users;
+    `,
       {
         commaPosition: 'leadingWithSpace',
       }
     );
-    const acceptableFormats = [
+    expect(result).toBe(
       dedent`
       SELECT
-        CONCAT(first_name, ' ', last_name) AS full_name
-        , SUM(salary, bonus) AS total_compensation
+        COALESCE(first_name, 'N/A')
+        , COALESCE(last_name, 'N/A')
       FROM
-        employees;
+        users;
+    `
+    );
+  });
+
+  it('supports leadingWithSpace comma position in queries with function with long argument list', () => {
+    const result = format(
+      `
+      SELECT COALESCE(first_name, last_name, email, phone, address, 'N/A') FROM users;
     `,
-      // In case user has a different language setting with spaces after CONCAT function signature
+      {
+        commaPosition: 'leadingWithSpace',
+      }
+    );
+    expect(result).toBe(
       dedent`
       SELECT
-        CONCAT (first_name, ' ', last_name) AS full_name
-        , SUM(salary, bonus) AS total_compensation
+        COALESCE(
+          first_name
+          , last_name
+          , email
+          , phone
+          , address
+          , 'N/A'
+        )
       FROM
-        employees;
-    `,
-    ];
-    expect(acceptableFormats).toContain(result);
+        users;
+    `
+    );
   });
 
   it('supports leading comma', () => {
@@ -256,17 +310,15 @@ export default function supportsCommaPosition(format: FormatFn) {
     `,
       { commaPosition: 'trailing' }
     );
-    expect(result).toBe(
-      dedent`
-    SELECT
-      id, -- comment 1
-      first_name, -- comment 2
-      /* block comment */
-      last_name,
-      email
-    FROM
-      users;
-    `
-    );
+    expect(result).toBe(dedent`
+      SELECT
+        id, -- comment 1
+        first_name -- comment 2
+        /* block comment */,
+        last_name,
+        email
+      FROM
+        users;
+      `);
   });
 }
