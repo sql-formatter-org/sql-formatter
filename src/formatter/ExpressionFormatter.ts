@@ -351,22 +351,45 @@ export default class ExpressionFormatter {
       this.layout.add(WS.NO_SPACE, ',', WS.SPACE);
     }
   }
+  /**
+   * Formats a trailing comma, taking into account any pending line comments
+   * that need to be added after the comma.
+   * STEPS:
+   * 1. If there are pending line comments, add the comma first.
+   * 2. Then, add each pending line comment on its own line.
+   * 3. If there are no pending line comments, just add the comma normally.
+   */
   private formatTrailingComma() {
+    // if there are pending line comments, we need to add them after the comma else just add the comma normally
     if (this.pendingLineComments && this.pendingLineComments.length > 0) {
+      // STEP 1: Add the comma first
       this.layout.add(WS.NO_SPACE, ',', WS.SPACE);
-      // We have a line comment that should come after the comma
+      // STEP 2: Add each pending line comment on its own line
       while (this.pendingLineComments.length > 0) {
-        const comment = this.pendingLineComments.shift();
+        const comment = this.pendingLineComments.shift(); // Remove the comment from the list
         if (comment) {
-          this.layout.add((comment as LineCommentNode).text, WS.MANDATORY_NEWLINE, WS.INDENT);
+          this.layout.add((comment as LineCommentNode).text, WS.MANDATORY_NEWLINE, WS.INDENT); // Add the comment
         }
       }
     } else {
-      this.layout.add(WS.NO_SPACE, ',', WS.NEWLINE, WS.INDENT);
+      // STEP 3: No pending comments - just add the comma normally
+      this.layout.add(WS.NO_SPACE, ',', WS.NEWLINE, WS.INDENT); // No pending comments, just add the comma normally
     }
   }
+  /**
+   * Formats a leading comma, taking into account any comments that may follow the comma.
+   * STEPS:
+   * 1. Look ahead for any comments following the comma.
+   * 2. If there are no comments, add the comma normally based on configuration.
+   * 3. If there are comments:
+   *    a. Output any line comment on the same line (belongs to previous item).
+   *    b. Output all block comments on their own lines BEFORE the comma.
+   *    c. Finally, add the comma based on configuration.
+   * 4. Skip all processed comments in the main loop.
+   */
   private formatLeadingComma() {
     const comments: AstNode[] = [];
+    // STEP 1: Look ahead for any comments following the comma
     let lookAheadIndex = this.index + 1;
 
     while (lookAheadIndex < this.nodes.length) {
@@ -379,6 +402,7 @@ export default class ExpressionFormatter {
       }
     }
 
+    // STEP 2: If there are no comments, add the comma normally based on configuration
     if (comments.length === 0) {
       // No comments - simple case
       if (this.cfg.commaPosition === 'leadingWithSpace') {
@@ -388,15 +412,15 @@ export default class ExpressionFormatter {
       }
       return;
     }
-
-    // First: output any line comment on the same line (belongs to previous item)
+    // STEP 3: If there are comments, process them accordingly
+    // STEP 3a: Output any line comment on the same line (belongs to previous item)
     let lineCommentProcessed = false;
     if (comments[0]?.type === NodeType.line_comment) {
       this.layout.add((comments[0] as LineCommentNode).text);
       lineCommentProcessed = true;
     }
 
-    // Second: output all block comments on their own lines BEFORE the comma
+    // STEP 3b: Output all block comments on their own lines BEFORE the comma
     const startIndex = lineCommentProcessed ? 1 : 0;
     for (let i = startIndex; i < comments.length; i++) {
       const comment = comments[i];
@@ -415,14 +439,14 @@ export default class ExpressionFormatter {
       }
     }
 
-    // Finally: add the comma
+    // STEP 3c: Finally, add the comma based on configuration
     if (this.cfg.commaPosition === 'leadingWithSpace') {
       this.layout.add(WS.NEWLINE, WS.INDENT, ',', WS.SPACE);
     } else {
       this.layout.add(WS.NEWLINE, WS.INDENT, ',');
     }
 
-    // Skip all processed comments
+    // STEP 4: Skip all processed comments in the main loop
     this.index = lookAheadIndex - 1;
   }
 

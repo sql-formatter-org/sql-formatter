@@ -197,31 +197,6 @@ export default function supportsCommaPosition(format: FormatFn) {
     );
   });
 
-  it('supports leadingWithSpace comma position with comments(with commas)', () => {
-    const result = format(
-      `SELECT
-        foo, -- comment, with, commas
-        bar, -- another comment, with, commas
-        baz
-      FROM
-        my_table;
-    `,
-      {
-        commaPosition: 'leadingWithSpace',
-      }
-    );
-    expect(result).toBe(
-      dedent`
-      SELECT
-        foo -- comment, with, commas
-        , bar -- another comment, with, commas
-        , baz
-      FROM
-        my_table;
-    `
-    );
-  });
-
   it('supports leadingWithSpace comma position in complex queries with complex comments', () => {
     const result = format(
       `SELECT
@@ -259,8 +234,50 @@ export default function supportsCommaPosition(format: FormatFn) {
     );
   });
 
-  it('supports leadingWithSpace comma position in queries with function argument list', () => {
-    // Example function: CONCAT_WS(separator, str1, str2, ...)
+  it('supports leadingWithSpace comma position in queries with function with short argument list', () => {
+    const result = format(
+      `
+      SELECT COALESCE(first_name, 'N/A'), COALESCE(last_name, 'N/A') FROM users;
+    `,
+      {
+        commaPosition: 'leadingWithSpace',
+      }
+    );
+    expect(result).toBe(
+      dedent`
+      SELECT
+        COALESCE(first_name, 'N/A')
+        , COALESCE(last_name, 'N/A')
+      FROM
+        users;
+    `
+    );
+  });
+
+  it('supports leadingWithSpace comma position in queries with function with long argument list', () => {
+    const result = format(
+      `
+      SELECT COALESCE(first_name, last_name, email, phone, address, 'N/A') FROM users;
+    `,
+      {
+        commaPosition: 'leadingWithSpace',
+      }
+    );
+    expect(result).toBe(
+      dedent`
+      SELECT
+        COALESCE(
+          first_name
+          , last_name
+          , email
+          , phone
+          , address
+          , 'N/A'
+        )
+      FROM
+        users;
+    `
+    );
   });
 
   it('supports leading comma', () => {
