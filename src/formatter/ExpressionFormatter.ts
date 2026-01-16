@@ -68,7 +68,7 @@ export default class ExpressionFormatter {
   private dialectCfg: ProcessedDialectFormatOptions;
   private params: Params;
   private layout: Layout;
-  private pendingLineComment: (LineCommentNode | BlockCommentNode | DisableCommentNode)[] = []; // Keeps track if any pending Line/Comment is remaining
+  private pendingLineComments: LineCommentNode[] = []; // Keeps track if any pending Line/Comment is remaining
 
   private inline = false;
   private nodes: AstNode[] = [];
@@ -185,38 +185,9 @@ export default class ExpressionFormatter {
   }
 
   private formatPropertyAccess(node: PropertyAccessNode) {
-    this.formatComments(node.object.leadingComments);
-    this.formatNodeWithoutComments(node.object);
-
-    // Handle trailing comments of object BEFORE the dot (inline)
-    if (node.object.trailingComments && node.object.trailingComments.length > 0) {
-      for (const comment of node.object.trailingComments) {
-        if (comment.type === NodeType.block_comment) {
-          this.layout.add(WS.NO_SPACE, WS.SPACE, (comment as BlockCommentNode).text);
-        } else if (comment.type === NodeType.line_comment) {
-          this.layout.add(WS.NO_SPACE, WS.SPACE, (comment as LineCommentNode).text);
-        }
-      }
-    }
-
-    // Add the dot operator
+    this.formatNode(node.object);
     this.layout.add(WS.NO_SPACE, node.operator);
-
-    // Handle leading comments of property AFTER the dot (inline)
-    if (node.property.leadingComments && node.property.leadingComments.length > 0) {
-      for (const comment of node.property.leadingComments) {
-        if (comment.type === NodeType.block_comment) {
-          this.layout.add((comment as BlockCommentNode).text, WS.SPACE);
-        } else if (comment.type === NodeType.line_comment) {
-          this.layout.add((comment as LineCommentNode).text, WS.SPACE);
-        }
-      }
-      // Format property without leading comments (already handled above)
-      this.formatNodeWithoutComments(node.property);
-      this.formatComments(node.property.trailingComments);
-    } else {
-      this.formatNode(node.property);
-    }
+    this.formatNode(node.property);
   }
 
   private formatParenthesis(node: ParenthesisNode) {
@@ -372,7 +343,6 @@ export default class ExpressionFormatter {
   private formatComma(_node: CommaNode) {
     if (!this.inline) {
       if (this.cfg.commaPosition === 'leading' || this.cfg.commaPosition === 'leadingWithSpace') {
-        // Look ahead: check if next node is a line comment
         this.formatLeadingComma();
       } else {
         this.formatTrailingComma();
@@ -382,23 +352,13 @@ export default class ExpressionFormatter {
     }
   }
   private formatTrailingComma() {
-    if (this.pendingLineComment && this.pendingLineComment.length > 0) {
+    if (this.pendingLineComments && this.pendingLineComments.length > 0) {
+      this.layout.add(WS.NO_SPACE, ',', WS.SPACE);
       // We have a line comment that should come after the comma
-      while (this.pendingLineComment.length > 0) {
-        const comment = this.pendingLineComment.shift();
+      while (this.pendingLineComments.length > 0) {
+        const comment = this.pendingLineComments.shift();
         if (comment) {
-          if (comment.type === NodeType.line_comment) {
-            this.layout.add(
-              WS.NO_SPACE,
-              ',',
-              WS.SPACE,
-              (comment as LineCommentNode).text,
-              WS.MANDATORY_NEWLINE,
-              WS.INDENT
-            );
-          } else {
-            this.layout.add((comment as BlockCommentNode).text, WS.MANDATORY_NEWLINE, WS.INDENT);
-          }
+          this.layout.add((comment as LineCommentNode).text, WS.MANDATORY_NEWLINE, WS.INDENT);
         }
       }
     } else {
@@ -488,7 +448,7 @@ export default class ExpressionFormatter {
   private formatLineComment(node: LineCommentNode) {
     if (!this.inline && this.cfg.commaPosition === 'trailing' && this.isNextNonCommentNodeComma()) {
       // Store the comment to be output after the comma
-      this.pendingLineComment.push(node);
+      this.pendingLineComments.push(node);
       return;
     }
     if (isMultiline(node.precedingWhitespace || '')) {
@@ -504,7 +464,7 @@ export default class ExpressionFormatter {
     let lookAheadIndex = this.index + 1;
     while (lookAheadIndex < this.nodes.length) {
       const nextNode = this.nodes[lookAheadIndex];
-      if (nextNode.type === NodeType.line_comment || nextNode.type === NodeType.block_comment) {
+      if (nextNode.type === NodeType.line_comment) {
         lookAheadIndex++;
       } else {
         return nextNode.type === NodeType.comma;
@@ -514,16 +474,20 @@ export default class ExpressionFormatter {
   }
 
   private formatBlockComment(node: BlockCommentNode | DisableCommentNode) {
-    if (!this.inline && this.cfg.commaPosition === 'trailing' && this.isNextNonCommentNodeComma()) {
-      // Store the comment to be output after the comma
-      this.pendingLineComment.push(node);
-      return;
-    }
     if (node.type === NodeType.block_comment && this.isMultilineBlockComment(node)) {
       this.splitBlockComment(node.text).forEach(line => {
         this.layout.add(WS.NEWLINE, WS.INDENT, line);
       });
-      this.layout.add(WS.NEWLINE, WS.INDENT);
+      // Don't add extra newline after multiline block comment if trailing comma needs to be added and
+      // next node is a comma
+      if (
+        !(
+          this.cfg.commaPosition === 'trailing' &&
+          this.nodes[this.index + 1]?.type === NodeType.comma
+        )
+      ) {
+        this.layout.add(WS.NEWLINE, WS.INDENT);
+      }
     } else {
       this.layout.add(node.text, WS.SPACE);
     }

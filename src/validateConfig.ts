@@ -24,6 +24,12 @@ export function validateConfig(cfg: FormatOptions): FormatOptions {
     );
   }
 
+  if (['before', 'after'].includes(cfg.commaPosition)) {
+    throw new ConfigError(
+      `commaPosition config value "${cfg.commaPosition}" is no more supported. Use "leading", "trailing", "leadingWithSpace" values instead.`
+    );
+  }
+
   if (cfg.params && !validateParams(cfg.params)) {
     // eslint-disable-next-line no-console
     console.warn('WARNING: All "params" option values should be strings.');
