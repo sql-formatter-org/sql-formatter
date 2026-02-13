@@ -46,6 +46,7 @@ export default function supportsOperators(
     expect(format('foo ALL bar')).toBe('foo ALL bar');
     expect(format('EXISTS bar')).toBe('EXISTS bar');
     expect(format('foo IN (1, 2, 3)')).toBe('foo IN (1, 2, 3)');
+    expect(format('foo NOT IN (1, 2, 3)')).toBe('foo NOT IN (1, 2, 3)');
     expect(format("foo LIKE 'hello%'")).toBe("foo LIKE 'hello%'");
     expect(format('foo IS NULL')).toBe('foo IS NULL');
     expect(format('UNIQUE foo')).toBe('UNIQUE foo');
