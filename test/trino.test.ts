@@ -16,7 +16,7 @@ import supportsComments from './features/comments.js';
 import supportsCommentOn from './features/commentOn.js';
 import supportsIdentifiers from './features/identifiers.js';
 import supportsParams from './options/param.js';
-import supportsSetOperations from './features/setOperations.js';
+import supportsSetOperations, { standardSetOperations } from './features/setOperations.js';
 import supportsWindow from './features/window.js';
 import supportsLimiting from './features/limiting.js';
 import supportsInsertInto from './features/insertInto.js';
@@ -58,7 +58,10 @@ describe('TrinoFormatter', () => {
   supportsArrayLiterals(format, { withArrayPrefix: true });
   supportsArrayAndMapAccessors(format);
   supportsJoin(format);
-  supportsSetOperations(format);
+  supportsSetOperations(format, [
+    ...standardSetOperations,
+    ...standardSetOperations.map(op => `${op} CORRESPONDING`),
+  ]);
   supportsParams(format, { positional: true });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
