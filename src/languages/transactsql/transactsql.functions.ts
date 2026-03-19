@@ -122,6 +122,7 @@ export const functions: string[] = [
   'YEAR',
   'JSON',
   'ISJSON',
+  'OPENJSON',
   'JSON_VALUE',
   'JSON_QUERY',
   'JSON_MODIFY',
