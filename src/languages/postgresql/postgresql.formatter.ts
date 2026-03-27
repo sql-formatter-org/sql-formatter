@@ -319,6 +319,7 @@ export const postgresql: DialectOptions = {
       '##',
       '<->',
       '&&',
+      '&&&',
       '&<',
       '&>',
       '<<|',
@@ -326,7 +327,7 @@ export const postgresql: DialectOptions = {
       '|>>',
       '|&>',
       '<^',
-      '^>',
+      '>^',
       '?#',
       '?-',
       '?|',
@@ -334,7 +335,10 @@ export const postgresql: DialectOptions = {
       '?||',
       '@>',
       '<@',
+      '<@>',
       '~=',
+      // PostGIS
+      '|=|',
       // JSON
       '?',
       '@?',
@@ -376,6 +380,10 @@ export const postgresql: DialectOptions = {
       '<->>',
       '<<<->',
       '<->>>',
+      // Cube
+      '~>',
+      // Hstore
+      '#=',
       // Type cast
       '::',
       ':',
