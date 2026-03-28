@@ -319,7 +319,6 @@ export const postgresql: DialectOptions = {
       '##',
       '<->',
       '&&',
-      '&&&',
       '&<',
       '&>',
       '<<|',
@@ -337,8 +336,6 @@ export const postgresql: DialectOptions = {
       '<@',
       '<@>',
       '~=',
-      // PostGIS
-      '|=|',
       // JSON
       '?',
       '@?',
@@ -394,6 +391,9 @@ export const postgresql: DialectOptions = {
       '<+>',
       '<~>',
       '<%>',
+      // Custom operators: from PostGIS extension
+      '&&&', // https://postgis.net/docs/geometry_overlaps_nd.html
+      '|=|', // https://postgis.net/docs/geometry_distance_cpa.html
     ],
     operatorKeyword: true,
   },

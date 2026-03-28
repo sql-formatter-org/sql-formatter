@@ -66,7 +66,6 @@ describe('PostgreSqlFormatter', () => {
       '##',
       '<->',
       '&&',
-      '&&&',
       '&<',
       '&>',
       '<<|',
@@ -84,8 +83,6 @@ describe('PostgreSqlFormatter', () => {
       '<@',
       '<@>',
       '~=',
-      // PostGIS
-      '|=|',
       // JSON
       '?',
       '@?',
@@ -137,6 +134,9 @@ describe('PostgreSqlFormatter', () => {
       '<+>',
       '<~>',
       '<%>',
+      // Custom operators: from PostGIS extension
+      '&&&',
+      '|=|',
     ],
     { any: true }
   );
