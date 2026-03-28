@@ -123,6 +123,8 @@ const reservedKeywordPhrases = expandPhrases([
   '{ROWS | RANGE | GROUPS} BETWEEN',
   // comparison operator
   'IS [NOT] DISTINCT FROM',
+  // https://trino.io/docs/current/language/types.html#timestamp-p-with-time-zone
+  '[TIMESTAMP | TIME] {WITH | WITHOUT} TIME ZONE',
 ]);
 
 const reservedDataTypePhrases = expandPhrases([]);

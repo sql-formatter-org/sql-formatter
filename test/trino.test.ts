@@ -123,4 +123,22 @@ describe('TrinoFormatter', () => {
         )
     `);
   });
+
+  // Regression test for issues #936
+  it('formats TIMESTAMP WITH TIME ZONE syntax', () => {
+    expect(
+      format(`
+        CREATE TABLE time_table (id INT,
+          created_at TIMESTAMP WITH TIME ZONE,
+          deleted_at TIME WITH TIME ZONE,
+          modified_at TIMESTAMP(0) WITH TIME ZONE);`)
+    ).toBe(dedent`
+      CREATE TABLE time_table (
+        id INT,
+        created_at TIMESTAMP WITH TIME ZONE,
+        deleted_at TIME WITH TIME ZONE,
+        modified_at TIMESTAMP(0) WITH TIME ZONE
+      );
+    `);
+  });
 });
