@@ -1,4 +1,4 @@
-import { FormatOptions } from '../FormatOptions.js';
+import { ColorKeys, FormatOptions } from '../FormatOptions.js';
 import { equalizeWhitespace, isMultiline, last } from '../utils.js';
 
 import Params from './Params.js';
@@ -36,6 +36,7 @@ import {
 import Layout, { WS } from './Layout.js';
 import toTabularFormat, { isTabularToken } from './tabularStyle.js';
 import InlineLayout, { InlineLayoutError } from './InlineLayout.js';
+import BlockLayout from './BlockLayout.js';
 
 interface ExpressionFormatterParams {
   cfg: FormatOptions;
@@ -156,7 +157,7 @@ export default class ExpressionFormatter {
 
   private formatParameterizedDataType(node: ParameterizedDataTypeNode) {
     this.withComments(node.dataType, () => {
-      this.layout.add(this.showDataType(node.dataType));
+      this.layout.add(this.colorize('dataType', this.showDataType(node.dataType)));
     });
     this.formatNode(node.parenthesis);
   }
@@ -166,13 +167,13 @@ export default class ExpressionFormatter {
 
     switch (node.array.type) {
       case NodeType.data_type:
-        formattedArray = this.showDataType(node.array);
+        formattedArray = this.colorize('dataType', this.showDataType(node.array));
         break;
       case NodeType.keyword:
-        formattedArray = this.showKw(node.array);
+        formattedArray = this.colorize('keyword', this.showKw(node.array));
         break;
       default:
-        formattedArray = this.showIdentifier(node.array);
+        formattedArray = this.colorize('identifier', this.showIdentifier(node.array));
         break;
     }
 
@@ -190,31 +191,53 @@ export default class ExpressionFormatter {
   }
 
   private formatParenthesis(node: ParenthesisNode) {
-    const inlineLayout = this.formatInlineExpression(node.children);
+    const maxItems = this.cfg.maxLengthInParenthesis;
+    const children = maxItems
+      ? this.limitNodesType(node.children, NodeType.parameter, this.limitComment, 0, maxItems - 1)
+      : node.children;
+
+    const openParen = this.colorize('parenthesis', node.openParen);
+    const closeParen = this.colorize('parenthesis', node.closeParen);
+
+    if (this.cfg.compactParenthesis) {
+      // I don't know how else to achieve the same effect
+      const singleIndent = this.layout.indentation.getSingleIndent();
+      const partIndent = singleIndent.length > 1 ? singleIndent.slice(0, -1) : singleIndent;
+
+      this.layout.add(openParen, partIndent);
+      this.layout.indentation.increaseBlockLevel();
+      this.layout.add(...this.formatBlockExpression(children).getLayoutItems());
+      this.layout.indentation.decreaseBlockLevel();
+      this.layout.add(WS.NEWLINE, WS.INDENT, closeParen, WS.SPACE);
+      return;
+    }
+
+    const inlineLayout = this.formatInlineExpression(children);
 
     if (inlineLayout) {
-      this.layout.add(node.openParen);
+      this.layout.add(openParen);
       this.layout.add(...inlineLayout.getLayoutItems());
-      this.layout.add(WS.NO_SPACE, node.closeParen, WS.SPACE);
+      this.layout.add(WS.NO_SPACE, closeParen, WS.SPACE);
     } else {
-      this.layout.add(node.openParen, WS.NEWLINE);
+      this.layout.add(openParen, WS.NEWLINE);
 
       if (isTabularStyle(this.cfg)) {
         this.layout.add(WS.INDENT);
-        this.layout = this.formatSubExpression(node.children);
+        this.layout = this.formatSubExpression(children);
       } else {
         this.layout.indentation.increaseBlockLevel();
         this.layout.add(WS.INDENT);
-        this.layout = this.formatSubExpression(node.children);
+        this.layout = this.formatSubExpression(children);
         this.layout.indentation.decreaseBlockLevel();
       }
 
-      this.layout.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
+      this.layout.add(WS.NEWLINE, WS.INDENT, closeParen, WS.SPACE);
     }
   }
 
   private formatBetweenPredicate(node: BetweenPredicateNode) {
-    this.layout.add(this.showKw(node.betweenKw), WS.SPACE);
+    this.layout.add(this.showKw(node.betweenKw));
+    this.layout.add(WS.SPACE);
     this.layout = this.formatSubExpression(node.expr1);
     this.layout.add(WS.NO_SPACE, WS.SPACE, this.showNonTabularKw(node.andKw), WS.SPACE);
     this.layout = this.formatSubExpression(node.expr2);
@@ -266,7 +289,9 @@ export default class ExpressionFormatter {
   }
 
   private formatClauseInIndentedStyle(node: ClauseNode) {
-    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.NEWLINE);
+    this.layout.add(WS.NEWLINE, WS.INDENT);
+    this.layout.add(this.showKw(node.nameKw));
+    this.layout.add(WS.NEWLINE);
     this.layout.indentation.increaseTopLevel();
     this.layout.add(WS.INDENT);
     this.layout = this.formatSubExpression(node.children);
@@ -274,26 +299,33 @@ export default class ExpressionFormatter {
   }
 
   private formatClauseInOnelineStyle(node: ClauseNode) {
-    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.SPACE);
+    this.layout.add(WS.NEWLINE, WS.INDENT);
+    this.layout.add(this.showKw(node.nameKw));
+    this.layout.add(WS.SPACE);
     this.layout = this.formatSubExpression(node.children);
   }
 
   private formatClauseInTabularStyle(node: ClauseNode) {
-    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.SPACE);
+    this.layout.add(WS.NEWLINE, WS.INDENT);
+    this.layout.add(this.showKw(node.nameKw));
+    this.layout.add(WS.SPACE);
     this.layout.indentation.increaseTopLevel();
     this.layout = this.formatSubExpression(node.children);
     this.layout.indentation.decreaseTopLevel();
   }
 
   private formatSetOperation(node: SetOperationNode) {
-    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.NEWLINE);
+    this.layout.add(WS.NEWLINE, WS.INDENT);
+    this.layout.add(this.showKw(node.nameKw));
+    this.layout.add(WS.NEWLINE);
     this.layout.add(WS.INDENT);
     this.layout = this.formatSubExpression(node.children);
   }
 
   private formatLimitClause(node: LimitClauseNode) {
     this.withComments(node.limitKw, () => {
-      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.limitKw));
+      this.layout.add(WS.NEWLINE, WS.INDENT);
+      this.layout.add(this.showKw(node.limitKw));
     });
     this.layout.indentation.increaseTopLevel();
 
@@ -318,11 +350,12 @@ export default class ExpressionFormatter {
   }
 
   private formatLiteral(node: LiteralNode) {
-    this.layout.add(node.text, WS.SPACE);
+    const isString = /^("|')/.test(node.text);
+    this.layout.add(this.colorize(isString ? 'string' : 'number', node.text), WS.SPACE);
   }
 
   private formatIdentifier(node: IdentifierNode) {
-    this.layout.add(this.showIdentifier(node), WS.SPACE);
+    this.layout.add(this.colorize('identifier', this.showIdentifier(node)), WS.SPACE);
   }
 
   private formatParameter(node: ParameterNode) {
@@ -367,24 +400,26 @@ export default class ExpressionFormatter {
   }
 
   private formatLineComment(node: LineCommentNode) {
+    const comment = this.colorize('comment', node.text);
+
     if (isMultiline(node.precedingWhitespace || '')) {
-      this.layout.add(WS.NEWLINE, WS.INDENT, node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
+      this.layout.add(WS.NEWLINE, WS.INDENT, comment, WS.MANDATORY_NEWLINE, WS.INDENT);
     } else if (this.layout.getLayoutItems().length > 0) {
-      this.layout.add(WS.NO_NEWLINE, WS.SPACE, node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
+      this.layout.add(WS.NO_NEWLINE, WS.SPACE, comment, WS.MANDATORY_NEWLINE, WS.INDENT);
     } else {
       // comment is the first item in code - no need to add preceding spaces
-      this.layout.add(node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
+      this.layout.add(comment, WS.MANDATORY_NEWLINE, WS.INDENT);
     }
   }
 
   private formatBlockComment(node: BlockCommentNode | DisableCommentNode) {
     if (node.type === NodeType.block_comment && this.isMultilineBlockComment(node)) {
       this.splitBlockComment(node.text).forEach(line => {
-        this.layout.add(WS.NEWLINE, WS.INDENT, line);
+        this.layout.add(WS.NEWLINE, WS.INDENT, this.colorize('comment', line));
       });
       this.layout.add(WS.NEWLINE, WS.INDENT);
     } else {
-      this.layout.add(node.text, WS.SPACE);
+      this.layout.add(this.colorize('comment', node.text), WS.SPACE);
     }
   }
 
@@ -480,6 +515,85 @@ export default class ExpressionFormatter {
     }
   }
 
+  private formatBlockExpression(nodes: AstNode[]): Layout {
+    return new ExpressionFormatter({
+      cfg: this.cfg,
+      dialectCfg: this.dialectCfg,
+      params: this.params,
+      layout: new BlockLayout(this.layout.indentation, this.cfg.expressionWidth),
+      inline: true,
+    }).format(nodes);
+  }
+
+  private limitComment(result: AstNode[], skipped: number, front: boolean) {
+    if (!skipped) {
+      return;
+    }
+
+    result.push({
+      type: NodeType.block_comment,
+      text: `/* ${front ? `${skipped} more items ...` : `... ${skipped} more items`} */`,
+      precedingWhitespace: '',
+    });
+  }
+
+  private limitNodesType(
+    nodes: AstNode[],
+    type: NodeType,
+    cbIfSkipped: (result: AstNode[], skipped: number, front: boolean) => void,
+    start: number,
+    end?: number
+  ): AstNode[] {
+    const buffer: AstNode[] = [];
+    const result: AstNode[] = [];
+    let hitCurrType = 0;
+    // We want to start taking a piece
+    let grub = false;
+
+    for (let i = start; i < nodes.length; i++) {
+      const node = nodes[i];
+
+      if (node.type !== type) {
+        if (grub) {
+          buffer.push(node);
+        }
+
+        continue;
+      }
+
+      if (hitCurrType < start) {
+        hitCurrType++;
+        continue;
+      } else {
+        if (!grub) {
+          cbIfSkipped(result, hitCurrType, true);
+        }
+
+        grub = true;
+      }
+
+      if (end !== undefined && hitCurrType > end) {
+        const sumToEnd = nodes.slice(i).reduce((acc, n) => acc + (n.type === type ? 1 : 0), 0);
+        cbIfSkipped(result, sumToEnd, false);
+        break;
+      }
+
+      hitCurrType++;
+      result.push(...buffer, node);
+      buffer.length = 0;
+    }
+
+    return result;
+  }
+
+  private colorize(colorKey: ColorKeys, text: string): string {
+    if (!this.cfg.colors) {
+      return text;
+    }
+
+    return this.cfg.colorsMap[colorKey](text);
+  }
+
   private formatKeywordNode(node: KeywordNode): void {
     switch (node.tokenType) {
       case TokenType.RESERVED_JOIN:
@@ -524,14 +638,17 @@ export default class ExpressionFormatter {
   }
 
   private formatDataType(node: DataTypeNode) {
-    this.layout.add(this.showDataType(node), WS.SPACE);
+    this.layout.add(this.colorize('dataType', this.showDataType(node)), WS.SPACE);
   }
 
   private showKw(node: KeywordNode): string {
     if (isTabularToken(node.tokenType)) {
-      return toTabularFormat(this.showNonTabularKw(node), this.cfg.indentStyle);
+      return this.colorize(
+        'keyword',
+        toTabularFormat(this.showNonTabularKw(node), this.cfg.indentStyle)
+      );
     } else {
-      return this.showNonTabularKw(node);
+      return this.colorize('keyword', this.showNonTabularKw(node));
     }
   }
 
@@ -549,9 +666,12 @@ export default class ExpressionFormatter {
 
   private showFunctionKw(node: KeywordNode): string {
     if (isTabularToken(node.tokenType)) {
-      return toTabularFormat(this.showNonTabularFunctionKw(node), this.cfg.indentStyle);
+      return this.colorize(
+        'function',
+        toTabularFormat(this.showNonTabularFunctionKw(node), this.cfg.indentStyle)
+      );
     } else {
-      return this.showNonTabularFunctionKw(node);
+      return this.colorize('function', this.showNonTabularFunctionKw(node));
     }
   }
 
