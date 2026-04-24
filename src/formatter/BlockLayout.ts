@@ -1,3 +1,4 @@
+import { stripColors } from '../utils.js';
 import Indentation from './Indentation.js';
 import Layout, { WS } from './Layout.js';
 
@@ -8,7 +9,11 @@ export default class BlockLayout extends Layout {
   // internal buffer for service tokens
   private buffer: (WS | string)[] = [];
 
-  constructor(indentation: Indentation, private expressionWidth: number) {
+  constructor(
+    indentation: Indentation,
+    private expressionWidth: number,
+    private colorized: boolean
+  ) {
     super(indentation);
   }
 
@@ -45,6 +50,8 @@ export default class BlockLayout extends Layout {
   }
 
   private addLengthCurrentLine(item: WS | string) {
+    item = this.colorized && typeof item === 'string' ? stripColors(item) : item;
+
     if (typeof item === 'string') {
       this.length += item.length;
       return this.length <= this.expressionWidth;

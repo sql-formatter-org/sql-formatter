@@ -1,3 +1,4 @@
+import * as regex from '../lexer/regexFactory.js';
 import { ColorKeys, FormatOptions } from '../FormatOptions.js';
 import { equalizeWhitespace, isMultiline, last } from '../utils.js';
 import { limitNodesByType, limitWithComment } from './LimitNodes.js';
@@ -359,8 +360,8 @@ export default class ExpressionFormatter {
   }
 
   private formatLiteral(node: LiteralNode) {
-    const isString = /^("|')/.test(node.text);
-    this.layout.add(this.colorize(isString ? 'string' : 'number', node.text), WS.SPACE);
+    const isString = /^("|')/.test(node.text) && 'string';
+    this.layout.add(this.colorize(isString || 'number', node.text), WS.SPACE);
   }
 
   private formatIdentifier(node: IdentifierNode) {
@@ -368,7 +369,11 @@ export default class ExpressionFormatter {
   }
 
   private formatParameter(node: ParameterNode) {
-    this.layout.add(this.params.get(node), WS.SPACE);
+    const param = this.params.get(node);
+    const isString = /^("|')/.test(param) && 'string';
+    const isNumber = regex.number(true).test(param) && 'number';
+
+    this.layout.add(this.colorize(isString || isNumber || undefined, param), WS.SPACE);
   }
 
   private formatOperator({ text }: OperatorNode) {
@@ -506,7 +511,7 @@ export default class ExpressionFormatter {
         cfg: this.cfg,
         dialectCfg: this.dialectCfg,
         params: this.params,
-        layout: new InlineLayout(this.cfg.expressionWidth),
+        layout: new InlineLayout(this.cfg.expressionWidth, this.cfg.colors),
         inline: true,
       }).format(nodes);
     } catch (e) {
@@ -529,13 +534,13 @@ export default class ExpressionFormatter {
       cfg: this.cfg,
       dialectCfg: this.dialectCfg,
       params: this.params,
-      layout: new BlockLayout(this.layout.indentation, this.cfg.expressionWidth),
+      layout: new BlockLayout(this.layout.indentation, this.cfg.expressionWidth, this.cfg.colors),
       inline: true,
     }).format(nodes);
   }
 
-  private colorize(colorKey: ColorKeys, text: string): string {
-    if (!this.cfg.colors) {
+  private colorize(colorKey: ColorKeys | undefined, text: string): string {
+    if (!this.cfg.colors || !colorKey) {
       return text;
     }
 

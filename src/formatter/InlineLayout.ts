@@ -1,4 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
+import { stripColors } from '../utils.js';
 import Indentation from './Indentation.js';
 import Layout, { WS } from './Layout.js';
 
@@ -16,7 +17,7 @@ export default class InlineLayout extends Layout {
   // but only when there actually is a space to remove.
   private trailingSpace = false;
 
-  constructor(private expressionWidth: number) {
+  constructor(private expressionWidth: number, private colorized: boolean) {
     super(new Indentation('')); // no indentation in inline layout
   }
 
@@ -30,6 +31,8 @@ export default class InlineLayout extends Layout {
   }
 
   private addToLength(item: WS | string) {
+    item = this.colorized && typeof item === 'string' ? stripColors(item) : item;
+
     if (typeof item === 'string') {
       this.length += item.length;
       this.trailingSpace = false;
