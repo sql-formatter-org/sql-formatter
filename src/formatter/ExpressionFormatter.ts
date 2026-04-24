@@ -1,5 +1,7 @@
-import { FormatOptions } from '../FormatOptions.js';
+import * as regex from '../lexer/regexFactory.js';
+import { ColorKeys, FormatOptions } from '../FormatOptions.js';
 import { equalizeWhitespace, isMultiline, last } from '../utils.js';
+import { limitNodesByType, limitWithComment } from './LimitNodes.js';
 
 import Params from './Params.js';
 import { isTabularStyle } from './config.js';
@@ -36,6 +38,7 @@ import {
 import Layout, { WS } from './Layout.js';
 import toTabularFormat, { isTabularToken } from './tabularStyle.js';
 import InlineLayout, { InlineLayoutError } from './InlineLayout.js';
+import BlockLayout from './BlockLayout.js';
 
 interface ExpressionFormatterParams {
   cfg: FormatOptions;
@@ -156,7 +159,7 @@ export default class ExpressionFormatter {
 
   private formatParameterizedDataType(node: ParameterizedDataTypeNode) {
     this.withComments(node.dataType, () => {
-      this.layout.add(this.showDataType(node.dataType));
+      this.layout.add(this.colorize('dataType', this.showDataType(node.dataType)));
     });
     this.formatNode(node.parenthesis);
   }
@@ -166,13 +169,13 @@ export default class ExpressionFormatter {
 
     switch (node.array.type) {
       case NodeType.data_type:
-        formattedArray = this.showDataType(node.array);
+        formattedArray = this.colorize('dataType', this.showDataType(node.array));
         break;
       case NodeType.keyword:
-        formattedArray = this.showKw(node.array);
+        formattedArray = this.colorize('keyword', this.showKw(node.array));
         break;
       default:
-        formattedArray = this.showIdentifier(node.array);
+        formattedArray = this.colorize('identifier', this.showIdentifier(node.array));
         break;
     }
 
@@ -190,27 +193,66 @@ export default class ExpressionFormatter {
   }
 
   private formatParenthesis(node: ParenthesisNode) {
-    const inlineLayout = this.formatInlineExpression(node.children);
+    const maxLength = this.cfg.maxLengthInParenthesis;
+    const limit = limitNodesByType(
+      node.children,
+      NodeType.parameter,
+      limitWithComment,
+      0,
+      maxLength
+    );
 
-    if (inlineLayout) {
-      this.layout.add(node.openParen);
-      this.layout.add(...inlineLayout.getLayoutItems());
-      this.layout.add(WS.NO_SPACE, node.closeParen, WS.SPACE);
-    } else {
-      this.layout.add(node.openParen, WS.NEWLINE);
+    this.params.addPositionalParameterIndex(limit.skippedFront);
 
-      if (isTabularStyle(this.cfg)) {
-        this.layout.add(WS.INDENT);
-        this.layout = this.formatSubExpression(node.children);
-      } else {
-        this.layout.indentation.increaseBlockLevel();
-        this.layout.add(WS.INDENT);
-        this.layout = this.formatSubExpression(node.children);
-        this.layout.indentation.decreaseBlockLevel();
+    const openParen = this.colorize('parenthesis', node.openParen);
+    const closeParen = this.colorize('parenthesis', node.closeParen);
+
+    if (this.cfg.compactParenthesis) {
+      const singleIndent = this.layout.indentation.getSingleIndent();
+      // Because the bracket is on the same line,
+      // we have to align the text one character less than necessary.
+      // I don't know how else to achieve the same effect with API library.
+      const partIndent = singleIndent.length > 1 ? singleIndent.slice(0, -1) : singleIndent;
+
+      this.layout.add(openParen, partIndent);
+      this.layout.indentation.increaseBlockLevel();
+
+      const elements = this.formatBlockExpression(limit.nodes).getLayoutItems();
+      const hasNewline = elements.some(item => item === WS.NEWLINE);
+      this.layout.add(...elements);
+
+      this.layout.indentation.decreaseBlockLevel();
+
+      if (hasNewline) {
+        this.layout.add(WS.NEWLINE, WS.INDENT);
       }
 
-      this.layout.add(WS.NEWLINE, WS.INDENT, node.closeParen, WS.SPACE);
+      this.layout.add(closeParen, WS.SPACE);
+    } else {
+      const inlineLayout = this.formatInlineExpression(limit.nodes);
+
+      if (inlineLayout) {
+        this.layout.add(openParen);
+        this.layout.add(...inlineLayout.getLayoutItems());
+        this.layout.add(WS.NO_SPACE, closeParen, WS.SPACE);
+      } else {
+        this.layout.add(openParen, WS.NEWLINE);
+
+        if (isTabularStyle(this.cfg)) {
+          this.layout.add(WS.INDENT);
+          this.layout = this.formatSubExpression(limit.nodes);
+        } else {
+          this.layout.indentation.increaseBlockLevel();
+          this.layout.add(WS.INDENT);
+          this.layout = this.formatSubExpression(limit.nodes);
+          this.layout.indentation.decreaseBlockLevel();
+        }
+
+        this.layout.add(WS.NEWLINE, WS.INDENT, closeParen, WS.SPACE);
+      }
     }
+
+    this.params.addPositionalParameterIndex(limit.skippedBack);
   }
 
   private formatBetweenPredicate(node: BetweenPredicateNode) {
@@ -318,15 +360,20 @@ export default class ExpressionFormatter {
   }
 
   private formatLiteral(node: LiteralNode) {
-    this.layout.add(node.text, WS.SPACE);
+    const isString = /^("|')/.test(node.text) && 'string';
+    this.layout.add(this.colorize(isString || 'number', node.text), WS.SPACE);
   }
 
   private formatIdentifier(node: IdentifierNode) {
-    this.layout.add(this.showIdentifier(node), WS.SPACE);
+    this.layout.add(this.colorize('identifier', this.showIdentifier(node)), WS.SPACE);
   }
 
   private formatParameter(node: ParameterNode) {
-    this.layout.add(this.params.get(node), WS.SPACE);
+    const param = this.params.get(node);
+    const isString = /^("|')/.test(param) && 'string';
+    const isNumber = regex.number(true).test(param) && 'number';
+
+    this.layout.add(this.colorize(isString || isNumber || undefined, param), WS.SPACE);
   }
 
   private formatOperator({ text }: OperatorNode) {
@@ -367,24 +414,26 @@ export default class ExpressionFormatter {
   }
 
   private formatLineComment(node: LineCommentNode) {
+    const comment = this.colorize('comment', node.text);
+
     if (isMultiline(node.precedingWhitespace || '')) {
-      this.layout.add(WS.NEWLINE, WS.INDENT, node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
+      this.layout.add(WS.NEWLINE, WS.INDENT, comment, WS.MANDATORY_NEWLINE, WS.INDENT);
     } else if (this.layout.getLayoutItems().length > 0) {
-      this.layout.add(WS.NO_NEWLINE, WS.SPACE, node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
+      this.layout.add(WS.NO_NEWLINE, WS.SPACE, comment, WS.MANDATORY_NEWLINE, WS.INDENT);
     } else {
       // comment is the first item in code - no need to add preceding spaces
-      this.layout.add(node.text, WS.MANDATORY_NEWLINE, WS.INDENT);
+      this.layout.add(comment, WS.MANDATORY_NEWLINE, WS.INDENT);
     }
   }
 
   private formatBlockComment(node: BlockCommentNode | DisableCommentNode) {
     if (node.type === NodeType.block_comment && this.isMultilineBlockComment(node)) {
       this.splitBlockComment(node.text).forEach(line => {
-        this.layout.add(WS.NEWLINE, WS.INDENT, line);
+        this.layout.add(WS.NEWLINE, WS.INDENT, this.colorize('comment', line));
       });
       this.layout.add(WS.NEWLINE, WS.INDENT);
     } else {
-      this.layout.add(node.text, WS.SPACE);
+      this.layout.add(this.colorize('comment', node.text), WS.SPACE);
     }
   }
 
@@ -462,7 +511,7 @@ export default class ExpressionFormatter {
         cfg: this.cfg,
         dialectCfg: this.dialectCfg,
         params: this.params,
-        layout: new InlineLayout(this.cfg.expressionWidth),
+        layout: new InlineLayout(this.cfg.expressionWidth, this.cfg.colors),
         inline: true,
       }).format(nodes);
     } catch (e) {
@@ -478,6 +527,24 @@ export default class ExpressionFormatter {
         throw e;
       }
     }
+  }
+
+  private formatBlockExpression(nodes: AstNode[]): Layout {
+    return new ExpressionFormatter({
+      cfg: this.cfg,
+      dialectCfg: this.dialectCfg,
+      params: this.params,
+      layout: new BlockLayout(this.layout.indentation, this.cfg.expressionWidth, this.cfg.colors),
+      inline: true,
+    }).format(nodes);
+  }
+
+  private colorize(colorKey: ColorKeys | undefined, text: string): string {
+    if (!this.cfg.colors || !colorKey) {
+      return text;
+    }
+
+    return this.cfg.colorsMap[colorKey](text);
   }
 
   private formatKeywordNode(node: KeywordNode): void {
@@ -524,14 +591,17 @@ export default class ExpressionFormatter {
   }
 
   private formatDataType(node: DataTypeNode) {
-    this.layout.add(this.showDataType(node), WS.SPACE);
+    this.layout.add(this.colorize('dataType', this.showDataType(node)), WS.SPACE);
   }
 
   private showKw(node: KeywordNode): string {
     if (isTabularToken(node.tokenType)) {
-      return toTabularFormat(this.showNonTabularKw(node), this.cfg.indentStyle);
+      return this.colorize(
+        'keyword',
+        toTabularFormat(this.showNonTabularKw(node), this.cfg.indentStyle)
+      );
     } else {
-      return this.showNonTabularKw(node);
+      return this.colorize('keyword', this.showNonTabularKw(node));
     }
   }
 
@@ -549,9 +619,12 @@ export default class ExpressionFormatter {
 
   private showFunctionKw(node: KeywordNode): string {
     if (isTabularToken(node.tokenType)) {
-      return toTabularFormat(this.showNonTabularFunctionKw(node), this.cfg.indentStyle);
+      return this.colorize(
+        'function',
+        toTabularFormat(this.showNonTabularFunctionKw(node), this.cfg.indentStyle)
+      );
     } else {
-      return this.showNonTabularFunctionKw(node);
+      return this.colorize('function', this.showNonTabularFunctionKw(node));
     }
   }
 

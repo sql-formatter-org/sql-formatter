@@ -18,6 +18,10 @@ export const equalizeWhitespace = (s: string) => s.replace(/\s+/gu, ' ');
 // True when string contains multiple lines
 export const isMultiline = (text: string): boolean => /\n/.test(text);
 
+export const stripColors = (s: string) =>
+  // eslint-disable-next-line no-control-regex
+  s.replace(/(?:\u001b\[\d\dm)+(.+)(?:\u001b\[\d\dm)+/gu, '$1');
+
 // Given a type and a field name, returns a type where this field is optional
 //
 // For example, these two type definitions are equivalent:

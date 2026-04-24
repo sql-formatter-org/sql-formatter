@@ -150,6 +150,11 @@ export const stringPattern = (quoteTypes: QuoteType[]): string =>
 export const string = (quoteTypes: QuoteType[]): RegExp =>
   patternToRegex(stringPattern(quoteTypes));
 
+export const number = (underscoresInNumbers?: boolean): RegExp =>
+  underscoresInNumbers
+    ? /(?:0x[0-9a-fA-F_]+|0b[01_]+|(?:-\s*)?(?:[0-9_]*\.[0-9_]+|[0-9_]+(?:\.[0-9_]*)?)(?:[eE][-+]?[0-9_]+(?:\.[0-9_]+)?)?)(?![\w\p{Alphabetic}])/uy
+    : /(?:0x[0-9a-fA-F]+|0b[01]+|(?:-\s*)?(?:[0-9]*\.[0-9]+|[0-9]+(?:\.[0-9]*)?)(?:[eE][-+]?[0-9]+(?:\.[0-9]+)?)?)(?![\w\p{Alphabetic}])/uy;
+
 /**
  * Builds a RegExp for valid identifiers in a SQL dialect
  */
@@ -168,14 +173,14 @@ export const identifierPattern = ({
   // Unicode letters, diacritical marks and underscore
   const letter = '\\p{Alphabetic}\\p{Mark}_';
   // Numbers 0..9, plus various unicode numbers
-  const number = '\\p{Decimal_Number}';
+  const dNumber = '\\p{Decimal_Number}';
 
   const firstChars = escapeRegExp(first ?? '');
   const restChars = escapeRegExp(rest ?? '');
 
   const pattern = allowFirstCharNumber
-    ? `[${letter}${number}${firstChars}][${letter}${number}${restChars}]*`
-    : `[${letter}${firstChars}][${letter}${number}${restChars}]*`;
+    ? `[${letter}${dNumber}${firstChars}][${letter}${dNumber}${restChars}]*`
+    : `[${letter}${firstChars}][${letter}${dNumber}${restChars}]*`;
 
   return dashes ? withDashes(pattern) : pattern;
 };

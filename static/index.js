@@ -16,6 +16,9 @@ const attachFormat = () => {
   const lineBetweenQueries = document.getElementById('lineBetweenQueries');
   const denseOperators = document.getElementById('denseOperators');
   const newlineBeforeSemicolon = document.getElementById('newlineBeforeSemicolon');
+  const maxLengthInParenthesis = document.getElementById('maxLengthInParenthesis');
+  const useCompactParenthesis = document.getElementById('useCompactParenthesis');
+  const useColors = document.getElementById('useColors');
 
   function showOutput(text) {
     output.value = text;
@@ -46,6 +49,9 @@ const attachFormat = () => {
         lineBetweenQueries: lineBetweenQueries.value,
         denseOperators: denseOperators.checked,
         newlineBeforeSemicolon: newlineBeforeSemicolon.checked,
+        maxLengthInParenthesis: maxLengthInParenthesis.value,
+        compactParenthesis: useCompactParenthesis.checked,
+        colors: useColors.checked,
       };
       showOutput(sqlFormatter.format(input.value, config));
     } catch (e) {

@@ -25,6 +25,9 @@ import supportsOnConflict from './features/onConflict.js';
 import supportsDataTypeCase from './options/dataTypeCase.js';
 import supportsNumbers from './features/numbers.js';
 import supportsReturning from './features/returning.js';
+import supportsCompactParenthesis from './options/compactParenthesis.js';
+import supportsMaxOperatorArgsLength from './options/maxOperatorArgsLength.js';
+import supportsColors from './options/colors.js';
 
 describe('SqliteFormatter', () => {
   const language = 'sqlite';
@@ -59,6 +62,9 @@ describe('SqliteFormatter', () => {
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
   supportsDataTypeCase(format);
+  supportsCompactParenthesis(format);
+  supportsMaxOperatorArgsLength(format);
+  supportsColors(format);
 
   it('supports REPLACE INTO syntax', () => {
     expect(format(`REPLACE INTO tbl VALUES (1,'Leopard'),(2,'Dog');`)).toBe(dedent`

@@ -1,3 +1,4 @@
+import pc from 'picocolors';
 import * as allDialects from './allDialects.js';
 
 import { FormatOptions } from './FormatOptions.js';
@@ -53,6 +54,19 @@ const defaultOptions: FormatOptions = {
   linesBetweenQueries: 1,
   denseOperators: false,
   newlineBeforeSemicolon: false,
+  compactParenthesis: false,
+  colors: false,
+  colorsMap: {
+    keyword: pc.cyan,
+    operator: pc.reset,
+    comment: pc.gray,
+    string: pc.magenta,
+    number: pc.green,
+    function: pc.blue,
+    parenthesis: pc.reset,
+    identifier: pc.yellow,
+    dataType: pc.reset,
+  },
 };
 
 /**
