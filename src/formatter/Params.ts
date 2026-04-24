@@ -39,4 +39,8 @@ export default class Params {
   public setPositionalParameterIndex(i: number) {
     this.index = i;
   }
+
+  public addPositionalParameterIndex(i: number) {
+    this.index += i;
+  }
 }

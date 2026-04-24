@@ -1,5 +1,6 @@
 import { ColorKeys, FormatOptions } from '../FormatOptions.js';
 import { equalizeWhitespace, isMultiline, last } from '../utils.js';
+import { limitNodesByType, limitWithComment } from './LimitNodes.js';
 
 import Params from './Params.js';
 import { isTabularStyle } from './config.js';
@@ -191,48 +192,66 @@ export default class ExpressionFormatter {
   }
 
   private formatParenthesis(node: ParenthesisNode) {
-    const maxItems = this.cfg.maxLengthInParenthesis;
-    const children = maxItems
-      ? this.limitNodesType(node.children, NodeType.parameter, this.limitComment, 0, maxItems - 1)
-      : node.children;
+    const maxLength = this.cfg.maxLengthInParenthesis;
+    const limit = limitNodesByType(
+      node.children,
+      NodeType.parameter,
+      limitWithComment,
+      0,
+      maxLength
+    );
+
+    this.params.addPositionalParameterIndex(limit.skippedFront);
 
     const openParen = this.colorize('parenthesis', node.openParen);
     const closeParen = this.colorize('parenthesis', node.closeParen);
 
     if (this.cfg.compactParenthesis) {
-      // I don't know how else to achieve the same effect
       const singleIndent = this.layout.indentation.getSingleIndent();
+      // Because the bracket is on the same line,
+      // we have to align the text one character less than necessary.
+      // I don't know how else to achieve the same effect with API library.
       const partIndent = singleIndent.length > 1 ? singleIndent.slice(0, -1) : singleIndent;
 
       this.layout.add(openParen, partIndent);
       this.layout.indentation.increaseBlockLevel();
-      this.layout.add(...this.formatBlockExpression(children).getLayoutItems());
+
+      const elements = this.formatBlockExpression(limit.nodes).getLayoutItems();
+      const hasNewline = elements.some(item => item === WS.NEWLINE);
+      this.layout.add(...elements);
+
       this.layout.indentation.decreaseBlockLevel();
-      this.layout.add(WS.NEWLINE, WS.INDENT, closeParen, WS.SPACE);
-      return;
-    }
 
-    const inlineLayout = this.formatInlineExpression(children);
-
-    if (inlineLayout) {
-      this.layout.add(openParen);
-      this.layout.add(...inlineLayout.getLayoutItems());
-      this.layout.add(WS.NO_SPACE, closeParen, WS.SPACE);
-    } else {
-      this.layout.add(openParen, WS.NEWLINE);
-
-      if (isTabularStyle(this.cfg)) {
-        this.layout.add(WS.INDENT);
-        this.layout = this.formatSubExpression(children);
-      } else {
-        this.layout.indentation.increaseBlockLevel();
-        this.layout.add(WS.INDENT);
-        this.layout = this.formatSubExpression(children);
-        this.layout.indentation.decreaseBlockLevel();
+      if (hasNewline) {
+        this.layout.add(WS.NEWLINE, WS.INDENT);
       }
 
-      this.layout.add(WS.NEWLINE, WS.INDENT, closeParen, WS.SPACE);
+      this.layout.add(closeParen, WS.SPACE);
+    } else {
+      const inlineLayout = this.formatInlineExpression(limit.nodes);
+
+      if (inlineLayout) {
+        this.layout.add(openParen);
+        this.layout.add(...inlineLayout.getLayoutItems());
+        this.layout.add(WS.NO_SPACE, closeParen, WS.SPACE);
+      } else {
+        this.layout.add(openParen, WS.NEWLINE);
+
+        if (isTabularStyle(this.cfg)) {
+          this.layout.add(WS.INDENT);
+          this.layout = this.formatSubExpression(limit.nodes);
+        } else {
+          this.layout.indentation.increaseBlockLevel();
+          this.layout.add(WS.INDENT);
+          this.layout = this.formatSubExpression(limit.nodes);
+          this.layout.indentation.decreaseBlockLevel();
+        }
+
+        this.layout.add(WS.NEWLINE, WS.INDENT, closeParen, WS.SPACE);
+      }
     }
+
+    this.params.addPositionalParameterIndex(limit.skippedBack);
   }
 
   private formatBetweenPredicate(node: BetweenPredicateNode) {
@@ -523,67 +542,6 @@ export default class ExpressionFormatter {
       layout: new BlockLayout(this.layout.indentation, this.cfg.expressionWidth),
       inline: true,
     }).format(nodes);
-  }
-
-  private limitComment(result: AstNode[], skipped: number, front: boolean) {
-    if (!skipped) {
-      return;
-    }
-
-    result.push({
-      type: NodeType.block_comment,
-      text: `/* ${front ? `${skipped} more items ...` : `... ${skipped} more items`} */`,
-      precedingWhitespace: '',
-    });
-  }
-
-  private limitNodesType(
-    nodes: AstNode[],
-    type: NodeType,
-    cbIfSkipped: (result: AstNode[], skipped: number, front: boolean) => void,
-    start: number,
-    end?: number
-  ): AstNode[] {
-    const buffer: AstNode[] = [];
-    const result: AstNode[] = [];
-    let hitCurrType = 0;
-    // We want to start taking a piece
-    let grub = false;
-
-    for (let i = start; i < nodes.length; i++) {
-      const node = nodes[i];
-
-      if (node.type !== type) {
-        if (grub) {
-          buffer.push(node);
-        }
-
-        continue;
-      }
-
-      if (hitCurrType < start) {
-        hitCurrType++;
-        continue;
-      } else {
-        if (!grub) {
-          cbIfSkipped(result, hitCurrType, true);
-        }
-
-        grub = true;
-      }
-
-      if (end !== undefined && hitCurrType > end) {
-        const sumToEnd = nodes.slice(i).reduce((acc, n) => acc + (n.type === type ? 1 : 0), 0);
-        cbIfSkipped(result, sumToEnd, false);
-        break;
-      }
-
-      hitCurrType++;
-      result.push(...buffer, node);
-      buffer.length = 0;
-    }
-
-    return result;
   }
 
   private colorize(colorKey: ColorKeys, text: string): string {
