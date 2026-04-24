@@ -25,7 +25,7 @@ import supportsOnConflict from './features/onConflict.js';
 import supportsDataTypeCase from './options/dataTypeCase.js';
 import supportsNumbers from './features/numbers.js';
 import supportsReturning from './features/returning.js';
-import supportsCompact from './options/compact.js';
+import supportsCompactParenthesis from './options/compactParenthesis.js';
 import supportsMaxOperatorArgsLength from './options/maxOperatorArgsLength.js';
 import supportsColors from './options/colors.js';
 
@@ -62,7 +62,7 @@ describe('SqliteFormatter', () => {
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
   supportsDataTypeCase(format);
-  supportsCompact(format);
+  supportsCompactParenthesis(format);
   supportsMaxOperatorArgsLength(format);
   supportsColors(format);
 

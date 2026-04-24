@@ -2,7 +2,7 @@ import dedent from 'dedent-js';
 
 import { FormatFn } from '../../src/sqlFormatter.js';
 
-export default function supportsCompact(format: FormatFn) {
+export default function supportsCompactParenthesis(format: FormatFn) {
   it('check option compactParenthesis works as expected', () => {
     const result = format(`INSERT INTO user VALUES (${'?'.repeat(100).split('').join(',')})`, {
       compactParenthesis: true,
