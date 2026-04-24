@@ -255,8 +255,7 @@ export default class ExpressionFormatter {
   }
 
   private formatBetweenPredicate(node: BetweenPredicateNode) {
-    this.layout.add(this.showKw(node.betweenKw));
-    this.layout.add(WS.SPACE);
+    this.layout.add(this.showKw(node.betweenKw), WS.SPACE);
     this.layout = this.formatSubExpression(node.expr1);
     this.layout.add(WS.NO_SPACE, WS.SPACE, this.showNonTabularKw(node.andKw), WS.SPACE);
     this.layout = this.formatSubExpression(node.expr2);
@@ -308,9 +307,7 @@ export default class ExpressionFormatter {
   }
 
   private formatClauseInIndentedStyle(node: ClauseNode) {
-    this.layout.add(WS.NEWLINE, WS.INDENT);
-    this.layout.add(this.showKw(node.nameKw));
-    this.layout.add(WS.NEWLINE);
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.NEWLINE);
     this.layout.indentation.increaseTopLevel();
     this.layout.add(WS.INDENT);
     this.layout = this.formatSubExpression(node.children);
@@ -318,33 +315,26 @@ export default class ExpressionFormatter {
   }
 
   private formatClauseInOnelineStyle(node: ClauseNode) {
-    this.layout.add(WS.NEWLINE, WS.INDENT);
-    this.layout.add(this.showKw(node.nameKw));
-    this.layout.add(WS.SPACE);
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.SPACE);
     this.layout = this.formatSubExpression(node.children);
   }
 
   private formatClauseInTabularStyle(node: ClauseNode) {
-    this.layout.add(WS.NEWLINE, WS.INDENT);
-    this.layout.add(this.showKw(node.nameKw));
-    this.layout.add(WS.SPACE);
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.SPACE);
     this.layout.indentation.increaseTopLevel();
     this.layout = this.formatSubExpression(node.children);
     this.layout.indentation.decreaseTopLevel();
   }
 
   private formatSetOperation(node: SetOperationNode) {
-    this.layout.add(WS.NEWLINE, WS.INDENT);
-    this.layout.add(this.showKw(node.nameKw));
-    this.layout.add(WS.NEWLINE);
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.NEWLINE);
     this.layout.add(WS.INDENT);
     this.layout = this.formatSubExpression(node.children);
   }
 
   private formatLimitClause(node: LimitClauseNode) {
     this.withComments(node.limitKw, () => {
-      this.layout.add(WS.NEWLINE, WS.INDENT);
-      this.layout.add(this.showKw(node.limitKw));
+      this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.limitKw));
     });
     this.layout.indentation.increaseTopLevel();
 
