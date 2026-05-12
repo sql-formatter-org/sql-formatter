@@ -90,7 +90,19 @@ export const sqlite: DialectOptions = {
     ],
     identTypes: [`""-qq`, '``', '[]'],
     // https://www.sqlite.org/lang_expr.html#parameters
-    paramTypes: { positional: true, numbered: ['?'], named: [':', '@', '$'] },
+    // Note: the $-prefixed form follows Tcl variable syntax and may include
+    // one or more "::"-separated suffixes and an optional "(...)" trailer.
+    paramTypes: {
+      positional: true,
+      numbered: ['?'],
+      named: [':', '@'],
+      custom: [
+        {
+          regex: String.raw`\$[a-zA-Z_][a-zA-Z0-9_]*(?:::[a-zA-Z_][a-zA-Z0-9_]*)*(?:\([^)]*\))?`,
+          key: v => v.slice(1),
+        },
+      ],
+    },
     operators: ['%', '~', '&', '|', '<<', '>>', '==', '->', '->>', '||'],
   },
   formatOptions: {
