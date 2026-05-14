@@ -19,16 +19,10 @@ It does not support:
 
 ## Install
 
-Get the latest version from NPM:
+Get the latest version using your package manager of choice:
 
 ```sh
-npm install sql-formatter
-```
-
-Also available with pnpm:
-
-```sh
-pnpm add sql-formatter
+npm install sql-formatter # or yarn, pnpm, bun, etc
 ```
 
 ## Usage
