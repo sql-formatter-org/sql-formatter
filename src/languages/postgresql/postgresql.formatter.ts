@@ -63,7 +63,9 @@ const tabularOnelineClauses = expandPhrases([
   // other
   'SET SCHEMA',
   '{BEFORE | AFTER | INSTEAD OF} {INSERT | UPDATE [OF] | DELETE | TRUNCATE}',
-  'DEFERRABLE INITIALLY DEFERRED',
+  '[NOT] DEFERRABLE',
+  'INITIALLY {DEFERRED | IMMEDIATE}',
+  '[NOT] DEFERRABLE INITIALLY {DEFERRED | IMMEDIATE}',
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
   'ALTER AGGREGATE',
