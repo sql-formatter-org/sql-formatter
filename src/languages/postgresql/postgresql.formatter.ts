@@ -40,6 +40,7 @@ const tabularOnelineClauses = expandPhrases([
   'CREATE [MATERIALIZED] VIEW [IF NOT EXISTS]',
   // - update:
   'UPDATE [ONLY]',
+  'UPDATE OF',
   'WHERE CURRENT OF',
   // - insert:
   'ON CONFLICT',
@@ -62,7 +63,8 @@ const tabularOnelineClauses = expandPhrases([
   'TRUNCATE [TABLE] [ONLY]',
   // other
   'SET SCHEMA',
-  'AFTER',
+  'AFTER [INSERT]',
+  'DEFERRABLE INITIALLY DEFERRED',
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
   'ALTER AGGREGATE',
@@ -200,7 +202,7 @@ const tabularOnelineClauses = expandPhrases([
   'DROP USER',
   'DROP USER MAPPING',
   'DROP VIEW',
-  'EXECUTE',
+  'EXECUTE [FUNCTION | PROCEDURE]',
   'EXPLAIN',
   'FETCH',
   'GRANT',
@@ -255,6 +257,7 @@ const reservedKeywordPhrases = expandPhrases([
   'ON {UPDATE | DELETE} [NO ACTION | RESTRICT | CASCADE | SET NULL | SET DEFAULT]',
   'DO {NOTHING | UPDATE}',
   'AS MATERIALIZED',
+  'FOR EACH ROW',
   '{ROWS | RANGE | GROUPS} BETWEEN',
   // comparison operator
   'IS [NOT] DISTINCT FROM',
