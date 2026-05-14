@@ -11,10 +11,6 @@ minimumReleaseAge: 10080
 minimumReleaseAgeStrict: true
 minimumReleaseAgeIgnoreMissingTime: false
 
-# Fail when another package manager is used
-# https://pnpm.io/settings#pmonfail
-pmOnFail: error
-
 # Avoid reusing cached dependency build outputs
 # https://pnpm.io/settings#sideeffectscache
 sideEffectsCache: false
