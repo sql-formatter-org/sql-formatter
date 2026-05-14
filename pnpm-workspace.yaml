@@ -11,14 +11,6 @@ minimumReleaseAge: 10080
 minimumReleaseAgeStrict: true
 minimumReleaseAgeIgnoreMissingTime: false
 
-# Avoid reusing cached dependency build outputs
-# https://pnpm.io/settings#sideeffectscache
-sideEffectsCache: false
-
-# Require build scripts to be explicitly trusted
-# https://pnpm.io/settings#strictdepbuilds
-strictDepBuilds: true
-
 # Prevent package trust metadata from downgrading on updates
 # https://pnpm.io/settings#trustpolicy
 trustPolicy: no-downgrade
