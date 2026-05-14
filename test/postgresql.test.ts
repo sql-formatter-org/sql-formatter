@@ -1,23 +1,25 @@
 import dedent from 'dedent-js';
+
 import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
-import behavesLikePostgresqlFormatter from './behavesLikePostgresqlFormatter.js';
-import supportsArrayLiterals from './features/arrayLiterals.js';
-import supportsConstraints from './features/constraints.js';
+
 import supportsCreateTable from './features/createTable.js';
-import supportsCreateView from './features/createView.js';
 import supportsDropTable from './features/dropTable.js';
-import supportsIdentifiers from './features/identifiers.js';
-import supportsIsDistinctFrom from './features/isDistinctFrom.js';
 import supportsJoin from './features/join.js';
-import supportsLimiting from './features/limiting.js';
 import supportsOperators from './features/operators.js';
 import supportsSchema from './features/schema.js';
-import supportsSetOperations from './features/setOperations.js';
 import supportsStrings from './features/strings.js';
-import supportsTruncateTable from './features/truncateTable.js';
-import supportsUpdate from './features/update.js';
-import supportsDataTypeCase from './options/dataTypeCase.js';
+import supportsConstraints from './features/constraints.js';
+import supportsIdentifiers from './features/identifiers.js';
 import supportsParams from './options/param.js';
+import supportsSetOperations from './features/setOperations.js';
+import supportsLimiting from './features/limiting.js';
+import supportsUpdate from './features/update.js';
+import supportsTruncateTable from './features/truncateTable.js';
+import supportsCreateView from './features/createView.js';
+import supportsIsDistinctFrom from './features/isDistinctFrom.js';
+import supportsArrayLiterals from './features/arrayLiterals.js';
+import supportsDataTypeCase from './options/dataTypeCase.js';
+import behavesLikePostgresqlFormatter from './behavesLikePostgresqlFormatter.js';
 
 describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
