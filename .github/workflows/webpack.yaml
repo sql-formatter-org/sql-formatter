@@ -18,7 +18,7 @@ jobs:
       # https://github.com/pnpm/action-setup/issues/227
       - name: Read pnpm version
         id: pnpm-version
-        run: echo "version=$(jq --raw-output '.devEngines.packageManager.version | split(\"+\")[0]' package.json)" >> "$GITHUB_OUTPUT"
+        run: 'echo "version=$(jq --raw-output ''.devEngines.packageManager.version | split("+")[0]'' package.json)" >> "$GITHUB_OUTPUT"'
 
       - uses: pnpm/action-setup@v6
         with:
