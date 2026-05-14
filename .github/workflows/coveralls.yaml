@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [22.x]
 
     steps:
       - uses: actions/checkout@v4
@@ -19,12 +19,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: pnpm
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Install
-        run: yarn install --ignore-scripts
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Test
-        run: yarn test --coverage
+        run: pnpm run test -- --coverage
 
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@1.1.3

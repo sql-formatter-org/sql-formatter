@@ -1,0 +1,20 @@
+pmOnFail: error
+verifyDepsBeforeRun: error
+packages:
+  - .
+
+strictDepBuilds: true
+allowBuilds: {}
+sideEffectsCache: false
+
+minimumReleaseAge: 10080
+minimumReleaseAgeStrict: true
+minimumReleaseAgeIgnoreMissingTime: false
+
+trustPolicy: no-downgrade
+trustPolicyExclude:
+  - eslint-config-prettier@8.10.2
+  - eslint-plugin-prettier@4.2.5
+  - semver@5.7.2 || 6.3.1
+  - undici-types@6.19.8
+blockExoticSubdeps: true

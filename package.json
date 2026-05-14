@@ -54,21 +54,21 @@
     "ts:check": "tsc --noEmit",
     "ts:changes": "tsc --noEmit --incremental",
     "lint": "eslint --cache .",
-    "lint:changes": "sh -c eslint --cache $(yarn git:changes)",
+    "lint:changes": "sh -c 'eslint --cache $(pnpm run --silent git:changes)'",
     "pretty": "prettier --write .",
     "pretty:check": "prettier --check .",
-    "fix": "yarn pretty && eslint --fix .",
-    "test": "yarn grammar && jest",
-    "test:watch": "yarn test -- --watch",
-    "test:perf": "yarn grammar && jest --testMatch '<rootDir>/test/perftest.ts' --coverage=false",
-    "check": "yarn ts:check && yarn pretty:check && yarn lint && yarn test",
-    "prepare": "yarn clean && yarn grammar && yarn fix && yarn check && yarn build",
+    "fix": "pnpm run pretty && eslint --fix .",
+    "test": "pnpm run grammar && jest",
+    "test:watch": "pnpm run test -- --watch",
+    "test:perf": "pnpm run grammar && jest --testMatch '<rootDir>/test/perftest.ts' --coverage=false",
+    "check": "pnpm run ts:check && pnpm run pretty:check && pnpm run lint && pnpm run test",
+    "prepare": "pnpm run clean && pnpm run grammar && pnpm run fix && pnpm run check && pnpm run build",
     "pre-commit": "npm-run-all --parallel ts:changes lint:changes",
     "grammar": "nearleyc src/parser/grammar.ne -o src/parser/grammar.ts",
     "build:cjs": "tsc -p tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:webpack": "webpack --config webpack.prod.js && cp dist/sql-formatter.min.cjs dist/sql-formatter.min.js",
-    "build": "yarn grammar && npm-run-all --parallel build:cjs build:esm build:webpack",
+    "build": "pnpm run grammar && npm-run-all --parallel build:cjs build:esm build:webpack",
     "release": "release-it"
   },
   "repository": {
@@ -92,6 +92,7 @@
     "@types/babel__core": "^7.1.15",
     "@types/jest": "^29.5.14",
     "@types/nearley": "^2.11.2",
+    "@types/node": "22.9.0",
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "@typescript-eslint/parser": "^5.21.0",
     "babel-eslint": "^10.1.0",
@@ -133,8 +134,8 @@
   },
   "devEngines": {
     "packageManager": {
-      "name": "yarn",
-      "version": "1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+      "name": "pnpm",
+      "version": "11.0.8+sha512.4c4097e1dd2d42372c4e7fa5a791ff28fc75a484c7ac192e64b1df0fdef17594ba982f9b4fed9adfb3c757846f565b799b2763fb3733d1de1bcb82cf46684912"
     }
   }
 }

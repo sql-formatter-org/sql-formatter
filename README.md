@@ -25,10 +25,10 @@ Get the latest version from NPM:
 npm install sql-formatter
 ```
 
-Also available with yarn:
+Also available with pnpm:
 
 ```sh
-yarn add sql-formatter
+pnpm add sql-formatter
 ```
 
 ## Usage
