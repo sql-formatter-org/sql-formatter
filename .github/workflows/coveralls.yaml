@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Work around pnpm/action-setup v6 resolving the wrong version from package.json.
+      # Work around pnpm/action-setup v6 resolving the wrong version from package.json
       # https://github.com/pnpm/action-setup/issues/227
       - name: Read pnpm version
         id: pnpm-version
