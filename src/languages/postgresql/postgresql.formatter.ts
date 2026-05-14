@@ -62,7 +62,10 @@ const tabularOnelineClauses = expandPhrases([
   'TRUNCATE [TABLE] [ONLY]',
   // other
   'SET SCHEMA',
-  'AFTER',
+  '{BEFORE | AFTER | INSTEAD OF} {INSERT | UPDATE [OF] | DELETE | TRUNCATE}',
+  '[NOT] DEFERRABLE',
+  'INITIALLY {DEFERRED | IMMEDIATE}',
+  '[NOT] DEFERRABLE INITIALLY {DEFERRED | IMMEDIATE}',
   // https://www.postgresql.org/docs/14/sql-commands.html
   'ABORT',
   'ALTER AGGREGATE',
@@ -200,7 +203,7 @@ const tabularOnelineClauses = expandPhrases([
   'DROP USER',
   'DROP USER MAPPING',
   'DROP VIEW',
-  'EXECUTE',
+  'EXECUTE [FUNCTION | PROCEDURE]',
   'EXPLAIN',
   'FETCH',
   'GRANT',
@@ -255,6 +258,8 @@ const reservedKeywordPhrases = expandPhrases([
   'ON {UPDATE | DELETE} [NO ACTION | RESTRICT | CASCADE | SET NULL | SET DEFAULT]',
   'DO {NOTHING | UPDATE}',
   'AS MATERIALIZED',
+  'FOR EACH ROW',
+  'OR {INSERT | UPDATE [OF] | DELETE | TRUNCATE}',
   '{ROWS | RANGE | GROUPS} BETWEEN',
   // comparison operator
   'IS [NOT] DISTINCT FROM',

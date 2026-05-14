@@ -258,4 +258,41 @@ describe('PostgreSqlFormatter', () => {
       dedent`COMMENT ON TABLE foo IS 'Hello my table';`
     );
   });
+
+  it('formats keywords in CREATE CONSTRAINT TRIGGER', () => {
+    expect(
+      format(
+        `create constraint trigger Example_Trigger
+        after insert
+        or
+        update of Column_A,
+        Column_B on Example_Table
+        deferrable initially deferred for each row
+        execute procedure Example_Function ();`,
+        { keywordCase: 'upper', identifierCase: 'lower' }
+      )
+    ).toBe(dedent`
+      CREATE CONSTRAINT TRIGGER example_trigger
+      AFTER INSERT OR UPDATE OF column_a,
+      column_b ON example_table
+      DEFERRABLE INITIALLY DEFERRED FOR EACH ROW
+      EXECUTE PROCEDURE example_function ();
+    `);
+  });
+
+  it('formats multiple CREATE TRIGGER events without treating OR as a logical operator', () => {
+    expect(
+      format(
+        `create trigger Example_Trigger
+        after insert or update or delete on Example_Table
+        for each row
+        execute function Example_Function ();`,
+        { keywordCase: 'upper', identifierCase: 'lower' }
+      )
+    ).toBe(dedent`
+      CREATE TRIGGER example_trigger
+      AFTER INSERT OR UPDATE OR DELETE ON example_table FOR EACH ROW
+      EXECUTE FUNCTION example_function ();
+    `);
+  });
 });
