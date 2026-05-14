@@ -24,7 +24,7 @@ jobs:
           cache: pnpm
 
       - name: Install
-        run: pnpm install --frozen-lockfile --ignore-scripts
+        run: pnpm install --ignore-scripts
 
       - name: Test
         run: pnpm run test -- --coverage

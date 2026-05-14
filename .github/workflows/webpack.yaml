@@ -23,7 +23,7 @@ jobs:
           cache: pnpm
 
       - name: Install
-        run: pnpm install --frozen-lockfile --ignore-scripts
+        run: pnpm install --ignore-scripts
 
       - name: Format
         run: pnpm run pretty:check
