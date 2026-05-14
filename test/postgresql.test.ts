@@ -260,14 +260,14 @@ describe('PostgreSqlFormatter', () => {
   it('formats keywords in CREATE CONSTRAINT TRIGGER', () => {
     expect(
       format(
-        `CREATE CONSTRAINT TRIGGER example_trigger
-        AFTER INSERT
-        OR
-        UPDATE OF column_a,
-        column_b ON example_table
-        DEFERRABLE INITIALLY DEFERRED FOR EACH ROW
-        EXECUTE PROCEDURE example_function ();`,
-        { keywordCase: 'upper' }
+        `create constraint trigger Example_Trigger
+        after insert
+        or
+        update of Column_A,
+        Column_B on Example_Table
+        deferrable initially deferred for each row
+        execute procedure Example_Function ();`,
+        { keywordCase: 'upper', identifierCase: 'lower' }
       )
     ).toBe(dedent`
       CREATE CONSTRAINT TRIGGER example_trigger
