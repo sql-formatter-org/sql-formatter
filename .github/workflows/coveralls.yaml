@@ -15,14 +15,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v6
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
-
-      - name: Enable Corepack
-        run: corepack enable
 
       - name: Install
         run: pnpm install --frozen-lockfile --ignore-scripts
