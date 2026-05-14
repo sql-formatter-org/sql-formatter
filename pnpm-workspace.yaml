@@ -1,20 +1,37 @@
-pmOnFail: error
-verifyDepsBeforeRun: error
 packages:
   - .
 
-strictDepBuilds: true
-allowBuilds: {}
-sideEffectsCache: false
+# Block tarball, git, and other non-registry subdependencies
+# https://pnpm.io/settings#blockexoticsubdeps
+blockExoticSubdeps: true
 
+# Prevent installing packages published less than 7 days ago
+# https://pnpm.io/settings#minimumreleaseage
 minimumReleaseAge: 10080
 minimumReleaseAgeStrict: true
 minimumReleaseAgeIgnoreMissingTime: false
 
+# Fail when another package manager is used
+# https://pnpm.io/settings#pmonfail
+pmOnFail: error
+
+# Avoid reusing cached dependency build outputs
+# https://pnpm.io/settings#sideeffectscache
+sideEffectsCache: false
+
+# Require build scripts to be explicitly trusted
+# https://pnpm.io/settings#strictdepbuilds
+strictDepBuilds: true
+
+# Prevent package trust metadata from downgrading on updates
+# https://pnpm.io/settings#trustpolicy
 trustPolicy: no-downgrade
 trustPolicyExclude:
   - eslint-config-prettier@8.10.2
   - eslint-plugin-prettier@4.2.5
   - semver@5.7.2 || 6.3.1
   - undici-types@6.19.8
-blockExoticSubdeps: true
+
+# Fail before scripts when dependencies are out of sync
+# https://pnpm.io/settings#verifydepsbeforerun
+verifyDepsBeforeRun: error
