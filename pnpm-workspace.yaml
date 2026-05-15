@@ -1,0 +1,29 @@
+packages:
+  - .
+
+# Block tarball, git, and other non-registry subdependencies
+# https://pnpm.io/settings#blockexoticsubdeps
+blockExoticSubdeps: true
+
+# Prevent installing packages published less than 7 days ago
+# https://pnpm.io/settings#minimumreleaseage
+minimumReleaseAge: 10080
+minimumReleaseAgeStrict: true
+minimumReleaseAgeIgnoreMissingTime: false
+
+# Prevent package trust metadata from downgrading on updates
+# https://pnpm.io/settings#trustpolicy
+trustPolicy: no-downgrade
+trustPolicyExclude:
+  # first version with provenance: eslint-config-prettier@10.1.4 https://github.com/prettier/eslint-config-prettier/issues/339#issuecomment-3090250555
+  - eslint-config-prettier@8.10.2
+  # first version with provenance: eslint-plugin-prettier@5.3.1 https://github.com/prettier/eslint-plugin-prettier/pull/757
+  - eslint-plugin-prettier@4.2.5
+  # first version with provenance: semver@7.5.1 https://github.com/npm/node-semver/issues/838#issuecomment-3698312268
+  - semver@5.7.2 || 6.3.1
+  # first version with provenance: undici-types@6.13.0 https://github.com/nodejs/undici/issues/4666
+  - undici-types@6.19.8
+
+# Fail before scripts when dependencies are out of sync
+# https://pnpm.io/settings#verifydepsbeforerun
+verifyDepsBeforeRun: error
