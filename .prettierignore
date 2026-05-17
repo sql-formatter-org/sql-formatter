@@ -2,6 +2,6 @@
 /dist
 /lib
 /node_modules
-yarn.lock
+pnpm-lock.yaml
 LICENSE
 /src/parser/grammar.ts
