@@ -10,21 +10,32 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [22.x]
 
     steps:
       - uses: actions/checkout@v4
+
+      # Work around pnpm/action-setup v6 resolving the wrong version from package.json
+      # https://github.com/pnpm/action-setup/issues/227
+      - name: Read pnpm version
+        id: pnpm-version
+        run: 'echo "version=$(jq --raw-output ''.devEngines.packageManager.version | split("+")[0]'' package.json)" >> "$GITHUB_OUTPUT"'
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: ${{ steps.pnpm-version.outputs.version }}
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: pnpm
 
       - name: Install
-        run: yarn install --ignore-scripts
+        run: pnpm install --ignore-scripts
 
       - name: Test
-        run: yarn test --coverage
+        run: pnpm run test -- --coverage
 
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@1.1.3

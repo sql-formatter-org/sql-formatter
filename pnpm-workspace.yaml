@@ -1,0 +1,27 @@
+packages:
+  - .
+
+# Block tarball, git, and other non-registry subdependencies
+# https://pnpm.io/settings#blockexoticsubdeps
+blockExoticSubdeps: true
+
+# Prevent installing packages published less than 7 days ago
+# https://pnpm.io/settings#minimumreleaseage
+minimumReleaseAge: 10080
+minimumReleaseAgeStrict: true
+minimumReleaseAgeIgnoreMissingTime: false
+
+# Work around pnpm bug where `pmOnFail` does not default to
+# 'download' with `devEngines.packageManager`
+# https://github.com/pnpm/pnpm/issues/11676
+pmOnFail: download
+
+# Prevent trust level decreases with packages newer than 60 days
+# to mitigate supply chain risks
+# https://pnpm.io/settings#trustpolicy
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 86400
+
+# Fail before scripts when dependencies are out of sync
+# https://pnpm.io/settings#verifydepsbeforerun
+verifyDepsBeforeRun: error
