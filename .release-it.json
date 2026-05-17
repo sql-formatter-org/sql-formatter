@@ -11,6 +11,7 @@
     "commitMessage": "Release v${version}",
     "tag": true,
     "tagAnnotation": "${version}",
+    "tagName": "v${version}",
     "push": true,
     "pushArgs": ["--follow-tags"]
   },
