@@ -18,6 +18,7 @@
     "publish": true,
     "publishPath": ".",
     "publishArgs": [],
+    "publishPackageManager": "pnpm",
     "tag": null,
     "otp": null,
     "ignoreVersion": true,
