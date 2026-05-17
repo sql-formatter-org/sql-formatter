@@ -35,7 +35,7 @@ jobs:
         run: pnpm install --ignore-scripts
 
       - name: Test
-        run: pnpm run test -- --coverage
+        run: pnpm run test --coverage
 
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@1.1.3
