@@ -111,6 +111,22 @@ export default class Layout {
     return this.items;
   }
 
+  /**
+   * True when some content has already been added and nothing but indentation
+   * has been emitted since the last newline, meaning the next token would be
+   * placed at the start of a fresh (non-first) line.
+   */
+  public isAtStartOfLine(): boolean {
+    for (let i = this.items.length - 1; i >= 0; i--) {
+      const item = this.items[i];
+      if (item === WS.SINGLE_INDENT) {
+        continue;
+      }
+      return item === WS.NEWLINE || item === WS.MANDATORY_NEWLINE;
+    }
+    return false;
+  }
+
   private itemToString(item: LayoutItem): string {
     switch (item) {
       case WS.SPACE:

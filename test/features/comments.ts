@@ -61,6 +61,19 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     expect(format(sql)).toBe(sql);
   });
 
+  it('moves a leading block comment of a clause item onto its own line', () => {
+    const result = format('SELECT /* comment */ foo FROM tbl');
+    expect(result).toBe(dedent`
+      SELECT
+        /* comment */
+        foo
+      FROM
+        tbl
+    `);
+    // Formatting must be idempotent: re-formatting the result must not change it.
+    expect(format(result)).toBe(result);
+  });
+
   it('formats tricky line comments', () => {
     expect(format('SELECT a--comment, here\nFROM b--comment')).toBe(dedent`
       SELECT

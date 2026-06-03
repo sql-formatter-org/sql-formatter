@@ -378,7 +378,7 @@ export default class ExpressionFormatter {
   }
 
   private formatBlockComment(node: BlockCommentNode | DisableCommentNode) {
-    if (node.type === NodeType.block_comment && this.isMultilineBlockComment(node)) {
+    if (node.type === NodeType.block_comment && this.isStandaloneBlockComment(node)) {
       this.splitBlockComment(node.text).forEach(line => {
         this.layout.add(WS.NEWLINE, WS.INDENT, line);
       });
@@ -388,8 +388,17 @@ export default class ExpressionFormatter {
     }
   }
 
-  private isMultilineBlockComment(node: BlockCommentNode): boolean {
-    return isMultiline(node.text) || isMultiline(node.precedingWhitespace || '');
+  private isStandaloneBlockComment(node: BlockCommentNode): boolean {
+    return (
+      isMultiline(node.text) ||
+      isMultiline(node.precedingWhitespace || '') ||
+      // The comment is the first thing on its line in the output being built
+      // (e.g. a comment leading the first item of a clause body, which the
+      // formatter always places on a fresh line). Keeping it inline here would
+      // make formatting non-idempotent, since reformatting would then see a
+      // newline before the comment and move it onto its own line.
+      this.layout.isAtStartOfLine()
+    );
   }
 
   private isDocComment(comment: string): boolean {
