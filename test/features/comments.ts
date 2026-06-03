@@ -74,6 +74,20 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     expect(format(result)).toBe(result);
   });
 
+  it('keeps block comments in various clause positions idempotent', () => {
+    // The fix should generalize beyond a comment right after SELECT: comments
+    // after a keyword, between items, and in UPDATE/SET must all be stable
+    // under re-formatting.
+    for (const sql of [
+      'SELECT foo /* c */, /* c */ bar FROM /* c */ tbl1 JOIN /* c */ tbl2',
+      'UPDATE /* c */ tbl SET /* c */ x = 10',
+      'SELECT /* c */ a, b FROM t WHERE /* c */ x = 1',
+    ]) {
+      const once = format(sql);
+      expect(format(once)).toBe(once);
+    }
+  });
+
   it('formats tricky line comments', () => {
     expect(format('SELECT a--comment, here\nFROM b--comment')).toBe(dedent`
       SELECT
