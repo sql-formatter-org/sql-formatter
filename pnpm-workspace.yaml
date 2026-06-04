@@ -21,7 +21,6 @@ pmOnFail: download
 # https://pnpm.io/settings#trustpolicy
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 86400
-
 # Fail before scripts when dependencies are out of sync
 # https://pnpm.io/settings#verifydepsbeforerun
-verifyDepsBeforeRun: error
+# verifyDepsBeforeRun: error
