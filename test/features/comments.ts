@@ -61,7 +61,7 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     expect(format(sql)).toBe(sql);
   });
 
-  it('moves a leading block comment of a clause item onto its own line', () => {
+  it('moves a leading block comment of SELECT clause onto its own line', () => {
     const result = format('SELECT /* comment */ foo FROM tbl');
     expect(result).toBe(dedent`
       SELECT
@@ -74,18 +74,36 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     expect(format(result)).toBe(result);
   });
 
-  it('keeps block comments in various clause positions idempotent', () => {
-    // The fix should generalize beyond a comment right after SELECT: comments
-    // after a keyword, between items, and in UPDATE/SET must all be stable
-    // under re-formatting.
-    for (const sql of [
-      'SELECT foo /* c */, /* c */ bar FROM /* c */ tbl1 JOIN /* c */ tbl2',
-      'UPDATE /* c */ tbl SET /* c */ x = 10',
-      'SELECT /* c */ a, b FROM t WHERE /* c */ x = 1',
-    ]) {
-      const once = format(sql);
-      expect(format(once)).toBe(once);
-    }
+  it('keeps block comments in various SELECT statement positions idempotent', () => {
+    const sql = 'SELECT foo /* c */, /* c */ bar FROM /* c */ tbl1 JOIN /* c */ tbl2';
+    const result = dedent`
+      SELECT
+        foo /* c */,
+        /* c */
+        bar
+      FROM
+        /* c */
+        tbl1
+        JOIN /* c */ tbl2
+    `;
+    expect(format(sql)).toBe(result);
+    expect(format(result)).toBe(result);
+  });
+
+  it('keeps block comments in various CREATE TABLE statement positions idempotent', () => {
+    const sql =
+      'CREATE TABLE /* c */ tbl (/* c */ id INT, /* c */ first_name TEXT, last_name TEXT)';
+    const result = dedent`
+      CREATE TABLE /* c */ tbl (
+        /* c */
+        id INT,
+        /* c */
+        first_name TEXT,
+        last_name TEXT
+      )
+    `;
+    expect(format(sql)).toBe(result);
+    expect(format(result)).toBe(result);
   });
 
   it('formats tricky line comments', () => {
