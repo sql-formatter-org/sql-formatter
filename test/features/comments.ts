@@ -61,6 +61,51 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     expect(format(sql)).toBe(sql);
   });
 
+  it('moves a leading block comment of SELECT clause onto its own line', () => {
+    const result = format('SELECT /* comment */ foo FROM tbl');
+    expect(result).toBe(dedent`
+      SELECT
+        /* comment */
+        foo
+      FROM
+        tbl
+    `);
+    // Formatting must be idempotent: re-formatting the result must not change it.
+    expect(format(result)).toBe(result);
+  });
+
+  it('keeps block comments in various SELECT statement positions idempotent', () => {
+    const sql = 'SELECT foo /* c */, /* c */ bar FROM /* c */ tbl1 JOIN /* c */ tbl2';
+    const result = dedent`
+      SELECT
+        foo /* c */,
+        /* c */
+        bar
+      FROM
+        /* c */
+        tbl1
+        JOIN /* c */ tbl2
+    `;
+    expect(format(sql)).toBe(result);
+    expect(format(result)).toBe(result);
+  });
+
+  it('keeps block comments in various CREATE TABLE statement positions idempotent', () => {
+    const sql =
+      'CREATE TABLE /* c */ tbl (/* c */ id INT, /* c */ first_name TEXT, last_name TEXT)';
+    const result = dedent`
+      CREATE TABLE /* c */ tbl (
+        /* c */
+        id INT,
+        /* c */
+        first_name TEXT,
+        last_name TEXT
+      )
+    `;
+    expect(format(sql)).toBe(result);
+    expect(format(result)).toBe(result);
+  });
+
   it('formats tricky line comments', () => {
     expect(format('SELECT a--comment, here\nFROM b--comment')).toBe(dedent`
       SELECT

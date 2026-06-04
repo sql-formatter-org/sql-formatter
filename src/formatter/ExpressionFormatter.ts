@@ -378,7 +378,7 @@ export default class ExpressionFormatter {
   }
 
   private formatBlockComment(node: BlockCommentNode | DisableCommentNode) {
-    if (node.type === NodeType.block_comment && this.isMultilineBlockComment(node)) {
+    if (node.type === NodeType.block_comment && this.isStandaloneBlockComment(node)) {
       this.splitBlockComment(node.text).forEach(line => {
         this.layout.add(WS.NEWLINE, WS.INDENT, line);
       });
@@ -388,8 +388,20 @@ export default class ExpressionFormatter {
     }
   }
 
-  private isMultilineBlockComment(node: BlockCommentNode): boolean {
-    return isMultiline(node.text) || isMultiline(node.precedingWhitespace || '');
+  // True when:
+  //
+  // - the source text had a newline before the comment
+  // - the comment itself is multi-line
+  // - we have already added a newline to output text (right before this to-be added comment)
+  //
+  // The last one will ensure the comment position stays idempotent - so that
+  // re-formatting the same SQL won't result in comment position changing.
+  private isStandaloneBlockComment(node: BlockCommentNode): boolean {
+    return (
+      isMultiline(node.text) ||
+      isMultiline(node.precedingWhitespace || '') ||
+      this.layout.isAtStartOfLine()
+    );
   }
 
   private isDocComment(comment: string): boolean {
