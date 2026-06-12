@@ -5,6 +5,9 @@ import { FormatFn } from '../../src/sqlFormatter.js';
 type OperatorsConfig = {
   logicalOperators?: string[];
   any?: boolean;
+  // True for dialects that allow dashes inside identifiers (e.g. BigQuery),
+  // where the "-" operator must keep its surrounding spaces even in dense mode.
+  identifierDashes?: boolean;
 };
 
 export default function supportsOperators(
@@ -27,7 +30,13 @@ export default function supportsOperators(
 
   operators.forEach(op => {
     it(`supports ${op} operator in dense mode`, () => {
-      expect(format(`foo ${op} bar`, { denseOperators: true })).toBe(`foo${op}bar`);
+      // In dialects with dashed identifiers, "foo-bar" would re-parse as a
+      // single identifier, so the "-" operator keeps its surrounding spaces.
+      if (op === '-' && cfg.identifierDashes) {
+        expect(format(`foo ${op} bar`, { denseOperators: true })).toBe(`foo ${op} bar`);
+      } else {
+        expect(format(`foo ${op} bar`, { denseOperators: true })).toBe(`foo${op}bar`);
+      }
     });
   });
 
