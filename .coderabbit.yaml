@@ -2,9 +2,15 @@
 reviews:
   # Add summary to walkthrough instead of PR description
   high_level_summary_in_walkthrough: true
+  # Disable useless fortune
+  in_progress_fortune: false
   # Disable useless poem
   poem: false
   pre_merge_checks:
     # Disable useless docstrings checks
     docstrings:
       mode: disabled
+
+chat:
+  # Disable useless ASCII art or emojis in chat responses
+  art: false
