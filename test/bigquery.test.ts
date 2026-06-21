@@ -58,7 +58,10 @@ describe('BigQueryFormatter', () => {
     'EXCEPT DISTINCT',
     'INTERSECT DISTINCT',
   ]);
-  supportsOperators(format, ['&', '|', '^', '~', '>>', '<<', '||', '=>'], { any: true });
+  supportsOperators(format, ['&', '|', '^', '~', '>>', '<<', '||', '=>'], {
+    any: true,
+    identifierDashes: true,
+  });
   supportsIsDistinctFrom(format);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
   supportsWindow(format);
@@ -77,6 +80,19 @@ describe('BigQueryFormatter', () => {
         where-long-identifier
       FROM
         beta
+    `);
+  });
+
+  // Because dashes are allowed inside identifiers, densing the "-" operator
+  // would glue its operands into a single identifier ("a - b" -> "a-b"),
+  // changing the meaning of the query. So denseOperators must keep it spaced.
+  it('keeps spaces around the - operator in dense mode', () => {
+    expect(format('SELECT a - b, x - foo(y)\nFROM t', { denseOperators: true })).toBe(dedent`
+      SELECT
+        a - b,
+        x - foo (y)
+      FROM
+        t
     `);
   });
 

@@ -34,15 +34,17 @@ export const createDialect = (options: DialectOptions): Dialect => {
 
 const dialectFromOptions = (dialectOptions: DialectOptions): Dialect => ({
   tokenizer: new Tokenizer(dialectOptions.tokenizerOptions, dialectOptions.name),
-  formatOptions: processDialectFormatOptions(dialectOptions.formatOptions),
+  formatOptions: processDialectFormatOptions(dialectOptions),
 });
 
-const processDialectFormatOptions = (
-  options: DialectFormatOptions
-): ProcessedDialectFormatOptions => ({
+const processDialectFormatOptions = ({
+  tokenizerOptions,
+  formatOptions: options,
+}: DialectOptions): ProcessedDialectFormatOptions => ({
   alwaysDenseOperators: options.alwaysDenseOperators || [],
   onelineClauses: Object.fromEntries(options.onelineClauses.map(name => [name, true])),
   tabularOnelineClauses: Object.fromEntries(
     (options.tabularOnelineClauses ?? options.onelineClauses).map(name => [name, true])
   ),
+  identifierDashes: Boolean(tokenizerOptions.identChars?.dashes),
 });

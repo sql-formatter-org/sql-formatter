@@ -60,6 +60,10 @@ export interface ProcessedDialectFormatOptions {
   alwaysDenseOperators: string[];
   onelineClauses: Record<string, boolean>;
   tabularOnelineClauses: Record<string, boolean>;
+  // True when the dialect allows dashes inside identifiers (e.g. BigQuery).
+  // In such dialects the "-" operator must keep its surrounding spaces,
+  // otherwise "a - b" densed to "a-b" would re-parse as a single identifier.
+  identifierDashes: boolean;
 }
 
 /** Formats a generic SQL expression */
@@ -330,7 +334,12 @@ export default class ExpressionFormatter {
   }
 
   private formatOperator({ text }: OperatorNode) {
-    if (this.cfg.denseOperators || this.dialectCfg.alwaysDenseOperators.includes(text)) {
+    // In dialects that allow dashes inside identifiers (e.g. BigQuery) the "-"
+    // operator must keep its surrounding spaces. Densing "a - b" into "a-b"
+    // would otherwise re-parse as a single dashed identifier.
+    if (text === '-' && this.dialectCfg.identifierDashes) {
+      this.layout.add(text, WS.SPACE);
+    } else if (this.cfg.denseOperators || this.dialectCfg.alwaysDenseOperators.includes(text)) {
       this.layout.add(WS.NO_SPACE, text);
     } else if (text === ':') {
       this.layout.add(WS.NO_SPACE, text, WS.SPACE);
