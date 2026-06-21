@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/coderabbit-overrides.v2.json
+reviews:
+  # Add summary to walkthrough instead of PR description
+  high_level_summary_in_walkthrough: true
+  # Disable useless poem
+  poem: false
+  pre_merge_checks:
+    # Disable useless docstrings checks
+    docstrings:
+      mode: disabled
