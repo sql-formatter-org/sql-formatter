@@ -40,6 +40,17 @@ export default function supportsOperators(
     });
   });
 
+  it('does not glue a - in front of a negative operand into a line comment in dense mode', () => {
+    // "a - -b" / "1 - -1" must not be densed into "a--b" / "1--1": the "--"
+    // would re-parse as a line comment and silently swallow the rest of the line.
+    ['SELECT a - -b', 'SELECT 1 - -1'].forEach(sql => {
+      const result = format(sql, { denseOperators: true });
+      expect(result).not.toContain('--');
+      // ...and formatting stays idempotent.
+      expect(format(result, { denseOperators: true })).toBe(result);
+    });
+  });
+
   (cfg.logicalOperators || ['AND', 'OR']).forEach(op => {
     it(`supports ${op} operator`, () => {
       const result = format(`SELECT true ${op} false AS foo;`);
