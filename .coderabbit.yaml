@@ -9,7 +9,7 @@ reviews:
   pre_merge_checks:
     # Disable useless docstrings checks
     docstrings:
-      mode: disabled
+      mode: off
 
 chat:
   # Disable useless ASCII art or emojis in chat responses
