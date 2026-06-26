@@ -11,11 +11,6 @@ minimumReleaseAge: 10080
 minimumReleaseAgeStrict: true
 minimumReleaseAgeIgnoreMissingTime: false
 
-# Work around pnpm bug where `pmOnFail` does not default to
-# 'download' with `devEngines.packageManager`
-# https://github.com/pnpm/pnpm/issues/11676
-pmOnFail: download
-
 # Prevent trust level decreases with packages newer than 60 days
 # to mitigate supply chain risks
 # https://pnpm.io/settings#trustpolicy
