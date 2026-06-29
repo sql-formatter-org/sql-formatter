@@ -60,7 +60,7 @@ export default class Layout {
           // Don't glue a layout item starting with "-" directly onto one ending with
           // "-": that forms "--", which re-parses as a line comment and
           // swallows the rest of the line (e.g. densing "a - -b" into "a--b").
-          if (typeof item === 'string' && item.startsWith('-') && this.lastItemEndsWith('-')) {
+          if (item.startsWith('-') && this.lastItemEndsWith('-')) {
             this.items.push(WS.SPACE);
           }
           this.items.push(item);
