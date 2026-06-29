@@ -10,7 +10,7 @@ import supportsSchema from './features/schema.js';
 import supportsStrings from './features/strings.js';
 import supportsBetween from './features/between.js';
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsConstraints from './features/constraints.js';
 import supportsDeleteFrom from './features/deleteFrom.js';
 import supportsComments from './features/comments.js';
@@ -53,7 +53,7 @@ describe('SqlFormatter', () => {
   supportsSchema(format);
   supportsJoin(format);
   supportsSetOperations(format);
-  supportsOperators(format, ['||'], { any: true });
+  supportsOperators(format, [...standardOperators, '||'], { any: true });
   supportsParams(format, { positional: true });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });

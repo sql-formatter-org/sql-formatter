@@ -9,7 +9,7 @@ import supportsSchema from './features/schema.js';
 import supportsStrings from './features/strings.js';
 import supportsBetween from './features/between.js';
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsConstraints from './features/constraints.js';
 import supportsDeleteFrom from './features/deleteFrom.js';
 import supportsComments from './features/comments.js';
@@ -54,7 +54,19 @@ describe('SqliteFormatter', () => {
   supportsSchema(format);
   supportsJoin(format);
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
-  supportsOperators(format, ['%', '~', '&', '|', '<<', '>>', '==', '->', '->>', '||']);
+  supportsOperators(format, [
+    ...standardOperators,
+    '%',
+    '~',
+    '&',
+    '|',
+    '<<',
+    '>>',
+    '==',
+    '->',
+    '->>',
+    '||',
+  ]);
   supportsParams(format, { positional: true, numbered: ['?'], named: [':', '@'] });
 
   // SQLite has its own Tcl-style $-parameter syntax that is handled as a custom

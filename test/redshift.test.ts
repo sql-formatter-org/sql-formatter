@@ -13,7 +13,7 @@ import supportsIdentifiers from './features/identifiers.js';
 import supportsInsertInto from './features/insertInto.js';
 import supportsJoin from './features/join.js';
 import supportsLimiting from './features/limiting.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsSetOperations from './features/setOperations.js';
 import supportsStrings from './features/strings.js';
 import supportsTruncateTable from './features/truncateTable.js';
@@ -47,9 +47,13 @@ describe('RedshiftFormatter', () => {
   supportsStrings(format, ["''-qq"]);
   supportsIdentifiers(format, [`""-qq`]);
   // Missing: '#' and '::' operator (tested separately)
-  supportsOperators(format, ['^', '%', '@', '|/', '||/', '&', '|', '~', '<<', '>>', '||'], {
-    any: true,
-  });
+  supportsOperators(
+    format,
+    [...standardOperators, '^', '%', '@', '|/', '||/', '&', '|', '~', '<<', '>>', '||'],
+    {
+      any: true,
+    }
+  );
   supportsJoin(format);
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT', 'MINUS']);
   supportsParams(format, { numbered: ['$'] });

@@ -6,7 +6,7 @@ import supportsCreateTable from './features/createTable.js';
 import supportsAlterTable from './features/alterTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsLimiting from './features/limiting.js';
 import supportsDataTypeCase from './options/dataTypeCase.js';
 
@@ -28,6 +28,10 @@ describe('Db2iFormatter', () => {
     without: ['NATURAL'],
     additionally: ['EXCEPTION JOIN', 'LEFT EXCEPTION JOIN', 'RIGHT EXCEPTION JOIN'],
   });
-  supportsOperators(format, ['**', '¬=', '¬>', '¬<', '!>', '!<', '||', '=>'], { any: true });
+  supportsOperators(
+    format,
+    [...standardOperators, '**', '¬=', '¬>', '¬<', '!>', '!<', '||', '=>'],
+    { any: true }
+  );
   supportsDataTypeCase(format);
 });

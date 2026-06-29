@@ -6,7 +6,7 @@ import behavesLikePostgresqlFormatter from './behavesLikePostgresqlFormatter.js'
 import supportsCreateTable from './features/createTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsStrings from './features/strings.js';
 import supportsIdentifiers from './features/identifiers.js';
 import supportsParams from './options/param.js';
@@ -34,6 +34,7 @@ describe('DuckDBFormatter', () => {
   supportsOperators(
     format,
     [
+      ...standardOperators,
       // Arithmetic:
       '//',
       '%',

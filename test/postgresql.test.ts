@@ -5,7 +5,7 @@ import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
 import supportsCreateTable from './features/createTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsSchema from './features/schema.js';
 import supportsStrings from './features/strings.js';
 import supportsConstraints from './features/constraints.js';
@@ -40,6 +40,7 @@ describe('PostgreSqlFormatter', () => {
   supportsOperators(
     format,
     [
+      ...standardOperators,
       // Arithmetic
       '%',
       '^',

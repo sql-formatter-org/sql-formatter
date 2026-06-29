@@ -10,7 +10,7 @@ import supportsAlterTable from './features/alterTable.js';
 import supportsStrings from './features/strings.js';
 import supportsBetween from './features/between.js';
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors.js';
 import supportsComments from './features/comments.js';
 import supportsIdentifiers from './features/identifiers.js';
@@ -49,7 +49,11 @@ describe('HiveFormatter', () => {
     supportsUsing: false,
   });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT']);
-  supportsOperators(format, ['%', '~', '^', '|', '&', '<=>', '==', '!', '||'], { any: true });
+  supportsOperators(
+    format,
+    [...standardOperators, '%', '~', '^', '|', '&', '<=>', '==', '!', '||'],
+    { any: true }
+  );
   supportsArrayAndMapAccessors(format);
   supportsWindow(format);
   supportsLimiting(format, { limit: true });

@@ -8,7 +8,7 @@ import supportsBetween from './features/between.js';
 import supportsCreateTable from './features/createTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsStrings from './features/strings.js';
 import supportsDeleteFrom from './features/deleteFrom.js';
 import supportsComments from './features/comments.js';
@@ -56,7 +56,7 @@ describe('SnowflakeFormatter', () => {
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   // ':' and '::' are tested later, since they should always be dense
-  supportsOperators(format, ['%', '||', '=>', ':='], { any: true });
+  supportsOperators(format, [...standardOperators, '%', '||', '=>', ':='], { any: true });
   supportsJoin(format, { without: ['NATURAL INNER JOIN'] });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'MINUS', 'EXCEPT', 'INTERSECT']);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });

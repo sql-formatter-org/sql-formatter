@@ -9,7 +9,7 @@ import supportsStrings from './features/strings.js';
 import supportsArrayLiterals from './features/arrayLiterals.js';
 import supportsBetween from './features/between.js';
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsDeleteFrom from './features/deleteFrom.js';
 import supportsComments from './features/comments.js';
 import supportsIdentifiers from './features/identifiers.js';
@@ -58,7 +58,7 @@ describe('BigQueryFormatter', () => {
     'EXCEPT DISTINCT',
     'INTERSECT DISTINCT',
   ]);
-  supportsOperators(format, ['&', '|', '^', '~', '>>', '<<', '||', '=>'], {
+  supportsOperators(format, [...standardOperators, '&', '|', '^', '~', '>>', '<<', '||', '=>'], {
     any: true,
     identifierDashes: true,
   });

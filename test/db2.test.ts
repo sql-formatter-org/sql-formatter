@@ -9,7 +9,7 @@ import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
 import supportsStrings from './features/strings.js';
 import supportsComments from './features/comments.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsLimiting from './features/limiting.js';
 import supportsDataTypeCase from './options/dataTypeCase.js';
 
@@ -32,6 +32,7 @@ describe('Db2Formatter', () => {
   supportsOperators(
     format,
     [
+      ...standardOperators,
       '**',
       '%',
       '&',

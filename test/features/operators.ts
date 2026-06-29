@@ -2,6 +2,8 @@ import dedent from 'dedent-js';
 
 import { FormatFn } from '../../src/sqlFormatter.js';
 
+export const standardOperators = ['+', '-', '*', '/', '>', '<', '=', '<>', '<=', '>=', '!='];
+
 type OperatorsConfig = {
   logicalOperators?: string[];
   any?: boolean;
@@ -15,10 +17,6 @@ export default function supportsOperators(
   operators: string[],
   cfg: OperatorsConfig = {}
 ) {
-  // Always test for standard SQL operators
-  const standardOperators = ['+', '-', '*', '/', '>', '<', '=', '<>', '<=', '>=', '!='];
-  operators = [...standardOperators, ...operators];
-
   operators.forEach(op => {
     it(`supports ${op} operator`, () => {
       // Would be simpler to test with "foo${op}bar"
