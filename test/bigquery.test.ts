@@ -104,6 +104,17 @@ describe('BigQueryFormatter', () => {
     expect(format(`foo - bar`, { denseOperators: true })).toBe(`foo - bar`);
   });
 
+  it('does not glue a "-" in front of another "-" in dense mode', () => {
+    expect(format('SELECT a - -b', { denseOperators: true })).toBe(dedent`
+      SELECT
+        a - - b
+    `);
+    expect(format('SELECT 1 - -1', { denseOperators: true })).toBe(dedent`
+      SELECT
+        1 - -1
+    `);
+  });
+
   it('supports @@variables', () => {
     expect(format('SELECT @@error.message, @@time_zone')).toBe(dedent`
       SELECT

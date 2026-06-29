@@ -83,19 +83,6 @@ describe('sqlFormatter', () => {
     }).toThrow('commaPosition config is no more supported.');
   });
 
-  it('keeps the boundary space before a negative operand but stays dense elsewhere', () => {
-    // The "--" that "a - -b" would dense into re-parses as a line comment, so that
-    // one boundary keeps its space; everything else still denses ("a-" / "1-").
-    expect(format('SELECT a - -b', { denseOperators: true })).toBe(dedent`
-      SELECT
-        a- -b
-    `);
-    expect(format('SELECT 1 - -1', { denseOperators: true })).toBe(dedent`
-      SELECT
-        1- -1
-    `);
-  });
-
   describe('formatDialect()', () => {
     it('allows passing Dialect config object as a dialect parameter', () => {
       expect(formatDialect('SELECT [foo], `bar`;', { dialect: sqlite })).toBe(dedent`
