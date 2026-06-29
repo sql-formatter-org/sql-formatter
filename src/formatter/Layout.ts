@@ -57,10 +57,10 @@ export default class Layout {
           this.items.push(WS.SINGLE_INDENT);
           break;
         default:
-          // Don't glue a token starting with "-" directly onto one ending with
+          // Don't glue a layout item starting with "-" directly onto one ending with
           // "-": that forms "--", which re-parses as a line comment and
           // swallows the rest of the line (e.g. densing "a - -b" into "a--b").
-          if (typeof item === 'string' && item.startsWith('-') && this.lastTokenEndsWith('-')) {
+          if (typeof item === 'string' && item.startsWith('-') && this.lastItemEndsWith('-')) {
             this.items.push(WS.SPACE);
           }
           this.items.push(item);
@@ -68,7 +68,7 @@ export default class Layout {
     }
   }
 
-  private lastTokenEndsWith(suffix: string): boolean {
+  private lastItemEndsWith(suffix: string): boolean {
     const lastItem = last(this.items);
     return typeof lastItem === 'string' && lastItem.endsWith(suffix);
   }
