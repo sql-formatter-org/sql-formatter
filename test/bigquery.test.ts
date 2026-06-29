@@ -58,10 +58,13 @@ describe('BigQueryFormatter', () => {
     'EXCEPT DISTINCT',
     'INTERSECT DISTINCT',
   ]);
-  supportsOperators(format, [...standardOperators, '&', '|', '^', '~', '>>', '<<', '||', '=>'], {
-    any: true,
-    identifierDashes: true,
-  });
+  supportsOperators(
+    format,
+    // In BigQuery the `-` operator needs special handling,
+    // we'll exclude it from this generic test and have separate tests explicitly for it.
+    [...standardOperators.filter(op => op !== '-'), '&', '|', '^', '~', '>>', '<<', '||', '=>'],
+    { any: true }
+  );
   supportsIsDistinctFrom(format);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
   supportsWindow(format);
@@ -94,6 +97,11 @@ describe('BigQueryFormatter', () => {
       FROM
         t
     `);
+  });
+
+  // Formatting `-` it to `foo-bar` would turn it into an identifier in BigQuery
+  it(`does not compact the - operator in dense mode`, () => {
+    expect(format(`foo - bar`, { denseOperators: true })).toBe(`foo - bar`);
   });
 
   it('supports @@variables', () => {
