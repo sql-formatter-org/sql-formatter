@@ -5,7 +5,7 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter.js';
 
 import supportsBetween from './features/between.js';
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsSchema from './features/schema.js';
 import supportsStrings from './features/strings.js';
 import supportsReturning from './features/returning.js';
@@ -35,7 +35,7 @@ describe('N1qlFormatter', () => {
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
   supportsSchema(format);
-  supportsOperators(format, ['%', '==', '||'], {
+  supportsOperators(format, [...standardOperators, '%', '==', '||'], {
     logicalOperators: ['AND', 'OR', 'XOR'],
     any: true,
   });

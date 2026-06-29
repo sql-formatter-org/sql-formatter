@@ -2,12 +2,11 @@ import dedent from 'dedent-js';
 
 import { FormatFn } from '../../src/sqlFormatter.js';
 
+export const standardOperators = ['+', '-', '*', '/', '>', '<', '=', '<>', '<=', '>=', '!='];
+
 type OperatorsConfig = {
   logicalOperators?: string[];
   any?: boolean;
-  // True for dialects that allow dashes inside identifiers (e.g. BigQuery),
-  // where the "-" operator must keep its surrounding spaces even in dense mode.
-  identifierDashes?: boolean;
 };
 
 export default function supportsOperators(
@@ -15,10 +14,6 @@ export default function supportsOperators(
   operators: string[],
   cfg: OperatorsConfig = {}
 ) {
-  // Always test for standard SQL operators
-  const standardOperators = ['+', '-', '*', '/', '>', '<', '=', '<>', '<=', '>=', '!='];
-  operators = [...standardOperators, ...operators];
-
   operators.forEach(op => {
     it(`supports ${op} operator`, () => {
       // Would be simpler to test with "foo${op}bar"
@@ -30,15 +25,24 @@ export default function supportsOperators(
 
   operators.forEach(op => {
     it(`supports ${op} operator in dense mode`, () => {
-      // In dialects with dashed identifiers, "foo-bar" would re-parse as a
-      // single identifier, so the "-" operator keeps its surrounding spaces.
-      if (op === '-' && cfg.identifierDashes) {
-        expect(format(`foo ${op} bar`, { denseOperators: true })).toBe(`foo ${op} bar`);
-      } else {
-        expect(format(`foo ${op} bar`, { denseOperators: true })).toBe(`foo${op}bar`);
-      }
+      expect(format(`foo ${op} bar`, { denseOperators: true })).toBe(`foo${op}bar`);
     });
   });
+
+  if (operators.includes('-')) {
+    it('does not glue a "-" in front of another "-" in dense mode', () => {
+      // "a - -b" / "1 - -1" must not be densed into "a--b" / "1--1":
+      // the "--" would re-parse as a line comment and silently swallow the rest of the line.
+      expect(format('SELECT a - -b', { denseOperators: true })).toBe(dedent`
+      SELECT
+        a- -b
+    `);
+      expect(format('SELECT 1 - -1', { denseOperators: true })).toBe(dedent`
+      SELECT
+        1- -1
+    `);
+    });
+  }
 
   (cfg.logicalOperators || ['AND', 'OR']).forEach(op => {
     it(`supports ${op} operator`, () => {

@@ -4,7 +4,7 @@ import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter.js';
 
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsWindow from './features/window.js';
 import supportsSetOperations from './features/setOperations.js';
 import supportsLimiting from './features/limiting.js';
@@ -32,7 +32,23 @@ describe('MySqlFormatter', () => {
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT']);
   supportsOperators(
     format,
-    ['%', ':=', '&', '|', '^', '~', '<<', '>>', '<=>', '->', '->>', '&&', '||', '!'],
+    [
+      ...standardOperators,
+      '%',
+      ':=',
+      '&',
+      '|',
+      '^',
+      '~',
+      '<<',
+      '>>',
+      '<=>',
+      '->',
+      '->>',
+      '&&',
+      '||',
+      '!',
+    ],
     {
       logicalOperators: ['AND', 'OR', 'XOR'],
       any: true,

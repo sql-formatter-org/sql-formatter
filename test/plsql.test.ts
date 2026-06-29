@@ -8,7 +8,7 @@ import supportsBetween from './features/between.js';
 import supportsCreateTable from './features/createTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsSchema from './features/schema.js';
 import supportsStrings from './features/strings.js';
 import supportsReturning from './features/returning.js';
@@ -59,7 +59,7 @@ describe('PlSqlFormatter', () => {
   supportsOperators(
     format,
     // Missing: '..' operator
-    ['**', ':=', '%', '~=', '^=', '>>', '<<', '=>', '||'],
+    [...standardOperators, '**', ':=', '%', '~=', '^=', '>>', '<<', '=>', '||'],
     {
       logicalOperators: ['AND', 'OR', 'XOR'],
       any: true,

@@ -9,7 +9,7 @@ import supportsStrings from './features/strings.js';
 import supportsArrayLiterals from './features/arrayLiterals.js';
 import supportsBetween from './features/between.js';
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsDeleteFrom from './features/deleteFrom.js';
 import supportsComments from './features/comments.js';
 import supportsIdentifiers from './features/identifiers.js';
@@ -58,10 +58,13 @@ describe('BigQueryFormatter', () => {
     'EXCEPT DISTINCT',
     'INTERSECT DISTINCT',
   ]);
-  supportsOperators(format, ['&', '|', '^', '~', '>>', '<<', '||', '=>'], {
-    any: true,
-    identifierDashes: true,
-  });
+  supportsOperators(
+    format,
+    // In BigQuery the `-` operator needs special handling,
+    // we'll exclude it from this generic test and have separate tests explicitly for it.
+    [...standardOperators.filter(op => op !== '-'), '&', '|', '^', '~', '>>', '<<', '||', '=>'],
+    { any: true }
+  );
   supportsIsDistinctFrom(format);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
   supportsWindow(format);
@@ -93,6 +96,22 @@ describe('BigQueryFormatter', () => {
         x - foo (y)
       FROM
         t
+    `);
+  });
+
+  // Formatting `-` it to `foo-bar` would turn it into an identifier in BigQuery
+  it(`does not compact the - operator in dense mode`, () => {
+    expect(format(`foo - bar`, { denseOperators: true })).toBe(`foo - bar`);
+  });
+
+  it('does not glue a "-" in front of another "-" in dense mode', () => {
+    expect(format('SELECT a - -b', { denseOperators: true })).toBe(dedent`
+      SELECT
+        a - - b
+    `);
+    expect(format('SELECT 1 - -1', { denseOperators: true })).toBe(dedent`
+      SELECT
+        1 - -1
     `);
   });
 

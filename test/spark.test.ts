@@ -8,7 +8,7 @@ import supportsBetween from './features/between.js';
 import supportsCreateTable from './features/createTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsStrings from './features/strings.js';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors.js';
 import supportsComments from './features/comments.js';
@@ -41,10 +41,14 @@ describe('SparkFormatter', () => {
   supportsStrings(format, ["''-bs", '""-bs', "X''", 'X""', "R''", 'R""']);
   supportsIdentifiers(format, ['``']);
   supportsBetween(format);
-  supportsOperators(format, ['%', '~', '^', '|', '&', '<=>', '==', '!', '||', '->'], {
-    logicalOperators: ['AND', 'OR', 'XOR'],
-    any: true,
-  });
+  supportsOperators(
+    format,
+    [...standardOperators, '%', '~', '^', '|', '&', '<=>', '==', '!', '||', '->'],
+    {
+      logicalOperators: ['AND', 'OR', 'XOR'],
+      any: true,
+    }
+  );
   supportsArrayAndMapAccessors(format);
   supportsJoin(format, {
     additionally: [

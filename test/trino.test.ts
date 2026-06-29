@@ -9,7 +9,7 @@ import supportsCreateTable from './features/createTable.js';
 import supportsDropTable from './features/dropTable.js';
 import supportsDeleteFrom from './features/deleteFrom.js';
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsStrings from './features/strings.js';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors.js';
 import supportsComments from './features/comments.js';
@@ -53,7 +53,9 @@ describe('TrinoFormatter', () => {
   supportsIdentifiers(format, [`""-qq`]);
   supportsBetween(format);
   // Missing: '?' operator (for row patterns)
-  supportsOperators(format, ['%', '->', '=>', '||', '|', '^', '$'], { any: true });
+  supportsOperators(format, [...standardOperators, '%', '->', '=>', '||', '|', '^', '$'], {
+    any: true,
+  });
   supportsIsDistinctFrom(format);
   supportsArrayLiterals(format, { withArrayPrefix: true });
   supportsArrayAndMapAccessors(format);

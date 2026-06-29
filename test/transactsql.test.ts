@@ -8,7 +8,7 @@ import supportsDropTable from './features/dropTable.js';
 import supportsAlterTable from './features/alterTable.js';
 import supportsStrings from './features/strings.js';
 import supportsBetween from './features/between.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsJoin from './features/join.js';
 import supportsConstraints from './features/constraints.js';
 import supportsDeleteFrom from './features/deleteFrom.js';
@@ -51,7 +51,24 @@ describe('TransactSqlFormatter', () => {
   // Missing: `::` scope resolution operator (tested separately)
   supportsOperators(
     format,
-    ['%', '&', '|', '^', '~', '!<', '!>', '+=', '-=', '*=', '/=', '%=', '|=', '&=', '^='],
+    [
+      ...standardOperators,
+      '%',
+      '&',
+      '|',
+      '^',
+      '~',
+      '!<',
+      '!>',
+      '+=',
+      '-=',
+      '*=',
+      '/=',
+      '%=',
+      '|=',
+      '&=',
+      '^=',
+    ],
     { any: true }
   );
   supportsJoin(format, { without: ['NATURAL'], supportsUsing: false, supportsApply: true });

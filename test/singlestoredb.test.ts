@@ -3,7 +3,7 @@ import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter.js';
 
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsSetOperations from './features/setOperations.js';
 import supportsLimiting from './features/limiting.js';
 import supportsCreateTable from './features/createTable.js';
@@ -35,7 +35,7 @@ describe('SingleStoreDbFormatter', () => {
   ]);
   supportsOperators(
     format,
-    [':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||', ':>', '!:>'],
+    [...standardOperators, ':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||', ':>', '!:>'],
     { any: true }
   );
   supportsLimiting(format, { limit: true, offset: true });

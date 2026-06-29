@@ -4,7 +4,7 @@ import { format as originalFormat, FormatFn } from '../src/sqlFormatter.js';
 import behavesLikeMariaDbFormatter from './behavesLikeMariaDbFormatter.js';
 
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsReturning from './features/returning.js';
 import supportsSetOperations, { standardSetOperations } from './features/setOperations.js';
 import supportsLimiting from './features/limiting.js';
@@ -30,10 +30,14 @@ describe('MariaDbFormatter', () => {
     additionally: ['STRAIGHT_JOIN'],
   });
   supportsSetOperations(format, [...standardSetOperations, 'MINUS', 'MINUS ALL', 'MINUS DISTINCT']);
-  supportsOperators(format, ['%', ':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||', '!'], {
-    logicalOperators: ['AND', 'OR', 'XOR'],
-    any: true,
-  });
+  supportsOperators(
+    format,
+    [...standardOperators, '%', ':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||', '!'],
+    {
+      logicalOperators: ['AND', 'OR', 'XOR'],
+      any: true,
+    }
+  );
   supportsReturning(format);
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
   supportsCreateTable(format, {

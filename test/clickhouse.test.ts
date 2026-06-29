@@ -10,7 +10,7 @@ import supportsArrayLiterals from './features/arrayLiterals.js';
 import supportsArrayAndMapAccessors from './features/arrayAndMapAccessors.js';
 import supportsBetween from './features/between.js';
 import supportsJoin from './features/join.js';
-import supportsOperators from './features/operators.js';
+import supportsOperators, { standardOperators } from './features/operators.js';
 import supportsDeleteFrom from './features/deleteFrom.js';
 import supportsComments from './features/comments.js';
 import supportsIdentifiers from './features/identifiers.js';
@@ -163,7 +163,7 @@ describe('ClickhouseFormatter', () => {
     ],
   });
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'UNION DISTINCT', 'PARALLEL WITH']);
-  supportsOperators(format, ['%'], { any: false });
+  supportsOperators(format, [...standardOperators, '%'], { any: false });
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: false });
   supportsArrayAndMapAccessors(format);
