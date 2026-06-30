@@ -221,6 +221,19 @@ describe('PostgreSqlFormatter', () => {
     `);
   });
 
+  it('keeps spaces around OPERATOR() syntax with denseOperators', () => {
+    // Densing "foo OPERATOR(public.===) bar" into "fooOPERATOR(public.===)bar"
+    // glues the operands onto the keyword and re-parses as invalid SQL.
+    expect(format(`SELECT foo OPERATOR(public.===) bar;`, { denseOperators: true })).toBe(dedent`
+      SELECT
+        foo OPERATOR(public.===) bar;
+    `);
+    expect(format(`SELECT a OPERATOR(+) b;`, { denseOperators: true })).toBe(dedent`
+      SELECT
+        a OPERATOR(+) b;
+    `);
+  });
+
   // Issue #813
   it('supports OR REPLACE in CREATE FUNCTION', () => {
     expect(format(`CREATE OR REPLACE FUNCTION foo ();`)).toBe(dedent`

@@ -339,6 +339,11 @@ export default class ExpressionFormatter {
     // would otherwise re-parse as a single dashed identifier.
     if (text === '-' && this.dialectCfg.identifierDashes) {
       this.layout.add(text, WS.SPACE);
+    } else if (/^OPERATOR\s*\(/iu.test(text)) {
+      // PostgreSQL's "OPERATOR(schema.+)" is a keyword-like operator. Densing it
+      // would glue it to its operands ("aOPERATOR(...)b") and re-parse as invalid
+      // SQL, so keep its surrounding spaces even with denseOperators.
+      this.layout.add(text, WS.SPACE);
     } else if (this.cfg.denseOperators || this.dialectCfg.alwaysDenseOperators.includes(text)) {
       this.layout.add(WS.NO_SPACE, text);
     } else if (text === ':') {
