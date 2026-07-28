@@ -25,7 +25,7 @@ export type LayoutItem = WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | WS.MANDATORY
 export default class Layout {
   private items: LayoutItem[] = [];
 
-  constructor(public indentation: Indentation) {}
+  constructor(public indentation: Indentation, private startsOnNewLine: boolean = false) {}
 
   /**
    * Appends token strings and whitespace modifications to SQL string.
@@ -123,9 +123,11 @@ export default class Layout {
   }
 
   /**
-   * True when some content has already been added and nothing but indentation
-   * has been emitted since the last newline, meaning the next token would be
-   * placed at the start of a fresh (non-first) line.
+   * True when nothing but indentation has been emitted since the last newline,
+   * meaning the next token would be placed at the start of a fresh line.
+   *
+   * An empty layout counts when the statement itself is preceded by others,
+   * since the formatter joins statements with newlines.
    */
   public isAtStartOfLine(): boolean {
     for (let i = this.items.length - 1; i >= 0; i--) {
@@ -135,7 +137,7 @@ export default class Layout {
       }
       return item === WS.NEWLINE || item === WS.MANDATORY_NEWLINE;
     }
-    return false;
+    return this.startsOnNewLine;
   }
 
   private itemToString(item: LayoutItem): string {
