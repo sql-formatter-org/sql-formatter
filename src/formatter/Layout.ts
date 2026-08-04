@@ -57,10 +57,12 @@ export default class Layout {
           this.items.push(WS.SINGLE_INDENT);
           break;
         default:
-          // Don't glue a layout item starting with "-" directly onto one ending with
-          // "-": that forms "--", which re-parses as a line comment and
-          // swallows the rest of the line (e.g. densing "a - -b" into "a--b").
-          if (item.startsWith('-') && this.lastItemEndsWith('-')) {
+          // Don't glue an item starting with "-"/"+" onto a preceding operator when
+          // the two would re-lex as one token: "-" onto "-" forms "--" (a line
+          // comment that swallows the rest of the line), and a sign onto an operator
+          // containing ~!@#%^&|`? forms a merged operator like "%-" or "@>-" that parses
+          // differently (e.g. densing "5 % -2" into "5%-2").
+          if (this.wouldMergeIntoOperator(item)) {
             this.items.push(WS.SPACE);
           }
           this.items.push(item);
@@ -71,6 +73,21 @@ export default class Layout {
   private lastItemEndsWith(suffix: string): boolean {
     const lastItem = last(this.items);
     return typeof lastItem === 'string' && lastItem.endsWith(suffix);
+  }
+
+  private wouldMergeIntoOperator(item: string): boolean {
+    if (!item.startsWith('-') && !item.startsWith('+')) {
+      return false;
+    }
+    const lastItem = last(this.items);
+    if (typeof lastItem !== 'string') {
+      return false;
+    }
+    const run = /[-+*/<>=~!@#%^&|`?]+$/u.exec(lastItem)?.[0];
+    if (!run) {
+      return false;
+    }
+    return (item.startsWith('-') && run.endsWith('-')) || /[~!@#%^&|`?]/u.test(run);
   }
 
   private trimHorizontalWhitespace() {

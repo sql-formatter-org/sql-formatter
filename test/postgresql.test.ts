@@ -249,6 +249,25 @@ describe('PostgreSqlFormatter', () => {
     `);
   });
 
+  it('keeps a space between an operator and a following sign with denseOperators', () => {
+    expect(format('SELECT 5 % -2, 2 ^ -2, 8 # -1', { denseOperators: true })).toBe(dedent`
+      SELECT
+        5% -2,
+        2^ -2,
+        8# -1
+    `);
+    expect(format(`SELECT '[1,2]'::jsonb @> -1`, { denseOperators: true })).toBe(dedent`
+      SELECT
+        '[1,2]'::jsonb@> -1
+    `);
+    expect(format(`SELECT data ? -1 FROM t`, { denseOperators: true })).toBe(dedent`
+      SELECT
+        data? -1
+      FROM
+        t
+    `);
+  });
+
   // Issue #813
   it('supports OR REPLACE in CREATE FUNCTION', () => {
     expect(format(`CREATE OR REPLACE FUNCTION foo ();`)).toBe(dedent`
