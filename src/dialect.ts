@@ -47,4 +47,5 @@ const processDialectFormatOptions = ({
     (options.tabularOnelineClauses ?? options.onelineClauses).map(name => [name, true])
   ),
   identifierDashes: Boolean(tokenizerOptions.identChars?.dashes),
+  operatorsCombine: Boolean(options.operatorsCombine),
 });

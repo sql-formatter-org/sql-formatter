@@ -182,5 +182,6 @@ export const redshift: DialectOptions = {
     alwaysDenseOperators: ['::'],
     onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
     tabularOnelineClauses,
+    operatorsCombine: true,
   },
 };

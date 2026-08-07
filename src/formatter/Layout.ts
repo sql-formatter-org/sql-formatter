@@ -25,7 +25,7 @@ export type LayoutItem = WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | WS.MANDATORY
 export default class Layout {
   private items: LayoutItem[] = [];
 
-  constructor(public indentation: Indentation) {}
+  constructor(public indentation: Indentation, private operatorsCombine = false) {}
 
   /**
    * Appends token strings and whitespace modifications to SQL string.
@@ -58,10 +58,11 @@ export default class Layout {
           break;
         default:
           // Don't glue an item starting with "-"/"+" onto a preceding operator when
-          // the two would re-lex as one token: "-" onto "-" forms "--" (a line
-          // comment that swallows the rest of the line), and a sign onto an operator
-          // containing ~!@#%^&|`? forms a merged operator like "%-" or "@>-" that parses
-          // differently (e.g. densing "5 % -2" into "5%-2").
+          // the two would re-lex as one token. "-" onto "-" forms "--" (a line
+          // comment that swallows the rest of the line) in every dialect. In dialects
+          // that lex a run of operator characters as a single operator (PostgreSQL,
+          // Redshift), a sign onto an operator containing ~!@#%^&|`? also merges
+          // (e.g. densing "5 % -2" into "5%-2", which re-parses as the operator "%-").
           if (this.wouldMergeIntoOperator(item)) {
             this.items.push(WS.SPACE);
           }
@@ -87,7 +88,10 @@ export default class Layout {
     if (!run) {
       return false;
     }
-    return (item.startsWith('-') && run.endsWith('-')) || /[~!@#%^&|`?]/u.test(run);
+    if (item.startsWith('-') && run.endsWith('-')) {
+      return true;
+    }
+    return this.operatorsCombine && /[~!@#%^&|`?]/u.test(run);
   }
 
   private trimHorizontalWhitespace() {
