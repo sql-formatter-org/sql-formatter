@@ -63,6 +63,13 @@ export default class Layout {
           if (item.startsWith('-') && this.lastItemEndsWith('-')) {
             this.items.push(WS.SPACE);
           }
+          // Don't glue a "." onto a bare integer literal: "1." re-lexes as a number
+          // and absorbs the property-access operator, so "1 . x" would collapse to
+          // "1.x" and re-parse as a different expression. Identifiers that merely end
+          // in a digit ("t1.x") are unaffected.
+          if (item.startsWith('.') && this.lastItemIsIntegerLiteral()) {
+            this.items.push(WS.SPACE);
+          }
           this.items.push(item);
       }
     }
@@ -71,6 +78,11 @@ export default class Layout {
   private lastItemEndsWith(suffix: string): boolean {
     const lastItem = last(this.items);
     return typeof lastItem === 'string' && lastItem.endsWith(suffix);
+  }
+
+  private lastItemIsIntegerLiteral(): boolean {
+    const lastItem = last(this.items);
+    return typeof lastItem === 'string' && /^[0-9]+$/.test(lastItem);
   }
 
   private trimHorizontalWhitespace() {

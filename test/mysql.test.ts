@@ -98,6 +98,18 @@ describe('MySqlFormatter', () => {
     `);
   });
 
+  it('keeps a numeric property access idempotent', () => {
+    // "1 ." must not glue into "1." which re-lexes as a number literal and
+    // swallows the property-access operator.
+    const sql = 'SELECT 1 . /*x*/ 5e';
+    const result = dedent`
+      SELECT
+        1 ./*x*/ 5e
+    `;
+    expect(format(sql)).toBe(result);
+    expect(format(result)).toBe(result);
+  });
+
   it('formats ALTER TABLE ... ALTER COLUMN', () => {
     expect(
       format(
