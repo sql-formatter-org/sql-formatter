@@ -265,6 +265,7 @@ export const singlestoredb: DialectOptions = {
     ],
     lineCommentTypes: ['--', '#'],
     operators: [
+      '%',
       ':=',
       '&',
       '|',
