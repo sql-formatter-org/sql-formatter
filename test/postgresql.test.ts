@@ -249,6 +249,20 @@ describe('PostgreSqlFormatter', () => {
     `);
   });
 
+  // Every character that lets PostgreSQL lex a run as a single operator can swallow a
+  // following sign, so each one is checked rather than a sample. The tenth such
+  // character, a backtick, is legal in CREATE OPERATOR but the lexer never yields it
+  // as an operator, so it is not reachable from here.
+  it.each(['~', '!~', '@>', '#', '%', '^', '&', '|', '?'])(
+    'keeps a space between the operator %s and a following sign with denseOperators',
+    operator => {
+      expect(format(`SELECT a ${operator} -1`, { denseOperators: true })).toBe(dedent`
+        SELECT
+          a${operator} -1
+      `);
+    }
+  );
+
   it('keeps a space between an operator and a following sign with denseOperators', () => {
     expect(format('SELECT 5 % -2, 2 ^ -2, 8 # -1', { denseOperators: true })).toBe(dedent`
       SELECT

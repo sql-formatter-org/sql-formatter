@@ -57,13 +57,7 @@ export default class Layout {
           this.items.push(WS.SINGLE_INDENT);
           break;
         default:
-          // Don't glue an item starting with "-"/"+" onto a preceding operator when
-          // the two would re-lex as one token. "-" onto "-" forms "--" (a line
-          // comment that swallows the rest of the line) in every dialect. In dialects
-          // that lex a run of operator characters as a single operator (PostgreSQL,
-          // Redshift), a sign onto an operator containing ~!@#%^&|`? also merges
-          // (e.g. densing "5 % -2" into "5%-2", which re-parses as the operator "%-").
-          if (this.wouldMergeIntoOperator(item)) {
+          if (!this.isItemSafeToAppend(item)) {
             this.items.push(WS.SPACE);
           }
           this.items.push(item);
@@ -71,27 +65,34 @@ export default class Layout {
     }
   }
 
-  private lastItemEndsWith(suffix: string): boolean {
-    const lastItem = last(this.items);
-    return typeof lastItem === 'string' && lastItem.endsWith(suffix);
-  }
-
-  private wouldMergeIntoOperator(item: string): boolean {
+  /**
+   * Whether `item` can be written directly after the preceding item without the
+   * two re-lexing as a single token.
+   *
+   * Only an item starting with "-" or "+" is at risk, and only when the preceding
+   * item ends in operator characters. "-" after a trailing "-" forms "--", a line
+   * comment that swallows the rest of the line, in every dialect. In a dialect that
+   * lexes a run of operator characters as one operator, a sign after an operator
+   * containing any of ~!@#%^&|`? merges too: "5 % -2" written densely as "5%-2"
+   * re-parses as the operator "%-".
+   */
+  private isItemSafeToAppend(item: string): boolean {
     if (!item.startsWith('-') && !item.startsWith('+')) {
-      return false;
+      return true;
     }
     const lastItem = last(this.items);
     if (typeof lastItem !== 'string') {
-      return false;
-    }
-    const run = /[-+*/<>=~!@#%^&|`?]+$/u.exec(lastItem)?.[0];
-    if (!run) {
-      return false;
-    }
-    if (item.startsWith('-') && run.endsWith('-')) {
       return true;
     }
-    return this.operatorsCombine && /[~!@#%^&|`?]/u.test(run);
+    // The operator characters the new item would be written against.
+    const precedingOperatorChars = /[-+*/<>=~!@#%^&|`?]+$/u.exec(lastItem)?.[0];
+    if (!precedingOperatorChars) {
+      return true;
+    }
+    if (item.startsWith('-') && precedingOperatorChars.endsWith('-')) {
+      return false;
+    }
+    return !(this.operatorsCombine && /[~!@#%^&|`?]/u.test(precedingOperatorChars));
   }
 
   private trimHorizontalWhitespace() {
