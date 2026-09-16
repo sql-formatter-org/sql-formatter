@@ -35,7 +35,22 @@ describe('SingleStoreDbFormatter', () => {
   ]);
   supportsOperators(
     format,
-    [...standardOperators, ':=', '&', '|', '^', '~', '<<', '>>', '<=>', '&&', '||', ':>', '!:>'],
+    [
+      ...standardOperators,
+      '%',
+      ':=',
+      '&',
+      '|',
+      '^',
+      '~',
+      '<<',
+      '>>',
+      '<=>',
+      '&&',
+      '||',
+      ':>',
+      '!:>',
+    ],
     { any: true }
   );
   supportsLimiting(format, { limit: true, offset: true });
