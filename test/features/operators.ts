@@ -7,6 +7,10 @@ export const standardOperators = ['+', '-', '*', '/', '>', '<', '=', '<>', '<=',
 type OperatorsConfig = {
   logicalOperators?: string[];
   any?: boolean;
+  // Set in dialects where an operator can take a following sign into its own name,
+  // so that "1 % -2" must not be densed to "1%-2".
+  // Such dialects test the spacing of each of their operators separately.
+  operatorsAbsorbSign?: boolean;
 };
 
 export default function supportsOperators(
@@ -42,6 +46,16 @@ export default function supportsOperators(
         1- -1
     `);
     });
+  }
+
+  if (!cfg.operatorsAbsorbSign) {
+    operators
+      .filter(op => !op.endsWith('-'))
+      .forEach(op => {
+        it(`denses a sign after ${op} operator in dense mode`, () => {
+          expect(format(`foo ${op} -2`, { denseOperators: true })).toBe(`foo${op}-2`);
+        });
+      });
   }
 
   (cfg.logicalOperators || ['AND', 'OR']).forEach(op => {

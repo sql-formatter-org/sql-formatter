@@ -139,7 +139,7 @@ describe('PostgreSqlFormatter', () => {
       '&&&',
       '|=|',
     ],
-    { any: true }
+    { any: true, operatorsAbsorbSign: true }
   );
   supportsIsDistinctFrom(format);
   supportsJoin(format);
@@ -249,38 +249,27 @@ describe('PostgreSqlFormatter', () => {
     `);
   });
 
-  // Every character that lets PostgreSQL lex a run as a single operator can swallow a
-  // following sign, so each one is checked rather than a sample. The tenth such
-  // character, a backtick, is legal in CREATE OPERATOR but the lexer never yields it
-  // as an operator, so it is not reachable from here.
-  it.each(['~', '!~', '@>', '#', '%', '^', '&', '|', '?'])(
-    'keeps a space between the operator %s and a following sign with denseOperators',
-    operator => {
-      expect(format(`SELECT a ${operator} -1`, { denseOperators: true })).toBe(dedent`
-        SELECT
-          a${operator} -1
-      `);
+  // An operator containing one of the ten characters ~!@#%^&|`? may end in "-" or "+",
+  // so densing a sign onto it would extend the operator name instead. Nine of the ten are
+  // covered here, together with the operators that end in "-" themselves. The tenth, the
+  // backtick, is never yielded as an operator by the lexer and can't be reached from here.
+  it.each(['~', '!~', '@', '@>', '#', '#>>', '%', '^', '&', '|', '||', '?', '@-@', '?-', '-|-'])(
+    'keeps a space after %s operator and before a sign in dense mode',
+    op => {
+      expect(format(`foo ${op} -1`, { denseOperators: true })).toBe(`foo${op} -1`);
+      expect(format(`foo ${op} +1`, { denseOperators: true })).toBe(`foo${op} +1`);
     }
   );
 
-  it('keeps a space between an operator and a following sign with denseOperators', () => {
-    expect(format('SELECT 5 % -2, 2 ^ -2, 8 # -1', { denseOperators: true })).toBe(dedent`
-      SELECT
-        5% -2,
-        2^ -2,
-        8# -1
-    `);
-    expect(format(`SELECT '[1,2]'::jsonb @> -1`, { denseOperators: true })).toBe(dedent`
-      SELECT
-        '[1,2]'::jsonb@> -1
-    `);
-    expect(format(`SELECT data ? -1 FROM t`, { denseOperators: true })).toBe(dedent`
-      SELECT
-        data? -1
-      FROM
-        t
-    `);
-  });
+  // The remaining operators are built only from -+*/<>= and can't take a sign into their
+  // name, so a sign denses onto them just like in any other dialect.
+  it.each(['*', '/', '<', '>=', '<<', '->', '->>', '<>', '<->'])(
+    'denses a sign after %s operator in dense mode',
+    op => {
+      expect(format(`foo ${op} -1`, { denseOperators: true })).toBe(`foo${op}-1`);
+      expect(format(`foo ${op} +1`, { denseOperators: true })).toBe(`foo${op}+1`);
+    }
+  );
 
   // Issue #813
   it('supports OR REPLACE in CREATE FUNCTION', () => {

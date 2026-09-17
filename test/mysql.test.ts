@@ -114,12 +114,4 @@ describe('MySqlFormatter', () => {
       DROP DEFAULT;
     `);
   });
-
-  it('does not space a sign after an operator in dense mode', () => {
-    expect(format('SELECT 5 % -2, 5 & -2', { denseOperators: true })).toBe(dedent`
-      SELECT
-        5%-2,
-        5&-2
-    `);
-  });
 });
