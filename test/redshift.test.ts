@@ -52,6 +52,9 @@ describe('RedshiftFormatter', () => {
     [...standardOperators, '^', '%', '@', '|/', '||/', '&', '|', '~', '<<', '>>', '||'],
     {
       any: true,
+      // Redshift inherits the operator syntax of PostgreSQL,
+      // but the formatter doesn't take that into account yet.
+      operatorsAbsorbSign: true,
     }
   );
   supportsJoin(format);
