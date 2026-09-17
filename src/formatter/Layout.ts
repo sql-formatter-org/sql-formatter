@@ -2,6 +2,15 @@ import { last } from '../utils.js';
 
 import Indentation from './Indentation.js';
 
+const STARTS_WITH_SIGN = /^[-+]/u;
+
+// An operator that would take a following sign into its own name.
+// PostgreSQL lexes a run of operator characters as a single operator, and such a name
+// may only end in "+" or "-" when it also contains one of ~!@#%^&|`? -- so "@-" is an
+// operator name, while "*-" is not.
+// https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-OPERATORS
+const ENDS_WITH_SIGN_ABSORBING_OPERATOR = /[~!@#%^&|`?][-+*/<>=~!@#%^&|`?]*$/u;
+
 /** Whitespace modifiers to be used with add() method */
 export enum WS {
   SPACE, // Adds single space
@@ -25,7 +34,7 @@ export type LayoutItem = WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | WS.MANDATORY
 export default class Layout {
   private items: LayoutItem[] = [];
 
-  constructor(public indentation: Indentation, private operatorsCombine = false) {}
+  constructor(public indentation: Indentation, private operatorsCombine: boolean) {}
 
   /**
    * Appends token strings and whitespace modifications to SQL string.
@@ -65,34 +74,25 @@ export default class Layout {
     }
   }
 
-  /**
-   * Whether `item` can be written directly after the preceding item without the
-   * two re-lexing as a single token.
-   *
-   * Only an item starting with "-" or "+" is at risk, and only when the preceding
-   * item ends in operator characters. "-" after a trailing "-" forms "--", a line
-   * comment that swallows the rest of the line, in every dialect. In a dialect that
-   * lexes a run of operator characters as one operator, a sign after an operator
-   * containing any of ~!@#%^&|`? merges too: "5 % -2" written densely as "5%-2"
-   * re-parses as the operator "%-".
-   */
+  /** Whether `item` can be written right after the preceding item without the two re-lexing as one. */
   private isItemSafeToAppend(item: string): boolean {
-    if (!item.startsWith('-') && !item.startsWith('+')) {
-      return true;
-    }
     const lastItem = last(this.items);
     if (typeof lastItem !== 'string') {
       return true;
     }
-    // The operator characters the new item would be written against.
-    const precedingOperatorChars = /[-+*/<>=~!@#%^&|`?]+$/u.exec(lastItem)?.[0];
-    if (!precedingOperatorChars) {
-      return true;
-    }
-    if (item.startsWith('-') && precedingOperatorChars.endsWith('-')) {
+    // "a - -b" densed to "a--b" would re-parse as a line comment.
+    if (lastItem.endsWith('-') && item.startsWith('-')) {
       return false;
     }
-    return !(this.operatorsCombine && /[~!@#%^&|`?]/u.test(precedingOperatorChars));
+    // "5 % -2" densed to "5%-2" would re-parse as the single operator "%-".
+    if (
+      this.operatorsCombine &&
+      ENDS_WITH_SIGN_ABSORBING_OPERATOR.test(lastItem) &&
+      STARTS_WITH_SIGN.test(item)
+    ) {
+      return false;
+    }
+    return true;
   }
 
   private trimHorizontalWhitespace() {

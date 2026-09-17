@@ -8,7 +8,7 @@ describe('Layout', () => {
     indentation.increaseTopLevel();
     indentation.increaseTopLevel();
 
-    const layout = new Layout(indentation);
+    const layout = new Layout(indentation, false);
     layout.add(...items);
     return layout.toString();
   }

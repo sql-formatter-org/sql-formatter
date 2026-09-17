@@ -54,8 +54,8 @@ export interface DialectFormatOptions {
   onelineClauses: string[];
   // List of clauses that should be formatted on a single line in tabular style
   tabularOnelineClauses?: string[];
-  // True in dialects that lex a run of operator characters as a single operator
-  // (PostgreSQL, Redshift), where two operators densed together re-parse as one.
+  // True in dialects that lex a run of operator characters as a single operator,
+  // where an operator and a following sign densed together re-parse as one operator.
   operatorsCombine?: boolean;
 }
 
@@ -514,7 +514,7 @@ export default class ExpressionFormatter {
         cfg: this.cfg,
         dialectCfg: this.dialectCfg,
         params: this.params,
-        layout: new InlineLayout(this.cfg.expressionWidth),
+        layout: new InlineLayout(this.cfg.expressionWidth, this.dialectCfg.operatorsCombine),
         inline: true,
         enclosingParenthesis,
       }).format(nodes);
