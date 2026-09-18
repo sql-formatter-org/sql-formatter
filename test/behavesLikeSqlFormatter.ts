@@ -277,4 +277,22 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
         tbl;
     `);
   });
+
+  it('treats zero-width space as whitespace', () => {
+    const zwsp = '\u200B';
+    expect(format(`SELECT${zwsp}foo FROM bar;`)).toBe(dedent`
+      SELECT
+        foo
+      FROM
+        bar;
+    `);
+  });
+
+  it('supports typographic single-quoted strings', () => {
+    expect(format('SELECT \u2018foo JOIN bar\u2019')).toBe('SELECT\n  \u2018foo JOIN bar\u2019');
+  });
+
+  it('does not treat a curly apostrophe inside an ASCII string as a delimiter', () => {
+    expect(format("SELECT 'don\u2019t'")).toBe("SELECT\n  'don\u2019t'");
+  });
 }

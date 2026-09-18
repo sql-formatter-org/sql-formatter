@@ -3,7 +3,9 @@ import { PrefixedQuoteType } from './TokenizerOptions.js';
 // Escapes regex special chars
 export const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
 
-export const WHITESPACE_REGEX = /\s+/uy;
+// \s covers ordinary Unicode whitespace (including NBSP and BOM), but not
+// U+200B ZERO WIDTH SPACE, which word processors often insert around quotes.
+export const WHITESPACE_REGEX = /[\s\u200B]+/uy;
 
 export const patternToRegex = (pattern: string): RegExp => new RegExp(`(?:${pattern})`, 'uy');
 

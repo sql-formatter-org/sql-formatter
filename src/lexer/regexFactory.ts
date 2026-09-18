@@ -112,6 +112,8 @@ export const quotePatterns = {
   "''-bs": String.raw`(?:'[^'\\]*(?:\\.[^'\\]*)*')`, // with backslash escapes
   "''-qq-bs": String.raw`(?:'[^'\\]*(?:\\.[^'\\]*)*')+`, // with repeated quote or backslash escapes
   "''-raw": String.raw`(?:'[^']*')`, // no escaping
+  // typographic single quotes (U+2018 / U+2019), common in copy-pasted SQL
+  '‘’': String.raw`\u2018[^\u2019]*\u2019`,
   // PostgreSQL dollar-quoted
   '$$': String.raw`(?<tag>\$\w*\$)[\s\S]*?\k<tag>`,
   // BigQuery '''triple-quoted''' (using \' to escape)

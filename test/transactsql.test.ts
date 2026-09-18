@@ -258,6 +258,33 @@ describe('TransactSqlFormatter', () => {
     `);
   });
 
+  // Issue #942
+  it('supports typographic quotes and zero-width spaces around a parameter', () => {
+    const zwsp = '\u200B';
+    // U+200B ZERO WIDTH SPACE + U+2018 LEFT SINGLE QUOTATION MARK + @p0
+    // + U+200B + U+2019 RIGHT SINGLE QUOTATION MARK
+    const quotedParam = `${zwsp}\u2018@p0${zwsp}\u2019`;
+    expect(format(`SELECT * FROM t WHERE x <= ${quotedParam} AND y >= ${quotedParam}`)).toBe(dedent`
+      SELECT
+        *
+      FROM
+        t
+      WHERE
+        x <= \u2018@p0${zwsp}\u2019
+        AND y >= \u2018@p0${zwsp}\u2019
+    `);
+
+    // Original playground input from the issue, with the same surrounding characters
+    expect(() =>
+      format(`select
+top @p1 ltrim(rtrim(long_matt_name))
+from sl_hbm_matter where matter_uno = @p2 and
+ CONVERT(DATETIME,CONVERT(VARCHAR(@p3), last_modified))
+<= ${quotedParam} and CONVERT(DATETIME,CONVERT(VARCHAR(@p3), sl_entry_date))
+ >= ${quotedParam} order by sl_entry_date desc`)
+    ).not.toThrow();
+  });
+
   // Issue #877
   it('allows the use of the ODBC date format', () => {
     const result = format(
