@@ -224,6 +224,64 @@ describe('PostgreSqlFormatter', () => {
     `);
   });
 
+  // Issue #928
+  it('formats CREATE POLICY FOR SELECT and FOR INSERT consistently', () => {
+    expect(
+      format(`
+        CREATE POLICY "Allow users to select their own records" ON public.user_achievements
+          FOR SELECT
+          TO authenticated
+          USING (user_id = auth.uid());
+
+        CREATE POLICY "Allow users to insert their own records" ON public.user_achievements
+          FOR INSERT
+          TO authenticated
+          WITH CHECK (user_id = auth.uid());
+      `)
+    ).toBe(dedent`
+      CREATE POLICY "Allow users to select their own records" ON public.user_achievements
+      FOR SELECT
+        TO authenticated USING (user_id = auth.uid ());
+
+      CREATE POLICY "Allow users to insert their own records" ON public.user_achievements
+      FOR INSERT
+        TO authenticated WITH CHECK (user_id = auth.uid ());
+    `);
+  });
+
+  it('formats CREATE POLICY FOR DELETE and WITH CHECK', () => {
+    expect(
+      format(`
+        CREATE POLICY p_del ON public.t
+          FOR DELETE
+          TO authenticated
+          USING (user_id = auth.uid());
+
+        CREATE POLICY p_ins ON public.t
+          WITH CHECK (true);
+      `)
+    ).toBe(dedent`
+      CREATE POLICY p_del ON public.t
+      FOR DELETE
+        TO authenticated USING (user_id = auth.uid ());
+
+      CREATE POLICY p_ins ON public.t WITH CHECK (true);
+    `);
+  });
+
+  it('formats ALTER POLICY USING and WITH CHECK', () => {
+    expect(
+      format(`
+        ALTER POLICY p ON public.t
+          TO authenticated
+          USING (user_id = 1)
+          WITH CHECK (user_id = 1);
+      `)
+    ).toBe(dedent`
+      ALTER POLICY p ON public.t TO authenticated USING (user_id = 1) WITH CHECK (user_id = 1);
+    `);
+  });
+
   // Issue #711
   it('supports OPERATOR() syntax', () => {
     expect(format(`SELECT foo OPERATOR(public.===) bar;`)).toBe(dedent`

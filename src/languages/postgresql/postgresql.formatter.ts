@@ -19,6 +19,8 @@ const reservedClauses = expandPhrases([
   'OFFSET',
   'FETCH {FIRST | NEXT}',
   'FOR {UPDATE | NO KEY UPDATE | SHARE | KEY SHARE} [OF]',
+  // CREATE/ALTER POLICY (issue #928)
+  'FOR {SELECT | INSERT | DELETE}',
   // Data manipulation
   // - insert:
   'INSERT INTO',
@@ -265,6 +267,8 @@ const reservedKeywordPhrases = expandPhrases([
   'IS [NOT] DISTINCT FROM',
   'NULLS {FIRST | LAST}',
   'WITH ORDINALITY',
+  // CREATE/ALTER POLICY: do not treat WITH CHECK as a CTE WITH clause (issue #928)
+  'WITH CHECK',
 ]);
 
 const reservedDataTypePhrases = expandPhrases([
