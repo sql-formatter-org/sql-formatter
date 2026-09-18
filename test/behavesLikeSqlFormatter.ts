@@ -277,4 +277,15 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
         tbl;
     `);
   });
+
+  // Issue #801
+  it('supports reserved word as column alias after AS', () => {
+    const result = format('SELECT id AS set FROM tbl;');
+    expect(result).toBe(dedent`
+      SELECT
+        id AS set
+      FROM
+        tbl;
+    `);
+  });
 }

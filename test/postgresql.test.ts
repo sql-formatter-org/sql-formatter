@@ -324,4 +324,30 @@ describe('PostgreSqlFormatter', () => {
       EXECUTE FUNCTION example_function ();
     `);
   });
+
+  // Issue #801
+  it('supports reserved word as table alias after AS', () => {
+    expect(format(`SELECT set.foo FROM settings AS set;`)).toBe(dedent`
+      SELECT
+        set.foo
+      FROM
+        settings AS set;
+    `);
+    expect(format(`SELECT * FROM pg_settings AS set WHERE set.name = $9;`)).toBe(dedent`
+      SELECT
+        *
+      FROM
+        pg_settings AS set
+      WHERE
+        set.name = $9;
+    `);
+  });
+
+  it('keeps SET as a clause after a reserved-word alias', () => {
+    expect(format(`UPDATE tbl AS set SET x = 1;`)).toBe(dedent`
+      UPDATE tbl AS set
+      SET
+        x = 1;
+    `);
+  });
 });

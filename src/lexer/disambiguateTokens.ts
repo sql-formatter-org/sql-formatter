@@ -12,6 +12,9 @@ import { isReserved, Token, TokenType } from './token.js';
  * When IDENTIFIER or RESERVED_DATA_TYPE token is followed by "["
  * converts it to ARRAY_IDENTIFIER or ARRAY_KEYWORD accordingly.
  *
+ * Converts a reserved word directly after AS to IDENTIFIER, as it can only
+ * be an alias name there.
+ *
  * This is needed to avoid ambiguity in parser which expects function names
  * to always be followed by open-paren, and to distinguish between
  * array accessor `foo[1]` and array literal `[1, 2, 3]`.
@@ -19,6 +22,7 @@ import { isReserved, Token, TokenType } from './token.js';
 export function disambiguateTokens(tokens: Token[]): Token[] {
   return tokens
     .map(propertyNameKeywordToIdent)
+    .map(keywordAliasAfterAs)
     .map(funcNameToIdent)
     .map(dataTypeToParameterizedDataType)
     .map(identToArrayIdent)
@@ -38,6 +42,47 @@ const propertyNameKeywordToIdent = (token: Token, i: number, tokens: Token[]): T
   }
   return token;
 };
+
+/**
+ * Some dialects allow reserved words as aliases, as in `SELECT id AS set FROM tbl`.
+ * Such a word is tokenized as a RESERVED_* token, which the parser then treats as
+ * the start of a clause. Directly after AS it can only be an alias name, so we
+ * convert it to IDENTIFIER.
+ *
+ * Only the token types that cannot legitimately follow AS are converted, leaving
+ * `CREATE TABLE t AS SELECT ...` and `PREPARE foo AS UPDATE ...` working.
+ */
+const keywordAliasAfterAs = (token: Token, i: number, tokens: Token[]): Token => {
+  if (canBeAliasAfterAs(token)) {
+    const prevToken = prevNonCommentToken(tokens, i);
+    if (prevToken && isAsKeyword(prevToken)) {
+      return { ...token, type: TokenType.IDENTIFIER, text: token.raw };
+    }
+  }
+  return token;
+};
+
+const isAsKeyword = (token: Token): boolean =>
+  (token.type === TokenType.RESERVED_KEYWORD || token.type === TokenType.RESERVED_KEYWORD_PHRASE) &&
+  token.text === 'AS';
+
+const canBeAliasAfterAs = (token: Token): boolean =>
+  token.type === TokenType.RESERVED_SET_OPERATION ||
+  token.type === TokenType.RESERVED_JOIN ||
+  token.type === TokenType.LIMIT ||
+  token.type === TokenType.BETWEEN ||
+  token.type === TokenType.CASE ||
+  token.type === TokenType.END ||
+  token.type === TokenType.WHEN ||
+  token.type === TokenType.ELSE ||
+  token.type === TokenType.THEN ||
+  token.type === TokenType.AND ||
+  token.type === TokenType.OR ||
+  token.type === TokenType.XOR ||
+  // SET is the clause keyword used as an alias in #801. The other
+  // RESERVED_CLAUSE words can follow AS for real (SELECT, VALUES, WITH,
+  // INSERT, UPDATE, DELETE, EXECUTE, ...), so they stay keywords.
+  (token.type === TokenType.RESERVED_CLAUSE && token.text === 'SET');
 
 const funcNameToIdent = (token: Token, i: number, tokens: Token[]): Token => {
   if (token.type === TokenType.RESERVED_FUNCTION_NAME) {
