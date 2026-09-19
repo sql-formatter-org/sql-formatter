@@ -636,4 +636,26 @@ describe('BigQueryFormatter', () => {
       expect(format(input, { linesBetweenQueries: 0 })).toBe(input);
     });
   });
+  describe('BigQuery dashed identifiers followed by line comments', () => {
+    // BigQuery is the only dialect that allows dashes inside identifiers, which
+    // makes "--" ambiguous with the start of a line comment. A keyword that is
+    // immediately followed by a line comment must still be recognized as a keyword.
+    it('recognizes SELECT when directly followed by a -- line comment', () => {
+      expect(format('SELECT-- c\na FROM t;')).toBe(dedent`
+        SELECT -- c
+          a
+        FROM
+          t;
+      `);
+    });
+
+    it('recognizes FROM when directly followed by a -- line comment', () => {
+      expect(format('SELECT a FROM-- c\nt;')).toBe(dedent`
+        SELECT
+          a
+        FROM -- c
+          t;
+      `);
+    });
+  });
 });
