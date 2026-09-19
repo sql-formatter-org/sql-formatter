@@ -114,4 +114,12 @@ describe('MySqlFormatter', () => {
       DROP DEFAULT;
     `);
   });
+  describe('comments in post-processed statements', () => {
+    // Comments must not stop SET( from being recognized as a function.
+    it('formats SET( as a function with a comment before the parens', () => {
+      expect(format('CREATE TABLE t (a SET /* c */ (1,2));')).toBe(dedent`
+        CREATE TABLE t (a SET/* c */ (1, 2));
+      `);
+    });
+  });
 });

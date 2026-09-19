@@ -1,6 +1,12 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
+import {
+  isToken,
+  nextNonCommentToken,
+  prevNonCommentToken,
+  Token,
+  TokenType,
+} from '../../lexer/token.js';
 import { dataTypes, keywords } from './spark.keywords.js';
 import { functions } from './spark.functions.js';
 
@@ -155,8 +161,8 @@ export const spark: DialectOptions = {
 
 function postProcess(tokens: Token[]) {
   return tokens.map((token, i) => {
-    const prevToken = tokens[i - 1] || EOF_TOKEN;
-    const nextToken = tokens[i + 1] || EOF_TOKEN;
+    const prevToken = prevNonCommentToken(tokens, i);
+    const nextToken = nextNonCommentToken(tokens, i);
 
     // [WINDOW](...)
     if (isToken.WINDOW(token) && nextToken.type === TokenType.OPEN_PAREN) {

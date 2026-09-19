@@ -191,4 +191,22 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
       GRANT ALL ON *.* TO user2;
     `);
   });
+  // Comments between a function name and its parenthesis must not stop the
+  // dialect post-processing from recognizing the function.
+  it('formats VALUES() as a function with a comment before it', () => {
+    expect(format('UPDATE t SET a = /*x*/ VALUES(b);')).toBe(dedent`
+      UPDATE t
+      SET
+        a = /*x*/ VALUES(b);
+    `);
+  });
+
+  it('formats VALUES() as a function with a line comment before it', () => {
+    expect(format('UPDATE t SET a = --x\nVALUES(b);')).toBe(dedent`
+      UPDATE t
+      SET
+        a = --x
+        VALUES(b);
+    `);
+  });
 }
