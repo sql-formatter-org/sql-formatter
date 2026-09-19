@@ -116,4 +116,60 @@ describe('sqlFormatter', () => {
       `);
     });
   });
+  describe('when a custom dialect would match zero-length tokens', () => {
+    // A quote type that resolves to no pattern at all yields a regex matching
+    // the empty string, which never advances the tokenizer. It used to loop
+    // forever instead of reporting the problem. Issue #754 was the same failure
+    // for paramTypes.
+    const dialectWith = (
+      tokenizerOptions: Partial<typeof sqlite.tokenizerOptions>
+    ): DialectOptions => ({
+      name: 'myCustomDialect',
+      tokenizerOptions: { ...sqlite.tokenizerOptions, ...tokenizerOptions },
+      formatOptions: sqlite.formatOptions,
+    });
+
+    const expectConfigError = (dialect: DialectOptions, message: RegExp) => {
+      expect(() => formatDialect('SELECT 1;', { dialect })).toThrow(message);
+    };
+
+    it('rejects an empty quote type list', () => {
+      const empty = (field: string) =>
+        new RegExp(`Empty ${field} given for dialect "myCustomDialect"\\.`);
+      expectConfigError(dialectWith({ stringTypes: [] }), empty('stringTypes'));
+      expectConfigError(dialectWith({ identTypes: [] }), empty('identTypes'));
+      expectConfigError(dialectWith({ variableTypes: [] }), empty('variableTypes'));
+    });
+
+    it('rejects a quote type name that has no pattern', () => {
+      // The types only allow known names, so this covers plain JavaScript
+      // callers. quotePatterns has no plain "''" key; the real keys are
+      // "''-qq", "''-bs", "''-raw" and so on.
+      const unknown = (quote: string) =>
+        new RegExp(`Unknown quote type ${JSON.stringify(quote)} given in stringTypes`);
+
+      expectConfigError(dialectWith({ stringTypes: ["''"] } as never), unknown("''"));
+
+      const prefixed = { stringTypes: [{ quote: '""', prefixes: ['X'] }] } as never;
+      expectConfigError(dialectWith(prefixed), unknown('""'));
+    });
+
+    it('rejects an empty regex quote type', () => {
+      expectConfigError(
+        dialectWith({ stringTypes: [{ regex: '' }] }),
+        /Empty regex given in stringTypes of dialect "myCustomDialect"\./
+      );
+    });
+
+    it('still allows a valid custom quote type list', () => {
+      expect(
+        formatDialect('SELECT 1;', {
+          dialect: dialectWith({ stringTypes: [...sqlite.tokenizerOptions.stringTypes] }),
+        })
+      ).toBe(dedent`
+        SELECT
+          1;
+      `);
+    });
+  });
 });
