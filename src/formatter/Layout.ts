@@ -25,7 +25,12 @@ export type LayoutItem = WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | WS.MANDATORY
 export default class Layout {
   private items: LayoutItem[] = [];
 
-  constructor(public indentation: Indentation) {}
+  constructor(
+    public indentation: Indentation,
+    // Line comment markers of the dialect. Any two adjacent layout items whose
+    // boundary would form one of these must stay separated.
+    private lineCommentTypes: string[] = ['--']
+  ) {}
 
   /**
    * Appends token strings and whitespace modifications to SQL string.
@@ -57,10 +62,12 @@ export default class Layout {
           this.items.push(WS.SINGLE_INDENT);
           break;
         default:
-          // Don't glue a layout item starting with "-" directly onto one ending with
-          // "-": that forms "--", which re-parses as a line comment and
-          // swallows the rest of the line (e.g. densing "a - -b" into "a--b").
-          if (item.startsWith('-') && this.lastItemEndsWith('-')) {
+          // Don't glue two layout items together when the boundary forms a line
+          // comment marker of this dialect: the result would re-parse as a
+          // comment and swallow the rest of the line (e.g. densing "a - -b"
+          // into "a--b", or a "/" operator directly before a block comment in
+          // Snowflake, where "//" starts a line comment).
+          if (this.wouldFormLineComment(item)) {
             this.items.push(WS.SPACE);
           }
           this.items.push(item);
@@ -68,9 +75,20 @@ export default class Layout {
     }
   }
 
-  private lastItemEndsWith(suffix: string): boolean {
+  /**
+   * True when appending the given item directly onto the last one would form a
+   * line comment marker of this dialect, e.g. "-" after "-" in every dialect,
+   * or "/" after "/" in dialects where "//" starts a comment.
+   */
+  private wouldFormLineComment(item: string): boolean {
     const lastItem = last(this.items);
-    return typeof lastItem === 'string' && lastItem.endsWith(suffix);
+    if (typeof lastItem !== 'string') {
+      return false;
+    }
+    return this.lineCommentTypes.some(
+      marker =>
+        marker.length > 1 && lastItem.endsWith(marker[0]) && item.startsWith(marker.slice(1))
+    );
   }
 
   private trimHorizontalWhitespace() {

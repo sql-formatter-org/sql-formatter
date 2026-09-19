@@ -66,6 +66,10 @@ export interface ProcessedDialectFormatOptions {
   // In such dialects the "-" operator must keep its surrounding spaces,
   // otherwise "a - b" densed to "a-b" would re-parse as a single identifier.
   identifierDashes: boolean;
+  // Line comment markers of the dialect (e.g. "--", "//", "#"). Used by Layout
+  // to avoid gluing a layout item onto a preceding one in a way that would
+  // form a line comment and swallow the rest of the line.
+  lineCommentTypes: string[];
 }
 
 /** Formats a generic SQL expression */
