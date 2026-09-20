@@ -39,16 +39,16 @@ export default class Formatter {
 
   private formatAst(statements: StatementNode[]): string {
     return statements
-      .map(stat => this.formatStatement(stat))
+      .map((stat, i) => this.formatStatement(stat, i > 0))
       .join('\n'.repeat(this.cfg.linesBetweenQueries + 1));
   }
 
-  private formatStatement(statement: StatementNode): string {
+  private formatStatement(statement: StatementNode, startsOnNewLine: boolean): string {
     const layout = new ExpressionFormatter({
       cfg: this.cfg,
       dialectCfg: this.dialect.formatOptions,
       params: this.params,
-      layout: new Layout(new Indentation(indentString(this.cfg))),
+      layout: new Layout(new Indentation(indentString(this.cfg)), startsOnNewLine),
     }).format(statement.children);
 
     if (!statement.hasSemicolon) {

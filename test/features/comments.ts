@@ -90,6 +90,19 @@ export default function supportsComments(format: FormatFn, opts: CommentsConfig 
     expect(format(result)).toBe(result);
   });
 
+  it('keeps a block comment leading a later statement on its own line', () => {
+    const sql = 'SELECT 1; /* c */ COMMIT;';
+    const result = dedent`
+      SELECT
+        1;
+
+      /* c */
+      COMMIT;
+    `;
+    expect(format(sql)).toBe(result);
+    expect(format(result)).toBe(result);
+  });
+
   it('keeps block comments in various CREATE TABLE statement positions idempotent', () => {
     const sql =
       'CREATE TABLE /* c */ tbl (/* c */ id INT, /* c */ first_name TEXT, last_name TEXT)';
