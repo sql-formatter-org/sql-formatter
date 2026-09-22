@@ -279,13 +279,13 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   });
 
   // Issue #801
-  it('supports reserved word as column alias after AS', () => {
-    const result = format('SELECT id AS set FROM tbl;');
+  it('supports reserved word as alias after AS', () => {
+    const result = format('SELECT id AS set FROM tbl AS set;');
     expect(result).toBe(dedent`
       SELECT
         id AS set
       FROM
-        tbl;
+        tbl AS set;
     `);
   });
 }

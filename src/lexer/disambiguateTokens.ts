@@ -12,8 +12,8 @@ import { isReserved, Token, TokenType } from './token.js';
  * When IDENTIFIER or RESERVED_DATA_TYPE token is followed by "["
  * converts it to ARRAY_IDENTIFIER or ARRAY_KEYWORD accordingly.
  *
- * Converts a reserved word directly after AS to IDENTIFIER, as it can only
- * be an alias name there.
+ * Converts a reserved word after AS to IDENTIFIER when that word cannot start
+ * a clause there, leaving `CREATE TABLE t AS SELECT ...` alone.
  *
  * This is needed to avoid ambiguity in parser which expects function names
  * to always be followed by open-paren, and to distinguish between
@@ -63,8 +63,7 @@ const keywordAliasAfterAs = (token: Token, i: number, tokens: Token[]): Token =>
 };
 
 const isAsKeyword = (token: Token): boolean =>
-  (token.type === TokenType.RESERVED_KEYWORD || token.type === TokenType.RESERVED_KEYWORD_PHRASE) &&
-  token.text === 'AS';
+  token.type === TokenType.RESERVED_KEYWORD && token.text === 'AS';
 
 const canBeAliasAfterAs = (token: Token): boolean =>
   token.type === TokenType.RESERVED_SET_OPERATION ||
