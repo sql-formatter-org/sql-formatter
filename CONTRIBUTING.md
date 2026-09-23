@@ -20,7 +20,10 @@ Tests that apply to all languages should be in `behavesLikeSqlFormatter.ts`.
 For those who have admin access on the repo, the new release publish flow is as such:
 
 - `pnpm login` (to ensure we are logged in)
-- `pnpm run release` (bumps version, git tag, git release, npm release).
+- `pnpm version {major | minor | patch}`
+- `pnpm publish`
+- `git push`
+- `git push --tags`
 - `git subtree push --prefix static origin gh-pages` (pushes demo page to GH pages)
 
 [prettier-plugin-sql-cst]: https://github.com/nene/prettier-plugin-sql-cst
