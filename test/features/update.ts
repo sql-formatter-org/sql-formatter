@@ -39,6 +39,16 @@ export default function supportsUpdate(format: FormatFn, { whereCurrentOf }: Upd
     `);
   });
 
+  // Issue #801
+  it('keeps SET as a clause after a reserved word alias', () => {
+    const result = format('UPDATE tbl AS set SET x = 1;');
+    expect(result).toBe(dedent`
+      UPDATE tbl AS set
+      SET
+        x = 1;
+    `);
+  });
+
   if (whereCurrentOf) {
     it('formats UPDATE statement with cursor position', () => {
       const result = format("UPDATE Customers SET Name='John' WHERE CURRENT OF my_cursor;");
