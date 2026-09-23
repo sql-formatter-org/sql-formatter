@@ -408,5 +408,6 @@ export const postgresql: DialectOptions = {
     alwaysDenseOperators: ['::', ':'],
     onelineClauses: [...standardOnelineClauses, ...tabularOnelineClauses],
     tabularOnelineClauses,
+    operatorsCombine: true,
   },
 };

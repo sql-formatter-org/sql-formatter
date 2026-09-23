@@ -2,6 +2,15 @@ import { last } from '../utils.js';
 
 import Indentation from './Indentation.js';
 
+const STARTS_WITH_SIGN = /^[-+]/u;
+
+// An operator that would take a following sign into its own name.
+// PostgreSQL lexes a run of operator characters as a single operator, and such a name
+// may only end in "+" or "-" when it also contains one of ~!@#%^&|`? -- so "@-" is an
+// operator name, while "*-" is not.
+// https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-OPERATORS
+const ENDS_WITH_SIGN_ABSORBING_OPERATOR = /[~!@#%^&|`?][-+*/<>=~!@#%^&|`?]*$/u;
+
 /** Whitespace modifiers to be used with add() method */
 export enum WS {
   SPACE, // Adds single space
@@ -25,7 +34,7 @@ export type LayoutItem = WS.SPACE | WS.SINGLE_INDENT | WS.NEWLINE | WS.MANDATORY
 export default class Layout {
   private items: LayoutItem[] = [];
 
-  constructor(public indentation: Indentation) {}
+  constructor(public indentation: Indentation, private operatorsCombine: boolean) {}
 
   /**
    * Appends token strings and whitespace modifications to SQL string.
@@ -57,10 +66,7 @@ export default class Layout {
           this.items.push(WS.SINGLE_INDENT);
           break;
         default:
-          // Don't glue a layout item starting with "-" directly onto one ending with
-          // "-": that forms "--", which re-parses as a line comment and
-          // swallows the rest of the line (e.g. densing "a - -b" into "a--b").
-          if (item.startsWith('-') && this.lastItemEndsWith('-')) {
+          if (!this.isItemSafeToAppend(item)) {
             this.items.push(WS.SPACE);
           }
           this.items.push(item);
@@ -68,9 +74,25 @@ export default class Layout {
     }
   }
 
-  private lastItemEndsWith(suffix: string): boolean {
+  /** Whether `item` can be written right after the preceding item without the two re-lexing as one. */
+  private isItemSafeToAppend(item: string): boolean {
     const lastItem = last(this.items);
-    return typeof lastItem === 'string' && lastItem.endsWith(suffix);
+    if (typeof lastItem !== 'string') {
+      return true;
+    }
+    // "a - -b" densed to "a--b" would re-parse as a line comment.
+    if (lastItem.endsWith('-') && item.startsWith('-')) {
+      return false;
+    }
+    // "5 % -2" densed to "5%-2" would re-parse as the single operator "%-".
+    if (
+      this.operatorsCombine &&
+      ENDS_WITH_SIGN_ABSORBING_OPERATOR.test(lastItem) &&
+      STARTS_WITH_SIGN.test(item)
+    ) {
+      return false;
+    }
+    return true;
   }
 
   private trimHorizontalWhitespace() {

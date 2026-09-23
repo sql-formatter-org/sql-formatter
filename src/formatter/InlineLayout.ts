@@ -16,8 +16,8 @@ export default class InlineLayout extends Layout {
   // but only when there actually is a space to remove.
   private trailingSpace = false;
 
-  constructor(private expressionWidth: number) {
-    super(new Indentation('')); // no indentation in inline layout
+  constructor(private expressionWidth: number, operatorsCombine: boolean) {
+    super(new Indentation(''), operatorsCombine); // no indentation in inline layout
   }
 
   public add(...items: (WS | string)[]) {

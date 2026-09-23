@@ -54,6 +54,9 @@ export interface DialectFormatOptions {
   onelineClauses: string[];
   // List of clauses that should be formatted on a single line in tabular style
   tabularOnelineClauses?: string[];
+  // True in dialects that lex a run of operator characters as a single operator,
+  // where an operator and a following sign densed together re-parse as one operator.
+  operatorsCombine?: boolean;
 }
 
 // Contains the same data as DialectFormatOptions,
@@ -66,6 +69,8 @@ export interface ProcessedDialectFormatOptions {
   // In such dialects the "-" operator must keep its surrounding spaces,
   // otherwise "a - b" densed to "a-b" would re-parse as a single identifier.
   identifierDashes: boolean;
+  // See DialectFormatOptions.operatorsCombine.
+  operatorsCombine: boolean;
 }
 
 /** Formats a generic SQL expression */
@@ -509,7 +514,7 @@ export default class ExpressionFormatter {
         cfg: this.cfg,
         dialectCfg: this.dialectCfg,
         params: this.params,
-        layout: new InlineLayout(this.cfg.expressionWidth),
+        layout: new InlineLayout(this.cfg.expressionWidth, this.dialectCfg.operatorsCombine),
         inline: true,
         enclosingParenthesis,
       }).format(nodes);
