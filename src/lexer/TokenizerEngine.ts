@@ -1,4 +1,5 @@
 import { Token, TokenType } from './token.js';
+import { ConfigError } from '../validateConfig.js';
 import { lineColFromIndex } from './lineColFromIndex.js';
 import { WHITESPACE_REGEX } from './regexUtil.js';
 
@@ -103,6 +104,12 @@ export default class TokenizerEngine {
     if (matches) {
       const matchedText = matches[0];
 
+      if (matchedText.length === 0) {
+        throw new ConfigError(
+          `A token rule matches the empty string at ${this.position()}, so the tokenizer would loop forever.\n${this.dialectInfo()}`
+        );
+      }
+
       const token: Token = {
         type: rule.type,
         raw: matchedText,
@@ -119,5 +126,10 @@ export default class TokenizerEngine {
       return token;
     }
     return undefined;
+  }
+
+  private position(): string {
+    const { line, col } = lineColFromIndex(this.input, this.index);
+    return `line ${line} column ${col}`;
   }
 }
