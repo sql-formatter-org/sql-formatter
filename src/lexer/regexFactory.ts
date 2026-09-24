@@ -31,8 +31,18 @@ export const operator = (operators: string[]) =>
 // For example "SELECT$ME" should be tokenized as:
 // - ["SELECT$ME"] when $ is allowed inside identifiers
 // - ["SELECT", "$", "ME"] when $ can't be part of identifiers.
-const rejectIdentCharsPattern = ({ rest, dashes }: IdentChars): string =>
-  rest || dashes ? `(?![${rest || ''}${dashes ? '-' : ''}])` : '';
+//
+// A dash only extends an identifier when it's followed by a character that could
+// start an identifier segment. So "SELECT-a" is a single identifier, while in
+// "SELECT--a" the dashes start a line comment and SELECT stays a keyword.
+const rejectIdentCharsPattern = (identChars: IdentChars): string => {
+  const { rest, dashes } = identChars;
+  const alternatives = [
+    ...(rest ? [`[${rest}]`] : []),
+    ...(dashes ? [`-(?=${identFirstCharsPattern(identChars)})`] : []),
+  ];
+  return alternatives.length ? `(?!${alternatives.join('|')})` : '';
+};
 
 /**
  * Builds a RegExp for all Reserved Keywords in a SQL dialect
@@ -156,6 +166,22 @@ export const string = (quoteTypes: QuoteType[]): RegExp =>
 export const identifier = (specialChars: IdentChars = {}): RegExp =>
   patternToRegex(identifierPattern(specialChars));
 
+// Unicode letters, diacritical marks and underscore
+const LETTER_CHARS = '\\p{Alphabetic}\\p{Mark}_';
+// Numbers 0..9, plus various unicode numbers
+const NUMBER_CHARS = '\\p{Decimal_Number}';
+
+/**
+ * Builds a character class matching the first character of an identifier.
+ * Dashed identifiers repeat this same pattern after every dash.
+ */
+const identFirstCharsPattern = ({ first, allowFirstCharNumber }: IdentChars = {}): string => {
+  const firstChars = escapeRegExp(first ?? '');
+  return allowFirstCharNumber
+    ? `[${LETTER_CHARS}${NUMBER_CHARS}${firstChars}]`
+    : `[${LETTER_CHARS}${firstChars}]`;
+};
+
 /**
  * Builds a RegExp string for valid identifiers in a SQL dialect
  */
@@ -165,17 +191,12 @@ export const identifierPattern = ({
   dashes,
   allowFirstCharNumber,
 }: IdentChars = {}): string => {
-  // Unicode letters, diacritical marks and underscore
-  const letter = '\\p{Alphabetic}\\p{Mark}_';
-  // Numbers 0..9, plus various unicode numbers
-  const number = '\\p{Decimal_Number}';
-
-  const firstChars = escapeRegExp(first ?? '');
   const restChars = escapeRegExp(rest ?? '');
 
-  const pattern = allowFirstCharNumber
-    ? `[${letter}${number}${firstChars}][${letter}${number}${restChars}]*`
-    : `[${letter}${firstChars}][${letter}${number}${restChars}]*`;
+  const pattern = `${identFirstCharsPattern({
+    first,
+    allowFirstCharNumber,
+  })}[${LETTER_CHARS}${NUMBER_CHARS}${restChars}]*`;
 
   return dashes ? withDashes(pattern) : pattern;
 };
