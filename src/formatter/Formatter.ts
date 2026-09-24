@@ -48,7 +48,10 @@ export default class Formatter {
       cfg: this.cfg,
       dialectCfg: this.dialect.formatOptions,
       params: this.params,
-      layout: new Layout(new Indentation(indentString(this.cfg))),
+      layout: new Layout(
+        new Indentation(indentString(this.cfg)),
+        this.dialect.formatOptions.lineCommentTypes
+      ),
     }).format(statement.children);
 
     if (!statement.hasSemicolon) {

@@ -221,4 +221,38 @@ describe('SnowflakeFormatter', () => {
       CREATE TABLE identifier($foo);
     `);
   });
+  describe('Snowflake line comments', () => {
+    // Snowflake is the only dialect where "//" starts a line comment, so a "/"
+    // operator directly in front of a comment used to glue into "//" and turn
+    // the rest of the line into comment text.
+    it('does not glue a slash operator onto a following block comment', () => {
+      const result = format('SELECT a / /* c */ b FROM t;', { denseOperators: true });
+      expect(result).toBe(dedent`
+        SELECT
+          a/ /* c */ b
+        FROM
+          t;
+      `);
+      // The regression: "b" used to become part of the "//" comment.
+      expect(result).toContain('b');
+      expect(result).not.toContain('a//');
+    });
+
+    it('does not glue a slash operator onto a formatter-disable comment', () => {
+      const result = format('SELECT a / /* sql-formatter-disable */ b FROM t;', {
+        denseOperators: true,
+      });
+      expect(result).toContain('a/ /* sql-formatter-disable */ b');
+      expect(result).not.toContain('a//');
+    });
+
+    it('keeps densing a plain division', () => {
+      expect(format('SELECT a / b FROM t;', { denseOperators: true })).toBe(dedent`
+        SELECT
+          a/b
+        FROM
+          t;
+      `);
+    });
+  });
 });
