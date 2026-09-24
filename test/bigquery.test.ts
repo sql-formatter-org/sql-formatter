@@ -636,4 +636,60 @@ describe('BigQueryFormatter', () => {
       expect(format(input, { linesBetweenQueries: 0 })).toBe(input);
     });
   });
+  describe('BigQuery parameterized types with comments', () => {
+    // A comment between ARRAY/STRUCT and "<" makes the outer type fail to
+    // combine, and the inner type is then combined on its own. When the angle
+    // brackets of that inner type never balance, the search for the closing
+    // bracket used to fall back to the last token, merging the whole rest of
+    // the query into a single identifier: the query after the type was
+    // silently destroyed. These tests lock down that the tokens are left
+    // alone instead.
+    const nestedTypeWithBlockComment = 'SELECT ARRAY /* c */ <ARRAY<INT64>>[1] FROM t;';
+    const nestedTypeWithLineComment = 'SELECT ARRAY -- c\n<ARRAY<INT64>>[1] FROM t;';
+
+    it('keeps the rest of the query after a nested type with a block comment', () => {
+      const result = format(nestedTypeWithBlockComment);
+      expect(result).toBe(dedent`
+        SELECT
+          ARRAY /* c */ < ARRAY < INT64 >> [1]
+        FROM
+          t;
+      `);
+      // The regression: FROM and t used to be merged into one identifier.
+      expect(result).toContain('FROM');
+      expect(result).not.toMatch(/FROMt/);
+    });
+
+    it('keeps the rest of the query after a nested type with a line comment', () => {
+      const result = format(nestedTypeWithLineComment);
+      expect(result).toBe(dedent`
+        SELECT
+          ARRAY -- c
+          < ARRAY < INT64 >> [1]
+        FROM
+          t;
+      `);
+      expect(result).not.toMatch(/FROMt/);
+    });
+
+    it('keeps a trailing alias after a nested type with a comment', () => {
+      const result = format('SELECT STRUCT /* c */ <a ARRAY<INT64>>(1) AS x FROM t;');
+      expect(result).toBe(dedent`
+        SELECT
+          STRUCT /* c */ < a ARRAY < INT64 >> (1) AS x
+        FROM
+          t;
+      `);
+      expect(result).not.toMatch(/ASx/);
+    });
+
+    it('keeps formatting nested types without comments unchanged', () => {
+      expect(format('SELECT ARRAY<ARRAY<INT64>>[1] FROM t;')).toBe(dedent`
+        SELECT
+          ARRAY<ARRAY<INT64>>[1]
+        FROM
+          t;
+      `);
+    });
+  });
 });

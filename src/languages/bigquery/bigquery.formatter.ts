@@ -225,6 +225,13 @@ function combineParameterizedTypes(tokens: Token[]) {
 
     if ((isToken.ARRAY(token) || isToken.STRUCT(token)) && tokens[i + 1]?.text === '<') {
       const endIndex = findClosingAngleBracketIndex(tokens, i + 1);
+      if (endIndex === -1) {
+        // Unbalanced angle brackets. There is no safe place to end the type,
+        // so leave the tokens as they are instead of swallowing the rest of
+        // the query into a single identifier.
+        processed.push(token);
+        continue;
+      }
       const typeDefTokens = tokens.slice(i, endIndex + 1);
       processed.push({
         type: TokenType.IDENTIFIER,
@@ -265,5 +272,8 @@ function findClosingAngleBracketIndex(tokens: Token[], startIndex: number): numb
       return i;
     }
   }
-  return tokens.length - 1;
+  // Brackets never balanced. Reporting "not found" lets the caller leave the
+  // tokens untouched; returning the last index used to make it merge the whole
+  // remaining token stream into one identifier.
+  return -1;
 }
