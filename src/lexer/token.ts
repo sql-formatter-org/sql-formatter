@@ -111,3 +111,29 @@ export const isReserved = (type: TokenType): boolean =>
 
 export const isLogicalOperator = (type: TokenType): boolean =>
   type === TokenType.AND || type === TokenType.OR || type === TokenType.XOR;
+
+/** Checks if token is a comment */
+export const isComment = (type: TokenType): boolean =>
+  type === TokenType.LINE_COMMENT ||
+  type === TokenType.BLOCK_COMMENT ||
+  type === TokenType.DISABLE_COMMENT;
+
+/** Returns the closest non-comment token preceding the given index, or EOF_TOKEN. */
+export const prevNonCommentToken = (tokens: Token[], index: number): Token => {
+  for (let i = index - 1; i >= 0; i--) {
+    if (!isComment(tokens[i].type)) {
+      return tokens[i];
+    }
+  }
+  return EOF_TOKEN;
+};
+
+/** Returns the closest non-comment token following the given index, or EOF_TOKEN. */
+export const nextNonCommentToken = (tokens: Token[], index: number): Token => {
+  for (let i = index + 1; i < tokens.length; i++) {
+    if (!isComment(tokens[i].type)) {
+      return tokens[i];
+    }
+  }
+  return EOF_TOKEN;
+};

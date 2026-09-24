@@ -1737,4 +1737,47 @@ describe('ClickhouseFormatter', () => {
         tuple();
     `);
   });
+  describe('comments in post-processed statements', () => {
+    // Comments between tokens must not affect the post-processing that decides
+    // whether SELECT is a clause or a privilege keyword.
+    it('formats CHECK GRANT with a comment before SELECT', () => {
+      expect(format('CHECK GRANT /* c */ SELECT ON db.table')).toBe(dedent`
+        CHECK GRANT
+          /* c */
+          SELECT ON db.table
+      `);
+    });
+
+    // Comments must not stop SET( from being recognized as a function.
+    it('formats SET( as a function with a comment before the parens', () => {
+      expect(format('SELECT SET /* c */ (100) FROM t;')).toBe(dedent`
+        SELECT
+          SET/* c */ (100)
+        FROM
+          t;
+      `);
+    });
+
+    it('formats EXPLAIN AST with a comment before SELECT', () => {
+      expect(format('EXPLAIN AST /*x*/ SELECT 1;')).toBe(dedent`
+        EXPLAIN AST /*x*/ SELECT 1;
+      `);
+    });
+
+    it('formats EXPLAIN AST with a line comment before SELECT', () => {
+      expect(format('EXPLAIN AST --x\nSELECT 1;')).toBe(dedent`
+        EXPLAIN AST --x
+        SELECT 1;
+      `);
+    });
+
+    it('formats GRANT with a comment before SELECT', () => {
+      expect(format('GRANT /*x*/ SELECT ON db.table TO john;')).toBe(dedent`
+        GRANT
+          /*x*/
+          SELECT ON db.table
+        TO john;
+      `);
+    });
+  });
 });

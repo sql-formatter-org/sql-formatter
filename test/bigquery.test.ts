@@ -636,4 +636,27 @@ describe('BigQueryFormatter', () => {
       expect(format(input, { linesBetweenQueries: 0 })).toBe(input);
     });
   });
+  describe('BigQuery array subscripts with comments', () => {
+    // A comment between "[" and OFFSET used to leave OFFSET as a clause token,
+    // which made the parser throw a Parse error.
+    it('formats a block comment before OFFSET', () => {
+      expect(format('SELECT arr[/* c */ OFFSET(0)] FROM t;')).toBe(dedent`
+        SELECT
+          arr[/* c */ OFFSET(0)]
+        FROM
+          t;
+      `);
+    });
+
+    it('formats a line comment before OFFSET', () => {
+      expect(format('SELECT arr[-- c\nOFFSET(0)] FROM t;')).toBe(dedent`
+        SELECT
+          arr[ -- c
+            OFFSET(0)
+          ]
+        FROM
+          t;
+      `);
+    });
+  });
 });

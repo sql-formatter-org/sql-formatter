@@ -152,4 +152,26 @@ describe('SparkFormatter', () => {
       ALTER COLUMN FirstName COMMENT "new comment";
     `);
   });
+  describe('Spark WINDOW() with comments', () => {
+    // A comment between WINDOW and its parenthesis used to leave WINDOW a clause
+    // token, so it was formatted as a clause instead of a function call.
+    it('formats WINDOW() as a function with a block comment before the parens', () => {
+      expect(format('SELECT window /*x*/ (time) FROM tbl;')).toBe(dedent`
+        SELECT
+          window/*x*/ (time)
+        FROM
+          tbl;
+      `);
+    });
+
+    it('formats WINDOW() as a function with a line comment before the parens', () => {
+      expect(format('SELECT window --x\n(time) FROM tbl;')).toBe(dedent`
+        SELECT
+          window --x
+          (time)
+        FROM
+          tbl;
+      `);
+    });
+  });
 });

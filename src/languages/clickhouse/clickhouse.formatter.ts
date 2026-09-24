@@ -1,6 +1,12 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
+import {
+  isToken,
+  nextNonCommentToken,
+  prevNonCommentToken,
+  Token,
+  TokenType,
+} from '../../lexer/token.js';
 import { functions } from './clickhouse.functions.js';
 import { dataTypes, keywords } from './clickhouse.keywords.js';
 
@@ -303,8 +309,8 @@ export const clickhouse: DialectOptions = {
  */
 function postProcess(tokens: Token[]): Token[] {
   return tokens.map((token, i) => {
-    const nextToken = tokens[i + 1] || EOF_TOKEN;
-    const prevToken = tokens[i - 1] || EOF_TOKEN;
+    const nextToken = nextNonCommentToken(tokens, i);
+    const prevToken = prevNonCommentToken(tokens, i);
 
     // If we have queries like
     // > GRANT SELECT, INSERT ON db.table TO john

@@ -1,6 +1,6 @@
 import { DialectOptions } from '../../dialect.js';
 import { expandPhrases } from '../../expandPhrases.js';
-import { EOF_TOKEN, isToken, Token, TokenType } from '../../lexer/token.js';
+import { isToken, prevNonCommentToken, Token, TokenType } from '../../lexer/token.js';
 import { functions } from './bigquery.functions.js';
 import { dataTypes, keywords } from './bigquery.keywords.js';
 
@@ -204,16 +204,14 @@ function postProcess(tokens: Token[]): Token[] {
 
 // Converts OFFSET token inside array from RESERVED_CLAUSE to RESERVED_FUNCTION_NAME
 // See: https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators#array_subscript_operator
+// Comments between the "[" and OFFSET are skipped, so "arr[/* c */ OFFSET(0)]"
+// is recognized the same way as "arr[OFFSET(0)]".
 function detectArraySubscripts(tokens: Token[]) {
-  let prevToken = EOF_TOKEN;
-  return tokens.map(token => {
-    if (token.text === 'OFFSET' && prevToken.text === '[') {
-      prevToken = token;
+  return tokens.map((token, i) => {
+    if (token.text === 'OFFSET' && prevNonCommentToken(tokens, i).text === '[') {
       return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
-    } else {
-      prevToken = token;
-      return token;
     }
+    return token;
   });
 }
 
