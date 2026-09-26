@@ -144,7 +144,9 @@ export const spark: DialectOptions = {
     identTypes: ['``'],
     identChars: { allowFirstCharNumber: true },
     variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
-    operators: ['%', '~', '^', '|', '&', '<=>', '==', '!', '||', '->'],
+    // ':' is optional between STRUCT field name and type:
+    // https://spark.apache.org/docs/latest/sql-ref-datatypes.html
+    operators: ['%', '~', '^', '|', '&', '<=>', '==', '!', '||', '->', ':'],
     postProcess,
   },
   formatOptions: {
@@ -154,24 +156,94 @@ export const spark: DialectOptions = {
 };
 
 function postProcess(tokens: Token[]) {
-  return tokens.map((token, i) => {
-    const prevToken = tokens[i - 1] || EOF_TOKEN;
-    const nextToken = tokens[i + 1] || EOF_TOKEN;
+  return combineParameterizedTypes(
+    tokens.map((token, i) => {
+      const prevToken = tokens[i - 1] || EOF_TOKEN;
+      const nextToken = tokens[i + 1] || EOF_TOKEN;
 
-    // [WINDOW](...)
-    if (isToken.WINDOW(token) && nextToken.type === TokenType.OPEN_PAREN) {
-      // This is a function call, treat it as a reserved function name
-      return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
-    }
-
-    // TODO: deprecate this once ITEMS is merged with COLLECTION
-    if (token.text === 'ITEMS' && token.type === TokenType.RESERVED_KEYWORD) {
-      if (!(prevToken.text === 'COLLECTION' && nextToken.text === 'TERMINATED')) {
-        // this is a word and not COLLECTION ITEMS
-        return { ...token, type: TokenType.IDENTIFIER, text: token.raw };
+      // [WINDOW](...)
+      if (isToken.WINDOW(token) && nextToken.type === TokenType.OPEN_PAREN) {
+        // This is a function call, treat it as a reserved function name
+        return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
       }
-    }
 
-    return token;
-  });
+      // TODO: deprecate this once ITEMS is merged with COLLECTION
+      if (token.text === 'ITEMS' && token.type === TokenType.RESERVED_KEYWORD) {
+        if (!(prevToken.text === 'COLLECTION' && nextToken.text === 'TERMINATED')) {
+          // this is a word and not COLLECTION ITEMS
+          return { ...token, type: TokenType.IDENTIFIER, text: token.raw };
+        }
+      }
+
+      return token;
+    })
+  );
+}
+
+// Combines ARRAY<T>, MAP<K, V>, STRUCT<field: T> into a single token.
+// Spark STRUCT fields allow an optional colon: STRUCT<c: bigint> or STRUCT<c bigint>.
+// https://spark.apache.org/docs/latest/sql-ref-datatypes.html
+function combineParameterizedTypes(tokens: Token[]) {
+  const processed: Token[] = [];
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+
+    if (isComplexTypeName(token) && tokens[i + 1]?.text === '<') {
+      const endIndex = findClosingAngleBracketIndex(tokens, i + 1);
+      if (endIndex === -1) {
+        processed.push(token);
+        continue;
+      }
+      const typeDefTokens = tokens.slice(i, endIndex + 1);
+      processed.push({
+        type: TokenType.RESERVED_DATA_TYPE,
+        raw: typeDefTokens.map(formatTypeDefToken('raw')).join(''),
+        text: typeDefTokens.map(formatTypeDefToken('text')).join(''),
+        start: token.start,
+      });
+      i = endIndex;
+    } else {
+      processed.push(token);
+    }
+  }
+  return processed;
+}
+
+function isComplexTypeName(token: Token): boolean {
+  return (
+    (token.text === 'ARRAY' || token.text === 'STRUCT' || token.text === 'MAP') &&
+    (token.type === TokenType.RESERVED_DATA_TYPE || token.type === TokenType.RESERVED_FUNCTION_NAME)
+  );
+}
+
+const formatTypeDefToken =
+  (key: Extract<keyof Token, 'raw' | 'text'>) =>
+  (token: Token, i: number, tokens: Token[]): string => {
+    if (token.text === ':' || token.type === TokenType.COMMA) {
+      return token[key] + ' ';
+    }
+    if (isTypeDefFieldName(token) && tokens[i + 1]?.text !== ':') {
+      return token[key] + ' ';
+    }
+    return token[key];
+  };
+
+function isTypeDefFieldName(token: Token): boolean {
+  return token.type === TokenType.IDENTIFIER || token.type === TokenType.QUOTED_IDENTIFIER;
+}
+
+function findClosingAngleBracketIndex(tokens: Token[], startIndex: number): number {
+  let level = 0;
+  for (let i = startIndex; i < tokens.length; i++) {
+    const token = tokens[i];
+    if (token.text === '<') {
+      level++;
+    } else if (token.text === '>') {
+      level--;
+    }
+    if (level === 0) {
+      return i;
+    }
+  }
+  return -1;
 }

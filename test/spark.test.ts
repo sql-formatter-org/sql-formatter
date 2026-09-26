@@ -152,4 +152,51 @@ describe('SparkFormatter', () => {
       ALTER COLUMN FirstName COMMENT "new comment";
     `);
   });
+
+  // regression test for #900
+  // Spark SHOW CREATE TABLE emits STRUCT<field: type>; the colon is optional.
+  it('supports optional colon in STRUCT field specs', () => {
+    expect(
+      format(`CREATE TABLE t_a (
+a bigint,
+b struct <c: bigint>
+)`)
+    ).toBe(dedent`
+      CREATE TABLE t_a (a bigint, b struct<c: bigint>)
+    `);
+  });
+
+  it('supports STRUCT field specs without colon', () => {
+    expect(format(`CREATE TABLE t_a (a bigint, b struct <c bigint>)`)).toBe(
+      dedent`
+        CREATE TABLE t_a (a bigint, b struct<c bigint>)
+      `
+    );
+  });
+
+  it('supports nested ARRAY, MAP and STRUCT types with optional colons', () => {
+    expect(
+      format(`CREATE TABLE family (
+name STRING,
+friends ARRAY<STRING>,
+children MAP<STRING, INT>,
+address STRUCT<street: STRING, city: STRING>
+)`)
+    ).toBe(dedent`
+      CREATE TABLE family (
+        name STRING,
+        friends ARRAY<STRING>,
+        children MAP<STRING, INT>,
+        address STRUCT<street: STRING, city: STRING>
+      )
+    `);
+  });
+
+  it('applies dataTypeCase to STRUCT field types', () => {
+    expect(format('CREATE TABLE t (b struct<c: bigint>)', { dataTypeCase: 'upper' })).toBe(
+      dedent`
+        CREATE TABLE t (b STRUCT<c: BIGINT>)
+      `
+    );
+  });
 });
