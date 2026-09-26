@@ -34,7 +34,8 @@ export enum TokenType {
   CLOSE_PAREN = 'CLOSE_PAREN',
   LINE_COMMENT = 'LINE_COMMENT',
   BLOCK_COMMENT = 'BLOCK_COMMENT',
-  // Text between /* sql-formatter-disable */ and /* sql-formatter-enable */
+  // Text between sql-formatter-disable and sql-formatter-enable comments
+  // (either /* ... */ or -- ... line comments)
   DISABLE_COMMENT = 'DISABLE_COMMENT',
   NUMBER = 'NUMBER',
   NAMED_PARAMETER = 'NAMED_PARAMETER',

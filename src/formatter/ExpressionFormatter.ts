@@ -406,7 +406,13 @@ export default class ExpressionFormatter {
   }
 
   private formatBlockComment(node: BlockCommentNode | DisableCommentNode) {
-    if (node.type === NodeType.block_comment && this.isStandaloneBlockComment(node)) {
+    if (node.type === NodeType.disable_comment) {
+      this.layout.add(node.text, WS.SPACE);
+      // Place following SQL on the next indented line after a multi-line region.
+      if (isMultiline(node.text)) {
+        this.layout.add(WS.NEWLINE, WS.INDENT);
+      }
+    } else if (this.isStandaloneBlockComment(node)) {
       this.splitBlockComment(node.text).forEach(line => {
         this.layout.add(WS.NEWLINE, WS.INDENT, line);
       });

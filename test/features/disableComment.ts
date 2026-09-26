@@ -83,4 +83,114 @@ export default function supportsDisableComment(format: FormatFn) {
         bar;
     `);
   });
+
+  it('does not format text between -- sql-formatter-disable and -- sql-formatter-enable', () => {
+    const result = format(dedent`
+      SELECT foo FROM bar;
+      -- sql-formatter-disable
+      SELECT foo FROM bar;
+      -- sql-formatter-enable
+      SELECT foo FROM bar;
+    `);
+
+    expect(result).toBe(dedent`
+      SELECT
+        foo
+      FROM
+        bar;
+
+      -- sql-formatter-disable
+      SELECT foo FROM bar;
+      -- sql-formatter-enable
+      SELECT
+        foo
+      FROM
+        bar;
+    `);
+  });
+
+  // Issue #912
+  it('preserves indentation between -- sql-formatter-disable and -- sql-formatter-enable', () => {
+    const result = format(dedent`
+      -- sql-formatter-disable
+      SELECT
+        foo
+          FROM
+            bar;
+      -- sql-formatter-enable
+    `);
+
+    expect(result).toBe(dedent`
+      -- sql-formatter-disable
+      SELECT
+        foo
+          FROM
+            bar;
+      -- sql-formatter-enable
+    `);
+  });
+
+  it('does not format text after -- sql-formatter-disable until end of file', () => {
+    const result = format(dedent`
+      SELECT foo FROM bar;
+      -- sql-formatter-disable
+      SELECT foo FROM bar;
+
+      SELECT foo FROM bar;
+    `);
+
+    expect(result).toBe(dedent`
+      SELECT
+        foo
+      FROM
+        bar;
+
+      -- sql-formatter-disable
+      SELECT foo FROM bar;
+
+      SELECT foo FROM bar;
+    `);
+  });
+
+  it('does not parse code between -- disable/enable comments', () => {
+    const result = format(dedent`
+      SELECT
+      -- sql-formatter-disable
+      ?!{}[]
+      -- sql-formatter-enable
+      FROM bar;
+    `);
+
+    expect(result).toBe(dedent`
+      SELECT
+        -- sql-formatter-disable
+      ?!{}[]
+      -- sql-formatter-enable
+      FROM
+        bar;
+    `);
+  });
+
+  // Issue #912
+  it('does not format sqlc.embed() between -- sql-formatter-disable comments', () => {
+    const result = format(dedent`
+      SELECT
+      -- sql-formatter-disable
+        sqlc.embed(users),
+      -- sql-formatter-enable
+        customers.id
+      FROM
+        customers
+    `);
+
+    expect(result).toBe(dedent`
+      SELECT
+        -- sql-formatter-disable
+        sqlc.embed(users),
+      -- sql-formatter-enable
+        customers.id
+      FROM
+        customers
+    `);
+  });
 }

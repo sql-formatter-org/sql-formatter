@@ -37,6 +37,11 @@ export default class Tokenizer {
           /(\/\* *sql-formatter-disable *\*\/[\s\S]*?(?:\/\* *sql-formatter-enable *\*\/|$))/uy,
       },
       {
+        type: TokenType.DISABLE_COMMENT,
+        regex:
+          /(-- *sql-formatter-disable\b[^\n\r]*(?:(?:\r\n|\r|\n)[\s\S]*?(?:-- *sql-formatter-enable\b[^\n\r]*|$)|$))/uy,
+      },
+      {
         type: TokenType.BLOCK_COMMENT,
         regex: cfg.nestedBlockComments ? new NestedComment() : /(\/\*[^]*?\*\/)/uy,
       },
