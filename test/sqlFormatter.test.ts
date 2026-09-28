@@ -47,40 +47,52 @@ describe('sqlFormatter', () => {
     );
   });
 
+  it('throws error when indent config option used', () => {
+    expect(() => {
+      format('SELECT *', { indent: '  ' } as any);
+    }).toThrow('indent config is no longer supported. Use tabWidth instead.');
+  });
+
+  it('throws error when uppercase config option used', () => {
+    expect(() => {
+      format('SELECT *', { uppercase: true } as any);
+    }).toThrow('uppercase config is no longer supported. Use keywordCase instead.');
+  });
+
   it('throws error when multilineLists config option used', () => {
     expect(() => {
       format('SELECT *', { multilineLists: 'always' } as any);
-    }).toThrow('multilineLists config is no more supported.');
+    }).toThrow('multilineLists config is no longer supported.');
   });
 
   it('throws error when newlineBeforeOpenParen config option used', () => {
     expect(() => {
       format('SELECT *', { newlineBeforeOpenParen: true } as any);
-    }).toThrow('newlineBeforeOpenParen config is no more supported.');
+    }).toThrow('newlineBeforeOpenParen config is no longer supported.');
   });
 
   it('throws error when newlineBeforeCloseParen config option used', () => {
     expect(() => {
       format('SELECT *', { newlineBeforeCloseParen: true } as any);
-    }).toThrow('newlineBeforeCloseParen config is no more supported.');
+    }).toThrow('newlineBeforeCloseParen config is no longer supported.');
   });
 
   it('throws error when aliasAs config option used', () => {
     expect(() => {
       format('SELECT *', { aliasAs: 'always' } as any);
-    }).toThrow('aliasAs config is no more supported.');
+    }).toThrow('aliasAs config is no longer supported.');
   });
 
   it('throws error when tabulateAlias config option used', () => {
     expect(() => {
       format('SELECT *', { tabulateAlias: false } as any);
-    }).toThrow('tabulateAlias config is no more supported.');
+    }).toThrow('tabulateAlias config is no longer supported.');
   });
 
   it('throws error when commaPosition config option used', () => {
     expect(() => {
       format('SELECT *', { commaPosition: 'before' } as any);
-    }).toThrow('commaPosition config is no more supported.');
+    }).toThrow('commaPosition config is no longer supported.');
   });
 
   describe('formatDialect()', () => {

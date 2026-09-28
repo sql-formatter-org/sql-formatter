@@ -5,17 +5,23 @@ import { ParamTypes } from './lexer/TokenizerOptions.js';
 export class ConfigError extends Error {}
 
 export function validateConfig(cfg: FormatOptions): FormatOptions {
-  const removedOptions = [
-    'multilineLists',
-    'newlineBeforeOpenParen',
-    'newlineBeforeCloseParen',
-    'aliasAs',
-    'commaPosition',
-    'tabulateAlias',
-  ];
-  for (const optionName of removedOptions) {
+  // Options removed in past major versions, mapped to their replacement when one exists.
+  const removedOptions: Record<string, string | undefined> = {
+    indent: 'tabWidth',
+    uppercase: 'keywordCase',
+    multilineLists: undefined,
+    newlineBeforeOpenParen: undefined,
+    newlineBeforeCloseParen: undefined,
+    aliasAs: undefined,
+    commaPosition: undefined,
+    tabulateAlias: undefined,
+  };
+  for (const [optionName, replacement] of Object.entries(removedOptions)) {
     if (optionName in cfg) {
-      throw new ConfigError(`${optionName} config is no more supported.`);
+      throw new ConfigError(
+        `${optionName} config is no longer supported.` +
+          (replacement ? ` Use ${replacement} instead.` : '')
+      );
     }
   }
 
