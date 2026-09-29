@@ -300,6 +300,9 @@ export const clickhouse: DialectOptions = {
  *    for SELECT GRANTs
  * 2. Formats SET(100) as RESERVED_FUNCTION_NAME instead of RESERVED_KEYWORD
  *    so it appears as a function rather than a statement.
+ * 3. Formats RANGE(...) as RESERVED_FUNCTION_NAME instead of RESERVED_KEYWORD
+ *    so keywordCase does not rewrite the case-sensitive range() function.
+ *    RANGE BETWEEN stays a reserved keyword phrase for window frames.
  */
 function postProcess(tokens: Token[]): Token[] {
   return tokens.map((token, i) => {
@@ -330,6 +333,15 @@ function postProcess(tokens: Token[]): Token[] {
 
     // We should format `set(100)` as-is rather than `SET (100)`
     if (isToken.SET(token) && nextToken.type === TokenType.OPEN_PAREN) {
+      return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
+    }
+
+    // We should format `range(32)` as-is rather than `RANGE (32)`
+    if (
+      token.type === TokenType.RESERVED_KEYWORD &&
+      token.text === 'RANGE' &&
+      nextToken.type === TokenType.OPEN_PAREN
+    ) {
       return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
     }
 

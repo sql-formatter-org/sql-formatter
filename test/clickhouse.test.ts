@@ -449,6 +449,34 @@ describe('ClickhouseFormatter', () => {
           value ASC;
       `);
     });
+
+    it('formats SELECT with window function and RANGE BETWEEN', () => {
+      expect(
+        format(
+          'SELECT part_key, value, groupArray(value) OVER (ORDER BY seq RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) FROM wf_frame;',
+          { keywordCase: 'upper' }
+        )
+      ).toBe(dedent`
+        SELECT
+          part_key,
+          value,
+          groupArray(value) OVER (
+            ORDER BY
+              seq RANGE BETWEEN UNBOUNDED PRECEDING
+              AND CURRENT ROW
+          )
+        FROM
+          wf_frame;
+      `);
+    });
+  });
+
+  // Regression test for issue #980
+  it('does not uppercase the case-sensitive range() function', () => {
+    expect(format('SELECT range(32);', { keywordCase: 'upper' })).toBe(dedent`
+      SELECT
+        range(32);
+    `);
   });
 
   // https://clickhouse.com/docs/sql-reference/statements/create
