@@ -295,11 +295,37 @@ export const clickhouse: DialectOptions = {
   },
 };
 
+// https://clickhouse.com/docs/sql-reference/aggregate-functions/combinators
+// Longer combinators come first, so that `MergeState` is not matched as just `State`.
+const aggregateCombinator =
+  /(?:SimpleState|MergeState|ForEach|Distinct|OrDefault|OrNull|Resample|ArgMax|ArgMin|State|Merge|Array|Map|If)$/u;
+const functionNames = new Set(functions);
+
+/**
+ * Whether the name is an aggregate function with one or more combinators appended,
+ * like `sumIf`, `countMerge` or `uniqExactIfState`. These are not in the list of functions,
+ * because ClickHouse builds them from the name of the aggregate function and the combinator.
+ */
+function isAggregateWithCombinators(name: string): boolean {
+  for (let base = name; ; ) {
+    const match = aggregateCombinator.exec(base);
+    if (!match || match.index === 0) {
+      return false;
+    }
+    base = base.slice(0, match.index);
+    if (functionNames.has(base)) {
+      return true;
+    }
+  }
+}
+
 /**
  * 1. Formats GRANT statements to use RESERVED_KEYWORD instead of RESERVED_SELECT
  *    for SELECT GRANTs
  * 2. Formats SET(100) as RESERVED_FUNCTION_NAME instead of RESERVED_KEYWORD
  *    so it appears as a function rather than a statement.
+ * 3. Formats sumIf(x, y), countMerge(x) etc. as RESERVED_FUNCTION_NAME instead of IDENTIFIER
+ *    so that they appear as function calls, like sum(x).
  */
 function postProcess(tokens: Token[]): Token[] {
   return tokens.map((token, i) => {
@@ -330,6 +356,15 @@ function postProcess(tokens: Token[]): Token[] {
 
     // We should format `set(100)` as-is rather than `SET (100)`
     if (isToken.SET(token) && nextToken.type === TokenType.OPEN_PAREN) {
+      return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
+    }
+
+    // We should format `countMerge(x)` as-is rather than `countMerge (x)`
+    if (
+      token.type === TokenType.IDENTIFIER &&
+      nextToken.type === TokenType.OPEN_PAREN &&
+      isAggregateWithCombinators(token.text)
+    ) {
       return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
     }
 

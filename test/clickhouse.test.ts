@@ -399,6 +399,24 @@ describe('ClickhouseFormatter', () => {
   });
 
   // https://clickhouse.com/docs/sql-reference/window-functions
+  describe('Aggregate function combinators', () => {
+    it('formats aggregate functions with combinators as function calls', () => {
+      const result = format(
+        `SELECT sumIf(x, y > 1), countMerge(s), uniqExactIfState(id), groupArrayArray(a), argMaxOrNull(a, b) FROM t;`
+      );
+      expect(result).toBe(dedent`
+        SELECT
+          sumIf(x, y > 1),
+          countMerge(s),
+          uniqExactIfState(id),
+          groupArrayArray(a),
+          argMaxOrNull(a, b)
+        FROM
+          t;
+      `);
+    });
+  });
+
   describe('Window functions', () => {
     it('formats SELECT with window function', () => {
       expect(
