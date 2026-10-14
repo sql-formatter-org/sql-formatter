@@ -226,6 +226,10 @@ const reservedSetOperations = expandPhrases([
 const reservedJoins = expandPhrases([
   // https://clickhouse.com/docs/sql-reference/statements/select/join
   '[GLOBAL] [INNER|LEFT|RIGHT|FULL|CROSS] [OUTER|SEMI|ANTI|ANY|ALL|ASOF] JOIN',
+  // The strictness can also come before the join type, e.g. `ANY LEFT JOIN`, `ALL INNER JOIN`
+  // and `ASOF LEFT JOIN`, which the documentation uses as well:
+  // https://clickhouse.com/docs/sql-reference/statements/select/join#asof-join-usage
+  '[GLOBAL] {ANY|ALL|ASOF} [INNER|LEFT|RIGHT|FULL] [OUTER] JOIN',
   // https://clickhouse.com/docs/sql-reference/statements/select/array-join
   '[LEFT] ARRAY JOIN',
 ]);

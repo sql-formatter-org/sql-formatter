@@ -149,6 +149,24 @@ describe('ClickhouseFormatter', () => {
       'GLOBAL ALL JOIN',
       'GLOBAL ASOF JOIN',
 
+      // Strictness before the join type
+      'ANY INNER JOIN',
+      'ANY LEFT JOIN',
+      'ANY RIGHT JOIN',
+      'ANY FULL JOIN',
+      'ALL INNER JOIN',
+      'ALL LEFT JOIN',
+      'ALL RIGHT JOIN',
+      'ALL FULL JOIN',
+      'ASOF INNER JOIN',
+      'ASOF LEFT JOIN',
+      'ASOF RIGHT JOIN',
+      'ASOF FULL JOIN',
+      'ANY LEFT OUTER JOIN',
+      'ASOF LEFT OUTER JOIN',
+      'GLOBAL ANY LEFT JOIN',
+      'GLOBAL ASOF LEFT JOIN',
+
       'GLOBAL JOIN',
 
       'OUTER JOIN',
