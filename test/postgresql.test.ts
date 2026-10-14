@@ -19,6 +19,7 @@ import supportsCreateView from './features/createView.js';
 import supportsIsDistinctFrom from './features/isDistinctFrom.js';
 import supportsArrayLiterals from './features/arrayLiterals.js';
 import supportsDataTypeCase from './options/dataTypeCase.js';
+import supportsMergeInto from './features/mergeInto.js';
 import behavesLikePostgresqlFormatter from './behavesLikePostgresqlFormatter.js';
 
 describe('PostgreSqlFormatter', () => {
@@ -147,6 +148,33 @@ describe('PostgreSqlFormatter', () => {
   supportsParams(format, { numbered: ['$'] });
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
   supportsDataTypeCase(format);
+  supportsMergeInto(format);
+
+  // Issue #986
+  it('formats MERGE with PostgreSQL 17 additions', () => {
+    const result = format(
+      `MERGE INTO stock t USING incoming s ON t.sku = s.sku
+      WHEN MATCHED AND s.qty = 0 THEN DELETE
+      WHEN NOT MATCHED BY SOURCE THEN DO NOTHING
+      WHEN NOT MATCHED BY TARGET THEN INSERT VALUES (s.sku, s.qty)
+      RETURNING merge_action(), t.*;`
+    );
+    expect(result).toBe(dedent`
+      MERGE INTO
+        stock t USING incoming s ON t.sku = s.sku
+      WHEN MATCHED
+        AND s.qty = 0 THEN DELETE
+      WHEN NOT MATCHED BY SOURCE THEN
+        DO NOTHING
+      WHEN NOT MATCHED BY TARGET THEN
+      INSERT
+      VALUES
+        (s.sku, s.qty)
+      RETURNING
+        merge_action(),
+        t.*;
+    `);
+  });
 
   // Regression test for issue #935
   it('preserves pg_dump restrict commands', () => {

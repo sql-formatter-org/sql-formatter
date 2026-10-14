@@ -710,6 +710,9 @@ export const functions: string[] = [
   // https://www.postgresql.org/docs/14/functions-statistics.html
   'PG_MCV_LIST_ITEMS',
 
+  // https://www.postgresql.org/docs/17/functions-merge-support.html
+  'MERGE_ACTION',
+
   // cast
   'CAST',
 ];

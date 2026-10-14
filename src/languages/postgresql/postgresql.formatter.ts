@@ -21,11 +21,15 @@ const reservedClauses = expandPhrases([
   'FOR {UPDATE | NO KEY UPDATE | SHARE | KEY SHARE} [OF]',
   // Data manipulation
   // - insert:
-  'INSERT INTO',
+  'INSERT [INTO]',
   'VALUES',
   'DEFAULT VALUES',
   // - update:
   'SET',
+  // - merge:
+  'MERGE INTO',
+  'WHEN [NOT] MATCHED [BY SOURCE | BY TARGET] [THEN]',
+  'UPDATE SET',
   // other
   'RETURNING',
 ]);
