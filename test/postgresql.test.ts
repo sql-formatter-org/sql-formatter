@@ -31,6 +31,18 @@ describe('PostgreSqlFormatter', () => {
   supportsDropTable(format, { ifExists: true });
   supportsConstraints(format, ['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL', 'SET DEFAULT']);
   supportsArrayLiterals(format, { withArrayPrefix: true });
+
+  it('formats a subscript after a quoted identifier, function call or parenthesis without a space', () => {
+    const result = format(`SELECT "col"[1], string_to_array(s, ',')[1], (ARRAY[1, 2])[1] FROM t;`);
+    expect(result).toBe(dedent`
+      SELECT
+        "col"[1],
+        string_to_array(s, ',')[1],
+        (ARRAY[1, 2])[1]
+      FROM
+        t;
+    `);
+  });
   supportsUpdate(format, { whereCurrentOf: true });
   supportsTruncateTable(format, { withoutTable: true });
   supportsStrings(format, ["''-qq", "U&''", "X''", "B''", "E''", '$$']);

@@ -204,7 +204,38 @@ export default class ExpressionFormatter {
     this.formatNode(node.property);
   }
 
+  /**
+   * Whether the parenthesis or bracket directly continues the previous expression,
+   * as in `quantile(0.9)(x)`, `splitByChar(',', s)[1]` or `` `arr`[1] ``.
+   * It is then not separated from the previous expression by a space.
+   */
+  private continuesPreviousNode(node: ParenthesisNode): boolean {
+    const prev = this.nodes[this.index - 1];
+    // Only for a node of this list, not for the parenthesis that belongs to a function call
+    if (!prev || this.nodes[this.index] !== node) {
+      return false;
+    }
+    switch (node.openParen) {
+      case '(':
+        return prev.type === NodeType.function_call;
+      case '[':
+        return (
+          (prev.type === NodeType.identifier && prev.quoted) ||
+          prev.type === NodeType.function_call ||
+          prev.type === NodeType.property_access ||
+          prev.type === NodeType.array_subscript ||
+          prev.type === NodeType.parenthesis
+        );
+      default:
+        return false;
+    }
+  }
+
   private formatParenthesis(node: ParenthesisNode) {
+    if (this.continuesPreviousNode(node)) {
+      this.layout.add(WS.NO_SPACE);
+    }
+
     const inlineLayout = this.formatInlineExpression(node.children, node.openParen);
 
     if (inlineLayout) {

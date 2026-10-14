@@ -167,6 +167,47 @@ describe('ClickhouseFormatter', () => {
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: false });
   supportsArrayAndMapAccessors(format);
+
+  describe('Chained calls and subscripts', () => {
+    it('formats the arguments of a parametric aggregate function without a space', () => {
+      const result = format(`SELECT quantile(0.9)(x), quantiles(0.5, 0.9)(x) FROM t;`);
+      expect(result).toBe(dedent`
+        SELECT
+          quantile(0.9)(x),
+          quantiles(0.5, 0.9)(x)
+        FROM
+          t;
+      `);
+    });
+
+    it('formats a subscript after a function call, parenthesis, quoted identifier or subscript without a space', () => {
+      const result = format(
+        "SELECT splitByChar(',', s)[1], (arr)[1], `signals`[1], t.`signals`[2], c[1][2] FROM t;"
+      );
+      expect(result).toBe(dedent`
+        SELECT
+          splitByChar(',', s)[1],
+          (arr)[1],
+          \`signals\`[1],
+          t.\`signals\`[2],
+          c[1][2]
+        FROM
+          t;
+      `);
+    });
+
+    it('keeps the space before an array literal that follows a keyword', () => {
+      const result = format(`SELECT * FROM t WHERE x IN [1, 2];`);
+      expect(result).toBe(dedent`
+        SELECT
+          *
+        FROM
+          t
+        WHERE
+          x IN [1, 2];
+      `);
+    });
+  });
   supportsDataTypeCase(format);
 
   it('supports map literals', () => {

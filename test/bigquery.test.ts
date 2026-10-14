@@ -50,6 +50,17 @@ describe('BigQueryFormatter', () => {
   supportsStrings(format, ['""-bs', "''-bs", "R''", 'R""', "B''", 'B""']);
   supportsIdentifiers(format, ['``']);
   supportsArrayLiterals(format, { withArrayPrefix: true, withoutArrayPrefix: true });
+
+  it('formats a subscript after a function call or quoted identifier without a space', () => {
+    const result = format("SELECT SPLIT(s, ',')[OFFSET(1)], `col`[0] FROM t;");
+    expect(result).toBe(dedent`
+      SELECT
+        SPLIT(s, ',')[OFFSET(1)],
+        \`col\`[0]
+      FROM
+        t;
+    `);
+  });
   supportsBetween(format);
   supportsJoin(format, { without: ['NATURAL'] });
   supportsSetOperations(format, [
