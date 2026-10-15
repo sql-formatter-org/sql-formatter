@@ -155,6 +155,8 @@ export const trino: DialectOptions = {
     // https://trino.io/docs/current/language/reserved.html
     identTypes: ['""-qq'],
     paramTypes: { positional: true },
+    // https://trino.io/docs/current/language/types.html#integer
+    underscoresInNumbers: true,
     operators: [
       '%',
       '->',
