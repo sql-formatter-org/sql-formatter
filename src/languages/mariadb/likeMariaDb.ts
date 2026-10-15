@@ -14,6 +14,15 @@ export function postProcess(tokens: Token[]) {
       // This is VALUES() function, not VALUES clause
       return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
     }
+    // INTERVAL is both a comparison function (INTERVAL(N, ...)) and a
+    // duration keyword (INTERVAL n DAY). Without '(', keep it as a keyword
+    // so keywordCase applies; otherwise disambiguateTokens would demote it
+    // to IDENTIFIER (see #985).
+    if (token.type === TokenType.RESERVED_FUNCTION_NAME && token.text === 'INTERVAL') {
+      if (nextToken.text !== '(') {
+        return { ...token, type: TokenType.RESERVED_KEYWORD };
+      }
+    }
     return token;
   });
 }

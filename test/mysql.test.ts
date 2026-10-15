@@ -98,6 +98,27 @@ describe('MySqlFormatter', () => {
     `);
   });
 
+  it('applies keywordCase to INTERVAL duration expressions (#985)', () => {
+    expect(
+      format(`select now() - interval 30 day; select date_sub(now(), interval 30 day);`, {
+        keywordCase: 'upper',
+      })
+    ).toBe(dedent`
+      SELECT
+        now() - INTERVAL 30 day;
+
+      SELECT
+        date_sub(now(), INTERVAL 30 day);
+    `);
+  });
+
+  it('still treats INTERVAL(...) as a function name', () => {
+    expect(format(`select interval(55, 0, 50, 100);`, { functionCase: 'upper' })).toBe(dedent`
+      select
+        INTERVAL(55, 0, 50, 100);
+    `);
+  });
+
   it('formats ALTER TABLE ... ALTER COLUMN', () => {
     expect(
       format(
