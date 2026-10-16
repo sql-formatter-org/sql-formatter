@@ -54,7 +54,12 @@ describe('SingleStoreDbFormatter', () => {
     { any: true }
   );
   supportsLimiting(format, { limit: true, offset: true });
-  supportsCreateTable(format, { ifNotExists: true, columnComment: true, tableComment: true });
+  supportsCreateTable(format, {
+    ifNotExists: true,
+    columnComment: true,
+    tableComment: true,
+    tableConstraints: true,
+  });
   supportsCreateView(format);
   supportsAlterTable(format, {
     addColumn: true,

@@ -57,7 +57,12 @@ describe('TiDBFormatter', () => {
   );
   supportsWindow(format);
   supportsLimiting(format, { limit: true, offset: true });
-  supportsCreateTable(format, { ifNotExists: true, columnComment: true, tableComment: true });
+  supportsCreateTable(format, {
+    ifNotExists: true,
+    columnComment: true,
+    tableComment: true,
+    tableConstraints: true,
+  });
   supportsConstraints(format, [
     'RESTRICT',
     'CASCADE',

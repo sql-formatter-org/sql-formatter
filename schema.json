@@ -18,6 +18,16 @@
       "type": "boolean",
       "default": false
     },
+    "createTableColumnAlignment": {
+      "description": "[Experimental] When true, aligns CREATE TABLE column definitions into three left-aligned columns: column name, column definition (data type), and the rest (constraints, comments, defaults, ...).",
+      "type": "boolean",
+      "default": false
+    },
+    "createTableColumnAlignment_breakwidth": {
+      "description": "[Experimental] Maximum character width of the third column (constraints, comments, defaults, ...) in a CREATE TABLE column definition. When the third column exceeds this width, it is wrapped to a new continuation line aligned with the start of the third column. Only takes effect when createTableColumnAlignment is true. Use 0 to always wrap. Defaults to Infinity (never wrap).",
+      "type": "number",
+      "minimum": 0
+    },
     "expressionWidth": {
       "description": "Determines maximum length of parenthesized expressions.",
       "type": "number",

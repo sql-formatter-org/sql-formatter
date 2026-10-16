@@ -45,6 +45,7 @@ describe('MariaDbFormatter', () => {
     ifNotExists: true,
     columnComment: true,
     tableComment: true,
+    tableConstraints: true,
   });
   supportsConstraints(format, ['RESTRICT', 'CASCADE', 'SET NULL', 'NO ACTION', 'SET DEFAULT']);
   supportsParams(format, { positional: true });

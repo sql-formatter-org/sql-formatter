@@ -34,7 +34,7 @@ describe('SqlFormatter', () => {
   supportsNumbers(format);
   supportsComments(format);
   supportsCreateView(format);
-  supportsCreateTable(format);
+  supportsCreateTable(format, { tableConstraints: true });
   supportsDropTable(format);
   supportsConstraints(format, ['CASCADE', 'SET NULL', 'SET DEFAULT', 'RESTRICT', 'NO ACTION']);
   supportsAlterTable(format, {

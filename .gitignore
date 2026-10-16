@@ -5,3 +5,4 @@ node_modules
 coverage
 .eslintcache
 src/parser/grammar.ts
+**/*.Identifier

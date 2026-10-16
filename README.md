@@ -181,6 +181,8 @@ All fields are optional and all fields that are not specified will be filled wit
 - [**`linesBetweenQueries`**](docs/linesBetweenQueries.md) how many newlines to insert between queries.
 - [**`denseOperators`**](docs/denseOperators.md) packs operators densely without spaces.
 - [**`newlineBeforeSemicolon`**](docs/newlineBeforeSemicolon.md) places semicolon on separate line.
+- [**`createTableColumnAlignment`**](docs/createTableColumnAlignment.md) aligns CREATE TABLE column definitions into three left-aligned columns (column name, column definition, other). (**experimental!**)
+- [**`createTableColumnAlignment_breakwidth`**](docs/createTableColumnAlignment.md#createtablecolumnalignment_breakwidth) max width of the third column before wrapping to a new line. (**experimental!**)
 - [**`params`**](docs/params.md) collection of values for placeholder replacement.
 - [**`paramTypes`**](docs/paramTypes.md) specifies parameter placeholders types to support.
 

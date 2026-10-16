@@ -34,7 +34,7 @@ describe('TransactSqlFormatter', () => {
   supportsNumbers(format);
   supportsComments(format, { nestedBlockComments: true });
   supportsCreateView(format, { materialized: true });
-  supportsCreateTable(format);
+  supportsCreateTable(format, { tableConstraints: true });
   supportsDropTable(format, { ifExists: true });
   supportsConstraints(format, ['SET NULL', 'SET DEFAULT', 'CASCADE', 'NO ACTION']);
   supportsAlterTable(format, {

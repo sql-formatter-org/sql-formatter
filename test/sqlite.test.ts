@@ -34,7 +34,7 @@ describe('SqliteFormatter', () => {
   supportsNumbers(format);
   supportsComments(format);
   supportsCreateView(format, { ifNotExists: true });
-  supportsCreateTable(format, { ifNotExists: true });
+  supportsCreateTable(format, { ifNotExists: true, tableConstraints: true });
   supportsDropTable(format, { ifExists: true });
   supportsConstraints(format, ['SET NULL', 'SET DEFAULT', 'CASCADE', 'RESTRICT', 'NO ACTION']);
   supportsAlterTable(format, {

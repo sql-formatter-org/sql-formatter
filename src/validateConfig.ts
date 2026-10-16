@@ -25,6 +25,15 @@ export function validateConfig(cfg: FormatOptions): FormatOptions {
     );
   }
 
+  if (
+    cfg.createTableColumnAlignment_breakwidth !== undefined &&
+    cfg.createTableColumnAlignment_breakwidth < 0
+  ) {
+    throw new ConfigError(
+      `createTableColumnAlignment_breakwidth config must be non-negative number. Received ${cfg.createTableColumnAlignment_breakwidth} instead.`
+    );
+  }
+
   if (cfg.params && !validateParams(cfg.params)) {
     // eslint-disable-next-line no-console
     console.warn('WARNING: All "params" option values should be strings.');

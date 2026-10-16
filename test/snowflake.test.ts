@@ -37,6 +37,7 @@ describe('SnowflakeFormatter', () => {
     ifNotExists: true,
     columnComment: true,
     tableComment: true,
+    tableConstraints: true,
   });
   supportsConstraints(format, ['CASCADE', 'SET NULL', 'SET DEFAULT', 'RESTRICT', 'NO ACTION']);
   supportsDropTable(format, { ifExists: true });

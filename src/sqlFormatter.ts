@@ -53,6 +53,8 @@ const defaultOptions: FormatOptions = {
   linesBetweenQueries: 1,
   denseOperators: false,
   newlineBeforeSemicolon: false,
+  createTableColumnAlignment: false,
+  createTableColumnAlignment_breakwidth: Infinity,
 };
 
 /**
