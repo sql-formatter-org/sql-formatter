@@ -258,6 +258,49 @@ describe('TransactSqlFormatter', () => {
     `);
   });
 
+  // Issue #984
+  it('formats TOP ... WITH TIES', () => {
+    expect(
+      format('select top (3) with ties name, score from players order by score desc;', {
+        keywordCase: 'upper',
+      })
+    ).toBe(dedent`
+      SELECT
+        TOP (3) WITH TIES name,
+        score
+      FROM
+        players
+      ORDER BY
+        score DESC;
+    `);
+  });
+
+  it('formats TOP ... PERCENT WITH TIES', () => {
+    expect(
+      format('select top (10) percent with ties name from players order by score desc;', {
+        keywordCase: 'upper',
+      })
+    ).toBe(dedent`
+      SELECT
+        TOP (10) PERCENT WITH TIES name
+      FROM
+        players
+      ORDER BY
+        score DESC;
+    `);
+  });
+
+  it('formats TOP n WITH TIES without parentheses', () => {
+    expect(format('SELECT TOP 5 WITH TIES name FROM players ORDER BY score;')).toBe(dedent`
+      SELECT
+        TOP 5 WITH TIES name
+      FROM
+        players
+      ORDER BY
+        score;
+    `);
+  });
+
   // Issue #877
   it('allows the use of the ODBC date format', () => {
     const result = format(

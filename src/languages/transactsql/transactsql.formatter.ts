@@ -229,6 +229,7 @@ const reservedJoins = expandPhrases([
 const reservedKeywordPhrases = expandPhrases([
   'ON {UPDATE | DELETE} [SET NULL | SET DEFAULT]',
   '{ROWS | RANGE} BETWEEN',
+  'WITH TIES',
 ]);
 
 const reservedDataTypePhrases = expandPhrases([]);
