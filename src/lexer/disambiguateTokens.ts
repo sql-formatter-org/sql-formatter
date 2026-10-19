@@ -22,6 +22,7 @@ import { isReserved, Token, TokenType } from './token.js';
 export function disambiguateTokens(tokens: Token[]): Token[] {
   return tokens
     .map(propertyNameKeywordToIdent)
+    .map(propertyNameOperatorToIdent)
     .map(keywordAliasAfterAs)
     .map(funcNameToIdent)
     .map(dataTypeToParameterizedDataType)
@@ -37,6 +38,20 @@ const propertyNameKeywordToIdent = (token: Token, i: number, tokens: Token[]): T
     }
     const nextToken = nextNonCommentToken(tokens, i);
     if (nextToken && nextToken.type === TokenType.PROPERTY_ACCESS_OPERATOR) {
+      return { ...token, type: TokenType.IDENTIFIER, text: token.raw };
+    }
+  }
+  return token;
+};
+
+const propertyNameOperatorToIdent = (token: Token, i: number, tokens: Token[]): Token => {
+  if (token.type === TokenType.OPERATOR) {
+    const prevToken = prevNonCommentToken(tokens, i);
+    const nextToken = nextNonCommentToken(tokens, i);
+    if (
+      prevToken?.type === TokenType.PROPERTY_ACCESS_OPERATOR &&
+      nextToken?.type === TokenType.OPEN_PAREN
+    ) {
       return { ...token, type: TokenType.IDENTIFIER, text: token.raw };
     }
   }

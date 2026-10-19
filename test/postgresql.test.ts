@@ -225,6 +225,23 @@ describe('PostgreSqlFormatter', () => {
   });
 
   // Issue #711
+  // Issue #997
+  it('supports schema-qualified operator names', () => {
+    expect(
+      format(
+        'create operator pg_catalog.!! (rightarg = tsquery, function = pg_catalog.tsquery_not);'
+      )
+    ).toBe(dedent`
+      create operator pg_catalog.!! (
+        rightarg = tsquery,
+        function = pg_catalog.tsquery_not
+      );
+    `);
+    expect(format('DROP OPERATOR pg_catalog.!! (none, tsquery);')).toBe(dedent`
+      DROP OPERATOR pg_catalog.!! (none, tsquery);
+    `);
+  });
+
   it('supports OPERATOR() syntax', () => {
     expect(format(`SELECT foo OPERATOR(public.===) bar;`)).toBe(dedent`
       SELECT
