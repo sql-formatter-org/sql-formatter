@@ -19,6 +19,7 @@ import supportsCreateView from './features/createView.js';
 import supportsIsDistinctFrom from './features/isDistinctFrom.js';
 import supportsArrayLiterals from './features/arrayLiterals.js';
 import supportsDataTypeCase from './options/dataTypeCase.js';
+import supportsMergeInto from './features/mergeInto.js';
 import behavesLikePostgresqlFormatter from './behavesLikePostgresqlFormatter.js';
 
 describe('PostgreSqlFormatter', () => {
@@ -147,6 +148,7 @@ describe('PostgreSqlFormatter', () => {
   supportsParams(format, { numbered: ['$'] });
   supportsLimiting(format, { limit: true, offset: true, fetchFirst: true, fetchNext: true });
   supportsDataTypeCase(format);
+  supportsMergeInto(format);
 
   // Regression test for issue #935
   it('preserves pg_dump restrict commands', () => {

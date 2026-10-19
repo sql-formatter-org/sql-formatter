@@ -271,6 +271,9 @@ export const functions: string[] = [
   'UUID_EXTRACT_TIMESTAMP',
   'UUID_EXTRACT_VERSION',
 
+  // https://www.postgresql.org/docs/17/functions-merge-support.html
+  'MERGE_ACTION',
+
   // https://www.postgresql.org/docs/14/functions-xml.html
   'CURSOR_TO_XML',
   'CURSOR_TO_XMLSCHEMA',
