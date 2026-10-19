@@ -131,7 +131,6 @@ export const functions: string[] = [
   'INTERNAL_MAX_DATA_LENGTH',
   'INTERNAL_TABLE_ROWS',
   'INTERNAL_UPDATE_TIME',
-  'INTERVAL',
   'IS',
   'IS_FREE_LOCK',
   'IS_IPV4',

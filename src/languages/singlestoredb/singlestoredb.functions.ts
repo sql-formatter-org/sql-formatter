@@ -132,7 +132,6 @@ export const functions: string[] = [
   'INITCAP',
   'INSERT',
   'INSTR',
-  'INTERVAL',
   'IS',
   'IS NULL',
   'JSON_AGG',

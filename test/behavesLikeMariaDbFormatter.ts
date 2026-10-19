@@ -191,4 +191,19 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
       GRANT ALL ON *.* TO user2;
     `);
   });
+
+  // Issue #985
+  it('treats INTERVAL as keyword and INTERVAL() as function', () => {
+    expect(
+      format(`select now() - interval 30 day, date_sub(d, interval 1 hour), interval(5, 1, 10);`, {
+        keywordCase: 'upper',
+        functionCase: 'lower',
+      })
+    ).toBe(dedent`
+      SELECT
+        now() - INTERVAL 30 day,
+        date_sub(d, INTERVAL 1 hour),
+        interval(5, 1, 10);
+    `);
+  });
 }

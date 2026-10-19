@@ -9,6 +9,10 @@ export function postProcess(tokens: Token[]) {
       // This is SET datatype, not SET statement
       return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
     }
+    if (isToken.INTERVAL(token) && nextToken.text === '(') {
+      // This is INTERVAL() function, not INTERVAL expression
+      return { ...token, type: TokenType.RESERVED_FUNCTION_NAME };
+    }
     const prevToken = tokens[i - 1] || EOF_TOKEN;
     if (isToken.VALUES(token) && prevToken.text === '=') {
       // This is VALUES() function, not VALUES clause

@@ -116,7 +116,6 @@ export const functions: string[] = [
   'INSERT_FUNC',
   'INSTR',
   'INTDIV',
-  'INTERVAL',
   'IS_FREE_LOCK',
   'IS_IPV4',
   'IS_IPV4_COMPAT',
