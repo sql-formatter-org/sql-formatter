@@ -8,6 +8,7 @@ const reservedSelect = expandPhrases(['SELECT [ALL | DISTINCT]']);
 const reservedClauses = expandPhrases([
   // queries
   'WITH [RECURSIVE]',
+  'INTO [TEMPORARY | TEMP | UNLOGGED] [TABLE]',
   'FROM',
   'WHERE',
   'GROUP BY [ALL | DISTINCT]',
