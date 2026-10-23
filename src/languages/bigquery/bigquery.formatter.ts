@@ -179,10 +179,8 @@ export const bigquery: DialectOptions = {
       // Otherwise the first two quotes of """ will get matched as an empty "" string.
       { quote: '""".."""', prefixes: ['R', 'B', 'RB', 'BR'] },
       { quote: "'''..'''", prefixes: ['R', 'B', 'RB', 'BR'] },
-      '""-bs',
-      "''-bs",
-      { quote: '""-raw', prefixes: ['R', 'B', 'RB', 'BR'], requirePrefix: true },
-      { quote: "''-raw", prefixes: ['R', 'B', 'RB', 'BR'], requirePrefix: true },
+      { quote: '""-bs', prefixes: ['R', 'B', 'RB', 'BR'] },
+      { quote: "''-bs", prefixes: ['R', 'B', 'RB', 'BR'] },
     ],
     identTypes: ['``'],
     identChars: { dashes: true },

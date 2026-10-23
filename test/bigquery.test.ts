@@ -47,7 +47,7 @@ describe('BigQueryFormatter', () => {
   supportsUpdate(format);
   supportsTruncateTable(format);
   supportsMergeInto(format);
-  supportsStrings(format, ['""-bs', "''-bs", "R''", 'R""', "B''", 'B""']);
+  supportsStrings(format, ['""-bs', "''-bs", "B''", 'B""']);
   supportsIdentifiers(format, ['``']);
   supportsArrayLiterals(format, { withArrayPrefix: true, withoutArrayPrefix: true });
   supportsBetween(format);
@@ -161,6 +161,19 @@ describe('BigQueryFormatter', () => {
         br'''bulu bulu''',
         r"""haha""",
         BR'''la' la'''
+      FROM
+        foo
+    `);
+  });
+
+  // Issue #762
+  it('supports escaped quotes in strings with r, b and rb prefixes', () => {
+    expect(format(`SELECT r'a\\'b', R"c\\"d", b'e\\'f', rb"g\\"h" FROM foo`)).toBe(dedent`
+      SELECT
+        r'a\\'b',
+        R"c\\"d",
+        b'e\\'f',
+        rb"g\\"h"
       FROM
         foo
     `);
