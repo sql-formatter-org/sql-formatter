@@ -25,6 +25,44 @@ describe('PostgreSqlFormatter', () => {
   const language = 'postgresql';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
+  // Issue #864
+  it.each([
+    'INTO',
+    'INTO TABLE',
+    'INTO TEMP',
+    'INTO TEMP TABLE',
+    'INTO TEMPORARY',
+    'INTO TEMPORARY TABLE',
+    'INTO UNLOGGED',
+    'INTO UNLOGGED TABLE',
+  ])('formats SELECT %s on a separate line', into => {
+    const result = format(`SELECT id, name ${into} new_users FROM users WHERE active;`);
+    expect(result).toBe(dedent`
+      SELECT
+        id,
+        name
+      ${into}
+        new_users
+      FROM
+        users
+      WHERE
+        active;
+    `);
+    expect(format(result)).toBe(result);
+  });
+
+  it('formats the case of SELECT INTO modifiers', () => {
+    expect(format('select id into temporary table new_users from users;', { keywordCase: 'upper' }))
+      .toBe(dedent`
+      SELECT
+        id
+      INTO TEMPORARY TABLE
+        new_users
+      FROM
+        users;
+    `);
+  });
+
   behavesLikePostgresqlFormatter(format);
   supportsCreateView(format, { orReplace: true, materialized: true, ifNotExists: true });
   supportsCreateTable(format, { ifNotExists: true });
