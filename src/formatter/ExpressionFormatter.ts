@@ -263,7 +263,9 @@ export default class ExpressionFormatter {
   }
 
   private formatClause(node: ClauseNode) {
-    if (this.isOnelineClause(node)) {
+    if (/^(ROWS|RANGE|GROUPS) BETWEEN$/.test(node.nameKw.text)) {
+      this.formatWindowFrameClause(node);
+    } else if (this.isOnelineClause(node)) {
       this.formatClauseInOnelineStyle(node);
     } else if (isTabularStyle(this.cfg)) {
       this.formatClauseInTabularStyle(node);
@@ -291,6 +293,18 @@ export default class ExpressionFormatter {
   private formatClauseInOnelineStyle(node: ClauseNode) {
     this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.SPACE);
     this.layout = this.formatSubExpression(node.children);
+  }
+
+  private formatWindowFrameClause(node: ClauseNode) {
+    this.layout.add(WS.NEWLINE, WS.INDENT, this.showKw(node.nameKw), WS.SPACE);
+    // The AND in a window frame separates its bounds, not boolean conditions.
+    node.children.forEach(child => {
+      if (child.type === NodeType.keyword && child.tokenType === TokenType.AND) {
+        this.withComments(child, () => this.layout.add(this.showNonTabularKw(child), WS.SPACE));
+      } else {
+        this.formatNode(child);
+      }
+    });
   }
 
   private formatClauseInTabularStyle(node: ClauseNode) {
