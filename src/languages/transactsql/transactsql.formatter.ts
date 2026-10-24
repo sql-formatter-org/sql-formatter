@@ -32,7 +32,7 @@ const reservedClauses = expandPhrases([
   'UPDATE SET',
 ]);
 
-const standardOnelineClauses = expandPhrases(['CREATE TABLE']);
+const standardOnelineClauses = expandPhrases(['CREATE TABLE', '{ROWS | RANGE} BETWEEN']);
 
 const tabularOnelineClauses = expandPhrases([
   // - create:
@@ -226,10 +226,7 @@ const reservedJoins = expandPhrases([
   '{CROSS | OUTER} APPLY',
 ]);
 
-const reservedKeywordPhrases = expandPhrases([
-  'ON {UPDATE | DELETE} [SET NULL | SET DEFAULT]',
-  '{ROWS | RANGE} BETWEEN',
-]);
+const reservedKeywordPhrases = expandPhrases(['ON {UPDATE | DELETE} [SET NULL | SET DEFAULT]']);
 
 const reservedDataTypePhrases = expandPhrases([]);
 
