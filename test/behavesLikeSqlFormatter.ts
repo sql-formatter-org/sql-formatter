@@ -21,7 +21,7 @@ import supportsDisableComment from './features/disableComment.js';
 /**
  * Core tests for all SQL formatters
  */
-export default function behavesLikeSqlFormatter(format: FormatFn) {
+export default function behavesLikeSqlFormatter(format: FormatFn, frameOnSeparateLine = false) {
   supportsDisableComment(format);
   supportsCase(format);
   supportsWith(format);
@@ -37,7 +37,7 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
   supportsNewlineBeforeSemicolon(format);
   supportsLogicalOperatorNewline(format);
   supportsParamTypes(format);
-  supportsWindowFunctions(format);
+  supportsWindowFunctions(format, frameOnSeparateLine);
 
   it('formats SELECT with asterisks', () => {
     const result = format('SELECT tbl.*, count(*), col1 * col2 FROM tbl;');
