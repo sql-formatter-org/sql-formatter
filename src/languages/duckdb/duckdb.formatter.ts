@@ -33,6 +33,7 @@ const reservedClauses = expandPhrases([
 
 const standardOnelineClauses = expandPhrases([
   'CREATE [OR REPLACE] [TEMPORARY | TEMP] TABLE [IF NOT EXISTS]',
+  '{ROWS | RANGE | GROUPS} BETWEEN',
 ]);
 
 const tabularOnelineClauses = expandPhrases([
@@ -134,11 +135,7 @@ const reservedJoins = expandPhrases([
   'SEMI JOIN',
 ]);
 
-const reservedKeywordPhrases = expandPhrases([
-  '{ROWS | RANGE | GROUPS} BETWEEN',
-  'SIMILAR TO',
-  'IS [NOT] DISTINCT FROM',
-]);
+const reservedKeywordPhrases = expandPhrases(['SIMILAR TO', 'IS [NOT] DISTINCT FROM']);
 
 const reservedDataTypePhrases = expandPhrases(['TIMESTAMP WITH TIME ZONE']);
 
