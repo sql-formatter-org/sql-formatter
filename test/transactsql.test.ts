@@ -30,7 +30,7 @@ describe('TransactSqlFormatter', () => {
   const language = 'transactsql';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
-  behavesLikeSqlFormatter(format);
+  behavesLikeSqlFormatter(format, true);
   supportsNumbers(format);
   supportsComments(format, { nestedBlockComments: true });
   supportsCreateView(format, { materialized: true });
@@ -75,6 +75,49 @@ describe('TransactSqlFormatter', () => {
   supportsSetOperations(format, ['UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT']);
   supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });
   supportsWindow(format);
+
+  it('places the ROWS window frame after ORDER BY on a new line', () => {
+    expect(
+      format(
+        'SELECT sum(size) OVER (ORDER BY time_stamp ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_size FROM some_events;'
+      )
+    ).toBe(dedent`
+      SELECT
+        sum(size) OVER (
+          ORDER BY
+            time_stamp
+          ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+        ) AS running_size
+      FROM
+        some_events;
+    `);
+  });
+
+  it('places the RANGE window frame after ORDER BY', () => {
+    const result = format(
+      'SELECT sum(size) OVER (ORDER BY time_stamp RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) FROM some_events;'
+    );
+    expect(result).toBe(dedent`
+      SELECT
+        sum(size) OVER (
+          ORDER BY
+            time_stamp
+          RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+        )
+      FROM
+        some_events;
+    `);
+    expect(format(result)).toBe(result);
+  });
+
+  it('keeps window frame bounds together in tabular style', () => {
+    const query =
+      'SELECT sum(size) OVER (ORDER BY time_stamp ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) FROM some_events;';
+    const result = format(query, { indentStyle: 'tabularLeft' });
+    expect(result).toMatch(/\n\s*ROWS[ \t]+BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n/);
+    expect(format(result, { indentStyle: 'tabularLeft' })).toBe(result);
+  });
+
   supportsLimiting(format, { offset: true, fetchFirst: true, fetchNext: true });
   supportsDataTypeCase(format);
 
