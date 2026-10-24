@@ -21,7 +21,50 @@ describe('DuckDBFormatter', () => {
   const language = 'duckdb';
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
-  behavesLikePostgresqlFormatter(format);
+  behavesLikePostgresqlFormatter(format, true);
+
+  it('places the ROWS window frame after ORDER BY on a new line', () => {
+    expect(
+      format(
+        'SELECT sum(size) OVER (ORDER BY time_stamp ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_size FROM some_events;'
+      )
+    ).toBe(dedent`
+      SELECT
+        sum(size) OVER (
+          ORDER BY
+            time_stamp
+          ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+        ) AS running_size
+      FROM
+        some_events;
+    `);
+  });
+
+  it.each(['RANGE', 'GROUPS'])('places the %s window frame after ORDER BY', frame => {
+    const result = format(
+      `SELECT sum(size) OVER (ORDER BY time_stamp ${frame} BETWEEN 1 PRECEDING AND 2 FOLLOWING) FROM some_events;`
+    );
+    expect(result).toBe(dedent`
+      SELECT
+        sum(size) OVER (
+          ORDER BY
+            time_stamp
+          ${frame} BETWEEN 1 PRECEDING AND 2 FOLLOWING
+        )
+      FROM
+        some_events;
+    `);
+    expect(format(result)).toBe(result);
+  });
+
+  it('keeps window frame bounds together in tabular style', () => {
+    const query =
+      'SELECT sum(size) OVER (ORDER BY time_stamp ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) FROM some_events;';
+    const result = format(query, { indentStyle: 'tabularLeft' });
+    expect(result).toMatch(/\n\s*ROWS[ \t]+BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n/);
+    expect(format(result, { indentStyle: 'tabularLeft' })).toBe(result);
+  });
+
   supportsCreateView(format, { orReplace: true, ifNotExists: true });
   supportsCreateTable(format, { orReplace: true, ifNotExists: true });
   supportsDropTable(format, { ifExists: true });
