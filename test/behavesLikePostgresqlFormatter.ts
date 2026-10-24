@@ -18,8 +18,11 @@ import supportsNumbers from './features/numbers.js';
 /**
  * Shared tests for PostgreSQL and DuckDB
  */
-export default function behavesLikePostgresqlFormatter(format: FormatFn) {
-  behavesLikeSqlFormatter(format);
+export default function behavesLikePostgresqlFormatter(
+  format: FormatFn,
+  frameOnSeparateLine = false
+) {
+  behavesLikeSqlFormatter(format, frameOnSeparateLine);
   supportsNumbers(format, { underscore: true });
   supportsComments(format, { nestedBlockComments: true });
   supportsCommentOn(format);
