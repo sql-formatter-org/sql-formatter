@@ -220,7 +220,35 @@ describe('TransactSqlFormatter', () => {
   it('supports special $ACTION keyword', () => {
     expect(format(`MERGE INTO tbl OUTPUT $action AS act;`)).toBe(dedent`
       MERGE INTO
-        tbl OUTPUT $action AS act;
+        tbl
+      OUTPUT
+        $action AS act;
+    `);
+  });
+
+  // Issue #888
+  it('formats OUTPUT clause on a separate line', () => {
+    expect(
+      format(
+        `UPDATE tbl SET a = 1 OUTPUT inserted.id, deleted.a INTO @log WHERE b = 2; DELETE FROM tbl OUTPUT deleted.id WHERE b = 3;`
+      )
+    ).toBe(dedent`
+      UPDATE tbl
+      SET
+        a = 1
+      OUTPUT
+        inserted.id,
+        deleted.a
+      INTO
+        @log
+      WHERE
+        b = 2;
+
+      DELETE FROM tbl
+      OUTPUT
+        deleted.id
+      WHERE
+        b = 3;
     `);
   });
 

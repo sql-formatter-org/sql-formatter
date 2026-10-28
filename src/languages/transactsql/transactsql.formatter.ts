@@ -20,6 +20,7 @@ const reservedClauses = expandPhrases([
   'FETCH {FIRST | NEXT}',
   'FOR {BROWSE | XML | JSON}',
   'OPTION',
+  'OUTPUT',
   // Data manipulation
   // - insert:
   'INSERT [INTO]',
