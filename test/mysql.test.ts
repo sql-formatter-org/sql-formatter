@@ -114,4 +114,31 @@ describe('MySqlFormatter', () => {
       DROP DEFAULT;
     `);
   });
+
+  // Issue #1005
+  it('formats FOR UPDATE clause', () => {
+    expect(
+      format(`
+        SELECT * FROM users WHERE id = ? FOR UPDATE;
+        SELECT * FROM users WHERE id = ? FOR UPDATE SKIP LOCKED;
+      `)
+    ).toBe(dedent`
+      SELECT
+        *
+      FROM
+        users
+      WHERE
+        id = ?
+      FOR UPDATE;
+
+      SELECT
+        *
+      FROM
+        users
+      WHERE
+        id = ?
+      FOR UPDATE
+        SKIP LOCKED;
+    `);
+  });
 });

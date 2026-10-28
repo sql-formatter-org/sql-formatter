@@ -18,6 +18,7 @@ const reservedClauses = expandPhrases([
   'ORDER BY',
   'LIMIT',
   'OFFSET',
+  'FOR UPDATE',
   // Data manipulation
   // - insert:
   'INSERT [LOW_PRIORITY | DELAYED | HIGH_PRIORITY] [IGNORE] [INTO]',
