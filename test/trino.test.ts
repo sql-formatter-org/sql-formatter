@@ -33,7 +33,7 @@ describe('TrinoFormatter', () => {
   const format: FormatFn = (query, cfg = {}) => originalFormat(query, { ...cfg, language });
 
   behavesLikeSqlFormatter(format);
-  supportsNumbers(format);
+  supportsNumbers(format, { underscore: true });
   supportsComments(format);
   supportsCommentOn(format);
   supportsCreateView(format, { orReplace: true, materialized: true });
