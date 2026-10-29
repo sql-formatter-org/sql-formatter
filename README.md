@@ -294,9 +294,14 @@ I have started a new SQL formatting tool: [prettier-plugin-sql-cst][].
 
 Give it a try if you'd like to take your SQL auto-formatting to the next level.
 
-## Contributing
+## Contribution policy: No AI-generated contributions
 
-Please see [CONTRIBUTING.md](CONTRIBUTING.md)
+AI-generated contributions are going to be rejected without reading.
+This is just a hobby project that I maintain from my free time, and I've had
+enough of reading AI-generated code. This is to preserve my sanity.
+You can thank the current AI boom for that.
+
+For more, see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License
 
