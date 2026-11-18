@@ -43,7 +43,25 @@ describe('SparkFormatter', () => {
   supportsBetween(format);
   supportsOperators(
     format,
-    [...standardOperators, '%', '~', '^', '|', '&', '<=>', '==', '!', '||', '->'],
+    [
+      ...standardOperators,
+      '%',
+      '~',
+      '^',
+      '|',
+      '&',
+      '<=>',
+      '==',
+      '!',
+      '||',
+      '->',
+      // Bitwise
+      '<<',
+      '>>',
+      '>>>',
+      // Named function params:
+      '=>',
+    ],
     {
       logicalOperators: ['AND', 'OR', 'XOR'],
       any: true,

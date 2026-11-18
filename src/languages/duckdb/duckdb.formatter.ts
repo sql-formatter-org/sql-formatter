@@ -191,6 +191,12 @@ export const duckdb: DialectOptions = {
       '->>',
       // key-value separator:
       ':',
+      // List:
+      '&&',
+      '<->',
+      '<=>',
+      '<@',
+      '@>',
       // Named function params:
       ':=',
       '=>',

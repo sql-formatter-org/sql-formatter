@@ -53,6 +53,12 @@ describe('DuckDBFormatter', () => {
       '->',
       // JSON:
       '->>',
+      // List:
+      '&&',
+      '<->',
+      '<=>',
+      '<@',
+      '@>',
       // Named function params:
       ':=',
       '=>',
