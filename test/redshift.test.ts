@@ -49,7 +49,27 @@ describe('RedshiftFormatter', () => {
   // Missing: '#' and '::' operator (tested separately)
   supportsOperators(
     format,
-    [...standardOperators, '^', '%', '@', '|/', '||/', '&', '|', '~', '<<', '>>', '||'],
+    [
+      ...standardOperators,
+      '^',
+      '%',
+      '@',
+      '|/',
+      '||/',
+      '&',
+      '|',
+      '~',
+      '<<',
+      '>>',
+      '||',
+      // Pattern matching
+      '~~',
+      '~~*',
+      '!~~',
+      '!~~*',
+      // Posix regex
+      '!~',
+    ],
     {
       any: true,
     }

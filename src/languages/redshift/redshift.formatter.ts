@@ -176,6 +176,13 @@ export const redshift: DialectOptions = {
       '>>',
       '||',
       '::',
+      // Pattern matching
+      '~~',
+      '~~*',
+      '!~~',
+      '!~~*',
+      // Posix regex
+      '!~',
     ],
   },
   formatOptions: {
