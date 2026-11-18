@@ -144,7 +144,24 @@ export const spark: DialectOptions = {
     identTypes: ['``'],
     identChars: { allowFirstCharNumber: true },
     variableTypes: [{ quote: '{}', prefixes: ['$'], requirePrefix: true }],
-    operators: ['%', '~', '^', '|', '&', '<=>', '==', '!', '||', '->'],
+    operators: [
+      '%',
+      '~',
+      '^',
+      '|',
+      '&',
+      '<=>',
+      '==',
+      '!',
+      '||',
+      '->',
+      // Bitwise
+      '<<',
+      '>>',
+      '>>>',
+      // Named function params
+      '=>',
+    ],
     postProcess,
   },
   formatOptions: {
