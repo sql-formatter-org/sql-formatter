@@ -106,8 +106,7 @@ describe('DuckDBFormatter', () => {
     'INTERSECT',
     'INTERSECT ALL',
   ]);
-  // TODO: named params $foo currently conflict with $$-quoted strings
-  supportsParams(format, { positional: true, numbered: ['$'], quoted: ['$""'] });
+  supportsParams(format, { positional: true, numbered: ['$'], quoted: ['$""'], named: ['$'] });
   supportsLimiting(format, { limit: true, offset: true });
 
   it('formats prefix aliases', () => {

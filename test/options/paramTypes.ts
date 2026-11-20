@@ -85,9 +85,9 @@ export default function supportsParamTypes(format: FormatFn) {
     });
 
     it('supports multiple custom param types', () => {
-      const result = format('SELECT %1%, {2};', {
-        paramTypes: { custom: [{ regex: '%[0-9]+%' }, { regex: String.raw`\{[0-9]\}` }] },
-        params: { '%1%': 'first', '{2}': 'second' },
+      const result = format('SELECT %1%, !{2};', {
+        paramTypes: { custom: [{ regex: '%[0-9]+%' }, { regex: String.raw`!\{[0-9]\}` }] },
+        params: { '%1%': 'first', '!{2}': 'second' },
       });
       expect(result).toBe(dedent`
         SELECT
@@ -100,14 +100,14 @@ export default function supportsParamTypes(format: FormatFn) {
     // but we support this to facilitate using the paramTypes config for
     // working around SQL templating.
     it('supports parameterizing schema.table.column syntax', () => {
-      const result = format('SELECT {schema}.{table}.{column} FROM {schema}.{table}', {
-        paramTypes: { custom: [{ regex: String.raw`\{\w+\}` }] },
+      const result = format('SELECT !{schema}.!{table}.!{column} FROM !{schema}.!{table}', {
+        paramTypes: { custom: [{ regex: String.raw`!\{\w+\}` }] },
       });
       expect(result).toBe(dedent`
         SELECT
-          {schema}.{table}.{column}
+          !{schema}.!{table}.!{column}
         FROM
-          {schema}.{table}
+          !{schema}.!{table}
       `);
     });
 
