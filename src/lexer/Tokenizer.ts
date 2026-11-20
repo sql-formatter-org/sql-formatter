@@ -159,6 +159,9 @@ export default class Tokenizer {
         regex: regex.reservedWord(cfg.reservedKeywords, cfg.identChars),
         text: toCanonical,
       },
+      // Match strings before parameters,
+      // this will ensure we match $foo$...$foo$ strings before $foo parameters.
+      { type: TokenType.STRING, regex: regex.string(cfg.stringTypes) },
     ]);
   }
 
@@ -170,7 +173,6 @@ export default class Tokenizer {
         type: TokenType.VARIABLE,
         regex: cfg.variableTypes ? regex.variable(cfg.variableTypes) : undefined,
       },
-      { type: TokenType.STRING, regex: regex.string(cfg.stringTypes) },
       {
         type: TokenType.IDENTIFIER,
         regex: regex.identifier(cfg.identChars),
